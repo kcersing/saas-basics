@@ -3,11 +3,10 @@ package infras
 import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	hertzlogrus "github.com/hertz-contrib/obs-opentelemetry/logging/logrus"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 	"path"
 	"runtime"
-	"saas_basics/shared/consts"
+	"saas/shared/consts"
 	"time"
 )
 

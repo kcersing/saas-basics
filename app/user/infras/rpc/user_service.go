@@ -14,8 +14,8 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	_ "github.com/kitex-contrib/obs-opentelemetry/tracing"
 	consul "github.com/kitex-contrib/registry-consul"
-	"saas_basics/app/user/config"
-	"saas_basics/kitex_gen/cwg/user/userservice"
+	"saas/app/user/config"
+	"saas/kitex_gen/cwg/user/userservice"
 )
 
 func initUser() {

@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 	"runtime"
-	"saas_basics/shared/consts"
+	"saas/shared/pkg/consts"
 	"time"
 )
 
