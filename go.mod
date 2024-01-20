@@ -1,4 +1,4 @@
-module saas_basics
+module saas
 
 go 1.21.4
 

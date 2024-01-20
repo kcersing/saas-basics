@@ -1,23 +1,18 @@
 version: '3.7'
-
 services:
-#  mysql:
-#    image: 'mysql:latest'
-#    ports:
-#      - "3306:3306"
-#    volumes:
-#      - ./deploy/mysql:/docker-entrypoint-initdb.d
-#    environment:
-#      - MYSQL_DATABASE=gorm
-#      - MYSQL_USER=gorm
-#      - MYSQL_PASSWORD=gorm
-#      - MYSQL_RANDOM_ROOT_PASSWORD="yes"
-  Etcd:
-    image: 'bitnami/etcd:latest'
-    environment:
-      - ALLOW_NONE_AUTHENTICATION=yes
+
+  # Consul
+  consul:
+    image: consul:latest
+    command: agent -dev -client=0.0.0.0
     ports:
-      - "2379:2379"
+      - "8500:8500"
+      - "8300:8300"
+      - "8301:8301"
+      - "8302:8302"
+      - "8600:8600/udp"
+
+  #elasticsearch
   elasticsearch:
     image: elasticsearch:7.6.2
     environment:
@@ -27,6 +22,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+
+  #kibana
   kibana:
     image: kibana:7.6.2
     links:
@@ -37,14 +34,53 @@ services:
       - "elasticsearch.hosts=http://es:9200" #设置访问elasticsearch的地址
     ports:
       - "5601:5601"
-#  redis:
-#    image: redis:latest
-#    restart: always
-#    container_name: redis
-#    ports:
-#      - "6379:6379"
-#    volumes:
-##      - ./deploy/redis/redis.conf:/etc/redis/redis.conf  # linux 下的路径
-#      - /D/docker/redis/conf/redis.conf:/etc/redis/redis.conf # win 下的路径
-#    command: redis-server /etc/redis/redis.conf
-#    privileged: true
+
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  # Jaeger
+  jaeger-all-in-one:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "14268"
+      - "14250:14250"
+      - "6831:6831"
+
+  # VictoriaMetrics
+  victoriametrics:
+    container_name: victoriametrics
+    image: victoriametrics/victoria-metrics
+    ports:
+      - "8428:8428"
+      - "8089:8089"
+      - "8089:8089/udp"
+      - "2003:2003"
+      - "2003:2003/udp"
+      - "4242:4242"
+    command:
+      - '--storageDataPath=/storage'
+      - '--graphiteListenAddr=:2003'
+      - '--opentsdbListenAddr=:4242'
+      - '--httpListenAddr=:8428'
+      - '--influxListenAddr=:8089'
+    restart: always
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
