@@ -4,11 +4,17 @@ package main
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"saas/app/api/infras"
+	"saas/app/api/infras/rpc"
 )
 
 func main() {
 	h := server.Default()
 
+	infras.InitLogger()
+	infras.InitConfig()
+	infras.InitRegistry()
+	rpc.Init()
 	register(h)
 	h.Spin()
 }

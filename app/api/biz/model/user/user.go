@@ -3,7 +3,7 @@
 package user
 
 import (
-	"app/api/biz/model/base"
+	"saas/app/api/biz/model/base"
 	"context"
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"

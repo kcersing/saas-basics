@@ -11,7 +11,12 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
+	Login(ctx context.Context, req *user.LoginRequest, callOptions ...callopt.Option) (r *user.LoginResponse, err error)
 	AdminLogin(ctx context.Context, req *user.AdminLoginRequest, callOptions ...callopt.Option) (r *user.AdminLoginResponse, err error)
+	ChangeAdminPassword(ctx context.Context, req *user.ChangeAdminPasswordRequest, callOptions ...callopt.Option) (r *user.ChangeAdminPasswordResponse, err error)
+	GetUser(ctx context.Context, req *user.GetUserRequest, callOptions ...callopt.Option) (r *user.GetUserInfoResponse, err error)
+	AddUser(ctx context.Context, req *user.AddUserRequest, callOptions ...callopt.Option) (r *user.AddUserResponse, err error)
+	DeleteUser(ctx context.Context, req *user.DeleteUserRequest, callOptions ...callopt.Option) (r *user.DeleteUserResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -43,7 +48,32 @@ type kUserServiceClient struct {
 	*kClient
 }
 
+func (p *kUserServiceClient) Login(ctx context.Context, req *user.LoginRequest, callOptions ...callopt.Option) (r *user.LoginResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.Login(ctx, req)
+}
+
 func (p *kUserServiceClient) AdminLogin(ctx context.Context, req *user.AdminLoginRequest, callOptions ...callopt.Option) (r *user.AdminLoginResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.AdminLogin(ctx, req)
+}
+
+func (p *kUserServiceClient) ChangeAdminPassword(ctx context.Context, req *user.ChangeAdminPasswordRequest, callOptions ...callopt.Option) (r *user.ChangeAdminPasswordResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.ChangeAdminPassword(ctx, req)
+}
+
+func (p *kUserServiceClient) GetUser(ctx context.Context, req *user.GetUserRequest, callOptions ...callopt.Option) (r *user.GetUserInfoResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetUser(ctx, req)
+}
+
+func (p *kUserServiceClient) AddUser(ctx context.Context, req *user.AddUserRequest, callOptions ...callopt.Option) (r *user.AddUserResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.AddUser(ctx, req)
+}
+
+func (p *kUserServiceClient) DeleteUser(ctx context.Context, req *user.DeleteUserRequest, callOptions ...callopt.Option) (r *user.DeleteUserResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.DeleteUser(ctx, req)
 }

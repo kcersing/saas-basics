@@ -14,7 +14,7 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	_ "github.com/kitex-contrib/obs-opentelemetry/tracing"
 	consul "github.com/kitex-contrib/registry-consul"
-	"saas/app/user/config"
+	"saas/app/api/config"
 	"saas/kitex_gen/cwg/user/userservice"
 )
 

@@ -5,10 +5,10 @@ package user
 import (
 	"context"
 
-	base "app/api/biz/model/base"
-	user "app/api/biz/model/user"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	base "saas/app/api/biz/model/base"
+	user "saas/app/api/biz/model/user"
 )
 
 // Login .
