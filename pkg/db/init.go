@@ -5,18 +5,17 @@ import (
 	"entgo.io/ent/dialect/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
-	"saas/conf"
-	"saas/db/ent"
-	"saas/db/ent/migrate"
+	"saas/pkg/db/ent"
+	"saas/pkg/db/ent/migrate"
 	"time"
 )
 
 var DB *ent.Client
 
-// Init init DB
-func Init() {
+// InitDB init DB
+func InitDB() {
 	var err error
-	mysqlConfig := conf.Conf().MySql.Name + ":" + conf.Conf().MySql.Password + "@tcp(" + conf.Conf().MySql.Url + ":" + conf.Conf().MySql.Port + ")/" + conf.Conf().MySql.Database + "?parseTime=True"
+	mysqlConfig := "root:pass@tcp(localhost:3306)/test?parseTime=True"
 
 	drvWd, err := sql.Open("mysql", mysqlConfig)
 	if err != nil {

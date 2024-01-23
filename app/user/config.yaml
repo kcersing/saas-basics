@@ -1,0 +1,3 @@
+host: localhost
+port: 8520
+key: 'saas/user_srv'

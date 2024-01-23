@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"fmt"
 	"github.com/cloudwego/kitex/client"
 	_ "github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -20,28 +21,32 @@ import (
 
 func initUser() {
 	// init resolver
-	r, err := consul.NewConsulResolver("")
+	r, err := consul.NewConsulResolver(
+		fmt.Sprintf("%s:%d",
+			config.GlobalConsulConfig.Host,
+			config.GlobalConsulConfig.Port,
+		),
+	)
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}
 	// init OpenTelemetry
 	provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(""),
-		provider.WithExportEndpoint(""),
+		provider.WithServiceName(config.GlobalServerConfig.UserSrvInfo.Name),
+		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 	//create a new client
 	c, err := userservice.NewClient(
-		"",
+		config.GlobalServerConfig.UserSrvInfo.Name,
 		client.WithResolver(r),
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()),
 		client.WithMuxConnection(1),
 		client.WithSuite(tracing.NewClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{
-			ServiceName: "",
-			Method:      "",
-			Tags:        nil,
-		}),
+		client.WithClientBasicInfo(
+			&rpcinfo.EndpointBasicInfo{
+				ServiceName: config.GlobalServerConfig.UserSrvInfo.Name,
+			}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)

@@ -1,0 +1,23 @@
+{
+  "name": "api",
+  "port": 8080,
+  "paseto": {
+    "pub_key": "YOUR_KEY",
+    "implicit": "YOUR-IMPLICIT"
+  },
+  "otel": {
+    "endpoint": ":4317"
+  },
+  "user_srv":{
+    "name": "user_srv"
+  },
+  "car_srv":{
+    "name": "car_srv"
+  },
+  "profile_srv":{
+    "name": "profile_srv"
+  },
+  "trip_srv":{
+    "name": "trip_srv"
+  },
+}
