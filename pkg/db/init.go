@@ -10,10 +10,8 @@ import (
 	"time"
 )
 
-var DB *ent.Client
-
 // InitDB init DB
-func InitDB() {
+func InitDB() *ent.Client {
 	var err error
 	mysqlConfig := "root:pass@tcp(localhost:3306)/test?parseTime=True"
 
@@ -27,7 +25,7 @@ func InitDB() {
 	db.SetConnMaxLifetime(time.Hour)
 	db.SetConnMaxIdleTime(time.Minute * 5)
 
-	DB = ent.NewClient(ent.Driver(drvWd))
+	DB := ent.NewClient(ent.Driver(drvWd))
 	ctx := context.Background()
 	if err := DB.Schema.Create(
 		ctx,
@@ -37,4 +35,5 @@ func InitDB() {
 	); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
+	return DB
 }

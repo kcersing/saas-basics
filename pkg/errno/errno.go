@@ -1,68 +1,30 @@
-/*
- * Copyright 2023 CloudWeGo Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package errno
 
 import (
-	"errors"
 	"fmt"
 )
 
-const (
-	SuccessCode    = 0
-	ServiceErrCode = iota + 10000
-	ParamErrCode
-	AuthorizationFailedErrCode
-
-	UserAlreadyExistErrCode
-	UserIsNotExistErrCode
-
-	FollowRelationAlreadyExistErrCode
-	FollowRelationNotExistErrCode
-
-	FavoriteRelationAlreadyExistErrCode
-	FavoriteRelationNotExistErrCode
-	FavoriteActionErrCode
-
-	MessageAddFailedErrCode
-	FriendListNoPermissionErrCode
-
-	VideoIsNotExistErrCode
-	CommentIsNotExistErrCode
-)
-
-const (
-	SuccessMsg               = "Success"
-	ServerErrMsg             = "Service is unable to start successfully"
-	ParamErrMsg              = "Wrong Parameter has been given"
-	UserIsNotExistErrMsg     = "user is not exist"
-	PasswordIsNotVerifiedMsg = "username or password not verified"
-)
-
 type ErrNo struct {
-	ErrCode int32
+	ErrCode int64
 	ErrMsg  string
+}
+
+type Response struct {
+	Code    int64       `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
 func (e ErrNo) Error() string {
 	return fmt.Sprintf("err_code=%d, err_msg=%s", e.ErrCode, e.ErrMsg)
 }
 
-func NewErrNo(code int32, msg string) ErrNo {
-	return ErrNo{code, msg}
+// NewErrNo return ErrNo
+func NewErrNo(code int64, msg string) ErrNo {
+	return ErrNo{
+		ErrCode: code,
+		ErrMsg:  msg,
+	}
 }
 
 func (e ErrNo) WithMessage(msg string) ErrNo {
@@ -71,23 +33,25 @@ func (e ErrNo) WithMessage(msg string) ErrNo {
 }
 
 var (
-	Success                = NewErrNo(SuccessCode, SuccessMsg)
-	ServiceErr             = NewErrNo(ServiceErrCode, ServerErrMsg)
-	ParamErr               = NewErrNo(ParamErrCode, ParamErrMsg)
-	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
-	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
-	UserIsNotExistErr      = NewErrNo(UserIsNotExistErrCode, UserIsNotExistErrMsg)
-	PasswordIsNotVerified  = NewErrNo(AuthorizationFailedErrCode, PasswordIsNotVerifiedMsg)
+// Success            = NewErrNo(int64(errno.Err_Success), "success")
+// NoRoute            = NewErrNo(int64(errno.Err_NoRoute), "no route")
+// NoMethod           = NewErrNo(int64(errno.Err_NoMethod), "no method")
+// BadRequest         = NewErrNo(int64(errno.Err_BadRequest), "bad request")
+// ParamsErr          = NewErrNo(int64(errno.Err_ParamsErr), "params error")
+// AuthorizeFail      = NewErrNo(int64(errno.Err_AuthorizeFail), "authorize failed")
+// TooManyReqeust     = NewErrNo(int64(errno.Err_TooManyRequest), "too many requests")
+// ServiceErr         = NewErrNo(int64(errno.Err_ServiceErr), "service error")
+// RPCUserSrvErr      = NewErrNo(int64(errno.Err_RPCUserSrvErr), "rpc user service error")
+// UserSrvErr         = NewErrNo(int64(errno.Err_UserSrvErr), "user service error")
+// RPCBlobSrvErr      = NewErrNo(int64(errno.Err_RPCBlobSrvErr), "rpc blob service error")
+// BlobSrvErr         = NewErrNo(int64(errno.Err_BlobSrvErr), "blob service error")
+// RPCCarSrvErr       = NewErrNo(int64(errno.Err_RPCCarSrvErr), "rpc car service error")
+// CarSrvErr          = NewErrNo(int64(errno.Err_CarSrvErr), "car service error")
+// RPCProfileSrvErr   = NewErrNo(int64(errno.Err_RPCProfileSrvErr), "rpc profile service error")
+// ProfileSrvErr      = NewErrNo(int64(errno.Err_ProfileSrvErr), "profile service error")
+// RPCTripSrvErr      = NewErrNo(int64(errno.Err_RPCTripSrvErr), "rpc trip service error")
+// TripSrvErr         = NewErrNo(int64(errno.Err_TripSrvErr), "trip service error")
+// RecordNotFound     = NewErrNo(int64(errno.Err_RecordNotFound), "record not found")
+// RecordAlreadyExist = NewErrNo(int64(errno.Err_RecordAlreadyExist), "record already exist")
+// DirtyData          = NewErrNo(int64(errno.Err_DirtyData), "dirty data")
 )
-
-// ConvertErr convert error to Errno
-func ConvertErr(err error) ErrNo {
-	Err := ErrNo{}
-	if errors.As(err, &Err) {
-		return Err
-	}
-
-	s := ServiceErr
-	s.ErrMsg = err.Error()
-	return s
-}

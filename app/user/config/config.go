@@ -36,4 +36,5 @@ type BlobSrvConfig struct {
 
 type MysqlConfig struct {
 	Source string `mapstructure:"host" json:"source"`
+	Salt   string `mapstructure:"salt" json:"salt"`
 }
