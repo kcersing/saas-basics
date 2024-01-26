@@ -8,49 +8,43 @@ import (
 )
 
 type User struct {
-	AccountID    string `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
-	Username     string `thrift:"username,2" form:"username" json:"username" query:"username"`
-	PhoneNumber  string `thrift:"phone_number,3" form:"phone_number" json:"phone_number" query:"phone_number"`
-	AvatarBlobID string `thrift:"avatar_blob_id,4" form:"avatar_blob_id" json:"avatar_blob_id" query:"avatar_blob_id"`
-	OpenID       string `thrift:"open_id,5" form:"open_id" json:"open_id" query:"open_id"`
-	Balance      int32  `thrift:"balance,6" form:"balance" json:"balance" query:"balance"`
+	ID       string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Username string `thrift:"username,2" form:"username" json:"username" query:"username"`
+	Mobile   string `thrift:"mobile,3" form:"mobile" json:"mobile" query:"mobile"`
+	Gender   string `thrift:"gender,4" form:"gender" json:"gender" query:"gender"`
+	Age      string `thrift:"age,5" form:"age" json:"age" query:"age"`
 }
 
 func NewUser() *User {
 	return &User{}
 }
 
-func (p *User) GetAccountID() (v string) {
-	return p.AccountID
+func (p *User) GetID() (v string) {
+	return p.ID
 }
 
 func (p *User) GetUsername() (v string) {
 	return p.Username
 }
 
-func (p *User) GetPhoneNumber() (v string) {
-	return p.PhoneNumber
+func (p *User) GetMobile() (v string) {
+	return p.Mobile
 }
 
-func (p *User) GetAvatarBlobID() (v string) {
-	return p.AvatarBlobID
+func (p *User) GetGender() (v string) {
+	return p.Gender
 }
 
-func (p *User) GetOpenID() (v string) {
-	return p.OpenID
-}
-
-func (p *User) GetBalance() (v int32) {
-	return p.Balance
+func (p *User) GetAge() (v string) {
+	return p.Age
 }
 
 var fieldIDToName_User = map[int16]string{
-	1: "account_id",
+	1: "id",
 	2: "username",
-	3: "phone_number",
-	4: "avatar_blob_id",
-	5: "open_id",
-	6: "balance",
+	3: "mobile",
+	4: "gender",
+	5: "age",
 }
 
 func (p *User) Read(iprot thrift.TProtocol) (err error) {
@@ -112,14 +106,6 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 6:
-			if fieldTypeId == thrift.I32 {
-				if err = p.ReadField6(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -154,7 +140,7 @@ func (p *User) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AccountID = v
+		p.ID = v
 	}
 	return nil
 }
@@ -172,7 +158,7 @@ func (p *User) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.PhoneNumber = v
+		p.Mobile = v
 	}
 	return nil
 }
@@ -181,7 +167,7 @@ func (p *User) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AvatarBlobID = v
+		p.Gender = v
 	}
 	return nil
 }
@@ -190,16 +176,7 @@ func (p *User) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.OpenID = v
-	}
-	return nil
-}
-func (p *User) ReadField6(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadI32(); err != nil {
-		return err
-	} else {
-		p.Balance = v
+		p.Age = v
 	}
 	return nil
 }
@@ -230,10 +207,6 @@ func (p *User) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 5
 			goto WriteFieldError
 		}
-		if err = p.writeField6(oprot); err != nil {
-			fieldId = 6
-			goto WriteFieldError
-		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -253,10 +226,10 @@ WriteStructEndError:
 }
 
 func (p *User) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountID); err != nil {
+	if err := oprot.WriteString(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -287,10 +260,10 @@ WriteFieldEndError:
 }
 
 func (p *User) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("phone_number", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.PhoneNumber); err != nil {
+	if err := oprot.WriteString(p.Mobile); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -304,10 +277,10 @@ WriteFieldEndError:
 }
 
 func (p *User) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("avatar_blob_id", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("gender", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AvatarBlobID); err != nil {
+	if err := oprot.WriteString(p.Gender); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -321,10 +294,10 @@ WriteFieldEndError:
 }
 
 func (p *User) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("open_id", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("age", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.OpenID); err != nil {
+	if err := oprot.WriteString(p.Age); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -337,23 +310,6 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
-func (p *User) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("balance", thrift.I32, 6); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI32(p.Balance); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
-}
-
 func (p *User) String() string {
 	if p == nil {
 		return "<nil>"
@@ -363,43 +319,49 @@ func (p *User) String() string {
 }
 
 type UserInfo struct {
-	AccountID   string `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
-	Username    string `thrift:"username,2" form:"username" json:"username" query:"username"`
-	PhoneNumber string `thrift:"phone_number,3" form:"phone_number" json:"phone_number" query:"phone_number"`
-	AvatarURL   string `thrift:"avatar_url,4" form:"avatar_url" json:"avatar_url" query:"avatar_url"`
-	Balance     int32  `thrift:"balance,5" form:"balance" json:"balance" query:"balance"`
+	ID        string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Username  string `thrift:"username,2" form:"username" json:"username" query:"username"`
+	Mobile    string `thrift:"mobile,3" form:"mobile" json:"mobile" query:"mobile"`
+	Gender    string `thrift:"gender,4" form:"gender" json:"gender" query:"gender"`
+	Age       string `thrift:"age,5" form:"age" json:"age" query:"age"`
+	AvatarURL string `thrift:"avatar_url,6" form:"avatar_url" json:"avatar_url" query:"avatar_url"`
 }
 
 func NewUserInfo() *UserInfo {
 	return &UserInfo{}
 }
 
-func (p *UserInfo) GetAccountID() (v string) {
-	return p.AccountID
+func (p *UserInfo) GetID() (v string) {
+	return p.ID
 }
 
 func (p *UserInfo) GetUsername() (v string) {
 	return p.Username
 }
 
-func (p *UserInfo) GetPhoneNumber() (v string) {
-	return p.PhoneNumber
+func (p *UserInfo) GetMobile() (v string) {
+	return p.Mobile
+}
+
+func (p *UserInfo) GetGender() (v string) {
+	return p.Gender
+}
+
+func (p *UserInfo) GetAge() (v string) {
+	return p.Age
 }
 
 func (p *UserInfo) GetAvatarURL() (v string) {
 	return p.AvatarURL
 }
 
-func (p *UserInfo) GetBalance() (v int32) {
-	return p.Balance
-}
-
 var fieldIDToName_UserInfo = map[int16]string{
-	1: "account_id",
+	1: "id",
 	2: "username",
-	3: "phone_number",
-	4: "avatar_url",
-	5: "balance",
+	3: "mobile",
+	4: "gender",
+	5: "age",
+	6: "avatar_url",
 }
 
 func (p *UserInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -454,8 +416,16 @@ func (p *UserInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 5:
-			if fieldTypeId == thrift.I32 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -495,7 +465,7 @@ func (p *UserInfo) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AccountID = v
+		p.ID = v
 	}
 	return nil
 }
@@ -513,7 +483,7 @@ func (p *UserInfo) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.PhoneNumber = v
+		p.Mobile = v
 	}
 	return nil
 }
@@ -522,16 +492,25 @@ func (p *UserInfo) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AvatarURL = v
+		p.Gender = v
 	}
 	return nil
 }
 func (p *UserInfo) ReadField5(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadI32(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Balance = v
+		p.Age = v
+	}
+	return nil
+}
+func (p *UserInfo) ReadField6(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.AvatarURL = v
 	}
 	return nil
 }
@@ -562,6 +541,10 @@ func (p *UserInfo) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 5
 			goto WriteFieldError
 		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -581,10 +564,10 @@ WriteStructEndError:
 }
 
 func (p *UserInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountID); err != nil {
+	if err := oprot.WriteString(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -615,10 +598,10 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("phone_number", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.PhoneNumber); err != nil {
+	if err := oprot.WriteString(p.Mobile); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -632,10 +615,10 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("avatar_url", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("gender", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AvatarURL); err != nil {
+	if err := oprot.WriteString(p.Gender); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -649,10 +632,10 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("balance", thrift.I32, 5); err != nil {
+	if err = oprot.WriteFieldBegin("age", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI32(p.Balance); err != nil {
+	if err := oprot.WriteString(p.Age); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -663,6 +646,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *UserInfo) writeField6(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("avatar_url", thrift.STRING, 6); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.AvatarURL); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
 func (p *UserInfo) String() string {

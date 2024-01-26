@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	"log"
 	"saas/app/api/biz/model/base"
 	"saas/app/api/biz/model/user"
 )
@@ -85,6 +84,21 @@ func AdminAddUser(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	//
+	//resp, err := config.GlobalUserClient.AddUser(ctx, &user2.AddUserRequest{
+	//	Username: req.Username,
+	//	Mobile:   req.Mobile,
+	//	Gender:   req.Gender,
+	//	Age:      req.Age,
+	//	Password: req.Password,
+	//})
+	//
+	//if err != nil {
+	//	hlog.Error("rpc user service err", err)
+	//	resp.BaseResp = utils.BuildBaseResp(errno.ServiceErr)
+	//	c.JSON(http.StatusInternalServerError, resp)
+	//	return
+	//}
 
 	resp := new(base.NilResponse)
 
@@ -103,6 +117,5 @@ func AdminDeleteUser(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp := new(base.NilResponse)
-	log.Print("1111")
 	c.JSON(consts.StatusOK, resp)
 }

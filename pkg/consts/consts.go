@@ -11,8 +11,8 @@ const (
 	AccountID  = "accountID"
 	ID         = "id"
 
-	ApiConfigPath   = "./app/api/config.yaml"
-	ApiConfigPath1  = "./app/api/tsconfig.json"
+	ApiConfigPath   = "./../../app/api/config.yaml"
+	ApiConfigPath1  = "./../../app/api/tsconfig.json"
 	UserConfigPath  = "./../../app/user/config.yaml"
 	UserConfigPath1 = "./../../app/user/tsconfig.json"
 

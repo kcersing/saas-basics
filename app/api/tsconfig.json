@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "port": 8080,
+  "port": 9080,
   "paseto": {
     "pub_key": "YOUR_KEY",
     "implicit": "YOUR-IMPLICIT"
@@ -19,5 +19,5 @@
   },
   "trip_srv":{
     "name": "trip_srv"
-  },
+  }
 }

@@ -18,11 +18,11 @@ struct AdminChangePasswordRequest {
 }
 
 struct AddUserRequest {
-    1:  string account_id (api.raw = "account_id")
-    2:  string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>")
-    3:  string phone_number (api.raw = "phone_number")
-    4:  string avatar_blob_id (api.raw = "avatar_blob_id")
-    5:  string open_id (api.raw = "open_id")
+    1:  string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>")
+    2:  string mobile (api.raw = "mobile")
+    3:  string gender (api.raw = "gender")
+    4:  string age (api.raw = "age")
+    5:  string password (api.raw = "password")
 }
 
 struct DeleteUserRequest {

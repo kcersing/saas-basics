@@ -12,8 +12,8 @@ func InitTLS() *tls.Config {
 	}
 
 	cert, err := tls.LoadX509KeyPair(
-		"./app/api/cert/server.crt",
-		"./app/api/cert/server.key",
+		"./../../app/api/cert/server.crt",
+		"./../../app/api/cert/server.key",
 	)
 
 	if err != nil {
