@@ -3,7 +3,7 @@
 package main
 
 import (
-	 "saas/app/api/biz/router"
+	"saas/app/api/biz/router"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
@@ -11,6 +11,5 @@ import (
 func register(r *server.Hertz) {
 
 	router.GeneratedRegister(r)
-
 	customizedRegister(r)
 }

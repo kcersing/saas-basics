@@ -16,6 +16,7 @@ import (
 func InitRegistry() (registry.Registry, *registry.Info) {
 
 	cfg := api.DefaultConfig()
+
 	cfg.Address = net.JoinHostPort(
 		config.GlobalConsulConfig.Host,
 		strconv.Itoa(config.GlobalConsulConfig.Port),
@@ -51,5 +52,6 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 			"ID": sf.Generate().Base36(),
 		},
 	}
+
 	return r, info
 }

@@ -27,6 +27,7 @@ func initUser() {
 			config.GlobalConsulConfig.Port,
 		),
 	)
+
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}
