@@ -4,6 +4,7 @@ package user
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"github.com/rs/xid"
 )
 
 const (
@@ -11,26 +12,20 @@ const (
 	Label = "user"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldAccountID holds the string denoting the account_id field in the database.
+	FieldAccountID = "account_id"
 	// FieldUsername holds the string denoting the username field in the database.
 	FieldUsername = "username"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
-	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
-	FieldPhoneNumber = "phone_number"
+	// FieldMobile holds the string denoting the mobile field in the database.
+	FieldMobile = "mobile"
 	// FieldGender holds the string denoting the gender field in the database.
 	FieldGender = "gender"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
 	// FieldIntroduce holds the string denoting the introduce field in the database.
 	FieldIntroduce = "introduce"
-	// FieldAccountID holds the string denoting the account_id field in the database.
-	FieldAccountID = "account_id"
-	// FieldAvatarBlobID holds the string denoting the avatar_blob_id field in the database.
-	FieldAvatarBlobID = "avatar_blob_id"
-	// FieldOpenID holds the string denoting the open_id field in the database.
-	FieldOpenID = "open_id"
-	// FieldBalance holds the string denoting the balance field in the database.
-	FieldBalance = "balance"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -38,16 +33,13 @@ const (
 // Columns holds all SQL columns for user fields.
 var Columns = []string{
 	FieldID,
+	FieldAccountID,
 	FieldUsername,
 	FieldPassword,
-	FieldPhoneNumber,
+	FieldMobile,
 	FieldGender,
 	FieldAge,
 	FieldIntroduce,
-	FieldAccountID,
-	FieldAvatarBlobID,
-	FieldOpenID,
-	FieldBalance,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -61,8 +53,10 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultAccountID holds the default value on creation for the "account_id" field.
+	DefaultAccountID func() xid.ID
 	// DefaultGender holds the default value on creation for the "gender" field.
-	DefaultGender int
+	DefaultGender string
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -71,6 +65,11 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByAccountID orders the results by the account_id field.
+func ByAccountID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccountID, opts...).ToFunc()
 }
 
 // ByUsername orders the results by the username field.
@@ -83,9 +82,9 @@ func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
 }
 
-// ByPhoneNumber orders the results by the phone_number field.
-func ByPhoneNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPhoneNumber, opts...).ToFunc()
+// ByMobile orders the results by the mobile field.
+func ByMobile(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMobile, opts...).ToFunc()
 }
 
 // ByGender orders the results by the gender field.
@@ -101,24 +100,4 @@ func ByAge(opts ...sql.OrderTermOption) OrderOption {
 // ByIntroduce orders the results by the introduce field.
 func ByIntroduce(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntroduce, opts...).ToFunc()
-}
-
-// ByAccountID orders the results by the account_id field.
-func ByAccountID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAccountID, opts...).ToFunc()
-}
-
-// ByAvatarBlobID orders the results by the avatar_blob_id field.
-func ByAvatarBlobID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAvatarBlobID, opts...).ToFunc()
-}
-
-// ByOpenID orders the results by the open_id field.
-func ByOpenID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOpenID, opts...).ToFunc()
-}
-
-// ByBalance orders the results by the balance field.
-func ByBalance(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBalance, opts...).ToFunc()
 }

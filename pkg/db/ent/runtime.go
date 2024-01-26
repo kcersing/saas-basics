@@ -5,6 +5,8 @@ package ent
 import (
 	"saas/pkg/db/ent/schema"
 	"saas/pkg/db/ent/user"
+
+	"github.com/rs/xid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -13,8 +15,12 @@ import (
 func init() {
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescAccountID is the schema descriptor for account_id field.
+	userDescAccountID := userFields[1].Descriptor()
+	// user.DefaultAccountID holds the default value on creation for the account_id field.
+	user.DefaultAccountID = userDescAccountID.Default.(func() xid.ID)
 	// userDescGender is the schema descriptor for gender field.
-	userDescGender := userFields[4].Descriptor()
+	userDescGender := userFields[5].Descriptor()
 	// user.DefaultGender holds the default value on creation for the gender field.
-	user.DefaultGender = userDescGender.Default.(int)
+	user.DefaultGender = userDescGender.Default.(string)
 }

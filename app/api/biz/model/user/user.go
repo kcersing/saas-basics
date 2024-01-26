@@ -3,10 +3,10 @@
 package user
 
 import (
-	"saas/app/api/biz/model/base"
 	"context"
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
+	"saas/app/api/biz/model/base"
 )
 
 type LoginRequest struct {

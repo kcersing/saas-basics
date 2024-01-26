@@ -16,7 +16,7 @@ func InitConfig() {
 	if err := v.Unmarshal(&config.GlobalConsulConfig); err != nil {
 		hlog.Fatalf("unmarshal err failed: %s", err.Error())
 	}
-	hlog.Infof("Config Info: %v", config.GlobalServerConfig)
+	hlog.Infof("Config Info: %v", config.GlobalConsulConfig)
 
 	v1 := viper.New()
 	v1.SetConfigFile(consts.UserConfigPath1)

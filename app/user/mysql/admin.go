@@ -7,6 +7,20 @@ type AdminManager struct {
 	db   *ent.Client
 }
 
+func (a AdminManager) GetAdminByAccountId(aid string) error {
+	//TODO implement me
+	panic("implement me")
+}
+func (a AdminManager) GetAdminByName(name string) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (a AdminManager) UpdateAdminPassword(aid string, password string) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func NewAdminManager(db *ent.Client, salt string) *AdminManager {
 	return &AdminManager{
 		db:   db,

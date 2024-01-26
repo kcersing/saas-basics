@@ -1474,7 +1474,7 @@ func (p *AddUserRequest) FastReadField1(buf []byte) (int, error) {
 	} else {
 		offset += l
 
-		p.AccountId = v
+		p.Username = v
 
 	}
 	return offset, nil
@@ -1488,7 +1488,7 @@ func (p *AddUserRequest) FastReadField2(buf []byte) (int, error) {
 	} else {
 		offset += l
 
-		p.Username = v
+		p.Mobile = v
 
 	}
 	return offset, nil
@@ -1502,7 +1502,7 @@ func (p *AddUserRequest) FastReadField3(buf []byte) (int, error) {
 	} else {
 		offset += l
 
-		p.PhoneNumber = v
+		p.Gender = v
 
 	}
 	return offset, nil
@@ -1516,7 +1516,7 @@ func (p *AddUserRequest) FastReadField4(buf []byte) (int, error) {
 	} else {
 		offset += l
 
-		p.AvatarBlobId = v
+		p.Age = v
 
 	}
 	return offset, nil
@@ -1530,7 +1530,7 @@ func (p *AddUserRequest) FastReadField5(buf []byte) (int, error) {
 	} else {
 		offset += l
 
-		p.OpenId = v
+		p.Password = v
 
 	}
 	return offset, nil
@@ -1573,8 +1573,8 @@ func (p *AddUserRequest) BLength() int {
 
 func (p *AddUserRequest) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "account_id", thrift.STRING, 1)
-	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.AccountId)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "username", thrift.STRING, 1)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.Username)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -1582,8 +1582,8 @@ func (p *AddUserRequest) fastWriteField1(buf []byte, binaryWriter bthrift.Binary
 
 func (p *AddUserRequest) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "username", thrift.STRING, 2)
-	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.Username)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "mobile", thrift.STRING, 2)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.Mobile)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -1591,8 +1591,8 @@ func (p *AddUserRequest) fastWriteField2(buf []byte, binaryWriter bthrift.Binary
 
 func (p *AddUserRequest) fastWriteField3(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "phone_number", thrift.STRING, 3)
-	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.PhoneNumber)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "gender", thrift.STRING, 3)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.Gender)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -1600,8 +1600,8 @@ func (p *AddUserRequest) fastWriteField3(buf []byte, binaryWriter bthrift.Binary
 
 func (p *AddUserRequest) fastWriteField4(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "avatar_blob_id", thrift.STRING, 4)
-	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.AvatarBlobId)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "age", thrift.STRING, 4)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.Age)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -1609,8 +1609,8 @@ func (p *AddUserRequest) fastWriteField4(buf []byte, binaryWriter bthrift.Binary
 
 func (p *AddUserRequest) fastWriteField5(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "open_id", thrift.STRING, 5)
-	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.OpenId)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "password", thrift.STRING, 5)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.Password)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -1618,8 +1618,8 @@ func (p *AddUserRequest) fastWriteField5(buf []byte, binaryWriter bthrift.Binary
 
 func (p *AddUserRequest) field1Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("account_id", thrift.STRING, 1)
-	l += bthrift.Binary.StringLengthNocopy(p.AccountId)
+	l += bthrift.Binary.FieldBeginLength("username", thrift.STRING, 1)
+	l += bthrift.Binary.StringLengthNocopy(p.Username)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l
@@ -1627,8 +1627,8 @@ func (p *AddUserRequest) field1Length() int {
 
 func (p *AddUserRequest) field2Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("username", thrift.STRING, 2)
-	l += bthrift.Binary.StringLengthNocopy(p.Username)
+	l += bthrift.Binary.FieldBeginLength("mobile", thrift.STRING, 2)
+	l += bthrift.Binary.StringLengthNocopy(p.Mobile)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l
@@ -1636,8 +1636,8 @@ func (p *AddUserRequest) field2Length() int {
 
 func (p *AddUserRequest) field3Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("phone_number", thrift.STRING, 3)
-	l += bthrift.Binary.StringLengthNocopy(p.PhoneNumber)
+	l += bthrift.Binary.FieldBeginLength("gender", thrift.STRING, 3)
+	l += bthrift.Binary.StringLengthNocopy(p.Gender)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l
@@ -1645,8 +1645,8 @@ func (p *AddUserRequest) field3Length() int {
 
 func (p *AddUserRequest) field4Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("avatar_blob_id", thrift.STRING, 4)
-	l += bthrift.Binary.StringLengthNocopy(p.AvatarBlobId)
+	l += bthrift.Binary.FieldBeginLength("age", thrift.STRING, 4)
+	l += bthrift.Binary.StringLengthNocopy(p.Age)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l
@@ -1654,8 +1654,8 @@ func (p *AddUserRequest) field4Length() int {
 
 func (p *AddUserRequest) field5Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("open_id", thrift.STRING, 5)
-	l += bthrift.Binary.StringLengthNocopy(p.OpenId)
+	l += bthrift.Binary.FieldBeginLength("password", thrift.STRING, 5)
+	l += bthrift.Binary.StringLengthNocopy(p.Password)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l

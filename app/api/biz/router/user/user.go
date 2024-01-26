@@ -3,8 +3,8 @@
 package user
 
 import (
-	user "saas/app/api/biz/handler/user"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	user "saas/app/api/biz/handler/user"
 )
 
 /*

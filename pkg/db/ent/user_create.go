@@ -4,11 +4,13 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"saas/pkg/db/ent/user"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/rs/xid"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -16,6 +18,20 @@ type UserCreate struct {
 	config
 	mutation *UserMutation
 	hooks    []Hook
+}
+
+// SetAccountID sets the "account_id" field.
+func (uc *UserCreate) SetAccountID(x xid.ID) *UserCreate {
+	uc.mutation.SetAccountID(x)
+	return uc
+}
+
+// SetNillableAccountID sets the "account_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableAccountID(x *xid.ID) *UserCreate {
+	if x != nil {
+		uc.SetAccountID(*x)
+	}
+	return uc
 }
 
 // SetUsername sets the "username" field.
@@ -46,44 +62,44 @@ func (uc *UserCreate) SetNillablePassword(s *string) *UserCreate {
 	return uc
 }
 
-// SetPhoneNumber sets the "phone_number" field.
-func (uc *UserCreate) SetPhoneNumber(s string) *UserCreate {
-	uc.mutation.SetPhoneNumber(s)
+// SetMobile sets the "mobile" field.
+func (uc *UserCreate) SetMobile(s string) *UserCreate {
+	uc.mutation.SetMobile(s)
 	return uc
 }
 
-// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (uc *UserCreate) SetNillablePhoneNumber(s *string) *UserCreate {
+// SetNillableMobile sets the "mobile" field if the given value is not nil.
+func (uc *UserCreate) SetNillableMobile(s *string) *UserCreate {
 	if s != nil {
-		uc.SetPhoneNumber(*s)
+		uc.SetMobile(*s)
 	}
 	return uc
 }
 
 // SetGender sets the "gender" field.
-func (uc *UserCreate) SetGender(i int) *UserCreate {
-	uc.mutation.SetGender(i)
+func (uc *UserCreate) SetGender(s string) *UserCreate {
+	uc.mutation.SetGender(s)
 	return uc
 }
 
 // SetNillableGender sets the "gender" field if the given value is not nil.
-func (uc *UserCreate) SetNillableGender(i *int) *UserCreate {
-	if i != nil {
-		uc.SetGender(*i)
+func (uc *UserCreate) SetNillableGender(s *string) *UserCreate {
+	if s != nil {
+		uc.SetGender(*s)
 	}
 	return uc
 }
 
 // SetAge sets the "age" field.
-func (uc *UserCreate) SetAge(i int) *UserCreate {
-	uc.mutation.SetAge(i)
+func (uc *UserCreate) SetAge(s string) *UserCreate {
+	uc.mutation.SetAge(s)
 	return uc
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (uc *UserCreate) SetNillableAge(i *int) *UserCreate {
-	if i != nil {
-		uc.SetAge(*i)
+func (uc *UserCreate) SetNillableAge(s *string) *UserCreate {
+	if s != nil {
+		uc.SetAge(*s)
 	}
 	return uc
 }
@@ -98,62 +114,6 @@ func (uc *UserCreate) SetIntroduce(s string) *UserCreate {
 func (uc *UserCreate) SetNillableIntroduce(s *string) *UserCreate {
 	if s != nil {
 		uc.SetIntroduce(*s)
-	}
-	return uc
-}
-
-// SetAccountID sets the "account_id" field.
-func (uc *UserCreate) SetAccountID(s string) *UserCreate {
-	uc.mutation.SetAccountID(s)
-	return uc
-}
-
-// SetNillableAccountID sets the "account_id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableAccountID(s *string) *UserCreate {
-	if s != nil {
-		uc.SetAccountID(*s)
-	}
-	return uc
-}
-
-// SetAvatarBlobID sets the "avatar_blob_id" field.
-func (uc *UserCreate) SetAvatarBlobID(s string) *UserCreate {
-	uc.mutation.SetAvatarBlobID(s)
-	return uc
-}
-
-// SetNillableAvatarBlobID sets the "avatar_blob_id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableAvatarBlobID(s *string) *UserCreate {
-	if s != nil {
-		uc.SetAvatarBlobID(*s)
-	}
-	return uc
-}
-
-// SetOpenID sets the "open_id" field.
-func (uc *UserCreate) SetOpenID(s string) *UserCreate {
-	uc.mutation.SetOpenID(s)
-	return uc
-}
-
-// SetNillableOpenID sets the "open_id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableOpenID(s *string) *UserCreate {
-	if s != nil {
-		uc.SetOpenID(*s)
-	}
-	return uc
-}
-
-// SetBalance sets the "balance" field.
-func (uc *UserCreate) SetBalance(i int) *UserCreate {
-	uc.mutation.SetBalance(i)
-	return uc
-}
-
-// SetNillableBalance sets the "balance" field if the given value is not nil.
-func (uc *UserCreate) SetNillableBalance(i *int) *UserCreate {
-	if i != nil {
-		uc.SetBalance(*i)
 	}
 	return uc
 }
@@ -199,6 +159,10 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.AccountID(); !ok {
+		v := user.DefaultAccountID()
+		uc.mutation.SetAccountID(v)
+	}
 	if _, ok := uc.mutation.Gender(); !ok {
 		v := user.DefaultGender
 		uc.mutation.SetGender(v)
@@ -207,6 +171,9 @@ func (uc *UserCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
+	if _, ok := uc.mutation.AccountID(); !ok {
+		return &ValidationError{Name: "account_id", err: errors.New(`ent: missing required field "User.account_id"`)}
+	}
 	return nil
 }
 
@@ -239,6 +206,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := uc.mutation.AccountID(); ok {
+		_spec.SetField(user.FieldAccountID, field.TypeString, value)
+		_node.AccountID = value
+	}
 	if value, ok := uc.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 		_node.Username = &value
@@ -247,37 +218,21 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 		_node.Password = &value
 	}
-	if value, ok := uc.mutation.PhoneNumber(); ok {
-		_spec.SetField(user.FieldPhoneNumber, field.TypeString, value)
-		_node.PhoneNumber = &value
+	if value, ok := uc.mutation.Mobile(); ok {
+		_spec.SetField(user.FieldMobile, field.TypeString, value)
+		_node.Mobile = &value
 	}
 	if value, ok := uc.mutation.Gender(); ok {
-		_spec.SetField(user.FieldGender, field.TypeInt, value)
+		_spec.SetField(user.FieldGender, field.TypeString, value)
 		_node.Gender = &value
 	}
 	if value, ok := uc.mutation.Age(); ok {
-		_spec.SetField(user.FieldAge, field.TypeInt, value)
+		_spec.SetField(user.FieldAge, field.TypeString, value)
 		_node.Age = &value
 	}
 	if value, ok := uc.mutation.Introduce(); ok {
 		_spec.SetField(user.FieldIntroduce, field.TypeString, value)
 		_node.Introduce = &value
-	}
-	if value, ok := uc.mutation.AccountID(); ok {
-		_spec.SetField(user.FieldAccountID, field.TypeString, value)
-		_node.AccountID = &value
-	}
-	if value, ok := uc.mutation.AvatarBlobID(); ok {
-		_spec.SetField(user.FieldAvatarBlobID, field.TypeString, value)
-		_node.AvatarBlobID = &value
-	}
-	if value, ok := uc.mutation.OpenID(); ok {
-		_spec.SetField(user.FieldOpenID, field.TypeString, value)
-		_node.OpenID = &value
-	}
-	if value, ok := uc.mutation.Balance(); ok {
-		_spec.SetField(user.FieldBalance, field.TypeInt, value)
-		_node.Balance = &value
 	}
 	return _node, _spec
 }

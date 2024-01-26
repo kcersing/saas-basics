@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/rs/xid"
 )
 
 // User holds the schema definition for the User entity.
@@ -15,17 +16,15 @@ type User struct {
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("id"),
+		field.String("account_id").
+			GoType(xid.ID{}).
+			DefaultFunc(xid.New),
 		field.String("username").Optional().Comment("姓名").Nillable(),
 		field.String("password").Optional().Comment("密码").Nillable(),
-		field.String("phone_number").Optional().Comment("联系方式").Nillable(),
-		field.Int("gender").Optional().Default(0).Comment("性别").Nillable(),
-		field.Int("age").Optional().Comment("年龄").Nillable(),
+		field.String("mobile").Optional().Comment("联系方式").Nillable(),
+		field.String("gender").Optional().Default("0").Comment("性别").Nillable(),
+		field.String("age").Optional().Comment("年龄").Nillable(),
 		field.String("introduce").Optional().Comment("介绍").Nillable(),
-
-		field.String("account_id").Optional().Comment("").Nillable(),
-		field.String("avatar_blob_id").Optional().Comment("").Nillable(),
-		field.String("open_id").Optional().Comment("").Nillable(),
-		field.Int("balance").Optional().Comment("").Nillable(),
 	}
 }
 
@@ -36,6 +35,6 @@ func (User) Edges() []ent.Edge {
 
 func (User) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("id"),
+		index.Fields("id", "account_id"),
 	}
 }

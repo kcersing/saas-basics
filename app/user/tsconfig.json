@@ -1,7 +1,7 @@
 {
   "name": "user_srv",
   "paseto": {
-    "pub_key": "YOUR_KEY",
+    "secret_key": "YOUR_KEY",
     "implicit": "YOUR-IMPLICIT"
   },
   "otel": {
@@ -11,10 +11,8 @@
     "app_id": "YOUR_ID",
     "app_secret": "YOUR_SECRET"
   },
-  "blob_srv":{
-    "name":"blob_srv"
-  },
   "mysql": {
     "source": "root:root@tcp(localhost:3306)/saas?parseTime=True",
+    "salt": "YOUR_SALT"
   }
 }

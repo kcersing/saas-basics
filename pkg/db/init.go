@@ -11,10 +11,8 @@ import (
 )
 
 // InitDB init DB
-func InitDB() *ent.Client {
+func InitDB(mysqlConfig string) *ent.Client {
 	var err error
-	mysqlConfig := "root:pass@tcp(localhost:3306)/test?parseTime=True"
-
 	drvWd, err := sql.Open("mysql", mysqlConfig)
 	if err != nil {
 		panic(err)

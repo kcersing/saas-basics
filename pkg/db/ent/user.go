@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/rs/xid"
 )
 
 // User is the model entity for the User schema.
@@ -16,26 +17,20 @@ type User struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// AccountID holds the value of the "account_id" field.
+	AccountID xid.ID `json:"account_id,omitempty"`
 	// 姓名
 	Username *string `json:"username,omitempty"`
 	// 密码
 	Password *string `json:"password,omitempty"`
 	// 联系方式
-	PhoneNumber *string `json:"phone_number,omitempty"`
+	Mobile *string `json:"mobile,omitempty"`
 	// 性别
-	Gender *int `json:"gender,omitempty"`
+	Gender *string `json:"gender,omitempty"`
 	// 年龄
-	Age *int `json:"age,omitempty"`
+	Age *string `json:"age,omitempty"`
 	// 介绍
-	Introduce *string `json:"introduce,omitempty"`
-	// AccountID holds the value of the "account_id" field.
-	AccountID *string `json:"account_id,omitempty"`
-	// AvatarBlobID holds the value of the "avatar_blob_id" field.
-	AvatarBlobID *string `json:"avatar_blob_id,omitempty"`
-	// OpenID holds the value of the "open_id" field.
-	OpenID *string `json:"open_id,omitempty"`
-	// Balance holds the value of the "balance" field.
-	Balance      *int `json:"balance,omitempty"`
+	Introduce    *string `json:"introduce,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -44,10 +39,12 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldGender, user.FieldAge, user.FieldBalance:
+		case user.FieldID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldUsername, user.FieldPassword, user.FieldPhoneNumber, user.FieldIntroduce, user.FieldAccountID, user.FieldAvatarBlobID, user.FieldOpenID:
+		case user.FieldUsername, user.FieldPassword, user.FieldMobile, user.FieldGender, user.FieldAge, user.FieldIntroduce:
 			values[i] = new(sql.NullString)
+		case user.FieldAccountID:
+			values[i] = new(xid.ID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -69,6 +66,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			u.ID = int(value.Int64)
+		case user.FieldAccountID:
+			if value, ok := values[i].(*xid.ID); !ok {
+				return fmt.Errorf("unexpected type %T for field account_id", values[i])
+			} else if value != nil {
+				u.AccountID = *value
+			}
 		case user.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field username", values[i])
@@ -83,26 +86,26 @@ func (u *User) assignValues(columns []string, values []any) error {
 				u.Password = new(string)
 				*u.Password = value.String
 			}
-		case user.FieldPhoneNumber:
+		case user.FieldMobile:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
+				return fmt.Errorf("unexpected type %T for field mobile", values[i])
 			} else if value.Valid {
-				u.PhoneNumber = new(string)
-				*u.PhoneNumber = value.String
+				u.Mobile = new(string)
+				*u.Mobile = value.String
 			}
 		case user.FieldGender:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gender", values[i])
 			} else if value.Valid {
-				u.Gender = new(int)
-				*u.Gender = int(value.Int64)
+				u.Gender = new(string)
+				*u.Gender = value.String
 			}
 		case user.FieldAge:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field age", values[i])
 			} else if value.Valid {
-				u.Age = new(int)
-				*u.Age = int(value.Int64)
+				u.Age = new(string)
+				*u.Age = value.String
 			}
 		case user.FieldIntroduce:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -110,34 +113,6 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.Introduce = new(string)
 				*u.Introduce = value.String
-			}
-		case user.FieldAccountID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field account_id", values[i])
-			} else if value.Valid {
-				u.AccountID = new(string)
-				*u.AccountID = value.String
-			}
-		case user.FieldAvatarBlobID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field avatar_blob_id", values[i])
-			} else if value.Valid {
-				u.AvatarBlobID = new(string)
-				*u.AvatarBlobID = value.String
-			}
-		case user.FieldOpenID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field open_id", values[i])
-			} else if value.Valid {
-				u.OpenID = new(string)
-				*u.OpenID = value.String
-			}
-		case user.FieldBalance:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field balance", values[i])
-			} else if value.Valid {
-				u.Balance = new(int)
-				*u.Balance = int(value.Int64)
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -175,6 +150,9 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
+	builder.WriteString("account_id=")
+	builder.WriteString(fmt.Sprintf("%v", u.AccountID))
+	builder.WriteString(", ")
 	if v := u.Username; v != nil {
 		builder.WriteString("username=")
 		builder.WriteString(*v)
@@ -185,44 +163,24 @@ func (u *User) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := u.PhoneNumber; v != nil {
-		builder.WriteString("phone_number=")
+	if v := u.Mobile; v != nil {
+		builder.WriteString("mobile=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	if v := u.Gender; v != nil {
 		builder.WriteString("gender=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
+		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	if v := u.Age; v != nil {
 		builder.WriteString("age=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
+		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	if v := u.Introduce; v != nil {
 		builder.WriteString("introduce=")
 		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := u.AccountID; v != nil {
-		builder.WriteString("account_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := u.AvatarBlobID; v != nil {
-		builder.WriteString("avatar_blob_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := u.OpenID; v != nil {
-		builder.WriteString("open_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := u.Balance; v != nil {
-		builder.WriteString("balance=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteByte(')')
 	return builder.String()

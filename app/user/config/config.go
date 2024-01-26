@@ -21,20 +21,15 @@ type PasetoConfig struct {
 }
 
 type ServerConfig struct {
-	Name        string        `mapstructure:"name" json:"name"`
-	Host        string        `mapstructure:"host" json:"host"`
-	PasetoInfo  PasetoConfig  `mapstructure:"paseto" json:"paseto"`
-	OtelInfo    OtelConfig    `mapstructure:"otel" json:"otel"`
-	WXInfo      WXConfig      `mapstructure:"wx_config" json:"wx_config"`
-	BlobSrvInfo BlobSrvConfig `mapstructure:"blob_srv" json:"blob_srv"`
-	MysqlInfo   MysqlConfig   `mapstructure:"mysql" json:"mysql"`
-}
-
-type BlobSrvConfig struct {
-	Name string `mapstructure:"name" json:"name"`
+	Name       string       `mapstructure:"name" json:"name"`
+	Host       string       `mapstructure:"host" json:"host"`
+	PasetoInfo PasetoConfig `mapstructure:"paseto" json:"paseto"`
+	OtelInfo   OtelConfig   `mapstructure:"otel" json:"otel"`
+	WXInfo     WXConfig     `mapstructure:"wx_config" json:"wx_config"`
+	MysqlInfo  MysqlConfig  `mapstructure:"mysql" json:"mysql"`
 }
 
 type MysqlConfig struct {
-	Source string `mapstructure:"host" json:"source"`
+	Source string `mapstructure:"source" json:"source"`
 	Salt   string `mapstructure:"salt" json:"salt"`
 }

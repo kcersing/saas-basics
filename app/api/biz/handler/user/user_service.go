@@ -4,11 +4,11 @@ package user
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	base "saas/app/api/biz/model/base"
-	user "saas/app/api/biz/model/user"
+	"log"
+	"saas/app/api/biz/model/base"
+	"saas/app/api/biz/model/user"
 )
 
 // Login .
@@ -103,6 +103,6 @@ func AdminDeleteUser(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp := new(base.NilResponse)
-
+	log.Print("1111")
 	c.JSON(consts.StatusOK, resp)
 }

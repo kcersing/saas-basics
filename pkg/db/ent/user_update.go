@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/rs/xid"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -24,6 +25,20 @@ type UserUpdate struct {
 // Where appends a list predicates to the UserUpdate builder.
 func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 	uu.mutation.Where(ps...)
+	return uu
+}
+
+// SetAccountID sets the "account_id" field.
+func (uu *UserUpdate) SetAccountID(x xid.ID) *UserUpdate {
+	uu.mutation.SetAccountID(x)
+	return uu
+}
+
+// SetNillableAccountID sets the "account_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableAccountID(x *xid.ID) *UserUpdate {
+	if x != nil {
+		uu.SetAccountID(*x)
+	}
 	return uu
 }
 
@@ -67,44 +82,37 @@ func (uu *UserUpdate) ClearPassword() *UserUpdate {
 	return uu
 }
 
-// SetPhoneNumber sets the "phone_number" field.
-func (uu *UserUpdate) SetPhoneNumber(s string) *UserUpdate {
-	uu.mutation.SetPhoneNumber(s)
+// SetMobile sets the "mobile" field.
+func (uu *UserUpdate) SetMobile(s string) *UserUpdate {
+	uu.mutation.SetMobile(s)
 	return uu
 }
 
-// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (uu *UserUpdate) SetNillablePhoneNumber(s *string) *UserUpdate {
+// SetNillableMobile sets the "mobile" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableMobile(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetPhoneNumber(*s)
+		uu.SetMobile(*s)
 	}
 	return uu
 }
 
-// ClearPhoneNumber clears the value of the "phone_number" field.
-func (uu *UserUpdate) ClearPhoneNumber() *UserUpdate {
-	uu.mutation.ClearPhoneNumber()
+// ClearMobile clears the value of the "mobile" field.
+func (uu *UserUpdate) ClearMobile() *UserUpdate {
+	uu.mutation.ClearMobile()
 	return uu
 }
 
 // SetGender sets the "gender" field.
-func (uu *UserUpdate) SetGender(i int) *UserUpdate {
-	uu.mutation.ResetGender()
-	uu.mutation.SetGender(i)
+func (uu *UserUpdate) SetGender(s string) *UserUpdate {
+	uu.mutation.SetGender(s)
 	return uu
 }
 
 // SetNillableGender sets the "gender" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableGender(i *int) *UserUpdate {
-	if i != nil {
-		uu.SetGender(*i)
+func (uu *UserUpdate) SetNillableGender(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetGender(*s)
 	}
-	return uu
-}
-
-// AddGender adds i to the "gender" field.
-func (uu *UserUpdate) AddGender(i int) *UserUpdate {
-	uu.mutation.AddGender(i)
 	return uu
 }
 
@@ -115,23 +123,16 @@ func (uu *UserUpdate) ClearGender() *UserUpdate {
 }
 
 // SetAge sets the "age" field.
-func (uu *UserUpdate) SetAge(i int) *UserUpdate {
-	uu.mutation.ResetAge()
-	uu.mutation.SetAge(i)
+func (uu *UserUpdate) SetAge(s string) *UserUpdate {
+	uu.mutation.SetAge(s)
 	return uu
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableAge(i *int) *UserUpdate {
-	if i != nil {
-		uu.SetAge(*i)
+func (uu *UserUpdate) SetNillableAge(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetAge(*s)
 	}
-	return uu
-}
-
-// AddAge adds i to the "age" field.
-func (uu *UserUpdate) AddAge(i int) *UserUpdate {
-	uu.mutation.AddAge(i)
 	return uu
 }
 
@@ -158,93 +159,6 @@ func (uu *UserUpdate) SetNillableIntroduce(s *string) *UserUpdate {
 // ClearIntroduce clears the value of the "introduce" field.
 func (uu *UserUpdate) ClearIntroduce() *UserUpdate {
 	uu.mutation.ClearIntroduce()
-	return uu
-}
-
-// SetAccountID sets the "account_id" field.
-func (uu *UserUpdate) SetAccountID(s string) *UserUpdate {
-	uu.mutation.SetAccountID(s)
-	return uu
-}
-
-// SetNillableAccountID sets the "account_id" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableAccountID(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetAccountID(*s)
-	}
-	return uu
-}
-
-// ClearAccountID clears the value of the "account_id" field.
-func (uu *UserUpdate) ClearAccountID() *UserUpdate {
-	uu.mutation.ClearAccountID()
-	return uu
-}
-
-// SetAvatarBlobID sets the "avatar_blob_id" field.
-func (uu *UserUpdate) SetAvatarBlobID(s string) *UserUpdate {
-	uu.mutation.SetAvatarBlobID(s)
-	return uu
-}
-
-// SetNillableAvatarBlobID sets the "avatar_blob_id" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableAvatarBlobID(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetAvatarBlobID(*s)
-	}
-	return uu
-}
-
-// ClearAvatarBlobID clears the value of the "avatar_blob_id" field.
-func (uu *UserUpdate) ClearAvatarBlobID() *UserUpdate {
-	uu.mutation.ClearAvatarBlobID()
-	return uu
-}
-
-// SetOpenID sets the "open_id" field.
-func (uu *UserUpdate) SetOpenID(s string) *UserUpdate {
-	uu.mutation.SetOpenID(s)
-	return uu
-}
-
-// SetNillableOpenID sets the "open_id" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableOpenID(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetOpenID(*s)
-	}
-	return uu
-}
-
-// ClearOpenID clears the value of the "open_id" field.
-func (uu *UserUpdate) ClearOpenID() *UserUpdate {
-	uu.mutation.ClearOpenID()
-	return uu
-}
-
-// SetBalance sets the "balance" field.
-func (uu *UserUpdate) SetBalance(i int) *UserUpdate {
-	uu.mutation.ResetBalance()
-	uu.mutation.SetBalance(i)
-	return uu
-}
-
-// SetNillableBalance sets the "balance" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableBalance(i *int) *UserUpdate {
-	if i != nil {
-		uu.SetBalance(*i)
-	}
-	return uu
-}
-
-// AddBalance adds i to the "balance" field.
-func (uu *UserUpdate) AddBalance(i int) *UserUpdate {
-	uu.mutation.AddBalance(i)
-	return uu
-}
-
-// ClearBalance clears the value of the "balance" field.
-func (uu *UserUpdate) ClearBalance() *UserUpdate {
-	uu.mutation.ClearBalance()
 	return uu
 }
 
@@ -289,6 +203,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := uu.mutation.AccountID(); ok {
+		_spec.SetField(user.FieldAccountID, field.TypeString, value)
+	}
 	if value, ok := uu.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
@@ -301,62 +218,29 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uu.mutation.PasswordCleared() {
 		_spec.ClearField(user.FieldPassword, field.TypeString)
 	}
-	if value, ok := uu.mutation.PhoneNumber(); ok {
-		_spec.SetField(user.FieldPhoneNumber, field.TypeString, value)
+	if value, ok := uu.mutation.Mobile(); ok {
+		_spec.SetField(user.FieldMobile, field.TypeString, value)
 	}
-	if uu.mutation.PhoneNumberCleared() {
-		_spec.ClearField(user.FieldPhoneNumber, field.TypeString)
+	if uu.mutation.MobileCleared() {
+		_spec.ClearField(user.FieldMobile, field.TypeString)
 	}
 	if value, ok := uu.mutation.Gender(); ok {
-		_spec.SetField(user.FieldGender, field.TypeInt, value)
-	}
-	if value, ok := uu.mutation.AddedGender(); ok {
-		_spec.AddField(user.FieldGender, field.TypeInt, value)
+		_spec.SetField(user.FieldGender, field.TypeString, value)
 	}
 	if uu.mutation.GenderCleared() {
-		_spec.ClearField(user.FieldGender, field.TypeInt)
+		_spec.ClearField(user.FieldGender, field.TypeString)
 	}
 	if value, ok := uu.mutation.Age(); ok {
-		_spec.SetField(user.FieldAge, field.TypeInt, value)
-	}
-	if value, ok := uu.mutation.AddedAge(); ok {
-		_spec.AddField(user.FieldAge, field.TypeInt, value)
+		_spec.SetField(user.FieldAge, field.TypeString, value)
 	}
 	if uu.mutation.AgeCleared() {
-		_spec.ClearField(user.FieldAge, field.TypeInt)
+		_spec.ClearField(user.FieldAge, field.TypeString)
 	}
 	if value, ok := uu.mutation.Introduce(); ok {
 		_spec.SetField(user.FieldIntroduce, field.TypeString, value)
 	}
 	if uu.mutation.IntroduceCleared() {
 		_spec.ClearField(user.FieldIntroduce, field.TypeString)
-	}
-	if value, ok := uu.mutation.AccountID(); ok {
-		_spec.SetField(user.FieldAccountID, field.TypeString, value)
-	}
-	if uu.mutation.AccountIDCleared() {
-		_spec.ClearField(user.FieldAccountID, field.TypeString)
-	}
-	if value, ok := uu.mutation.AvatarBlobID(); ok {
-		_spec.SetField(user.FieldAvatarBlobID, field.TypeString, value)
-	}
-	if uu.mutation.AvatarBlobIDCleared() {
-		_spec.ClearField(user.FieldAvatarBlobID, field.TypeString)
-	}
-	if value, ok := uu.mutation.OpenID(); ok {
-		_spec.SetField(user.FieldOpenID, field.TypeString, value)
-	}
-	if uu.mutation.OpenIDCleared() {
-		_spec.ClearField(user.FieldOpenID, field.TypeString)
-	}
-	if value, ok := uu.mutation.Balance(); ok {
-		_spec.SetField(user.FieldBalance, field.TypeInt, value)
-	}
-	if value, ok := uu.mutation.AddedBalance(); ok {
-		_spec.AddField(user.FieldBalance, field.TypeInt, value)
-	}
-	if uu.mutation.BalanceCleared() {
-		_spec.ClearField(user.FieldBalance, field.TypeInt)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -376,6 +260,20 @@ type UserUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *UserMutation
+}
+
+// SetAccountID sets the "account_id" field.
+func (uuo *UserUpdateOne) SetAccountID(x xid.ID) *UserUpdateOne {
+	uuo.mutation.SetAccountID(x)
+	return uuo
+}
+
+// SetNillableAccountID sets the "account_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableAccountID(x *xid.ID) *UserUpdateOne {
+	if x != nil {
+		uuo.SetAccountID(*x)
+	}
+	return uuo
 }
 
 // SetUsername sets the "username" field.
@@ -418,44 +316,37 @@ func (uuo *UserUpdateOne) ClearPassword() *UserUpdateOne {
 	return uuo
 }
 
-// SetPhoneNumber sets the "phone_number" field.
-func (uuo *UserUpdateOne) SetPhoneNumber(s string) *UserUpdateOne {
-	uuo.mutation.SetPhoneNumber(s)
+// SetMobile sets the "mobile" field.
+func (uuo *UserUpdateOne) SetMobile(s string) *UserUpdateOne {
+	uuo.mutation.SetMobile(s)
 	return uuo
 }
 
-// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillablePhoneNumber(s *string) *UserUpdateOne {
+// SetNillableMobile sets the "mobile" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableMobile(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetPhoneNumber(*s)
+		uuo.SetMobile(*s)
 	}
 	return uuo
 }
 
-// ClearPhoneNumber clears the value of the "phone_number" field.
-func (uuo *UserUpdateOne) ClearPhoneNumber() *UserUpdateOne {
-	uuo.mutation.ClearPhoneNumber()
+// ClearMobile clears the value of the "mobile" field.
+func (uuo *UserUpdateOne) ClearMobile() *UserUpdateOne {
+	uuo.mutation.ClearMobile()
 	return uuo
 }
 
 // SetGender sets the "gender" field.
-func (uuo *UserUpdateOne) SetGender(i int) *UserUpdateOne {
-	uuo.mutation.ResetGender()
-	uuo.mutation.SetGender(i)
+func (uuo *UserUpdateOne) SetGender(s string) *UserUpdateOne {
+	uuo.mutation.SetGender(s)
 	return uuo
 }
 
 // SetNillableGender sets the "gender" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableGender(i *int) *UserUpdateOne {
-	if i != nil {
-		uuo.SetGender(*i)
+func (uuo *UserUpdateOne) SetNillableGender(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetGender(*s)
 	}
-	return uuo
-}
-
-// AddGender adds i to the "gender" field.
-func (uuo *UserUpdateOne) AddGender(i int) *UserUpdateOne {
-	uuo.mutation.AddGender(i)
 	return uuo
 }
 
@@ -466,23 +357,16 @@ func (uuo *UserUpdateOne) ClearGender() *UserUpdateOne {
 }
 
 // SetAge sets the "age" field.
-func (uuo *UserUpdateOne) SetAge(i int) *UserUpdateOne {
-	uuo.mutation.ResetAge()
-	uuo.mutation.SetAge(i)
+func (uuo *UserUpdateOne) SetAge(s string) *UserUpdateOne {
+	uuo.mutation.SetAge(s)
 	return uuo
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableAge(i *int) *UserUpdateOne {
-	if i != nil {
-		uuo.SetAge(*i)
+func (uuo *UserUpdateOne) SetNillableAge(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetAge(*s)
 	}
-	return uuo
-}
-
-// AddAge adds i to the "age" field.
-func (uuo *UserUpdateOne) AddAge(i int) *UserUpdateOne {
-	uuo.mutation.AddAge(i)
 	return uuo
 }
 
@@ -509,93 +393,6 @@ func (uuo *UserUpdateOne) SetNillableIntroduce(s *string) *UserUpdateOne {
 // ClearIntroduce clears the value of the "introduce" field.
 func (uuo *UserUpdateOne) ClearIntroduce() *UserUpdateOne {
 	uuo.mutation.ClearIntroduce()
-	return uuo
-}
-
-// SetAccountID sets the "account_id" field.
-func (uuo *UserUpdateOne) SetAccountID(s string) *UserUpdateOne {
-	uuo.mutation.SetAccountID(s)
-	return uuo
-}
-
-// SetNillableAccountID sets the "account_id" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableAccountID(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetAccountID(*s)
-	}
-	return uuo
-}
-
-// ClearAccountID clears the value of the "account_id" field.
-func (uuo *UserUpdateOne) ClearAccountID() *UserUpdateOne {
-	uuo.mutation.ClearAccountID()
-	return uuo
-}
-
-// SetAvatarBlobID sets the "avatar_blob_id" field.
-func (uuo *UserUpdateOne) SetAvatarBlobID(s string) *UserUpdateOne {
-	uuo.mutation.SetAvatarBlobID(s)
-	return uuo
-}
-
-// SetNillableAvatarBlobID sets the "avatar_blob_id" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableAvatarBlobID(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetAvatarBlobID(*s)
-	}
-	return uuo
-}
-
-// ClearAvatarBlobID clears the value of the "avatar_blob_id" field.
-func (uuo *UserUpdateOne) ClearAvatarBlobID() *UserUpdateOne {
-	uuo.mutation.ClearAvatarBlobID()
-	return uuo
-}
-
-// SetOpenID sets the "open_id" field.
-func (uuo *UserUpdateOne) SetOpenID(s string) *UserUpdateOne {
-	uuo.mutation.SetOpenID(s)
-	return uuo
-}
-
-// SetNillableOpenID sets the "open_id" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableOpenID(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetOpenID(*s)
-	}
-	return uuo
-}
-
-// ClearOpenID clears the value of the "open_id" field.
-func (uuo *UserUpdateOne) ClearOpenID() *UserUpdateOne {
-	uuo.mutation.ClearOpenID()
-	return uuo
-}
-
-// SetBalance sets the "balance" field.
-func (uuo *UserUpdateOne) SetBalance(i int) *UserUpdateOne {
-	uuo.mutation.ResetBalance()
-	uuo.mutation.SetBalance(i)
-	return uuo
-}
-
-// SetNillableBalance sets the "balance" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableBalance(i *int) *UserUpdateOne {
-	if i != nil {
-		uuo.SetBalance(*i)
-	}
-	return uuo
-}
-
-// AddBalance adds i to the "balance" field.
-func (uuo *UserUpdateOne) AddBalance(i int) *UserUpdateOne {
-	uuo.mutation.AddBalance(i)
-	return uuo
-}
-
-// ClearBalance clears the value of the "balance" field.
-func (uuo *UserUpdateOne) ClearBalance() *UserUpdateOne {
-	uuo.mutation.ClearBalance()
 	return uuo
 }
 
@@ -670,6 +467,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			}
 		}
 	}
+	if value, ok := uuo.mutation.AccountID(); ok {
+		_spec.SetField(user.FieldAccountID, field.TypeString, value)
+	}
 	if value, ok := uuo.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
@@ -682,62 +482,29 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if uuo.mutation.PasswordCleared() {
 		_spec.ClearField(user.FieldPassword, field.TypeString)
 	}
-	if value, ok := uuo.mutation.PhoneNumber(); ok {
-		_spec.SetField(user.FieldPhoneNumber, field.TypeString, value)
+	if value, ok := uuo.mutation.Mobile(); ok {
+		_spec.SetField(user.FieldMobile, field.TypeString, value)
 	}
-	if uuo.mutation.PhoneNumberCleared() {
-		_spec.ClearField(user.FieldPhoneNumber, field.TypeString)
+	if uuo.mutation.MobileCleared() {
+		_spec.ClearField(user.FieldMobile, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Gender(); ok {
-		_spec.SetField(user.FieldGender, field.TypeInt, value)
-	}
-	if value, ok := uuo.mutation.AddedGender(); ok {
-		_spec.AddField(user.FieldGender, field.TypeInt, value)
+		_spec.SetField(user.FieldGender, field.TypeString, value)
 	}
 	if uuo.mutation.GenderCleared() {
-		_spec.ClearField(user.FieldGender, field.TypeInt)
+		_spec.ClearField(user.FieldGender, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Age(); ok {
-		_spec.SetField(user.FieldAge, field.TypeInt, value)
-	}
-	if value, ok := uuo.mutation.AddedAge(); ok {
-		_spec.AddField(user.FieldAge, field.TypeInt, value)
+		_spec.SetField(user.FieldAge, field.TypeString, value)
 	}
 	if uuo.mutation.AgeCleared() {
-		_spec.ClearField(user.FieldAge, field.TypeInt)
+		_spec.ClearField(user.FieldAge, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Introduce(); ok {
 		_spec.SetField(user.FieldIntroduce, field.TypeString, value)
 	}
 	if uuo.mutation.IntroduceCleared() {
 		_spec.ClearField(user.FieldIntroduce, field.TypeString)
-	}
-	if value, ok := uuo.mutation.AccountID(); ok {
-		_spec.SetField(user.FieldAccountID, field.TypeString, value)
-	}
-	if uuo.mutation.AccountIDCleared() {
-		_spec.ClearField(user.FieldAccountID, field.TypeString)
-	}
-	if value, ok := uuo.mutation.AvatarBlobID(); ok {
-		_spec.SetField(user.FieldAvatarBlobID, field.TypeString, value)
-	}
-	if uuo.mutation.AvatarBlobIDCleared() {
-		_spec.ClearField(user.FieldAvatarBlobID, field.TypeString)
-	}
-	if value, ok := uuo.mutation.OpenID(); ok {
-		_spec.SetField(user.FieldOpenID, field.TypeString, value)
-	}
-	if uuo.mutation.OpenIDCleared() {
-		_spec.ClearField(user.FieldOpenID, field.TypeString)
-	}
-	if value, ok := uuo.mutation.Balance(); ok {
-		_spec.SetField(user.FieldBalance, field.TypeInt, value)
-	}
-	if value, ok := uuo.mutation.AddedBalance(); ok {
-		_spec.AddField(user.FieldBalance, field.TypeInt, value)
-	}
-	if uuo.mutation.BalanceCleared() {
-		_spec.ClearField(user.FieldBalance, field.TypeInt)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

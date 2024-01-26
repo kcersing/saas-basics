@@ -41,11 +41,11 @@ struct GetUserRequest {
 }
 
 struct AddUserRequest {
-    1:  string account_id
-    2:  string username
-    3:  string phone_number
-    4:  string avatar_blob_id
-    5:  string open_id
+    1:  string username
+    2:  string mobile
+    3:  string gender
+    4:  string age
+    5:  string password
 }
 
 struct AddUserResponse {

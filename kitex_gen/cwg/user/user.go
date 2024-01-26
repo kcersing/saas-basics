@@ -1684,11 +1684,11 @@ func (p *GetUserRequest) Field1DeepEqual(src string) bool {
 }
 
 type AddUserRequest struct {
-	AccountId    string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
-	Username     string `thrift:"username,2" frugal:"2,default,string" json:"username"`
-	PhoneNumber  string `thrift:"phone_number,3" frugal:"3,default,string" json:"phone_number"`
-	AvatarBlobId string `thrift:"avatar_blob_id,4" frugal:"4,default,string" json:"avatar_blob_id"`
-	OpenId       string `thrift:"open_id,5" frugal:"5,default,string" json:"open_id"`
+	Username string `thrift:"username,1" frugal:"1,default,string" json:"username"`
+	Mobile   string `thrift:"mobile,2" frugal:"2,default,string" json:"mobile"`
+	Gender   string `thrift:"gender,3" frugal:"3,default,string" json:"gender"`
+	Age      string `thrift:"age,4" frugal:"4,default,string" json:"age"`
+	Password string `thrift:"password,5" frugal:"5,default,string" json:"password"`
 }
 
 func NewAddUserRequest() *AddUserRequest {
@@ -1699,47 +1699,47 @@ func (p *AddUserRequest) InitDefault() {
 	*p = AddUserRequest{}
 }
 
-func (p *AddUserRequest) GetAccountId() (v string) {
-	return p.AccountId
-}
-
 func (p *AddUserRequest) GetUsername() (v string) {
 	return p.Username
 }
 
-func (p *AddUserRequest) GetPhoneNumber() (v string) {
-	return p.PhoneNumber
+func (p *AddUserRequest) GetMobile() (v string) {
+	return p.Mobile
 }
 
-func (p *AddUserRequest) GetAvatarBlobId() (v string) {
-	return p.AvatarBlobId
+func (p *AddUserRequest) GetGender() (v string) {
+	return p.Gender
 }
 
-func (p *AddUserRequest) GetOpenId() (v string) {
-	return p.OpenId
+func (p *AddUserRequest) GetAge() (v string) {
+	return p.Age
 }
-func (p *AddUserRequest) SetAccountId(val string) {
-	p.AccountId = val
+
+func (p *AddUserRequest) GetPassword() (v string) {
+	return p.Password
 }
 func (p *AddUserRequest) SetUsername(val string) {
 	p.Username = val
 }
-func (p *AddUserRequest) SetPhoneNumber(val string) {
-	p.PhoneNumber = val
+func (p *AddUserRequest) SetMobile(val string) {
+	p.Mobile = val
 }
-func (p *AddUserRequest) SetAvatarBlobId(val string) {
-	p.AvatarBlobId = val
+func (p *AddUserRequest) SetGender(val string) {
+	p.Gender = val
 }
-func (p *AddUserRequest) SetOpenId(val string) {
-	p.OpenId = val
+func (p *AddUserRequest) SetAge(val string) {
+	p.Age = val
+}
+func (p *AddUserRequest) SetPassword(val string) {
+	p.Password = val
 }
 
 var fieldIDToName_AddUserRequest = map[int16]string{
-	1: "account_id",
-	2: "username",
-	3: "phone_number",
-	4: "avatar_blob_id",
-	5: "open_id",
+	1: "username",
+	2: "mobile",
+	3: "gender",
+	4: "age",
+	5: "password",
 }
 
 func (p *AddUserRequest) Read(iprot thrift.TProtocol) (err error) {
@@ -1835,7 +1835,7 @@ func (p *AddUserRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.Username = v
 	}
 	return nil
 }
@@ -1844,7 +1844,7 @@ func (p *AddUserRequest) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Username = v
+		p.Mobile = v
 	}
 	return nil
 }
@@ -1853,7 +1853,7 @@ func (p *AddUserRequest) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.PhoneNumber = v
+		p.Gender = v
 	}
 	return nil
 }
@@ -1862,7 +1862,7 @@ func (p *AddUserRequest) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AvatarBlobId = v
+		p.Age = v
 	}
 	return nil
 }
@@ -1871,7 +1871,7 @@ func (p *AddUserRequest) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.OpenId = v
+		p.Password = v
 	}
 	return nil
 }
@@ -1921,10 +1921,10 @@ WriteStructEndError:
 }
 
 func (p *AddUserRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("username", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.Username); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1938,10 +1938,10 @@ WriteFieldEndError:
 }
 
 func (p *AddUserRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("username", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Username); err != nil {
+	if err := oprot.WriteString(p.Mobile); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1955,10 +1955,10 @@ WriteFieldEndError:
 }
 
 func (p *AddUserRequest) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("phone_number", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("gender", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.PhoneNumber); err != nil {
+	if err := oprot.WriteString(p.Gender); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1972,10 +1972,10 @@ WriteFieldEndError:
 }
 
 func (p *AddUserRequest) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("avatar_blob_id", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("age", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AvatarBlobId); err != nil {
+	if err := oprot.WriteString(p.Age); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1989,10 +1989,10 @@ WriteFieldEndError:
 }
 
 func (p *AddUserRequest) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("open_id", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("password", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.OpenId); err != nil {
+	if err := oprot.WriteString(p.Password); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2019,19 +2019,19 @@ func (p *AddUserRequest) DeepEqual(ano *AddUserRequest) bool {
 	} else if p == nil || ano == nil {
 		return false
 	}
-	if !p.Field1DeepEqual(ano.AccountId) {
+	if !p.Field1DeepEqual(ano.Username) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.Username) {
+	if !p.Field2DeepEqual(ano.Mobile) {
 		return false
 	}
-	if !p.Field3DeepEqual(ano.PhoneNumber) {
+	if !p.Field3DeepEqual(ano.Gender) {
 		return false
 	}
-	if !p.Field4DeepEqual(ano.AvatarBlobId) {
+	if !p.Field4DeepEqual(ano.Age) {
 		return false
 	}
-	if !p.Field5DeepEqual(ano.OpenId) {
+	if !p.Field5DeepEqual(ano.Password) {
 		return false
 	}
 	return true
@@ -2039,35 +2039,35 @@ func (p *AddUserRequest) DeepEqual(ano *AddUserRequest) bool {
 
 func (p *AddUserRequest) Field1DeepEqual(src string) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if strings.Compare(p.Username, src) != 0 {
 		return false
 	}
 	return true
 }
 func (p *AddUserRequest) Field2DeepEqual(src string) bool {
 
-	if strings.Compare(p.Username, src) != 0 {
+	if strings.Compare(p.Mobile, src) != 0 {
 		return false
 	}
 	return true
 }
 func (p *AddUserRequest) Field3DeepEqual(src string) bool {
 
-	if strings.Compare(p.PhoneNumber, src) != 0 {
+	if strings.Compare(p.Gender, src) != 0 {
 		return false
 	}
 	return true
 }
 func (p *AddUserRequest) Field4DeepEqual(src string) bool {
 
-	if strings.Compare(p.AvatarBlobId, src) != 0 {
+	if strings.Compare(p.Age, src) != 0 {
 		return false
 	}
 	return true
 }
 func (p *AddUserRequest) Field5DeepEqual(src string) bool {
 
-	if strings.Compare(p.OpenId, src) != 0 {
+	if strings.Compare(p.Password, src) != 0 {
 		return false
 	}
 	return true

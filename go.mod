@@ -23,8 +23,11 @@ require (
 	github.com/kitex-contrib/obs-opentelemetry v0.2.5
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20240117073603-beff3185044c
 	github.com/kitex-contrib/registry-consul v0.0.0-20230406075225-7d341f036654
+	github.com/medivhzhan/weapp/v2 v2.5.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/olivere/elastic/v7 v7.0.32
+	github.com/pkg/errors v0.9.1
+	github.com/rs/xid v1.5.0
 	github.com/spf13/viper v1.18.2
 	golang.org/x/crypto v0.16.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
@@ -105,7 +108,6 @@ require (
 	github.com/nyaruka/phonenumbers v1.1.6 // indirect
 	github.com/oleiade/lane v1.0.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.9.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect

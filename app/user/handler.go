@@ -2,8 +2,13 @@ package main
 
 import (
 	"context"
+	"errors"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/hertz-contrib/paseto"
 	user "saas/kitex_gen/cwg/user"
+	"saas/pkg/db/ent"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 )
 
 // UserServiceImpl implements the last service interface defined in the IDL.
@@ -30,9 +35,18 @@ type EncryptManager interface {
 	EncryptPassword(code string) string
 }
 type UserMysqlManager interface {
-	CreateUser()
+	CreateUser(req *user.AddUserRequest) (*ent.User, error)
+	GetUserByMobile(mobile string) (*ent.User, error)
+
+	GetUserByAccountId(aid string) (*ent.User, error)
+	GetUserList() ([]*ent.User, error)
+
+	DeleteUser(aid string) error
 }
 type AdminMysqlManager interface {
+	GetAdminByAccountId(aid string) error
+	GetAdminByName(name string) error
+	UpdateAdminPassword(aid string, password string) error
 }
 
 // Login implements the UserServiceImpl interface.
@@ -63,13 +77,20 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest)
 func (s *UserServiceImpl) AddUser(ctx context.Context, req *user.AddUserRequest) (resp *user.AddUserResponse, err error) {
 	// TODO: Your code here...
 	resp = new(user.AddUserResponse)
-	_, err = s.UserMysqlManager.CreateUser()
-
+	_, err = s.UserMysqlManager.CreateUser(req)
 	if err != nil {
-		//if err == errno.NewErrNo()
+		if errors.Is(err, errno.RecordAlreadyExist) {
+			klog.Error("add user error", err)
+			resp.BaseResp = utils.BuildBaseResp(errno.RecordAlreadyExist)
+			return resp, nil
+		}
+		klog.Error("add user error", err)
+		resp.BaseResp = utils.BuildBaseResp(errno.UserSrvErr)
+		return resp, nil
 	}
+	resp.BaseResp = utils.BuildBaseResp(nil)
 
-	return
+	return resp, nil
 }
 
 // DeleteUser implements the UserServiceImpl interface.

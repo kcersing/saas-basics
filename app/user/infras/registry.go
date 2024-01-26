@@ -1,20 +1,21 @@
 package infras
 
 import (
-	"github.com/bwmarrin/snowflake"
-	"github.com/cloudwego/hertz/pkg/common/utils"
-	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/registry"
-	"github.com/hashicorp/consul/api"
-	consul "github.com/kitex-contrib/registry-consul"
 	"net"
-	"saas/app/api/config"
+	"saas/app/user/config"
 	"saas/pkg/consts"
 	"strconv"
+
+	"github.com/bwmarrin/snowflake"
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/cloudwego/kitex/pkg/registry"
+	"github.com/cloudwego/kitex/pkg/utils"
+	"github.com/hashicorp/consul/api"
+	consul "github.com/kitex-contrib/registry-consul"
 )
 
+// InitRegistry to init consul
 func InitRegistry(Port int) (registry.Registry, *registry.Info) {
-
 	r, err := consul.NewConsulRegister(
 		net.JoinHostPort(
 			config.GlobalConsulConfig.Host,
@@ -24,15 +25,15 @@ func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 			Interval:                       consts.ConsulCheckInterval,
 			Timeout:                        consts.ConsulCheckTimeout,
 			DeregisterCriticalServiceAfter: consts.ConsulCheckDeregisterCriticalServiceAfter,
-		}),
-	)
+		}))
 	if err != nil {
 		klog.Fatalf("new consul register failed: %s", err.Error())
 	}
 
+	// Using snowflake to generate service name.
 	sf, err := snowflake.NewNode(2)
 	if err != nil {
-		klog.Fatalf("generate servive name failed: %s", err.Error())
+		klog.Fatalf("generate service name failed: %s", err.Error())
 	}
 	info := &registry.Info{
 		ServiceName: config.GlobalServerConfig.Name,
