@@ -1,9 +1,9 @@
 {
   "name": "api",
-  "port": 9080,
+  "port": 9010,
   "paseto": {
-    "pub_key": "YOUR_KEY",
-    "implicit": "YOUR-IMPLICIT"
+    "pub_key": "123456",
+    "implicit": "654321"
   },
   "otel": {
     "endpoint": ":4317"

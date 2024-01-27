@@ -1,15 +1,15 @@
 {
   "name": "user_srv",
   "paseto": {
-    "secret_key": "YOUR_KEY",
-    "implicit": "YOUR-IMPLICIT"
+    "secret_key": "",
+    "implicit": ""
   },
   "otel": {
     "endpoint": ":4317"
   },
   "wx_config":{
-    "app_id": "YOUR_ID",
-    "app_secret": "YOUR_SECRET"
+    "app_id": "",
+    "app_secret": ""
   },
   "mysql": {
     "source": "root:root@tcp(localhost:3306)/saas?parseTime=True",

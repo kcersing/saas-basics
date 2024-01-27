@@ -23,7 +23,7 @@ func main() {
 
 	infras.InitLogger()
 	infras.InitConfig()
-	//r, info := infras.InitRegistry()
+	r, info := infras.InitRegistry()
 	rpc.Init()
 	tracer, trcCfg := hertztracing.NewServerTracer()
 	tlsCfg := infras.InitTLS()
@@ -35,7 +35,7 @@ func main() {
 		server.WithALPN(true),
 		server.WithTLS(tlsCfg),
 		server.WithHostPorts(fmt.Sprintf(":%d", config.GlobalServerConfig.Port)),
-		//server.WithRegistry(r, info),
+		server.WithRegistry(r, info),
 		server.WithHandleMethodNotAllowed(true),
 	)
 	// add http2

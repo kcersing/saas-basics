@@ -11,10 +11,10 @@ const (
 	AccountID  = "accountID"
 	ID         = "id"
 
-	ApiConfigPath   = "./../../app/api/config.yaml"
-	ApiConfigPath1  = "./../../app/api/tsconfig.json"
-	UserConfigPath  = "./../../app/user/config.yaml"
-	UserConfigPath1 = "./../../app/user/tsconfig.json"
+	ApiConfigPath   = "./app/api/config.yaml"
+	ApiConfigPath1  = "./app/api/tsconfig.json"
+	UserConfigPath  = "./app/user/config.yaml"
+	UserConfigPath1 = "./app/user/tsconfig.json"
 
 	HlogFilePath = "./tmp/hlog/logs/"
 	KlogFilePath = "./tmp/klog/logs/"

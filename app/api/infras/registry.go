@@ -4,7 +4,7 @@ import (
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"github.com/cloudwego/kitex/pkg/utils"
+	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/hashicorp/consul/api"
 	"github.com/hertz-contrib/registry/consul"
 	"net"
@@ -12,6 +12,8 @@ import (
 	"saas/pkg/consts"
 	"strconv"
 )
+
+// api
 
 func InitRegistry() (registry.Registry, *registry.Info) {
 
@@ -21,6 +23,7 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 		config.GlobalConsulConfig.Host,
 		strconv.Itoa(config.GlobalConsulConfig.Port),
 	)
+
 	consulClient, err := api.NewClient(cfg)
 	if err != nil {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
@@ -40,13 +43,13 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 	if err != nil {
 		hlog.Fatalf("generate service name failed: %s", err.Error())
 	}
+
 	info := &registry.Info{
 		ServiceName: config.GlobalServerConfig.Name,
-		Addr: utils.NewNetAddr(
-			consts.TCP, net.JoinHostPort(config.GlobalServerConfig.Host,
-				strconv.Itoa(config.GlobalServerConfig.Port),
-			),
-		),
+		Addr: utils.NewNetAddr(consts.TCP, net.JoinHostPort(
+			config.GlobalConsulConfig.Host,
+			strconv.Itoa(config.GlobalConsulConfig.Port),
+		)),
 		Weight: registry.DefaultWeight,
 		Tags: map[string]string{
 			"ID": sf.Generate().Base36(),

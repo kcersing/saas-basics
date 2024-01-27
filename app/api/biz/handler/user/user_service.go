@@ -5,9 +5,15 @@ package user
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"net/http"
 	"saas/app/api/biz/model/base"
 	"saas/app/api/biz/model/user"
+	"saas/app/api/config"
+	user2 "saas/kitex_gen/cwg/user"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 )
 
 // Login .
@@ -84,23 +90,21 @@ func AdminAddUser(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-	//
-	//resp, err := config.GlobalUserClient.AddUser(ctx, &user2.AddUserRequest{
-	//	Username: req.Username,
-	//	Mobile:   req.Mobile,
-	//	Gender:   req.Gender,
-	//	Age:      req.Age,
-	//	Password: req.Password,
-	//})
-	//
-	//if err != nil {
-	//	hlog.Error("rpc user service err", err)
-	//	resp.BaseResp = utils.BuildBaseResp(errno.ServiceErr)
-	//	c.JSON(http.StatusInternalServerError, resp)
-	//	return
-	//}
 
-	resp := new(base.NilResponse)
+	resp, err := config.GlobalUserClient.AddUser(ctx, &user2.AddUserRequest{
+		Username: req.Username,
+		Mobile:   req.Mobile,
+		Gender:   req.Gender,
+		Age:      req.Age,
+		Password: req.Password,
+	})
+
+	if err != nil {
+		hlog.Error("rpc user service err", err)
+		resp.BaseResp = utils.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

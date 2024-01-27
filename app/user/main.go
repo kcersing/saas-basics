@@ -2,34 +2,33 @@ package main
 
 import (
 	"context"
-	"saas/kitex_gen/cwg/user/userservice"
+	paseto1 "github.com/hertz-contrib/paseto"
 
-	"log"
-	"net"
-	"saas/app/user/config"
-	"saas/app/user/infras"
-	"saas/app/user/mysql"
-	"saas/pkg/consts"
-	db2 "saas/pkg/db"
-	"saas/pkg/md5"
-	"saas/pkg/paseto"
-	"saas/pkg/wechat"
-	"strconv"
-
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/utils"
 	"github.com/cloudwego/kitex/server"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
+	"log"
+	"saas/app/user/config"
+	"saas/app/user/infras"
+	"saas/app/user/mysql"
+	"saas/kitex_gen/cwg/user/userservice"
+	"saas/pkg/consts"
+	db2 "saas/pkg/db"
+	"saas/pkg/md5"
+	"saas/pkg/paseto"
+	"saas/pkg/wechat"
 )
 
 func main() {
-
 	infras.InitLogger()
 	infras.InitConfig()
-	IP, Port := infras.InitFlag()
-	r, info := infras.InitRegistry(Port)
+	//IP, Port := infras.InitFlag()
+	r, info := infras.InitRegistry(9011)
+
 	db := db2.InitDB(config.GlobalServerConfig.MysqlInfo.Source)
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
@@ -37,12 +36,22 @@ func main() {
 		provider.WithInsecure(),
 	)
 	defer p.Shutdown(context.Background())
+
+	//tg, err := paseto.NewTokenGenerator(
+	//	config.GlobalServerConfig.PasetoInfo.SecretKey,
+	//	[]byte(config.GlobalServerConfig.PasetoInfo.Implicit),
+	//)
+
 	tg, err := paseto.NewTokenGenerator(
-		config.GlobalServerConfig.PasetoInfo.SecretKey,
-		[]byte(config.GlobalServerConfig.PasetoInfo.Implicit),
+		paseto1.DefaultPrivateKey,
+		[]byte(paseto1.DefaultImplicit),
 	)
 
+	if err != nil {
+		klog.Fatal(err)
+	}
 	// Create new server.
+
 	svr := userservice.NewServer(
 		&UserServiceImpl{
 			OpenIDResolver: &wechat.AuthServiceImpl{
@@ -55,17 +64,12 @@ func main() {
 			TokenGenerator:    tg,
 		},
 
-		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, "127.0.0.1:9011")),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
-		server.WithLimit(&limit.Option{
-			MaxConnections: 2000,
-			MaxQPS:         500,
-		}),
+		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),
 		server.WithSuite(tracing.NewServerSuite()),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
-			ServiceName: config.GlobalServerConfig.Name,
-		}),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 
 	err = svr.Run()

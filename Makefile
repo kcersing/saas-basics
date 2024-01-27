@@ -18,5 +18,5 @@ user:
 
 # run the api
 .PHONY: api
-user:
+api:
 	go run ./app/api

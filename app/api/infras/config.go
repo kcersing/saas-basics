@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/viper"
 	"saas/app/api/config"
 	"saas/pkg/consts"
+	"saas/pkg/utils"
 )
 
 func InitConfig() {
@@ -47,10 +48,12 @@ func InitConfig() {
 	//if err != nil {
 	//	hlog.Fatalf("sonic unmarshal config failed: %s", err.Error())
 	//}
-	//if config.GlobalServerConfig.Host == "" {
-	//	config.GlobalServerConfig.Host, err = utils.GetLocalIPv4Address()
-	//	if err != nil {
-	//		hlog.Fatalf("get localIpv4Addr failed:%s", err.Error())
-	//	}
-	//}
+	if config.GlobalServerConfig.Host == "" {
+		address, err := utils.GetLocalIPv4Address()
+		if err != nil {
+			hlog.Fatalf("get localIpv4Addr failed:%s", err.Error())
+		} else {
+			config.GlobalServerConfig.Host = address
+		}
+	}
 }

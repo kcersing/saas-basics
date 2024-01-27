@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/viper"
 	"saas/app/user/config"
 	"saas/pkg/consts"
+	"saas/pkg/utils"
 )
 
 func InitConfig() {
@@ -28,4 +29,13 @@ func InitConfig() {
 		hlog.Fatalf("unmarshal err failed: %s", err.Error())
 	}
 	hlog.Info("config Info: %v", config.GlobalServerConfig)
+
+	if config.GlobalServerConfig.Host == "" {
+		address, err := utils.GetLocalIPv4Address()
+		if err != nil {
+			hlog.Fatalf("get localIpv4Addr failed:%s", err.Error())
+		} else {
+			config.GlobalServerConfig.Host = address
+		}
+	}
 }

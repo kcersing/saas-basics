@@ -10,7 +10,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/registry"
 	"github.com/cloudwego/kitex/pkg/utils"
-	"github.com/hashicorp/consul/api"
+	consulapi "github.com/hashicorp/consul/api"
 	consul "github.com/kitex-contrib/registry-consul"
 )
 
@@ -21,7 +21,7 @@ func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 			config.GlobalConsulConfig.Host,
 			strconv.Itoa(config.GlobalConsulConfig.Port),
 		),
-		consul.WithCheck(&api.AgentServiceCheck{
+		consul.WithCheck(&consulapi.AgentServiceCheck{
 			Interval:                       consts.ConsulCheckInterval,
 			Timeout:                        consts.ConsulCheckTimeout,
 			DeregisterCriticalServiceAfter: consts.ConsulCheckDeregisterCriticalServiceAfter,
@@ -35,9 +35,10 @@ func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 	if err != nil {
 		klog.Fatalf("generate service name failed: %s", err.Error())
 	}
+
 	info := &registry.Info{
 		ServiceName: config.GlobalServerConfig.Name,
-		Addr:        utils.NewNetAddr(consts.TCP, net.JoinHostPort(config.GlobalServerConfig.Host, strconv.Itoa(Port))),
+		Addr:        utils.NewNetAddr(consts.TCP, net.JoinHostPort("127.0.0.1", "9011")),
 		Tags: map[string]string{
 			"ID": sf.Generate().Base36(),
 		},
