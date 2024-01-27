@@ -16,11 +16,9 @@ import (
 
 // InitRegistry to init consul
 func InitRegistry(Port int) (registry.Registry, *registry.Info) {
-	r, err := consul.NewConsulRegister(
-		net.JoinHostPort(
-			config.GlobalConsulConfig.Host,
-			strconv.Itoa(config.GlobalConsulConfig.Port),
-		),
+	r, err := consul.NewConsulRegister(net.JoinHostPort(
+		config.GlobalConsulConfig.Host,
+		strconv.Itoa(config.GlobalConsulConfig.Port)),
 		consul.WithCheck(&consulapi.AgentServiceCheck{
 			Interval:                       consts.ConsulCheckInterval,
 			Timeout:                        consts.ConsulCheckTimeout,
@@ -38,7 +36,7 @@ func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 
 	info := &registry.Info{
 		ServiceName: config.GlobalServerConfig.Name,
-		Addr:        utils.NewNetAddr(consts.TCP, net.JoinHostPort("127.0.0.1", "9011")),
+		Addr:        utils.NewNetAddr(consts.TCP, net.JoinHostPort(config.GlobalServerConfig.Host, strconv.Itoa(Port))),
 		Tags: map[string]string{
 			"ID": sf.Generate().Base36(),
 		},

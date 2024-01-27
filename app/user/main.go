@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	paseto1 "github.com/hertz-contrib/paseto"
+	"net"
+	"strconv"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -26,8 +28,8 @@ import (
 func main() {
 	infras.InitLogger()
 	infras.InitConfig()
-	//IP, Port := infras.InitFlag()
-	r, info := infras.InitRegistry(9011)
+	IP, Port := infras.InitFlag()
+	r, info := infras.InitRegistry(Port)
 
 	db := db2.InitDB(config.GlobalServerConfig.MysqlInfo.Source)
 	p := provider.NewOpenTelemetryProvider(
@@ -64,7 +66,7 @@ func main() {
 			TokenGenerator:    tg,
 		},
 
-		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, "127.0.0.1:9011")),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),
