@@ -23,6 +23,7 @@ func NewUserManager(db *ent.Client, salt string) *UserManager {
 }
 
 func (m *UserManager) CreateUser(req *user.AddUserRequest) (*ent.User, error) {
+
 	if _, err := m.GetUserByMobile(req.Mobile); err == nil {
 		return nil, errno.RecordAlreadyExist
 	} else if !errors.Is(err, errno.RecordNotFound) {
@@ -41,6 +42,7 @@ func (m *UserManager) CreateUser(req *user.AddUserRequest) (*ent.User, error) {
 		SetPassword(cryPassword).
 		SetAge(req.Age).
 		Save(context.Background())
+
 	if err != nil {
 		return nil, err
 	}

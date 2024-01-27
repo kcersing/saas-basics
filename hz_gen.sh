@@ -23,3 +23,7 @@ kitex -module saas -service item -gen-path ../../kitex_gen -record ../../idl/rpc
 
 
 kitex -module saas -gen-path ../kitex_gen  ./../idl/base/errno.thrift
+
+
+
+kitex -module saas -gen-path ../../kitex_gen  ./../../idl/rpc/user.thrift

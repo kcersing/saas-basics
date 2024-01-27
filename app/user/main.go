@@ -13,7 +13,6 @@ import (
 	"github.com/cloudwego/kitex/server"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
-	"log"
 	"saas/app/user/config"
 	"saas/app/user/infras"
 	"saas/app/user/mysql"
@@ -26,12 +25,16 @@ import (
 )
 
 func main() {
+
 	infras.InitLogger()
 	infras.InitConfig()
+
 	IP, Port := infras.InitFlag()
+	
 	r, info := infras.InitRegistry(Port)
 
 	db := db2.InitDB(config.GlobalServerConfig.MysqlInfo.Source)
+
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
@@ -54,7 +57,7 @@ func main() {
 	}
 	// Create new server.
 
-	svr := userservice.NewServer(
+	srv := userservice.NewServer(
 		&UserServiceImpl{
 			OpenIDResolver: &wechat.AuthServiceImpl{
 				AppID:     config.GlobalServerConfig.WXInfo.AppId,
@@ -74,10 +77,9 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 
-	err = svr.Run()
-
+	err = srv.Run()
 	if err != nil {
-		log.Println(err.Error())
+		klog.Fatal(err)
 	}
 
 }

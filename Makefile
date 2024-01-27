@@ -1,14 +1,14 @@
 # start the environment of FreeCar
 
-#.PHONY: start
-#start:
-#	docker-compose up -d
+.PHONY: start
+start:
+	docker-compose up -d --build 
 
 # stop the environment of FreeCar
 
-#.PHONY: stop
-#stop:
-#	docker-compose down
+.PHONY: stop
+stop:
+	docker-compose down
 
 
 # run the user

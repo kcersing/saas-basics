@@ -39,23 +39,6 @@ const (
 	ConsulCheckTimeout                        = "5s"
 	ConsulCheckDeregisterCriticalServiceAfter = "15s"
 
-	RedisImage         = "redis:latest"
-	RedisContainerPort = "6379/tcp"
-	RedisContainerIP   = "127.0.0.1"
-	RedisPort          = "0"
-
-	MySQLImage         = "mysql:latest"
-	MySQLContainerPort = "3306/tcp"
-	MySQLContainerIP   = "127.0.0.1"
-	MySQLPort          = "0"
-	MySQLAdmin         = "root"
-	DockerTestMySQLPwd = "123456"
-
-	MongoImage         = "mongo:latest"
-	MongoContainerPort = "27017/tcp"
-	MongoContainerIP   = "127.0.0.1"
-	MongoPort          = "0"
-
 	CarCollection     = "car"
 	ProfileCollection = "profile"
 	TripCollection    = "trip"
