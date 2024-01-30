@@ -2,17 +2,15 @@ package main
 
 import (
 	"context"
-	paseto1 "github.com/hertz-contrib/paseto"
-	"net"
-	"strconv"
-
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/utils"
 	"github.com/cloudwego/kitex/server"
+	paseto1 "github.com/hertz-contrib/paseto"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
+	"net"
 	"saas/app/user/config"
 	"saas/app/user/infras"
 	"saas/app/user/mysql"
@@ -22,6 +20,7 @@ import (
 	"saas/pkg/md5"
 	"saas/pkg/paseto"
 	"saas/pkg/wechat"
+	"strconv"
 )
 
 func main() {
@@ -30,7 +29,7 @@ func main() {
 	infras.InitConfig()
 
 	IP, Port := infras.InitFlag()
-	
+
 	r, info := infras.InitRegistry(Port)
 
 	db := db2.InitDB(config.GlobalServerConfig.MysqlInfo.Source)
@@ -73,6 +72,7 @@ func main() {
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),
+		//server.WithReadWriteTimeout(time.Minute*5),
 		server.WithSuite(tracing.NewServerSuite()),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)

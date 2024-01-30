@@ -3,6 +3,7 @@ package mysql
 import (
 	"context"
 	"errors"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"saas/kitex_gen/cwg/user"
 	"saas/pkg/db/ent"
 	user2 "saas/pkg/db/ent/user"
@@ -42,6 +43,8 @@ func (m *UserManager) CreateUser(req *user.AddUserRequest) (*ent.User, error) {
 		SetPassword(cryPassword).
 		SetAge(req.Age).
 		Save(context.Background())
+
+	klog.Info("111111111111111111111111111111111111111111111111111111")
 
 	if err != nil {
 		return nil, err

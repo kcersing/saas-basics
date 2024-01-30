@@ -3,6 +3,8 @@ services:
 
   # Consul
   consul:
+    hostname: consul
+    container_name: consul
     image: consul:latest
     command: agent -dev -client=0.0.0.0
     ports:
@@ -11,7 +13,6 @@ services:
       - "8301:8301"
       - "8302:8302"
       - "8600:8600/udp"
-
 #  #elasticsearch
 #  elasticsearch:
 #    image: elasticsearch:7.6.2
@@ -35,22 +36,24 @@ services:
 #    ports:
 #      - "5601:5601"
 
-  # RabbitMQ
-  rabbitmq:
-    image: rabbitmq:management
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+#  # RabbitMQ
+#  rabbitmq:
+#    hostname: rabbitmq
+#    container_name: rabbitmq
+#    image: rabbitmq:management
+#    ports:
+#      - "15672:15672"
+#      - "5672:5672"
+#    environment:
+#      - RABBITMQ_DEFAULT_USER=guest
+#      - RABBITMQ_DEFAULT_PASS=guest
 
   # Collector
   otel-collector:
     image: otel/opentelemetry-collector-contrib-dev:latest
-    command: [ "--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}" ]
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: [ "--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}" ]
     ports:
       - "1888:1888"   # pprof extension
       - "8888"   # Prometheus' metrics exposed by the collector
@@ -63,6 +66,8 @@ services:
 
   # Jaeger
   jaeger-all-in-one:
+    hostname: jaegertracing
+    container_name: jaegertracing
     image: jaegertracing/all-in-one:latest
     environment:
       - COLLECTOR_OTLP_ENABLED=true
@@ -74,6 +79,7 @@ services:
 
   # VictoriaMetrics
   victoriametrics:
+    hostname: victoriametrics
     container_name: victoriametrics
     image: victoriametrics/victoria-metrics
     ports:
@@ -93,6 +99,8 @@ services:
 
   # Grafana
   grafana:
+    hostname: grafana
+    container_name: grafana
     image: grafana/grafana:latest
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -100,3 +108,22 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
     ports:
       - "3000:3000"
+
+#  #golang 服务
+#  golang:
+#    #image: golang:latest  # 父镜像名称
+#    image: golang:1.21.6
+#    volumes: # 挂载卷
+#      - /D/docker/src:/go/src
+##    ports: # 端口映射
+##      - "9010:9010"
+#    #    expose: # 暴露的服务端口
+#    #      - 8011
+#    # 依赖的项目，启动的时候根据依赖关系定义启动顺序
+##    depends_on: # 依赖容器
+##     #    - redis
+##      - consul
+##      - jagerservice
+#    stdin_open: true
+#    tty: true
+#    # command: 启动后运行的命令

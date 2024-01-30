@@ -4,6 +4,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -13,7 +14,6 @@ import (
 	"saas/app/api/config"
 	user2 "saas/kitex_gen/cwg/user"
 	"saas/pkg/errno"
-	"saas/pkg/utils"
 )
 
 // Login .
@@ -85,12 +85,12 @@ func AdminChangePassword(ctx context.Context, c *app.RequestContext) {
 func AdminAddUser(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.AddUserRequest
+
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
 	resp, err := config.GlobalUserClient.AddUser(ctx, &user2.AddUserRequest{
 		Username: req.Username,
 		Mobile:   req.Mobile,
@@ -98,10 +98,12 @@ func AdminAddUser(ctx context.Context, c *app.RequestContext) {
 		Age:      req.Age,
 		Password: req.Password,
 	})
+	fmt.Println(resp)
 
 	if err != nil {
 		hlog.Error("rpc user service err", err)
-		resp.BaseResp = utils.BuildBaseResp(errno.ServiceErr)
+		hlog.Info(errno.ServiceErr)
+		//resp.BaseResp = utils.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}

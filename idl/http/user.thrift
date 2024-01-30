@@ -40,6 +40,6 @@ service UserService {
     // admin
     common.NilResponse AdminLogin(1: AdminLoginRequest req) (api.post = "/admin/login")
     common.NilResponse AdminChangePassword(1: AdminChangePasswordRequest req) (api.post = "/admin/password")
-    common.NilResponse AdminAddUser(1: AddUserRequest req) (api.post = "/admin/user")
-    common.NilResponse AdminDeleteUser(1: DeleteUserRequest req) (api.delete = "/admin/user")
+    common.NilResponse AdminAddUser(1: AddUserRequest req) (api.post = "/admin/add-user")
+    common.NilResponse AdminDeleteUser(1: DeleteUserRequest req) (api.post = "/admin/delete-user")
 }
