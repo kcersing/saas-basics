@@ -2,7 +2,7 @@ package errno
 
 import (
 	"fmt"
-	"saas/kitex_gen/errno"
+	"saas/gen/errno"
 )
 
 type ErrNo struct {

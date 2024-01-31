@@ -2,7 +2,7 @@ package utils
 
 import (
 	"github.com/pkg/errors"
-	"saas/kitex_gen/base"
+	"saas/gen/base"
 	"saas/pkg/errno"
 )
 
