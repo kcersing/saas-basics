@@ -11,7 +11,7 @@ struct DictionaryPageReq {
     1:  string title (api.raw = "title" )
     2:  string name (api.raw = "name" )
     3:  string page (api.raw = "page" )
-    4:  string pageSize (api.raw = "pageSize" )
+    4:  string limit (api.raw = "limit" )
 }
 
 //字典名获取字典键值请求数据
@@ -20,7 +20,7 @@ struct DictionaryDetailReq{
 }
 
 // dictionary service
-service dictionary {
+service dictionaryService {
   // 创建字典信息
   base.NilResponse CreateDictionary(1: data.DictionaryInfo req) (api.post = "/api/admin/dict/create")
 

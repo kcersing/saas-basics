@@ -20,7 +20,21 @@ struct UserInfo{
 
 
 
-
+//日志信息
+struct LogsInfo {
+    1:  string type (api.raw = "type")
+    2:  string method (api.raw = "method")
+    3:  string api (api.raw = "api")
+    4:  string success (api.raw = "success")
+    5:  string reqContent (api.raw = "reqContent")
+    6:  string respContent (api.raw = "respContent")
+    7:  string ip (api.raw = "ip")
+    8:  string userAgent (api.raw = "userAgent")
+    9:  string operator (api.raw = "operator")
+    10:  string time (api.raw = "time")
+    11:  string createdAt (api.raw = "createdAt")
+    12:  string updatedAt (api.raw = "updatedAt")
+}
 
 
 // 字典信息

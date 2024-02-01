@@ -7,23 +7,15 @@
 
 #hz 代码生成
 # /api  saas-basics/app/api 下
-hz new -idl ./../../idl/http/user.thrift -mod app/api
+hz new -idl ./../idl/http/user.thrift
 
 
-hz update -idl ./../../idl/http/user.thrift
+hz update -idl ./../idl/base/errno.thrift
+hz update -idl ./../idl/admin/user.thrift
+hz update -idl ./../idl/admin/admin.thrift
+hz update -idl ./../idl/admin/dictionary.thrift
+hz update -idl ./../idl/admin/logs.thrift
+hz update -idl ./../idl/admin/menu.thrift
+hz update -idl ./../idl/admin/role.thrift
+hz update -idl ./../idl/admin/token.thrift
 
-
-#kitex 代码生成
-#  saas-basics/app/user 下
-kitex -module saas -service user -gen-path ../../kitex_gen  ./../../idl/rpc/user.thrift
-
-kitex -module saas -service order -gen-path ../../kitex_gen -record ../../idl/rpc/order.thrift
-
-kitex -module saas -service item -gen-path ../../kitex_gen -record ../../idl/rpc/item.thrift
-
-
-kitex -module saas -gen-path ../kitex_gen  ./../idl/base/errno.thrift
-
-
-
-kitex -module saas -gen-path ../../kitex_gen  ./../../idl/rpc/user.thrift
