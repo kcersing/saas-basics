@@ -1,4 +1,4 @@
-namespace go admin
+namespace go admin.admin
 
 include "../base/base.thrift"
 include "../base/data.thrift"

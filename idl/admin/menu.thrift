@@ -1,4 +1,4 @@
-namespace go admin
+namespace go admin.menu
 
 include "../base/base.thrift"
 include "../base/data.thrift"
@@ -45,7 +45,7 @@ struct CreateOrUpdateMenuParamReq{
 }
 
 // menu service
-service AdminService {
+service MenuService {
 
   // 创建菜单
   base.NilResponse CreateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/admin/menu/create")

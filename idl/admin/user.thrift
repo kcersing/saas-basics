@@ -1,4 +1,4 @@
-namespace go admin
+namespace go admin.user
 
 include "../base/base.thrift"
 include "../base/data.thrift"
@@ -91,7 +91,7 @@ service UserService {
   base.NilResponse DeleteUser(1: base.IDReq req) (api.post = "/api/admin/user")
 
   // 更新用户个人信息
-  base.NilResponse UpdateProfile(1: ProfileReq req) (api.post = "/api/admin/user/profile")
+  base.NilResponse UpdateProfile(1: ProfileReq req) (api.post = "/api/admin/user/profile-update")
 
   // 获取用户个人信息
   base.NilResponse UserProfile(1: base.Empty req) (api.post = "/api/admin/user/profile")

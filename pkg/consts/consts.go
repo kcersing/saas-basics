@@ -11,16 +11,15 @@ const (
 	AccountID  = "accountID"
 	ID         = "id"
 
-	ApiConfigPath  = "./app/api/config.yaml"
-	ApiConfigPath1 = "./app/api/tsconfig.json"
+	ApiConfigPath = "./app/config.yaml"
 
 	HlogFilePath = "./tmp/hlog/logs/"
 
 	MySqlDSN    = "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 	RabbitMqURI = "amqp://%s:%s@%s:%d/"
 
-	TCP = "tcp"
-
+	TCP                  = "tcp"
+	FreePortAddress      = ""
 	RedisProfileClientDB = 0
 	RedisBlobClientDB    = 0
 	RedisCarClientDB     = 0

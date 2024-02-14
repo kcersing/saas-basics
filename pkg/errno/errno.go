@@ -2,7 +2,7 @@ package errno
 
 import (
 	"fmt"
-	"saas/gen/errno"
+	"saas/app/biz/model/errno"
 )
 
 type ErrNo struct {

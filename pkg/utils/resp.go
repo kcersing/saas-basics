@@ -2,7 +2,8 @@ package utils
 
 import (
 	"github.com/pkg/errors"
-	"saas/gen/base"
+	"saas/app/biz/model/base"
+
 	"saas/pkg/errno"
 )
 
