@@ -4,6 +4,7 @@ package menu
 
 import (
 	"context"
+	"saas/app/biz/service/admin"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -85,8 +86,7 @@ func MenuList(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
+	resp := admin.NewMenu(ctx, c).MenuList(req)
 
 	c.JSON(consts.StatusOK, resp)
 }
