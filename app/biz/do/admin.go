@@ -3,7 +3,7 @@ package do
 import (
 	"context"
 	"github.com/hertz-contrib/paseto"
-	"saas/app/biz/model/admin"
+	"saas/app/biz/model/admin/admin"
 )
 
 type Admin interface {

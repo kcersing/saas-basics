@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/user"
 	"sync"
 
@@ -73,6 +74,7 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
+			menu.Table: menu.ValidColumn,
 			user.Table: user.ValidColumn,
 		})
 	})

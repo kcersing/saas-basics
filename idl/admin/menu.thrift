@@ -3,36 +3,22 @@ namespace go admin.menu
 include "../base/base.thrift"
 include "../base/data.thrift"
 
-//菜单的meta数据
-struct Meta {
-    1:  string title (api.raw = "title" )
-    2:  string icon (api.raw = "icon" )
-    3:  string hideMenu (api.raw = "hideMenu" )
-    4:  string hideBreadcrumb (api.raw = "hideBreadcrumb" )
-    5:  string currentActiveMenu (api.raw = "currentActiveMenu" )
-    6:  string ignoreKeepAlive (api.raw = "ignoreKeepAlive" )
-    7:  string hideTab (api.raw = "hideTab" )
-    8:  string frameSrc (api.raw = "frameSrc" )
-    9:  string carryParam (api.raw = "carryParam" )
-    10:  string hideChildrenInMenu (api.raw = "hideChildrenInMenu" )
-    11:  string affix (api.raw = "affix" )
-    12:  string dynamicLevel (api.raw = "dynamicLevel" )
-    13:  string realPath (api.raw = "realPath" )
-}
 
 // 创建或更新菜单信息参数
 struct CreateOrUpdateMenuReq {
     1:  string id (api.raw = "id" )
     2:  string name (api.raw = "name" api.vd = "len($) > 0 && len($) < 33>")
-    3:  string parent_id (api.raw = "parent_id")
-    4:  string level (api.raw = "level")
-    5:  string path (api.raw = "path")
-    6:  string redirect (api.raw = "redirect")
-    7:  string component (api.raw = "component")
-    8:  string orderNo (api.raw = "orderNo")
-    9:  string disabled (api.raw = "disabled")
-    10:  string menuType (api.raw = "menuType")
-    11:  Meta meta (api.raw = "meta")
+    3:  string menu_type (api.raw = "menu_type")
+    4:  string parent_id (api.raw = "parent_id")
+    6:  string level (api.raw = "level")
+    7:  string route_path (api.raw = "route_path")
+    8:  string route_name (api.raw = "route_name")
+    9:  string component (api.raw = "component")
+    10:  string Status (api.raw = "status")
+    11:  string icon_type (api.raw = "icon_type")
+    12:  string icon (api.raw = "icon")
+    13:  string i18n_key (api.raw = "i18n_key")
+    14:  string redirect (api.raw = "redirect")
 }
 
 //更新菜单额外参数

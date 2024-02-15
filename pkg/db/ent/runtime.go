@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/schema"
 	"saas/pkg/db/ent/user"
 
@@ -13,6 +14,12 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	menuFields := schema.Menu{}.Fields()
+	_ = menuFields
+	// menuDescParentID is the schema descriptor for parent_id field.
+	menuDescParentID := menuFields[1].Descriptor()
+	// menu.DefaultParentID holds the default value on creation for the parent_id field.
+	menu.DefaultParentID = menuDescParentID.Default.(int)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescAccountID is the schema descriptor for account_id field.

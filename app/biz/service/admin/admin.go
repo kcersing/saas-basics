@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"saas/app/biz/do"
-	"saas/app/biz/model/admin"
+	"saas/app/biz/model/admin/admin"
 	"saas/app/config"
 	"saas/pkg/db"
 	"saas/pkg/db/ent"
