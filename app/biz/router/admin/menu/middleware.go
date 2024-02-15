@@ -85,3 +85,8 @@ func _updatemenuMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _menulistsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

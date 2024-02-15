@@ -1,2 +1,5 @@
 name: 'api'
 port: 9010
+MySql:
+  host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
+  salt: YOUR_SALT

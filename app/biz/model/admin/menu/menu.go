@@ -996,7 +996,7 @@ type MenuService interface {
 	//获取角色菜单列表
 	MenuByRole(ctx context.Context, req *base.Empty) (r *base.NilResponse, err error)
 	//获取菜单列表
-	MenuList(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error)
+	MenuLists(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error)
 	//创建菜单额外参数
 	CreateMenuParam(ctx context.Context, req *CreateOrUpdateMenuParamReq) (r *base.NilResponse, err error)
 	//更新菜单额外参数
@@ -1069,11 +1069,11 @@ func (p *MenuServiceClient) MenuByRole(ctx context.Context, req *base.Empty) (r 
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *MenuServiceClient) MenuList(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error) {
-	var _args MenuServiceMenuListArgs
+func (p *MenuServiceClient) MenuLists(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error) {
+	var _args MenuServiceMenuListsArgs
 	_args.Req = req
-	var _result MenuServiceMenuListResult
-	if err = p.Client_().Call(ctx, "MenuList", &_args, &_result); err != nil {
+	var _result MenuServiceMenuListsResult
+	if err = p.Client_().Call(ctx, "MenuLists", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -1139,7 +1139,7 @@ func NewMenuServiceProcessor(handler MenuService) *MenuServiceProcessor {
 	self.AddToProcessorMap("UpdateMenu", &menuServiceProcessorUpdateMenu{handler: handler})
 	self.AddToProcessorMap("DeleteMenu", &menuServiceProcessorDeleteMenu{handler: handler})
 	self.AddToProcessorMap("MenuByRole", &menuServiceProcessorMenuByRole{handler: handler})
-	self.AddToProcessorMap("MenuList", &menuServiceProcessorMenuList{handler: handler})
+	self.AddToProcessorMap("MenuLists", &menuServiceProcessorMenuLists{handler: handler})
 	self.AddToProcessorMap("CreateMenuParam", &menuServiceProcessorCreateMenuParam{handler: handler})
 	self.AddToProcessorMap("UpdateMenuParam", &menuServiceProcessorUpdateMenuParam{handler: handler})
 	self.AddToProcessorMap("DeleteMenuParam", &menuServiceProcessorDeleteMenuParam{handler: handler})
@@ -1356,16 +1356,16 @@ func (p *menuServiceProcessorMenuByRole) Process(ctx context.Context, seqId int3
 	return true, err
 }
 
-type menuServiceProcessorMenuList struct {
+type menuServiceProcessorMenuLists struct {
 	handler MenuService
 }
 
-func (p *menuServiceProcessorMenuList) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := MenuServiceMenuListArgs{}
+func (p *menuServiceProcessorMenuLists) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := MenuServiceMenuListsArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("MenuList", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("MenuLists", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1374,11 +1374,11 @@ func (p *menuServiceProcessorMenuList) Process(ctx context.Context, seqId int32,
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := MenuServiceMenuListResult{}
+	result := MenuServiceMenuListsResult{}
 	var retval *base.NilResponse
-	if retval, err2 = p.handler.MenuList(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MenuList: "+err2.Error())
-		oprot.WriteMessageBegin("MenuList", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.MenuLists(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MenuLists: "+err2.Error())
+		oprot.WriteMessageBegin("MenuLists", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1386,7 +1386,7 @@ func (p *menuServiceProcessorMenuList) Process(ctx context.Context, seqId int32,
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("MenuList", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("MenuLists", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2740,32 +2740,32 @@ func (p *MenuServiceMenuByRoleResult) String() string {
 
 }
 
-type MenuServiceMenuListArgs struct {
+type MenuServiceMenuListsArgs struct {
 	Req *base.PageInfoReq `thrift:"req,1"`
 }
 
-func NewMenuServiceMenuListArgs() *MenuServiceMenuListArgs {
-	return &MenuServiceMenuListArgs{}
+func NewMenuServiceMenuListsArgs() *MenuServiceMenuListsArgs {
+	return &MenuServiceMenuListsArgs{}
 }
 
-var MenuServiceMenuListArgs_Req_DEFAULT *base.PageInfoReq
+var MenuServiceMenuListsArgs_Req_DEFAULT *base.PageInfoReq
 
-func (p *MenuServiceMenuListArgs) GetReq() (v *base.PageInfoReq) {
+func (p *MenuServiceMenuListsArgs) GetReq() (v *base.PageInfoReq) {
 	if !p.IsSetReq() {
-		return MenuServiceMenuListArgs_Req_DEFAULT
+		return MenuServiceMenuListsArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_MenuServiceMenuListArgs = map[int16]string{
+var fieldIDToName_MenuServiceMenuListsArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *MenuServiceMenuListArgs) IsSetReq() bool {
+func (p *MenuServiceMenuListsArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *MenuServiceMenuListArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *MenuServiceMenuListsArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -2811,7 +2811,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MenuServiceMenuListArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MenuServiceMenuListsArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2821,7 +2821,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *MenuServiceMenuListArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *MenuServiceMenuListsArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.Req = base.NewPageInfoReq()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
@@ -2829,9 +2829,9 @@ func (p *MenuServiceMenuListArgs) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *MenuServiceMenuListArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *MenuServiceMenuListsArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("MenuList_args"); err != nil {
+	if err = oprot.WriteStructBegin("MenuLists_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2857,7 +2857,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *MenuServiceMenuListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *MenuServiceMenuListsArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2874,40 +2874,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *MenuServiceMenuListArgs) String() string {
+func (p *MenuServiceMenuListsArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("MenuServiceMenuListArgs(%+v)", *p)
+	return fmt.Sprintf("MenuServiceMenuListsArgs(%+v)", *p)
 
 }
 
-type MenuServiceMenuListResult struct {
+type MenuServiceMenuListsResult struct {
 	Success *base.NilResponse `thrift:"success,0,optional"`
 }
 
-func NewMenuServiceMenuListResult() *MenuServiceMenuListResult {
-	return &MenuServiceMenuListResult{}
+func NewMenuServiceMenuListsResult() *MenuServiceMenuListsResult {
+	return &MenuServiceMenuListsResult{}
 }
 
-var MenuServiceMenuListResult_Success_DEFAULT *base.NilResponse
+var MenuServiceMenuListsResult_Success_DEFAULT *base.NilResponse
 
-func (p *MenuServiceMenuListResult) GetSuccess() (v *base.NilResponse) {
+func (p *MenuServiceMenuListsResult) GetSuccess() (v *base.NilResponse) {
 	if !p.IsSetSuccess() {
-		return MenuServiceMenuListResult_Success_DEFAULT
+		return MenuServiceMenuListsResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_MenuServiceMenuListResult = map[int16]string{
+var fieldIDToName_MenuServiceMenuListsResult = map[int16]string{
 	0: "success",
 }
 
-func (p *MenuServiceMenuListResult) IsSetSuccess() bool {
+func (p *MenuServiceMenuListsResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *MenuServiceMenuListResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *MenuServiceMenuListsResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -2953,7 +2953,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MenuServiceMenuListResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MenuServiceMenuListsResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2963,7 +2963,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *MenuServiceMenuListResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *MenuServiceMenuListsResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = base.NewNilResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
@@ -2971,9 +2971,9 @@ func (p *MenuServiceMenuListResult) ReadField0(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *MenuServiceMenuListResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *MenuServiceMenuListsResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("MenuList_result"); err != nil {
+	if err = oprot.WriteStructBegin("MenuLists_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2999,7 +2999,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *MenuServiceMenuListResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *MenuServiceMenuListsResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -3018,11 +3018,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *MenuServiceMenuListResult) String() string {
+func (p *MenuServiceMenuListsResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("MenuServiceMenuListResult(%+v)", *p)
+	return fmt.Sprintf("MenuServiceMenuListsResult(%+v)", *p)
 
 }
 

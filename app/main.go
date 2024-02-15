@@ -3,51 +3,42 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	cfg "github.com/hertz-contrib/http2/config"
-	"github.com/hertz-contrib/http2/factory"
-	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
-	hertzSentinel "github.com/hertz-contrib/opensergo/sentinel/adapter"
-	"github.com/hertz-contrib/pprof"
-	"net/http"
 	"saas/app/config"
 	"saas/app/infras"
-	"time"
 )
 
 func main() {
 
 	infras.InitLogger()
 	infras.InitConfig()
-	tracer, trcCfg := hertztracing.NewServerTracer()
+	//tracer, trcCfg := hertztracing.NewServerTracer()
 	// create a new server
 	h := server.New(
-		tracer,
-		server.WithALPN(true),
+		//tracer,
+		//server.WithALPN(true),
 		server.WithHostPorts(fmt.Sprintf(":%d", config.GlobalServerConfig.Port)),
-		server.WithHandleMethodNotAllowed(true),
+		//server.WithHandleMethodNotAllowed(true),
 	)
 	// add http2
-	h.AddProtocol(
-		"h2",
-		factory.NewServerFactory(
-			cfg.WithReadTimeout(time.Minute),
-			cfg.WithDisableKeepAlive(false),
-		),
-	)
+	//h.AddProtocol(
+	//	"h2",
+	//	factory.NewServerFactory(
+	//		cfg.WithReadTimeout(time.Minute),
+	//		cfg.WithDisableKeepAlive(false),
+	//	),
+	//)
 	// use pprof & tracer & sentinel
-	pprof.Register(h)
-	h.Use(hertztracing.ServerMiddleware(trcCfg))
-	h.Use(hertzSentinel.SentinelServerMiddleware(
-		hertzSentinel.WithServerBlockFallback(func(c context.Context, ctx *app.RequestContext) {
-			// abort with status 429 by default
-			ctx.JSON(http.StatusTooManyRequests, nil)
-			ctx.Abort()
-		}),
-	))
+	//pprof.Register(h)
+	//h.Use(hertztracing.ServerMiddleware(trcCfg))
+	//h.Use(hertzSentinel.SentinelServerMiddleware(
+	//	hertzSentinel.WithServerBlockFallback(func(c context.Context, ctx *app.RequestContext) {
+	//		// abort with status 429 by default
+	//		ctx.JSON(http.StatusTooManyRequests, nil)
+	//		ctx.Abort()
+	//	}),
+	//))
 	register(h)
 	h.Spin()
 }

@@ -4,12 +4,12 @@ package menu
 
 import (
 	"context"
-	"saas/app/biz/service/admin"
-
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	menu "saas/app/biz/model/admin/menu"
 	base "saas/app/biz/model/base"
+	"saas/app/biz/service/admin"
 )
 
 // CreateMenu .
@@ -76,21 +76,6 @@ func MenuByRole(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// MenuList .
-// @router /api/admin/menu/list [GET]
-func MenuList(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.PageInfoReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-	resp := admin.NewMenu(ctx, c).MenuList(req)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
 // CreateMenuParam .
 // @router /api/admin/menu/param/create [POST]
 func CreateMenuParam(ctx context.Context, c *app.RequestContext) {
@@ -151,6 +136,24 @@ func MenuParamListByMenuID(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// MenuLists .
+// @router /api/admin/menu/lists [GET]
+func MenuLists(ctx context.Context, c *app.RequestContext) {
+	hlog.Info("00000000000000000000000000")
+	var err error
+	var req base.PageInfoReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	hlog.Info("00000000000000000000000000")
+
+	resp := admin.NewMenu(ctx, c).MenuList(req)
 
 	c.JSON(consts.StatusOK, resp)
 }

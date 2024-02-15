@@ -46,7 +46,7 @@ service MenuService {
   base.NilResponse MenuByRole(1: base.Empty req) (api.get = "/api/admin/menu/role")
 
   //获取菜单列表
-  base.NilResponse MenuList(1: base.PageInfoReq req) (api.get = "/api/admin/menu/list")
+  base.NilResponse MenuLists(1: base.PageInfoReq req) (api.get = "/api/admin/menu/lists")
 
   //创建菜单额外参数
   base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/create")

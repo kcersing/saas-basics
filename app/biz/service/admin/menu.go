@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"saas/app/biz/do"
 	"saas/app/biz/model/admin/menu"
 	"saas/app/biz/model/base"
@@ -59,6 +60,7 @@ func (m Menu) MenuByRole(id string) error {
 
 func (m Menu) MenuList(req base.PageInfoReq) []*ent.Menu {
 	//TODO implement me
+
 	all, err := m.db.Menu.
 		Query().
 		Order(ent.Asc(menu2.FieldLevel)).
@@ -66,6 +68,9 @@ func (m Menu) MenuList(req base.PageInfoReq) []*ent.Menu {
 	if err != nil {
 
 	}
+
+	hlog.Info(all)
+	hlog.Info(err)
 	return all
 }
 
