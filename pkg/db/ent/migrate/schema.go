@@ -3,13 +3,14 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
 
 var (
-	// MenusColumns holds the columns for the "menus" table.
-	MenusColumns = []*schema.Column{
+	// MenuColumns holds the columns for the "menu" table.
+	MenuColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "route_name", Type: field.TypeString, Nullable: true},
 		{Name: "route_path", Type: field.TypeString, Nullable: true},
@@ -20,18 +21,18 @@ var (
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "i18n_key", Type: field.TypeString, Nullable: true},
 		{Name: "level", Type: field.TypeString, Nullable: true},
-		{Name: "parent_id", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "parent_id", Type: field.TypeInt, Nullable: true},
 	}
-	// MenusTable holds the schema information for the "menus" table.
-	MenusTable = &schema.Table{
-		Name:       "menus",
-		Columns:    MenusColumns,
-		PrimaryKey: []*schema.Column{MenusColumns[0]},
+	// MenuTable holds the schema information for the "menu" table.
+	MenuTable = &schema.Table{
+		Name:       "menu",
+		Columns:    MenuColumns,
+		PrimaryKey: []*schema.Column{MenuColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "menus_menus_children",
-				Columns:    []*schema.Column{MenusColumns[10]},
-				RefColumns: []*schema.Column{MenusColumns[0]},
+				Symbol:     "menu_menu_children",
+				Columns:    []*schema.Column{MenuColumns[10]},
+				RefColumns: []*schema.Column{MenuColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -39,41 +40,49 @@ var (
 			{
 				Name:    "menu_id_parent_id",
 				Unique:  false,
-				Columns: []*schema.Column{MenusColumns[0], MenusColumns[10]},
+				Columns: []*schema.Column{MenuColumns[0], MenuColumns[10]},
 			},
 		},
 	}
-	// UsersColumns holds the columns for the "users" table.
-	UsersColumns = []*schema.Column{
+	// UserColumns holds the columns for the "user" table.
+	UserColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "account_id", Type: field.TypeString},
-		{Name: "username", Type: field.TypeString, Nullable: true},
-		{Name: "password", Type: field.TypeString, Nullable: true},
-		{Name: "mobile", Type: field.TypeString, Nullable: true},
-		{Name: "gender", Type: field.TypeString, Nullable: true, Default: "0"},
-		{Name: "age", Type: field.TypeString, Nullable: true},
-		{Name: "introduce", Type: field.TypeString, Nullable: true},
+		{Name: "username", Type: field.TypeString, Nullable: true, Comment: "姓名"},
+		{Name: "password", Type: field.TypeString, Nullable: true, Comment: "密码"},
+		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "联系方式"},
+		{Name: "gender", Type: field.TypeString, Nullable: true, Comment: "性别", Default: "0"},
+		{Name: "age", Type: field.TypeString, Nullable: true, Comment: "年龄"},
+		{Name: "introduce", Type: field.TypeString, Nullable: true, Comment: "介绍"},
 	}
-	// UsersTable holds the schema information for the "users" table.
-	UsersTable = &schema.Table{
-		Name:       "users",
-		Columns:    UsersColumns,
-		PrimaryKey: []*schema.Column{UsersColumns[0]},
+	// UserTable holds the schema information for the "user" table.
+	UserTable = &schema.Table{
+		Name:       "user",
+		Columns:    UserColumns,
+		PrimaryKey: []*schema.Column{UserColumns[0]},
 		Indexes: []*schema.Index{
 			{
 				Name:    "user_id_account_id",
 				Unique:  false,
-				Columns: []*schema.Column{UsersColumns[0], UsersColumns[1]},
+				Columns: []*schema.Column{UserColumns[0], UserColumns[1]},
 			},
 		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		MenusTable,
-		UsersTable,
+		MenuTable,
+		UserTable,
 	}
 )
 
 func init() {
-	MenusTable.ForeignKeys[0].RefTable = MenusTable
+	MenuTable.ForeignKeys[0].RefTable = MenuTable
+	MenuTable.Annotation = &entsql.Annotation{
+		Table:   "menu",
+		Charset: "utf8mb4",
+	}
+	UserTable.Annotation = &entsql.Annotation{
+		Table:   "user",
+		Charset: "utf8mb4",
+	}
 }

@@ -37,13 +37,13 @@ const (
 	// EdgeChildren holds the string denoting the children edge name in mutations.
 	EdgeChildren = "children"
 	// Table holds the table name of the menu in the database.
-	Table = "menus"
+	Table = "menu"
 	// ParentTable is the table that holds the parent relation/edge.
-	ParentTable = "menus"
+	ParentTable = "menu"
 	// ParentColumn is the table column denoting the parent relation/edge.
 	ParentColumn = "parent_id"
 	// ChildrenTable is the table that holds the children relation/edge.
-	ChildrenTable = "menus"
+	ChildrenTable = "menu"
 	// ChildrenColumn is the table column denoting the children relation/edge.
 	ChildrenColumn = "parent_id"
 )
@@ -72,11 +72,6 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
-
-var (
-	// DefaultParentID holds the default value on creation for the "parent_id" field.
-	DefaultParentID int
-)
 
 // OrderOption defines the ordering options for the Menu queries.
 type OrderOption func(*sql.Selector)

@@ -191,7 +191,6 @@ func (mc *MenuCreate) Mutation() *MenuMutation {
 
 // Save creates the Menu in the database.
 func (mc *MenuCreate) Save(ctx context.Context) (*Menu, error) {
-	mc.defaults()
 	return withHooks(ctx, mc.sqlSave, mc.mutation, mc.hooks)
 }
 
@@ -214,14 +213,6 @@ func (mc *MenuCreate) Exec(ctx context.Context) error {
 func (mc *MenuCreate) ExecX(ctx context.Context) {
 	if err := mc.Exec(ctx); err != nil {
 		panic(err)
-	}
-}
-
-// defaults sets the default values of the builder before save.
-func (mc *MenuCreate) defaults() {
-	if _, ok := mc.mutation.ParentID(); !ok {
-		v := menu.DefaultParentID
-		mc.mutation.SetParentID(v)
 	}
 }
 
@@ -349,7 +340,6 @@ func (mcb *MenuCreateBulk) Save(ctx context.Context) ([]*Menu, error) {
 	for i := range mcb.builders {
 		func(i int, root context.Context) {
 			builder := mcb.builders[i]
-			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MenuMutation)
 				if !ok {

@@ -1,6 +1,7 @@
 package errno
 
 import (
+	"errors"
 	"fmt"
 	"saas/app/biz/model/errno"
 )
@@ -8,12 +9,6 @@ import (
 type ErrNo struct {
 	ErrCode int64
 	ErrMsg  string
-}
-
-type Response struct {
-	Code    int64       `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
 }
 
 func (e ErrNo) Error() string {
@@ -56,3 +51,15 @@ var (
 	RecordAlreadyExist = NewErrNo(int64(errno.Err_RecordAlreadyExist), "record already exist")
 	DirtyData          = NewErrNo(int64(errno.Err_DirtyData), "dirty data")
 )
+
+// ConvertErr convert error to Errno
+func ConvertErr(err error) ErrNo {
+	Err := ErrNo{}
+	if errors.As(err, &Err) {
+		return Err
+	}
+
+	s := ServiceErr
+	s.ErrMsg = err.Error()
+	return s
+}

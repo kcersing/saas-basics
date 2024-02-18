@@ -10,6 +10,8 @@ import (
 	menu "saas/app/biz/model/admin/menu"
 	base "saas/app/biz/model/base"
 	"saas/app/biz/service/admin"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 )
 
 // CreateMenu .
@@ -148,12 +150,10 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 	var req base.PageInfoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		errno.BuildBaseResp(err)
 		return
 	}
-	hlog.Info("00000000000000000000000000")
-
 	resp := admin.NewMenu(ctx, c).MenuList(req)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, resp, "")
+	return
 }

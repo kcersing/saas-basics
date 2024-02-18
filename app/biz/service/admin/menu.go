@@ -63,7 +63,7 @@ func (m Menu) MenuList(req base.PageInfoReq) []*ent.Menu {
 
 	all, err := m.db.Menu.
 		Query().
-		Order(ent.Asc(menu2.FieldLevel)).
+		Order(ent.Asc(menu2.FieldLevel)).WithChildren().
 		All(m.ctx)
 	if err != nil {
 
@@ -95,6 +95,9 @@ func (m Menu) MenuParamListByMenuID(id string) error {
 }
 
 func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
+
+	hlog.Info("111111111111111111111111111111111")
+
 	return &Menu{
 		ctx:  ctx,
 		c:    c,
