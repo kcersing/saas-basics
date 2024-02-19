@@ -7,7 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/dictionary"
+	"saas/pkg/db/ent/dictionarydetail"
+	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/menu"
+	"saas/pkg/db/ent/menuparam"
+	"saas/pkg/db/ent/role"
+	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
 	"sync"
 
@@ -74,8 +81,15 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			menu.Table: menu.ValidColumn,
-			user.Table: user.ValidColumn,
+			api.Table:              api.ValidColumn,
+			dictionary.Table:       dictionary.ValidColumn,
+			dictionarydetail.Table: dictionarydetail.ValidColumn,
+			logs.Table:             logs.ValidColumn,
+			menu.Table:             menu.ValidColumn,
+			menuparam.Table:        menuparam.ValidColumn,
+			role.Table:             role.ValidColumn,
+			token.Table:            token.ValidColumn,
+			user.Table:             user.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

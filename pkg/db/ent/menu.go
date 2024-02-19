@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/menu"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -15,27 +16,56 @@ import (
 type Menu struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
-	// ParentID holds the value of the "parent_id" field.
-	ParentID *int `json:"parent_id,omitempty"`
-	// RouteName holds the value of the "route_name" field.
-	RouteName *string `json:"route_name,omitempty"`
-	// RoutePath holds the value of the "route_path" field.
-	RoutePath *string `json:"route_path,omitempty"`
-	// Status holds the value of the "status" field.
-	Status *string `json:"status,omitempty"`
-	// MenuName holds the value of the "menu_name" field.
-	MenuName *string `json:"menu_name,omitempty"`
-	// MenuType holds the value of the "menu_type" field.
-	MenuType *string `json:"menu_type,omitempty"`
-	// IconType holds the value of the "icon_type" field.
-	IconType *string `json:"icon_type,omitempty"`
-	// Icon holds the value of the "icon" field.
-	Icon *string `json:"icon,omitempty"`
-	// I18nKey holds the value of the "i18n_key" field.
-	I18nKey *string `json:"i18n_key,omitempty"`
-	// Level holds the value of the "level" field.
-	Level *string `json:"level,omitempty"`
+	// primary key
+	ID uint64 `json:"id,omitempty"`
+	// created time
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// last update time
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// parent menu ID | 父菜单ID
+	ParentID uint64 `json:"parent_id,omitempty"`
+	// menu level | 菜单层级
+	MenuLevel uint32 `json:"menu_level,omitempty"`
+	// menu type | 菜单类型 0 目录 1 菜单 2 按钮
+	MenuType uint32 `json:"menu_type,omitempty"`
+	// index path | 菜单路由路径
+	Path string `json:"path,omitempty"`
+	// index name | 菜单名称
+	Name string `json:"name,omitempty"`
+	// redirect path | 跳转路径 （外链）
+	Redirect string `json:"redirect,omitempty"`
+	// the path of vue file | 组件路径
+	Component string `json:"component,omitempty"`
+	// sorting numbers | 排序编号
+	OrderNo uint32 `json:"order_no,omitempty"`
+	// disable status | 是否停用
+	Disabled bool `json:"disabled,omitempty"`
+	// menu name | 菜单显示标题
+	Title string `json:"title,omitempty"`
+	// menu icon | 菜单图标
+	Icon string `json:"icon,omitempty"`
+	// hide menu | 是否隐藏菜单
+	HideMenu bool `json:"hide_menu,omitempty"`
+	// hide the breadcrumb | 隐藏面包屑
+	HideBreadcrumb bool `json:"hide_breadcrumb,omitempty"`
+	// set the active menu | 激活菜单
+	CurrentActiveMenu string `json:"current_active_menu,omitempty"`
+	// do not keep alive the tab | 取消页面缓存
+	IgnoreKeepAlive bool `json:"ignore_keep_alive,omitempty"`
+	// hide the tab header | 隐藏页头
+	HideTab bool `json:"hide_tab,omitempty"`
+	// show iframe | 内嵌 iframe
+	FrameSrc string `json:"frame_src,omitempty"`
+	// the route carries parameters or not | 携带参数
+	CarryParam bool `json:"carry_param,omitempty"`
+	// hide children menu or not | 隐藏所有子菜单
+	HideChildrenInMenu bool `json:"hide_children_in_menu,omitempty"`
+	// affix tab | Tab 固定
+	Affix bool `json:"affix,omitempty"`
+	// the maximum number of pages the router can open | 能打开的子TAB数
+	DynamicLevel uint32 `json:"dynamic_level,omitempty"`
+	// the real path of the route without dynamic part | 菜单路由不包含参数部分
+	RealPath string `json:"real_path,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MenuQuery when eager-loading is set.
 	Edges        MenuEdges `json:"edges"`
@@ -44,19 +74,32 @@ type Menu struct {
 
 // MenuEdges holds the relations/edges for other nodes in the graph.
 type MenuEdges struct {
+	// Roles holds the value of the roles edge.
+	Roles []*Role `json:"roles,omitempty"`
 	// Parent holds the value of the parent edge.
 	Parent *Menu `json:"parent,omitempty"`
 	// Children holds the value of the children edge.
 	Children []*Menu `json:"children,omitempty"`
+	// Params holds the value of the params edge.
+	Params []*MenuParam `json:"params,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
+}
+
+// RolesOrErr returns the Roles value or an error if the edge
+// was not loaded in eager-loading.
+func (e MenuEdges) RolesOrErr() ([]*Role, error) {
+	if e.loadedTypes[0] {
+		return e.Roles, nil
+	}
+	return nil, &NotLoadedError{edge: "roles"}
 }
 
 // ParentOrErr returns the Parent value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e MenuEdges) ParentOrErr() (*Menu, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		if e.Parent == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: menu.Label}
@@ -69,10 +112,19 @@ func (e MenuEdges) ParentOrErr() (*Menu, error) {
 // ChildrenOrErr returns the Children value or an error if the edge
 // was not loaded in eager-loading.
 func (e MenuEdges) ChildrenOrErr() ([]*Menu, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Children, nil
 	}
 	return nil, &NotLoadedError{edge: "children"}
+}
+
+// ParamsOrErr returns the Params value or an error if the edge
+// was not loaded in eager-loading.
+func (e MenuEdges) ParamsOrErr() ([]*MenuParam, error) {
+	if e.loadedTypes[3] {
+		return e.Params, nil
+	}
+	return nil, &NotLoadedError{edge: "params"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -80,10 +132,14 @@ func (*Menu) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case menu.FieldID, menu.FieldParentID:
+		case menu.FieldDisabled, menu.FieldHideMenu, menu.FieldHideBreadcrumb, menu.FieldIgnoreKeepAlive, menu.FieldHideTab, menu.FieldCarryParam, menu.FieldHideChildrenInMenu, menu.FieldAffix:
+			values[i] = new(sql.NullBool)
+		case menu.FieldID, menu.FieldParentID, menu.FieldMenuLevel, menu.FieldMenuType, menu.FieldOrderNo, menu.FieldDynamicLevel:
 			values[i] = new(sql.NullInt64)
-		case menu.FieldRouteName, menu.FieldRoutePath, menu.FieldStatus, menu.FieldMenuName, menu.FieldMenuType, menu.FieldIconType, menu.FieldIcon, menu.FieldI18nKey, menu.FieldLevel:
+		case menu.FieldPath, menu.FieldName, menu.FieldRedirect, menu.FieldComponent, menu.FieldTitle, menu.FieldIcon, menu.FieldCurrentActiveMenu, menu.FieldFrameSrc, menu.FieldRealPath:
 			values[i] = new(sql.NullString)
+		case menu.FieldCreatedAt, menu.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -104,76 +160,150 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			m.ID = int(value.Int64)
+			m.ID = uint64(value.Int64)
+		case menu.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				m.CreatedAt = value.Time
+			}
+		case menu.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				m.UpdatedAt = value.Time
+			}
 		case menu.FieldParentID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field parent_id", values[i])
 			} else if value.Valid {
-				m.ParentID = new(int)
-				*m.ParentID = int(value.Int64)
+				m.ParentID = uint64(value.Int64)
 			}
-		case menu.FieldRouteName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field route_name", values[i])
+		case menu.FieldMenuLevel:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field menu_level", values[i])
 			} else if value.Valid {
-				m.RouteName = new(string)
-				*m.RouteName = value.String
-			}
-		case menu.FieldRoutePath:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field route_path", values[i])
-			} else if value.Valid {
-				m.RoutePath = new(string)
-				*m.RoutePath = value.String
-			}
-		case menu.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				m.Status = new(string)
-				*m.Status = value.String
-			}
-		case menu.FieldMenuName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field menu_name", values[i])
-			} else if value.Valid {
-				m.MenuName = new(string)
-				*m.MenuName = value.String
+				m.MenuLevel = uint32(value.Int64)
 			}
 		case menu.FieldMenuType:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field menu_type", values[i])
 			} else if value.Valid {
-				m.MenuType = new(string)
-				*m.MenuType = value.String
+				m.MenuType = uint32(value.Int64)
 			}
-		case menu.FieldIconType:
+		case menu.FieldPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field icon_type", values[i])
+				return fmt.Errorf("unexpected type %T for field path", values[i])
 			} else if value.Valid {
-				m.IconType = new(string)
-				*m.IconType = value.String
+				m.Path = value.String
+			}
+		case menu.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				m.Name = value.String
+			}
+		case menu.FieldRedirect:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field redirect", values[i])
+			} else if value.Valid {
+				m.Redirect = value.String
+			}
+		case menu.FieldComponent:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field component", values[i])
+			} else if value.Valid {
+				m.Component = value.String
+			}
+		case menu.FieldOrderNo:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field order_no", values[i])
+			} else if value.Valid {
+				m.OrderNo = uint32(value.Int64)
+			}
+		case menu.FieldDisabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field disabled", values[i])
+			} else if value.Valid {
+				m.Disabled = value.Bool
+			}
+		case menu.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				m.Title = value.String
 			}
 		case menu.FieldIcon:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field icon", values[i])
 			} else if value.Valid {
-				m.Icon = new(string)
-				*m.Icon = value.String
+				m.Icon = value.String
 			}
-		case menu.FieldI18nKey:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field i18n_key", values[i])
+		case menu.FieldHideMenu:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field hide_menu", values[i])
 			} else if value.Valid {
-				m.I18nKey = new(string)
-				*m.I18nKey = value.String
+				m.HideMenu = value.Bool
 			}
-		case menu.FieldLevel:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field level", values[i])
+		case menu.FieldHideBreadcrumb:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field hide_breadcrumb", values[i])
 			} else if value.Valid {
-				m.Level = new(string)
-				*m.Level = value.String
+				m.HideBreadcrumb = value.Bool
+			}
+		case menu.FieldCurrentActiveMenu:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field current_active_menu", values[i])
+			} else if value.Valid {
+				m.CurrentActiveMenu = value.String
+			}
+		case menu.FieldIgnoreKeepAlive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field ignore_keep_alive", values[i])
+			} else if value.Valid {
+				m.IgnoreKeepAlive = value.Bool
+			}
+		case menu.FieldHideTab:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field hide_tab", values[i])
+			} else if value.Valid {
+				m.HideTab = value.Bool
+			}
+		case menu.FieldFrameSrc:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field frame_src", values[i])
+			} else if value.Valid {
+				m.FrameSrc = value.String
+			}
+		case menu.FieldCarryParam:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field carry_param", values[i])
+			} else if value.Valid {
+				m.CarryParam = value.Bool
+			}
+		case menu.FieldHideChildrenInMenu:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field hide_children_in_menu", values[i])
+			} else if value.Valid {
+				m.HideChildrenInMenu = value.Bool
+			}
+		case menu.FieldAffix:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field affix", values[i])
+			} else if value.Valid {
+				m.Affix = value.Bool
+			}
+		case menu.FieldDynamicLevel:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field dynamic_level", values[i])
+			} else if value.Valid {
+				m.DynamicLevel = uint32(value.Int64)
+			}
+		case menu.FieldRealPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field real_path", values[i])
+			} else if value.Valid {
+				m.RealPath = value.String
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -188,6 +318,11 @@ func (m *Menu) Value(name string) (ent.Value, error) {
 	return m.selectValues.Get(name)
 }
 
+// QueryRoles queries the "roles" edge of the Menu entity.
+func (m *Menu) QueryRoles() *RoleQuery {
+	return NewMenuClient(m.config).QueryRoles(m)
+}
+
 // QueryParent queries the "parent" edge of the Menu entity.
 func (m *Menu) QueryParent() *MenuQuery {
 	return NewMenuClient(m.config).QueryParent(m)
@@ -196,6 +331,11 @@ func (m *Menu) QueryParent() *MenuQuery {
 // QueryChildren queries the "children" edge of the Menu entity.
 func (m *Menu) QueryChildren() *MenuQuery {
 	return NewMenuClient(m.config).QueryChildren(m)
+}
+
+// QueryParams queries the "params" edge of the Menu entity.
+func (m *Menu) QueryParams() *MenuParamQuery {
+	return NewMenuClient(m.config).QueryParams(m)
 }
 
 // Update returns a builder for updating this Menu.
@@ -221,55 +361,77 @@ func (m *Menu) String() string {
 	var builder strings.Builder
 	builder.WriteString("Menu(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", m.ID))
-	if v := m.ParentID; v != nil {
-		builder.WriteString("parent_id=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
+	builder.WriteString("created_at=")
+	builder.WriteString(m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	if v := m.RouteName; v != nil {
-		builder.WriteString("route_name=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("updated_at=")
+	builder.WriteString(m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	if v := m.RoutePath; v != nil {
-		builder.WriteString("route_path=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("parent_id=")
+	builder.WriteString(fmt.Sprintf("%v", m.ParentID))
 	builder.WriteString(", ")
-	if v := m.Status; v != nil {
-		builder.WriteString("status=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("menu_level=")
+	builder.WriteString(fmt.Sprintf("%v", m.MenuLevel))
 	builder.WriteString(", ")
-	if v := m.MenuName; v != nil {
-		builder.WriteString("menu_name=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("menu_type=")
+	builder.WriteString(fmt.Sprintf("%v", m.MenuType))
 	builder.WriteString(", ")
-	if v := m.MenuType; v != nil {
-		builder.WriteString("menu_type=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("path=")
+	builder.WriteString(m.Path)
 	builder.WriteString(", ")
-	if v := m.IconType; v != nil {
-		builder.WriteString("icon_type=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("name=")
+	builder.WriteString(m.Name)
 	builder.WriteString(", ")
-	if v := m.Icon; v != nil {
-		builder.WriteString("icon=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("redirect=")
+	builder.WriteString(m.Redirect)
 	builder.WriteString(", ")
-	if v := m.I18nKey; v != nil {
-		builder.WriteString("i18n_key=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("component=")
+	builder.WriteString(m.Component)
 	builder.WriteString(", ")
-	if v := m.Level; v != nil {
-		builder.WriteString("level=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("order_no=")
+	builder.WriteString(fmt.Sprintf("%v", m.OrderNo))
+	builder.WriteString(", ")
+	builder.WriteString("disabled=")
+	builder.WriteString(fmt.Sprintf("%v", m.Disabled))
+	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(m.Title)
+	builder.WriteString(", ")
+	builder.WriteString("icon=")
+	builder.WriteString(m.Icon)
+	builder.WriteString(", ")
+	builder.WriteString("hide_menu=")
+	builder.WriteString(fmt.Sprintf("%v", m.HideMenu))
+	builder.WriteString(", ")
+	builder.WriteString("hide_breadcrumb=")
+	builder.WriteString(fmt.Sprintf("%v", m.HideBreadcrumb))
+	builder.WriteString(", ")
+	builder.WriteString("current_active_menu=")
+	builder.WriteString(m.CurrentActiveMenu)
+	builder.WriteString(", ")
+	builder.WriteString("ignore_keep_alive=")
+	builder.WriteString(fmt.Sprintf("%v", m.IgnoreKeepAlive))
+	builder.WriteString(", ")
+	builder.WriteString("hide_tab=")
+	builder.WriteString(fmt.Sprintf("%v", m.HideTab))
+	builder.WriteString(", ")
+	builder.WriteString("frame_src=")
+	builder.WriteString(m.FrameSrc)
+	builder.WriteString(", ")
+	builder.WriteString("carry_param=")
+	builder.WriteString(fmt.Sprintf("%v", m.CarryParam))
+	builder.WriteString(", ")
+	builder.WriteString("hide_children_in_menu=")
+	builder.WriteString(fmt.Sprintf("%v", m.HideChildrenInMenu))
+	builder.WriteString(", ")
+	builder.WriteString("affix=")
+	builder.WriteString(fmt.Sprintf("%v", m.Affix))
+	builder.WriteString(", ")
+	builder.WriteString("dynamic_level=")
+	builder.WriteString(fmt.Sprintf("%v", m.DynamicLevel))
+	builder.WriteString(", ")
+	builder.WriteString("real_path=")
+	builder.WriteString(m.RealPath)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -10,7 +10,7 @@ import (
 type BaseResp struct {
 	StatusMessage string            `thrift:"StatusMessage,1" form:"StatusMessage" json:"StatusMessage" query:"StatusMessage"`
 	StatusCode    int32             `thrift:"StatusCode,2" form:"StatusCode" json:"StatusCode" query:"StatusCode"`
-	Extra         map[string]string `thrift:"Extra,3,optional" form:"Extra" json:"Extra,omitempty" query:"Extra"`
+	Extra         map[string]string `thrift:"Extra,3,optional" form:"Extra" json:"Extra" query:"Extra"`
 }
 
 func NewBaseResp() *BaseResp {

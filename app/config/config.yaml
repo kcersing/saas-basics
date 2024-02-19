@@ -1,0 +1,37 @@
+Name: Kcersing Admin
+IsProd: true
+Host: 0.0.0.0
+Port: 9039
+Timeout: 30000
+
+Captcha:
+  KeyLong: 5
+  ImgWidth: 240
+  ImgHeight: 80
+
+Auth:
+  OAuthKey: OauthJf3z1n2xxx2cr1
+  AccessSecret: D86VKDtsJf3z1nxxxxtsJf3z1n5
+  AccessExpire: 259200 # seconds, 3 days
+
+Redis:
+  Host: 127.0.0.1
+  Port: 6379
+  Type: node
+
+MySql:
+  host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
+  salt: YOUR_SALT
+
+Casbin:
+  ModelText: |
+    [request_definition]
+    r = sub, obj, act
+    [policy_definition]
+    p = sub, obj, act
+    [role_definition]
+    g = _, _
+    [policy_effect]
+    e = some(where (p.eft == allow))
+    [matchers]
+    m = r.sub == p.sub && keyMatch2(r.obj,p.obj) && r.act == p.act

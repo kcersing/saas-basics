@@ -8,7 +8,9 @@ import (
 	"fmt"
 	"math"
 	"saas/pkg/db/ent/menu"
+	"saas/pkg/db/ent/menuparam"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/role"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -22,8 +24,10 @@ type MenuQuery struct {
 	order        []menu.OrderOption
 	inters       []Interceptor
 	predicates   []predicate.Menu
+	withRoles    *RoleQuery
 	withParent   *MenuQuery
 	withChildren *MenuQuery
+	withParams   *MenuParamQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (mq *MenuQuery) Unique(unique bool) *MenuQuery {
 func (mq *MenuQuery) Order(o ...menu.OrderOption) *MenuQuery {
 	mq.order = append(mq.order, o...)
 	return mq
+}
+
+// QueryRoles chains the current query on the "roles" edge.
+func (mq *MenuQuery) QueryRoles() *RoleQuery {
+	query := (&RoleClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(menu.Table, menu.FieldID, selector),
+			sqlgraph.To(role.Table, role.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, menu.RolesTable, menu.RolesPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryParent chains the current query on the "parent" edge.
@@ -104,6 +130,28 @@ func (mq *MenuQuery) QueryChildren() *MenuQuery {
 	return query
 }
 
+// QueryParams chains the current query on the "params" edge.
+func (mq *MenuQuery) QueryParams() *MenuParamQuery {
+	query := (&MenuParamClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(menu.Table, menu.FieldID, selector),
+			sqlgraph.To(menuparam.Table, menuparam.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, menu.ParamsTable, menu.ParamsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Menu entity from the query.
 // Returns a *NotFoundError when no Menu was found.
 func (mq *MenuQuery) First(ctx context.Context) (*Menu, error) {
@@ -128,8 +176,8 @@ func (mq *MenuQuery) FirstX(ctx context.Context) *Menu {
 
 // FirstID returns the first Menu ID from the query.
 // Returns a *NotFoundError when no Menu ID was found.
-func (mq *MenuQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (mq *MenuQuery) FirstID(ctx context.Context) (id uint64, err error) {
+	var ids []uint64
 	if ids, err = mq.Limit(1).IDs(setContextOp(ctx, mq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -141,7 +189,7 @@ func (mq *MenuQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (mq *MenuQuery) FirstIDX(ctx context.Context) int {
+func (mq *MenuQuery) FirstIDX(ctx context.Context) uint64 {
 	id, err := mq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -179,8 +227,8 @@ func (mq *MenuQuery) OnlyX(ctx context.Context) *Menu {
 // OnlyID is like Only, but returns the only Menu ID in the query.
 // Returns a *NotSingularError when more than one Menu ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (mq *MenuQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (mq *MenuQuery) OnlyID(ctx context.Context) (id uint64, err error) {
+	var ids []uint64
 	if ids, err = mq.Limit(2).IDs(setContextOp(ctx, mq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -196,7 +244,7 @@ func (mq *MenuQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (mq *MenuQuery) OnlyIDX(ctx context.Context) int {
+func (mq *MenuQuery) OnlyIDX(ctx context.Context) uint64 {
 	id, err := mq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -224,7 +272,7 @@ func (mq *MenuQuery) AllX(ctx context.Context) []*Menu {
 }
 
 // IDs executes the query and returns a list of Menu IDs.
-func (mq *MenuQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (mq *MenuQuery) IDs(ctx context.Context) (ids []uint64, err error) {
 	if mq.ctx.Unique == nil && mq.path != nil {
 		mq.Unique(true)
 	}
@@ -236,7 +284,7 @@ func (mq *MenuQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (mq *MenuQuery) IDsX(ctx context.Context) []int {
+func (mq *MenuQuery) IDsX(ctx context.Context) []uint64 {
 	ids, err := mq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -296,12 +344,25 @@ func (mq *MenuQuery) Clone() *MenuQuery {
 		order:        append([]menu.OrderOption{}, mq.order...),
 		inters:       append([]Interceptor{}, mq.inters...),
 		predicates:   append([]predicate.Menu{}, mq.predicates...),
+		withRoles:    mq.withRoles.Clone(),
 		withParent:   mq.withParent.Clone(),
 		withChildren: mq.withChildren.Clone(),
+		withParams:   mq.withParams.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
 	}
+}
+
+// WithRoles tells the query-builder to eager-load the nodes that are connected to
+// the "roles" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MenuQuery) WithRoles(opts ...func(*RoleQuery)) *MenuQuery {
+	query := (&RoleClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withRoles = query
+	return mq
 }
 
 // WithParent tells the query-builder to eager-load the nodes that are connected to
@@ -326,18 +387,29 @@ func (mq *MenuQuery) WithChildren(opts ...func(*MenuQuery)) *MenuQuery {
 	return mq
 }
 
+// WithParams tells the query-builder to eager-load the nodes that are connected to
+// the "params" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MenuQuery) WithParams(opts ...func(*MenuParamQuery)) *MenuQuery {
+	query := (&MenuParamClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withParams = query
+	return mq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
 // Example:
 //
 //	var v []struct {
-//		ParentID int `json:"parent_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Menu.Query().
-//		GroupBy(menu.FieldParentID).
+//		GroupBy(menu.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (mq *MenuQuery) GroupBy(field string, fields ...string) *MenuGroupBy {
@@ -355,11 +427,11 @@ func (mq *MenuQuery) GroupBy(field string, fields ...string) *MenuGroupBy {
 // Example:
 //
 //	var v []struct {
-//		ParentID int `json:"parent_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Menu.Query().
-//		Select(menu.FieldParentID).
+//		Select(menu.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (mq *MenuQuery) Select(fields ...string) *MenuSelect {
 	mq.ctx.Fields = append(mq.ctx.Fields, fields...)
@@ -404,9 +476,11 @@ func (mq *MenuQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Menu, e
 	var (
 		nodes       = []*Menu{}
 		_spec       = mq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
+			mq.withRoles != nil,
 			mq.withParent != nil,
 			mq.withChildren != nil,
+			mq.withParams != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -427,6 +501,13 @@ func (mq *MenuQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Menu, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := mq.withRoles; query != nil {
+		if err := mq.loadRoles(ctx, query, nodes,
+			func(n *Menu) { n.Edges.Roles = []*Role{} },
+			func(n *Menu, e *Role) { n.Edges.Roles = append(n.Edges.Roles, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := mq.withParent; query != nil {
 		if err := mq.loadParent(ctx, query, nodes, nil,
 			func(n *Menu, e *Menu) { n.Edges.Parent = e }); err != nil {
@@ -440,17 +521,82 @@ func (mq *MenuQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Menu, e
 			return nil, err
 		}
 	}
+	if query := mq.withParams; query != nil {
+		if err := mq.loadParams(ctx, query, nodes,
+			func(n *Menu) { n.Edges.Params = []*MenuParam{} },
+			func(n *Menu, e *MenuParam) { n.Edges.Params = append(n.Edges.Params, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
 }
 
-func (mq *MenuQuery) loadParent(ctx context.Context, query *MenuQuery, nodes []*Menu, init func(*Menu), assign func(*Menu, *Menu)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Menu)
-	for i := range nodes {
-		if nodes[i].ParentID == nil {
-			continue
+func (mq *MenuQuery) loadRoles(ctx context.Context, query *RoleQuery, nodes []*Menu, init func(*Menu), assign func(*Menu, *Role)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[uint64]*Menu)
+	nids := make(map[uint64]map[*Menu]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].ParentID
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(menu.RolesTable)
+		s.Join(joinT).On(s.C(role.FieldID), joinT.C(menu.RolesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(menu.RolesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(menu.RolesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := uint64(values[0].(*sql.NullInt64).Int64)
+				inValue := uint64(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Menu]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Role](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "roles" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (mq *MenuQuery) loadParent(ctx context.Context, query *MenuQuery, nodes []*Menu, init func(*Menu), assign func(*Menu, *Menu)) error {
+	ids := make([]uint64, 0, len(nodes))
+	nodeids := make(map[uint64][]*Menu)
+	for i := range nodes {
+		fk := nodes[i].ParentID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -477,7 +623,7 @@ func (mq *MenuQuery) loadParent(ctx context.Context, query *MenuQuery, nodes []*
 }
 func (mq *MenuQuery) loadChildren(ctx context.Context, query *MenuQuery, nodes []*Menu, init func(*Menu), assign func(*Menu, *Menu)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Menu)
+	nodeids := make(map[uint64]*Menu)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -497,12 +643,40 @@ func (mq *MenuQuery) loadChildren(ctx context.Context, query *MenuQuery, nodes [
 	}
 	for _, n := range neighbors {
 		fk := n.ParentID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "parent_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (mq *MenuQuery) loadParams(ctx context.Context, query *MenuParamQuery, nodes []*Menu, init func(*Menu), assign func(*Menu, *MenuParam)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uint64]*Menu)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.MenuParam(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(menu.ParamsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.menu_params
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "parent_id" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "menu_params" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "parent_id" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "menu_params" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -519,7 +693,7 @@ func (mq *MenuQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (mq *MenuQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(menu.Table, menu.Columns, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(menu.Table, menu.Columns, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64))
 	_spec.From = mq.sql
 	if unique := mq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

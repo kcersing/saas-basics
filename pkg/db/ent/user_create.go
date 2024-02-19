@@ -6,11 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/rs/xid"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -20,16 +21,44 @@ type UserCreate struct {
 	hooks    []Hook
 }
 
-// SetAccountID sets the "account_id" field.
-func (uc *UserCreate) SetAccountID(x xid.ID) *UserCreate {
-	uc.mutation.SetAccountID(x)
+// SetCreatedAt sets the "created_at" field.
+func (uc *UserCreate) SetCreatedAt(t time.Time) *UserCreate {
+	uc.mutation.SetCreatedAt(t)
 	return uc
 }
 
-// SetNillableAccountID sets the "account_id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableAccountID(x *xid.ID) *UserCreate {
-	if x != nil {
-		uc.SetAccountID(*x)
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCreatedAt(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetCreatedAt(*t)
+	}
+	return uc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (uc *UserCreate) SetUpdatedAt(t time.Time) *UserCreate {
+	uc.mutation.SetUpdatedAt(t)
+	return uc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (uc *UserCreate) SetNillableUpdatedAt(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetUpdatedAt(*t)
+	}
+	return uc
+}
+
+// SetStatus sets the "status" field.
+func (uc *UserCreate) SetStatus(u uint8) *UserCreate {
+	uc.mutation.SetStatus(u)
+	return uc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (uc *UserCreate) SetNillableStatus(u *uint8) *UserCreate {
+	if u != nil {
+		uc.SetStatus(*u)
 	}
 	return uc
 }
@@ -40,24 +69,70 @@ func (uc *UserCreate) SetUsername(s string) *UserCreate {
 	return uc
 }
 
-// SetNillableUsername sets the "username" field if the given value is not nil.
-func (uc *UserCreate) SetNillableUsername(s *string) *UserCreate {
-	if s != nil {
-		uc.SetUsername(*s)
-	}
-	return uc
-}
-
 // SetPassword sets the "password" field.
 func (uc *UserCreate) SetPassword(s string) *UserCreate {
 	uc.mutation.SetPassword(s)
 	return uc
 }
 
-// SetNillablePassword sets the "password" field if the given value is not nil.
-func (uc *UserCreate) SetNillablePassword(s *string) *UserCreate {
+// SetNickname sets the "nickname" field.
+func (uc *UserCreate) SetNickname(s string) *UserCreate {
+	uc.mutation.SetNickname(s)
+	return uc
+}
+
+// SetSideMode sets the "side_mode" field.
+func (uc *UserCreate) SetSideMode(s string) *UserCreate {
+	uc.mutation.SetSideMode(s)
+	return uc
+}
+
+// SetNillableSideMode sets the "side_mode" field if the given value is not nil.
+func (uc *UserCreate) SetNillableSideMode(s *string) *UserCreate {
 	if s != nil {
-		uc.SetPassword(*s)
+		uc.SetSideMode(*s)
+	}
+	return uc
+}
+
+// SetBaseColor sets the "base_color" field.
+func (uc *UserCreate) SetBaseColor(s string) *UserCreate {
+	uc.mutation.SetBaseColor(s)
+	return uc
+}
+
+// SetNillableBaseColor sets the "base_color" field if the given value is not nil.
+func (uc *UserCreate) SetNillableBaseColor(s *string) *UserCreate {
+	if s != nil {
+		uc.SetBaseColor(*s)
+	}
+	return uc
+}
+
+// SetActiveColor sets the "active_color" field.
+func (uc *UserCreate) SetActiveColor(s string) *UserCreate {
+	uc.mutation.SetActiveColor(s)
+	return uc
+}
+
+// SetNillableActiveColor sets the "active_color" field if the given value is not nil.
+func (uc *UserCreate) SetNillableActiveColor(s *string) *UserCreate {
+	if s != nil {
+		uc.SetActiveColor(*s)
+	}
+	return uc
+}
+
+// SetRoleID sets the "role_id" field.
+func (uc *UserCreate) SetRoleID(u uint64) *UserCreate {
+	uc.mutation.SetRoleID(u)
+	return uc
+}
+
+// SetNillableRoleID sets the "role_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableRoleID(u *uint64) *UserCreate {
+	if u != nil {
+		uc.SetRoleID(*u)
 	}
 	return uc
 }
@@ -68,60 +143,71 @@ func (uc *UserCreate) SetMobile(s string) *UserCreate {
 	return uc
 }
 
-// SetNillableMobile sets the "mobile" field if the given value is not nil.
-func (uc *UserCreate) SetNillableMobile(s *string) *UserCreate {
+// SetEmail sets the "email" field.
+func (uc *UserCreate) SetEmail(s string) *UserCreate {
+	uc.mutation.SetEmail(s)
+	return uc
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (uc *UserCreate) SetNillableEmail(s *string) *UserCreate {
 	if s != nil {
-		uc.SetMobile(*s)
+		uc.SetEmail(*s)
 	}
 	return uc
 }
 
-// SetGender sets the "gender" field.
-func (uc *UserCreate) SetGender(s string) *UserCreate {
-	uc.mutation.SetGender(s)
+// SetWecom sets the "wecom" field.
+func (uc *UserCreate) SetWecom(s string) *UserCreate {
+	uc.mutation.SetWecom(s)
 	return uc
 }
 
-// SetNillableGender sets the "gender" field if the given value is not nil.
-func (uc *UserCreate) SetNillableGender(s *string) *UserCreate {
+// SetNillableWecom sets the "wecom" field if the given value is not nil.
+func (uc *UserCreate) SetNillableWecom(s *string) *UserCreate {
 	if s != nil {
-		uc.SetGender(*s)
+		uc.SetWecom(*s)
 	}
 	return uc
 }
 
-// SetAge sets the "age" field.
-func (uc *UserCreate) SetAge(s string) *UserCreate {
-	uc.mutation.SetAge(s)
+// SetAvatar sets the "avatar" field.
+func (uc *UserCreate) SetAvatar(s string) *UserCreate {
+	uc.mutation.SetAvatar(s)
 	return uc
 }
 
-// SetNillableAge sets the "age" field if the given value is not nil.
-func (uc *UserCreate) SetNillableAge(s *string) *UserCreate {
+// SetNillableAvatar sets the "avatar" field if the given value is not nil.
+func (uc *UserCreate) SetNillableAvatar(s *string) *UserCreate {
 	if s != nil {
-		uc.SetAge(*s)
-	}
-	return uc
-}
-
-// SetIntroduce sets the "introduce" field.
-func (uc *UserCreate) SetIntroduce(s string) *UserCreate {
-	uc.mutation.SetIntroduce(s)
-	return uc
-}
-
-// SetNillableIntroduce sets the "introduce" field if the given value is not nil.
-func (uc *UserCreate) SetNillableIntroduce(s *string) *UserCreate {
-	if s != nil {
-		uc.SetIntroduce(*s)
+		uc.SetAvatar(*s)
 	}
 	return uc
 }
 
 // SetID sets the "id" field.
-func (uc *UserCreate) SetID(i int) *UserCreate {
-	uc.mutation.SetID(i)
+func (uc *UserCreate) SetID(u uint64) *UserCreate {
+	uc.mutation.SetID(u)
 	return uc
+}
+
+// SetTokenID sets the "token" edge to the Token entity by ID.
+func (uc *UserCreate) SetTokenID(id uint64) *UserCreate {
+	uc.mutation.SetTokenID(id)
+	return uc
+}
+
+// SetNillableTokenID sets the "token" edge to the Token entity by ID if the given value is not nil.
+func (uc *UserCreate) SetNillableTokenID(id *uint64) *UserCreate {
+	if id != nil {
+		uc = uc.SetTokenID(*id)
+	}
+	return uc
+}
+
+// SetToken sets the "token" edge to the Token entity.
+func (uc *UserCreate) SetToken(t *Token) *UserCreate {
+	return uc.SetTokenID(t.ID)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -159,20 +245,59 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
-	if _, ok := uc.mutation.AccountID(); !ok {
-		v := user.DefaultAccountID()
-		uc.mutation.SetAccountID(v)
+	if _, ok := uc.mutation.CreatedAt(); !ok {
+		v := user.DefaultCreatedAt()
+		uc.mutation.SetCreatedAt(v)
 	}
-	if _, ok := uc.mutation.Gender(); !ok {
-		v := user.DefaultGender
-		uc.mutation.SetGender(v)
+	if _, ok := uc.mutation.UpdatedAt(); !ok {
+		v := user.DefaultUpdatedAt()
+		uc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := uc.mutation.Status(); !ok {
+		v := user.DefaultStatus
+		uc.mutation.SetStatus(v)
+	}
+	if _, ok := uc.mutation.SideMode(); !ok {
+		v := user.DefaultSideMode
+		uc.mutation.SetSideMode(v)
+	}
+	if _, ok := uc.mutation.BaseColor(); !ok {
+		v := user.DefaultBaseColor
+		uc.mutation.SetBaseColor(v)
+	}
+	if _, ok := uc.mutation.ActiveColor(); !ok {
+		v := user.DefaultActiveColor
+		uc.mutation.SetActiveColor(v)
+	}
+	if _, ok := uc.mutation.RoleID(); !ok {
+		v := user.DefaultRoleID
+		uc.mutation.SetRoleID(v)
+	}
+	if _, ok := uc.mutation.Avatar(); !ok {
+		v := user.DefaultAvatar
+		uc.mutation.SetAvatar(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
-	if _, ok := uc.mutation.AccountID(); !ok {
-		return &ValidationError{Name: "account_id", err: errors.New(`ent: missing required field "User.account_id"`)}
+	if _, ok := uc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "User.created_at"`)}
+	}
+	if _, ok := uc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "User.updated_at"`)}
+	}
+	if _, ok := uc.mutation.Username(); !ok {
+		return &ValidationError{Name: "username", err: errors.New(`ent: missing required field "User.username"`)}
+	}
+	if _, ok := uc.mutation.Password(); !ok {
+		return &ValidationError{Name: "password", err: errors.New(`ent: missing required field "User.password"`)}
+	}
+	if _, ok := uc.mutation.Nickname(); !ok {
+		return &ValidationError{Name: "nickname", err: errors.New(`ent: missing required field "User.nickname"`)}
+	}
+	if _, ok := uc.mutation.Mobile(); !ok {
+		return &ValidationError{Name: "mobile", err: errors.New(`ent: missing required field "User.mobile"`)}
 	}
 	return nil
 }
@@ -190,7 +315,7 @@ func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 	}
 	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
-		_node.ID = int(id)
+		_node.ID = uint64(id)
 	}
 	uc.mutation.id = &_node.ID
 	uc.mutation.done = true
@@ -200,39 +325,83 @@ func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	var (
 		_node = &User{config: uc.config}
-		_spec = sqlgraph.NewCreateSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUint64))
 	)
 	if id, ok := uc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := uc.mutation.AccountID(); ok {
-		_spec.SetField(user.FieldAccountID, field.TypeString, value)
-		_node.AccountID = value
+	if value, ok := uc.mutation.CreatedAt(); ok {
+		_spec.SetField(user.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := uc.mutation.UpdatedAt(); ok {
+		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := uc.mutation.Status(); ok {
+		_spec.SetField(user.FieldStatus, field.TypeUint8, value)
+		_node.Status = value
 	}
 	if value, ok := uc.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
-		_node.Username = &value
+		_node.Username = value
 	}
 	if value, ok := uc.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
-		_node.Password = &value
+		_node.Password = value
+	}
+	if value, ok := uc.mutation.Nickname(); ok {
+		_spec.SetField(user.FieldNickname, field.TypeString, value)
+		_node.Nickname = value
+	}
+	if value, ok := uc.mutation.SideMode(); ok {
+		_spec.SetField(user.FieldSideMode, field.TypeString, value)
+		_node.SideMode = value
+	}
+	if value, ok := uc.mutation.BaseColor(); ok {
+		_spec.SetField(user.FieldBaseColor, field.TypeString, value)
+		_node.BaseColor = value
+	}
+	if value, ok := uc.mutation.ActiveColor(); ok {
+		_spec.SetField(user.FieldActiveColor, field.TypeString, value)
+		_node.ActiveColor = value
+	}
+	if value, ok := uc.mutation.RoleID(); ok {
+		_spec.SetField(user.FieldRoleID, field.TypeUint64, value)
+		_node.RoleID = value
 	}
 	if value, ok := uc.mutation.Mobile(); ok {
 		_spec.SetField(user.FieldMobile, field.TypeString, value)
-		_node.Mobile = &value
+		_node.Mobile = value
 	}
-	if value, ok := uc.mutation.Gender(); ok {
-		_spec.SetField(user.FieldGender, field.TypeString, value)
-		_node.Gender = &value
+	if value, ok := uc.mutation.Email(); ok {
+		_spec.SetField(user.FieldEmail, field.TypeString, value)
+		_node.Email = value
 	}
-	if value, ok := uc.mutation.Age(); ok {
-		_spec.SetField(user.FieldAge, field.TypeString, value)
-		_node.Age = &value
+	if value, ok := uc.mutation.Wecom(); ok {
+		_spec.SetField(user.FieldWecom, field.TypeString, value)
+		_node.Wecom = value
 	}
-	if value, ok := uc.mutation.Introduce(); ok {
-		_spec.SetField(user.FieldIntroduce, field.TypeString, value)
-		_node.Introduce = &value
+	if value, ok := uc.mutation.Avatar(); ok {
+		_spec.SetField(user.FieldAvatar, field.TypeString, value)
+		_node.Avatar = value
+	}
+	if nodes := uc.mutation.TokenIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.TokenTable,
+			Columns: []string{user.TokenColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
@@ -284,7 +453,7 @@ func (ucb *UserCreateBulk) Save(ctx context.Context) ([]*User, error) {
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = uint64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

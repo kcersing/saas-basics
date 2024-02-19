@@ -4,34 +4,75 @@ package ent
 
 import (
 	"fmt"
+	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/rs/xid"
 )
 
 // User is the model entity for the User schema.
 type User struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
-	// AccountID holds the value of the "account_id" field.
-	AccountID xid.ID `json:"account_id,omitempty"`
-	// 姓名
-	Username *string `json:"username,omitempty"`
-	// 密码
-	Password *string `json:"password,omitempty"`
-	// 联系方式
-	Mobile *string `json:"mobile,omitempty"`
-	// 性别
-	Gender *string `json:"gender,omitempty"`
-	// 年龄
-	Age *string `json:"age,omitempty"`
-	// 介绍
-	Introduce    *string `json:"introduce,omitempty"`
+	// primary key
+	ID uint64 `json:"id,omitempty"`
+	// created time
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// last update time
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// status 1 normal 0 ban | 状态 1 正常 0 禁用
+	Status uint8 `json:"status,omitempty"`
+	// user's login name | 登录名
+	Username string `json:"username,omitempty"`
+	// password | 密码
+	Password string `json:"password,omitempty"`
+	// nickname | 昵称
+	Nickname string `json:"nickname,omitempty"`
+	// template mode | 布局方式
+	SideMode string `json:"side_mode,omitempty"`
+	// base color of template | 后台页面色调
+	BaseColor string `json:"base_color,omitempty"`
+	// active color of template | 当前激活的颜色设定
+	ActiveColor string `json:"active_color,omitempty"`
+	// role id | 角色ID
+	RoleID uint64 `json:"role_id,omitempty"`
+	// mobile number | 手机号
+	Mobile string `json:"mobile,omitempty"`
+	// email | 邮箱号
+	Email string `json:"email,omitempty"`
+	// wecom | 微信号
+	Wecom string `json:"wecom,omitempty"`
+	// avatar | 头像路径
+	Avatar string `json:"avatar,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the UserQuery when eager-loading is set.
+	Edges        UserEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// UserEdges holds the relations/edges for other nodes in the graph.
+type UserEdges struct {
+	// Token holds the value of the token edge.
+	Token *Token `json:"token,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// TokenOrErr returns the Token value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e UserEdges) TokenOrErr() (*Token, error) {
+	if e.loadedTypes[0] {
+		if e.Token == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: token.Label}
+		}
+		return e.Token, nil
+	}
+	return nil, &NotLoadedError{edge: "token"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -39,12 +80,12 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID:
+		case user.FieldID, user.FieldStatus, user.FieldRoleID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldUsername, user.FieldPassword, user.FieldMobile, user.FieldGender, user.FieldAge, user.FieldIntroduce:
+		case user.FieldUsername, user.FieldPassword, user.FieldNickname, user.FieldSideMode, user.FieldBaseColor, user.FieldActiveColor, user.FieldMobile, user.FieldEmail, user.FieldWecom, user.FieldAvatar:
 			values[i] = new(sql.NullString)
-		case user.FieldAccountID:
-			values[i] = new(xid.ID)
+		case user.FieldCreatedAt, user.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -65,54 +106,90 @@ func (u *User) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			u.ID = int(value.Int64)
-		case user.FieldAccountID:
-			if value, ok := values[i].(*xid.ID); !ok {
-				return fmt.Errorf("unexpected type %T for field account_id", values[i])
-			} else if value != nil {
-				u.AccountID = *value
+			u.ID = uint64(value.Int64)
+		case user.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				u.CreatedAt = value.Time
+			}
+		case user.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				u.UpdatedAt = value.Time
+			}
+		case user.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				u.Status = uint8(value.Int64)
 			}
 		case user.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field username", values[i])
 			} else if value.Valid {
-				u.Username = new(string)
-				*u.Username = value.String
+				u.Username = value.String
 			}
 		case user.FieldPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field password", values[i])
 			} else if value.Valid {
-				u.Password = new(string)
-				*u.Password = value.String
+				u.Password = value.String
+			}
+		case user.FieldNickname:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field nickname", values[i])
+			} else if value.Valid {
+				u.Nickname = value.String
+			}
+		case user.FieldSideMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field side_mode", values[i])
+			} else if value.Valid {
+				u.SideMode = value.String
+			}
+		case user.FieldBaseColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field base_color", values[i])
+			} else if value.Valid {
+				u.BaseColor = value.String
+			}
+		case user.FieldActiveColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field active_color", values[i])
+			} else if value.Valid {
+				u.ActiveColor = value.String
+			}
+		case user.FieldRoleID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field role_id", values[i])
+			} else if value.Valid {
+				u.RoleID = uint64(value.Int64)
 			}
 		case user.FieldMobile:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mobile", values[i])
 			} else if value.Valid {
-				u.Mobile = new(string)
-				*u.Mobile = value.String
+				u.Mobile = value.String
 			}
-		case user.FieldGender:
+		case user.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field gender", values[i])
+				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
-				u.Gender = new(string)
-				*u.Gender = value.String
+				u.Email = value.String
 			}
-		case user.FieldAge:
+		case user.FieldWecom:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field age", values[i])
+				return fmt.Errorf("unexpected type %T for field wecom", values[i])
 			} else if value.Valid {
-				u.Age = new(string)
-				*u.Age = value.String
+				u.Wecom = value.String
 			}
-		case user.FieldIntroduce:
+		case user.FieldAvatar:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field introduce", values[i])
+				return fmt.Errorf("unexpected type %T for field avatar", values[i])
 			} else if value.Valid {
-				u.Introduce = new(string)
-				*u.Introduce = value.String
+				u.Avatar = value.String
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -125,6 +202,11 @@ func (u *User) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (u *User) Value(name string) (ent.Value, error) {
 	return u.selectValues.Get(name)
+}
+
+// QueryToken queries the "token" edge of the User entity.
+func (u *User) QueryToken() *TokenQuery {
+	return NewUserClient(u.config).QueryToken(u)
 }
 
 // Update returns a builder for updating this User.
@@ -150,38 +232,47 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
-	builder.WriteString("account_id=")
-	builder.WriteString(fmt.Sprintf("%v", u.AccountID))
+	builder.WriteString("created_at=")
+	builder.WriteString(u.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	if v := u.Username; v != nil {
-		builder.WriteString("username=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("updated_at=")
+	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	if v := u.Password; v != nil {
-		builder.WriteString("password=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", u.Status))
 	builder.WriteString(", ")
-	if v := u.Mobile; v != nil {
-		builder.WriteString("mobile=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("username=")
+	builder.WriteString(u.Username)
 	builder.WriteString(", ")
-	if v := u.Gender; v != nil {
-		builder.WriteString("gender=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("password=")
+	builder.WriteString(u.Password)
 	builder.WriteString(", ")
-	if v := u.Age; v != nil {
-		builder.WriteString("age=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("nickname=")
+	builder.WriteString(u.Nickname)
 	builder.WriteString(", ")
-	if v := u.Introduce; v != nil {
-		builder.WriteString("introduce=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("side_mode=")
+	builder.WriteString(u.SideMode)
+	builder.WriteString(", ")
+	builder.WriteString("base_color=")
+	builder.WriteString(u.BaseColor)
+	builder.WriteString(", ")
+	builder.WriteString("active_color=")
+	builder.WriteString(u.ActiveColor)
+	builder.WriteString(", ")
+	builder.WriteString("role_id=")
+	builder.WriteString(fmt.Sprintf("%v", u.RoleID))
+	builder.WriteString(", ")
+	builder.WriteString("mobile=")
+	builder.WriteString(u.Mobile)
+	builder.WriteString(", ")
+	builder.WriteString("email=")
+	builder.WriteString(u.Email)
+	builder.WriteString(", ")
+	builder.WriteString("wecom=")
+	builder.WriteString(u.Wecom)
+	builder.WriteString(", ")
+	builder.WriteString("avatar=")
+	builder.WriteString(u.Avatar)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -5,7 +5,6 @@ package menu
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	menu "saas/app/biz/model/admin/menu"
 	base "saas/app/biz/model/base"
@@ -145,7 +144,6 @@ func MenuParamListByMenuID(ctx context.Context, c *app.RequestContext) {
 // MenuLists .
 // @router /api/admin/menu/lists [GET]
 func MenuLists(ctx context.Context, c *app.RequestContext) {
-	hlog.Info("00000000000000000000000000")
 	var err error
 	var req base.PageInfoReq
 	err = c.BindAndValidate(&req)
