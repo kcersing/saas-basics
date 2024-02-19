@@ -8,7 +8,7 @@ import (
 	"saas/app/admin/config"
 	"saas/app/admin/idl_gen/model/admin/menu"
 	"saas/app/admin/idl_gen/model/base"
-	infras "saas/app/admin/initialize"
+	infras "saas/app/admin/infras"
 	"saas/app/pkg/do"
 
 	"saas/pkg/db/ent"

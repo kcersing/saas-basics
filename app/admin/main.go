@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"saas/app/admin/config"
-	"saas/app/admin/initialize"
+	"saas/app/admin/infras"
 )
 
 func main() {
