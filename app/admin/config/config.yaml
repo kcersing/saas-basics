@@ -20,8 +20,8 @@ Redis:
   Type: node
 
 MySql:
-  host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
-  salt: YOUR_SALT
+  Host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
+  Salt: YOUR_SALT
 
 Casbin:
   ModelText: |

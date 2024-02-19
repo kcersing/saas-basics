@@ -13,6 +13,7 @@ func main() {
 
 	infras.InitLogger()
 	infras.InitConfig()
+	infras.InitDB()
 
 	//tracer, trcCfg := hertztracing.NewServerTracer()
 	// create a new server

@@ -1,39 +1,39 @@
 package config
 
 type ServerConfig struct {
-	Name    string `mapstructure:"name" json:"name"`
-	Host    string `mapstructure:"host" json:"host"`
-	Port    int    `mapstructure:"port" json:"port"`
-	Timeout int    `yaml:"Timeout"`
-
+	Name      string      `mapstructure:"Name" json:"Name"`
+	Host      string      `mapstructure:"Host" json:"Host"`
+	Port      int         `mapstructure:"Port" json:"Port"`
+	Timeout   int         `mapstructure:"Timeout" json:"Timeout"`
+	IsProd    bool        `mapstructure:"IsProd" json:"IsProd"`
 	MysqlInfo MysqlConfig `mapstructure:"MySql" json:"MySql"`
-	Captcha   Captcha     `yaml:"Captcha"`
-	Auth      Auth        `yaml:"Auth"`
-	Redis     Redis       `yaml:"Redis"`
-	Casbin    CasbinConf  `yaml:"Casbin"`
+	Captcha   Captcha     `mapstructure:"Captcha" json:"Captcha"`
+	Auth      Auth        `mapstructure:"Auth" json:"Auth"`
+	Redis     Redis       `mapstructure:"Redis" json:"Redis"`
+	Casbin    CasbinConf  `mapstructure:"Casbin" json:"Casbin"`
 }
 
 type MysqlConfig struct {
-	Host string `mapstructure:"host" json:"host"`
-	Salt string `mapstructure:"salt" json:"salt"`
+	Host string `mapstructure:"Host" json:"Host"`
+	Salt string `mapstructure:"Salt" json:"Salt"`
 }
 type Captcha struct {
-	KeyLong   int `yaml:"KeyLong"`
-	ImgWidth  int `yaml:"ImgWidth"`
-	ImgHeight int `yaml:"ImgHeight"`
+	KeyLong   int `mapstructure:"KeyLong" json:"KeyLong"`
+	ImgWidth  int `mapstructure:"ImgWidth" json:"ImgWidth"`
+	ImgHeight int `mapstructure:"ImgHeight" json:"ImgHeight"`
 }
 type Auth struct {
-	OAuthKey     string `yaml:"OAuthKey"`
-	AccessSecret string `yaml:"AccessSecret"`
-	AccessExpire int    `yaml:"AccessExpire"`
+	OAuthKey     string `mapstructure:"OAuthKey" json:"OAuthKey"`
+	AccessSecret string `mapstructure:"AccessSecret" json:"AccessSecret"`
+	AccessExpire int    `mapstructure:"AccessExpire" json:"AccessExpire"`
 }
 
 type Redis struct {
-	Host string `yaml:"Host"`
-	Port int    `yaml:"Port"`
-	Type string `yaml:"Type"`
+	Host string `mapstructure:"Host" json:"Host"`
+	Port int    `mapstructure:"Port" json:"Port"`
+	Type string `mapstructure:"Type" json:"Type"`
 }
 
 type CasbinConf struct {
-	ModelText string `yaml:"ModelText"`
+	ModelText string `mapstructure:"ModelText" json:"ModelText"`
 }
