@@ -19,7 +19,6 @@ func Register(r *server.Hertz) {
 	root := r.Group("/", rootMw()...)
 	{
 		_api := root.Group("/api", _apiMw()...)
-		_api.POST("/login", append(_loginMw(), user.Login)...)
 		_api.POST("/register", append(_registerMw(), user.Register)...)
 		{
 			_admin := _api.Group("/admin", _adminMw()...)

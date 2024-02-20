@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/hertz-contrib/logger/accesslog"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 )
@@ -24,6 +25,8 @@ func main() {
 		server.WithHostPorts(fmt.Sprintf("%s:%d", config.GlobalServerConfig.Host, config.GlobalServerConfig.Port)),
 		//server.WithHandleMethodNotAllowed(true),
 	)
+
+	h.Use(accesslog.New())
 	// add http2
 	//h.AddProtocol(
 	//	"h2",

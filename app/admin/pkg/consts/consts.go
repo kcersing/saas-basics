@@ -11,7 +11,7 @@ const (
 	AccountID  = "accountID"
 	ID         = "id"
 
-	ApiConfigPath = "./app/config/config.yaml"
+	ApiConfigPath = "./app/admin/config/config.yaml"
 
 	HlogFilePath = "./tmp/hlog/logs/"
 

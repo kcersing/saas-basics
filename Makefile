@@ -12,9 +12,9 @@ stop:
 
 
 # run the user
-.PHONY: user
-user:
-	go run ./app/user
+.PHONY: admin
+admin:
+	go run ./app/admin
 
 # run the api
 .PHONY: api

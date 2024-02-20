@@ -64,7 +64,7 @@ struct UserListReq {
 
 service UserService {
   // 注册
-  base.NilResponse Login(1: LoginReq req) (api.post = "/api/login")
+//  base.NilResponse Login(1: LoginReq req) (api.post = "/api/login")
 
   // 注册
   base.NilResponse Register(1: RegisterReq req) (api.post = "/api/register")

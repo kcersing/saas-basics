@@ -55,7 +55,7 @@ func LogMw() app.HandlerFunc {
 
 		userID, _ := strconv.Atoi(userIDStr)
 
-		userInfo := admin.NewMenu(ctx, c).MenuByRole(string(userID))
+		userInfo, _ := admin.NewUser(ctx, c).UserInfo(uint64(userID))
 
 		if userInfo != nil {
 			username = ""

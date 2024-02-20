@@ -13,12 +13,15 @@ require (
 	github.com/cloudwego/kitex v0.8.0
 	github.com/cockroachdb/errors v1.11.1
 	github.com/go-sql-driver/mysql v1.7.1
+	github.com/hertz-contrib/jwt v1.0.2
+	github.com/hertz-contrib/logger/accesslog v0.0.0-20240128134225-6b18af47a115
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/paseto v0.0.0-20230508023022-71af6635a26c
 	github.com/medivhzhan/weapp/v2 v2.5.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/olivere/elastic/v7 v7.0.32
 	github.com/pkg/errors v0.9.1
+	github.com/spf13/cast v1.6.0
 	github.com/spf13/viper v1.18.2
 	golang.org/x/crypto v0.19.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
@@ -42,6 +45,7 @@ require (
 	github.com/getsentry/sentry-go v0.18.0 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang-jwt/jwt/v4 v4.4.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.4.0 // indirect
@@ -74,7 +78,6 @@ require (
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
-	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tidwall/gjson v1.14.4 // indirect

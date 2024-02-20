@@ -4,6 +4,8 @@ package admin
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"saas/app/admin/biz/handler/mw"
+	"saas/app/admin/infras"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -13,7 +15,11 @@ func rootMw() []app.HandlerFunc {
 
 func _adminMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	// add jwt Auth middleware
+	return []app.HandlerFunc{
+		mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
+		mw.LogMw(),
+	}
 }
 
 func _adminadduserMw() []app.HandlerFunc {
