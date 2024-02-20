@@ -1,37 +1,36 @@
 package infras
 
 import (
-	"fmt"
+	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	entAdapter "github.com/casbin/ent-adapter"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"saas/app/admin/config"
 )
 
 var casbinEnforcer *casbin.Enforcer
 
-func init() {
+func InitCasbin() {
 	var err error
-	casbinEnforcer, err = newCasbin(configs.Data())
+	casbinEnforcer, err = newCasbin()
 	if err != nil {
 		hlog.Fatal(err)
 	}
 }
 
-// CasbinEnforcer Get a default casbin enforcer instance
 func CasbinEnforcer() *casbin.Enforcer {
 	return casbinEnforcer
 }
 
-func newCasbin(config configs.Config) (enforcer *casbin.Enforcer, err error) {
-	adapter, err := entAdapter.NewAdapter(config.Database.Type, fmt.Sprintf(mySqlDsn,
-		config.Database.Username, config.Database.Password, config.Database.Host, config.Database.Port, config.Database.DBName))
+func newCasbin() (enforcer *casbin.Enforcer, err error) {
+	adapter, err := entAdapter.NewAdapter("mysql", config.GlobalServerConfig.MysqlInfo.Host)
 	if err != nil {
 		hlog.Error(err)
 		return
 	}
 
 	var text string
-	if config.Casbin.ModelText == "" {
+	if config.GlobalServerConfig.Casbin.ModelText == "" {
 		text = `
 		[request_definition]
 		r = sub, obj, act
@@ -49,7 +48,7 @@ func newCasbin(config configs.Config) (enforcer *casbin.Enforcer, err error) {
 		m = r.sub == p.sub && keyMatch2(r.obj,p.obj) && r.act == p.act
 		`
 	} else {
-		text = config.Casbin.ModelText
+		text = config.GlobalServerConfig.Casbin.ModelText
 	}
 
 	m, err := model.NewModelFromString(text)

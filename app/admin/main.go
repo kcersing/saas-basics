@@ -14,13 +14,14 @@ func main() {
 	infras.InitLogger()
 	infras.InitConfig()
 	infras.InitDB()
+	infras.InitCasbin()
 
 	//tracer, trcCfg := hertztracing.NewServerTracer()
 	// create a new server
 	h := server.New(
 		//tracer,
 		//server.WithALPN(true),
-		server.WithHostPorts(fmt.Sprintf(":%d", config.GlobalServerConfig.Port)),
+		server.WithHostPorts(fmt.Sprintf("%s:%d", config.GlobalServerConfig.Host, config.GlobalServerConfig.Port)),
 		//server.WithHandleMethodNotAllowed(true),
 	)
 	// add http2
@@ -43,4 +44,5 @@ func main() {
 	//))
 	register(h)
 	h.Spin()
+
 }

@@ -18,9 +18,8 @@ Redis:
   Host: 127.0.0.1
   Port: 6379
   Type: node
-
 MySql:
-  Host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
+  Host: root:root@tcp(127.0.0.1:3306)/saas??charset=utf8&parseTime=True&loc=Local
   Salt: YOUR_SALT
 
 Casbin:
