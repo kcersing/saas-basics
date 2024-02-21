@@ -8,6 +8,7 @@ import (
 	"github.com/hertz-contrib/logger/accesslog"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
+	"time"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 	infras.InitConfig()
 	infras.InitDB()
 	infras.InitCasbin()
+	infras.InitCache()
 
 	//tracer, trcCfg := hertztracing.NewServerTracer()
 	// create a new server
@@ -26,7 +28,12 @@ func main() {
 		//server.WithHandleMethodNotAllowed(true),
 	)
 
-	h.Use(accesslog.New())
+	h.Use(accesslog.New(
+		accesslog.WithFormat("[${time}] | ${status} | ${latency} | ${method} | ${path} | ${queryParams}"),
+		accesslog.WithTimeFormat(time.DateTime),
+	),
+	)
+
 	// add http2
 	//h.AddProtocol(
 	//	"h2",

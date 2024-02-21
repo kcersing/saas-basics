@@ -18,7 +18,7 @@ type jwtLogin struct {
 	Username  string `form:"username,required" json:"username,required"`   //lint:ignore SA5008 ignoreCheck
 	Password  string `form:"password,required" json:"password,required"`   //lint:ignore SA5008 ignoreCheck
 	Captcha   string `form:"captcha,required" json:"captcha,required"`     //lint:ignore SA5008 ignoreCheck
-	CaptchaID string `form:"captchaID,required" json:"captchaId,required"` //lint:ignore SA5008 ignoreCheck
+	CaptchaID string `form:"captchaId,required" json:"captchaId,required"` //lint:ignore SA5008 ignoreCheck
 }
 
 // jwt identityKey
@@ -62,8 +62,21 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			return payloadMap
 		},
 		Authenticator: func(ctx context.Context, c *app.RequestContext) (interface{}, error) {
-
 			res := new(do.LoginResp)
+
+			var loginVal jwtLogin
+			if err := c.BindAndValidate(&loginVal); err != nil {
+				return "", err
+			}
+			// 验证码
+
+			username := loginVal.Username
+			password := loginVal.Password
+			res, err = admin.NewLogin(ctx, c).Login(username, password)
+			if err != nil {
+				hlog.Error(err, "jwtLogin error")
+				return nil, err
+			}
 			//jwt
 			var tokenInfo do.TokenInfo
 			tokenInfo.UserID = res.UserID

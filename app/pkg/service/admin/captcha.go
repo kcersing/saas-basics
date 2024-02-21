@@ -3,29 +3,30 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/mojocn/base64Captcha"
 	"saas/app/admin/config"
-	"saas/app/admin/infras"
+	//"saas/app/admin/infras"
 	"saas/app/pkg/do"
-	"saas/pkg/db/ent"
 )
 
 type Captcha struct {
-	ctx  context.Context
-	c    *app.RequestContext
-	salt string
-	db   *ent.Client
 }
 
-func (c Captcha) GetCaptcha() (id, b64s string, err error) {
-	//TODO implement me
-	panic("implement me")
+func (c Captcha) GetCaptcha() (id, b64s, answer string, err error) {
+	captchaDriver := base64Captcha.NewDriverDigit(
+		config.GlobalServerConfig.Captcha.ImgHeight,
+		config.GlobalServerConfig.Captcha.ImgWidth,
+		config.GlobalServerConfig.Captcha.KeyLong,
+		0.7,
+		80,
+	)
+	captchaGen := base64Captcha.NewCaptcha(captchaDriver, base64Captcha.DefaultMemStore)
+
+	id, b64s, answer, err = captchaGen.Generate()
+	return
+
 }
 
 func NewCaptcha(ctx context.Context, c *app.RequestContext) do.Captcha {
-	return &Captcha{
-		ctx:  ctx,
-		c:    c,
-		salt: config.GlobalServerConfig.MysqlInfo.Salt,
-		db:   infras.DB,
-	}
+	return &Captcha{}
 }

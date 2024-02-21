@@ -17,7 +17,7 @@ package errno
 
 import (
 	"errors"
-	"saas/app/biz/model/base"
+	"saas/app/admin/idl_gen/model/base"
 )
 
 // BuildBaseResp build baseResp from error

@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/dgraph-io/ristretto"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
@@ -10,10 +11,11 @@ import (
 )
 
 type Role struct {
-	ctx  context.Context
-	c    *app.RequestContext
-	salt string
-	db   *ent.Client
+	ctx   context.Context
+	c     *app.RequestContext
+	salt  string
+	db    *ent.Client
+	cache *ristretto.Cache
 }
 
 func (r Role) Create(req do.RoleInfo) error {
@@ -48,9 +50,10 @@ func (r Role) UpdateStatus(ID uint64, status uint8) error {
 
 func NewRole(ctx context.Context, c *app.RequestContext) do.Role {
 	return &Role{
-		ctx:  ctx,
-		c:    c,
-		salt: config.GlobalServerConfig.MysqlInfo.Salt,
-		db:   infras.DB,
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
+		db:    infras.DB,
+		cache: infras.Cache,
 	}
 }

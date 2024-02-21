@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
@@ -11,18 +12,20 @@ import (
 )
 
 type Logs struct {
-	ctx  context.Context
-	c    *app.RequestContext
-	salt string
-	db   *ent.Client
+	ctx   context.Context
+	c     *app.RequestContext
+	salt  string
+	db    *ent.Client
+	cache *ristretto.Cache
 }
 
 func NewLogs(ctx context.Context, c *app.RequestContext) do.Logs {
 	return &Logs{
-		ctx:  ctx,
-		c:    c,
-		salt: config.GlobalServerConfig.MysqlInfo.Salt,
-		db:   infras.DB,
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
+		db:    infras.DB,
+		cache: infras.Cache,
 	}
 }
 

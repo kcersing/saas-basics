@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/dgraph-io/ristretto"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
@@ -10,10 +11,11 @@ import (
 )
 
 type User struct {
-	ctx  context.Context
-	c    *app.RequestContext
-	salt string
-	db   *ent.Client
+	ctx   context.Context
+	c     *app.RequestContext
+	salt  string
+	db    *ent.Client
+	cache *ristretto.Cache
 }
 
 func (u User) Create(req do.CreateOrUpdateUserReq) error {
@@ -58,9 +60,10 @@ func (u User) UpdateProfile(req do.UpdateUserProfileReq) error {
 
 func NewUser(ctx context.Context, c *app.RequestContext) do.User {
 	return &User{
-		ctx:  ctx,
-		c:    c,
-		salt: config.GlobalServerConfig.MysqlInfo.Salt,
-		db:   infras.DB,
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
+		db:    infras.DB,
+		cache: infras.Cache,
 	}
 }

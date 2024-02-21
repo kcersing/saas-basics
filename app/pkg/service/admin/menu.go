@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/dgraph-io/ristretto"
 	"saas/app/admin/config"
 	infras "saas/app/admin/infras"
 	"saas/app/pkg/do"
@@ -12,10 +13,11 @@ import (
 )
 
 type Menu struct {
-	ctx  context.Context
-	c    *app.RequestContext
-	salt string
-	db   *ent.Client
+	ctx   context.Context
+	c     *app.RequestContext
+	salt  string
+	db    *ent.Client
+	cache *ristretto.Cache
 }
 
 func (m Menu) Create(menuReq *do.MenuInfo) error {
@@ -121,9 +123,10 @@ func (m Menu) MenuParamListByMenuID(menuID uint64) (list []do.MenuParam, total u
 
 func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
 	return &Menu{
-		ctx:  ctx,
-		c:    c,
-		salt: config.GlobalServerConfig.MysqlInfo.Salt,
-		db:   infras.DB,
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
+		db:    infras.DB,
+		cache: infras.Cache,
 	}
 }

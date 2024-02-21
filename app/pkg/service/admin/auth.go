@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/dgraph-io/ristretto"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
@@ -10,10 +11,11 @@ import (
 )
 
 type Auth struct {
-	ctx  context.Context
-	c    *app.RequestContext
-	salt string
-	db   *ent.Client
+	ctx   context.Context
+	c     *app.RequestContext
+	salt  string
+	db    *ent.Client
+	cache *ristretto.Cache
 }
 
 func (a Auth) UpdateApiAuth(roleIDStr string, infos []*do.ApiAuthInfo) error {
@@ -38,9 +40,10 @@ func (a Auth) MenuAuth(roleID uint64) (menuIDs []uint64, err error) {
 
 func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
 	return &Auth{
-		ctx:  ctx,
-		c:    c,
-		salt: config.GlobalServerConfig.MysqlInfo.Salt,
-		db:   infras.DB,
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
+		db:    infras.DB,
+		cache: infras.Cache,
 	}
 }

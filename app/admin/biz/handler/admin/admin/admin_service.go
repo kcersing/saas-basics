@@ -4,10 +4,11 @@ package admin
 
 import (
 	"context"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/service/admin"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	admin "saas/app/admin/idl_gen/model/admin/admin"
 	base "saas/app/admin/idl_gen/model/base"
 )
 
@@ -31,78 +32,18 @@ func HealthCheck(ctx context.Context, c *app.RequestContext) {
 // @router /api/captcha [POST]
 func Captcha(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req admin.CaptchaInfoResp
+	var req base.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(base.NilResponse)
+	id, b64s, _, err := admin.NewCaptcha(ctx, c).GetCaptcha()
 
-	c.JSON(consts.StatusOK, resp)
-}
+	utils.SendResponse(c, err, map[string]string{
+		"id":   id,
+		"b64s": b64s,
+	}, "")
 
-// AdminLogin .
-// @router /admin/login [POST]
-func AdminLogin(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req admin.AdminLoginRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// AdminChangePassword .
-// @router /admin/password [POST]
-func AdminChangePassword(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req admin.AdminChangePasswordRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// AdminAddUser .
-// @router /admin/add-user [POST]
-func AdminAddUser(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req admin.AddUserRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// AdminDeleteUser .
-// @router /admin/delete-user [POST]
-func AdminDeleteUser(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req admin.DeleteUserRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
 }

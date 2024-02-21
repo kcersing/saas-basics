@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/dgraph-io/ristretto"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
@@ -10,10 +11,11 @@ import (
 )
 
 type Dictionary struct {
-	ctx  context.Context
-	c    *app.RequestContext
-	salt string
-	db   *ent.Client
+	ctx   context.Context
+	c     *app.RequestContext
+	salt  string
+	db    *ent.Client
+	cache *ristretto.Cache
 }
 
 func (d Dictionary) Create(req *do.DictionaryInfo) error {
@@ -63,9 +65,10 @@ func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *do.Dic
 
 func NewDictionary(ctx context.Context, c *app.RequestContext) do.Dictionary {
 	return &Dictionary{
-		ctx:  ctx,
-		c:    c,
-		salt: config.GlobalServerConfig.MysqlInfo.Salt,
-		db:   infras.DB,
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
+		db:    infras.DB,
+		cache: infras.Cache,
 	}
 }
