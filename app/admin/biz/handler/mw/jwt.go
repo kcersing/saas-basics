@@ -53,10 +53,12 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {
 			claims := jwt.ExtractClaims(ctx, c)
 			payloadMap, ok := claims[identityKey].(map[string]interface{})
-			if ok {
-				hlog.Error("get payloadMap error", "claims data:", claims[identityKey])
+			if !ok {
+				hlog.Error("get payloadMap error:", " claims data:", claims[identityKey])
 				return nil
 			}
+			hlog.Info("IdentityHandler")
+			hlog.Info(payloadMap)
 			c.Set("role_id", payloadMap["role_id"])
 			c.Set("user_id", payloadMap["user_id"])
 			return payloadMap
@@ -73,6 +75,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			username := loginVal.Username
 			password := loginVal.Password
 			res, err = admin.NewLogin(ctx, c).Login(username, password)
+
 			if err != nil {
 				hlog.Error(err, "jwtLogin error")
 				return nil, err
@@ -81,9 +84,8 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			var tokenInfo do.TokenInfo
 			tokenInfo.UserID = res.UserID
 			tokenInfo.UserName = res.Username
-			tokenInfo.ExpiredAt = time.Now().
-				Add(time.Duration(config.GlobalServerConfig.Auth.AccessExpire) * time.Second).
-				Format("2006-01-02 15:04:05")
+			tokenInfo.ExpiredAt = time.Now().Add(time.Duration(config.GlobalServerConfig.Auth.AccessExpire) * time.Second).Format("2006-01-02 15:04:05")
+
 			err = admin.NewToken(ctx, c).Create(&tokenInfo)
 			if err != nil {
 				hlog.Error(err, "jwtLogin error, store token error")
@@ -96,20 +98,23 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			return payLoadMap, nil
 		},
 		Authorizator: func(data interface{}, ctx context.Context, c *app.RequestContext) bool {
-			obj := string(c.URI().Path())
-			act := string(c.Method())
+			//obj := string(c.URI().Path())
+			//act := string(c.Method())
 			payloadMap, ok := data.(map[string]interface{})
-			if ok {
-				hlog.Error("get payloadMap error", "claims data:", data)
+			if !ok {
+				hlog.Error("get payloadMap error:", " claims data:", data)
 				return false
 			}
 			roleId := payloadMap["role_id"].(string)
 			userId := payloadMap["user_id"].(string)
 
+			hlog.Info("Authorizator")
+			hlog.Info(payloadMap)
+
 			// check token is valid
 			userIdInt, err := strconv.Atoi(userId)
 			if err != nil {
-				hlog.Error("get payloadMap error", err)
+				hlog.Error("get payloadMap error:", err)
 				return false
 			}
 			existToken := admin.NewToken(ctx, c).IsExistByUserID(uint64(userIdInt))
@@ -127,19 +132,21 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				hlog.Error("role cache is not a valid *ent.Role or the role is not active")
 				return false
 			}
+			//
+			//sub := roleId
+			//
+			//pass, err := enforcer.Enforce(sub, obj, act)
+			//if err != nil {
+			//	hlog.Error("casbin err,  role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass, " err: ", err.Error())
+			//	return false
+			//}
+			//if !pass {
+			//	hlog.Info("casbin forbid role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
+			//}
+			//hlog.Info("casbin allow role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
+			//return pass
 
-			sub := roleId
-
-			pass, err := enforcer.Enforce(sub, obj, act)
-			if err != nil {
-				hlog.Error("casbin err,  role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass, " err: ", err.Error())
-				return false
-			}
-			if !pass {
-				hlog.Info("casbin forbid role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
-			}
-			hlog.Info("casbin allow role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
-			return pass
+			return true
 		},
 		Unauthorized: func(ctx context.Context, c *app.RequestContext, code int, message string) {
 			c.JSON(code, map[string]interface{}{

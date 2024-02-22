@@ -4,28 +4,16 @@ package user
 
 import (
 	"context"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/service/admin"
+	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	user "saas/app/admin/idl_gen/model/admin/user"
 	base "saas/app/admin/idl_gen/model/base"
 )
-
-// Login .
-// @router /api/login [POST]
-func Login(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req user.LoginReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
 
 // Register .
 // @router /api/register [POST]
@@ -118,9 +106,25 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	v, exist := c.Get("user_id")
+	if !exist || v == nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	i, err := strconv.Atoi(v.(string))
+	if err != nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized,"+err.Error())
+		return
+	}
+	userID := uint64(i)
 
-	c.JSON(consts.StatusOK, resp)
+	userInfo, err := admin.NewUser(ctx, c).UserInfo(userID)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, userInfo, "")
 }
 
 // UserList .
@@ -182,9 +186,25 @@ func UserProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	v, exist := c.Get("user_id")
+	if !exist || v == nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	i, err := strconv.Atoi(v.(string))
+	if err != nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized,"+err.Error())
+		return
+	}
+	userID := uint64(i)
 
-	c.JSON(consts.StatusOK, resp)
+	user, err := admin.NewUser(ctx, c).UserInfo(userID)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.SendResponse(c, err, user, "")
 }
 
 // UpdateUserStatus .

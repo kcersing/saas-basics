@@ -54,11 +54,11 @@ var (
 
 // ConvertErr convert error to Errno
 func ConvertErr(err error) ErrNo {
+
 	Err := ErrNo{}
 	if errors.As(err, &Err) {
 		return Err
 	}
-
 	s := ServiceErr
 	s.ErrMsg = err.Error()
 	return s

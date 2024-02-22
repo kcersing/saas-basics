@@ -82,7 +82,7 @@ service UserService {
   base.NilResponse UpdateUser(1: CreateOrUpdateUserReq req) (api.post = "/api/admin/user/update")
 
   // 获取用户基本信息
-  base.NilResponse UserInfo(1: base.Empty req) (api.post = "/api/admin/user/info")
+  base.NilResponse UserInfo(1: base.Empty req) (api.get = "/api/admin/user/info")
 
   // 获取用户列表
   base.NilResponse UserList(1: UserListReq req) (api.post = "/api/admin/user/list")
@@ -94,7 +94,7 @@ service UserService {
   base.NilResponse UpdateProfile(1: ProfileReq req) (api.post = "/api/admin/user/profile-update")
 
   // 获取用户个人信息
-  base.NilResponse UserProfile(1: base.Empty req) (api.post = "/api/admin/user/profile")
+  base.NilResponse UserProfile(1: base.Empty req) (api.get = "/api/admin/user/profile")
 
   // 更新用户状态
   base.NilResponse UpdateUserStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/user/status")

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"net/http"
 	"saas/app/admin/pkg/errno"
 	"time"
@@ -18,6 +19,7 @@ type Response struct {
 
 // SendResponse pack response
 func SendResponse(c *app.RequestContext, err error, data interface{}, cacheTime string) {
+	hlog.Info(err)
 	Err := errno.ConvertErr(err)
 	c.JSON(http.StatusOK, Response{
 		Code:      Err.ErrCode,

@@ -20,12 +20,7 @@ func _apiMw() []app.HandlerFunc {
 
 func _loginMw() []app.HandlerFunc {
 	// your code...
-
-	return []app.HandlerFunc{
-		mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
-		mw.LogMw(),
-	}
-
+	return nil
 }
 
 func _registerMw() []app.HandlerFunc {
@@ -35,7 +30,12 @@ func _registerMw() []app.HandlerFunc {
 
 func _adminMw() []app.HandlerFunc {
 	// your code...
-	return nil
+
+	return []app.HandlerFunc{
+		mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
+		mw.LogMw(),
+	}
+
 }
 
 func _userMw() []app.HandlerFunc {

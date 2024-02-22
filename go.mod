@@ -18,6 +18,7 @@ require (
 	github.com/hertz-contrib/logger/accesslog v0.0.0-20240128134225-6b18af47a115
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/paseto v0.0.0-20230508023022-71af6635a26c
+	github.com/jinzhu/copier v0.4.0
 	github.com/medivhzhan/weapp/v2 v2.5.0
 	github.com/mojocn/base64Captcha v1.3.6
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
