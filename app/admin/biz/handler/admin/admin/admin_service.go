@@ -4,6 +4,7 @@ package admin
 
 import (
 	"context"
+	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
 	"saas/app/pkg/service/admin"
 
@@ -41,9 +42,9 @@ func Captcha(ctx context.Context, c *app.RequestContext) {
 
 	id, b64s, _, err := admin.NewCaptcha(ctx, c).GetCaptcha()
 
-	utils.SendResponse(c, err, map[string]string{
+	utils.SendResponse(c, errno.Success, map[string]string{
 		"id":   id,
 		"b64s": b64s,
-	}, "")
+	}, 0, "")
 
 }

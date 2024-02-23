@@ -5,11 +5,13 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
+	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	infras "saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	menu2 "saas/pkg/db/ent/menu"
+	"saas/pkg/db/ent/role"
 )
 
 type Menu struct {
@@ -82,7 +84,16 @@ func (m Menu) Delete(id uint64) error {
 
 func (m Menu) ListByRole(roleID uint64) (list []*do.MenuInfoTree, total uint64, err error) {
 	//TODO implement me
-	panic("implement me")
+	menus, err := m.db.Role.Query().Where(role.IDEQ(roleID)).
+		QueryMenus().Order(ent.Asc(menu2.FieldOrderNo)).All(m.ctx)
+	if err != nil {
+		return nil, 0, errors.Wrap(err, "query m by role failed")
+	}
+
+	list = findMenuChildren(menus, 1)
+	total = uint64(len(list))
+	return
+
 }
 
 func (m Menu) List(req *do.MenuListReq) (list []*do.MenuInfoTree, total int, err error) {
@@ -129,4 +140,47 @@ func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
 		db:    infras.DB,
 		cache: infras.Cache,
 	}
+}
+
+func findMenuChildren(data []*ent.Menu, parentID uint64) []*do.MenuInfoTree {
+	if data == nil {
+		return nil
+	}
+	var result []*do.MenuInfoTree
+	for _, v := range data {
+		// discard the parent menu, only find the children menu
+		if v.ParentID == parentID && v.ID != parentID {
+			var m = new(do.MenuInfoTree)
+			m.ID = v.ID
+			m.CreatedAt = v.CreatedAt.Format("2006-01-02 15:04:05")
+			m.UpdatedAt = v.UpdatedAt.Format("2006-01-02 15:04:05")
+			m.MenuType = v.MenuType
+			m.Level = v.MenuLevel
+			m.ParentID = v.ParentID
+			m.Path = v.Path
+			m.Name = v.Name
+			m.Redirect = v.Redirect
+			m.Component = v.Component
+			m.OrderNo = v.OrderNo
+			m.Meta = &do.MenuMeta{
+				Title:              v.Title,
+				Icon:               v.Icon,
+				HideMenu:           v.HideMenu,
+				HideBreadcrumb:     v.HideBreadcrumb,
+				CurrentActiveMenu:  v.CurrentActiveMenu,
+				IgnoreKeepAlive:    v.IgnoreKeepAlive,
+				HideTab:            v.HideTab,
+				FrameSrc:           v.FrameSrc,
+				CarryParam:         v.CarryParam,
+				HideChildrenInMenu: v.HideChildrenInMenu,
+				Affix:              v.Affix,
+				DynamicLevel:       v.DynamicLevel,
+				RealPath:           v.RealPath,
+			}
+
+			m.Children = findMenuChildren(data, v.ID)
+			result = append(result, m)
+		}
+	}
+	return result
 }

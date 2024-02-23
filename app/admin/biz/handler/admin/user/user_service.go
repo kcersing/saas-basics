@@ -41,10 +41,12 @@ func UserPermCode(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	roleId, exist := c.Get("role_id")
+	if !exist || roleId == nil {
+		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
+	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, []string{roleId.(string)}, 0, "")
 }
 
 // ChangePassword .
@@ -124,7 +126,7 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, userInfo, "")
+	utils.SendResponse(c, errno.Success, userInfo, 0, "")
 }
 
 // UserList .
@@ -204,7 +206,7 @@ func UserProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	utils.SendResponse(c, err, user, "")
+	utils.SendResponse(c, err, user, 0, "")
 }
 
 // UpdateUserStatus .

@@ -18,6 +18,7 @@ func main() {
 	infras.InitDB()
 	infras.InitCasbin()
 	infras.InitCache()
+	infras.NewInitDatabase().InitDatabase()
 
 	//tracer, trcCfg := hertztracing.NewServerTracer()
 	// create a new server

@@ -4,6 +4,13 @@ package menu
 
 import (
 	"context"
+	"errors"
+	"github.com/jinzhu/copier"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"saas/app/pkg/service/admin"
+	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -69,10 +76,29 @@ func MenuByRole(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	roleIdInterface, exist := c.Get("role_id")
+	if !exist || roleIdInterface == nil {
+		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
+		return
+	}
+	roleId, err := strconv.Atoi(roleIdInterface.(string))
+	if err != nil {
+		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
+		return
+	}
+	menuTree, total, err := admin.NewMenu(ctx, c).ListByRole(uint64(roleId))
+	if err != nil {
+		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
+		return
+	}
+	var menuInfos []*do.MenuInfo
+	err = copier.Copy(&menuInfos, &menuTree)
+	if err != nil {
+		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
+		return
+	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, menuInfos, total, "")
 }
 
 // MenuLists .
