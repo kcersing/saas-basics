@@ -30,7 +30,7 @@ func Register(r *server.Hertz) {
 			{
 				_detail0 := _dict.Group("/detail", _detail0Mw()...)
 				_detail0.POST("/create", append(_createdictionarydetailMw(), dictionary.CreateDictionaryDetail)...)
-				_detail0.GET("/update", append(_updatedictionarydetailMw(), dictionary.UpdateDictionaryDetail)...)
+				_detail0.POST("/update", append(_updatedictionarydetailMw(), dictionary.UpdateDictionaryDetail)...)
 			}
 			{
 				_dict0 := _admin.Group("/dict", _dict0Mw()...)

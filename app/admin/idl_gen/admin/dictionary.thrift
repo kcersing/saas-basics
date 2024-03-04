@@ -37,7 +37,7 @@ service dictionaryService {
   base.NilResponse CreateDictionaryDetail(1: data.DictionaryDetail req) (api.post = "/api/admin/dict/detail/create")
 
   // 更新字典键值信息
-  base.NilResponse UpdateDictionaryDetail(1: data.DictionaryDetail req) (api.get = "/api/admin/dict/detail/update")
+  base.NilResponse UpdateDictionaryDetail(1: data.DictionaryDetail req) (api.post = "/api/admin/dict/detail/update")
 
   // 删除字典键值信息
   base.NilResponse DeleteDictionaryDetail(1: base.IDReq req) (api.get = "/api/admin/dict/detail")
