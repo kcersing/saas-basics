@@ -46,6 +46,11 @@ struct CreateOrUpdateMenuParamReq{
     5:  string value (api.raw = "value")
 }
 
+
+
+
+
+
 // menu service
 service MenuService {
 

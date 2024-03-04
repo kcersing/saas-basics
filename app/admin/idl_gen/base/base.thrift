@@ -20,11 +20,12 @@ struct Empty {
 }
 
 struct IDReq{
-
+    1: string id,
 }
 
 struct PageInfoReq{
-
+    1: string page,
+    2: string pageSize,
 }
 
 struct StatusCodeReq {

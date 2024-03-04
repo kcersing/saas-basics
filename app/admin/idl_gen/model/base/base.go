@@ -756,13 +756,20 @@ func (p *Empty) String() string {
 }
 
 type IDReq struct {
+	ID string `thrift:"id,1" form:"id" json:"id" query:"id"`
 }
 
 func NewIDReq() *IDReq {
 	return &IDReq{}
 }
 
-var fieldIDToName_IDReq = map[int16]string{}
+func (p *IDReq) GetID() (v string) {
+	return p.ID
+}
+
+var fieldIDToName_IDReq = map[int16]string{
+	1: "id",
+}
 
 func (p *IDReq) Read(iprot thrift.TProtocol) (err error) {
 
@@ -781,8 +788,20 @@ func (p *IDReq) Read(iprot thrift.TProtocol) (err error) {
 		if fieldTypeId == thrift.STOP {
 			break
 		}
-		if err = iprot.Skip(fieldTypeId); err != nil {
-			goto SkipFieldTypeError
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		}
 		if err = iprot.ReadFieldEnd(); err != nil {
 			goto ReadFieldEndError
@@ -797,8 +816,10 @@ ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-SkipFieldTypeError:
-	return thrift.PrependError(fmt.Sprintf("%T skip field type %d error", p, fieldTypeId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_IDReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
 ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
@@ -806,11 +827,26 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
+func (p *IDReq) ReadField1(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.ID = v
+	}
+	return nil
+}
+
 func (p *IDReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
 	if err = oprot.WriteStructBegin("IDReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -821,10 +857,29 @@ func (p *IDReq) Write(oprot thrift.TProtocol) (err error) {
 	return nil
 WriteStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
 WriteFieldStopError:
 	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
 WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *IDReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.ID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
 func (p *IDReq) String() string {
@@ -836,13 +891,26 @@ func (p *IDReq) String() string {
 }
 
 type PageInfoReq struct {
+	Page     string `thrift:"page,1" form:"page" json:"page" query:"page"`
+	PageSize string `thrift:"pageSize,2" form:"pageSize" json:"pageSize" query:"pageSize"`
 }
 
 func NewPageInfoReq() *PageInfoReq {
 	return &PageInfoReq{}
 }
 
-var fieldIDToName_PageInfoReq = map[int16]string{}
+func (p *PageInfoReq) GetPage() (v string) {
+	return p.Page
+}
+
+func (p *PageInfoReq) GetPageSize() (v string) {
+	return p.PageSize
+}
+
+var fieldIDToName_PageInfoReq = map[int16]string{
+	1: "page",
+	2: "pageSize",
+}
 
 func (p *PageInfoReq) Read(iprot thrift.TProtocol) (err error) {
 
@@ -861,8 +929,28 @@ func (p *PageInfoReq) Read(iprot thrift.TProtocol) (err error) {
 		if fieldTypeId == thrift.STOP {
 			break
 		}
-		if err = iprot.Skip(fieldTypeId); err != nil {
-			goto SkipFieldTypeError
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		}
 		if err = iprot.ReadFieldEnd(); err != nil {
 			goto ReadFieldEndError
@@ -877,8 +965,10 @@ ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-SkipFieldTypeError:
-	return thrift.PrependError(fmt.Sprintf("%T skip field type %d error", p, fieldTypeId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_PageInfoReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
 ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
@@ -886,11 +976,39 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
+func (p *PageInfoReq) ReadField1(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Page = v
+	}
+	return nil
+}
+func (p *PageInfoReq) ReadField2(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.PageSize = v
+	}
+	return nil
+}
+
 func (p *PageInfoReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
 	if err = oprot.WriteStructBegin("PageInfoReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -901,10 +1019,46 @@ func (p *PageInfoReq) Write(oprot thrift.TProtocol) (err error) {
 	return nil
 WriteStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
 WriteFieldStopError:
 	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
 WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *PageInfoReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("page", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Page); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *PageInfoReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("pageSize", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.PageSize); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *PageInfoReq) String() string {

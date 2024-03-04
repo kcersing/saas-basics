@@ -2,6 +2,7 @@ package admin
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
@@ -118,22 +119,82 @@ func (m Menu) List(req *do.MenuListReq) (list []*do.MenuInfoTree, total int, err
 
 func (m Menu) CreateMenuParam(req *do.MenuParam) error {
 	//TODO implement me
-	panic("implement me")
+	// check menu whether exist
+	exist, err := m.db.Menu.Query().Where(menu2.IDEQ(req.MenuID)).Exist(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "query menu failed")
+	}
+	if !exist {
+		return errors.New(fmt.Sprintf("menu not exist, menu id: %d", req.MenuID))
+	}
+
+	// create menu param
+	err = m.db.MenuParam.Create().
+		SetMenusID(req.MenuID).
+		SetType(req.Type).
+		SetKey(req.Key).
+		SetValue(req.Value).
+		Exec(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "create menu param failed")
+	}
+	return nil
+
 }
 
 func (m Menu) UpdateMenuParam(req *do.MenuParam) error {
-	//TODO implement me
-	panic("implement me")
+	// check menu whether exist
+	exist, err := m.db.Menu.Query().Where(menu2.IDEQ(req.MenuID)).Exist(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "query menu failed")
+	}
+	if !exist {
+		return errors.New(fmt.Sprintf("menu not exist, menu id: %d", req.MenuID))
+	}
+
+	// update menu param
+	err = m.db.MenuParam.UpdateOneID(req.ID).
+		SetMenusID(req.MenuID).
+		SetType(req.Type).
+		SetKey(req.Key).
+		SetValue(req.Value).
+		Exec(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "update menu param failed")
+	}
+	return nil
 }
 
 func (m Menu) DeleteMenuParam(menuParamID uint64) error {
-	//TODO implement me
-	panic("implement me")
+	// delete menu param
+	err := m.db.MenuParam.DeleteOneID(menuParamID).Exec(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "delete menu param failed")
+	}
+	return nil
 }
 
 func (m Menu) MenuParamListByMenuID(menuID uint64) (list []do.MenuParam, total uint64, err error) {
-	//TODO implement me
-	panic("implement me")
+	// query menu param list
+	params, err := m.db.Menu.Query().Where(menu2.IDEQ(menuID)).QueryParams().All(m.ctx)
+	if err != nil {
+		return nil, 0, errors.Wrap(err, "query menu param list failed")
+	}
+
+	// convert to MenuParam
+	for _, v := range params {
+		var p do.MenuParam
+		p.ID = v.ID
+		p.Type = v.Type
+		p.Key = v.Key
+		p.Value = v.Value
+		p.CreatedAt = v.CreatedAt.Format("2006-01-02 15:04:05")
+		p.UpdatedAt = v.UpdatedAt.Format("2006-01-02 15:04:05")
+		list = append(list, p)
+	}
+
+	total = uint64(len(list))
+	return
 }
 
 func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {

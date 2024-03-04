@@ -13,29 +13,29 @@ type Dictionary interface {
 }
 
 type DictionaryInfo struct {
-	ID          uint64
-	Title       string
-	Name        string
-	Status      uint64
-	Description string
-	CreatedAt   string
-	UpdatedAt   string
+	ID          uint64 `json:"id,omitempty"`
+	Title       string `json:"title,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Status      uint64 `json:"status,omitempty"`
+	Description string `json:"description,omitempty"`
+	CreatedAt   string `json:"createdAt,omitempty"`
+	UpdatedAt   string `json:"updatedAt,omitempty"`
 }
 
 type DictListReq struct {
-	Title    string
-	Name     string
-	Page     uint64
-	PageSize uint64
+	Title    string `json:"title,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Page     uint64 `json:"page,omitempty"`
+	PageSize uint64 `json:"pageSize,omitempty"`
 }
 
 type DictionaryDetail struct {
-	ID        uint64
-	Title     string
-	Key       string
-	Value     string
-	Status    uint64
-	CreatedAt string
-	UpdatedAt string
-	ParentID  uint64
+	ID        uint64 `json:"id,omitempty"`
+	Title     string `json:"title,omitempty"`
+	Key       string `json:"key,omitempty"`
+	Value     string `json:"value,omitempty"`
+	Status    uint64 `json:"status,omitempty"`
+	CreatedAt string `json:"createdAt,omitempty"`
+	UpdatedAt string `json:"updatedAt,omitempty"`
+	ParentID  uint64 `json:"parentID,omitempty"`
 }

@@ -4,6 +4,12 @@ package dictionary
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"saas/app/pkg/service/admin"
+	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -22,9 +28,19 @@ func CreateDictionary(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	var DictInfo do.DictionaryInfo
+	err = copier.Copy(&DictInfo, &req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	err = admin.NewDictionary(ctx, c).Create(&DictInfo)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateDictionary .
@@ -38,9 +54,20 @@ func UpdateDictionary(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var DictDetail do.DictionaryDetail
+	err = copier.Copy(&DictDetail, &req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewDictionary(ctx, c).UpdateDetail(&DictDetail)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DeleteDictionary .
@@ -53,10 +80,14 @@ func DeleteDictionary(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	id, _ := strconv.Atoi(req.ID)
+	err = admin.NewDictionary(ctx, c).DeleteDetail(uint64(id))
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DictionaryList .
@@ -70,9 +101,22 @@ func DictionaryList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var dictListReq do.DictListReq
+	err = copier.Copy(&dictListReq, &req)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, err.Error())
+		return
+	}
+	// get dict list
+	dictList, total, err := admin.NewDictionary(ctx, c).List(&dictListReq)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, dictList, uint64(total), "")
+	return
+
 }
 
 // CreateDictionaryDetail .
@@ -86,9 +130,21 @@ func CreateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var DictDetail do.DictionaryDetail
+	err = copier.Copy(&DictDetail, &req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewDictionary(ctx, c).CreateDetail(&DictDetail)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateDictionaryDetail .
@@ -101,10 +157,19 @@ func UpdateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	var DictDetail do.DictionaryDetail
+	err = copier.Copy(&DictDetail, &req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	err = admin.NewDictionary(ctx, c).UpdateDetail(&DictDetail)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DeleteDictionaryDetail .
@@ -117,10 +182,14 @@ func DeleteDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	id, _ := strconv.Atoi(req.ID)
+	err = admin.NewDictionary(ctx, c).DeleteDetail(uint64(id))
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DetailByDictionaryName .
@@ -134,7 +203,12 @@ func DetailByDictionaryName(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	dictDetailList, total, err := admin.NewDictionary(ctx, c).DetailListByDictName(req.Name)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, dictDetailList, total, "")
+	return
 }

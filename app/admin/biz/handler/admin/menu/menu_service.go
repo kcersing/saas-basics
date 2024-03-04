@@ -131,6 +131,13 @@ func CreateMenuParam(ctx context.Context, c *app.RequestContext) {
 	resp := new(base.NilResponse)
 
 	c.JSON(consts.StatusOK, resp)
+	var listReq do.MenuListReq
+
+	menuTree, total, err := admin.NewMenu(ctx, c).List(&listReq)
+	var menuInfos []*do.MenuInfo
+	err = copier.Copy(&menuInfos, &menuTree)
+
+	utils.SendResponse(c, errno.Success, menuInfos, uint64(total), "")
 }
 
 // UpdateMenuParam .
@@ -144,9 +151,17 @@ func UpdateMenuParam(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var menuParamReq do.MenuParam
+	err = copier.Copy(&menuParamReq, &req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+	}
+	err = admin.NewMenu(ctx, c).UpdateMenuParam(&menuParamReq)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
 }
 
 // DeleteMenuParam .
@@ -159,10 +174,12 @@ func DeleteMenuParam(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	id, _ := strconv.Atoi(req.ID)
+	err = admin.NewMenu(ctx, c).DeleteMenuParam(uint64(id))
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
 }
 
 // MenuParamListByMenuID .
@@ -175,8 +192,11 @@ func MenuParamListByMenuID(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	id, _ := strconv.Atoi(req.ID)
+	menuParams, total, err := admin.NewMenu(ctx, c).MenuParamListByMenuID(uint64(id))
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, menuParams, total, "")
 }

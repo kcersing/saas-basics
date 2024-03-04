@@ -1295,10 +1295,10 @@ func (p *LogsInfo) String() string {
 
 // 字典信息
 type DictionaryInfo struct {
-	ID          string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID          int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
 	Title       string `thrift:"title,2" form:"title" json:"title" query:"title"`
 	Name        string `thrift:"name,3" form:"name" json:"name" query:"name"`
-	Status      string `thrift:"status,5" form:"status" json:"status" query:"status"`
+	Status      int64  `thrift:"status,5" form:"status" json:"status" query:"status"`
 	Description string `thrift:"description,6" form:"description" json:"description" query:"description"`
 	CreatedAt   string `thrift:"createdAt,7" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt   string `thrift:"updatedAt,8" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
@@ -1308,7 +1308,7 @@ func NewDictionaryInfo() *DictionaryInfo {
 	return &DictionaryInfo{}
 }
 
-func (p *DictionaryInfo) GetID() (v string) {
+func (p *DictionaryInfo) GetID() (v int64) {
 	return p.ID
 }
 
@@ -1320,7 +1320,7 @@ func (p *DictionaryInfo) GetName() (v string) {
 	return p.Name
 }
 
-func (p *DictionaryInfo) GetStatus() (v string) {
+func (p *DictionaryInfo) GetStatus() (v int64) {
 	return p.Status
 }
 
@@ -1366,7 +1366,7 @@ func (p *DictionaryInfo) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1390,7 +1390,7 @@ func (p *DictionaryInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 5:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1452,7 +1452,7 @@ ReadStructEndError:
 
 func (p *DictionaryInfo) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -1479,7 +1479,7 @@ func (p *DictionaryInfo) ReadField3(iprot thrift.TProtocol) error {
 }
 func (p *DictionaryInfo) ReadField5(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Status = v
@@ -1567,10 +1567,10 @@ WriteStructEndError:
 }
 
 func (p *DictionaryInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1618,10 +1618,10 @@ WriteFieldEndError:
 }
 
 func (p *DictionaryInfo) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("status", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Status); err != nil {
+	if err := oprot.WriteI64(p.Status); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1695,21 +1695,21 @@ func (p *DictionaryInfo) String() string {
 
 // 字典键值信息
 type DictionaryDetail struct {
-	ID        string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID        int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
 	Title     string `thrift:"title,2" form:"title" json:"title" query:"title"`
 	Key       string `thrift:"key,3" form:"key" json:"key" query:"key"`
 	Value     string `thrift:"value,4" form:"value" json:"value" query:"value"`
-	Status    string `thrift:"status,5" form:"status" json:"status" query:"status"`
+	Status    int64  `thrift:"status,5" form:"status" json:"status" query:"status"`
 	CreatedAt string `thrift:"createdAt,6" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt string `thrift:"updatedAt,7" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
-	ParentID  string `thrift:"parentID,8" form:"parentID" json:"parentID" query:"parentID"`
+	ParentID  int64  `thrift:"parentID,8" form:"parentID" json:"parentID" query:"parentID"`
 }
 
 func NewDictionaryDetail() *DictionaryDetail {
 	return &DictionaryDetail{}
 }
 
-func (p *DictionaryDetail) GetID() (v string) {
+func (p *DictionaryDetail) GetID() (v int64) {
 	return p.ID
 }
 
@@ -1725,7 +1725,7 @@ func (p *DictionaryDetail) GetValue() (v string) {
 	return p.Value
 }
 
-func (p *DictionaryDetail) GetStatus() (v string) {
+func (p *DictionaryDetail) GetStatus() (v int64) {
 	return p.Status
 }
 
@@ -1737,7 +1737,7 @@ func (p *DictionaryDetail) GetUpdatedAt() (v string) {
 	return p.UpdatedAt
 }
 
-func (p *DictionaryDetail) GetParentID() (v string) {
+func (p *DictionaryDetail) GetParentID() (v int64) {
 	return p.ParentID
 }
 
@@ -1772,7 +1772,7 @@ func (p *DictionaryDetail) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1804,7 +1804,7 @@ func (p *DictionaryDetail) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 5:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1828,7 +1828,7 @@ func (p *DictionaryDetail) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 8:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1866,7 +1866,7 @@ ReadStructEndError:
 
 func (p *DictionaryDetail) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -1902,7 +1902,7 @@ func (p *DictionaryDetail) ReadField4(iprot thrift.TProtocol) error {
 }
 func (p *DictionaryDetail) ReadField5(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Status = v
@@ -1929,7 +1929,7 @@ func (p *DictionaryDetail) ReadField7(iprot thrift.TProtocol) error {
 }
 func (p *DictionaryDetail) ReadField8(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ParentID = v
@@ -1994,10 +1994,10 @@ WriteStructEndError:
 }
 
 func (p *DictionaryDetail) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2062,10 +2062,10 @@ WriteFieldEndError:
 }
 
 func (p *DictionaryDetail) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("status", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Status); err != nil {
+	if err := oprot.WriteI64(p.Status); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2113,10 +2113,10 @@ WriteFieldEndError:
 }
 
 func (p *DictionaryDetail) writeField8(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("parentID", thrift.STRING, 8); err != nil {
+	if err = oprot.WriteFieldBegin("parentID", thrift.I64, 8); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ParentID); err != nil {
+	if err := oprot.WriteI64(p.ParentID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
