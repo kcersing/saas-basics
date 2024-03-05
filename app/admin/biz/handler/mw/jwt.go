@@ -117,12 +117,12 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				hlog.Error("get payloadMap error:", err)
 				return false
 			}
-			existToken := admin.NewToken(ctx, c).IsExistByUserID(uint64(userIdInt))
+			existToken := admin.NewToken(ctx, c).IsExistByUserID(int64(userIdInt))
 			if !existToken {
 				return false
 			}
 			// check the role status
-			roleInfo, err := admin.NewRole(ctx, c).RoleInfoByID(cast.ToUint64(roleId))
+			roleInfo, err := admin.NewRole(ctx, c).RoleInfoByID(cast.ToInt64(roleId))
 			// if the role is not exist or the role is not active, return false
 			if err != nil {
 				hlog.Error(err, "role is not exist")

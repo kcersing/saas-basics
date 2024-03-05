@@ -62,7 +62,7 @@ func (a Auth) ApiAuth(roleIDStr string) (infos []*do.ApiAuthInfo, err error) {
 	return
 }
 
-func (a Auth) UpdateMenuAuth(roleID uint64, menuIDs []uint64) error {
+func (a Auth) UpdateMenuAuth(roleID int64, menuIDs []int64) error {
 	tx, err := a.db.Tx(a.ctx)
 	if err != nil {
 		return errors.Wrap(err, "starting a transaction err")
@@ -89,7 +89,7 @@ func (a Auth) UpdateMenuAuth(roleID uint64, menuIDs []uint64) error {
 	return tx.Commit()
 }
 
-func (a Auth) MenuAuth(roleID uint64) (menuIDs []uint64, err error) {
+func (a Auth) MenuAuth(roleID int64) (menuIDs []int64, err error) {
 	menus, err := a.db.Role.Query().Where(role.IDEQ(roleID)).QueryMenus().All(a.ctx)
 	for _, v := range menus {
 		if v.ID != 1 {

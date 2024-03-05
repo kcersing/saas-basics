@@ -1,14 +1,14 @@
 namespace go base
 
 struct BaseResp {
-    1: string StatusMessage = ""
-    2: i32 StatusCode = 0
+    1: string message = ""
+    2: i32 code = 0
     3: optional map<string, string> Extra
 }
 
 struct BaseResponse {
-    1: i64 status_code,   // Status code, 0-success, other values-failure
-    2: string status_msg, // Return status description
+    1: i64 code,   // Status code, 0-success, other values-failure
+    2: string message, // Return status description
 }
 
 struct NilResponse {
@@ -20,17 +20,17 @@ struct Empty {
 }
 
 struct IDReq{
-    1: string id,
+    1: i64 id,
 }
 
 struct PageInfoReq{
-    1: string page,
-    2: string pageSize,
+    1: i64 page,
+    2: i64 pageSize,
 }
 
 struct StatusCodeReq {
-    1: string id,
-    2: string status,
+    1: i64 id,
+    2: i64 status,
 }
 
 enum Err {

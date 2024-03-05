@@ -36,23 +36,23 @@ func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (uu *UserUpdate) SetStatus(u uint8) *UserUpdate {
+func (uu *UserUpdate) SetStatus(i int8) *UserUpdate {
 	uu.mutation.ResetStatus()
-	uu.mutation.SetStatus(u)
+	uu.mutation.SetStatus(i)
 	return uu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableStatus(u *uint8) *UserUpdate {
-	if u != nil {
-		uu.SetStatus(*u)
+func (uu *UserUpdate) SetNillableStatus(i *int8) *UserUpdate {
+	if i != nil {
+		uu.SetStatus(*i)
 	}
 	return uu
 }
 
-// AddStatus adds u to the "status" field.
-func (uu *UserUpdate) AddStatus(u int8) *UserUpdate {
-	uu.mutation.AddStatus(u)
+// AddStatus adds i to the "status" field.
+func (uu *UserUpdate) AddStatus(i int8) *UserUpdate {
+	uu.mutation.AddStatus(i)
 	return uu
 }
 
@@ -165,23 +165,23 @@ func (uu *UserUpdate) ClearActiveColor() *UserUpdate {
 }
 
 // SetRoleID sets the "role_id" field.
-func (uu *UserUpdate) SetRoleID(u uint64) *UserUpdate {
+func (uu *UserUpdate) SetRoleID(i int64) *UserUpdate {
 	uu.mutation.ResetRoleID()
-	uu.mutation.SetRoleID(u)
+	uu.mutation.SetRoleID(i)
 	return uu
 }
 
 // SetNillableRoleID sets the "role_id" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableRoleID(u *uint64) *UserUpdate {
-	if u != nil {
-		uu.SetRoleID(*u)
+func (uu *UserUpdate) SetNillableRoleID(i *int64) *UserUpdate {
+	if i != nil {
+		uu.SetRoleID(*i)
 	}
 	return uu
 }
 
-// AddRoleID adds u to the "role_id" field.
-func (uu *UserUpdate) AddRoleID(u int64) *UserUpdate {
-	uu.mutation.AddRoleID(u)
+// AddRoleID adds i to the "role_id" field.
+func (uu *UserUpdate) AddRoleID(i int64) *UserUpdate {
+	uu.mutation.AddRoleID(i)
 	return uu
 }
 
@@ -266,13 +266,13 @@ func (uu *UserUpdate) ClearAvatar() *UserUpdate {
 }
 
 // SetTokenID sets the "token" edge to the Token entity by ID.
-func (uu *UserUpdate) SetTokenID(id uint64) *UserUpdate {
+func (uu *UserUpdate) SetTokenID(id int64) *UserUpdate {
 	uu.mutation.SetTokenID(id)
 	return uu
 }
 
 // SetNillableTokenID sets the "token" edge to the Token entity by ID if the given value is not nil.
-func (uu *UserUpdate) SetNillableTokenID(id *uint64) *UserUpdate {
+func (uu *UserUpdate) SetNillableTokenID(id *int64) *UserUpdate {
 	if id != nil {
 		uu = uu.SetTokenID(*id)
 	}
@@ -332,7 +332,7 @@ func (uu *UserUpdate) defaults() {
 }
 
 func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	if ps := uu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -344,13 +344,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := uu.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt8, value)
 	}
 	if value, ok := uu.mutation.AddedStatus(); ok {
-		_spec.AddField(user.FieldStatus, field.TypeUint8, value)
+		_spec.AddField(user.FieldStatus, field.TypeInt8, value)
 	}
 	if uu.mutation.StatusCleared() {
-		_spec.ClearField(user.FieldStatus, field.TypeUint8)
+		_spec.ClearField(user.FieldStatus, field.TypeInt8)
 	}
 	if value, ok := uu.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
@@ -380,13 +380,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(user.FieldActiveColor, field.TypeString)
 	}
 	if value, ok := uu.mutation.RoleID(); ok {
-		_spec.SetField(user.FieldRoleID, field.TypeUint64, value)
+		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
 	}
 	if value, ok := uu.mutation.AddedRoleID(); ok {
-		_spec.AddField(user.FieldRoleID, field.TypeUint64, value)
+		_spec.AddField(user.FieldRoleID, field.TypeInt64, value)
 	}
 	if uu.mutation.RoleIDCleared() {
-		_spec.ClearField(user.FieldRoleID, field.TypeUint64)
+		_spec.ClearField(user.FieldRoleID, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.Mobile(); ok {
 		_spec.SetField(user.FieldMobile, field.TypeString, value)
@@ -417,7 +417,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -430,7 +430,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -465,23 +465,23 @@ func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (uuo *UserUpdateOne) SetStatus(u uint8) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetStatus(i int8) *UserUpdateOne {
 	uuo.mutation.ResetStatus()
-	uuo.mutation.SetStatus(u)
+	uuo.mutation.SetStatus(i)
 	return uuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableStatus(u *uint8) *UserUpdateOne {
-	if u != nil {
-		uuo.SetStatus(*u)
+func (uuo *UserUpdateOne) SetNillableStatus(i *int8) *UserUpdateOne {
+	if i != nil {
+		uuo.SetStatus(*i)
 	}
 	return uuo
 }
 
-// AddStatus adds u to the "status" field.
-func (uuo *UserUpdateOne) AddStatus(u int8) *UserUpdateOne {
-	uuo.mutation.AddStatus(u)
+// AddStatus adds i to the "status" field.
+func (uuo *UserUpdateOne) AddStatus(i int8) *UserUpdateOne {
+	uuo.mutation.AddStatus(i)
 	return uuo
 }
 
@@ -594,23 +594,23 @@ func (uuo *UserUpdateOne) ClearActiveColor() *UserUpdateOne {
 }
 
 // SetRoleID sets the "role_id" field.
-func (uuo *UserUpdateOne) SetRoleID(u uint64) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetRoleID(i int64) *UserUpdateOne {
 	uuo.mutation.ResetRoleID()
-	uuo.mutation.SetRoleID(u)
+	uuo.mutation.SetRoleID(i)
 	return uuo
 }
 
 // SetNillableRoleID sets the "role_id" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableRoleID(u *uint64) *UserUpdateOne {
-	if u != nil {
-		uuo.SetRoleID(*u)
+func (uuo *UserUpdateOne) SetNillableRoleID(i *int64) *UserUpdateOne {
+	if i != nil {
+		uuo.SetRoleID(*i)
 	}
 	return uuo
 }
 
-// AddRoleID adds u to the "role_id" field.
-func (uuo *UserUpdateOne) AddRoleID(u int64) *UserUpdateOne {
-	uuo.mutation.AddRoleID(u)
+// AddRoleID adds i to the "role_id" field.
+func (uuo *UserUpdateOne) AddRoleID(i int64) *UserUpdateOne {
+	uuo.mutation.AddRoleID(i)
 	return uuo
 }
 
@@ -695,13 +695,13 @@ func (uuo *UserUpdateOne) ClearAvatar() *UserUpdateOne {
 }
 
 // SetTokenID sets the "token" edge to the Token entity by ID.
-func (uuo *UserUpdateOne) SetTokenID(id uint64) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetTokenID(id int64) *UserUpdateOne {
 	uuo.mutation.SetTokenID(id)
 	return uuo
 }
 
 // SetNillableTokenID sets the "token" edge to the Token entity by ID if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableTokenID(id *uint64) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetNillableTokenID(id *int64) *UserUpdateOne {
 	if id != nil {
 		uuo = uuo.SetTokenID(*id)
 	}
@@ -774,7 +774,7 @@ func (uuo *UserUpdateOne) defaults() {
 }
 
 func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
-	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	id, ok := uuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "User.id" for update`)}
@@ -803,13 +803,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := uuo.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt8, value)
 	}
 	if value, ok := uuo.mutation.AddedStatus(); ok {
-		_spec.AddField(user.FieldStatus, field.TypeUint8, value)
+		_spec.AddField(user.FieldStatus, field.TypeInt8, value)
 	}
 	if uuo.mutation.StatusCleared() {
-		_spec.ClearField(user.FieldStatus, field.TypeUint8)
+		_spec.ClearField(user.FieldStatus, field.TypeInt8)
 	}
 	if value, ok := uuo.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
@@ -839,13 +839,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		_spec.ClearField(user.FieldActiveColor, field.TypeString)
 	}
 	if value, ok := uuo.mutation.RoleID(); ok {
-		_spec.SetField(user.FieldRoleID, field.TypeUint64, value)
+		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
 	}
 	if value, ok := uuo.mutation.AddedRoleID(); ok {
-		_spec.AddField(user.FieldRoleID, field.TypeUint64, value)
+		_spec.AddField(user.FieldRoleID, field.TypeInt64, value)
 	}
 	if uuo.mutation.RoleIDCleared() {
-		_spec.ClearField(user.FieldRoleID, field.TypeUint64)
+		_spec.ClearField(user.FieldRoleID, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.Mobile(); ok {
 		_spec.SetField(user.FieldMobile, field.TypeString, value)
@@ -876,7 +876,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -889,7 +889,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

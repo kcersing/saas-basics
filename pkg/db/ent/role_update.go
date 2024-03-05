@@ -36,23 +36,23 @@ func (ru *RoleUpdate) SetUpdatedAt(t time.Time) *RoleUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (ru *RoleUpdate) SetStatus(u uint8) *RoleUpdate {
+func (ru *RoleUpdate) SetStatus(i int8) *RoleUpdate {
 	ru.mutation.ResetStatus()
-	ru.mutation.SetStatus(u)
+	ru.mutation.SetStatus(i)
 	return ru
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ru *RoleUpdate) SetNillableStatus(u *uint8) *RoleUpdate {
-	if u != nil {
-		ru.SetStatus(*u)
+func (ru *RoleUpdate) SetNillableStatus(i *int8) *RoleUpdate {
+	if i != nil {
+		ru.SetStatus(*i)
 	}
 	return ru
 }
 
-// AddStatus adds u to the "status" field.
-func (ru *RoleUpdate) AddStatus(u int8) *RoleUpdate {
-	ru.mutation.AddStatus(u)
+// AddStatus adds i to the "status" field.
+func (ru *RoleUpdate) AddStatus(i int8) *RoleUpdate {
+	ru.mutation.AddStatus(i)
 	return ru
 }
 
@@ -119,35 +119,35 @@ func (ru *RoleUpdate) SetNillableRemark(s *string) *RoleUpdate {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (ru *RoleUpdate) SetOrderNo(u uint32) *RoleUpdate {
+func (ru *RoleUpdate) SetOrderNo(i int32) *RoleUpdate {
 	ru.mutation.ResetOrderNo()
-	ru.mutation.SetOrderNo(u)
+	ru.mutation.SetOrderNo(i)
 	return ru
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (ru *RoleUpdate) SetNillableOrderNo(u *uint32) *RoleUpdate {
-	if u != nil {
-		ru.SetOrderNo(*u)
+func (ru *RoleUpdate) SetNillableOrderNo(i *int32) *RoleUpdate {
+	if i != nil {
+		ru.SetOrderNo(*i)
 	}
 	return ru
 }
 
-// AddOrderNo adds u to the "order_no" field.
-func (ru *RoleUpdate) AddOrderNo(u int32) *RoleUpdate {
-	ru.mutation.AddOrderNo(u)
+// AddOrderNo adds i to the "order_no" field.
+func (ru *RoleUpdate) AddOrderNo(i int32) *RoleUpdate {
+	ru.mutation.AddOrderNo(i)
 	return ru
 }
 
 // AddMenuIDs adds the "menus" edge to the Menu entity by IDs.
-func (ru *RoleUpdate) AddMenuIDs(ids ...uint64) *RoleUpdate {
+func (ru *RoleUpdate) AddMenuIDs(ids ...int64) *RoleUpdate {
 	ru.mutation.AddMenuIDs(ids...)
 	return ru
 }
 
 // AddMenus adds the "menus" edges to the Menu entity.
 func (ru *RoleUpdate) AddMenus(m ...*Menu) *RoleUpdate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -166,14 +166,14 @@ func (ru *RoleUpdate) ClearMenus() *RoleUpdate {
 }
 
 // RemoveMenuIDs removes the "menus" edge to Menu entities by IDs.
-func (ru *RoleUpdate) RemoveMenuIDs(ids ...uint64) *RoleUpdate {
+func (ru *RoleUpdate) RemoveMenuIDs(ids ...int64) *RoleUpdate {
 	ru.mutation.RemoveMenuIDs(ids...)
 	return ru
 }
 
 // RemoveMenus removes "menus" edges to Menu entities.
 func (ru *RoleUpdate) RemoveMenus(m ...*Menu) *RoleUpdate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -217,7 +217,7 @@ func (ru *RoleUpdate) defaults() {
 }
 
 func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64))
 	if ps := ru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -229,13 +229,13 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(role.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := ru.mutation.Status(); ok {
-		_spec.SetField(role.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(role.FieldStatus, field.TypeInt8, value)
 	}
 	if value, ok := ru.mutation.AddedStatus(); ok {
-		_spec.AddField(role.FieldStatus, field.TypeUint8, value)
+		_spec.AddField(role.FieldStatus, field.TypeInt8, value)
 	}
 	if ru.mutation.StatusCleared() {
-		_spec.ClearField(role.FieldStatus, field.TypeUint8)
+		_spec.ClearField(role.FieldStatus, field.TypeInt8)
 	}
 	if value, ok := ru.mutation.Name(); ok {
 		_spec.SetField(role.FieldName, field.TypeString, value)
@@ -250,10 +250,10 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(role.FieldRemark, field.TypeString, value)
 	}
 	if value, ok := ru.mutation.OrderNo(); ok {
-		_spec.SetField(role.FieldOrderNo, field.TypeUint32, value)
+		_spec.SetField(role.FieldOrderNo, field.TypeInt32, value)
 	}
 	if value, ok := ru.mutation.AddedOrderNo(); ok {
-		_spec.AddField(role.FieldOrderNo, field.TypeUint32, value)
+		_spec.AddField(role.FieldOrderNo, field.TypeInt32, value)
 	}
 	if ru.mutation.MenusCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -263,7 +263,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: role.MenusPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -276,7 +276,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: role.MenusPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -292,7 +292,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: role.MenusPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -327,23 +327,23 @@ func (ruo *RoleUpdateOne) SetUpdatedAt(t time.Time) *RoleUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (ruo *RoleUpdateOne) SetStatus(u uint8) *RoleUpdateOne {
+func (ruo *RoleUpdateOne) SetStatus(i int8) *RoleUpdateOne {
 	ruo.mutation.ResetStatus()
-	ruo.mutation.SetStatus(u)
+	ruo.mutation.SetStatus(i)
 	return ruo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ruo *RoleUpdateOne) SetNillableStatus(u *uint8) *RoleUpdateOne {
-	if u != nil {
-		ruo.SetStatus(*u)
+func (ruo *RoleUpdateOne) SetNillableStatus(i *int8) *RoleUpdateOne {
+	if i != nil {
+		ruo.SetStatus(*i)
 	}
 	return ruo
 }
 
-// AddStatus adds u to the "status" field.
-func (ruo *RoleUpdateOne) AddStatus(u int8) *RoleUpdateOne {
-	ruo.mutation.AddStatus(u)
+// AddStatus adds i to the "status" field.
+func (ruo *RoleUpdateOne) AddStatus(i int8) *RoleUpdateOne {
+	ruo.mutation.AddStatus(i)
 	return ruo
 }
 
@@ -410,35 +410,35 @@ func (ruo *RoleUpdateOne) SetNillableRemark(s *string) *RoleUpdateOne {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (ruo *RoleUpdateOne) SetOrderNo(u uint32) *RoleUpdateOne {
+func (ruo *RoleUpdateOne) SetOrderNo(i int32) *RoleUpdateOne {
 	ruo.mutation.ResetOrderNo()
-	ruo.mutation.SetOrderNo(u)
+	ruo.mutation.SetOrderNo(i)
 	return ruo
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (ruo *RoleUpdateOne) SetNillableOrderNo(u *uint32) *RoleUpdateOne {
-	if u != nil {
-		ruo.SetOrderNo(*u)
+func (ruo *RoleUpdateOne) SetNillableOrderNo(i *int32) *RoleUpdateOne {
+	if i != nil {
+		ruo.SetOrderNo(*i)
 	}
 	return ruo
 }
 
-// AddOrderNo adds u to the "order_no" field.
-func (ruo *RoleUpdateOne) AddOrderNo(u int32) *RoleUpdateOne {
-	ruo.mutation.AddOrderNo(u)
+// AddOrderNo adds i to the "order_no" field.
+func (ruo *RoleUpdateOne) AddOrderNo(i int32) *RoleUpdateOne {
+	ruo.mutation.AddOrderNo(i)
 	return ruo
 }
 
 // AddMenuIDs adds the "menus" edge to the Menu entity by IDs.
-func (ruo *RoleUpdateOne) AddMenuIDs(ids ...uint64) *RoleUpdateOne {
+func (ruo *RoleUpdateOne) AddMenuIDs(ids ...int64) *RoleUpdateOne {
 	ruo.mutation.AddMenuIDs(ids...)
 	return ruo
 }
 
 // AddMenus adds the "menus" edges to the Menu entity.
 func (ruo *RoleUpdateOne) AddMenus(m ...*Menu) *RoleUpdateOne {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -457,14 +457,14 @@ func (ruo *RoleUpdateOne) ClearMenus() *RoleUpdateOne {
 }
 
 // RemoveMenuIDs removes the "menus" edge to Menu entities by IDs.
-func (ruo *RoleUpdateOne) RemoveMenuIDs(ids ...uint64) *RoleUpdateOne {
+func (ruo *RoleUpdateOne) RemoveMenuIDs(ids ...int64) *RoleUpdateOne {
 	ruo.mutation.RemoveMenuIDs(ids...)
 	return ruo
 }
 
 // RemoveMenus removes "menus" edges to Menu entities.
 func (ruo *RoleUpdateOne) RemoveMenus(m ...*Menu) *RoleUpdateOne {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -521,7 +521,7 @@ func (ruo *RoleUpdateOne) defaults() {
 }
 
 func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) {
-	_spec := sqlgraph.NewUpdateSpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64))
 	id, ok := ruo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Role.id" for update`)}
@@ -550,13 +550,13 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 		_spec.SetField(role.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := ruo.mutation.Status(); ok {
-		_spec.SetField(role.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(role.FieldStatus, field.TypeInt8, value)
 	}
 	if value, ok := ruo.mutation.AddedStatus(); ok {
-		_spec.AddField(role.FieldStatus, field.TypeUint8, value)
+		_spec.AddField(role.FieldStatus, field.TypeInt8, value)
 	}
 	if ruo.mutation.StatusCleared() {
-		_spec.ClearField(role.FieldStatus, field.TypeUint8)
+		_spec.ClearField(role.FieldStatus, field.TypeInt8)
 	}
 	if value, ok := ruo.mutation.Name(); ok {
 		_spec.SetField(role.FieldName, field.TypeString, value)
@@ -571,10 +571,10 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 		_spec.SetField(role.FieldRemark, field.TypeString, value)
 	}
 	if value, ok := ruo.mutation.OrderNo(); ok {
-		_spec.SetField(role.FieldOrderNo, field.TypeUint32, value)
+		_spec.SetField(role.FieldOrderNo, field.TypeInt32, value)
 	}
 	if value, ok := ruo.mutation.AddedOrderNo(); ok {
-		_spec.AddField(role.FieldOrderNo, field.TypeUint32, value)
+		_spec.AddField(role.FieldOrderNo, field.TypeInt32, value)
 	}
 	if ruo.mutation.MenusCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -584,7 +584,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			Columns: role.MenusPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -597,7 +597,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			Columns: role.MenusPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -613,7 +613,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			Columns: role.MenusPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

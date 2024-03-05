@@ -17,17 +17,17 @@ type Menu struct {
 	config `json:"-"`
 	// ID of the ent.
 	// primary key
-	ID uint64 `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// created time
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// parent menu ID | 父菜单ID
-	ParentID uint64 `json:"parent_id,omitempty"`
+	ParentID int64 `json:"parent_id,omitempty"`
 	// menu level | 菜单层级
-	MenuLevel uint32 `json:"menu_level,omitempty"`
+	MenuLevel int32 `json:"menu_level,omitempty"`
 	// menu type | 菜单类型 0 目录 1 菜单 2 按钮
-	MenuType uint32 `json:"menu_type,omitempty"`
+	MenuType int32 `json:"menu_type,omitempty"`
 	// index path | 菜单路由路径
 	Path string `json:"path,omitempty"`
 	// index name | 菜单名称
@@ -37,7 +37,7 @@ type Menu struct {
 	// the path of vue file | 组件路径
 	Component string `json:"component,omitempty"`
 	// sorting numbers | 排序编号
-	OrderNo uint32 `json:"order_no,omitempty"`
+	OrderNo int32 `json:"order_no,omitempty"`
 	// disable status | 是否停用
 	Disabled bool `json:"disabled,omitempty"`
 	// menu name | 菜单显示标题
@@ -63,7 +63,7 @@ type Menu struct {
 	// affix tab | Tab 固定
 	Affix bool `json:"affix,omitempty"`
 	// the maximum number of pages the router can open | 能打开的子TAB数
-	DynamicLevel uint32 `json:"dynamic_level,omitempty"`
+	DynamicLevel int32 `json:"dynamic_level,omitempty"`
 	// the real path of the route without dynamic part | 菜单路由不包含参数部分
 	RealPath string `json:"real_path,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -160,7 +160,7 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			m.ID = uint64(value.Int64)
+			m.ID = int64(value.Int64)
 		case menu.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -177,19 +177,19 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field parent_id", values[i])
 			} else if value.Valid {
-				m.ParentID = uint64(value.Int64)
+				m.ParentID = value.Int64
 			}
 		case menu.FieldMenuLevel:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field menu_level", values[i])
 			} else if value.Valid {
-				m.MenuLevel = uint32(value.Int64)
+				m.MenuLevel = int32(value.Int64)
 			}
 		case menu.FieldMenuType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field menu_type", values[i])
 			} else if value.Valid {
-				m.MenuType = uint32(value.Int64)
+				m.MenuType = int32(value.Int64)
 			}
 		case menu.FieldPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -219,7 +219,7 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field order_no", values[i])
 			} else if value.Valid {
-				m.OrderNo = uint32(value.Int64)
+				m.OrderNo = int32(value.Int64)
 			}
 		case menu.FieldDisabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -297,7 +297,7 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field dynamic_level", values[i])
 			} else if value.Valid {
-				m.DynamicLevel = uint32(value.Int64)
+				m.DynamicLevel = int32(value.Int64)
 			}
 		case menu.FieldRealPath:
 			if value, ok := values[i].(*sql.NullString); !ok {

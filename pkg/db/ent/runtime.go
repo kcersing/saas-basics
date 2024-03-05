@@ -59,7 +59,7 @@ func init() {
 	// dictionaryDescStatus is the schema descriptor for status field.
 	dictionaryDescStatus := dictionaryMixinFields1[0].Descriptor()
 	// dictionary.DefaultStatus holds the default value on creation for the status field.
-	dictionary.DefaultStatus = dictionaryDescStatus.Default.(uint8)
+	dictionary.DefaultStatus = dictionaryDescStatus.Default.(int8)
 	dictionarydetailMixin := schema.DictionaryDetail{}.Mixin()
 	dictionarydetailMixinFields0 := dictionarydetailMixin[0].Fields()
 	_ = dictionarydetailMixinFields0
@@ -80,7 +80,7 @@ func init() {
 	// dictionarydetailDescStatus is the schema descriptor for status field.
 	dictionarydetailDescStatus := dictionarydetailMixinFields1[0].Descriptor()
 	// dictionarydetail.DefaultStatus holds the default value on creation for the status field.
-	dictionarydetail.DefaultStatus = dictionarydetailDescStatus.Default.(uint8)
+	dictionarydetail.DefaultStatus = dictionarydetailDescStatus.Default.(int8)
 	logsMixin := schema.Logs{}.Mixin()
 	logsMixinFields0 := logsMixin[0].Fields()
 	_ = logsMixinFields0
@@ -126,7 +126,7 @@ func init() {
 	// menuDescOrderNo is the schema descriptor for order_no field.
 	menuDescOrderNo := menuFields[7].Descriptor()
 	// menu.DefaultOrderNo holds the default value on creation for the order_no field.
-	menu.DefaultOrderNo = menuDescOrderNo.Default.(uint32)
+	menu.DefaultOrderNo = menuDescOrderNo.Default.(int32)
 	// menuDescDisabled is the schema descriptor for disabled field.
 	menuDescDisabled := menuFields[8].Descriptor()
 	// menu.DefaultDisabled holds the default value on creation for the disabled field.
@@ -170,7 +170,7 @@ func init() {
 	// menuDescDynamicLevel is the schema descriptor for dynamic_level field.
 	menuDescDynamicLevel := menuFields[20].Descriptor()
 	// menu.DefaultDynamicLevel holds the default value on creation for the dynamic_level field.
-	menu.DefaultDynamicLevel = menuDescDynamicLevel.Default.(uint32)
+	menu.DefaultDynamicLevel = menuDescDynamicLevel.Default.(int32)
 	// menuDescRealPath is the schema descriptor for real_path field.
 	menuDescRealPath := menuFields[21].Descriptor()
 	// menu.DefaultRealPath holds the default value on creation for the real_path field.
@@ -210,7 +210,7 @@ func init() {
 	// roleDescStatus is the schema descriptor for status field.
 	roleDescStatus := roleMixinFields1[0].Descriptor()
 	// role.DefaultStatus holds the default value on creation for the status field.
-	role.DefaultStatus = roleDescStatus.Default.(uint8)
+	role.DefaultStatus = roleDescStatus.Default.(int8)
 	// roleDescDefaultRouter is the schema descriptor for default_router field.
 	roleDescDefaultRouter := roleFields[2].Descriptor()
 	// role.DefaultDefaultRouter holds the default value on creation for the default_router field.
@@ -222,7 +222,7 @@ func init() {
 	// roleDescOrderNo is the schema descriptor for order_no field.
 	roleDescOrderNo := roleFields[4].Descriptor()
 	// role.DefaultOrderNo holds the default value on creation for the order_no field.
-	role.DefaultOrderNo = roleDescOrderNo.Default.(uint32)
+	role.DefaultOrderNo = roleDescOrderNo.Default.(int32)
 	tokenMixin := schema.Token{}.Mixin()
 	tokenMixinFields0 := tokenMixin[0].Fields()
 	_ = tokenMixinFields0
@@ -258,7 +258,7 @@ func init() {
 	// userDescStatus is the schema descriptor for status field.
 	userDescStatus := userMixinFields1[0].Descriptor()
 	// user.DefaultStatus holds the default value on creation for the status field.
-	user.DefaultStatus = userDescStatus.Default.(uint8)
+	user.DefaultStatus = userDescStatus.Default.(int8)
 	// userDescSideMode is the schema descriptor for side_mode field.
 	userDescSideMode := userFields[3].Descriptor()
 	// user.DefaultSideMode holds the default value on creation for the side_mode field.
@@ -274,7 +274,7 @@ func init() {
 	// userDescRoleID is the schema descriptor for role_id field.
 	userDescRoleID := userFields[6].Descriptor()
 	// user.DefaultRoleID holds the default value on creation for the role_id field.
-	user.DefaultRoleID = userDescRoleID.Default.(uint64)
+	user.DefaultRoleID = userDescRoleID.Default.(int64)
 	// userDescAvatar is the schema descriptor for avatar field.
 	userDescAvatar := userFields[10].Descriptor()
 	// user.DefaultAvatar holds the default value on creation for the avatar field.

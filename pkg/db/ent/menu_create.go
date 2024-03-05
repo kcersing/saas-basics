@@ -51,28 +51,28 @@ func (mc *MenuCreate) SetNillableUpdatedAt(t *time.Time) *MenuCreate {
 }
 
 // SetParentID sets the "parent_id" field.
-func (mc *MenuCreate) SetParentID(u uint64) *MenuCreate {
-	mc.mutation.SetParentID(u)
+func (mc *MenuCreate) SetParentID(i int64) *MenuCreate {
+	mc.mutation.SetParentID(i)
 	return mc
 }
 
 // SetNillableParentID sets the "parent_id" field if the given value is not nil.
-func (mc *MenuCreate) SetNillableParentID(u *uint64) *MenuCreate {
-	if u != nil {
-		mc.SetParentID(*u)
+func (mc *MenuCreate) SetNillableParentID(i *int64) *MenuCreate {
+	if i != nil {
+		mc.SetParentID(*i)
 	}
 	return mc
 }
 
 // SetMenuLevel sets the "menu_level" field.
-func (mc *MenuCreate) SetMenuLevel(u uint32) *MenuCreate {
-	mc.mutation.SetMenuLevel(u)
+func (mc *MenuCreate) SetMenuLevel(i int32) *MenuCreate {
+	mc.mutation.SetMenuLevel(i)
 	return mc
 }
 
 // SetMenuType sets the "menu_type" field.
-func (mc *MenuCreate) SetMenuType(u uint32) *MenuCreate {
-	mc.mutation.SetMenuType(u)
+func (mc *MenuCreate) SetMenuType(i int32) *MenuCreate {
+	mc.mutation.SetMenuType(i)
 	return mc
 }
 
@@ -125,15 +125,15 @@ func (mc *MenuCreate) SetNillableComponent(s *string) *MenuCreate {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (mc *MenuCreate) SetOrderNo(u uint32) *MenuCreate {
-	mc.mutation.SetOrderNo(u)
+func (mc *MenuCreate) SetOrderNo(i int32) *MenuCreate {
+	mc.mutation.SetOrderNo(i)
 	return mc
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (mc *MenuCreate) SetNillableOrderNo(u *uint32) *MenuCreate {
-	if u != nil {
-		mc.SetOrderNo(*u)
+func (mc *MenuCreate) SetNillableOrderNo(i *int32) *MenuCreate {
+	if i != nil {
+		mc.SetOrderNo(*i)
 	}
 	return mc
 }
@@ -291,15 +291,15 @@ func (mc *MenuCreate) SetNillableAffix(b *bool) *MenuCreate {
 }
 
 // SetDynamicLevel sets the "dynamic_level" field.
-func (mc *MenuCreate) SetDynamicLevel(u uint32) *MenuCreate {
-	mc.mutation.SetDynamicLevel(u)
+func (mc *MenuCreate) SetDynamicLevel(i int32) *MenuCreate {
+	mc.mutation.SetDynamicLevel(i)
 	return mc
 }
 
 // SetNillableDynamicLevel sets the "dynamic_level" field if the given value is not nil.
-func (mc *MenuCreate) SetNillableDynamicLevel(u *uint32) *MenuCreate {
-	if u != nil {
-		mc.SetDynamicLevel(*u)
+func (mc *MenuCreate) SetNillableDynamicLevel(i *int32) *MenuCreate {
+	if i != nil {
+		mc.SetDynamicLevel(*i)
 	}
 	return mc
 }
@@ -319,20 +319,20 @@ func (mc *MenuCreate) SetNillableRealPath(s *string) *MenuCreate {
 }
 
 // SetID sets the "id" field.
-func (mc *MenuCreate) SetID(u uint64) *MenuCreate {
-	mc.mutation.SetID(u)
+func (mc *MenuCreate) SetID(i int64) *MenuCreate {
+	mc.mutation.SetID(i)
 	return mc
 }
 
 // AddRoleIDs adds the "roles" edge to the Role entity by IDs.
-func (mc *MenuCreate) AddRoleIDs(ids ...uint64) *MenuCreate {
+func (mc *MenuCreate) AddRoleIDs(ids ...int64) *MenuCreate {
 	mc.mutation.AddRoleIDs(ids...)
 	return mc
 }
 
 // AddRoles adds the "roles" edges to the Role entity.
 func (mc *MenuCreate) AddRoles(r ...*Role) *MenuCreate {
-	ids := make([]uint64, len(r))
+	ids := make([]int64, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
 	}
@@ -345,14 +345,14 @@ func (mc *MenuCreate) SetParent(m *Menu) *MenuCreate {
 }
 
 // AddChildIDs adds the "children" edge to the Menu entity by IDs.
-func (mc *MenuCreate) AddChildIDs(ids ...uint64) *MenuCreate {
+func (mc *MenuCreate) AddChildIDs(ids ...int64) *MenuCreate {
 	mc.mutation.AddChildIDs(ids...)
 	return mc
 }
 
 // AddChildren adds the "children" edges to the Menu entity.
 func (mc *MenuCreate) AddChildren(m ...*Menu) *MenuCreate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -360,14 +360,14 @@ func (mc *MenuCreate) AddChildren(m ...*Menu) *MenuCreate {
 }
 
 // AddParamIDs adds the "params" edge to the MenuParam entity by IDs.
-func (mc *MenuCreate) AddParamIDs(ids ...uint64) *MenuCreate {
+func (mc *MenuCreate) AddParamIDs(ids ...int64) *MenuCreate {
 	mc.mutation.AddParamIDs(ids...)
 	return mc
 }
 
 // AddParams adds the "params" edges to the MenuParam entity.
 func (mc *MenuCreate) AddParams(m ...*MenuParam) *MenuCreate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -525,7 +525,7 @@ func (mc *MenuCreate) sqlSave(ctx context.Context) (*Menu, error) {
 	}
 	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
-		_node.ID = uint64(id)
+		_node.ID = int64(id)
 	}
 	mc.mutation.id = &_node.ID
 	mc.mutation.done = true
@@ -535,7 +535,7 @@ func (mc *MenuCreate) sqlSave(ctx context.Context) (*Menu, error) {
 func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Menu{config: mc.config}
-		_spec = sqlgraph.NewCreateSpec(menu.Table, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64))
+		_spec = sqlgraph.NewCreateSpec(menu.Table, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64))
 	)
 	if id, ok := mc.mutation.ID(); ok {
 		_node.ID = id
@@ -550,11 +550,11 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := mc.mutation.MenuLevel(); ok {
-		_spec.SetField(menu.FieldMenuLevel, field.TypeUint32, value)
+		_spec.SetField(menu.FieldMenuLevel, field.TypeInt32, value)
 		_node.MenuLevel = value
 	}
 	if value, ok := mc.mutation.MenuType(); ok {
-		_spec.SetField(menu.FieldMenuType, field.TypeUint32, value)
+		_spec.SetField(menu.FieldMenuType, field.TypeInt32, value)
 		_node.MenuType = value
 	}
 	if value, ok := mc.mutation.Path(); ok {
@@ -574,7 +574,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 		_node.Component = value
 	}
 	if value, ok := mc.mutation.OrderNo(); ok {
-		_spec.SetField(menu.FieldOrderNo, field.TypeUint32, value)
+		_spec.SetField(menu.FieldOrderNo, field.TypeInt32, value)
 		_node.OrderNo = value
 	}
 	if value, ok := mc.mutation.Disabled(); ok {
@@ -626,7 +626,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 		_node.Affix = value
 	}
 	if value, ok := mc.mutation.DynamicLevel(); ok {
-		_spec.SetField(menu.FieldDynamicLevel, field.TypeUint32, value)
+		_spec.SetField(menu.FieldDynamicLevel, field.TypeInt32, value)
 		_node.DynamicLevel = value
 	}
 	if value, ok := mc.mutation.RealPath(); ok {
@@ -641,7 +641,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 			Columns: menu.RolesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -657,7 +657,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 			Columns: []string{menu.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -674,7 +674,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 			Columns: []string{menu.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -690,7 +690,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 			Columns: []string{menu.ParamsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -748,7 +748,7 @@ func (mcb *MenuCreateBulk) Save(ctx context.Context) ([]*Menu, error) {
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = uint64(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

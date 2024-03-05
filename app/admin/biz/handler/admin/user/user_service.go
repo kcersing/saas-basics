@@ -120,7 +120,7 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 	}
 	userID := uint64(i)
 
-	userInfo, err := admin.NewUser(ctx, c).UserInfo(userID)
+	userInfo, err := admin.NewUser(ctx, c).UserInfo(int64(userID))
 	if err != nil {
 		c.JSON(consts.StatusInternalServerError, err.Error())
 		return
@@ -198,15 +198,13 @@ func UserProfile(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusUnauthorized, "Unauthorized,"+err.Error())
 		return
 	}
-	userID := uint64(i)
-
-	user, err := admin.NewUser(ctx, c).UserInfo(userID)
+	userInfo, err := admin.NewUser(ctx, c).UserInfo(int64(i))
 	if err != nil {
 		c.JSON(consts.StatusInternalServerError, err.Error())
 		return
 	}
 
-	utils.SendResponse(c, err, user, 0, "")
+	utils.SendResponse(c, err, userInfo, 0, "")
 }
 
 // UpdateUserStatus .

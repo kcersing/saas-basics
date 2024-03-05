@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/user"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -25,7 +26,6 @@ type Token struct {
 }
 
 func (t Token) Create(req *do.TokenInfo) error {
-	//TODO implement me
 	expiredAt, _ := time.ParseInLocation("2006-01-02 15:04:05", req.ExpiredAt, time.Local)
 	if expiredAt.Sub(time.Now()).Seconds() < 5 {
 		return errors.New("expired time must be greater than now, more than 5s")
@@ -81,8 +81,7 @@ func (t Token) Update(req *do.TokenInfo) error {
 	return nil
 }
 
-func (t Token) IsExistByUserID(userID uint64) bool {
-	//TODO implement me
+func (t Token) IsExistByUserID(userID int64) bool {
 	_, exist := t.cache.Get(fmt.Sprintf("token_%d", userID))
 	if exist {
 		return true
@@ -91,7 +90,7 @@ func (t Token) IsExistByUserID(userID uint64) bool {
 	return exist
 }
 
-func (t Token) Delete(userID uint64) error {
+func (t Token) Delete(userID int64) error {
 	_, err := t.db.Token.Delete().Where(token.UserID(userID)).Exec(t.ctx)
 	if err != nil {
 		return errors.Wrap(err, "delete Token failed")
@@ -101,8 +100,42 @@ func (t Token) Delete(userID uint64) error {
 }
 
 func (t Token) List(req *do.TokenListReq) (res []*do.TokenInfo, total int, err error) {
-	//TODO implement me
-	panic("implement me")
+	// list token with user info
+	var userPredicates = []predicate.User{user.HasToken()}
+	if req.Username != "" {
+		userPredicates = append(userPredicates, user.UsernameContainsFold(req.Username))
+	}
+	if req.UserID != 0 {
+		userPredicates = append(userPredicates, user.IDEQ(req.UserID))
+	}
+	UserTokens, err := t.db.User.Query().Where(userPredicates...).
+		WithToken(func(q *ent.TokenQuery) {
+			// get token all fields default, or use q.Select() to get some fields
+		}).Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(t.ctx)
+	if err != nil {
+		return res, total, errors.Wrap(err, "get User - Token list failed")
+	}
+
+	for _, userEnt := range UserTokens {
+		res = append(res, &do.TokenInfo{
+			ID:        userEnt.Edges.Token.ID,
+			UserID:    userEnt.ID,
+			UserName:  userEnt.Username,
+			Token:     userEnt.Edges.Token.Token,
+			Source:    userEnt.Edges.Token.Source,
+			CreatedAt: userEnt.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdatedAt: userEnt.UpdatedAt.Format("2006-01-02 15:04:05"),
+			ExpiredAt: userEnt.Edges.Token.ExpiredAt.Format("2006-01-02 15:04:05"),
+		})
+
+		// delete expired token from db
+		if userEnt.Edges.Token.ExpiredAt.Sub(time.Now()).Seconds() < 0 {
+			_ = t.Delete(userEnt.ID)
+		}
+	}
+	total, _ = t.db.User.Query().Where(userPredicates...).Count(t.ctx)
+	return
 }
 
 func NewToken(ctx context.Context, c *app.RequestContext) do.Token {

@@ -11,13 +11,13 @@ import (
 
 // 创建或更新角色信息参数
 type RoleInfo struct {
-	ID            string `thrift:"ID,1" form:"ID" json:"ID" query:"ID"`
+	ID            int64  `thrift:"ID,1" form:"ID" json:"ID" query:"ID"`
 	Name          string `thrift:"name,2" form:"name" json:"name" query:"name"`
 	Value         string `thrift:"value,3" form:"value" json:"value" query:"value"`
 	DefaultRouter string `thrift:"defaultRouter,4" form:"defaultRouter" json:"defaultRouter" query:"defaultRouter"`
-	Status        string `thrift:"status,5" form:"status" json:"status" query:"status"`
+	Status        int64  `thrift:"status,5" form:"status" json:"status" query:"status"`
 	Remark        string `thrift:"remark,6" form:"remark" json:"remark" query:"remark"`
-	OrderNo       string `thrift:"orderNo,7" form:"orderNo" json:"orderNo" query:"orderNo"`
+	OrderNo       int64  `thrift:"orderNo,7" form:"orderNo" json:"orderNo" query:"orderNo"`
 	CreatedAt     string `thrift:"createdAt,8" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt     string `thrift:"updatedAt,9" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 }
@@ -26,7 +26,7 @@ func NewRoleInfo() *RoleInfo {
 	return &RoleInfo{}
 }
 
-func (p *RoleInfo) GetID() (v string) {
+func (p *RoleInfo) GetID() (v int64) {
 	return p.ID
 }
 
@@ -42,7 +42,7 @@ func (p *RoleInfo) GetDefaultRouter() (v string) {
 	return p.DefaultRouter
 }
 
-func (p *RoleInfo) GetStatus() (v string) {
+func (p *RoleInfo) GetStatus() (v int64) {
 	return p.Status
 }
 
@@ -50,7 +50,7 @@ func (p *RoleInfo) GetRemark() (v string) {
 	return p.Remark
 }
 
-func (p *RoleInfo) GetOrderNo() (v string) {
+func (p *RoleInfo) GetOrderNo() (v int64) {
 	return p.OrderNo
 }
 
@@ -94,7 +94,7 @@ func (p *RoleInfo) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -126,7 +126,7 @@ func (p *RoleInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 5:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -142,7 +142,7 @@ func (p *RoleInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 7:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField7(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -196,7 +196,7 @@ ReadStructEndError:
 
 func (p *RoleInfo) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -232,7 +232,7 @@ func (p *RoleInfo) ReadField4(iprot thrift.TProtocol) error {
 }
 func (p *RoleInfo) ReadField5(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Status = v
@@ -250,7 +250,7 @@ func (p *RoleInfo) ReadField6(iprot thrift.TProtocol) error {
 }
 func (p *RoleInfo) ReadField7(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.OrderNo = v
@@ -337,10 +337,10 @@ WriteStructEndError:
 }
 
 func (p *RoleInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ID", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("ID", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -405,10 +405,10 @@ WriteFieldEndError:
 }
 
 func (p *RoleInfo) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("status", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Status); err != nil {
+	if err := oprot.WriteI64(p.Status); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -439,10 +439,10 @@ WriteFieldEndError:
 }
 
 func (p *RoleInfo) writeField7(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("orderNo", thrift.STRING, 7); err != nil {
+	if err = oprot.WriteFieldBegin("orderNo", thrift.I64, 7); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.OrderNo); err != nil {
+	if err := oprot.WriteI64(p.OrderNo); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -680,34 +680,34 @@ func (p *ApiAuthorityInfo) String() string {
 
 // 创建或更新API授权信息
 type CreateOrUpdateApiAuthorityReq struct {
-	RoleID           string            `thrift:"role_id,1" form:"role_id" json:"role_id" query:"role_id"`
-	ApiAuthorityInfo *ApiAuthorityInfo `thrift:"apiAuthorityInfo,2" form:"apiAuthorityInfo" json:"apiAuthorityInfo" query:"apiAuthorityInfo"`
+	RoleID int64             `thrift:"role_id,1" form:"role_id" json:"role_id" query:"role_id"`
+	Data   *ApiAuthorityInfo `thrift:"data,2" form:"data" json:"data" query:"data"`
 }
 
 func NewCreateOrUpdateApiAuthorityReq() *CreateOrUpdateApiAuthorityReq {
 	return &CreateOrUpdateApiAuthorityReq{}
 }
 
-func (p *CreateOrUpdateApiAuthorityReq) GetRoleID() (v string) {
+func (p *CreateOrUpdateApiAuthorityReq) GetRoleID() (v int64) {
 	return p.RoleID
 }
 
-var CreateOrUpdateApiAuthorityReq_ApiAuthorityInfo_DEFAULT *ApiAuthorityInfo
+var CreateOrUpdateApiAuthorityReq_Data_DEFAULT *ApiAuthorityInfo
 
-func (p *CreateOrUpdateApiAuthorityReq) GetApiAuthorityInfo() (v *ApiAuthorityInfo) {
-	if !p.IsSetApiAuthorityInfo() {
-		return CreateOrUpdateApiAuthorityReq_ApiAuthorityInfo_DEFAULT
+func (p *CreateOrUpdateApiAuthorityReq) GetData() (v *ApiAuthorityInfo) {
+	if !p.IsSetData() {
+		return CreateOrUpdateApiAuthorityReq_Data_DEFAULT
 	}
-	return p.ApiAuthorityInfo
+	return p.Data
 }
 
 var fieldIDToName_CreateOrUpdateApiAuthorityReq = map[int16]string{
 	1: "role_id",
-	2: "apiAuthorityInfo",
+	2: "data",
 }
 
-func (p *CreateOrUpdateApiAuthorityReq) IsSetApiAuthorityInfo() bool {
-	return p.ApiAuthorityInfo != nil
+func (p *CreateOrUpdateApiAuthorityReq) IsSetData() bool {
+	return p.Data != nil
 }
 
 func (p *CreateOrUpdateApiAuthorityReq) Read(iprot thrift.TProtocol) (err error) {
@@ -730,7 +730,7 @@ func (p *CreateOrUpdateApiAuthorityReq) Read(iprot thrift.TProtocol) (err error)
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -776,7 +776,7 @@ ReadStructEndError:
 
 func (p *CreateOrUpdateApiAuthorityReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.RoleID = v
@@ -784,8 +784,8 @@ func (p *CreateOrUpdateApiAuthorityReq) ReadField1(iprot thrift.TProtocol) error
 	return nil
 }
 func (p *CreateOrUpdateApiAuthorityReq) ReadField2(iprot thrift.TProtocol) error {
-	p.ApiAuthorityInfo = NewApiAuthorityInfo()
-	if err := p.ApiAuthorityInfo.Read(iprot); err != nil {
+	p.Data = NewApiAuthorityInfo()
+	if err := p.Data.Read(iprot); err != nil {
 		return err
 	}
 	return nil
@@ -824,10 +824,10 @@ WriteStructEndError:
 }
 
 func (p *CreateOrUpdateApiAuthorityReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("role_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("role_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.RoleID); err != nil {
+	if err := oprot.WriteI64(p.RoleID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -841,10 +841,10 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateApiAuthorityReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("apiAuthorityInfo", thrift.STRUCT, 2); err != nil {
+	if err = oprot.WriteFieldBegin("data", thrift.STRUCT, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := p.ApiAuthorityInfo.Write(oprot); err != nil {
+	if err := p.Data.Write(oprot); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -867,19 +867,19 @@ func (p *CreateOrUpdateApiAuthorityReq) String() string {
 
 // 菜单授权请求数据
 type MenuAuthorityInfoReq struct {
-	RoleID  string `thrift:"role_id,1" form:"role_id" json:"role_id" query:"role_id"`
-	MenuIds string `thrift:"menu_ids,2" form:"menu_ids" json:"menu_ids" query:"menu_ids"`
+	RoleID  int64   `thrift:"role_id,1" form:"role_id" json:"role_id" query:"role_id"`
+	MenuIds []int64 `thrift:"menu_ids,2" form:"menu_ids" json:"menu_ids" query:"menu_ids"`
 }
 
 func NewMenuAuthorityInfoReq() *MenuAuthorityInfoReq {
 	return &MenuAuthorityInfoReq{}
 }
 
-func (p *MenuAuthorityInfoReq) GetRoleID() (v string) {
+func (p *MenuAuthorityInfoReq) GetRoleID() (v int64) {
 	return p.RoleID
 }
 
-func (p *MenuAuthorityInfoReq) GetMenuIds() (v string) {
+func (p *MenuAuthorityInfoReq) GetMenuIds() (v []int64) {
 	return p.MenuIds
 }
 
@@ -908,7 +908,7 @@ func (p *MenuAuthorityInfoReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -916,7 +916,7 @@ func (p *MenuAuthorityInfoReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -954,7 +954,7 @@ ReadStructEndError:
 
 func (p *MenuAuthorityInfoReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.RoleID = v
@@ -962,11 +962,24 @@ func (p *MenuAuthorityInfoReq) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 func (p *MenuAuthorityInfoReq) ReadField2(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadString(); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
 		return err
-	} else {
-		p.MenuIds = v
+	}
+	p.MenuIds = make([]int64, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem int64
+		if v, err := iprot.ReadI64(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		p.MenuIds = append(p.MenuIds, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
 	}
 	return nil
 }
@@ -1004,10 +1017,10 @@ WriteStructEndError:
 }
 
 func (p *MenuAuthorityInfoReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("role_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("role_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.RoleID); err != nil {
+	if err := oprot.WriteI64(p.RoleID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1021,10 +1034,18 @@ WriteFieldEndError:
 }
 
 func (p *MenuAuthorityInfoReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("menu_ids", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("menu_ids", thrift.LIST, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.MenuIds); err != nil {
+	if err := oprot.WriteListBegin(thrift.I64, len(p.MenuIds)); err != nil {
+		return err
+	}
+	for _, v := range p.MenuIds {
+		if err := oprot.WriteI64(v); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteListEnd(); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1048,7 +1069,7 @@ func (p *MenuAuthorityInfoReq) String() string {
 // api message
 // API信息
 type ApiInfo struct {
-	ID          string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID          int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
 	CreatedAt   string `thrift:"createdAt,2" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt   string `thrift:"updatedAt,3" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 	Path        string `thrift:"path,4" form:"path" json:"path" query:"path"`
@@ -1061,7 +1082,7 @@ func NewApiInfo() *ApiInfo {
 	return &ApiInfo{}
 }
 
-func (p *ApiInfo) GetID() (v string) {
+func (p *ApiInfo) GetID() (v int64) {
 	return p.ID
 }
 
@@ -1119,7 +1140,7 @@ func (p *ApiInfo) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1205,7 +1226,7 @@ ReadStructEndError:
 
 func (p *ApiInfo) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -1320,10 +1341,10 @@ WriteStructEndError:
 }
 
 func (p *ApiInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1448,8 +1469,8 @@ func (p *ApiInfo) String() string {
 
 // API列表请求数据
 type ApiPageReq struct {
-	Page        string `thrift:"page,1" form:"page" json:"page" query:"page"`
-	Limit       string `thrift:"limit,2" form:"limit" json:"limit" query:"limit"`
+	Page        int64  `thrift:"page,1" form:"page" json:"page" query:"page"`
+	Limit       int64  `thrift:"limit,2" form:"limit" json:"limit" query:"limit"`
 	Path        string `thrift:"path,3" form:"path" json:"path" query:"path"`
 	Description string `thrift:"description,4" form:"description" json:"description" query:"description"`
 	Method      string `thrift:"method,5" form:"method" json:"method" query:"method"`
@@ -1460,11 +1481,11 @@ func NewApiPageReq() *ApiPageReq {
 	return &ApiPageReq{}
 }
 
-func (p *ApiPageReq) GetPage() (v string) {
+func (p *ApiPageReq) GetPage() (v int64) {
 	return p.Page
 }
 
-func (p *ApiPageReq) GetLimit() (v string) {
+func (p *ApiPageReq) GetLimit() (v int64) {
 	return p.Limit
 }
 
@@ -1513,7 +1534,7 @@ func (p *ApiPageReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1521,7 +1542,7 @@ func (p *ApiPageReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1591,7 +1612,7 @@ ReadStructEndError:
 
 func (p *ApiPageReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Page = v
@@ -1600,7 +1621,7 @@ func (p *ApiPageReq) ReadField1(iprot thrift.TProtocol) error {
 }
 func (p *ApiPageReq) ReadField2(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Limit = v
@@ -1693,10 +1714,10 @@ WriteStructEndError:
 }
 
 func (p *ApiPageReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Page); err != nil {
+	if err := oprot.WriteI64(p.Page); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1710,10 +1731,10 @@ WriteFieldEndError:
 }
 
 func (p *ApiPageReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("limit", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("limit", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Limit); err != nil {
+	if err := oprot.WriteI64(p.Limit); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

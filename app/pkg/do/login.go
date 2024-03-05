@@ -5,9 +5,9 @@ type Login interface {
 }
 
 type LoginResp struct {
-	UserID    uint64
-	Username  string
-	RoleName  string
-	RoleValue string
-	RoleID    uint64
+	UserID    int64  `json:"userID,omitempty"`
+	Username  string `json:"username,omitempty"`
+	RoleName  string `json:"roleName,omitempty"`
+	RoleValue string `json:"roleValue,omitempty"`
+	RoleID    int64  `json:"roleID,omitempty"`
 }

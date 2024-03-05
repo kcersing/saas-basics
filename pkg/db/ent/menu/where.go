@@ -11,47 +11,47 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id uint64) predicate.Menu {
+func ID(id int64) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id uint64) predicate.Menu {
+func IDEQ(id int64) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id uint64) predicate.Menu {
+func IDNEQ(id int64) predicate.Menu {
 	return predicate.Menu(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...uint64) predicate.Menu {
+func IDIn(ids ...int64) predicate.Menu {
 	return predicate.Menu(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...uint64) predicate.Menu {
+func IDNotIn(ids ...int64) predicate.Menu {
 	return predicate.Menu(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id uint64) predicate.Menu {
+func IDGT(id int64) predicate.Menu {
 	return predicate.Menu(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id uint64) predicate.Menu {
+func IDGTE(id int64) predicate.Menu {
 	return predicate.Menu(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id uint64) predicate.Menu {
+func IDLT(id int64) predicate.Menu {
 	return predicate.Menu(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id uint64) predicate.Menu {
+func IDLTE(id int64) predicate.Menu {
 	return predicate.Menu(sql.FieldLTE(FieldID, id))
 }
 
@@ -66,17 +66,17 @@ func UpdatedAt(v time.Time) predicate.Menu {
 }
 
 // ParentID applies equality check predicate on the "parent_id" field. It's identical to ParentIDEQ.
-func ParentID(v uint64) predicate.Menu {
+func ParentID(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldParentID, v))
 }
 
 // MenuLevel applies equality check predicate on the "menu_level" field. It's identical to MenuLevelEQ.
-func MenuLevel(v uint32) predicate.Menu {
+func MenuLevel(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldMenuLevel, v))
 }
 
 // MenuType applies equality check predicate on the "menu_type" field. It's identical to MenuTypeEQ.
-func MenuType(v uint32) predicate.Menu {
+func MenuType(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldMenuType, v))
 }
 
@@ -101,7 +101,7 @@ func Component(v string) predicate.Menu {
 }
 
 // OrderNo applies equality check predicate on the "order_no" field. It's identical to OrderNoEQ.
-func OrderNo(v uint32) predicate.Menu {
+func OrderNo(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldOrderNo, v))
 }
 
@@ -166,7 +166,7 @@ func Affix(v bool) predicate.Menu {
 }
 
 // DynamicLevel applies equality check predicate on the "dynamic_level" field. It's identical to DynamicLevelEQ.
-func DynamicLevel(v uint32) predicate.Menu {
+func DynamicLevel(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldDynamicLevel, v))
 }
 
@@ -256,22 +256,22 @@ func UpdatedAtLTE(v time.Time) predicate.Menu {
 }
 
 // ParentIDEQ applies the EQ predicate on the "parent_id" field.
-func ParentIDEQ(v uint64) predicate.Menu {
+func ParentIDEQ(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldParentID, v))
 }
 
 // ParentIDNEQ applies the NEQ predicate on the "parent_id" field.
-func ParentIDNEQ(v uint64) predicate.Menu {
+func ParentIDNEQ(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldNEQ(FieldParentID, v))
 }
 
 // ParentIDIn applies the In predicate on the "parent_id" field.
-func ParentIDIn(vs ...uint64) predicate.Menu {
+func ParentIDIn(vs ...int64) predicate.Menu {
 	return predicate.Menu(sql.FieldIn(FieldParentID, vs...))
 }
 
 // ParentIDNotIn applies the NotIn predicate on the "parent_id" field.
-func ParentIDNotIn(vs ...uint64) predicate.Menu {
+func ParentIDNotIn(vs ...int64) predicate.Menu {
 	return predicate.Menu(sql.FieldNotIn(FieldParentID, vs...))
 }
 
@@ -286,82 +286,82 @@ func ParentIDNotNil() predicate.Menu {
 }
 
 // MenuLevelEQ applies the EQ predicate on the "menu_level" field.
-func MenuLevelEQ(v uint32) predicate.Menu {
+func MenuLevelEQ(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldMenuLevel, v))
 }
 
 // MenuLevelNEQ applies the NEQ predicate on the "menu_level" field.
-func MenuLevelNEQ(v uint32) predicate.Menu {
+func MenuLevelNEQ(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldNEQ(FieldMenuLevel, v))
 }
 
 // MenuLevelIn applies the In predicate on the "menu_level" field.
-func MenuLevelIn(vs ...uint32) predicate.Menu {
+func MenuLevelIn(vs ...int32) predicate.Menu {
 	return predicate.Menu(sql.FieldIn(FieldMenuLevel, vs...))
 }
 
 // MenuLevelNotIn applies the NotIn predicate on the "menu_level" field.
-func MenuLevelNotIn(vs ...uint32) predicate.Menu {
+func MenuLevelNotIn(vs ...int32) predicate.Menu {
 	return predicate.Menu(sql.FieldNotIn(FieldMenuLevel, vs...))
 }
 
 // MenuLevelGT applies the GT predicate on the "menu_level" field.
-func MenuLevelGT(v uint32) predicate.Menu {
+func MenuLevelGT(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldGT(FieldMenuLevel, v))
 }
 
 // MenuLevelGTE applies the GTE predicate on the "menu_level" field.
-func MenuLevelGTE(v uint32) predicate.Menu {
+func MenuLevelGTE(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldGTE(FieldMenuLevel, v))
 }
 
 // MenuLevelLT applies the LT predicate on the "menu_level" field.
-func MenuLevelLT(v uint32) predicate.Menu {
+func MenuLevelLT(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldLT(FieldMenuLevel, v))
 }
 
 // MenuLevelLTE applies the LTE predicate on the "menu_level" field.
-func MenuLevelLTE(v uint32) predicate.Menu {
+func MenuLevelLTE(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldLTE(FieldMenuLevel, v))
 }
 
 // MenuTypeEQ applies the EQ predicate on the "menu_type" field.
-func MenuTypeEQ(v uint32) predicate.Menu {
+func MenuTypeEQ(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldMenuType, v))
 }
 
 // MenuTypeNEQ applies the NEQ predicate on the "menu_type" field.
-func MenuTypeNEQ(v uint32) predicate.Menu {
+func MenuTypeNEQ(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldNEQ(FieldMenuType, v))
 }
 
 // MenuTypeIn applies the In predicate on the "menu_type" field.
-func MenuTypeIn(vs ...uint32) predicate.Menu {
+func MenuTypeIn(vs ...int32) predicate.Menu {
 	return predicate.Menu(sql.FieldIn(FieldMenuType, vs...))
 }
 
 // MenuTypeNotIn applies the NotIn predicate on the "menu_type" field.
-func MenuTypeNotIn(vs ...uint32) predicate.Menu {
+func MenuTypeNotIn(vs ...int32) predicate.Menu {
 	return predicate.Menu(sql.FieldNotIn(FieldMenuType, vs...))
 }
 
 // MenuTypeGT applies the GT predicate on the "menu_type" field.
-func MenuTypeGT(v uint32) predicate.Menu {
+func MenuTypeGT(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldGT(FieldMenuType, v))
 }
 
 // MenuTypeGTE applies the GTE predicate on the "menu_type" field.
-func MenuTypeGTE(v uint32) predicate.Menu {
+func MenuTypeGTE(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldGTE(FieldMenuType, v))
 }
 
 // MenuTypeLT applies the LT predicate on the "menu_type" field.
-func MenuTypeLT(v uint32) predicate.Menu {
+func MenuTypeLT(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldLT(FieldMenuType, v))
 }
 
 // MenuTypeLTE applies the LTE predicate on the "menu_type" field.
-func MenuTypeLTE(v uint32) predicate.Menu {
+func MenuTypeLTE(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldLTE(FieldMenuType, v))
 }
 
@@ -656,42 +656,42 @@ func ComponentContainsFold(v string) predicate.Menu {
 }
 
 // OrderNoEQ applies the EQ predicate on the "order_no" field.
-func OrderNoEQ(v uint32) predicate.Menu {
+func OrderNoEQ(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldOrderNo, v))
 }
 
 // OrderNoNEQ applies the NEQ predicate on the "order_no" field.
-func OrderNoNEQ(v uint32) predicate.Menu {
+func OrderNoNEQ(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldNEQ(FieldOrderNo, v))
 }
 
 // OrderNoIn applies the In predicate on the "order_no" field.
-func OrderNoIn(vs ...uint32) predicate.Menu {
+func OrderNoIn(vs ...int32) predicate.Menu {
 	return predicate.Menu(sql.FieldIn(FieldOrderNo, vs...))
 }
 
 // OrderNoNotIn applies the NotIn predicate on the "order_no" field.
-func OrderNoNotIn(vs ...uint32) predicate.Menu {
+func OrderNoNotIn(vs ...int32) predicate.Menu {
 	return predicate.Menu(sql.FieldNotIn(FieldOrderNo, vs...))
 }
 
 // OrderNoGT applies the GT predicate on the "order_no" field.
-func OrderNoGT(v uint32) predicate.Menu {
+func OrderNoGT(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldGT(FieldOrderNo, v))
 }
 
 // OrderNoGTE applies the GTE predicate on the "order_no" field.
-func OrderNoGTE(v uint32) predicate.Menu {
+func OrderNoGTE(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldGTE(FieldOrderNo, v))
 }
 
 // OrderNoLT applies the LT predicate on the "order_no" field.
-func OrderNoLT(v uint32) predicate.Menu {
+func OrderNoLT(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldLT(FieldOrderNo, v))
 }
 
 // OrderNoLTE applies the LTE predicate on the "order_no" field.
-func OrderNoLTE(v uint32) predicate.Menu {
+func OrderNoLTE(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldLTE(FieldOrderNo, v))
 }
 
@@ -1136,42 +1136,42 @@ func AffixNotNil() predicate.Menu {
 }
 
 // DynamicLevelEQ applies the EQ predicate on the "dynamic_level" field.
-func DynamicLevelEQ(v uint32) predicate.Menu {
+func DynamicLevelEQ(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldDynamicLevel, v))
 }
 
 // DynamicLevelNEQ applies the NEQ predicate on the "dynamic_level" field.
-func DynamicLevelNEQ(v uint32) predicate.Menu {
+func DynamicLevelNEQ(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldNEQ(FieldDynamicLevel, v))
 }
 
 // DynamicLevelIn applies the In predicate on the "dynamic_level" field.
-func DynamicLevelIn(vs ...uint32) predicate.Menu {
+func DynamicLevelIn(vs ...int32) predicate.Menu {
 	return predicate.Menu(sql.FieldIn(FieldDynamicLevel, vs...))
 }
 
 // DynamicLevelNotIn applies the NotIn predicate on the "dynamic_level" field.
-func DynamicLevelNotIn(vs ...uint32) predicate.Menu {
+func DynamicLevelNotIn(vs ...int32) predicate.Menu {
 	return predicate.Menu(sql.FieldNotIn(FieldDynamicLevel, vs...))
 }
 
 // DynamicLevelGT applies the GT predicate on the "dynamic_level" field.
-func DynamicLevelGT(v uint32) predicate.Menu {
+func DynamicLevelGT(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldGT(FieldDynamicLevel, v))
 }
 
 // DynamicLevelGTE applies the GTE predicate on the "dynamic_level" field.
-func DynamicLevelGTE(v uint32) predicate.Menu {
+func DynamicLevelGTE(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldGTE(FieldDynamicLevel, v))
 }
 
 // DynamicLevelLT applies the LT predicate on the "dynamic_level" field.
-func DynamicLevelLT(v uint32) predicate.Menu {
+func DynamicLevelLT(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldLT(FieldDynamicLevel, v))
 }
 
 // DynamicLevelLTE applies the LTE predicate on the "dynamic_level" field.
-func DynamicLevelLTE(v uint32) predicate.Menu {
+func DynamicLevelLTE(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldLTE(FieldDynamicLevel, v))
 }
 

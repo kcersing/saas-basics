@@ -147,25 +147,25 @@ func (p *Err) Value() (driver.Value, error) {
 }
 
 type BaseResp struct {
-	StatusMessage string            `thrift:"StatusMessage,1" form:"StatusMessage" json:"StatusMessage" query:"StatusMessage"`
-	StatusCode    int32             `thrift:"StatusCode,2" form:"StatusCode" json:"StatusCode" query:"StatusCode"`
-	Extra         map[string]string `thrift:"Extra,3,optional" form:"Extra" json:"Extra" query:"Extra"`
+	Message string            `thrift:"message,1" form:"message" json:"message" query:"message"`
+	Code    int32             `thrift:"code,2" form:"code" json:"code" query:"code"`
+	Extra   map[string]string `thrift:"Extra,3,optional" form:"Extra" json:"Extra" query:"Extra"`
 }
 
 func NewBaseResp() *BaseResp {
 	return &BaseResp{
 
-		StatusMessage: "",
-		StatusCode:    0,
+		Message: "",
+		Code:    0,
 	}
 }
 
-func (p *BaseResp) GetStatusMessage() (v string) {
-	return p.StatusMessage
+func (p *BaseResp) GetMessage() (v string) {
+	return p.Message
 }
 
-func (p *BaseResp) GetStatusCode() (v int32) {
-	return p.StatusCode
+func (p *BaseResp) GetCode() (v int32) {
+	return p.Code
 }
 
 var BaseResp_Extra_DEFAULT map[string]string
@@ -178,8 +178,8 @@ func (p *BaseResp) GetExtra() (v map[string]string) {
 }
 
 var fieldIDToName_BaseResp = map[int16]string{
-	1: "StatusMessage",
-	2: "StatusCode",
+	1: "message",
+	2: "code",
 	3: "Extra",
 }
 
@@ -264,7 +264,7 @@ func (p *BaseResp) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.StatusMessage = v
+		p.Message = v
 	}
 	return nil
 }
@@ -273,7 +273,7 @@ func (p *BaseResp) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI32(); err != nil {
 		return err
 	} else {
-		p.StatusCode = v
+		p.Code = v
 	}
 	return nil
 }
@@ -343,10 +343,10 @@ WriteStructEndError:
 }
 
 func (p *BaseResp) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("StatusMessage", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("message", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.StatusMessage); err != nil {
+	if err := oprot.WriteString(p.Message); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -360,10 +360,10 @@ WriteFieldEndError:
 }
 
 func (p *BaseResp) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("StatusCode", thrift.I32, 2); err != nil {
+	if err = oprot.WriteFieldBegin("code", thrift.I32, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI32(p.StatusCode); err != nil {
+	if err := oprot.WriteI32(p.Code); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -416,26 +416,26 @@ func (p *BaseResp) String() string {
 
 type BaseResponse struct {
 	// Status code, 0-success, other values-failure
-	StatusCode int64 `thrift:"status_code,1" form:"status_code" json:"status_code" query:"status_code"`
+	Code int64 `thrift:"code,1" form:"code" json:"code" query:"code"`
 	// Return status description
-	StatusMsg string `thrift:"status_msg,2" form:"status_msg" json:"status_msg" query:"status_msg"`
+	Message string `thrift:"message,2" form:"message" json:"message" query:"message"`
 }
 
 func NewBaseResponse() *BaseResponse {
 	return &BaseResponse{}
 }
 
-func (p *BaseResponse) GetStatusCode() (v int64) {
-	return p.StatusCode
+func (p *BaseResponse) GetCode() (v int64) {
+	return p.Code
 }
 
-func (p *BaseResponse) GetStatusMsg() (v string) {
-	return p.StatusMsg
+func (p *BaseResponse) GetMessage() (v string) {
+	return p.Message
 }
 
 var fieldIDToName_BaseResponse = map[int16]string{
-	1: "status_code",
-	2: "status_msg",
+	1: "code",
+	2: "message",
 }
 
 func (p *BaseResponse) Read(iprot thrift.TProtocol) (err error) {
@@ -507,7 +507,7 @@ func (p *BaseResponse) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.StatusCode = v
+		p.Code = v
 	}
 	return nil
 }
@@ -516,7 +516,7 @@ func (p *BaseResponse) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.StatusMsg = v
+		p.Message = v
 	}
 	return nil
 }
@@ -554,10 +554,10 @@ WriteStructEndError:
 }
 
 func (p *BaseResponse) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("status_code", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.StatusCode); err != nil {
+	if err := oprot.WriteI64(p.Code); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -571,10 +571,10 @@ WriteFieldEndError:
 }
 
 func (p *BaseResponse) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("status_msg", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("message", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.StatusMsg); err != nil {
+	if err := oprot.WriteString(p.Message); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -756,14 +756,14 @@ func (p *Empty) String() string {
 }
 
 type IDReq struct {
-	ID string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID int64 `thrift:"id,1" form:"id" json:"id" query:"id"`
 }
 
 func NewIDReq() *IDReq {
 	return &IDReq{}
 }
 
-func (p *IDReq) GetID() (v string) {
+func (p *IDReq) GetID() (v int64) {
 	return p.ID
 }
 
@@ -791,7 +791,7 @@ func (p *IDReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -829,7 +829,7 @@ ReadStructEndError:
 
 func (p *IDReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -866,10 +866,10 @@ WriteStructEndError:
 }
 
 func (p *IDReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -891,19 +891,19 @@ func (p *IDReq) String() string {
 }
 
 type PageInfoReq struct {
-	Page     string `thrift:"page,1" form:"page" json:"page" query:"page"`
-	PageSize string `thrift:"pageSize,2" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Page     int64 `thrift:"page,1" form:"page" json:"page" query:"page"`
+	PageSize int64 `thrift:"pageSize,2" form:"pageSize" json:"pageSize" query:"pageSize"`
 }
 
 func NewPageInfoReq() *PageInfoReq {
 	return &PageInfoReq{}
 }
 
-func (p *PageInfoReq) GetPage() (v string) {
+func (p *PageInfoReq) GetPage() (v int64) {
 	return p.Page
 }
 
-func (p *PageInfoReq) GetPageSize() (v string) {
+func (p *PageInfoReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
@@ -932,7 +932,7 @@ func (p *PageInfoReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -940,7 +940,7 @@ func (p *PageInfoReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -978,7 +978,7 @@ ReadStructEndError:
 
 func (p *PageInfoReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Page = v
@@ -987,7 +987,7 @@ func (p *PageInfoReq) ReadField1(iprot thrift.TProtocol) error {
 }
 func (p *PageInfoReq) ReadField2(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.PageSize = v
@@ -1028,10 +1028,10 @@ WriteStructEndError:
 }
 
 func (p *PageInfoReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Page); err != nil {
+	if err := oprot.WriteI64(p.Page); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1045,10 +1045,10 @@ WriteFieldEndError:
 }
 
 func (p *PageInfoReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("pageSize", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.PageSize); err != nil {
+	if err := oprot.WriteI64(p.PageSize); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1070,19 +1070,19 @@ func (p *PageInfoReq) String() string {
 }
 
 type StatusCodeReq struct {
-	ID     string `thrift:"id,1" form:"id" json:"id" query:"id"`
-	Status string `thrift:"status,2" form:"status" json:"status" query:"status"`
+	ID     int64 `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Status int64 `thrift:"status,2" form:"status" json:"status" query:"status"`
 }
 
 func NewStatusCodeReq() *StatusCodeReq {
 	return &StatusCodeReq{}
 }
 
-func (p *StatusCodeReq) GetID() (v string) {
+func (p *StatusCodeReq) GetID() (v int64) {
 	return p.ID
 }
 
-func (p *StatusCodeReq) GetStatus() (v string) {
+func (p *StatusCodeReq) GetStatus() (v int64) {
 	return p.Status
 }
 
@@ -1111,7 +1111,7 @@ func (p *StatusCodeReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1119,7 +1119,7 @@ func (p *StatusCodeReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1157,7 +1157,7 @@ ReadStructEndError:
 
 func (p *StatusCodeReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -1166,7 +1166,7 @@ func (p *StatusCodeReq) ReadField1(iprot thrift.TProtocol) error {
 }
 func (p *StatusCodeReq) ReadField2(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Status = v
@@ -1207,10 +1207,10 @@ WriteStructEndError:
 }
 
 func (p *StatusCodeReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1224,10 +1224,10 @@ WriteFieldEndError:
 }
 
 func (p *StatusCodeReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("status", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Status); err != nil {
+	if err := oprot.WriteI64(p.Status); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

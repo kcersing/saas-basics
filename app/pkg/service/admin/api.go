@@ -49,7 +49,7 @@ func (a Api) Update(req do.ApiInfo) error {
 	return nil
 }
 
-func (a Api) Delete(id uint64) error {
+func (a Api) Delete(id int64) error {
 	err := a.db.API.DeleteOneID(id).Exec(a.ctx)
 	return err
 }

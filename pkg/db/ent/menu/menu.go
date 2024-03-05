@@ -153,7 +153,7 @@ var (
 	// DefaultComponent holds the default value on creation for the "component" field.
 	DefaultComponent string
 	// DefaultOrderNo holds the default value on creation for the "order_no" field.
-	DefaultOrderNo uint32
+	DefaultOrderNo int32
 	// DefaultDisabled holds the default value on creation for the "disabled" field.
 	DefaultDisabled bool
 	// DefaultHideMenu holds the default value on creation for the "hide_menu" field.
@@ -175,7 +175,7 @@ var (
 	// DefaultAffix holds the default value on creation for the "affix" field.
 	DefaultAffix bool
 	// DefaultDynamicLevel holds the default value on creation for the "dynamic_level" field.
-	DefaultDynamicLevel uint32
+	DefaultDynamicLevel int32
 	// DefaultRealPath holds the default value on creation for the "real_path" field.
 	DefaultRealPath string
 )

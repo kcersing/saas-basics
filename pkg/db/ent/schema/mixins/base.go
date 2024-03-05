@@ -18,7 +18,7 @@ type BaseMixin struct {
 
 func (BaseMixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.Uint64("id").
+		field.Int64("id").
 			Comment("primary key"),
 		field.Time("created_at").
 			Immutable().

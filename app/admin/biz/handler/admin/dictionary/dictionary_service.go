@@ -4,17 +4,15 @@ package dictionary
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/jinzhu/copier"
+	dictionary "saas/app/admin/idl_gen/model/admin/dictionary"
+	base "saas/app/admin/idl_gen/model/base"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
 	"saas/app/pkg/do"
 	"saas/app/pkg/service/admin"
-	"strconv"
-
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	dictionary "saas/app/admin/idl_gen/model/admin/dictionary"
-	base "saas/app/admin/idl_gen/model/base"
 )
 
 // CreateDictionary .
@@ -80,8 +78,8 @@ func DeleteDictionary(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-	id, _ := strconv.Atoi(req.ID)
-	err = admin.NewDictionary(ctx, c).DeleteDetail(uint64(id))
+
+	err = admin.NewDictionary(ctx, c).DeleteDetail(req.ID)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
@@ -114,7 +112,7 @@ func DictionaryList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, dictList, uint64(total), "")
+	utils.SendResponse(c, errno.Success, dictList, int64(total), "")
 	return
 
 }
@@ -182,8 +180,8 @@ func DeleteDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-	id, _ := strconv.Atoi(req.ID)
-	err = admin.NewDictionary(ctx, c).DeleteDetail(uint64(id))
+
+	err = admin.NewDictionary(ctx, c).DeleteDetail(req.ID)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return

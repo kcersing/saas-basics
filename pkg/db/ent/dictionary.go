@@ -17,13 +17,13 @@ type Dictionary struct {
 	config `json:"-"`
 	// ID of the ent.
 	// primary key
-	ID uint64 `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// created time
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// status 1 normal 0 ban | 状态 1 正常 0 禁用
-	Status uint8 `json:"status,omitempty"`
+	Status int8 `json:"status,omitempty"`
 	// the title shown in the ui | 展示名称 （建议配合i18n）
 	Title string `json:"title,omitempty"`
 	// the name of dictionary for search | 字典搜索名称
@@ -85,7 +85,7 @@ func (d *Dictionary) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			d.ID = uint64(value.Int64)
+			d.ID = int64(value.Int64)
 		case dictionary.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -102,7 +102,7 @@ func (d *Dictionary) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				d.Status = uint8(value.Int64)
+				d.Status = int8(value.Int64)
 			}
 		case dictionary.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {

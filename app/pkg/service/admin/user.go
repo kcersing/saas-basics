@@ -34,12 +34,12 @@ func (u User) Update(req do.CreateOrUpdateUserReq) error {
 	panic("implement me")
 }
 
-func (u User) ChangePassword(userID uint64, oldPassword, newPassword string) error {
+func (u User) ChangePassword(userID int64, oldPassword, newPassword string) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u User) UserInfo(id uint64) (userInfo *do.UserInfo, err error) {
+func (u User) UserInfo(id int64) (userInfo *do.UserInfo, err error) {
 	//TODO implement me
 	userInfo = new(do.UserInfo)
 	userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
@@ -76,12 +76,12 @@ func (u User) List(req do.UserListReq) (userList []*do.UserInfo, total int, err 
 	panic("implement me")
 }
 
-func (u User) UpdateUserStatus(id uint64, status uint64) error {
+func (u User) UpdateUserStatus(id int64, status int64) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u User) DeleteUser(id uint64) error {
+func (u User) DeleteUser(id int64) error {
 	//TODO implement me
 	panic("implement me")
 }

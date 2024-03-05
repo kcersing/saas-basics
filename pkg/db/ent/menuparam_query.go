@@ -106,8 +106,8 @@ func (mpq *MenuParamQuery) FirstX(ctx context.Context) *MenuParam {
 
 // FirstID returns the first MenuParam ID from the query.
 // Returns a *NotFoundError when no MenuParam ID was found.
-func (mpq *MenuParamQuery) FirstID(ctx context.Context) (id uint64, err error) {
-	var ids []uint64
+func (mpq *MenuParamQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = mpq.Limit(1).IDs(setContextOp(ctx, mpq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -119,7 +119,7 @@ func (mpq *MenuParamQuery) FirstID(ctx context.Context) (id uint64, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (mpq *MenuParamQuery) FirstIDX(ctx context.Context) uint64 {
+func (mpq *MenuParamQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := mpq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +157,8 @@ func (mpq *MenuParamQuery) OnlyX(ctx context.Context) *MenuParam {
 // OnlyID is like Only, but returns the only MenuParam ID in the query.
 // Returns a *NotSingularError when more than one MenuParam ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (mpq *MenuParamQuery) OnlyID(ctx context.Context) (id uint64, err error) {
-	var ids []uint64
+func (mpq *MenuParamQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = mpq.Limit(2).IDs(setContextOp(ctx, mpq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -174,7 +174,7 @@ func (mpq *MenuParamQuery) OnlyID(ctx context.Context) (id uint64, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (mpq *MenuParamQuery) OnlyIDX(ctx context.Context) uint64 {
+func (mpq *MenuParamQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := mpq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +202,7 @@ func (mpq *MenuParamQuery) AllX(ctx context.Context) []*MenuParam {
 }
 
 // IDs executes the query and returns a list of MenuParam IDs.
-func (mpq *MenuParamQuery) IDs(ctx context.Context) (ids []uint64, err error) {
+func (mpq *MenuParamQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if mpq.ctx.Unique == nil && mpq.path != nil {
 		mpq.Unique(true)
 	}
@@ -214,7 +214,7 @@ func (mpq *MenuParamQuery) IDs(ctx context.Context) (ids []uint64, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (mpq *MenuParamQuery) IDsX(ctx context.Context) []uint64 {
+func (mpq *MenuParamQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := mpq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -409,8 +409,8 @@ func (mpq *MenuParamQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*M
 }
 
 func (mpq *MenuParamQuery) loadMenus(ctx context.Context, query *MenuQuery, nodes []*MenuParam, init func(*MenuParam), assign func(*MenuParam, *Menu)) error {
-	ids := make([]uint64, 0, len(nodes))
-	nodeids := make(map[uint64][]*MenuParam)
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*MenuParam)
 	for i := range nodes {
 		if nodes[i].menu_params == nil {
 			continue
@@ -451,7 +451,7 @@ func (mpq *MenuParamQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (mpq *MenuParamQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(menuparam.Table, menuparam.Columns, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewQuerySpec(menuparam.Table, menuparam.Columns, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64))
 	_spec.From = mpq.sql
 	if unique := mpq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

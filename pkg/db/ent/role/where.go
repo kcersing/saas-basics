@@ -11,47 +11,47 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id uint64) predicate.Role {
+func ID(id int64) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id uint64) predicate.Role {
+func IDEQ(id int64) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id uint64) predicate.Role {
+func IDNEQ(id int64) predicate.Role {
 	return predicate.Role(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...uint64) predicate.Role {
+func IDIn(ids ...int64) predicate.Role {
 	return predicate.Role(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...uint64) predicate.Role {
+func IDNotIn(ids ...int64) predicate.Role {
 	return predicate.Role(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id uint64) predicate.Role {
+func IDGT(id int64) predicate.Role {
 	return predicate.Role(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id uint64) predicate.Role {
+func IDGTE(id int64) predicate.Role {
 	return predicate.Role(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id uint64) predicate.Role {
+func IDLT(id int64) predicate.Role {
 	return predicate.Role(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id uint64) predicate.Role {
+func IDLTE(id int64) predicate.Role {
 	return predicate.Role(sql.FieldLTE(FieldID, id))
 }
 
@@ -66,7 +66,7 @@ func UpdatedAt(v time.Time) predicate.Role {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v uint8) predicate.Role {
+func Status(v int8) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldStatus, v))
 }
 
@@ -91,7 +91,7 @@ func Remark(v string) predicate.Role {
 }
 
 // OrderNo applies equality check predicate on the "order_no" field. It's identical to OrderNoEQ.
-func OrderNo(v uint32) predicate.Role {
+func OrderNo(v int32) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldOrderNo, v))
 }
 
@@ -176,42 +176,42 @@ func UpdatedAtLTE(v time.Time) predicate.Role {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v uint8) predicate.Role {
+func StatusEQ(v int8) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v uint8) predicate.Role {
+func StatusNEQ(v int8) predicate.Role {
 	return predicate.Role(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...uint8) predicate.Role {
+func StatusIn(vs ...int8) predicate.Role {
 	return predicate.Role(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...uint8) predicate.Role {
+func StatusNotIn(vs ...int8) predicate.Role {
 	return predicate.Role(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v uint8) predicate.Role {
+func StatusGT(v int8) predicate.Role {
 	return predicate.Role(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v uint8) predicate.Role {
+func StatusGTE(v int8) predicate.Role {
 	return predicate.Role(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v uint8) predicate.Role {
+func StatusLT(v int8) predicate.Role {
 	return predicate.Role(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v uint8) predicate.Role {
+func StatusLTE(v int8) predicate.Role {
 	return predicate.Role(sql.FieldLTE(FieldStatus, v))
 }
 
@@ -486,42 +486,42 @@ func RemarkContainsFold(v string) predicate.Role {
 }
 
 // OrderNoEQ applies the EQ predicate on the "order_no" field.
-func OrderNoEQ(v uint32) predicate.Role {
+func OrderNoEQ(v int32) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldOrderNo, v))
 }
 
 // OrderNoNEQ applies the NEQ predicate on the "order_no" field.
-func OrderNoNEQ(v uint32) predicate.Role {
+func OrderNoNEQ(v int32) predicate.Role {
 	return predicate.Role(sql.FieldNEQ(FieldOrderNo, v))
 }
 
 // OrderNoIn applies the In predicate on the "order_no" field.
-func OrderNoIn(vs ...uint32) predicate.Role {
+func OrderNoIn(vs ...int32) predicate.Role {
 	return predicate.Role(sql.FieldIn(FieldOrderNo, vs...))
 }
 
 // OrderNoNotIn applies the NotIn predicate on the "order_no" field.
-func OrderNoNotIn(vs ...uint32) predicate.Role {
+func OrderNoNotIn(vs ...int32) predicate.Role {
 	return predicate.Role(sql.FieldNotIn(FieldOrderNo, vs...))
 }
 
 // OrderNoGT applies the GT predicate on the "order_no" field.
-func OrderNoGT(v uint32) predicate.Role {
+func OrderNoGT(v int32) predicate.Role {
 	return predicate.Role(sql.FieldGT(FieldOrderNo, v))
 }
 
 // OrderNoGTE applies the GTE predicate on the "order_no" field.
-func OrderNoGTE(v uint32) predicate.Role {
+func OrderNoGTE(v int32) predicate.Role {
 	return predicate.Role(sql.FieldGTE(FieldOrderNo, v))
 }
 
 // OrderNoLT applies the LT predicate on the "order_no" field.
-func OrderNoLT(v uint32) predicate.Role {
+func OrderNoLT(v int32) predicate.Role {
 	return predicate.Role(sql.FieldLT(FieldOrderNo, v))
 }
 
 // OrderNoLTE applies the LTE predicate on the "order_no" field.
-func OrderNoLTE(v uint32) predicate.Role {
+func OrderNoLTE(v int32) predicate.Role {
 	return predicate.Role(sql.FieldLTE(FieldOrderNo, v))
 }
 

@@ -4,11 +4,17 @@ package role
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	role "saas/app/admin/idl_gen/model/admin/role"
-	base "saas/app/admin/idl_gen/model/base"
+	"saas/app/admin/idl_gen/model/admin/role"
+	"saas/app/admin/idl_gen/model/base"
+	"saas/app/pkg/service/admin"
 )
 
 // CreateAuthority .
@@ -22,9 +28,21 @@ func CreateAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var apiInfos []*do.ApiAuthInfo
+	err = copier.Copy(&apiInfos, &req.Data)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), apiInfos)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateApiAuthority .
@@ -38,9 +56,21 @@ func UpdateApiAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var apiInfos []*do.ApiAuthInfo
+	err = copier.Copy(&apiInfos, &req.Data)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), apiInfos)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ApiAuthority .
@@ -54,9 +84,15 @@ func ApiAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	policies, err := admin.NewAuth(ctx, c).ApiAuth(strconv.FormatInt(req.ID, 10))
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	total := uint64(len(policies))
+	utils.SendResponse(c, errno.Success, policies, int64(total), "")
+	return
 }
 
 // CreateMenuAuthority .
@@ -70,9 +106,12 @@ func CreateMenuAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewAuth(ctx, c).UpdateMenuAuth(req.RoleID, req.MenuIds)
+	if err != nil {
 
-	c.JSON(consts.StatusOK, resp)
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateMenuAuthority .
@@ -86,9 +125,14 @@ func UpdateMenuAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewAuth(ctx, c).UpdateMenuAuth(int64(req.RoleID), req.MenuIds)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // MenuAuthority .
@@ -102,7 +146,15 @@ func MenuAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	menuIDs, err := admin.NewAuth(ctx, c).MenuAuth(req.ID)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	m := map[string]interface{}{
+		"roleID":  req.ID,
+		"menuIDs": menuIDs,
+	}
+	utils.SendResponse(c, errno.Success, m, 0, "")
+	return
 }

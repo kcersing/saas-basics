@@ -50,15 +50,15 @@ func (uc *UserCreate) SetNillableUpdatedAt(t *time.Time) *UserCreate {
 }
 
 // SetStatus sets the "status" field.
-func (uc *UserCreate) SetStatus(u uint8) *UserCreate {
-	uc.mutation.SetStatus(u)
+func (uc *UserCreate) SetStatus(i int8) *UserCreate {
+	uc.mutation.SetStatus(i)
 	return uc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (uc *UserCreate) SetNillableStatus(u *uint8) *UserCreate {
-	if u != nil {
-		uc.SetStatus(*u)
+func (uc *UserCreate) SetNillableStatus(i *int8) *UserCreate {
+	if i != nil {
+		uc.SetStatus(*i)
 	}
 	return uc
 }
@@ -124,15 +124,15 @@ func (uc *UserCreate) SetNillableActiveColor(s *string) *UserCreate {
 }
 
 // SetRoleID sets the "role_id" field.
-func (uc *UserCreate) SetRoleID(u uint64) *UserCreate {
-	uc.mutation.SetRoleID(u)
+func (uc *UserCreate) SetRoleID(i int64) *UserCreate {
+	uc.mutation.SetRoleID(i)
 	return uc
 }
 
 // SetNillableRoleID sets the "role_id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableRoleID(u *uint64) *UserCreate {
-	if u != nil {
-		uc.SetRoleID(*u)
+func (uc *UserCreate) SetNillableRoleID(i *int64) *UserCreate {
+	if i != nil {
+		uc.SetRoleID(*i)
 	}
 	return uc
 }
@@ -186,19 +186,19 @@ func (uc *UserCreate) SetNillableAvatar(s *string) *UserCreate {
 }
 
 // SetID sets the "id" field.
-func (uc *UserCreate) SetID(u uint64) *UserCreate {
-	uc.mutation.SetID(u)
+func (uc *UserCreate) SetID(i int64) *UserCreate {
+	uc.mutation.SetID(i)
 	return uc
 }
 
 // SetTokenID sets the "token" edge to the Token entity by ID.
-func (uc *UserCreate) SetTokenID(id uint64) *UserCreate {
+func (uc *UserCreate) SetTokenID(id int64) *UserCreate {
 	uc.mutation.SetTokenID(id)
 	return uc
 }
 
 // SetNillableTokenID sets the "token" edge to the Token entity by ID if the given value is not nil.
-func (uc *UserCreate) SetNillableTokenID(id *uint64) *UserCreate {
+func (uc *UserCreate) SetNillableTokenID(id *int64) *UserCreate {
 	if id != nil {
 		uc = uc.SetTokenID(*id)
 	}
@@ -315,7 +315,7 @@ func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 	}
 	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
-		_node.ID = uint64(id)
+		_node.ID = int64(id)
 	}
 	uc.mutation.id = &_node.ID
 	uc.mutation.done = true
@@ -325,7 +325,7 @@ func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	var (
 		_node = &User{config: uc.config}
-		_spec = sqlgraph.NewCreateSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUint64))
+		_spec = sqlgraph.NewCreateSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	)
 	if id, ok := uc.mutation.ID(); ok {
 		_node.ID = id
@@ -340,7 +340,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := uc.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt8, value)
 		_node.Status = value
 	}
 	if value, ok := uc.mutation.Username(); ok {
@@ -368,7 +368,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.ActiveColor = value
 	}
 	if value, ok := uc.mutation.RoleID(); ok {
-		_spec.SetField(user.FieldRoleID, field.TypeUint64, value)
+		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
 		_node.RoleID = value
 	}
 	if value, ok := uc.mutation.Mobile(); ok {
@@ -395,7 +395,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -453,7 +453,7 @@ func (ucb *UserCreateBulk) Save(ctx context.Context) ([]*User, error) {
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = uint64(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

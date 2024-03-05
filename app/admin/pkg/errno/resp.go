@@ -36,5 +36,5 @@ func BuildBaseResp(err error) *base.BaseResp {
 }
 
 func baseResp(err ErrNo) *base.BaseResp {
-	return &base.BaseResp{StatusCode: int32(err.ErrCode), StatusMessage: err.ErrMsg}
+	return &base.BaseResp{Code: int32(err.ErrCode), Message: err.ErrMsg}
 }

@@ -17,7 +17,7 @@ type API struct {
 	config `json:"-"`
 	// ID of the ent.
 	// primary key
-	ID uint64 `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// created time
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
@@ -64,7 +64,7 @@ func (a *API) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			a.ID = uint64(value.Int64)
+			a.ID = int64(value.Int64)
 		case api.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])

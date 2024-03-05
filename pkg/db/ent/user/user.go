@@ -92,7 +92,7 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus uint8
+	DefaultStatus int8
 	// DefaultSideMode holds the default value on creation for the "side_mode" field.
 	DefaultSideMode string
 	// DefaultBaseColor holds the default value on creation for the "base_color" field.
@@ -100,7 +100,7 @@ var (
 	// DefaultActiveColor holds the default value on creation for the "active_color" field.
 	DefaultActiveColor string
 	// DefaultRoleID holds the default value on creation for the "role_id" field.
-	DefaultRoleID uint64
+	DefaultRoleID int64
 	// DefaultAvatar holds the default value on creation for the "avatar" field.
 	DefaultAvatar string
 )

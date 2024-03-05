@@ -37,7 +37,7 @@ func LogMw() app.HandlerFunc {
 		}
 
 		costTime := time.Since(start).Milliseconds()
-		logs.Time = uint32(costTime)
+		logs.Time = int32(costTime)
 
 		v, exist := c.Get("user_id")
 		if exist || v == nil {
@@ -55,7 +55,7 @@ func LogMw() app.HandlerFunc {
 
 		userID, _ := strconv.Atoi(userIDStr)
 
-		userInfo, _ := admin.NewUser(ctx, c).UserInfo(uint64(userID))
+		userInfo, _ := admin.NewUser(ctx, c).UserInfo(int64(userID))
 
 		if userInfo != nil {
 			username = userInfo.Username

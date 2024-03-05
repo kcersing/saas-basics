@@ -18,7 +18,7 @@ type MenuParam struct {
 	config `json:"-"`
 	// ID of the ent.
 	// primary key
-	ID uint64 `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// created time
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
@@ -32,7 +32,7 @@ type MenuParam struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MenuParamQuery when eager-loading is set.
 	Edges        MenuParamEdges `json:"edges"`
-	menu_params  *uint64
+	menu_params  *int64
 	selectValues sql.SelectValues
 }
 
@@ -91,7 +91,7 @@ func (mp *MenuParam) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			mp.ID = uint64(value.Int64)
+			mp.ID = int64(value.Int64)
 		case menuparam.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -126,8 +126,8 @@ func (mp *MenuParam) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field menu_params", value)
 			} else if value.Valid {
-				mp.menu_params = new(uint64)
-				*mp.menu_params = uint64(value.Int64)
+				mp.menu_params = new(int64)
+				*mp.menu_params = int64(value.Int64)
 			}
 		default:
 			mp.selectValues.Set(columns[i], values[i])

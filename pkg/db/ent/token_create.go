@@ -50,8 +50,8 @@ func (tc *TokenCreate) SetNillableUpdatedAt(t *time.Time) *TokenCreate {
 }
 
 // SetUserID sets the "user_id" field.
-func (tc *TokenCreate) SetUserID(u uint64) *TokenCreate {
-	tc.mutation.SetUserID(u)
+func (tc *TokenCreate) SetUserID(i int64) *TokenCreate {
+	tc.mutation.SetUserID(i)
 	return tc
 }
 
@@ -74,19 +74,19 @@ func (tc *TokenCreate) SetExpiredAt(t time.Time) *TokenCreate {
 }
 
 // SetID sets the "id" field.
-func (tc *TokenCreate) SetID(u uint64) *TokenCreate {
-	tc.mutation.SetID(u)
+func (tc *TokenCreate) SetID(i int64) *TokenCreate {
+	tc.mutation.SetID(i)
 	return tc
 }
 
 // SetOwnerID sets the "owner" edge to the User entity by ID.
-func (tc *TokenCreate) SetOwnerID(id uint64) *TokenCreate {
+func (tc *TokenCreate) SetOwnerID(id int64) *TokenCreate {
 	tc.mutation.SetOwnerID(id)
 	return tc
 }
 
 // SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
-func (tc *TokenCreate) SetNillableOwnerID(id *uint64) *TokenCreate {
+func (tc *TokenCreate) SetNillableOwnerID(id *int64) *TokenCreate {
 	if id != nil {
 		tc = tc.SetOwnerID(*id)
 	}
@@ -179,7 +179,7 @@ func (tc *TokenCreate) sqlSave(ctx context.Context) (*Token, error) {
 	}
 	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
-		_node.ID = uint64(id)
+		_node.ID = int64(id)
 	}
 	tc.mutation.id = &_node.ID
 	tc.mutation.done = true
@@ -189,7 +189,7 @@ func (tc *TokenCreate) sqlSave(ctx context.Context) (*Token, error) {
 func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Token{config: tc.config}
-		_spec = sqlgraph.NewCreateSpec(token.Table, sqlgraph.NewFieldSpec(token.FieldID, field.TypeUint64))
+		_spec = sqlgraph.NewCreateSpec(token.Table, sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64))
 	)
 	if id, ok := tc.mutation.ID(); ok {
 		_node.ID = id
@@ -204,7 +204,7 @@ func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := tc.mutation.UserID(); ok {
-		_spec.SetField(token.FieldUserID, field.TypeUint64, value)
+		_spec.SetField(token.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
 	if value, ok := tc.mutation.Token(); ok {
@@ -227,7 +227,7 @@ func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 			Columns: []string{token.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -286,7 +286,7 @@ func (tcb *TokenCreateBulk) Save(ctx context.Context) ([]*Token, error) {
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = uint64(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

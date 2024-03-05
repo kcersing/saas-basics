@@ -37,15 +37,15 @@ func (mu *MenuUpdate) SetUpdatedAt(t time.Time) *MenuUpdate {
 }
 
 // SetParentID sets the "parent_id" field.
-func (mu *MenuUpdate) SetParentID(u uint64) *MenuUpdate {
-	mu.mutation.SetParentID(u)
+func (mu *MenuUpdate) SetParentID(i int64) *MenuUpdate {
+	mu.mutation.SetParentID(i)
 	return mu
 }
 
 // SetNillableParentID sets the "parent_id" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableParentID(u *uint64) *MenuUpdate {
-	if u != nil {
-		mu.SetParentID(*u)
+func (mu *MenuUpdate) SetNillableParentID(i *int64) *MenuUpdate {
+	if i != nil {
+		mu.SetParentID(*i)
 	}
 	return mu
 }
@@ -57,44 +57,44 @@ func (mu *MenuUpdate) ClearParentID() *MenuUpdate {
 }
 
 // SetMenuLevel sets the "menu_level" field.
-func (mu *MenuUpdate) SetMenuLevel(u uint32) *MenuUpdate {
+func (mu *MenuUpdate) SetMenuLevel(i int32) *MenuUpdate {
 	mu.mutation.ResetMenuLevel()
-	mu.mutation.SetMenuLevel(u)
+	mu.mutation.SetMenuLevel(i)
 	return mu
 }
 
 // SetNillableMenuLevel sets the "menu_level" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableMenuLevel(u *uint32) *MenuUpdate {
-	if u != nil {
-		mu.SetMenuLevel(*u)
+func (mu *MenuUpdate) SetNillableMenuLevel(i *int32) *MenuUpdate {
+	if i != nil {
+		mu.SetMenuLevel(*i)
 	}
 	return mu
 }
 
-// AddMenuLevel adds u to the "menu_level" field.
-func (mu *MenuUpdate) AddMenuLevel(u int32) *MenuUpdate {
-	mu.mutation.AddMenuLevel(u)
+// AddMenuLevel adds i to the "menu_level" field.
+func (mu *MenuUpdate) AddMenuLevel(i int32) *MenuUpdate {
+	mu.mutation.AddMenuLevel(i)
 	return mu
 }
 
 // SetMenuType sets the "menu_type" field.
-func (mu *MenuUpdate) SetMenuType(u uint32) *MenuUpdate {
+func (mu *MenuUpdate) SetMenuType(i int32) *MenuUpdate {
 	mu.mutation.ResetMenuType()
-	mu.mutation.SetMenuType(u)
+	mu.mutation.SetMenuType(i)
 	return mu
 }
 
 // SetNillableMenuType sets the "menu_type" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableMenuType(u *uint32) *MenuUpdate {
-	if u != nil {
-		mu.SetMenuType(*u)
+func (mu *MenuUpdate) SetNillableMenuType(i *int32) *MenuUpdate {
+	if i != nil {
+		mu.SetMenuType(*i)
 	}
 	return mu
 }
 
-// AddMenuType adds u to the "menu_type" field.
-func (mu *MenuUpdate) AddMenuType(u int32) *MenuUpdate {
-	mu.mutation.AddMenuType(u)
+// AddMenuType adds i to the "menu_type" field.
+func (mu *MenuUpdate) AddMenuType(i int32) *MenuUpdate {
+	mu.mutation.AddMenuType(i)
 	return mu
 }
 
@@ -173,23 +173,23 @@ func (mu *MenuUpdate) ClearComponent() *MenuUpdate {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (mu *MenuUpdate) SetOrderNo(u uint32) *MenuUpdate {
+func (mu *MenuUpdate) SetOrderNo(i int32) *MenuUpdate {
 	mu.mutation.ResetOrderNo()
-	mu.mutation.SetOrderNo(u)
+	mu.mutation.SetOrderNo(i)
 	return mu
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableOrderNo(u *uint32) *MenuUpdate {
-	if u != nil {
-		mu.SetOrderNo(*u)
+func (mu *MenuUpdate) SetNillableOrderNo(i *int32) *MenuUpdate {
+	if i != nil {
+		mu.SetOrderNo(*i)
 	}
 	return mu
 }
 
-// AddOrderNo adds u to the "order_no" field.
-func (mu *MenuUpdate) AddOrderNo(u int32) *MenuUpdate {
-	mu.mutation.AddOrderNo(u)
+// AddOrderNo adds i to the "order_no" field.
+func (mu *MenuUpdate) AddOrderNo(i int32) *MenuUpdate {
+	mu.mutation.AddOrderNo(i)
 	return mu
 }
 
@@ -422,23 +422,23 @@ func (mu *MenuUpdate) ClearAffix() *MenuUpdate {
 }
 
 // SetDynamicLevel sets the "dynamic_level" field.
-func (mu *MenuUpdate) SetDynamicLevel(u uint32) *MenuUpdate {
+func (mu *MenuUpdate) SetDynamicLevel(i int32) *MenuUpdate {
 	mu.mutation.ResetDynamicLevel()
-	mu.mutation.SetDynamicLevel(u)
+	mu.mutation.SetDynamicLevel(i)
 	return mu
 }
 
 // SetNillableDynamicLevel sets the "dynamic_level" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableDynamicLevel(u *uint32) *MenuUpdate {
-	if u != nil {
-		mu.SetDynamicLevel(*u)
+func (mu *MenuUpdate) SetNillableDynamicLevel(i *int32) *MenuUpdate {
+	if i != nil {
+		mu.SetDynamicLevel(*i)
 	}
 	return mu
 }
 
-// AddDynamicLevel adds u to the "dynamic_level" field.
-func (mu *MenuUpdate) AddDynamicLevel(u int32) *MenuUpdate {
-	mu.mutation.AddDynamicLevel(u)
+// AddDynamicLevel adds i to the "dynamic_level" field.
+func (mu *MenuUpdate) AddDynamicLevel(i int32) *MenuUpdate {
+	mu.mutation.AddDynamicLevel(i)
 	return mu
 }
 
@@ -469,14 +469,14 @@ func (mu *MenuUpdate) ClearRealPath() *MenuUpdate {
 }
 
 // AddRoleIDs adds the "roles" edge to the Role entity by IDs.
-func (mu *MenuUpdate) AddRoleIDs(ids ...uint64) *MenuUpdate {
+func (mu *MenuUpdate) AddRoleIDs(ids ...int64) *MenuUpdate {
 	mu.mutation.AddRoleIDs(ids...)
 	return mu
 }
 
 // AddRoles adds the "roles" edges to the Role entity.
 func (mu *MenuUpdate) AddRoles(r ...*Role) *MenuUpdate {
-	ids := make([]uint64, len(r))
+	ids := make([]int64, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
 	}
@@ -489,14 +489,14 @@ func (mu *MenuUpdate) SetParent(m *Menu) *MenuUpdate {
 }
 
 // AddChildIDs adds the "children" edge to the Menu entity by IDs.
-func (mu *MenuUpdate) AddChildIDs(ids ...uint64) *MenuUpdate {
+func (mu *MenuUpdate) AddChildIDs(ids ...int64) *MenuUpdate {
 	mu.mutation.AddChildIDs(ids...)
 	return mu
 }
 
 // AddChildren adds the "children" edges to the Menu entity.
 func (mu *MenuUpdate) AddChildren(m ...*Menu) *MenuUpdate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -504,14 +504,14 @@ func (mu *MenuUpdate) AddChildren(m ...*Menu) *MenuUpdate {
 }
 
 // AddParamIDs adds the "params" edge to the MenuParam entity by IDs.
-func (mu *MenuUpdate) AddParamIDs(ids ...uint64) *MenuUpdate {
+func (mu *MenuUpdate) AddParamIDs(ids ...int64) *MenuUpdate {
 	mu.mutation.AddParamIDs(ids...)
 	return mu
 }
 
 // AddParams adds the "params" edges to the MenuParam entity.
 func (mu *MenuUpdate) AddParams(m ...*MenuParam) *MenuUpdate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -530,14 +530,14 @@ func (mu *MenuUpdate) ClearRoles() *MenuUpdate {
 }
 
 // RemoveRoleIDs removes the "roles" edge to Role entities by IDs.
-func (mu *MenuUpdate) RemoveRoleIDs(ids ...uint64) *MenuUpdate {
+func (mu *MenuUpdate) RemoveRoleIDs(ids ...int64) *MenuUpdate {
 	mu.mutation.RemoveRoleIDs(ids...)
 	return mu
 }
 
 // RemoveRoles removes "roles" edges to Role entities.
 func (mu *MenuUpdate) RemoveRoles(r ...*Role) *MenuUpdate {
-	ids := make([]uint64, len(r))
+	ids := make([]int64, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
 	}
@@ -557,14 +557,14 @@ func (mu *MenuUpdate) ClearChildren() *MenuUpdate {
 }
 
 // RemoveChildIDs removes the "children" edge to Menu entities by IDs.
-func (mu *MenuUpdate) RemoveChildIDs(ids ...uint64) *MenuUpdate {
+func (mu *MenuUpdate) RemoveChildIDs(ids ...int64) *MenuUpdate {
 	mu.mutation.RemoveChildIDs(ids...)
 	return mu
 }
 
 // RemoveChildren removes "children" edges to Menu entities.
 func (mu *MenuUpdate) RemoveChildren(m ...*Menu) *MenuUpdate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -578,14 +578,14 @@ func (mu *MenuUpdate) ClearParams() *MenuUpdate {
 }
 
 // RemoveParamIDs removes the "params" edge to MenuParam entities by IDs.
-func (mu *MenuUpdate) RemoveParamIDs(ids ...uint64) *MenuUpdate {
+func (mu *MenuUpdate) RemoveParamIDs(ids ...int64) *MenuUpdate {
 	mu.mutation.RemoveParamIDs(ids...)
 	return mu
 }
 
 // RemoveParams removes "params" edges to MenuParam entities.
 func (mu *MenuUpdate) RemoveParams(m ...*MenuParam) *MenuUpdate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -629,7 +629,7 @@ func (mu *MenuUpdate) defaults() {
 }
 
 func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(menu.Table, menu.Columns, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(menu.Table, menu.Columns, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64))
 	if ps := mu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -641,16 +641,16 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(menu.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := mu.mutation.MenuLevel(); ok {
-		_spec.SetField(menu.FieldMenuLevel, field.TypeUint32, value)
+		_spec.SetField(menu.FieldMenuLevel, field.TypeInt32, value)
 	}
 	if value, ok := mu.mutation.AddedMenuLevel(); ok {
-		_spec.AddField(menu.FieldMenuLevel, field.TypeUint32, value)
+		_spec.AddField(menu.FieldMenuLevel, field.TypeInt32, value)
 	}
 	if value, ok := mu.mutation.MenuType(); ok {
-		_spec.SetField(menu.FieldMenuType, field.TypeUint32, value)
+		_spec.SetField(menu.FieldMenuType, field.TypeInt32, value)
 	}
 	if value, ok := mu.mutation.AddedMenuType(); ok {
-		_spec.AddField(menu.FieldMenuType, field.TypeUint32, value)
+		_spec.AddField(menu.FieldMenuType, field.TypeInt32, value)
 	}
 	if value, ok := mu.mutation.Path(); ok {
 		_spec.SetField(menu.FieldPath, field.TypeString, value)
@@ -674,10 +674,10 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(menu.FieldComponent, field.TypeString)
 	}
 	if value, ok := mu.mutation.OrderNo(); ok {
-		_spec.SetField(menu.FieldOrderNo, field.TypeUint32, value)
+		_spec.SetField(menu.FieldOrderNo, field.TypeInt32, value)
 	}
 	if value, ok := mu.mutation.AddedOrderNo(); ok {
-		_spec.AddField(menu.FieldOrderNo, field.TypeUint32, value)
+		_spec.AddField(menu.FieldOrderNo, field.TypeInt32, value)
 	}
 	if value, ok := mu.mutation.Disabled(); ok {
 		_spec.SetField(menu.FieldDisabled, field.TypeBool, value)
@@ -746,13 +746,13 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(menu.FieldAffix, field.TypeBool)
 	}
 	if value, ok := mu.mutation.DynamicLevel(); ok {
-		_spec.SetField(menu.FieldDynamicLevel, field.TypeUint32, value)
+		_spec.SetField(menu.FieldDynamicLevel, field.TypeInt32, value)
 	}
 	if value, ok := mu.mutation.AddedDynamicLevel(); ok {
-		_spec.AddField(menu.FieldDynamicLevel, field.TypeUint32, value)
+		_spec.AddField(menu.FieldDynamicLevel, field.TypeInt32, value)
 	}
 	if mu.mutation.DynamicLevelCleared() {
-		_spec.ClearField(menu.FieldDynamicLevel, field.TypeUint32)
+		_spec.ClearField(menu.FieldDynamicLevel, field.TypeInt32)
 	}
 	if value, ok := mu.mutation.RealPath(); ok {
 		_spec.SetField(menu.FieldRealPath, field.TypeString, value)
@@ -768,7 +768,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: menu.RolesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -781,7 +781,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: menu.RolesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -797,7 +797,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: menu.RolesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -813,7 +813,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menu.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -826,7 +826,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menu.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -842,7 +842,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menu.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -855,7 +855,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menu.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -871,7 +871,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menu.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -887,7 +887,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menu.ParamsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -900,7 +900,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menu.ParamsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -916,7 +916,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menu.ParamsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -951,15 +951,15 @@ func (muo *MenuUpdateOne) SetUpdatedAt(t time.Time) *MenuUpdateOne {
 }
 
 // SetParentID sets the "parent_id" field.
-func (muo *MenuUpdateOne) SetParentID(u uint64) *MenuUpdateOne {
-	muo.mutation.SetParentID(u)
+func (muo *MenuUpdateOne) SetParentID(i int64) *MenuUpdateOne {
+	muo.mutation.SetParentID(i)
 	return muo
 }
 
 // SetNillableParentID sets the "parent_id" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableParentID(u *uint64) *MenuUpdateOne {
-	if u != nil {
-		muo.SetParentID(*u)
+func (muo *MenuUpdateOne) SetNillableParentID(i *int64) *MenuUpdateOne {
+	if i != nil {
+		muo.SetParentID(*i)
 	}
 	return muo
 }
@@ -971,44 +971,44 @@ func (muo *MenuUpdateOne) ClearParentID() *MenuUpdateOne {
 }
 
 // SetMenuLevel sets the "menu_level" field.
-func (muo *MenuUpdateOne) SetMenuLevel(u uint32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) SetMenuLevel(i int32) *MenuUpdateOne {
 	muo.mutation.ResetMenuLevel()
-	muo.mutation.SetMenuLevel(u)
+	muo.mutation.SetMenuLevel(i)
 	return muo
 }
 
 // SetNillableMenuLevel sets the "menu_level" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableMenuLevel(u *uint32) *MenuUpdateOne {
-	if u != nil {
-		muo.SetMenuLevel(*u)
+func (muo *MenuUpdateOne) SetNillableMenuLevel(i *int32) *MenuUpdateOne {
+	if i != nil {
+		muo.SetMenuLevel(*i)
 	}
 	return muo
 }
 
-// AddMenuLevel adds u to the "menu_level" field.
-func (muo *MenuUpdateOne) AddMenuLevel(u int32) *MenuUpdateOne {
-	muo.mutation.AddMenuLevel(u)
+// AddMenuLevel adds i to the "menu_level" field.
+func (muo *MenuUpdateOne) AddMenuLevel(i int32) *MenuUpdateOne {
+	muo.mutation.AddMenuLevel(i)
 	return muo
 }
 
 // SetMenuType sets the "menu_type" field.
-func (muo *MenuUpdateOne) SetMenuType(u uint32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) SetMenuType(i int32) *MenuUpdateOne {
 	muo.mutation.ResetMenuType()
-	muo.mutation.SetMenuType(u)
+	muo.mutation.SetMenuType(i)
 	return muo
 }
 
 // SetNillableMenuType sets the "menu_type" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableMenuType(u *uint32) *MenuUpdateOne {
-	if u != nil {
-		muo.SetMenuType(*u)
+func (muo *MenuUpdateOne) SetNillableMenuType(i *int32) *MenuUpdateOne {
+	if i != nil {
+		muo.SetMenuType(*i)
 	}
 	return muo
 }
 
-// AddMenuType adds u to the "menu_type" field.
-func (muo *MenuUpdateOne) AddMenuType(u int32) *MenuUpdateOne {
-	muo.mutation.AddMenuType(u)
+// AddMenuType adds i to the "menu_type" field.
+func (muo *MenuUpdateOne) AddMenuType(i int32) *MenuUpdateOne {
+	muo.mutation.AddMenuType(i)
 	return muo
 }
 
@@ -1087,23 +1087,23 @@ func (muo *MenuUpdateOne) ClearComponent() *MenuUpdateOne {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (muo *MenuUpdateOne) SetOrderNo(u uint32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) SetOrderNo(i int32) *MenuUpdateOne {
 	muo.mutation.ResetOrderNo()
-	muo.mutation.SetOrderNo(u)
+	muo.mutation.SetOrderNo(i)
 	return muo
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableOrderNo(u *uint32) *MenuUpdateOne {
-	if u != nil {
-		muo.SetOrderNo(*u)
+func (muo *MenuUpdateOne) SetNillableOrderNo(i *int32) *MenuUpdateOne {
+	if i != nil {
+		muo.SetOrderNo(*i)
 	}
 	return muo
 }
 
-// AddOrderNo adds u to the "order_no" field.
-func (muo *MenuUpdateOne) AddOrderNo(u int32) *MenuUpdateOne {
-	muo.mutation.AddOrderNo(u)
+// AddOrderNo adds i to the "order_no" field.
+func (muo *MenuUpdateOne) AddOrderNo(i int32) *MenuUpdateOne {
+	muo.mutation.AddOrderNo(i)
 	return muo
 }
 
@@ -1336,23 +1336,23 @@ func (muo *MenuUpdateOne) ClearAffix() *MenuUpdateOne {
 }
 
 // SetDynamicLevel sets the "dynamic_level" field.
-func (muo *MenuUpdateOne) SetDynamicLevel(u uint32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) SetDynamicLevel(i int32) *MenuUpdateOne {
 	muo.mutation.ResetDynamicLevel()
-	muo.mutation.SetDynamicLevel(u)
+	muo.mutation.SetDynamicLevel(i)
 	return muo
 }
 
 // SetNillableDynamicLevel sets the "dynamic_level" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableDynamicLevel(u *uint32) *MenuUpdateOne {
-	if u != nil {
-		muo.SetDynamicLevel(*u)
+func (muo *MenuUpdateOne) SetNillableDynamicLevel(i *int32) *MenuUpdateOne {
+	if i != nil {
+		muo.SetDynamicLevel(*i)
 	}
 	return muo
 }
 
-// AddDynamicLevel adds u to the "dynamic_level" field.
-func (muo *MenuUpdateOne) AddDynamicLevel(u int32) *MenuUpdateOne {
-	muo.mutation.AddDynamicLevel(u)
+// AddDynamicLevel adds i to the "dynamic_level" field.
+func (muo *MenuUpdateOne) AddDynamicLevel(i int32) *MenuUpdateOne {
+	muo.mutation.AddDynamicLevel(i)
 	return muo
 }
 
@@ -1383,14 +1383,14 @@ func (muo *MenuUpdateOne) ClearRealPath() *MenuUpdateOne {
 }
 
 // AddRoleIDs adds the "roles" edge to the Role entity by IDs.
-func (muo *MenuUpdateOne) AddRoleIDs(ids ...uint64) *MenuUpdateOne {
+func (muo *MenuUpdateOne) AddRoleIDs(ids ...int64) *MenuUpdateOne {
 	muo.mutation.AddRoleIDs(ids...)
 	return muo
 }
 
 // AddRoles adds the "roles" edges to the Role entity.
 func (muo *MenuUpdateOne) AddRoles(r ...*Role) *MenuUpdateOne {
-	ids := make([]uint64, len(r))
+	ids := make([]int64, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
 	}
@@ -1403,14 +1403,14 @@ func (muo *MenuUpdateOne) SetParent(m *Menu) *MenuUpdateOne {
 }
 
 // AddChildIDs adds the "children" edge to the Menu entity by IDs.
-func (muo *MenuUpdateOne) AddChildIDs(ids ...uint64) *MenuUpdateOne {
+func (muo *MenuUpdateOne) AddChildIDs(ids ...int64) *MenuUpdateOne {
 	muo.mutation.AddChildIDs(ids...)
 	return muo
 }
 
 // AddChildren adds the "children" edges to the Menu entity.
 func (muo *MenuUpdateOne) AddChildren(m ...*Menu) *MenuUpdateOne {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -1418,14 +1418,14 @@ func (muo *MenuUpdateOne) AddChildren(m ...*Menu) *MenuUpdateOne {
 }
 
 // AddParamIDs adds the "params" edge to the MenuParam entity by IDs.
-func (muo *MenuUpdateOne) AddParamIDs(ids ...uint64) *MenuUpdateOne {
+func (muo *MenuUpdateOne) AddParamIDs(ids ...int64) *MenuUpdateOne {
 	muo.mutation.AddParamIDs(ids...)
 	return muo
 }
 
 // AddParams adds the "params" edges to the MenuParam entity.
 func (muo *MenuUpdateOne) AddParams(m ...*MenuParam) *MenuUpdateOne {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -1444,14 +1444,14 @@ func (muo *MenuUpdateOne) ClearRoles() *MenuUpdateOne {
 }
 
 // RemoveRoleIDs removes the "roles" edge to Role entities by IDs.
-func (muo *MenuUpdateOne) RemoveRoleIDs(ids ...uint64) *MenuUpdateOne {
+func (muo *MenuUpdateOne) RemoveRoleIDs(ids ...int64) *MenuUpdateOne {
 	muo.mutation.RemoveRoleIDs(ids...)
 	return muo
 }
 
 // RemoveRoles removes "roles" edges to Role entities.
 func (muo *MenuUpdateOne) RemoveRoles(r ...*Role) *MenuUpdateOne {
-	ids := make([]uint64, len(r))
+	ids := make([]int64, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
 	}
@@ -1471,14 +1471,14 @@ func (muo *MenuUpdateOne) ClearChildren() *MenuUpdateOne {
 }
 
 // RemoveChildIDs removes the "children" edge to Menu entities by IDs.
-func (muo *MenuUpdateOne) RemoveChildIDs(ids ...uint64) *MenuUpdateOne {
+func (muo *MenuUpdateOne) RemoveChildIDs(ids ...int64) *MenuUpdateOne {
 	muo.mutation.RemoveChildIDs(ids...)
 	return muo
 }
 
 // RemoveChildren removes "children" edges to Menu entities.
 func (muo *MenuUpdateOne) RemoveChildren(m ...*Menu) *MenuUpdateOne {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -1492,14 +1492,14 @@ func (muo *MenuUpdateOne) ClearParams() *MenuUpdateOne {
 }
 
 // RemoveParamIDs removes the "params" edge to MenuParam entities by IDs.
-func (muo *MenuUpdateOne) RemoveParamIDs(ids ...uint64) *MenuUpdateOne {
+func (muo *MenuUpdateOne) RemoveParamIDs(ids ...int64) *MenuUpdateOne {
 	muo.mutation.RemoveParamIDs(ids...)
 	return muo
 }
 
 // RemoveParams removes "params" edges to MenuParam entities.
 func (muo *MenuUpdateOne) RemoveParams(m ...*MenuParam) *MenuUpdateOne {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -1556,7 +1556,7 @@ func (muo *MenuUpdateOne) defaults() {
 }
 
 func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) {
-	_spec := sqlgraph.NewUpdateSpec(menu.Table, menu.Columns, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(menu.Table, menu.Columns, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64))
 	id, ok := muo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Menu.id" for update`)}
@@ -1585,16 +1585,16 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 		_spec.SetField(menu.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := muo.mutation.MenuLevel(); ok {
-		_spec.SetField(menu.FieldMenuLevel, field.TypeUint32, value)
+		_spec.SetField(menu.FieldMenuLevel, field.TypeInt32, value)
 	}
 	if value, ok := muo.mutation.AddedMenuLevel(); ok {
-		_spec.AddField(menu.FieldMenuLevel, field.TypeUint32, value)
+		_spec.AddField(menu.FieldMenuLevel, field.TypeInt32, value)
 	}
 	if value, ok := muo.mutation.MenuType(); ok {
-		_spec.SetField(menu.FieldMenuType, field.TypeUint32, value)
+		_spec.SetField(menu.FieldMenuType, field.TypeInt32, value)
 	}
 	if value, ok := muo.mutation.AddedMenuType(); ok {
-		_spec.AddField(menu.FieldMenuType, field.TypeUint32, value)
+		_spec.AddField(menu.FieldMenuType, field.TypeInt32, value)
 	}
 	if value, ok := muo.mutation.Path(); ok {
 		_spec.SetField(menu.FieldPath, field.TypeString, value)
@@ -1618,10 +1618,10 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 		_spec.ClearField(menu.FieldComponent, field.TypeString)
 	}
 	if value, ok := muo.mutation.OrderNo(); ok {
-		_spec.SetField(menu.FieldOrderNo, field.TypeUint32, value)
+		_spec.SetField(menu.FieldOrderNo, field.TypeInt32, value)
 	}
 	if value, ok := muo.mutation.AddedOrderNo(); ok {
-		_spec.AddField(menu.FieldOrderNo, field.TypeUint32, value)
+		_spec.AddField(menu.FieldOrderNo, field.TypeInt32, value)
 	}
 	if value, ok := muo.mutation.Disabled(); ok {
 		_spec.SetField(menu.FieldDisabled, field.TypeBool, value)
@@ -1690,13 +1690,13 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 		_spec.ClearField(menu.FieldAffix, field.TypeBool)
 	}
 	if value, ok := muo.mutation.DynamicLevel(); ok {
-		_spec.SetField(menu.FieldDynamicLevel, field.TypeUint32, value)
+		_spec.SetField(menu.FieldDynamicLevel, field.TypeInt32, value)
 	}
 	if value, ok := muo.mutation.AddedDynamicLevel(); ok {
-		_spec.AddField(menu.FieldDynamicLevel, field.TypeUint32, value)
+		_spec.AddField(menu.FieldDynamicLevel, field.TypeInt32, value)
 	}
 	if muo.mutation.DynamicLevelCleared() {
-		_spec.ClearField(menu.FieldDynamicLevel, field.TypeUint32)
+		_spec.ClearField(menu.FieldDynamicLevel, field.TypeInt32)
 	}
 	if value, ok := muo.mutation.RealPath(); ok {
 		_spec.SetField(menu.FieldRealPath, field.TypeString, value)
@@ -1712,7 +1712,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: menu.RolesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1725,7 +1725,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: menu.RolesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1741,7 +1741,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: menu.RolesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1757,7 +1757,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: []string{menu.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1770,7 +1770,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: []string{menu.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1786,7 +1786,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: []string{menu.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1799,7 +1799,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: []string{menu.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1815,7 +1815,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: []string{menu.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1831,7 +1831,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: []string{menu.ParamsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1844,7 +1844,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: []string{menu.ParamsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1860,7 +1860,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			Columns: []string{menu.ParamsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

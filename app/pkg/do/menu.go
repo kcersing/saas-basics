@@ -3,27 +3,27 @@ package do
 type Menu interface {
 	Create(menuReq *MenuInfo) error
 	Update(menuReq *MenuInfo) error
-	Delete(id uint64) error
-	ListByRole(roleID uint64) (list []*MenuInfoTree, total uint64, err error)
+	Delete(id int64) error
+	ListByRole(roleID int64) (list []*MenuInfoTree, total int64, err error)
 	List(req *MenuListReq) (list []*MenuInfoTree, total int, err error)
 	CreateMenuParam(req *MenuParam) error
 	UpdateMenuParam(req *MenuParam) error
-	DeleteMenuParam(menuParamID uint64) error
-	MenuParamListByMenuID(menuID uint64) (list []MenuParam, total uint64, err error)
+	DeleteMenuParam(menuParamID int64) error
+	MenuParamListByMenuID(menuID int64) (list []MenuParam, total int64, err error)
 }
 
 type MenuInfo struct {
-	Level     uint32      `json:"level,omitempty"`
-	ParentID  uint64      `json:"parentId,omitempty"`
+	Level     int32       `json:"level,omitempty"`
+	ParentID  int64       `json:"parentId,omitempty"`
 	Path      string      `json:"path,omitempty"`
 	Name      string      `json:"name,omitempty"`
 	Redirect  string      `json:"redirect,omitempty"`
 	Component string      `json:"component,omitempty"`
-	OrderNo   uint32      `json:"orderNo,omitempty"`
+	OrderNo   int32       `json:"orderNo,omitempty"`
 	Disabled  bool        `json:"disabled,omitempty"`
 	Meta      *MenuMeta   `json:"meta,omitempty"`
-	ID        uint64      `json:"id,omitempty"`
-	MenuType  uint32      `json:"menuType,omitempty"`
+	ID        int64       `json:"id,omitempty"`
+	MenuType  int32       `json:"menuType,omitempty"`
 	Children  []*MenuInfo `json:"children,omitempty"`
 }
 
@@ -39,13 +39,13 @@ type MenuMeta struct {
 	CarryParam         bool   `json:"carryParam,omitempty"`
 	HideChildrenInMenu bool   `json:"hideChildrenInMenu,omitempty"`
 	Affix              bool   `json:"affix,omitempty"`
-	DynamicLevel       uint32 `json:"dynamicLevel,omitempty"`
+	DynamicLevel       int32  `json:"dynamicLevel,omitempty"`
 	RealPath           string `json:"realPath,omitempty"`
 }
 
 type MenuListReq struct {
-	Page     uint64 `json:"page,omitempty"`
-	PageSize uint64 `json:"pageSize,omitempty"`
+	Page     int64 `json:"page,omitempty"`
+	PageSize int64 `json:"pageSize,omitempty"`
 }
 
 type MenuInfoTree struct {
@@ -57,8 +57,8 @@ type MenuInfoTree struct {
 
 // MenuParam is the menu parameter structure.data stored at the table `sys_menu_params`
 type MenuParam struct {
-	ID        uint64 `json:"id,omitempty"`
-	MenuID    uint64 `json:"menuId,omitempty"`
+	ID        int64  `json:"id,omitempty"`
+	MenuID    int64  `json:"menuId,omitempty"`
 	Type      string `json:"type,omitempty"`
 	Key       string `json:"key,omitempty"`
 	Value     string `json:"value,omitempty"`

@@ -5,13 +5,13 @@ include "../base/data.thrift"
 
 //创建或更新角色信息参数
 struct RoleInfo {
-    1:  string ID (api.raw = "ID")
+    1:  i64 ID (api.raw = "ID")
     2:  string name (api.raw = "name")
     3:  string value (api.raw = "value")
     4:  string defaultRouter (api.raw = "defaultRouter")
-    5:  string status (api.raw = "status")
+    5:  i64 status (api.raw = "status")
     6:  string remark  (api.raw = "remark")
-    7:  string orderNo (api.raw = "orderNo")
+    7:  i64 orderNo (api.raw = "orderNo")
     8:  string createdAt (api.raw = "createdAt")
     9:  string updatedAt (api.raw = "updatedAt")
 }
@@ -47,14 +47,14 @@ struct ApiAuthorityInfo {
 
 // 创建或更新API授权信息
 struct CreateOrUpdateApiAuthorityReq {
-    1:  string role_id (api.raw = "role_id")
-    2:  ApiAuthorityInfo apiAuthorityInfo (api.raw = "api_authority_info")
+    1:  i64 role_id (api.raw = "role_id")
+    2:  ApiAuthorityInfo data (api.raw = "api_authority_info")
 }
 
 // 菜单授权请求数据
 struct MenuAuthorityInfoReq {
-    1:  string role_id (api.raw = "role_id")
-    2:  string menu_ids (api.raw = "menu_ids")
+    1: i64 role_id (api.raw = "role_id")
+    2: list<i64> menu_ids (api.raw = "menu_ids")
 }
 
 // authorization service
@@ -83,7 +83,7 @@ service authorityService {
 // api message
 // API信息
 struct ApiInfo {
-    1:  string id (api.raw = "id")
+    1:  i64 id (api.raw = "id")
     2:  string createdAt (api.raw = "createdAt")
     3:  string updatedAt (api.raw = "updatedAt")
     4:  string path (api.raw = "path")
@@ -94,8 +94,8 @@ struct ApiInfo {
 
 // API列表请求数据
 struct ApiPageReq {
-    1:  string page (api.raw = "page")
-    2:  string limit (api.raw = "limit")
+    1:  i64 page (api.raw = "page")
+    2:  i64 limit (api.raw = "limit")
     3:  string path (api.raw = "path")
     4:  string description (api.raw = "description")
     5:  string method (api.raw = "method")
@@ -114,5 +114,5 @@ service ApisService {
   base.NilResponse DeleteApi(1: base.IDReq req) (api.post = "/api/admin/api")
 
   // 获取API列表
-  base.NilResponse ApiList(1: ApiPageReq req) (api.post = "/api/admin/api/list")
+  base.NilResponse ApiList(1: ApiPageReq req) (api.get = "/api/admin/api/list")
 }

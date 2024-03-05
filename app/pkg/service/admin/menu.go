@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
@@ -24,66 +23,126 @@ type Menu struct {
 }
 
 func (m Menu) Create(menuReq *do.MenuInfo) error {
-	//// get menu level
-	//if req.ParentID == 0 {
-	//	// it is a first level menu
-	//	req.ParentID = 1
-	//	req.Level = 1
-	//} else {
-	//	// it is a children level menu
-	//	// get parent menu level
-	//	parent, err := m.db.Menu.Query().Where(menu2.IDEQ(req.ParentID)).First(m.ctx)
-	//	if err != nil {
-	//		return errors.Wrap(err, "query menu failed")
-	//	}
-	//	// set menu level
-	//	req.Level = parent.MenuLevel + 1
-	//}
-	//
-	//// create menu
-	//err := m.db.Menu.Create().
-	//	SetMenuLevel(req.Level).
-	//	SetMenuType(req.MenuType).
-	//	SetParentID(req.ParentID).
-	//	SetPath(req.Path).
-	//	SetName(req.Name).
-	//	SetRedirect(req.Redirect).
-	//	SetComponent(req.Component).
-	//	SetOrderNo(req.OrderNo).
-	//	SetDisabled(req.Disabled).
-	//	// meta
-	//	SetTitle(req.Meta.Title).
-	//	SetIcon(req.Meta.Icon).
-	//	SetHideMenu(req.Meta.HideMenu).
-	//	SetHideBreadcrumb(req.Meta.HideBreadcrumb).
-	//	SetCurrentActiveMenu(req.Meta.CurrentActiveMenu).
-	//	SetIgnoreKeepAlive(req.Meta.IgnoreKeepAlive).
-	//	SetHideTab(req.Meta.HideTab).
-	//	SetFrameSrc(req.Meta.FrameSrc).
-	//	SetCarryParam(req.Meta.CarryParam).
-	//	SetHideChildrenInMenu(req.Meta.HideChildrenInMenu).
-	//	SetAffix(req.Meta.Affix).
-	//	SetDynamicLevel(req.Meta.DynamicLevel).
-	//	SetRealPath(req.Meta.RealPath).
-	//	Exec(m.ctx)
-	//
-	//if err != nil {
-	//	return errors.Wrap(err, "create menu failed")
-	//}
-	panic("implement me")
+	// get menu level
+	if menuReq.ParentID == 0 {
+		// it is a first level menu
+		menuReq.ParentID = 1
+		menuReq.Level = 1
+	} else {
+		// it is a children level menu
+		// get parent menu level
+		parent, err := m.db.Menu.Query().Where(menu2.IDEQ(menuReq.ParentID)).First(m.ctx)
+		if err != nil {
+			return errors.Wrap(err, "query menu failed")
+		}
+		// set menu level
+		menuReq.Level = parent.MenuLevel + 1
+	}
+
+	// create menu
+	err := m.db.Menu.Create().
+		SetMenuLevel(menuReq.Level).
+		SetMenuType(menuReq.MenuType).
+		SetParentID(menuReq.ParentID).
+		SetPath(menuReq.Path).
+		SetName(menuReq.Name).
+		SetRedirect(menuReq.Redirect).
+		SetComponent(menuReq.Component).
+		SetOrderNo(menuReq.OrderNo).
+		SetDisabled(menuReq.Disabled).
+		// meta
+		SetTitle(menuReq.Meta.Title).
+		SetIcon(menuReq.Meta.Icon).
+		SetHideMenu(menuReq.Meta.HideMenu).
+		SetHideBreadcrumb(menuReq.Meta.HideBreadcrumb).
+		SetCurrentActiveMenu(menuReq.Meta.CurrentActiveMenu).
+		SetIgnoreKeepAlive(menuReq.Meta.IgnoreKeepAlive).
+		SetHideTab(menuReq.Meta.HideTab).
+		SetFrameSrc(menuReq.Meta.FrameSrc).
+		SetCarryParam(menuReq.Meta.CarryParam).
+		SetHideChildrenInMenu(menuReq.Meta.HideChildrenInMenu).
+		SetAffix(menuReq.Meta.Affix).
+		SetDynamicLevel(menuReq.Meta.DynamicLevel).
+		SetRealPath(menuReq.Meta.RealPath).
+		Exec(m.ctx)
+
+	if err != nil {
+		return errors.Wrap(err, "create menu failed")
+	}
+	return nil
 }
 
 func (m Menu) Update(menuReq *do.MenuInfo) error {
-	//TODO implement me
-	panic("implement me")
+	// get menu level
+	if menuReq.ParentID == 0 {
+		// it is a first level menu
+		menuReq.ParentID = 1
+		menuReq.Level = 1
+	} else {
+		// it is a children level menu
+		// get parent menu level
+		parent, err := m.db.Menu.Query().Where(menu2.IDEQ(menuReq.ParentID)).First(m.ctx)
+		if err != nil {
+			return errors.Wrap(err, "query menu failed")
+		}
+		// set menu level
+		menuReq.Level = parent.MenuLevel + 1
+	}
+
+	// update menu
+	err := m.db.Menu.UpdateOneID(menuReq.ID).
+		SetMenuLevel(menuReq.Level).
+		SetMenuType(menuReq.MenuType).
+		SetParentID(menuReq.ParentID).
+		SetPath(menuReq.Path).
+		SetName(menuReq.Name).
+		SetRedirect(menuReq.Redirect).
+		SetComponent(menuReq.Component).
+		SetOrderNo(menuReq.OrderNo).
+		SetDisabled(menuReq.Disabled).
+		// meta
+		SetTitle(menuReq.Meta.Title).
+		SetIcon(menuReq.Meta.Icon).
+		SetHideMenu(menuReq.Meta.HideMenu).
+		SetHideBreadcrumb(menuReq.Meta.HideBreadcrumb).
+		SetCurrentActiveMenu(menuReq.Meta.CurrentActiveMenu).
+		SetIgnoreKeepAlive(menuReq.Meta.IgnoreKeepAlive).
+		SetHideTab(menuReq.Meta.HideTab).
+		SetFrameSrc(menuReq.Meta.FrameSrc).
+		SetCarryParam(menuReq.Meta.CarryParam).
+		SetHideChildrenInMenu(menuReq.Meta.HideChildrenInMenu).
+		SetAffix(menuReq.Meta.Affix).
+		SetDynamicLevel(menuReq.Meta.DynamicLevel).
+		SetRealPath(menuReq.Meta.RealPath).
+		Exec(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "update menu failed")
+	}
+
+	return nil
 }
 
-func (m Menu) Delete(id uint64) error {
-	//TODO implement me
-	panic("implement me")
+func (m Menu) Delete(id int64) error {
+
+	// find out the menu whether it has children
+	// if it has children, it can not be deleted
+	exist, err := m.db.Menu.Query().Where(menu2.ParentIDEQ(id)).Exist(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "query menu failed")
+	}
+	if exist {
+		return errors.New("menu has children, can not be deleted")
+	}
+
+	// delete menu
+	err = m.db.Menu.DeleteOneID(id).Exec(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "delete menu failed")
+	}
+	return nil
 }
 
-func (m Menu) ListByRole(roleID uint64) (list []*do.MenuInfoTree, total uint64, err error) {
+func (m Menu) ListByRole(roleID int64) (list []*do.MenuInfoTree, total int64, err error) {
 	//TODO implement me
 	menus, err := m.db.Role.Query().Where(role.IDEQ(roleID)).
 		QueryMenus().
@@ -95,30 +154,24 @@ func (m Menu) ListByRole(roleID uint64) (list []*do.MenuInfoTree, total uint64, 
 	}
 
 	list = findMenuChildren(menus, 1)
-
-	total = uint64(len(list))
+	total = int64(len(list))
 	return
-
 }
 
 func (m Menu) List(req *do.MenuListReq) (list []*do.MenuInfoTree, total int, err error) {
-
-	all, err := m.db.Menu.
-		Query().
-		Order(ent.Asc(menu2.FieldMenuLevel)).
-		WithChildren().
-		All(m.ctx)
+	// query menu list
+	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldOrderNo)).
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
-
+		return nil, 0, errors.Wrap(err, "query menu list failed")
 	}
-
-	hlog.Info(all)
-	hlog.Info(err)
-	panic("implement me")
+	list = findMenuChildren(menus, 1)
+	total, _ = m.db.Menu.Query().Count(m.ctx)
+	return
 }
 
 func (m Menu) CreateMenuParam(req *do.MenuParam) error {
-	//TODO implement me
 	// check menu whether exist
 	exist, err := m.db.Menu.Query().Where(menu2.IDEQ(req.MenuID)).Exist(m.ctx)
 	if err != nil {
@@ -165,7 +218,7 @@ func (m Menu) UpdateMenuParam(req *do.MenuParam) error {
 	return nil
 }
 
-func (m Menu) DeleteMenuParam(menuParamID uint64) error {
+func (m Menu) DeleteMenuParam(menuParamID int64) error {
 	// delete menu param
 	err := m.db.MenuParam.DeleteOneID(menuParamID).Exec(m.ctx)
 	if err != nil {
@@ -174,7 +227,7 @@ func (m Menu) DeleteMenuParam(menuParamID uint64) error {
 	return nil
 }
 
-func (m Menu) MenuParamListByMenuID(menuID uint64) (list []do.MenuParam, total uint64, err error) {
+func (m Menu) MenuParamListByMenuID(menuID int64) (list []do.MenuParam, total int64, err error) {
 	// query menu param list
 	params, err := m.db.Menu.Query().Where(menu2.IDEQ(menuID)).QueryParams().All(m.ctx)
 	if err != nil {
@@ -193,7 +246,7 @@ func (m Menu) MenuParamListByMenuID(menuID uint64) (list []do.MenuParam, total u
 		list = append(list, p)
 	}
 
-	total = uint64(len(list))
+	total = int64(len(list))
 	return
 }
 
@@ -207,7 +260,7 @@ func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
 	}
 }
 
-func findMenuChildren(data []*ent.Menu, parentID uint64) []*do.MenuInfoTree {
+func findMenuChildren(data []*ent.Menu, parentID int64) []*do.MenuInfoTree {
 	if data == nil {
 		return nil
 	}

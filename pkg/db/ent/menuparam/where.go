@@ -11,47 +11,47 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id uint64) predicate.MenuParam {
+func ID(id int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id uint64) predicate.MenuParam {
+func IDEQ(id int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id uint64) predicate.MenuParam {
+func IDNEQ(id int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...uint64) predicate.MenuParam {
+func IDIn(ids ...int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...uint64) predicate.MenuParam {
+func IDNotIn(ids ...int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id uint64) predicate.MenuParam {
+func IDGT(id int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id uint64) predicate.MenuParam {
+func IDGTE(id int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id uint64) predicate.MenuParam {
+func IDLT(id int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id uint64) predicate.MenuParam {
+func IDLTE(id int64) predicate.MenuParam {
 	return predicate.MenuParam(sql.FieldLTE(FieldID, id))
 }
 

@@ -34,7 +34,7 @@ func (d Dictionary) Create(req *do.DictionaryInfo) error {
 	_, err := d.db.Dictionary.Create().
 		SetTitle(req.Title).
 		SetName(req.Name).
-		SetStatus(uint8(req.Status)).
+		SetStatus(int8(req.Status)).
 		SetDescription(req.Description).
 		Save(d.ctx)
 	if err != nil {
@@ -53,7 +53,7 @@ func (d Dictionary) Update(req *do.DictionaryInfo) error {
 	_, err := d.db.Dictionary.UpdateOneID(req.ID).
 		SetTitle(req.Title).
 		SetName(req.Name).
-		SetStatus(uint8(req.Status)).
+		SetStatus(int8(req.Status)).
 		SetDescription(req.Description).
 		Save(d.ctx)
 	if err != nil {
@@ -62,7 +62,7 @@ func (d Dictionary) Update(req *do.DictionaryInfo) error {
 	return nil
 }
 
-func (d Dictionary) Delete(id uint64) error {
+func (d Dictionary) Delete(id int64) error {
 	// whether dictionary is exists
 	dict, err := d.db.Dictionary.Query().Where(dictionary.ID(id)).Only(d.ctx)
 	if err != nil {
@@ -115,7 +115,7 @@ func (d Dictionary) List(req *do.DictListReq) (list []*do.DictionaryInfo, total 
 			ID:          dict.ID,
 			Title:       dict.Title,
 			Name:        dict.Name,
-			Status:      uint64(dict.Status),
+			Status:      int64(dict.Status),
 			Description: dict.Description,
 			CreatedAt:   dict.CreatedAt.Format("2006-01-02 15:04:05"),
 			UpdatedAt:   dict.UpdatedAt.Format("2006-01-02 15:04:05"),
@@ -154,7 +154,7 @@ func (d Dictionary) CreateDetail(req *do.DictionaryDetail) error {
 		SetTitle(req.Title).
 		SetKey(req.Key).
 		SetValue(req.Value).
-		SetStatus(uint8(req.Status)).
+		SetStatus(int8(req.Status)).
 		Save(d.ctx)
 	if err != nil {
 		return errors.Wrap(err, "create DictionaryDetail failed")
@@ -178,7 +178,7 @@ func (d Dictionary) UpdateDetail(req *do.DictionaryDetail) error {
 		SetTitle(req.Title).
 		SetKey(req.Key).
 		SetValue(req.Value).
-		SetStatus(uint8(req.Status)).
+		SetStatus(int8(req.Status)).
 		Save(d.ctx)
 	if err != nil {
 		return errors.Wrap(err, "update DictionaryDetail failed")
@@ -189,7 +189,7 @@ func (d Dictionary) UpdateDetail(req *do.DictionaryDetail) error {
 	return nil
 }
 
-func (d Dictionary) DeleteDetail(id uint64) error {
+func (d Dictionary) DeleteDetail(id int64) error {
 	// query dictionary detail
 	detail, err := d.db.DictionaryDetail.Query().
 		Where(dictionarydetail.ID(id)).
@@ -211,7 +211,7 @@ func (d Dictionary) DeleteDetail(id uint64) error {
 	return nil
 }
 
-func (d Dictionary) DetailListByDictName(dictName string) (list []*do.DictionaryDetail, total uint64, err error) {
+func (d Dictionary) DetailListByDictName(dictName string) (list []*do.DictionaryDetail, total int64, err error) {
 	// query dictionary detail
 	details, err := d.db.DictionaryDetail.Query().
 		Where(dictionarydetail.HasDictionaryWith(dictionary.NameEQ(dictName))).
@@ -230,13 +230,13 @@ func (d Dictionary) DetailListByDictName(dictName string) (list []*do.Dictionary
 			Title:     detail.Title,
 			Key:       detail.Key,
 			Value:     detail.Value,
-			Status:    uint64(detail.Status),
+			Status:    int64(detail.Status),
 			CreatedAt: detail.CreatedAt.Format("2006-01-02 15:04:05"),
 			UpdatedAt: detail.UpdatedAt.Format("2006-01-02 15:04:05"),
 			ParentID:  detail.Edges.Dictionary.ID,
 		})
 	}
-	total = uint64(len(list))
+	total = int64(len(list))
 	return
 }
 
@@ -260,7 +260,7 @@ func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *do.Dic
 	detail.Title = dictDetail.Title
 	detail.Key = dictDetail.Key
 	detail.Value = dictDetail.Value
-	detail.Status = uint64(dictDetail.Status)
+	detail.Status = int64(dictDetail.Status)
 	detail.CreatedAt = dictDetail.CreatedAt.Format("2006-01-02 15:04:05")
 	detail.UpdatedAt = dictDetail.UpdatedAt.Format("2006-01-02 15:04:05")
 

@@ -50,15 +50,15 @@ func (rc *RoleCreate) SetNillableUpdatedAt(t *time.Time) *RoleCreate {
 }
 
 // SetStatus sets the "status" field.
-func (rc *RoleCreate) SetStatus(u uint8) *RoleCreate {
-	rc.mutation.SetStatus(u)
+func (rc *RoleCreate) SetStatus(i int8) *RoleCreate {
+	rc.mutation.SetStatus(i)
 	return rc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rc *RoleCreate) SetNillableStatus(u *uint8) *RoleCreate {
-	if u != nil {
-		rc.SetStatus(*u)
+func (rc *RoleCreate) SetNillableStatus(i *int8) *RoleCreate {
+	if i != nil {
+		rc.SetStatus(*i)
 	}
 	return rc
 }
@@ -104,34 +104,34 @@ func (rc *RoleCreate) SetNillableRemark(s *string) *RoleCreate {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (rc *RoleCreate) SetOrderNo(u uint32) *RoleCreate {
-	rc.mutation.SetOrderNo(u)
+func (rc *RoleCreate) SetOrderNo(i int32) *RoleCreate {
+	rc.mutation.SetOrderNo(i)
 	return rc
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (rc *RoleCreate) SetNillableOrderNo(u *uint32) *RoleCreate {
-	if u != nil {
-		rc.SetOrderNo(*u)
+func (rc *RoleCreate) SetNillableOrderNo(i *int32) *RoleCreate {
+	if i != nil {
+		rc.SetOrderNo(*i)
 	}
 	return rc
 }
 
 // SetID sets the "id" field.
-func (rc *RoleCreate) SetID(u uint64) *RoleCreate {
-	rc.mutation.SetID(u)
+func (rc *RoleCreate) SetID(i int64) *RoleCreate {
+	rc.mutation.SetID(i)
 	return rc
 }
 
 // AddMenuIDs adds the "menus" edge to the Menu entity by IDs.
-func (rc *RoleCreate) AddMenuIDs(ids ...uint64) *RoleCreate {
+func (rc *RoleCreate) AddMenuIDs(ids ...int64) *RoleCreate {
 	rc.mutation.AddMenuIDs(ids...)
 	return rc
 }
 
 // AddMenus adds the "menus" edges to the Menu entity.
 func (rc *RoleCreate) AddMenus(m ...*Menu) *RoleCreate {
-	ids := make([]uint64, len(m))
+	ids := make([]int64, len(m))
 	for i := range m {
 		ids[i] = m[i].ID
 	}
@@ -238,7 +238,7 @@ func (rc *RoleCreate) sqlSave(ctx context.Context) (*Role, error) {
 	}
 	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
-		_node.ID = uint64(id)
+		_node.ID = int64(id)
 	}
 	rc.mutation.id = &_node.ID
 	rc.mutation.done = true
@@ -248,7 +248,7 @@ func (rc *RoleCreate) sqlSave(ctx context.Context) (*Role, error) {
 func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Role{config: rc.config}
-		_spec = sqlgraph.NewCreateSpec(role.Table, sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64))
+		_spec = sqlgraph.NewCreateSpec(role.Table, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64))
 	)
 	if id, ok := rc.mutation.ID(); ok {
 		_node.ID = id
@@ -263,7 +263,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := rc.mutation.Status(); ok {
-		_spec.SetField(role.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(role.FieldStatus, field.TypeInt8, value)
 		_node.Status = value
 	}
 	if value, ok := rc.mutation.Name(); ok {
@@ -283,7 +283,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_node.Remark = value
 	}
 	if value, ok := rc.mutation.OrderNo(); ok {
-		_spec.SetField(role.FieldOrderNo, field.TypeUint32, value)
+		_spec.SetField(role.FieldOrderNo, field.TypeInt32, value)
 		_node.OrderNo = value
 	}
 	if nodes := rc.mutation.MenusIDs(); len(nodes) > 0 {
@@ -294,7 +294,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 			Columns: role.MenusPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -352,7 +352,7 @@ func (rcb *RoleCreateBulk) Save(ctx context.Context) ([]*Role, error) {
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = uint64(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

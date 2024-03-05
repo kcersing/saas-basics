@@ -9,6 +9,8 @@ import (
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
+	"saas/pkg/db/ent/logs"
+	"saas/pkg/db/ent/predicate"
 )
 
 type Logs struct {
@@ -50,8 +52,50 @@ func (l Logs) Create(logsReq *do.LogsInfo) error {
 }
 
 func (l Logs) List(req *do.LogsListReq) (list []*do.LogsInfo, total int, err error) {
-	//TODO implement me
-	panic("implement me")
+	var predicates []predicate.Logs
+	if req.Type != "" {
+		predicates = append(predicates, logs.TypeEQ(req.Type))
+	}
+	if req.Method != "" {
+		predicates = append(predicates, logs.MethodEQ(req.Method))
+	}
+	if req.Api != "" {
+		predicates = append(predicates, logs.APIContains(req.Api))
+	}
+	if req.Operator != "" {
+		predicates = append(predicates, logs.OperatorContains(req.Operator))
+	}
+	if req.Success != nil {
+		predicates = append(predicates, logs.SuccessEQ(*req.Success))
+	}
+	logsData, err := l.db.Logs.Query().Where(predicates...).
+		Offset(int((req.Page - 1) * req.Limit)).
+		Limit(int(req.Limit)).
+		Order(ent.Desc(logs.FieldCreatedAt)).All(l.ctx)
+	if err != nil {
+		return nil, 0, errors.Wrap(err, "query logsData list failed")
+	}
+	for _, v := range logsData {
+		list = append(list, &do.LogsInfo{
+			Type:        v.Type,
+			Method:      v.Method,
+			Api:         v.API,
+			Success:     v.Success,
+			ReqContent:  v.ReqContent,
+			RespContent: v.RespContent,
+			Ip:          v.IP,
+			UserAgent:   v.UserAgent,
+			Operator:    v.Operator,
+			Time:        int32(v.Time),
+			CreatedAt:   v.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdatedAt:   v.UpdatedAt.Format("2006-01-02 15:04:05"),
+		})
+	}
+	total, err = l.db.Logs.Query().Where(predicates...).Count(l.ctx)
+	if err != nil {
+		return nil, 0, errors.Wrap(err, "query logsData count failed")
+	}
+	return
 }
 
 func (l Logs) DeleteAll() error {

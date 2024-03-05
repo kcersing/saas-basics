@@ -50,15 +50,15 @@ func (dc *DictionaryCreate) SetNillableUpdatedAt(t *time.Time) *DictionaryCreate
 }
 
 // SetStatus sets the "status" field.
-func (dc *DictionaryCreate) SetStatus(u uint8) *DictionaryCreate {
-	dc.mutation.SetStatus(u)
+func (dc *DictionaryCreate) SetStatus(i int8) *DictionaryCreate {
+	dc.mutation.SetStatus(i)
 	return dc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (dc *DictionaryCreate) SetNillableStatus(u *uint8) *DictionaryCreate {
-	if u != nil {
-		dc.SetStatus(*u)
+func (dc *DictionaryCreate) SetNillableStatus(i *int8) *DictionaryCreate {
+	if i != nil {
+		dc.SetStatus(*i)
 	}
 	return dc
 }
@@ -82,20 +82,20 @@ func (dc *DictionaryCreate) SetDescription(s string) *DictionaryCreate {
 }
 
 // SetID sets the "id" field.
-func (dc *DictionaryCreate) SetID(u uint64) *DictionaryCreate {
-	dc.mutation.SetID(u)
+func (dc *DictionaryCreate) SetID(i int64) *DictionaryCreate {
+	dc.mutation.SetID(i)
 	return dc
 }
 
 // AddDictionaryDetailIDs adds the "dictionary_details" edge to the DictionaryDetail entity by IDs.
-func (dc *DictionaryCreate) AddDictionaryDetailIDs(ids ...uint64) *DictionaryCreate {
+func (dc *DictionaryCreate) AddDictionaryDetailIDs(ids ...int64) *DictionaryCreate {
 	dc.mutation.AddDictionaryDetailIDs(ids...)
 	return dc
 }
 
 // AddDictionaryDetails adds the "dictionary_details" edges to the DictionaryDetail entity.
 func (dc *DictionaryCreate) AddDictionaryDetails(d ...*DictionaryDetail) *DictionaryCreate {
-	ids := make([]uint64, len(d))
+	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -184,7 +184,7 @@ func (dc *DictionaryCreate) sqlSave(ctx context.Context) (*Dictionary, error) {
 	}
 	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
-		_node.ID = uint64(id)
+		_node.ID = int64(id)
 	}
 	dc.mutation.id = &_node.ID
 	dc.mutation.done = true
@@ -194,7 +194,7 @@ func (dc *DictionaryCreate) sqlSave(ctx context.Context) (*Dictionary, error) {
 func (dc *DictionaryCreate) createSpec() (*Dictionary, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Dictionary{config: dc.config}
-		_spec = sqlgraph.NewCreateSpec(dictionary.Table, sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeUint64))
+		_spec = sqlgraph.NewCreateSpec(dictionary.Table, sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64))
 	)
 	if id, ok := dc.mutation.ID(); ok {
 		_node.ID = id
@@ -209,7 +209,7 @@ func (dc *DictionaryCreate) createSpec() (*Dictionary, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := dc.mutation.Status(); ok {
-		_spec.SetField(dictionary.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(dictionary.FieldStatus, field.TypeInt8, value)
 		_node.Status = value
 	}
 	if value, ok := dc.mutation.Title(); ok {
@@ -232,7 +232,7 @@ func (dc *DictionaryCreate) createSpec() (*Dictionary, *sqlgraph.CreateSpec) {
 			Columns: []string{dictionary.DictionaryDetailsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -290,7 +290,7 @@ func (dcb *DictionaryCreateBulk) Save(ctx context.Context) ([]*Dictionary, error
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = uint64(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

@@ -52,7 +52,7 @@ func (l *Login) Login(username, password string) (res *do.LoginResp, err error) 
 	return res, err
 }
 
-func (l *Login) getRoleInfo(roleID uint64) (roleName, roleValue string, err error) {
+func (l *Login) getRoleInfo(roleID int64) (roleName, roleValue string, err error) {
 	v, exist := l.cache.Get("roleData" + strconv.Itoa(int(roleID)))
 	if exist {
 		roleName = v.(*ent.Role).Name

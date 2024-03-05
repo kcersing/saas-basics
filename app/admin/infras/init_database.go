@@ -753,11 +753,11 @@ func (I *InitDatabase) insertRoleMenuAuthorityData(ctx context.Context) error {
 		return errors.Wrap(err, "db failed")
 	}
 
-	var menuIDs []uint64
-	menuIDs = make([]uint64, count)
+	var menuIDs []int64
+	menuIDs = make([]int64, count)
 
 	for i := range menuIDs {
-		menuIDs[i] = uint64(i + 1)
+		menuIDs[i] = int64(i + 1)
 	}
 
 	err = I.DB.Role.Update().AddMenuIDs(menuIDs...).Exec(ctx)

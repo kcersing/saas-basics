@@ -11,7 +11,7 @@ import (
 var (
 	// SysApisColumns holds the columns for the "sys_apis" table.
 	SysApisColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "primary key"},
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "path", Type: field.TypeString, Comment: "API path | API 路径"},
@@ -34,10 +34,10 @@ var (
 	}
 	// SysDictionariesColumns holds the columns for the "sys_dictionaries" table.
 	SysDictionariesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "primary key"},
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "status 1 normal 0 ban | 状态 1 正常 0 禁用", Default: 1},
+		{Name: "status", Type: field.TypeInt8, Nullable: true, Comment: "status 1 normal 0 ban | 状态 1 正常 0 禁用", Default: 1},
 		{Name: "title", Type: field.TypeString, Comment: "the title shown in the ui | 展示名称 （建议配合i18n）"},
 		{Name: "name", Type: field.TypeString, Unique: true, Comment: "the name of dictionary for search | 字典搜索名称"},
 		{Name: "description", Type: field.TypeString, Comment: "the description of dictionary | 字典描述"},
@@ -50,14 +50,14 @@ var (
 	}
 	// SysDictionaryDetailsColumns holds the columns for the "sys_dictionary_details" table.
 	SysDictionaryDetailsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "primary key"},
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "status 1 normal 0 ban | 状态 1 正常 0 禁用", Default: 1},
+		{Name: "status", Type: field.TypeInt8, Nullable: true, Comment: "status 1 normal 0 ban | 状态 1 正常 0 禁用", Default: 1},
 		{Name: "title", Type: field.TypeString, Comment: "the title shown in the ui | 展示名称 （建议配合i18n）"},
 		{Name: "key", Type: field.TypeString, Comment: "key | 键"},
 		{Name: "value", Type: field.TypeString, Comment: "value | 值"},
-		{Name: "dictionary_id", Type: field.TypeUint64, Nullable: true, Comment: "Dictionary ID | 字典ID"},
+		{Name: "dictionary_id", Type: field.TypeInt64, Nullable: true, Comment: "Dictionary ID | 字典ID"},
 	}
 	// SysDictionaryDetailsTable holds the schema information for the "sys_dictionary_details" table.
 	SysDictionaryDetailsTable = &schema.Table{
@@ -82,7 +82,7 @@ var (
 	}
 	// SysLogsColumns holds the columns for the "sys_logs" table.
 	SysLogsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "primary key"},
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "type", Type: field.TypeString, Comment: "type of log | 日志类型"},
@@ -111,16 +111,16 @@ var (
 	}
 	// SysMenusColumns holds the columns for the "sys_menus" table.
 	SysMenusColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "primary key"},
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "menu_level", Type: field.TypeUint32, Comment: "menu level | 菜单层级"},
-		{Name: "menu_type", Type: field.TypeUint32, Comment: "menu type | 菜单类型 0 目录 1 菜单 2 按钮"},
+		{Name: "menu_level", Type: field.TypeInt32, Comment: "menu level | 菜单层级"},
+		{Name: "menu_type", Type: field.TypeInt32, Comment: "menu type | 菜单类型 0 目录 1 菜单 2 按钮"},
 		{Name: "path", Type: field.TypeString, Nullable: true, Comment: "index path | 菜单路由路径", Default: ""},
 		{Name: "name", Type: field.TypeString, Comment: "index name | 菜单名称"},
 		{Name: "redirect", Type: field.TypeString, Nullable: true, Comment: "redirect path | 跳转路径 （外链）", Default: ""},
 		{Name: "component", Type: field.TypeString, Nullable: true, Comment: "the path of vue file | 组件路径", Default: ""},
-		{Name: "order_no", Type: field.TypeUint32, Comment: "sorting numbers | 排序编号", Default: 0},
+		{Name: "order_no", Type: field.TypeInt32, Comment: "sorting numbers | 排序编号", Default: 0},
 		{Name: "disabled", Type: field.TypeBool, Nullable: true, Comment: "disable status | 是否停用", Default: false},
 		{Name: "title", Type: field.TypeString, Comment: "menu name | 菜单显示标题"},
 		{Name: "icon", Type: field.TypeString, Comment: "menu icon | 菜单图标"},
@@ -133,9 +133,9 @@ var (
 		{Name: "carry_param", Type: field.TypeBool, Nullable: true, Comment: "the route carries parameters or not | 携带参数", Default: false},
 		{Name: "hide_children_in_menu", Type: field.TypeBool, Nullable: true, Comment: "hide children menu or not | 隐藏所有子菜单", Default: false},
 		{Name: "affix", Type: field.TypeBool, Nullable: true, Comment: "affix tab | Tab 固定", Default: false},
-		{Name: "dynamic_level", Type: field.TypeUint32, Nullable: true, Comment: "the maximum number of pages the router can open | 能打开的子TAB数", Default: 20},
+		{Name: "dynamic_level", Type: field.TypeInt32, Nullable: true, Comment: "the maximum number of pages the router can open | 能打开的子TAB数", Default: 20},
 		{Name: "real_path", Type: field.TypeString, Nullable: true, Comment: "the real path of the route without dynamic part | 菜单路由不包含参数部分", Default: ""},
-		{Name: "parent_id", Type: field.TypeUint64, Nullable: true, Comment: "parent menu ID | 父菜单ID"},
+		{Name: "parent_id", Type: field.TypeInt64, Nullable: true, Comment: "parent menu ID | 父菜单ID"},
 	}
 	// SysMenusTable holds the schema information for the "sys_menus" table.
 	SysMenusTable = &schema.Table{
@@ -153,13 +153,13 @@ var (
 	}
 	// SysMenuParamsColumns holds the columns for the "sys_menu_params" table.
 	SysMenuParamsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "primary key"},
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "type", Type: field.TypeString, Comment: "pass parameters via params or query | 参数类型"},
 		{Name: "key", Type: field.TypeString, Comment: "the key of parameters | 参数键"},
 		{Name: "value", Type: field.TypeString, Comment: "the value of parameters | 参数值"},
-		{Name: "menu_params", Type: field.TypeUint64, Nullable: true},
+		{Name: "menu_params", Type: field.TypeInt64, Nullable: true},
 	}
 	// SysMenuParamsTable holds the schema information for the "sys_menu_params" table.
 	SysMenuParamsTable = &schema.Table{
@@ -177,15 +177,15 @@ var (
 	}
 	// SysRolesColumns holds the columns for the "sys_roles" table.
 	SysRolesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "primary key"},
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "status 1 normal 0 ban | 状态 1 正常 0 禁用", Default: 1},
+		{Name: "status", Type: field.TypeInt8, Nullable: true, Comment: "status 1 normal 0 ban | 状态 1 正常 0 禁用", Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "role name | 角色名"},
 		{Name: "value", Type: field.TypeString, Unique: true, Comment: "role value for permission control in front end | 角色值，用于前端权限控制"},
 		{Name: "default_router", Type: field.TypeString, Comment: "default menu : dashboard | 默认登录页面", Default: "dashboard"},
 		{Name: "remark", Type: field.TypeString, Comment: "remark | 备注", Default: ""},
-		{Name: "order_no", Type: field.TypeUint32, Comment: "order number | 排序编号", Default: 0},
+		{Name: "order_no", Type: field.TypeInt32, Comment: "order number | 排序编号", Default: 0},
 	}
 	// SysRolesTable holds the schema information for the "sys_roles" table.
 	SysRolesTable = &schema.Table{
@@ -195,14 +195,14 @@ var (
 	}
 	// SysTokensColumns holds the columns for the "sys_tokens" table.
 	SysTokensColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "user_id", Type: field.TypeUint64, Unique: true, Comment: " User's ID | 用户的ID"},
+		{Name: "user_id", Type: field.TypeInt64, Unique: true, Comment: " User's ID | 用户的ID"},
 		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
 		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
 		{Name: "expired_at", Type: field.TypeTime, Comment: " Expire time | 过期时间"},
-		{Name: "user_token", Type: field.TypeUint64, Unique: true, Nullable: true},
+		{Name: "user_token", Type: field.TypeInt64, Unique: true, Nullable: true},
 	}
 	// SysTokensTable holds the schema information for the "sys_tokens" table.
 	SysTokensTable = &schema.Table{
@@ -232,17 +232,17 @@ var (
 	}
 	// SysUsersColumns holds the columns for the "sys_users" table.
 	SysUsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "primary key"},
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "status 1 normal 0 ban | 状态 1 正常 0 禁用", Default: 1},
+		{Name: "status", Type: field.TypeInt8, Nullable: true, Comment: "status 1 normal 0 ban | 状态 1 正常 0 禁用", Default: 1},
 		{Name: "username", Type: field.TypeString, Unique: true, Comment: "user's login name | 登录名"},
 		{Name: "password", Type: field.TypeString, Comment: "password | 密码"},
 		{Name: "nickname", Type: field.TypeString, Unique: true, Comment: "nickname | 昵称"},
 		{Name: "side_mode", Type: field.TypeString, Nullable: true, Comment: "template mode | 布局方式", Default: "dark"},
 		{Name: "base_color", Type: field.TypeString, Nullable: true, Comment: "base color of template | 后台页面色调", Default: "#fff"},
 		{Name: "active_color", Type: field.TypeString, Nullable: true, Comment: "active color of template | 当前激活的颜色设定", Default: "#1890ff"},
-		{Name: "role_id", Type: field.TypeUint64, Nullable: true, Comment: "role id | 角色ID", Default: 2},
+		{Name: "role_id", Type: field.TypeInt64, Nullable: true, Comment: "role id | 角色ID", Default: 2},
 		{Name: "mobile", Type: field.TypeString, Unique: true, Comment: "mobile number | 手机号"},
 		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "email | 邮箱号"},
 		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
@@ -263,8 +263,8 @@ var (
 	}
 	// RoleMenusColumns holds the columns for the "role_menus" table.
 	RoleMenusColumns = []*schema.Column{
-		{Name: "role_id", Type: field.TypeUint64},
-		{Name: "menu_id", Type: field.TypeUint64},
+		{Name: "role_id", Type: field.TypeInt64},
+		{Name: "menu_id", Type: field.TypeInt64},
 	}
 	// RoleMenusTable holds the schema information for the "role_menus" table.
 	RoleMenusTable = &schema.Table{

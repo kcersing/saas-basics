@@ -78,13 +78,13 @@ func (mpu *MenuParamUpdate) SetNillableValue(s *string) *MenuParamUpdate {
 }
 
 // SetMenusID sets the "menus" edge to the Menu entity by ID.
-func (mpu *MenuParamUpdate) SetMenusID(id uint64) *MenuParamUpdate {
+func (mpu *MenuParamUpdate) SetMenusID(id int64) *MenuParamUpdate {
 	mpu.mutation.SetMenusID(id)
 	return mpu
 }
 
 // SetNillableMenusID sets the "menus" edge to the Menu entity by ID if the given value is not nil.
-func (mpu *MenuParamUpdate) SetNillableMenusID(id *uint64) *MenuParamUpdate {
+func (mpu *MenuParamUpdate) SetNillableMenusID(id *int64) *MenuParamUpdate {
 	if id != nil {
 		mpu = mpu.SetMenusID(*id)
 	}
@@ -144,7 +144,7 @@ func (mpu *MenuParamUpdate) defaults() {
 }
 
 func (mpu *MenuParamUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(menuparam.Table, menuparam.Columns, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(menuparam.Table, menuparam.Columns, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64))
 	if ps := mpu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -172,7 +172,7 @@ func (mpu *MenuParamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menuparam.MenusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -185,7 +185,7 @@ func (mpu *MenuParamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{menuparam.MenusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -262,13 +262,13 @@ func (mpuo *MenuParamUpdateOne) SetNillableValue(s *string) *MenuParamUpdateOne 
 }
 
 // SetMenusID sets the "menus" edge to the Menu entity by ID.
-func (mpuo *MenuParamUpdateOne) SetMenusID(id uint64) *MenuParamUpdateOne {
+func (mpuo *MenuParamUpdateOne) SetMenusID(id int64) *MenuParamUpdateOne {
 	mpuo.mutation.SetMenusID(id)
 	return mpuo
 }
 
 // SetNillableMenusID sets the "menus" edge to the Menu entity by ID if the given value is not nil.
-func (mpuo *MenuParamUpdateOne) SetNillableMenusID(id *uint64) *MenuParamUpdateOne {
+func (mpuo *MenuParamUpdateOne) SetNillableMenusID(id *int64) *MenuParamUpdateOne {
 	if id != nil {
 		mpuo = mpuo.SetMenusID(*id)
 	}
@@ -341,7 +341,7 @@ func (mpuo *MenuParamUpdateOne) defaults() {
 }
 
 func (mpuo *MenuParamUpdateOne) sqlSave(ctx context.Context) (_node *MenuParam, err error) {
-	_spec := sqlgraph.NewUpdateSpec(menuparam.Table, menuparam.Columns, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(menuparam.Table, menuparam.Columns, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64))
 	id, ok := mpuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "MenuParam.id" for update`)}
@@ -386,7 +386,7 @@ func (mpuo *MenuParamUpdateOne) sqlSave(ctx context.Context) (_node *MenuParam, 
 			Columns: []string{menuparam.MenusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -399,7 +399,7 @@ func (mpuo *MenuParamUpdateOne) sqlSave(ctx context.Context) (_node *MenuParam, 
 			Columns: []string{menuparam.MenusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

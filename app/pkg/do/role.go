@@ -3,25 +3,25 @@ package do
 type Role interface {
 	Create(req RoleInfo) error
 	Update(req RoleInfo) error
-	Delete(id uint64) error
-	RoleInfoByID(ID uint64) (roleInfo *RoleInfo, err error)
+	Delete(id int64) error
+	RoleInfoByID(ID int64) (roleInfo *RoleInfo, err error)
 	List(req *RoleListReq) (roleInfoList []*RoleInfo, total int, err error)
-	UpdateStatus(ID uint64, status uint8) error
+	UpdateStatus(ID int64, status int8) error
 }
 
 type RoleInfo struct {
-	ID            uint64
-	Name          string
-	Value         string
-	DefaultRouter string
-	Status        uint64
-	Remark        string
-	OrderNo       uint32
-	CreatedAt     string
-	UpdatedAt     string
+	ID            int64  `json:"id,omitempty"`
+	Name          string `json:"name,omitempty"`
+	Value         string `json:"value,omitempty"`
+	DefaultRouter string `json:"defaultRouter,omitempty"`
+	Status        int64  `json:"status,omitempty"`
+	Remark        string `json:"remark,omitempty"`
+	OrderNo       int32  `json:"orderNo,omitempty"`
+	CreatedAt     string `json:"createdAt,omitempty"`
+	UpdatedAt     string `json:"updatedAt,omitempty"`
 }
 
 type RoleListReq struct {
-	Page     uint64
-	PageSize uint64
+	Page     int64 `json:"page,omitempty"`
+	PageSize int64 `json:"pageSize,omitempty"`
 }

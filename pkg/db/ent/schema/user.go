@@ -23,7 +23,7 @@ func (User) Fields() []ent.Field {
 		field.String("side_mode").Optional().Default("dark").Comment("template mode | 布局方式"),
 		field.String("base_color").Optional().Default("#fff").Comment("base color of template | 后台页面色调"),
 		field.String("active_color").Optional().Default("#1890ff").Comment("active color of template | 当前激活的颜色设定"),
-		field.Uint64("role_id").Optional().Default(2).Comment("role id | 角色ID"),
+		field.Int64("role_id").Optional().Default(2).Comment("role id | 角色ID"),
 		field.String("mobile").Unique().Comment("mobile number | 手机号"),
 		field.String("email").Optional().Comment("email | 邮箱号"),
 		field.String("wecom").Optional().Comment("wecom | 微信号"),

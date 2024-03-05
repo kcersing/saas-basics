@@ -20,14 +20,14 @@ func BuildBaseResp(err error) *base.BaseResponse {
 
 func baseResp(err errno.ErrNo) *base.BaseResponse {
 	return &base.BaseResponse{
-		StatusCode: err.ErrCode,
-		StatusMsg:  err.ErrMsg,
+		Code:    err.ErrCode,
+		Message: err.ErrMsg,
 	}
 }
 
 func ParseBaseResp(resp *base.BaseResponse) error {
-	if resp.StatusCode == errno.Success.ErrCode {
+	if resp.Code == errno.Success.ErrCode {
 		return nil
 	}
-	return errno.NewErrNo(resp.StatusCode, resp.StatusMsg)
+	return errno.NewErrNo(resp.Code, resp.Message)
 }

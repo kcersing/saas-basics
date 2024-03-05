@@ -78,13 +78,13 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus uint8
+	DefaultStatus int8
 	// DefaultDefaultRouter holds the default value on creation for the "default_router" field.
 	DefaultDefaultRouter string
 	// DefaultRemark holds the default value on creation for the "remark" field.
 	DefaultRemark string
 	// DefaultOrderNo holds the default value on creation for the "order_no" field.
-	DefaultOrderNo uint32
+	DefaultOrderNo int32
 )
 
 // OrderOption defines the ordering options for the Role queries.

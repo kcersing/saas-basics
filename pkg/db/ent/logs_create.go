@@ -157,8 +157,8 @@ func (lc *LogsCreate) SetNillableTime(i *int) *LogsCreate {
 }
 
 // SetID sets the "id" field.
-func (lc *LogsCreate) SetID(u uint64) *LogsCreate {
-	lc.mutation.SetID(u)
+func (lc *LogsCreate) SetID(i int64) *LogsCreate {
+	lc.mutation.SetID(i)
 	return lc
 }
 
@@ -243,7 +243,7 @@ func (lc *LogsCreate) sqlSave(ctx context.Context) (*Logs, error) {
 	}
 	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
-		_node.ID = uint64(id)
+		_node.ID = int64(id)
 	}
 	lc.mutation.id = &_node.ID
 	lc.mutation.done = true
@@ -253,7 +253,7 @@ func (lc *LogsCreate) sqlSave(ctx context.Context) (*Logs, error) {
 func (lc *LogsCreate) createSpec() (*Logs, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Logs{config: lc.config}
-		_spec = sqlgraph.NewCreateSpec(logs.Table, sqlgraph.NewFieldSpec(logs.FieldID, field.TypeUint64))
+		_spec = sqlgraph.NewCreateSpec(logs.Table, sqlgraph.NewFieldSpec(logs.FieldID, field.TypeInt64))
 	)
 	if id, ok := lc.mutation.ID(); ok {
 		_node.ID = id
@@ -357,7 +357,7 @@ func (lcb *LogsCreateBulk) Save(ctx context.Context) ([]*Logs, error) {
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = uint64(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

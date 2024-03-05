@@ -15,14 +15,14 @@ type Menu struct {
 
 func (Menu) Fields() []ent.Field {
 	return []ent.Field{
-		field.Uint64("parent_id").Optional().Comment("parent menu ID | 父菜单ID"),
-		field.Uint32("menu_level").Comment("menu level | 菜单层级"),
-		field.Uint32("menu_type").Comment("menu type | 菜单类型 0 目录 1 菜单 2 按钮"),
+		field.Int64("parent_id").Optional().Comment("parent menu ID | 父菜单ID"),
+		field.Int32("menu_level").Comment("menu level | 菜单层级"),
+		field.Int32("menu_type").Comment("menu type | 菜单类型 0 目录 1 菜单 2 按钮"),
 		field.String("path").Optional().Default("").Comment("index path | 菜单路由路径"),
 		field.String("name").Comment("index name | 菜单名称"),
 		field.String("redirect").Optional().Default("").Comment("redirect path | 跳转路径 （外链）"),
 		field.String("component").Optional().Default("").Comment("the path of vue file | 组件路径"),
-		field.Uint32("order_no").Default(0).Comment("sorting numbers | 排序编号"),
+		field.Int32("order_no").Default(0).Comment("sorting numbers | 排序编号"),
 		field.Bool("disabled").Optional().Default(false).Comment("disable status | 是否停用"),
 		// meta
 		field.String("title").Comment("menu name | 菜单显示标题"),
@@ -36,7 +36,7 @@ func (Menu) Fields() []ent.Field {
 		field.Bool("carry_param").Optional().Default(false).Comment("the route carries parameters or not | 携带参数"),
 		field.Bool("hide_children_in_menu").Optional().Default(false).Comment("hide children menu or not | 隐藏所有子菜单"),
 		field.Bool("affix").Optional().Default(false).Comment("affix tab | Tab 固定"),
-		field.Uint32("dynamic_level").Optional().Default(20).Comment("the maximum number of pages the router can open | 能打开的子TAB数"),
+		field.Int32("dynamic_level").Optional().Default(20).Comment("the maximum number of pages the router can open | 能打开的子TAB数"),
 		field.String("real_path").Optional().Default("").Comment("the real path of the route without dynamic part | 菜单路由不包含参数部分"),
 	}
 }

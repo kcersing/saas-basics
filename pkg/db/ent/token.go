@@ -17,13 +17,13 @@ import (
 type Token struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID uint64 `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// created time
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	//  User's ID | 用户的ID
-	UserID uint64 `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 	// Token string | Token 字符串
 	Token string `json:"token,omitempty"`
 	// Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）
@@ -33,7 +33,7 @@ type Token struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TokenQuery when eager-loading is set.
 	Edges        TokenEdges `json:"edges"`
-	user_token   *uint64
+	user_token   *int64
 	selectValues sql.SelectValues
 }
 
@@ -92,7 +92,7 @@ func (t *Token) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			t.ID = uint64(value.Int64)
+			t.ID = int64(value.Int64)
 		case token.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -109,7 +109,7 @@ func (t *Token) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				t.UserID = uint64(value.Int64)
+				t.UserID = value.Int64
 			}
 		case token.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -133,8 +133,8 @@ func (t *Token) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field user_token", value)
 			} else if value.Valid {
-				t.user_token = new(uint64)
-				*t.user_token = uint64(value.Int64)
+				t.user_token = new(int64)
+				*t.user_token = int64(value.Int64)
 			}
 		default:
 			t.selectValues.Set(columns[i], values[i])

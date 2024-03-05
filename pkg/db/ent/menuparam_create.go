@@ -68,19 +68,19 @@ func (mpc *MenuParamCreate) SetValue(s string) *MenuParamCreate {
 }
 
 // SetID sets the "id" field.
-func (mpc *MenuParamCreate) SetID(u uint64) *MenuParamCreate {
-	mpc.mutation.SetID(u)
+func (mpc *MenuParamCreate) SetID(i int64) *MenuParamCreate {
+	mpc.mutation.SetID(i)
 	return mpc
 }
 
 // SetMenusID sets the "menus" edge to the Menu entity by ID.
-func (mpc *MenuParamCreate) SetMenusID(id uint64) *MenuParamCreate {
+func (mpc *MenuParamCreate) SetMenusID(id int64) *MenuParamCreate {
 	mpc.mutation.SetMenusID(id)
 	return mpc
 }
 
 // SetNillableMenusID sets the "menus" edge to the Menu entity by ID if the given value is not nil.
-func (mpc *MenuParamCreate) SetNillableMenusID(id *uint64) *MenuParamCreate {
+func (mpc *MenuParamCreate) SetNillableMenusID(id *int64) *MenuParamCreate {
 	if id != nil {
 		mpc = mpc.SetMenusID(*id)
 	}
@@ -170,7 +170,7 @@ func (mpc *MenuParamCreate) sqlSave(ctx context.Context) (*MenuParam, error) {
 	}
 	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
-		_node.ID = uint64(id)
+		_node.ID = int64(id)
 	}
 	mpc.mutation.id = &_node.ID
 	mpc.mutation.done = true
@@ -180,7 +180,7 @@ func (mpc *MenuParamCreate) sqlSave(ctx context.Context) (*MenuParam, error) {
 func (mpc *MenuParamCreate) createSpec() (*MenuParam, *sqlgraph.CreateSpec) {
 	var (
 		_node = &MenuParam{config: mpc.config}
-		_spec = sqlgraph.NewCreateSpec(menuparam.Table, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeUint64))
+		_spec = sqlgraph.NewCreateSpec(menuparam.Table, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64))
 	)
 	if id, ok := mpc.mutation.ID(); ok {
 		_node.ID = id
@@ -214,7 +214,7 @@ func (mpc *MenuParamCreate) createSpec() (*MenuParam, *sqlgraph.CreateSpec) {
 			Columns: []string{menuparam.MenusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -273,7 +273,7 @@ func (mpcb *MenuParamCreateBulk) Save(ctx context.Context) ([]*MenuParam, error)
 				mutation.id = &nodes[i].ID
 				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = uint64(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

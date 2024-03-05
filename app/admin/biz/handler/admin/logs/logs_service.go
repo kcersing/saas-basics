@@ -4,6 +4,11 @@ package logs
 
 import (
 	"context"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"saas/app/pkg/service/admin"
+	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -22,9 +27,33 @@ func GetLogsList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	page, _ := strconv.Atoi(req.Page)
+	limit, _ := strconv.Atoi(req.Limit)
+	var logsListReq do.LogsListReq
+	logsListReq.Page = int64(page)
+	logsListReq.Limit = int64(limit)
+	logsListReq.Type = req.Type
+	logsListReq.Api = req.API
+	logsListReq.Method = req.Method
+	logsListReq.Operator = req.Operators
+	switch req.Success {
+	case "true":
+		success := true
+		logsListReq.Success = &success
+	case "false":
+		success := false
+		logsListReq.Success = &success
+	default:
+		logsListReq.Success = nil
+	}
+	logsList, total, err := admin.NewLogs(ctx, c).List(&logsListReq)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, logsList, int64(total), "")
+	return
 }
 
 // DeleteLogs .

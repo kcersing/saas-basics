@@ -36,23 +36,23 @@ func (ddu *DictionaryDetailUpdate) SetUpdatedAt(t time.Time) *DictionaryDetailUp
 }
 
 // SetStatus sets the "status" field.
-func (ddu *DictionaryDetailUpdate) SetStatus(u uint8) *DictionaryDetailUpdate {
+func (ddu *DictionaryDetailUpdate) SetStatus(i int8) *DictionaryDetailUpdate {
 	ddu.mutation.ResetStatus()
-	ddu.mutation.SetStatus(u)
+	ddu.mutation.SetStatus(i)
 	return ddu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ddu *DictionaryDetailUpdate) SetNillableStatus(u *uint8) *DictionaryDetailUpdate {
-	if u != nil {
-		ddu.SetStatus(*u)
+func (ddu *DictionaryDetailUpdate) SetNillableStatus(i *int8) *DictionaryDetailUpdate {
+	if i != nil {
+		ddu.SetStatus(*i)
 	}
 	return ddu
 }
 
-// AddStatus adds u to the "status" field.
-func (ddu *DictionaryDetailUpdate) AddStatus(u int8) *DictionaryDetailUpdate {
-	ddu.mutation.AddStatus(u)
+// AddStatus adds i to the "status" field.
+func (ddu *DictionaryDetailUpdate) AddStatus(i int8) *DictionaryDetailUpdate {
+	ddu.mutation.AddStatus(i)
 	return ddu
 }
 
@@ -105,15 +105,15 @@ func (ddu *DictionaryDetailUpdate) SetNillableValue(s *string) *DictionaryDetail
 }
 
 // SetDictionaryID sets the "dictionary_id" field.
-func (ddu *DictionaryDetailUpdate) SetDictionaryID(u uint64) *DictionaryDetailUpdate {
-	ddu.mutation.SetDictionaryID(u)
+func (ddu *DictionaryDetailUpdate) SetDictionaryID(i int64) *DictionaryDetailUpdate {
+	ddu.mutation.SetDictionaryID(i)
 	return ddu
 }
 
 // SetNillableDictionaryID sets the "dictionary_id" field if the given value is not nil.
-func (ddu *DictionaryDetailUpdate) SetNillableDictionaryID(u *uint64) *DictionaryDetailUpdate {
-	if u != nil {
-		ddu.SetDictionaryID(*u)
+func (ddu *DictionaryDetailUpdate) SetNillableDictionaryID(i *int64) *DictionaryDetailUpdate {
+	if i != nil {
+		ddu.SetDictionaryID(*i)
 	}
 	return ddu
 }
@@ -177,7 +177,7 @@ func (ddu *DictionaryDetailUpdate) defaults() {
 }
 
 func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(dictionarydetail.Table, dictionarydetail.Columns, sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(dictionarydetail.Table, dictionarydetail.Columns, sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64))
 	if ps := ddu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -189,13 +189,13 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 		_spec.SetField(dictionarydetail.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := ddu.mutation.Status(); ok {
-		_spec.SetField(dictionarydetail.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt8, value)
 	}
 	if value, ok := ddu.mutation.AddedStatus(); ok {
-		_spec.AddField(dictionarydetail.FieldStatus, field.TypeUint8, value)
+		_spec.AddField(dictionarydetail.FieldStatus, field.TypeInt8, value)
 	}
 	if ddu.mutation.StatusCleared() {
-		_spec.ClearField(dictionarydetail.FieldStatus, field.TypeUint8)
+		_spec.ClearField(dictionarydetail.FieldStatus, field.TypeInt8)
 	}
 	if value, ok := ddu.mutation.Title(); ok {
 		_spec.SetField(dictionarydetail.FieldTitle, field.TypeString, value)
@@ -214,7 +214,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{dictionarydetail.DictionaryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -227,7 +227,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{dictionarydetail.DictionaryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -262,23 +262,23 @@ func (dduo *DictionaryDetailUpdateOne) SetUpdatedAt(t time.Time) *DictionaryDeta
 }
 
 // SetStatus sets the "status" field.
-func (dduo *DictionaryDetailUpdateOne) SetStatus(u uint8) *DictionaryDetailUpdateOne {
+func (dduo *DictionaryDetailUpdateOne) SetStatus(i int8) *DictionaryDetailUpdateOne {
 	dduo.mutation.ResetStatus()
-	dduo.mutation.SetStatus(u)
+	dduo.mutation.SetStatus(i)
 	return dduo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (dduo *DictionaryDetailUpdateOne) SetNillableStatus(u *uint8) *DictionaryDetailUpdateOne {
-	if u != nil {
-		dduo.SetStatus(*u)
+func (dduo *DictionaryDetailUpdateOne) SetNillableStatus(i *int8) *DictionaryDetailUpdateOne {
+	if i != nil {
+		dduo.SetStatus(*i)
 	}
 	return dduo
 }
 
-// AddStatus adds u to the "status" field.
-func (dduo *DictionaryDetailUpdateOne) AddStatus(u int8) *DictionaryDetailUpdateOne {
-	dduo.mutation.AddStatus(u)
+// AddStatus adds i to the "status" field.
+func (dduo *DictionaryDetailUpdateOne) AddStatus(i int8) *DictionaryDetailUpdateOne {
+	dduo.mutation.AddStatus(i)
 	return dduo
 }
 
@@ -331,15 +331,15 @@ func (dduo *DictionaryDetailUpdateOne) SetNillableValue(s *string) *DictionaryDe
 }
 
 // SetDictionaryID sets the "dictionary_id" field.
-func (dduo *DictionaryDetailUpdateOne) SetDictionaryID(u uint64) *DictionaryDetailUpdateOne {
-	dduo.mutation.SetDictionaryID(u)
+func (dduo *DictionaryDetailUpdateOne) SetDictionaryID(i int64) *DictionaryDetailUpdateOne {
+	dduo.mutation.SetDictionaryID(i)
 	return dduo
 }
 
 // SetNillableDictionaryID sets the "dictionary_id" field if the given value is not nil.
-func (dduo *DictionaryDetailUpdateOne) SetNillableDictionaryID(u *uint64) *DictionaryDetailUpdateOne {
-	if u != nil {
-		dduo.SetDictionaryID(*u)
+func (dduo *DictionaryDetailUpdateOne) SetNillableDictionaryID(i *int64) *DictionaryDetailUpdateOne {
+	if i != nil {
+		dduo.SetDictionaryID(*i)
 	}
 	return dduo
 }
@@ -416,7 +416,7 @@ func (dduo *DictionaryDetailUpdateOne) defaults() {
 }
 
 func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *DictionaryDetail, err error) {
-	_spec := sqlgraph.NewUpdateSpec(dictionarydetail.Table, dictionarydetail.Columns, sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeUint64))
+	_spec := sqlgraph.NewUpdateSpec(dictionarydetail.Table, dictionarydetail.Columns, sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64))
 	id, ok := dduo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "DictionaryDetail.id" for update`)}
@@ -445,13 +445,13 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 		_spec.SetField(dictionarydetail.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := dduo.mutation.Status(); ok {
-		_spec.SetField(dictionarydetail.FieldStatus, field.TypeUint8, value)
+		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt8, value)
 	}
 	if value, ok := dduo.mutation.AddedStatus(); ok {
-		_spec.AddField(dictionarydetail.FieldStatus, field.TypeUint8, value)
+		_spec.AddField(dictionarydetail.FieldStatus, field.TypeInt8, value)
 	}
 	if dduo.mutation.StatusCleared() {
-		_spec.ClearField(dictionarydetail.FieldStatus, field.TypeUint8)
+		_spec.ClearField(dictionarydetail.FieldStatus, field.TypeInt8)
 	}
 	if value, ok := dduo.mutation.Title(); ok {
 		_spec.SetField(dictionarydetail.FieldTitle, field.TypeString, value)
@@ -470,7 +470,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 			Columns: []string{dictionarydetail.DictionaryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -483,7 +483,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 			Columns: []string{dictionarydetail.DictionaryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeUint64),
+				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

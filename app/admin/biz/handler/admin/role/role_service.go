@@ -4,11 +4,14 @@ package role
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	role "saas/app/admin/idl_gen/model/admin/role"
-	base "saas/app/admin/idl_gen/model/base"
+	"saas/app/admin/idl_gen/model/admin/role"
+	"saas/app/admin/idl_gen/model/base"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"saas/app/pkg/service/admin"
 )
 
 // CreateRole .
@@ -22,9 +25,21 @@ func CreateRole(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewRole(ctx, c).Create(do.RoleInfo{
+		Name:          req.Name,
+		Value:         req.Value,
+		DefaultRouter: req.DefaultRouter,
+		Status:        req.Status,
+		Remark:        req.Remark,
+		OrderNo:       int32(req.OrderNo),
+	})
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateRole .
@@ -38,9 +53,21 @@ func UpdateRole(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewRole(ctx, c).Update(do.RoleInfo{
+		ID:            req.ID,
+		Name:          req.Name,
+		Value:         req.Value,
+		DefaultRouter: req.DefaultRouter,
+		Status:        req.Status,
+		Remark:        req.Remark,
+		OrderNo:       int32(req.OrderNo),
+	})
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DeleteRole .
@@ -54,9 +81,12 @@ func DeleteRole(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewRole(ctx, c).Delete(int64(req.ID))
+	if err != nil {
 
-	c.JSON(consts.StatusOK, resp)
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // RoleByID .
@@ -70,9 +100,14 @@ func RoleByID(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	roleInfo, err := admin.NewRole(ctx, c).RoleInfoByID(int64(req.ID))
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, roleInfo, 0, "")
+	return
 }
 
 // RoleList .
@@ -86,9 +121,17 @@ func RoleList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var listReq do.RoleListReq
+	listReq.Page = (req.Page)
+	listReq.PageSize = (req.PageSize)
+	list, total, err := admin.NewRole(ctx, c).List(&listReq)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // UpdateRoleStatus .
@@ -102,7 +145,11 @@ func UpdateRoleStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewRole(ctx, c).UpdateStatus(int64(req.ID), int8(req.Status))
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
