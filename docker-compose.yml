@@ -109,21 +109,21 @@ services:
     ports:
       - "3000:3000"
 
-#  #golang 服务
-#  golang:
-#    #image: golang:latest  # 父镜像名称
-#    image: golang:1.21.6
-#    volumes: # 挂载卷
-#      - /D/docker/src:/go/src
-##    ports: # 端口映射
-##      - "9010:9010"
-#    #    expose: # 暴露的服务端口
-#    #      - 8011
-#    # 依赖的项目，启动的时候根据依赖关系定义启动顺序
-##    depends_on: # 依赖容器
-##     #    - redis
-##      - consul
-##      - jagerservice
-#    stdin_open: true
-#    tty: true
-#    # command: 启动后运行的命令
+ # golang 服务
+  golang:
+   #image: golang:latest  # 父镜像名称
+    image: golang:1.21.6
+    volumes: # 挂载卷
+      - /D/docker/src:/go/src
+#    ports: # 端口映射
+#      - "9010:9010"
+   #    expose: # 暴露的服务端口
+   #      - 8011
+   # 依赖的项目，启动的时候根据依赖关系定义启动顺序
+#    depends_on: # 依赖容器
+#     #    - redis
+#      - consul
+#      - jagerservice
+    stdin_open: true
+    tty: true
+   # command: 启动后运行的命令

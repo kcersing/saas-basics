@@ -3,7 +3,6 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
@@ -40,8 +39,30 @@ func (u User) ChangePassword(userID int64, oldPassword, newPassword string) erro
 }
 
 func (u User) UserInfo(id int64) (userInfo *do.UserInfo, err error) {
-	//TODO implement me
 	userInfo = new(do.UserInfo)
+
+	//errChan := make(chan error, 7)
+	//defer close(errChan)
+	//var wg sync.WaitGroup
+	//wg.Add(7)
+	//go func() {
+	//
+	//	//userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
+	//	//if exist {
+	//	//	if u, ok := userInterface.(*do.UserInfo); ok {
+	//	//		errChan <- err
+	//	//	}
+	//	//}
+	//
+	//	wg.Done()
+	//}()
+	//wg.Wait()
+	//select {
+	//case result := <-errChan:
+	//	return &do.UserInfo{}, result
+	//default:
+	//}
+
 	userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
 	if exist {
 		if u, ok := userInterface.(*do.UserInfo); ok {
@@ -53,7 +74,6 @@ func (u User) UserInfo(id int64) (userInfo *do.UserInfo, err error) {
 		err = errors.Wrap(err, "get user failed")
 		return userInfo, err
 	}
-	hlog.Info(userEnt)
 	err = copier.Copy(&userInfo, &userEnt)
 	if err != nil {
 		err = errors.Wrap(err, "copy user info failed")

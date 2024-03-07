@@ -634,11 +634,11 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(3).
-		SetPath("/sys/oauth/index").
-		SetName("Oauth Management").
-		SetComponent("/sys/oauth/index").
+		SetPath("/sys/order/index").
+		SetName("Order").
+		SetComponent("/sys/order/index").
 		SetOrderNo(7).
-		SetTitle("Oauth管理").
+		SetTitle("订单管理").
 		SetIcon("ant-design:unlock-filled").
 		SetHideMenu(false)
 
@@ -707,10 +707,10 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuType(0).
 		SetParentID(1).
 		SetPath("").
-		SetName("Dev Tool").
+		SetName("product").
 		SetComponent("LAYOUT").
 		SetOrderNo(3).
-		SetTitle("开发工具").
+		SetTitle("产品管理").
 		SetIcon("ant-design:api-filled").
 		SetHideMenu(false)
 
@@ -718,25 +718,25 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(16).
-		SetPath("/devtool/structToProto").
-		SetName("StructToProto").
-		SetComponent("/devtool/structToProto").
+		SetPath("/product/List").
+		SetName("ProductList").
+		SetComponent("/product/List").
 		SetOrderNo(1).
-		SetTitle("StructToProto").
+		SetTitle("ProductList").
 		SetIcon("ant-design:disconnect-outlined").
 		SetHideMenu(false)
 
-	menus[17] = I.DB.Menu.Create().
-		SetMenuLevel(2).
-		SetMenuType(1).
-		SetParentID(16).
-		SetPath("/devtool/structTag").
-		SetName("DeleteStructTag").
-		SetComponent("/devtool/structTag").
-		SetOrderNo(2).
-		SetTitle("DeleteStructTag").
-		SetIcon("ant-design:disconnect-outlined").
-		SetHideMenu(false)
+	//menus[17] = I.DB.Menu.Create().
+	//	SetMenuLevel(2).
+	//	SetMenuType(1).
+	//	SetParentID(16).
+	//	SetPath("/product/structTag").
+	//	SetName("DeleteStructTag").
+	//	SetComponent("/product/structTag").
+	//	SetOrderNo(2).
+	//	SetTitle("DeleteStructTag").
+	//	SetIcon("ant-design:disconnect-outlined").
+	//	SetHideMenu(false)
 
 	err := I.DB.Menu.CreateBulk(menus...).Exec(ctx)
 	if err != nil {

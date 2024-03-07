@@ -52,13 +52,13 @@ struct CreateOrUpdateUserReq {
 
 // Get user list request | 获取用户列表请求参数
 struct UserListReq {
-    1:  string page (api.raw = "page")
-    2:  string limit (api.raw = "limit")
+    1:  i64 page (api.raw = "page")
+    2:  i64 limit (api.raw = "limit")
     3:  string username (api.raw = "username")
     4:  string nickname (api.raw = "nickname")
     5:  string email (api.raw = "email")
     6:  string mobile (api.raw = "mobile")
-    7:  string role_id (api.raw = "role_id")
+    7:  i64 role_id (api.raw = "role_id")
 }
 
 

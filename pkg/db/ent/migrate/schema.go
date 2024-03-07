@@ -32,6 +32,109 @@ var (
 			},
 		},
 	}
+	// CourseRecordCoachColumns holds the columns for the "course_record_coach" table.
+	CourseRecordCoachColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "coach_id", Type: field.TypeInt64, Nullable: true, Comment: "教练ID"},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
+		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
+		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
+		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
+		{Name: "sign_nd_time", Type: field.TypeTime, Nullable: true, Comment: "下课签到时间"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+		{Name: "course_record_schedule_id", Type: field.TypeInt64, Nullable: true, Comment: "课程ID"},
+	}
+	// CourseRecordCoachTable holds the schema information for the "course_record_coach" table.
+	CourseRecordCoachTable = &schema.Table{
+		Name:       "course_record_coach",
+		Columns:    CourseRecordCoachColumns,
+		PrimaryKey: []*schema.Column{CourseRecordCoachColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "course_record_coach_course_record_schedule_coach",
+				Columns:    []*schema.Column{CourseRecordCoachColumns[11]},
+				RefColumns: []*schema.Column{CourseRecordScheduleColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "courserecordcoach_coach_id",
+				Unique:  true,
+				Columns: []*schema.Column{CourseRecordCoachColumns[4]},
+			},
+		},
+	}
+	// CourseRecordScheduleColumns holds the columns for the "course_record_schedule" table.
+	CourseRecordScheduleColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
+		{Name: "coach_id", Type: field.TypeInt64, Nullable: true, Comment: "教练ID"},
+		{Name: "num", Type: field.TypeInt64, Nullable: true, Comment: "上课人数"},
+		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
+		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
+		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "课程价格", Default: 0},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+	}
+	// CourseRecordScheduleTable holds the schema information for the "course_record_schedule" table.
+	CourseRecordScheduleTable = &schema.Table{
+		Name:       "course_record_schedule",
+		Columns:    CourseRecordScheduleColumns,
+		PrimaryKey: []*schema.Column{CourseRecordScheduleColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "courserecordschedule_venue_id",
+				Unique:  true,
+				Columns: []*schema.Column{CourseRecordScheduleColumns[4]},
+			},
+		},
+	}
+	// CourseRecordUserColumns holds the columns for the "course_record_user" table.
+	CourseRecordUserColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
+		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
+		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
+		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
+		{Name: "sign_nd_time", Type: field.TypeTime, Nullable: true, Comment: "下课签到时间"},
+		{Name: "user_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员购买课ID"},
+		{Name: "user_product_item_id", Type: field.TypeInt64, Nullable: true, Comment: "会员购买课ID"},
+		{Name: "coach_id", Type: field.TypeInt64, Nullable: true, Comment: "教练ID"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+		{Name: "course_record_schedule_id", Type: field.TypeInt64, Nullable: true, Comment: "课程ID"},
+	}
+	// CourseRecordUserTable holds the schema information for the "course_record_user" table.
+	CourseRecordUserTable = &schema.Table{
+		Name:       "course_record_user",
+		Columns:    CourseRecordUserColumns,
+		PrimaryKey: []*schema.Column{CourseRecordUserColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "course_record_user_course_record_schedule_users",
+				Columns:    []*schema.Column{CourseRecordUserColumns[14]},
+				RefColumns: []*schema.Column{CourseRecordScheduleColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "courserecorduser_user_id",
+				Unique:  true,
+				Columns: []*schema.Column{CourseRecordUserColumns[4]},
+			},
+		},
+	}
 	// SysDictionariesColumns holds the columns for the "sys_dictionaries" table.
 	SysDictionariesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -175,6 +278,204 @@ var (
 			},
 		},
 	}
+	// OrderColumns holds the columns for the "order" table.
+	OrderColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+		{Name: "source", Type: field.TypeString, Nullable: true, Comment: "订单来源", Default: ""},
+		{Name: "device", Type: field.TypeString, Nullable: true, Comment: "设备来源", Default: ""},
+		{Name: "completion_at", Type: field.TypeTime, Nullable: true, Comment: "订单完成时间"},
+		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人id"},
+	}
+	// OrderTable holds the schema information for the "order" table.
+	OrderTable = &schema.Table{
+		Name:       "order",
+		Columns:    OrderColumns,
+		PrimaryKey: []*schema.Column{OrderColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "order_user_id_order_sn",
+				Unique:  true,
+				Columns: []*schema.Column{OrderColumns[5], OrderColumns[3]},
+			},
+		},
+	}
+	// OrderAmountColumns holds the columns for the "order_amount" table.
+	OrderAmountColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "total", Type: field.TypeFloat64, Nullable: true, Comment: "总金额"},
+		{Name: "remission", Type: field.TypeFloat64, Nullable: true, Comment: "减免"},
+		{Name: "pay", Type: field.TypeFloat64, Nullable: true, Comment: "实际付款"},
+		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
+	}
+	// OrderAmountTable holds the schema information for the "order_amount" table.
+	OrderAmountTable = &schema.Table{
+		Name:       "order_amount",
+		Columns:    OrderAmountColumns,
+		PrimaryKey: []*schema.Column{OrderAmountColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "order_amount_order_amount",
+				Columns:    []*schema.Column{OrderAmountColumns[6]},
+				RefColumns: []*schema.Column{OrderColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orderamount_order_id",
+				Unique:  true,
+				Columns: []*schema.Column{OrderAmountColumns[6]},
+			},
+		},
+	}
+	// OrderItemColumns holds the columns for the "order_item" table.
+	OrderItemColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品id"},
+		{Name: "quantity", Type: field.TypeInt64, Nullable: true, Comment: "购买数量", Default: 0},
+		{Name: "related_user_product_id", Type: field.TypeInt64, Nullable: true, Comment: "关联会员产品id", Default: 0},
+		{Name: "contract_id", Type: field.TypeInt64, Nullable: true, Comment: "合同ID", Default: 0},
+		{Name: "assign_at", Type: field.TypeTime, Nullable: true, Comment: "指定时间"},
+		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
+	}
+	// OrderItemTable holds the schema information for the "order_item" table.
+	OrderItemTable = &schema.Table{
+		Name:       "order_item",
+		Columns:    OrderItemColumns,
+		PrimaryKey: []*schema.Column{OrderItemColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "order_item_order_item",
+				Columns:    []*schema.Column{OrderItemColumns[8]},
+				RefColumns: []*schema.Column{OrderColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orderitem_order_id",
+				Unique:  true,
+				Columns: []*schema.Column{OrderItemColumns[8]},
+			},
+		},
+	}
+	// OrderPayColumns holds the columns for the "order_pay" table.
+	OrderPayColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "pay_sn", Type: field.TypeString, Nullable: true, Comment: "支付编号"},
+		{Name: "remission", Type: field.TypeFloat64, Nullable: true, Comment: "减免"},
+		{Name: "pay", Type: field.TypeFloat64, Nullable: true, Comment: "实际付款"},
+		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "操作人id"},
+		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
+	}
+	// OrderPayTable holds the schema information for the "order_pay" table.
+	OrderPayTable = &schema.Table{
+		Name:       "order_pay",
+		Columns:    OrderPayColumns,
+		PrimaryKey: []*schema.Column{OrderPayColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "order_pay_order_pay",
+				Columns:    []*schema.Column{OrderPayColumns[7]},
+				RefColumns: []*schema.Column{OrderColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orderpay_order_id",
+				Unique:  true,
+				Columns: []*schema.Column{OrderPayColumns[7]},
+			},
+		},
+	}
+	// OrderSalesColumns holds the columns for the "order_sales" table.
+	OrderSalesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "sales_id", Type: field.TypeInt64, Nullable: true, Comment: "销售id"},
+		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
+	}
+	// OrderSalesTable holds the schema information for the "order_sales" table.
+	OrderSalesTable = &schema.Table{
+		Name:       "order_sales",
+		Columns:    OrderSalesColumns,
+		PrimaryKey: []*schema.Column{OrderSalesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "order_sales_order_sales",
+				Columns:    []*schema.Column{OrderSalesColumns[4]},
+				RefColumns: []*schema.Column{OrderColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "ordersales_order_id",
+				Unique:  true,
+				Columns: []*schema.Column{OrderSalesColumns[4]},
+			},
+		},
+	}
+	// ProductColumns holds the columns for the "product" table.
+	ProductColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "sn", Type: field.TypeString, Nullable: true, Comment: "编号"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人id"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "商品名"},
+		{Name: "pic", Type: field.TypeInt64, Nullable: true, Comment: "主图"},
+		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "详情"},
+		{Name: "price", Type: field.TypeString, Nullable: true, Comment: "价格"},
+		{Name: "stock", Type: field.TypeInt64, Nullable: true, Comment: "库存"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+	}
+	// ProductTable holds the schema information for the "product" table.
+	ProductTable = &schema.Table{
+		Name:       "product",
+		Columns:    ProductColumns,
+		PrimaryKey: []*schema.Column{ProductColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "product_id_sn",
+				Unique:  true,
+				Columns: []*schema.Column{ProductColumns[0], ProductColumns[3]},
+			},
+		},
+	}
+	// ProductPropertyColumns holds the columns for the "product_property" table.
+	ProductPropertyColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
+		{Name: "spu_name", Type: field.TypeString, Nullable: true, Comment: "spu名"},
+		{Name: "duration", Type: field.TypeInt64, Nullable: true, Comment: "总时长"},
+		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "单次时长"},
+		{Name: "count", Type: field.TypeInt64, Nullable: true, Comment: "次数"},
+		{Name: "spu_price", Type: field.TypeFloat64, Nullable: true, Comment: "定价"},
+	}
+	// ProductPropertyTable holds the schema information for the "product_property" table.
+	ProductPropertyTable = &schema.Table{
+		Name:       "product_property",
+		Columns:    ProductPropertyColumns,
+		PrimaryKey: []*schema.Column{ProductPropertyColumns[0]},
+	}
 	// SysRolesColumns holds the columns for the "sys_roles" table.
 	SysRolesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -261,6 +562,68 @@ var (
 			},
 		},
 	}
+	// VenueColumns holds the columns for the "venue" table.
+	VenueColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
+		{Name: "address", Type: field.TypeString, Nullable: true, Comment: "地址 省/市/区"},
+		{Name: "address_detail", Type: field.TypeString, Nullable: true, Comment: "详细地址"},
+		{Name: "latitude", Type: field.TypeString, Nullable: true, Comment: "维度"},
+		{Name: "longitude", Type: field.TypeString, Nullable: true, Comment: "经度"},
+		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "联系电话"},
+		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "场馆照片"},
+		{Name: "information", Type: field.TypeString, Nullable: true, Comment: "详情"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+	}
+	// VenueTable holds the schema information for the "venue" table.
+	VenueTable = &schema.Table{
+		Name:       "venue",
+		Columns:    VenueColumns,
+		PrimaryKey: []*schema.Column{VenueColumns[0]},
+	}
+	// VenuePlaceColumns holds the columns for the "venue_place" table.
+	VenuePlaceColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
+		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "照片"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+	}
+	// VenuePlaceTable holds the schema information for the "venue_place" table.
+	VenuePlaceTable = &schema.Table{
+		Name:       "venue_place",
+		Columns:    VenuePlaceColumns,
+		PrimaryKey: []*schema.Column{VenuePlaceColumns[0]},
+	}
+	// ProductPropertyColumns holds the columns for the "product_property" table.
+	ProductPropertyColumns = []*schema.Column{
+		{Name: "product_id", Type: field.TypeInt64},
+		{Name: "product_property_id", Type: field.TypeInt64},
+	}
+	// ProductPropertyTable holds the schema information for the "product_property" table.
+	ProductPropertyTable = &schema.Table{
+		Name:       "product_property",
+		Columns:    ProductPropertyColumns,
+		PrimaryKey: []*schema.Column{ProductPropertyColumns[0], ProductPropertyColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "product_property_product_id",
+				Columns:    []*schema.Column{ProductPropertyColumns[0]},
+				RefColumns: []*schema.Column{ProductColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "product_property_product_property_id",
+				Columns:    []*schema.Column{ProductPropertyColumns[1]},
+				RefColumns: []*schema.Column{ProductPropertyColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RoleMenusColumns holds the columns for the "role_menus" table.
 	RoleMenusColumns = []*schema.Column{
 		{Name: "role_id", Type: field.TypeInt64},
@@ -286,24 +649,74 @@ var (
 			},
 		},
 	}
+	// VenuePlacesColumns holds the columns for the "venue_places" table.
+	VenuePlacesColumns = []*schema.Column{
+		{Name: "venue_id", Type: field.TypeInt64},
+		{Name: "venue_place_id", Type: field.TypeInt64},
+	}
+	// VenuePlacesTable holds the schema information for the "venue_places" table.
+	VenuePlacesTable = &schema.Table{
+		Name:       "venue_places",
+		Columns:    VenuePlacesColumns,
+		PrimaryKey: []*schema.Column{VenuePlacesColumns[0], VenuePlacesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "venue_places_venue_id",
+				Columns:    []*schema.Column{VenuePlacesColumns[0]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "venue_places_venue_place_id",
+				Columns:    []*schema.Column{VenuePlacesColumns[1]},
+				RefColumns: []*schema.Column{VenuePlaceColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
+		CourseRecordCoachTable,
+		CourseRecordScheduleTable,
+		CourseRecordUserTable,
 		SysDictionariesTable,
 		SysDictionaryDetailsTable,
 		SysLogsTable,
 		SysMenusTable,
 		SysMenuParamsTable,
+		OrderTable,
+		OrderAmountTable,
+		OrderItemTable,
+		OrderPayTable,
+		OrderSalesTable,
+		ProductTable,
+		ProductPropertyTable,
 		SysRolesTable,
 		SysTokensTable,
 		SysUsersTable,
+		VenueTable,
+		VenuePlaceTable,
+		ProductPropertyTable,
 		RoleMenusTable,
+		VenuePlacesTable,
 	}
 )
 
 func init() {
 	SysApisTable.Annotation = &entsql.Annotation{
 		Table: "sys_apis",
+	}
+	CourseRecordCoachTable.ForeignKeys[0].RefTable = CourseRecordScheduleTable
+	CourseRecordCoachTable.Annotation = &entsql.Annotation{
+		Table: "course_record_coach",
+	}
+	CourseRecordScheduleTable.Annotation = &entsql.Annotation{
+		Table: "course_record_schedule",
+	}
+	CourseRecordUserTable.ForeignKeys[0].RefTable = CourseRecordScheduleTable
+	CourseRecordUserTable.Annotation = &entsql.Annotation{
+		Table: "course_record_user",
 	}
 	SysDictionariesTable.Annotation = &entsql.Annotation{
 		Table: "sys_dictionaries",
@@ -323,6 +736,31 @@ func init() {
 	SysMenuParamsTable.Annotation = &entsql.Annotation{
 		Table: "sys_menu_params",
 	}
+	OrderTable.Annotation = &entsql.Annotation{
+		Table: "order",
+	}
+	OrderAmountTable.ForeignKeys[0].RefTable = OrderTable
+	OrderAmountTable.Annotation = &entsql.Annotation{
+		Table: "order_amount",
+	}
+	OrderItemTable.ForeignKeys[0].RefTable = OrderTable
+	OrderItemTable.Annotation = &entsql.Annotation{
+		Table: "order_item",
+	}
+	OrderPayTable.ForeignKeys[0].RefTable = OrderTable
+	OrderPayTable.Annotation = &entsql.Annotation{
+		Table: "order_pay",
+	}
+	OrderSalesTable.ForeignKeys[0].RefTable = OrderTable
+	OrderSalesTable.Annotation = &entsql.Annotation{
+		Table: "order_sales",
+	}
+	ProductTable.Annotation = &entsql.Annotation{
+		Table: "product",
+	}
+	ProductPropertyTable.Annotation = &entsql.Annotation{
+		Table: "product_property",
+	}
 	SysRolesTable.Annotation = &entsql.Annotation{
 		Table: "sys_roles",
 	}
@@ -333,6 +771,16 @@ func init() {
 	SysUsersTable.Annotation = &entsql.Annotation{
 		Table: "sys_users",
 	}
+	VenueTable.Annotation = &entsql.Annotation{
+		Table: "venue",
+	}
+	VenuePlaceTable.Annotation = &entsql.Annotation{
+		Table: "venue_place",
+	}
+	ProductPropertyTable.ForeignKeys[0].RefTable = ProductTable
+	ProductPropertyTable.ForeignKeys[1].RefTable = ProductPropertyTable
 	RoleMenusTable.ForeignKeys[0].RefTable = SysRolesTable
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
+	VenuePlacesTable.ForeignKeys[0].RefTable = VenueTable
+	VenuePlacesTable.ForeignKeys[1].RefTable = VenuePlaceTable
 }

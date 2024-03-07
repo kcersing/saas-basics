@@ -8,14 +8,26 @@ import (
 	"fmt"
 	"reflect"
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/courserecordcoach"
+	"saas/pkg/db/ent/courserecordschedule"
+	"saas/pkg/db/ent/courserecorduser"
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
+	"saas/pkg/db/ent/order"
+	"saas/pkg/db/ent/orderamount"
+	"saas/pkg/db/ent/orderitem"
+	"saas/pkg/db/ent/orderpay"
+	"saas/pkg/db/ent/ordersales"
+	"saas/pkg/db/ent/product"
+	"saas/pkg/db/ent/productproperty"
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
+	"saas/pkg/db/ent/venueplace"
 	"sync"
 
 	"entgo.io/ent"
@@ -81,15 +93,27 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			api.Table:              api.ValidColumn,
-			dictionary.Table:       dictionary.ValidColumn,
-			dictionarydetail.Table: dictionarydetail.ValidColumn,
-			logs.Table:             logs.ValidColumn,
-			menu.Table:             menu.ValidColumn,
-			menuparam.Table:        menuparam.ValidColumn,
-			role.Table:             role.ValidColumn,
-			token.Table:            token.ValidColumn,
-			user.Table:             user.ValidColumn,
+			api.Table:                  api.ValidColumn,
+			courserecordcoach.Table:    courserecordcoach.ValidColumn,
+			courserecordschedule.Table: courserecordschedule.ValidColumn,
+			courserecorduser.Table:     courserecorduser.ValidColumn,
+			dictionary.Table:           dictionary.ValidColumn,
+			dictionarydetail.Table:     dictionarydetail.ValidColumn,
+			logs.Table:                 logs.ValidColumn,
+			menu.Table:                 menu.ValidColumn,
+			menuparam.Table:            menuparam.ValidColumn,
+			order.Table:                order.ValidColumn,
+			orderamount.Table:          orderamount.ValidColumn,
+			orderitem.Table:            orderitem.ValidColumn,
+			orderpay.Table:             orderpay.ValidColumn,
+			ordersales.Table:           ordersales.ValidColumn,
+			product.Table:              product.ValidColumn,
+			productproperty.Table:      productproperty.ValidColumn,
+			role.Table:                 role.ValidColumn,
+			token.Table:                token.ValidColumn,
+			user.Table:                 user.ValidColumn,
+			venue.Table:                venue.ValidColumn,
+			venueplace.Table:           venueplace.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

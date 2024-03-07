@@ -31,7 +31,7 @@ func GetLogsList(ctx context.Context, c *app.RequestContext) {
 	limit, _ := strconv.Atoi(req.Limit)
 	var logsListReq do.LogsListReq
 	logsListReq.Page = int64(page)
-	logsListReq.Limit = int64(limit)
+	logsListReq.PageSize = int64(limit)
 	logsListReq.Type = req.Type
 	logsListReq.Api = req.API
 	logsListReq.Method = req.Method

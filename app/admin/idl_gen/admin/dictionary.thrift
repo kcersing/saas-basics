@@ -3,15 +3,12 @@ namespace go admin.dictionary
 include "../base/base.thrift"
 include "../base/data.thrift"
 
-
-
-
 // 字典列表请求数据
 struct DictionaryPageReq {
     1:  string title (api.raw = "title" )
     2:  string name (api.raw = "name" )
-    3:  string page (api.raw = "page" )
-    4:  string limit (api.raw = "limit" )
+    3:  i64 page (api.raw = "page" )
+    4:  i64 limit (api.raw = "limit" )
 }
 
 //字典名获取字典键值请求数据

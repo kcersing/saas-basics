@@ -23,7 +23,7 @@ type LogsInfo struct {
 
 type LogsListReq struct {
 	Page     int64  `json:"page,omitempty"`
-	Limit    int64  `json:"limit,omitempty"`
+	PageSize int64  `json:"pageSize,omitempty"`
 	Type     string `json:"type,omitempty"`
 	Method   string `json:"method,omitempty"`
 	Api      string `json:"api,omitempty"`

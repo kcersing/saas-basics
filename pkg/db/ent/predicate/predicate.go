@@ -9,6 +9,15 @@ import (
 // API is the predicate function for api builders.
 type API func(*sql.Selector)
 
+// CourseRecordCoach is the predicate function for courserecordcoach builders.
+type CourseRecordCoach func(*sql.Selector)
+
+// CourseRecordSchedule is the predicate function for courserecordschedule builders.
+type CourseRecordSchedule func(*sql.Selector)
+
+// CourseRecordUser is the predicate function for courserecorduser builders.
+type CourseRecordUser func(*sql.Selector)
+
 // Dictionary is the predicate function for dictionary builders.
 type Dictionary func(*sql.Selector)
 
@@ -24,6 +33,27 @@ type Menu func(*sql.Selector)
 // MenuParam is the predicate function for menuparam builders.
 type MenuParam func(*sql.Selector)
 
+// Order is the predicate function for order builders.
+type Order func(*sql.Selector)
+
+// OrderAmount is the predicate function for orderamount builders.
+type OrderAmount func(*sql.Selector)
+
+// OrderItem is the predicate function for orderitem builders.
+type OrderItem func(*sql.Selector)
+
+// OrderPay is the predicate function for orderpay builders.
+type OrderPay func(*sql.Selector)
+
+// OrderSales is the predicate function for ordersales builders.
+type OrderSales func(*sql.Selector)
+
+// Product is the predicate function for product builders.
+type Product func(*sql.Selector)
+
+// ProductProperty is the predicate function for productproperty builders.
+type ProductProperty func(*sql.Selector)
+
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)
 
@@ -32,3 +62,9 @@ type Token func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
+
+// Venue is the predicate function for venue builders.
+type Venue func(*sql.Selector)
+
+// VenuePlace is the predicate function for venueplace builders.
+type VenuePlace func(*sql.Selector)

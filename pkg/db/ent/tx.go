@@ -14,6 +14,12 @@ type Tx struct {
 	config
 	// API is the client for interacting with the API builders.
 	API *APIClient
+	// CourseRecordCoach is the client for interacting with the CourseRecordCoach builders.
+	CourseRecordCoach *CourseRecordCoachClient
+	// CourseRecordSchedule is the client for interacting with the CourseRecordSchedule builders.
+	CourseRecordSchedule *CourseRecordScheduleClient
+	// CourseRecordUser is the client for interacting with the CourseRecordUser builders.
+	CourseRecordUser *CourseRecordUserClient
 	// Dictionary is the client for interacting with the Dictionary builders.
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
@@ -24,12 +30,30 @@ type Tx struct {
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
 	MenuParam *MenuParamClient
+	// Order is the client for interacting with the Order builders.
+	Order *OrderClient
+	// OrderAmount is the client for interacting with the OrderAmount builders.
+	OrderAmount *OrderAmountClient
+	// OrderItem is the client for interacting with the OrderItem builders.
+	OrderItem *OrderItemClient
+	// OrderPay is the client for interacting with the OrderPay builders.
+	OrderPay *OrderPayClient
+	// OrderSales is the client for interacting with the OrderSales builders.
+	OrderSales *OrderSalesClient
+	// Product is the client for interacting with the Product builders.
+	Product *ProductClient
+	// ProductProperty is the client for interacting with the ProductProperty builders.
+	ProductProperty *ProductPropertyClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 	// Token is the client for interacting with the Token builders.
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// Venue is the client for interacting with the Venue builders.
+	Venue *VenueClient
+	// VenuePlace is the client for interacting with the VenuePlace builders.
+	VenuePlace *VenuePlaceClient
 
 	// lazily loaded.
 	client     *Client
@@ -162,14 +186,26 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.API = NewAPIClient(tx.config)
+	tx.CourseRecordCoach = NewCourseRecordCoachClient(tx.config)
+	tx.CourseRecordSchedule = NewCourseRecordScheduleClient(tx.config)
+	tx.CourseRecordUser = NewCourseRecordUserClient(tx.config)
 	tx.Dictionary = NewDictionaryClient(tx.config)
 	tx.DictionaryDetail = NewDictionaryDetailClient(tx.config)
 	tx.Logs = NewLogsClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
+	tx.Order = NewOrderClient(tx.config)
+	tx.OrderAmount = NewOrderAmountClient(tx.config)
+	tx.OrderItem = NewOrderItemClient(tx.config)
+	tx.OrderPay = NewOrderPayClient(tx.config)
+	tx.OrderSales = NewOrderSalesClient(tx.config)
+	tx.Product = NewProductClient(tx.config)
+	tx.ProductProperty = NewProductPropertyClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
 	tx.Token = NewTokenClient(tx.config)
 	tx.User = NewUserClient(tx.config)
+	tx.Venue = NewVenueClient(tx.config)
+	tx.VenuePlace = NewVenuePlaceClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
