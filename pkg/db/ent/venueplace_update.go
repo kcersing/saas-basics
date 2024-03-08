@@ -77,7 +77,6 @@ func (vpu *VenuePlaceUpdate) ClearPic() *VenuePlaceUpdate {
 
 // SetVenueID sets the "venue_id" field.
 func (vpu *VenuePlaceUpdate) SetVenueID(i int64) *VenuePlaceUpdate {
-	vpu.mutation.ResetVenueID()
 	vpu.mutation.SetVenueID(i)
 	return vpu
 }
@@ -87,12 +86,6 @@ func (vpu *VenuePlaceUpdate) SetNillableVenueID(i *int64) *VenuePlaceUpdate {
 	if i != nil {
 		vpu.SetVenueID(*i)
 	}
-	return vpu
-}
-
-// AddVenueID adds i to the "venue_id" field.
-func (vpu *VenuePlaceUpdate) AddVenueID(i int64) *VenuePlaceUpdate {
-	vpu.mutation.AddVenueID(i)
 	return vpu
 }
 
@@ -129,19 +122,9 @@ func (vpu *VenuePlaceUpdate) ClearStatus() *VenuePlaceUpdate {
 	return vpu
 }
 
-// AddVenueIDs adds the "venue" edge to the Venue entity by IDs.
-func (vpu *VenuePlaceUpdate) AddVenueIDs(ids ...int64) *VenuePlaceUpdate {
-	vpu.mutation.AddVenueIDs(ids...)
-	return vpu
-}
-
-// AddVenue adds the "venue" edges to the Venue entity.
-func (vpu *VenuePlaceUpdate) AddVenue(v ...*Venue) *VenuePlaceUpdate {
-	ids := make([]int64, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpu.AddVenueIDs(ids...)
+// SetVenue sets the "venue" edge to the Venue entity.
+func (vpu *VenuePlaceUpdate) SetVenue(v *Venue) *VenuePlaceUpdate {
+	return vpu.SetVenueID(v.ID)
 }
 
 // Mutation returns the VenuePlaceMutation object of the builder.
@@ -149,25 +132,10 @@ func (vpu *VenuePlaceUpdate) Mutation() *VenuePlaceMutation {
 	return vpu.mutation
 }
 
-// ClearVenue clears all "venue" edges to the Venue entity.
+// ClearVenue clears the "venue" edge to the Venue entity.
 func (vpu *VenuePlaceUpdate) ClearVenue() *VenuePlaceUpdate {
 	vpu.mutation.ClearVenue()
 	return vpu
-}
-
-// RemoveVenueIDs removes the "venue" edge to Venue entities by IDs.
-func (vpu *VenuePlaceUpdate) RemoveVenueIDs(ids ...int64) *VenuePlaceUpdate {
-	vpu.mutation.RemoveVenueIDs(ids...)
-	return vpu
-}
-
-// RemoveVenue removes "venue" edges to Venue entities.
-func (vpu *VenuePlaceUpdate) RemoveVenue(v ...*Venue) *VenuePlaceUpdate {
-	ids := make([]int64, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpu.RemoveVenueIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -230,15 +198,6 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if vpu.mutation.PicCleared() {
 		_spec.ClearField(venueplace.FieldPic, field.TypeString)
 	}
-	if value, ok := vpu.mutation.VenueID(); ok {
-		_spec.SetField(venueplace.FieldVenueID, field.TypeInt64, value)
-	}
-	if value, ok := vpu.mutation.AddedVenueID(); ok {
-		_spec.AddField(venueplace.FieldVenueID, field.TypeInt64, value)
-	}
-	if vpu.mutation.VenueIDCleared() {
-		_spec.ClearField(venueplace.FieldVenueID, field.TypeInt64)
-	}
 	if value, ok := vpu.mutation.Status(); ok {
 		_spec.SetField(venueplace.FieldStatus, field.TypeInt64, value)
 	}
@@ -250,39 +209,23 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vpu.mutation.VenueCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   venueplace.VenueTable,
-			Columns: venueplace.VenuePrimaryKey,
+			Columns: []string{venueplace.VenueColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := vpu.mutation.RemovedVenueIDs(); len(nodes) > 0 && !vpu.mutation.VenueCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   venueplace.VenueTable,
-			Columns: venueplace.VenuePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vpu.mutation.VenueIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   venueplace.VenueTable,
-			Columns: venueplace.VenuePrimaryKey,
+			Columns: []string{venueplace.VenueColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
@@ -361,7 +304,6 @@ func (vpuo *VenuePlaceUpdateOne) ClearPic() *VenuePlaceUpdateOne {
 
 // SetVenueID sets the "venue_id" field.
 func (vpuo *VenuePlaceUpdateOne) SetVenueID(i int64) *VenuePlaceUpdateOne {
-	vpuo.mutation.ResetVenueID()
 	vpuo.mutation.SetVenueID(i)
 	return vpuo
 }
@@ -371,12 +313,6 @@ func (vpuo *VenuePlaceUpdateOne) SetNillableVenueID(i *int64) *VenuePlaceUpdateO
 	if i != nil {
 		vpuo.SetVenueID(*i)
 	}
-	return vpuo
-}
-
-// AddVenueID adds i to the "venue_id" field.
-func (vpuo *VenuePlaceUpdateOne) AddVenueID(i int64) *VenuePlaceUpdateOne {
-	vpuo.mutation.AddVenueID(i)
 	return vpuo
 }
 
@@ -413,19 +349,9 @@ func (vpuo *VenuePlaceUpdateOne) ClearStatus() *VenuePlaceUpdateOne {
 	return vpuo
 }
 
-// AddVenueIDs adds the "venue" edge to the Venue entity by IDs.
-func (vpuo *VenuePlaceUpdateOne) AddVenueIDs(ids ...int64) *VenuePlaceUpdateOne {
-	vpuo.mutation.AddVenueIDs(ids...)
-	return vpuo
-}
-
-// AddVenue adds the "venue" edges to the Venue entity.
-func (vpuo *VenuePlaceUpdateOne) AddVenue(v ...*Venue) *VenuePlaceUpdateOne {
-	ids := make([]int64, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpuo.AddVenueIDs(ids...)
+// SetVenue sets the "venue" edge to the Venue entity.
+func (vpuo *VenuePlaceUpdateOne) SetVenue(v *Venue) *VenuePlaceUpdateOne {
+	return vpuo.SetVenueID(v.ID)
 }
 
 // Mutation returns the VenuePlaceMutation object of the builder.
@@ -433,25 +359,10 @@ func (vpuo *VenuePlaceUpdateOne) Mutation() *VenuePlaceMutation {
 	return vpuo.mutation
 }
 
-// ClearVenue clears all "venue" edges to the Venue entity.
+// ClearVenue clears the "venue" edge to the Venue entity.
 func (vpuo *VenuePlaceUpdateOne) ClearVenue() *VenuePlaceUpdateOne {
 	vpuo.mutation.ClearVenue()
 	return vpuo
-}
-
-// RemoveVenueIDs removes the "venue" edge to Venue entities by IDs.
-func (vpuo *VenuePlaceUpdateOne) RemoveVenueIDs(ids ...int64) *VenuePlaceUpdateOne {
-	vpuo.mutation.RemoveVenueIDs(ids...)
-	return vpuo
-}
-
-// RemoveVenue removes "venue" edges to Venue entities.
-func (vpuo *VenuePlaceUpdateOne) RemoveVenue(v ...*Venue) *VenuePlaceUpdateOne {
-	ids := make([]int64, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpuo.RemoveVenueIDs(ids...)
 }
 
 // Where appends a list predicates to the VenuePlaceUpdate builder.
@@ -544,15 +455,6 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 	if vpuo.mutation.PicCleared() {
 		_spec.ClearField(venueplace.FieldPic, field.TypeString)
 	}
-	if value, ok := vpuo.mutation.VenueID(); ok {
-		_spec.SetField(venueplace.FieldVenueID, field.TypeInt64, value)
-	}
-	if value, ok := vpuo.mutation.AddedVenueID(); ok {
-		_spec.AddField(venueplace.FieldVenueID, field.TypeInt64, value)
-	}
-	if vpuo.mutation.VenueIDCleared() {
-		_spec.ClearField(venueplace.FieldVenueID, field.TypeInt64)
-	}
 	if value, ok := vpuo.mutation.Status(); ok {
 		_spec.SetField(venueplace.FieldStatus, field.TypeInt64, value)
 	}
@@ -564,39 +466,23 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 	}
 	if vpuo.mutation.VenueCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   venueplace.VenueTable,
-			Columns: venueplace.VenuePrimaryKey,
+			Columns: []string{venueplace.VenueColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := vpuo.mutation.RemovedVenueIDs(); len(nodes) > 0 && !vpuo.mutation.VenueCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   venueplace.VenueTable,
-			Columns: venueplace.VenuePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vpuo.mutation.VenueIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   venueplace.VenueTable,
-			Columns: venueplace.VenuePrimaryKey,
+			Columns: []string{venueplace.VenueColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),

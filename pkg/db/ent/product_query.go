@@ -19,11 +19,11 @@ import (
 // ProductQuery is the builder for querying Product entities.
 type ProductQuery struct {
 	config
-	ctx          *QueryContext
-	order        []product.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.Product
-	withProperty *ProductPropertyQuery
+	ctx           *QueryContext
+	order         []product.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.Product
+	withPropertys *ProductPropertyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -60,8 +60,8 @@ func (pq *ProductQuery) Order(o ...product.OrderOption) *ProductQuery {
 	return pq
 }
 
-// QueryProperty chains the current query on the "property" edge.
-func (pq *ProductQuery) QueryProperty() *ProductPropertyQuery {
+// QueryPropertys chains the current query on the "propertys" edge.
+func (pq *ProductQuery) QueryPropertys() *ProductPropertyQuery {
 	query := (&ProductPropertyClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -74,7 +74,7 @@ func (pq *ProductQuery) QueryProperty() *ProductPropertyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(product.Table, product.FieldID, selector),
 			sqlgraph.To(productproperty.Table, productproperty.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, product.PropertyTable, product.PropertyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, product.PropertysTable, product.PropertysPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -269,26 +269,26 @@ func (pq *ProductQuery) Clone() *ProductQuery {
 		return nil
 	}
 	return &ProductQuery{
-		config:       pq.config,
-		ctx:          pq.ctx.Clone(),
-		order:        append([]product.OrderOption{}, pq.order...),
-		inters:       append([]Interceptor{}, pq.inters...),
-		predicates:   append([]predicate.Product{}, pq.predicates...),
-		withProperty: pq.withProperty.Clone(),
+		config:        pq.config,
+		ctx:           pq.ctx.Clone(),
+		order:         append([]product.OrderOption{}, pq.order...),
+		inters:        append([]Interceptor{}, pq.inters...),
+		predicates:    append([]predicate.Product{}, pq.predicates...),
+		withPropertys: pq.withPropertys.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
 	}
 }
 
-// WithProperty tells the query-builder to eager-load the nodes that are connected to
-// the "property" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProductQuery) WithProperty(opts ...func(*ProductPropertyQuery)) *ProductQuery {
+// WithPropertys tells the query-builder to eager-load the nodes that are connected to
+// the "propertys" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProductQuery) WithPropertys(opts ...func(*ProductPropertyQuery)) *ProductQuery {
 	query := (&ProductPropertyClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withProperty = query
+	pq.withPropertys = query
 	return pq
 }
 
@@ -371,7 +371,7 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 		nodes       = []*Product{}
 		_spec       = pq.querySpec()
 		loadedTypes = [1]bool{
-			pq.withProperty != nil,
+			pq.withPropertys != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -392,17 +392,17 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pq.withProperty; query != nil {
-		if err := pq.loadProperty(ctx, query, nodes,
-			func(n *Product) { n.Edges.Property = []*ProductProperty{} },
-			func(n *Product, e *ProductProperty) { n.Edges.Property = append(n.Edges.Property, e) }); err != nil {
+	if query := pq.withPropertys; query != nil {
+		if err := pq.loadPropertys(ctx, query, nodes,
+			func(n *Product) { n.Edges.Propertys = []*ProductProperty{} },
+			func(n *Product, e *ProductProperty) { n.Edges.Propertys = append(n.Edges.Propertys, e) }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (pq *ProductQuery) loadProperty(ctx context.Context, query *ProductPropertyQuery, nodes []*Product, init func(*Product), assign func(*Product, *ProductProperty)) error {
+func (pq *ProductQuery) loadPropertys(ctx context.Context, query *ProductPropertyQuery, nodes []*Product, init func(*Product), assign func(*Product, *ProductProperty)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int64]*Product)
 	nids := make(map[int64]map[*Product]struct{})
@@ -414,11 +414,11 @@ func (pq *ProductQuery) loadProperty(ctx context.Context, query *ProductProperty
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(product.PropertyTable)
-		s.Join(joinT).On(s.C(productproperty.FieldID), joinT.C(product.PropertyPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(product.PropertyPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(product.PropertysTable)
+		s.Join(joinT).On(s.C(productproperty.FieldID), joinT.C(product.PropertysPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(product.PropertysPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(product.PropertyPrimaryKey[0]))
+		s.Select(joinT.C(product.PropertysPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -455,7 +455,7 @@ func (pq *ProductQuery) loadProperty(ctx context.Context, query *ProductProperty
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "property" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "propertys" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)

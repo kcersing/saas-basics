@@ -181,14 +181,14 @@ func (pc *ProductCreate) SetID(i int64) *ProductCreate {
 	return pc
 }
 
-// AddPropertyIDs adds the "property" edge to the ProductProperty entity by IDs.
+// AddPropertyIDs adds the "propertys" edge to the ProductProperty entity by IDs.
 func (pc *ProductCreate) AddPropertyIDs(ids ...int64) *ProductCreate {
 	pc.mutation.AddPropertyIDs(ids...)
 	return pc
 }
 
-// AddProperty adds the "property" edges to the ProductProperty entity.
-func (pc *ProductCreate) AddProperty(p ...*ProductProperty) *ProductCreate {
+// AddPropertys adds the "propertys" edges to the ProductProperty entity.
+func (pc *ProductCreate) AddPropertys(p ...*ProductProperty) *ProductCreate {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -329,12 +329,12 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
-	if nodes := pc.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.PropertysIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.PropertyTable,
-			Columns: product.PropertyPrimaryKey,
+			Table:   product.PropertysTable,
+			Columns: product.PropertysPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64),

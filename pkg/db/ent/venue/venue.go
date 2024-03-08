@@ -40,11 +40,13 @@ const (
 	EdgePlaces = "places"
 	// Table holds the table name of the venue in the database.
 	Table = "venue"
-	// PlacesTable is the table that holds the places relation/edge. The primary key declared below.
-	PlacesTable = "venue_places"
+	// PlacesTable is the table that holds the places relation/edge.
+	PlacesTable = "venue_place"
 	// PlacesInverseTable is the table name for the VenuePlace entity.
 	// It exists in this package in order to avoid circular dependency with the "venueplace" package.
 	PlacesInverseTable = "venue_place"
+	// PlacesColumn is the table column denoting the places relation/edge.
+	PlacesColumn = "venue_id"
 )
 
 // Columns holds all SQL columns for venue fields.
@@ -62,12 +64,6 @@ var Columns = []string{
 	FieldInformation,
 	FieldStatus,
 }
-
-var (
-	// PlacesPrimaryKey and PlacesColumn2 are the table columns denoting the
-	// primary key for the places relation (M2M).
-	PlacesPrimaryKey = []string{"venue_id", "venue_place_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -170,6 +166,6 @@ func newPlacesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlacesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, PlacesTable, PlacesPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, PlacesTable, PlacesColumn),
 	)
 }

@@ -590,35 +590,43 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "照片"},
-		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 	}
 	// VenuePlaceTable holds the schema information for the "venue_place" table.
 	VenuePlaceTable = &schema.Table{
 		Name:       "venue_place",
 		Columns:    VenuePlaceColumns,
 		PrimaryKey: []*schema.Column{VenuePlaceColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "venue_place_venue_places",
+				Columns:    []*schema.Column{VenuePlaceColumns[6]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
-	// ProductPropertyColumns holds the columns for the "product_property" table.
-	ProductPropertyColumns = []*schema.Column{
+	// ProductPropertysColumns holds the columns for the "product_propertys" table.
+	ProductPropertysColumns = []*schema.Column{
 		{Name: "product_id", Type: field.TypeInt64},
 		{Name: "product_property_id", Type: field.TypeInt64},
 	}
-	// ProductPropertyTable holds the schema information for the "product_property" table.
-	ProductPropertyTable = &schema.Table{
-		Name:       "product_property",
-		Columns:    ProductPropertyColumns,
-		PrimaryKey: []*schema.Column{ProductPropertyColumns[0], ProductPropertyColumns[1]},
+	// ProductPropertysTable holds the schema information for the "product_propertys" table.
+	ProductPropertysTable = &schema.Table{
+		Name:       "product_propertys",
+		Columns:    ProductPropertysColumns,
+		PrimaryKey: []*schema.Column{ProductPropertysColumns[0], ProductPropertysColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "product_property_product_id",
-				Columns:    []*schema.Column{ProductPropertyColumns[0]},
+				Symbol:     "product_propertys_product_id",
+				Columns:    []*schema.Column{ProductPropertysColumns[0]},
 				RefColumns: []*schema.Column{ProductColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "product_property_product_property_id",
-				Columns:    []*schema.Column{ProductPropertyColumns[1]},
+				Symbol:     "product_propertys_product_property_id",
+				Columns:    []*schema.Column{ProductPropertysColumns[1]},
 				RefColumns: []*schema.Column{ProductPropertyColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -649,31 +657,6 @@ var (
 			},
 		},
 	}
-	// VenuePlacesColumns holds the columns for the "venue_places" table.
-	VenuePlacesColumns = []*schema.Column{
-		{Name: "venue_id", Type: field.TypeInt64},
-		{Name: "venue_place_id", Type: field.TypeInt64},
-	}
-	// VenuePlacesTable holds the schema information for the "venue_places" table.
-	VenuePlacesTable = &schema.Table{
-		Name:       "venue_places",
-		Columns:    VenuePlacesColumns,
-		PrimaryKey: []*schema.Column{VenuePlacesColumns[0], VenuePlacesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "venue_places_venue_id",
-				Columns:    []*schema.Column{VenuePlacesColumns[0]},
-				RefColumns: []*schema.Column{VenueColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "venue_places_venue_place_id",
-				Columns:    []*schema.Column{VenuePlacesColumns[1]},
-				RefColumns: []*schema.Column{VenuePlaceColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
@@ -697,9 +680,8 @@ var (
 		SysUsersTable,
 		VenueTable,
 		VenuePlaceTable,
-		ProductPropertyTable,
+		ProductPropertysTable,
 		RoleMenusTable,
-		VenuePlacesTable,
 	}
 )
 
@@ -774,13 +756,12 @@ func init() {
 	VenueTable.Annotation = &entsql.Annotation{
 		Table: "venue",
 	}
+	VenuePlaceTable.ForeignKeys[0].RefTable = VenueTable
 	VenuePlaceTable.Annotation = &entsql.Annotation{
 		Table: "venue_place",
 	}
-	ProductPropertyTable.ForeignKeys[0].RefTable = ProductTable
-	ProductPropertyTable.ForeignKeys[1].RefTable = ProductPropertyTable
+	ProductPropertysTable.ForeignKeys[0].RefTable = ProductTable
+	ProductPropertysTable.ForeignKeys[1].RefTable = ProductPropertyTable
 	RoleMenusTable.ForeignKeys[0].RefTable = SysRolesTable
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
-	VenuePlacesTable.ForeignKeys[0].RefTable = VenueTable
-	VenuePlacesTable.ForeignKeys[1].RefTable = VenuePlaceTable
 }

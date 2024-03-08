@@ -48,20 +48,20 @@ type Product struct {
 
 // ProductEdges holds the relations/edges for other nodes in the graph.
 type ProductEdges struct {
-	// Property holds the value of the property edge.
-	Property []*ProductProperty `json:"property,omitempty"`
+	// Propertys holds the value of the propertys edge.
+	Propertys []*ProductProperty `json:"propertys,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// PropertyOrErr returns the Property value or an error if the edge
+// PropertysOrErr returns the Propertys value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProductEdges) PropertyOrErr() ([]*ProductProperty, error) {
+func (e ProductEdges) PropertysOrErr() ([]*ProductProperty, error) {
 	if e.loadedTypes[0] {
-		return e.Property, nil
+		return e.Propertys, nil
 	}
-	return nil, &NotLoadedError{edge: "property"}
+	return nil, &NotLoadedError{edge: "propertys"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -175,9 +175,9 @@ func (pr *Product) Value(name string) (ent.Value, error) {
 	return pr.selectValues.Get(name)
 }
 
-// QueryProperty queries the "property" edge of the Product entity.
-func (pr *Product) QueryProperty() *ProductPropertyQuery {
-	return NewProductClient(pr.config).QueryProperty(pr)
+// QueryPropertys queries the "propertys" edge of the Product entity.
+func (pr *Product) QueryPropertys() *ProductPropertyQuery {
+	return NewProductClient(pr.config).QueryPropertys(pr)
 }
 
 // Update returns a builder for updating this Product.

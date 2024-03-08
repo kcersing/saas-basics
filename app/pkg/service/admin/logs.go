@@ -69,8 +69,8 @@ func (l Logs) List(req *do.LogsListReq) (list []*do.LogsInfo, total int, err err
 		predicates = append(predicates, logs.SuccessEQ(*req.Success))
 	}
 	logsData, err := l.db.Logs.Query().Where(predicates...).
-		Offset(int((req.Page - 1) * req.Limit)).
-		Limit(int(req.Limit)).
+		Offset(int((req.Page - 1) * req.PageSize)).
+		Limit(int(req.PageSize)).
 		Order(ent.Desc(logs.FieldCreatedAt)).All(l.ctx)
 	if err != nil {
 		return nil, 0, errors.Wrap(err, "query logsData list failed")

@@ -370,10 +370,10 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vu.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   venue.PlacesTable,
-			Columns: venue.PlacesPrimaryKey,
+			Columns: []string{venue.PlacesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
@@ -383,10 +383,10 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := vu.mutation.RemovedPlacesIDs(); len(nodes) > 0 && !vu.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   venue.PlacesTable,
-			Columns: venue.PlacesPrimaryKey,
+			Columns: []string{venue.PlacesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
@@ -399,10 +399,10 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := vu.mutation.PlacesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   venue.PlacesTable,
-			Columns: venue.PlacesPrimaryKey,
+			Columns: []string{venue.PlacesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
@@ -804,10 +804,10 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 	}
 	if vuo.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   venue.PlacesTable,
-			Columns: venue.PlacesPrimaryKey,
+			Columns: []string{venue.PlacesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
@@ -817,10 +817,10 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 	}
 	if nodes := vuo.mutation.RemovedPlacesIDs(); len(nodes) > 0 && !vuo.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   venue.PlacesTable,
-			Columns: venue.PlacesPrimaryKey,
+			Columns: []string{venue.PlacesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
@@ -833,10 +833,10 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 	}
 	if nodes := vuo.mutation.PlacesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   venue.PlacesTable,
-			Columns: venue.PlacesPrimaryKey,
+			Columns: []string{venue.PlacesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),

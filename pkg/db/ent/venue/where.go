@@ -845,7 +845,7 @@ func HasPlaces() predicate.Venue {
 	return predicate.Venue(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, PlacesTable, PlacesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, PlacesTable, PlacesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

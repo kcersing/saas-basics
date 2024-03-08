@@ -111,19 +111,9 @@ func (vpc *VenuePlaceCreate) SetID(i int64) *VenuePlaceCreate {
 	return vpc
 }
 
-// AddVenueIDs adds the "venue" edge to the Venue entity by IDs.
-func (vpc *VenuePlaceCreate) AddVenueIDs(ids ...int64) *VenuePlaceCreate {
-	vpc.mutation.AddVenueIDs(ids...)
-	return vpc
-}
-
-// AddVenue adds the "venue" edges to the Venue entity.
-func (vpc *VenuePlaceCreate) AddVenue(v ...*Venue) *VenuePlaceCreate {
-	ids := make([]int64, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpc.AddVenueIDs(ids...)
+// SetVenue sets the "venue" edge to the Venue entity.
+func (vpc *VenuePlaceCreate) SetVenue(v *Venue) *VenuePlaceCreate {
+	return vpc.SetVenueID(v.ID)
 }
 
 // Mutation returns the VenuePlaceMutation object of the builder.
@@ -231,20 +221,16 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 		_spec.SetField(venueplace.FieldPic, field.TypeString, value)
 		_node.Pic = value
 	}
-	if value, ok := vpc.mutation.VenueID(); ok {
-		_spec.SetField(venueplace.FieldVenueID, field.TypeInt64, value)
-		_node.VenueID = value
-	}
 	if value, ok := vpc.mutation.Status(); ok {
 		_spec.SetField(venueplace.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
 	if nodes := vpc.mutation.VenueIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   venueplace.VenueTable,
-			Columns: venueplace.VenuePrimaryKey,
+			Columns: []string{venueplace.VenueColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
@@ -253,6 +239,7 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.VenueID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -250,14 +250,14 @@ func (pu *ProductUpdate) ClearStatus() *ProductUpdate {
 	return pu
 }
 
-// AddPropertyIDs adds the "property" edge to the ProductProperty entity by IDs.
+// AddPropertyIDs adds the "propertys" edge to the ProductProperty entity by IDs.
 func (pu *ProductUpdate) AddPropertyIDs(ids ...int64) *ProductUpdate {
 	pu.mutation.AddPropertyIDs(ids...)
 	return pu
 }
 
-// AddProperty adds the "property" edges to the ProductProperty entity.
-func (pu *ProductUpdate) AddProperty(p ...*ProductProperty) *ProductUpdate {
+// AddPropertys adds the "propertys" edges to the ProductProperty entity.
+func (pu *ProductUpdate) AddPropertys(p ...*ProductProperty) *ProductUpdate {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -270,20 +270,20 @@ func (pu *ProductUpdate) Mutation() *ProductMutation {
 	return pu.mutation
 }
 
-// ClearProperty clears all "property" edges to the ProductProperty entity.
-func (pu *ProductUpdate) ClearProperty() *ProductUpdate {
-	pu.mutation.ClearProperty()
+// ClearPropertys clears all "propertys" edges to the ProductProperty entity.
+func (pu *ProductUpdate) ClearPropertys() *ProductUpdate {
+	pu.mutation.ClearPropertys()
 	return pu
 }
 
-// RemovePropertyIDs removes the "property" edge to ProductProperty entities by IDs.
+// RemovePropertyIDs removes the "propertys" edge to ProductProperty entities by IDs.
 func (pu *ProductUpdate) RemovePropertyIDs(ids ...int64) *ProductUpdate {
 	pu.mutation.RemovePropertyIDs(ids...)
 	return pu
 }
 
-// RemoveProperty removes "property" edges to ProductProperty entities.
-func (pu *ProductUpdate) RemoveProperty(p ...*ProductProperty) *ProductUpdate {
+// RemovePropertys removes "propertys" edges to ProductProperty entities.
+func (pu *ProductUpdate) RemovePropertys(p ...*ProductProperty) *ProductUpdate {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -408,12 +408,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.StatusCleared() {
 		_spec.ClearField(product.FieldStatus, field.TypeInt64)
 	}
-	if pu.mutation.PropertyCleared() {
+	if pu.mutation.PropertysCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.PropertyTable,
-			Columns: product.PropertyPrimaryKey,
+			Table:   product.PropertysTable,
+			Columns: product.PropertysPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64),
@@ -421,12 +421,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedPropertyIDs(); len(nodes) > 0 && !pu.mutation.PropertyCleared() {
+	if nodes := pu.mutation.RemovedPropertysIDs(); len(nodes) > 0 && !pu.mutation.PropertysCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.PropertyTable,
-			Columns: product.PropertyPrimaryKey,
+			Table:   product.PropertysTable,
+			Columns: product.PropertysPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64),
@@ -437,12 +437,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.PropertysIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.PropertyTable,
-			Columns: product.PropertyPrimaryKey,
+			Table:   product.PropertysTable,
+			Columns: product.PropertysPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64),
@@ -694,14 +694,14 @@ func (puo *ProductUpdateOne) ClearStatus() *ProductUpdateOne {
 	return puo
 }
 
-// AddPropertyIDs adds the "property" edge to the ProductProperty entity by IDs.
+// AddPropertyIDs adds the "propertys" edge to the ProductProperty entity by IDs.
 func (puo *ProductUpdateOne) AddPropertyIDs(ids ...int64) *ProductUpdateOne {
 	puo.mutation.AddPropertyIDs(ids...)
 	return puo
 }
 
-// AddProperty adds the "property" edges to the ProductProperty entity.
-func (puo *ProductUpdateOne) AddProperty(p ...*ProductProperty) *ProductUpdateOne {
+// AddPropertys adds the "propertys" edges to the ProductProperty entity.
+func (puo *ProductUpdateOne) AddPropertys(p ...*ProductProperty) *ProductUpdateOne {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -714,20 +714,20 @@ func (puo *ProductUpdateOne) Mutation() *ProductMutation {
 	return puo.mutation
 }
 
-// ClearProperty clears all "property" edges to the ProductProperty entity.
-func (puo *ProductUpdateOne) ClearProperty() *ProductUpdateOne {
-	puo.mutation.ClearProperty()
+// ClearPropertys clears all "propertys" edges to the ProductProperty entity.
+func (puo *ProductUpdateOne) ClearPropertys() *ProductUpdateOne {
+	puo.mutation.ClearPropertys()
 	return puo
 }
 
-// RemovePropertyIDs removes the "property" edge to ProductProperty entities by IDs.
+// RemovePropertyIDs removes the "propertys" edge to ProductProperty entities by IDs.
 func (puo *ProductUpdateOne) RemovePropertyIDs(ids ...int64) *ProductUpdateOne {
 	puo.mutation.RemovePropertyIDs(ids...)
 	return puo
 }
 
-// RemoveProperty removes "property" edges to ProductProperty entities.
-func (puo *ProductUpdateOne) RemoveProperty(p ...*ProductProperty) *ProductUpdateOne {
+// RemovePropertys removes "propertys" edges to ProductProperty entities.
+func (puo *ProductUpdateOne) RemovePropertys(p ...*ProductProperty) *ProductUpdateOne {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -882,12 +882,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	if puo.mutation.StatusCleared() {
 		_spec.ClearField(product.FieldStatus, field.TypeInt64)
 	}
-	if puo.mutation.PropertyCleared() {
+	if puo.mutation.PropertysCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.PropertyTable,
-			Columns: product.PropertyPrimaryKey,
+			Table:   product.PropertysTable,
+			Columns: product.PropertysPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64),
@@ -895,12 +895,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedPropertyIDs(); len(nodes) > 0 && !puo.mutation.PropertyCleared() {
+	if nodes := puo.mutation.RemovedPropertysIDs(); len(nodes) > 0 && !puo.mutation.PropertysCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.PropertyTable,
-			Columns: product.PropertyPrimaryKey,
+			Table:   product.PropertysTable,
+			Columns: product.PropertysPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64),
@@ -911,12 +911,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.PropertysIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.PropertyTable,
-			Columns: product.PropertyPrimaryKey,
+			Table:   product.PropertysTable,
+			Columns: product.PropertysPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64),

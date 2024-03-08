@@ -335,26 +335,6 @@ func VenueIDNotIn(vs ...int64) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldNotIn(FieldVenueID, vs...))
 }
 
-// VenueIDGT applies the GT predicate on the "venue_id" field.
-func VenueIDGT(v int64) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldGT(FieldVenueID, v))
-}
-
-// VenueIDGTE applies the GTE predicate on the "venue_id" field.
-func VenueIDGTE(v int64) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldGTE(FieldVenueID, v))
-}
-
-// VenueIDLT applies the LT predicate on the "venue_id" field.
-func VenueIDLT(v int64) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldLT(FieldVenueID, v))
-}
-
-// VenueIDLTE applies the LTE predicate on the "venue_id" field.
-func VenueIDLTE(v int64) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldLTE(FieldVenueID, v))
-}
-
 // VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
 func VenueIDIsNil() predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldIsNull(FieldVenueID))
@@ -420,7 +400,7 @@ func HasVenue() predicate.VenuePlace {
 	return predicate.VenuePlace(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, VenueTable, VenuePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, VenueTable, VenueColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

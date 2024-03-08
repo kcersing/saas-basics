@@ -4,6 +4,7 @@ package ent
 
 import (
 	"fmt"
+	"saas/pkg/db/ent/venue"
 	"saas/pkg/db/ent/venueplace"
 	"strings"
 	"time"
@@ -39,16 +40,20 @@ type VenuePlace struct {
 // VenuePlaceEdges holds the relations/edges for other nodes in the graph.
 type VenuePlaceEdges struct {
 	// Venue holds the value of the venue edge.
-	Venue []*Venue `json:"venue,omitempty"`
+	Venue *Venue `json:"venue,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
 // VenueOrErr returns the Venue value or an error if the edge
-// was not loaded in eager-loading.
-func (e VenuePlaceEdges) VenueOrErr() ([]*Venue, error) {
+// was not loaded in eager-loading, or loaded but was not found.
+func (e VenuePlaceEdges) VenueOrErr() (*Venue, error) {
 	if e.loadedTypes[0] {
+		if e.Venue == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: venue.Label}
+		}
 		return e.Venue, nil
 	}
 	return nil, &NotLoadedError{edge: "venue"}

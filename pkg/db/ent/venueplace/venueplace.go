@@ -30,11 +30,13 @@ const (
 	EdgeVenue = "venue"
 	// Table holds the table name of the venueplace in the database.
 	Table = "venue_place"
-	// VenueTable is the table that holds the venue relation/edge. The primary key declared below.
-	VenueTable = "venue_places"
+	// VenueTable is the table that holds the venue relation/edge.
+	VenueTable = "venue_place"
 	// VenueInverseTable is the table name for the Venue entity.
 	// It exists in this package in order to avoid circular dependency with the "venue" package.
 	VenueInverseTable = "venue"
+	// VenueColumn is the table column denoting the venue relation/edge.
+	VenueColumn = "venue_id"
 )
 
 // Columns holds all SQL columns for venueplace fields.
@@ -47,12 +49,6 @@ var Columns = []string{
 	FieldVenueID,
 	FieldStatus,
 }
-
-var (
-	// VenuePrimaryKey and VenueColumn2 are the table columns denoting the
-	// primary key for the venue relation (M2M).
-	VenuePrimaryKey = []string{"venue_id", "venue_place_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -113,23 +109,16 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByVenueCount orders the results by venue count.
-func ByVenueCount(opts ...sql.OrderTermOption) OrderOption {
+// ByVenueField orders the results by venue field.
+func ByVenueField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newVenueStep(), opts...)
-	}
-}
-
-// ByVenue orders the results by venue terms.
-func ByVenue(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newVenueStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newVenueStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newVenueStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VenueInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, VenueTable, VenuePrimaryKey...),
+		sqlgraph.Edge(sqlgraph.M2O, true, VenueTable, VenueColumn),
 	)
 }

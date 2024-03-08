@@ -35,7 +35,7 @@ const (
 	// Table holds the table name of the productproperty in the database.
 	Table = "product_property"
 	// ProductTable is the table that holds the product relation/edge. The primary key declared below.
-	ProductTable = "product_property"
+	ProductTable = "product_propertys"
 	// ProductInverseTable is the table name for the Product entity.
 	// It exists in this package in order to avoid circular dependency with the "product" package.
 	ProductInverseTable = "product"

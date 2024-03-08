@@ -31,7 +31,7 @@ func (VenuePlace) Mixin() []ent.Mixin {
 func (VenuePlace) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("venue", Venue.Type).
-			Ref("places"),
+			Ref("places").Field("venue_id").Unique(),
 	}
 }
 

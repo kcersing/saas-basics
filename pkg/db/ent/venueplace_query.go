@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"database/sql/driver"
 	"fmt"
 	"math"
 	"saas/pkg/db/ent/predicate"
@@ -74,7 +73,7 @@ func (vpq *VenuePlaceQuery) QueryVenue() *VenueQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(venueplace.Table, venueplace.FieldID, selector),
 			sqlgraph.To(venue.Table, venue.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, venueplace.VenueTable, venueplace.VenuePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, venueplace.VenueTable, venueplace.VenueColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(vpq.driver.Dialect(), step)
 		return fromU, nil
@@ -393,9 +392,8 @@ func (vpq *VenuePlaceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		return nodes, nil
 	}
 	if query := vpq.withVenue; query != nil {
-		if err := vpq.loadVenue(ctx, query, nodes,
-			func(n *VenuePlace) { n.Edges.Venue = []*Venue{} },
-			func(n *VenuePlace, e *Venue) { n.Edges.Venue = append(n.Edges.Venue, e) }); err != nil {
+		if err := vpq.loadVenue(ctx, query, nodes, nil,
+			func(n *VenuePlace, e *Venue) { n.Edges.Venue = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -403,62 +401,30 @@ func (vpq *VenuePlaceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 }
 
 func (vpq *VenuePlaceQuery) loadVenue(ctx context.Context, query *VenueQuery, nodes []*VenuePlace, init func(*VenuePlace), assign func(*VenuePlace, *Venue)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int64]*VenuePlace)
-	nids := make(map[int64]map[*VenuePlace]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*VenuePlace)
+	for i := range nodes {
+		fk := nodes[i].VenueID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
 		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(venueplace.VenueTable)
-		s.Join(joinT).On(s.C(venue.FieldID), joinT.C(venueplace.VenuePrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(venueplace.VenuePrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(venueplace.VenuePrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
+	if len(ids) == 0 {
+		return nil
 	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullInt64).Int64
-				inValue := values[1].(*sql.NullInt64).Int64
-				if nids[inValue] == nil {
-					nids[inValue] = map[*VenuePlace]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Venue](ctx, query, qr, query.inters)
+	query.Where(venue.IDIn(ids...))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "venue" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "venue_id" returned %v`, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -488,6 +454,9 @@ func (vpq *VenuePlaceQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != venueplace.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if vpq.withVenue != nil {
+			_spec.Node.AddColumnOnce(venueplace.FieldVenueID)
 		}
 	}
 	if ps := vpq.predicates; len(ps) > 0 {

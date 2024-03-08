@@ -740,21 +740,21 @@ func StatusNotNil() predicate.Product {
 	return predicate.Product(sql.FieldNotNull(FieldStatus))
 }
 
-// HasProperty applies the HasEdge predicate on the "property" edge.
-func HasProperty() predicate.Product {
+// HasPropertys applies the HasEdge predicate on the "propertys" edge.
+func HasPropertys() predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, PropertyTable, PropertyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, PropertysTable, PropertysPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasPropertyWith applies the HasEdge predicate on the "property" edge with a given conditions (other predicates).
-func HasPropertyWith(preds ...predicate.ProductProperty) predicate.Product {
+// HasPropertysWith applies the HasEdge predicate on the "propertys" edge with a given conditions (other predicates).
+func HasPropertysWith(preds ...predicate.ProductProperty) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
-		step := newPropertyStep()
+		step := newPropertysStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

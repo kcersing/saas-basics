@@ -36,15 +36,15 @@ const (
 	FieldStock = "stock"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// EdgeProperty holds the string denoting the property edge name in mutations.
-	EdgeProperty = "property"
+	// EdgePropertys holds the string denoting the propertys edge name in mutations.
+	EdgePropertys = "propertys"
 	// Table holds the table name of the product in the database.
 	Table = "product"
-	// PropertyTable is the table that holds the property relation/edge. The primary key declared below.
-	PropertyTable = "product_property"
-	// PropertyInverseTable is the table name for the ProductProperty entity.
+	// PropertysTable is the table that holds the propertys relation/edge. The primary key declared below.
+	PropertysTable = "product_propertys"
+	// PropertysInverseTable is the table name for the ProductProperty entity.
 	// It exists in this package in order to avoid circular dependency with the "productproperty" package.
-	PropertyInverseTable = "product_property"
+	PropertysInverseTable = "product_property"
 )
 
 // Columns holds all SQL columns for product fields.
@@ -64,9 +64,9 @@ var Columns = []string{
 }
 
 var (
-	// PropertyPrimaryKey and PropertyColumn2 are the table columns denoting the
-	// primary key for the property relation (M2M).
-	PropertyPrimaryKey = []string{"product_id", "product_property_id"}
+	// PropertysPrimaryKey and PropertysColumn2 are the table columns denoting the
+	// primary key for the propertys relation (M2M).
+	PropertysPrimaryKey = []string{"product_id", "product_property_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -153,23 +153,23 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByPropertyCount orders the results by property count.
-func ByPropertyCount(opts ...sql.OrderTermOption) OrderOption {
+// ByPropertysCount orders the results by propertys count.
+func ByPropertysCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newPropertyStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newPropertysStep(), opts...)
 	}
 }
 
-// ByProperty orders the results by property terms.
-func ByProperty(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByPropertys orders the results by propertys terms.
+func ByPropertys(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPropertyStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newPropertysStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newPropertyStep() *sqlgraph.Step {
+func newPropertysStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PropertyInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, PropertyTable, PropertyPrimaryKey...),
+		sqlgraph.To(PropertysInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, PropertysTable, PropertysPrimaryKey...),
 	)
 }

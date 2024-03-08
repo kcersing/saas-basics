@@ -2646,15 +2646,15 @@ func (c *ProductClient) GetX(ctx context.Context, id int64) *Product {
 	return obj
 }
 
-// QueryProperty queries the property edge of a Product.
-func (c *ProductClient) QueryProperty(pr *Product) *ProductPropertyQuery {
+// QueryPropertys queries the propertys edge of a Product.
+func (c *ProductClient) QueryPropertys(pr *Product) *ProductPropertyQuery {
 	query := (&ProductPropertyClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(product.Table, product.FieldID, id),
 			sqlgraph.To(productproperty.Table, productproperty.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, product.PropertyTable, product.PropertyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, product.PropertysTable, product.PropertysPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
@@ -3399,7 +3399,7 @@ func (c *VenueClient) QueryPlaces(v *Venue) *VenuePlaceQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(venue.Table, venue.FieldID, id),
 			sqlgraph.To(venueplace.Table, venueplace.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, venue.PlacesTable, venue.PlacesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, venue.PlacesTable, venue.PlacesColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
@@ -3548,7 +3548,7 @@ func (c *VenuePlaceClient) QueryVenue(vp *VenuePlace) *VenueQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(venueplace.Table, venueplace.FieldID, id),
 			sqlgraph.To(venue.Table, venue.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, venueplace.VenueTable, venueplace.VenuePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, venueplace.VenueTable, venueplace.VenueColumn),
 		)
 		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
 		return fromV, nil

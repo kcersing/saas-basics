@@ -15322,32 +15322,32 @@ func (m *OrderSalesMutation) ResetEdge(name string) error {
 // ProductMutation represents an operation that mutates the Product nodes in the graph.
 type ProductMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int64
-	created_at      *time.Time
-	updated_at      *time.Time
-	sn              *string
-	venue_id        *int64
-	addvenue_id     *int64
-	create_id       *int64
-	addcreate_id    *int64
-	name            *string
-	pic             *int64
-	addpic          *int64
-	description     *string
-	price           *string
-	stock           *int64
-	addstock        *int64
-	status          *int64
-	addstatus       *int64
-	clearedFields   map[string]struct{}
-	property        map[int64]struct{}
-	removedproperty map[int64]struct{}
-	clearedproperty bool
-	done            bool
-	oldValue        func(context.Context) (*Product, error)
-	predicates      []predicate.Product
+	op               Op
+	typ              string
+	id               *int64
+	created_at       *time.Time
+	updated_at       *time.Time
+	sn               *string
+	venue_id         *int64
+	addvenue_id      *int64
+	create_id        *int64
+	addcreate_id     *int64
+	name             *string
+	pic              *int64
+	addpic           *int64
+	description      *string
+	price            *string
+	stock            *int64
+	addstock         *int64
+	status           *int64
+	addstatus        *int64
+	clearedFields    map[string]struct{}
+	propertys        map[int64]struct{}
+	removedpropertys map[int64]struct{}
+	clearedpropertys bool
+	done             bool
+	oldValue         func(context.Context) (*Product, error)
+	predicates       []predicate.Product
 }
 
 var _ ent.Mutation = (*ProductMutation)(nil)
@@ -16072,58 +16072,58 @@ func (m *ProductMutation) ResetStatus() {
 	delete(m.clearedFields, product.FieldStatus)
 }
 
-// AddPropertyIDs adds the "property" edge to the ProductProperty entity by ids.
+// AddPropertyIDs adds the "propertys" edge to the ProductProperty entity by ids.
 func (m *ProductMutation) AddPropertyIDs(ids ...int64) {
-	if m.property == nil {
-		m.property = make(map[int64]struct{})
+	if m.propertys == nil {
+		m.propertys = make(map[int64]struct{})
 	}
 	for i := range ids {
-		m.property[ids[i]] = struct{}{}
+		m.propertys[ids[i]] = struct{}{}
 	}
 }
 
-// ClearProperty clears the "property" edge to the ProductProperty entity.
-func (m *ProductMutation) ClearProperty() {
-	m.clearedproperty = true
+// ClearPropertys clears the "propertys" edge to the ProductProperty entity.
+func (m *ProductMutation) ClearPropertys() {
+	m.clearedpropertys = true
 }
 
-// PropertyCleared reports if the "property" edge to the ProductProperty entity was cleared.
-func (m *ProductMutation) PropertyCleared() bool {
-	return m.clearedproperty
+// PropertysCleared reports if the "propertys" edge to the ProductProperty entity was cleared.
+func (m *ProductMutation) PropertysCleared() bool {
+	return m.clearedpropertys
 }
 
-// RemovePropertyIDs removes the "property" edge to the ProductProperty entity by IDs.
+// RemovePropertyIDs removes the "propertys" edge to the ProductProperty entity by IDs.
 func (m *ProductMutation) RemovePropertyIDs(ids ...int64) {
-	if m.removedproperty == nil {
-		m.removedproperty = make(map[int64]struct{})
+	if m.removedpropertys == nil {
+		m.removedpropertys = make(map[int64]struct{})
 	}
 	for i := range ids {
-		delete(m.property, ids[i])
-		m.removedproperty[ids[i]] = struct{}{}
+		delete(m.propertys, ids[i])
+		m.removedpropertys[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedProperty returns the removed IDs of the "property" edge to the ProductProperty entity.
-func (m *ProductMutation) RemovedPropertyIDs() (ids []int64) {
-	for id := range m.removedproperty {
+// RemovedPropertys returns the removed IDs of the "propertys" edge to the ProductProperty entity.
+func (m *ProductMutation) RemovedPropertysIDs() (ids []int64) {
+	for id := range m.removedpropertys {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PropertyIDs returns the "property" edge IDs in the mutation.
-func (m *ProductMutation) PropertyIDs() (ids []int64) {
-	for id := range m.property {
+// PropertysIDs returns the "propertys" edge IDs in the mutation.
+func (m *ProductMutation) PropertysIDs() (ids []int64) {
+	for id := range m.propertys {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetProperty resets all changes to the "property" edge.
-func (m *ProductMutation) ResetProperty() {
-	m.property = nil
-	m.clearedproperty = false
-	m.removedproperty = nil
+// ResetPropertys resets all changes to the "propertys" edge.
+func (m *ProductMutation) ResetPropertys() {
+	m.propertys = nil
+	m.clearedpropertys = false
+	m.removedpropertys = nil
 }
 
 // Where appends a list predicates to the ProductMutation builder.
@@ -16550,8 +16550,8 @@ func (m *ProductMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProductMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.property != nil {
-		edges = append(edges, product.EdgeProperty)
+	if m.propertys != nil {
+		edges = append(edges, product.EdgePropertys)
 	}
 	return edges
 }
@@ -16560,9 +16560,9 @@ func (m *ProductMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ProductMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case product.EdgeProperty:
-		ids := make([]ent.Value, 0, len(m.property))
-		for id := range m.property {
+	case product.EdgePropertys:
+		ids := make([]ent.Value, 0, len(m.propertys))
+		for id := range m.propertys {
 			ids = append(ids, id)
 		}
 		return ids
@@ -16573,8 +16573,8 @@ func (m *ProductMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProductMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedproperty != nil {
-		edges = append(edges, product.EdgeProperty)
+	if m.removedpropertys != nil {
+		edges = append(edges, product.EdgePropertys)
 	}
 	return edges
 }
@@ -16583,9 +16583,9 @@ func (m *ProductMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *ProductMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case product.EdgeProperty:
-		ids := make([]ent.Value, 0, len(m.removedproperty))
-		for id := range m.removedproperty {
+	case product.EdgePropertys:
+		ids := make([]ent.Value, 0, len(m.removedpropertys))
+		for id := range m.removedpropertys {
 			ids = append(ids, id)
 		}
 		return ids
@@ -16596,8 +16596,8 @@ func (m *ProductMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProductMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedproperty {
-		edges = append(edges, product.EdgeProperty)
+	if m.clearedpropertys {
+		edges = append(edges, product.EdgePropertys)
 	}
 	return edges
 }
@@ -16606,8 +16606,8 @@ func (m *ProductMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ProductMutation) EdgeCleared(name string) bool {
 	switch name {
-	case product.EdgeProperty:
-		return m.clearedproperty
+	case product.EdgePropertys:
+		return m.clearedpropertys
 	}
 	return false
 }
@@ -16624,8 +16624,8 @@ func (m *ProductMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ProductMutation) ResetEdge(name string) error {
 	switch name {
-	case product.EdgeProperty:
-		m.ResetProperty()
+	case product.EdgePropertys:
+		m.ResetPropertys()
 		return nil
 	}
 	return fmt.Errorf("unknown Product edge %s", name)
@@ -21803,13 +21803,10 @@ type VenuePlaceMutation struct {
 	updated_at    *time.Time
 	name          *string
 	pic           *string
-	venue_id      *int64
-	addvenue_id   *int64
 	status        *int64
 	addstatus     *int64
 	clearedFields map[string]struct{}
-	venue         map[int64]struct{}
-	removedvenue  map[int64]struct{}
+	venue         *int64
 	clearedvenue  bool
 	done          bool
 	oldValue      func(context.Context) (*VenuePlace, error)
@@ -22092,13 +22089,12 @@ func (m *VenuePlaceMutation) ResetPic() {
 
 // SetVenueID sets the "venue_id" field.
 func (m *VenuePlaceMutation) SetVenueID(i int64) {
-	m.venue_id = &i
-	m.addvenue_id = nil
+	m.venue = &i
 }
 
 // VenueID returns the value of the "venue_id" field in the mutation.
 func (m *VenuePlaceMutation) VenueID() (r int64, exists bool) {
-	v := m.venue_id
+	v := m.venue
 	if v == nil {
 		return
 	}
@@ -22122,28 +22118,9 @@ func (m *VenuePlaceMutation) OldVenueID(ctx context.Context) (v int64, err error
 	return oldValue.VenueID, nil
 }
 
-// AddVenueID adds i to the "venue_id" field.
-func (m *VenuePlaceMutation) AddVenueID(i int64) {
-	if m.addvenue_id != nil {
-		*m.addvenue_id += i
-	} else {
-		m.addvenue_id = &i
-	}
-}
-
-// AddedVenueID returns the value that was added to the "venue_id" field in this mutation.
-func (m *VenuePlaceMutation) AddedVenueID() (r int64, exists bool) {
-	v := m.addvenue_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearVenueID clears the value of the "venue_id" field.
 func (m *VenuePlaceMutation) ClearVenueID() {
-	m.venue_id = nil
-	m.addvenue_id = nil
+	m.venue = nil
 	m.clearedFields[venueplace.FieldVenueID] = struct{}{}
 }
 
@@ -22155,8 +22132,7 @@ func (m *VenuePlaceMutation) VenueIDCleared() bool {
 
 // ResetVenueID resets all changes to the "venue_id" field.
 func (m *VenuePlaceMutation) ResetVenueID() {
-	m.venue_id = nil
-	m.addvenue_id = nil
+	m.venue = nil
 	delete(m.clearedFields, venueplace.FieldVenueID)
 }
 
@@ -22230,49 +22206,23 @@ func (m *VenuePlaceMutation) ResetStatus() {
 	delete(m.clearedFields, venueplace.FieldStatus)
 }
 
-// AddVenueIDs adds the "venue" edge to the Venue entity by ids.
-func (m *VenuePlaceMutation) AddVenueIDs(ids ...int64) {
-	if m.venue == nil {
-		m.venue = make(map[int64]struct{})
-	}
-	for i := range ids {
-		m.venue[ids[i]] = struct{}{}
-	}
-}
-
 // ClearVenue clears the "venue" edge to the Venue entity.
 func (m *VenuePlaceMutation) ClearVenue() {
 	m.clearedvenue = true
+	m.clearedFields[venueplace.FieldVenueID] = struct{}{}
 }
 
 // VenueCleared reports if the "venue" edge to the Venue entity was cleared.
 func (m *VenuePlaceMutation) VenueCleared() bool {
-	return m.clearedvenue
-}
-
-// RemoveVenueIDs removes the "venue" edge to the Venue entity by IDs.
-func (m *VenuePlaceMutation) RemoveVenueIDs(ids ...int64) {
-	if m.removedvenue == nil {
-		m.removedvenue = make(map[int64]struct{})
-	}
-	for i := range ids {
-		delete(m.venue, ids[i])
-		m.removedvenue[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedVenue returns the removed IDs of the "venue" edge to the Venue entity.
-func (m *VenuePlaceMutation) RemovedVenueIDs() (ids []int64) {
-	for id := range m.removedvenue {
-		ids = append(ids, id)
-	}
-	return
+	return m.VenueIDCleared() || m.clearedvenue
 }
 
 // VenueIDs returns the "venue" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// VenueID instead. It exists only for internal usage by the builders.
 func (m *VenuePlaceMutation) VenueIDs() (ids []int64) {
-	for id := range m.venue {
-		ids = append(ids, id)
+	if id := m.venue; id != nil {
+		ids = append(ids, *id)
 	}
 	return
 }
@@ -22281,7 +22231,6 @@ func (m *VenuePlaceMutation) VenueIDs() (ids []int64) {
 func (m *VenuePlaceMutation) ResetVenue() {
 	m.venue = nil
 	m.clearedvenue = false
-	m.removedvenue = nil
 }
 
 // Where appends a list predicates to the VenuePlaceMutation builder.
@@ -22331,7 +22280,7 @@ func (m *VenuePlaceMutation) Fields() []string {
 	if m.pic != nil {
 		fields = append(fields, venueplace.FieldPic)
 	}
-	if m.venue_id != nil {
+	if m.venue != nil {
 		fields = append(fields, venueplace.FieldVenueID)
 	}
 	if m.status != nil {
@@ -22437,9 +22386,6 @@ func (m *VenuePlaceMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *VenuePlaceMutation) AddedFields() []string {
 	var fields []string
-	if m.addvenue_id != nil {
-		fields = append(fields, venueplace.FieldVenueID)
-	}
 	if m.addstatus != nil {
 		fields = append(fields, venueplace.FieldStatus)
 	}
@@ -22451,8 +22397,6 @@ func (m *VenuePlaceMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *VenuePlaceMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case venueplace.FieldVenueID:
-		return m.AddedVenueID()
 	case venueplace.FieldStatus:
 		return m.AddedStatus()
 	}
@@ -22464,13 +22408,6 @@ func (m *VenuePlaceMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *VenuePlaceMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case venueplace.FieldVenueID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddVenueID(v)
-		return nil
 	case venueplace.FieldStatus:
 		v, ok := value.(int64)
 		if !ok {
@@ -22568,11 +22505,9 @@ func (m *VenuePlaceMutation) AddedEdges() []string {
 func (m *VenuePlaceMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case venueplace.EdgeVenue:
-		ids := make([]ent.Value, 0, len(m.venue))
-		for id := range m.venue {
-			ids = append(ids, id)
+		if id := m.venue; id != nil {
+			return []ent.Value{*id}
 		}
-		return ids
 	}
 	return nil
 }
@@ -22580,23 +22515,12 @@ func (m *VenuePlaceMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VenuePlaceMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedvenue != nil {
-		edges = append(edges, venueplace.EdgeVenue)
-	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *VenuePlaceMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case venueplace.EdgeVenue:
-		ids := make([]ent.Value, 0, len(m.removedvenue))
-		for id := range m.removedvenue {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
@@ -22623,6 +22547,9 @@ func (m *VenuePlaceMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *VenuePlaceMutation) ClearEdge(name string) error {
 	switch name {
+	case venueplace.EdgeVenue:
+		m.ClearVenue()
+		return nil
 	}
 	return fmt.Errorf("unknown VenuePlace unique edge %s", name)
 }
