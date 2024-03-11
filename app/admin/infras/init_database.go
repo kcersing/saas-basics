@@ -726,17 +726,17 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetIcon("ant-design:disconnect-outlined").
 		SetHideMenu(false)
 
-	//menus[17] = I.DB.Menu.Create().
-	//	SetMenuLevel(2).
-	//	SetMenuType(1).
-	//	SetParentID(16).
-	//	SetPath("/product/structTag").
-	//	SetName("DeleteStructTag").
-	//	SetComponent("/product/structTag").
-	//	SetOrderNo(2).
-	//	SetTitle("DeleteStructTag").
-	//	SetIcon("ant-design:disconnect-outlined").
-	//	SetHideMenu(false)
+	menus[17] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(16).
+		SetPath("/product/structTag").
+		SetName("DeleteStructTag").
+		SetComponent("/product/structTag").
+		SetOrderNo(2).
+		SetTitle("DeleteStructTag").
+		SetIcon("ant-design:disconnect-outlined").
+		SetHideMenu(false)
 
 	err := I.DB.Menu.CreateBulk(menus...).Exec(ctx)
 	if err != nil {
@@ -759,9 +759,7 @@ func (I *InitDatabase) insertRoleMenuAuthorityData(ctx context.Context) error {
 	for i := range menuIDs {
 		menuIDs[i] = int64(i + 1)
 	}
-
 	err = I.DB.Role.Update().AddMenuIDs(menuIDs...).Exec(ctx)
-
 	if err != nil {
 		return errors.Wrap(err, "db failed")
 	}

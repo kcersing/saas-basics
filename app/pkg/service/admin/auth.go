@@ -52,7 +52,13 @@ func (a Auth) UpdateApiAuth(roleIDStr string, infos []*do.ApiAuthInfo) error {
 }
 
 func (a Auth) ApiAuth(roleIDStr string) (infos []*do.ApiAuthInfo, err error) {
+	hlog.Info("=========================")
+	hlog.Info(roleIDStr)
+	hlog.Info("=========================")
 	policies := a.Cbs.GetFilteredPolicy(0, roleIDStr)
+	hlog.Info("=========================")
+	hlog.Info(policies)
+	hlog.Info("=========================")
 	for _, v := range policies {
 		infos = append(infos, &do.ApiAuthInfo{
 			Path:   v[1],
