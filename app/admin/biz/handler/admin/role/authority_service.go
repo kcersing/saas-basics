@@ -4,6 +4,7 @@ package role
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/jinzhu/copier"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
@@ -83,8 +84,15 @@ func ApiAuthority(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	policies, err := admin.NewAuth(ctx, c).ApiAuth(strconv.FormatInt(req.ID, 10))
+	roleId := strconv.FormatInt(req.ID, 10)
+	hlog.Info("00000000000000000000000000000000")
+	hlog.Info(roleId)
+	hlog.Info("00000000000000000000000000000000")
+	if roleId == "0" {
+		c.String(consts.StatusBadRequest, "roleId 不应为0")
+		return
+	}
+	policies, err := admin.NewAuth(ctx, c).ApiAuth(roleId)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return

@@ -52,13 +52,12 @@ func (a Auth) UpdateApiAuth(roleIDStr string, infos []*do.ApiAuthInfo) error {
 }
 
 func (a Auth) ApiAuth(roleIDStr string) (infos []*do.ApiAuthInfo, err error) {
-	hlog.Info("=========================")
-	hlog.Info(roleIDStr)
-	hlog.Info("=========================")
+
 	policies := a.Cbs.GetFilteredPolicy(0, roleIDStr)
-	hlog.Info("=========================")
+
+	hlog.Info("111111111111111111111111111111111")
 	hlog.Info(policies)
-	hlog.Info("=========================")
+	hlog.Info("111111111111111111111111111111111")
 	for _, v := range policies {
 		infos = append(infos, &do.ApiAuthInfo{
 			Path:   v[1],
@@ -112,5 +111,6 @@ func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
 		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
 		db:    infras.DB,
 		cache: infras.Cache,
+		Cbs:   infras.CasbinEnforcer(),
 	}
 }
