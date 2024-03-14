@@ -15,50 +15,50 @@ struct LoginReq {
 
 // The profile request | 更新个人数据
 struct ProfileReq {
-    1:  string nickname (api.raw = "nickname")
-    2:  string avatar (api.raw = "avatar")
-    3:  string mobile (api.raw = "mobile")
-    4:  string email (api.raw = "email")
+    1:  optional string nickname (api.raw = "nickname")
+    2:  optional string avatar (api.raw = "avatar")
+    3:  optional string mobile (api.raw = "mobile")
+    4:  optional string email (api.raw = "email")
 }
 
 // register request | 注册参数
 struct RegisterReq {
-    1:  string username (api.raw = "username")
-    2:  string password (api.raw = "password")
-    3:  string captcha_id (api.raw = "captcha_id")
-    4:  string captcha (api.raw = "captcha")
-    5:  string email (api.raw = "email")
+    1:  optional string username (api.raw = "username")
+    2:  optional string password (api.raw = "password")
+    3:  optional string captcha_id (api.raw = "captcha_id")
+    4:  optional string captcha (api.raw = "captcha")
+    5:  optional string email (api.raw = "email")
 }
 
 // change user's password request | 修改密码请求参数
 struct ChangePasswordReq {
-    1:  string user_id (api.raw = "user_id")
+    1:  i64 user_id (api.raw = "user_id")
     2:  string old_password (api.raw = "old_password")
     3:  string new_password (api.raw = "new_password")
 }
 
 // Create or update user information request | 创建或更新用户信息
 struct CreateOrUpdateUserReq {
-    1:  string id (api.raw = "id")
-    2:  string avatar (api.raw = "avatar")
-    3:  string role_id (api.raw = "role_id")
-    4:  string mobile (api.raw = "mobile")
-    5:  string email (api.raw = "email")
-    6:  string status (api.raw = "status")
-    7:  string username (api.raw = "username")
-    8:  string nickname (api.raw = "nickname")
-    9:  string password (api.raw = "password")
+    1:  i64 id (api.raw = "id")
+    2:  optional string avatar (api.raw = "avatar")
+    3:  optional i64 role_id (api.raw = "role_id")
+    4:  optional string mobile (api.raw = "mobile")
+    5:  optional string email (api.raw = "email")
+    6:  optional i64 status (api.raw = "status")
+    7:  optional string username (api.raw = "username")
+    8:  optional string nickname (api.raw = "nickname")
+    9:  optional string password (api.raw = "password")
 }
 
 // Get user list request | 获取用户列表请求参数
 struct UserListReq {
-    1:  i64 page (api.raw = "page")
-    2:  i64 limit (api.raw = "limit")
-    3:  string username (api.raw = "username")
-    4:  string nickname (api.raw = "nickname")
-    5:  string email (api.raw = "email")
-    6:  string mobile (api.raw = "mobile")
-    7:  i64 role_id (api.raw = "role_id")
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 limit (api.raw = "limit")
+    3:  optional string username (api.raw = "username")
+    4:  optional string nickname (api.raw = "nickname")
+    5:  optional string email (api.raw = "email")
+    6:  optional string mobile (api.raw = "mobile")
+    7:  optional i64 role_id (api.raw = "role_id")
 }
 
 

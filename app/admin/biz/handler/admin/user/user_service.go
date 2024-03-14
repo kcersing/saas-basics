@@ -4,8 +4,10 @@ package user
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
 	"saas/app/pkg/service/admin"
 	"strconv"
 
@@ -22,7 +24,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	var req user.RegisterReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -38,7 +40,7 @@ func UserPermCode(ctx context.Context, c *app.RequestContext) {
 	var req base.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	roleId, exist := c.Get("role_id")
@@ -47,6 +49,7 @@ func UserPermCode(ctx context.Context, c *app.RequestContext) {
 	}
 
 	utils.SendResponse(c, errno.Success, []string{roleId.(string)}, 0, "")
+	return
 }
 
 // ChangePassword .
@@ -56,13 +59,17 @@ func ChangePassword(ctx context.Context, c *app.RequestContext) {
 	var req user.ChangePasswordReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
+	err = admin.NewUser(ctx, c).ChangePassword(req.UserID, req.OldPassword, req.NewPassword)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
 }
 
 // CreateUser .
@@ -72,13 +79,28 @@ func CreateUser(ctx context.Context, c *app.RequestContext) {
 	var req user.CreateOrUpdateUserReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewUser(ctx, c).Create(do.CreateOrUpdateUserReq{
+		Username: *req.Username,
+		Password: *req.Password,
+		Email:    *req.Email,
+		Mobile:   *req.Mobile,
+		RoleID:   *req.RoleID,
+		Avatar:   *req.Avatar,
+		Nickname: *req.Nickname,
+		Status:   *req.Status,
+	})
 
-	c.JSON(consts.StatusOK, resp)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateUser .
@@ -88,13 +110,28 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 	var req user.CreateOrUpdateUserReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	err = admin.NewUser(ctx, c).Update(do.CreateOrUpdateUserReq{
+		ID:       req.ID,
+		Username: *req.Username,
+		Password: *req.Password,
+		Email:    *req.Email,
+		Mobile:   *req.Mobile,
+		RoleID:   *req.RoleID,
+		Avatar:   *req.Avatar,
+		Nickname: *req.Nickname,
+		Status:   *req.Status,
+	})
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 
-	c.JSON(consts.StatusOK, resp)
 }
 
 // UserInfo .
@@ -104,7 +141,7 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 	var req base.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -125,8 +162,8 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusInternalServerError, err.Error())
 		return
 	}
-
 	utils.SendResponse(c, errno.Success, userInfo, 0, "")
+	return
 }
 
 // UserList .
@@ -136,13 +173,23 @@ func UserList(ctx context.Context, c *app.RequestContext) {
 	var req user.UserListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	var userListReq do.UserListReq
+	err = copier.Copy(&userListReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	userList, total, err := admin.NewUser(ctx, c).List(userListReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, userList, int64(total), "")
+	return
 }
 
 // DeleteUser .
@@ -152,13 +199,17 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewUser(ctx, c).DeleteUser(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateProfile .
@@ -168,13 +219,22 @@ func UpdateProfile(ctx context.Context, c *app.RequestContext) {
 	var req user.ProfileReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	var profileReq do.UpdateUserProfileReq
+	err = copier.Copy(&profileReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	err = admin.NewUser(ctx, c).UpdateProfile(profileReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UserProfile .
@@ -184,27 +244,29 @@ func UserProfile(ctx context.Context, c *app.RequestContext) {
 	var req base.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	v, exist := c.Get("user_id")
 	if !exist || v == nil {
-		c.JSON(consts.StatusUnauthorized, "Unauthorized")
+		utils.SendResponse(c, errno.ConvertErr(errno.NewErrNo(501, "Unauthorized")), nil, 0, "")
 		return
 	}
 	i, err := strconv.Atoi(v.(string))
 	if err != nil {
-		c.JSON(consts.StatusUnauthorized, "Unauthorized,"+err.Error())
+
+		utils.SendResponse(c, errno.ConvertErr(errno.NewErrNo(401, "Unauthorized,"+err.Error())), nil, 0, "")
 		return
 	}
 	userInfo, err := admin.NewUser(ctx, c).UserInfo(int64(i))
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(errno.NewErrNo(500, err.Error())), nil, 0, "")
 		return
 	}
 
-	utils.SendResponse(c, err, userInfo, 0, "")
+	utils.SendResponse(c, errno.Success, userInfo, 0, "")
+	return
 }
 
 // UpdateUserStatus .
@@ -214,11 +276,16 @@ func UpdateUserStatus(ctx context.Context, c *app.RequestContext) {
 	var req base.StatusCodeReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewUser(ctx, c).UpdateUserStatus(req.ID, req.Status)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }

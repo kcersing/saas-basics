@@ -11,10 +11,10 @@ import (
 
 // Token信息
 type TokenInfo struct {
-	ID        string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID        int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
 	CreatedAt string `thrift:"createdAt,2" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt string `thrift:"updatedAt,3" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
-	UserID    string `thrift:"user_id,4" form:"user_id" json:"user_id" query:"user_id"`
+	UserID    int64  `thrift:"user_id,4" form:"user_id" json:"user_id" query:"user_id"`
 	Username  string `thrift:"username,5" form:"username" json:"username" query:"username"`
 	Token     string `thrift:"token,6" form:"token" json:"token" query:"token"`
 	Source    string `thrift:"source,7" form:"source" json:"source" query:"source"`
@@ -25,7 +25,7 @@ func NewTokenInfo() *TokenInfo {
 	return &TokenInfo{}
 }
 
-func (p *TokenInfo) GetID() (v string) {
+func (p *TokenInfo) GetID() (v int64) {
 	return p.ID
 }
 
@@ -37,7 +37,7 @@ func (p *TokenInfo) GetUpdatedAt() (v string) {
 	return p.UpdatedAt
 }
 
-func (p *TokenInfo) GetUserID() (v string) {
+func (p *TokenInfo) GetUserID() (v int64) {
 	return p.UserID
 }
 
@@ -88,7 +88,7 @@ func (p *TokenInfo) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -112,7 +112,7 @@ func (p *TokenInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -182,7 +182,7 @@ ReadStructEndError:
 
 func (p *TokenInfo) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -209,7 +209,7 @@ func (p *TokenInfo) ReadField3(iprot thrift.TProtocol) error {
 }
 func (p *TokenInfo) ReadField4(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.UserID = v
@@ -310,10 +310,10 @@ WriteStructEndError:
 }
 
 func (p *TokenInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -361,10 +361,10 @@ WriteFieldEndError:
 }
 
 func (p *TokenInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UserID); err != nil {
+	if err := oprot.WriteI64(p.UserID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -455,21 +455,21 @@ func (p *TokenInfo) String() string {
 
 // token列表请求参数
 type TokenListReq struct {
-	Page     string `thrift:"page,1" form:"page" json:"page" query:"page"`
-	Limit    string `thrift:"limit,2" form:"limit" json:"limit" query:"limit"`
+	Page     int64  `thrift:"page,1" form:"page" json:"page" query:"page"`
+	Limit    int64  `thrift:"limit,2" form:"limit" json:"limit" query:"limit"`
 	Username string `thrift:"username,3" form:"username" json:"username" query:"username"`
-	UserID   string `thrift:"user_id,4" form:"user_id" json:"user_id" query:"user_id"`
+	UserID   int64  `thrift:"user_id,4" form:"user_id" json:"user_id" query:"user_id"`
 }
 
 func NewTokenListReq() *TokenListReq {
 	return &TokenListReq{}
 }
 
-func (p *TokenListReq) GetPage() (v string) {
+func (p *TokenListReq) GetPage() (v int64) {
 	return p.Page
 }
 
-func (p *TokenListReq) GetLimit() (v string) {
+func (p *TokenListReq) GetLimit() (v int64) {
 	return p.Limit
 }
 
@@ -477,7 +477,7 @@ func (p *TokenListReq) GetUsername() (v string) {
 	return p.Username
 }
 
-func (p *TokenListReq) GetUserID() (v string) {
+func (p *TokenListReq) GetUserID() (v int64) {
 	return p.UserID
 }
 
@@ -508,7 +508,7 @@ func (p *TokenListReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -516,7 +516,7 @@ func (p *TokenListReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -532,7 +532,7 @@ func (p *TokenListReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -570,7 +570,7 @@ ReadStructEndError:
 
 func (p *TokenListReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Page = v
@@ -579,7 +579,7 @@ func (p *TokenListReq) ReadField1(iprot thrift.TProtocol) error {
 }
 func (p *TokenListReq) ReadField2(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Limit = v
@@ -597,7 +597,7 @@ func (p *TokenListReq) ReadField3(iprot thrift.TProtocol) error {
 }
 func (p *TokenListReq) ReadField4(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.UserID = v
@@ -646,10 +646,10 @@ WriteStructEndError:
 }
 
 func (p *TokenListReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Page); err != nil {
+	if err := oprot.WriteI64(p.Page); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -663,10 +663,10 @@ WriteFieldEndError:
 }
 
 func (p *TokenListReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("limit", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("limit", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Limit); err != nil {
+	if err := oprot.WriteI64(p.Limit); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -697,10 +697,10 @@ WriteFieldEndError:
 }
 
 func (p *TokenListReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UserID); err != nil {
+	if err := oprot.WriteI64(p.UserID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -721,147 +721,11 @@ func (p *TokenListReq) String() string {
 
 }
 
-// token删除请求参数
-type DeleteReq struct {
-	UserID string `thrift:"user_id,1" form:"user_id" json:"user_id" query:"user_id"`
-}
-
-func NewDeleteReq() *DeleteReq {
-	return &DeleteReq{}
-}
-
-func (p *DeleteReq) GetUserID() (v string) {
-	return p.UserID
-}
-
-var fieldIDToName_DeleteReq = map[int16]string{
-	1: "user_id",
-}
-
-func (p *DeleteReq) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_DeleteReq[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *DeleteReq) ReadField1(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.UserID = v
-	}
-	return nil
-}
-
-func (p *DeleteReq) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("DeleteReq"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *DeleteReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.UserID); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *DeleteReq) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("DeleteReq(%+v)", *p)
-
-}
-
 type TokenService interface {
 	// 更新Token
 	UpdateToken(ctx context.Context, req *TokenInfo) (r *base.NilResponse, err error)
 	// 删除token信息
-	DeleteToken(ctx context.Context, req *DeleteReq) (r *base.NilResponse, err error)
+	DeleteToken(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	// 获取token列表
 	TokenList(ctx context.Context, req *TokenListReq) (r *base.NilResponse, err error)
 }
@@ -901,7 +765,7 @@ func (p *TokenServiceClient) UpdateToken(ctx context.Context, req *TokenInfo) (r
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *TokenServiceClient) DeleteToken(ctx context.Context, req *DeleteReq) (r *base.NilResponse, err error) {
+func (p *TokenServiceClient) DeleteToken(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
 	var _args TokenServiceDeleteTokenArgs
 	_args.Req = req
 	var _result TokenServiceDeleteTokenResult
@@ -1394,16 +1258,16 @@ func (p *TokenServiceUpdateTokenResult) String() string {
 }
 
 type TokenServiceDeleteTokenArgs struct {
-	Req *DeleteReq `thrift:"req,1"`
+	Req *base.IDReq `thrift:"req,1"`
 }
 
 func NewTokenServiceDeleteTokenArgs() *TokenServiceDeleteTokenArgs {
 	return &TokenServiceDeleteTokenArgs{}
 }
 
-var TokenServiceDeleteTokenArgs_Req_DEFAULT *DeleteReq
+var TokenServiceDeleteTokenArgs_Req_DEFAULT *base.IDReq
 
-func (p *TokenServiceDeleteTokenArgs) GetReq() (v *DeleteReq) {
+func (p *TokenServiceDeleteTokenArgs) GetReq() (v *base.IDReq) {
 	if !p.IsSetReq() {
 		return TokenServiceDeleteTokenArgs_Req_DEFAULT
 	}
@@ -1475,7 +1339,7 @@ ReadStructEndError:
 }
 
 func (p *TokenServiceDeleteTokenArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.Req = NewDeleteReq()
+	p.Req = base.NewIDReq()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
 	}

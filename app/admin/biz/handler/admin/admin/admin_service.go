@@ -20,7 +20,7 @@ func HealthCheck(ctx context.Context, c *app.RequestContext) {
 	var req base.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -36,15 +36,15 @@ func Captcha(ctx context.Context, c *app.RequestContext) {
 	var req base.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	id, b64s, _, err := admin.NewCaptcha(ctx, c).GetCaptcha()
 
 	utils.SendResponse(c, errno.Success, map[string]string{
-		"id":   id,
-		"b64s": b64s,
+		"captchaId": id,
+		"imgPath":   b64s,
 	}, 0, "")
 
 }

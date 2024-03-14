@@ -4,11 +4,14 @@ package token
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/jinzhu/copier"
 	token "saas/app/admin/idl_gen/model/admin/token"
 	base "saas/app/admin/idl_gen/model/base"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"saas/app/pkg/service/admin"
 )
 
 // UpdateToken .
@@ -18,29 +21,23 @@ func UpdateToken(ctx context.Context, c *app.RequestContext) {
 	var req token.TokenInfo
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// DeleteToken .
-// @router /api/admin/token [POST]
-func DeleteToken(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req token.DeleteReq
-	err = c.BindAndValidate(&req)
+	var tokenInfo do.TokenInfo
+	err = copier.Copy(&tokenInfo, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewToken(ctx, c).Update(&tokenInfo)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // TokenList .
@@ -50,11 +47,42 @@ func TokenList(ctx context.Context, c *app.RequestContext) {
 	var req token.TokenListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var tokenListReq do.TokenListReq
+	err = copier.Copy(&tokenListReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	tokens, total, err := admin.NewToken(ctx, c).List(&tokenListReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, tokens, int64(total), "")
+	return
+}
 
-	c.JSON(consts.StatusOK, resp)
+// DeleteToken .
+// @router /api/admin/token [POST]
+func DeleteToken(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	err = admin.NewToken(ctx, c).Delete(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }

@@ -6,10 +6,10 @@ include "../base/data.thrift"
 
 // Token信息
 struct TokenInfo {
-    1:  string id (api.raw = "id")
+    1:  i64 id (api.raw = "id")
     2:  string createdAt (api.raw = "createdAt")
     3:  string updatedAt (api.raw = "updatedAt")
-    4:  string user_id (api.raw = "user_id")
+    4:  i64 user_id (api.raw = "user_id")
     5:  string username (api.raw = "username")
     6:  string token (api.raw = "token")
     7:  string source (api.raw = "source")
@@ -24,19 +24,12 @@ struct TokenListReq {
     4:  i64 user_id (api.raw = "user_id")
 }
 
-// token删除请求参数
-struct DeleteReq {
-    1:  string user_id (api.raw = "user_id")
-}
-
-
-
 service TokenService{
   // 更新Token
   base.NilResponse UpdateToken(1: TokenInfo req) (api.post = "/api/admin/token/update")
 
   // 删除token信息
-  base.NilResponse DeleteToken(1: DeleteReq req) (api.post = "/api/admin/token")
+  base.NilResponse DeleteToken(1: base.IDReq req) (api.post = "/api/admin/token")
 
   // 获取token列表
   base.NilResponse TokenList(1: TokenListReq req) (api.post = "/api/admin/token/list")

@@ -23,7 +23,7 @@ func GetLogsList(ctx context.Context, c *app.RequestContext) {
 	var req logs.LogsListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -48,7 +48,7 @@ func GetLogsList(ctx context.Context, c *app.RequestContext) {
 	}
 	logsList, total, err := admin.NewLogs(ctx, c).List(&logsListReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -63,7 +63,7 @@ func DeleteLogs(ctx context.Context, c *app.RequestContext) {
 	var req base.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 

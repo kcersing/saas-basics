@@ -5,7 +5,6 @@ package role
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"saas/app/admin/idl_gen/model/admin/role"
 	"saas/app/admin/idl_gen/model/base"
 	"saas/app/admin/pkg/errno"
@@ -21,7 +20,7 @@ func CreateRole(ctx context.Context, c *app.RequestContext) {
 	var req role.RoleInfo
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -34,7 +33,7 @@ func CreateRole(ctx context.Context, c *app.RequestContext) {
 		OrderNo:       int32(req.OrderNo),
 	})
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -49,7 +48,7 @@ func UpdateRole(ctx context.Context, c *app.RequestContext) {
 	var req role.RoleInfo
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -63,7 +62,7 @@ func UpdateRole(ctx context.Context, c *app.RequestContext) {
 		OrderNo:       int32(req.OrderNo),
 	})
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -77,7 +76,7 @@ func DeleteRole(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -96,13 +95,13 @@ func RoleByID(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	roleInfo, err := admin.NewRole(ctx, c).RoleInfoByID(int64(req.ID))
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -117,7 +116,7 @@ func RoleList(ctx context.Context, c *app.RequestContext) {
 	var req base.PageInfoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -126,7 +125,7 @@ func RoleList(ctx context.Context, c *app.RequestContext) {
 	listReq.PageSize = (req.PageSize)
 	list, total, err := admin.NewRole(ctx, c).List(&listReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -141,13 +140,13 @@ func UpdateRoleStatus(ctx context.Context, c *app.RequestContext) {
 	var req base.StatusCodeReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewRole(ctx, c).UpdateStatus(int64(req.ID), int8(req.Status))
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")

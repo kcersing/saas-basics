@@ -13,7 +13,6 @@ import (
 	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	menu "saas/app/admin/idl_gen/model/admin/menu"
 	base "saas/app/admin/idl_gen/model/base"
 )
@@ -25,19 +24,19 @@ func CreateMenu(ctx context.Context, c *app.RequestContext) {
 	var req menu.CreateOrUpdateMenuReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	var menuReq do.MenuInfo
 	err = copier.Copy(&menuReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewMenu(ctx, c).Create(&menuReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -52,20 +51,20 @@ func UpdateMenu(ctx context.Context, c *app.RequestContext) {
 	var req menu.CreateOrUpdateMenuReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var menuReq do.MenuInfo
 	err = copier.Copy(&menuReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewMenu(ctx, c).Update(&menuReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -80,13 +79,13 @@ func DeleteMenu(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewMenu(ctx, c).Delete(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -101,7 +100,7 @@ func MenuByRole(ctx context.Context, c *app.RequestContext) {
 	var req base.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	roleIdInterface, exist := c.Get("role_id")
@@ -137,7 +136,7 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 	var req base.PageInfoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	var listReq do.MenuListReq
@@ -145,13 +144,13 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 	listReq.PageSize = req.PageSize
 	menuTree, total, err := admin.NewMenu(ctx, c).List(&listReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	var menuInfos []*do.MenuInfo
 	err = copier.Copy(&menuInfos, &menuTree)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, menuInfos, int64(total), "")
@@ -165,19 +164,19 @@ func CreateMenuParam(ctx context.Context, c *app.RequestContext) {
 	var req menu.CreateOrUpdateMenuParamReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var menuParamReq do.MenuParam
 	err = copier.Copy(&menuParamReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	err = admin.NewMenu(ctx, c).CreateMenuParam(&menuParamReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -191,19 +190,19 @@ func UpdateMenuParam(ctx context.Context, c *app.RequestContext) {
 	var req menu.CreateOrUpdateMenuParamReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var menuParamReq do.MenuParam
 	err = copier.Copy(&menuParamReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	err = admin.NewMenu(ctx, c).UpdateMenuParam(&menuParamReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -218,13 +217,13 @@ func DeleteMenuParam(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewMenu(ctx, c).DeleteMenuParam(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -238,13 +237,13 @@ func MenuParamListByMenuID(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	menuParams, total, err := admin.NewMenu(ctx, c).MenuParamListByMenuID(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 

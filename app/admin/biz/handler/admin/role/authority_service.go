@@ -25,20 +25,20 @@ func CreateAuthority(ctx context.Context, c *app.RequestContext) {
 	var req role.CreateOrUpdateApiAuthorityReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var apiInfos []*do.ApiAuthInfo
 	err = copier.Copy(&apiInfos, &req.Data)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), apiInfos)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -53,20 +53,20 @@ func UpdateApiAuthority(ctx context.Context, c *app.RequestContext) {
 	var req role.CreateOrUpdateApiAuthorityReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var apiInfos []*do.ApiAuthInfo
 	err = copier.Copy(&apiInfos, &req.Data)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), apiInfos)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -81,7 +81,7 @@ func ApiAuthority(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	roleId := strconv.FormatInt(req.ID, 10)
@@ -94,7 +94,7 @@ func ApiAuthority(ctx context.Context, c *app.RequestContext) {
 	}
 	policies, err := admin.NewAuth(ctx, c).ApiAuth(roleId)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -110,7 +110,7 @@ func CreateMenuAuthority(ctx context.Context, c *app.RequestContext) {
 	var req role.MenuAuthorityInfoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -129,13 +129,13 @@ func UpdateMenuAuthority(ctx context.Context, c *app.RequestContext) {
 	var req role.MenuAuthorityInfoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewAuth(ctx, c).UpdateMenuAuth(int64(req.RoleID), req.MenuIds)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -150,13 +150,13 @@ func MenuAuthority(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	menuIDs, err := admin.NewAuth(ctx, c).MenuAuth(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	m := map[string]interface{}{

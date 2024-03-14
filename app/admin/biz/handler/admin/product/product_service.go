@@ -11,7 +11,6 @@ import (
 	"saas/app/pkg/service/admin"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	product "saas/app/admin/idl_gen/model/admin/product"
 	base "saas/app/admin/idl_gen/model/base"
 )
@@ -23,19 +22,19 @@ func Create(ctx context.Context, c *app.RequestContext) {
 	var req product.CreateReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	var productReq do.ProductInfo
 	err = copier.Copy(&productReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewProduct(ctx, c).Create(productReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -50,20 +49,20 @@ func Update(ctx context.Context, c *app.RequestContext) {
 	var req product.UpdateReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var productReq do.ProductInfo
 	err = copier.Copy(&productReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewProduct(ctx, c).Update(productReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -78,12 +77,12 @@ func Delete(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	err = admin.NewProduct(ctx, c).Delete(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -98,13 +97,13 @@ func UpdateStatus(ctx context.Context, c *app.RequestContext) {
 	var req base.StatusCodeReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewProduct(ctx, c).UpdateStatus(int64(req.ID), int8(req.Status))
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -118,13 +117,13 @@ func InfoByID(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	info, err := admin.NewProduct(ctx, c).InfoByID(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -139,7 +138,7 @@ func List(ctx context.Context, c *app.RequestContext) {
 	var req product.ListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -148,7 +147,7 @@ func List(ctx context.Context, c *app.RequestContext) {
 	listReq.PageSize = req.PageSize
 	list, total, err := admin.NewProduct(ctx, c).List(listReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
@@ -162,20 +161,20 @@ func CreateProperty(ctx context.Context, c *app.RequestContext) {
 	var req product.CreatePropertyReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var propertyReq do.PropertyInfo
 	err = copier.Copy(&propertyReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewProduct(ctx, c).CreateProperty(propertyReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -190,20 +189,20 @@ func UpdateProperty(ctx context.Context, c *app.RequestContext) {
 	var req product.UpdatePropertyReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var propertyReq do.PropertyInfo
 	err = copier.Copy(&propertyReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewProduct(ctx, c).UpdateProperty(propertyReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -217,12 +216,12 @@ func DeleteProperty(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	err = admin.NewProduct(ctx, c).DeleteProperty(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -237,7 +236,7 @@ func ListProperty(ctx context.Context, c *app.RequestContext) {
 	var req product.ListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -246,7 +245,7 @@ func ListProperty(ctx context.Context, c *app.RequestContext) {
 	listReq.PageSize = req.PageSize
 	list, total, err := admin.NewProduct(ctx, c).PropertyList(listReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, list, int64(total), "")

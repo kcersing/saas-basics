@@ -22,19 +22,19 @@ func CreateDictionary(ctx context.Context, c *app.RequestContext) {
 	var req base.DictionaryInfo
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var DictInfo do.DictionaryInfo
 	err = copier.Copy(&DictInfo, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	err = admin.NewDictionary(ctx, c).Create(&DictInfo)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -48,20 +48,20 @@ func UpdateDictionary(ctx context.Context, c *app.RequestContext) {
 	var req base.DictionaryInfo
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var DictDetail do.DictionaryDetail
 	err = copier.Copy(&DictDetail, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewDictionary(ctx, c).UpdateDetail(&DictDetail)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -75,13 +75,13 @@ func DeleteDictionary(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewDictionary(ctx, c).DeleteDetail(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -95,7 +95,7 @@ func DictionaryList(ctx context.Context, c *app.RequestContext) {
 	var req dictionary.DictionaryPageReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -108,7 +108,7 @@ func DictionaryList(ctx context.Context, c *app.RequestContext) {
 	// get dict list
 	dictList, total, err := admin.NewDictionary(ctx, c).List(&dictListReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -124,20 +124,20 @@ func CreateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 	var req base.DictionaryDetail
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	var DictDetail do.DictionaryDetail
 	err = copier.Copy(&DictDetail, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewDictionary(ctx, c).CreateDetail(&DictDetail)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
@@ -152,18 +152,18 @@ func UpdateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 	var req base.DictionaryDetail
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	var DictDetail do.DictionaryDetail
 	err = copier.Copy(&DictDetail, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	err = admin.NewDictionary(ctx, c).UpdateDetail(&DictDetail)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -177,13 +177,13 @@ func DeleteDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	err = admin.NewDictionary(ctx, c).DeleteDetail(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
@@ -197,13 +197,13 @@ func DetailByDictionaryName(ctx context.Context, c *app.RequestContext) {
 	var req dictionary.DictionaryDetailReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
 	dictDetailList, total, err := admin.NewDictionary(ctx, c).DetailListByDictName(req.Name)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 

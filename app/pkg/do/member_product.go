@@ -1,6 +1,6 @@
 package do
 
-type Product interface {
+type MemberProduct interface {
 	CreateProperty(req PropertyInfo) error
 	UpdateProperty(req PropertyInfo) error
 	DeleteProperty(id int64) error
@@ -14,8 +14,9 @@ type Product interface {
 	InfoByID(ID int64) (roleInfo *ProductInfo, err error)
 }
 
-type PropertyInfo struct {
+type MemberPropertyInfo struct {
 	ID        int64   `json:"id,omitempty"`
+	MemberId  int64   `json:"member_id,omitempty"`
 	ProductId int64   `json:"productId,omitempty"`
 	SpuName   string  `json:"spuName,omitempty"`
 	SpuPrice  float64 `json:"spuPrice,omitempty"`
@@ -27,8 +28,9 @@ type PropertyInfo struct {
 	Status    int64   `json:"status,omitempty"`
 }
 
-type ProductInfo struct {
+type MemberProductInfo struct {
 	ID          int64          `json:"id,omitempty"`
+	MemberId    int64          `json:"member_id,omitempty"`
 	Name        string         `json:"name,omitempty"`
 	Pic         string         `json:"pic,omitempty"`
 	Description string         `json:"description,omitempty"`
@@ -37,9 +39,10 @@ type ProductInfo struct {
 	Stock       int64          `json:"stock,omitempty"`
 	Status      int64          `json:"status,omitempty"`
 }
-type ProductListReq struct {
+type MemberProductListReq struct {
 	Page     int64  `json:"page,omitempty"`
 	PageSize int64  `json:"pageSize,omitempty"`
+	Mobile   string `json:"mobile,omitempty"`
 	Name     string `json:"name,omitempty"`
 	SpuName  string `json:"spuName,omitempty"`
 	Status   int64  `json:"status,omitempty"`
