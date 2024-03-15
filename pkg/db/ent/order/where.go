@@ -75,9 +75,9 @@ func VenueID(v int64) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldVenueID, v))
 }
 
-// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int64) predicate.Order {
-	return predicate.Order(sql.FieldEQ(FieldUserID, v))
+// MemberID applies equality check predicate on the "member_id" field. It's identical to MemberIDEQ.
+func MemberID(v int64) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldMemberID, v))
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
@@ -310,54 +310,54 @@ func VenueIDNotNil() predicate.Order {
 	return predicate.Order(sql.FieldNotNull(FieldVenueID))
 }
 
-// UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int64) predicate.Order {
-	return predicate.Order(sql.FieldEQ(FieldUserID, v))
+// MemberIDEQ applies the EQ predicate on the "member_id" field.
+func MemberIDEQ(v int64) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldMemberID, v))
 }
 
-// UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int64) predicate.Order {
-	return predicate.Order(sql.FieldNEQ(FieldUserID, v))
+// MemberIDNEQ applies the NEQ predicate on the "member_id" field.
+func MemberIDNEQ(v int64) predicate.Order {
+	return predicate.Order(sql.FieldNEQ(FieldMemberID, v))
 }
 
-// UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int64) predicate.Order {
-	return predicate.Order(sql.FieldIn(FieldUserID, vs...))
+// MemberIDIn applies the In predicate on the "member_id" field.
+func MemberIDIn(vs ...int64) predicate.Order {
+	return predicate.Order(sql.FieldIn(FieldMemberID, vs...))
 }
 
-// UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int64) predicate.Order {
-	return predicate.Order(sql.FieldNotIn(FieldUserID, vs...))
+// MemberIDNotIn applies the NotIn predicate on the "member_id" field.
+func MemberIDNotIn(vs ...int64) predicate.Order {
+	return predicate.Order(sql.FieldNotIn(FieldMemberID, vs...))
 }
 
-// UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGT(FieldUserID, v))
+// MemberIDGT applies the GT predicate on the "member_id" field.
+func MemberIDGT(v int64) predicate.Order {
+	return predicate.Order(sql.FieldGT(FieldMemberID, v))
 }
 
-// UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGTE(FieldUserID, v))
+// MemberIDGTE applies the GTE predicate on the "member_id" field.
+func MemberIDGTE(v int64) predicate.Order {
+	return predicate.Order(sql.FieldGTE(FieldMemberID, v))
 }
 
-// UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLT(FieldUserID, v))
+// MemberIDLT applies the LT predicate on the "member_id" field.
+func MemberIDLT(v int64) predicate.Order {
+	return predicate.Order(sql.FieldLT(FieldMemberID, v))
 }
 
-// UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLTE(FieldUserID, v))
+// MemberIDLTE applies the LTE predicate on the "member_id" field.
+func MemberIDLTE(v int64) predicate.Order {
+	return predicate.Order(sql.FieldLTE(FieldMemberID, v))
 }
 
-// UserIDIsNil applies the IsNil predicate on the "user_id" field.
-func UserIDIsNil() predicate.Order {
-	return predicate.Order(sql.FieldIsNull(FieldUserID))
+// MemberIDIsNil applies the IsNil predicate on the "member_id" field.
+func MemberIDIsNil() predicate.Order {
+	return predicate.Order(sql.FieldIsNull(FieldMemberID))
 }
 
-// UserIDNotNil applies the NotNil predicate on the "user_id" field.
-func UserIDNotNil() predicate.Order {
-	return predicate.Order(sql.FieldNotNull(FieldUserID))
+// MemberIDNotNil applies the NotNil predicate on the "member_id" field.
+func MemberIDNotNil() predicate.Order {
+	return predicate.Order(sql.FieldNotNull(FieldMemberID))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/courserecordcoach"
+	"saas/pkg/db/ent/courserecordmember"
 	"saas/pkg/db/ent/courserecordschedule"
-	"saas/pkg/db/ent/courserecorduser"
 	"saas/pkg/db/ent/predicate"
 	"time"
 
@@ -258,29 +258,29 @@ func (crsu *CourseRecordScheduleUpdate) ClearStatus() *CourseRecordScheduleUpdat
 	return crsu
 }
 
-// AddUserIDs adds the "users" edge to the CourseRecordUser entity by IDs.
-func (crsu *CourseRecordScheduleUpdate) AddUserIDs(ids ...int64) *CourseRecordScheduleUpdate {
-	crsu.mutation.AddUserIDs(ids...)
+// AddMemberIDs adds the "members" edge to the CourseRecordMember entity by IDs.
+func (crsu *CourseRecordScheduleUpdate) AddMemberIDs(ids ...int64) *CourseRecordScheduleUpdate {
+	crsu.mutation.AddMemberIDs(ids...)
 	return crsu
 }
 
-// AddUsers adds the "users" edges to the CourseRecordUser entity.
-func (crsu *CourseRecordScheduleUpdate) AddUsers(c ...*CourseRecordUser) *CourseRecordScheduleUpdate {
+// AddMembers adds the "members" edges to the CourseRecordMember entity.
+func (crsu *CourseRecordScheduleUpdate) AddMembers(c ...*CourseRecordMember) *CourseRecordScheduleUpdate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return crsu.AddUserIDs(ids...)
+	return crsu.AddMemberIDs(ids...)
 }
 
-// AddCoachIDs adds the "coach" edge to the CourseRecordCoach entity by IDs.
+// AddCoachIDs adds the "coachs" edge to the CourseRecordCoach entity by IDs.
 func (crsu *CourseRecordScheduleUpdate) AddCoachIDs(ids ...int64) *CourseRecordScheduleUpdate {
 	crsu.mutation.AddCoachIDs(ids...)
 	return crsu
 }
 
-// AddCoach adds the "coach" edges to the CourseRecordCoach entity.
-func (crsu *CourseRecordScheduleUpdate) AddCoach(c ...*CourseRecordCoach) *CourseRecordScheduleUpdate {
+// AddCoachs adds the "coachs" edges to the CourseRecordCoach entity.
+func (crsu *CourseRecordScheduleUpdate) AddCoachs(c ...*CourseRecordCoach) *CourseRecordScheduleUpdate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -293,41 +293,41 @@ func (crsu *CourseRecordScheduleUpdate) Mutation() *CourseRecordScheduleMutation
 	return crsu.mutation
 }
 
-// ClearUsers clears all "users" edges to the CourseRecordUser entity.
-func (crsu *CourseRecordScheduleUpdate) ClearUsers() *CourseRecordScheduleUpdate {
-	crsu.mutation.ClearUsers()
+// ClearMembers clears all "members" edges to the CourseRecordMember entity.
+func (crsu *CourseRecordScheduleUpdate) ClearMembers() *CourseRecordScheduleUpdate {
+	crsu.mutation.ClearMembers()
 	return crsu
 }
 
-// RemoveUserIDs removes the "users" edge to CourseRecordUser entities by IDs.
-func (crsu *CourseRecordScheduleUpdate) RemoveUserIDs(ids ...int64) *CourseRecordScheduleUpdate {
-	crsu.mutation.RemoveUserIDs(ids...)
+// RemoveMemberIDs removes the "members" edge to CourseRecordMember entities by IDs.
+func (crsu *CourseRecordScheduleUpdate) RemoveMemberIDs(ids ...int64) *CourseRecordScheduleUpdate {
+	crsu.mutation.RemoveMemberIDs(ids...)
 	return crsu
 }
 
-// RemoveUsers removes "users" edges to CourseRecordUser entities.
-func (crsu *CourseRecordScheduleUpdate) RemoveUsers(c ...*CourseRecordUser) *CourseRecordScheduleUpdate {
+// RemoveMembers removes "members" edges to CourseRecordMember entities.
+func (crsu *CourseRecordScheduleUpdate) RemoveMembers(c ...*CourseRecordMember) *CourseRecordScheduleUpdate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return crsu.RemoveUserIDs(ids...)
+	return crsu.RemoveMemberIDs(ids...)
 }
 
-// ClearCoach clears all "coach" edges to the CourseRecordCoach entity.
-func (crsu *CourseRecordScheduleUpdate) ClearCoach() *CourseRecordScheduleUpdate {
-	crsu.mutation.ClearCoach()
+// ClearCoachs clears all "coachs" edges to the CourseRecordCoach entity.
+func (crsu *CourseRecordScheduleUpdate) ClearCoachs() *CourseRecordScheduleUpdate {
+	crsu.mutation.ClearCoachs()
 	return crsu
 }
 
-// RemoveCoachIDs removes the "coach" edge to CourseRecordCoach entities by IDs.
+// RemoveCoachIDs removes the "coachs" edge to CourseRecordCoach entities by IDs.
 func (crsu *CourseRecordScheduleUpdate) RemoveCoachIDs(ids ...int64) *CourseRecordScheduleUpdate {
 	crsu.mutation.RemoveCoachIDs(ids...)
 	return crsu
 }
 
-// RemoveCoach removes "coach" edges to CourseRecordCoach entities.
-func (crsu *CourseRecordScheduleUpdate) RemoveCoach(c ...*CourseRecordCoach) *CourseRecordScheduleUpdate {
+// RemoveCoachs removes "coachs" edges to CourseRecordCoach entities.
+func (crsu *CourseRecordScheduleUpdate) RemoveCoachs(c ...*CourseRecordCoach) *CourseRecordScheduleUpdate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -455,28 +455,28 @@ func (crsu *CourseRecordScheduleUpdate) sqlSave(ctx context.Context) (n int, err
 	if crsu.mutation.StatusCleared() {
 		_spec.ClearField(courserecordschedule.FieldStatus, field.TypeInt64)
 	}
-	if crsu.mutation.UsersCleared() {
+	if crsu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.UsersTable,
-			Columns: []string{courserecordschedule.UsersColumn},
+			Table:   courserecordschedule.MembersTable,
+			Columns: []string{courserecordschedule.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(courserecorduser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(courserecordmember.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := crsu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !crsu.mutation.UsersCleared() {
+	if nodes := crsu.mutation.RemovedMembersIDs(); len(nodes) > 0 && !crsu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.UsersTable,
-			Columns: []string{courserecordschedule.UsersColumn},
+			Table:   courserecordschedule.MembersTable,
+			Columns: []string{courserecordschedule.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(courserecorduser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(courserecordmember.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -484,15 +484,15 @@ func (crsu *CourseRecordScheduleUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := crsu.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := crsu.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.UsersTable,
-			Columns: []string{courserecordschedule.UsersColumn},
+			Table:   courserecordschedule.MembersTable,
+			Columns: []string{courserecordschedule.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(courserecorduser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(courserecordmember.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -500,12 +500,12 @@ func (crsu *CourseRecordScheduleUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if crsu.mutation.CoachCleared() {
+	if crsu.mutation.CoachsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.CoachTable,
-			Columns: []string{courserecordschedule.CoachColumn},
+			Table:   courserecordschedule.CoachsTable,
+			Columns: []string{courserecordschedule.CoachsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(courserecordcoach.FieldID, field.TypeInt64),
@@ -513,12 +513,12 @@ func (crsu *CourseRecordScheduleUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := crsu.mutation.RemovedCoachIDs(); len(nodes) > 0 && !crsu.mutation.CoachCleared() {
+	if nodes := crsu.mutation.RemovedCoachsIDs(); len(nodes) > 0 && !crsu.mutation.CoachsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.CoachTable,
-			Columns: []string{courserecordschedule.CoachColumn},
+			Table:   courserecordschedule.CoachsTable,
+			Columns: []string{courserecordschedule.CoachsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(courserecordcoach.FieldID, field.TypeInt64),
@@ -529,12 +529,12 @@ func (crsu *CourseRecordScheduleUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := crsu.mutation.CoachIDs(); len(nodes) > 0 {
+	if nodes := crsu.mutation.CoachsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.CoachTable,
-			Columns: []string{courserecordschedule.CoachColumn},
+			Table:   courserecordschedule.CoachsTable,
+			Columns: []string{courserecordschedule.CoachsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(courserecordcoach.FieldID, field.TypeInt64),
@@ -793,29 +793,29 @@ func (crsuo *CourseRecordScheduleUpdateOne) ClearStatus() *CourseRecordScheduleU
 	return crsuo
 }
 
-// AddUserIDs adds the "users" edge to the CourseRecordUser entity by IDs.
-func (crsuo *CourseRecordScheduleUpdateOne) AddUserIDs(ids ...int64) *CourseRecordScheduleUpdateOne {
-	crsuo.mutation.AddUserIDs(ids...)
+// AddMemberIDs adds the "members" edge to the CourseRecordMember entity by IDs.
+func (crsuo *CourseRecordScheduleUpdateOne) AddMemberIDs(ids ...int64) *CourseRecordScheduleUpdateOne {
+	crsuo.mutation.AddMemberIDs(ids...)
 	return crsuo
 }
 
-// AddUsers adds the "users" edges to the CourseRecordUser entity.
-func (crsuo *CourseRecordScheduleUpdateOne) AddUsers(c ...*CourseRecordUser) *CourseRecordScheduleUpdateOne {
+// AddMembers adds the "members" edges to the CourseRecordMember entity.
+func (crsuo *CourseRecordScheduleUpdateOne) AddMembers(c ...*CourseRecordMember) *CourseRecordScheduleUpdateOne {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return crsuo.AddUserIDs(ids...)
+	return crsuo.AddMemberIDs(ids...)
 }
 
-// AddCoachIDs adds the "coach" edge to the CourseRecordCoach entity by IDs.
+// AddCoachIDs adds the "coachs" edge to the CourseRecordCoach entity by IDs.
 func (crsuo *CourseRecordScheduleUpdateOne) AddCoachIDs(ids ...int64) *CourseRecordScheduleUpdateOne {
 	crsuo.mutation.AddCoachIDs(ids...)
 	return crsuo
 }
 
-// AddCoach adds the "coach" edges to the CourseRecordCoach entity.
-func (crsuo *CourseRecordScheduleUpdateOne) AddCoach(c ...*CourseRecordCoach) *CourseRecordScheduleUpdateOne {
+// AddCoachs adds the "coachs" edges to the CourseRecordCoach entity.
+func (crsuo *CourseRecordScheduleUpdateOne) AddCoachs(c ...*CourseRecordCoach) *CourseRecordScheduleUpdateOne {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -828,41 +828,41 @@ func (crsuo *CourseRecordScheduleUpdateOne) Mutation() *CourseRecordScheduleMuta
 	return crsuo.mutation
 }
 
-// ClearUsers clears all "users" edges to the CourseRecordUser entity.
-func (crsuo *CourseRecordScheduleUpdateOne) ClearUsers() *CourseRecordScheduleUpdateOne {
-	crsuo.mutation.ClearUsers()
+// ClearMembers clears all "members" edges to the CourseRecordMember entity.
+func (crsuo *CourseRecordScheduleUpdateOne) ClearMembers() *CourseRecordScheduleUpdateOne {
+	crsuo.mutation.ClearMembers()
 	return crsuo
 }
 
-// RemoveUserIDs removes the "users" edge to CourseRecordUser entities by IDs.
-func (crsuo *CourseRecordScheduleUpdateOne) RemoveUserIDs(ids ...int64) *CourseRecordScheduleUpdateOne {
-	crsuo.mutation.RemoveUserIDs(ids...)
+// RemoveMemberIDs removes the "members" edge to CourseRecordMember entities by IDs.
+func (crsuo *CourseRecordScheduleUpdateOne) RemoveMemberIDs(ids ...int64) *CourseRecordScheduleUpdateOne {
+	crsuo.mutation.RemoveMemberIDs(ids...)
 	return crsuo
 }
 
-// RemoveUsers removes "users" edges to CourseRecordUser entities.
-func (crsuo *CourseRecordScheduleUpdateOne) RemoveUsers(c ...*CourseRecordUser) *CourseRecordScheduleUpdateOne {
+// RemoveMembers removes "members" edges to CourseRecordMember entities.
+func (crsuo *CourseRecordScheduleUpdateOne) RemoveMembers(c ...*CourseRecordMember) *CourseRecordScheduleUpdateOne {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return crsuo.RemoveUserIDs(ids...)
+	return crsuo.RemoveMemberIDs(ids...)
 }
 
-// ClearCoach clears all "coach" edges to the CourseRecordCoach entity.
-func (crsuo *CourseRecordScheduleUpdateOne) ClearCoach() *CourseRecordScheduleUpdateOne {
-	crsuo.mutation.ClearCoach()
+// ClearCoachs clears all "coachs" edges to the CourseRecordCoach entity.
+func (crsuo *CourseRecordScheduleUpdateOne) ClearCoachs() *CourseRecordScheduleUpdateOne {
+	crsuo.mutation.ClearCoachs()
 	return crsuo
 }
 
-// RemoveCoachIDs removes the "coach" edge to CourseRecordCoach entities by IDs.
+// RemoveCoachIDs removes the "coachs" edge to CourseRecordCoach entities by IDs.
 func (crsuo *CourseRecordScheduleUpdateOne) RemoveCoachIDs(ids ...int64) *CourseRecordScheduleUpdateOne {
 	crsuo.mutation.RemoveCoachIDs(ids...)
 	return crsuo
 }
 
-// RemoveCoach removes "coach" edges to CourseRecordCoach entities.
-func (crsuo *CourseRecordScheduleUpdateOne) RemoveCoach(c ...*CourseRecordCoach) *CourseRecordScheduleUpdateOne {
+// RemoveCoachs removes "coachs" edges to CourseRecordCoach entities.
+func (crsuo *CourseRecordScheduleUpdateOne) RemoveCoachs(c ...*CourseRecordCoach) *CourseRecordScheduleUpdateOne {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1020,28 +1020,28 @@ func (crsuo *CourseRecordScheduleUpdateOne) sqlSave(ctx context.Context) (_node 
 	if crsuo.mutation.StatusCleared() {
 		_spec.ClearField(courserecordschedule.FieldStatus, field.TypeInt64)
 	}
-	if crsuo.mutation.UsersCleared() {
+	if crsuo.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.UsersTable,
-			Columns: []string{courserecordschedule.UsersColumn},
+			Table:   courserecordschedule.MembersTable,
+			Columns: []string{courserecordschedule.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(courserecorduser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(courserecordmember.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := crsuo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !crsuo.mutation.UsersCleared() {
+	if nodes := crsuo.mutation.RemovedMembersIDs(); len(nodes) > 0 && !crsuo.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.UsersTable,
-			Columns: []string{courserecordschedule.UsersColumn},
+			Table:   courserecordschedule.MembersTable,
+			Columns: []string{courserecordschedule.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(courserecorduser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(courserecordmember.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1049,15 +1049,15 @@ func (crsuo *CourseRecordScheduleUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := crsuo.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := crsuo.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.UsersTable,
-			Columns: []string{courserecordschedule.UsersColumn},
+			Table:   courserecordschedule.MembersTable,
+			Columns: []string{courserecordschedule.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(courserecorduser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(courserecordmember.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1065,12 +1065,12 @@ func (crsuo *CourseRecordScheduleUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if crsuo.mutation.CoachCleared() {
+	if crsuo.mutation.CoachsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.CoachTable,
-			Columns: []string{courserecordschedule.CoachColumn},
+			Table:   courserecordschedule.CoachsTable,
+			Columns: []string{courserecordschedule.CoachsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(courserecordcoach.FieldID, field.TypeInt64),
@@ -1078,12 +1078,12 @@ func (crsuo *CourseRecordScheduleUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := crsuo.mutation.RemovedCoachIDs(); len(nodes) > 0 && !crsuo.mutation.CoachCleared() {
+	if nodes := crsuo.mutation.RemovedCoachsIDs(); len(nodes) > 0 && !crsuo.mutation.CoachsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.CoachTable,
-			Columns: []string{courserecordschedule.CoachColumn},
+			Table:   courserecordschedule.CoachsTable,
+			Columns: []string{courserecordschedule.CoachsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(courserecordcoach.FieldID, field.TypeInt64),
@@ -1094,12 +1094,12 @@ func (crsuo *CourseRecordScheduleUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := crsuo.mutation.CoachIDs(); len(nodes) > 0 {
+	if nodes := crsuo.mutation.CoachsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.CoachTable,
-			Columns: []string{courserecordschedule.CoachColumn},
+			Table:   courserecordschedule.CoachsTable,
+			Columns: []string{courserecordschedule.CoachsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(courserecordcoach.FieldID, field.TypeInt64),

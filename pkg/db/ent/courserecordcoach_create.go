@@ -147,16 +147,16 @@ func (crcc *CourseRecordCoachCreate) SetNillableSignStartTime(t *time.Time) *Cou
 	return crcc
 }
 
-// SetSignNdTime sets the "sign_nd_time" field.
-func (crcc *CourseRecordCoachCreate) SetSignNdTime(t time.Time) *CourseRecordCoachCreate {
-	crcc.mutation.SetSignNdTime(t)
+// SetSignEndTime sets the "sign_end_time" field.
+func (crcc *CourseRecordCoachCreate) SetSignEndTime(t time.Time) *CourseRecordCoachCreate {
+	crcc.mutation.SetSignEndTime(t)
 	return crcc
 }
 
-// SetNillableSignNdTime sets the "sign_nd_time" field if the given value is not nil.
-func (crcc *CourseRecordCoachCreate) SetNillableSignNdTime(t *time.Time) *CourseRecordCoachCreate {
+// SetNillableSignEndTime sets the "sign_end_time" field if the given value is not nil.
+func (crcc *CourseRecordCoachCreate) SetNillableSignEndTime(t *time.Time) *CourseRecordCoachCreate {
 	if t != nil {
-		crcc.SetSignNdTime(*t)
+		crcc.SetSignEndTime(*t)
 	}
 	return crcc
 }
@@ -255,9 +255,9 @@ func (crcc *CourseRecordCoachCreate) defaults() {
 		v := courserecordcoach.DefaultSignStartTime()
 		crcc.mutation.SetSignStartTime(v)
 	}
-	if _, ok := crcc.mutation.SignNdTime(); !ok {
-		v := courserecordcoach.DefaultSignNdTime()
-		crcc.mutation.SetSignNdTime(v)
+	if _, ok := crcc.mutation.SignEndTime(); !ok {
+		v := courserecordcoach.DefaultSignEndTime()
+		crcc.mutation.SetSignEndTime(v)
 	}
 	if _, ok := crcc.mutation.Status(); !ok {
 		v := courserecordcoach.DefaultStatus
@@ -337,9 +337,9 @@ func (crcc *CourseRecordCoachCreate) createSpec() (*CourseRecordCoach, *sqlgraph
 		_spec.SetField(courserecordcoach.FieldSignStartTime, field.TypeTime, value)
 		_node.SignStartTime = value
 	}
-	if value, ok := crcc.mutation.SignNdTime(); ok {
-		_spec.SetField(courserecordcoach.FieldSignNdTime, field.TypeTime, value)
-		_node.SignNdTime = value
+	if value, ok := crcc.mutation.SignEndTime(); ok {
+		_spec.SetField(courserecordcoach.FieldSignEndTime, field.TypeTime, value)
+		_node.SignEndTime = value
 	}
 	if value, ok := crcc.mutation.Status(); ok {
 		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)

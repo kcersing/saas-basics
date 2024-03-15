@@ -16,16 +16,24 @@ type Tx struct {
 	API *APIClient
 	// CourseRecordCoach is the client for interacting with the CourseRecordCoach builders.
 	CourseRecordCoach *CourseRecordCoachClient
+	// CourseRecordMember is the client for interacting with the CourseRecordMember builders.
+	CourseRecordMember *CourseRecordMemberClient
 	// CourseRecordSchedule is the client for interacting with the CourseRecordSchedule builders.
 	CourseRecordSchedule *CourseRecordScheduleClient
-	// CourseRecordUser is the client for interacting with the CourseRecordUser builders.
-	CourseRecordUser *CourseRecordUserClient
 	// Dictionary is the client for interacting with the Dictionary builders.
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
 	DictionaryDetail *DictionaryDetailClient
 	// Logs is the client for interacting with the Logs builders.
 	Logs *LogsClient
+	// Member is the client for interacting with the Member builders.
+	Member *MemberClient
+	// MemberProduct is the client for interacting with the MemberProduct builders.
+	MemberProduct *MemberProductClient
+	// MemberProductProperty is the client for interacting with the MemberProductProperty builders.
+	MemberProductProperty *MemberProductPropertyClient
+	// MemberProductPropertyVenue is the client for interacting with the MemberProductPropertyVenue builders.
+	MemberProductPropertyVenue *MemberProductPropertyVenueClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
@@ -44,6 +52,8 @@ type Tx struct {
 	Product *ProductClient
 	// ProductProperty is the client for interacting with the ProductProperty builders.
 	ProductProperty *ProductPropertyClient
+	// ProductPropertyVenue is the client for interacting with the ProductPropertyVenue builders.
+	ProductPropertyVenue *ProductPropertyVenueClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 	// Token is the client for interacting with the Token builders.
@@ -187,11 +197,15 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.API = NewAPIClient(tx.config)
 	tx.CourseRecordCoach = NewCourseRecordCoachClient(tx.config)
+	tx.CourseRecordMember = NewCourseRecordMemberClient(tx.config)
 	tx.CourseRecordSchedule = NewCourseRecordScheduleClient(tx.config)
-	tx.CourseRecordUser = NewCourseRecordUserClient(tx.config)
 	tx.Dictionary = NewDictionaryClient(tx.config)
 	tx.DictionaryDetail = NewDictionaryDetailClient(tx.config)
 	tx.Logs = NewLogsClient(tx.config)
+	tx.Member = NewMemberClient(tx.config)
+	tx.MemberProduct = NewMemberProductClient(tx.config)
+	tx.MemberProductProperty = NewMemberProductPropertyClient(tx.config)
+	tx.MemberProductPropertyVenue = NewMemberProductPropertyVenueClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
 	tx.Order = NewOrderClient(tx.config)
@@ -201,6 +215,7 @@ func (tx *Tx) init() {
 	tx.OrderSales = NewOrderSalesClient(tx.config)
 	tx.Product = NewProductClient(tx.config)
 	tx.ProductProperty = NewProductPropertyClient(tx.config)
+	tx.ProductPropertyVenue = NewProductPropertyVenueClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
 	tx.Token = NewTokenClient(tx.config)
 	tx.User = NewUserClient(tx.config)

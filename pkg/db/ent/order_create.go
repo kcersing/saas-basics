@@ -80,16 +80,16 @@ func (oc *OrderCreate) SetNillableVenueID(i *int64) *OrderCreate {
 	return oc
 }
 
-// SetUserID sets the "user_id" field.
-func (oc *OrderCreate) SetUserID(i int64) *OrderCreate {
-	oc.mutation.SetUserID(i)
+// SetMemberID sets the "member_id" field.
+func (oc *OrderCreate) SetMemberID(i int64) *OrderCreate {
+	oc.mutation.SetMemberID(i)
 	return oc
 }
 
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (oc *OrderCreate) SetNillableUserID(i *int64) *OrderCreate {
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (oc *OrderCreate) SetNillableMemberID(i *int64) *OrderCreate {
 	if i != nil {
-		oc.SetUserID(*i)
+		oc.SetMemberID(*i)
 	}
 	return oc
 }
@@ -343,9 +343,9 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		_spec.SetField(order.FieldVenueID, field.TypeInt64, value)
 		_node.VenueID = value
 	}
-	if value, ok := oc.mutation.UserID(); ok {
-		_spec.SetField(order.FieldUserID, field.TypeInt64, value)
-		_node.UserID = value
+	if value, ok := oc.mutation.MemberID(); ok {
+		_spec.SetField(order.FieldMemberID, field.TypeInt64, value)
+		_node.MemberID = value
 	}
 	if value, ok := oc.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)

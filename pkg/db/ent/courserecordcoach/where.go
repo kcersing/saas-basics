@@ -100,9 +100,9 @@ func SignStartTime(v time.Time) predicate.CourseRecordCoach {
 	return predicate.CourseRecordCoach(sql.FieldEQ(FieldSignStartTime, v))
 }
 
-// SignNdTime applies equality check predicate on the "sign_nd_time" field. It's identical to SignNdTimeEQ.
-func SignNdTime(v time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldEQ(FieldSignNdTime, v))
+// SignEndTime applies equality check predicate on the "sign_end_time" field. It's identical to SignEndTimeEQ.
+func SignEndTime(v time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldEQ(FieldSignEndTime, v))
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
@@ -545,54 +545,54 @@ func SignStartTimeNotNil() predicate.CourseRecordCoach {
 	return predicate.CourseRecordCoach(sql.FieldNotNull(FieldSignStartTime))
 }
 
-// SignNdTimeEQ applies the EQ predicate on the "sign_nd_time" field.
-func SignNdTimeEQ(v time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldEQ(FieldSignNdTime, v))
+// SignEndTimeEQ applies the EQ predicate on the "sign_end_time" field.
+func SignEndTimeEQ(v time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldEQ(FieldSignEndTime, v))
 }
 
-// SignNdTimeNEQ applies the NEQ predicate on the "sign_nd_time" field.
-func SignNdTimeNEQ(v time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldNEQ(FieldSignNdTime, v))
+// SignEndTimeNEQ applies the NEQ predicate on the "sign_end_time" field.
+func SignEndTimeNEQ(v time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldNEQ(FieldSignEndTime, v))
 }
 
-// SignNdTimeIn applies the In predicate on the "sign_nd_time" field.
-func SignNdTimeIn(vs ...time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldIn(FieldSignNdTime, vs...))
+// SignEndTimeIn applies the In predicate on the "sign_end_time" field.
+func SignEndTimeIn(vs ...time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldIn(FieldSignEndTime, vs...))
 }
 
-// SignNdTimeNotIn applies the NotIn predicate on the "sign_nd_time" field.
-func SignNdTimeNotIn(vs ...time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldNotIn(FieldSignNdTime, vs...))
+// SignEndTimeNotIn applies the NotIn predicate on the "sign_end_time" field.
+func SignEndTimeNotIn(vs ...time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldNotIn(FieldSignEndTime, vs...))
 }
 
-// SignNdTimeGT applies the GT predicate on the "sign_nd_time" field.
-func SignNdTimeGT(v time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldGT(FieldSignNdTime, v))
+// SignEndTimeGT applies the GT predicate on the "sign_end_time" field.
+func SignEndTimeGT(v time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldGT(FieldSignEndTime, v))
 }
 
-// SignNdTimeGTE applies the GTE predicate on the "sign_nd_time" field.
-func SignNdTimeGTE(v time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldGTE(FieldSignNdTime, v))
+// SignEndTimeGTE applies the GTE predicate on the "sign_end_time" field.
+func SignEndTimeGTE(v time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldGTE(FieldSignEndTime, v))
 }
 
-// SignNdTimeLT applies the LT predicate on the "sign_nd_time" field.
-func SignNdTimeLT(v time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldLT(FieldSignNdTime, v))
+// SignEndTimeLT applies the LT predicate on the "sign_end_time" field.
+func SignEndTimeLT(v time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldLT(FieldSignEndTime, v))
 }
 
-// SignNdTimeLTE applies the LTE predicate on the "sign_nd_time" field.
-func SignNdTimeLTE(v time.Time) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldLTE(FieldSignNdTime, v))
+// SignEndTimeLTE applies the LTE predicate on the "sign_end_time" field.
+func SignEndTimeLTE(v time.Time) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldLTE(FieldSignEndTime, v))
 }
 
-// SignNdTimeIsNil applies the IsNil predicate on the "sign_nd_time" field.
-func SignNdTimeIsNil() predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldIsNull(FieldSignNdTime))
+// SignEndTimeIsNil applies the IsNil predicate on the "sign_end_time" field.
+func SignEndTimeIsNil() predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldIsNull(FieldSignEndTime))
 }
 
-// SignNdTimeNotNil applies the NotNil predicate on the "sign_nd_time" field.
-func SignNdTimeNotNil() predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldNotNull(FieldSignNdTime))
+// SignEndTimeNotNil applies the NotNil predicate on the "sign_end_time" field.
+func SignEndTimeNotNil() predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldNotNull(FieldSignEndTime))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

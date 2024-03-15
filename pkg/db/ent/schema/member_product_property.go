@@ -1,0 +1,55 @@
+package schema
+
+import (
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
+	"saas/pkg/db/ent/schema/mixins"
+)
+
+type MemberProductProperty struct {
+	ent.Schema
+}
+
+func (MemberProductProperty) Fields() []ent.Field {
+	return []ent.Field{
+		field.Int64("member_product_id").Comment("会员产品ID").Optional(),
+		field.String("type").Comment("类型").Optional(),
+		field.String("spu_name").Comment("spu名").Optional(),
+		field.Int64("duration").Comment("总时长").Optional(),
+		field.Int64("length").Comment("单次时长").Optional(),
+		field.Int64("count").Default(0).Comment("总次数").Optional(),
+		field.Int64("count_surplus").Default(0).Comment("剩余次数").Optional(),
+		field.Float("spu_price").Comment("定价").Optional(),
+		field.Int64("status").Default(0).Comment("状态").Optional(),
+	}
+}
+
+func (MemberProductProperty) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixins.BaseMixin{},
+	}
+}
+
+func (MemberProductProperty) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("owner", MemberProduct.Type).
+			Ref("member_product_propertys").
+			Field("member_product_id").
+			Unique(),
+		edge.To("member_product_property_venues", MemberProductPropertyVenue.Type),
+	}
+}
+
+func (MemberProductProperty) Indexes() []ent.Index {
+	return []ent.Index{}
+}
+
+func (MemberProductProperty) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: "member_product_property"},
+		entsql.WithComments(true),
+	}
+}

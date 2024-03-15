@@ -665,21 +665,21 @@ func StatusNotNil() predicate.CourseRecordSchedule {
 	return predicate.CourseRecordSchedule(sql.FieldNotNull(FieldStatus))
 }
 
-// HasUsers applies the HasEdge predicate on the "users" edge.
-func HasUsers() predicate.CourseRecordSchedule {
+// HasMembers applies the HasEdge predicate on the "members" edge.
+func HasMembers() predicate.CourseRecordSchedule {
 	return predicate.CourseRecordSchedule(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, UsersTable, UsersColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, MembersTable, MembersColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasUsersWith applies the HasEdge predicate on the "users" edge with a given conditions (other predicates).
-func HasUsersWith(preds ...predicate.CourseRecordUser) predicate.CourseRecordSchedule {
+// HasMembersWith applies the HasEdge predicate on the "members" edge with a given conditions (other predicates).
+func HasMembersWith(preds ...predicate.CourseRecordMember) predicate.CourseRecordSchedule {
 	return predicate.CourseRecordSchedule(func(s *sql.Selector) {
-		step := newUsersStep()
+		step := newMembersStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -688,21 +688,21 @@ func HasUsersWith(preds ...predicate.CourseRecordUser) predicate.CourseRecordSch
 	})
 }
 
-// HasCoach applies the HasEdge predicate on the "coach" edge.
-func HasCoach() predicate.CourseRecordSchedule {
+// HasCoachs applies the HasEdge predicate on the "coachs" edge.
+func HasCoachs() predicate.CourseRecordSchedule {
 	return predicate.CourseRecordSchedule(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, CoachTable, CoachColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, CoachsTable, CoachsColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasCoachWith applies the HasEdge predicate on the "coach" edge with a given conditions (other predicates).
-func HasCoachWith(preds ...predicate.CourseRecordCoach) predicate.CourseRecordSchedule {
+// HasCoachsWith applies the HasEdge predicate on the "coachs" edge with a given conditions (other predicates).
+func HasCoachsWith(preds ...predicate.CourseRecordCoach) predicate.CourseRecordSchedule {
 	return predicate.CourseRecordSchedule(func(s *sql.Selector) {
-		step := newCoachStep()
+		step := newCoachsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

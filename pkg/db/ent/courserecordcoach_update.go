@@ -189,23 +189,23 @@ func (crcu *CourseRecordCoachUpdate) ClearSignStartTime() *CourseRecordCoachUpda
 	return crcu
 }
 
-// SetSignNdTime sets the "sign_nd_time" field.
-func (crcu *CourseRecordCoachUpdate) SetSignNdTime(t time.Time) *CourseRecordCoachUpdate {
-	crcu.mutation.SetSignNdTime(t)
+// SetSignEndTime sets the "sign_end_time" field.
+func (crcu *CourseRecordCoachUpdate) SetSignEndTime(t time.Time) *CourseRecordCoachUpdate {
+	crcu.mutation.SetSignEndTime(t)
 	return crcu
 }
 
-// SetNillableSignNdTime sets the "sign_nd_time" field if the given value is not nil.
-func (crcu *CourseRecordCoachUpdate) SetNillableSignNdTime(t *time.Time) *CourseRecordCoachUpdate {
+// SetNillableSignEndTime sets the "sign_end_time" field if the given value is not nil.
+func (crcu *CourseRecordCoachUpdate) SetNillableSignEndTime(t *time.Time) *CourseRecordCoachUpdate {
 	if t != nil {
-		crcu.SetSignNdTime(*t)
+		crcu.SetSignEndTime(*t)
 	}
 	return crcu
 }
 
-// ClearSignNdTime clears the value of the "sign_nd_time" field.
-func (crcu *CourseRecordCoachUpdate) ClearSignNdTime() *CourseRecordCoachUpdate {
-	crcu.mutation.ClearSignNdTime()
+// ClearSignEndTime clears the value of the "sign_end_time" field.
+func (crcu *CourseRecordCoachUpdate) ClearSignEndTime() *CourseRecordCoachUpdate {
+	crcu.mutation.ClearSignEndTime()
 	return crcu
 }
 
@@ -356,11 +356,11 @@ func (crcu *CourseRecordCoachUpdate) sqlSave(ctx context.Context) (n int, err er
 	if crcu.mutation.SignStartTimeCleared() {
 		_spec.ClearField(courserecordcoach.FieldSignStartTime, field.TypeTime)
 	}
-	if value, ok := crcu.mutation.SignNdTime(); ok {
-		_spec.SetField(courserecordcoach.FieldSignNdTime, field.TypeTime, value)
+	if value, ok := crcu.mutation.SignEndTime(); ok {
+		_spec.SetField(courserecordcoach.FieldSignEndTime, field.TypeTime, value)
 	}
-	if crcu.mutation.SignNdTimeCleared() {
-		_spec.ClearField(courserecordcoach.FieldSignNdTime, field.TypeTime)
+	if crcu.mutation.SignEndTimeCleared() {
+		_spec.ClearField(courserecordcoach.FieldSignEndTime, field.TypeTime)
 	}
 	if value, ok := crcu.mutation.Status(); ok {
 		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)
@@ -580,23 +580,23 @@ func (crcuo *CourseRecordCoachUpdateOne) ClearSignStartTime() *CourseRecordCoach
 	return crcuo
 }
 
-// SetSignNdTime sets the "sign_nd_time" field.
-func (crcuo *CourseRecordCoachUpdateOne) SetSignNdTime(t time.Time) *CourseRecordCoachUpdateOne {
-	crcuo.mutation.SetSignNdTime(t)
+// SetSignEndTime sets the "sign_end_time" field.
+func (crcuo *CourseRecordCoachUpdateOne) SetSignEndTime(t time.Time) *CourseRecordCoachUpdateOne {
+	crcuo.mutation.SetSignEndTime(t)
 	return crcuo
 }
 
-// SetNillableSignNdTime sets the "sign_nd_time" field if the given value is not nil.
-func (crcuo *CourseRecordCoachUpdateOne) SetNillableSignNdTime(t *time.Time) *CourseRecordCoachUpdateOne {
+// SetNillableSignEndTime sets the "sign_end_time" field if the given value is not nil.
+func (crcuo *CourseRecordCoachUpdateOne) SetNillableSignEndTime(t *time.Time) *CourseRecordCoachUpdateOne {
 	if t != nil {
-		crcuo.SetSignNdTime(*t)
+		crcuo.SetSignEndTime(*t)
 	}
 	return crcuo
 }
 
-// ClearSignNdTime clears the value of the "sign_nd_time" field.
-func (crcuo *CourseRecordCoachUpdateOne) ClearSignNdTime() *CourseRecordCoachUpdateOne {
-	crcuo.mutation.ClearSignNdTime()
+// ClearSignEndTime clears the value of the "sign_end_time" field.
+func (crcuo *CourseRecordCoachUpdateOne) ClearSignEndTime() *CourseRecordCoachUpdateOne {
+	crcuo.mutation.ClearSignEndTime()
 	return crcuo
 }
 
@@ -777,11 +777,11 @@ func (crcuo *CourseRecordCoachUpdateOne) sqlSave(ctx context.Context) (_node *Co
 	if crcuo.mutation.SignStartTimeCleared() {
 		_spec.ClearField(courserecordcoach.FieldSignStartTime, field.TypeTime)
 	}
-	if value, ok := crcuo.mutation.SignNdTime(); ok {
-		_spec.SetField(courserecordcoach.FieldSignNdTime, field.TypeTime, value)
+	if value, ok := crcuo.mutation.SignEndTime(); ok {
+		_spec.SetField(courserecordcoach.FieldSignEndTime, field.TypeTime, value)
 	}
-	if crcuo.mutation.SignNdTimeCleared() {
-		_spec.ClearField(courserecordcoach.FieldSignNdTime, field.TypeTime)
+	if crcuo.mutation.SignEndTimeCleared() {
+		_spec.ClearField(courserecordcoach.FieldSignEndTime, field.TypeTime)
 	}
 	if value, ok := crcuo.mutation.Status(); ok {
 		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)

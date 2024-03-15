@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"math"
 	"saas/pkg/db/ent/courserecordcoach"
+	"saas/pkg/db/ent/courserecordmember"
 	"saas/pkg/db/ent/courserecordschedule"
-	"saas/pkg/db/ent/courserecorduser"
 	"saas/pkg/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -20,12 +20,12 @@ import (
 // CourseRecordScheduleQuery is the builder for querying CourseRecordSchedule entities.
 type CourseRecordScheduleQuery struct {
 	config
-	ctx        *QueryContext
-	order      []courserecordschedule.OrderOption
-	inters     []Interceptor
-	predicates []predicate.CourseRecordSchedule
-	withUsers  *CourseRecordUserQuery
-	withCoach  *CourseRecordCoachQuery
+	ctx         *QueryContext
+	order       []courserecordschedule.OrderOption
+	inters      []Interceptor
+	predicates  []predicate.CourseRecordSchedule
+	withMembers *CourseRecordMemberQuery
+	withCoachs  *CourseRecordCoachQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -62,9 +62,9 @@ func (crsq *CourseRecordScheduleQuery) Order(o ...courserecordschedule.OrderOpti
 	return crsq
 }
 
-// QueryUsers chains the current query on the "users" edge.
-func (crsq *CourseRecordScheduleQuery) QueryUsers() *CourseRecordUserQuery {
-	query := (&CourseRecordUserClient{config: crsq.config}).Query()
+// QueryMembers chains the current query on the "members" edge.
+func (crsq *CourseRecordScheduleQuery) QueryMembers() *CourseRecordMemberQuery {
+	query := (&CourseRecordMemberClient{config: crsq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := crsq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -75,8 +75,8 @@ func (crsq *CourseRecordScheduleQuery) QueryUsers() *CourseRecordUserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(courserecordschedule.Table, courserecordschedule.FieldID, selector),
-			sqlgraph.To(courserecorduser.Table, courserecorduser.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, courserecordschedule.UsersTable, courserecordschedule.UsersColumn),
+			sqlgraph.To(courserecordmember.Table, courserecordmember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, courserecordschedule.MembersTable, courserecordschedule.MembersColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(crsq.driver.Dialect(), step)
 		return fromU, nil
@@ -84,8 +84,8 @@ func (crsq *CourseRecordScheduleQuery) QueryUsers() *CourseRecordUserQuery {
 	return query
 }
 
-// QueryCoach chains the current query on the "coach" edge.
-func (crsq *CourseRecordScheduleQuery) QueryCoach() *CourseRecordCoachQuery {
+// QueryCoachs chains the current query on the "coachs" edge.
+func (crsq *CourseRecordScheduleQuery) QueryCoachs() *CourseRecordCoachQuery {
 	query := (&CourseRecordCoachClient{config: crsq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := crsq.prepareQuery(ctx); err != nil {
@@ -98,7 +98,7 @@ func (crsq *CourseRecordScheduleQuery) QueryCoach() *CourseRecordCoachQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(courserecordschedule.Table, courserecordschedule.FieldID, selector),
 			sqlgraph.To(courserecordcoach.Table, courserecordcoach.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, courserecordschedule.CoachTable, courserecordschedule.CoachColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, courserecordschedule.CoachsTable, courserecordschedule.CoachsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(crsq.driver.Dialect(), step)
 		return fromU, nil
@@ -293,38 +293,38 @@ func (crsq *CourseRecordScheduleQuery) Clone() *CourseRecordScheduleQuery {
 		return nil
 	}
 	return &CourseRecordScheduleQuery{
-		config:     crsq.config,
-		ctx:        crsq.ctx.Clone(),
-		order:      append([]courserecordschedule.OrderOption{}, crsq.order...),
-		inters:     append([]Interceptor{}, crsq.inters...),
-		predicates: append([]predicate.CourseRecordSchedule{}, crsq.predicates...),
-		withUsers:  crsq.withUsers.Clone(),
-		withCoach:  crsq.withCoach.Clone(),
+		config:      crsq.config,
+		ctx:         crsq.ctx.Clone(),
+		order:       append([]courserecordschedule.OrderOption{}, crsq.order...),
+		inters:      append([]Interceptor{}, crsq.inters...),
+		predicates:  append([]predicate.CourseRecordSchedule{}, crsq.predicates...),
+		withMembers: crsq.withMembers.Clone(),
+		withCoachs:  crsq.withCoachs.Clone(),
 		// clone intermediate query.
 		sql:  crsq.sql.Clone(),
 		path: crsq.path,
 	}
 }
 
-// WithUsers tells the query-builder to eager-load the nodes that are connected to
-// the "users" edge. The optional arguments are used to configure the query builder of the edge.
-func (crsq *CourseRecordScheduleQuery) WithUsers(opts ...func(*CourseRecordUserQuery)) *CourseRecordScheduleQuery {
-	query := (&CourseRecordUserClient{config: crsq.config}).Query()
+// WithMembers tells the query-builder to eager-load the nodes that are connected to
+// the "members" edge. The optional arguments are used to configure the query builder of the edge.
+func (crsq *CourseRecordScheduleQuery) WithMembers(opts ...func(*CourseRecordMemberQuery)) *CourseRecordScheduleQuery {
+	query := (&CourseRecordMemberClient{config: crsq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	crsq.withUsers = query
+	crsq.withMembers = query
 	return crsq
 }
 
-// WithCoach tells the query-builder to eager-load the nodes that are connected to
-// the "coach" edge. The optional arguments are used to configure the query builder of the edge.
-func (crsq *CourseRecordScheduleQuery) WithCoach(opts ...func(*CourseRecordCoachQuery)) *CourseRecordScheduleQuery {
+// WithCoachs tells the query-builder to eager-load the nodes that are connected to
+// the "coachs" edge. The optional arguments are used to configure the query builder of the edge.
+func (crsq *CourseRecordScheduleQuery) WithCoachs(opts ...func(*CourseRecordCoachQuery)) *CourseRecordScheduleQuery {
 	query := (&CourseRecordCoachClient{config: crsq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	crsq.withCoach = query
+	crsq.withCoachs = query
 	return crsq
 }
 
@@ -407,8 +407,8 @@ func (crsq *CourseRecordScheduleQuery) sqlAll(ctx context.Context, hooks ...quer
 		nodes       = []*CourseRecordSchedule{}
 		_spec       = crsq.querySpec()
 		loadedTypes = [2]bool{
-			crsq.withUsers != nil,
-			crsq.withCoach != nil,
+			crsq.withMembers != nil,
+			crsq.withCoachs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -429,24 +429,24 @@ func (crsq *CourseRecordScheduleQuery) sqlAll(ctx context.Context, hooks ...quer
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := crsq.withUsers; query != nil {
-		if err := crsq.loadUsers(ctx, query, nodes,
-			func(n *CourseRecordSchedule) { n.Edges.Users = []*CourseRecordUser{} },
-			func(n *CourseRecordSchedule, e *CourseRecordUser) { n.Edges.Users = append(n.Edges.Users, e) }); err != nil {
+	if query := crsq.withMembers; query != nil {
+		if err := crsq.loadMembers(ctx, query, nodes,
+			func(n *CourseRecordSchedule) { n.Edges.Members = []*CourseRecordMember{} },
+			func(n *CourseRecordSchedule, e *CourseRecordMember) { n.Edges.Members = append(n.Edges.Members, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := crsq.withCoach; query != nil {
-		if err := crsq.loadCoach(ctx, query, nodes,
-			func(n *CourseRecordSchedule) { n.Edges.Coach = []*CourseRecordCoach{} },
-			func(n *CourseRecordSchedule, e *CourseRecordCoach) { n.Edges.Coach = append(n.Edges.Coach, e) }); err != nil {
+	if query := crsq.withCoachs; query != nil {
+		if err := crsq.loadCoachs(ctx, query, nodes,
+			func(n *CourseRecordSchedule) { n.Edges.Coachs = []*CourseRecordCoach{} },
+			func(n *CourseRecordSchedule, e *CourseRecordCoach) { n.Edges.Coachs = append(n.Edges.Coachs, e) }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (crsq *CourseRecordScheduleQuery) loadUsers(ctx context.Context, query *CourseRecordUserQuery, nodes []*CourseRecordSchedule, init func(*CourseRecordSchedule), assign func(*CourseRecordSchedule, *CourseRecordUser)) error {
+func (crsq *CourseRecordScheduleQuery) loadMembers(ctx context.Context, query *CourseRecordMemberQuery, nodes []*CourseRecordSchedule, init func(*CourseRecordSchedule), assign func(*CourseRecordSchedule, *CourseRecordMember)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*CourseRecordSchedule)
 	for i := range nodes {
@@ -457,10 +457,10 @@ func (crsq *CourseRecordScheduleQuery) loadUsers(ctx context.Context, query *Cou
 		}
 	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(courserecorduser.FieldCourseRecordScheduleID)
+		query.ctx.AppendFieldOnce(courserecordmember.FieldCourseRecordScheduleID)
 	}
-	query.Where(predicate.CourseRecordUser(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(courserecordschedule.UsersColumn), fks...))
+	query.Where(predicate.CourseRecordMember(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(courserecordschedule.MembersColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -476,7 +476,7 @@ func (crsq *CourseRecordScheduleQuery) loadUsers(ctx context.Context, query *Cou
 	}
 	return nil
 }
-func (crsq *CourseRecordScheduleQuery) loadCoach(ctx context.Context, query *CourseRecordCoachQuery, nodes []*CourseRecordSchedule, init func(*CourseRecordSchedule), assign func(*CourseRecordSchedule, *CourseRecordCoach)) error {
+func (crsq *CourseRecordScheduleQuery) loadCoachs(ctx context.Context, query *CourseRecordCoachQuery, nodes []*CourseRecordSchedule, init func(*CourseRecordSchedule), assign func(*CourseRecordSchedule, *CourseRecordCoach)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*CourseRecordSchedule)
 	for i := range nodes {
@@ -490,7 +490,7 @@ func (crsq *CourseRecordScheduleQuery) loadCoach(ctx context.Context, query *Cou
 		query.ctx.AppendFieldOnce(courserecordcoach.FieldCourseRecordScheduleID)
 	}
 	query.Where(predicate.CourseRecordCoach(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(courserecordschedule.CoachColumn), fks...))
+		s.Where(sql.InValues(s.C(courserecordschedule.CoachsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {

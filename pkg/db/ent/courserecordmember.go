@@ -4,8 +4,8 @@ package ent
 
 import (
 	"fmt"
+	"saas/pkg/db/ent/courserecordmember"
 	"saas/pkg/db/ent/courserecordschedule"
-	"saas/pkg/db/ent/courserecorduser"
 	"strings"
 	"time"
 
@@ -13,8 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// CourseRecordUser is the model entity for the CourseRecordUser schema.
-type CourseRecordUser struct {
+// CourseRecordMember is the model entity for the CourseRecordMember schema.
+type CourseRecordMember struct {
 	config `json:"-"`
 	// ID of the ent.
 	// primary key
@@ -26,7 +26,7 @@ type CourseRecordUser struct {
 	// 场馆id
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 会员id
-	UserID int64 `json:"user_id,omitempty"`
+	MemberID int64 `json:"member_id,omitempty"`
 	// 课程ID
 	CourseRecordScheduleID int64 `json:"course_record_schedule_id,omitempty"`
 	// 类型
@@ -38,23 +38,23 @@ type CourseRecordUser struct {
 	// 上课签到时间
 	SignStartTime time.Time `json:"sign_start_time,omitempty"`
 	// 下课签到时间
-	SignNdTime time.Time `json:"sign_nd_time,omitempty"`
+	SignEndTime time.Time `json:"sign_end_time,omitempty"`
 	// 会员购买课ID
-	UserProductID int64 `json:"user_product_id,omitempty"`
+	MemberProductID int64 `json:"member_product_id,omitempty"`
 	// 会员购买课ID
-	UserProductItemID int64 `json:"user_product_item_id,omitempty"`
+	MemberProductItemID int64 `json:"member_product_item_id,omitempty"`
 	// 教练ID
 	CoachID int64 `json:"coach_id,omitempty"`
 	// 状态
 	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the CourseRecordUserQuery when eager-loading is set.
-	Edges        CourseRecordUserEdges `json:"edges"`
+	// The values are being populated by the CourseRecordMemberQuery when eager-loading is set.
+	Edges        CourseRecordMemberEdges `json:"edges"`
 	selectValues sql.SelectValues
 }
 
-// CourseRecordUserEdges holds the relations/edges for other nodes in the graph.
-type CourseRecordUserEdges struct {
+// CourseRecordMemberEdges holds the relations/edges for other nodes in the graph.
+type CourseRecordMemberEdges struct {
 	// Schedule holds the value of the schedule edge.
 	Schedule *CourseRecordSchedule `json:"sch"`
 	// loadedTypes holds the information for reporting if a
@@ -64,7 +64,7 @@ type CourseRecordUserEdges struct {
 
 // ScheduleOrErr returns the Schedule value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e CourseRecordUserEdges) ScheduleOrErr() (*CourseRecordSchedule, error) {
+func (e CourseRecordMemberEdges) ScheduleOrErr() (*CourseRecordSchedule, error) {
 	if e.loadedTypes[0] {
 		if e.Schedule == nil {
 			// Edge was loaded but was not found.
@@ -76,15 +76,15 @@ func (e CourseRecordUserEdges) ScheduleOrErr() (*CourseRecordSchedule, error) {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*CourseRecordUser) scanValues(columns []string) ([]any, error) {
+func (*CourseRecordMember) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case courserecorduser.FieldID, courserecorduser.FieldVenueID, courserecorduser.FieldUserID, courserecorduser.FieldCourseRecordScheduleID, courserecorduser.FieldUserProductID, courserecorduser.FieldUserProductItemID, courserecorduser.FieldCoachID, courserecorduser.FieldStatus:
+		case courserecordmember.FieldID, courserecordmember.FieldVenueID, courserecordmember.FieldMemberID, courserecordmember.FieldCourseRecordScheduleID, courserecordmember.FieldMemberProductID, courserecordmember.FieldMemberProductItemID, courserecordmember.FieldCoachID, courserecordmember.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case courserecorduser.FieldType:
+		case courserecordmember.FieldType:
 			values[i] = new(sql.NullString)
-		case courserecorduser.FieldCreatedAt, courserecorduser.FieldUpdatedAt, courserecorduser.FieldStartTime, courserecorduser.FieldEndTime, courserecorduser.FieldSignStartTime, courserecorduser.FieldSignNdTime:
+		case courserecordmember.FieldCreatedAt, courserecordmember.FieldUpdatedAt, courserecordmember.FieldStartTime, courserecordmember.FieldEndTime, courserecordmember.FieldSignStartTime, courserecordmember.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -94,188 +94,188 @@ func (*CourseRecordUser) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the CourseRecordUser fields.
-func (cru *CourseRecordUser) assignValues(columns []string, values []any) error {
+// to the CourseRecordMember fields.
+func (crm *CourseRecordMember) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case courserecorduser.FieldID:
+		case courserecordmember.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			cru.ID = int64(value.Int64)
-		case courserecorduser.FieldCreatedAt:
+			crm.ID = int64(value.Int64)
+		case courserecordmember.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				cru.CreatedAt = value.Time
+				crm.CreatedAt = value.Time
 			}
-		case courserecorduser.FieldUpdatedAt:
+		case courserecordmember.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				cru.UpdatedAt = value.Time
+				crm.UpdatedAt = value.Time
 			}
-		case courserecorduser.FieldVenueID:
+		case courserecordmember.FieldVenueID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
 			} else if value.Valid {
-				cru.VenueID = value.Int64
+				crm.VenueID = value.Int64
 			}
-		case courserecorduser.FieldUserID:
+		case courserecordmember.FieldMemberID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+				return fmt.Errorf("unexpected type %T for field member_id", values[i])
 			} else if value.Valid {
-				cru.UserID = value.Int64
+				crm.MemberID = value.Int64
 			}
-		case courserecorduser.FieldCourseRecordScheduleID:
+		case courserecordmember.FieldCourseRecordScheduleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field course_record_schedule_id", values[i])
 			} else if value.Valid {
-				cru.CourseRecordScheduleID = value.Int64
+				crm.CourseRecordScheduleID = value.Int64
 			}
-		case courserecorduser.FieldType:
+		case courserecordmember.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				cru.Type = value.String
+				crm.Type = value.String
 			}
-		case courserecorduser.FieldStartTime:
+		case courserecordmember.FieldStartTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field start_time", values[i])
 			} else if value.Valid {
-				cru.StartTime = value.Time
+				crm.StartTime = value.Time
 			}
-		case courserecorduser.FieldEndTime:
+		case courserecordmember.FieldEndTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field end_time", values[i])
 			} else if value.Valid {
-				cru.EndTime = value.Time
+				crm.EndTime = value.Time
 			}
-		case courserecorduser.FieldSignStartTime:
+		case courserecordmember.FieldSignStartTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field sign_start_time", values[i])
 			} else if value.Valid {
-				cru.SignStartTime = value.Time
+				crm.SignStartTime = value.Time
 			}
-		case courserecorduser.FieldSignNdTime:
+		case courserecordmember.FieldSignEndTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field sign_nd_time", values[i])
+				return fmt.Errorf("unexpected type %T for field sign_end_time", values[i])
 			} else if value.Valid {
-				cru.SignNdTime = value.Time
+				crm.SignEndTime = value.Time
 			}
-		case courserecorduser.FieldUserProductID:
+		case courserecordmember.FieldMemberProductID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_product_id", values[i])
+				return fmt.Errorf("unexpected type %T for field member_product_id", values[i])
 			} else if value.Valid {
-				cru.UserProductID = value.Int64
+				crm.MemberProductID = value.Int64
 			}
-		case courserecorduser.FieldUserProductItemID:
+		case courserecordmember.FieldMemberProductItemID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_product_item_id", values[i])
+				return fmt.Errorf("unexpected type %T for field member_product_item_id", values[i])
 			} else if value.Valid {
-				cru.UserProductItemID = value.Int64
+				crm.MemberProductItemID = value.Int64
 			}
-		case courserecorduser.FieldCoachID:
+		case courserecordmember.FieldCoachID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field coach_id", values[i])
 			} else if value.Valid {
-				cru.CoachID = value.Int64
+				crm.CoachID = value.Int64
 			}
-		case courserecorduser.FieldStatus:
+		case courserecordmember.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				cru.Status = value.Int64
+				crm.Status = value.Int64
 			}
 		default:
-			cru.selectValues.Set(columns[i], values[i])
+			crm.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the CourseRecordUser.
+// Value returns the ent.Value that was dynamically selected and assigned to the CourseRecordMember.
 // This includes values selected through modifiers, order, etc.
-func (cru *CourseRecordUser) Value(name string) (ent.Value, error) {
-	return cru.selectValues.Get(name)
+func (crm *CourseRecordMember) Value(name string) (ent.Value, error) {
+	return crm.selectValues.Get(name)
 }
 
-// QuerySchedule queries the "schedule" edge of the CourseRecordUser entity.
-func (cru *CourseRecordUser) QuerySchedule() *CourseRecordScheduleQuery {
-	return NewCourseRecordUserClient(cru.config).QuerySchedule(cru)
+// QuerySchedule queries the "schedule" edge of the CourseRecordMember entity.
+func (crm *CourseRecordMember) QuerySchedule() *CourseRecordScheduleQuery {
+	return NewCourseRecordMemberClient(crm.config).QuerySchedule(crm)
 }
 
-// Update returns a builder for updating this CourseRecordUser.
-// Note that you need to call CourseRecordUser.Unwrap() before calling this method if this CourseRecordUser
+// Update returns a builder for updating this CourseRecordMember.
+// Note that you need to call CourseRecordMember.Unwrap() before calling this method if this CourseRecordMember
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (cru *CourseRecordUser) Update() *CourseRecordUserUpdateOne {
-	return NewCourseRecordUserClient(cru.config).UpdateOne(cru)
+func (crm *CourseRecordMember) Update() *CourseRecordMemberUpdateOne {
+	return NewCourseRecordMemberClient(crm.config).UpdateOne(crm)
 }
 
-// Unwrap unwraps the CourseRecordUser entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the CourseRecordMember entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (cru *CourseRecordUser) Unwrap() *CourseRecordUser {
-	_tx, ok := cru.config.driver.(*txDriver)
+func (crm *CourseRecordMember) Unwrap() *CourseRecordMember {
+	_tx, ok := crm.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: CourseRecordUser is not a transactional entity")
+		panic("ent: CourseRecordMember is not a transactional entity")
 	}
-	cru.config.driver = _tx.drv
-	return cru
+	crm.config.driver = _tx.drv
+	return crm
 }
 
 // String implements the fmt.Stringer.
-func (cru *CourseRecordUser) String() string {
+func (crm *CourseRecordMember) String() string {
 	var builder strings.Builder
-	builder.WriteString("CourseRecordUser(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", cru.ID))
+	builder.WriteString("CourseRecordMember(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", crm.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(cru.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(crm.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(cru.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(crm.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("venue_id=")
-	builder.WriteString(fmt.Sprintf("%v", cru.VenueID))
+	builder.WriteString(fmt.Sprintf("%v", crm.VenueID))
 	builder.WriteString(", ")
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", cru.UserID))
+	builder.WriteString("member_id=")
+	builder.WriteString(fmt.Sprintf("%v", crm.MemberID))
 	builder.WriteString(", ")
 	builder.WriteString("course_record_schedule_id=")
-	builder.WriteString(fmt.Sprintf("%v", cru.CourseRecordScheduleID))
+	builder.WriteString(fmt.Sprintf("%v", crm.CourseRecordScheduleID))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(cru.Type)
+	builder.WriteString(crm.Type)
 	builder.WriteString(", ")
 	builder.WriteString("start_time=")
-	builder.WriteString(cru.StartTime.Format(time.ANSIC))
+	builder.WriteString(crm.StartTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("end_time=")
-	builder.WriteString(cru.EndTime.Format(time.ANSIC))
+	builder.WriteString(crm.EndTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("sign_start_time=")
-	builder.WriteString(cru.SignStartTime.Format(time.ANSIC))
+	builder.WriteString(crm.SignStartTime.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("sign_nd_time=")
-	builder.WriteString(cru.SignNdTime.Format(time.ANSIC))
+	builder.WriteString("sign_end_time=")
+	builder.WriteString(crm.SignEndTime.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("user_product_id=")
-	builder.WriteString(fmt.Sprintf("%v", cru.UserProductID))
+	builder.WriteString("member_product_id=")
+	builder.WriteString(fmt.Sprintf("%v", crm.MemberProductID))
 	builder.WriteString(", ")
-	builder.WriteString("user_product_item_id=")
-	builder.WriteString(fmt.Sprintf("%v", cru.UserProductItemID))
+	builder.WriteString("member_product_item_id=")
+	builder.WriteString(fmt.Sprintf("%v", crm.MemberProductItemID))
 	builder.WriteString(", ")
 	builder.WriteString("coach_id=")
-	builder.WriteString(fmt.Sprintf("%v", cru.CoachID))
+	builder.WriteString(fmt.Sprintf("%v", crm.CoachID))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", cru.Status))
+	builder.WriteString(fmt.Sprintf("%v", crm.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// CourseRecordUsers is a parsable slice of CourseRecordUser.
-type CourseRecordUsers []*CourseRecordUser
+// CourseRecordMembers is a parsable slice of CourseRecordMember.
+type CourseRecordMembers []*CourseRecordMember

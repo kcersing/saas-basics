@@ -22,8 +22,8 @@ const (
 	FieldOrderSn = "order_sn"
 	// FieldVenueID holds the string denoting the venue_id field in the database.
 	FieldVenueID = "venue_id"
-	// FieldUserID holds the string denoting the user_id field in the database.
-	FieldUserID = "user_id"
+	// FieldMemberID holds the string denoting the member_id field in the database.
+	FieldMemberID = "member_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -81,7 +81,7 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldOrderSn,
 	FieldVenueID,
-	FieldUserID,
+	FieldMemberID,
 	FieldStatus,
 	FieldSource,
 	FieldDevice,
@@ -142,9 +142,9 @@ func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
 }
 
-// ByUserID orders the results by the user_id field.
-func ByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUserID, opts...).ToFunc()
+// ByMemberID orders the results by the member_id field.
+func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

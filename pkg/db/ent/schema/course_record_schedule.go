@@ -37,8 +37,8 @@ func (CourseRecordSchedule) Mixin() []ent.Mixin {
 
 func (CourseRecordSchedule) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("users", CourseRecordUser.Type),
-		edge.To("coach", CourseRecordCoach.Type),
+		edge.To("members", CourseRecordMember.Type),
+		edge.To("coachs", CourseRecordCoach.Type),
 	}
 }
 

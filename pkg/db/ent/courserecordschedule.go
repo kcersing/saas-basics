@@ -48,31 +48,31 @@ type CourseRecordSchedule struct {
 
 // CourseRecordScheduleEdges holds the relations/edges for other nodes in the graph.
 type CourseRecordScheduleEdges struct {
-	// Users holds the value of the users edge.
-	Users []*CourseRecordUser `json:"users,omitempty"`
-	// Coach holds the value of the coach edge.
-	Coach []*CourseRecordCoach `json:"coach,omitempty"`
+	// Members holds the value of the members edge.
+	Members []*CourseRecordMember `json:"members,omitempty"`
+	// Coachs holds the value of the coachs edge.
+	Coachs []*CourseRecordCoach `json:"coachs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [2]bool
 }
 
-// UsersOrErr returns the Users value or an error if the edge
+// MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
-func (e CourseRecordScheduleEdges) UsersOrErr() ([]*CourseRecordUser, error) {
+func (e CourseRecordScheduleEdges) MembersOrErr() ([]*CourseRecordMember, error) {
 	if e.loadedTypes[0] {
-		return e.Users, nil
+		return e.Members, nil
 	}
-	return nil, &NotLoadedError{edge: "users"}
+	return nil, &NotLoadedError{edge: "members"}
 }
 
-// CoachOrErr returns the Coach value or an error if the edge
+// CoachsOrErr returns the Coachs value or an error if the edge
 // was not loaded in eager-loading.
-func (e CourseRecordScheduleEdges) CoachOrErr() ([]*CourseRecordCoach, error) {
+func (e CourseRecordScheduleEdges) CoachsOrErr() ([]*CourseRecordCoach, error) {
 	if e.loadedTypes[1] {
-		return e.Coach, nil
+		return e.Coachs, nil
 	}
-	return nil, &NotLoadedError{edge: "coach"}
+	return nil, &NotLoadedError{edge: "coachs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -188,14 +188,14 @@ func (crs *CourseRecordSchedule) Value(name string) (ent.Value, error) {
 	return crs.selectValues.Get(name)
 }
 
-// QueryUsers queries the "users" edge of the CourseRecordSchedule entity.
-func (crs *CourseRecordSchedule) QueryUsers() *CourseRecordUserQuery {
-	return NewCourseRecordScheduleClient(crs.config).QueryUsers(crs)
+// QueryMembers queries the "members" edge of the CourseRecordSchedule entity.
+func (crs *CourseRecordSchedule) QueryMembers() *CourseRecordMemberQuery {
+	return NewCourseRecordScheduleClient(crs.config).QueryMembers(crs)
 }
 
-// QueryCoach queries the "coach" edge of the CourseRecordSchedule entity.
-func (crs *CourseRecordSchedule) QueryCoach() *CourseRecordCoachQuery {
-	return NewCourseRecordScheduleClient(crs.config).QueryCoach(crs)
+// QueryCoachs queries the "coachs" edge of the CourseRecordSchedule entity.
+func (crs *CourseRecordSchedule) QueryCoachs() *CourseRecordCoachQuery {
+	return NewCourseRecordScheduleClient(crs.config).QueryCoachs(crs)
 }
 
 // Update returns a builder for updating this CourseRecordSchedule.

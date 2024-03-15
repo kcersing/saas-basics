@@ -27,7 +27,7 @@ type Order struct {
 	// 场馆id
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 会员id
-	UserID int64 `json:"user_id,omitempty"`
+	MemberID int64 `json:"member_id,omitempty"`
 	// 状态
 	Status int64 `json:"status,omitempty"`
 	// 订单来源
@@ -100,7 +100,7 @@ func (*Order) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case order.FieldID, order.FieldVenueID, order.FieldUserID, order.FieldStatus, order.FieldCreateID:
+		case order.FieldID, order.FieldVenueID, order.FieldMemberID, order.FieldStatus, order.FieldCreateID:
 			values[i] = new(sql.NullInt64)
 		case order.FieldOrderSn, order.FieldSource, order.FieldDevice:
 			values[i] = new(sql.NullString)
@@ -151,11 +151,11 @@ func (o *Order) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				o.VenueID = value.Int64
 			}
-		case order.FieldUserID:
+		case order.FieldMemberID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+				return fmt.Errorf("unexpected type %T for field member_id", values[i])
 			} else if value.Valid {
-				o.UserID = value.Int64
+				o.MemberID = value.Int64
 			}
 		case order.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -255,8 +255,8 @@ func (o *Order) String() string {
 	builder.WriteString("venue_id=")
 	builder.WriteString(fmt.Sprintf("%v", o.VenueID))
 	builder.WriteString(", ")
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", o.UserID))
+	builder.WriteString("member_id=")
+	builder.WriteString(fmt.Sprintf("%v", o.MemberID))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", o.Status))

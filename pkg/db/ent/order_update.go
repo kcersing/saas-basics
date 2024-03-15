@@ -85,30 +85,30 @@ func (ou *OrderUpdate) ClearVenueID() *OrderUpdate {
 	return ou
 }
 
-// SetUserID sets the "user_id" field.
-func (ou *OrderUpdate) SetUserID(i int64) *OrderUpdate {
-	ou.mutation.ResetUserID()
-	ou.mutation.SetUserID(i)
+// SetMemberID sets the "member_id" field.
+func (ou *OrderUpdate) SetMemberID(i int64) *OrderUpdate {
+	ou.mutation.ResetMemberID()
+	ou.mutation.SetMemberID(i)
 	return ou
 }
 
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (ou *OrderUpdate) SetNillableUserID(i *int64) *OrderUpdate {
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (ou *OrderUpdate) SetNillableMemberID(i *int64) *OrderUpdate {
 	if i != nil {
-		ou.SetUserID(*i)
+		ou.SetMemberID(*i)
 	}
 	return ou
 }
 
-// AddUserID adds i to the "user_id" field.
-func (ou *OrderUpdate) AddUserID(i int64) *OrderUpdate {
-	ou.mutation.AddUserID(i)
+// AddMemberID adds i to the "member_id" field.
+func (ou *OrderUpdate) AddMemberID(i int64) *OrderUpdate {
+	ou.mutation.AddMemberID(i)
 	return ou
 }
 
-// ClearUserID clears the value of the "user_id" field.
-func (ou *OrderUpdate) ClearUserID() *OrderUpdate {
-	ou.mutation.ClearUserID()
+// ClearMemberID clears the value of the "member_id" field.
+func (ou *OrderUpdate) ClearMemberID() *OrderUpdate {
+	ou.mutation.ClearMemberID()
 	return ou
 }
 
@@ -438,14 +438,14 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.VenueIDCleared() {
 		_spec.ClearField(order.FieldVenueID, field.TypeInt64)
 	}
-	if value, ok := ou.mutation.UserID(); ok {
-		_spec.SetField(order.FieldUserID, field.TypeInt64, value)
+	if value, ok := ou.mutation.MemberID(); ok {
+		_spec.SetField(order.FieldMemberID, field.TypeInt64, value)
 	}
-	if value, ok := ou.mutation.AddedUserID(); ok {
-		_spec.AddField(order.FieldUserID, field.TypeInt64, value)
+	if value, ok := ou.mutation.AddedMemberID(); ok {
+		_spec.AddField(order.FieldMemberID, field.TypeInt64, value)
 	}
-	if ou.mutation.UserIDCleared() {
-		_spec.ClearField(order.FieldUserID, field.TypeInt64)
+	if ou.mutation.MemberIDCleared() {
+		_spec.ClearField(order.FieldMemberID, field.TypeInt64)
 	}
 	if value, ok := ou.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
@@ -736,30 +736,30 @@ func (ouo *OrderUpdateOne) ClearVenueID() *OrderUpdateOne {
 	return ouo
 }
 
-// SetUserID sets the "user_id" field.
-func (ouo *OrderUpdateOne) SetUserID(i int64) *OrderUpdateOne {
-	ouo.mutation.ResetUserID()
-	ouo.mutation.SetUserID(i)
+// SetMemberID sets the "member_id" field.
+func (ouo *OrderUpdateOne) SetMemberID(i int64) *OrderUpdateOne {
+	ouo.mutation.ResetMemberID()
+	ouo.mutation.SetMemberID(i)
 	return ouo
 }
 
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (ouo *OrderUpdateOne) SetNillableUserID(i *int64) *OrderUpdateOne {
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableMemberID(i *int64) *OrderUpdateOne {
 	if i != nil {
-		ouo.SetUserID(*i)
+		ouo.SetMemberID(*i)
 	}
 	return ouo
 }
 
-// AddUserID adds i to the "user_id" field.
-func (ouo *OrderUpdateOne) AddUserID(i int64) *OrderUpdateOne {
-	ouo.mutation.AddUserID(i)
+// AddMemberID adds i to the "member_id" field.
+func (ouo *OrderUpdateOne) AddMemberID(i int64) *OrderUpdateOne {
+	ouo.mutation.AddMemberID(i)
 	return ouo
 }
 
-// ClearUserID clears the value of the "user_id" field.
-func (ouo *OrderUpdateOne) ClearUserID() *OrderUpdateOne {
-	ouo.mutation.ClearUserID()
+// ClearMemberID clears the value of the "member_id" field.
+func (ouo *OrderUpdateOne) ClearMemberID() *OrderUpdateOne {
+	ouo.mutation.ClearMemberID()
 	return ouo
 }
 
@@ -1119,14 +1119,14 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	if ouo.mutation.VenueIDCleared() {
 		_spec.ClearField(order.FieldVenueID, field.TypeInt64)
 	}
-	if value, ok := ouo.mutation.UserID(); ok {
-		_spec.SetField(order.FieldUserID, field.TypeInt64, value)
+	if value, ok := ouo.mutation.MemberID(); ok {
+		_spec.SetField(order.FieldMemberID, field.TypeInt64, value)
 	}
-	if value, ok := ouo.mutation.AddedUserID(); ok {
-		_spec.AddField(order.FieldUserID, field.TypeInt64, value)
+	if value, ok := ouo.mutation.AddedMemberID(); ok {
+		_spec.AddField(order.FieldMemberID, field.TypeInt64, value)
 	}
-	if ouo.mutation.UserIDCleared() {
-		_spec.ClearField(order.FieldUserID, field.TypeInt64)
+	if ouo.mutation.MemberIDCleared() {
+		_spec.ClearField(order.FieldMemberID, field.TypeInt64)
 	}
 	if value, ok := ouo.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)

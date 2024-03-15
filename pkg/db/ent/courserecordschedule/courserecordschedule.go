@@ -36,26 +36,26 @@ const (
 	FieldPrice = "price"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// EdgeUsers holds the string denoting the users edge name in mutations.
-	EdgeUsers = "users"
-	// EdgeCoach holds the string denoting the coach edge name in mutations.
-	EdgeCoach = "coach"
+	// EdgeMembers holds the string denoting the members edge name in mutations.
+	EdgeMembers = "members"
+	// EdgeCoachs holds the string denoting the coachs edge name in mutations.
+	EdgeCoachs = "coachs"
 	// Table holds the table name of the courserecordschedule in the database.
 	Table = "course_record_schedule"
-	// UsersTable is the table that holds the users relation/edge.
-	UsersTable = "course_record_user"
-	// UsersInverseTable is the table name for the CourseRecordUser entity.
-	// It exists in this package in order to avoid circular dependency with the "courserecorduser" package.
-	UsersInverseTable = "course_record_user"
-	// UsersColumn is the table column denoting the users relation/edge.
-	UsersColumn = "course_record_schedule_id"
-	// CoachTable is the table that holds the coach relation/edge.
-	CoachTable = "course_record_coach"
-	// CoachInverseTable is the table name for the CourseRecordCoach entity.
+	// MembersTable is the table that holds the members relation/edge.
+	MembersTable = "course_record_member"
+	// MembersInverseTable is the table name for the CourseRecordMember entity.
+	// It exists in this package in order to avoid circular dependency with the "courserecordmember" package.
+	MembersInverseTable = "course_record_member"
+	// MembersColumn is the table column denoting the members relation/edge.
+	MembersColumn = "course_record_schedule_id"
+	// CoachsTable is the table that holds the coachs relation/edge.
+	CoachsTable = "course_record_coach"
+	// CoachsInverseTable is the table name for the CourseRecordCoach entity.
 	// It exists in this package in order to avoid circular dependency with the "courserecordcoach" package.
-	CoachInverseTable = "course_record_coach"
-	// CoachColumn is the table column denoting the coach relation/edge.
-	CoachColumn = "course_record_schedule_id"
+	CoachsInverseTable = "course_record_coach"
+	// CoachsColumn is the table column denoting the coachs relation/edge.
+	CoachsColumn = "course_record_schedule_id"
 )
 
 // Columns holds all SQL columns for courserecordschedule fields.
@@ -164,44 +164,44 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByUsersCount orders the results by users count.
-func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
+// ByMembersCount orders the results by members count.
+func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUsersStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newMembersStep(), opts...)
 	}
 }
 
-// ByUsers orders the results by users terms.
-func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByMembers orders the results by members terms.
+func ByMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByCoachCount orders the results by coach count.
-func ByCoachCount(opts ...sql.OrderTermOption) OrderOption {
+// ByCoachsCount orders the results by coachs count.
+func ByCoachsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newCoachStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newCoachsStep(), opts...)
 	}
 }
 
-// ByCoach orders the results by coach terms.
-func ByCoach(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByCoachs orders the results by coachs terms.
+func ByCoachs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newCoachStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newCoachsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newUsersStep() *sqlgraph.Step {
+func newMembersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UsersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, UsersTable, UsersColumn),
+		sqlgraph.To(MembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MembersTable, MembersColumn),
 	)
 }
-func newCoachStep() *sqlgraph.Step {
+func newCoachsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(CoachInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, CoachTable, CoachColumn),
+		sqlgraph.To(CoachsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CoachsTable, CoachsColumn),
 	)
 }

@@ -32,8 +32,8 @@ const (
 	FieldEndTime = "end_time"
 	// FieldSignStartTime holds the string denoting the sign_start_time field in the database.
 	FieldSignStartTime = "sign_start_time"
-	// FieldSignNdTime holds the string denoting the sign_nd_time field in the database.
-	FieldSignNdTime = "sign_nd_time"
+	// FieldSignEndTime holds the string denoting the sign_end_time field in the database.
+	FieldSignEndTime = "sign_end_time"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// EdgeSchedule holds the string denoting the schedule edge name in mutations.
@@ -61,7 +61,7 @@ var Columns = []string{
 	FieldStartTime,
 	FieldEndTime,
 	FieldSignStartTime,
-	FieldSignNdTime,
+	FieldSignEndTime,
 	FieldStatus,
 }
 
@@ -88,8 +88,8 @@ var (
 	DefaultEndTime func() time.Time
 	// DefaultSignStartTime holds the default value on creation for the "sign_start_time" field.
 	DefaultSignStartTime func() time.Time
-	// DefaultSignNdTime holds the default value on creation for the "sign_nd_time" field.
-	DefaultSignNdTime func() time.Time
+	// DefaultSignEndTime holds the default value on creation for the "sign_end_time" field.
+	DefaultSignEndTime func() time.Time
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int64
 )
@@ -147,9 +147,9 @@ func BySignStartTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSignStartTime, opts...).ToFunc()
 }
 
-// BySignNdTime orders the results by the sign_nd_time field.
-func BySignNdTime(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSignNdTime, opts...).ToFunc()
+// BySignEndTime orders the results by the sign_end_time field.
+func BySignEndTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSignEndTime, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

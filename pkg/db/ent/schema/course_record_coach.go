@@ -24,7 +24,7 @@ func (CourseRecordCoach) Fields() []ent.Field {
 		field.Time("start_time").Default(time.Now).Comment("开始时间").Optional(),
 		field.Time("end_time").Default(time.Now).Comment("开始时间").Optional(),
 		field.Time("sign_start_time").Default(time.Now).Comment("上课签到时间").Optional(),
-		field.Time("sign_nd_time").Default(time.Now).Comment("下课签到时间").Optional(),
+		field.Time("sign_end_time").Default(time.Now).Comment("下课签到时间").Optional(),
 		field.Int64("status").Default(0).Comment("状态").Optional(),
 	}
 }
@@ -38,7 +38,7 @@ func (CourseRecordCoach) Mixin() []ent.Mixin {
 func (CourseRecordCoach) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("schedule", CourseRecordSchedule.Type).
-			Ref("coach").Unique().
+			Ref("coachs").Unique().
 			Field("course_record_schedule_id"),
 	}
 }

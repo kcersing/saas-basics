@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/courserecordcoach"
+	"saas/pkg/db/ent/courserecordmember"
 	"saas/pkg/db/ent/courserecordschedule"
-	"saas/pkg/db/ent/courserecorduser"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -182,29 +182,29 @@ func (crsc *CourseRecordScheduleCreate) SetID(i int64) *CourseRecordScheduleCrea
 	return crsc
 }
 
-// AddUserIDs adds the "users" edge to the CourseRecordUser entity by IDs.
-func (crsc *CourseRecordScheduleCreate) AddUserIDs(ids ...int64) *CourseRecordScheduleCreate {
-	crsc.mutation.AddUserIDs(ids...)
+// AddMemberIDs adds the "members" edge to the CourseRecordMember entity by IDs.
+func (crsc *CourseRecordScheduleCreate) AddMemberIDs(ids ...int64) *CourseRecordScheduleCreate {
+	crsc.mutation.AddMemberIDs(ids...)
 	return crsc
 }
 
-// AddUsers adds the "users" edges to the CourseRecordUser entity.
-func (crsc *CourseRecordScheduleCreate) AddUsers(c ...*CourseRecordUser) *CourseRecordScheduleCreate {
+// AddMembers adds the "members" edges to the CourseRecordMember entity.
+func (crsc *CourseRecordScheduleCreate) AddMembers(c ...*CourseRecordMember) *CourseRecordScheduleCreate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return crsc.AddUserIDs(ids...)
+	return crsc.AddMemberIDs(ids...)
 }
 
-// AddCoachIDs adds the "coach" edge to the CourseRecordCoach entity by IDs.
+// AddCoachIDs adds the "coachs" edge to the CourseRecordCoach entity by IDs.
 func (crsc *CourseRecordScheduleCreate) AddCoachIDs(ids ...int64) *CourseRecordScheduleCreate {
 	crsc.mutation.AddCoachIDs(ids...)
 	return crsc
 }
 
-// AddCoach adds the "coach" edges to the CourseRecordCoach entity.
-func (crsc *CourseRecordScheduleCreate) AddCoach(c ...*CourseRecordCoach) *CourseRecordScheduleCreate {
+// AddCoachs adds the "coachs" edges to the CourseRecordCoach entity.
+func (crsc *CourseRecordScheduleCreate) AddCoachs(c ...*CourseRecordCoach) *CourseRecordScheduleCreate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -357,15 +357,15 @@ func (crsc *CourseRecordScheduleCreate) createSpec() (*CourseRecordSchedule, *sq
 		_spec.SetField(courserecordschedule.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
-	if nodes := crsc.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := crsc.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.UsersTable,
-			Columns: []string{courserecordschedule.UsersColumn},
+			Table:   courserecordschedule.MembersTable,
+			Columns: []string{courserecordschedule.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(courserecorduser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(courserecordmember.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -373,12 +373,12 @@ func (crsc *CourseRecordScheduleCreate) createSpec() (*CourseRecordSchedule, *sq
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := crsc.mutation.CoachIDs(); len(nodes) > 0 {
+	if nodes := crsc.mutation.CoachsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   courserecordschedule.CoachTable,
-			Columns: []string{courserecordschedule.CoachColumn},
+			Table:   courserecordschedule.CoachsTable,
+			Columns: []string{courserecordschedule.CoachsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(courserecordcoach.FieldID, field.TypeInt64),

@@ -10,14 +10,6 @@ import (
 	"saas/pkg/db/ent/schema/mixins"
 )
 
-//	OrderId         int64  `json:"order_id"`
-//	UserId          int64  `json:"user_id"`
-//	Address         string `json:"address"`
-//	ProductId       int64  `json:"product_id"`
-//	StockNum        int64  `json:"stock_num"`
-//	ProductSnapshot string `json:"product_snapshot"`
-//	Status          int64  `json:"status"`
-
 type Order struct {
 	ent.Schema
 }
@@ -26,7 +18,7 @@ func (Order) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("order_sn").Comment("订单编号").Optional(),
 		field.Int64("venue_id").Comment("场馆id").Optional(),
-		field.Int64("user_id").Comment("会员id").Optional(),
+		field.Int64("member_id").Comment("会员id").Optional(),
 		field.Int64("status").Default(0).Comment("状态").Optional(),
 		field.String("source").Default("").Comment("订单来源").Optional(),
 		field.String("device").Default("").Comment("设备来源").Optional(),
@@ -52,7 +44,7 @@ func (Order) Edges() []ent.Edge {
 
 func (Order) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("user_id", "order_sn").
+		index.Fields("member_id", "order_sn").
 			Unique(),
 	}
 }

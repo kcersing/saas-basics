@@ -38,7 +38,7 @@ type CourseRecordCoach struct {
 	// 上课签到时间
 	SignStartTime time.Time `json:"sign_start_time,omitempty"`
 	// 下课签到时间
-	SignNdTime time.Time `json:"sign_nd_time,omitempty"`
+	SignEndTime time.Time `json:"sign_end_time,omitempty"`
 	// 状态
 	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -78,7 +78,7 @@ func (*CourseRecordCoach) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case courserecordcoach.FieldType:
 			values[i] = new(sql.NullString)
-		case courserecordcoach.FieldCreatedAt, courserecordcoach.FieldUpdatedAt, courserecordcoach.FieldStartTime, courserecordcoach.FieldEndTime, courserecordcoach.FieldSignStartTime, courserecordcoach.FieldSignNdTime:
+		case courserecordcoach.FieldCreatedAt, courserecordcoach.FieldUpdatedAt, courserecordcoach.FieldStartTime, courserecordcoach.FieldEndTime, courserecordcoach.FieldSignStartTime, courserecordcoach.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -155,11 +155,11 @@ func (crc *CourseRecordCoach) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				crc.SignStartTime = value.Time
 			}
-		case courserecordcoach.FieldSignNdTime:
+		case courserecordcoach.FieldSignEndTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field sign_nd_time", values[i])
+				return fmt.Errorf("unexpected type %T for field sign_end_time", values[i])
 			} else if value.Valid {
-				crc.SignNdTime = value.Time
+				crc.SignEndTime = value.Time
 			}
 		case courserecordcoach.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -235,8 +235,8 @@ func (crc *CourseRecordCoach) String() string {
 	builder.WriteString("sign_start_time=")
 	builder.WriteString(crc.SignStartTime.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("sign_nd_time=")
-	builder.WriteString(crc.SignNdTime.Format(time.ANSIC))
+	builder.WriteString("sign_end_time=")
+	builder.WriteString(crc.SignEndTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", crc.Status))
