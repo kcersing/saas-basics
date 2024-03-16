@@ -31,6 +31,8 @@ type OrderPay struct {
 	Remission float64 `json:"remission,omitempty"`
 	// 实际付款
 	Pay float64 `json:"pay,omitempty"`
+	// 备注
+	Note string `json:"note,omitempty"`
 	// 操作人id
 	CreateID int64 `json:"create_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -70,7 +72,7 @@ func (*OrderPay) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case orderpay.FieldID, orderpay.FieldOrderID, orderpay.FieldCreateID:
 			values[i] = new(sql.NullInt64)
-		case orderpay.FieldPaySn:
+		case orderpay.FieldPaySn, orderpay.FieldNote:
 			values[i] = new(sql.NullString)
 		case orderpay.FieldCreatedAt, orderpay.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -130,6 +132,12 @@ func (op *OrderPay) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field pay", values[i])
 			} else if value.Valid {
 				op.Pay = value.Float64
+			}
+		case orderpay.FieldNote:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field note", values[i])
+			} else if value.Valid {
+				op.Note = value.String
 			}
 		case orderpay.FieldCreateID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -195,6 +203,9 @@ func (op *OrderPay) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("pay=")
 	builder.WriteString(fmt.Sprintf("%v", op.Pay))
+	builder.WriteString(", ")
+	builder.WriteString("note=")
+	builder.WriteString(op.Note)
 	builder.WriteString(", ")
 	builder.WriteString("create_id=")
 	builder.WriteString(fmt.Sprintf("%v", op.CreateID))

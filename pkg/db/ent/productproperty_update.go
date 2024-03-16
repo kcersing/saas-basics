@@ -55,23 +55,23 @@ func (ppu *ProductPropertyUpdate) ClearType() *ProductPropertyUpdate {
 	return ppu
 }
 
-// SetSpuName sets the "spu_name" field.
-func (ppu *ProductPropertyUpdate) SetSpuName(s string) *ProductPropertyUpdate {
-	ppu.mutation.SetSpuName(s)
+// SetName sets the "name" field.
+func (ppu *ProductPropertyUpdate) SetName(s string) *ProductPropertyUpdate {
+	ppu.mutation.SetName(s)
 	return ppu
 }
 
-// SetNillableSpuName sets the "spu_name" field if the given value is not nil.
-func (ppu *ProductPropertyUpdate) SetNillableSpuName(s *string) *ProductPropertyUpdate {
+// SetNillableName sets the "name" field if the given value is not nil.
+func (ppu *ProductPropertyUpdate) SetNillableName(s *string) *ProductPropertyUpdate {
 	if s != nil {
-		ppu.SetSpuName(*s)
+		ppu.SetName(*s)
 	}
 	return ppu
 }
 
-// ClearSpuName clears the value of the "spu_name" field.
-func (ppu *ProductPropertyUpdate) ClearSpuName() *ProductPropertyUpdate {
-	ppu.mutation.ClearSpuName()
+// ClearName clears the value of the "name" field.
+func (ppu *ProductPropertyUpdate) ClearName() *ProductPropertyUpdate {
+	ppu.mutation.ClearName()
 	return ppu
 }
 
@@ -156,30 +156,30 @@ func (ppu *ProductPropertyUpdate) ClearCount() *ProductPropertyUpdate {
 	return ppu
 }
 
-// SetSpuPrice sets the "spu_price" field.
-func (ppu *ProductPropertyUpdate) SetSpuPrice(f float64) *ProductPropertyUpdate {
-	ppu.mutation.ResetSpuPrice()
-	ppu.mutation.SetSpuPrice(f)
+// SetPrice sets the "price" field.
+func (ppu *ProductPropertyUpdate) SetPrice(f float64) *ProductPropertyUpdate {
+	ppu.mutation.ResetPrice()
+	ppu.mutation.SetPrice(f)
 	return ppu
 }
 
-// SetNillableSpuPrice sets the "spu_price" field if the given value is not nil.
-func (ppu *ProductPropertyUpdate) SetNillableSpuPrice(f *float64) *ProductPropertyUpdate {
+// SetNillablePrice sets the "price" field if the given value is not nil.
+func (ppu *ProductPropertyUpdate) SetNillablePrice(f *float64) *ProductPropertyUpdate {
 	if f != nil {
-		ppu.SetSpuPrice(*f)
+		ppu.SetPrice(*f)
 	}
 	return ppu
 }
 
-// AddSpuPrice adds f to the "spu_price" field.
-func (ppu *ProductPropertyUpdate) AddSpuPrice(f float64) *ProductPropertyUpdate {
-	ppu.mutation.AddSpuPrice(f)
+// AddPrice adds f to the "price" field.
+func (ppu *ProductPropertyUpdate) AddPrice(f float64) *ProductPropertyUpdate {
+	ppu.mutation.AddPrice(f)
 	return ppu
 }
 
-// ClearSpuPrice clears the value of the "spu_price" field.
-func (ppu *ProductPropertyUpdate) ClearSpuPrice() *ProductPropertyUpdate {
-	ppu.mutation.ClearSpuPrice()
+// ClearPrice clears the value of the "price" field.
+func (ppu *ProductPropertyUpdate) ClearPrice() *ProductPropertyUpdate {
+	ppu.mutation.ClearPrice()
 	return ppu
 }
 
@@ -278,11 +278,11 @@ func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error
 	if ppu.mutation.TypeCleared() {
 		_spec.ClearField(productproperty.FieldType, field.TypeString)
 	}
-	if value, ok := ppu.mutation.SpuName(); ok {
-		_spec.SetField(productproperty.FieldSpuName, field.TypeString, value)
+	if value, ok := ppu.mutation.Name(); ok {
+		_spec.SetField(productproperty.FieldName, field.TypeString, value)
 	}
-	if ppu.mutation.SpuNameCleared() {
-		_spec.ClearField(productproperty.FieldSpuName, field.TypeString)
+	if ppu.mutation.NameCleared() {
+		_spec.ClearField(productproperty.FieldName, field.TypeString)
 	}
 	if value, ok := ppu.mutation.Duration(); ok {
 		_spec.SetField(productproperty.FieldDuration, field.TypeInt64, value)
@@ -311,14 +311,14 @@ func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error
 	if ppu.mutation.CountCleared() {
 		_spec.ClearField(productproperty.FieldCount, field.TypeInt64)
 	}
-	if value, ok := ppu.mutation.SpuPrice(); ok {
-		_spec.SetField(productproperty.FieldSpuPrice, field.TypeFloat64, value)
+	if value, ok := ppu.mutation.Price(); ok {
+		_spec.SetField(productproperty.FieldPrice, field.TypeFloat64, value)
 	}
-	if value, ok := ppu.mutation.AddedSpuPrice(); ok {
-		_spec.AddField(productproperty.FieldSpuPrice, field.TypeFloat64, value)
+	if value, ok := ppu.mutation.AddedPrice(); ok {
+		_spec.AddField(productproperty.FieldPrice, field.TypeFloat64, value)
 	}
-	if ppu.mutation.SpuPriceCleared() {
-		_spec.ClearField(productproperty.FieldSpuPrice, field.TypeFloat64)
+	if ppu.mutation.PriceCleared() {
+		_spec.ClearField(productproperty.FieldPrice, field.TypeFloat64)
 	}
 	if ppu.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -411,23 +411,23 @@ func (ppuo *ProductPropertyUpdateOne) ClearType() *ProductPropertyUpdateOne {
 	return ppuo
 }
 
-// SetSpuName sets the "spu_name" field.
-func (ppuo *ProductPropertyUpdateOne) SetSpuName(s string) *ProductPropertyUpdateOne {
-	ppuo.mutation.SetSpuName(s)
+// SetName sets the "name" field.
+func (ppuo *ProductPropertyUpdateOne) SetName(s string) *ProductPropertyUpdateOne {
+	ppuo.mutation.SetName(s)
 	return ppuo
 }
 
-// SetNillableSpuName sets the "spu_name" field if the given value is not nil.
-func (ppuo *ProductPropertyUpdateOne) SetNillableSpuName(s *string) *ProductPropertyUpdateOne {
+// SetNillableName sets the "name" field if the given value is not nil.
+func (ppuo *ProductPropertyUpdateOne) SetNillableName(s *string) *ProductPropertyUpdateOne {
 	if s != nil {
-		ppuo.SetSpuName(*s)
+		ppuo.SetName(*s)
 	}
 	return ppuo
 }
 
-// ClearSpuName clears the value of the "spu_name" field.
-func (ppuo *ProductPropertyUpdateOne) ClearSpuName() *ProductPropertyUpdateOne {
-	ppuo.mutation.ClearSpuName()
+// ClearName clears the value of the "name" field.
+func (ppuo *ProductPropertyUpdateOne) ClearName() *ProductPropertyUpdateOne {
+	ppuo.mutation.ClearName()
 	return ppuo
 }
 
@@ -512,30 +512,30 @@ func (ppuo *ProductPropertyUpdateOne) ClearCount() *ProductPropertyUpdateOne {
 	return ppuo
 }
 
-// SetSpuPrice sets the "spu_price" field.
-func (ppuo *ProductPropertyUpdateOne) SetSpuPrice(f float64) *ProductPropertyUpdateOne {
-	ppuo.mutation.ResetSpuPrice()
-	ppuo.mutation.SetSpuPrice(f)
+// SetPrice sets the "price" field.
+func (ppuo *ProductPropertyUpdateOne) SetPrice(f float64) *ProductPropertyUpdateOne {
+	ppuo.mutation.ResetPrice()
+	ppuo.mutation.SetPrice(f)
 	return ppuo
 }
 
-// SetNillableSpuPrice sets the "spu_price" field if the given value is not nil.
-func (ppuo *ProductPropertyUpdateOne) SetNillableSpuPrice(f *float64) *ProductPropertyUpdateOne {
+// SetNillablePrice sets the "price" field if the given value is not nil.
+func (ppuo *ProductPropertyUpdateOne) SetNillablePrice(f *float64) *ProductPropertyUpdateOne {
 	if f != nil {
-		ppuo.SetSpuPrice(*f)
+		ppuo.SetPrice(*f)
 	}
 	return ppuo
 }
 
-// AddSpuPrice adds f to the "spu_price" field.
-func (ppuo *ProductPropertyUpdateOne) AddSpuPrice(f float64) *ProductPropertyUpdateOne {
-	ppuo.mutation.AddSpuPrice(f)
+// AddPrice adds f to the "price" field.
+func (ppuo *ProductPropertyUpdateOne) AddPrice(f float64) *ProductPropertyUpdateOne {
+	ppuo.mutation.AddPrice(f)
 	return ppuo
 }
 
-// ClearSpuPrice clears the value of the "spu_price" field.
-func (ppuo *ProductPropertyUpdateOne) ClearSpuPrice() *ProductPropertyUpdateOne {
-	ppuo.mutation.ClearSpuPrice()
+// ClearPrice clears the value of the "price" field.
+func (ppuo *ProductPropertyUpdateOne) ClearPrice() *ProductPropertyUpdateOne {
+	ppuo.mutation.ClearPrice()
 	return ppuo
 }
 
@@ -664,11 +664,11 @@ func (ppuo *ProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *Produ
 	if ppuo.mutation.TypeCleared() {
 		_spec.ClearField(productproperty.FieldType, field.TypeString)
 	}
-	if value, ok := ppuo.mutation.SpuName(); ok {
-		_spec.SetField(productproperty.FieldSpuName, field.TypeString, value)
+	if value, ok := ppuo.mutation.Name(); ok {
+		_spec.SetField(productproperty.FieldName, field.TypeString, value)
 	}
-	if ppuo.mutation.SpuNameCleared() {
-		_spec.ClearField(productproperty.FieldSpuName, field.TypeString)
+	if ppuo.mutation.NameCleared() {
+		_spec.ClearField(productproperty.FieldName, field.TypeString)
 	}
 	if value, ok := ppuo.mutation.Duration(); ok {
 		_spec.SetField(productproperty.FieldDuration, field.TypeInt64, value)
@@ -697,14 +697,14 @@ func (ppuo *ProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *Produ
 	if ppuo.mutation.CountCleared() {
 		_spec.ClearField(productproperty.FieldCount, field.TypeInt64)
 	}
-	if value, ok := ppuo.mutation.SpuPrice(); ok {
-		_spec.SetField(productproperty.FieldSpuPrice, field.TypeFloat64, value)
+	if value, ok := ppuo.mutation.Price(); ok {
+		_spec.SetField(productproperty.FieldPrice, field.TypeFloat64, value)
 	}
-	if value, ok := ppuo.mutation.AddedSpuPrice(); ok {
-		_spec.AddField(productproperty.FieldSpuPrice, field.TypeFloat64, value)
+	if value, ok := ppuo.mutation.AddedPrice(); ok {
+		_spec.AddField(productproperty.FieldPrice, field.TypeFloat64, value)
 	}
-	if ppuo.mutation.SpuPriceCleared() {
-		_spec.ClearField(productproperty.FieldSpuPrice, field.TypeFloat64)
+	if ppuo.mutation.PriceCleared() {
+		_spec.ClearField(productproperty.FieldPrice, field.TypeFloat64)
 	}
 	if ppuo.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{

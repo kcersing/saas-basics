@@ -78,16 +78,16 @@ func (mppc *MemberProductPropertyCreate) SetNillableType(s *string) *MemberProdu
 	return mppc
 }
 
-// SetSpuName sets the "spu_name" field.
-func (mppc *MemberProductPropertyCreate) SetSpuName(s string) *MemberProductPropertyCreate {
-	mppc.mutation.SetSpuName(s)
+// SetName sets the "name" field.
+func (mppc *MemberProductPropertyCreate) SetName(s string) *MemberProductPropertyCreate {
+	mppc.mutation.SetName(s)
 	return mppc
 }
 
-// SetNillableSpuName sets the "spu_name" field if the given value is not nil.
-func (mppc *MemberProductPropertyCreate) SetNillableSpuName(s *string) *MemberProductPropertyCreate {
+// SetNillableName sets the "name" field if the given value is not nil.
+func (mppc *MemberProductPropertyCreate) SetNillableName(s *string) *MemberProductPropertyCreate {
 	if s != nil {
-		mppc.SetSpuName(*s)
+		mppc.SetName(*s)
 	}
 	return mppc
 }
@@ -148,16 +148,16 @@ func (mppc *MemberProductPropertyCreate) SetNillableCountSurplus(i *int64) *Memb
 	return mppc
 }
 
-// SetSpuPrice sets the "spu_price" field.
-func (mppc *MemberProductPropertyCreate) SetSpuPrice(f float64) *MemberProductPropertyCreate {
-	mppc.mutation.SetSpuPrice(f)
+// SetPrice sets the "price" field.
+func (mppc *MemberProductPropertyCreate) SetPrice(f float64) *MemberProductPropertyCreate {
+	mppc.mutation.SetPrice(f)
 	return mppc
 }
 
-// SetNillableSpuPrice sets the "spu_price" field if the given value is not nil.
-func (mppc *MemberProductPropertyCreate) SetNillableSpuPrice(f *float64) *MemberProductPropertyCreate {
+// SetNillablePrice sets the "price" field if the given value is not nil.
+func (mppc *MemberProductPropertyCreate) SetNillablePrice(f *float64) *MemberProductPropertyCreate {
 	if f != nil {
-		mppc.SetSpuPrice(*f)
+		mppc.SetPrice(*f)
 	}
 	return mppc
 }
@@ -325,9 +325,9 @@ func (mppc *MemberProductPropertyCreate) createSpec() (*MemberProductProperty, *
 		_spec.SetField(memberproductproperty.FieldType, field.TypeString, value)
 		_node.Type = value
 	}
-	if value, ok := mppc.mutation.SpuName(); ok {
-		_spec.SetField(memberproductproperty.FieldSpuName, field.TypeString, value)
-		_node.SpuName = value
+	if value, ok := mppc.mutation.Name(); ok {
+		_spec.SetField(memberproductproperty.FieldName, field.TypeString, value)
+		_node.Name = value
 	}
 	if value, ok := mppc.mutation.Duration(); ok {
 		_spec.SetField(memberproductproperty.FieldDuration, field.TypeInt64, value)
@@ -345,9 +345,9 @@ func (mppc *MemberProductPropertyCreate) createSpec() (*MemberProductProperty, *
 		_spec.SetField(memberproductproperty.FieldCountSurplus, field.TypeInt64, value)
 		_node.CountSurplus = value
 	}
-	if value, ok := mppc.mutation.SpuPrice(); ok {
-		_spec.SetField(memberproductproperty.FieldSpuPrice, field.TypeFloat64, value)
-		_node.SpuPrice = value
+	if value, ok := mppc.mutation.Price(); ok {
+		_spec.SetField(memberproductproperty.FieldPrice, field.TypeFloat64, value)
+		_node.Price = value
 	}
 	if value, ok := mppc.mutation.Status(); ok {
 		_spec.SetField(memberproductproperty.FieldStatus, field.TypeInt64, value)

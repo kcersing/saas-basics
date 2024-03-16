@@ -17,12 +17,12 @@ func (MemberProductProperty) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("member_product_id").Comment("会员产品ID").Optional(),
 		field.String("type").Comment("类型").Optional(),
-		field.String("spu_name").Comment("spu名").Optional(),
+		field.String("name").Comment("名称").Optional(),
 		field.Int64("duration").Comment("总时长").Optional(),
 		field.Int64("length").Comment("单次时长").Optional(),
 		field.Int64("count").Default(0).Comment("总次数").Optional(),
 		field.Int64("count_surplus").Default(0).Comment("剩余次数").Optional(),
-		field.Float("spu_price").Comment("定价").Optional(),
+		field.Float("price").Comment("定价").Optional(),
 		field.Int64("status").Default(0).Comment("状态").Optional(),
 	}
 }

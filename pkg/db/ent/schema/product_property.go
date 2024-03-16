@@ -16,11 +16,11 @@ type ProductProperty struct {
 func (ProductProperty) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("type").Comment("类型").Optional(),
-		field.String("spu_name").Comment("spu名").Optional(),
+		field.String("name").Comment("名称").Optional(),
 		field.Int64("duration").Comment("总时长").Optional(),
 		field.Int64("length").Comment("单次时长").Optional(),
 		field.Int64("count").Comment("次数").Optional(),
-		field.Float("spu_price").Comment("定价").Optional(),
+		field.Float("price").Comment("定价").Optional(),
 	}
 }
 

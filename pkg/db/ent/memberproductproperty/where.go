@@ -75,9 +75,9 @@ func Type(v string) predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldEQ(FieldType, v))
 }
 
-// SpuName applies equality check predicate on the "spu_name" field. It's identical to SpuNameEQ.
-func SpuName(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldEQ(FieldSpuName, v))
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEQ(FieldName, v))
 }
 
 // Duration applies equality check predicate on the "duration" field. It's identical to DurationEQ.
@@ -100,9 +100,9 @@ func CountSurplus(v int64) predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldEQ(FieldCountSurplus, v))
 }
 
-// SpuPrice applies equality check predicate on the "spu_price" field. It's identical to SpuPriceEQ.
-func SpuPrice(v float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldEQ(FieldSpuPrice, v))
+// Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
+func Price(v float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEQ(FieldPrice, v))
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
@@ -295,79 +295,79 @@ func TypeContainsFold(v string) predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldContainsFold(FieldType, v))
 }
 
-// SpuNameEQ applies the EQ predicate on the "spu_name" field.
-func SpuNameEQ(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldEQ(FieldSpuName, v))
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEQ(FieldName, v))
 }
 
-// SpuNameNEQ applies the NEQ predicate on the "spu_name" field.
-func SpuNameNEQ(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldNEQ(FieldSpuName, v))
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNEQ(FieldName, v))
 }
 
-// SpuNameIn applies the In predicate on the "spu_name" field.
-func SpuNameIn(vs ...string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldIn(FieldSpuName, vs...))
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldIn(FieldName, vs...))
 }
 
-// SpuNameNotIn applies the NotIn predicate on the "spu_name" field.
-func SpuNameNotIn(vs ...string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldNotIn(FieldSpuName, vs...))
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNotIn(FieldName, vs...))
 }
 
-// SpuNameGT applies the GT predicate on the "spu_name" field.
-func SpuNameGT(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldGT(FieldSpuName, v))
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldGT(FieldName, v))
 }
 
-// SpuNameGTE applies the GTE predicate on the "spu_name" field.
-func SpuNameGTE(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldGTE(FieldSpuName, v))
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldGTE(FieldName, v))
 }
 
-// SpuNameLT applies the LT predicate on the "spu_name" field.
-func SpuNameLT(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldLT(FieldSpuName, v))
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldLT(FieldName, v))
 }
 
-// SpuNameLTE applies the LTE predicate on the "spu_name" field.
-func SpuNameLTE(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldLTE(FieldSpuName, v))
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldLTE(FieldName, v))
 }
 
-// SpuNameContains applies the Contains predicate on the "spu_name" field.
-func SpuNameContains(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldContains(FieldSpuName, v))
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldContains(FieldName, v))
 }
 
-// SpuNameHasPrefix applies the HasPrefix predicate on the "spu_name" field.
-func SpuNameHasPrefix(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldHasPrefix(FieldSpuName, v))
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldHasPrefix(FieldName, v))
 }
 
-// SpuNameHasSuffix applies the HasSuffix predicate on the "spu_name" field.
-func SpuNameHasSuffix(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldHasSuffix(FieldSpuName, v))
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldHasSuffix(FieldName, v))
 }
 
-// SpuNameIsNil applies the IsNil predicate on the "spu_name" field.
-func SpuNameIsNil() predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldIsNull(FieldSpuName))
+// NameIsNil applies the IsNil predicate on the "name" field.
+func NameIsNil() predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldIsNull(FieldName))
 }
 
-// SpuNameNotNil applies the NotNil predicate on the "spu_name" field.
-func SpuNameNotNil() predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldNotNull(FieldSpuName))
+// NameNotNil applies the NotNil predicate on the "name" field.
+func NameNotNil() predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNotNull(FieldName))
 }
 
-// SpuNameEqualFold applies the EqualFold predicate on the "spu_name" field.
-func SpuNameEqualFold(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldEqualFold(FieldSpuName, v))
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEqualFold(FieldName, v))
 }
 
-// SpuNameContainsFold applies the ContainsFold predicate on the "spu_name" field.
-func SpuNameContainsFold(v string) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldContainsFold(FieldSpuName, v))
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldContainsFold(FieldName, v))
 }
 
 // DurationEQ applies the EQ predicate on the "duration" field.
@@ -570,54 +570,54 @@ func CountSurplusNotNil() predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldNotNull(FieldCountSurplus))
 }
 
-// SpuPriceEQ applies the EQ predicate on the "spu_price" field.
-func SpuPriceEQ(v float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldEQ(FieldSpuPrice, v))
+// PriceEQ applies the EQ predicate on the "price" field.
+func PriceEQ(v float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEQ(FieldPrice, v))
 }
 
-// SpuPriceNEQ applies the NEQ predicate on the "spu_price" field.
-func SpuPriceNEQ(v float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldNEQ(FieldSpuPrice, v))
+// PriceNEQ applies the NEQ predicate on the "price" field.
+func PriceNEQ(v float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNEQ(FieldPrice, v))
 }
 
-// SpuPriceIn applies the In predicate on the "spu_price" field.
-func SpuPriceIn(vs ...float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldIn(FieldSpuPrice, vs...))
+// PriceIn applies the In predicate on the "price" field.
+func PriceIn(vs ...float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldIn(FieldPrice, vs...))
 }
 
-// SpuPriceNotIn applies the NotIn predicate on the "spu_price" field.
-func SpuPriceNotIn(vs ...float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldNotIn(FieldSpuPrice, vs...))
+// PriceNotIn applies the NotIn predicate on the "price" field.
+func PriceNotIn(vs ...float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNotIn(FieldPrice, vs...))
 }
 
-// SpuPriceGT applies the GT predicate on the "spu_price" field.
-func SpuPriceGT(v float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldGT(FieldSpuPrice, v))
+// PriceGT applies the GT predicate on the "price" field.
+func PriceGT(v float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldGT(FieldPrice, v))
 }
 
-// SpuPriceGTE applies the GTE predicate on the "spu_price" field.
-func SpuPriceGTE(v float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldGTE(FieldSpuPrice, v))
+// PriceGTE applies the GTE predicate on the "price" field.
+func PriceGTE(v float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldGTE(FieldPrice, v))
 }
 
-// SpuPriceLT applies the LT predicate on the "spu_price" field.
-func SpuPriceLT(v float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldLT(FieldSpuPrice, v))
+// PriceLT applies the LT predicate on the "price" field.
+func PriceLT(v float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldLT(FieldPrice, v))
 }
 
-// SpuPriceLTE applies the LTE predicate on the "spu_price" field.
-func SpuPriceLTE(v float64) predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldLTE(FieldSpuPrice, v))
+// PriceLTE applies the LTE predicate on the "price" field.
+func PriceLTE(v float64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldLTE(FieldPrice, v))
 }
 
-// SpuPriceIsNil applies the IsNil predicate on the "spu_price" field.
-func SpuPriceIsNil() predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldIsNull(FieldSpuPrice))
+// PriceIsNil applies the IsNil predicate on the "price" field.
+func PriceIsNil() predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldIsNull(FieldPrice))
 }
 
-// SpuPriceNotNil applies the NotNil predicate on the "spu_price" field.
-func SpuPriceNotNil() predicate.MemberProductProperty {
-	return predicate.MemberProductProperty(sql.FieldNotNull(FieldSpuPrice))
+// PriceNotNil applies the NotNil predicate on the "price" field.
+func PriceNotNil() predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNotNull(FieldPrice))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

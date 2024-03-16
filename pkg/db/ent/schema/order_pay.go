@@ -20,6 +20,7 @@ func (OrderPay) Fields() []ent.Field {
 		field.String("pay_sn").Comment("支付编号").Optional(),
 		field.Float("remission").Comment("减免").Optional(),
 		field.Float("pay").Comment("实际付款").Optional(),
+		field.String("note").Comment("备注").Optional(),
 		field.Int64("create_id").Comment("操作人id").Optional(),
 	}
 }

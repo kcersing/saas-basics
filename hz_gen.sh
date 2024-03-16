@@ -28,7 +28,6 @@
 
 #hz new -I api -idl_gen ./../idl_gen/admin/token.thrift -model_dir ./../app/biz/model/ --unset_omitempty
 
-
 hz update -idl idl_gen/base/errno.thrift -model_dir idl_gen/model/  --unset_omitempty
 hz update -idl idl_gen/admin/user.thrift -model_dir idl_gen/model/  --unset_omitempty
 hz update -idl idl_gen/admin/admin.thrift -model_dir idl_gen/model/  --unset_omitempty

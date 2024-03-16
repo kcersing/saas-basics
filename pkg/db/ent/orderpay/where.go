@@ -85,6 +85,11 @@ func Pay(v float64) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldPay, v))
 }
 
+// Note applies equality check predicate on the "note" field. It's identical to NoteEQ.
+func Note(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldNote, v))
+}
+
 // CreateID applies equality check predicate on the "create_id" field. It's identical to CreateIDEQ.
 func CreateID(v int64) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldCreateID, v))
@@ -373,6 +378,81 @@ func PayIsNil() predicate.OrderPay {
 // PayNotNil applies the NotNil predicate on the "pay" field.
 func PayNotNil() predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldNotNull(FieldPay))
+}
+
+// NoteEQ applies the EQ predicate on the "note" field.
+func NoteEQ(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldNote, v))
+}
+
+// NoteNEQ applies the NEQ predicate on the "note" field.
+func NoteNEQ(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNEQ(FieldNote, v))
+}
+
+// NoteIn applies the In predicate on the "note" field.
+func NoteIn(vs ...string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIn(FieldNote, vs...))
+}
+
+// NoteNotIn applies the NotIn predicate on the "note" field.
+func NoteNotIn(vs ...string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotIn(FieldNote, vs...))
+}
+
+// NoteGT applies the GT predicate on the "note" field.
+func NoteGT(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGT(FieldNote, v))
+}
+
+// NoteGTE applies the GTE predicate on the "note" field.
+func NoteGTE(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGTE(FieldNote, v))
+}
+
+// NoteLT applies the LT predicate on the "note" field.
+func NoteLT(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLT(FieldNote, v))
+}
+
+// NoteLTE applies the LTE predicate on the "note" field.
+func NoteLTE(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLTE(FieldNote, v))
+}
+
+// NoteContains applies the Contains predicate on the "note" field.
+func NoteContains(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldContains(FieldNote, v))
+}
+
+// NoteHasPrefix applies the HasPrefix predicate on the "note" field.
+func NoteHasPrefix(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldHasPrefix(FieldNote, v))
+}
+
+// NoteHasSuffix applies the HasSuffix predicate on the "note" field.
+func NoteHasSuffix(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldHasSuffix(FieldNote, v))
+}
+
+// NoteIsNil applies the IsNil predicate on the "note" field.
+func NoteIsNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIsNull(FieldNote))
+}
+
+// NoteNotNil applies the NotNil predicate on the "note" field.
+func NoteNotNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotNull(FieldNote))
+}
+
+// NoteEqualFold applies the EqualFold predicate on the "note" field.
+func NoteEqualFold(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEqualFold(FieldNote, v))
+}
+
+// NoteContainsFold applies the ContainsFold predicate on the "note" field.
+func NoteContainsFold(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldContainsFold(FieldNote, v))
 }
 
 // CreateIDEQ applies the EQ predicate on the "create_id" field.

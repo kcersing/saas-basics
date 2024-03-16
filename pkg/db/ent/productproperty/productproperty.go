@@ -20,16 +20,16 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
-	// FieldSpuName holds the string denoting the spu_name field in the database.
-	FieldSpuName = "spu_name"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldDuration holds the string denoting the duration field in the database.
 	FieldDuration = "duration"
 	// FieldLength holds the string denoting the length field in the database.
 	FieldLength = "length"
 	// FieldCount holds the string denoting the count field in the database.
 	FieldCount = "count"
-	// FieldSpuPrice holds the string denoting the spu_price field in the database.
-	FieldSpuPrice = "spu_price"
+	// FieldPrice holds the string denoting the price field in the database.
+	FieldPrice = "price"
 	// EdgeProduct holds the string denoting the product edge name in mutations.
 	EdgeProduct = "product"
 	// Table holds the table name of the productproperty in the database.
@@ -47,11 +47,11 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldType,
-	FieldSpuName,
+	FieldName,
 	FieldDuration,
 	FieldLength,
 	FieldCount,
-	FieldSpuPrice,
+	FieldPrice,
 }
 
 var (
@@ -102,9 +102,9 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
-// BySpuName orders the results by the spu_name field.
-func BySpuName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSpuName, opts...).ToFunc()
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
 // ByDuration orders the results by the duration field.
@@ -122,9 +122,9 @@ func ByCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCount, opts...).ToFunc()
 }
 
-// BySpuPrice orders the results by the spu_price field.
-func BySpuPrice(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSpuPrice, opts...).ToFunc()
+// ByPrice orders the results by the price field.
+func ByPrice(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrice, opts...).ToFunc()
 }
 
 // ByProductCount orders the results by product count.

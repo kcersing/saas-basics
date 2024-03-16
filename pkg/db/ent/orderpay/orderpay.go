@@ -26,6 +26,8 @@ const (
 	FieldRemission = "remission"
 	// FieldPay holds the string denoting the pay field in the database.
 	FieldPay = "pay"
+	// FieldNote holds the string denoting the note field in the database.
+	FieldNote = "note"
 	// FieldCreateID holds the string denoting the create_id field in the database.
 	FieldCreateID = "create_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -50,6 +52,7 @@ var Columns = []string{
 	FieldPaySn,
 	FieldRemission,
 	FieldPay,
+	FieldNote,
 	FieldCreateID,
 }
 
@@ -108,6 +111,11 @@ func ByRemission(opts ...sql.OrderTermOption) OrderOption {
 // ByPay orders the results by the pay field.
 func ByPay(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPay, opts...).ToFunc()
+}
+
+// ByNote orders the results by the note field.
+func ByNote(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNote, opts...).ToFunc()
 }
 
 // ByCreateID orders the results by the create_id field.

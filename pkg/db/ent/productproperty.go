@@ -24,8 +24,8 @@ type ProductProperty struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
-	// spu名
-	SpuName string `json:"spu_name,omitempty"`
+	// 名称
+	Name string `json:"name,omitempty"`
 	// 总时长
 	Duration int64 `json:"duration,omitempty"`
 	// 单次时长
@@ -33,7 +33,7 @@ type ProductProperty struct {
 	// 次数
 	Count int64 `json:"count,omitempty"`
 	// 定价
-	SpuPrice float64 `json:"spu_price,omitempty"`
+	Price float64 `json:"price,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProductPropertyQuery when eager-loading is set.
 	Edges        ProductPropertyEdges `json:"edges"`
@@ -63,11 +63,11 @@ func (*ProductProperty) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case productproperty.FieldSpuPrice:
+		case productproperty.FieldPrice:
 			values[i] = new(sql.NullFloat64)
 		case productproperty.FieldID, productproperty.FieldDuration, productproperty.FieldLength, productproperty.FieldCount:
 			values[i] = new(sql.NullInt64)
-		case productproperty.FieldType, productproperty.FieldSpuName:
+		case productproperty.FieldType, productproperty.FieldName:
 			values[i] = new(sql.NullString)
 		case productproperty.FieldCreatedAt, productproperty.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -110,11 +110,11 @@ func (pp *ProductProperty) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pp.Type = value.String
 			}
-		case productproperty.FieldSpuName:
+		case productproperty.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field spu_name", values[i])
+				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				pp.SpuName = value.String
+				pp.Name = value.String
 			}
 		case productproperty.FieldDuration:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -134,11 +134,11 @@ func (pp *ProductProperty) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pp.Count = value.Int64
 			}
-		case productproperty.FieldSpuPrice:
+		case productproperty.FieldPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
-				return fmt.Errorf("unexpected type %T for field spu_price", values[i])
+				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
-				pp.SpuPrice = value.Float64
+				pp.Price = value.Float64
 			}
 		default:
 			pp.selectValues.Set(columns[i], values[i])
@@ -190,8 +190,8 @@ func (pp *ProductProperty) String() string {
 	builder.WriteString("type=")
 	builder.WriteString(pp.Type)
 	builder.WriteString(", ")
-	builder.WriteString("spu_name=")
-	builder.WriteString(pp.SpuName)
+	builder.WriteString("name=")
+	builder.WriteString(pp.Name)
 	builder.WriteString(", ")
 	builder.WriteString("duration=")
 	builder.WriteString(fmt.Sprintf("%v", pp.Duration))
@@ -202,8 +202,8 @@ func (pp *ProductProperty) String() string {
 	builder.WriteString("count=")
 	builder.WriteString(fmt.Sprintf("%v", pp.Count))
 	builder.WriteString(", ")
-	builder.WriteString("spu_price=")
-	builder.WriteString(fmt.Sprintf("%v", pp.SpuPrice))
+	builder.WriteString("price=")
+	builder.WriteString(fmt.Sprintf("%v", pp.Price))
 	builder.WriteByte(')')
 	return builder.String()
 }

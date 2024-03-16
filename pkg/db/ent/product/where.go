@@ -96,7 +96,7 @@ func Description(v string) predicate.Product {
 }
 
 // Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
-func Price(v string) predicate.Product {
+func Price(v float64) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldPrice, v))
 }
 
@@ -566,58 +566,43 @@ func DescriptionContainsFold(v string) predicate.Product {
 }
 
 // PriceEQ applies the EQ predicate on the "price" field.
-func PriceEQ(v string) predicate.Product {
+func PriceEQ(v float64) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldPrice, v))
 }
 
 // PriceNEQ applies the NEQ predicate on the "price" field.
-func PriceNEQ(v string) predicate.Product {
+func PriceNEQ(v float64) predicate.Product {
 	return predicate.Product(sql.FieldNEQ(FieldPrice, v))
 }
 
 // PriceIn applies the In predicate on the "price" field.
-func PriceIn(vs ...string) predicate.Product {
+func PriceIn(vs ...float64) predicate.Product {
 	return predicate.Product(sql.FieldIn(FieldPrice, vs...))
 }
 
 // PriceNotIn applies the NotIn predicate on the "price" field.
-func PriceNotIn(vs ...string) predicate.Product {
+func PriceNotIn(vs ...float64) predicate.Product {
 	return predicate.Product(sql.FieldNotIn(FieldPrice, vs...))
 }
 
 // PriceGT applies the GT predicate on the "price" field.
-func PriceGT(v string) predicate.Product {
+func PriceGT(v float64) predicate.Product {
 	return predicate.Product(sql.FieldGT(FieldPrice, v))
 }
 
 // PriceGTE applies the GTE predicate on the "price" field.
-func PriceGTE(v string) predicate.Product {
+func PriceGTE(v float64) predicate.Product {
 	return predicate.Product(sql.FieldGTE(FieldPrice, v))
 }
 
 // PriceLT applies the LT predicate on the "price" field.
-func PriceLT(v string) predicate.Product {
+func PriceLT(v float64) predicate.Product {
 	return predicate.Product(sql.FieldLT(FieldPrice, v))
 }
 
 // PriceLTE applies the LTE predicate on the "price" field.
-func PriceLTE(v string) predicate.Product {
+func PriceLTE(v float64) predicate.Product {
 	return predicate.Product(sql.FieldLTE(FieldPrice, v))
-}
-
-// PriceContains applies the Contains predicate on the "price" field.
-func PriceContains(v string) predicate.Product {
-	return predicate.Product(sql.FieldContains(FieldPrice, v))
-}
-
-// PriceHasPrefix applies the HasPrefix predicate on the "price" field.
-func PriceHasPrefix(v string) predicate.Product {
-	return predicate.Product(sql.FieldHasPrefix(FieldPrice, v))
-}
-
-// PriceHasSuffix applies the HasSuffix predicate on the "price" field.
-func PriceHasSuffix(v string) predicate.Product {
-	return predicate.Product(sql.FieldHasSuffix(FieldPrice, v))
 }
 
 // PriceIsNil applies the IsNil predicate on the "price" field.
@@ -628,16 +613,6 @@ func PriceIsNil() predicate.Product {
 // PriceNotNil applies the NotNil predicate on the "price" field.
 func PriceNotNil() predicate.Product {
 	return predicate.Product(sql.FieldNotNull(FieldPrice))
-}
-
-// PriceEqualFold applies the EqualFold predicate on the "price" field.
-func PriceEqualFold(v string) predicate.Product {
-	return predicate.Product(sql.FieldEqualFold(FieldPrice, v))
-}
-
-// PriceContainsFold applies the ContainsFold predicate on the "price" field.
-func PriceContainsFold(v string) predicate.Product {
-	return predicate.Product(sql.FieldContainsFold(FieldPrice, v))
 }
 
 // StockEQ applies the EQ predicate on the "stock" field.

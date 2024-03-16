@@ -88,6 +88,12 @@ func (I *InitDatabase) InitDatabase() error {
 		err = errors.Wrap(err, "insert casbin policies data failed")
 		return err
 	}
+	err = I.insertDictionariesData(ctx)
+	if err != nil {
+		hlog.Error("insert dictionaries data failed", err)
+		err = errors.Wrap(err, "insert dictionaries data failed")
+		return err
+	}
 
 	// set init status
 	InitDatabaseStatus = true
@@ -785,6 +791,51 @@ func (I *InitDatabase) insertCasbinPoliciesData(ctx context.Context) error {
 	}
 
 	if !addResult {
+		return errors.Wrap(err, "db failed")
+	}
+	return nil
+}
+
+// init menu data
+func (I *InitDatabase) insertDictionariesData(ctx context.Context) error {
+
+	propertyType, err := I.DB.Dictionary.Create().
+		SetTitle("property_type").
+		SetName("属性类型").
+		SetStatus(1).
+		SetDescription("属性类型").
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("卡").
+		SetValue("卡").
+		SetKey("card").
+		SetDictionary(propertyType).
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("私教课").
+		SetValue("私教课").
+		SetKey("course").
+		SetDictionary(propertyType).
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("团课").
+		SetValue("团课").
+		SetKey("class").
+		SetDictionary(propertyType).
+		Save(ctx)
+	if err != nil {
 		return errors.Wrap(err, "db failed")
 	}
 	return nil

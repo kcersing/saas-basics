@@ -35,7 +35,7 @@ type Product struct {
 	// 详情
 	Description string `json:"description,omitempty"`
 	// 价格
-	Price string `json:"price,omitempty"`
+	Price float64 `json:"price,omitempty"`
 	// 库存
 	Stock int64 `json:"stock,omitempty"`
 	// 状态
@@ -69,9 +69,11 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case product.FieldPrice:
+			values[i] = new(sql.NullFloat64)
 		case product.FieldID, product.FieldVenueID, product.FieldCreateID, product.FieldPic, product.FieldStock, product.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case product.FieldSn, product.FieldName, product.FieldDescription, product.FieldPrice:
+		case product.FieldSn, product.FieldName, product.FieldDescription:
 			values[i] = new(sql.NullString)
 		case product.FieldCreatedAt, product.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -145,10 +147,10 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				pr.Description = value.String
 			}
 		case product.FieldPrice:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
-				pr.Price = value.String
+				pr.Price = value.Float64
 			}
 		case product.FieldStock:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -228,7 +230,7 @@ func (pr *Product) String() string {
 	builder.WriteString(pr.Description)
 	builder.WriteString(", ")
 	builder.WriteString("price=")
-	builder.WriteString(pr.Price)
+	builder.WriteString(fmt.Sprintf("%v", pr.Price))
 	builder.WriteString(", ")
 	builder.WriteString("stock=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Stock))

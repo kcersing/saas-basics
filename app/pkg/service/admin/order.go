@@ -43,7 +43,7 @@ func (o Order) UpdateStatus(ID int64, status int8) error {
 	panic("implement me")
 }
 
-func (o Order) InfoByID(ID int64) (roleInfo *do.OrderInfo, err error) {
+func (o Order) Info(ID int64) (roleInfo *do.OrderInfo, err error) {
 	//TODO implement me
 	panic("implement me")
 }

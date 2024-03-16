@@ -5,8 +5,8 @@ include "../base/data.thrift"
 
 struct Property {
     1: i64 product_id
-    2: string spu_name // spu名
-    3: i64 spu_price // 定价
+    2: string name // 名称
+    3: i64 price // 定价
     4: i64 duration // 时长
     5: i64 length // 单次时长
     6: i64 count // 次数
@@ -25,8 +25,8 @@ struct Product {
 }
 
 struct CreatePropertyReq {
-    2: string spu_name // spu名
-    3: i64 spu_price // 定价
+    2: string name // 名称
+    3: i64 price // 定价
     4: i64 duration // 时长
     5: i64 length // 单次时长
     6: i64 count // 次数
@@ -35,8 +35,8 @@ struct CreatePropertyReq {
 
 struct UpdatePropertyReq {
     1: required i64 property_id
-    2: string spu_name // spu名
-    3: i64 spu_price // 定价
+    2: string name // 名称
+    3: i64 price // 定价
     4: i64 duration // 时长
     5: i64 length // 单次时长
     6: i64 count // 次数
@@ -70,7 +70,6 @@ struct ListReq {
     1: i64 page,
     2: i64 pageSize,
     3: optional string name
-    4: optional string spu_name
     5: optional i64 status
 }
 

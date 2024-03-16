@@ -27,8 +27,8 @@ type MemberProductProperty struct {
 	MemberProductID int64 `json:"member_product_id,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
-	// spu名
-	SpuName string `json:"spu_name,omitempty"`
+	// 名称
+	Name string `json:"name,omitempty"`
 	// 总时长
 	Duration int64 `json:"duration,omitempty"`
 	// 单次时长
@@ -38,7 +38,7 @@ type MemberProductProperty struct {
 	// 剩余次数
 	CountSurplus int64 `json:"count_surplus,omitempty"`
 	// 定价
-	SpuPrice float64 `json:"spu_price,omitempty"`
+	Price float64 `json:"price,omitempty"`
 	// 状态
 	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -85,11 +85,11 @@ func (*MemberProductProperty) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case memberproductproperty.FieldSpuPrice:
+		case memberproductproperty.FieldPrice:
 			values[i] = new(sql.NullFloat64)
 		case memberproductproperty.FieldID, memberproductproperty.FieldMemberProductID, memberproductproperty.FieldDuration, memberproductproperty.FieldLength, memberproductproperty.FieldCount, memberproductproperty.FieldCountSurplus, memberproductproperty.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case memberproductproperty.FieldType, memberproductproperty.FieldSpuName:
+		case memberproductproperty.FieldType, memberproductproperty.FieldName:
 			values[i] = new(sql.NullString)
 		case memberproductproperty.FieldCreatedAt, memberproductproperty.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,11 +138,11 @@ func (mpp *MemberProductProperty) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				mpp.Type = value.String
 			}
-		case memberproductproperty.FieldSpuName:
+		case memberproductproperty.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field spu_name", values[i])
+				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				mpp.SpuName = value.String
+				mpp.Name = value.String
 			}
 		case memberproductproperty.FieldDuration:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -168,11 +168,11 @@ func (mpp *MemberProductProperty) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				mpp.CountSurplus = value.Int64
 			}
-		case memberproductproperty.FieldSpuPrice:
+		case memberproductproperty.FieldPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
-				return fmt.Errorf("unexpected type %T for field spu_price", values[i])
+				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
-				mpp.SpuPrice = value.Float64
+				mpp.Price = value.Float64
 			}
 		case memberproductproperty.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -238,8 +238,8 @@ func (mpp *MemberProductProperty) String() string {
 	builder.WriteString("type=")
 	builder.WriteString(mpp.Type)
 	builder.WriteString(", ")
-	builder.WriteString("spu_name=")
-	builder.WriteString(mpp.SpuName)
+	builder.WriteString("name=")
+	builder.WriteString(mpp.Name)
 	builder.WriteString(", ")
 	builder.WriteString("duration=")
 	builder.WriteString(fmt.Sprintf("%v", mpp.Duration))
@@ -253,8 +253,8 @@ func (mpp *MemberProductProperty) String() string {
 	builder.WriteString("count_surplus=")
 	builder.WriteString(fmt.Sprintf("%v", mpp.CountSurplus))
 	builder.WriteString(", ")
-	builder.WriteString("spu_price=")
-	builder.WriteString(fmt.Sprintf("%v", mpp.SpuPrice))
+	builder.WriteString("price=")
+	builder.WriteString(fmt.Sprintf("%v", mpp.Price))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", mpp.Status))

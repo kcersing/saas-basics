@@ -38,12 +38,17 @@ func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, er
 	panic("implement me")
 }
 
-func (m Member) UpdateStatus(ID int64, status int8) error {
+func (m Member) Info(ID int64) (memberInfo *do.MemberInfo, err error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (m Member) InfoByID(ID int64) (roleInfo *do.MemberInfo, err error) {
+func (m Member) ChangePassword(ID int64, oldPassword, newPassword string) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m Member) UpdateStatus(ID int64, status int8) error {
 	//TODO implement me
 	panic("implement me")
 }

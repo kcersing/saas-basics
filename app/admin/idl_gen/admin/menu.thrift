@@ -24,15 +24,15 @@ struct Meta {
 
 // 创建或更新菜单信息参数
 struct CreateOrUpdateMenuReq {
-    1:  string id (api.raw = "id" )
+    1:  i64 id (api.raw = "id" )
     2:  string name (api.raw = "name" api.vd = "len($) > 0 && len($) < 33>")
-    3:  string parent_id (api.raw = "parent_id")
-    4:  string level (api.raw = "level")
+    3:  i64 parent_id (api.raw = "parentID")
+    4:  i64 level (api.raw = "level")
     5:  string path (api.raw = "path")
     6:  string redirect (api.raw = "redirect")
     7:  string component (api.raw = "component")
-    8:  string orderNo (api.raw = "orderNo")
-    9:  string disabled (api.raw = "disabled")
+    8:  i64 orderNo (api.raw = "orderNo")
+    9:  bool disabled (api.raw = "disabled")
     10:  string menuType (api.raw = "menuType")
     11:  Meta meta (api.raw = "meta")
 }

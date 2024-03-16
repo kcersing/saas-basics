@@ -267,12 +267,12 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
-		{Name: "spu_name", Type: field.TypeString, Nullable: true, Comment: "spu名"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "duration", Type: field.TypeInt64, Nullable: true, Comment: "总时长"},
 		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "单次时长"},
 		{Name: "count", Type: field.TypeInt64, Nullable: true, Comment: "总次数", Default: 0},
 		{Name: "count_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余次数", Default: 0},
-		{Name: "spu_price", Type: field.TypeFloat64, Nullable: true, Comment: "定价"},
+		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "定价"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员产品ID"},
 	}
@@ -477,6 +477,7 @@ var (
 		{Name: "pay_sn", Type: field.TypeString, Nullable: true, Comment: "支付编号"},
 		{Name: "remission", Type: field.TypeFloat64, Nullable: true, Comment: "减免"},
 		{Name: "pay", Type: field.TypeFloat64, Nullable: true, Comment: "实际付款"},
+		{Name: "note", Type: field.TypeString, Nullable: true, Comment: "备注"},
 		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "操作人id"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
 	}
@@ -488,7 +489,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_pay_order_pay",
-				Columns:    []*schema.Column{OrderPayColumns[7]},
+				Columns:    []*schema.Column{OrderPayColumns[8]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -497,7 +498,7 @@ var (
 			{
 				Name:    "orderpay_order_id",
 				Unique:  true,
-				Columns: []*schema.Column{OrderPayColumns[7]},
+				Columns: []*schema.Column{OrderPayColumns[8]},
 			},
 		},
 	}
@@ -541,7 +542,7 @@ var (
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "商品名"},
 		{Name: "pic", Type: field.TypeInt64, Nullable: true, Comment: "主图"},
 		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "详情"},
-		{Name: "price", Type: field.TypeString, Nullable: true, Comment: "价格"},
+		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "价格"},
 		{Name: "stock", Type: field.TypeInt64, Nullable: true, Comment: "库存"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
 	}
@@ -564,11 +565,11 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
-		{Name: "spu_name", Type: field.TypeString, Nullable: true, Comment: "spu名"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "duration", Type: field.TypeInt64, Nullable: true, Comment: "总时长"},
 		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "单次时长"},
 		{Name: "count", Type: field.TypeInt64, Nullable: true, Comment: "次数"},
-		{Name: "spu_price", Type: field.TypeFloat64, Nullable: true, Comment: "定价"},
+		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "定价"},
 	}
 	// ProductPropertyTable holds the schema information for the "product_property" table.
 	ProductPropertyTable = &schema.Table{

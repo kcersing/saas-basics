@@ -11,10 +11,10 @@ import (
 
 type Property struct {
 	ProductID int64 `thrift:"product_id,1" form:"product_id" json:"product_id" query:"product_id"`
-	// spu名
-	SpuName string `thrift:"spu_name,2" form:"spu_name" json:"spu_name" query:"spu_name"`
+	// 名称
+	Name string `thrift:"name,2" form:"name" json:"name" query:"name"`
 	// 定价
-	SpuPrice int64 `thrift:"spu_price,3" form:"spu_price" json:"spu_price" query:"spu_price"`
+	Price int64 `thrift:"price,3" form:"price" json:"price" query:"price"`
 	// 时长
 	Duration int64 `thrift:"duration,4" form:"duration" json:"duration" query:"duration"`
 	// 单次时长
@@ -34,12 +34,12 @@ func (p *Property) GetProductID() (v int64) {
 	return p.ProductID
 }
 
-func (p *Property) GetSpuName() (v string) {
-	return p.SpuName
+func (p *Property) GetName() (v string) {
+	return p.Name
 }
 
-func (p *Property) GetSpuPrice() (v int64) {
-	return p.SpuPrice
+func (p *Property) GetPrice() (v int64) {
+	return p.Price
 }
 
 func (p *Property) GetDuration() (v int64) {
@@ -64,8 +64,8 @@ func (p *Property) GetData() (v string) {
 
 var fieldIDToName_Property = map[int16]string{
 	1: "product_id",
-	2: "spu_name",
-	3: "spu_price",
+	2: "name",
+	3: "price",
 	4: "duration",
 	5: "length",
 	6: "count",
@@ -199,7 +199,7 @@ func (p *Property) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.SpuName = v
+		p.Name = v
 	}
 	return nil
 }
@@ -208,7 +208,7 @@ func (p *Property) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.SpuPrice = v
+		p.Price = v
 	}
 	return nil
 }
@@ -332,10 +332,10 @@ WriteFieldEndError:
 }
 
 func (p *Property) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("spu_name", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.SpuName); err != nil {
+	if err := oprot.WriteString(p.Name); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -349,10 +349,10 @@ WriteFieldEndError:
 }
 
 func (p *Property) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("spu_price", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("price", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.SpuPrice); err != nil {
+	if err := oprot.WriteI64(p.Price); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -883,10 +883,10 @@ func (p *Product) String() string {
 }
 
 type CreatePropertyReq struct {
-	// spu名
-	SpuName string `thrift:"spu_name,2" form:"spu_name" json:"spu_name" query:"spu_name"`
+	// 名称
+	Name string `thrift:"name,2" form:"name" json:"name" query:"name"`
 	// 定价
-	SpuPrice int64 `thrift:"spu_price,3" form:"spu_price" json:"spu_price" query:"spu_price"`
+	Price int64 `thrift:"price,3" form:"price" json:"price" query:"price"`
 	// 时长
 	Duration int64 `thrift:"duration,4" form:"duration" json:"duration" query:"duration"`
 	// 单次时长
@@ -901,12 +901,12 @@ func NewCreatePropertyReq() *CreatePropertyReq {
 	return &CreatePropertyReq{}
 }
 
-func (p *CreatePropertyReq) GetSpuName() (v string) {
-	return p.SpuName
+func (p *CreatePropertyReq) GetName() (v string) {
+	return p.Name
 }
 
-func (p *CreatePropertyReq) GetSpuPrice() (v int64) {
-	return p.SpuPrice
+func (p *CreatePropertyReq) GetPrice() (v int64) {
+	return p.Price
 }
 
 func (p *CreatePropertyReq) GetDuration() (v int64) {
@@ -926,8 +926,8 @@ func (p *CreatePropertyReq) GetType() (v string) {
 }
 
 var fieldIDToName_CreatePropertyReq = map[int16]string{
-	2: "spu_name",
-	3: "spu_price",
+	2: "name",
+	3: "price",
 	4: "duration",
 	5: "length",
 	6: "count",
@@ -1035,7 +1035,7 @@ func (p *CreatePropertyReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.SpuName = v
+		p.Name = v
 	}
 	return nil
 }
@@ -1044,7 +1044,7 @@ func (p *CreatePropertyReq) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.SpuPrice = v
+		p.Price = v
 	}
 	return nil
 }
@@ -1134,10 +1134,10 @@ WriteStructEndError:
 }
 
 func (p *CreatePropertyReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("spu_name", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.SpuName); err != nil {
+	if err := oprot.WriteString(p.Name); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1151,10 +1151,10 @@ WriteFieldEndError:
 }
 
 func (p *CreatePropertyReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("spu_price", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("price", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.SpuPrice); err != nil {
+	if err := oprot.WriteI64(p.Price); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1245,10 +1245,10 @@ func (p *CreatePropertyReq) String() string {
 
 type UpdatePropertyReq struct {
 	PropertyID int64 `thrift:"property_id,1,required" form:"property_id,required" json:"property_id,required" query:"property_id,required"`
-	// spu名
-	SpuName string `thrift:"spu_name,2" form:"spu_name" json:"spu_name" query:"spu_name"`
+	// 名称
+	Name string `thrift:"name,2" form:"name" json:"name" query:"name"`
 	// 定价
-	SpuPrice int64 `thrift:"spu_price,3" form:"spu_price" json:"spu_price" query:"spu_price"`
+	Price int64 `thrift:"price,3" form:"price" json:"price" query:"price"`
 	// 时长
 	Duration int64 `thrift:"duration,4" form:"duration" json:"duration" query:"duration"`
 	// 单次时长
@@ -1267,12 +1267,12 @@ func (p *UpdatePropertyReq) GetPropertyID() (v int64) {
 	return p.PropertyID
 }
 
-func (p *UpdatePropertyReq) GetSpuName() (v string) {
-	return p.SpuName
+func (p *UpdatePropertyReq) GetName() (v string) {
+	return p.Name
 }
 
-func (p *UpdatePropertyReq) GetSpuPrice() (v int64) {
-	return p.SpuPrice
+func (p *UpdatePropertyReq) GetPrice() (v int64) {
+	return p.Price
 }
 
 func (p *UpdatePropertyReq) GetDuration() (v int64) {
@@ -1293,8 +1293,8 @@ func (p *UpdatePropertyReq) GetType() (v string) {
 
 var fieldIDToName_UpdatePropertyReq = map[int16]string{
 	1: "property_id",
-	2: "spu_name",
-	3: "spu_price",
+	2: "name",
+	3: "price",
 	4: "duration",
 	5: "length",
 	6: "count",
@@ -1427,7 +1427,7 @@ func (p *UpdatePropertyReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.SpuName = v
+		p.Name = v
 	}
 	return nil
 }
@@ -1436,7 +1436,7 @@ func (p *UpdatePropertyReq) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.SpuPrice = v
+		p.Price = v
 	}
 	return nil
 }
@@ -1547,10 +1547,10 @@ WriteFieldEndError:
 }
 
 func (p *UpdatePropertyReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("spu_name", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.SpuName); err != nil {
+	if err := oprot.WriteString(p.Name); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1564,10 +1564,10 @@ WriteFieldEndError:
 }
 
 func (p *UpdatePropertyReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("spu_price", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("price", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.SpuPrice); err != nil {
+	if err := oprot.WriteI64(p.Price); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2722,7 +2722,6 @@ type ListReq struct {
 	Page     int64   `thrift:"page,1" form:"page" json:"page" query:"page"`
 	PageSize int64   `thrift:"pageSize,2" form:"pageSize" json:"pageSize" query:"pageSize"`
 	Name     *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	SpuName  *string `thrift:"spu_name,4,optional" form:"spu_name" json:"spu_name" query:"spu_name"`
 	Status   *int64  `thrift:"status,5,optional" form:"status" json:"status" query:"status"`
 }
 
@@ -2747,15 +2746,6 @@ func (p *ListReq) GetName() (v string) {
 	return *p.Name
 }
 
-var ListReq_SpuName_DEFAULT string
-
-func (p *ListReq) GetSpuName() (v string) {
-	if !p.IsSetSpuName() {
-		return ListReq_SpuName_DEFAULT
-	}
-	return *p.SpuName
-}
-
 var ListReq_Status_DEFAULT int64
 
 func (p *ListReq) GetStatus() (v int64) {
@@ -2769,16 +2759,11 @@ var fieldIDToName_ListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
 	3: "name",
-	4: "spu_name",
 	5: "status",
 }
 
 func (p *ListReq) IsSetName() bool {
 	return p.Name != nil
-}
-
-func (p *ListReq) IsSetSpuName() bool {
-	return p.SpuName != nil
 }
 
 func (p *ListReq) IsSetStatus() bool {
@@ -2823,14 +2808,6 @@ func (p *ListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 3:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 4:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2900,15 +2877,6 @@ func (p *ListReq) ReadField3(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
-func (p *ListReq) ReadField4(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.SpuName = &v
-	}
-	return nil
-}
 func (p *ListReq) ReadField5(iprot thrift.TProtocol) error {
 
 	if v, err := iprot.ReadI64(); err != nil {
@@ -2935,10 +2903,6 @@ func (p *ListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
 			goto WriteFieldError
 		}
 		if err = p.writeField5(oprot); err != nil {
@@ -3014,25 +2978,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *ListReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSpuName() {
-		if err = oprot.WriteFieldBegin("spu_name", thrift.STRING, 4); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.SpuName); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *ListReq) writeField5(oprot thrift.TProtocol) (err error) {

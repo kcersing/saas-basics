@@ -63,16 +63,16 @@ func (ppc *ProductPropertyCreate) SetNillableType(s *string) *ProductPropertyCre
 	return ppc
 }
 
-// SetSpuName sets the "spu_name" field.
-func (ppc *ProductPropertyCreate) SetSpuName(s string) *ProductPropertyCreate {
-	ppc.mutation.SetSpuName(s)
+// SetName sets the "name" field.
+func (ppc *ProductPropertyCreate) SetName(s string) *ProductPropertyCreate {
+	ppc.mutation.SetName(s)
 	return ppc
 }
 
-// SetNillableSpuName sets the "spu_name" field if the given value is not nil.
-func (ppc *ProductPropertyCreate) SetNillableSpuName(s *string) *ProductPropertyCreate {
+// SetNillableName sets the "name" field if the given value is not nil.
+func (ppc *ProductPropertyCreate) SetNillableName(s *string) *ProductPropertyCreate {
 	if s != nil {
-		ppc.SetSpuName(*s)
+		ppc.SetName(*s)
 	}
 	return ppc
 }
@@ -119,16 +119,16 @@ func (ppc *ProductPropertyCreate) SetNillableCount(i *int64) *ProductPropertyCre
 	return ppc
 }
 
-// SetSpuPrice sets the "spu_price" field.
-func (ppc *ProductPropertyCreate) SetSpuPrice(f float64) *ProductPropertyCreate {
-	ppc.mutation.SetSpuPrice(f)
+// SetPrice sets the "price" field.
+func (ppc *ProductPropertyCreate) SetPrice(f float64) *ProductPropertyCreate {
+	ppc.mutation.SetPrice(f)
 	return ppc
 }
 
-// SetNillableSpuPrice sets the "spu_price" field if the given value is not nil.
-func (ppc *ProductPropertyCreate) SetNillableSpuPrice(f *float64) *ProductPropertyCreate {
+// SetNillablePrice sets the "price" field if the given value is not nil.
+func (ppc *ProductPropertyCreate) SetNillablePrice(f *float64) *ProductPropertyCreate {
 	if f != nil {
-		ppc.SetSpuPrice(*f)
+		ppc.SetPrice(*f)
 	}
 	return ppc
 }
@@ -251,9 +251,9 @@ func (ppc *ProductPropertyCreate) createSpec() (*ProductProperty, *sqlgraph.Crea
 		_spec.SetField(productproperty.FieldType, field.TypeString, value)
 		_node.Type = value
 	}
-	if value, ok := ppc.mutation.SpuName(); ok {
-		_spec.SetField(productproperty.FieldSpuName, field.TypeString, value)
-		_node.SpuName = value
+	if value, ok := ppc.mutation.Name(); ok {
+		_spec.SetField(productproperty.FieldName, field.TypeString, value)
+		_node.Name = value
 	}
 	if value, ok := ppc.mutation.Duration(); ok {
 		_spec.SetField(productproperty.FieldDuration, field.TypeInt64, value)
@@ -267,9 +267,9 @@ func (ppc *ProductPropertyCreate) createSpec() (*ProductProperty, *sqlgraph.Crea
 		_spec.SetField(productproperty.FieldCount, field.TypeInt64, value)
 		_node.Count = value
 	}
-	if value, ok := ppc.mutation.SpuPrice(); ok {
-		_spec.SetField(productproperty.FieldSpuPrice, field.TypeFloat64, value)
-		_node.SpuPrice = value
+	if value, ok := ppc.mutation.Price(); ok {
+		_spec.SetField(productproperty.FieldPrice, field.TypeFloat64, value)
+		_node.Price = value
 	}
 	if nodes := ppc.mutation.ProductIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

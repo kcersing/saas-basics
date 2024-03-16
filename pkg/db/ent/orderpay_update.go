@@ -129,6 +129,26 @@ func (opu *OrderPayUpdate) ClearPay() *OrderPayUpdate {
 	return opu
 }
 
+// SetNote sets the "note" field.
+func (opu *OrderPayUpdate) SetNote(s string) *OrderPayUpdate {
+	opu.mutation.SetNote(s)
+	return opu
+}
+
+// SetNillableNote sets the "note" field if the given value is not nil.
+func (opu *OrderPayUpdate) SetNillableNote(s *string) *OrderPayUpdate {
+	if s != nil {
+		opu.SetNote(*s)
+	}
+	return opu
+}
+
+// ClearNote clears the value of the "note" field.
+func (opu *OrderPayUpdate) ClearNote() *OrderPayUpdate {
+	opu.mutation.ClearNote()
+	return opu
+}
+
 // SetCreateID sets the "create_id" field.
 func (opu *OrderPayUpdate) SetCreateID(i int64) *OrderPayUpdate {
 	opu.mutation.ResetCreateID()
@@ -257,6 +277,12 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if opu.mutation.PayCleared() {
 		_spec.ClearField(orderpay.FieldPay, field.TypeFloat64)
+	}
+	if value, ok := opu.mutation.Note(); ok {
+		_spec.SetField(orderpay.FieldNote, field.TypeString, value)
+	}
+	if opu.mutation.NoteCleared() {
+		_spec.ClearField(orderpay.FieldNote, field.TypeString)
 	}
 	if value, ok := opu.mutation.CreateID(); ok {
 		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)
@@ -413,6 +439,26 @@ func (opuo *OrderPayUpdateOne) AddPay(f float64) *OrderPayUpdateOne {
 // ClearPay clears the value of the "pay" field.
 func (opuo *OrderPayUpdateOne) ClearPay() *OrderPayUpdateOne {
 	opuo.mutation.ClearPay()
+	return opuo
+}
+
+// SetNote sets the "note" field.
+func (opuo *OrderPayUpdateOne) SetNote(s string) *OrderPayUpdateOne {
+	opuo.mutation.SetNote(s)
+	return opuo
+}
+
+// SetNillableNote sets the "note" field if the given value is not nil.
+func (opuo *OrderPayUpdateOne) SetNillableNote(s *string) *OrderPayUpdateOne {
+	if s != nil {
+		opuo.SetNote(*s)
+	}
+	return opuo
+}
+
+// ClearNote clears the value of the "note" field.
+func (opuo *OrderPayUpdateOne) ClearNote() *OrderPayUpdateOne {
+	opuo.mutation.ClearNote()
 	return opuo
 }
 
@@ -574,6 +620,12 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 	}
 	if opuo.mutation.PayCleared() {
 		_spec.ClearField(orderpay.FieldPay, field.TypeFloat64)
+	}
+	if value, ok := opuo.mutation.Note(); ok {
+		_spec.SetField(orderpay.FieldNote, field.TypeString, value)
+	}
+	if opuo.mutation.NoteCleared() {
+		_spec.ClearField(orderpay.FieldNote, field.TypeString)
 	}
 	if value, ok := opuo.mutation.CreateID(); ok {
 		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)

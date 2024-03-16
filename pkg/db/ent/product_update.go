@@ -177,16 +177,23 @@ func (pu *ProductUpdate) ClearDescription() *ProductUpdate {
 }
 
 // SetPrice sets the "price" field.
-func (pu *ProductUpdate) SetPrice(s string) *ProductUpdate {
-	pu.mutation.SetPrice(s)
+func (pu *ProductUpdate) SetPrice(f float64) *ProductUpdate {
+	pu.mutation.ResetPrice()
+	pu.mutation.SetPrice(f)
 	return pu
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillablePrice(s *string) *ProductUpdate {
-	if s != nil {
-		pu.SetPrice(*s)
+func (pu *ProductUpdate) SetNillablePrice(f *float64) *ProductUpdate {
+	if f != nil {
+		pu.SetPrice(*f)
 	}
+	return pu
+}
+
+// AddPrice adds f to the "price" field.
+func (pu *ProductUpdate) AddPrice(f float64) *ProductUpdate {
+	pu.mutation.AddPrice(f)
 	return pu
 }
 
@@ -385,10 +392,13 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(product.FieldDescription, field.TypeString)
 	}
 	if value, ok := pu.mutation.Price(); ok {
-		_spec.SetField(product.FieldPrice, field.TypeString, value)
+		_spec.SetField(product.FieldPrice, field.TypeFloat64, value)
+	}
+	if value, ok := pu.mutation.AddedPrice(); ok {
+		_spec.AddField(product.FieldPrice, field.TypeFloat64, value)
 	}
 	if pu.mutation.PriceCleared() {
-		_spec.ClearField(product.FieldPrice, field.TypeString)
+		_spec.ClearField(product.FieldPrice, field.TypeFloat64)
 	}
 	if value, ok := pu.mutation.Stock(); ok {
 		_spec.SetField(product.FieldStock, field.TypeInt64, value)
@@ -621,16 +631,23 @@ func (puo *ProductUpdateOne) ClearDescription() *ProductUpdateOne {
 }
 
 // SetPrice sets the "price" field.
-func (puo *ProductUpdateOne) SetPrice(s string) *ProductUpdateOne {
-	puo.mutation.SetPrice(s)
+func (puo *ProductUpdateOne) SetPrice(f float64) *ProductUpdateOne {
+	puo.mutation.ResetPrice()
+	puo.mutation.SetPrice(f)
 	return puo
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillablePrice(s *string) *ProductUpdateOne {
-	if s != nil {
-		puo.SetPrice(*s)
+func (puo *ProductUpdateOne) SetNillablePrice(f *float64) *ProductUpdateOne {
+	if f != nil {
+		puo.SetPrice(*f)
 	}
+	return puo
+}
+
+// AddPrice adds f to the "price" field.
+func (puo *ProductUpdateOne) AddPrice(f float64) *ProductUpdateOne {
+	puo.mutation.AddPrice(f)
 	return puo
 }
 
@@ -859,10 +876,13 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		_spec.ClearField(product.FieldDescription, field.TypeString)
 	}
 	if value, ok := puo.mutation.Price(); ok {
-		_spec.SetField(product.FieldPrice, field.TypeString, value)
+		_spec.SetField(product.FieldPrice, field.TypeFloat64, value)
+	}
+	if value, ok := puo.mutation.AddedPrice(); ok {
+		_spec.AddField(product.FieldPrice, field.TypeFloat64, value)
 	}
 	if puo.mutation.PriceCleared() {
-		_spec.ClearField(product.FieldPrice, field.TypeString)
+		_spec.ClearField(product.FieldPrice, field.TypeFloat64)
 	}
 	if value, ok := puo.mutation.Stock(); ok {
 		_spec.SetField(product.FieldStock, field.TypeInt64, value)

@@ -675,15 +675,15 @@ func (p *Meta) String() string {
 
 // 创建或更新菜单信息参数
 type CreateOrUpdateMenuReq struct {
-	ID        string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID        int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
 	Name      string `thrift:"name,2" form:"name" json:"name" query:"name" vd:"len($) > 0 && len($) < 33>"`
-	ParentID  string `thrift:"parent_id,3" form:"parent_id" json:"parent_id" query:"parent_id"`
-	Level     string `thrift:"level,4" form:"level" json:"level" query:"level"`
+	ParentID  int64  `thrift:"parent_id,3" form:"parent_id" json:"parent_id" query:"parent_id"`
+	Level     int64  `thrift:"level,4" form:"level" json:"level" query:"level"`
 	Path      string `thrift:"path,5" form:"path" json:"path" query:"path"`
 	Redirect  string `thrift:"redirect,6" form:"redirect" json:"redirect" query:"redirect"`
 	Component string `thrift:"component,7" form:"component" json:"component" query:"component"`
-	OrderNo   string `thrift:"orderNo,8" form:"orderNo" json:"orderNo" query:"orderNo"`
-	Disabled  string `thrift:"disabled,9" form:"disabled" json:"disabled" query:"disabled"`
+	OrderNo   int64  `thrift:"orderNo,8" form:"orderNo" json:"orderNo" query:"orderNo"`
+	Disabled  bool   `thrift:"disabled,9" form:"disabled" json:"disabled" query:"disabled"`
 	MenuType  string `thrift:"menuType,10" form:"menuType" json:"menuType" query:"menuType"`
 	Meta      *Meta  `thrift:"meta,11" form:"meta" json:"meta" query:"meta"`
 }
@@ -692,7 +692,7 @@ func NewCreateOrUpdateMenuReq() *CreateOrUpdateMenuReq {
 	return &CreateOrUpdateMenuReq{}
 }
 
-func (p *CreateOrUpdateMenuReq) GetID() (v string) {
+func (p *CreateOrUpdateMenuReq) GetID() (v int64) {
 	return p.ID
 }
 
@@ -700,11 +700,11 @@ func (p *CreateOrUpdateMenuReq) GetName() (v string) {
 	return p.Name
 }
 
-func (p *CreateOrUpdateMenuReq) GetParentID() (v string) {
+func (p *CreateOrUpdateMenuReq) GetParentID() (v int64) {
 	return p.ParentID
 }
 
-func (p *CreateOrUpdateMenuReq) GetLevel() (v string) {
+func (p *CreateOrUpdateMenuReq) GetLevel() (v int64) {
 	return p.Level
 }
 
@@ -720,11 +720,11 @@ func (p *CreateOrUpdateMenuReq) GetComponent() (v string) {
 	return p.Component
 }
 
-func (p *CreateOrUpdateMenuReq) GetOrderNo() (v string) {
+func (p *CreateOrUpdateMenuReq) GetOrderNo() (v int64) {
 	return p.OrderNo
 }
 
-func (p *CreateOrUpdateMenuReq) GetDisabled() (v string) {
+func (p *CreateOrUpdateMenuReq) GetDisabled() (v bool) {
 	return p.Disabled
 }
 
@@ -779,7 +779,7 @@ func (p *CreateOrUpdateMenuReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -795,7 +795,7 @@ func (p *CreateOrUpdateMenuReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -803,7 +803,7 @@ func (p *CreateOrUpdateMenuReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -835,7 +835,7 @@ func (p *CreateOrUpdateMenuReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 8:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -843,7 +843,7 @@ func (p *CreateOrUpdateMenuReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 9:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.BOOL {
 				if err = p.ReadField9(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -897,7 +897,7 @@ ReadStructEndError:
 
 func (p *CreateOrUpdateMenuReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -915,7 +915,7 @@ func (p *CreateOrUpdateMenuReq) ReadField2(iprot thrift.TProtocol) error {
 }
 func (p *CreateOrUpdateMenuReq) ReadField3(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ParentID = v
@@ -924,7 +924,7 @@ func (p *CreateOrUpdateMenuReq) ReadField3(iprot thrift.TProtocol) error {
 }
 func (p *CreateOrUpdateMenuReq) ReadField4(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Level = v
@@ -960,7 +960,7 @@ func (p *CreateOrUpdateMenuReq) ReadField7(iprot thrift.TProtocol) error {
 }
 func (p *CreateOrUpdateMenuReq) ReadField8(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.OrderNo = v
@@ -969,7 +969,7 @@ func (p *CreateOrUpdateMenuReq) ReadField8(iprot thrift.TProtocol) error {
 }
 func (p *CreateOrUpdateMenuReq) ReadField9(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadBool(); err != nil {
 		return err
 	} else {
 		p.Disabled = v
@@ -1062,10 +1062,10 @@ WriteStructEndError:
 }
 
 func (p *CreateOrUpdateMenuReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1096,10 +1096,10 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateMenuReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("parent_id", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("parent_id", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ParentID); err != nil {
+	if err := oprot.WriteI64(p.ParentID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1113,10 +1113,10 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateMenuReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("level", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("level", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Level); err != nil {
+	if err := oprot.WriteI64(p.Level); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1181,10 +1181,10 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateMenuReq) writeField8(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("orderNo", thrift.STRING, 8); err != nil {
+	if err = oprot.WriteFieldBegin("orderNo", thrift.I64, 8); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.OrderNo); err != nil {
+	if err := oprot.WriteI64(p.OrderNo); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1198,10 +1198,10 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateMenuReq) writeField9(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("disabled", thrift.STRING, 9); err != nil {
+	if err = oprot.WriteFieldBegin("disabled", thrift.BOOL, 9); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Disabled); err != nil {
+	if err := oprot.WriteBool(p.Disabled); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

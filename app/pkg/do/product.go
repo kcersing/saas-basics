@@ -17,8 +17,8 @@ type Product interface {
 type PropertyInfo struct {
 	ID        int64   `json:"id,omitempty"`
 	ProductId int64   `json:"productId,omitempty"`
-	SpuName   string  `json:"spuName,omitempty"`
-	SpuPrice  float64 `json:"spuPrice,omitempty"`
+	Name      string  `json:"name,omitempty"`
+	Price     float64 `json:"price,omitempty"`
 	Duration  int64   `json:"duration,omitempty"`
 	Length    int64   `json:"length,omitempty"`
 	Count     int64   `json:"count,omitempty"`
@@ -41,6 +41,5 @@ type ProductListReq struct {
 	Page     int64  `json:"page,omitempty"`
 	PageSize int64  `json:"pageSize,omitempty"`
 	Name     string `json:"name,omitempty"`
-	SpuName  string `json:"spuName,omitempty"`
 	Status   int64  `json:"status,omitempty"`
 }
