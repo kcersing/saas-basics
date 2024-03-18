@@ -724,11 +724,11 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(16).
-		SetPath("/product/List").
+		SetPath("/sys/product/index").
 		SetName("ProductList").
-		SetComponent("/product/List").
+		SetComponent("/sys/product/index").
 		SetOrderNo(1).
-		SetTitle("ProductList").
+		SetTitle("产品列表").
 		SetIcon("ant-design:disconnect-outlined").
 		SetHideMenu(false)
 
