@@ -527,7 +527,7 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 // init menu data
 func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	var menus []*ent.MenuCreate
-	menus = make([]*ent.MenuCreate, 18)
+	menus = make([]*ent.MenuCreate, 19)
 	menus[0] = I.DB.Menu.Create().
 		SetMenuLevel(0).
 		SetMenuType(0).
@@ -637,13 +637,13 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetHideMenu(true)
 
 	menus[9] = I.DB.Menu.Create().
-		SetMenuLevel(2).
-		SetMenuType(1).
-		SetParentID(3).
-		SetPath("/sys/order/index").
+		SetMenuLevel(1).
+		SetMenuType(0).
+		SetParentID(1).
+		SetPath("").
 		SetName("Order").
-		SetComponent("/sys/order/index").
-		SetOrderNo(7).
+		SetComponent("LAYOUT").
+		SetOrderNo(4).
 		SetTitle("订单管理").
 		SetIcon("ant-design:unlock-filled").
 		SetHideMenu(false)
@@ -736,11 +736,23 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(16).
-		SetPath("/product/structTag").
-		SetName("DeleteStructTag").
-		SetComponent("/product/structTag").
+		SetPath("/sys/property/index").
+		SetName("PropertyList").
+		SetComponent("/sys/property/index").
 		SetOrderNo(2).
-		SetTitle("DeleteStructTag").
+		SetTitle("属性列表").
+		SetIcon("ant-design:disconnect-outlined").
+		SetHideMenu(false)
+
+	menus[18] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(10).
+		SetPath("/sys/order/index").
+		SetName("OrderList").
+		SetComponent("/sys/order/index").
+		SetOrderNo(1).
+		SetTitle("订单列表").
 		SetIcon("ant-design:disconnect-outlined").
 		SetHideMenu(false)
 

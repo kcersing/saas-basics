@@ -133,6 +133,34 @@ func (ppc *ProductPropertyCreate) SetNillablePrice(f *float64) *ProductPropertyC
 	return ppc
 }
 
+// SetStatus sets the "status" field.
+func (ppc *ProductPropertyCreate) SetStatus(i int64) *ProductPropertyCreate {
+	ppc.mutation.SetStatus(i)
+	return ppc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ppc *ProductPropertyCreate) SetNillableStatus(i *int64) *ProductPropertyCreate {
+	if i != nil {
+		ppc.SetStatus(*i)
+	}
+	return ppc
+}
+
+// SetData sets the "data" field.
+func (ppc *ProductPropertyCreate) SetData(s string) *ProductPropertyCreate {
+	ppc.mutation.SetData(s)
+	return ppc
+}
+
+// SetNillableData sets the "data" field if the given value is not nil.
+func (ppc *ProductPropertyCreate) SetNillableData(s *string) *ProductPropertyCreate {
+	if s != nil {
+		ppc.SetData(*s)
+	}
+	return ppc
+}
+
 // SetID sets the "id" field.
 func (ppc *ProductPropertyCreate) SetID(i int64) *ProductPropertyCreate {
 	ppc.mutation.SetID(i)
@@ -270,6 +298,14 @@ func (ppc *ProductPropertyCreate) createSpec() (*ProductProperty, *sqlgraph.Crea
 	if value, ok := ppc.mutation.Price(); ok {
 		_spec.SetField(productproperty.FieldPrice, field.TypeFloat64, value)
 		_node.Price = value
+	}
+	if value, ok := ppc.mutation.Status(); ok {
+		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
+	if value, ok := ppc.mutation.Data(); ok {
+		_spec.SetField(productproperty.FieldData, field.TypeString, value)
+		_node.Data = value
 	}
 	if nodes := ppc.mutation.ProductIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

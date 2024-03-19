@@ -570,6 +570,8 @@ var (
 		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "单次时长"},
 		{Name: "count", Type: field.TypeInt64, Nullable: true, Comment: "次数"},
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "定价"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态"},
+		{Name: "data", Type: field.TypeString, Nullable: true},
 	}
 	// ProductPropertyTable holds the schema information for the "product_property" table.
 	ProductPropertyTable = &schema.Table{

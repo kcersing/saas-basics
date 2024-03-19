@@ -183,6 +183,53 @@ func (ppu *ProductPropertyUpdate) ClearPrice() *ProductPropertyUpdate {
 	return ppu
 }
 
+// SetStatus sets the "status" field.
+func (ppu *ProductPropertyUpdate) SetStatus(i int64) *ProductPropertyUpdate {
+	ppu.mutation.ResetStatus()
+	ppu.mutation.SetStatus(i)
+	return ppu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ppu *ProductPropertyUpdate) SetNillableStatus(i *int64) *ProductPropertyUpdate {
+	if i != nil {
+		ppu.SetStatus(*i)
+	}
+	return ppu
+}
+
+// AddStatus adds i to the "status" field.
+func (ppu *ProductPropertyUpdate) AddStatus(i int64) *ProductPropertyUpdate {
+	ppu.mutation.AddStatus(i)
+	return ppu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (ppu *ProductPropertyUpdate) ClearStatus() *ProductPropertyUpdate {
+	ppu.mutation.ClearStatus()
+	return ppu
+}
+
+// SetData sets the "data" field.
+func (ppu *ProductPropertyUpdate) SetData(s string) *ProductPropertyUpdate {
+	ppu.mutation.SetData(s)
+	return ppu
+}
+
+// SetNillableData sets the "data" field if the given value is not nil.
+func (ppu *ProductPropertyUpdate) SetNillableData(s *string) *ProductPropertyUpdate {
+	if s != nil {
+		ppu.SetData(*s)
+	}
+	return ppu
+}
+
+// ClearData clears the value of the "data" field.
+func (ppu *ProductPropertyUpdate) ClearData() *ProductPropertyUpdate {
+	ppu.mutation.ClearData()
+	return ppu
+}
+
 // AddProductIDs adds the "product" edge to the Product entity by IDs.
 func (ppu *ProductPropertyUpdate) AddProductIDs(ids ...int64) *ProductPropertyUpdate {
 	ppu.mutation.AddProductIDs(ids...)
@@ -319,6 +366,21 @@ func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if ppu.mutation.PriceCleared() {
 		_spec.ClearField(productproperty.FieldPrice, field.TypeFloat64)
+	}
+	if value, ok := ppu.mutation.Status(); ok {
+		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := ppu.mutation.AddedStatus(); ok {
+		_spec.AddField(productproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if ppu.mutation.StatusCleared() {
+		_spec.ClearField(productproperty.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := ppu.mutation.Data(); ok {
+		_spec.SetField(productproperty.FieldData, field.TypeString, value)
+	}
+	if ppu.mutation.DataCleared() {
+		_spec.ClearField(productproperty.FieldData, field.TypeString)
 	}
 	if ppu.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -539,6 +601,53 @@ func (ppuo *ProductPropertyUpdateOne) ClearPrice() *ProductPropertyUpdateOne {
 	return ppuo
 }
 
+// SetStatus sets the "status" field.
+func (ppuo *ProductPropertyUpdateOne) SetStatus(i int64) *ProductPropertyUpdateOne {
+	ppuo.mutation.ResetStatus()
+	ppuo.mutation.SetStatus(i)
+	return ppuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ppuo *ProductPropertyUpdateOne) SetNillableStatus(i *int64) *ProductPropertyUpdateOne {
+	if i != nil {
+		ppuo.SetStatus(*i)
+	}
+	return ppuo
+}
+
+// AddStatus adds i to the "status" field.
+func (ppuo *ProductPropertyUpdateOne) AddStatus(i int64) *ProductPropertyUpdateOne {
+	ppuo.mutation.AddStatus(i)
+	return ppuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (ppuo *ProductPropertyUpdateOne) ClearStatus() *ProductPropertyUpdateOne {
+	ppuo.mutation.ClearStatus()
+	return ppuo
+}
+
+// SetData sets the "data" field.
+func (ppuo *ProductPropertyUpdateOne) SetData(s string) *ProductPropertyUpdateOne {
+	ppuo.mutation.SetData(s)
+	return ppuo
+}
+
+// SetNillableData sets the "data" field if the given value is not nil.
+func (ppuo *ProductPropertyUpdateOne) SetNillableData(s *string) *ProductPropertyUpdateOne {
+	if s != nil {
+		ppuo.SetData(*s)
+	}
+	return ppuo
+}
+
+// ClearData clears the value of the "data" field.
+func (ppuo *ProductPropertyUpdateOne) ClearData() *ProductPropertyUpdateOne {
+	ppuo.mutation.ClearData()
+	return ppuo
+}
+
 // AddProductIDs adds the "product" edge to the Product entity by IDs.
 func (ppuo *ProductPropertyUpdateOne) AddProductIDs(ids ...int64) *ProductPropertyUpdateOne {
 	ppuo.mutation.AddProductIDs(ids...)
@@ -705,6 +814,21 @@ func (ppuo *ProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *Produ
 	}
 	if ppuo.mutation.PriceCleared() {
 		_spec.ClearField(productproperty.FieldPrice, field.TypeFloat64)
+	}
+	if value, ok := ppuo.mutation.Status(); ok {
+		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := ppuo.mutation.AddedStatus(); ok {
+		_spec.AddField(productproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if ppuo.mutation.StatusCleared() {
+		_spec.ClearField(productproperty.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := ppuo.mutation.Data(); ok {
+		_spec.SetField(productproperty.FieldData, field.TypeString, value)
+	}
+	if ppuo.mutation.DataCleared() {
+		_spec.ClearField(productproperty.FieldData, field.TypeString)
 	}
 	if ppuo.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{

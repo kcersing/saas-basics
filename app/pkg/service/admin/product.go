@@ -12,6 +12,7 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/product"
+	"saas/pkg/db/ent/productproperty"
 )
 
 type Product struct {
@@ -38,8 +39,27 @@ func (p Product) DeleteProperty(id int64) error {
 }
 
 func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, total int, err error) {
-	//TODO implement me
-	panic("implement me")
+
+	var predicates []predicate.ProductProperty
+	if req.Name != "" {
+		predicates = append(predicates, productproperty.NameEQ(req.Name))
+	}
+	lists, err := p.db.ProductProperty.Query().Where(predicates...).
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(p.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get product list failed")
+		return resp, total, err
+	}
+
+	err = copier.Copy(&resp, &lists)
+	if err != nil {
+		err = errors.Wrap(err, "copy product info failed")
+		return resp, 0, err
+	}
+	total, _ = p.db.ProductProperty.Query().Where(predicates...).Count(p.ctx)
+	return
+
 }
 
 func (p Product) Create(req do.ProductInfo) error {
@@ -62,15 +82,15 @@ func (p Product) List(req do.ProductListReq) (resp []*do.ProductInfo, total int,
 	if req.Name != "" {
 		predicates = append(predicates, product.NameEQ(req.Name))
 	}
-	users, err := p.db.Product.Query().Where(predicates...).
+	lists, err := p.db.Product.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(p.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
 		return resp, total, err
 	}
-	// copy to productInfo struct
-	err = copier.Copy(&resp, &users)
+
+	err = copier.Copy(&resp, &lists)
 	if err != nil {
 		err = errors.Wrap(err, "copy product info failed")
 		return resp, 0, err

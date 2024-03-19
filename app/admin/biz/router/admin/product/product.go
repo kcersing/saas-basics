@@ -22,10 +22,6 @@ func Register(r *server.Hertz) {
 		{
 			_admin := _api.Group("/admin", _adminMw()...)
 			{
-				_property := _admin.Group("/Property", _propertyMw()...)
-				_property.POST("/list", append(_listpropertyMw(), product.ListProperty)...)
-			}
-			{
 				_product := _admin.Group("/product", _productMw()...)
 				_product.POST("/create", append(_createMw(), product.Create)...)
 				_product.POST("/del", append(_deleteMw(), product.Delete)...)
@@ -35,10 +31,11 @@ func Register(r *server.Hertz) {
 				_product.POST("/update", append(_updateMw(), product.Update)...)
 			}
 			{
-				_property0 := _admin.Group("/property", _property0Mw()...)
-				_property0.POST("/create", append(_createpropertyMw(), product.CreateProperty)...)
-				_property0.POST("/del", append(_deletepropertyMw(), product.DeleteProperty)...)
-				_property0.POST("/update", append(_updatepropertyMw(), product.UpdateProperty)...)
+				_property := _admin.Group("/property", _propertyMw()...)
+				_property.POST("/create", append(_createpropertyMw(), product.CreateProperty)...)
+				_property.POST("/del", append(_deletepropertyMw(), product.DeleteProperty)...)
+				_property.POST("/list", append(_listpropertyMw(), product.ListProperty)...)
+				_property.POST("/update", append(_updatepropertyMw(), product.UpdateProperty)...)
 			}
 		}
 	}

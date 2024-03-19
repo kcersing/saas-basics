@@ -30,6 +30,10 @@ const (
 	FieldCount = "count"
 	// FieldPrice holds the string denoting the price field in the database.
 	FieldPrice = "price"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldData holds the string denoting the data field in the database.
+	FieldData = "data"
 	// EdgeProduct holds the string denoting the product edge name in mutations.
 	EdgeProduct = "product"
 	// Table holds the table name of the productproperty in the database.
@@ -52,6 +56,8 @@ var Columns = []string{
 	FieldLength,
 	FieldCount,
 	FieldPrice,
+	FieldStatus,
+	FieldData,
 }
 
 var (
@@ -125,6 +131,16 @@ func ByCount(opts ...sql.OrderTermOption) OrderOption {
 // ByPrice orders the results by the price field.
 func ByPrice(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrice, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByData orders the results by the data field.
+func ByData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldData, opts...).ToFunc()
 }
 
 // ByProductCount orders the results by product count.

@@ -21,6 +21,8 @@ func (ProductProperty) Fields() []ent.Field {
 		field.Int64("length").Comment("单次时长").Optional(),
 		field.Int64("count").Comment("次数").Optional(),
 		field.Float("price").Comment("定价").Optional(),
+		field.Int64("status").Comment("状态").Optional(),
+		field.String("data").Comment("").Optional(),
 	}
 }
 

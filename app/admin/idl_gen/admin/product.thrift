@@ -12,6 +12,7 @@ struct Property {
     6: i64 count // 次数
     7: string type // 次数
     8: string data
+    9: i64 id
 }
 
 struct Product {
@@ -22,6 +23,7 @@ struct Product {
     5: i64 price // 价格
     6: i64 stock // 库存
     7: i64 status // 商品状态
+    8: i64 id
 }
 
 struct CreatePropertyReq {
@@ -34,17 +36,13 @@ struct CreatePropertyReq {
 }
 
 struct UpdatePropertyReq {
-    1: required i64 property_id
+    1: required i64 id
     2: string name // 名称
     3: i64 price // 定价
     4: i64 duration // 时长
     5: i64 length // 单次时长
     6: i64 count // 次数
     7: string type // 次数
-}
-
-struct DeletePropertyReq {
-    1: required i64 property_id
 }
 
 struct CreateReq {
@@ -57,7 +55,7 @@ struct CreateReq {
 }
 
 struct UpdateReq {
-    1: required i64 product_id
+    1: required i64 id
     2: optional string name // 商品名
     3: optional string pic // 主图
     4: optional string description // 详情
@@ -83,7 +81,7 @@ service ProductService {
     // 删除属性
     base.NilResponse DeleteProperty(1: base.IDReq req) (api.post = "/api/admin/property/del")
     // 商品列表
-    base.NilResponse ListProperty(1: ListReq req) (api.post = "/api/admin/Property/list")
+    base.NilResponse ListProperty(1: ListReq req) (api.post = "/api/admin/property/list")
 
     // 添加商品
     base.NilResponse Create(1: CreateReq req) (api.post = "/api/admin/product/create")
@@ -91,12 +89,15 @@ service ProductService {
     base.NilResponse Update(1: UpdateReq req) (api.post = "/api/admin/product/update")
     // 删除商品
     base.NilResponse Delete(1: base.IDReq req) (api.post = "/api/admin/product/del")
-    // 上架0/下架1
-    base.NilResponse UpdateStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/product/status")
-    // 商品详情
-    base.NilResponse InfoByID(1: base.IDReq req) (api.post = "/api/admin/product/info")
     // 商品列表
     base.NilResponse List(1: ListReq req) (api.post = "/api/admin/product/list")
+    // 上架0/下架1
+    base.NilResponse UpdateStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/product/status")
+
+    // 商品详情
+    base.NilResponse InfoByID(1: base.IDReq req) (api.post = "/api/admin/product/info")
+
+
 
 }
 

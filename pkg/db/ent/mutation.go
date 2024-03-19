@@ -21174,6 +21174,9 @@ type ProductPropertyMutation struct {
 	addcount       *int64
 	price          *float64
 	addprice       *float64
+	status         *int64
+	addstatus      *int64
+	data           *string
 	clearedFields  map[string]struct{}
 	product        map[int64]struct{}
 	removedproduct map[int64]struct{}
@@ -21737,6 +21740,125 @@ func (m *ProductPropertyMutation) ResetPrice() {
 	delete(m.clearedFields, productproperty.FieldPrice)
 }
 
+// SetStatus sets the "status" field.
+func (m *ProductPropertyMutation) SetStatus(i int64) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ProductPropertyMutation) Status() (r int64, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the ProductProperty entity.
+// If the ProductProperty object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductPropertyMutation) OldStatus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *ProductPropertyMutation) AddStatus(i int64) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *ProductPropertyMutation) AddedStatus() (r int64, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *ProductPropertyMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[productproperty.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *ProductPropertyMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[productproperty.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ProductPropertyMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, productproperty.FieldStatus)
+}
+
+// SetData sets the "data" field.
+func (m *ProductPropertyMutation) SetData(s string) {
+	m.data = &s
+}
+
+// Data returns the value of the "data" field in the mutation.
+func (m *ProductPropertyMutation) Data() (r string, exists bool) {
+	v := m.data
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldData returns the old "data" field's value of the ProductProperty entity.
+// If the ProductProperty object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductPropertyMutation) OldData(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldData is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldData requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldData: %w", err)
+	}
+	return oldValue.Data, nil
+}
+
+// ClearData clears the value of the "data" field.
+func (m *ProductPropertyMutation) ClearData() {
+	m.data = nil
+	m.clearedFields[productproperty.FieldData] = struct{}{}
+}
+
+// DataCleared returns if the "data" field was cleared in this mutation.
+func (m *ProductPropertyMutation) DataCleared() bool {
+	_, ok := m.clearedFields[productproperty.FieldData]
+	return ok
+}
+
+// ResetData resets all changes to the "data" field.
+func (m *ProductPropertyMutation) ResetData() {
+	m.data = nil
+	delete(m.clearedFields, productproperty.FieldData)
+}
+
 // AddProductIDs adds the "product" edge to the Product entity by ids.
 func (m *ProductPropertyMutation) AddProductIDs(ids ...int64) {
 	if m.product == nil {
@@ -21825,7 +21947,7 @@ func (m *ProductPropertyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductPropertyMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, productproperty.FieldCreatedAt)
 	}
@@ -21849,6 +21971,12 @@ func (m *ProductPropertyMutation) Fields() []string {
 	}
 	if m.price != nil {
 		fields = append(fields, productproperty.FieldPrice)
+	}
+	if m.status != nil {
+		fields = append(fields, productproperty.FieldStatus)
+	}
+	if m.data != nil {
+		fields = append(fields, productproperty.FieldData)
 	}
 	return fields
 }
@@ -21874,6 +22002,10 @@ func (m *ProductPropertyMutation) Field(name string) (ent.Value, bool) {
 		return m.Count()
 	case productproperty.FieldPrice:
 		return m.Price()
+	case productproperty.FieldStatus:
+		return m.Status()
+	case productproperty.FieldData:
+		return m.Data()
 	}
 	return nil, false
 }
@@ -21899,6 +22031,10 @@ func (m *ProductPropertyMutation) OldField(ctx context.Context, name string) (en
 		return m.OldCount(ctx)
 	case productproperty.FieldPrice:
 		return m.OldPrice(ctx)
+	case productproperty.FieldStatus:
+		return m.OldStatus(ctx)
+	case productproperty.FieldData:
+		return m.OldData(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProductProperty field %s", name)
 }
@@ -21964,6 +22100,20 @@ func (m *ProductPropertyMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPrice(v)
 		return nil
+	case productproperty.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case productproperty.FieldData:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetData(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProductProperty field %s", name)
 }
@@ -21984,6 +22134,9 @@ func (m *ProductPropertyMutation) AddedFields() []string {
 	if m.addprice != nil {
 		fields = append(fields, productproperty.FieldPrice)
 	}
+	if m.addstatus != nil {
+		fields = append(fields, productproperty.FieldStatus)
+	}
 	return fields
 }
 
@@ -22000,6 +22153,8 @@ func (m *ProductPropertyMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedCount()
 	case productproperty.FieldPrice:
 		return m.AddedPrice()
+	case productproperty.FieldStatus:
+		return m.AddedStatus()
 	}
 	return nil, false
 }
@@ -22037,6 +22192,13 @@ func (m *ProductPropertyMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddPrice(v)
 		return nil
+	case productproperty.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProductProperty numeric field %s", name)
 }
@@ -22062,6 +22224,12 @@ func (m *ProductPropertyMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(productproperty.FieldPrice) {
 		fields = append(fields, productproperty.FieldPrice)
+	}
+	if m.FieldCleared(productproperty.FieldStatus) {
+		fields = append(fields, productproperty.FieldStatus)
+	}
+	if m.FieldCleared(productproperty.FieldData) {
+		fields = append(fields, productproperty.FieldData)
 	}
 	return fields
 }
@@ -22095,6 +22263,12 @@ func (m *ProductPropertyMutation) ClearField(name string) error {
 	case productproperty.FieldPrice:
 		m.ClearPrice()
 		return nil
+	case productproperty.FieldStatus:
+		m.ClearStatus()
+		return nil
+	case productproperty.FieldData:
+		m.ClearData()
+		return nil
 	}
 	return fmt.Errorf("unknown ProductProperty nullable field %s", name)
 }
@@ -22126,6 +22300,12 @@ func (m *ProductPropertyMutation) ResetField(name string) error {
 		return nil
 	case productproperty.FieldPrice:
 		m.ResetPrice()
+		return nil
+	case productproperty.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case productproperty.FieldData:
+		m.ResetData()
 		return nil
 	}
 	return fmt.Errorf("unknown ProductProperty field %s", name)
