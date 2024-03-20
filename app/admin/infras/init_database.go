@@ -527,12 +527,12 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 // init menu data
 func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	var menus []*ent.MenuCreate
-	menus = make([]*ent.MenuCreate, 19)
+	menus = make([]*ent.MenuCreate, 29)
 	menus[0] = I.DB.Menu.Create().
 		SetMenuLevel(0).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("").
+		SetPath("/").
 		SetName("root").
 		SetComponent("").
 		SetOrderNo(0).
@@ -556,132 +556,132 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(1).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("").
-		SetName("System Management").
+		SetPath("/").
+		SetName("SystemManagement").
 		SetComponent("LAYOUT").
-		SetOrderNo(1).
+		SetOrderNo(19).
 		SetTitle("系统管理").
 		SetIcon("ant-design:tool-outlined").
 		SetHideMenu(false)
 
 	menus[3] = I.DB.Menu.Create().
-		SetMenuLevel(2).
-		SetMenuType(1).
-		SetParentID(3).
-		SetPath("/sys/menu/index").
-		SetName("MenuManagement").
-		SetComponent("/sys/menu/index").
-		SetOrderNo(1).
-		SetTitle("菜单管理").
-		SetIcon("ant-design:bars-outlined").
+		SetMenuLevel(1).
+		SetMenuType(0).
+		SetParentID(1).
+		SetPath("/").
+		SetName("Maintenance").
+		SetComponent("LAYOUT").
+		SetOrderNo(21).
+		SetTitle("运维管理").
+		SetIcon("ant-design:bar-chart-outlined").
 		SetHideMenu(false)
 
 	menus[4] = I.DB.Menu.Create().
 		SetMenuLevel(2).
 		SetMenuType(1).
-		SetParentID(3).
-		SetPath("/sys/role/index").
-		SetName("Role Management").
-		SetComponent("/sys/role/index").
-		SetOrderNo(2).
-		SetTitle("角色管理").
-		SetIcon("ant-design:user-outlined").
+		SetParentID(4).
+		SetPath("/sys/menu/index").
+		SetName("MenuManagement").
+		SetComponent("/sys/menu/index").
+		SetOrderNo(1).
+		SetTitle("菜单管理").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[5] = I.DB.Menu.Create().
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(3).
-		SetPath("/sys/api/index").
-		SetName("API Management").
-		SetComponent("/sys/api/index").
-		SetOrderNo(3).
-		SetTitle("API管理").
-		SetIcon("ant-design:api-outlined").
+		SetPath("/sys/role/index").
+		SetName("RoleManagement").
+		SetComponent("/sys/role/index").
+		SetOrderNo(1).
+		SetTitle("角色管理").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[6] = I.DB.Menu.Create().
 		SetMenuLevel(2).
 		SetMenuType(1).
-		SetParentID(3).
-		SetPath("/sys/user/index").
-		SetName("User Management").
-		SetComponent("/sys/user/index").
-		SetOrderNo(4).
-		SetTitle("用户管理").
-		SetIcon("ant-design:user-outlined").
+		SetParentID(4).
+		SetPath("/sys/api/index").
+		SetName("APIManagement").
+		SetComponent("/sys/api/index").
+		SetOrderNo(3).
+		SetTitle("API管理").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[7] = I.DB.Menu.Create().
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(3).
-		SetPath("/sys/dictionary/index").
-		SetName("Dictionary Management").
-		SetComponent("/sys/dictionary/index").
-		SetOrderNo(5).
-		SetTitle("字典管理").
-		SetIcon("ant-design:book-outlined").
+		SetPath("/sys/user/index").
+		SetName("UserManagement").
+		SetComponent("/sys/user/index").
+		SetOrderNo(2).
+		SetTitle("用户管理").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[8] = I.DB.Menu.Create().
 		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(3).
+		SetPath("/sys/dictionary/index").
+		SetName("DictionaryManagement").
+		SetComponent("/sys/dictionary/index").
+		SetOrderNo(3).
+		SetTitle("字典管理").
+		SetIcon("").
+		SetHideMenu(false)
+
+	menus[9] = I.DB.Menu.Create().
+		SetMenuLevel(2).
 		SetMenuType(2).
 		SetParentID(3).
 		SetPath("/sys/dictionary/detail").
-		SetName("Dictionary Detail").
+		SetName("DictionaryDetail").
 		SetComponent("/sys/dictionary/detail").
-		SetOrderNo(6).
+		SetOrderNo(4).
 		SetTitle("字典明细").
-		SetIcon("ant-design:align-left-outlined").
-		SetHideMenu(true)
+		SetIcon("").
+		SetHideMenu(false)
 
-	menus[9] = I.DB.Menu.Create().
+	menus[10] = I.DB.Menu.Create().
 		SetMenuLevel(1).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("").
+		SetPath("/").
 		SetName("Order").
 		SetComponent("LAYOUT").
 		SetOrderNo(4).
 		SetTitle("订单管理").
-		SetIcon("ant-design:unlock-filled").
-		SetHideMenu(false)
-
-	menus[10] = I.DB.Menu.Create().
-		SetMenuLevel(2).
-		SetMenuType(1).
-		SetParentID(3).
-		SetPath("/sys/token/index").
-		SetName("Token Management").
-		SetComponent("/sys/token/index").
-		SetOrderNo(8).
-		SetTitle("Token管理").
-		SetIcon("ant-design:lock-outlined").
+		SetIcon("ant-design:property-safety-outlined").
 		SetHideMenu(false)
 
 	menus[11] = I.DB.Menu.Create().
 		SetMenuLevel(2).
 		SetMenuType(1).
-		SetParentID(3).
+		SetParentID(4).
 		SetPath("/sys/logs/index").
-		SetName("Logs Management").
+		SetName("LogsManagement").
 		SetComponent("/sys/logs/index").
 		SetOrderNo(9).
 		SetTitle("日志管理").
-		SetIcon("ant-design:profile-twotone").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[12] = I.DB.Menu.Create().
 		SetMenuLevel(1).
 		SetMenuType(0).
-		SetParentID(1).
-		SetPath("").
-		SetName("Other Pages").
+		SetParentID(4).
+		SetPath("/").
+		SetName("OtherPages").
 		SetComponent("LAYOUT").
 		SetOrderNo(2).
 		SetTitle("其他页面").
-		SetIcon("ant-design:question-circle-outlined").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[13] = I.DB.Menu.Create().
@@ -693,7 +693,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetComponent("/sys/oauth/callback").
 		SetOrderNo(1).
 		SetTitle("回调页面").
-		SetIcon("ant-design:android-filled").
+		SetIcon("").
 		SetHideMenu(true)
 
 	menus[14] = I.DB.Menu.Create().
@@ -705,19 +705,19 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetComponent("/sys/profile/index").
 		SetOrderNo(2).
 		SetTitle("用户信息").
-		SetIcon("ant-design:profile-outlined").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[15] = I.DB.Menu.Create().
 		SetMenuLevel(1).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("").
-		SetName("product").
+		SetPath("/").
+		SetName("Product").
 		SetComponent("LAYOUT").
 		SetOrderNo(3).
 		SetTitle("产品管理").
-		SetIcon("ant-design:api-filled").
+		SetIcon("ant-design:inbox-outlined").
 		SetHideMenu(false)
 
 	menus[16] = I.DB.Menu.Create().
@@ -729,7 +729,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetComponent("/sys/product/index").
 		SetOrderNo(1).
 		SetTitle("产品列表").
-		SetIcon("ant-design:disconnect-outlined").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[17] = I.DB.Menu.Create().
@@ -741,19 +741,139 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetComponent("/sys/property/index").
 		SetOrderNo(2).
 		SetTitle("属性列表").
-		SetIcon("ant-design:disconnect-outlined").
+		SetIcon("").
 		SetHideMenu(false)
 
 	menus[18] = I.DB.Menu.Create().
 		SetMenuLevel(2).
 		SetMenuType(1).
-		SetParentID(10).
+		SetParentID(11).
 		SetPath("/sys/order/index").
 		SetName("OrderList").
 		SetComponent("/sys/order/index").
 		SetOrderNo(1).
 		SetTitle("订单列表").
-		SetIcon("ant-design:disconnect-outlined").
+		SetIcon("").
+		SetHideMenu(false)
+
+	menus[19] = I.DB.Menu.Create().
+		SetMenuLevel(1).
+		SetMenuType(0).
+		SetParentID(1).
+		SetPath("/").
+		SetName("Member").
+		SetComponent("LAYOUT").
+		SetOrderNo(3).
+		SetTitle("会员管理").
+		SetIcon("ant-design:team-outlined").
+		SetHideMenu(false)
+
+	menus[20] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(20).
+		SetPath("/sys/member/index").
+		SetName("MemberList").
+		SetComponent("/sys/member/index").
+		SetOrderNo(1).
+		SetTitle("会员列表").
+		SetIcon("").
+		SetHideMenu(false)
+
+	menus[21] = I.DB.Menu.Create().
+		SetMenuLevel(1).
+		SetMenuType(0).
+		SetParentID(1).
+		SetPath("/").
+		SetName("Schedule").
+		SetComponent("LAYOUT").
+		SetOrderNo(3).
+		SetTitle("预约排期").
+		SetIcon("ant-design:schedule-outlined").
+		SetHideMenu(false)
+
+	menus[22] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(22).
+		SetPath("/sys/schedule/index").
+		SetName("ScheduleReservation").
+		SetComponent("/sys/schedule/index").
+		SetOrderNo(8).
+		SetTitle("课程预约").
+		SetIcon("").
+		SetHideMenu(false)
+
+	menus[23] = I.DB.Menu.Create().
+		SetMenuLevel(1).
+		SetMenuType(0).
+		SetParentID(1).
+		SetPath("/").
+		SetName("Statistical").
+		SetComponent("LAYOUT").
+		SetOrderNo(18).
+		SetTitle("数据分析").
+		SetIcon("ant-design:bar-chart-outlined").
+		SetHideMenu(false)
+
+	menus[24] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(24).
+		SetPath("/sys/statistical/index").
+		SetName("StatisticalAll").
+		SetComponent("/sys/statistical/index").
+		SetOrderNo(8).
+		SetTitle("数据汇总").
+		SetIcon("").
+		SetHideMenu(false)
+
+	menus[25] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(4).
+		SetPath("/sys/token/index").
+		SetName("TokenManagement").
+		SetComponent("/sys/token/index").
+		SetOrderNo(8).
+		SetTitle("Token管理").
+		SetIcon("").
+		SetHideMenu(false)
+
+	menus[26] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(3).
+		SetPath("/sys/venue/index").
+		SetName("Venue").
+		SetComponent("/sys/venue/index").
+		SetOrderNo(1).
+		SetTitle("场馆管理").
+		SetIcon("").
+		SetHideMenu(false)
+
+	menus[27] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(2).
+		SetParentID(5).
+		SetPath("/sys/venue/place").
+		SetName("VenuePlace").
+		SetComponent("/sys/venue/place").
+		SetOrderNo(1).
+		SetTitle("场地管理").
+		SetIcon("").
+		SetHideMenu(true)
+
+	menus[28] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(1).
+		SetParentID(3).
+		SetPath("/sys/contract/index").
+		SetName("Contract").
+		SetComponent("/sys/contract/index").
+		SetOrderNo(1).
+		SetTitle("合同管理").
+		SetIcon("").
 		SetHideMenu(false)
 
 	err := I.DB.Menu.CreateBulk(menus...).Exec(ctx)

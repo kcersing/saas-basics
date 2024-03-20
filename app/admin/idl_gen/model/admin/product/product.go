@@ -972,45 +972,75 @@ func (p *Product) String() string {
 
 type CreatePropertyReq struct {
 	// 名称
-	Name string `thrift:"name,2" form:"name" json:"name" query:"name"`
+	Name *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
 	// 定价
-	Price int64 `thrift:"price,3" form:"price" json:"price" query:"price"`
+	Price *int64 `thrift:"price,3,optional" form:"price" json:"price" query:"price"`
 	// 时长
-	Duration int64 `thrift:"duration,4" form:"duration" json:"duration" query:"duration"`
+	Duration *int64 `thrift:"duration,4,optional" form:"duration" json:"duration" query:"duration"`
 	// 单次时长
-	Length int64 `thrift:"length,5" form:"length" json:"length" query:"length"`
+	Length *int64 `thrift:"length,5,optional" form:"length" json:"length" query:"length"`
 	// 次数
-	Count int64 `thrift:"count,6" form:"count" json:"count" query:"count"`
+	Count *int64 `thrift:"count,6,optional" form:"count" json:"count" query:"count"`
 	// 次数
-	Type string `thrift:"type,7" form:"type" json:"type" query:"type"`
+	Type *string `thrift:"type,7,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewCreatePropertyReq() *CreatePropertyReq {
 	return &CreatePropertyReq{}
 }
 
+var CreatePropertyReq_Name_DEFAULT string
+
 func (p *CreatePropertyReq) GetName() (v string) {
-	return p.Name
+	if !p.IsSetName() {
+		return CreatePropertyReq_Name_DEFAULT
+	}
+	return *p.Name
 }
+
+var CreatePropertyReq_Price_DEFAULT int64
 
 func (p *CreatePropertyReq) GetPrice() (v int64) {
-	return p.Price
+	if !p.IsSetPrice() {
+		return CreatePropertyReq_Price_DEFAULT
+	}
+	return *p.Price
 }
+
+var CreatePropertyReq_Duration_DEFAULT int64
 
 func (p *CreatePropertyReq) GetDuration() (v int64) {
-	return p.Duration
+	if !p.IsSetDuration() {
+		return CreatePropertyReq_Duration_DEFAULT
+	}
+	return *p.Duration
 }
+
+var CreatePropertyReq_Length_DEFAULT int64
 
 func (p *CreatePropertyReq) GetLength() (v int64) {
-	return p.Length
+	if !p.IsSetLength() {
+		return CreatePropertyReq_Length_DEFAULT
+	}
+	return *p.Length
 }
+
+var CreatePropertyReq_Count_DEFAULT int64
 
 func (p *CreatePropertyReq) GetCount() (v int64) {
-	return p.Count
+	if !p.IsSetCount() {
+		return CreatePropertyReq_Count_DEFAULT
+	}
+	return *p.Count
 }
 
+var CreatePropertyReq_Type_DEFAULT string
+
 func (p *CreatePropertyReq) GetType() (v string) {
-	return p.Type
+	if !p.IsSetType() {
+		return CreatePropertyReq_Type_DEFAULT
+	}
+	return *p.Type
 }
 
 var fieldIDToName_CreatePropertyReq = map[int16]string{
@@ -1020,6 +1050,30 @@ var fieldIDToName_CreatePropertyReq = map[int16]string{
 	5: "length",
 	6: "count",
 	7: "type",
+}
+
+func (p *CreatePropertyReq) IsSetName() bool {
+	return p.Name != nil
+}
+
+func (p *CreatePropertyReq) IsSetPrice() bool {
+	return p.Price != nil
+}
+
+func (p *CreatePropertyReq) IsSetDuration() bool {
+	return p.Duration != nil
+}
+
+func (p *CreatePropertyReq) IsSetLength() bool {
+	return p.Length != nil
+}
+
+func (p *CreatePropertyReq) IsSetCount() bool {
+	return p.Count != nil
+}
+
+func (p *CreatePropertyReq) IsSetType() bool {
+	return p.Type != nil
 }
 
 func (p *CreatePropertyReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1123,7 +1177,7 @@ func (p *CreatePropertyReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Name = v
+		p.Name = &v
 	}
 	return nil
 }
@@ -1132,7 +1186,7 @@ func (p *CreatePropertyReq) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Price = v
+		p.Price = &v
 	}
 	return nil
 }
@@ -1141,7 +1195,7 @@ func (p *CreatePropertyReq) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Duration = v
+		p.Duration = &v
 	}
 	return nil
 }
@@ -1150,7 +1204,7 @@ func (p *CreatePropertyReq) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Length = v
+		p.Length = &v
 	}
 	return nil
 }
@@ -1159,7 +1213,7 @@ func (p *CreatePropertyReq) ReadField6(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Count = v
+		p.Count = &v
 	}
 	return nil
 }
@@ -1168,7 +1222,7 @@ func (p *CreatePropertyReq) ReadField7(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Type = v
+		p.Type = &v
 	}
 	return nil
 }
@@ -1222,14 +1276,16 @@ WriteStructEndError:
 }
 
 func (p *CreatePropertyReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Name); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1239,14 +1295,16 @@ WriteFieldEndError:
 }
 
 func (p *CreatePropertyReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("price", thrift.I64, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Price); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPrice() {
+		if err = oprot.WriteFieldBegin("price", thrift.I64, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Price); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1256,14 +1314,16 @@ WriteFieldEndError:
 }
 
 func (p *CreatePropertyReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("duration", thrift.I64, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Duration); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetDuration() {
+		if err = oprot.WriteFieldBegin("duration", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Duration); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1273,14 +1333,16 @@ WriteFieldEndError:
 }
 
 func (p *CreatePropertyReq) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("length", thrift.I64, 5); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Length); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetLength() {
+		if err = oprot.WriteFieldBegin("length", thrift.I64, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Length); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1290,14 +1352,16 @@ WriteFieldEndError:
 }
 
 func (p *CreatePropertyReq) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("count", thrift.I64, 6); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Count); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetCount() {
+		if err = oprot.WriteFieldBegin("count", thrift.I64, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Count); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1307,14 +1371,16 @@ WriteFieldEndError:
 }
 
 func (p *CreatePropertyReq) writeField7(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("type", thrift.STRING, 7); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Type); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.STRING, 7); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1334,17 +1400,17 @@ func (p *CreatePropertyReq) String() string {
 type UpdatePropertyReq struct {
 	ID int64 `thrift:"id,1,required" form:"id,required" json:"id,required" query:"id,required"`
 	// 名称
-	Name string `thrift:"name,2" form:"name" json:"name" query:"name"`
+	Name *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
 	// 定价
-	Price int64 `thrift:"price,3" form:"price" json:"price" query:"price"`
+	Price *int64 `thrift:"price,3,optional" form:"price" json:"price" query:"price"`
 	// 时长
-	Duration int64 `thrift:"duration,4" form:"duration" json:"duration" query:"duration"`
+	Duration *int64 `thrift:"duration,4,optional" form:"duration" json:"duration" query:"duration"`
 	// 单次时长
-	Length int64 `thrift:"length,5" form:"length" json:"length" query:"length"`
+	Length *int64 `thrift:"length,5,optional" form:"length" json:"length" query:"length"`
 	// 次数
-	Count int64 `thrift:"count,6" form:"count" json:"count" query:"count"`
+	Count *int64 `thrift:"count,6,optional" form:"count" json:"count" query:"count"`
 	// 次数
-	Type string `thrift:"type,7" form:"type" json:"type" query:"type"`
+	Type *string `thrift:"type,7,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewUpdatePropertyReq() *UpdatePropertyReq {
@@ -1355,28 +1421,58 @@ func (p *UpdatePropertyReq) GetID() (v int64) {
 	return p.ID
 }
 
+var UpdatePropertyReq_Name_DEFAULT string
+
 func (p *UpdatePropertyReq) GetName() (v string) {
-	return p.Name
+	if !p.IsSetName() {
+		return UpdatePropertyReq_Name_DEFAULT
+	}
+	return *p.Name
 }
+
+var UpdatePropertyReq_Price_DEFAULT int64
 
 func (p *UpdatePropertyReq) GetPrice() (v int64) {
-	return p.Price
+	if !p.IsSetPrice() {
+		return UpdatePropertyReq_Price_DEFAULT
+	}
+	return *p.Price
 }
+
+var UpdatePropertyReq_Duration_DEFAULT int64
 
 func (p *UpdatePropertyReq) GetDuration() (v int64) {
-	return p.Duration
+	if !p.IsSetDuration() {
+		return UpdatePropertyReq_Duration_DEFAULT
+	}
+	return *p.Duration
 }
+
+var UpdatePropertyReq_Length_DEFAULT int64
 
 func (p *UpdatePropertyReq) GetLength() (v int64) {
-	return p.Length
+	if !p.IsSetLength() {
+		return UpdatePropertyReq_Length_DEFAULT
+	}
+	return *p.Length
 }
+
+var UpdatePropertyReq_Count_DEFAULT int64
 
 func (p *UpdatePropertyReq) GetCount() (v int64) {
-	return p.Count
+	if !p.IsSetCount() {
+		return UpdatePropertyReq_Count_DEFAULT
+	}
+	return *p.Count
 }
 
+var UpdatePropertyReq_Type_DEFAULT string
+
 func (p *UpdatePropertyReq) GetType() (v string) {
-	return p.Type
+	if !p.IsSetType() {
+		return UpdatePropertyReq_Type_DEFAULT
+	}
+	return *p.Type
 }
 
 var fieldIDToName_UpdatePropertyReq = map[int16]string{
@@ -1387,6 +1483,30 @@ var fieldIDToName_UpdatePropertyReq = map[int16]string{
 	5: "length",
 	6: "count",
 	7: "type",
+}
+
+func (p *UpdatePropertyReq) IsSetName() bool {
+	return p.Name != nil
+}
+
+func (p *UpdatePropertyReq) IsSetPrice() bool {
+	return p.Price != nil
+}
+
+func (p *UpdatePropertyReq) IsSetDuration() bool {
+	return p.Duration != nil
+}
+
+func (p *UpdatePropertyReq) IsSetLength() bool {
+	return p.Length != nil
+}
+
+func (p *UpdatePropertyReq) IsSetCount() bool {
+	return p.Count != nil
+}
+
+func (p *UpdatePropertyReq) IsSetType() bool {
+	return p.Type != nil
 }
 
 func (p *UpdatePropertyReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1515,7 +1635,7 @@ func (p *UpdatePropertyReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Name = v
+		p.Name = &v
 	}
 	return nil
 }
@@ -1524,7 +1644,7 @@ func (p *UpdatePropertyReq) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Price = v
+		p.Price = &v
 	}
 	return nil
 }
@@ -1533,7 +1653,7 @@ func (p *UpdatePropertyReq) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Duration = v
+		p.Duration = &v
 	}
 	return nil
 }
@@ -1542,7 +1662,7 @@ func (p *UpdatePropertyReq) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Length = v
+		p.Length = &v
 	}
 	return nil
 }
@@ -1551,7 +1671,7 @@ func (p *UpdatePropertyReq) ReadField6(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Count = v
+		p.Count = &v
 	}
 	return nil
 }
@@ -1560,7 +1680,7 @@ func (p *UpdatePropertyReq) ReadField7(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Type = v
+		p.Type = &v
 	}
 	return nil
 }
@@ -1635,14 +1755,16 @@ WriteFieldEndError:
 }
 
 func (p *UpdatePropertyReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Name); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1652,14 +1774,16 @@ WriteFieldEndError:
 }
 
 func (p *UpdatePropertyReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("price", thrift.I64, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Price); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPrice() {
+		if err = oprot.WriteFieldBegin("price", thrift.I64, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Price); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1669,14 +1793,16 @@ WriteFieldEndError:
 }
 
 func (p *UpdatePropertyReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("duration", thrift.I64, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Duration); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetDuration() {
+		if err = oprot.WriteFieldBegin("duration", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Duration); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1686,14 +1812,16 @@ WriteFieldEndError:
 }
 
 func (p *UpdatePropertyReq) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("length", thrift.I64, 5); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Length); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetLength() {
+		if err = oprot.WriteFieldBegin("length", thrift.I64, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Length); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1703,14 +1831,16 @@ WriteFieldEndError:
 }
 
 func (p *UpdatePropertyReq) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("count", thrift.I64, 6); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Count); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetCount() {
+		if err = oprot.WriteFieldBegin("count", thrift.I64, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Count); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1720,14 +1850,16 @@ WriteFieldEndError:
 }
 
 func (p *UpdatePropertyReq) writeField7(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("type", thrift.STRING, 7); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Type); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.STRING, 7); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1746,66 +1878,113 @@ func (p *UpdatePropertyReq) String() string {
 
 type CreateReq struct {
 	// 商品名
-	Name string `thrift:"name,1,required" form:"name,required" json:"name,required" query:"name,required"`
+	Name *string `thrift:"name,1,optional" form:"name" json:"name" query:"name"`
 	// 主图
-	Pic string `thrift:"pic,2,required" form:"pic,required" json:"pic,required" query:"pic,required"`
+	Pic *string `thrift:"pic,2,optional" form:"pic" json:"pic" query:"pic"`
 	// 详情
-	Description string `thrift:"description,3,required" form:"description,required" json:"description,required" query:"description,required"`
-	// 属性
-	Property []*Property `thrift:"property,4,required" form:"property,required" json:"property,required" query:"property,required"`
+	Description *string `thrift:"description,3,optional" form:"description" json:"description" query:"description"`
+	PropertyID  []int64 `thrift:"property_id,4,optional" form:"property_id" json:"property_id" query:"property_id"`
 	// 价格
-	Price int64 `thrift:"price,5,required" form:"price,required" json:"price,required" query:"price,required"`
+	Price *int64 `thrift:"price,5,optional" form:"price" json:"price" query:"price"`
 	// 库存
-	Stock int64 `thrift:"stock,6,required" form:"stock,required" json:"stock,required" query:"stock,required"`
+	Stock *int64 `thrift:"stock,6,optional" form:"stock" json:"stock" query:"stock"`
 }
 
 func NewCreateReq() *CreateReq {
 	return &CreateReq{}
 }
 
+var CreateReq_Name_DEFAULT string
+
 func (p *CreateReq) GetName() (v string) {
-	return p.Name
+	if !p.IsSetName() {
+		return CreateReq_Name_DEFAULT
+	}
+	return *p.Name
 }
+
+var CreateReq_Pic_DEFAULT string
 
 func (p *CreateReq) GetPic() (v string) {
-	return p.Pic
+	if !p.IsSetPic() {
+		return CreateReq_Pic_DEFAULT
+	}
+	return *p.Pic
 }
+
+var CreateReq_Description_DEFAULT string
 
 func (p *CreateReq) GetDescription() (v string) {
-	return p.Description
+	if !p.IsSetDescription() {
+		return CreateReq_Description_DEFAULT
+	}
+	return *p.Description
 }
 
-func (p *CreateReq) GetProperty() (v []*Property) {
-	return p.Property
+var CreateReq_PropertyID_DEFAULT []int64
+
+func (p *CreateReq) GetPropertyID() (v []int64) {
+	if !p.IsSetPropertyID() {
+		return CreateReq_PropertyID_DEFAULT
+	}
+	return p.PropertyID
 }
+
+var CreateReq_Price_DEFAULT int64
 
 func (p *CreateReq) GetPrice() (v int64) {
-	return p.Price
+	if !p.IsSetPrice() {
+		return CreateReq_Price_DEFAULT
+	}
+	return *p.Price
 }
 
+var CreateReq_Stock_DEFAULT int64
+
 func (p *CreateReq) GetStock() (v int64) {
-	return p.Stock
+	if !p.IsSetStock() {
+		return CreateReq_Stock_DEFAULT
+	}
+	return *p.Stock
 }
 
 var fieldIDToName_CreateReq = map[int16]string{
 	1: "name",
 	2: "pic",
 	3: "description",
-	4: "property",
+	4: "property_id",
 	5: "price",
 	6: "stock",
+}
+
+func (p *CreateReq) IsSetName() bool {
+	return p.Name != nil
+}
+
+func (p *CreateReq) IsSetPic() bool {
+	return p.Pic != nil
+}
+
+func (p *CreateReq) IsSetDescription() bool {
+	return p.Description != nil
+}
+
+func (p *CreateReq) IsSetPropertyID() bool {
+	return p.PropertyID != nil
+}
+
+func (p *CreateReq) IsSetPrice() bool {
+	return p.Price != nil
+}
+
+func (p *CreateReq) IsSetStock() bool {
+	return p.Stock != nil
 }
 
 func (p *CreateReq) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetName bool = false
-	var issetPic bool = false
-	var issetDescription bool = false
-	var issetProperty bool = false
-	var issetPrice bool = false
-	var issetStock bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1826,7 +2005,6 @@ func (p *CreateReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetName = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1835,7 +2013,6 @@ func (p *CreateReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetPic = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1844,7 +2021,6 @@ func (p *CreateReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetDescription = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1853,7 +2029,6 @@ func (p *CreateReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetProperty = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1862,7 +2037,6 @@ func (p *CreateReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetPrice = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1871,7 +2045,6 @@ func (p *CreateReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetStock = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1888,35 +2061,6 @@ func (p *CreateReq) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetName {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetPic {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetDescription {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetProperty {
-		fieldId = 4
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetPrice {
-		fieldId = 5
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetStock {
-		fieldId = 6
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -1931,8 +2075,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CreateReq[fieldId]))
 }
 
 func (p *CreateReq) ReadField1(iprot thrift.TProtocol) error {
@@ -1940,7 +2082,7 @@ func (p *CreateReq) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Name = v
+		p.Name = &v
 	}
 	return nil
 }
@@ -1949,7 +2091,7 @@ func (p *CreateReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Pic = v
+		p.Pic = &v
 	}
 	return nil
 }
@@ -1958,7 +2100,7 @@ func (p *CreateReq) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Description = v
+		p.Description = &v
 	}
 	return nil
 }
@@ -1967,14 +2109,17 @@ func (p *CreateReq) ReadField4(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.Property = make([]*Property, 0, size)
+	p.PropertyID = make([]int64, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := NewProperty()
-		if err := _elem.Read(iprot); err != nil {
+
+		var _elem int64
+		if v, err := iprot.ReadI64(); err != nil {
 			return err
+		} else {
+			_elem = v
 		}
 
-		p.Property = append(p.Property, _elem)
+		p.PropertyID = append(p.PropertyID, _elem)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return err
@@ -1986,7 +2131,7 @@ func (p *CreateReq) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Price = v
+		p.Price = &v
 	}
 	return nil
 }
@@ -1995,7 +2140,7 @@ func (p *CreateReq) ReadField6(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Stock = v
+		p.Stock = &v
 	}
 	return nil
 }
@@ -2049,14 +2194,16 @@ WriteStructEndError:
 }
 
 func (p *CreateReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("name", thrift.STRING, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Name); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -2066,14 +2213,16 @@ WriteFieldEndError:
 }
 
 func (p *CreateReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("pic", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Pic); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPic() {
+		if err = oprot.WriteFieldBegin("pic", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Pic); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -2083,14 +2232,16 @@ WriteFieldEndError:
 }
 
 func (p *CreateReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("description", thrift.STRING, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Description); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetDescription() {
+		if err = oprot.WriteFieldBegin("description", thrift.STRING, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Description); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -2100,22 +2251,24 @@ WriteFieldEndError:
 }
 
 func (p *CreateReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("property", thrift.LIST, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Property)); err != nil {
-		return err
-	}
-	for _, v := range p.Property {
-		if err := v.Write(oprot); err != nil {
+	if p.IsSetPropertyID() {
+		if err = oprot.WriteFieldBegin("property_id", thrift.LIST, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.I64, len(p.PropertyID)); err != nil {
 			return err
 		}
-	}
-	if err := oprot.WriteListEnd(); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+		for _, v := range p.PropertyID {
+			if err := oprot.WriteI64(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -2125,14 +2278,16 @@ WriteFieldEndError:
 }
 
 func (p *CreateReq) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("price", thrift.I64, 5); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Price); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPrice() {
+		if err = oprot.WriteFieldBegin("price", thrift.I64, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Price); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -2142,14 +2297,16 @@ WriteFieldEndError:
 }
 
 func (p *CreateReq) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("stock", thrift.I64, 6); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Stock); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetStock() {
+		if err = oprot.WriteFieldBegin("stock", thrift.I64, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Stock); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
