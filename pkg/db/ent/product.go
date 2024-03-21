@@ -22,10 +22,6 @@ type Product struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// 编号
-	Sn string `json:"sn,omitempty"`
-	// 场馆id
-	VenueID int64 `json:"venue_id,omitempty"`
 	// 创建人id
 	CreateID int64 `json:"create_id,omitempty"`
 	// 商品名
@@ -71,9 +67,9 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case product.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case product.FieldID, product.FieldVenueID, product.FieldCreateID, product.FieldPic, product.FieldStock, product.FieldStatus:
+		case product.FieldID, product.FieldCreateID, product.FieldPic, product.FieldStock, product.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case product.FieldSn, product.FieldName, product.FieldDescription:
+		case product.FieldName, product.FieldDescription:
 			values[i] = new(sql.NullString)
 		case product.FieldCreatedAt, product.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -109,18 +105,6 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				pr.UpdatedAt = value.Time
-			}
-		case product.FieldSn:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field sn", values[i])
-			} else if value.Valid {
-				pr.Sn = value.String
-			}
-		case product.FieldVenueID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
-			} else if value.Valid {
-				pr.VenueID = value.Int64
 			}
 		case product.FieldCreateID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -210,12 +194,6 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("sn=")
-	builder.WriteString(pr.Sn)
-	builder.WriteString(", ")
-	builder.WriteString("venue_id=")
-	builder.WriteString(fmt.Sprintf("%v", pr.VenueID))
 	builder.WriteString(", ")
 	builder.WriteString("create_id=")
 	builder.WriteString(fmt.Sprintf("%v", pr.CreateID))

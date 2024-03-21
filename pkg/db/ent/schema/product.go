@@ -16,8 +16,6 @@ type Product struct {
 
 func (Product) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("sn").Comment("编号").Optional(),
-		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("create_id").Comment("创建人id").Optional(),
 		field.String("name").Comment("商品名").Optional(),
 		field.Int64("pic").Comment("主图").Optional(),
@@ -42,7 +40,7 @@ func (Product) Edges() []ent.Edge {
 
 func (Product) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("id", "sn").
+		index.Fields("id").
 			Unique(),
 	}
 }

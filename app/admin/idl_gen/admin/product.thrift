@@ -33,6 +33,7 @@ struct CreatePropertyReq {
     5: optional i64 length // 单次时长
     6: optional i64 count // 次数
     7: optional string type // 次数
+    8: optional list<i64> venueId
 }
 
 struct UpdatePropertyReq {
@@ -43,13 +44,14 @@ struct UpdatePropertyReq {
     5: optional i64 length // 单次时长
     6: optional i64 count // 次数
     7: optional string type // 次数
+    8: optional list<i64> venueId
 }
 
 struct CreateReq {
     1: optional string name // 商品名
     2: optional string pic // 主图
     3: optional string description // 详情
-    4: optional list<i64> property_id
+    4: optional list<i64> propertyId
     5: optional i64 price // 价格
     6: optional i64 stock // 库存
 }
@@ -59,7 +61,7 @@ struct UpdateReq {
     2: optional string name // 商品名
     3: optional string pic // 主图
     4: optional string description // 详情
-    5: optional list <Property> property  // 属性
+    5: optional list <Property> propertyId  // 属性
     6: optional i64 price // 价格
     7: optional i64 stock // 库存
 }

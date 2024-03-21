@@ -35,53 +35,6 @@ func (pu *ProductUpdate) SetUpdatedAt(t time.Time) *ProductUpdate {
 	return pu
 }
 
-// SetSn sets the "sn" field.
-func (pu *ProductUpdate) SetSn(s string) *ProductUpdate {
-	pu.mutation.SetSn(s)
-	return pu
-}
-
-// SetNillableSn sets the "sn" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillableSn(s *string) *ProductUpdate {
-	if s != nil {
-		pu.SetSn(*s)
-	}
-	return pu
-}
-
-// ClearSn clears the value of the "sn" field.
-func (pu *ProductUpdate) ClearSn() *ProductUpdate {
-	pu.mutation.ClearSn()
-	return pu
-}
-
-// SetVenueID sets the "venue_id" field.
-func (pu *ProductUpdate) SetVenueID(i int64) *ProductUpdate {
-	pu.mutation.ResetVenueID()
-	pu.mutation.SetVenueID(i)
-	return pu
-}
-
-// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillableVenueID(i *int64) *ProductUpdate {
-	if i != nil {
-		pu.SetVenueID(*i)
-	}
-	return pu
-}
-
-// AddVenueID adds i to the "venue_id" field.
-func (pu *ProductUpdate) AddVenueID(i int64) *ProductUpdate {
-	pu.mutation.AddVenueID(i)
-	return pu
-}
-
-// ClearVenueID clears the value of the "venue_id" field.
-func (pu *ProductUpdate) ClearVenueID() *ProductUpdate {
-	pu.mutation.ClearVenueID()
-	return pu
-}
-
 // SetCreateID sets the "create_id" field.
 func (pu *ProductUpdate) SetCreateID(i int64) *ProductUpdate {
 	pu.mutation.ResetCreateID()
@@ -346,21 +299,6 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := pu.mutation.Sn(); ok {
-		_spec.SetField(product.FieldSn, field.TypeString, value)
-	}
-	if pu.mutation.SnCleared() {
-		_spec.ClearField(product.FieldSn, field.TypeString)
-	}
-	if value, ok := pu.mutation.VenueID(); ok {
-		_spec.SetField(product.FieldVenueID, field.TypeInt64, value)
-	}
-	if value, ok := pu.mutation.AddedVenueID(); ok {
-		_spec.AddField(product.FieldVenueID, field.TypeInt64, value)
-	}
-	if pu.mutation.VenueIDCleared() {
-		_spec.ClearField(product.FieldVenueID, field.TypeInt64)
-	}
 	if value, ok := pu.mutation.CreateID(); ok {
 		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)
 	}
@@ -486,53 +424,6 @@ type ProductUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (puo *ProductUpdateOne) SetUpdatedAt(t time.Time) *ProductUpdateOne {
 	puo.mutation.SetUpdatedAt(t)
-	return puo
-}
-
-// SetSn sets the "sn" field.
-func (puo *ProductUpdateOne) SetSn(s string) *ProductUpdateOne {
-	puo.mutation.SetSn(s)
-	return puo
-}
-
-// SetNillableSn sets the "sn" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillableSn(s *string) *ProductUpdateOne {
-	if s != nil {
-		puo.SetSn(*s)
-	}
-	return puo
-}
-
-// ClearSn clears the value of the "sn" field.
-func (puo *ProductUpdateOne) ClearSn() *ProductUpdateOne {
-	puo.mutation.ClearSn()
-	return puo
-}
-
-// SetVenueID sets the "venue_id" field.
-func (puo *ProductUpdateOne) SetVenueID(i int64) *ProductUpdateOne {
-	puo.mutation.ResetVenueID()
-	puo.mutation.SetVenueID(i)
-	return puo
-}
-
-// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillableVenueID(i *int64) *ProductUpdateOne {
-	if i != nil {
-		puo.SetVenueID(*i)
-	}
-	return puo
-}
-
-// AddVenueID adds i to the "venue_id" field.
-func (puo *ProductUpdateOne) AddVenueID(i int64) *ProductUpdateOne {
-	puo.mutation.AddVenueID(i)
-	return puo
-}
-
-// ClearVenueID clears the value of the "venue_id" field.
-func (puo *ProductUpdateOne) ClearVenueID() *ProductUpdateOne {
-	puo.mutation.ClearVenueID()
 	return puo
 }
 
@@ -829,21 +720,6 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if value, ok := puo.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := puo.mutation.Sn(); ok {
-		_spec.SetField(product.FieldSn, field.TypeString, value)
-	}
-	if puo.mutation.SnCleared() {
-		_spec.ClearField(product.FieldSn, field.TypeString)
-	}
-	if value, ok := puo.mutation.VenueID(); ok {
-		_spec.SetField(product.FieldVenueID, field.TypeInt64, value)
-	}
-	if value, ok := puo.mutation.AddedVenueID(); ok {
-		_spec.AddField(product.FieldVenueID, field.TypeInt64, value)
-	}
-	if puo.mutation.VenueIDCleared() {
-		_spec.ClearField(product.FieldVenueID, field.TypeInt64)
 	}
 	if value, ok := puo.mutation.CreateID(); ok {
 		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)

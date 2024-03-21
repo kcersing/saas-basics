@@ -24,13 +24,43 @@ type Product struct {
 }
 
 func (p Product) CreateProperty(req do.PropertyInfo) error {
-	//TODO implement me
-	panic("implement me")
+
+	_, err := p.db.ProductProperty.Create().
+		SetName(req.Name).
+		SetType(req.Type).
+		SetLength(req.Length).
+		SetStatus(req.Status).
+		SetDuration(req.Duration).
+		SetCount(req.Count).
+		SetPrice(req.Price).
+		SetData("").
+		Save(p.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "create user failed")
+		return err
+	}
+	return nil
+
 }
 
 func (p Product) UpdateProperty(req do.PropertyInfo) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := p.db.ProductProperty.Update().
+		Where(productproperty.IDEQ(req.ID)).
+		SetName(req.Name).
+		SetType(req.Type).
+		SetLength(req.Length).
+		SetStatus(req.Status).
+		SetDuration(req.Duration).
+		SetCount(req.Count).
+		SetPrice(req.Price).
+		SetData("").
+		Save(p.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "update Product Property failed")
+		return err
+	}
+
+	return nil
 }
 
 func (p Product) DeleteProperty(id int64) error {

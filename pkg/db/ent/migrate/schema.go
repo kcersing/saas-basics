@@ -536,8 +536,6 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "sn", Type: field.TypeString, Nullable: true, Comment: "编号"},
-		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人id"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "商品名"},
 		{Name: "pic", Type: field.TypeInt64, Nullable: true, Comment: "主图"},
@@ -553,9 +551,9 @@ var (
 		PrimaryKey: []*schema.Column{ProductColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "product_id_sn",
+				Name:    "product_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProductColumns[0], ProductColumns[3]},
+				Columns: []*schema.Column{ProductColumns[0]},
 			},
 		},
 	}

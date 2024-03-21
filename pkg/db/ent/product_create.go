@@ -49,34 +49,6 @@ func (pc *ProductCreate) SetNillableUpdatedAt(t *time.Time) *ProductCreate {
 	return pc
 }
 
-// SetSn sets the "sn" field.
-func (pc *ProductCreate) SetSn(s string) *ProductCreate {
-	pc.mutation.SetSn(s)
-	return pc
-}
-
-// SetNillableSn sets the "sn" field if the given value is not nil.
-func (pc *ProductCreate) SetNillableSn(s *string) *ProductCreate {
-	if s != nil {
-		pc.SetSn(*s)
-	}
-	return pc
-}
-
-// SetVenueID sets the "venue_id" field.
-func (pc *ProductCreate) SetVenueID(i int64) *ProductCreate {
-	pc.mutation.SetVenueID(i)
-	return pc
-}
-
-// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
-func (pc *ProductCreate) SetNillableVenueID(i *int64) *ProductCreate {
-	if i != nil {
-		pc.SetVenueID(*i)
-	}
-	return pc
-}
-
 // SetCreateID sets the "create_id" field.
 func (pc *ProductCreate) SetCreateID(i int64) *ProductCreate {
 	pc.mutation.SetCreateID(i)
@@ -292,14 +264,6 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if value, ok := pc.mutation.Sn(); ok {
-		_spec.SetField(product.FieldSn, field.TypeString, value)
-		_node.Sn = value
-	}
-	if value, ok := pc.mutation.VenueID(); ok {
-		_spec.SetField(product.FieldVenueID, field.TypeInt64, value)
-		_node.VenueID = value
 	}
 	if value, ok := pc.mutation.CreateID(); ok {
 		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)

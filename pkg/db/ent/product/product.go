@@ -18,10 +18,6 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// FieldSn holds the string denoting the sn field in the database.
-	FieldSn = "sn"
-	// FieldVenueID holds the string denoting the venue_id field in the database.
-	FieldVenueID = "venue_id"
 	// FieldCreateID holds the string denoting the create_id field in the database.
 	FieldCreateID = "create_id"
 	// FieldName holds the string denoting the name field in the database.
@@ -52,8 +48,6 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
-	FieldSn,
-	FieldVenueID,
 	FieldCreateID,
 	FieldName,
 	FieldPic,
@@ -106,16 +100,6 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
-}
-
-// BySn orders the results by the sn field.
-func BySn(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSn, opts...).ToFunc()
-}
-
-// ByVenueID orders the results by the venue_id field.
-func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
 }
 
 // ByCreateID orders the results by the create_id field.
