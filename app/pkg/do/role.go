@@ -6,7 +6,7 @@ type Role interface {
 	Delete(id int64) error
 	RoleInfoByID(ID int64) (roleInfo *RoleInfo, err error)
 	List(req *RoleListReq) (roleInfoList []*RoleInfo, total int, err error)
-	UpdateStatus(ID int64, status int8) error
+	UpdateStatus(ID int64, status int64) error
 }
 
 type RoleInfo struct {

@@ -1,10 +1,15 @@
 package do
 
 type Venue interface {
-	Create(logsReq *VenueInfo) error
+	Create(req *VenueInfo) error
+	Update(req *VenueInfo) error
 	List(req *VenueListReq) (list []*VenueInfo, total int, err error)
 	UpdateVenueStatus(id int64, status int64) error
-	DeleteAll() error
+
+	CreatePlace(req *VenuePlaceInfo) error
+	UpdatePlace(req *VenuePlaceInfo) error
+	PlaceList(req *VenuePlaceListReq) (list []*VenuePlaceInfo, total int, err error)
+	UpdatePlaceStatus(id int64, status int64) error
 }
 
 type VenueListReq struct {
@@ -25,4 +30,19 @@ type VenueInfo struct {
 	Status        int64  `json:"status,omitempty"`
 	CreatedAt     string `json:"createdAt,omitempty"`
 	UpdatedAt     string `json:"updatedAt,omitempty"`
+}
+
+type VenuePlaceListReq struct {
+	PageSize int64  `json:"page_size,omitempty"`
+	Page     int64  `json:"page,omitempty"`
+	Name     string `json:"name,omitempty"`
+}
+type VenuePlaceInfo struct {
+	ID        int64  `json:"id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Pic       string `json:"pic,omitempty"`
+	VenueId   int64  `json:"venue_id,omitempty"`
+	Status    int64  `json:"status,omitempty"`
+	CreatedAt string `json:"createdAt,omitempty"`
+	UpdatedAt string `json:"updatedAt,omitempty"`
 }

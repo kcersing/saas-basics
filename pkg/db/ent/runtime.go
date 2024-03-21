@@ -142,19 +142,19 @@ func init() {
 	// courserecordschedule.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	courserecordschedule.UpdateDefaultUpdatedAt = courserecordscheduleDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// courserecordscheduleDescStartTime is the schema descriptor for start_time field.
-	courserecordscheduleDescStartTime := courserecordscheduleFields[5].Descriptor()
+	courserecordscheduleDescStartTime := courserecordscheduleFields[4].Descriptor()
 	// courserecordschedule.DefaultStartTime holds the default value on creation for the start_time field.
 	courserecordschedule.DefaultStartTime = courserecordscheduleDescStartTime.Default.(func() time.Time)
 	// courserecordscheduleDescEndTime is the schema descriptor for end_time field.
-	courserecordscheduleDescEndTime := courserecordscheduleFields[6].Descriptor()
+	courserecordscheduleDescEndTime := courserecordscheduleFields[5].Descriptor()
 	// courserecordschedule.DefaultEndTime holds the default value on creation for the end_time field.
 	courserecordschedule.DefaultEndTime = courserecordscheduleDescEndTime.Default.(func() time.Time)
 	// courserecordscheduleDescPrice is the schema descriptor for price field.
-	courserecordscheduleDescPrice := courserecordscheduleFields[7].Descriptor()
+	courserecordscheduleDescPrice := courserecordscheduleFields[6].Descriptor()
 	// courserecordschedule.DefaultPrice holds the default value on creation for the price field.
 	courserecordschedule.DefaultPrice = courserecordscheduleDescPrice.Default.(float64)
 	// courserecordscheduleDescStatus is the schema descriptor for status field.
-	courserecordscheduleDescStatus := courserecordscheduleFields[8].Descriptor()
+	courserecordscheduleDescStatus := courserecordscheduleFields[7].Descriptor()
 	// courserecordschedule.DefaultStatus holds the default value on creation for the status field.
 	courserecordschedule.DefaultStatus = courserecordscheduleDescStatus.Default.(int64)
 	dictionaryMixin := schema.Dictionary{}.Mixin()
@@ -513,7 +513,7 @@ func init() {
 	// product.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	product.UpdateDefaultUpdatedAt = productDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// productDescStatus is the schema descriptor for status field.
-	productDescStatus := productFields[6].Descriptor()
+	productDescStatus := productFields[5].Descriptor()
 	// product.DefaultStatus holds the default value on creation for the status field.
 	product.DefaultStatus = productDescStatus.Default.(int64)
 	productpropertyMixin := schema.ProductProperty{}.Mixin()

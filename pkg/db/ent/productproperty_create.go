@@ -161,6 +161,20 @@ func (ppc *ProductPropertyCreate) SetNillableData(s *string) *ProductPropertyCre
 	return ppc
 }
 
+// SetCreateID sets the "create_id" field.
+func (ppc *ProductPropertyCreate) SetCreateID(i int64) *ProductPropertyCreate {
+	ppc.mutation.SetCreateID(i)
+	return ppc
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (ppc *ProductPropertyCreate) SetNillableCreateID(i *int64) *ProductPropertyCreate {
+	if i != nil {
+		ppc.SetCreateID(*i)
+	}
+	return ppc
+}
+
 // SetID sets the "id" field.
 func (ppc *ProductPropertyCreate) SetID(i int64) *ProductPropertyCreate {
 	ppc.mutation.SetID(i)
@@ -306,6 +320,10 @@ func (ppc *ProductPropertyCreate) createSpec() (*ProductProperty, *sqlgraph.Crea
 	if value, ok := ppc.mutation.Data(); ok {
 		_spec.SetField(productproperty.FieldData, field.TypeString, value)
 		_node.Data = value
+	}
+	if value, ok := ppc.mutation.CreateID(); ok {
+		_spec.SetField(productproperty.FieldCreateID, field.TypeInt64, value)
+		_node.CreateID = value
 	}
 	if nodes := ppc.mutation.ProductIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -115,7 +115,6 @@ var (
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
-		{Name: "coach_id", Type: field.TypeInt64, Nullable: true, Comment: "教练ID"},
 		{Name: "num", Type: field.TypeInt64, Nullable: true, Comment: "上课人数"},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
@@ -536,13 +535,13 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人id"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "商品名"},
-		{Name: "pic", Type: field.TypeInt64, Nullable: true, Comment: "主图"},
+		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "主图"},
 		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "详情"},
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "价格"},
 		{Name: "stock", Type: field.TypeInt64, Nullable: true, Comment: "库存"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态", Default: 0},
+		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人id"},
 	}
 	// ProductTable holds the schema information for the "product" table.
 	ProductTable = &schema.Table{
@@ -570,6 +569,7 @@ var (
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "定价"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态"},
 		{Name: "data", Type: field.TypeString, Nullable: true},
+		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人id"},
 	}
 	// ProductPropertyTable holds the schema information for the "product_property" table.
 	ProductPropertyTable = &schema.Table{

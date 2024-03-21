@@ -20,7 +20,6 @@ func (CourseRecordSchedule) Fields() []ent.Field {
 		field.String("type").Comment("类型").Optional(),
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("place_id").Comment("场地ID").Optional(),
-		field.Int64("coach_id").Comment("教练ID").Optional(),
 		field.Int64("num").Comment("上课人数").Optional(),
 		field.Time("start_time").Default(time.Now).Comment("开始时间").Optional(),
 		field.Time("end_time").Default(time.Now).Comment("开始时间").Optional(),

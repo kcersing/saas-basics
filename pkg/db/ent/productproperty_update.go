@@ -230,6 +230,33 @@ func (ppu *ProductPropertyUpdate) ClearData() *ProductPropertyUpdate {
 	return ppu
 }
 
+// SetCreateID sets the "create_id" field.
+func (ppu *ProductPropertyUpdate) SetCreateID(i int64) *ProductPropertyUpdate {
+	ppu.mutation.ResetCreateID()
+	ppu.mutation.SetCreateID(i)
+	return ppu
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (ppu *ProductPropertyUpdate) SetNillableCreateID(i *int64) *ProductPropertyUpdate {
+	if i != nil {
+		ppu.SetCreateID(*i)
+	}
+	return ppu
+}
+
+// AddCreateID adds i to the "create_id" field.
+func (ppu *ProductPropertyUpdate) AddCreateID(i int64) *ProductPropertyUpdate {
+	ppu.mutation.AddCreateID(i)
+	return ppu
+}
+
+// ClearCreateID clears the value of the "create_id" field.
+func (ppu *ProductPropertyUpdate) ClearCreateID() *ProductPropertyUpdate {
+	ppu.mutation.ClearCreateID()
+	return ppu
+}
+
 // AddProductIDs adds the "product" edge to the Product entity by IDs.
 func (ppu *ProductPropertyUpdate) AddProductIDs(ids ...int64) *ProductPropertyUpdate {
 	ppu.mutation.AddProductIDs(ids...)
@@ -381,6 +408,15 @@ func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if ppu.mutation.DataCleared() {
 		_spec.ClearField(productproperty.FieldData, field.TypeString)
+	}
+	if value, ok := ppu.mutation.CreateID(); ok {
+		_spec.SetField(productproperty.FieldCreateID, field.TypeInt64, value)
+	}
+	if value, ok := ppu.mutation.AddedCreateID(); ok {
+		_spec.AddField(productproperty.FieldCreateID, field.TypeInt64, value)
+	}
+	if ppu.mutation.CreateIDCleared() {
+		_spec.ClearField(productproperty.FieldCreateID, field.TypeInt64)
 	}
 	if ppu.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -648,6 +684,33 @@ func (ppuo *ProductPropertyUpdateOne) ClearData() *ProductPropertyUpdateOne {
 	return ppuo
 }
 
+// SetCreateID sets the "create_id" field.
+func (ppuo *ProductPropertyUpdateOne) SetCreateID(i int64) *ProductPropertyUpdateOne {
+	ppuo.mutation.ResetCreateID()
+	ppuo.mutation.SetCreateID(i)
+	return ppuo
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (ppuo *ProductPropertyUpdateOne) SetNillableCreateID(i *int64) *ProductPropertyUpdateOne {
+	if i != nil {
+		ppuo.SetCreateID(*i)
+	}
+	return ppuo
+}
+
+// AddCreateID adds i to the "create_id" field.
+func (ppuo *ProductPropertyUpdateOne) AddCreateID(i int64) *ProductPropertyUpdateOne {
+	ppuo.mutation.AddCreateID(i)
+	return ppuo
+}
+
+// ClearCreateID clears the value of the "create_id" field.
+func (ppuo *ProductPropertyUpdateOne) ClearCreateID() *ProductPropertyUpdateOne {
+	ppuo.mutation.ClearCreateID()
+	return ppuo
+}
+
 // AddProductIDs adds the "product" edge to the Product entity by IDs.
 func (ppuo *ProductPropertyUpdateOne) AddProductIDs(ids ...int64) *ProductPropertyUpdateOne {
 	ppuo.mutation.AddProductIDs(ids...)
@@ -829,6 +892,15 @@ func (ppuo *ProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *Produ
 	}
 	if ppuo.mutation.DataCleared() {
 		_spec.ClearField(productproperty.FieldData, field.TypeString)
+	}
+	if value, ok := ppuo.mutation.CreateID(); ok {
+		_spec.SetField(productproperty.FieldCreateID, field.TypeInt64, value)
+	}
+	if value, ok := ppuo.mutation.AddedCreateID(); ok {
+		_spec.AddField(productproperty.FieldCreateID, field.TypeInt64, value)
+	}
+	if ppuo.mutation.CreateIDCleared() {
+		_spec.ClearField(productproperty.FieldCreateID, field.TypeInt64)
 	}
 	if ppuo.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{

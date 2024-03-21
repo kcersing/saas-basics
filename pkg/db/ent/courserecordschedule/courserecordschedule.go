@@ -24,8 +24,6 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldPlaceID holds the string denoting the place_id field in the database.
 	FieldPlaceID = "place_id"
-	// FieldCoachID holds the string denoting the coach_id field in the database.
-	FieldCoachID = "coach_id"
 	// FieldNum holds the string denoting the num field in the database.
 	FieldNum = "num"
 	// FieldStartTime holds the string denoting the start_time field in the database.
@@ -66,7 +64,6 @@ var Columns = []string{
 	FieldType,
 	FieldVenueID,
 	FieldPlaceID,
-	FieldCoachID,
 	FieldNum,
 	FieldStartTime,
 	FieldEndTime,
@@ -132,11 +129,6 @@ func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 // ByPlaceID orders the results by the place_id field.
 func ByPlaceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlaceID, opts...).ToFunc()
-}
-
-// ByCoachID orders the results by the coach_id field.
-func ByCoachID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCoachID, opts...).ToFunc()
 }
 
 // ByNum orders the results by the num field.

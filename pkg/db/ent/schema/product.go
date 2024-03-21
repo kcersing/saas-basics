@@ -1,13 +1,14 @@
 package schema
 
 import (
+	"saas/pkg/db/ent/schema/mixins"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"saas/pkg/db/ent/schema/mixins"
 )
 
 type Product struct {
@@ -16,13 +17,13 @@ type Product struct {
 
 func (Product) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("create_id").Comment("创建人id").Optional(),
 		field.String("name").Comment("商品名").Optional(),
-		field.Int64("pic").Comment("主图").Optional(),
+		field.String("pic").Comment("主图").Optional(),
 		field.String("description").Comment("详情").Optional(),
 		field.Float("price").Comment("价格").Optional(),
 		field.Int64("stock").Comment("库存").Optional(),
 		field.Int64("status").Default(0).Comment("状态").Optional(),
+		field.Int64("create_id").Comment("创建人id").Optional(),
 	}
 }
 

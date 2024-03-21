@@ -92,20 +92,6 @@ func (crsc *CourseRecordScheduleCreate) SetNillablePlaceID(i *int64) *CourseReco
 	return crsc
 }
 
-// SetCoachID sets the "coach_id" field.
-func (crsc *CourseRecordScheduleCreate) SetCoachID(i int64) *CourseRecordScheduleCreate {
-	crsc.mutation.SetCoachID(i)
-	return crsc
-}
-
-// SetNillableCoachID sets the "coach_id" field if the given value is not nil.
-func (crsc *CourseRecordScheduleCreate) SetNillableCoachID(i *int64) *CourseRecordScheduleCreate {
-	if i != nil {
-		crsc.SetCoachID(*i)
-	}
-	return crsc
-}
-
 // SetNum sets the "num" field.
 func (crsc *CourseRecordScheduleCreate) SetNum(i int64) *CourseRecordScheduleCreate {
 	crsc.mutation.SetNum(i)
@@ -332,10 +318,6 @@ func (crsc *CourseRecordScheduleCreate) createSpec() (*CourseRecordSchedule, *sq
 	if value, ok := crsc.mutation.PlaceID(); ok {
 		_spec.SetField(courserecordschedule.FieldPlaceID, field.TypeInt64, value)
 		_node.PlaceID = value
-	}
-	if value, ok := crsc.mutation.CoachID(); ok {
-		_spec.SetField(courserecordschedule.FieldCoachID, field.TypeInt64, value)
-		_node.CoachID = value
 	}
 	if value, ok := crsc.mutation.Num(); ok {
 		_spec.SetField(courserecordschedule.FieldNum, field.TypeInt64, value)

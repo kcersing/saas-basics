@@ -80,11 +80,6 @@ func PlaceID(v int64) predicate.CourseRecordSchedule {
 	return predicate.CourseRecordSchedule(sql.FieldEQ(FieldPlaceID, v))
 }
 
-// CoachID applies equality check predicate on the "coach_id" field. It's identical to CoachIDEQ.
-func CoachID(v int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldEQ(FieldCoachID, v))
-}
-
 // Num applies equality check predicate on the "num" field. It's identical to NumEQ.
 func Num(v int64) predicate.CourseRecordSchedule {
 	return predicate.CourseRecordSchedule(sql.FieldEQ(FieldNum, v))
@@ -363,56 +358,6 @@ func PlaceIDIsNil() predicate.CourseRecordSchedule {
 // PlaceIDNotNil applies the NotNil predicate on the "place_id" field.
 func PlaceIDNotNil() predicate.CourseRecordSchedule {
 	return predicate.CourseRecordSchedule(sql.FieldNotNull(FieldPlaceID))
-}
-
-// CoachIDEQ applies the EQ predicate on the "coach_id" field.
-func CoachIDEQ(v int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldEQ(FieldCoachID, v))
-}
-
-// CoachIDNEQ applies the NEQ predicate on the "coach_id" field.
-func CoachIDNEQ(v int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldNEQ(FieldCoachID, v))
-}
-
-// CoachIDIn applies the In predicate on the "coach_id" field.
-func CoachIDIn(vs ...int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldIn(FieldCoachID, vs...))
-}
-
-// CoachIDNotIn applies the NotIn predicate on the "coach_id" field.
-func CoachIDNotIn(vs ...int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldNotIn(FieldCoachID, vs...))
-}
-
-// CoachIDGT applies the GT predicate on the "coach_id" field.
-func CoachIDGT(v int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldGT(FieldCoachID, v))
-}
-
-// CoachIDGTE applies the GTE predicate on the "coach_id" field.
-func CoachIDGTE(v int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldGTE(FieldCoachID, v))
-}
-
-// CoachIDLT applies the LT predicate on the "coach_id" field.
-func CoachIDLT(v int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldLT(FieldCoachID, v))
-}
-
-// CoachIDLTE applies the LTE predicate on the "coach_id" field.
-func CoachIDLTE(v int64) predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldLTE(FieldCoachID, v))
-}
-
-// CoachIDIsNil applies the IsNil predicate on the "coach_id" field.
-func CoachIDIsNil() predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldIsNull(FieldCoachID))
-}
-
-// CoachIDNotNil applies the NotNil predicate on the "coach_id" field.
-func CoachIDNotNil() predicate.CourseRecordSchedule {
-	return predicate.CourseRecordSchedule(sql.FieldNotNull(FieldCoachID))
 }
 
 // NumEQ applies the EQ predicate on the "num" field.

@@ -9,7 +9,7 @@ type Member interface {
 	List(req MemberListReq) (resp []*MemberInfo, total int, err error)
 	Info(ID int64) (memberInfo *MemberInfo, err error)
 	ChangePassword(ID int64, oldPassword, newPassword string) error
-	UpdateStatus(ID int64, status int8) error
+	UpdateStatus(ID int64, status int64) error
 }
 
 type CreateOrUpdateMemberReq struct {

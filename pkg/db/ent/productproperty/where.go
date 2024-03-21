@@ -105,6 +105,11 @@ func Data(v string) predicate.ProductProperty {
 	return predicate.ProductProperty(sql.FieldEQ(FieldData, v))
 }
 
+// CreateID applies equality check predicate on the "create_id" field. It's identical to CreateIDEQ.
+func CreateID(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldEQ(FieldCreateID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ProductProperty {
 	return predicate.ProductProperty(sql.FieldEQ(FieldCreatedAt, v))
@@ -658,6 +663,56 @@ func DataEqualFold(v string) predicate.ProductProperty {
 // DataContainsFold applies the ContainsFold predicate on the "data" field.
 func DataContainsFold(v string) predicate.ProductProperty {
 	return predicate.ProductProperty(sql.FieldContainsFold(FieldData, v))
+}
+
+// CreateIDEQ applies the EQ predicate on the "create_id" field.
+func CreateIDEQ(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldEQ(FieldCreateID, v))
+}
+
+// CreateIDNEQ applies the NEQ predicate on the "create_id" field.
+func CreateIDNEQ(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldNEQ(FieldCreateID, v))
+}
+
+// CreateIDIn applies the In predicate on the "create_id" field.
+func CreateIDIn(vs ...int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldIn(FieldCreateID, vs...))
+}
+
+// CreateIDNotIn applies the NotIn predicate on the "create_id" field.
+func CreateIDNotIn(vs ...int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldNotIn(FieldCreateID, vs...))
+}
+
+// CreateIDGT applies the GT predicate on the "create_id" field.
+func CreateIDGT(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldGT(FieldCreateID, v))
+}
+
+// CreateIDGTE applies the GTE predicate on the "create_id" field.
+func CreateIDGTE(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldGTE(FieldCreateID, v))
+}
+
+// CreateIDLT applies the LT predicate on the "create_id" field.
+func CreateIDLT(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldLT(FieldCreateID, v))
+}
+
+// CreateIDLTE applies the LTE predicate on the "create_id" field.
+func CreateIDLTE(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldLTE(FieldCreateID, v))
+}
+
+// CreateIDIsNil applies the IsNil predicate on the "create_id" field.
+func CreateIDIsNil() predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldIsNull(FieldCreateID))
+}
+
+// CreateIDNotNil applies the NotNil predicate on the "create_id" field.
+func CreateIDNotNil() predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldNotNull(FieldCreateID))
 }
 
 // HasProduct applies the HasEdge predicate on the "product" edge.

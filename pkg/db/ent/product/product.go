@@ -18,8 +18,6 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// FieldCreateID holds the string denoting the create_id field in the database.
-	FieldCreateID = "create_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldPic holds the string denoting the pic field in the database.
@@ -32,6 +30,8 @@ const (
 	FieldStock = "stock"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldCreateID holds the string denoting the create_id field in the database.
+	FieldCreateID = "create_id"
 	// EdgePropertys holds the string denoting the propertys edge name in mutations.
 	EdgePropertys = "propertys"
 	// Table holds the table name of the product in the database.
@@ -48,13 +48,13 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
-	FieldCreateID,
 	FieldName,
 	FieldPic,
 	FieldDescription,
 	FieldPrice,
 	FieldStock,
 	FieldStatus,
+	FieldCreateID,
 }
 
 var (
@@ -102,11 +102,6 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
-// ByCreateID orders the results by the create_id field.
-func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
-}
-
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -135,6 +130,11 @@ func ByStock(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByCreateID orders the results by the create_id field.
+func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
 }
 
 // ByPropertysCount orders the results by propertys count.

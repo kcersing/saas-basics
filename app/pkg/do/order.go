@@ -7,7 +7,7 @@ type Order interface {
 	Update(req OrderInfo) error
 	Delete(id int64) error
 	List(req OrderListReq) (resp []*OrderInfo, total int, err error)
-	UpdateStatus(ID int64, status int8) error
+	UpdateStatus(ID int64, status int64) error
 	Info(ID int64) (roleInfo *OrderInfo, err error)
 }
 type OrderInfo struct {
@@ -42,6 +42,8 @@ type OrderListReq struct {
 	Source       int64     `json:"source,omitempty"`
 	Device       int64     `json:"device,omitempty"`
 	CompletionAt time.Time `json:"completionAt,omitempty"`
+	Page         int64     `json:"page,omitempty"`
+	PageSize     int64     `json:"pageSize,omitempty"`
 }
 type OrderSales struct {
 	ID        int64     `json:"id,omitempty"`

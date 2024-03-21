@@ -22,12 +22,10 @@ type Product struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// 创建人id
-	CreateID int64 `json:"create_id,omitempty"`
 	// 商品名
 	Name string `json:"name,omitempty"`
 	// 主图
-	Pic int64 `json:"pic,omitempty"`
+	Pic string `json:"pic,omitempty"`
 	// 详情
 	Description string `json:"description,omitempty"`
 	// 价格
@@ -36,6 +34,8 @@ type Product struct {
 	Stock int64 `json:"stock,omitempty"`
 	// 状态
 	Status int64 `json:"status,omitempty"`
+	// 创建人id
+	CreateID int64 `json:"create_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProductQuery when eager-loading is set.
 	Edges        ProductEdges `json:"edges"`
@@ -67,9 +67,9 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case product.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case product.FieldID, product.FieldCreateID, product.FieldPic, product.FieldStock, product.FieldStatus:
+		case product.FieldID, product.FieldStock, product.FieldStatus, product.FieldCreateID:
 			values[i] = new(sql.NullInt64)
-		case product.FieldName, product.FieldDescription:
+		case product.FieldName, product.FieldPic, product.FieldDescription:
 			values[i] = new(sql.NullString)
 		case product.FieldCreatedAt, product.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -106,12 +106,6 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.UpdatedAt = value.Time
 			}
-		case product.FieldCreateID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field create_id", values[i])
-			} else if value.Valid {
-				pr.CreateID = value.Int64
-			}
 		case product.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -119,10 +113,10 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				pr.Name = value.String
 			}
 		case product.FieldPic:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field pic", values[i])
 			} else if value.Valid {
-				pr.Pic = value.Int64
+				pr.Pic = value.String
 			}
 		case product.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -147,6 +141,12 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				pr.Status = value.Int64
+			}
+		case product.FieldCreateID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field create_id", values[i])
+			} else if value.Valid {
+				pr.CreateID = value.Int64
 			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
@@ -195,14 +195,11 @@ func (pr *Product) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("create_id=")
-	builder.WriteString(fmt.Sprintf("%v", pr.CreateID))
-	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(pr.Name)
 	builder.WriteString(", ")
 	builder.WriteString("pic=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Pic))
+	builder.WriteString(pr.Pic)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(pr.Description)
@@ -215,6 +212,9 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Status))
+	builder.WriteString(", ")
+	builder.WriteString("create_id=")
+	builder.WriteString(fmt.Sprintf("%v", pr.CreateID))
 	builder.WriteByte(')')
 	return builder.String()
 }

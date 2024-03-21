@@ -38,6 +38,8 @@ type ProductProperty struct {
 	Status int64 `json:"status,omitempty"`
 	// Data holds the value of the "data" field.
 	Data string `json:"data,omitempty"`
+	// 创建人id
+	CreateID int64 `json:"create_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProductPropertyQuery when eager-loading is set.
 	Edges        ProductPropertyEdges `json:"edges"`
@@ -69,7 +71,7 @@ func (*ProductProperty) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case productproperty.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case productproperty.FieldID, productproperty.FieldDuration, productproperty.FieldLength, productproperty.FieldCount, productproperty.FieldStatus:
+		case productproperty.FieldID, productproperty.FieldDuration, productproperty.FieldLength, productproperty.FieldCount, productproperty.FieldStatus, productproperty.FieldCreateID:
 			values[i] = new(sql.NullInt64)
 		case productproperty.FieldType, productproperty.FieldName, productproperty.FieldData:
 			values[i] = new(sql.NullString)
@@ -156,6 +158,12 @@ func (pp *ProductProperty) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pp.Data = value.String
 			}
+		case productproperty.FieldCreateID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field create_id", values[i])
+			} else if value.Valid {
+				pp.CreateID = value.Int64
+			}
 		default:
 			pp.selectValues.Set(columns[i], values[i])
 		}
@@ -226,6 +234,9 @@ func (pp *ProductProperty) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("data=")
 	builder.WriteString(pp.Data)
+	builder.WriteString(", ")
+	builder.WriteString("create_id=")
+	builder.WriteString(fmt.Sprintf("%v", pp.CreateID))
 	builder.WriteByte(')')
 	return builder.String()
 }

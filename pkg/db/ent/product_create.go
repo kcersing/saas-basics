@@ -49,20 +49,6 @@ func (pc *ProductCreate) SetNillableUpdatedAt(t *time.Time) *ProductCreate {
 	return pc
 }
 
-// SetCreateID sets the "create_id" field.
-func (pc *ProductCreate) SetCreateID(i int64) *ProductCreate {
-	pc.mutation.SetCreateID(i)
-	return pc
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (pc *ProductCreate) SetNillableCreateID(i *int64) *ProductCreate {
-	if i != nil {
-		pc.SetCreateID(*i)
-	}
-	return pc
-}
-
 // SetName sets the "name" field.
 func (pc *ProductCreate) SetName(s string) *ProductCreate {
 	pc.mutation.SetName(s)
@@ -78,15 +64,15 @@ func (pc *ProductCreate) SetNillableName(s *string) *ProductCreate {
 }
 
 // SetPic sets the "pic" field.
-func (pc *ProductCreate) SetPic(i int64) *ProductCreate {
-	pc.mutation.SetPic(i)
+func (pc *ProductCreate) SetPic(s string) *ProductCreate {
+	pc.mutation.SetPic(s)
 	return pc
 }
 
 // SetNillablePic sets the "pic" field if the given value is not nil.
-func (pc *ProductCreate) SetNillablePic(i *int64) *ProductCreate {
-	if i != nil {
-		pc.SetPic(*i)
+func (pc *ProductCreate) SetNillablePic(s *string) *ProductCreate {
+	if s != nil {
+		pc.SetPic(*s)
 	}
 	return pc
 }
@@ -143,6 +129,20 @@ func (pc *ProductCreate) SetStatus(i int64) *ProductCreate {
 func (pc *ProductCreate) SetNillableStatus(i *int64) *ProductCreate {
 	if i != nil {
 		pc.SetStatus(*i)
+	}
+	return pc
+}
+
+// SetCreateID sets the "create_id" field.
+func (pc *ProductCreate) SetCreateID(i int64) *ProductCreate {
+	pc.mutation.SetCreateID(i)
+	return pc
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableCreateID(i *int64) *ProductCreate {
+	if i != nil {
+		pc.SetCreateID(*i)
 	}
 	return pc
 }
@@ -265,16 +265,12 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pc.mutation.CreateID(); ok {
-		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)
-		_node.CreateID = value
-	}
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := pc.mutation.Pic(); ok {
-		_spec.SetField(product.FieldPic, field.TypeInt64, value)
+		_spec.SetField(product.FieldPic, field.TypeString, value)
 		_node.Pic = value
 	}
 	if value, ok := pc.mutation.Description(); ok {
@@ -292,6 +288,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Status(); ok {
 		_spec.SetField(product.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
+	}
+	if value, ok := pc.mutation.CreateID(); ok {
+		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)
+		_node.CreateID = value
 	}
 	if nodes := pc.mutation.PropertysIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

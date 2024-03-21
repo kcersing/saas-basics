@@ -149,9 +149,9 @@ func (r Role) List(req *do.RoleListReq) (roleInfoList []*do.RoleInfo, total int,
 	return
 }
 
-func (r Role) UpdateStatus(ID int64, status int8) error {
+func (r Role) UpdateStatus(ID int64, status int64) error {
 
-	roleEnt, err := r.db.Role.UpdateOneID(ID).SetStatus(status).Save(r.ctx)
+	roleEnt, err := r.db.Role.UpdateOneID(ID).SetStatus(int8(status)).Save(r.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "update Role status failed")
 		return err

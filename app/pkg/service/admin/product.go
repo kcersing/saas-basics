@@ -2,10 +2,6 @@ package admin
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
-	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
@@ -13,6 +9,11 @@ import (
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/dgraph-io/ristretto"
+	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
 )
 
 type Product struct {
@@ -34,6 +35,7 @@ func (p Product) CreateProperty(req do.PropertyInfo) error {
 		SetCount(req.Count).
 		SetPrice(req.Price).
 		SetData("").
+		SetCreateID(req.CreateId).
 		Save(p.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create user failed")
@@ -62,7 +64,10 @@ func (p Product) UpdateProperty(req do.PropertyInfo) error {
 
 	return nil
 }
-
+func (p Product) UpdatePropertyStatus(ID int64, status int64) error {
+	_, err := p.db.ProductProperty.Update().Where(productproperty.IDEQ(ID)).SetStatus(int64(status)).Save(p.ctx)
+	return err
+}
 func (p Product) DeleteProperty(id int64) error {
 	//TODO implement me
 	panic("implement me")
@@ -93,13 +98,42 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 }
 
 func (p Product) Create(req do.ProductInfo) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := p.db.Product.Create().
+		SetName(req.Name).
+		SetPic(req.Pic).
+		SetDescription(req.Description).
+		SetStatus(req.Status).
+		SetPrice(req.Price).
+		SetStock(req.Stock).
+		SetCreateID(req.CreateID).
+		Save(p.ctx)
+
+	if err != nil {
+		err = errors.Wrap(err, "create Product failed")
+		return err
+	}
+
+	return nil
 }
 
 func (p Product) Update(req do.ProductInfo) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := p.db.Product.Update().
+		Where(product.IDEQ(req.ID)).
+		SetName(req.Name).
+		SetPic(req.Pic).
+		SetDescription(req.Description).
+		SetStatus(req.Status).
+		SetPrice(req.Price).
+		SetStock(req.Stock).
+		SetCreateID(req.CreateID).
+		Save(p.ctx)
+
+	if err != nil {
+		err = errors.Wrap(err, "update Product failed")
+		return err
+	}
+
+	return nil
 }
 
 func (p Product) Delete(id int64) error {
@@ -130,9 +164,9 @@ func (p Product) List(req do.ProductListReq) (resp []*do.ProductInfo, total int,
 
 }
 
-func (p Product) UpdateStatus(ID int64, status int8) error {
-	//TODO implement me
-	panic("implement me")
+func (p Product) UpdateStatus(ID int64, status int64) error {
+	_, err := p.db.Product.Update().Where(product.IDEQ(ID)).SetStatus(int64(status)).Save(p.ctx)
+	return err
 }
 
 func (p Product) InfoByID(ID int64) (roleInfo *do.ProductInfo, err error) {

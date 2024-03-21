@@ -34,6 +34,8 @@ const (
 	FieldStatus = "status"
 	// FieldData holds the string denoting the data field in the database.
 	FieldData = "data"
+	// FieldCreateID holds the string denoting the create_id field in the database.
+	FieldCreateID = "create_id"
 	// EdgeProduct holds the string denoting the product edge name in mutations.
 	EdgeProduct = "product"
 	// Table holds the table name of the productproperty in the database.
@@ -58,6 +60,7 @@ var Columns = []string{
 	FieldPrice,
 	FieldStatus,
 	FieldData,
+	FieldCreateID,
 }
 
 var (
@@ -141,6 +144,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByData orders the results by the data field.
 func ByData(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldData, opts...).ToFunc()
+}
+
+// ByCreateID orders the results by the create_id field.
+func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
 }
 
 // ByProductCount orders the results by product count.

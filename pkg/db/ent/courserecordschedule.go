@@ -28,8 +28,6 @@ type CourseRecordSchedule struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 场地ID
 	PlaceID int64 `json:"place_id,omitempty"`
-	// 教练ID
-	CoachID int64 `json:"coach_id,omitempty"`
 	// 上课人数
 	Num int64 `json:"num,omitempty"`
 	// 开始时间
@@ -82,7 +80,7 @@ func (*CourseRecordSchedule) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case courserecordschedule.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case courserecordschedule.FieldID, courserecordschedule.FieldVenueID, courserecordschedule.FieldPlaceID, courserecordschedule.FieldCoachID, courserecordschedule.FieldNum, courserecordschedule.FieldStatus:
+		case courserecordschedule.FieldID, courserecordschedule.FieldVenueID, courserecordschedule.FieldPlaceID, courserecordschedule.FieldNum, courserecordschedule.FieldStatus:
 			values[i] = new(sql.NullInt64)
 		case courserecordschedule.FieldType:
 			values[i] = new(sql.NullString)
@@ -138,12 +136,6 @@ func (crs *CourseRecordSchedule) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field place_id", values[i])
 			} else if value.Valid {
 				crs.PlaceID = value.Int64
-			}
-		case courserecordschedule.FieldCoachID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field coach_id", values[i])
-			} else if value.Valid {
-				crs.CoachID = value.Int64
 			}
 		case courserecordschedule.FieldNum:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -235,9 +227,6 @@ func (crs *CourseRecordSchedule) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("place_id=")
 	builder.WriteString(fmt.Sprintf("%v", crs.PlaceID))
-	builder.WriteString(", ")
-	builder.WriteString("coach_id=")
-	builder.WriteString(fmt.Sprintf("%v", crs.CoachID))
 	builder.WriteString(", ")
 	builder.WriteString("num=")
 	builder.WriteString(fmt.Sprintf("%v", crs.Num))

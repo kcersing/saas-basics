@@ -35,33 +35,6 @@ func (pu *ProductUpdate) SetUpdatedAt(t time.Time) *ProductUpdate {
 	return pu
 }
 
-// SetCreateID sets the "create_id" field.
-func (pu *ProductUpdate) SetCreateID(i int64) *ProductUpdate {
-	pu.mutation.ResetCreateID()
-	pu.mutation.SetCreateID(i)
-	return pu
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillableCreateID(i *int64) *ProductUpdate {
-	if i != nil {
-		pu.SetCreateID(*i)
-	}
-	return pu
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (pu *ProductUpdate) AddCreateID(i int64) *ProductUpdate {
-	pu.mutation.AddCreateID(i)
-	return pu
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (pu *ProductUpdate) ClearCreateID() *ProductUpdate {
-	pu.mutation.ClearCreateID()
-	return pu
-}
-
 // SetName sets the "name" field.
 func (pu *ProductUpdate) SetName(s string) *ProductUpdate {
 	pu.mutation.SetName(s)
@@ -83,23 +56,16 @@ func (pu *ProductUpdate) ClearName() *ProductUpdate {
 }
 
 // SetPic sets the "pic" field.
-func (pu *ProductUpdate) SetPic(i int64) *ProductUpdate {
-	pu.mutation.ResetPic()
-	pu.mutation.SetPic(i)
+func (pu *ProductUpdate) SetPic(s string) *ProductUpdate {
+	pu.mutation.SetPic(s)
 	return pu
 }
 
 // SetNillablePic sets the "pic" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillablePic(i *int64) *ProductUpdate {
-	if i != nil {
-		pu.SetPic(*i)
+func (pu *ProductUpdate) SetNillablePic(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetPic(*s)
 	}
-	return pu
-}
-
-// AddPic adds i to the "pic" field.
-func (pu *ProductUpdate) AddPic(i int64) *ProductUpdate {
-	pu.mutation.AddPic(i)
 	return pu
 }
 
@@ -210,6 +176,33 @@ func (pu *ProductUpdate) ClearStatus() *ProductUpdate {
 	return pu
 }
 
+// SetCreateID sets the "create_id" field.
+func (pu *ProductUpdate) SetCreateID(i int64) *ProductUpdate {
+	pu.mutation.ResetCreateID()
+	pu.mutation.SetCreateID(i)
+	return pu
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableCreateID(i *int64) *ProductUpdate {
+	if i != nil {
+		pu.SetCreateID(*i)
+	}
+	return pu
+}
+
+// AddCreateID adds i to the "create_id" field.
+func (pu *ProductUpdate) AddCreateID(i int64) *ProductUpdate {
+	pu.mutation.AddCreateID(i)
+	return pu
+}
+
+// ClearCreateID clears the value of the "create_id" field.
+func (pu *ProductUpdate) ClearCreateID() *ProductUpdate {
+	pu.mutation.ClearCreateID()
+	return pu
+}
+
 // AddPropertyIDs adds the "propertys" edge to the ProductProperty entity by IDs.
 func (pu *ProductUpdate) AddPropertyIDs(ids ...int64) *ProductUpdate {
 	pu.mutation.AddPropertyIDs(ids...)
@@ -299,15 +292,6 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := pu.mutation.CreateID(); ok {
-		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := pu.mutation.AddedCreateID(); ok {
-		_spec.AddField(product.FieldCreateID, field.TypeInt64, value)
-	}
-	if pu.mutation.CreateIDCleared() {
-		_spec.ClearField(product.FieldCreateID, field.TypeInt64)
-	}
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)
 	}
@@ -315,13 +299,10 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(product.FieldName, field.TypeString)
 	}
 	if value, ok := pu.mutation.Pic(); ok {
-		_spec.SetField(product.FieldPic, field.TypeInt64, value)
-	}
-	if value, ok := pu.mutation.AddedPic(); ok {
-		_spec.AddField(product.FieldPic, field.TypeInt64, value)
+		_spec.SetField(product.FieldPic, field.TypeString, value)
 	}
 	if pu.mutation.PicCleared() {
-		_spec.ClearField(product.FieldPic, field.TypeInt64)
+		_spec.ClearField(product.FieldPic, field.TypeString)
 	}
 	if value, ok := pu.mutation.Description(); ok {
 		_spec.SetField(product.FieldDescription, field.TypeString, value)
@@ -355,6 +336,15 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.StatusCleared() {
 		_spec.ClearField(product.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := pu.mutation.CreateID(); ok {
+		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)
+	}
+	if value, ok := pu.mutation.AddedCreateID(); ok {
+		_spec.AddField(product.FieldCreateID, field.TypeInt64, value)
+	}
+	if pu.mutation.CreateIDCleared() {
+		_spec.ClearField(product.FieldCreateID, field.TypeInt64)
 	}
 	if pu.mutation.PropertysCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -427,33 +417,6 @@ func (puo *ProductUpdateOne) SetUpdatedAt(t time.Time) *ProductUpdateOne {
 	return puo
 }
 
-// SetCreateID sets the "create_id" field.
-func (puo *ProductUpdateOne) SetCreateID(i int64) *ProductUpdateOne {
-	puo.mutation.ResetCreateID()
-	puo.mutation.SetCreateID(i)
-	return puo
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillableCreateID(i *int64) *ProductUpdateOne {
-	if i != nil {
-		puo.SetCreateID(*i)
-	}
-	return puo
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (puo *ProductUpdateOne) AddCreateID(i int64) *ProductUpdateOne {
-	puo.mutation.AddCreateID(i)
-	return puo
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (puo *ProductUpdateOne) ClearCreateID() *ProductUpdateOne {
-	puo.mutation.ClearCreateID()
-	return puo
-}
-
 // SetName sets the "name" field.
 func (puo *ProductUpdateOne) SetName(s string) *ProductUpdateOne {
 	puo.mutation.SetName(s)
@@ -475,23 +438,16 @@ func (puo *ProductUpdateOne) ClearName() *ProductUpdateOne {
 }
 
 // SetPic sets the "pic" field.
-func (puo *ProductUpdateOne) SetPic(i int64) *ProductUpdateOne {
-	puo.mutation.ResetPic()
-	puo.mutation.SetPic(i)
+func (puo *ProductUpdateOne) SetPic(s string) *ProductUpdateOne {
+	puo.mutation.SetPic(s)
 	return puo
 }
 
 // SetNillablePic sets the "pic" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillablePic(i *int64) *ProductUpdateOne {
-	if i != nil {
-		puo.SetPic(*i)
+func (puo *ProductUpdateOne) SetNillablePic(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetPic(*s)
 	}
-	return puo
-}
-
-// AddPic adds i to the "pic" field.
-func (puo *ProductUpdateOne) AddPic(i int64) *ProductUpdateOne {
-	puo.mutation.AddPic(i)
 	return puo
 }
 
@@ -599,6 +555,33 @@ func (puo *ProductUpdateOne) AddStatus(i int64) *ProductUpdateOne {
 // ClearStatus clears the value of the "status" field.
 func (puo *ProductUpdateOne) ClearStatus() *ProductUpdateOne {
 	puo.mutation.ClearStatus()
+	return puo
+}
+
+// SetCreateID sets the "create_id" field.
+func (puo *ProductUpdateOne) SetCreateID(i int64) *ProductUpdateOne {
+	puo.mutation.ResetCreateID()
+	puo.mutation.SetCreateID(i)
+	return puo
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableCreateID(i *int64) *ProductUpdateOne {
+	if i != nil {
+		puo.SetCreateID(*i)
+	}
+	return puo
+}
+
+// AddCreateID adds i to the "create_id" field.
+func (puo *ProductUpdateOne) AddCreateID(i int64) *ProductUpdateOne {
+	puo.mutation.AddCreateID(i)
+	return puo
+}
+
+// ClearCreateID clears the value of the "create_id" field.
+func (puo *ProductUpdateOne) ClearCreateID() *ProductUpdateOne {
+	puo.mutation.ClearCreateID()
 	return puo
 }
 
@@ -721,15 +704,6 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	if value, ok := puo.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := puo.mutation.CreateID(); ok {
-		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := puo.mutation.AddedCreateID(); ok {
-		_spec.AddField(product.FieldCreateID, field.TypeInt64, value)
-	}
-	if puo.mutation.CreateIDCleared() {
-		_spec.ClearField(product.FieldCreateID, field.TypeInt64)
-	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)
 	}
@@ -737,13 +711,10 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		_spec.ClearField(product.FieldName, field.TypeString)
 	}
 	if value, ok := puo.mutation.Pic(); ok {
-		_spec.SetField(product.FieldPic, field.TypeInt64, value)
-	}
-	if value, ok := puo.mutation.AddedPic(); ok {
-		_spec.AddField(product.FieldPic, field.TypeInt64, value)
+		_spec.SetField(product.FieldPic, field.TypeString, value)
 	}
 	if puo.mutation.PicCleared() {
-		_spec.ClearField(product.FieldPic, field.TypeInt64)
+		_spec.ClearField(product.FieldPic, field.TypeString)
 	}
 	if value, ok := puo.mutation.Description(); ok {
 		_spec.SetField(product.FieldDescription, field.TypeString, value)
@@ -777,6 +748,15 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if puo.mutation.StatusCleared() {
 		_spec.ClearField(product.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := puo.mutation.CreateID(); ok {
+		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)
+	}
+	if value, ok := puo.mutation.AddedCreateID(); ok {
+		_spec.AddField(product.FieldCreateID, field.TypeInt64, value)
+	}
+	if puo.mutation.CreateIDCleared() {
+		_spec.ClearField(product.FieldCreateID, field.TypeInt64)
 	}
 	if puo.mutation.PropertysCleared() {
 		edge := &sqlgraph.EdgeSpec{

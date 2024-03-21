@@ -1,12 +1,13 @@
 package schema
 
 import (
+	"saas/pkg/db/ent/schema/mixins"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"saas/pkg/db/ent/schema/mixins"
 )
 
 type ProductProperty struct {
@@ -23,6 +24,7 @@ func (ProductProperty) Fields() []ent.Field {
 		field.Float("price").Comment("定价").Optional(),
 		field.Int64("status").Comment("状态").Optional(),
 		field.String("data").Comment("").Optional(),
+		field.Int64("create_id").Comment("创建人id").Optional(),
 	}
 }
 

@@ -110,33 +110,6 @@ func (crsu *CourseRecordScheduleUpdate) ClearPlaceID() *CourseRecordScheduleUpda
 	return crsu
 }
 
-// SetCoachID sets the "coach_id" field.
-func (crsu *CourseRecordScheduleUpdate) SetCoachID(i int64) *CourseRecordScheduleUpdate {
-	crsu.mutation.ResetCoachID()
-	crsu.mutation.SetCoachID(i)
-	return crsu
-}
-
-// SetNillableCoachID sets the "coach_id" field if the given value is not nil.
-func (crsu *CourseRecordScheduleUpdate) SetNillableCoachID(i *int64) *CourseRecordScheduleUpdate {
-	if i != nil {
-		crsu.SetCoachID(*i)
-	}
-	return crsu
-}
-
-// AddCoachID adds i to the "coach_id" field.
-func (crsu *CourseRecordScheduleUpdate) AddCoachID(i int64) *CourseRecordScheduleUpdate {
-	crsu.mutation.AddCoachID(i)
-	return crsu
-}
-
-// ClearCoachID clears the value of the "coach_id" field.
-func (crsu *CourseRecordScheduleUpdate) ClearCoachID() *CourseRecordScheduleUpdate {
-	crsu.mutation.ClearCoachID()
-	return crsu
-}
-
 // SetNum sets the "num" field.
 func (crsu *CourseRecordScheduleUpdate) SetNum(i int64) *CourseRecordScheduleUpdate {
 	crsu.mutation.ResetNum()
@@ -407,15 +380,6 @@ func (crsu *CourseRecordScheduleUpdate) sqlSave(ctx context.Context) (n int, err
 	if crsu.mutation.PlaceIDCleared() {
 		_spec.ClearField(courserecordschedule.FieldPlaceID, field.TypeInt64)
 	}
-	if value, ok := crsu.mutation.CoachID(); ok {
-		_spec.SetField(courserecordschedule.FieldCoachID, field.TypeInt64, value)
-	}
-	if value, ok := crsu.mutation.AddedCoachID(); ok {
-		_spec.AddField(courserecordschedule.FieldCoachID, field.TypeInt64, value)
-	}
-	if crsu.mutation.CoachIDCleared() {
-		_spec.ClearField(courserecordschedule.FieldCoachID, field.TypeInt64)
-	}
 	if value, ok := crsu.mutation.Num(); ok {
 		_spec.SetField(courserecordschedule.FieldNum, field.TypeInt64, value)
 	}
@@ -642,33 +606,6 @@ func (crsuo *CourseRecordScheduleUpdateOne) AddPlaceID(i int64) *CourseRecordSch
 // ClearPlaceID clears the value of the "place_id" field.
 func (crsuo *CourseRecordScheduleUpdateOne) ClearPlaceID() *CourseRecordScheduleUpdateOne {
 	crsuo.mutation.ClearPlaceID()
-	return crsuo
-}
-
-// SetCoachID sets the "coach_id" field.
-func (crsuo *CourseRecordScheduleUpdateOne) SetCoachID(i int64) *CourseRecordScheduleUpdateOne {
-	crsuo.mutation.ResetCoachID()
-	crsuo.mutation.SetCoachID(i)
-	return crsuo
-}
-
-// SetNillableCoachID sets the "coach_id" field if the given value is not nil.
-func (crsuo *CourseRecordScheduleUpdateOne) SetNillableCoachID(i *int64) *CourseRecordScheduleUpdateOne {
-	if i != nil {
-		crsuo.SetCoachID(*i)
-	}
-	return crsuo
-}
-
-// AddCoachID adds i to the "coach_id" field.
-func (crsuo *CourseRecordScheduleUpdateOne) AddCoachID(i int64) *CourseRecordScheduleUpdateOne {
-	crsuo.mutation.AddCoachID(i)
-	return crsuo
-}
-
-// ClearCoachID clears the value of the "coach_id" field.
-func (crsuo *CourseRecordScheduleUpdateOne) ClearCoachID() *CourseRecordScheduleUpdateOne {
-	crsuo.mutation.ClearCoachID()
 	return crsuo
 }
 
@@ -971,15 +908,6 @@ func (crsuo *CourseRecordScheduleUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if crsuo.mutation.PlaceIDCleared() {
 		_spec.ClearField(courserecordschedule.FieldPlaceID, field.TypeInt64)
-	}
-	if value, ok := crsuo.mutation.CoachID(); ok {
-		_spec.SetField(courserecordschedule.FieldCoachID, field.TypeInt64, value)
-	}
-	if value, ok := crsuo.mutation.AddedCoachID(); ok {
-		_spec.AddField(courserecordschedule.FieldCoachID, field.TypeInt64, value)
-	}
-	if crsuo.mutation.CoachIDCleared() {
-		_spec.ClearField(courserecordschedule.FieldCoachID, field.TypeInt64)
 	}
 	if value, ok := crsuo.mutation.Num(); ok {
 		_spec.SetField(courserecordschedule.FieldNum, field.TypeInt64, value)
