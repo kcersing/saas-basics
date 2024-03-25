@@ -12,6 +12,7 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
+	"sync"
 )
 
 type Order struct {
@@ -23,45 +24,74 @@ type Order struct {
 }
 
 func (o Order) Create(req do.OrderInfo) error {
-	one, err := o.db.Order.Create().
-		SetOrderSn("").
-		SetVenueID(req.VenueId).
-		SetMemberID(req.MemberId).
-		SetStatus(0).
-		//SetSource(req.Source).
-		//SetDevice(req.Device).
-		SetCreateID(req.CreateId).
-		Save(o.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "create Order failed")
-		return err
-	}
 
-	_, err = o.db.OrderAmount.Create().
-		SetOrderID(one.ID).
-		Save(o.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "create Order Amount failed")
-		return err
-	}
+	one := &ent.Order{}
+	var err error
+	errChan := make(chan error, 7)
+	defer close(errChan)
+	var wg sync.WaitGroup
+	wg.Add(5)
+	go func() {
+		one, err = o.db.Order.Create().
+			SetOrderSn("").
+			SetVenueID(req.VenueId).
+			SetMemberID(req.MemberId).
+			SetStatus(0).
+			//SetSource(req.Source).
+			//SetDevice(req.Device).
+			SetCreateID(req.CreateId).
+			Save(o.ctx)
+		if err != nil {
+			err = errors.Wrap(err, "create Order failed")
+			errChan <- err
+		}
+		wg.Done()
+	}()
 
-	_, err = o.db.OrderSales.Create().
-		SetOrderID(one.ID).
-		Save(o.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "create Order Sales failed")
-		return err
-	}
-	_, err = o.db.OrderItem.Create().
-		SetOrderID(one.ID).
-		Save(o.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "create Order Item failed")
-		return err
+	go func() {
+		_, err = o.db.OrderAmount.Create().
+			SetOrderID(one.ID).
+			Save(o.ctx)
+		if err != nil {
+			err = errors.Wrap(err, "create Order Amount failed")
+			errChan <- err
+		}
+		wg.Done()
+	}()
+
+	go func() {
+		_, err = o.db.OrderSales.Create().
+			SetOrderID(one.ID).
+			Save(o.ctx)
+		if err != nil {
+			err = errors.Wrap(err, "create Order Sales failed")
+			errChan <- err
+		}
+		wg.Done()
+	}()
+	go func() {
+		_, err = o.db.OrderItem.Create().
+			SetOrderID(one.ID).
+			Save(o.ctx)
+		if err != nil {
+			err = errors.Wrap(err, "create Order Item failed")
+			errChan <- err
+		}
+		wg.Done()
+	}()
+
+	go func() {
+		wg.Done()
+	}()
+
+	wg.Wait()
+	select {
+	case result := <-errChan:
+		return result
+	default:
 	}
 	return nil
 }
-
 func (o Order) Update(req do.OrderInfo) error {
 	_, err := o.db.Order.Update().
 		Where(order.IDEQ(req.ID)).

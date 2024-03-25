@@ -101,7 +101,7 @@ func UpdateStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	err = admin.NewProduct(ctx, c).UpdateStatus(int64(req.ID), int8(req.Status))
+	err = admin.NewProduct(ctx, c).UpdateStatus(int64(req.ID), req.Status)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
