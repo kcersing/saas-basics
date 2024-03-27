@@ -53,7 +53,7 @@ service OrderService {
 
     base.NilResponse CancelOrder(1: base.IDReq req)  (api.post = "/api/admin/order/cancel")// 取消订单
 
-    base.NilResponse ListOrder(1: ListOrderReq req )(api.get = "/api/admin/order/list") // 订单列表
+    base.NilResponse ListOrder(1: ListOrderReq req )(api.post = "/api/admin/order/list") // 订单列表
 
     base.NilResponse GetOrderById(1: GetOrderByIdReq req) (api.get = "/api/admin/order/info") // 订单详情
 }

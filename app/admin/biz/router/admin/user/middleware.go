@@ -97,3 +97,38 @@ func _updateuserMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _memberMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _creatememberMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberprofileMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatememberstatusMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatememberMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
