@@ -4,6 +4,10 @@ package order
 
 import (
 	"context"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"saas/app/pkg/service/admin"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -66,20 +70,27 @@ func ListOrder(ctx context.Context, c *app.RequestContext) {
 	var req order.ListOrderReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	var listReq do.OrderListReq
+	listReq.Page = *req.Page
+	listReq.PageSize = *req.PageSize
+	list, total, err := admin.NewOrder(ctx, c).List(listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // GetOrderById .
 // @router /api/admin/order/info [GET]
 func GetOrderById(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req order.GetOrderByIdReq
+	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
