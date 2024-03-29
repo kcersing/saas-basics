@@ -41,9 +41,9 @@ struct UpdateOrderReq {
 service OrderService {
     base.NilResponse CreateOrder(1: CreateOrderReq req)  (api.post = "/api/admin/order/create")// 创建订单
 
-    base.NilResponse UpdateUser(1: UpdateOrderReq req) (api.post = "/api/admin/order/update")
+    base.NilResponse UpdateOrder(1: UpdateOrderReq req) (api.post = "/api/admin/order/update")
 
-    base.NilResponse CancelOrder(1: base.IDReq req)  (api.post = "/api/admin/order/cancel")// 取消订单
+    base.NilResponse UpdateStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/order/status")
 
     base.NilResponse ListOrder(1: ListOrderReq req )(api.post = "/api/admin/order/list") // 订单列表
 

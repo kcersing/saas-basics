@@ -23,11 +23,11 @@ func Register(r *server.Hertz) {
 			_admin := _api.Group("/admin", _adminMw()...)
 			{
 				_order := _admin.Group("/order", _orderMw()...)
-				_order.POST("/cancel", append(_cancelorderMw(), order.CancelOrder)...)
 				_order.POST("/create", append(_createorderMw(), order.CreateOrder)...)
 				_order.GET("/info", append(_getorderbyidMw(), order.GetOrderById)...)
 				_order.POST("/list", append(_listorderMw(), order.ListOrder)...)
-				_order.POST("/update", append(_updateuserMw(), order.UpdateUser)...)
+				_order.POST("/status", append(_updatestatusMw(), order.UpdateStatus)...)
+				_order.POST("/update", append(_updateorderMw(), order.UpdateOrder)...)
 			}
 		}
 	}

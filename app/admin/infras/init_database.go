@@ -527,7 +527,7 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 // init menu data
 func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	var menus []*ent.MenuCreate
-	menus = make([]*ent.MenuCreate, 29)
+	menus = make([]*ent.MenuCreate, 30)
 	menus[0] = I.DB.Menu.Create().
 		SetMenuLevel(0).
 		SetMenuType(0).
@@ -875,6 +875,18 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetTitle("合同管理").
 		SetIcon("").
 		SetHideMenu(false)
+
+	menus[29] = I.DB.Menu.Create().
+		SetMenuLevel(2).
+		SetMenuType(2).
+		SetParentID(11).
+		SetPath("/sys/order/add").
+		SetName("AddOrder").
+		SetComponent("/sys/order/add").
+		SetOrderNo(1).
+		SetTitle("添加订单").
+		SetIcon("").
+		SetHideMenu(true)
 
 	err := I.DB.Menu.CreateBulk(menus...).Exec(ctx)
 	if err != nil {

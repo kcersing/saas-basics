@@ -651,84 +651,77 @@ func (p *Venue) String() string {
 
 }
 
-type VenueListReq struct {
-	Page  *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	Limit *int64  `thrift:"limit,2,optional" form:"limit" json:"limit" query:"limit"`
-	Name  *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	//    4:  optional string address (api.raw = "address")
-	//    5:  optional string address_detail (api.raw = "address_detail")
-	//    6:  optional string latitude (api.raw = "latitude")
-	//    7:  optional string longitude (api.raw = "longitude")
-	//    8:  optional string mobile (api.raw = "mobile")
-	//    9:  optional string pic (api.raw = "pic")
-	//    10:  optional string information (api.raw = "information")
-	Status *int64 `thrift:"status,11,optional" form:"status" json:"status" query:"status"`
+type ListReq struct {
+	Page   *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	Limit  *int64  `thrift:"limit,2,optional" form:"limit" json:"limit" query:"limit"`
+	Name   *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
+	Status *int64  `thrift:"status,11,optional" form:"status" json:"status" query:"status"`
 }
 
-func NewVenueListReq() *VenueListReq {
-	return &VenueListReq{}
+func NewListReq() *ListReq {
+	return &ListReq{}
 }
 
-var VenueListReq_Page_DEFAULT int64
+var ListReq_Page_DEFAULT int64
 
-func (p *VenueListReq) GetPage() (v int64) {
+func (p *ListReq) GetPage() (v int64) {
 	if !p.IsSetPage() {
-		return VenueListReq_Page_DEFAULT
+		return ListReq_Page_DEFAULT
 	}
 	return *p.Page
 }
 
-var VenueListReq_Limit_DEFAULT int64
+var ListReq_Limit_DEFAULT int64
 
-func (p *VenueListReq) GetLimit() (v int64) {
+func (p *ListReq) GetLimit() (v int64) {
 	if !p.IsSetLimit() {
-		return VenueListReq_Limit_DEFAULT
+		return ListReq_Limit_DEFAULT
 	}
 	return *p.Limit
 }
 
-var VenueListReq_Name_DEFAULT string
+var ListReq_Name_DEFAULT string
 
-func (p *VenueListReq) GetName() (v string) {
+func (p *ListReq) GetName() (v string) {
 	if !p.IsSetName() {
-		return VenueListReq_Name_DEFAULT
+		return ListReq_Name_DEFAULT
 	}
 	return *p.Name
 }
 
-var VenueListReq_Status_DEFAULT int64
+var ListReq_Status_DEFAULT int64
 
-func (p *VenueListReq) GetStatus() (v int64) {
+func (p *ListReq) GetStatus() (v int64) {
 	if !p.IsSetStatus() {
-		return VenueListReq_Status_DEFAULT
+		return ListReq_Status_DEFAULT
 	}
 	return *p.Status
 }
 
-var fieldIDToName_VenueListReq = map[int16]string{
+var fieldIDToName_ListReq = map[int16]string{
 	1:  "page",
 	2:  "limit",
 	3:  "name",
 	11: "status",
 }
 
-func (p *VenueListReq) IsSetPage() bool {
+func (p *ListReq) IsSetPage() bool {
 	return p.Page != nil
 }
 
-func (p *VenueListReq) IsSetLimit() bool {
+func (p *ListReq) IsSetLimit() bool {
 	return p.Limit != nil
 }
 
-func (p *VenueListReq) IsSetName() bool {
+func (p *ListReq) IsSetName() bool {
 	return p.Name != nil
 }
 
-func (p *VenueListReq) IsSetStatus() bool {
+func (p *ListReq) IsSetStatus() bool {
 	return p.Status != nil
 }
 
-func (p *VenueListReq) Read(iprot thrift.TProtocol) (err error) {
+func (p *ListReq) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -798,7 +791,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueListReq[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ListReq[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -808,7 +801,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *VenueListReq) ReadField1(iprot thrift.TProtocol) error {
+func (p *ListReq) ReadField1(iprot thrift.TProtocol) error {
 
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -817,7 +810,7 @@ func (p *VenueListReq) ReadField1(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
-func (p *VenueListReq) ReadField2(iprot thrift.TProtocol) error {
+func (p *ListReq) ReadField2(iprot thrift.TProtocol) error {
 
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -826,7 +819,7 @@ func (p *VenueListReq) ReadField2(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
-func (p *VenueListReq) ReadField3(iprot thrift.TProtocol) error {
+func (p *ListReq) ReadField3(iprot thrift.TProtocol) error {
 
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -835,7 +828,7 @@ func (p *VenueListReq) ReadField3(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
-func (p *VenueListReq) ReadField11(iprot thrift.TProtocol) error {
+func (p *ListReq) ReadField11(iprot thrift.TProtocol) error {
 
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -845,9 +838,9 @@ func (p *VenueListReq) ReadField11(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *VenueListReq) Write(oprot thrift.TProtocol) (err error) {
+func (p *ListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("VenueListReq"); err != nil {
+	if err = oprot.WriteStructBegin("ListReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -885,7 +878,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *VenueListReq) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ListReq) writeField1(oprot thrift.TProtocol) (err error) {
 	if p.IsSetPage() {
 		if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
 			goto WriteFieldBeginError
@@ -904,7 +897,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *VenueListReq) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *ListReq) writeField2(oprot thrift.TProtocol) (err error) {
 	if p.IsSetLimit() {
 		if err = oprot.WriteFieldBegin("limit", thrift.I64, 2); err != nil {
 			goto WriteFieldBeginError
@@ -923,7 +916,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *VenueListReq) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *ListReq) writeField3(oprot thrift.TProtocol) (err error) {
 	if p.IsSetName() {
 		if err = oprot.WriteFieldBegin("name", thrift.STRING, 3); err != nil {
 			goto WriteFieldBeginError
@@ -942,7 +935,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *VenueListReq) writeField11(oprot thrift.TProtocol) (err error) {
+func (p *ListReq) writeField11(oprot thrift.TProtocol) (err error) {
 	if p.IsSetStatus() {
 		if err = oprot.WriteFieldBegin("status", thrift.I64, 11); err != nil {
 			goto WriteFieldBeginError
@@ -961,17 +954,1017 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 11 end error: ", p), err)
 }
 
-func (p *VenueListReq) String() string {
+func (p *ListReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("VenueListReq(%+v)", *p)
+	return fmt.Sprintf("ListReq(%+v)", *p)
+
+}
+
+type CreateOrUpdateVenueReq struct {
+	ID            int64   `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Name          *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	Address       *string `thrift:"address,3,optional" form:"address" json:"address" query:"address"`
+	AddressDetail *string `thrift:"addressDetail,4,optional" form:"addressDetail" json:"addressDetail" query:"addressDetail"`
+	Latitude      *string `thrift:"latitude,5,optional" form:"latitude" json:"latitude" query:"latitude"`
+	Longitude     *string `thrift:"longitude,6,optional" form:"longitude" json:"longitude" query:"longitude"`
+	Mobile        *string `thrift:"mobile,7,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Pic           *string `thrift:"pic,8,optional" form:"pic" json:"pic" query:"pic"`
+	Information   *string `thrift:"information,9,optional" form:"information" json:"information" query:"information"`
+	Status        *int64  `thrift:"status,10,optional" form:"status" json:"status" query:"status"`
+}
+
+func NewCreateOrUpdateVenueReq() *CreateOrUpdateVenueReq {
+	return &CreateOrUpdateVenueReq{}
+}
+
+func (p *CreateOrUpdateVenueReq) GetID() (v int64) {
+	return p.ID
+}
+
+var CreateOrUpdateVenueReq_Name_DEFAULT string
+
+func (p *CreateOrUpdateVenueReq) GetName() (v string) {
+	if !p.IsSetName() {
+		return CreateOrUpdateVenueReq_Name_DEFAULT
+	}
+	return *p.Name
+}
+
+var CreateOrUpdateVenueReq_Address_DEFAULT string
+
+func (p *CreateOrUpdateVenueReq) GetAddress() (v string) {
+	if !p.IsSetAddress() {
+		return CreateOrUpdateVenueReq_Address_DEFAULT
+	}
+	return *p.Address
+}
+
+var CreateOrUpdateVenueReq_AddressDetail_DEFAULT string
+
+func (p *CreateOrUpdateVenueReq) GetAddressDetail() (v string) {
+	if !p.IsSetAddressDetail() {
+		return CreateOrUpdateVenueReq_AddressDetail_DEFAULT
+	}
+	return *p.AddressDetail
+}
+
+var CreateOrUpdateVenueReq_Latitude_DEFAULT string
+
+func (p *CreateOrUpdateVenueReq) GetLatitude() (v string) {
+	if !p.IsSetLatitude() {
+		return CreateOrUpdateVenueReq_Latitude_DEFAULT
+	}
+	return *p.Latitude
+}
+
+var CreateOrUpdateVenueReq_Longitude_DEFAULT string
+
+func (p *CreateOrUpdateVenueReq) GetLongitude() (v string) {
+	if !p.IsSetLongitude() {
+		return CreateOrUpdateVenueReq_Longitude_DEFAULT
+	}
+	return *p.Longitude
+}
+
+var CreateOrUpdateVenueReq_Mobile_DEFAULT string
+
+func (p *CreateOrUpdateVenueReq) GetMobile() (v string) {
+	if !p.IsSetMobile() {
+		return CreateOrUpdateVenueReq_Mobile_DEFAULT
+	}
+	return *p.Mobile
+}
+
+var CreateOrUpdateVenueReq_Pic_DEFAULT string
+
+func (p *CreateOrUpdateVenueReq) GetPic() (v string) {
+	if !p.IsSetPic() {
+		return CreateOrUpdateVenueReq_Pic_DEFAULT
+	}
+	return *p.Pic
+}
+
+var CreateOrUpdateVenueReq_Information_DEFAULT string
+
+func (p *CreateOrUpdateVenueReq) GetInformation() (v string) {
+	if !p.IsSetInformation() {
+		return CreateOrUpdateVenueReq_Information_DEFAULT
+	}
+	return *p.Information
+}
+
+var CreateOrUpdateVenueReq_Status_DEFAULT int64
+
+func (p *CreateOrUpdateVenueReq) GetStatus() (v int64) {
+	if !p.IsSetStatus() {
+		return CreateOrUpdateVenueReq_Status_DEFAULT
+	}
+	return *p.Status
+}
+
+var fieldIDToName_CreateOrUpdateVenueReq = map[int16]string{
+	1:  "id",
+	2:  "name",
+	3:  "address",
+	4:  "addressDetail",
+	5:  "latitude",
+	6:  "longitude",
+	7:  "mobile",
+	8:  "pic",
+	9:  "information",
+	10: "status",
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetName() bool {
+	return p.Name != nil
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetAddress() bool {
+	return p.Address != nil
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetAddressDetail() bool {
+	return p.AddressDetail != nil
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetLatitude() bool {
+	return p.Latitude != nil
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetLongitude() bool {
+	return p.Longitude != nil
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetMobile() bool {
+	return p.Mobile != nil
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetPic() bool {
+	return p.Pic != nil
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetInformation() bool {
+	return p.Information != nil
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetStatus() bool {
+	return p.Status != nil
+}
+
+func (p *CreateOrUpdateVenueReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField6(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 7:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField9(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 10:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField10(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CreateOrUpdateVenueReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) ReadField1(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.ID = v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField2(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Name = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField3(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Address = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField4(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.AddressDetail = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField5(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Latitude = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField6(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Longitude = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField7(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Mobile = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField8(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Pic = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField9(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Information = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenueReq) ReadField10(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.Status = &v
+	}
+	return nil
+}
+
+func (p *CreateOrUpdateVenueReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("CreateOrUpdateVenueReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
+			goto WriteFieldError
+		}
+		if err = p.writeField7(oprot); err != nil {
+			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
+			goto WriteFieldError
+		}
+		if err = p.writeField10(oprot); err != nil {
+			fieldId = 10
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.ID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAddress() {
+		if err = oprot.WriteFieldBegin("address", thrift.STRING, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Address); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAddressDetail() {
+		if err = oprot.WriteFieldBegin("addressDetail", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AddressDetail); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetLatitude() {
+		if err = oprot.WriteFieldBegin("latitude", thrift.STRING, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Latitude); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField6(oprot thrift.TProtocol) (err error) {
+	if p.IsSetLongitude() {
+		if err = oprot.WriteFieldBegin("longitude", thrift.STRING, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Longitude); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField7(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMobile() {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 7); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Mobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetPic() {
+		if err = oprot.WriteFieldBegin("pic", thrift.STRING, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Pic); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField9(oprot thrift.TProtocol) (err error) {
+	if p.IsSetInformation() {
+		if err = oprot.WriteFieldBegin("information", thrift.STRING, 9); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Information); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) writeField10(oprot thrift.TProtocol) (err error) {
+	if p.IsSetStatus() {
+		if err = oprot.WriteFieldBegin("status", thrift.I64, 10); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Status); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 10 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenueReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CreateOrUpdateVenueReq(%+v)", *p)
+
+}
+
+type CreateOrUpdateVenuePlaceReq struct {
+	ID      int64   `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Name    *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	VenueId *int64  `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
+	Pic     *string `thrift:"pic,4,optional" form:"pic" json:"pic" query:"pic"`
+	Status  *int64  `thrift:"status,5,optional" form:"status" json:"status" query:"status"`
+}
+
+func NewCreateOrUpdateVenuePlaceReq() *CreateOrUpdateVenuePlaceReq {
+	return &CreateOrUpdateVenuePlaceReq{}
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) GetID() (v int64) {
+	return p.ID
+}
+
+var CreateOrUpdateVenuePlaceReq_Name_DEFAULT string
+
+func (p *CreateOrUpdateVenuePlaceReq) GetName() (v string) {
+	if !p.IsSetName() {
+		return CreateOrUpdateVenuePlaceReq_Name_DEFAULT
+	}
+	return *p.Name
+}
+
+var CreateOrUpdateVenuePlaceReq_VenueId_DEFAULT int64
+
+func (p *CreateOrUpdateVenuePlaceReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return CreateOrUpdateVenuePlaceReq_VenueId_DEFAULT
+	}
+	return *p.VenueId
+}
+
+var CreateOrUpdateVenuePlaceReq_Pic_DEFAULT string
+
+func (p *CreateOrUpdateVenuePlaceReq) GetPic() (v string) {
+	if !p.IsSetPic() {
+		return CreateOrUpdateVenuePlaceReq_Pic_DEFAULT
+	}
+	return *p.Pic
+}
+
+var CreateOrUpdateVenuePlaceReq_Status_DEFAULT int64
+
+func (p *CreateOrUpdateVenuePlaceReq) GetStatus() (v int64) {
+	if !p.IsSetStatus() {
+		return CreateOrUpdateVenuePlaceReq_Status_DEFAULT
+	}
+	return *p.Status
+}
+
+var fieldIDToName_CreateOrUpdateVenuePlaceReq = map[int16]string{
+	1: "id",
+	2: "name",
+	3: "venueId",
+	4: "pic",
+	5: "status",
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) IsSetName() bool {
+	return p.Name != nil
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) IsSetVenueId() bool {
+	return p.VenueId != nil
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) IsSetPic() bool {
+	return p.Pic != nil
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) IsSetStatus() bool {
+	return p.Status != nil
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CreateOrUpdateVenuePlaceReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) ReadField1(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.ID = v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenuePlaceReq) ReadField2(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Name = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenuePlaceReq) ReadField3(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.VenueId = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenuePlaceReq) ReadField4(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Pic = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateVenuePlaceReq) ReadField5(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.Status = &v
+	}
+	return nil
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("CreateOrUpdateVenuePlaceReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.ID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetPic() {
+		if err = oprot.WriteFieldBegin("pic", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Pic); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetStatus() {
+		if err = oprot.WriteFieldBegin("status", thrift.I64, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Status); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CreateOrUpdateVenuePlaceReq(%+v)", *p)
 
 }
 
 type VenueService interface {
 	// 获取用户列表
-	VenueList(ctx context.Context, req *VenueListReq) (r *base.NilResponse, err error)
+	// 添加
+	CreatePlace(ctx context.Context, req *CreateOrUpdateVenuePlaceReq) (r *base.NilResponse, err error)
+	// 编辑
+	UpdatePlace(ctx context.Context, req *CreateOrUpdateVenuePlaceReq) (r *base.NilResponse, err error)
+	// 删除
+	PlaceUpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
+	// 列表
+	PlaceList(ctx context.Context, req *ListReq) (r *base.NilResponse, err error)
+	// 添加
+	Create(ctx context.Context, req *CreateOrUpdateVenueReq) (r *base.NilResponse, err error)
+	// 编辑
+	Update(ctx context.Context, req *CreateOrUpdateVenueReq) (r *base.NilResponse, err error)
+	// 删除
+	UpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
+	// 列表
+	List(ctx context.Context, req *ListReq) (r *base.NilResponse, err error)
 }
 
 type VenueServiceClient struct {
@@ -1000,11 +1993,74 @@ func (p *VenueServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
-func (p *VenueServiceClient) VenueList(ctx context.Context, req *VenueListReq) (r *base.NilResponse, err error) {
-	var _args VenueServiceVenueListArgs
+func (p *VenueServiceClient) CreatePlace(ctx context.Context, req *CreateOrUpdateVenuePlaceReq) (r *base.NilResponse, err error) {
+	var _args VenueServiceCreatePlaceArgs
 	_args.Req = req
-	var _result VenueServiceVenueListResult
-	if err = p.Client_().Call(ctx, "VenueList", &_args, &_result); err != nil {
+	var _result VenueServiceCreatePlaceResult
+	if err = p.Client_().Call(ctx, "CreatePlace", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *VenueServiceClient) UpdatePlace(ctx context.Context, req *CreateOrUpdateVenuePlaceReq) (r *base.NilResponse, err error) {
+	var _args VenueServiceUpdatePlaceArgs
+	_args.Req = req
+	var _result VenueServiceUpdatePlaceResult
+	if err = p.Client_().Call(ctx, "UpdatePlace", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *VenueServiceClient) PlaceUpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error) {
+	var _args VenueServicePlaceUpdateStatusArgs
+	_args.Req = req
+	var _result VenueServicePlaceUpdateStatusResult
+	if err = p.Client_().Call(ctx, "PlaceUpdateStatus", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *VenueServiceClient) PlaceList(ctx context.Context, req *ListReq) (r *base.NilResponse, err error) {
+	var _args VenueServicePlaceListArgs
+	_args.Req = req
+	var _result VenueServicePlaceListResult
+	if err = p.Client_().Call(ctx, "PlaceList", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *VenueServiceClient) Create(ctx context.Context, req *CreateOrUpdateVenueReq) (r *base.NilResponse, err error) {
+	var _args VenueServiceCreateArgs
+	_args.Req = req
+	var _result VenueServiceCreateResult
+	if err = p.Client_().Call(ctx, "Create", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *VenueServiceClient) Update(ctx context.Context, req *CreateOrUpdateVenueReq) (r *base.NilResponse, err error) {
+	var _args VenueServiceUpdateArgs
+	_args.Req = req
+	var _result VenueServiceUpdateResult
+	if err = p.Client_().Call(ctx, "Update", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *VenueServiceClient) UpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error) {
+	var _args VenueServiceUpdateStatusArgs
+	_args.Req = req
+	var _result VenueServiceUpdateStatusResult
+	if err = p.Client_().Call(ctx, "UpdateStatus", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *VenueServiceClient) List(ctx context.Context, req *ListReq) (r *base.NilResponse, err error) {
+	var _args VenueServiceListArgs
+	_args.Req = req
+	var _result VenueServiceListResult
+	if err = p.Client_().Call(ctx, "List", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -1030,7 +2086,14 @@ func (p *VenueServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunct
 
 func NewVenueServiceProcessor(handler VenueService) *VenueServiceProcessor {
 	self := &VenueServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self.AddToProcessorMap("VenueList", &venueServiceProcessorVenueList{handler: handler})
+	self.AddToProcessorMap("CreatePlace", &venueServiceProcessorCreatePlace{handler: handler})
+	self.AddToProcessorMap("UpdatePlace", &venueServiceProcessorUpdatePlace{handler: handler})
+	self.AddToProcessorMap("PlaceUpdateStatus", &venueServiceProcessorPlaceUpdateStatus{handler: handler})
+	self.AddToProcessorMap("PlaceList", &venueServiceProcessorPlaceList{handler: handler})
+	self.AddToProcessorMap("Create", &venueServiceProcessorCreate{handler: handler})
+	self.AddToProcessorMap("Update", &venueServiceProcessorUpdate{handler: handler})
+	self.AddToProcessorMap("UpdateStatus", &venueServiceProcessorUpdateStatus{handler: handler})
+	self.AddToProcessorMap("List", &venueServiceProcessorList{handler: handler})
 	return self
 }
 func (p *VenueServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -1051,16 +2114,16 @@ func (p *VenueServiceProcessor) Process(ctx context.Context, iprot, oprot thrift
 	return false, x
 }
 
-type venueServiceProcessorVenueList struct {
+type venueServiceProcessorCreatePlace struct {
 	handler VenueService
 }
 
-func (p *venueServiceProcessorVenueList) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := VenueServiceVenueListArgs{}
+func (p *venueServiceProcessorCreatePlace) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VenueServiceCreatePlaceArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("VenueList", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("CreatePlace", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1069,11 +2132,11 @@ func (p *venueServiceProcessorVenueList) Process(ctx context.Context, seqId int3
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := VenueServiceVenueListResult{}
+	result := VenueServiceCreatePlaceResult{}
 	var retval *base.NilResponse
-	if retval, err2 = p.handler.VenueList(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing VenueList: "+err2.Error())
-		oprot.WriteMessageBegin("VenueList", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.CreatePlace(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing CreatePlace: "+err2.Error())
+		oprot.WriteMessageBegin("CreatePlace", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1081,7 +2144,7 @@ func (p *venueServiceProcessorVenueList) Process(ctx context.Context, seqId int3
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("VenueList", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("CreatePlace", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1099,32 +2162,368 @@ func (p *venueServiceProcessorVenueList) Process(ctx context.Context, seqId int3
 	return true, err
 }
 
-type VenueServiceVenueListArgs struct {
-	Req *VenueListReq `thrift:"req,1"`
+type venueServiceProcessorUpdatePlace struct {
+	handler VenueService
 }
 
-func NewVenueServiceVenueListArgs() *VenueServiceVenueListArgs {
-	return &VenueServiceVenueListArgs{}
+func (p *venueServiceProcessorUpdatePlace) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VenueServiceUpdatePlaceArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("UpdatePlace", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := VenueServiceUpdatePlaceResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.UpdatePlace(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdatePlace: "+err2.Error())
+		oprot.WriteMessageBegin("UpdatePlace", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("UpdatePlace", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
 }
 
-var VenueServiceVenueListArgs_Req_DEFAULT *VenueListReq
+type venueServiceProcessorPlaceUpdateStatus struct {
+	handler VenueService
+}
 
-func (p *VenueServiceVenueListArgs) GetReq() (v *VenueListReq) {
+func (p *venueServiceProcessorPlaceUpdateStatus) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VenueServicePlaceUpdateStatusArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("PlaceUpdateStatus", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := VenueServicePlaceUpdateStatusResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.PlaceUpdateStatus(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing PlaceUpdateStatus: "+err2.Error())
+		oprot.WriteMessageBegin("PlaceUpdateStatus", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("PlaceUpdateStatus", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type venueServiceProcessorPlaceList struct {
+	handler VenueService
+}
+
+func (p *venueServiceProcessorPlaceList) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VenueServicePlaceListArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("PlaceList", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := VenueServicePlaceListResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.PlaceList(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing PlaceList: "+err2.Error())
+		oprot.WriteMessageBegin("PlaceList", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("PlaceList", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type venueServiceProcessorCreate struct {
+	handler VenueService
+}
+
+func (p *venueServiceProcessorCreate) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VenueServiceCreateArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("Create", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := VenueServiceCreateResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.Create(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Create: "+err2.Error())
+		oprot.WriteMessageBegin("Create", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("Create", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type venueServiceProcessorUpdate struct {
+	handler VenueService
+}
+
+func (p *venueServiceProcessorUpdate) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VenueServiceUpdateArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("Update", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := VenueServiceUpdateResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.Update(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Update: "+err2.Error())
+		oprot.WriteMessageBegin("Update", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("Update", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type venueServiceProcessorUpdateStatus struct {
+	handler VenueService
+}
+
+func (p *venueServiceProcessorUpdateStatus) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VenueServiceUpdateStatusArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("UpdateStatus", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := VenueServiceUpdateStatusResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.UpdateStatus(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdateStatus: "+err2.Error())
+		oprot.WriteMessageBegin("UpdateStatus", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("UpdateStatus", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type venueServiceProcessorList struct {
+	handler VenueService
+}
+
+func (p *venueServiceProcessorList) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VenueServiceListArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("List", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := VenueServiceListResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.List(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing List: "+err2.Error())
+		oprot.WriteMessageBegin("List", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("List", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type VenueServiceCreatePlaceArgs struct {
+	Req *CreateOrUpdateVenuePlaceReq `thrift:"req,1"`
+}
+
+func NewVenueServiceCreatePlaceArgs() *VenueServiceCreatePlaceArgs {
+	return &VenueServiceCreatePlaceArgs{}
+}
+
+var VenueServiceCreatePlaceArgs_Req_DEFAULT *CreateOrUpdateVenuePlaceReq
+
+func (p *VenueServiceCreatePlaceArgs) GetReq() (v *CreateOrUpdateVenuePlaceReq) {
 	if !p.IsSetReq() {
-		return VenueServiceVenueListArgs_Req_DEFAULT
+		return VenueServiceCreatePlaceArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_VenueServiceVenueListArgs = map[int16]string{
+var fieldIDToName_VenueServiceCreatePlaceArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *VenueServiceVenueListArgs) IsSetReq() bool {
+func (p *VenueServiceCreatePlaceArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *VenueServiceVenueListArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *VenueServiceCreatePlaceArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -1170,7 +2569,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceVenueListArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceCreatePlaceArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -1180,17 +2579,17 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *VenueServiceVenueListArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.Req = NewVenueListReq()
+func (p *VenueServiceCreatePlaceArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewCreateOrUpdateVenuePlaceReq()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *VenueServiceVenueListArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *VenueServiceCreatePlaceArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("VenueList_args"); err != nil {
+	if err = oprot.WriteStructBegin("CreatePlace_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -1216,7 +2615,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *VenueServiceVenueListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *VenueServiceCreatePlaceArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -1233,40 +2632,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *VenueServiceVenueListArgs) String() string {
+func (p *VenueServiceCreatePlaceArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("VenueServiceVenueListArgs(%+v)", *p)
+	return fmt.Sprintf("VenueServiceCreatePlaceArgs(%+v)", *p)
 
 }
 
-type VenueServiceVenueListResult struct {
+type VenueServiceCreatePlaceResult struct {
 	Success *base.NilResponse `thrift:"success,0,optional"`
 }
 
-func NewVenueServiceVenueListResult() *VenueServiceVenueListResult {
-	return &VenueServiceVenueListResult{}
+func NewVenueServiceCreatePlaceResult() *VenueServiceCreatePlaceResult {
+	return &VenueServiceCreatePlaceResult{}
 }
 
-var VenueServiceVenueListResult_Success_DEFAULT *base.NilResponse
+var VenueServiceCreatePlaceResult_Success_DEFAULT *base.NilResponse
 
-func (p *VenueServiceVenueListResult) GetSuccess() (v *base.NilResponse) {
+func (p *VenueServiceCreatePlaceResult) GetSuccess() (v *base.NilResponse) {
 	if !p.IsSetSuccess() {
-		return VenueServiceVenueListResult_Success_DEFAULT
+		return VenueServiceCreatePlaceResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_VenueServiceVenueListResult = map[int16]string{
+var fieldIDToName_VenueServiceCreatePlaceResult = map[int16]string{
 	0: "success",
 }
 
-func (p *VenueServiceVenueListResult) IsSetSuccess() bool {
+func (p *VenueServiceCreatePlaceResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *VenueServiceVenueListResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *VenueServiceCreatePlaceResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -1312,7 +2711,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceVenueListResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceCreatePlaceResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -1322,7 +2721,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *VenueServiceVenueListResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *VenueServiceCreatePlaceResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = base.NewNilResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
@@ -1330,9 +2729,9 @@ func (p *VenueServiceVenueListResult) ReadField0(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *VenueServiceVenueListResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *VenueServiceCreatePlaceResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("VenueList_result"); err != nil {
+	if err = oprot.WriteStructBegin("CreatePlace_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -1358,7 +2757,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *VenueServiceVenueListResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *VenueServiceCreatePlaceResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -1377,10 +2776,2012 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *VenueServiceVenueListResult) String() string {
+func (p *VenueServiceCreatePlaceResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("VenueServiceVenueListResult(%+v)", *p)
+	return fmt.Sprintf("VenueServiceCreatePlaceResult(%+v)", *p)
+
+}
+
+type VenueServiceUpdatePlaceArgs struct {
+	Req *CreateOrUpdateVenuePlaceReq `thrift:"req,1"`
+}
+
+func NewVenueServiceUpdatePlaceArgs() *VenueServiceUpdatePlaceArgs {
+	return &VenueServiceUpdatePlaceArgs{}
+}
+
+var VenueServiceUpdatePlaceArgs_Req_DEFAULT *CreateOrUpdateVenuePlaceReq
+
+func (p *VenueServiceUpdatePlaceArgs) GetReq() (v *CreateOrUpdateVenuePlaceReq) {
+	if !p.IsSetReq() {
+		return VenueServiceUpdatePlaceArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_VenueServiceUpdatePlaceArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *VenueServiceUpdatePlaceArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VenueServiceUpdatePlaceArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceUpdatePlaceArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdatePlaceArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewCreateOrUpdateVenuePlaceReq()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceUpdatePlaceArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("UpdatePlace_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdatePlaceArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *VenueServiceUpdatePlaceArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceUpdatePlaceArgs(%+v)", *p)
+
+}
+
+type VenueServiceUpdatePlaceResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewVenueServiceUpdatePlaceResult() *VenueServiceUpdatePlaceResult {
+	return &VenueServiceUpdatePlaceResult{}
+}
+
+var VenueServiceUpdatePlaceResult_Success_DEFAULT *base.NilResponse
+
+func (p *VenueServiceUpdatePlaceResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return VenueServiceUpdatePlaceResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_VenueServiceUpdatePlaceResult = map[int16]string{
+	0: "success",
+}
+
+func (p *VenueServiceUpdatePlaceResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VenueServiceUpdatePlaceResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceUpdatePlaceResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdatePlaceResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = base.NewNilResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceUpdatePlaceResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("UpdatePlace_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdatePlaceResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *VenueServiceUpdatePlaceResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceUpdatePlaceResult(%+v)", *p)
+
+}
+
+type VenueServicePlaceUpdateStatusArgs struct {
+	Req *base.StatusCodeReq `thrift:"req,1"`
+}
+
+func NewVenueServicePlaceUpdateStatusArgs() *VenueServicePlaceUpdateStatusArgs {
+	return &VenueServicePlaceUpdateStatusArgs{}
+}
+
+var VenueServicePlaceUpdateStatusArgs_Req_DEFAULT *base.StatusCodeReq
+
+func (p *VenueServicePlaceUpdateStatusArgs) GetReq() (v *base.StatusCodeReq) {
+	if !p.IsSetReq() {
+		return VenueServicePlaceUpdateStatusArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_VenueServicePlaceUpdateStatusArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *VenueServicePlaceUpdateStatusArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VenueServicePlaceUpdateStatusArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServicePlaceUpdateStatusArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServicePlaceUpdateStatusArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = base.NewStatusCodeReq()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServicePlaceUpdateStatusArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PlaceUpdateStatus_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServicePlaceUpdateStatusArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *VenueServicePlaceUpdateStatusArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServicePlaceUpdateStatusArgs(%+v)", *p)
+
+}
+
+type VenueServicePlaceUpdateStatusResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewVenueServicePlaceUpdateStatusResult() *VenueServicePlaceUpdateStatusResult {
+	return &VenueServicePlaceUpdateStatusResult{}
+}
+
+var VenueServicePlaceUpdateStatusResult_Success_DEFAULT *base.NilResponse
+
+func (p *VenueServicePlaceUpdateStatusResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return VenueServicePlaceUpdateStatusResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_VenueServicePlaceUpdateStatusResult = map[int16]string{
+	0: "success",
+}
+
+func (p *VenueServicePlaceUpdateStatusResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VenueServicePlaceUpdateStatusResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServicePlaceUpdateStatusResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServicePlaceUpdateStatusResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = base.NewNilResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServicePlaceUpdateStatusResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PlaceUpdateStatus_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServicePlaceUpdateStatusResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *VenueServicePlaceUpdateStatusResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServicePlaceUpdateStatusResult(%+v)", *p)
+
+}
+
+type VenueServicePlaceListArgs struct {
+	Req *ListReq `thrift:"req,1"`
+}
+
+func NewVenueServicePlaceListArgs() *VenueServicePlaceListArgs {
+	return &VenueServicePlaceListArgs{}
+}
+
+var VenueServicePlaceListArgs_Req_DEFAULT *ListReq
+
+func (p *VenueServicePlaceListArgs) GetReq() (v *ListReq) {
+	if !p.IsSetReq() {
+		return VenueServicePlaceListArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_VenueServicePlaceListArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *VenueServicePlaceListArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VenueServicePlaceListArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServicePlaceListArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServicePlaceListArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewListReq()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServicePlaceListArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PlaceList_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServicePlaceListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *VenueServicePlaceListArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServicePlaceListArgs(%+v)", *p)
+
+}
+
+type VenueServicePlaceListResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewVenueServicePlaceListResult() *VenueServicePlaceListResult {
+	return &VenueServicePlaceListResult{}
+}
+
+var VenueServicePlaceListResult_Success_DEFAULT *base.NilResponse
+
+func (p *VenueServicePlaceListResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return VenueServicePlaceListResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_VenueServicePlaceListResult = map[int16]string{
+	0: "success",
+}
+
+func (p *VenueServicePlaceListResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VenueServicePlaceListResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServicePlaceListResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServicePlaceListResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = base.NewNilResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServicePlaceListResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PlaceList_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServicePlaceListResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *VenueServicePlaceListResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServicePlaceListResult(%+v)", *p)
+
+}
+
+type VenueServiceCreateArgs struct {
+	Req *CreateOrUpdateVenueReq `thrift:"req,1"`
+}
+
+func NewVenueServiceCreateArgs() *VenueServiceCreateArgs {
+	return &VenueServiceCreateArgs{}
+}
+
+var VenueServiceCreateArgs_Req_DEFAULT *CreateOrUpdateVenueReq
+
+func (p *VenueServiceCreateArgs) GetReq() (v *CreateOrUpdateVenueReq) {
+	if !p.IsSetReq() {
+		return VenueServiceCreateArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_VenueServiceCreateArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *VenueServiceCreateArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VenueServiceCreateArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceCreateArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceCreateArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewCreateOrUpdateVenueReq()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceCreateArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("Create_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceCreateArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *VenueServiceCreateArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceCreateArgs(%+v)", *p)
+
+}
+
+type VenueServiceCreateResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewVenueServiceCreateResult() *VenueServiceCreateResult {
+	return &VenueServiceCreateResult{}
+}
+
+var VenueServiceCreateResult_Success_DEFAULT *base.NilResponse
+
+func (p *VenueServiceCreateResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return VenueServiceCreateResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_VenueServiceCreateResult = map[int16]string{
+	0: "success",
+}
+
+func (p *VenueServiceCreateResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VenueServiceCreateResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceCreateResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceCreateResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = base.NewNilResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceCreateResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("Create_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceCreateResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *VenueServiceCreateResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceCreateResult(%+v)", *p)
+
+}
+
+type VenueServiceUpdateArgs struct {
+	Req *CreateOrUpdateVenueReq `thrift:"req,1"`
+}
+
+func NewVenueServiceUpdateArgs() *VenueServiceUpdateArgs {
+	return &VenueServiceUpdateArgs{}
+}
+
+var VenueServiceUpdateArgs_Req_DEFAULT *CreateOrUpdateVenueReq
+
+func (p *VenueServiceUpdateArgs) GetReq() (v *CreateOrUpdateVenueReq) {
+	if !p.IsSetReq() {
+		return VenueServiceUpdateArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_VenueServiceUpdateArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *VenueServiceUpdateArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VenueServiceUpdateArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceUpdateArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewCreateOrUpdateVenueReq()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceUpdateArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("Update_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceUpdateArgs(%+v)", *p)
+
+}
+
+type VenueServiceUpdateResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewVenueServiceUpdateResult() *VenueServiceUpdateResult {
+	return &VenueServiceUpdateResult{}
+}
+
+var VenueServiceUpdateResult_Success_DEFAULT *base.NilResponse
+
+func (p *VenueServiceUpdateResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return VenueServiceUpdateResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_VenueServiceUpdateResult = map[int16]string{
+	0: "success",
+}
+
+func (p *VenueServiceUpdateResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VenueServiceUpdateResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceUpdateResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = base.NewNilResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceUpdateResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("Update_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceUpdateResult(%+v)", *p)
+
+}
+
+type VenueServiceUpdateStatusArgs struct {
+	Req *base.StatusCodeReq `thrift:"req,1"`
+}
+
+func NewVenueServiceUpdateStatusArgs() *VenueServiceUpdateStatusArgs {
+	return &VenueServiceUpdateStatusArgs{}
+}
+
+var VenueServiceUpdateStatusArgs_Req_DEFAULT *base.StatusCodeReq
+
+func (p *VenueServiceUpdateStatusArgs) GetReq() (v *base.StatusCodeReq) {
+	if !p.IsSetReq() {
+		return VenueServiceUpdateStatusArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_VenueServiceUpdateStatusArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *VenueServiceUpdateStatusArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VenueServiceUpdateStatusArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceUpdateStatusArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateStatusArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = base.NewStatusCodeReq()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceUpdateStatusArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("UpdateStatus_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateStatusArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateStatusArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceUpdateStatusArgs(%+v)", *p)
+
+}
+
+type VenueServiceUpdateStatusResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewVenueServiceUpdateStatusResult() *VenueServiceUpdateStatusResult {
+	return &VenueServiceUpdateStatusResult{}
+}
+
+var VenueServiceUpdateStatusResult_Success_DEFAULT *base.NilResponse
+
+func (p *VenueServiceUpdateStatusResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return VenueServiceUpdateStatusResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_VenueServiceUpdateStatusResult = map[int16]string{
+	0: "success",
+}
+
+func (p *VenueServiceUpdateStatusResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VenueServiceUpdateStatusResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceUpdateStatusResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateStatusResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = base.NewNilResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceUpdateStatusResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("UpdateStatus_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateStatusResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *VenueServiceUpdateStatusResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceUpdateStatusResult(%+v)", *p)
+
+}
+
+type VenueServiceListArgs struct {
+	Req *ListReq `thrift:"req,1"`
+}
+
+func NewVenueServiceListArgs() *VenueServiceListArgs {
+	return &VenueServiceListArgs{}
+}
+
+var VenueServiceListArgs_Req_DEFAULT *ListReq
+
+func (p *VenueServiceListArgs) GetReq() (v *ListReq) {
+	if !p.IsSetReq() {
+		return VenueServiceListArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_VenueServiceListArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *VenueServiceListArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VenueServiceListArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceListArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceListArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewListReq()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceListArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("List_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *VenueServiceListArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceListArgs(%+v)", *p)
+
+}
+
+type VenueServiceListResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewVenueServiceListResult() *VenueServiceListResult {
+	return &VenueServiceListResult{}
+}
+
+var VenueServiceListResult_Success_DEFAULT *base.NilResponse
+
+func (p *VenueServiceListResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return VenueServiceListResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_VenueServiceListResult = map[int16]string{
+	0: "success",
+}
+
+func (p *VenueServiceListResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VenueServiceListResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_VenueServiceListResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *VenueServiceListResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = base.NewNilResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *VenueServiceListResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("List_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *VenueServiceListResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *VenueServiceListResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VenueServiceListResult(%+v)", *p)
 
 }

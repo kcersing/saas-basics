@@ -4,13 +4,13 @@ package order
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
 	"saas/app/pkg/do"
 	"saas/app/pkg/service/admin"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	order "saas/app/admin/idl_gen/model/admin/order"
 	base "saas/app/admin/idl_gen/model/base"
 )
@@ -22,45 +22,24 @@ func CreateOrder(ctx context.Context, c *app.RequestContext) {
 	var req order.CreateOrderReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// UpdateUser .
-// @router /api/admin/order/update [POST]
-func UpdateUser(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req order.UpdateOrderReq
-	err = c.BindAndValidate(&req)
+	var orderInfoReq do.OrderInfo
+	err = copier.Copy(&orderInfoReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// CancelOrder .
-// @router /api/admin/order/cancel [POST]
-func CancelOrder(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
+	err = admin.NewOrder(ctx, c).Create(orderInfoReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ListOrder .
@@ -93,11 +72,64 @@ func GetOrderById(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	info, err := admin.NewOrder(ctx, c).Info(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}
+
+// UpdateOrder .
+// @router /api/admin/order/update [POST]
+func UpdateOrder(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.UpdateOrderReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	var orderReq do.OrderInfo
+	err = copier.Copy(&orderReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	err = admin.NewOrder(ctx, c).Update(orderReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
+
+// UpdateStatus .
+// @router /api/admin/order/status [POST]
+func UpdateStatus(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.StatusCodeReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	err = admin.NewOrder(ctx, c).UpdateStatus(int64(req.ID), req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }

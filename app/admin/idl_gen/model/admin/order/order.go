@@ -1456,9 +1456,9 @@ func (p *UpdateOrderReq) String() string {
 type OrderService interface {
 	CreateOrder(ctx context.Context, req *CreateOrderReq) (r *base.NilResponse, err error)
 
-	UpdateUser(ctx context.Context, req *UpdateOrderReq) (r *base.NilResponse, err error)
+	UpdateOrder(ctx context.Context, req *UpdateOrderReq) (r *base.NilResponse, err error)
 
-	CancelOrder(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
+	UpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
 
 	ListOrder(ctx context.Context, req *ListOrderReq) (r *base.NilResponse, err error)
 
@@ -1500,20 +1500,20 @@ func (p *OrderServiceClient) CreateOrder(ctx context.Context, req *CreateOrderRe
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *OrderServiceClient) UpdateUser(ctx context.Context, req *UpdateOrderReq) (r *base.NilResponse, err error) {
-	var _args OrderServiceUpdateUserArgs
+func (p *OrderServiceClient) UpdateOrder(ctx context.Context, req *UpdateOrderReq) (r *base.NilResponse, err error) {
+	var _args OrderServiceUpdateOrderArgs
 	_args.Req = req
-	var _result OrderServiceUpdateUserResult
-	if err = p.Client_().Call(ctx, "UpdateUser", &_args, &_result); err != nil {
+	var _result OrderServiceUpdateOrderResult
+	if err = p.Client_().Call(ctx, "UpdateOrder", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *OrderServiceClient) CancelOrder(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
-	var _args OrderServiceCancelOrderArgs
+func (p *OrderServiceClient) UpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error) {
+	var _args OrderServiceUpdateStatusArgs
 	_args.Req = req
-	var _result OrderServiceCancelOrderResult
-	if err = p.Client_().Call(ctx, "CancelOrder", &_args, &_result); err != nil {
+	var _result OrderServiceUpdateStatusResult
+	if err = p.Client_().Call(ctx, "UpdateStatus", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -1558,8 +1558,8 @@ func (p *OrderServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunct
 func NewOrderServiceProcessor(handler OrderService) *OrderServiceProcessor {
 	self := &OrderServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
 	self.AddToProcessorMap("CreateOrder", &orderServiceProcessorCreateOrder{handler: handler})
-	self.AddToProcessorMap("UpdateUser", &orderServiceProcessorUpdateUser{handler: handler})
-	self.AddToProcessorMap("CancelOrder", &orderServiceProcessorCancelOrder{handler: handler})
+	self.AddToProcessorMap("UpdateOrder", &orderServiceProcessorUpdateOrder{handler: handler})
+	self.AddToProcessorMap("UpdateStatus", &orderServiceProcessorUpdateStatus{handler: handler})
 	self.AddToProcessorMap("ListOrder", &orderServiceProcessorListOrder{handler: handler})
 	self.AddToProcessorMap("GetOrderById", &orderServiceProcessorGetOrderById{handler: handler})
 	return self
@@ -1630,16 +1630,16 @@ func (p *orderServiceProcessorCreateOrder) Process(ctx context.Context, seqId in
 	return true, err
 }
 
-type orderServiceProcessorUpdateUser struct {
+type orderServiceProcessorUpdateOrder struct {
 	handler OrderService
 }
 
-func (p *orderServiceProcessorUpdateUser) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := OrderServiceUpdateUserArgs{}
+func (p *orderServiceProcessorUpdateOrder) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := OrderServiceUpdateOrderArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("UpdateUser", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("UpdateOrder", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1648,11 +1648,11 @@ func (p *orderServiceProcessorUpdateUser) Process(ctx context.Context, seqId int
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := OrderServiceUpdateUserResult{}
+	result := OrderServiceUpdateOrderResult{}
 	var retval *base.NilResponse
-	if retval, err2 = p.handler.UpdateUser(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdateUser: "+err2.Error())
-		oprot.WriteMessageBegin("UpdateUser", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.UpdateOrder(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdateOrder: "+err2.Error())
+		oprot.WriteMessageBegin("UpdateOrder", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1660,7 +1660,7 @@ func (p *orderServiceProcessorUpdateUser) Process(ctx context.Context, seqId int
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("UpdateUser", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("UpdateOrder", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1678,16 +1678,16 @@ func (p *orderServiceProcessorUpdateUser) Process(ctx context.Context, seqId int
 	return true, err
 }
 
-type orderServiceProcessorCancelOrder struct {
+type orderServiceProcessorUpdateStatus struct {
 	handler OrderService
 }
 
-func (p *orderServiceProcessorCancelOrder) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := OrderServiceCancelOrderArgs{}
+func (p *orderServiceProcessorUpdateStatus) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := OrderServiceUpdateStatusArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("CancelOrder", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("UpdateStatus", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1696,11 +1696,11 @@ func (p *orderServiceProcessorCancelOrder) Process(ctx context.Context, seqId in
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := OrderServiceCancelOrderResult{}
+	result := OrderServiceUpdateStatusResult{}
 	var retval *base.NilResponse
-	if retval, err2 = p.handler.CancelOrder(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing CancelOrder: "+err2.Error())
-		oprot.WriteMessageBegin("CancelOrder", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.UpdateStatus(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdateStatus: "+err2.Error())
+		oprot.WriteMessageBegin("UpdateStatus", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1708,7 +1708,7 @@ func (p *orderServiceProcessorCancelOrder) Process(ctx context.Context, seqId in
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("CancelOrder", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("UpdateStatus", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2108,32 +2108,32 @@ func (p *OrderServiceCreateOrderResult) String() string {
 
 }
 
-type OrderServiceUpdateUserArgs struct {
+type OrderServiceUpdateOrderArgs struct {
 	Req *UpdateOrderReq `thrift:"req,1"`
 }
 
-func NewOrderServiceUpdateUserArgs() *OrderServiceUpdateUserArgs {
-	return &OrderServiceUpdateUserArgs{}
+func NewOrderServiceUpdateOrderArgs() *OrderServiceUpdateOrderArgs {
+	return &OrderServiceUpdateOrderArgs{}
 }
 
-var OrderServiceUpdateUserArgs_Req_DEFAULT *UpdateOrderReq
+var OrderServiceUpdateOrderArgs_Req_DEFAULT *UpdateOrderReq
 
-func (p *OrderServiceUpdateUserArgs) GetReq() (v *UpdateOrderReq) {
+func (p *OrderServiceUpdateOrderArgs) GetReq() (v *UpdateOrderReq) {
 	if !p.IsSetReq() {
-		return OrderServiceUpdateUserArgs_Req_DEFAULT
+		return OrderServiceUpdateOrderArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_OrderServiceUpdateUserArgs = map[int16]string{
+var fieldIDToName_OrderServiceUpdateOrderArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *OrderServiceUpdateUserArgs) IsSetReq() bool {
+func (p *OrderServiceUpdateOrderArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *OrderServiceUpdateUserArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateOrderArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -2179,7 +2179,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OrderServiceUpdateUserArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OrderServiceUpdateOrderArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2189,7 +2189,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *OrderServiceUpdateUserArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *OrderServiceUpdateOrderArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.Req = NewUpdateOrderReq()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
@@ -2197,9 +2197,9 @@ func (p *OrderServiceUpdateUserArgs) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *OrderServiceUpdateUserArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateOrderArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UpdateUser_args"); err != nil {
+	if err = oprot.WriteStructBegin("UpdateOrder_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2225,7 +2225,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *OrderServiceUpdateUserArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateOrderArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2242,40 +2242,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *OrderServiceUpdateUserArgs) String() string {
+func (p *OrderServiceUpdateOrderArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("OrderServiceUpdateUserArgs(%+v)", *p)
+	return fmt.Sprintf("OrderServiceUpdateOrderArgs(%+v)", *p)
 
 }
 
-type OrderServiceUpdateUserResult struct {
+type OrderServiceUpdateOrderResult struct {
 	Success *base.NilResponse `thrift:"success,0,optional"`
 }
 
-func NewOrderServiceUpdateUserResult() *OrderServiceUpdateUserResult {
-	return &OrderServiceUpdateUserResult{}
+func NewOrderServiceUpdateOrderResult() *OrderServiceUpdateOrderResult {
+	return &OrderServiceUpdateOrderResult{}
 }
 
-var OrderServiceUpdateUserResult_Success_DEFAULT *base.NilResponse
+var OrderServiceUpdateOrderResult_Success_DEFAULT *base.NilResponse
 
-func (p *OrderServiceUpdateUserResult) GetSuccess() (v *base.NilResponse) {
+func (p *OrderServiceUpdateOrderResult) GetSuccess() (v *base.NilResponse) {
 	if !p.IsSetSuccess() {
-		return OrderServiceUpdateUserResult_Success_DEFAULT
+		return OrderServiceUpdateOrderResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_OrderServiceUpdateUserResult = map[int16]string{
+var fieldIDToName_OrderServiceUpdateOrderResult = map[int16]string{
 	0: "success",
 }
 
-func (p *OrderServiceUpdateUserResult) IsSetSuccess() bool {
+func (p *OrderServiceUpdateOrderResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *OrderServiceUpdateUserResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateOrderResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -2321,7 +2321,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OrderServiceUpdateUserResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OrderServiceUpdateOrderResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2331,7 +2331,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *OrderServiceUpdateUserResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *OrderServiceUpdateOrderResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = base.NewNilResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
@@ -2339,9 +2339,9 @@ func (p *OrderServiceUpdateUserResult) ReadField0(iprot thrift.TProtocol) error 
 	return nil
 }
 
-func (p *OrderServiceUpdateUserResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateOrderResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UpdateUser_result"); err != nil {
+	if err = oprot.WriteStructBegin("UpdateOrder_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2367,7 +2367,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *OrderServiceUpdateUserResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateOrderResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -2386,40 +2386,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *OrderServiceUpdateUserResult) String() string {
+func (p *OrderServiceUpdateOrderResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("OrderServiceUpdateUserResult(%+v)", *p)
+	return fmt.Sprintf("OrderServiceUpdateOrderResult(%+v)", *p)
 
 }
 
-type OrderServiceCancelOrderArgs struct {
-	Req *base.IDReq `thrift:"req,1"`
+type OrderServiceUpdateStatusArgs struct {
+	Req *base.StatusCodeReq `thrift:"req,1"`
 }
 
-func NewOrderServiceCancelOrderArgs() *OrderServiceCancelOrderArgs {
-	return &OrderServiceCancelOrderArgs{}
+func NewOrderServiceUpdateStatusArgs() *OrderServiceUpdateStatusArgs {
+	return &OrderServiceUpdateStatusArgs{}
 }
 
-var OrderServiceCancelOrderArgs_Req_DEFAULT *base.IDReq
+var OrderServiceUpdateStatusArgs_Req_DEFAULT *base.StatusCodeReq
 
-func (p *OrderServiceCancelOrderArgs) GetReq() (v *base.IDReq) {
+func (p *OrderServiceUpdateStatusArgs) GetReq() (v *base.StatusCodeReq) {
 	if !p.IsSetReq() {
-		return OrderServiceCancelOrderArgs_Req_DEFAULT
+		return OrderServiceUpdateStatusArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_OrderServiceCancelOrderArgs = map[int16]string{
+var fieldIDToName_OrderServiceUpdateStatusArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *OrderServiceCancelOrderArgs) IsSetReq() bool {
+func (p *OrderServiceUpdateStatusArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *OrderServiceCancelOrderArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateStatusArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -2465,7 +2465,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OrderServiceCancelOrderArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OrderServiceUpdateStatusArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2475,17 +2475,17 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *OrderServiceCancelOrderArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.Req = base.NewIDReq()
+func (p *OrderServiceUpdateStatusArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = base.NewStatusCodeReq()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *OrderServiceCancelOrderArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateStatusArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("CancelOrder_args"); err != nil {
+	if err = oprot.WriteStructBegin("UpdateStatus_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2511,7 +2511,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *OrderServiceCancelOrderArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateStatusArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2528,40 +2528,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *OrderServiceCancelOrderArgs) String() string {
+func (p *OrderServiceUpdateStatusArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("OrderServiceCancelOrderArgs(%+v)", *p)
+	return fmt.Sprintf("OrderServiceUpdateStatusArgs(%+v)", *p)
 
 }
 
-type OrderServiceCancelOrderResult struct {
+type OrderServiceUpdateStatusResult struct {
 	Success *base.NilResponse `thrift:"success,0,optional"`
 }
 
-func NewOrderServiceCancelOrderResult() *OrderServiceCancelOrderResult {
-	return &OrderServiceCancelOrderResult{}
+func NewOrderServiceUpdateStatusResult() *OrderServiceUpdateStatusResult {
+	return &OrderServiceUpdateStatusResult{}
 }
 
-var OrderServiceCancelOrderResult_Success_DEFAULT *base.NilResponse
+var OrderServiceUpdateStatusResult_Success_DEFAULT *base.NilResponse
 
-func (p *OrderServiceCancelOrderResult) GetSuccess() (v *base.NilResponse) {
+func (p *OrderServiceUpdateStatusResult) GetSuccess() (v *base.NilResponse) {
 	if !p.IsSetSuccess() {
-		return OrderServiceCancelOrderResult_Success_DEFAULT
+		return OrderServiceUpdateStatusResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_OrderServiceCancelOrderResult = map[int16]string{
+var fieldIDToName_OrderServiceUpdateStatusResult = map[int16]string{
 	0: "success",
 }
 
-func (p *OrderServiceCancelOrderResult) IsSetSuccess() bool {
+func (p *OrderServiceUpdateStatusResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *OrderServiceCancelOrderResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateStatusResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -2607,7 +2607,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OrderServiceCancelOrderResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OrderServiceUpdateStatusResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2617,7 +2617,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *OrderServiceCancelOrderResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *OrderServiceUpdateStatusResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = base.NewNilResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
@@ -2625,9 +2625,9 @@ func (p *OrderServiceCancelOrderResult) ReadField0(iprot thrift.TProtocol) error
 	return nil
 }
 
-func (p *OrderServiceCancelOrderResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateStatusResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("CancelOrder_result"); err != nil {
+	if err = oprot.WriteStructBegin("UpdateStatus_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2653,7 +2653,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *OrderServiceCancelOrderResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *OrderServiceUpdateStatusResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -2672,11 +2672,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *OrderServiceCancelOrderResult) String() string {
+func (p *OrderServiceUpdateStatusResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("OrderServiceCancelOrderResult(%+v)", *p)
+	return fmt.Sprintf("OrderServiceUpdateStatusResult(%+v)", *p)
 
 }
 
