@@ -7,6 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberdetails"
+	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
 	"time"
 
@@ -50,22 +52,16 @@ func (mc *MemberCreate) SetNillableUpdatedAt(t *time.Time) *MemberCreate {
 }
 
 // SetStatus sets the "status" field.
-func (mc *MemberCreate) SetStatus(i int8) *MemberCreate {
+func (mc *MemberCreate) SetStatus(i int64) *MemberCreate {
 	mc.mutation.SetStatus(i)
 	return mc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableStatus(i *int8) *MemberCreate {
+func (mc *MemberCreate) SetNillableStatus(i *int64) *MemberCreate {
 	if i != nil {
 		mc.SetStatus(*i)
 	}
-	return mc
-}
-
-// SetUsername sets the "username" field.
-func (mc *MemberCreate) SetUsername(s string) *MemberCreate {
-	mc.mutation.SetUsername(s)
 	return mc
 }
 
@@ -75,15 +71,39 @@ func (mc *MemberCreate) SetPassword(s string) *MemberCreate {
 	return mc
 }
 
-// SetNickname sets the "nickname" field.
-func (mc *MemberCreate) SetNickname(s string) *MemberCreate {
-	mc.mutation.SetNickname(s)
+// SetNillablePassword sets the "password" field if the given value is not nil.
+func (mc *MemberCreate) SetNillablePassword(s *string) *MemberCreate {
+	if s != nil {
+		mc.SetPassword(*s)
+	}
+	return mc
+}
+
+// SetName sets the "name" field.
+func (mc *MemberCreate) SetName(s string) *MemberCreate {
+	mc.mutation.SetName(s)
+	return mc
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableName(s *string) *MemberCreate {
+	if s != nil {
+		mc.SetName(*s)
+	}
 	return mc
 }
 
 // SetMobile sets the "mobile" field.
 func (mc *MemberCreate) SetMobile(s string) *MemberCreate {
 	mc.mutation.SetMobile(s)
+	return mc
+}
+
+// SetNillableMobile sets the "mobile" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableMobile(s *string) *MemberCreate {
+	if s != nil {
+		mc.SetMobile(*s)
+	}
 	return mc
 }
 
@@ -129,10 +149,54 @@ func (mc *MemberCreate) SetNillableAvatar(s *string) *MemberCreate {
 	return mc
 }
 
+// SetCondition sets the "condition" field.
+func (mc *MemberCreate) SetCondition(i int64) *MemberCreate {
+	mc.mutation.SetCondition(i)
+	return mc
+}
+
+// SetNillableCondition sets the "condition" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableCondition(i *int64) *MemberCreate {
+	if i != nil {
+		mc.SetCondition(*i)
+	}
+	return mc
+}
+
 // SetID sets the "id" field.
 func (mc *MemberCreate) SetID(i int64) *MemberCreate {
 	mc.mutation.SetID(i)
 	return mc
+}
+
+// AddMemberDetailIDs adds the "member_details" edge to the MemberDetails entity by IDs.
+func (mc *MemberCreate) AddMemberDetailIDs(ids ...int64) *MemberCreate {
+	mc.mutation.AddMemberDetailIDs(ids...)
+	return mc
+}
+
+// AddMemberDetails adds the "member_details" edges to the MemberDetails entity.
+func (mc *MemberCreate) AddMemberDetails(m ...*MemberDetails) *MemberCreate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mc.AddMemberDetailIDs(ids...)
+}
+
+// AddMemberNoteIDs adds the "member_notes" edge to the MemberNote entity by IDs.
+func (mc *MemberCreate) AddMemberNoteIDs(ids ...int64) *MemberCreate {
+	mc.mutation.AddMemberNoteIDs(ids...)
+	return mc
+}
+
+// AddMemberNotes adds the "member_notes" edges to the MemberNote entity.
+func (mc *MemberCreate) AddMemberNotes(m ...*MemberNote) *MemberCreate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mc.AddMemberNoteIDs(ids...)
 }
 
 // AddMemberProductIDs adds the "member_products" edge to the MemberProduct entity by IDs.
@@ -201,6 +265,10 @@ func (mc *MemberCreate) defaults() {
 		v := member.DefaultAvatar
 		mc.mutation.SetAvatar(v)
 	}
+	if _, ok := mc.mutation.Condition(); !ok {
+		v := member.DefaultCondition
+		mc.mutation.SetCondition(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -210,18 +278,6 @@ func (mc *MemberCreate) check() error {
 	}
 	if _, ok := mc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Member.updated_at"`)}
-	}
-	if _, ok := mc.mutation.Username(); !ok {
-		return &ValidationError{Name: "username", err: errors.New(`ent: missing required field "Member.username"`)}
-	}
-	if _, ok := mc.mutation.Password(); !ok {
-		return &ValidationError{Name: "password", err: errors.New(`ent: missing required field "Member.password"`)}
-	}
-	if _, ok := mc.mutation.Nickname(); !ok {
-		return &ValidationError{Name: "nickname", err: errors.New(`ent: missing required field "Member.nickname"`)}
-	}
-	if _, ok := mc.mutation.Mobile(); !ok {
-		return &ValidationError{Name: "mobile", err: errors.New(`ent: missing required field "Member.mobile"`)}
 	}
 	return nil
 }
@@ -264,20 +320,16 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := mc.mutation.Status(); ok {
-		_spec.SetField(member.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(member.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
-	}
-	if value, ok := mc.mutation.Username(); ok {
-		_spec.SetField(member.FieldUsername, field.TypeString, value)
-		_node.Username = value
 	}
 	if value, ok := mc.mutation.Password(); ok {
 		_spec.SetField(member.FieldPassword, field.TypeString, value)
 		_node.Password = value
 	}
-	if value, ok := mc.mutation.Nickname(); ok {
-		_spec.SetField(member.FieldNickname, field.TypeString, value)
-		_node.Nickname = value
+	if value, ok := mc.mutation.Name(); ok {
+		_spec.SetField(member.FieldName, field.TypeString, value)
+		_node.Name = value
 	}
 	if value, ok := mc.mutation.Mobile(); ok {
 		_spec.SetField(member.FieldMobile, field.TypeString, value)
@@ -294,6 +346,42 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Avatar(); ok {
 		_spec.SetField(member.FieldAvatar, field.TypeString, value)
 		_node.Avatar = value
+	}
+	if value, ok := mc.mutation.Condition(); ok {
+		_spec.SetField(member.FieldCondition, field.TypeInt64, value)
+		_node.Condition = value
+	}
+	if nodes := mc.mutation.MemberDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberDetailsTable,
+			Columns: []string{member.MemberDetailsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mc.mutation.MemberNotesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberNotesTable,
+			Columns: []string{member.MemberNotesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := mc.mutation.MemberProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

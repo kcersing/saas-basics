@@ -22,8 +22,8 @@ type Role struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// status 1 normal 0 ban | 状态 1 正常 0 禁用
-	Status int8 `json:"status,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// role name | 角色名
 	Name string `json:"name,omitempty"`
 	// role value for permission control in front end | 角色值，用于前端权限控制
@@ -106,7 +106,7 @@ func (r *Role) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				r.Status = int8(value.Int64)
+				r.Status = value.Int64
 			}
 		case role.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {

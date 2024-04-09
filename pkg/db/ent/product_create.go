@@ -49,6 +49,20 @@ func (pc *ProductCreate) SetNillableUpdatedAt(t *time.Time) *ProductCreate {
 	return pc
 }
 
+// SetStatus sets the "status" field.
+func (pc *ProductCreate) SetStatus(i int64) *ProductCreate {
+	pc.mutation.SetStatus(i)
+	return pc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableStatus(i *int64) *ProductCreate {
+	if i != nil {
+		pc.SetStatus(*i)
+	}
+	return pc
+}
+
 // SetName sets the "name" field.
 func (pc *ProductCreate) SetName(s string) *ProductCreate {
 	pc.mutation.SetName(s)
@@ -115,20 +129,6 @@ func (pc *ProductCreate) SetStock(i int64) *ProductCreate {
 func (pc *ProductCreate) SetNillableStock(i *int64) *ProductCreate {
 	if i != nil {
 		pc.SetStock(*i)
-	}
-	return pc
-}
-
-// SetStatus sets the "status" field.
-func (pc *ProductCreate) SetStatus(i int64) *ProductCreate {
-	pc.mutation.SetStatus(i)
-	return pc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (pc *ProductCreate) SetNillableStatus(i *int64) *ProductCreate {
-	if i != nil {
-		pc.SetStatus(*i)
 	}
 	return pc
 }
@@ -265,6 +265,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := pc.mutation.Status(); ok {
+		_spec.SetField(product.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -284,10 +288,6 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Stock(); ok {
 		_spec.SetField(product.FieldStock, field.TypeInt64, value)
 		_node.Stock = value
-	}
-	if value, ok := pc.mutation.Status(); ok {
-		_spec.SetField(product.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if value, ok := pc.mutation.CreateID(); ok {
 		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)

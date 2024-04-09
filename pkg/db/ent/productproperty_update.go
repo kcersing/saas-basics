@@ -35,6 +35,33 @@ func (ppu *ProductPropertyUpdate) SetUpdatedAt(t time.Time) *ProductPropertyUpda
 	return ppu
 }
 
+// SetStatus sets the "status" field.
+func (ppu *ProductPropertyUpdate) SetStatus(i int64) *ProductPropertyUpdate {
+	ppu.mutation.ResetStatus()
+	ppu.mutation.SetStatus(i)
+	return ppu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ppu *ProductPropertyUpdate) SetNillableStatus(i *int64) *ProductPropertyUpdate {
+	if i != nil {
+		ppu.SetStatus(*i)
+	}
+	return ppu
+}
+
+// AddStatus adds i to the "status" field.
+func (ppu *ProductPropertyUpdate) AddStatus(i int64) *ProductPropertyUpdate {
+	ppu.mutation.AddStatus(i)
+	return ppu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (ppu *ProductPropertyUpdate) ClearStatus() *ProductPropertyUpdate {
+	ppu.mutation.ClearStatus()
+	return ppu
+}
+
 // SetType sets the "type" field.
 func (ppu *ProductPropertyUpdate) SetType(s string) *ProductPropertyUpdate {
 	ppu.mutation.SetType(s)
@@ -183,33 +210,6 @@ func (ppu *ProductPropertyUpdate) ClearPrice() *ProductPropertyUpdate {
 	return ppu
 }
 
-// SetStatus sets the "status" field.
-func (ppu *ProductPropertyUpdate) SetStatus(i int64) *ProductPropertyUpdate {
-	ppu.mutation.ResetStatus()
-	ppu.mutation.SetStatus(i)
-	return ppu
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (ppu *ProductPropertyUpdate) SetNillableStatus(i *int64) *ProductPropertyUpdate {
-	if i != nil {
-		ppu.SetStatus(*i)
-	}
-	return ppu
-}
-
-// AddStatus adds i to the "status" field.
-func (ppu *ProductPropertyUpdate) AddStatus(i int64) *ProductPropertyUpdate {
-	ppu.mutation.AddStatus(i)
-	return ppu
-}
-
-// ClearStatus clears the value of the "status" field.
-func (ppu *ProductPropertyUpdate) ClearStatus() *ProductPropertyUpdate {
-	ppu.mutation.ClearStatus()
-	return ppu
-}
-
 // SetData sets the "data" field.
 func (ppu *ProductPropertyUpdate) SetData(s string) *ProductPropertyUpdate {
 	ppu.mutation.SetData(s)
@@ -346,6 +346,15 @@ func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error
 	if value, ok := ppu.mutation.UpdatedAt(); ok {
 		_spec.SetField(productproperty.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := ppu.mutation.Status(); ok {
+		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := ppu.mutation.AddedStatus(); ok {
+		_spec.AddField(productproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if ppu.mutation.StatusCleared() {
+		_spec.ClearField(productproperty.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := ppu.mutation.GetType(); ok {
 		_spec.SetField(productproperty.FieldType, field.TypeString, value)
 	}
@@ -393,15 +402,6 @@ func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if ppu.mutation.PriceCleared() {
 		_spec.ClearField(productproperty.FieldPrice, field.TypeFloat64)
-	}
-	if value, ok := ppu.mutation.Status(); ok {
-		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := ppu.mutation.AddedStatus(); ok {
-		_spec.AddField(productproperty.FieldStatus, field.TypeInt64, value)
-	}
-	if ppu.mutation.StatusCleared() {
-		_spec.ClearField(productproperty.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := ppu.mutation.Data(); ok {
 		_spec.SetField(productproperty.FieldData, field.TypeString, value)
@@ -486,6 +486,33 @@ type ProductPropertyUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (ppuo *ProductPropertyUpdateOne) SetUpdatedAt(t time.Time) *ProductPropertyUpdateOne {
 	ppuo.mutation.SetUpdatedAt(t)
+	return ppuo
+}
+
+// SetStatus sets the "status" field.
+func (ppuo *ProductPropertyUpdateOne) SetStatus(i int64) *ProductPropertyUpdateOne {
+	ppuo.mutation.ResetStatus()
+	ppuo.mutation.SetStatus(i)
+	return ppuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ppuo *ProductPropertyUpdateOne) SetNillableStatus(i *int64) *ProductPropertyUpdateOne {
+	if i != nil {
+		ppuo.SetStatus(*i)
+	}
+	return ppuo
+}
+
+// AddStatus adds i to the "status" field.
+func (ppuo *ProductPropertyUpdateOne) AddStatus(i int64) *ProductPropertyUpdateOne {
+	ppuo.mutation.AddStatus(i)
+	return ppuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (ppuo *ProductPropertyUpdateOne) ClearStatus() *ProductPropertyUpdateOne {
+	ppuo.mutation.ClearStatus()
 	return ppuo
 }
 
@@ -634,33 +661,6 @@ func (ppuo *ProductPropertyUpdateOne) AddPrice(f float64) *ProductPropertyUpdate
 // ClearPrice clears the value of the "price" field.
 func (ppuo *ProductPropertyUpdateOne) ClearPrice() *ProductPropertyUpdateOne {
 	ppuo.mutation.ClearPrice()
-	return ppuo
-}
-
-// SetStatus sets the "status" field.
-func (ppuo *ProductPropertyUpdateOne) SetStatus(i int64) *ProductPropertyUpdateOne {
-	ppuo.mutation.ResetStatus()
-	ppuo.mutation.SetStatus(i)
-	return ppuo
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (ppuo *ProductPropertyUpdateOne) SetNillableStatus(i *int64) *ProductPropertyUpdateOne {
-	if i != nil {
-		ppuo.SetStatus(*i)
-	}
-	return ppuo
-}
-
-// AddStatus adds i to the "status" field.
-func (ppuo *ProductPropertyUpdateOne) AddStatus(i int64) *ProductPropertyUpdateOne {
-	ppuo.mutation.AddStatus(i)
-	return ppuo
-}
-
-// ClearStatus clears the value of the "status" field.
-func (ppuo *ProductPropertyUpdateOne) ClearStatus() *ProductPropertyUpdateOne {
-	ppuo.mutation.ClearStatus()
 	return ppuo
 }
 
@@ -830,6 +830,15 @@ func (ppuo *ProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *Produ
 	if value, ok := ppuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(productproperty.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := ppuo.mutation.Status(); ok {
+		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := ppuo.mutation.AddedStatus(); ok {
+		_spec.AddField(productproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if ppuo.mutation.StatusCleared() {
+		_spec.ClearField(productproperty.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := ppuo.mutation.GetType(); ok {
 		_spec.SetField(productproperty.FieldType, field.TypeString, value)
 	}
@@ -877,15 +886,6 @@ func (ppuo *ProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *Produ
 	}
 	if ppuo.mutation.PriceCleared() {
 		_spec.ClearField(productproperty.FieldPrice, field.TypeFloat64)
-	}
-	if value, ok := ppuo.mutation.Status(); ok {
-		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := ppuo.mutation.AddedStatus(); ok {
-		_spec.AddField(productproperty.FieldStatus, field.TypeInt64, value)
-	}
-	if ppuo.mutation.StatusCleared() {
-		_spec.ClearField(productproperty.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := ppuo.mutation.Data(); ok {
 		_spec.SetField(productproperty.FieldData, field.TypeString, value)

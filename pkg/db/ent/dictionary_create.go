@@ -50,13 +50,13 @@ func (dc *DictionaryCreate) SetNillableUpdatedAt(t *time.Time) *DictionaryCreate
 }
 
 // SetStatus sets the "status" field.
-func (dc *DictionaryCreate) SetStatus(i int8) *DictionaryCreate {
+func (dc *DictionaryCreate) SetStatus(i int64) *DictionaryCreate {
 	dc.mutation.SetStatus(i)
 	return dc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (dc *DictionaryCreate) SetNillableStatus(i *int8) *DictionaryCreate {
+func (dc *DictionaryCreate) SetNillableStatus(i *int64) *DictionaryCreate {
 	if i != nil {
 		dc.SetStatus(*i)
 	}
@@ -209,7 +209,7 @@ func (dc *DictionaryCreate) createSpec() (*Dictionary, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := dc.mutation.Status(); ok {
-		_spec.SetField(dictionary.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(dictionary.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
 	if value, ok := dc.mutation.Title(); ok {

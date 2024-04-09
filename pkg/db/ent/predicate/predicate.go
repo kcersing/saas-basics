@@ -24,11 +24,20 @@ type Dictionary func(*sql.Selector)
 // DictionaryDetail is the predicate function for dictionarydetail builders.
 type DictionaryDetail func(*sql.Selector)
 
+// EntryLogs is the predicate function for entrylogs builders.
+type EntryLogs func(*sql.Selector)
+
 // Logs is the predicate function for logs builders.
 type Logs func(*sql.Selector)
 
 // Member is the predicate function for member builders.
 type Member func(*sql.Selector)
+
+// MemberDetails is the predicate function for memberdetails builders.
+type MemberDetails func(*sql.Selector)
+
+// MemberNote is the predicate function for membernote builders.
+type MemberNote func(*sql.Selector)
 
 // MemberProduct is the predicate function for memberproduct builders.
 type MemberProduct func(*sql.Selector)

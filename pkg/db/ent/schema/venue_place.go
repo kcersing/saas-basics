@@ -18,13 +18,13 @@ func (VenuePlace) Fields() []ent.Field {
 		field.String("name").Comment("名称").Optional(),
 		field.String("pic").Comment("照片").Optional(),
 		field.Int64("venue_id").Comment("场馆id").Optional(),
-		field.Int64("status").Default(0).Comment("状态").Optional(),
 	}
 }
 
 func (VenuePlace) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 

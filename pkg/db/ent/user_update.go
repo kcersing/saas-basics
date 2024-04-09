@@ -36,14 +36,14 @@ func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (uu *UserUpdate) SetStatus(i int8) *UserUpdate {
+func (uu *UserUpdate) SetStatus(i int64) *UserUpdate {
 	uu.mutation.ResetStatus()
 	uu.mutation.SetStatus(i)
 	return uu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableStatus(i *int8) *UserUpdate {
+func (uu *UserUpdate) SetNillableStatus(i *int64) *UserUpdate {
 	if i != nil {
 		uu.SetStatus(*i)
 	}
@@ -51,7 +51,7 @@ func (uu *UserUpdate) SetNillableStatus(i *int8) *UserUpdate {
 }
 
 // AddStatus adds i to the "status" field.
-func (uu *UserUpdate) AddStatus(i int8) *UserUpdate {
+func (uu *UserUpdate) AddStatus(i int64) *UserUpdate {
 	uu.mutation.AddStatus(i)
 	return uu
 }
@@ -344,13 +344,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := uu.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt64, value)
 	}
 	if value, ok := uu.mutation.AddedStatus(); ok {
-		_spec.AddField(user.FieldStatus, field.TypeInt8, value)
+		_spec.AddField(user.FieldStatus, field.TypeInt64, value)
 	}
 	if uu.mutation.StatusCleared() {
-		_spec.ClearField(user.FieldStatus, field.TypeInt8)
+		_spec.ClearField(user.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
@@ -465,14 +465,14 @@ func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (uuo *UserUpdateOne) SetStatus(i int8) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetStatus(i int64) *UserUpdateOne {
 	uuo.mutation.ResetStatus()
 	uuo.mutation.SetStatus(i)
 	return uuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableStatus(i *int8) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetNillableStatus(i *int64) *UserUpdateOne {
 	if i != nil {
 		uuo.SetStatus(*i)
 	}
@@ -480,7 +480,7 @@ func (uuo *UserUpdateOne) SetNillableStatus(i *int8) *UserUpdateOne {
 }
 
 // AddStatus adds i to the "status" field.
-func (uuo *UserUpdateOne) AddStatus(i int8) *UserUpdateOne {
+func (uuo *UserUpdateOne) AddStatus(i int64) *UserUpdateOne {
 	uuo.mutation.AddStatus(i)
 	return uuo
 }
@@ -803,13 +803,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := uuo.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt64, value)
 	}
 	if value, ok := uuo.mutation.AddedStatus(); ok {
-		_spec.AddField(user.FieldStatus, field.TypeInt8, value)
+		_spec.AddField(user.FieldStatus, field.TypeInt64, value)
 	}
 	if uuo.mutation.StatusCleared() {
-		_spec.ClearField(user.FieldStatus, field.TypeInt8)
+		_spec.ClearField(user.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)

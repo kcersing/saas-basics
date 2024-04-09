@@ -24,13 +24,13 @@ func (MemberProduct) Fields() []ent.Field {
 		field.Float("price").Comment("产品价格").Optional(),
 		field.Time("validity_at").Comment("生效时间").Optional(),
 		field.Time("cancel_at").Comment("作废时间").Optional(),
-		field.Int64("status").Default(0).Comment("状态").Optional(),
 	}
 }
 
 func (MemberProduct) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 

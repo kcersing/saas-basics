@@ -66,7 +66,7 @@ func UpdatedAt(v time.Time) predicate.Dictionary {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int8) predicate.Dictionary {
+func Status(v int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldEQ(FieldStatus, v))
 }
 
@@ -166,42 +166,42 @@ func UpdatedAtLTE(v time.Time) predicate.Dictionary {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int8) predicate.Dictionary {
+func StatusEQ(v int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int8) predicate.Dictionary {
+func StatusNEQ(v int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int8) predicate.Dictionary {
+func StatusIn(vs ...int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int8) predicate.Dictionary {
+func StatusNotIn(vs ...int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int8) predicate.Dictionary {
+func StatusGT(v int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int8) predicate.Dictionary {
+func StatusGTE(v int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int8) predicate.Dictionary {
+func StatusLT(v int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int8) predicate.Dictionary {
+func StatusLTE(v int64) predicate.Dictionary {
 	return predicate.Dictionary(sql.FieldLTE(FieldStatus, v))
 }
 

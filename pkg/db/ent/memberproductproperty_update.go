@@ -36,6 +36,60 @@ func (mppu *MemberProductPropertyUpdate) SetUpdatedAt(t time.Time) *MemberProduc
 	return mppu
 }
 
+// SetStatus sets the "status" field.
+func (mppu *MemberProductPropertyUpdate) SetStatus(i int64) *MemberProductPropertyUpdate {
+	mppu.mutation.ResetStatus()
+	mppu.mutation.SetStatus(i)
+	return mppu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (mppu *MemberProductPropertyUpdate) SetNillableStatus(i *int64) *MemberProductPropertyUpdate {
+	if i != nil {
+		mppu.SetStatus(*i)
+	}
+	return mppu
+}
+
+// AddStatus adds i to the "status" field.
+func (mppu *MemberProductPropertyUpdate) AddStatus(i int64) *MemberProductPropertyUpdate {
+	mppu.mutation.AddStatus(i)
+	return mppu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (mppu *MemberProductPropertyUpdate) ClearStatus() *MemberProductPropertyUpdate {
+	mppu.mutation.ClearStatus()
+	return mppu
+}
+
+// SetMemberID sets the "member_id" field.
+func (mppu *MemberProductPropertyUpdate) SetMemberID(i int64) *MemberProductPropertyUpdate {
+	mppu.mutation.ResetMemberID()
+	mppu.mutation.SetMemberID(i)
+	return mppu
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (mppu *MemberProductPropertyUpdate) SetNillableMemberID(i *int64) *MemberProductPropertyUpdate {
+	if i != nil {
+		mppu.SetMemberID(*i)
+	}
+	return mppu
+}
+
+// AddMemberID adds i to the "member_id" field.
+func (mppu *MemberProductPropertyUpdate) AddMemberID(i int64) *MemberProductPropertyUpdate {
+	mppu.mutation.AddMemberID(i)
+	return mppu
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (mppu *MemberProductPropertyUpdate) ClearMemberID() *MemberProductPropertyUpdate {
+	mppu.mutation.ClearMemberID()
+	return mppu
+}
+
 // SetMemberProductID sets the "member_product_id" field.
 func (mppu *MemberProductPropertyUpdate) SetMemberProductID(i int64) *MemberProductPropertyUpdate {
 	mppu.mutation.SetMemberProductID(i)
@@ -231,33 +285,6 @@ func (mppu *MemberProductPropertyUpdate) ClearPrice() *MemberProductPropertyUpda
 	return mppu
 }
 
-// SetStatus sets the "status" field.
-func (mppu *MemberProductPropertyUpdate) SetStatus(i int64) *MemberProductPropertyUpdate {
-	mppu.mutation.ResetStatus()
-	mppu.mutation.SetStatus(i)
-	return mppu
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (mppu *MemberProductPropertyUpdate) SetNillableStatus(i *int64) *MemberProductPropertyUpdate {
-	if i != nil {
-		mppu.SetStatus(*i)
-	}
-	return mppu
-}
-
-// AddStatus adds i to the "status" field.
-func (mppu *MemberProductPropertyUpdate) AddStatus(i int64) *MemberProductPropertyUpdate {
-	mppu.mutation.AddStatus(i)
-	return mppu
-}
-
-// ClearStatus clears the value of the "status" field.
-func (mppu *MemberProductPropertyUpdate) ClearStatus() *MemberProductPropertyUpdate {
-	mppu.mutation.ClearStatus()
-	return mppu
-}
-
 // SetOwnerID sets the "owner" edge to the MemberProduct entity by ID.
 func (mppu *MemberProductPropertyUpdate) SetOwnerID(id int64) *MemberProductPropertyUpdate {
 	mppu.mutation.SetOwnerID(id)
@@ -372,6 +399,24 @@ func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, er
 	if value, ok := mppu.mutation.UpdatedAt(); ok {
 		_spec.SetField(memberproductproperty.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := mppu.mutation.Status(); ok {
+		_spec.SetField(memberproductproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := mppu.mutation.AddedStatus(); ok {
+		_spec.AddField(memberproductproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if mppu.mutation.StatusCleared() {
+		_spec.ClearField(memberproductproperty.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := mppu.mutation.MemberID(); ok {
+		_spec.SetField(memberproductproperty.FieldMemberID, field.TypeInt64, value)
+	}
+	if value, ok := mppu.mutation.AddedMemberID(); ok {
+		_spec.AddField(memberproductproperty.FieldMemberID, field.TypeInt64, value)
+	}
+	if mppu.mutation.MemberIDCleared() {
+		_spec.ClearField(memberproductproperty.FieldMemberID, field.TypeInt64)
+	}
 	if value, ok := mppu.mutation.GetType(); ok {
 		_spec.SetField(memberproductproperty.FieldType, field.TypeString, value)
 	}
@@ -428,15 +473,6 @@ func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if mppu.mutation.PriceCleared() {
 		_spec.ClearField(memberproductproperty.FieldPrice, field.TypeFloat64)
-	}
-	if value, ok := mppu.mutation.Status(); ok {
-		_spec.SetField(memberproductproperty.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := mppu.mutation.AddedStatus(); ok {
-		_spec.AddField(memberproductproperty.FieldStatus, field.TypeInt64, value)
-	}
-	if mppu.mutation.StatusCleared() {
-		_spec.ClearField(memberproductproperty.FieldStatus, field.TypeInt64)
 	}
 	if mppu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -535,6 +571,60 @@ type MemberProductPropertyUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (mppuo *MemberProductPropertyUpdateOne) SetUpdatedAt(t time.Time) *MemberProductPropertyUpdateOne {
 	mppuo.mutation.SetUpdatedAt(t)
+	return mppuo
+}
+
+// SetStatus sets the "status" field.
+func (mppuo *MemberProductPropertyUpdateOne) SetStatus(i int64) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.ResetStatus()
+	mppuo.mutation.SetStatus(i)
+	return mppuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (mppuo *MemberProductPropertyUpdateOne) SetNillableStatus(i *int64) *MemberProductPropertyUpdateOne {
+	if i != nil {
+		mppuo.SetStatus(*i)
+	}
+	return mppuo
+}
+
+// AddStatus adds i to the "status" field.
+func (mppuo *MemberProductPropertyUpdateOne) AddStatus(i int64) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.AddStatus(i)
+	return mppuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (mppuo *MemberProductPropertyUpdateOne) ClearStatus() *MemberProductPropertyUpdateOne {
+	mppuo.mutation.ClearStatus()
+	return mppuo
+}
+
+// SetMemberID sets the "member_id" field.
+func (mppuo *MemberProductPropertyUpdateOne) SetMemberID(i int64) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.ResetMemberID()
+	mppuo.mutation.SetMemberID(i)
+	return mppuo
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (mppuo *MemberProductPropertyUpdateOne) SetNillableMemberID(i *int64) *MemberProductPropertyUpdateOne {
+	if i != nil {
+		mppuo.SetMemberID(*i)
+	}
+	return mppuo
+}
+
+// AddMemberID adds i to the "member_id" field.
+func (mppuo *MemberProductPropertyUpdateOne) AddMemberID(i int64) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.AddMemberID(i)
+	return mppuo
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (mppuo *MemberProductPropertyUpdateOne) ClearMemberID() *MemberProductPropertyUpdateOne {
+	mppuo.mutation.ClearMemberID()
 	return mppuo
 }
 
@@ -733,33 +823,6 @@ func (mppuo *MemberProductPropertyUpdateOne) ClearPrice() *MemberProductProperty
 	return mppuo
 }
 
-// SetStatus sets the "status" field.
-func (mppuo *MemberProductPropertyUpdateOne) SetStatus(i int64) *MemberProductPropertyUpdateOne {
-	mppuo.mutation.ResetStatus()
-	mppuo.mutation.SetStatus(i)
-	return mppuo
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (mppuo *MemberProductPropertyUpdateOne) SetNillableStatus(i *int64) *MemberProductPropertyUpdateOne {
-	if i != nil {
-		mppuo.SetStatus(*i)
-	}
-	return mppuo
-}
-
-// AddStatus adds i to the "status" field.
-func (mppuo *MemberProductPropertyUpdateOne) AddStatus(i int64) *MemberProductPropertyUpdateOne {
-	mppuo.mutation.AddStatus(i)
-	return mppuo
-}
-
-// ClearStatus clears the value of the "status" field.
-func (mppuo *MemberProductPropertyUpdateOne) ClearStatus() *MemberProductPropertyUpdateOne {
-	mppuo.mutation.ClearStatus()
-	return mppuo
-}
-
 // SetOwnerID sets the "owner" edge to the MemberProduct entity by ID.
 func (mppuo *MemberProductPropertyUpdateOne) SetOwnerID(id int64) *MemberProductPropertyUpdateOne {
 	mppuo.mutation.SetOwnerID(id)
@@ -904,6 +967,24 @@ func (mppuo *MemberProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node
 	if value, ok := mppuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(memberproductproperty.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := mppuo.mutation.Status(); ok {
+		_spec.SetField(memberproductproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := mppuo.mutation.AddedStatus(); ok {
+		_spec.AddField(memberproductproperty.FieldStatus, field.TypeInt64, value)
+	}
+	if mppuo.mutation.StatusCleared() {
+		_spec.ClearField(memberproductproperty.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := mppuo.mutation.MemberID(); ok {
+		_spec.SetField(memberproductproperty.FieldMemberID, field.TypeInt64, value)
+	}
+	if value, ok := mppuo.mutation.AddedMemberID(); ok {
+		_spec.AddField(memberproductproperty.FieldMemberID, field.TypeInt64, value)
+	}
+	if mppuo.mutation.MemberIDCleared() {
+		_spec.ClearField(memberproductproperty.FieldMemberID, field.TypeInt64)
+	}
 	if value, ok := mppuo.mutation.GetType(); ok {
 		_spec.SetField(memberproductproperty.FieldType, field.TypeString, value)
 	}
@@ -960,15 +1041,6 @@ func (mppuo *MemberProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if mppuo.mutation.PriceCleared() {
 		_spec.ClearField(memberproductproperty.FieldPrice, field.TypeFloat64)
-	}
-	if value, ok := mppuo.mutation.Status(); ok {
-		_spec.SetField(memberproductproperty.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := mppuo.mutation.AddedStatus(); ok {
-		_spec.AddField(memberproductproperty.FieldStatus, field.TypeInt64, value)
-	}
-	if mppuo.mutation.StatusCleared() {
-		_spec.ClearField(memberproductproperty.FieldStatus, field.TypeInt64)
 	}
 	if mppuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

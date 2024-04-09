@@ -50,6 +50,34 @@ func (mppc *MemberProductPropertyCreate) SetNillableUpdatedAt(t *time.Time) *Mem
 	return mppc
 }
 
+// SetStatus sets the "status" field.
+func (mppc *MemberProductPropertyCreate) SetStatus(i int64) *MemberProductPropertyCreate {
+	mppc.mutation.SetStatus(i)
+	return mppc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (mppc *MemberProductPropertyCreate) SetNillableStatus(i *int64) *MemberProductPropertyCreate {
+	if i != nil {
+		mppc.SetStatus(*i)
+	}
+	return mppc
+}
+
+// SetMemberID sets the "member_id" field.
+func (mppc *MemberProductPropertyCreate) SetMemberID(i int64) *MemberProductPropertyCreate {
+	mppc.mutation.SetMemberID(i)
+	return mppc
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (mppc *MemberProductPropertyCreate) SetNillableMemberID(i *int64) *MemberProductPropertyCreate {
+	if i != nil {
+		mppc.SetMemberID(*i)
+	}
+	return mppc
+}
+
 // SetMemberProductID sets the "member_product_id" field.
 func (mppc *MemberProductPropertyCreate) SetMemberProductID(i int64) *MemberProductPropertyCreate {
 	mppc.mutation.SetMemberProductID(i)
@@ -162,20 +190,6 @@ func (mppc *MemberProductPropertyCreate) SetNillablePrice(f *float64) *MemberPro
 	return mppc
 }
 
-// SetStatus sets the "status" field.
-func (mppc *MemberProductPropertyCreate) SetStatus(i int64) *MemberProductPropertyCreate {
-	mppc.mutation.SetStatus(i)
-	return mppc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (mppc *MemberProductPropertyCreate) SetNillableStatus(i *int64) *MemberProductPropertyCreate {
-	if i != nil {
-		mppc.SetStatus(*i)
-	}
-	return mppc
-}
-
 // SetID sets the "id" field.
 func (mppc *MemberProductPropertyCreate) SetID(i int64) *MemberProductPropertyCreate {
 	mppc.mutation.SetID(i)
@@ -259,6 +273,10 @@ func (mppc *MemberProductPropertyCreate) defaults() {
 		v := memberproductproperty.DefaultUpdatedAt()
 		mppc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mppc.mutation.Status(); !ok {
+		v := memberproductproperty.DefaultStatus
+		mppc.mutation.SetStatus(v)
+	}
 	if _, ok := mppc.mutation.Count(); !ok {
 		v := memberproductproperty.DefaultCount
 		mppc.mutation.SetCount(v)
@@ -266,10 +284,6 @@ func (mppc *MemberProductPropertyCreate) defaults() {
 	if _, ok := mppc.mutation.CountSurplus(); !ok {
 		v := memberproductproperty.DefaultCountSurplus
 		mppc.mutation.SetCountSurplus(v)
-	}
-	if _, ok := mppc.mutation.Status(); !ok {
-		v := memberproductproperty.DefaultStatus
-		mppc.mutation.SetStatus(v)
 	}
 }
 
@@ -321,6 +335,14 @@ func (mppc *MemberProductPropertyCreate) createSpec() (*MemberProductProperty, *
 		_spec.SetField(memberproductproperty.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := mppc.mutation.Status(); ok {
+		_spec.SetField(memberproductproperty.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
+	if value, ok := mppc.mutation.MemberID(); ok {
+		_spec.SetField(memberproductproperty.FieldMemberID, field.TypeInt64, value)
+		_node.MemberID = value
+	}
 	if value, ok := mppc.mutation.GetType(); ok {
 		_spec.SetField(memberproductproperty.FieldType, field.TypeString, value)
 		_node.Type = value
@@ -348,10 +370,6 @@ func (mppc *MemberProductPropertyCreate) createSpec() (*MemberProductProperty, *
 	if value, ok := mppc.mutation.Price(); ok {
 		_spec.SetField(memberproductproperty.FieldPrice, field.TypeFloat64, value)
 		_node.Price = value
-	}
-	if value, ok := mppc.mutation.Status(); ok {
-		_spec.SetField(memberproductproperty.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if nodes := mppc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

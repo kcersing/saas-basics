@@ -36,14 +36,14 @@ func (ddu *DictionaryDetailUpdate) SetUpdatedAt(t time.Time) *DictionaryDetailUp
 }
 
 // SetStatus sets the "status" field.
-func (ddu *DictionaryDetailUpdate) SetStatus(i int8) *DictionaryDetailUpdate {
+func (ddu *DictionaryDetailUpdate) SetStatus(i int64) *DictionaryDetailUpdate {
 	ddu.mutation.ResetStatus()
 	ddu.mutation.SetStatus(i)
 	return ddu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ddu *DictionaryDetailUpdate) SetNillableStatus(i *int8) *DictionaryDetailUpdate {
+func (ddu *DictionaryDetailUpdate) SetNillableStatus(i *int64) *DictionaryDetailUpdate {
 	if i != nil {
 		ddu.SetStatus(*i)
 	}
@@ -51,7 +51,7 @@ func (ddu *DictionaryDetailUpdate) SetNillableStatus(i *int8) *DictionaryDetailU
 }
 
 // AddStatus adds i to the "status" field.
-func (ddu *DictionaryDetailUpdate) AddStatus(i int8) *DictionaryDetailUpdate {
+func (ddu *DictionaryDetailUpdate) AddStatus(i int64) *DictionaryDetailUpdate {
 	ddu.mutation.AddStatus(i)
 	return ddu
 }
@@ -189,13 +189,13 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 		_spec.SetField(dictionarydetail.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := ddu.mutation.Status(); ok {
-		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt64, value)
 	}
 	if value, ok := ddu.mutation.AddedStatus(); ok {
-		_spec.AddField(dictionarydetail.FieldStatus, field.TypeInt8, value)
+		_spec.AddField(dictionarydetail.FieldStatus, field.TypeInt64, value)
 	}
 	if ddu.mutation.StatusCleared() {
-		_spec.ClearField(dictionarydetail.FieldStatus, field.TypeInt8)
+		_spec.ClearField(dictionarydetail.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := ddu.mutation.Title(); ok {
 		_spec.SetField(dictionarydetail.FieldTitle, field.TypeString, value)
@@ -262,14 +262,14 @@ func (dduo *DictionaryDetailUpdateOne) SetUpdatedAt(t time.Time) *DictionaryDeta
 }
 
 // SetStatus sets the "status" field.
-func (dduo *DictionaryDetailUpdateOne) SetStatus(i int8) *DictionaryDetailUpdateOne {
+func (dduo *DictionaryDetailUpdateOne) SetStatus(i int64) *DictionaryDetailUpdateOne {
 	dduo.mutation.ResetStatus()
 	dduo.mutation.SetStatus(i)
 	return dduo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (dduo *DictionaryDetailUpdateOne) SetNillableStatus(i *int8) *DictionaryDetailUpdateOne {
+func (dduo *DictionaryDetailUpdateOne) SetNillableStatus(i *int64) *DictionaryDetailUpdateOne {
 	if i != nil {
 		dduo.SetStatus(*i)
 	}
@@ -277,7 +277,7 @@ func (dduo *DictionaryDetailUpdateOne) SetNillableStatus(i *int8) *DictionaryDet
 }
 
 // AddStatus adds i to the "status" field.
-func (dduo *DictionaryDetailUpdateOne) AddStatus(i int8) *DictionaryDetailUpdateOne {
+func (dduo *DictionaryDetailUpdateOne) AddStatus(i int64) *DictionaryDetailUpdateOne {
 	dduo.mutation.AddStatus(i)
 	return dduo
 }
@@ -445,13 +445,13 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 		_spec.SetField(dictionarydetail.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := dduo.mutation.Status(); ok {
-		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt64, value)
 	}
 	if value, ok := dduo.mutation.AddedStatus(); ok {
-		_spec.AddField(dictionarydetail.FieldStatus, field.TypeInt8, value)
+		_spec.AddField(dictionarydetail.FieldStatus, field.TypeInt64, value)
 	}
 	if dduo.mutation.StatusCleared() {
-		_spec.ClearField(dictionarydetail.FieldStatus, field.TypeInt8)
+		_spec.ClearField(dictionarydetail.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := dduo.mutation.Title(); ok {
 		_spec.SetField(dictionarydetail.FieldTitle, field.TypeString, value)

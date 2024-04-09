@@ -23,6 +23,8 @@ type CourseRecordMember struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 场馆id
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 会员id
@@ -45,8 +47,6 @@ type CourseRecordMember struct {
 	MemberProductItemID int64 `json:"member_product_item_id,omitempty"`
 	// 教练ID
 	CoachID int64 `json:"coach_id,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CourseRecordMemberQuery when eager-loading is set.
 	Edges        CourseRecordMemberEdges `json:"edges"`
@@ -80,7 +80,7 @@ func (*CourseRecordMember) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case courserecordmember.FieldID, courserecordmember.FieldVenueID, courserecordmember.FieldMemberID, courserecordmember.FieldCourseRecordScheduleID, courserecordmember.FieldMemberProductID, courserecordmember.FieldMemberProductItemID, courserecordmember.FieldCoachID, courserecordmember.FieldStatus:
+		case courserecordmember.FieldID, courserecordmember.FieldStatus, courserecordmember.FieldVenueID, courserecordmember.FieldMemberID, courserecordmember.FieldCourseRecordScheduleID, courserecordmember.FieldMemberProductID, courserecordmember.FieldMemberProductItemID, courserecordmember.FieldCoachID:
 			values[i] = new(sql.NullInt64)
 		case courserecordmember.FieldType:
 			values[i] = new(sql.NullString)
@@ -118,6 +118,12 @@ func (crm *CourseRecordMember) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				crm.UpdatedAt = value.Time
+			}
+		case courserecordmember.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				crm.Status = value.Int64
 			}
 		case courserecordmember.FieldVenueID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -185,12 +191,6 @@ func (crm *CourseRecordMember) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				crm.CoachID = value.Int64
 			}
-		case courserecordmember.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				crm.Status = value.Int64
-			}
 		default:
 			crm.selectValues.Set(columns[i], values[i])
 		}
@@ -238,6 +238,9 @@ func (crm *CourseRecordMember) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(crm.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", crm.Status))
+	builder.WriteString(", ")
 	builder.WriteString("venue_id=")
 	builder.WriteString(fmt.Sprintf("%v", crm.VenueID))
 	builder.WriteString(", ")
@@ -270,9 +273,6 @@ func (crm *CourseRecordMember) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("coach_id=")
 	builder.WriteString(fmt.Sprintf("%v", crm.CoachID))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", crm.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

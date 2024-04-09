@@ -22,14 +22,12 @@ type Member struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// status 1 normal 0 ban | 状态 1 正常 0 禁用
-	Status int8 `json:"status,omitempty"`
-	// user's login name | 登录名
-	Username string `json:"username,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// password | 密码
 	Password string `json:"password,omitempty"`
-	// nickname | 昵称
-	Nickname string `json:"nickname,omitempty"`
+	// name | 名称
+	Name string `json:"name,omitempty"`
 	// mobile number | 手机号
 	Mobile string `json:"mobile,omitempty"`
 	// email | 邮箱号
@@ -38,6 +36,8 @@ type Member struct {
 	Wecom string `json:"wecom,omitempty"`
 	// avatar | 头像路径
 	Avatar string `json:"avatar,omitempty"`
+	// 状态[0:潜在;1:正式;2:到期]
+	Condition int64 `json:"condition,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberQuery when eager-loading is set.
 	Edges        MemberEdges `json:"edges"`
@@ -46,17 +46,39 @@ type Member struct {
 
 // MemberEdges holds the relations/edges for other nodes in the graph.
 type MemberEdges struct {
+	// MemberDetails holds the value of the member_details edge.
+	MemberDetails []*MemberDetails `json:"member_details,omitempty"`
+	// MemberNotes holds the value of the member_notes edge.
+	MemberNotes []*MemberNote `json:"member_notes,omitempty"`
 	// MemberProducts holds the value of the member_products edge.
 	MemberProducts []*MemberProduct `json:"member_products,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
+}
+
+// MemberDetailsOrErr returns the MemberDetails value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) MemberDetailsOrErr() ([]*MemberDetails, error) {
+	if e.loadedTypes[0] {
+		return e.MemberDetails, nil
+	}
+	return nil, &NotLoadedError{edge: "member_details"}
+}
+
+// MemberNotesOrErr returns the MemberNotes value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) MemberNotesOrErr() ([]*MemberNote, error) {
+	if e.loadedTypes[1] {
+		return e.MemberNotes, nil
+	}
+	return nil, &NotLoadedError{edge: "member_notes"}
 }
 
 // MemberProductsOrErr returns the MemberProducts value or an error if the edge
 // was not loaded in eager-loading.
 func (e MemberEdges) MemberProductsOrErr() ([]*MemberProduct, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[2] {
 		return e.MemberProducts, nil
 	}
 	return nil, &NotLoadedError{edge: "member_products"}
@@ -67,9 +89,9 @@ func (*Member) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case member.FieldID, member.FieldStatus:
+		case member.FieldID, member.FieldStatus, member.FieldCondition:
 			values[i] = new(sql.NullInt64)
-		case member.FieldUsername, member.FieldPassword, member.FieldNickname, member.FieldMobile, member.FieldEmail, member.FieldWecom, member.FieldAvatar:
+		case member.FieldPassword, member.FieldName, member.FieldMobile, member.FieldEmail, member.FieldWecom, member.FieldAvatar:
 			values[i] = new(sql.NullString)
 		case member.FieldCreatedAt, member.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -110,13 +132,7 @@ func (m *Member) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				m.Status = int8(value.Int64)
-			}
-		case member.FieldUsername:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field username", values[i])
-			} else if value.Valid {
-				m.Username = value.String
+				m.Status = value.Int64
 			}
 		case member.FieldPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -124,11 +140,11 @@ func (m *Member) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Password = value.String
 			}
-		case member.FieldNickname:
+		case member.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field nickname", values[i])
+				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				m.Nickname = value.String
+				m.Name = value.String
 			}
 		case member.FieldMobile:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -154,6 +170,12 @@ func (m *Member) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Avatar = value.String
 			}
+		case member.FieldCondition:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field condition", values[i])
+			} else if value.Valid {
+				m.Condition = value.Int64
+			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
 		}
@@ -165,6 +187,16 @@ func (m *Member) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (m *Member) Value(name string) (ent.Value, error) {
 	return m.selectValues.Get(name)
+}
+
+// QueryMemberDetails queries the "member_details" edge of the Member entity.
+func (m *Member) QueryMemberDetails() *MemberDetailsQuery {
+	return NewMemberClient(m.config).QueryMemberDetails(m)
+}
+
+// QueryMemberNotes queries the "member_notes" edge of the Member entity.
+func (m *Member) QueryMemberNotes() *MemberNoteQuery {
+	return NewMemberClient(m.config).QueryMemberNotes(m)
 }
 
 // QueryMemberProducts queries the "member_products" edge of the Member entity.
@@ -204,14 +236,11 @@ func (m *Member) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", m.Status))
 	builder.WriteString(", ")
-	builder.WriteString("username=")
-	builder.WriteString(m.Username)
-	builder.WriteString(", ")
 	builder.WriteString("password=")
 	builder.WriteString(m.Password)
 	builder.WriteString(", ")
-	builder.WriteString("nickname=")
-	builder.WriteString(m.Nickname)
+	builder.WriteString("name=")
+	builder.WriteString(m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("mobile=")
 	builder.WriteString(m.Mobile)
@@ -224,6 +253,9 @@ func (m *Member) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("avatar=")
 	builder.WriteString(m.Avatar)
+	builder.WriteString(", ")
+	builder.WriteString("condition=")
+	builder.WriteString(fmt.Sprintf("%v", m.Condition))
 	builder.WriteByte(')')
 	return builder.String()
 }

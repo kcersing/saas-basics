@@ -49,6 +49,20 @@ func (ppc *ProductPropertyCreate) SetNillableUpdatedAt(t *time.Time) *ProductPro
 	return ppc
 }
 
+// SetStatus sets the "status" field.
+func (ppc *ProductPropertyCreate) SetStatus(i int64) *ProductPropertyCreate {
+	ppc.mutation.SetStatus(i)
+	return ppc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ppc *ProductPropertyCreate) SetNillableStatus(i *int64) *ProductPropertyCreate {
+	if i != nil {
+		ppc.SetStatus(*i)
+	}
+	return ppc
+}
+
 // SetType sets the "type" field.
 func (ppc *ProductPropertyCreate) SetType(s string) *ProductPropertyCreate {
 	ppc.mutation.SetType(s)
@@ -129,20 +143,6 @@ func (ppc *ProductPropertyCreate) SetPrice(f float64) *ProductPropertyCreate {
 func (ppc *ProductPropertyCreate) SetNillablePrice(f *float64) *ProductPropertyCreate {
 	if f != nil {
 		ppc.SetPrice(*f)
-	}
-	return ppc
-}
-
-// SetStatus sets the "status" field.
-func (ppc *ProductPropertyCreate) SetStatus(i int64) *ProductPropertyCreate {
-	ppc.mutation.SetStatus(i)
-	return ppc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (ppc *ProductPropertyCreate) SetNillableStatus(i *int64) *ProductPropertyCreate {
-	if i != nil {
-		ppc.SetStatus(*i)
 	}
 	return ppc
 }
@@ -239,6 +239,10 @@ func (ppc *ProductPropertyCreate) defaults() {
 		v := productproperty.DefaultUpdatedAt()
 		ppc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ppc.mutation.Status(); !ok {
+		v := productproperty.DefaultStatus
+		ppc.mutation.SetStatus(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -289,6 +293,10 @@ func (ppc *ProductPropertyCreate) createSpec() (*ProductProperty, *sqlgraph.Crea
 		_spec.SetField(productproperty.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := ppc.mutation.Status(); ok {
+		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := ppc.mutation.GetType(); ok {
 		_spec.SetField(productproperty.FieldType, field.TypeString, value)
 		_node.Type = value
@@ -312,10 +320,6 @@ func (ppc *ProductPropertyCreate) createSpec() (*ProductProperty, *sqlgraph.Crea
 	if value, ok := ppc.mutation.Price(); ok {
 		_spec.SetField(productproperty.FieldPrice, field.TypeFloat64, value)
 		_node.Price = value
-	}
-	if value, ok := ppc.mutation.Status(); ok {
-		_spec.SetField(productproperty.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if value, ok := ppc.mutation.Data(); ok {
 		_spec.SetField(productproperty.FieldData, field.TypeString, value)

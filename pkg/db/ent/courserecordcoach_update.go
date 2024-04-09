@@ -35,6 +35,33 @@ func (crcu *CourseRecordCoachUpdate) SetUpdatedAt(t time.Time) *CourseRecordCoac
 	return crcu
 }
 
+// SetStatus sets the "status" field.
+func (crcu *CourseRecordCoachUpdate) SetStatus(i int64) *CourseRecordCoachUpdate {
+	crcu.mutation.ResetStatus()
+	crcu.mutation.SetStatus(i)
+	return crcu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (crcu *CourseRecordCoachUpdate) SetNillableStatus(i *int64) *CourseRecordCoachUpdate {
+	if i != nil {
+		crcu.SetStatus(*i)
+	}
+	return crcu
+}
+
+// AddStatus adds i to the "status" field.
+func (crcu *CourseRecordCoachUpdate) AddStatus(i int64) *CourseRecordCoachUpdate {
+	crcu.mutation.AddStatus(i)
+	return crcu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (crcu *CourseRecordCoachUpdate) ClearStatus() *CourseRecordCoachUpdate {
+	crcu.mutation.ClearStatus()
+	return crcu
+}
+
 // SetVenueID sets the "venue_id" field.
 func (crcu *CourseRecordCoachUpdate) SetVenueID(i int64) *CourseRecordCoachUpdate {
 	crcu.mutation.ResetVenueID()
@@ -209,33 +236,6 @@ func (crcu *CourseRecordCoachUpdate) ClearSignEndTime() *CourseRecordCoachUpdate
 	return crcu
 }
 
-// SetStatus sets the "status" field.
-func (crcu *CourseRecordCoachUpdate) SetStatus(i int64) *CourseRecordCoachUpdate {
-	crcu.mutation.ResetStatus()
-	crcu.mutation.SetStatus(i)
-	return crcu
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (crcu *CourseRecordCoachUpdate) SetNillableStatus(i *int64) *CourseRecordCoachUpdate {
-	if i != nil {
-		crcu.SetStatus(*i)
-	}
-	return crcu
-}
-
-// AddStatus adds i to the "status" field.
-func (crcu *CourseRecordCoachUpdate) AddStatus(i int64) *CourseRecordCoachUpdate {
-	crcu.mutation.AddStatus(i)
-	return crcu
-}
-
-// ClearStatus clears the value of the "status" field.
-func (crcu *CourseRecordCoachUpdate) ClearStatus() *CourseRecordCoachUpdate {
-	crcu.mutation.ClearStatus()
-	return crcu
-}
-
 // SetScheduleID sets the "schedule" edge to the CourseRecordSchedule entity by ID.
 func (crcu *CourseRecordCoachUpdate) SetScheduleID(id int64) *CourseRecordCoachUpdate {
 	crcu.mutation.SetScheduleID(id)
@@ -314,6 +314,15 @@ func (crcu *CourseRecordCoachUpdate) sqlSave(ctx context.Context) (n int, err er
 	if value, ok := crcu.mutation.UpdatedAt(); ok {
 		_spec.SetField(courserecordcoach.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := crcu.mutation.Status(); ok {
+		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := crcu.mutation.AddedStatus(); ok {
+		_spec.AddField(courserecordcoach.FieldStatus, field.TypeInt64, value)
+	}
+	if crcu.mutation.StatusCleared() {
+		_spec.ClearField(courserecordcoach.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := crcu.mutation.VenueID(); ok {
 		_spec.SetField(courserecordcoach.FieldVenueID, field.TypeInt64, value)
 	}
@@ -361,15 +370,6 @@ func (crcu *CourseRecordCoachUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if crcu.mutation.SignEndTimeCleared() {
 		_spec.ClearField(courserecordcoach.FieldSignEndTime, field.TypeTime)
-	}
-	if value, ok := crcu.mutation.Status(); ok {
-		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := crcu.mutation.AddedStatus(); ok {
-		_spec.AddField(courserecordcoach.FieldStatus, field.TypeInt64, value)
-	}
-	if crcu.mutation.StatusCleared() {
-		_spec.ClearField(courserecordcoach.FieldStatus, field.TypeInt64)
 	}
 	if crcu.mutation.ScheduleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -423,6 +423,33 @@ type CourseRecordCoachUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (crcuo *CourseRecordCoachUpdateOne) SetUpdatedAt(t time.Time) *CourseRecordCoachUpdateOne {
 	crcuo.mutation.SetUpdatedAt(t)
+	return crcuo
+}
+
+// SetStatus sets the "status" field.
+func (crcuo *CourseRecordCoachUpdateOne) SetStatus(i int64) *CourseRecordCoachUpdateOne {
+	crcuo.mutation.ResetStatus()
+	crcuo.mutation.SetStatus(i)
+	return crcuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (crcuo *CourseRecordCoachUpdateOne) SetNillableStatus(i *int64) *CourseRecordCoachUpdateOne {
+	if i != nil {
+		crcuo.SetStatus(*i)
+	}
+	return crcuo
+}
+
+// AddStatus adds i to the "status" field.
+func (crcuo *CourseRecordCoachUpdateOne) AddStatus(i int64) *CourseRecordCoachUpdateOne {
+	crcuo.mutation.AddStatus(i)
+	return crcuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (crcuo *CourseRecordCoachUpdateOne) ClearStatus() *CourseRecordCoachUpdateOne {
+	crcuo.mutation.ClearStatus()
 	return crcuo
 }
 
@@ -600,33 +627,6 @@ func (crcuo *CourseRecordCoachUpdateOne) ClearSignEndTime() *CourseRecordCoachUp
 	return crcuo
 }
 
-// SetStatus sets the "status" field.
-func (crcuo *CourseRecordCoachUpdateOne) SetStatus(i int64) *CourseRecordCoachUpdateOne {
-	crcuo.mutation.ResetStatus()
-	crcuo.mutation.SetStatus(i)
-	return crcuo
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (crcuo *CourseRecordCoachUpdateOne) SetNillableStatus(i *int64) *CourseRecordCoachUpdateOne {
-	if i != nil {
-		crcuo.SetStatus(*i)
-	}
-	return crcuo
-}
-
-// AddStatus adds i to the "status" field.
-func (crcuo *CourseRecordCoachUpdateOne) AddStatus(i int64) *CourseRecordCoachUpdateOne {
-	crcuo.mutation.AddStatus(i)
-	return crcuo
-}
-
-// ClearStatus clears the value of the "status" field.
-func (crcuo *CourseRecordCoachUpdateOne) ClearStatus() *CourseRecordCoachUpdateOne {
-	crcuo.mutation.ClearStatus()
-	return crcuo
-}
-
 // SetScheduleID sets the "schedule" edge to the CourseRecordSchedule entity by ID.
 func (crcuo *CourseRecordCoachUpdateOne) SetScheduleID(id int64) *CourseRecordCoachUpdateOne {
 	crcuo.mutation.SetScheduleID(id)
@@ -735,6 +735,15 @@ func (crcuo *CourseRecordCoachUpdateOne) sqlSave(ctx context.Context) (_node *Co
 	if value, ok := crcuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(courserecordcoach.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := crcuo.mutation.Status(); ok {
+		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := crcuo.mutation.AddedStatus(); ok {
+		_spec.AddField(courserecordcoach.FieldStatus, field.TypeInt64, value)
+	}
+	if crcuo.mutation.StatusCleared() {
+		_spec.ClearField(courserecordcoach.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := crcuo.mutation.VenueID(); ok {
 		_spec.SetField(courserecordcoach.FieldVenueID, field.TypeInt64, value)
 	}
@@ -782,15 +791,6 @@ func (crcuo *CourseRecordCoachUpdateOne) sqlSave(ctx context.Context) (_node *Co
 	}
 	if crcuo.mutation.SignEndTimeCleared() {
 		_spec.ClearField(courserecordcoach.FieldSignEndTime, field.TypeTime)
-	}
-	if value, ok := crcuo.mutation.Status(); ok {
-		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := crcuo.mutation.AddedStatus(); ok {
-		_spec.AddField(courserecordcoach.FieldStatus, field.TypeInt64, value)
-	}
-	if crcuo.mutation.StatusCleared() {
-		_spec.ClearField(courserecordcoach.FieldStatus, field.TypeInt64)
 	}
 	if crcuo.mutation.ScheduleCleared() {
 		edge := &sqlgraph.EdgeSpec{

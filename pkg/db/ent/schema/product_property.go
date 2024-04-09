@@ -22,7 +22,6 @@ func (ProductProperty) Fields() []ent.Field {
 		field.Int64("length").Comment("单次时长").Optional(),
 		field.Int64("count").Comment("次数").Optional(),
 		field.Float("price").Comment("定价").Optional(),
-		field.Int64("status").Comment("状态").Optional(),
 		field.String("data").Comment("").Optional(),
 		field.Int64("create_id").Comment("创建人id").Optional(),
 	}
@@ -31,6 +30,7 @@ func (ProductProperty) Fields() []ent.Field {
 func (ProductProperty) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 

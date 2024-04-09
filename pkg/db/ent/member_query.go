@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"math"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberdetails"
+	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/predicate"
 
@@ -23,6 +25,8 @@ type MemberQuery struct {
 	order              []member.OrderOption
 	inters             []Interceptor
 	predicates         []predicate.Member
+	withMemberDetails  *MemberDetailsQuery
+	withMemberNotes    *MemberNoteQuery
 	withMemberProducts *MemberProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -58,6 +62,50 @@ func (mq *MemberQuery) Unique(unique bool) *MemberQuery {
 func (mq *MemberQuery) Order(o ...member.OrderOption) *MemberQuery {
 	mq.order = append(mq.order, o...)
 	return mq
+}
+
+// QueryMemberDetails chains the current query on the "member_details" edge.
+func (mq *MemberQuery) QueryMemberDetails() *MemberDetailsQuery {
+	query := (&MemberDetailsClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, selector),
+			sqlgraph.To(memberdetails.Table, memberdetails.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberDetailsTable, member.MemberDetailsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberNotes chains the current query on the "member_notes" edge.
+func (mq *MemberQuery) QueryMemberNotes() *MemberNoteQuery {
+	query := (&MemberNoteClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, selector),
+			sqlgraph.To(membernote.Table, membernote.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberNotesTable, member.MemberNotesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryMemberProducts chains the current query on the "member_products" edge.
@@ -274,11 +322,35 @@ func (mq *MemberQuery) Clone() *MemberQuery {
 		order:              append([]member.OrderOption{}, mq.order...),
 		inters:             append([]Interceptor{}, mq.inters...),
 		predicates:         append([]predicate.Member{}, mq.predicates...),
+		withMemberDetails:  mq.withMemberDetails.Clone(),
+		withMemberNotes:    mq.withMemberNotes.Clone(),
 		withMemberProducts: mq.withMemberProducts.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
 	}
+}
+
+// WithMemberDetails tells the query-builder to eager-load the nodes that are connected to
+// the "member_details" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithMemberDetails(opts ...func(*MemberDetailsQuery)) *MemberQuery {
+	query := (&MemberDetailsClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withMemberDetails = query
+	return mq
+}
+
+// WithMemberNotes tells the query-builder to eager-load the nodes that are connected to
+// the "member_notes" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithMemberNotes(opts ...func(*MemberNoteQuery)) *MemberQuery {
+	query := (&MemberNoteClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withMemberNotes = query
+	return mq
 }
 
 // WithMemberProducts tells the query-builder to eager-load the nodes that are connected to
@@ -370,7 +442,9 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	var (
 		nodes       = []*Member{}
 		_spec       = mq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
+			mq.withMemberDetails != nil,
+			mq.withMemberNotes != nil,
 			mq.withMemberProducts != nil,
 		}
 	)
@@ -392,6 +466,20 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := mq.withMemberDetails; query != nil {
+		if err := mq.loadMemberDetails(ctx, query, nodes,
+			func(n *Member) { n.Edges.MemberDetails = []*MemberDetails{} },
+			func(n *Member, e *MemberDetails) { n.Edges.MemberDetails = append(n.Edges.MemberDetails, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := mq.withMemberNotes; query != nil {
+		if err := mq.loadMemberNotes(ctx, query, nodes,
+			func(n *Member) { n.Edges.MemberNotes = []*MemberNote{} },
+			func(n *Member, e *MemberNote) { n.Edges.MemberNotes = append(n.Edges.MemberNotes, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := mq.withMemberProducts; query != nil {
 		if err := mq.loadMemberProducts(ctx, query, nodes,
 			func(n *Member) { n.Edges.MemberProducts = []*MemberProduct{} },
@@ -402,6 +490,66 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	return nodes, nil
 }
 
+func (mq *MemberQuery) loadMemberDetails(ctx context.Context, query *MemberDetailsQuery, nodes []*Member, init func(*Member), assign func(*Member, *MemberDetails)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Member)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(memberdetails.FieldMemberID)
+	}
+	query.Where(predicate.MemberDetails(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(member.MemberDetailsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.MemberID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (mq *MemberQuery) loadMemberNotes(ctx context.Context, query *MemberNoteQuery, nodes []*Member, init func(*Member), assign func(*Member, *MemberNote)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Member)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(membernote.FieldMemberID)
+	}
+	query.Where(predicate.MemberNote(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(member.MemberNotesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.MemberID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (mq *MemberQuery) loadMemberProducts(ctx context.Context, query *MemberProductQuery, nodes []*Member, init func(*Member), assign func(*Member, *MemberProduct)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*Member)

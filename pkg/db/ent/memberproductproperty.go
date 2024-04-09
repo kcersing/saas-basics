@@ -23,6 +23,10 @@ type MemberProductProperty struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
+	// 会员id
+	MemberID int64 `json:"member_id,omitempty"`
 	// 会员产品ID
 	MemberProductID int64 `json:"member_product_id,omitempty"`
 	// 类型
@@ -39,8 +43,6 @@ type MemberProductProperty struct {
 	CountSurplus int64 `json:"count_surplus,omitempty"`
 	// 定价
 	Price float64 `json:"price,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberProductPropertyQuery when eager-loading is set.
 	Edges        MemberProductPropertyEdges `json:"edges"`
@@ -87,7 +89,7 @@ func (*MemberProductProperty) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberproductproperty.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case memberproductproperty.FieldID, memberproductproperty.FieldMemberProductID, memberproductproperty.FieldDuration, memberproductproperty.FieldLength, memberproductproperty.FieldCount, memberproductproperty.FieldCountSurplus, memberproductproperty.FieldStatus:
+		case memberproductproperty.FieldID, memberproductproperty.FieldStatus, memberproductproperty.FieldMemberID, memberproductproperty.FieldMemberProductID, memberproductproperty.FieldDuration, memberproductproperty.FieldLength, memberproductproperty.FieldCount, memberproductproperty.FieldCountSurplus:
 			values[i] = new(sql.NullInt64)
 		case memberproductproperty.FieldType, memberproductproperty.FieldName:
 			values[i] = new(sql.NullString)
@@ -125,6 +127,18 @@ func (mpp *MemberProductProperty) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				mpp.UpdatedAt = value.Time
+			}
+		case memberproductproperty.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				mpp.Status = value.Int64
+			}
+		case memberproductproperty.FieldMemberID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field member_id", values[i])
+			} else if value.Valid {
+				mpp.MemberID = value.Int64
 			}
 		case memberproductproperty.FieldMemberProductID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -173,12 +187,6 @@ func (mpp *MemberProductProperty) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
 				mpp.Price = value.Float64
-			}
-		case memberproductproperty.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				mpp.Status = value.Int64
 			}
 		default:
 			mpp.selectValues.Set(columns[i], values[i])
@@ -232,6 +240,12 @@ func (mpp *MemberProductProperty) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(mpp.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", mpp.Status))
+	builder.WriteString(", ")
+	builder.WriteString("member_id=")
+	builder.WriteString(fmt.Sprintf("%v", mpp.MemberID))
+	builder.WriteString(", ")
 	builder.WriteString("member_product_id=")
 	builder.WriteString(fmt.Sprintf("%v", mpp.MemberProductID))
 	builder.WriteString(", ")
@@ -255,9 +269,6 @@ func (mpp *MemberProductProperty) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("price=")
 	builder.WriteString(fmt.Sprintf("%v", mpp.Price))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", mpp.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

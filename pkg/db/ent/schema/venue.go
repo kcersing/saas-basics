@@ -23,13 +23,13 @@ func (Venue) Fields() []ent.Field {
 		field.String("mobile").Comment("联系电话").Optional(),
 		field.String("pic").Comment("场馆照片").Optional(),
 		field.String("information").Comment("详情").Optional(),
-		field.Int64("status").Default(0).Comment("状态").Optional(),
 	}
 }
 
 func (Venue) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 

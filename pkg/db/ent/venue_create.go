@@ -49,6 +49,20 @@ func (vc *VenueCreate) SetNillableUpdatedAt(t *time.Time) *VenueCreate {
 	return vc
 }
 
+// SetStatus sets the "status" field.
+func (vc *VenueCreate) SetStatus(i int64) *VenueCreate {
+	vc.mutation.SetStatus(i)
+	return vc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (vc *VenueCreate) SetNillableStatus(i *int64) *VenueCreate {
+	if i != nil {
+		vc.SetStatus(*i)
+	}
+	return vc
+}
+
 // SetName sets the "name" field.
 func (vc *VenueCreate) SetName(s string) *VenueCreate {
 	vc.mutation.SetName(s)
@@ -157,20 +171,6 @@ func (vc *VenueCreate) SetInformation(s string) *VenueCreate {
 func (vc *VenueCreate) SetNillableInformation(s *string) *VenueCreate {
 	if s != nil {
 		vc.SetInformation(*s)
-	}
-	return vc
-}
-
-// SetStatus sets the "status" field.
-func (vc *VenueCreate) SetStatus(i int64) *VenueCreate {
-	vc.mutation.SetStatus(i)
-	return vc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (vc *VenueCreate) SetNillableStatus(i *int64) *VenueCreate {
-	if i != nil {
-		vc.SetStatus(*i)
 	}
 	return vc
 }
@@ -293,6 +293,10 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 		_spec.SetField(venue.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := vc.mutation.Status(); ok {
+		_spec.SetField(venue.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := vc.mutation.Name(); ok {
 		_spec.SetField(venue.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -324,10 +328,6 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 	if value, ok := vc.mutation.Information(); ok {
 		_spec.SetField(venue.FieldInformation, field.TypeString, value)
 		_node.Information = value
-	}
-	if value, ok := vc.mutation.Status(); ok {
-		_spec.SetField(venue.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if nodes := vc.mutation.PlacesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

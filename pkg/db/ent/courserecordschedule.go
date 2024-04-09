@@ -22,6 +22,8 @@ type CourseRecordSchedule struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
 	// 场馆id
@@ -36,8 +38,6 @@ type CourseRecordSchedule struct {
 	EndTime time.Time `json:"end_time,omitempty"`
 	// 课程价格
 	Price float64 `json:"price,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CourseRecordScheduleQuery when eager-loading is set.
 	Edges        CourseRecordScheduleEdges `json:"edges"`
@@ -80,7 +80,7 @@ func (*CourseRecordSchedule) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case courserecordschedule.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case courserecordschedule.FieldID, courserecordschedule.FieldVenueID, courserecordschedule.FieldPlaceID, courserecordschedule.FieldNum, courserecordschedule.FieldStatus:
+		case courserecordschedule.FieldID, courserecordschedule.FieldStatus, courserecordschedule.FieldVenueID, courserecordschedule.FieldPlaceID, courserecordschedule.FieldNum:
 			values[i] = new(sql.NullInt64)
 		case courserecordschedule.FieldType:
 			values[i] = new(sql.NullString)
@@ -118,6 +118,12 @@ func (crs *CourseRecordSchedule) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				crs.UpdatedAt = value.Time
+			}
+		case courserecordschedule.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				crs.Status = value.Int64
 			}
 		case courserecordschedule.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -160,12 +166,6 @@ func (crs *CourseRecordSchedule) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
 				crs.Price = value.Float64
-			}
-		case courserecordschedule.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				crs.Status = value.Int64
 			}
 		default:
 			crs.selectValues.Set(columns[i], values[i])
@@ -219,6 +219,9 @@ func (crs *CourseRecordSchedule) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(crs.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", crs.Status))
+	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(crs.Type)
 	builder.WriteString(", ")
@@ -239,9 +242,6 @@ func (crs *CourseRecordSchedule) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("price=")
 	builder.WriteString(fmt.Sprintf("%v", crs.Price))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", crs.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

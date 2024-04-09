@@ -50,13 +50,13 @@ func (ddc *DictionaryDetailCreate) SetNillableUpdatedAt(t *time.Time) *Dictionar
 }
 
 // SetStatus sets the "status" field.
-func (ddc *DictionaryDetailCreate) SetStatus(i int8) *DictionaryDetailCreate {
+func (ddc *DictionaryDetailCreate) SetStatus(i int64) *DictionaryDetailCreate {
 	ddc.mutation.SetStatus(i)
 	return ddc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ddc *DictionaryDetailCreate) SetNillableStatus(i *int8) *DictionaryDetailCreate {
+func (ddc *DictionaryDetailCreate) SetNillableStatus(i *int64) *DictionaryDetailCreate {
 	if i != nil {
 		ddc.SetStatus(*i)
 	}
@@ -213,7 +213,7 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 		_node.UpdatedAt = value
 	}
 	if value, ok := ddc.mutation.Status(); ok {
-		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
 	if value, ok := ddc.mutation.Title(); ok {

@@ -50,6 +50,20 @@ func (mpc *MemberProductCreate) SetNillableUpdatedAt(t *time.Time) *MemberProduc
 	return mpc
 }
 
+// SetStatus sets the "status" field.
+func (mpc *MemberProductCreate) SetStatus(i int64) *MemberProductCreate {
+	mpc.mutation.SetStatus(i)
+	return mpc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableStatus(i *int64) *MemberProductCreate {
+	if i != nil {
+		mpc.SetStatus(*i)
+	}
+	return mpc
+}
+
 // SetSn sets the "sn" field.
 func (mpc *MemberProductCreate) SetSn(s string) *MemberProductCreate {
 	mpc.mutation.SetSn(s)
@@ -158,20 +172,6 @@ func (mpc *MemberProductCreate) SetCancelAt(t time.Time) *MemberProductCreate {
 func (mpc *MemberProductCreate) SetNillableCancelAt(t *time.Time) *MemberProductCreate {
 	if t != nil {
 		mpc.SetCancelAt(*t)
-	}
-	return mpc
-}
-
-// SetStatus sets the "status" field.
-func (mpc *MemberProductCreate) SetStatus(i int64) *MemberProductCreate {
-	mpc.mutation.SetStatus(i)
-	return mpc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (mpc *MemberProductCreate) SetNillableStatus(i *int64) *MemberProductCreate {
-	if i != nil {
-		mpc.SetStatus(*i)
 	}
 	return mpc
 }
@@ -313,6 +313,10 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 		_spec.SetField(memberproduct.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := mpc.mutation.Status(); ok {
+		_spec.SetField(memberproduct.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := mpc.mutation.Sn(); ok {
 		_spec.SetField(memberproduct.FieldSn, field.TypeString, value)
 		_node.Sn = value
@@ -340,10 +344,6 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 	if value, ok := mpc.mutation.CancelAt(); ok {
 		_spec.SetField(memberproduct.FieldCancelAt, field.TypeTime, value)
 		_node.CancelAt = value
-	}
-	if value, ok := mpc.mutation.Status(); ok {
-		_spec.SetField(memberproduct.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if nodes := mpc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

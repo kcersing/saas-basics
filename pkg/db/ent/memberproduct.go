@@ -23,6 +23,8 @@ type MemberProduct struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 编号
 	Sn string `json:"sn,omitempty"`
 	// 类型
@@ -39,8 +41,6 @@ type MemberProduct struct {
 	ValidityAt time.Time `json:"validity_at,omitempty"`
 	// 作废时间
 	CancelAt time.Time `json:"cancel_at,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberProductQuery when eager-loading is set.
 	Edges        MemberProductEdges `json:"edges"`
@@ -87,7 +87,7 @@ func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberproduct.FieldName, memberproduct.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case memberproduct.FieldID, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldStatus:
+		case memberproduct.FieldID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID:
 			values[i] = new(sql.NullInt64)
 		case memberproduct.FieldSn, memberproduct.FieldType:
 			values[i] = new(sql.NullString)
@@ -125,6 +125,12 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				mp.UpdatedAt = value.Time
+			}
+		case memberproduct.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				mp.Status = value.Int64
 			}
 		case memberproduct.FieldSn:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -173,12 +179,6 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field cancel_at", values[i])
 			} else if value.Valid {
 				mp.CancelAt = value.Time
-			}
-		case memberproduct.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				mp.Status = value.Int64
 			}
 		default:
 			mp.selectValues.Set(columns[i], values[i])
@@ -232,6 +232,9 @@ func (mp *MemberProduct) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(mp.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", mp.Status))
+	builder.WriteString(", ")
 	builder.WriteString("sn=")
 	builder.WriteString(mp.Sn)
 	builder.WriteString(", ")
@@ -255,9 +258,6 @@ func (mp *MemberProduct) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("cancel_at=")
 	builder.WriteString(mp.CancelAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", mp.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

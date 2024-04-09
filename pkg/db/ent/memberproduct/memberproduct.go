@@ -18,6 +18,8 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldSn holds the string denoting the sn field in the database.
 	FieldSn = "sn"
 	// FieldType holds the string denoting the type field in the database.
@@ -34,8 +36,6 @@ const (
 	FieldValidityAt = "validity_at"
 	// FieldCancelAt holds the string denoting the cancel_at field in the database.
 	FieldCancelAt = "cancel_at"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeMemberProductPropertys holds the string denoting the member_product_propertys edge name in mutations.
@@ -63,6 +63,7 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldStatus,
 	FieldSn,
 	FieldType,
 	FieldMemberID,
@@ -71,7 +72,6 @@ var Columns = []string{
 	FieldPrice,
 	FieldValidityAt,
 	FieldCancelAt,
-	FieldStatus,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -113,6 +113,11 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 // BySn orders the results by the sn field.
 func BySn(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSn, opts...).ToFunc()
@@ -151,11 +156,6 @@ func ByValidityAt(opts ...sql.OrderTermOption) OrderOption {
 // ByCancelAt orders the results by the cancel_at field.
 func ByCancelAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCancelAt, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

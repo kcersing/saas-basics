@@ -32,7 +32,7 @@ func (u User) Create(req do.CreateOrUpdateUserReq) error {
 		SetRoleID(req.RoleID).
 		SetMobile(req.Mobile).
 		SetEmail(req.Email).
-		SetStatus(int8(req.Status)).
+		SetStatus(req.Status).
 		SetUsername(req.Username).
 		SetPassword(password).
 		SetNickname(req.Nickname).
@@ -53,7 +53,7 @@ func (u User) Update(req do.CreateOrUpdateUserReq) error {
 		SetRoleID(req.RoleID).
 		SetMobile(req.Mobile).
 		SetEmail(req.Email).
-		SetStatus(int8(req.Status)).
+		SetStatus(req.Status).
 		SetUsername(req.Username).
 		SetPassword(password).
 		SetNickname(req.Nickname).
@@ -177,7 +177,7 @@ func (u User) List(req do.UserListReq) (userList []*do.UserInfo, total int, err 
 }
 
 func (u User) UpdateUserStatus(id int64, status int64) error {
-	_, err := u.db.User.Update().Where(user.IDEQ(id)).SetStatus(int8(status)).Save(u.ctx)
+	_, err := u.db.User.Update().Where(user.IDEQ(id)).SetStatus(status).Save(u.ctx)
 	return err
 }
 

@@ -28,7 +28,7 @@ type Order struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
-	// 状态
+	// 状态 | [0:正常;1:禁用]
 	Status int64 `json:"status,omitempty"`
 	// 订单来源
 	Source string `json:"source,omitempty"`

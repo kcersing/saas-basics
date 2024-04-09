@@ -36,3 +36,19 @@ Casbin:
     e = some(where (p.eft == allow))
     [matchers]
     m = r.sub == p.sub && keyMatch2(r.obj,p.obj) && r.act == p.act
+
+# 支付平台信息配置
+Wechat:
+  appid: wx1234567890
+  mch_id:
+  api_key:
+  api_v3_key:
+  cert_file_content:
+  key_file_content:
+  pkcs12_file_content:
+Alipay: # 以下配置文件为新沙箱环境配置
+  appid: ali1234567890
+  private_key:
+  app_public_cert_content:
+  alipay_root_cert_content:
+  alipay_public_cert_content:

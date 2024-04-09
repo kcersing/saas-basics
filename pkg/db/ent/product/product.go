@@ -18,6 +18,8 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldPic holds the string denoting the pic field in the database.
@@ -28,8 +30,6 @@ const (
 	FieldPrice = "price"
 	// FieldStock holds the string denoting the stock field in the database.
 	FieldStock = "stock"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// FieldCreateID holds the string denoting the create_id field in the database.
 	FieldCreateID = "create_id"
 	// EdgePropertys holds the string denoting the propertys edge name in mutations.
@@ -48,12 +48,12 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldStatus,
 	FieldName,
 	FieldPic,
 	FieldDescription,
 	FieldPrice,
 	FieldStock,
-	FieldStatus,
 	FieldCreateID,
 }
 
@@ -102,6 +102,11 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -125,11 +130,6 @@ func ByPrice(opts ...sql.OrderTermOption) OrderOption {
 // ByStock orders the results by the stock field.
 func ByStock(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStock, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByCreateID orders the results by the create_id field.

@@ -22,6 +22,8 @@ type Product struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 商品名
 	Name string `json:"name,omitempty"`
 	// 主图
@@ -32,8 +34,6 @@ type Product struct {
 	Price float64 `json:"price,omitempty"`
 	// 库存
 	Stock int64 `json:"stock,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// 创建人id
 	CreateID int64 `json:"create_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -67,7 +67,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case product.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case product.FieldID, product.FieldStock, product.FieldStatus, product.FieldCreateID:
+		case product.FieldID, product.FieldStatus, product.FieldStock, product.FieldCreateID:
 			values[i] = new(sql.NullInt64)
 		case product.FieldName, product.FieldPic, product.FieldDescription:
 			values[i] = new(sql.NullString)
@@ -106,6 +106,12 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.UpdatedAt = value.Time
 			}
+		case product.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				pr.Status = value.Int64
+			}
 		case product.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -135,12 +141,6 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field stock", values[i])
 			} else if value.Valid {
 				pr.Stock = value.Int64
-			}
-		case product.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				pr.Status = value.Int64
 			}
 		case product.FieldCreateID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -195,6 +195,9 @@ func (pr *Product) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Status))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(pr.Name)
 	builder.WriteString(", ")
@@ -209,9 +212,6 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("stock=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Stock))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Status))
 	builder.WriteString(", ")
 	builder.WriteString("create_id=")
 	builder.WriteString(fmt.Sprintf("%v", pr.CreateID))

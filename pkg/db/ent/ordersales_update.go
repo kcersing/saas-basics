@@ -35,6 +35,33 @@ func (osu *OrderSalesUpdate) SetUpdatedAt(t time.Time) *OrderSalesUpdate {
 	return osu
 }
 
+// SetStatus sets the "status" field.
+func (osu *OrderSalesUpdate) SetStatus(i int64) *OrderSalesUpdate {
+	osu.mutation.ResetStatus()
+	osu.mutation.SetStatus(i)
+	return osu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (osu *OrderSalesUpdate) SetNillableStatus(i *int64) *OrderSalesUpdate {
+	if i != nil {
+		osu.SetStatus(*i)
+	}
+	return osu
+}
+
+// AddStatus adds i to the "status" field.
+func (osu *OrderSalesUpdate) AddStatus(i int64) *OrderSalesUpdate {
+	osu.mutation.AddStatus(i)
+	return osu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (osu *OrderSalesUpdate) ClearStatus() *OrderSalesUpdate {
+	osu.mutation.ClearStatus()
+	return osu
+}
+
 // SetOrderID sets the "order_id" field.
 func (osu *OrderSalesUpdate) SetOrderID(i int64) *OrderSalesUpdate {
 	osu.mutation.SetOrderID(i)
@@ -52,6 +79,33 @@ func (osu *OrderSalesUpdate) SetNillableOrderID(i *int64) *OrderSalesUpdate {
 // ClearOrderID clears the value of the "order_id" field.
 func (osu *OrderSalesUpdate) ClearOrderID() *OrderSalesUpdate {
 	osu.mutation.ClearOrderID()
+	return osu
+}
+
+// SetMemberID sets the "member_id" field.
+func (osu *OrderSalesUpdate) SetMemberID(i int64) *OrderSalesUpdate {
+	osu.mutation.ResetMemberID()
+	osu.mutation.SetMemberID(i)
+	return osu
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (osu *OrderSalesUpdate) SetNillableMemberID(i *int64) *OrderSalesUpdate {
+	if i != nil {
+		osu.SetMemberID(*i)
+	}
+	return osu
+}
+
+// AddMemberID adds i to the "member_id" field.
+func (osu *OrderSalesUpdate) AddMemberID(i int64) *OrderSalesUpdate {
+	osu.mutation.AddMemberID(i)
+	return osu
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (osu *OrderSalesUpdate) ClearMemberID() *OrderSalesUpdate {
+	osu.mutation.ClearMemberID()
 	return osu
 }
 
@@ -160,6 +214,24 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := osu.mutation.UpdatedAt(); ok {
 		_spec.SetField(ordersales.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := osu.mutation.Status(); ok {
+		_spec.SetField(ordersales.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := osu.mutation.AddedStatus(); ok {
+		_spec.AddField(ordersales.FieldStatus, field.TypeInt64, value)
+	}
+	if osu.mutation.StatusCleared() {
+		_spec.ClearField(ordersales.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := osu.mutation.MemberID(); ok {
+		_spec.SetField(ordersales.FieldMemberID, field.TypeInt64, value)
+	}
+	if value, ok := osu.mutation.AddedMemberID(); ok {
+		_spec.AddField(ordersales.FieldMemberID, field.TypeInt64, value)
+	}
+	if osu.mutation.MemberIDCleared() {
+		_spec.ClearField(ordersales.FieldMemberID, field.TypeInt64)
+	}
 	if value, ok := osu.mutation.SalesID(); ok {
 		_spec.SetField(ordersales.FieldSalesID, field.TypeInt64, value)
 	}
@@ -224,6 +296,33 @@ func (osuo *OrderSalesUpdateOne) SetUpdatedAt(t time.Time) *OrderSalesUpdateOne 
 	return osuo
 }
 
+// SetStatus sets the "status" field.
+func (osuo *OrderSalesUpdateOne) SetStatus(i int64) *OrderSalesUpdateOne {
+	osuo.mutation.ResetStatus()
+	osuo.mutation.SetStatus(i)
+	return osuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (osuo *OrderSalesUpdateOne) SetNillableStatus(i *int64) *OrderSalesUpdateOne {
+	if i != nil {
+		osuo.SetStatus(*i)
+	}
+	return osuo
+}
+
+// AddStatus adds i to the "status" field.
+func (osuo *OrderSalesUpdateOne) AddStatus(i int64) *OrderSalesUpdateOne {
+	osuo.mutation.AddStatus(i)
+	return osuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (osuo *OrderSalesUpdateOne) ClearStatus() *OrderSalesUpdateOne {
+	osuo.mutation.ClearStatus()
+	return osuo
+}
+
 // SetOrderID sets the "order_id" field.
 func (osuo *OrderSalesUpdateOne) SetOrderID(i int64) *OrderSalesUpdateOne {
 	osuo.mutation.SetOrderID(i)
@@ -241,6 +340,33 @@ func (osuo *OrderSalesUpdateOne) SetNillableOrderID(i *int64) *OrderSalesUpdateO
 // ClearOrderID clears the value of the "order_id" field.
 func (osuo *OrderSalesUpdateOne) ClearOrderID() *OrderSalesUpdateOne {
 	osuo.mutation.ClearOrderID()
+	return osuo
+}
+
+// SetMemberID sets the "member_id" field.
+func (osuo *OrderSalesUpdateOne) SetMemberID(i int64) *OrderSalesUpdateOne {
+	osuo.mutation.ResetMemberID()
+	osuo.mutation.SetMemberID(i)
+	return osuo
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (osuo *OrderSalesUpdateOne) SetNillableMemberID(i *int64) *OrderSalesUpdateOne {
+	if i != nil {
+		osuo.SetMemberID(*i)
+	}
+	return osuo
+}
+
+// AddMemberID adds i to the "member_id" field.
+func (osuo *OrderSalesUpdateOne) AddMemberID(i int64) *OrderSalesUpdateOne {
+	osuo.mutation.AddMemberID(i)
+	return osuo
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (osuo *OrderSalesUpdateOne) ClearMemberID() *OrderSalesUpdateOne {
+	osuo.mutation.ClearMemberID()
 	return osuo
 }
 
@@ -378,6 +504,24 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 	}
 	if value, ok := osuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(ordersales.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := osuo.mutation.Status(); ok {
+		_spec.SetField(ordersales.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := osuo.mutation.AddedStatus(); ok {
+		_spec.AddField(ordersales.FieldStatus, field.TypeInt64, value)
+	}
+	if osuo.mutation.StatusCleared() {
+		_spec.ClearField(ordersales.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := osuo.mutation.MemberID(); ok {
+		_spec.SetField(ordersales.FieldMemberID, field.TypeInt64, value)
+	}
+	if value, ok := osuo.mutation.AddedMemberID(); ok {
+		_spec.AddField(ordersales.FieldMemberID, field.TypeInt64, value)
+	}
+	if osuo.mutation.MemberIDCleared() {
+		_spec.ClearField(ordersales.FieldMemberID, field.TypeInt64)
 	}
 	if value, ok := osuo.mutation.SalesID(); ok {
 		_spec.SetField(ordersales.FieldSalesID, field.TypeInt64, value)

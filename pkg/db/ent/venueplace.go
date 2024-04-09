@@ -23,14 +23,14 @@ type VenuePlace struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 名称
 	Name string `json:"name,omitempty"`
 	// 照片
 	Pic string `json:"pic,omitempty"`
 	// 场馆id
 	VenueID int64 `json:"venue_id,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VenuePlaceQuery when eager-loading is set.
 	Edges        VenuePlaceEdges `json:"edges"`
@@ -64,7 +64,7 @@ func (*VenuePlace) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case venueplace.FieldID, venueplace.FieldVenueID, venueplace.FieldStatus:
+		case venueplace.FieldID, venueplace.FieldStatus, venueplace.FieldVenueID:
 			values[i] = new(sql.NullInt64)
 		case venueplace.FieldName, venueplace.FieldPic:
 			values[i] = new(sql.NullString)
@@ -103,6 +103,12 @@ func (vp *VenuePlace) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				vp.UpdatedAt = value.Time
 			}
+		case venueplace.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				vp.Status = value.Int64
+			}
 		case venueplace.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -120,12 +126,6 @@ func (vp *VenuePlace) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
 			} else if value.Valid {
 				vp.VenueID = value.Int64
-			}
-		case venueplace.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				vp.Status = value.Int64
 			}
 		default:
 			vp.selectValues.Set(columns[i], values[i])
@@ -174,6 +174,9 @@ func (vp *VenuePlace) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(vp.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", vp.Status))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(vp.Name)
 	builder.WriteString(", ")
@@ -182,9 +185,6 @@ func (vp *VenuePlace) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("venue_id=")
 	builder.WriteString(fmt.Sprintf("%v", vp.VenueID))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", vp.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

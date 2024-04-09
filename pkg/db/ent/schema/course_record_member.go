@@ -29,13 +29,13 @@ func (CourseRecordMember) Fields() []ent.Field {
 		field.Int64("member_product_id").Comment("会员购买课ID").Optional(),
 		field.Int64("member_product_item_id").Comment("会员购买课ID").Optional(),
 		field.Int64("coach_id").Comment("教练ID").Optional(),
-		field.Int64("status").Default(0).Comment("状态").Optional(),
 	}
 }
 
 func (CourseRecordMember) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 

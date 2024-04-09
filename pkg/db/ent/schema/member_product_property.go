@@ -15,6 +15,7 @@ type MemberProductProperty struct {
 
 func (MemberProductProperty) Fields() []ent.Field {
 	return []ent.Field{
+		field.Int64("member_id").Comment("会员id").Optional(),
 		field.Int64("member_product_id").Comment("会员产品ID").Optional(),
 		field.String("type").Comment("类型").Optional(),
 		field.String("name").Comment("名称").Optional(),
@@ -23,13 +24,13 @@ func (MemberProductProperty) Fields() []ent.Field {
 		field.Int64("count").Default(0).Comment("总次数").Optional(),
 		field.Int64("count_surplus").Default(0).Comment("剩余次数").Optional(),
 		field.Float("price").Comment("定价").Optional(),
-		field.Int64("status").Default(0).Comment("状态").Optional(),
 	}
 }
 
 func (MemberProductProperty) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 

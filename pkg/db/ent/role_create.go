@@ -50,13 +50,13 @@ func (rc *RoleCreate) SetNillableUpdatedAt(t *time.Time) *RoleCreate {
 }
 
 // SetStatus sets the "status" field.
-func (rc *RoleCreate) SetStatus(i int8) *RoleCreate {
+func (rc *RoleCreate) SetStatus(i int64) *RoleCreate {
 	rc.mutation.SetStatus(i)
 	return rc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rc *RoleCreate) SetNillableStatus(i *int8) *RoleCreate {
+func (rc *RoleCreate) SetNillableStatus(i *int64) *RoleCreate {
 	if i != nil {
 		rc.SetStatus(*i)
 	}
@@ -263,7 +263,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := rc.mutation.Status(); ok {
-		_spec.SetField(role.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(role.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
 	if value, ok := rc.mutation.Name(); ok {

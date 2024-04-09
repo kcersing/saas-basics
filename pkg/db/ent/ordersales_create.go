@@ -49,6 +49,20 @@ func (osc *OrderSalesCreate) SetNillableUpdatedAt(t *time.Time) *OrderSalesCreat
 	return osc
 }
 
+// SetStatus sets the "status" field.
+func (osc *OrderSalesCreate) SetStatus(i int64) *OrderSalesCreate {
+	osc.mutation.SetStatus(i)
+	return osc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (osc *OrderSalesCreate) SetNillableStatus(i *int64) *OrderSalesCreate {
+	if i != nil {
+		osc.SetStatus(*i)
+	}
+	return osc
+}
+
 // SetOrderID sets the "order_id" field.
 func (osc *OrderSalesCreate) SetOrderID(i int64) *OrderSalesCreate {
 	osc.mutation.SetOrderID(i)
@@ -59,6 +73,20 @@ func (osc *OrderSalesCreate) SetOrderID(i int64) *OrderSalesCreate {
 func (osc *OrderSalesCreate) SetNillableOrderID(i *int64) *OrderSalesCreate {
 	if i != nil {
 		osc.SetOrderID(*i)
+	}
+	return osc
+}
+
+// SetMemberID sets the "member_id" field.
+func (osc *OrderSalesCreate) SetMemberID(i int64) *OrderSalesCreate {
+	osc.mutation.SetMemberID(i)
+	return osc
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (osc *OrderSalesCreate) SetNillableMemberID(i *int64) *OrderSalesCreate {
+	if i != nil {
+		osc.SetMemberID(*i)
 	}
 	return osc
 }
@@ -145,6 +173,10 @@ func (osc *OrderSalesCreate) defaults() {
 		v := ordersales.DefaultUpdatedAt()
 		osc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := osc.mutation.Status(); !ok {
+		v := ordersales.DefaultStatus
+		osc.mutation.SetStatus(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -194,6 +226,14 @@ func (osc *OrderSalesCreate) createSpec() (*OrderSales, *sqlgraph.CreateSpec) {
 	if value, ok := osc.mutation.UpdatedAt(); ok {
 		_spec.SetField(ordersales.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := osc.mutation.Status(); ok {
+		_spec.SetField(ordersales.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
+	if value, ok := osc.mutation.MemberID(); ok {
+		_spec.SetField(ordersales.FieldMemberID, field.TypeInt64, value)
+		_node.MemberID = value
 	}
 	if value, ok := osc.mutation.SalesID(); ok {
 		_spec.SetField(ordersales.FieldSalesID, field.TypeInt64, value)

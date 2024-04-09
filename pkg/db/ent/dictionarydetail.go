@@ -23,8 +23,8 @@ type DictionaryDetail struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// status 1 normal 0 ban | 状态 1 正常 0 禁用
-	Status int8 `json:"status,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// the title shown in the ui | 展示名称 （建议配合i18n）
 	Title string `json:"title,omitempty"`
 	// key | 键
@@ -109,7 +109,7 @@ func (dd *DictionaryDetail) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				dd.Status = int8(value.Int64)
+				dd.Status = value.Int64
 			}
 		case dictionarydetail.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {

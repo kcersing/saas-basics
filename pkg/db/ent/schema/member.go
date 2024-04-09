@@ -16,10 +16,9 @@ type Member struct {
 
 func (Member) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("username").Unique().Comment("user's login name | 登录名"),
-		field.String("password").Comment("password | 密码"),
-		field.String("nickname").Unique().Comment("nickname | 昵称"),
-		field.String("mobile").Unique().Comment("mobile number | 手机号"),
+		field.String("password").Optional().Comment("password | 密码"),
+		field.String("name").Optional().Comment("name | 名称"),
+		field.String("mobile").Optional().Comment("mobile number | 手机号"),
 		field.String("email").Optional().Comment("email | 邮箱号"),
 		field.String("wecom").Optional().Comment("wecom | 微信号"),
 		field.String("avatar").
@@ -27,6 +26,10 @@ func (Member) Fields() []ent.Field {
 			Optional().
 			Default("").
 			Comment("avatar | 头像路径"),
+		field.Int64("condition").
+			Default(1).
+			Optional().
+			Comment("状态[0:潜在;1:正式;2:到期]"),
 	}
 }
 
@@ -39,6 +42,8 @@ func (Member) Mixin() []ent.Mixin {
 
 func (Member) Edges() []ent.Edge {
 	return []ent.Edge{
+		edge.To("member_details", MemberDetails.Type),
+		edge.To("member_notes", MemberNote.Type),
 		edge.To("member_products", MemberProduct.Type),
 	}
 }

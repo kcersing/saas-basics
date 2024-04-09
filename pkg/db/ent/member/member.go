@@ -20,12 +20,10 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldUsername holds the string denoting the username field in the database.
-	FieldUsername = "username"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
-	// FieldNickname holds the string denoting the nickname field in the database.
-	FieldNickname = "nickname"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldMobile holds the string denoting the mobile field in the database.
 	FieldMobile = "mobile"
 	// FieldEmail holds the string denoting the email field in the database.
@@ -34,10 +32,30 @@ const (
 	FieldWecom = "wecom"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
+	// FieldCondition holds the string denoting the condition field in the database.
+	FieldCondition = "condition"
+	// EdgeMemberDetails holds the string denoting the member_details edge name in mutations.
+	EdgeMemberDetails = "member_details"
+	// EdgeMemberNotes holds the string denoting the member_notes edge name in mutations.
+	EdgeMemberNotes = "member_notes"
 	// EdgeMemberProducts holds the string denoting the member_products edge name in mutations.
 	EdgeMemberProducts = "member_products"
 	// Table holds the table name of the member in the database.
 	Table = "member"
+	// MemberDetailsTable is the table that holds the member_details relation/edge.
+	MemberDetailsTable = "member_details"
+	// MemberDetailsInverseTable is the table name for the MemberDetails entity.
+	// It exists in this package in order to avoid circular dependency with the "memberdetails" package.
+	MemberDetailsInverseTable = "member_details"
+	// MemberDetailsColumn is the table column denoting the member_details relation/edge.
+	MemberDetailsColumn = "member_id"
+	// MemberNotesTable is the table that holds the member_notes relation/edge.
+	MemberNotesTable = "member_note"
+	// MemberNotesInverseTable is the table name for the MemberNote entity.
+	// It exists in this package in order to avoid circular dependency with the "membernote" package.
+	MemberNotesInverseTable = "member_note"
+	// MemberNotesColumn is the table column denoting the member_notes relation/edge.
+	MemberNotesColumn = "member_id"
 	// MemberProductsTable is the table that holds the member_products relation/edge.
 	MemberProductsTable = "member_product"
 	// MemberProductsInverseTable is the table name for the MemberProduct entity.
@@ -53,13 +71,13 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldStatus,
-	FieldUsername,
 	FieldPassword,
-	FieldNickname,
+	FieldName,
 	FieldMobile,
 	FieldEmail,
 	FieldWecom,
 	FieldAvatar,
+	FieldCondition,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -80,9 +98,11 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int8
+	DefaultStatus int64
 	// DefaultAvatar holds the default value on creation for the "avatar" field.
 	DefaultAvatar string
+	// DefaultCondition holds the default value on creation for the "condition" field.
+	DefaultCondition int64
 )
 
 // OrderOption defines the ordering options for the Member queries.
@@ -108,19 +128,14 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByUsername orders the results by the username field.
-func ByUsername(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUsername, opts...).ToFunc()
-}
-
 // ByPassword orders the results by the password field.
 func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
 }
 
-// ByNickname orders the results by the nickname field.
-func ByNickname(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNickname, opts...).ToFunc()
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
 // ByMobile orders the results by the mobile field.
@@ -143,6 +158,39 @@ func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatar, opts...).ToFunc()
 }
 
+// ByCondition orders the results by the condition field.
+func ByCondition(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCondition, opts...).ToFunc()
+}
+
+// ByMemberDetailsCount orders the results by member_details count.
+func ByMemberDetailsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberDetailsStep(), opts...)
+	}
+}
+
+// ByMemberDetails orders the results by member_details terms.
+func ByMemberDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMemberNotesCount orders the results by member_notes count.
+func ByMemberNotesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberNotesStep(), opts...)
+	}
+}
+
+// ByMemberNotes orders the results by member_notes terms.
+func ByMemberNotes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberNotesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMemberProductsCount orders the results by member_products count.
 func ByMemberProductsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -155,6 +203,20 @@ func ByMemberProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newMemberProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newMemberDetailsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberDetailsTable, MemberDetailsColumn),
+	)
+}
+func newMemberNotesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberNotesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberNotesTable, MemberNotesColumn),
+	)
 }
 func newMemberProductsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

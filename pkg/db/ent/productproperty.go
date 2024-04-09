@@ -22,6 +22,8 @@ type ProductProperty struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
 	// 名称
@@ -34,8 +36,6 @@ type ProductProperty struct {
 	Count int64 `json:"count,omitempty"`
 	// 定价
 	Price float64 `json:"price,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// Data holds the value of the "data" field.
 	Data string `json:"data,omitempty"`
 	// 创建人id
@@ -71,7 +71,7 @@ func (*ProductProperty) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case productproperty.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case productproperty.FieldID, productproperty.FieldDuration, productproperty.FieldLength, productproperty.FieldCount, productproperty.FieldStatus, productproperty.FieldCreateID:
+		case productproperty.FieldID, productproperty.FieldStatus, productproperty.FieldDuration, productproperty.FieldLength, productproperty.FieldCount, productproperty.FieldCreateID:
 			values[i] = new(sql.NullInt64)
 		case productproperty.FieldType, productproperty.FieldName, productproperty.FieldData:
 			values[i] = new(sql.NullString)
@@ -110,6 +110,12 @@ func (pp *ProductProperty) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pp.UpdatedAt = value.Time
 			}
+		case productproperty.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				pp.Status = value.Int64
+			}
 		case productproperty.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
@@ -145,12 +151,6 @@ func (pp *ProductProperty) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
 				pp.Price = value.Float64
-			}
-		case productproperty.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				pp.Status = value.Int64
 			}
 		case productproperty.FieldData:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -211,6 +211,9 @@ func (pp *ProductProperty) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(pp.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", pp.Status))
+	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(pp.Type)
 	builder.WriteString(", ")
@@ -228,9 +231,6 @@ func (pp *ProductProperty) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("price=")
 	builder.WriteString(fmt.Sprintf("%v", pp.Price))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", pp.Status))
 	builder.WriteString(", ")
 	builder.WriteString("data=")
 	builder.WriteString(pp.Data)

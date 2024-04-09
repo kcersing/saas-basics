@@ -65,9 +65,19 @@ func UpdatedAt(v time.Time) predicate.OrderSales {
 	return predicate.OrderSales(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldEQ(FieldStatus, v))
+}
+
 // OrderID applies equality check predicate on the "order_id" field. It's identical to OrderIDEQ.
 func OrderID(v int64) predicate.OrderSales {
 	return predicate.OrderSales(sql.FieldEQ(FieldOrderID, v))
+}
+
+// MemberID applies equality check predicate on the "member_id" field. It's identical to MemberIDEQ.
+func MemberID(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldEQ(FieldMemberID, v))
 }
 
 // SalesID applies equality check predicate on the "sales_id" field. It's identical to SalesIDEQ.
@@ -155,6 +165,56 @@ func UpdatedAtLTE(v time.Time) predicate.OrderSales {
 	return predicate.OrderSales(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNotNull(FieldStatus))
+}
+
 // OrderIDEQ applies the EQ predicate on the "order_id" field.
 func OrderIDEQ(v int64) predicate.OrderSales {
 	return predicate.OrderSales(sql.FieldEQ(FieldOrderID, v))
@@ -183,6 +243,56 @@ func OrderIDIsNil() predicate.OrderSales {
 // OrderIDNotNil applies the NotNil predicate on the "order_id" field.
 func OrderIDNotNil() predicate.OrderSales {
 	return predicate.OrderSales(sql.FieldNotNull(FieldOrderID))
+}
+
+// MemberIDEQ applies the EQ predicate on the "member_id" field.
+func MemberIDEQ(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldEQ(FieldMemberID, v))
+}
+
+// MemberIDNEQ applies the NEQ predicate on the "member_id" field.
+func MemberIDNEQ(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNEQ(FieldMemberID, v))
+}
+
+// MemberIDIn applies the In predicate on the "member_id" field.
+func MemberIDIn(vs ...int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldIn(FieldMemberID, vs...))
+}
+
+// MemberIDNotIn applies the NotIn predicate on the "member_id" field.
+func MemberIDNotIn(vs ...int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNotIn(FieldMemberID, vs...))
+}
+
+// MemberIDGT applies the GT predicate on the "member_id" field.
+func MemberIDGT(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldGT(FieldMemberID, v))
+}
+
+// MemberIDGTE applies the GTE predicate on the "member_id" field.
+func MemberIDGTE(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldGTE(FieldMemberID, v))
+}
+
+// MemberIDLT applies the LT predicate on the "member_id" field.
+func MemberIDLT(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldLT(FieldMemberID, v))
+}
+
+// MemberIDLTE applies the LTE predicate on the "member_id" field.
+func MemberIDLTE(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldLTE(FieldMemberID, v))
+}
+
+// MemberIDIsNil applies the IsNil predicate on the "member_id" field.
+func MemberIDIsNil() predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldIsNull(FieldMemberID))
+}
+
+// MemberIDNotNil applies the NotNil predicate on the "member_id" field.
+func MemberIDNotNil() predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNotNull(FieldMemberID))
 }
 
 // SalesIDEQ applies the EQ predicate on the "sales_id" field.

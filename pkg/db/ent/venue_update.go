@@ -35,6 +35,33 @@ func (vu *VenueUpdate) SetUpdatedAt(t time.Time) *VenueUpdate {
 	return vu
 }
 
+// SetStatus sets the "status" field.
+func (vu *VenueUpdate) SetStatus(i int64) *VenueUpdate {
+	vu.mutation.ResetStatus()
+	vu.mutation.SetStatus(i)
+	return vu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (vu *VenueUpdate) SetNillableStatus(i *int64) *VenueUpdate {
+	if i != nil {
+		vu.SetStatus(*i)
+	}
+	return vu
+}
+
+// AddStatus adds i to the "status" field.
+func (vu *VenueUpdate) AddStatus(i int64) *VenueUpdate {
+	vu.mutation.AddStatus(i)
+	return vu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (vu *VenueUpdate) ClearStatus() *VenueUpdate {
+	vu.mutation.ClearStatus()
+	return vu
+}
+
 // SetName sets the "name" field.
 func (vu *VenueUpdate) SetName(s string) *VenueUpdate {
 	vu.mutation.SetName(s)
@@ -195,33 +222,6 @@ func (vu *VenueUpdate) ClearInformation() *VenueUpdate {
 	return vu
 }
 
-// SetStatus sets the "status" field.
-func (vu *VenueUpdate) SetStatus(i int64) *VenueUpdate {
-	vu.mutation.ResetStatus()
-	vu.mutation.SetStatus(i)
-	return vu
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (vu *VenueUpdate) SetNillableStatus(i *int64) *VenueUpdate {
-	if i != nil {
-		vu.SetStatus(*i)
-	}
-	return vu
-}
-
-// AddStatus adds i to the "status" field.
-func (vu *VenueUpdate) AddStatus(i int64) *VenueUpdate {
-	vu.mutation.AddStatus(i)
-	return vu
-}
-
-// ClearStatus clears the value of the "status" field.
-func (vu *VenueUpdate) ClearStatus() *VenueUpdate {
-	vu.mutation.ClearStatus()
-	return vu
-}
-
 // AddPlaceIDs adds the "places" edge to the VenuePlace entity by IDs.
 func (vu *VenueUpdate) AddPlaceIDs(ids ...int64) *VenueUpdate {
 	vu.mutation.AddPlaceIDs(ids...)
@@ -311,6 +311,15 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := vu.mutation.UpdatedAt(); ok {
 		_spec.SetField(venue.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := vu.mutation.Status(); ok {
+		_spec.SetField(venue.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := vu.mutation.AddedStatus(); ok {
+		_spec.AddField(venue.FieldStatus, field.TypeInt64, value)
+	}
+	if vu.mutation.StatusCleared() {
+		_spec.ClearField(venue.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := vu.mutation.Name(); ok {
 		_spec.SetField(venue.FieldName, field.TypeString, value)
 	}
@@ -358,15 +367,6 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vu.mutation.InformationCleared() {
 		_spec.ClearField(venue.FieldInformation, field.TypeString)
-	}
-	if value, ok := vu.mutation.Status(); ok {
-		_spec.SetField(venue.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := vu.mutation.AddedStatus(); ok {
-		_spec.AddField(venue.FieldStatus, field.TypeInt64, value)
-	}
-	if vu.mutation.StatusCleared() {
-		_spec.ClearField(venue.FieldStatus, field.TypeInt64)
 	}
 	if vu.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -436,6 +436,33 @@ type VenueUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (vuo *VenueUpdateOne) SetUpdatedAt(t time.Time) *VenueUpdateOne {
 	vuo.mutation.SetUpdatedAt(t)
+	return vuo
+}
+
+// SetStatus sets the "status" field.
+func (vuo *VenueUpdateOne) SetStatus(i int64) *VenueUpdateOne {
+	vuo.mutation.ResetStatus()
+	vuo.mutation.SetStatus(i)
+	return vuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (vuo *VenueUpdateOne) SetNillableStatus(i *int64) *VenueUpdateOne {
+	if i != nil {
+		vuo.SetStatus(*i)
+	}
+	return vuo
+}
+
+// AddStatus adds i to the "status" field.
+func (vuo *VenueUpdateOne) AddStatus(i int64) *VenueUpdateOne {
+	vuo.mutation.AddStatus(i)
+	return vuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (vuo *VenueUpdateOne) ClearStatus() *VenueUpdateOne {
+	vuo.mutation.ClearStatus()
 	return vuo
 }
 
@@ -599,33 +626,6 @@ func (vuo *VenueUpdateOne) ClearInformation() *VenueUpdateOne {
 	return vuo
 }
 
-// SetStatus sets the "status" field.
-func (vuo *VenueUpdateOne) SetStatus(i int64) *VenueUpdateOne {
-	vuo.mutation.ResetStatus()
-	vuo.mutation.SetStatus(i)
-	return vuo
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (vuo *VenueUpdateOne) SetNillableStatus(i *int64) *VenueUpdateOne {
-	if i != nil {
-		vuo.SetStatus(*i)
-	}
-	return vuo
-}
-
-// AddStatus adds i to the "status" field.
-func (vuo *VenueUpdateOne) AddStatus(i int64) *VenueUpdateOne {
-	vuo.mutation.AddStatus(i)
-	return vuo
-}
-
-// ClearStatus clears the value of the "status" field.
-func (vuo *VenueUpdateOne) ClearStatus() *VenueUpdateOne {
-	vuo.mutation.ClearStatus()
-	return vuo
-}
-
 // AddPlaceIDs adds the "places" edge to the VenuePlace entity by IDs.
 func (vuo *VenueUpdateOne) AddPlaceIDs(ids ...int64) *VenueUpdateOne {
 	vuo.mutation.AddPlaceIDs(ids...)
@@ -745,6 +745,15 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 	if value, ok := vuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(venue.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := vuo.mutation.Status(); ok {
+		_spec.SetField(venue.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := vuo.mutation.AddedStatus(); ok {
+		_spec.AddField(venue.FieldStatus, field.TypeInt64, value)
+	}
+	if vuo.mutation.StatusCleared() {
+		_spec.ClearField(venue.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := vuo.mutation.Name(); ok {
 		_spec.SetField(venue.FieldName, field.TypeString, value)
 	}
@@ -792,15 +801,6 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 	}
 	if vuo.mutation.InformationCleared() {
 		_spec.ClearField(venue.FieldInformation, field.TypeString)
-	}
-	if value, ok := vuo.mutation.Status(); ok {
-		_spec.SetField(venue.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := vuo.mutation.AddedStatus(); ok {
-		_spec.AddField(venue.FieldStatus, field.TypeInt64, value)
-	}
-	if vuo.mutation.StatusCleared() {
-		_spec.ClearField(venue.FieldStatus, field.TypeInt64)
 	}
 	if vuo.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{

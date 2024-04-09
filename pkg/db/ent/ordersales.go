@@ -23,8 +23,12 @@ type OrderSales struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 订单id
 	OrderID int64 `json:"order_id,omitempty"`
+	// 会员id
+	MemberID int64 `json:"member_id,omitempty"`
 	// 销售id
 	SalesID int64 `json:"sales_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -60,7 +64,7 @@ func (*OrderSales) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case ordersales.FieldID, ordersales.FieldOrderID, ordersales.FieldSalesID:
+		case ordersales.FieldID, ordersales.FieldStatus, ordersales.FieldOrderID, ordersales.FieldMemberID, ordersales.FieldSalesID:
 			values[i] = new(sql.NullInt64)
 		case ordersales.FieldCreatedAt, ordersales.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -97,11 +101,23 @@ func (os *OrderSales) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				os.UpdatedAt = value.Time
 			}
+		case ordersales.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				os.Status = value.Int64
+			}
 		case ordersales.FieldOrderID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field order_id", values[i])
 			} else if value.Valid {
 				os.OrderID = value.Int64
+			}
+		case ordersales.FieldMemberID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field member_id", values[i])
+			} else if value.Valid {
+				os.MemberID = value.Int64
 			}
 		case ordersales.FieldSalesID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -156,8 +172,14 @@ func (os *OrderSales) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(os.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", os.Status))
+	builder.WriteString(", ")
 	builder.WriteString("order_id=")
 	builder.WriteString(fmt.Sprintf("%v", os.OrderID))
+	builder.WriteString(", ")
+	builder.WriteString("member_id=")
+	builder.WriteString(fmt.Sprintf("%v", os.MemberID))
 	builder.WriteString(", ")
 	builder.WriteString("sales_id=")
 	builder.WriteString(fmt.Sprintf("%v", os.SalesID))

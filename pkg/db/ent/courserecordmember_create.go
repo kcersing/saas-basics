@@ -49,6 +49,20 @@ func (crmc *CourseRecordMemberCreate) SetNillableUpdatedAt(t *time.Time) *Course
 	return crmc
 }
 
+// SetStatus sets the "status" field.
+func (crmc *CourseRecordMemberCreate) SetStatus(i int64) *CourseRecordMemberCreate {
+	crmc.mutation.SetStatus(i)
+	return crmc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (crmc *CourseRecordMemberCreate) SetNillableStatus(i *int64) *CourseRecordMemberCreate {
+	if i != nil {
+		crmc.SetStatus(*i)
+	}
+	return crmc
+}
+
 // SetVenueID sets the "venue_id" field.
 func (crmc *CourseRecordMemberCreate) SetVenueID(i int64) *CourseRecordMemberCreate {
 	crmc.mutation.SetVenueID(i)
@@ -203,20 +217,6 @@ func (crmc *CourseRecordMemberCreate) SetNillableCoachID(i *int64) *CourseRecord
 	return crmc
 }
 
-// SetStatus sets the "status" field.
-func (crmc *CourseRecordMemberCreate) SetStatus(i int64) *CourseRecordMemberCreate {
-	crmc.mutation.SetStatus(i)
-	return crmc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (crmc *CourseRecordMemberCreate) SetNillableStatus(i *int64) *CourseRecordMemberCreate {
-	if i != nil {
-		crmc.SetStatus(*i)
-	}
-	return crmc
-}
-
 // SetID sets the "id" field.
 func (crmc *CourseRecordMemberCreate) SetID(i int64) *CourseRecordMemberCreate {
 	crmc.mutation.SetID(i)
@@ -285,6 +285,10 @@ func (crmc *CourseRecordMemberCreate) defaults() {
 		v := courserecordmember.DefaultUpdatedAt()
 		crmc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := crmc.mutation.Status(); !ok {
+		v := courserecordmember.DefaultStatus
+		crmc.mutation.SetStatus(v)
+	}
 	if _, ok := crmc.mutation.StartTime(); !ok {
 		v := courserecordmember.DefaultStartTime()
 		crmc.mutation.SetStartTime(v)
@@ -300,10 +304,6 @@ func (crmc *CourseRecordMemberCreate) defaults() {
 	if _, ok := crmc.mutation.SignEndTime(); !ok {
 		v := courserecordmember.DefaultSignEndTime()
 		crmc.mutation.SetSignEndTime(v)
-	}
-	if _, ok := crmc.mutation.Status(); !ok {
-		v := courserecordmember.DefaultStatus
-		crmc.mutation.SetStatus(v)
 	}
 }
 
@@ -355,6 +355,10 @@ func (crmc *CourseRecordMemberCreate) createSpec() (*CourseRecordMember, *sqlgra
 		_spec.SetField(courserecordmember.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := crmc.mutation.Status(); ok {
+		_spec.SetField(courserecordmember.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := crmc.mutation.VenueID(); ok {
 		_spec.SetField(courserecordmember.FieldVenueID, field.TypeInt64, value)
 		_node.VenueID = value
@@ -394,10 +398,6 @@ func (crmc *CourseRecordMemberCreate) createSpec() (*CourseRecordMember, *sqlgra
 	if value, ok := crmc.mutation.CoachID(); ok {
 		_spec.SetField(courserecordmember.FieldCoachID, field.TypeInt64, value)
 		_node.CoachID = value
-	}
-	if value, ok := crmc.mutation.Status(); ok {
-		_spec.SetField(courserecordmember.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if nodes := crmc.mutation.ScheduleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

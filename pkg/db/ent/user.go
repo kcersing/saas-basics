@@ -23,8 +23,8 @@ type User struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// status 1 normal 0 ban | 状态 1 正常 0 禁用
-	Status int8 `json:"status,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// user's login name | 登录名
 	Username string `json:"username,omitempty"`
 	// password | 密码
@@ -123,7 +123,7 @@ func (u *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				u.Status = int8(value.Int64)
+				u.Status = value.Int64
 			}
 		case user.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {

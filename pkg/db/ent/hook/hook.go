@@ -80,6 +80,18 @@ func (f DictionaryDetailFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.V
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DictionaryDetailMutation", m)
 }
 
+// The EntryLogsFunc type is an adapter to allow the use of ordinary
+// function as EntryLogs mutator.
+type EntryLogsFunc func(context.Context, *ent.EntryLogsMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EntryLogsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.EntryLogsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EntryLogsMutation", m)
+}
+
 // The LogsFunc type is an adapter to allow the use of ordinary
 // function as Logs mutator.
 type LogsFunc func(context.Context, *ent.LogsMutation) (ent.Value, error)
@@ -102,6 +114,30 @@ func (f MemberFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, erro
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberMutation", m)
+}
+
+// The MemberDetailsFunc type is an adapter to allow the use of ordinary
+// function as MemberDetails mutator.
+type MemberDetailsFunc func(context.Context, *ent.MemberDetailsMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemberDetailsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemberDetailsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberDetailsMutation", m)
+}
+
+// The MemberNoteFunc type is an adapter to allow the use of ordinary
+// function as MemberNote mutator.
+type MemberNoteFunc func(context.Context, *ent.MemberNoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemberNoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemberNoteMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberNoteMutation", m)
 }
 
 // The MemberProductFunc type is an adapter to allow the use of ordinary

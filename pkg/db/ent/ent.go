@@ -13,8 +13,11 @@ import (
 	"saas/pkg/db/ent/courserecordschedule"
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberdetails"
+	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
 	"saas/pkg/db/ent/memberproductpropertyvenue"
@@ -104,8 +107,11 @@ func checkColumn(table, column string) error {
 			courserecordschedule.Table:       courserecordschedule.ValidColumn,
 			dictionary.Table:                 dictionary.ValidColumn,
 			dictionarydetail.Table:           dictionarydetail.ValidColumn,
+			entrylogs.Table:                  entrylogs.ValidColumn,
 			logs.Table:                       logs.ValidColumn,
 			member.Table:                     member.ValidColumn,
+			memberdetails.Table:              memberdetails.ValidColumn,
+			membernote.Table:                 membernote.ValidColumn,
 			memberproduct.Table:              memberproduct.ValidColumn,
 			memberproductproperty.Table:      memberproductproperty.ValidColumn,
 			memberproductpropertyvenue.Table: memberproductpropertyvenue.ValidColumn,

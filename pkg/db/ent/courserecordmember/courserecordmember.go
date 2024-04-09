@@ -18,6 +18,8 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldVenueID holds the string denoting the venue_id field in the database.
 	FieldVenueID = "venue_id"
 	// FieldMemberID holds the string denoting the member_id field in the database.
@@ -40,8 +42,6 @@ const (
 	FieldMemberProductItemID = "member_product_item_id"
 	// FieldCoachID holds the string denoting the coach_id field in the database.
 	FieldCoachID = "coach_id"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// EdgeSchedule holds the string denoting the schedule edge name in mutations.
 	EdgeSchedule = "schedule"
 	// Table holds the table name of the courserecordmember in the database.
@@ -60,6 +60,7 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldStatus,
 	FieldVenueID,
 	FieldMemberID,
 	FieldCourseRecordScheduleID,
@@ -71,7 +72,6 @@ var Columns = []string{
 	FieldMemberProductID,
 	FieldMemberProductItemID,
 	FieldCoachID,
-	FieldStatus,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -91,6 +91,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus int64
 	// DefaultStartTime holds the default value on creation for the "start_time" field.
 	DefaultStartTime func() time.Time
 	// DefaultEndTime holds the default value on creation for the "end_time" field.
@@ -99,8 +101,6 @@ var (
 	DefaultSignStartTime func() time.Time
 	// DefaultSignEndTime holds the default value on creation for the "sign_end_time" field.
 	DefaultSignEndTime func() time.Time
-	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int64
 )
 
 // OrderOption defines the ordering options for the CourseRecordMember queries.
@@ -119,6 +119,11 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByVenueID orders the results by the venue_id field.
@@ -174,11 +179,6 @@ func ByMemberProductItemID(opts ...sql.OrderTermOption) OrderOption {
 // ByCoachID orders the results by the coach_id field.
 func ByCoachID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCoachID, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByScheduleField orders the results by schedule field.

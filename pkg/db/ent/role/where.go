@@ -66,7 +66,7 @@ func UpdatedAt(v time.Time) predicate.Role {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int8) predicate.Role {
+func Status(v int64) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldStatus, v))
 }
 
@@ -176,42 +176,42 @@ func UpdatedAtLTE(v time.Time) predicate.Role {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int8) predicate.Role {
+func StatusEQ(v int64) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int8) predicate.Role {
+func StatusNEQ(v int64) predicate.Role {
 	return predicate.Role(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int8) predicate.Role {
+func StatusIn(vs ...int64) predicate.Role {
 	return predicate.Role(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int8) predicate.Role {
+func StatusNotIn(vs ...int64) predicate.Role {
 	return predicate.Role(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int8) predicate.Role {
+func StatusGT(v int64) predicate.Role {
 	return predicate.Role(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int8) predicate.Role {
+func StatusGTE(v int64) predicate.Role {
 	return predicate.Role(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int8) predicate.Role {
+func StatusLT(v int64) predicate.Role {
 	return predicate.Role(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int8) predicate.Role {
+func StatusLTE(v int64) predicate.Role {
 	return predicate.Role(sql.FieldLTE(FieldStatus, v))
 }
 

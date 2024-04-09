@@ -34,7 +34,7 @@ func (d Dictionary) Create(req *do.DictionaryInfo) error {
 	_, err := d.db.Dictionary.Create().
 		SetTitle(req.Title).
 		SetName(req.Name).
-		SetStatus(int8(req.Status)).
+		SetStatus(req.Status).
 		SetDescription(req.Description).
 		Save(d.ctx)
 	if err != nil {
@@ -53,7 +53,7 @@ func (d Dictionary) Update(req *do.DictionaryInfo) error {
 	_, err := d.db.Dictionary.UpdateOneID(req.ID).
 		SetTitle(req.Title).
 		SetName(req.Name).
-		SetStatus(int8(req.Status)).
+		SetStatus(req.Status).
 		SetDescription(req.Description).
 		Save(d.ctx)
 	if err != nil {
@@ -154,7 +154,7 @@ func (d Dictionary) CreateDetail(req *do.DictionaryDetail) error {
 		SetTitle(req.Title).
 		SetKey(req.Key).
 		SetValue(req.Value).
-		SetStatus(int8(req.Status)).
+		SetStatus(req.Status).
 		Save(d.ctx)
 	if err != nil {
 		return errors.Wrap(err, "create DictionaryDetail failed")
@@ -178,7 +178,7 @@ func (d Dictionary) UpdateDetail(req *do.DictionaryDetail) error {
 		SetTitle(req.Title).
 		SetKey(req.Key).
 		SetValue(req.Value).
-		SetStatus(int8(req.Status)).
+		SetStatus(req.Status).
 		Save(d.ctx)
 	if err != nil {
 		return errors.Wrap(err, "update DictionaryDetail failed")
@@ -230,7 +230,7 @@ func (d Dictionary) DetailListByDictName(dictName string) (list []*do.Dictionary
 			Title:     detail.Title,
 			Key:       detail.Key,
 			Value:     detail.Value,
-			Status:    int64(detail.Status),
+			Status:    detail.Status,
 			CreatedAt: detail.CreatedAt.Format("2006-01-02 15:04:05"),
 			UpdatedAt: detail.UpdatedAt.Format("2006-01-02 15:04:05"),
 			ParentID:  detail.Edges.Dictionary.ID,

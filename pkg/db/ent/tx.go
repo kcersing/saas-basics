@@ -24,10 +24,16 @@ type Tx struct {
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
 	DictionaryDetail *DictionaryDetailClient
+	// EntryLogs is the client for interacting with the EntryLogs builders.
+	EntryLogs *EntryLogsClient
 	// Logs is the client for interacting with the Logs builders.
 	Logs *LogsClient
 	// Member is the client for interacting with the Member builders.
 	Member *MemberClient
+	// MemberDetails is the client for interacting with the MemberDetails builders.
+	MemberDetails *MemberDetailsClient
+	// MemberNote is the client for interacting with the MemberNote builders.
+	MemberNote *MemberNoteClient
 	// MemberProduct is the client for interacting with the MemberProduct builders.
 	MemberProduct *MemberProductClient
 	// MemberProductProperty is the client for interacting with the MemberProductProperty builders.
@@ -201,8 +207,11 @@ func (tx *Tx) init() {
 	tx.CourseRecordSchedule = NewCourseRecordScheduleClient(tx.config)
 	tx.Dictionary = NewDictionaryClient(tx.config)
 	tx.DictionaryDetail = NewDictionaryDetailClient(tx.config)
+	tx.EntryLogs = NewEntryLogsClient(tx.config)
 	tx.Logs = NewLogsClient(tx.config)
 	tx.Member = NewMemberClient(tx.config)
+	tx.MemberDetails = NewMemberDetailsClient(tx.config)
+	tx.MemberNote = NewMemberNoteClient(tx.config)
 	tx.MemberProduct = NewMemberProductClient(tx.config)
 	tx.MemberProductProperty = NewMemberProductPropertyClient(tx.config)
 	tx.MemberProductPropertyVenue = NewMemberProductPropertyVenueClient(tx.config)

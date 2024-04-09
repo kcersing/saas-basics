@@ -14,9 +14,9 @@ type StatusMixin struct {
 
 func (StatusMixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int8("status").
+		field.Int64("status").
 			Default(1).
 			Optional().
-			Comment("status 1 normal 0 ban | 状态 1 正常 0 禁用"),
+			Comment("状态[0:禁用;1:正常]"),
 	}
 }

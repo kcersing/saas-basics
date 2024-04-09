@@ -29,8 +29,6 @@ func (m Member) Create(req do.MemberInfo) error {
 	_, err := m.db.Member.Create().
 		SetPassword(password).
 		SetStatus(req.Status).
-		SetUsername(req.Username).
-		SetNickname(req.Nickname).
 		SetMobile(req.Mobile).
 		SetEmail(req.Email).
 		Save(m.ctx)
@@ -47,8 +45,6 @@ func (m Member) Update(req do.MemberInfo) error {
 		Where(member.IDEQ(req.ID)).
 		SetPassword(password).
 		SetStatus(req.Status).
-		SetUsername(req.Username).
-		SetNickname(req.Nickname).
 		SetMobile(req.Mobile).
 		SetEmail(req.Email).
 		Save(m.ctx)
@@ -66,8 +62,8 @@ func (m Member) Delete(id int64) error {
 
 func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, err error) {
 	var predicates []predicate.Member
-	if req.Nickname != "" {
-		predicates = append(predicates, member.NicknameEQ(req.Nickname))
+	if req.Name != "" {
+		predicates = append(predicates, member.NameEQ(req.Name))
 	}
 	lists, err := m.db.Member.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -110,7 +106,7 @@ func (m Member) ChangePassword(ID int64, oldPassword, newPassword string) error 
 }
 
 func (m Member) UpdateStatus(ID int64, status int64) error {
-	_, err := m.db.Member.Update().Where(member.IDEQ(ID)).SetStatus(int8(status)).Save(m.ctx)
+	_, err := m.db.Member.Update().Where(member.IDEQ(ID)).SetStatus(status).Save(m.ctx)
 	return err
 }
 

@@ -35,6 +35,33 @@ func (pu *ProductUpdate) SetUpdatedAt(t time.Time) *ProductUpdate {
 	return pu
 }
 
+// SetStatus sets the "status" field.
+func (pu *ProductUpdate) SetStatus(i int64) *ProductUpdate {
+	pu.mutation.ResetStatus()
+	pu.mutation.SetStatus(i)
+	return pu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableStatus(i *int64) *ProductUpdate {
+	if i != nil {
+		pu.SetStatus(*i)
+	}
+	return pu
+}
+
+// AddStatus adds i to the "status" field.
+func (pu *ProductUpdate) AddStatus(i int64) *ProductUpdate {
+	pu.mutation.AddStatus(i)
+	return pu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (pu *ProductUpdate) ClearStatus() *ProductUpdate {
+	pu.mutation.ClearStatus()
+	return pu
+}
+
 // SetName sets the "name" field.
 func (pu *ProductUpdate) SetName(s string) *ProductUpdate {
 	pu.mutation.SetName(s)
@@ -146,33 +173,6 @@ func (pu *ProductUpdate) AddStock(i int64) *ProductUpdate {
 // ClearStock clears the value of the "stock" field.
 func (pu *ProductUpdate) ClearStock() *ProductUpdate {
 	pu.mutation.ClearStock()
-	return pu
-}
-
-// SetStatus sets the "status" field.
-func (pu *ProductUpdate) SetStatus(i int64) *ProductUpdate {
-	pu.mutation.ResetStatus()
-	pu.mutation.SetStatus(i)
-	return pu
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillableStatus(i *int64) *ProductUpdate {
-	if i != nil {
-		pu.SetStatus(*i)
-	}
-	return pu
-}
-
-// AddStatus adds i to the "status" field.
-func (pu *ProductUpdate) AddStatus(i int64) *ProductUpdate {
-	pu.mutation.AddStatus(i)
-	return pu
-}
-
-// ClearStatus clears the value of the "status" field.
-func (pu *ProductUpdate) ClearStatus() *ProductUpdate {
-	pu.mutation.ClearStatus()
 	return pu
 }
 
@@ -292,6 +292,15 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := pu.mutation.Status(); ok {
+		_spec.SetField(product.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := pu.mutation.AddedStatus(); ok {
+		_spec.AddField(product.FieldStatus, field.TypeInt64, value)
+	}
+	if pu.mutation.StatusCleared() {
+		_spec.ClearField(product.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)
 	}
@@ -327,15 +336,6 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.StockCleared() {
 		_spec.ClearField(product.FieldStock, field.TypeInt64)
-	}
-	if value, ok := pu.mutation.Status(); ok {
-		_spec.SetField(product.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := pu.mutation.AddedStatus(); ok {
-		_spec.AddField(product.FieldStatus, field.TypeInt64, value)
-	}
-	if pu.mutation.StatusCleared() {
-		_spec.ClearField(product.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := pu.mutation.CreateID(); ok {
 		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)
@@ -414,6 +414,33 @@ type ProductUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (puo *ProductUpdateOne) SetUpdatedAt(t time.Time) *ProductUpdateOne {
 	puo.mutation.SetUpdatedAt(t)
+	return puo
+}
+
+// SetStatus sets the "status" field.
+func (puo *ProductUpdateOne) SetStatus(i int64) *ProductUpdateOne {
+	puo.mutation.ResetStatus()
+	puo.mutation.SetStatus(i)
+	return puo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableStatus(i *int64) *ProductUpdateOne {
+	if i != nil {
+		puo.SetStatus(*i)
+	}
+	return puo
+}
+
+// AddStatus adds i to the "status" field.
+func (puo *ProductUpdateOne) AddStatus(i int64) *ProductUpdateOne {
+	puo.mutation.AddStatus(i)
+	return puo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (puo *ProductUpdateOne) ClearStatus() *ProductUpdateOne {
+	puo.mutation.ClearStatus()
 	return puo
 }
 
@@ -528,33 +555,6 @@ func (puo *ProductUpdateOne) AddStock(i int64) *ProductUpdateOne {
 // ClearStock clears the value of the "stock" field.
 func (puo *ProductUpdateOne) ClearStock() *ProductUpdateOne {
 	puo.mutation.ClearStock()
-	return puo
-}
-
-// SetStatus sets the "status" field.
-func (puo *ProductUpdateOne) SetStatus(i int64) *ProductUpdateOne {
-	puo.mutation.ResetStatus()
-	puo.mutation.SetStatus(i)
-	return puo
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillableStatus(i *int64) *ProductUpdateOne {
-	if i != nil {
-		puo.SetStatus(*i)
-	}
-	return puo
-}
-
-// AddStatus adds i to the "status" field.
-func (puo *ProductUpdateOne) AddStatus(i int64) *ProductUpdateOne {
-	puo.mutation.AddStatus(i)
-	return puo
-}
-
-// ClearStatus clears the value of the "status" field.
-func (puo *ProductUpdateOne) ClearStatus() *ProductUpdateOne {
-	puo.mutation.ClearStatus()
 	return puo
 }
 
@@ -704,6 +704,15 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	if value, ok := puo.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := puo.mutation.Status(); ok {
+		_spec.SetField(product.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := puo.mutation.AddedStatus(); ok {
+		_spec.AddField(product.FieldStatus, field.TypeInt64, value)
+	}
+	if puo.mutation.StatusCleared() {
+		_spec.ClearField(product.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)
 	}
@@ -739,15 +748,6 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if puo.mutation.StockCleared() {
 		_spec.ClearField(product.FieldStock, field.TypeInt64)
-	}
-	if value, ok := puo.mutation.Status(); ok {
-		_spec.SetField(product.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := puo.mutation.AddedStatus(); ok {
-		_spec.AddField(product.FieldStatus, field.TypeInt64, value)
-	}
-	if puo.mutation.StatusCleared() {
-		_spec.ClearField(product.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := puo.mutation.CreateID(); ok {
 		_spec.SetField(product.FieldCreateID, field.TypeInt64, value)

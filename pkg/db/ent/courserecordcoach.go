@@ -23,6 +23,8 @@ type CourseRecordCoach struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 场馆id
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 教练ID
@@ -39,8 +41,6 @@ type CourseRecordCoach struct {
 	SignStartTime time.Time `json:"sign_start_time,omitempty"`
 	// 下课签到时间
 	SignEndTime time.Time `json:"sign_end_time,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CourseRecordCoachQuery when eager-loading is set.
 	Edges        CourseRecordCoachEdges `json:"edges"`
@@ -74,7 +74,7 @@ func (*CourseRecordCoach) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case courserecordcoach.FieldID, courserecordcoach.FieldVenueID, courserecordcoach.FieldCoachID, courserecordcoach.FieldCourseRecordScheduleID, courserecordcoach.FieldStatus:
+		case courserecordcoach.FieldID, courserecordcoach.FieldStatus, courserecordcoach.FieldVenueID, courserecordcoach.FieldCoachID, courserecordcoach.FieldCourseRecordScheduleID:
 			values[i] = new(sql.NullInt64)
 		case courserecordcoach.FieldType:
 			values[i] = new(sql.NullString)
@@ -112,6 +112,12 @@ func (crc *CourseRecordCoach) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				crc.UpdatedAt = value.Time
+			}
+		case courserecordcoach.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				crc.Status = value.Int64
 			}
 		case courserecordcoach.FieldVenueID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -161,12 +167,6 @@ func (crc *CourseRecordCoach) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				crc.SignEndTime = value.Time
 			}
-		case courserecordcoach.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				crc.Status = value.Int64
-			}
 		default:
 			crc.selectValues.Set(columns[i], values[i])
 		}
@@ -214,6 +214,9 @@ func (crc *CourseRecordCoach) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(crc.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", crc.Status))
+	builder.WriteString(", ")
 	builder.WriteString("venue_id=")
 	builder.WriteString(fmt.Sprintf("%v", crc.VenueID))
 	builder.WriteString(", ")
@@ -237,9 +240,6 @@ func (crc *CourseRecordCoach) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sign_end_time=")
 	builder.WriteString(crc.SignEndTime.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", crc.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -18,6 +18,8 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
 	// FieldVenueID holds the string denoting the venue_id field in the database.
@@ -32,8 +34,6 @@ const (
 	FieldEndTime = "end_time"
 	// FieldPrice holds the string denoting the price field in the database.
 	FieldPrice = "price"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// EdgeCoachs holds the string denoting the coachs edge name in mutations.
@@ -61,6 +61,7 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldStatus,
 	FieldType,
 	FieldVenueID,
 	FieldPlaceID,
@@ -68,7 +69,6 @@ var Columns = []string{
 	FieldStartTime,
 	FieldEndTime,
 	FieldPrice,
-	FieldStatus,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -88,14 +88,14 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus int64
 	// DefaultStartTime holds the default value on creation for the "start_time" field.
 	DefaultStartTime func() time.Time
 	// DefaultEndTime holds the default value on creation for the "end_time" field.
 	DefaultEndTime func() time.Time
 	// DefaultPrice holds the default value on creation for the "price" field.
 	DefaultPrice float64
-	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int64
 )
 
 // OrderOption defines the ordering options for the CourseRecordSchedule queries.
@@ -114,6 +114,11 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByType orders the results by the type field.
@@ -149,11 +154,6 @@ func ByEndTime(opts ...sql.OrderTermOption) OrderOption {
 // ByPrice orders the results by the price field.
 func ByPrice(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrice, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByMembersCount orders the results by members count.

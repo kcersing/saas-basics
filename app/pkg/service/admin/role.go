@@ -28,7 +28,7 @@ func (r Role) Create(req do.RoleInfo) error {
 		SetName(req.Name).
 		SetValue(req.Value).
 		SetDefaultRouter(req.DefaultRouter).
-		SetStatus(int8(req.Status)).
+		SetStatus(req.Status).
 		SetRemark(req.Remark).
 		SetOrderNo(req.OrderNo).
 		Save(r.ctx)
@@ -47,7 +47,7 @@ func (r Role) Update(req do.RoleInfo) error {
 		SetName(req.Name).
 		SetValue(req.Value).
 		SetDefaultRouter(req.DefaultRouter).
-		SetStatus(int8(req.Status)).
+		SetStatus(req.Status).
 		SetRemark(req.Remark).
 		SetOrderNo(req.OrderNo).
 		SetUpdatedAt(time.Now()).
@@ -92,7 +92,7 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *do.RoleInfo, err error) {
 				Name:          l.Name,
 				Value:         l.Value,
 				DefaultRouter: l.DefaultRouter,
-				Status:        int64(l.Status),
+				Status:        l.Status,
 				Remark:        l.Remark,
 				OrderNo:       l.OrderNo,
 				CreatedAt:     l.CreatedAt.Format("2006-01-02 15:04:05"),
@@ -151,7 +151,7 @@ func (r Role) List(req *do.RoleListReq) (roleInfoList []*do.RoleInfo, total int,
 
 func (r Role) UpdateStatus(ID int64, status int64) error {
 
-	roleEnt, err := r.db.Role.UpdateOneID(ID).SetStatus(int8(status)).Save(r.ctx)
+	roleEnt, err := r.db.Role.UpdateOneID(ID).SetStatus(status).Save(r.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "update Role status failed")
 		return err

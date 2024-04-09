@@ -65,6 +65,11 @@ func UpdatedAt(v time.Time) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldStatus, v))
+}
+
 // Sn applies equality check predicate on the "sn" field. It's identical to SnEQ.
 func Sn(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldSn, v))
@@ -103,11 +108,6 @@ func ValidityAt(v time.Time) predicate.MemberProduct {
 // CancelAt applies equality check predicate on the "cancel_at" field. It's identical to CancelAtEQ.
 func CancelAt(v time.Time) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldCancelAt, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldStatus, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -188,6 +188,56 @@ func UpdatedAtLT(v time.Time) predicate.MemberProduct {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotNull(FieldStatus))
 }
 
 // SnEQ applies the EQ predicate on the "sn" field.
@@ -618,56 +668,6 @@ func CancelAtIsNil() predicate.MemberProduct {
 // CancelAtNotNil applies the NotNil predicate on the "cancel_at" field.
 func CancelAtNotNil() predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotNull(FieldCancelAt))
-}
-
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldStatus, v))
-}
-
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNEQ(FieldStatus, v))
-}
-
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIn(FieldStatus, vs...))
-}
-
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIsNull(FieldStatus))
-}
-
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotNull(FieldStatus))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

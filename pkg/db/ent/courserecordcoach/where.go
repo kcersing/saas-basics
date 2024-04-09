@@ -65,6 +65,11 @@ func UpdatedAt(v time.Time) predicate.CourseRecordCoach {
 	return predicate.CourseRecordCoach(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldEQ(FieldStatus, v))
+}
+
 // VenueID applies equality check predicate on the "venue_id" field. It's identical to VenueIDEQ.
 func VenueID(v int64) predicate.CourseRecordCoach {
 	return predicate.CourseRecordCoach(sql.FieldEQ(FieldVenueID, v))
@@ -103,11 +108,6 @@ func SignStartTime(v time.Time) predicate.CourseRecordCoach {
 // SignEndTime applies equality check predicate on the "sign_end_time" field. It's identical to SignEndTimeEQ.
 func SignEndTime(v time.Time) predicate.CourseRecordCoach {
 	return predicate.CourseRecordCoach(sql.FieldEQ(FieldSignEndTime, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldEQ(FieldStatus, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -188,6 +188,56 @@ func UpdatedAtLT(v time.Time) predicate.CourseRecordCoach {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.CourseRecordCoach {
 	return predicate.CourseRecordCoach(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v int64) predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.CourseRecordCoach {
+	return predicate.CourseRecordCoach(sql.FieldNotNull(FieldStatus))
 }
 
 // VenueIDEQ applies the EQ predicate on the "venue_id" field.
@@ -593,56 +643,6 @@ func SignEndTimeIsNil() predicate.CourseRecordCoach {
 // SignEndTimeNotNil applies the NotNil predicate on the "sign_end_time" field.
 func SignEndTimeNotNil() predicate.CourseRecordCoach {
 	return predicate.CourseRecordCoach(sql.FieldNotNull(FieldSignEndTime))
-}
-
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldEQ(FieldStatus, v))
-}
-
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldNEQ(FieldStatus, v))
-}
-
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldIn(FieldStatus, vs...))
-}
-
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int64) predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldIsNull(FieldStatus))
-}
-
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.CourseRecordCoach {
-	return predicate.CourseRecordCoach(sql.FieldNotNull(FieldStatus))
 }
 
 // HasSchedule applies the HasEdge predicate on the "schedule" edge.

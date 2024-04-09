@@ -49,6 +49,20 @@ func (crcc *CourseRecordCoachCreate) SetNillableUpdatedAt(t *time.Time) *CourseR
 	return crcc
 }
 
+// SetStatus sets the "status" field.
+func (crcc *CourseRecordCoachCreate) SetStatus(i int64) *CourseRecordCoachCreate {
+	crcc.mutation.SetStatus(i)
+	return crcc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (crcc *CourseRecordCoachCreate) SetNillableStatus(i *int64) *CourseRecordCoachCreate {
+	if i != nil {
+		crcc.SetStatus(*i)
+	}
+	return crcc
+}
+
 // SetVenueID sets the "venue_id" field.
 func (crcc *CourseRecordCoachCreate) SetVenueID(i int64) *CourseRecordCoachCreate {
 	crcc.mutation.SetVenueID(i)
@@ -161,20 +175,6 @@ func (crcc *CourseRecordCoachCreate) SetNillableSignEndTime(t *time.Time) *Cours
 	return crcc
 }
 
-// SetStatus sets the "status" field.
-func (crcc *CourseRecordCoachCreate) SetStatus(i int64) *CourseRecordCoachCreate {
-	crcc.mutation.SetStatus(i)
-	return crcc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (crcc *CourseRecordCoachCreate) SetNillableStatus(i *int64) *CourseRecordCoachCreate {
-	if i != nil {
-		crcc.SetStatus(*i)
-	}
-	return crcc
-}
-
 // SetID sets the "id" field.
 func (crcc *CourseRecordCoachCreate) SetID(i int64) *CourseRecordCoachCreate {
 	crcc.mutation.SetID(i)
@@ -243,6 +243,10 @@ func (crcc *CourseRecordCoachCreate) defaults() {
 		v := courserecordcoach.DefaultUpdatedAt()
 		crcc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := crcc.mutation.Status(); !ok {
+		v := courserecordcoach.DefaultStatus
+		crcc.mutation.SetStatus(v)
+	}
 	if _, ok := crcc.mutation.StartTime(); !ok {
 		v := courserecordcoach.DefaultStartTime()
 		crcc.mutation.SetStartTime(v)
@@ -258,10 +262,6 @@ func (crcc *CourseRecordCoachCreate) defaults() {
 	if _, ok := crcc.mutation.SignEndTime(); !ok {
 		v := courserecordcoach.DefaultSignEndTime()
 		crcc.mutation.SetSignEndTime(v)
-	}
-	if _, ok := crcc.mutation.Status(); !ok {
-		v := courserecordcoach.DefaultStatus
-		crcc.mutation.SetStatus(v)
 	}
 }
 
@@ -313,6 +313,10 @@ func (crcc *CourseRecordCoachCreate) createSpec() (*CourseRecordCoach, *sqlgraph
 		_spec.SetField(courserecordcoach.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := crcc.mutation.Status(); ok {
+		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := crcc.mutation.VenueID(); ok {
 		_spec.SetField(courserecordcoach.FieldVenueID, field.TypeInt64, value)
 		_node.VenueID = value
@@ -340,10 +344,6 @@ func (crcc *CourseRecordCoachCreate) createSpec() (*CourseRecordCoach, *sqlgraph
 	if value, ok := crcc.mutation.SignEndTime(); ok {
 		_spec.SetField(courserecordcoach.FieldSignEndTime, field.TypeTime, value)
 		_node.SignEndTime = value
-	}
-	if value, ok := crcc.mutation.Status(); ok {
-		_spec.SetField(courserecordcoach.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if nodes := crcc.mutation.ScheduleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

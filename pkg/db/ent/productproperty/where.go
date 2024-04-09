@@ -65,6 +65,11 @@ func UpdatedAt(v time.Time) predicate.ProductProperty {
 	return predicate.ProductProperty(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldEQ(FieldStatus, v))
+}
+
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
 func Type(v string) predicate.ProductProperty {
 	return predicate.ProductProperty(sql.FieldEQ(FieldType, v))
@@ -93,11 +98,6 @@ func Count(v int64) predicate.ProductProperty {
 // Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
 func Price(v float64) predicate.ProductProperty {
 	return predicate.ProductProperty(sql.FieldEQ(FieldPrice, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldEQ(FieldStatus, v))
 }
 
 // Data applies equality check predicate on the "data" field. It's identical to DataEQ.
@@ -188,6 +188,56 @@ func UpdatedAtLT(v time.Time) predicate.ProductProperty {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.ProductProperty {
 	return predicate.ProductProperty(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v int64) predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.ProductProperty {
+	return predicate.ProductProperty(sql.FieldNotNull(FieldStatus))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.
@@ -538,56 +588,6 @@ func PriceIsNil() predicate.ProductProperty {
 // PriceNotNil applies the NotNil predicate on the "price" field.
 func PriceNotNil() predicate.ProductProperty {
 	return predicate.ProductProperty(sql.FieldNotNull(FieldPrice))
-}
-
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldEQ(FieldStatus, v))
-}
-
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldNEQ(FieldStatus, v))
-}
-
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldIn(FieldStatus, vs...))
-}
-
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int64) predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldIsNull(FieldStatus))
-}
-
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.ProductProperty {
-	return predicate.ProductProperty(sql.FieldNotNull(FieldStatus))
 }
 
 // DataEQ applies the EQ predicate on the "data" field.

@@ -11,7 +11,6 @@ import (
 	"saas/app/pkg/service/admin"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	member "saas/app/admin/idl_gen/model/admin/member"
 	base "saas/app/admin/idl_gen/model/base"
 )
@@ -23,13 +22,24 @@ func CreateMember(ctx context.Context, c *app.RequestContext) {
 	var req member.CreateOrUpdateMemberReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var memberInfoReq do.MemberInfo
+	err = copier.Copy(&memberInfoReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewMember(ctx, c).Create(memberInfoReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateMember .
@@ -39,29 +49,25 @@ func UpdateMember(ctx context.Context, c *app.RequestContext) {
 	var req member.CreateOrUpdateMemberReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// MemberInfo .
-// @router /api/admin/member/info [GET]
-func MemberInfo(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.Empty
-	err = c.BindAndValidate(&req)
+	var memberReq do.MemberInfo
+	err = copier.Copy(&memberReq, &req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewMember(ctx, c).Update(memberReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // MemberList .
@@ -90,38 +96,6 @@ func MemberList(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// UpdateProfile .
-// @router /api/admin/member/profile-update [POST]
-func UpdateProfile(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req member.ProfileReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// MemberProfile .
-// @router /api/admin/member/profile [GET]
-func MemberProfile(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.Empty
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
 // UpdateMemberStatus .
 // @router /api/admin/member/status [POST]
 func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
@@ -129,11 +103,36 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 	var req base.StatusCodeReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewMember(ctx, c).UpdateStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
 
-	c.JSON(consts.StatusOK, resp)
+// MemberInfo .
+// @router /api/admin/member/info [GET]
+func MemberInfo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	info, err := admin.NewMember(ctx, c).Info(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }

@@ -17,6 +17,7 @@ type OrderSales struct {
 func (OrderSales) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("order_id").Comment("订单id").Optional(),
+		field.Int64("member_id").Comment("会员id").Optional(),
 		field.Int64("sales_id").Comment("销售id").Optional(),
 	}
 }
@@ -24,6 +25,7 @@ func (OrderSales) Fields() []ent.Field {
 func (OrderSales) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 

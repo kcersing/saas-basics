@@ -50,13 +50,13 @@ func (uc *UserCreate) SetNillableUpdatedAt(t *time.Time) *UserCreate {
 }
 
 // SetStatus sets the "status" field.
-func (uc *UserCreate) SetStatus(i int8) *UserCreate {
+func (uc *UserCreate) SetStatus(i int64) *UserCreate {
 	uc.mutation.SetStatus(i)
 	return uc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (uc *UserCreate) SetNillableStatus(i *int8) *UserCreate {
+func (uc *UserCreate) SetNillableStatus(i *int64) *UserCreate {
 	if i != nil {
 		uc.SetStatus(*i)
 	}
@@ -340,7 +340,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.UpdatedAt = value
 	}
 	if value, ok := uc.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeInt8, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
 	if value, ok := uc.mutation.Username(); ok {

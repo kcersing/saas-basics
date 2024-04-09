@@ -49,6 +49,20 @@ func (vpc *VenuePlaceCreate) SetNillableUpdatedAt(t *time.Time) *VenuePlaceCreat
 	return vpc
 }
 
+// SetStatus sets the "status" field.
+func (vpc *VenuePlaceCreate) SetStatus(i int64) *VenuePlaceCreate {
+	vpc.mutation.SetStatus(i)
+	return vpc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableStatus(i *int64) *VenuePlaceCreate {
+	if i != nil {
+		vpc.SetStatus(*i)
+	}
+	return vpc
+}
+
 // SetName sets the "name" field.
 func (vpc *VenuePlaceCreate) SetName(s string) *VenuePlaceCreate {
 	vpc.mutation.SetName(s)
@@ -87,20 +101,6 @@ func (vpc *VenuePlaceCreate) SetVenueID(i int64) *VenuePlaceCreate {
 func (vpc *VenuePlaceCreate) SetNillableVenueID(i *int64) *VenuePlaceCreate {
 	if i != nil {
 		vpc.SetVenueID(*i)
-	}
-	return vpc
-}
-
-// SetStatus sets the "status" field.
-func (vpc *VenuePlaceCreate) SetStatus(i int64) *VenuePlaceCreate {
-	vpc.mutation.SetStatus(i)
-	return vpc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (vpc *VenuePlaceCreate) SetNillableStatus(i *int64) *VenuePlaceCreate {
-	if i != nil {
-		vpc.SetStatus(*i)
 	}
 	return vpc
 }
@@ -213,6 +213,10 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 		_spec.SetField(venueplace.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := vpc.mutation.Status(); ok {
+		_spec.SetField(venueplace.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := vpc.mutation.Name(); ok {
 		_spec.SetField(venueplace.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -220,10 +224,6 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 	if value, ok := vpc.mutation.Pic(); ok {
 		_spec.SetField(venueplace.FieldPic, field.TypeString, value)
 		_node.Pic = value
-	}
-	if value, ok := vpc.mutation.Status(); ok {
-		_spec.SetField(venueplace.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if nodes := vpc.mutation.VenueIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

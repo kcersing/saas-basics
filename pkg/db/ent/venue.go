@@ -22,6 +22,8 @@ type Venue struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 名称
 	Name string `json:"name,omitempty"`
 	// 地址 省/市/区
@@ -38,8 +40,6 @@ type Venue struct {
 	Pic string `json:"pic,omitempty"`
 	// 详情
 	Information string `json:"information,omitempty"`
-	// 状态
-	Status int64 `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VenueQuery when eager-loading is set.
 	Edges        VenueEdges `json:"edges"`
@@ -108,6 +108,12 @@ func (v *Venue) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				v.UpdatedAt = value.Time
 			}
+		case venue.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				v.Status = value.Int64
+			}
 		case venue.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -156,12 +162,6 @@ func (v *Venue) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				v.Information = value.String
 			}
-		case venue.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				v.Status = value.Int64
-			}
 		default:
 			v.selectValues.Set(columns[i], values[i])
 		}
@@ -209,6 +209,9 @@ func (v *Venue) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(v.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", v.Status))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(v.Name)
 	builder.WriteString(", ")
@@ -232,9 +235,6 @@ func (v *Venue) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("information=")
 	builder.WriteString(v.Information)
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", v.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

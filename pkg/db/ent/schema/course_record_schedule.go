@@ -24,13 +24,13 @@ func (CourseRecordSchedule) Fields() []ent.Field {
 		field.Time("start_time").Default(time.Now).Comment("开始时间").Optional(),
 		field.Time("end_time").Default(time.Now).Comment("开始时间").Optional(),
 		field.Float("price").Default(0).Comment("课程价格").Optional(),
-		field.Int64("status").Default(0).Comment("状态").Optional(),
 	}
 }
 
 func (CourseRecordSchedule) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 

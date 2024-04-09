@@ -17,8 +17,11 @@ import (
 	"saas/pkg/db/ent/courserecordschedule"
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberdetails"
+	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
 	"saas/pkg/db/ent/memberproductpropertyvenue"
@@ -61,10 +64,16 @@ type Client struct {
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
 	DictionaryDetail *DictionaryDetailClient
+	// EntryLogs is the client for interacting with the EntryLogs builders.
+	EntryLogs *EntryLogsClient
 	// Logs is the client for interacting with the Logs builders.
 	Logs *LogsClient
 	// Member is the client for interacting with the Member builders.
 	Member *MemberClient
+	// MemberDetails is the client for interacting with the MemberDetails builders.
+	MemberDetails *MemberDetailsClient
+	// MemberNote is the client for interacting with the MemberNote builders.
+	MemberNote *MemberNoteClient
 	// MemberProduct is the client for interacting with the MemberProduct builders.
 	MemberProduct *MemberProductClient
 	// MemberProductProperty is the client for interacting with the MemberProductProperty builders.
@@ -118,8 +127,11 @@ func (c *Client) init() {
 	c.CourseRecordSchedule = NewCourseRecordScheduleClient(c.config)
 	c.Dictionary = NewDictionaryClient(c.config)
 	c.DictionaryDetail = NewDictionaryDetailClient(c.config)
+	c.EntryLogs = NewEntryLogsClient(c.config)
 	c.Logs = NewLogsClient(c.config)
 	c.Member = NewMemberClient(c.config)
+	c.MemberDetails = NewMemberDetailsClient(c.config)
+	c.MemberNote = NewMemberNoteClient(c.config)
 	c.MemberProduct = NewMemberProductClient(c.config)
 	c.MemberProductProperty = NewMemberProductPropertyClient(c.config)
 	c.MemberProductPropertyVenue = NewMemberProductPropertyVenueClient(c.config)
@@ -236,8 +248,11 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		CourseRecordSchedule:       NewCourseRecordScheduleClient(cfg),
 		Dictionary:                 NewDictionaryClient(cfg),
 		DictionaryDetail:           NewDictionaryDetailClient(cfg),
+		EntryLogs:                  NewEntryLogsClient(cfg),
 		Logs:                       NewLogsClient(cfg),
 		Member:                     NewMemberClient(cfg),
+		MemberDetails:              NewMemberDetailsClient(cfg),
+		MemberNote:                 NewMemberNoteClient(cfg),
 		MemberProduct:              NewMemberProductClient(cfg),
 		MemberProductProperty:      NewMemberProductPropertyClient(cfg),
 		MemberProductPropertyVenue: NewMemberProductPropertyVenueClient(cfg),
@@ -281,8 +296,11 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		CourseRecordSchedule:       NewCourseRecordScheduleClient(cfg),
 		Dictionary:                 NewDictionaryClient(cfg),
 		DictionaryDetail:           NewDictionaryDetailClient(cfg),
+		EntryLogs:                  NewEntryLogsClient(cfg),
 		Logs:                       NewLogsClient(cfg),
 		Member:                     NewMemberClient(cfg),
+		MemberDetails:              NewMemberDetailsClient(cfg),
+		MemberNote:                 NewMemberNoteClient(cfg),
 		MemberProduct:              NewMemberProductClient(cfg),
 		MemberProductProperty:      NewMemberProductPropertyClient(cfg),
 		MemberProductPropertyVenue: NewMemberProductPropertyVenueClient(cfg),
@@ -331,11 +349,11 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.API, c.CourseRecordCoach, c.CourseRecordMember, c.CourseRecordSchedule,
-		c.Dictionary, c.DictionaryDetail, c.Logs, c.Member, c.MemberProduct,
-		c.MemberProductProperty, c.MemberProductPropertyVenue, c.Menu, c.MenuParam,
-		c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product,
-		c.ProductProperty, c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue,
-		c.VenuePlace,
+		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
+		c.MemberDetails, c.MemberNote, c.MemberProduct, c.MemberProductProperty,
+		c.MemberProductPropertyVenue, c.Menu, c.MenuParam, c.Order, c.OrderAmount,
+		c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.ProductProperty,
+		c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
 	} {
 		n.Use(hooks...)
 	}
@@ -346,11 +364,11 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.API, c.CourseRecordCoach, c.CourseRecordMember, c.CourseRecordSchedule,
-		c.Dictionary, c.DictionaryDetail, c.Logs, c.Member, c.MemberProduct,
-		c.MemberProductProperty, c.MemberProductPropertyVenue, c.Menu, c.MenuParam,
-		c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product,
-		c.ProductProperty, c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue,
-		c.VenuePlace,
+		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
+		c.MemberDetails, c.MemberNote, c.MemberProduct, c.MemberProductProperty,
+		c.MemberProductPropertyVenue, c.Menu, c.MenuParam, c.Order, c.OrderAmount,
+		c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.ProductProperty,
+		c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -371,10 +389,16 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Dictionary.mutate(ctx, m)
 	case *DictionaryDetailMutation:
 		return c.DictionaryDetail.mutate(ctx, m)
+	case *EntryLogsMutation:
+		return c.EntryLogs.mutate(ctx, m)
 	case *LogsMutation:
 		return c.Logs.mutate(ctx, m)
 	case *MemberMutation:
 		return c.Member.mutate(ctx, m)
+	case *MemberDetailsMutation:
+		return c.MemberDetails.mutate(ctx, m)
+	case *MemberNoteMutation:
+		return c.MemberNote.mutate(ctx, m)
 	case *MemberProductMutation:
 		return c.MemberProduct.mutate(ctx, m)
 	case *MemberProductPropertyMutation:
@@ -1310,6 +1334,139 @@ func (c *DictionaryDetailClient) mutate(ctx context.Context, m *DictionaryDetail
 	}
 }
 
+// EntryLogsClient is a client for the EntryLogs schema.
+type EntryLogsClient struct {
+	config
+}
+
+// NewEntryLogsClient returns a client for the EntryLogs from the given config.
+func NewEntryLogsClient(c config) *EntryLogsClient {
+	return &EntryLogsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `entrylogs.Hooks(f(g(h())))`.
+func (c *EntryLogsClient) Use(hooks ...Hook) {
+	c.hooks.EntryLogs = append(c.hooks.EntryLogs, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `entrylogs.Intercept(f(g(h())))`.
+func (c *EntryLogsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EntryLogs = append(c.inters.EntryLogs, interceptors...)
+}
+
+// Create returns a builder for creating a EntryLogs entity.
+func (c *EntryLogsClient) Create() *EntryLogsCreate {
+	mutation := newEntryLogsMutation(c.config, OpCreate)
+	return &EntryLogsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EntryLogs entities.
+func (c *EntryLogsClient) CreateBulk(builders ...*EntryLogsCreate) *EntryLogsCreateBulk {
+	return &EntryLogsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EntryLogsClient) MapCreateBulk(slice any, setFunc func(*EntryLogsCreate, int)) *EntryLogsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EntryLogsCreateBulk{err: fmt.Errorf("calling to EntryLogsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EntryLogsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EntryLogsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EntryLogs.
+func (c *EntryLogsClient) Update() *EntryLogsUpdate {
+	mutation := newEntryLogsMutation(c.config, OpUpdate)
+	return &EntryLogsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EntryLogsClient) UpdateOne(el *EntryLogs) *EntryLogsUpdateOne {
+	mutation := newEntryLogsMutation(c.config, OpUpdateOne, withEntryLogs(el))
+	return &EntryLogsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EntryLogsClient) UpdateOneID(id int64) *EntryLogsUpdateOne {
+	mutation := newEntryLogsMutation(c.config, OpUpdateOne, withEntryLogsID(id))
+	return &EntryLogsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EntryLogs.
+func (c *EntryLogsClient) Delete() *EntryLogsDelete {
+	mutation := newEntryLogsMutation(c.config, OpDelete)
+	return &EntryLogsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EntryLogsClient) DeleteOne(el *EntryLogs) *EntryLogsDeleteOne {
+	return c.DeleteOneID(el.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EntryLogsClient) DeleteOneID(id int64) *EntryLogsDeleteOne {
+	builder := c.Delete().Where(entrylogs.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EntryLogsDeleteOne{builder}
+}
+
+// Query returns a query builder for EntryLogs.
+func (c *EntryLogsClient) Query() *EntryLogsQuery {
+	return &EntryLogsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEntryLogs},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EntryLogs entity by its id.
+func (c *EntryLogsClient) Get(ctx context.Context, id int64) (*EntryLogs, error) {
+	return c.Query().Where(entrylogs.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EntryLogsClient) GetX(ctx context.Context, id int64) *EntryLogs {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *EntryLogsClient) Hooks() []Hook {
+	return c.hooks.EntryLogs
+}
+
+// Interceptors returns the client interceptors.
+func (c *EntryLogsClient) Interceptors() []Interceptor {
+	return c.inters.EntryLogs
+}
+
+func (c *EntryLogsClient) mutate(ctx context.Context, m *EntryLogsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EntryLogsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EntryLogsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EntryLogsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EntryLogsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown EntryLogs mutation op: %q", m.Op())
+	}
+}
+
 // LogsClient is a client for the Logs schema.
 type LogsClient struct {
 	config
@@ -1551,6 +1708,38 @@ func (c *MemberClient) GetX(ctx context.Context, id int64) *Member {
 	return obj
 }
 
+// QueryMemberDetails queries the member_details edge of a Member.
+func (c *MemberClient) QueryMemberDetails(m *Member) *MemberDetailsQuery {
+	query := (&MemberDetailsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(memberdetails.Table, memberdetails.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberDetailsTable, member.MemberDetailsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberNotes queries the member_notes edge of a Member.
+func (c *MemberClient) QueryMemberNotes(m *Member) *MemberNoteQuery {
+	query := (&MemberNoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(membernote.Table, membernote.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberNotesTable, member.MemberNotesColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMemberProducts queries the member_products edge of a Member.
 func (c *MemberClient) QueryMemberProducts(m *Member) *MemberProductQuery {
 	query := (&MemberProductClient{config: c.config}).Query()
@@ -1589,6 +1778,304 @@ func (c *MemberClient) mutate(ctx context.Context, m *MemberMutation) (Value, er
 		return (&MemberDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Member mutation op: %q", m.Op())
+	}
+}
+
+// MemberDetailsClient is a client for the MemberDetails schema.
+type MemberDetailsClient struct {
+	config
+}
+
+// NewMemberDetailsClient returns a client for the MemberDetails from the given config.
+func NewMemberDetailsClient(c config) *MemberDetailsClient {
+	return &MemberDetailsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `memberdetails.Hooks(f(g(h())))`.
+func (c *MemberDetailsClient) Use(hooks ...Hook) {
+	c.hooks.MemberDetails = append(c.hooks.MemberDetails, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `memberdetails.Intercept(f(g(h())))`.
+func (c *MemberDetailsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemberDetails = append(c.inters.MemberDetails, interceptors...)
+}
+
+// Create returns a builder for creating a MemberDetails entity.
+func (c *MemberDetailsClient) Create() *MemberDetailsCreate {
+	mutation := newMemberDetailsMutation(c.config, OpCreate)
+	return &MemberDetailsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemberDetails entities.
+func (c *MemberDetailsClient) CreateBulk(builders ...*MemberDetailsCreate) *MemberDetailsCreateBulk {
+	return &MemberDetailsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberDetailsClient) MapCreateBulk(slice any, setFunc func(*MemberDetailsCreate, int)) *MemberDetailsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberDetailsCreateBulk{err: fmt.Errorf("calling to MemberDetailsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberDetailsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberDetailsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemberDetails.
+func (c *MemberDetailsClient) Update() *MemberDetailsUpdate {
+	mutation := newMemberDetailsMutation(c.config, OpUpdate)
+	return &MemberDetailsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberDetailsClient) UpdateOne(md *MemberDetails) *MemberDetailsUpdateOne {
+	mutation := newMemberDetailsMutation(c.config, OpUpdateOne, withMemberDetails(md))
+	return &MemberDetailsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberDetailsClient) UpdateOneID(id int64) *MemberDetailsUpdateOne {
+	mutation := newMemberDetailsMutation(c.config, OpUpdateOne, withMemberDetailsID(id))
+	return &MemberDetailsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemberDetails.
+func (c *MemberDetailsClient) Delete() *MemberDetailsDelete {
+	mutation := newMemberDetailsMutation(c.config, OpDelete)
+	return &MemberDetailsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberDetailsClient) DeleteOne(md *MemberDetails) *MemberDetailsDeleteOne {
+	return c.DeleteOneID(md.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberDetailsClient) DeleteOneID(id int64) *MemberDetailsDeleteOne {
+	builder := c.Delete().Where(memberdetails.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberDetailsDeleteOne{builder}
+}
+
+// Query returns a query builder for MemberDetails.
+func (c *MemberDetailsClient) Query() *MemberDetailsQuery {
+	return &MemberDetailsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemberDetails},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemberDetails entity by its id.
+func (c *MemberDetailsClient) Get(ctx context.Context, id int64) (*MemberDetails, error) {
+	return c.Query().Where(memberdetails.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberDetailsClient) GetX(ctx context.Context, id int64) *MemberDetails {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryInfo queries the info edge of a MemberDetails.
+func (c *MemberDetailsClient) QueryInfo(md *MemberDetails) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := md.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberdetails.Table, memberdetails.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberdetails.InfoTable, memberdetails.InfoColumn),
+		)
+		fromV = sqlgraph.Neighbors(md.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemberDetailsClient) Hooks() []Hook {
+	return c.hooks.MemberDetails
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberDetailsClient) Interceptors() []Interceptor {
+	return c.inters.MemberDetails
+}
+
+func (c *MemberDetailsClient) mutate(ctx context.Context, m *MemberDetailsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberDetailsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberDetailsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberDetailsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberDetailsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemberDetails mutation op: %q", m.Op())
+	}
+}
+
+// MemberNoteClient is a client for the MemberNote schema.
+type MemberNoteClient struct {
+	config
+}
+
+// NewMemberNoteClient returns a client for the MemberNote from the given config.
+func NewMemberNoteClient(c config) *MemberNoteClient {
+	return &MemberNoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `membernote.Hooks(f(g(h())))`.
+func (c *MemberNoteClient) Use(hooks ...Hook) {
+	c.hooks.MemberNote = append(c.hooks.MemberNote, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `membernote.Intercept(f(g(h())))`.
+func (c *MemberNoteClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemberNote = append(c.inters.MemberNote, interceptors...)
+}
+
+// Create returns a builder for creating a MemberNote entity.
+func (c *MemberNoteClient) Create() *MemberNoteCreate {
+	mutation := newMemberNoteMutation(c.config, OpCreate)
+	return &MemberNoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemberNote entities.
+func (c *MemberNoteClient) CreateBulk(builders ...*MemberNoteCreate) *MemberNoteCreateBulk {
+	return &MemberNoteCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberNoteClient) MapCreateBulk(slice any, setFunc func(*MemberNoteCreate, int)) *MemberNoteCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberNoteCreateBulk{err: fmt.Errorf("calling to MemberNoteClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberNoteCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberNoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemberNote.
+func (c *MemberNoteClient) Update() *MemberNoteUpdate {
+	mutation := newMemberNoteMutation(c.config, OpUpdate)
+	return &MemberNoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberNoteClient) UpdateOne(mn *MemberNote) *MemberNoteUpdateOne {
+	mutation := newMemberNoteMutation(c.config, OpUpdateOne, withMemberNote(mn))
+	return &MemberNoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberNoteClient) UpdateOneID(id int64) *MemberNoteUpdateOne {
+	mutation := newMemberNoteMutation(c.config, OpUpdateOne, withMemberNoteID(id))
+	return &MemberNoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemberNote.
+func (c *MemberNoteClient) Delete() *MemberNoteDelete {
+	mutation := newMemberNoteMutation(c.config, OpDelete)
+	return &MemberNoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberNoteClient) DeleteOne(mn *MemberNote) *MemberNoteDeleteOne {
+	return c.DeleteOneID(mn.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberNoteClient) DeleteOneID(id int64) *MemberNoteDeleteOne {
+	builder := c.Delete().Where(membernote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberNoteDeleteOne{builder}
+}
+
+// Query returns a query builder for MemberNote.
+func (c *MemberNoteClient) Query() *MemberNoteQuery {
+	return &MemberNoteQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemberNote},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemberNote entity by its id.
+func (c *MemberNoteClient) Get(ctx context.Context, id int64) (*MemberNote, error) {
+	return c.Query().Where(membernote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberNoteClient) GetX(ctx context.Context, id int64) *MemberNote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryNotes queries the notes edge of a MemberNote.
+func (c *MemberNoteClient) QueryNotes(mn *MemberNote) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membernote.Table, membernote.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, membernote.NotesTable, membernote.NotesColumn),
+		)
+		fromV = sqlgraph.Neighbors(mn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemberNoteClient) Hooks() []Hook {
+	return c.hooks.MemberNote
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberNoteClient) Interceptors() []Interceptor {
+	return c.inters.MemberNote
+}
+
+func (c *MemberNoteClient) mutate(ctx context.Context, m *MemberNoteMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberNoteCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberNoteUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberNoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberNoteDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemberNote mutation op: %q", m.Op())
 	}
 }
 
@@ -4390,16 +4877,18 @@ func (c *VenuePlaceClient) mutate(ctx context.Context, m *VenuePlaceMutation) (V
 type (
 	hooks struct {
 		API, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule, Dictionary,
-		DictionaryDetail, Logs, Member, MemberProduct, MemberProductProperty,
-		MemberProductPropertyVenue, Menu, MenuParam, Order, OrderAmount, OrderItem,
-		OrderPay, OrderSales, Product, ProductProperty, ProductPropertyVenue, Role,
-		Token, User, Venue, VenuePlace []ent.Hook
+		DictionaryDetail, EntryLogs, Logs, Member, MemberDetails, MemberNote,
+		MemberProduct, MemberProductProperty, MemberProductPropertyVenue, Menu,
+		MenuParam, Order, OrderAmount, OrderItem, OrderPay, OrderSales, Product,
+		ProductProperty, ProductPropertyVenue, Role, Token, User, Venue,
+		VenuePlace []ent.Hook
 	}
 	inters struct {
 		API, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule, Dictionary,
-		DictionaryDetail, Logs, Member, MemberProduct, MemberProductProperty,
-		MemberProductPropertyVenue, Menu, MenuParam, Order, OrderAmount, OrderItem,
-		OrderPay, OrderSales, Product, ProductProperty, ProductPropertyVenue, Role,
-		Token, User, Venue, VenuePlace []ent.Interceptor
+		DictionaryDetail, EntryLogs, Logs, Member, MemberDetails, MemberNote,
+		MemberProduct, MemberProductProperty, MemberProductPropertyVenue, Menu,
+		MenuParam, Order, OrderAmount, OrderItem, OrderPay, OrderSales, Product,
+		ProductProperty, ProductPropertyVenue, Role, Token, User, Venue,
+		VenuePlace []ent.Interceptor
 	}
 )

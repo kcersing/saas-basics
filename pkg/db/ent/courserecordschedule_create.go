@@ -50,6 +50,20 @@ func (crsc *CourseRecordScheduleCreate) SetNillableUpdatedAt(t *time.Time) *Cour
 	return crsc
 }
 
+// SetStatus sets the "status" field.
+func (crsc *CourseRecordScheduleCreate) SetStatus(i int64) *CourseRecordScheduleCreate {
+	crsc.mutation.SetStatus(i)
+	return crsc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (crsc *CourseRecordScheduleCreate) SetNillableStatus(i *int64) *CourseRecordScheduleCreate {
+	if i != nil {
+		crsc.SetStatus(*i)
+	}
+	return crsc
+}
+
 // SetType sets the "type" field.
 func (crsc *CourseRecordScheduleCreate) SetType(s string) *CourseRecordScheduleCreate {
 	crsc.mutation.SetType(s)
@@ -148,20 +162,6 @@ func (crsc *CourseRecordScheduleCreate) SetNillablePrice(f *float64) *CourseReco
 	return crsc
 }
 
-// SetStatus sets the "status" field.
-func (crsc *CourseRecordScheduleCreate) SetStatus(i int64) *CourseRecordScheduleCreate {
-	crsc.mutation.SetStatus(i)
-	return crsc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (crsc *CourseRecordScheduleCreate) SetNillableStatus(i *int64) *CourseRecordScheduleCreate {
-	if i != nil {
-		crsc.SetStatus(*i)
-	}
-	return crsc
-}
-
 // SetID sets the "id" field.
 func (crsc *CourseRecordScheduleCreate) SetID(i int64) *CourseRecordScheduleCreate {
 	crsc.mutation.SetID(i)
@@ -241,6 +241,10 @@ func (crsc *CourseRecordScheduleCreate) defaults() {
 		v := courserecordschedule.DefaultUpdatedAt()
 		crsc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := crsc.mutation.Status(); !ok {
+		v := courserecordschedule.DefaultStatus
+		crsc.mutation.SetStatus(v)
+	}
 	if _, ok := crsc.mutation.StartTime(); !ok {
 		v := courserecordschedule.DefaultStartTime()
 		crsc.mutation.SetStartTime(v)
@@ -252,10 +256,6 @@ func (crsc *CourseRecordScheduleCreate) defaults() {
 	if _, ok := crsc.mutation.Price(); !ok {
 		v := courserecordschedule.DefaultPrice
 		crsc.mutation.SetPrice(v)
-	}
-	if _, ok := crsc.mutation.Status(); !ok {
-		v := courserecordschedule.DefaultStatus
-		crsc.mutation.SetStatus(v)
 	}
 }
 
@@ -307,6 +307,10 @@ func (crsc *CourseRecordScheduleCreate) createSpec() (*CourseRecordSchedule, *sq
 		_spec.SetField(courserecordschedule.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := crsc.mutation.Status(); ok {
+		_spec.SetField(courserecordschedule.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := crsc.mutation.GetType(); ok {
 		_spec.SetField(courserecordschedule.FieldType, field.TypeString, value)
 		_node.Type = value
@@ -334,10 +338,6 @@ func (crsc *CourseRecordScheduleCreate) createSpec() (*CourseRecordSchedule, *sq
 	if value, ok := crsc.mutation.Price(); ok {
 		_spec.SetField(courserecordschedule.FieldPrice, field.TypeFloat64, value)
 		_node.Price = value
-	}
-	if value, ok := crsc.mutation.Status(); ok {
-		_spec.SetField(courserecordschedule.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if nodes := crsc.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

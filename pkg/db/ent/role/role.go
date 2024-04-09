@@ -78,7 +78,7 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int8
+	DefaultStatus int64
 	// DefaultDefaultRouter holds the default value on creation for the "default_router" field.
 	DefaultDefaultRouter string
 	// DefaultRemark holds the default value on creation for the "remark" field.
