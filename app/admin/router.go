@@ -18,4 +18,5 @@ func customizedRegister(r *server.Hertz) {
 	r.POST("/api/login", mw.GetJWTMw(infras.CasbinEnforcer()).LoginHandler)
 	r.POST("/api/logout", mw.GetJWTMw(infras.CasbinEnforcer()).LogoutHandler)
 	r.POST("/api/refresh_token", mw.GetJWTMw(infras.CasbinEnforcer()).RefreshHandler)
+
 }

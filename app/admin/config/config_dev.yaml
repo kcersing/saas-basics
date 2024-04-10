@@ -52,3 +52,12 @@ Alipay: # 以下配置文件为新沙箱环境配置
   app_public_cert_content:
   alipay_root_cert_content:
   alipay_public_cert_content:
+
+Minio:
+  EndPoint : localhost:18001
+  AccessKeyID : douyin
+  SecretAccessKey : douyin123
+  UseSSL : false
+  VideoBucketName : videobucket
+  ImgBucketName : imagebucket
+  Url : http://localhost:18001

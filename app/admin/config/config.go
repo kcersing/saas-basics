@@ -11,6 +11,8 @@ type ServerConfig struct {
 	Auth      Auth        `mapstructure:"Auth" json:"Auth"`
 	Redis     Redis       `mapstructure:"Redis" json:"Redis"`
 	Casbin    CasbinConf  `mapstructure:"Casbin" json:"Casbin"`
+	Payment   Payment     `mapstructure:"Payment" json:"Payment"`
+	Minio     Minio       `mapstructure:"Minio" json:"Minio"`
 }
 
 type MysqlConfig struct {
@@ -44,19 +46,31 @@ type Payment struct {
 }
 
 type WechatPay struct {
-	Appid             string `yaml:"appid"`
-	MchId             string `yaml:"mch_id"`
-	ApiKey            string `yaml:"api_key"`
-	ApiV3Key          string `yaml:"api_v3_key"`
-	CertFileContent   string `yaml:"cert_file_content"`
-	KeyFileContent    string `yaml:"key_file_content"`
-	Pkcs12FileContent string `yaml:"pkcs12_file_content"`
+	Appid             string `mapstructure:"ModelText" yaml:"appid"`
+	MchId             string `mapstructure:"ModelText" yaml:"mch_id"`
+	ApiKey            string `mapstructure:"ModelText" yaml:"api_key"`
+	ApiV3Key          string `mapstructure:"ModelText" yaml:"api_v3_key"`
+	CertFileContent   string `mapstructure:"ModelText" yaml:"cert_file_content"`
+	KeyFileContent    string `mapstructure:"ModelText" yaml:"key_file_content"`
+	Pkcs12FileContent string `mapstructure:"ModelText" yaml:"pkcs12_file_content"`
 }
 
 type AliPay struct {
-	Appid                   string `yaml:"appid"`
-	PrivateKey              string `yaml:"private_key"`
-	AppPublicCertContent    string `yaml:"app_public_cert_content"`
-	AlipayRootCertContent   string `yaml:"alipay_root_cert_content"`
-	AlipayPublicCertContent string `yaml:"alipay_public_cert_content"`
+	Appid                   string `mapstructure:"ModelText" yaml:"appid"`
+	PrivateKey              string `mapstructure:"ModelText" yaml:"private_key"`
+	AppPublicCertContent    string `mapstructure:"ModelText" yaml:"app_public_cert_content"`
+	AlipayRootCertContent   string `mapstructure:"ModelText" yaml:"alipay_root_cert_content"`
+	AlipayPublicCertContent string `mapstructure:"ModelText" yaml:"alipay_public_cert_content"`
+}
+
+type Minio struct {
+	EndPoint        string `mapstructure:"EndPoint" yaml:"EndPoint"`
+	AccessKeyID     string `mapstructure:"AccessKeyID" yaml:"AccessKeyID"`
+	SecretAccessKey string `mapstructure:"SecretAccessKey" yaml:"SecretAccessKey"`
+	UseSSL          bool   `mapstructure:"UseSSL" yaml:"UseSSL"`
+
+	VideoBucketName string `mapstructure:"VideoBucketName" yaml:"VideoBucketName"`
+	ImgBucketName   string `mapstructure:"ImgBucketName" yaml:"ImgBucketName"`
+
+	Url string `mapstructure:"Host" yaml:"Host"`
 }

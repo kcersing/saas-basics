@@ -1,129 +1,22 @@
-version: '3.7'
+version: '3'
+
 services:
 
-  # Consul
-  consul:
-    hostname: consul
-    container_name: consul
-    image: consul:latest
-    command: agent -dev -client=0.0.0.0
+  minio:
+    image: minio/minio
+    container_name: saas_minio
     ports:
-      - "8500:8500"
-      - "8300:8300"
-      - "8301:8301"
-      - "8302:8302"
-      - "8600:8600/udp"
-#  #elasticsearch
-#  elasticsearch:
-#    image: elasticsearch:7.6.2
-#    environment:
-#      - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
-#      - "discovery.type=single-node" #以单一节点模式启动
-#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置使用jvm内存大小
-#    ports:
-#      - "9200:9200"
-#      - "9300:9300"
-
-#  #kibana
-#  kibana:
-#    image: kibana:7.6.2
-#    links:
-#      - elasticsearch:es #可以用es这个域名访问elasticsearch服务
-#    depends_on:
-#      - elasticsearch #kibana在elasticsearch启动之后再启动
-#    environment:
-#      - "elasticsearch.hosts=http://es:9200" #设置访问elasticsearch的地址
-#    ports:
-#      - "5601:5601"
-
-#  # RabbitMQ
-#  rabbitmq:
-#    hostname: rabbitmq
-#    container_name: rabbitmq
-#    image: rabbitmq:management
-#    ports:
-#      - "15672:15672"
-#      - "5672:5672"
-#    environment:
-#      - RABBITMQ_DEFAULT_USER=guest
-#      - RABBITMQ_DEFAULT_PASS=guest
-
-  # Collector
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib-dev:latest
+      - "18001:9000"
+      - "18002:9001"
+    environment:
+      MINIO_ACCESS_KEY: douyin
+      MINIO_SECRET_KEY: douyin123
     volumes:
-      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
-    command: [ "--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}" ]
-    ports:
-      - "1888:1888"   # pprof extension
-      - "8888"   # Prometheus' metrics exposed by the collector
-      - "8889:8889"   # Prometheus exporter metrics
-      - "13133:13133" # health_check extension
-      - "4317:4317"   # OTLP gRPC receiver
-      - "55679" # zpages extension
-    depends_on:
-      - jaeger-all-in-one
-
-  # Jaeger
-  jaeger-all-in-one:
-    hostname: jaegertracing
-    container_name: jaegertracing
-    image: jaegertracing/all-in-one:latest
-    environment:
-      - COLLECTOR_OTLP_ENABLED=true
-    ports:
-      - "16686:16686"
-      - "14268"
-      - "14250:14250"
-      - "6831:6831"
-
-  # VictoriaMetrics
-  victoriametrics:
-    hostname: victoriametrics
-    container_name: victoriametrics
-    image: victoriametrics/victoria-metrics
-    ports:
-      - "8428:8428"
-      - "8089:8089"
-      - "8089:8089/udp"
-      - "2003:2003"
-      - "2003:2003/udp"
-      - "4242:4242"
-    command:
-      - '--storageDataPath=/storage'
-      - '--graphiteListenAddr=:2003'
-      - '--opentsdbListenAddr=:4242'
-      - '--httpListenAddr=:8428'
-      - '--influxListenAddr=:8089'
+      - /D/docker/src/my-saas-basics/pkg/data/minio/:/data
+      - /D/docker/src/my-saas-basics/pkg/data/minio/:/root/.minio
+    command: server --console-address ':9001' /data
+    privileged: true
     restart: always
-
-  # Grafana
-  grafana:
-    hostname: grafana
-    container_name: grafana
-    image: grafana/grafana:latest
-    environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-      - GF_AUTH_DISABLE_LOGIN_FORM=true
-    ports:
-      - "3000:3000"
-
- # golang 服务
-  golang:
-   #image: golang:latest  # 父镜像名称
-    image: golang:1.21.6
-    volumes: # 挂载卷
-      - /D/docker/src:/go/src
-#    ports: # 端口映射
-#      - "9010:9010"
-   #    expose: # 暴露的服务端口
-   #      - 8011
-   # 依赖的项目，启动的时候根据依赖关系定义启动顺序
-#    depends_on: # 依赖容器
-#     #    - redis
-#      - consul
-#      - jagerservice
-    stdin_open: true
-    tty: true
-   # command: 启动后运行的命令
+    profiles:
+      - dev
+      - release
