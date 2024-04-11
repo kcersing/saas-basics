@@ -27,9 +27,9 @@ func init() {
 	minio.Init()
 }
 func minioReverseProxy(c context.Context, ctx *app.RequestContext) {
-	hlog.Info(config.GlobalServerConfig.Minio.Url)
 	proxy, _ := reverseproxy.NewSingleHostReverseProxy(config.GlobalServerConfig.Minio.Url)
 	ctx.URI().SetPath(ctx.Param("name"))
+	hlog.CtxInfof(c, string(ctx.Request.URI().Path()))
 	proxy.ServeHTTP(c, ctx)
 }
 

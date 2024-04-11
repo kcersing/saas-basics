@@ -53,10 +53,10 @@ Payment:
     alipay_public_cert_content:
 
 Minio:
-  EndPoint : localhost:18001
+  EndPoint : localhost:9000
   AccessKeyID : douyin
   SecretAccessKey : douyin123
   UseSSL : false
   VideoBucketName : videobucket
   ImgBucketName : imagebucket
-  Url : http://localhost:18001
+  Url : http://localhost:9001

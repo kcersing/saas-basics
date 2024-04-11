@@ -6,14 +6,14 @@ services:
     image: minio/minio
     container_name: saas_minio
     ports:
-      - "18001:9000"
-      - "18002:9001"
+      - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ACCESS_KEY: douyin
       MINIO_SECRET_KEY: douyin123
     volumes:
-      - /D/docker/src/my-saas-basics/pkg/data/minio/:/data
-      - /D/docker/src/my-saas-basics/pkg/data/minio/:/root/.minio
+      - /D/docker/src/my-saas-basics/files/minio/:/data
+      - /D/docker/src/my-saas-basics/files/minio/:/root/.minio
     command: server --console-address ':9001' /data
     privileged: true
     restart: always

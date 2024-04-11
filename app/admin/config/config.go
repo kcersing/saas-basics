@@ -72,5 +72,5 @@ type Minio struct {
 	VideoBucketName string `mapstructure:"VideoBucketName" yaml:"VideoBucketName"`
 	ImgBucketName   string `mapstructure:"ImgBucketName" yaml:"ImgBucketName"`
 
-	Url string `mapstructure:"Host" yaml:"Host"`
+	Url string `mapstructure:"Url" yaml:"Url"`
 }

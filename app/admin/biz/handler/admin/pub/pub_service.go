@@ -8,7 +8,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"path"
 	"saas/app/admin/config"
-	"saas/app/admin/idl_gen/model/admin/pub"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/minio"
 	"saas/app/admin/pkg/utils"
@@ -19,14 +18,6 @@ import (
 // Upload .
 // @router /api/pub/upload/ [POST]
 func Upload(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req pub.UploadReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-
 	file, _ := c.FormFile("file")
 	nowTime := time.Now()
 	filename := minio.NewFileName(0, nowTime.UnixMicro())
