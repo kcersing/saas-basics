@@ -60,4 +60,4 @@ Minio:
   UseSSL : false
   VideoBucketName : videobucket
   ImgBucketName : imagebucket
-  Url : http://localhost:9001
+  Url : http://localhost:9000
