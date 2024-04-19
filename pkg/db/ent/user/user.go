@@ -40,6 +40,10 @@ const (
 	FieldEmail = "email"
 	// FieldWecom holds the string denoting the wecom field in the database.
 	FieldWecom = "wecom"
+	// FieldJob holds the string denoting the job field in the database.
+	FieldJob = "job"
+	// FieldOrganization holds the string denoting the organization field in the database.
+	FieldOrganization = "organization"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
 	// EdgeToken holds the string denoting the token edge name in mutations.
@@ -71,6 +75,8 @@ var Columns = []string{
 	FieldMobile,
 	FieldEmail,
 	FieldWecom,
+	FieldJob,
+	FieldOrganization,
 	FieldAvatar,
 }
 
@@ -101,8 +107,6 @@ var (
 	DefaultActiveColor string
 	// DefaultRoleID holds the default value on creation for the "role_id" field.
 	DefaultRoleID int64
-	// DefaultAvatar holds the default value on creation for the "avatar" field.
-	DefaultAvatar string
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -176,6 +180,16 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 // ByWecom orders the results by the wecom field.
 func ByWecom(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWecom, opts...).ToFunc()
+}
+
+// ByJob orders the results by the job field.
+func ByJob(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJob, opts...).ToFunc()
+}
+
+// ByOrganization orders the results by the organization field.
+func ByOrganization(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrganization, opts...).ToFunc()
 }
 
 // ByAvatar orders the results by the avatar field.

@@ -27,6 +27,7 @@ import (
 	"saas/pkg/db/ent/memberproductpropertyvenue"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
+	"saas/pkg/db/ent/messages"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
@@ -84,6 +85,8 @@ type Client struct {
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
 	MenuParam *MenuParamClient
+	// Messages is the client for interacting with the Messages builders.
+	Messages *MessagesClient
 	// Order is the client for interacting with the Order builders.
 	Order *OrderClient
 	// OrderAmount is the client for interacting with the OrderAmount builders.
@@ -137,6 +140,7 @@ func (c *Client) init() {
 	c.MemberProductPropertyVenue = NewMemberProductPropertyVenueClient(c.config)
 	c.Menu = NewMenuClient(c.config)
 	c.MenuParam = NewMenuParamClient(c.config)
+	c.Messages = NewMessagesClient(c.config)
 	c.Order = NewOrderClient(c.config)
 	c.OrderAmount = NewOrderAmountClient(c.config)
 	c.OrderItem = NewOrderItemClient(c.config)
@@ -258,6 +262,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		MemberProductPropertyVenue: NewMemberProductPropertyVenueClient(cfg),
 		Menu:                       NewMenuClient(cfg),
 		MenuParam:                  NewMenuParamClient(cfg),
+		Messages:                   NewMessagesClient(cfg),
 		Order:                      NewOrderClient(cfg),
 		OrderAmount:                NewOrderAmountClient(cfg),
 		OrderItem:                  NewOrderItemClient(cfg),
@@ -306,6 +311,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		MemberProductPropertyVenue: NewMemberProductPropertyVenueClient(cfg),
 		Menu:                       NewMenuClient(cfg),
 		MenuParam:                  NewMenuParamClient(cfg),
+		Messages:                   NewMessagesClient(cfg),
 		Order:                      NewOrderClient(cfg),
 		OrderAmount:                NewOrderAmountClient(cfg),
 		OrderItem:                  NewOrderItemClient(cfg),
@@ -351,9 +357,10 @@ func (c *Client) Use(hooks ...Hook) {
 		c.API, c.CourseRecordCoach, c.CourseRecordMember, c.CourseRecordSchedule,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberDetails, c.MemberNote, c.MemberProduct, c.MemberProductProperty,
-		c.MemberProductPropertyVenue, c.Menu, c.MenuParam, c.Order, c.OrderAmount,
-		c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.ProductProperty,
-		c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
+		c.MemberProductPropertyVenue, c.Menu, c.MenuParam, c.Messages, c.Order,
+		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product,
+		c.ProductProperty, c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue,
+		c.VenuePlace,
 	} {
 		n.Use(hooks...)
 	}
@@ -366,9 +373,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.API, c.CourseRecordCoach, c.CourseRecordMember, c.CourseRecordSchedule,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberDetails, c.MemberNote, c.MemberProduct, c.MemberProductProperty,
-		c.MemberProductPropertyVenue, c.Menu, c.MenuParam, c.Order, c.OrderAmount,
-		c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.ProductProperty,
-		c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
+		c.MemberProductPropertyVenue, c.Menu, c.MenuParam, c.Messages, c.Order,
+		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product,
+		c.ProductProperty, c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue,
+		c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -409,6 +417,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Menu.mutate(ctx, m)
 	case *MenuParamMutation:
 		return c.MenuParam.mutate(ctx, m)
+	case *MessagesMutation:
+		return c.Messages.mutate(ctx, m)
 	case *OrderMutation:
 		return c.Order.mutate(ctx, m)
 	case *OrderAmountMutation:
@@ -2904,6 +2914,139 @@ func (c *MenuParamClient) mutate(ctx context.Context, m *MenuParamMutation) (Val
 	}
 }
 
+// MessagesClient is a client for the Messages schema.
+type MessagesClient struct {
+	config
+}
+
+// NewMessagesClient returns a client for the Messages from the given config.
+func NewMessagesClient(c config) *MessagesClient {
+	return &MessagesClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `messages.Hooks(f(g(h())))`.
+func (c *MessagesClient) Use(hooks ...Hook) {
+	c.hooks.Messages = append(c.hooks.Messages, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `messages.Intercept(f(g(h())))`.
+func (c *MessagesClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Messages = append(c.inters.Messages, interceptors...)
+}
+
+// Create returns a builder for creating a Messages entity.
+func (c *MessagesClient) Create() *MessagesCreate {
+	mutation := newMessagesMutation(c.config, OpCreate)
+	return &MessagesCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Messages entities.
+func (c *MessagesClient) CreateBulk(builders ...*MessagesCreate) *MessagesCreateBulk {
+	return &MessagesCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MessagesClient) MapCreateBulk(slice any, setFunc func(*MessagesCreate, int)) *MessagesCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MessagesCreateBulk{err: fmt.Errorf("calling to MessagesClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MessagesCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MessagesCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Messages.
+func (c *MessagesClient) Update() *MessagesUpdate {
+	mutation := newMessagesMutation(c.config, OpUpdate)
+	return &MessagesUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MessagesClient) UpdateOne(m *Messages) *MessagesUpdateOne {
+	mutation := newMessagesMutation(c.config, OpUpdateOne, withMessages(m))
+	return &MessagesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MessagesClient) UpdateOneID(id int64) *MessagesUpdateOne {
+	mutation := newMessagesMutation(c.config, OpUpdateOne, withMessagesID(id))
+	return &MessagesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Messages.
+func (c *MessagesClient) Delete() *MessagesDelete {
+	mutation := newMessagesMutation(c.config, OpDelete)
+	return &MessagesDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MessagesClient) DeleteOne(m *Messages) *MessagesDeleteOne {
+	return c.DeleteOneID(m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MessagesClient) DeleteOneID(id int64) *MessagesDeleteOne {
+	builder := c.Delete().Where(messages.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MessagesDeleteOne{builder}
+}
+
+// Query returns a query builder for Messages.
+func (c *MessagesClient) Query() *MessagesQuery {
+	return &MessagesQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMessages},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Messages entity by its id.
+func (c *MessagesClient) Get(ctx context.Context, id int64) (*Messages, error) {
+	return c.Query().Where(messages.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MessagesClient) GetX(ctx context.Context, id int64) *Messages {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *MessagesClient) Hooks() []Hook {
+	return c.hooks.Messages
+}
+
+// Interceptors returns the client interceptors.
+func (c *MessagesClient) Interceptors() []Interceptor {
+	return c.inters.Messages
+}
+
+func (c *MessagesClient) mutate(ctx context.Context, m *MessagesMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MessagesCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MessagesUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MessagesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MessagesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Messages mutation op: %q", m.Op())
+	}
+}
+
 // OrderClient is a client for the Order schema.
 type OrderClient struct {
 	config
@@ -4879,16 +5022,16 @@ type (
 		API, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule, Dictionary,
 		DictionaryDetail, EntryLogs, Logs, Member, MemberDetails, MemberNote,
 		MemberProduct, MemberProductProperty, MemberProductPropertyVenue, Menu,
-		MenuParam, Order, OrderAmount, OrderItem, OrderPay, OrderSales, Product,
-		ProductProperty, ProductPropertyVenue, Role, Token, User, Venue,
+		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales,
+		Product, ProductProperty, ProductPropertyVenue, Role, Token, User, Venue,
 		VenuePlace []ent.Hook
 	}
 	inters struct {
 		API, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule, Dictionary,
 		DictionaryDetail, EntryLogs, Logs, Member, MemberDetails, MemberNote,
 		MemberProduct, MemberProductProperty, MemberProductPropertyVenue, Menu,
-		MenuParam, Order, OrderAmount, OrderItem, OrderPay, OrderSales, Product,
-		ProductProperty, ProductPropertyVenue, Role, Token, User, Venue,
+		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales,
+		Product, ProductProperty, ProductPropertyVenue, Role, Token, User, Venue,
 		VenuePlace []ent.Interceptor
 	}
 )

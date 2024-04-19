@@ -245,6 +245,46 @@ func (uu *UserUpdate) ClearWecom() *UserUpdate {
 	return uu
 }
 
+// SetJob sets the "job" field.
+func (uu *UserUpdate) SetJob(s string) *UserUpdate {
+	uu.mutation.SetJob(s)
+	return uu
+}
+
+// SetNillableJob sets the "job" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableJob(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetJob(*s)
+	}
+	return uu
+}
+
+// ClearJob clears the value of the "job" field.
+func (uu *UserUpdate) ClearJob() *UserUpdate {
+	uu.mutation.ClearJob()
+	return uu
+}
+
+// SetOrganization sets the "organization" field.
+func (uu *UserUpdate) SetOrganization(s string) *UserUpdate {
+	uu.mutation.SetOrganization(s)
+	return uu
+}
+
+// SetNillableOrganization sets the "organization" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableOrganization(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetOrganization(*s)
+	}
+	return uu
+}
+
+// ClearOrganization clears the value of the "organization" field.
+func (uu *UserUpdate) ClearOrganization() *UserUpdate {
+	uu.mutation.ClearOrganization()
+	return uu
+}
+
 // SetAvatar sets the "avatar" field.
 func (uu *UserUpdate) SetAvatar(s string) *UserUpdate {
 	uu.mutation.SetAvatar(s)
@@ -402,6 +442,18 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.WecomCleared() {
 		_spec.ClearField(user.FieldWecom, field.TypeString)
+	}
+	if value, ok := uu.mutation.Job(); ok {
+		_spec.SetField(user.FieldJob, field.TypeString, value)
+	}
+	if uu.mutation.JobCleared() {
+		_spec.ClearField(user.FieldJob, field.TypeString)
+	}
+	if value, ok := uu.mutation.Organization(); ok {
+		_spec.SetField(user.FieldOrganization, field.TypeString, value)
+	}
+	if uu.mutation.OrganizationCleared() {
+		_spec.ClearField(user.FieldOrganization, field.TypeString)
 	}
 	if value, ok := uu.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)
@@ -674,6 +726,46 @@ func (uuo *UserUpdateOne) ClearWecom() *UserUpdateOne {
 	return uuo
 }
 
+// SetJob sets the "job" field.
+func (uuo *UserUpdateOne) SetJob(s string) *UserUpdateOne {
+	uuo.mutation.SetJob(s)
+	return uuo
+}
+
+// SetNillableJob sets the "job" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableJob(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetJob(*s)
+	}
+	return uuo
+}
+
+// ClearJob clears the value of the "job" field.
+func (uuo *UserUpdateOne) ClearJob() *UserUpdateOne {
+	uuo.mutation.ClearJob()
+	return uuo
+}
+
+// SetOrganization sets the "organization" field.
+func (uuo *UserUpdateOne) SetOrganization(s string) *UserUpdateOne {
+	uuo.mutation.SetOrganization(s)
+	return uuo
+}
+
+// SetNillableOrganization sets the "organization" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableOrganization(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetOrganization(*s)
+	}
+	return uuo
+}
+
+// ClearOrganization clears the value of the "organization" field.
+func (uuo *UserUpdateOne) ClearOrganization() *UserUpdateOne {
+	uuo.mutation.ClearOrganization()
+	return uuo
+}
+
 // SetAvatar sets the "avatar" field.
 func (uuo *UserUpdateOne) SetAvatar(s string) *UserUpdateOne {
 	uuo.mutation.SetAvatar(s)
@@ -861,6 +953,18 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.WecomCleared() {
 		_spec.ClearField(user.FieldWecom, field.TypeString)
+	}
+	if value, ok := uuo.mutation.Job(); ok {
+		_spec.SetField(user.FieldJob, field.TypeString, value)
+	}
+	if uuo.mutation.JobCleared() {
+		_spec.ClearField(user.FieldJob, field.TypeString)
+	}
+	if value, ok := uuo.mutation.Organization(); ok {
+		_spec.SetField(user.FieldOrganization, field.TypeString, value)
+	}
+	if uuo.mutation.OrganizationCleared() {
+		_spec.ClearField(user.FieldOrganization, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)

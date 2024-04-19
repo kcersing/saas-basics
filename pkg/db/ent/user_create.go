@@ -171,6 +171,34 @@ func (uc *UserCreate) SetNillableWecom(s *string) *UserCreate {
 	return uc
 }
 
+// SetJob sets the "job" field.
+func (uc *UserCreate) SetJob(s string) *UserCreate {
+	uc.mutation.SetJob(s)
+	return uc
+}
+
+// SetNillableJob sets the "job" field if the given value is not nil.
+func (uc *UserCreate) SetNillableJob(s *string) *UserCreate {
+	if s != nil {
+		uc.SetJob(*s)
+	}
+	return uc
+}
+
+// SetOrganization sets the "organization" field.
+func (uc *UserCreate) SetOrganization(s string) *UserCreate {
+	uc.mutation.SetOrganization(s)
+	return uc
+}
+
+// SetNillableOrganization sets the "organization" field if the given value is not nil.
+func (uc *UserCreate) SetNillableOrganization(s *string) *UserCreate {
+	if s != nil {
+		uc.SetOrganization(*s)
+	}
+	return uc
+}
+
 // SetAvatar sets the "avatar" field.
 func (uc *UserCreate) SetAvatar(s string) *UserCreate {
 	uc.mutation.SetAvatar(s)
@@ -272,10 +300,6 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.RoleID(); !ok {
 		v := user.DefaultRoleID
 		uc.mutation.SetRoleID(v)
-	}
-	if _, ok := uc.mutation.Avatar(); !ok {
-		v := user.DefaultAvatar
-		uc.mutation.SetAvatar(v)
 	}
 }
 
@@ -382,6 +406,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Wecom(); ok {
 		_spec.SetField(user.FieldWecom, field.TypeString, value)
 		_node.Wecom = value
+	}
+	if value, ok := uc.mutation.Job(); ok {
+		_spec.SetField(user.FieldJob, field.TypeString, value)
+		_node.Job = value
+	}
+	if value, ok := uc.mutation.Organization(); ok {
+		_spec.SetField(user.FieldOrganization, field.TypeString, value)
+		_node.Organization = value
 	}
 	if value, ok := uc.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)

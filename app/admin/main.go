@@ -23,7 +23,8 @@ func init() {
 	infras.InitDB()
 	infras.InitCasbin()
 	infras.InitCache()
-	infras.NewInitDatabase().InitDatabase()
+	//infras.NewInitDatabase().InitDatabase()
+	infras.NewInitDatabase().InitDatabase2()
 	minio.Init()
 }
 func minioReverseProxy(c context.Context, ctx *app.RequestContext) {

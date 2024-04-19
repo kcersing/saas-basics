@@ -135,7 +135,7 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 }
 
 // UserInfo .
-// @router /api/admin/user/info [POST]
+// @router /api/admin/user/info [get]
 func UserInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.Empty

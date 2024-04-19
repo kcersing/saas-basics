@@ -45,6 +45,10 @@ type User struct {
 	Email string `json:"email,omitempty"`
 	// wecom | 微信号
 	Wecom string `json:"wecom,omitempty"`
+	// 职业
+	Job string `json:"job,omitempty"`
+	// 部门
+	Organization string `json:"organization,omitempty"`
 	// avatar | 头像路径
 	Avatar string `json:"avatar,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -82,7 +86,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldID, user.FieldStatus, user.FieldRoleID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldUsername, user.FieldPassword, user.FieldNickname, user.FieldSideMode, user.FieldBaseColor, user.FieldActiveColor, user.FieldMobile, user.FieldEmail, user.FieldWecom, user.FieldAvatar:
+		case user.FieldUsername, user.FieldPassword, user.FieldNickname, user.FieldSideMode, user.FieldBaseColor, user.FieldActiveColor, user.FieldMobile, user.FieldEmail, user.FieldWecom, user.FieldJob, user.FieldOrganization, user.FieldAvatar:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -185,6 +189,18 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.Wecom = value.String
 			}
+		case user.FieldJob:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job", values[i])
+			} else if value.Valid {
+				u.Job = value.String
+			}
+		case user.FieldOrganization:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field organization", values[i])
+			} else if value.Valid {
+				u.Organization = value.String
+			}
 		case user.FieldAvatar:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar", values[i])
@@ -270,6 +286,12 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("wecom=")
 	builder.WriteString(u.Wecom)
+	builder.WriteString(", ")
+	builder.WriteString("job=")
+	builder.WriteString(u.Job)
+	builder.WriteString(", ")
+	builder.WriteString("organization=")
+	builder.WriteString(u.Organization)
 	builder.WriteString(", ")
 	builder.WriteString("avatar=")
 	builder.WriteString(u.Avatar)

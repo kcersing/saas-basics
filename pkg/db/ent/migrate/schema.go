@@ -466,6 +466,29 @@ var (
 			},
 		},
 	}
+	// MessagesColumns holds the columns for the "messages" table.
+	MessagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "type", Type: field.TypeString, Comment: "类型[1:用户user;2:会员member]"},
+		{Name: "to_user_id", Type: field.TypeString, Comment: "该消息接受者ID"},
+		{Name: "from_user_id", Type: field.TypeString, Comment: "该消息发送者ID"},
+		{Name: "content", Type: field.TypeString, Comment: "消息内容"},
+	}
+	// MessagesTable holds the schema information for the "messages" table.
+	MessagesTable = &schema.Table{
+		Name:       "messages",
+		Columns:    MessagesColumns,
+		PrimaryKey: []*schema.Column{MessagesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "messages_to_user_id_from_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{MessagesColumns[4], MessagesColumns[5]},
+			},
+		},
+	}
 	// OrderColumns holds the columns for the "order" table.
 	OrderColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -753,7 +776,9 @@ var (
 		{Name: "mobile", Type: field.TypeString, Unique: true, Comment: "mobile number | 手机号"},
 		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "email | 邮箱号"},
 		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
-		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "job", Type: field.TypeString, Nullable: true, Comment: "职业"},
+		{Name: "organization", Type: field.TypeString, Nullable: true, Comment: "部门"},
+		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 	}
 	// SysUsersTable holds the schema information for the "sys_users" table.
 	SysUsersTable = &schema.Table{
@@ -881,6 +906,7 @@ var (
 		MemberProductPropertyVenueTable,
 		SysMenusTable,
 		SysMenuParamsTable,
+		MessagesTable,
 		OrderTable,
 		OrderAmountTable,
 		OrderItemTable,
@@ -957,6 +983,9 @@ func init() {
 	SysMenuParamsTable.ForeignKeys[0].RefTable = SysMenusTable
 	SysMenuParamsTable.Annotation = &entsql.Annotation{
 		Table: "sys_menu_params",
+	}
+	MessagesTable.Annotation = &entsql.Annotation{
+		Table: "messages",
 	}
 	OrderTable.Annotation = &entsql.Annotation{
 		Table: "order",

@@ -54,6 +54,9 @@ type Menu func(*sql.Selector)
 // MenuParam is the predicate function for menuparam builders.
 type MenuParam func(*sql.Selector)
 
+// Messages is the predicate function for messages builders.
+type Messages func(*sql.Selector)
+
 // Order is the predicate function for order builders.
 type Order func(*sql.Selector)
 

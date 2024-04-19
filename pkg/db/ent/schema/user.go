@@ -27,10 +27,13 @@ func (User) Fields() []ent.Field {
 		field.String("mobile").Unique().Comment("mobile number | 手机号"),
 		field.String("email").Optional().Comment("email | 邮箱号"),
 		field.String("wecom").Optional().Comment("wecom | 微信号"),
+
+		field.String("job").Optional().Comment("职业"),
+		field.String("organization").Optional().Comment("部门"),
+
 		field.String("avatar").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Optional().
-			Default("").
 			Comment("avatar | 头像路径"),
 	}
 }

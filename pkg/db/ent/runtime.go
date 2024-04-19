@@ -19,6 +19,7 @@ import (
 	"saas/pkg/db/ent/memberproductpropertyvenue"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
+	"saas/pkg/db/ent/messages"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
@@ -538,6 +539,21 @@ func init() {
 	menuparam.DefaultUpdatedAt = menuparamDescUpdatedAt.Default.(func() time.Time)
 	// menuparam.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	menuparam.UpdateDefaultUpdatedAt = menuparamDescUpdatedAt.UpdateDefault.(func() time.Time)
+	messagesMixin := schema.Messages{}.Mixin()
+	messagesMixinFields0 := messagesMixin[0].Fields()
+	_ = messagesMixinFields0
+	messagesFields := schema.Messages{}.Fields()
+	_ = messagesFields
+	// messagesDescCreatedAt is the schema descriptor for created_at field.
+	messagesDescCreatedAt := messagesMixinFields0[1].Descriptor()
+	// messages.DefaultCreatedAt holds the default value on creation for the created_at field.
+	messages.DefaultCreatedAt = messagesDescCreatedAt.Default.(func() time.Time)
+	// messagesDescUpdatedAt is the schema descriptor for updated_at field.
+	messagesDescUpdatedAt := messagesMixinFields0[2].Descriptor()
+	// messages.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	messages.DefaultUpdatedAt = messagesDescUpdatedAt.Default.(func() time.Time)
+	// messages.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	messages.UpdateDefaultUpdatedAt = messagesDescUpdatedAt.UpdateDefault.(func() time.Time)
 	orderMixin := schema.Order{}.Mixin()
 	orderMixinFields0 := orderMixin[0].Fields()
 	_ = orderMixinFields0
@@ -789,10 +805,6 @@ func init() {
 	userDescRoleID := userFields[6].Descriptor()
 	// user.DefaultRoleID holds the default value on creation for the role_id field.
 	user.DefaultRoleID = userDescRoleID.Default.(int64)
-	// userDescAvatar is the schema descriptor for avatar field.
-	userDescAvatar := userFields[10].Descriptor()
-	// user.DefaultAvatar holds the default value on creation for the avatar field.
-	user.DefaultAvatar = userDescAvatar.Default.(string)
 	venueMixin := schema.Venue{}.Mixin()
 	venueMixinFields0 := venueMixin[0].Fields()
 	_ = venueMixinFields0

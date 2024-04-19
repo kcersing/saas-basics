@@ -45,6 +45,11 @@ type UserInfo struct {
 	UpdatedAt   time.Time `json:"updatedAt"`
 	RoleName    string    `json:"roleName,omitempty"`
 	RoleValue   string    `json:"roleValue,omitempty"`
+
+	Job              string `json:"job,omitempty"`
+	JobName          string `json:"jobName,omitempty"`
+	Organization     string `json:"organization,omitempty"`
+	OrganizationName string `json:"organizationName,omitempty"`
 }
 
 type UserListReq struct {

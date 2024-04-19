@@ -88,7 +88,36 @@ func (I *InitDatabase) InitDatabase() error {
 		err = errors.Wrap(err, "insert casbin policies data failed")
 		return err
 	}
-	err = I.insertDictionariesData(ctx)
+
+	// set init status
+	InitDatabaseStatus = true
+	return nil
+}
+
+func (I *InitDatabase) InitDatabase2() error {
+	// add lock to avoid duplicate initialization
+	I.Mu.Lock()
+	defer I.Mu.Unlock()
+	ctx := context.Background()
+	// judge if the initialization had been done
+	//check, err := I.DB.API.Query().Count(ctx)
+	//if InitDatabaseStatus || check > 0 {
+	//	return errors.New("Database had been initialized")
+	//}
+
+	err := I.insertDictionariesPropertyTypeData(ctx)
+	if err != nil {
+		hlog.Error("insert dictionaries data failed", err)
+		err = errors.Wrap(err, "insert dictionaries data failed")
+		return err
+	}
+	err = I.insertDictionariesOrganizationData(ctx)
+	if err != nil {
+		hlog.Error("insert dictionaries data failed", err)
+		err = errors.Wrap(err, "insert dictionaries data failed")
+		return err
+	}
+	err = I.insertDictionariesJobData(ctx)
 	if err != nil {
 		hlog.Error("insert dictionaries data failed", err)
 		err = errors.Wrap(err, "insert dictionaries data failed")
@@ -136,12 +165,6 @@ func (I *InitDatabase) insertRoleData(ctx context.Context) error {
 		SetValue("stuff").
 		SetRemark("普通员工").
 		SetOrderNo(2)
-
-	roles[2] = I.DB.Role.Create().
-		SetName("role.member").
-		SetValue("member").
-		SetRemark("注册会员").
-		SetOrderNo(3)
 
 	err := I.DB.Role.CreateBulk(roles...).Exec(ctx)
 	if err != nil {
@@ -940,11 +963,10 @@ func (I *InitDatabase) insertCasbinPoliciesData(ctx context.Context) error {
 	return nil
 }
 
-// init menu data
-func (I *InitDatabase) insertDictionariesData(ctx context.Context) error {
-
-	propertyType, err := I.DB.Dictionary.Create().
-		SetTitle("property_type").
+// init propertyType data
+func (I *InitDatabase) insertDictionariesPropertyTypeData(ctx context.Context) error {
+	data, err := I.DB.Dictionary.Create().
+		SetTitle("propertys").
 		SetName("属性类型").
 		SetStatus(1).
 		SetDescription("属性类型").
@@ -957,7 +979,7 @@ func (I *InitDatabase) insertDictionariesData(ctx context.Context) error {
 		SetTitle("卡").
 		SetValue("卡").
 		SetKey("card").
-		SetDictionary(propertyType).
+		SetDictionary(data).
 		Save(ctx)
 	if err != nil {
 		return errors.Wrap(err, "db failed")
@@ -967,7 +989,7 @@ func (I *InitDatabase) insertDictionariesData(ctx context.Context) error {
 		SetTitle("私教课").
 		SetValue("私教课").
 		SetKey("course").
-		SetDictionary(propertyType).
+		SetDictionary(data).
 		Save(ctx)
 	if err != nil {
 		return errors.Wrap(err, "db failed")
@@ -977,10 +999,80 @@ func (I *InitDatabase) insertDictionariesData(ctx context.Context) error {
 		SetTitle("团课").
 		SetValue("团课").
 		SetKey("class").
-		SetDictionary(propertyType).
+		SetDictionary(data).
 		Save(ctx)
 	if err != nil {
 		return errors.Wrap(err, "db failed")
 	}
+	return nil
+}
+
+// init job data
+func (I *InitDatabase) insertDictionariesJobData(ctx context.Context) error {
+	data, err := I.DB.Dictionary.Create().
+		SetTitle("jobs").
+		SetName("职业").
+		SetStatus(1).
+		SetDescription("职业").
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("销售").
+		SetValue("销售").
+		SetKey("sale").
+		SetDictionary(data).
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("教练").
+		SetValue("教练").
+		SetKey("coach").
+		SetDictionary(data).
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+
+	return nil
+}
+
+// init organization data
+func (I *InitDatabase) insertDictionariesOrganizationData(ctx context.Context) error {
+	data, err := I.DB.Dictionary.Create().
+		SetTitle("organizations").
+		SetName("部门").
+		SetStatus(1).
+		SetDescription("部门").
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("销售").
+		SetValue("销售").
+		SetKey("sales").
+		SetDictionary(data).
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("教练").
+		SetValue("教练").
+		SetKey("coach").
+		SetDictionary(data).
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+
 	return nil
 }

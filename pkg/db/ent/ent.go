@@ -23,6 +23,7 @@ import (
 	"saas/pkg/db/ent/memberproductpropertyvenue"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
+	"saas/pkg/db/ent/messages"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
@@ -117,6 +118,7 @@ func checkColumn(table, column string) error {
 			memberproductpropertyvenue.Table: memberproductpropertyvenue.ValidColumn,
 			menu.Table:                       menu.ValidColumn,
 			menuparam.Table:                  menuparam.ValidColumn,
+			messages.Table:                   messages.ValidColumn,
 			order.Table:                      order.ValidColumn,
 			orderamount.Table:                orderamount.ValidColumn,
 			orderitem.Table:                  orderitem.ValidColumn,

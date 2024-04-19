@@ -44,6 +44,8 @@ type Tx struct {
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
 	MenuParam *MenuParamClient
+	// Messages is the client for interacting with the Messages builders.
+	Messages *MessagesClient
 	// Order is the client for interacting with the Order builders.
 	Order *OrderClient
 	// OrderAmount is the client for interacting with the OrderAmount builders.
@@ -217,6 +219,7 @@ func (tx *Tx) init() {
 	tx.MemberProductPropertyVenue = NewMemberProductPropertyVenueClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
+	tx.Messages = NewMessagesClient(tx.config)
 	tx.Order = NewOrderClient(tx.config)
 	tx.OrderAmount = NewOrderAmountClient(tx.config)
 	tx.OrderItem = NewOrderItemClient(tx.config)
