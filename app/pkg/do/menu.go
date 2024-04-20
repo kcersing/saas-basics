@@ -16,6 +16,7 @@ type MenuInfo struct {
 	Level     int32       `json:"level,omitempty"`
 	ParentID  int64       `json:"parentId,omitempty"`
 	Path      string      `json:"path,omitempty"`
+	Key       string      `json:"key,omitempty"`
 	Name      string      `json:"name,omitempty"`
 	Redirect  string      `json:"redirect,omitempty"`
 	Component string      `json:"component,omitempty"`

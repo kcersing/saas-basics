@@ -275,6 +275,7 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*do.MenuInfoTree {
 			m.UpdatedAt = v.UpdatedAt.Format("2006-01-02 15:04:05")
 			m.MenuType = v.MenuType
 			m.Level = v.MenuLevel
+			m.Key = v.Path
 			m.ParentID = v.ParentID
 			m.Path = v.Path
 			m.Name = v.Name
