@@ -11,8 +11,9 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/encrypt"
 
-	"github.com/casbin/casbin/v2"
 	"sync"
+
+	"github.com/casbin/casbin/v2"
 
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cockroachdb/errors"
@@ -100,10 +101,10 @@ func (I *InitDatabase) InitDatabase2() error {
 	defer I.Mu.Unlock()
 	ctx := context.Background()
 	// judge if the initialization had been done
-	//check, err := I.DB.API.Query().Count(ctx)
-	//if InitDatabaseStatus || check > 0 {
-	//	return errors.New("Database had been initialized")
-	//}
+	// check, err := I.DB.API.Query().Count(ctx)
+	// if InitDatabaseStatus || check > 0 {
+	// 	return errors.New("Database had been initialized")
+	// }
 
 	err := I.insertDictionariesPropertyTypeData(ctx)
 	if err != nil {
@@ -153,7 +154,7 @@ func (I *InitDatabase) insertUserData(ctx context.Context) error {
 // insert init apis data
 func (I *InitDatabase) insertRoleData(ctx context.Context) error {
 	var roles []*ent.RoleCreate
-	roles = make([]*ent.RoleCreate, 3)
+	roles = make([]*ent.RoleCreate, 2)
 	roles[0] = I.DB.Role.Create().
 		SetName("role.admin").
 		SetValue("admin").
