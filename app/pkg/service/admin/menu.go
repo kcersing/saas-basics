@@ -270,33 +270,34 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*do.MenuInfoTree {
 
 		if v.ParentID == parentID && v.ID != parentID {
 			var m = new(do.MenuInfoTree)
-			m.ID = v.ID
-			m.CreatedAt = v.CreatedAt.Format("2006-01-02 15:04:05")
-			m.UpdatedAt = v.UpdatedAt.Format("2006-01-02 15:04:05")
-			m.MenuType = v.MenuType
-			m.Level = v.MenuLevel
+			//m.ID = v.ID
+			//m.CreatedAt = v.CreatedAt.Format("2006-01-02 15:04:05")
+			//m.UpdatedAt = v.UpdatedAt.Format("2006-01-02 15:04:05")
+			//m.MenuType = v.MenuType
+			//m.Level = v.MenuLevel
+
+			m.Name = v.Title
 			m.Key = v.Path
-			m.ParentID = v.ParentID
-			m.Path = v.Path
-			m.Name = v.Name
-			m.Redirect = v.Redirect
-			m.Component = v.Component
-			m.OrderNo = v.OrderNo
-			m.Meta = &do.MenuMeta{
-				Title:              v.Title,
-				Icon:               v.Icon,
-				HideMenu:           v.HideMenu,
-				HideBreadcrumb:     v.HideBreadcrumb,
-				CurrentActiveMenu:  v.CurrentActiveMenu,
-				IgnoreKeepAlive:    v.IgnoreKeepAlive,
-				HideTab:            v.HideTab,
-				FrameSrc:           v.FrameSrc,
-				CarryParam:         v.CarryParam,
-				HideChildrenInMenu: v.HideChildrenInMenu,
-				Affix:              v.Affix,
-				DynamicLevel:       v.DynamicLevel,
-				RealPath:           v.RealPath,
-			}
+			//	Title:              v.Name,
+			//m.ParentID = v.ParentID
+			//m.Path = v.Path
+			//m.Redirect = v.Redirect
+			//m.Component = v.Component
+			//m.OrderNo = v.OrderNo
+			//m.Meta = &do.MenuMeta{
+			//	Icon:               v.Icon,
+			//	HideMenu:           v.HideMenu,
+			//	HideBreadcrumb:     v.HideBreadcrumb,
+			//	CurrentActiveMenu:  v.CurrentActiveMenu,
+			//	IgnoreKeepAlive:    v.IgnoreKeepAlive,
+			//	HideTab:            v.HideTab,
+			//	FrameSrc:           v.FrameSrc,
+			//	CarryParam:         v.CarryParam,
+			//	HideChildrenInMenu: v.HideChildrenInMenu,
+			//	Affix:              v.Affix,
+			//	DynamicLevel:       v.DynamicLevel,
+			//	RealPath:           v.RealPath,
+			//}
 
 			m.Children = findMenuChildren(data, v.ID)
 			result = append(result, m)
