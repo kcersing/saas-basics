@@ -551,12 +551,12 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 // init menu data
 func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	var menus []*ent.MenuCreate
-	menus = make([]*ent.MenuCreate, 30)
+	menus = make([]*ent.MenuCreate, 31)
 	menus[0] = I.DB.Menu.Create().
 		SetMenuLevel(0).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("/").
+		SetPath("sys/").
 		SetName("root").
 		SetComponent("").
 		SetOrderNo(0).
@@ -568,9 +568,9 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(1).
 		SetMenuType(1).
 		SetParentID(1).
-		SetPath("dashboard/workbench/index").
+		SetPath("dashboard").
 		SetName("Dashboard").
-		SetComponent("dashboard/workbench/index").
+		SetComponent("dashboard/workbench").
 		SetOrderNo(0).
 		SetTitle("控制台").
 		SetIcon("ant-design:home-outlined").
@@ -580,7 +580,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(1).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("/").
+		SetPath("sys/").
 		SetName("SystemManagement").
 		SetComponent("LAYOUT").
 		SetOrderNo(19).
@@ -592,7 +592,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(1).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("/").
+		SetPath("sys/").
 		SetName("Maintenance").
 		SetComponent("LAYOUT").
 		SetOrderNo(21).
@@ -604,7 +604,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(4).
-		SetPath("sys/menu/index").
+		SetPath("sys/menu").
 		SetName("MenuManagement").
 		SetComponent("sys/menu/index").
 		SetOrderNo(1).
@@ -616,7 +616,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(3).
-		SetPath("sys/role/index").
+		SetPath("sys/role").
 		SetName("RoleManagement").
 		SetComponent("sys/role/index").
 		SetOrderNo(1).
@@ -628,7 +628,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(4).
-		SetPath("sys/api/index").
+		SetPath("sys/api").
 		SetName("APIManagement").
 		SetComponent("sys/api/index").
 		SetOrderNo(3).
@@ -640,7 +640,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(3).
-		SetPath("sys/user/index").
+		SetPath("sys/user").
 		SetName("UserManagement").
 		SetComponent("sys/user/index").
 		SetOrderNo(2).
@@ -652,7 +652,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(3).
-		SetPath("sys/dictionary/index").
+		SetPath("sys/dictionary").
 		SetName("DictionaryManagement").
 		SetComponent("sys/dictionary/index").
 		SetOrderNo(3).
@@ -676,7 +676,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(1).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("/").
+		SetPath("sys/order").
 		SetName("Order").
 		SetComponent("LAYOUT").
 		SetOrderNo(4).
@@ -688,7 +688,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(4).
-		SetPath("sys/logs/index").
+		SetPath("sys/logs").
 		SetName("LogsManagement").
 		SetComponent("sys/logs/index").
 		SetOrderNo(9).
@@ -700,7 +700,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(1).
 		SetMenuType(0).
 		SetParentID(4).
-		SetPath("/").
+		SetPath("sys/").
 		SetName("OtherPages").
 		SetComponent("LAYOUT").
 		SetOrderNo(2).
@@ -724,7 +724,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(1).
 		SetMenuType(1).
 		SetParentID(13).
-		SetPath("sys/profile/index").
+		SetPath("sys/profile").
 		SetName("Profile").
 		SetComponent("sys/profile/index").
 		SetOrderNo(2).
@@ -736,7 +736,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(1).
 		SetMenuType(0).
 		SetParentID(1).
-		SetPath("/").
+		SetPath("sys/product").
 		SetName("Product").
 		SetComponent("LAYOUT").
 		SetOrderNo(3).
@@ -748,7 +748,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(16).
-		SetPath("sys/product/index").
+		SetPath("sys/product").
 		SetName("ProductList").
 		SetComponent("sys/product/index").
 		SetOrderNo(1).
@@ -760,7 +760,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(16).
-		SetPath("sys/property/index").
+		SetPath("sys/property").
 		SetName("PropertyList").
 		SetComponent("sys/property/index").
 		SetOrderNo(2).
@@ -772,7 +772,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(11).
-		SetPath("sys/order/index").
+		SetPath("sys/order").
 		SetName("OrderList").
 		SetComponent("sys/order/index").
 		SetOrderNo(1).
@@ -796,7 +796,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(20).
-		SetPath("sys/member/index").
+		SetPath("sys/member").
 		SetName("MemberList").
 		SetComponent("sys/member/index").
 		SetOrderNo(1).
@@ -820,7 +820,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(22).
-		SetPath("sys/schedule/index").
+		SetPath("sys/schedule").
 		SetName("ScheduleReservation").
 		SetComponent("sys/schedule/index").
 		SetOrderNo(8).
@@ -844,7 +844,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(24).
-		SetPath("sys/statistical/index").
+		SetPath("sys/statistical").
 		SetName("StatisticalAll").
 		SetComponent("sys/statistical/index").
 		SetOrderNo(8).
@@ -856,7 +856,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(4).
-		SetPath("sys/token/index").
+		SetPath("sys/token").
 		SetName("TokenManagement").
 		SetComponent("sys/token/index").
 		SetOrderNo(8).
@@ -868,7 +868,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(3).
-		SetPath("sys/venue/index").
+		SetPath("sys/venue").
 		SetName("Venue").
 		SetComponent("sys/venue/index").
 		SetOrderNo(1).
@@ -892,7 +892,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetMenuLevel(2).
 		SetMenuType(1).
 		SetParentID(3).
-		SetPath("sys/contract/index").
+		SetPath("sys/contract").
 		SetName("Contract").
 		SetComponent("sys/contract/index").
 		SetOrderNo(1).
@@ -911,6 +911,18 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetTitle("添加订单").
 		SetIcon("").
 		SetHideMenu(true)
+
+	menus[30] = I.DB.Menu.Create().
+		SetMenuLevel(1).
+		SetMenuType(1).
+		SetParentID(2).
+		SetPath("dashboard/workbench").
+		SetName("Dashboard").
+		SetComponent("dashboard/workbench/index").
+		SetOrderNo(0).
+		SetTitle("控制台").
+		SetIcon("ant-design:home-outlined").
+		SetHideMenu(false)
 
 	err := I.DB.Menu.CreateBulk(menus...).Exec(ctx)
 	if err != nil {

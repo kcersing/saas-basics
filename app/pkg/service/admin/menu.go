@@ -144,10 +144,13 @@ func (m Menu) Delete(id int64) error {
 
 func (m Menu) ListByRole(roleID int64) (list []*do.MenuInfoTree, total int64, err error) {
 	//TODO implement me
-	menus, err := m.db.Role.Query().Where(role.IDEQ(roleID)).
+	menus, err := m.db.Role.
+		Query().
+		Where(role.IDEQ(roleID)).
 		QueryMenus().
-		//WithChildren().
-		Order(ent.Asc(menu2.FieldOrderNo)).All(m.ctx)
+		WithChildren().
+		Order(ent.Asc(menu2.FieldOrderNo)).
+		All(m.ctx)
 
 	if err != nil {
 		return nil, 0, errors.Wrap(err, "query m by role failed")
