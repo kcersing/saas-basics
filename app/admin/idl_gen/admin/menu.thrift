@@ -27,14 +27,14 @@ struct CreateOrUpdateMenuReq {
     1:  i64 id (api.raw = "id" )
     2:  string name (api.raw = "name" api.vd = "len($) > 0 && len($) < 33>")
     3:  i64 parent_id (api.raw = "parentID")
-    4:  i64 level (api.raw = "level")
+//    4:  i64 level (api.raw = "level")
     5:  string path (api.raw = "path")
-    6:  string redirect (api.raw = "redirect")
-    7:  string component (api.raw = "component")
+//    6:  string redirect (api.raw = "redirect")
+//    7:  string component (api.raw = "component")
     8:  i64 orderNo (api.raw = "orderNo")
     9:  bool disabled (api.raw = "disabled")
-    10:  string menuType (api.raw = "menuType")
-    11:  Meta meta (api.raw = "meta")
+//    10:  string menuType (api.raw = "menuType")
+//    11:  Meta meta (api.raw = "meta")
 }
 
 //更新菜单额外参数

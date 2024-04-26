@@ -24,48 +24,14 @@ type Menu struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// parent menu ID | 父菜单ID
 	ParentID int64 `json:"parent_id,omitempty"`
-	// menu level | 菜单层级
-	MenuLevel int32 `json:"menu_level,omitempty"`
-	// menu type | 菜单类型 0 目录 1 菜单 2 按钮
-	MenuType int32 `json:"menu_type,omitempty"`
 	// index path | 菜单路由路径
 	Path string `json:"path,omitempty"`
 	// index name | 菜单名称
 	Name string `json:"name,omitempty"`
-	// redirect path | 跳转路径 （外链）
-	Redirect string `json:"redirect,omitempty"`
-	// the path of vue file | 组件路径
-	Component string `json:"component,omitempty"`
 	// sorting numbers | 排序编号
 	OrderNo int32 `json:"order_no,omitempty"`
 	// disable status | 是否停用
-	Disabled bool `json:"disabled,omitempty"`
-	// menu name | 菜单显示标题
-	Title string `json:"title,omitempty"`
-	// menu icon | 菜单图标
-	Icon string `json:"icon,omitempty"`
-	// hide menu | 是否隐藏菜单
-	HideMenu bool `json:"hide_menu,omitempty"`
-	// hide the breadcrumb | 隐藏面包屑
-	HideBreadcrumb bool `json:"hide_breadcrumb,omitempty"`
-	// set the active menu | 激活菜单
-	CurrentActiveMenu string `json:"current_active_menu,omitempty"`
-	// do not keep alive the tab | 取消页面缓存
-	IgnoreKeepAlive bool `json:"ignore_keep_alive,omitempty"`
-	// hide the tab header | 隐藏页头
-	HideTab bool `json:"hide_tab,omitempty"`
-	// show iframe | 内嵌 iframe
-	FrameSrc string `json:"frame_src,omitempty"`
-	// the route carries parameters or not | 携带参数
-	CarryParam bool `json:"carry_param,omitempty"`
-	// hide children menu or not | 隐藏所有子菜单
-	HideChildrenInMenu bool `json:"hide_children_in_menu,omitempty"`
-	// affix tab | Tab 固定
-	Affix bool `json:"affix,omitempty"`
-	// the maximum number of pages the router can open | 能打开的子TAB数
-	DynamicLevel int32 `json:"dynamic_level,omitempty"`
-	// the real path of the route without dynamic part | 菜单路由不包含参数部分
-	RealPath string `json:"real_path,omitempty"`
+	Disabled int32 `json:"disabled,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MenuQuery when eager-loading is set.
 	Edges        MenuEdges `json:"edges"`
@@ -132,11 +98,9 @@ func (*Menu) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case menu.FieldDisabled, menu.FieldHideMenu, menu.FieldHideBreadcrumb, menu.FieldIgnoreKeepAlive, menu.FieldHideTab, menu.FieldCarryParam, menu.FieldHideChildrenInMenu, menu.FieldAffix:
-			values[i] = new(sql.NullBool)
-		case menu.FieldID, menu.FieldParentID, menu.FieldMenuLevel, menu.FieldMenuType, menu.FieldOrderNo, menu.FieldDynamicLevel:
+		case menu.FieldID, menu.FieldParentID, menu.FieldOrderNo, menu.FieldDisabled:
 			values[i] = new(sql.NullInt64)
-		case menu.FieldPath, menu.FieldName, menu.FieldRedirect, menu.FieldComponent, menu.FieldTitle, menu.FieldIcon, menu.FieldCurrentActiveMenu, menu.FieldFrameSrc, menu.FieldRealPath:
+		case menu.FieldPath, menu.FieldName:
 			values[i] = new(sql.NullString)
 		case menu.FieldCreatedAt, menu.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -179,18 +143,6 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.ParentID = value.Int64
 			}
-		case menu.FieldMenuLevel:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field menu_level", values[i])
-			} else if value.Valid {
-				m.MenuLevel = int32(value.Int64)
-			}
-		case menu.FieldMenuType:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field menu_type", values[i])
-			} else if value.Valid {
-				m.MenuType = int32(value.Int64)
-			}
 		case menu.FieldPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field path", values[i])
@@ -203,18 +155,6 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Name = value.String
 			}
-		case menu.FieldRedirect:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field redirect", values[i])
-			} else if value.Valid {
-				m.Redirect = value.String
-			}
-		case menu.FieldComponent:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field component", values[i])
-			} else if value.Valid {
-				m.Component = value.String
-			}
 		case menu.FieldOrderNo:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field order_no", values[i])
@@ -222,88 +162,10 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 				m.OrderNo = int32(value.Int64)
 			}
 		case menu.FieldDisabled:
-			if value, ok := values[i].(*sql.NullBool); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field disabled", values[i])
 			} else if value.Valid {
-				m.Disabled = value.Bool
-			}
-		case menu.FieldTitle:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field title", values[i])
-			} else if value.Valid {
-				m.Title = value.String
-			}
-		case menu.FieldIcon:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field icon", values[i])
-			} else if value.Valid {
-				m.Icon = value.String
-			}
-		case menu.FieldHideMenu:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field hide_menu", values[i])
-			} else if value.Valid {
-				m.HideMenu = value.Bool
-			}
-		case menu.FieldHideBreadcrumb:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field hide_breadcrumb", values[i])
-			} else if value.Valid {
-				m.HideBreadcrumb = value.Bool
-			}
-		case menu.FieldCurrentActiveMenu:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field current_active_menu", values[i])
-			} else if value.Valid {
-				m.CurrentActiveMenu = value.String
-			}
-		case menu.FieldIgnoreKeepAlive:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field ignore_keep_alive", values[i])
-			} else if value.Valid {
-				m.IgnoreKeepAlive = value.Bool
-			}
-		case menu.FieldHideTab:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field hide_tab", values[i])
-			} else if value.Valid {
-				m.HideTab = value.Bool
-			}
-		case menu.FieldFrameSrc:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field frame_src", values[i])
-			} else if value.Valid {
-				m.FrameSrc = value.String
-			}
-		case menu.FieldCarryParam:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field carry_param", values[i])
-			} else if value.Valid {
-				m.CarryParam = value.Bool
-			}
-		case menu.FieldHideChildrenInMenu:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field hide_children_in_menu", values[i])
-			} else if value.Valid {
-				m.HideChildrenInMenu = value.Bool
-			}
-		case menu.FieldAffix:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field affix", values[i])
-			} else if value.Valid {
-				m.Affix = value.Bool
-			}
-		case menu.FieldDynamicLevel:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field dynamic_level", values[i])
-			} else if value.Valid {
-				m.DynamicLevel = int32(value.Int64)
-			}
-		case menu.FieldRealPath:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field real_path", values[i])
-			} else if value.Valid {
-				m.RealPath = value.String
+				m.Disabled = int32(value.Int64)
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -370,68 +232,17 @@ func (m *Menu) String() string {
 	builder.WriteString("parent_id=")
 	builder.WriteString(fmt.Sprintf("%v", m.ParentID))
 	builder.WriteString(", ")
-	builder.WriteString("menu_level=")
-	builder.WriteString(fmt.Sprintf("%v", m.MenuLevel))
-	builder.WriteString(", ")
-	builder.WriteString("menu_type=")
-	builder.WriteString(fmt.Sprintf("%v", m.MenuType))
-	builder.WriteString(", ")
 	builder.WriteString("path=")
 	builder.WriteString(m.Path)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(m.Name)
 	builder.WriteString(", ")
-	builder.WriteString("redirect=")
-	builder.WriteString(m.Redirect)
-	builder.WriteString(", ")
-	builder.WriteString("component=")
-	builder.WriteString(m.Component)
-	builder.WriteString(", ")
 	builder.WriteString("order_no=")
 	builder.WriteString(fmt.Sprintf("%v", m.OrderNo))
 	builder.WriteString(", ")
 	builder.WriteString("disabled=")
 	builder.WriteString(fmt.Sprintf("%v", m.Disabled))
-	builder.WriteString(", ")
-	builder.WriteString("title=")
-	builder.WriteString(m.Title)
-	builder.WriteString(", ")
-	builder.WriteString("icon=")
-	builder.WriteString(m.Icon)
-	builder.WriteString(", ")
-	builder.WriteString("hide_menu=")
-	builder.WriteString(fmt.Sprintf("%v", m.HideMenu))
-	builder.WriteString(", ")
-	builder.WriteString("hide_breadcrumb=")
-	builder.WriteString(fmt.Sprintf("%v", m.HideBreadcrumb))
-	builder.WriteString(", ")
-	builder.WriteString("current_active_menu=")
-	builder.WriteString(m.CurrentActiveMenu)
-	builder.WriteString(", ")
-	builder.WriteString("ignore_keep_alive=")
-	builder.WriteString(fmt.Sprintf("%v", m.IgnoreKeepAlive))
-	builder.WriteString(", ")
-	builder.WriteString("hide_tab=")
-	builder.WriteString(fmt.Sprintf("%v", m.HideTab))
-	builder.WriteString(", ")
-	builder.WriteString("frame_src=")
-	builder.WriteString(m.FrameSrc)
-	builder.WriteString(", ")
-	builder.WriteString("carry_param=")
-	builder.WriteString(fmt.Sprintf("%v", m.CarryParam))
-	builder.WriteString(", ")
-	builder.WriteString("hide_children_in_menu=")
-	builder.WriteString(fmt.Sprintf("%v", m.HideChildrenInMenu))
-	builder.WriteString(", ")
-	builder.WriteString("affix=")
-	builder.WriteString(fmt.Sprintf("%v", m.Affix))
-	builder.WriteString(", ")
-	builder.WriteString("dynamic_level=")
-	builder.WriteString(fmt.Sprintf("%v", m.DynamicLevel))
-	builder.WriteString(", ")
-	builder.WriteString("real_path=")
-	builder.WriteString(m.RealPath)
 	builder.WriteByte(')')
 	return builder.String()
 }

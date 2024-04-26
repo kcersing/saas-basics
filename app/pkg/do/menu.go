@@ -13,19 +13,20 @@ type Menu interface {
 }
 
 type MenuInfo struct {
-	Level     int32       `json:"level,omitempty"`
-	ParentID  int64       `json:"parentId,omitempty"`
-	Path      string      `json:"path,omitempty"`
-	Key       string      `json:"key,omitempty"`
-	Name      string      `json:"name,omitempty"`
-	Redirect  string      `json:"redirect,omitempty"`
-	Component string      `json:"component,omitempty"`
-	OrderNo   int32       `json:"orderNo,omitempty"`
-	Disabled  bool        `json:"disabled,omitempty"`
-	Meta      *MenuMeta   `json:"meta,omitempty"`
-	ID        int64       `json:"id,omitempty"`
-	MenuType  int32       `json:"menuType,omitempty"`
-	Children  []*MenuInfo `json:"children,omitempty"`
+	ID       int64       `json:"id,omitempty"`
+	ParentID int64       `json:"parentId,omitempty"`
+	Path     string      `json:"path,omitempty"`
+	Name     string      `json:"name,omitempty"`
+	Key      string      `json:"key,omitempty"`
+	Children []*MenuInfo `json:"children,omitempty"`
+	OrderNo  int32       `json:"orderNo,omitempty"`
+	Disabled int32       `json:"disabled,omitempty"`
+
+	//Level     int32       `json:"level,omitempty"`
+	//Redirect  string      `json:"redirect,omitempty"`
+	//Component string      `json:"component,omitempty"`
+	//Meta      *MenuMeta   `json:"meta,omitempty"`
+	//MenuType  int32       `json:"menuType,omitempty"`
 }
 
 type MenuMeta struct {

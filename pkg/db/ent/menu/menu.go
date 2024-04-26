@@ -20,48 +20,14 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldParentID holds the string denoting the parent_id field in the database.
 	FieldParentID = "parent_id"
-	// FieldMenuLevel holds the string denoting the menu_level field in the database.
-	FieldMenuLevel = "menu_level"
-	// FieldMenuType holds the string denoting the menu_type field in the database.
-	FieldMenuType = "menu_type"
 	// FieldPath holds the string denoting the path field in the database.
 	FieldPath = "path"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldRedirect holds the string denoting the redirect field in the database.
-	FieldRedirect = "redirect"
-	// FieldComponent holds the string denoting the component field in the database.
-	FieldComponent = "component"
 	// FieldOrderNo holds the string denoting the order_no field in the database.
 	FieldOrderNo = "order_no"
 	// FieldDisabled holds the string denoting the disabled field in the database.
 	FieldDisabled = "disabled"
-	// FieldTitle holds the string denoting the title field in the database.
-	FieldTitle = "title"
-	// FieldIcon holds the string denoting the icon field in the database.
-	FieldIcon = "icon"
-	// FieldHideMenu holds the string denoting the hide_menu field in the database.
-	FieldHideMenu = "hide_menu"
-	// FieldHideBreadcrumb holds the string denoting the hide_breadcrumb field in the database.
-	FieldHideBreadcrumb = "hide_breadcrumb"
-	// FieldCurrentActiveMenu holds the string denoting the current_active_menu field in the database.
-	FieldCurrentActiveMenu = "current_active_menu"
-	// FieldIgnoreKeepAlive holds the string denoting the ignore_keep_alive field in the database.
-	FieldIgnoreKeepAlive = "ignore_keep_alive"
-	// FieldHideTab holds the string denoting the hide_tab field in the database.
-	FieldHideTab = "hide_tab"
-	// FieldFrameSrc holds the string denoting the frame_src field in the database.
-	FieldFrameSrc = "frame_src"
-	// FieldCarryParam holds the string denoting the carry_param field in the database.
-	FieldCarryParam = "carry_param"
-	// FieldHideChildrenInMenu holds the string denoting the hide_children_in_menu field in the database.
-	FieldHideChildrenInMenu = "hide_children_in_menu"
-	// FieldAffix holds the string denoting the affix field in the database.
-	FieldAffix = "affix"
-	// FieldDynamicLevel holds the string denoting the dynamic_level field in the database.
-	FieldDynamicLevel = "dynamic_level"
-	// FieldRealPath holds the string denoting the real_path field in the database.
-	FieldRealPath = "real_path"
 	// EdgeRoles holds the string denoting the roles edge name in mutations.
 	EdgeRoles = "roles"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -100,27 +66,10 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldParentID,
-	FieldMenuLevel,
-	FieldMenuType,
 	FieldPath,
 	FieldName,
-	FieldRedirect,
-	FieldComponent,
 	FieldOrderNo,
 	FieldDisabled,
-	FieldTitle,
-	FieldIcon,
-	FieldHideMenu,
-	FieldHideBreadcrumb,
-	FieldCurrentActiveMenu,
-	FieldIgnoreKeepAlive,
-	FieldHideTab,
-	FieldFrameSrc,
-	FieldCarryParam,
-	FieldHideChildrenInMenu,
-	FieldAffix,
-	FieldDynamicLevel,
-	FieldRealPath,
 }
 
 var (
@@ -148,36 +97,10 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultPath holds the default value on creation for the "path" field.
 	DefaultPath string
-	// DefaultRedirect holds the default value on creation for the "redirect" field.
-	DefaultRedirect string
-	// DefaultComponent holds the default value on creation for the "component" field.
-	DefaultComponent string
 	// DefaultOrderNo holds the default value on creation for the "order_no" field.
 	DefaultOrderNo int32
 	// DefaultDisabled holds the default value on creation for the "disabled" field.
-	DefaultDisabled bool
-	// DefaultHideMenu holds the default value on creation for the "hide_menu" field.
-	DefaultHideMenu bool
-	// DefaultHideBreadcrumb holds the default value on creation for the "hide_breadcrumb" field.
-	DefaultHideBreadcrumb bool
-	// DefaultCurrentActiveMenu holds the default value on creation for the "current_active_menu" field.
-	DefaultCurrentActiveMenu string
-	// DefaultIgnoreKeepAlive holds the default value on creation for the "ignore_keep_alive" field.
-	DefaultIgnoreKeepAlive bool
-	// DefaultHideTab holds the default value on creation for the "hide_tab" field.
-	DefaultHideTab bool
-	// DefaultFrameSrc holds the default value on creation for the "frame_src" field.
-	DefaultFrameSrc string
-	// DefaultCarryParam holds the default value on creation for the "carry_param" field.
-	DefaultCarryParam bool
-	// DefaultHideChildrenInMenu holds the default value on creation for the "hide_children_in_menu" field.
-	DefaultHideChildrenInMenu bool
-	// DefaultAffix holds the default value on creation for the "affix" field.
-	DefaultAffix bool
-	// DefaultDynamicLevel holds the default value on creation for the "dynamic_level" field.
-	DefaultDynamicLevel int32
-	// DefaultRealPath holds the default value on creation for the "real_path" field.
-	DefaultRealPath string
+	DefaultDisabled int32
 )
 
 // OrderOption defines the ordering options for the Menu queries.
@@ -203,16 +126,6 @@ func ByParentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldParentID, opts...).ToFunc()
 }
 
-// ByMenuLevel orders the results by the menu_level field.
-func ByMenuLevel(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMenuLevel, opts...).ToFunc()
-}
-
-// ByMenuType orders the results by the menu_type field.
-func ByMenuType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMenuType, opts...).ToFunc()
-}
-
 // ByPath orders the results by the path field.
 func ByPath(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPath, opts...).ToFunc()
@@ -223,16 +136,6 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByRedirect orders the results by the redirect field.
-func ByRedirect(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRedirect, opts...).ToFunc()
-}
-
-// ByComponent orders the results by the component field.
-func ByComponent(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldComponent, opts...).ToFunc()
-}
-
 // ByOrderNo orders the results by the order_no field.
 func ByOrderNo(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrderNo, opts...).ToFunc()
@@ -241,71 +144,6 @@ func ByOrderNo(opts ...sql.OrderTermOption) OrderOption {
 // ByDisabled orders the results by the disabled field.
 func ByDisabled(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisabled, opts...).ToFunc()
-}
-
-// ByTitle orders the results by the title field.
-func ByTitle(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTitle, opts...).ToFunc()
-}
-
-// ByIcon orders the results by the icon field.
-func ByIcon(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIcon, opts...).ToFunc()
-}
-
-// ByHideMenu orders the results by the hide_menu field.
-func ByHideMenu(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldHideMenu, opts...).ToFunc()
-}
-
-// ByHideBreadcrumb orders the results by the hide_breadcrumb field.
-func ByHideBreadcrumb(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldHideBreadcrumb, opts...).ToFunc()
-}
-
-// ByCurrentActiveMenu orders the results by the current_active_menu field.
-func ByCurrentActiveMenu(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCurrentActiveMenu, opts...).ToFunc()
-}
-
-// ByIgnoreKeepAlive orders the results by the ignore_keep_alive field.
-func ByIgnoreKeepAlive(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIgnoreKeepAlive, opts...).ToFunc()
-}
-
-// ByHideTab orders the results by the hide_tab field.
-func ByHideTab(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldHideTab, opts...).ToFunc()
-}
-
-// ByFrameSrc orders the results by the frame_src field.
-func ByFrameSrc(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFrameSrc, opts...).ToFunc()
-}
-
-// ByCarryParam orders the results by the carry_param field.
-func ByCarryParam(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCarryParam, opts...).ToFunc()
-}
-
-// ByHideChildrenInMenu orders the results by the hide_children_in_menu field.
-func ByHideChildrenInMenu(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldHideChildrenInMenu, opts...).ToFunc()
-}
-
-// ByAffix orders the results by the affix field.
-func ByAffix(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAffix, opts...).ToFunc()
-}
-
-// ByDynamicLevel orders the results by the dynamic_level field.
-func ByDynamicLevel(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDynamicLevel, opts...).ToFunc()
-}
-
-// ByRealPath orders the results by the real_path field.
-func ByRealPath(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRealPath, opts...).ToFunc()
 }
 
 // ByRolesCount orders the results by roles count.
