@@ -532,11 +532,10 @@ func (p *CreateOrUpdateMemberReq) String() string {
 
 // Get user list request | 获取用户列表请求参数
 type MemberListReq struct {
-	Page   *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	Limit  *int64  `thrift:"limit,2,optional" form:"limit" json:"limit" query:"limit"`
-	Name   *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	Email  *string `thrift:"email,4,optional" form:"email" json:"email" query:"email"`
-	Mobile *string `thrift:"mobile,5,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Page     *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize *int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Name     *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
+	Mobile   *string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
 }
 
 func NewMemberListReq() *MemberListReq {
@@ -552,13 +551,13 @@ func (p *MemberListReq) GetPage() (v int64) {
 	return *p.Page
 }
 
-var MemberListReq_Limit_DEFAULT int64
+var MemberListReq_PageSize_DEFAULT int64
 
-func (p *MemberListReq) GetLimit() (v int64) {
-	if !p.IsSetLimit() {
-		return MemberListReq_Limit_DEFAULT
+func (p *MemberListReq) GetPageSize() (v int64) {
+	if !p.IsSetPageSize() {
+		return MemberListReq_PageSize_DEFAULT
 	}
-	return *p.Limit
+	return *p.PageSize
 }
 
 var MemberListReq_Name_DEFAULT string
@@ -568,15 +567,6 @@ func (p *MemberListReq) GetName() (v string) {
 		return MemberListReq_Name_DEFAULT
 	}
 	return *p.Name
-}
-
-var MemberListReq_Email_DEFAULT string
-
-func (p *MemberListReq) GetEmail() (v string) {
-	if !p.IsSetEmail() {
-		return MemberListReq_Email_DEFAULT
-	}
-	return *p.Email
 }
 
 var MemberListReq_Mobile_DEFAULT string
@@ -590,26 +580,21 @@ func (p *MemberListReq) GetMobile() (v string) {
 
 var fieldIDToName_MemberListReq = map[int16]string{
 	1: "page",
-	2: "limit",
+	2: "pageSize",
 	3: "name",
-	4: "email",
-	5: "mobile",
+	4: "mobile",
 }
 
 func (p *MemberListReq) IsSetPage() bool {
 	return p.Page != nil
 }
 
-func (p *MemberListReq) IsSetLimit() bool {
-	return p.Limit != nil
+func (p *MemberListReq) IsSetPageSize() bool {
+	return p.PageSize != nil
 }
 
 func (p *MemberListReq) IsSetName() bool {
 	return p.Name != nil
-}
-
-func (p *MemberListReq) IsSetEmail() bool {
-	return p.Email != nil
 }
 
 func (p *MemberListReq) IsSetMobile() bool {
@@ -667,14 +652,6 @@ func (p *MemberListReq) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 5:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField5(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -718,7 +695,7 @@ func (p *MemberListReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Limit = &v
+		p.PageSize = &v
 	}
 	return nil
 }
@@ -732,15 +709,6 @@ func (p *MemberListReq) ReadField3(iprot thrift.TProtocol) error {
 	return nil
 }
 func (p *MemberListReq) ReadField4(iprot thrift.TProtocol) error {
-
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Email = &v
-	}
-	return nil
-}
-func (p *MemberListReq) ReadField5(iprot thrift.TProtocol) error {
 
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -770,10 +738,6 @@ func (p *MemberListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
-			goto WriteFieldError
-		}
-		if err = p.writeField5(oprot); err != nil {
-			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -814,11 +778,11 @@ WriteFieldEndError:
 }
 
 func (p *MemberListReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetLimit() {
-		if err = oprot.WriteFieldBegin("limit", thrift.I64, 2); err != nil {
+	if p.IsSetPageSize() {
+		if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Limit); err != nil {
+		if err := oprot.WriteI64(*p.PageSize); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -852,27 +816,8 @@ WriteFieldEndError:
 }
 
 func (p *MemberListReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetEmail() {
-		if err = oprot.WriteFieldBegin("email", thrift.STRING, 4); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.Email); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
-func (p *MemberListReq) writeField5(oprot thrift.TProtocol) (err error) {
 	if p.IsSetMobile() {
-		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 5); err != nil {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 4); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.Mobile); err != nil {
@@ -884,9 +829,9 @@ func (p *MemberListReq) writeField5(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *MemberListReq) String() string {

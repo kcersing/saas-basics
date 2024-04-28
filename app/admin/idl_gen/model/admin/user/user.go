@@ -1760,7 +1760,7 @@ func (p *CreateOrUpdateUserReq) String() string {
 // Get user list request | 获取用户列表请求参数
 type UserListReq struct {
 	Page     *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	Limit    *int64  `thrift:"limit,2,optional" form:"limit" json:"limit" query:"limit"`
+	PageSize *int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
 	Username *string `thrift:"username,3,optional" form:"username" json:"username" query:"username"`
 	Nickname *string `thrift:"nickname,4,optional" form:"nickname" json:"nickname" query:"nickname"`
 	Email    *string `thrift:"email,5,optional" form:"email" json:"email" query:"email"`
@@ -1781,13 +1781,13 @@ func (p *UserListReq) GetPage() (v int64) {
 	return *p.Page
 }
 
-var UserListReq_Limit_DEFAULT int64
+var UserListReq_PageSize_DEFAULT int64
 
-func (p *UserListReq) GetLimit() (v int64) {
-	if !p.IsSetLimit() {
-		return UserListReq_Limit_DEFAULT
+func (p *UserListReq) GetPageSize() (v int64) {
+	if !p.IsSetPageSize() {
+		return UserListReq_PageSize_DEFAULT
 	}
-	return *p.Limit
+	return *p.PageSize
 }
 
 var UserListReq_Username_DEFAULT string
@@ -1837,7 +1837,7 @@ func (p *UserListReq) GetRoleID() (v int64) {
 
 var fieldIDToName_UserListReq = map[int16]string{
 	1: "page",
-	2: "limit",
+	2: "pageSize",
 	3: "username",
 	4: "nickname",
 	5: "email",
@@ -1849,8 +1849,8 @@ func (p *UserListReq) IsSetPage() bool {
 	return p.Page != nil
 }
 
-func (p *UserListReq) IsSetLimit() bool {
-	return p.Limit != nil
+func (p *UserListReq) IsSetPageSize() bool {
+	return p.PageSize != nil
 }
 
 func (p *UserListReq) IsSetUsername() bool {
@@ -1991,7 +1991,7 @@ func (p *UserListReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Limit = &v
+		p.PageSize = &v
 	}
 	return nil
 }
@@ -2113,11 +2113,11 @@ WriteFieldEndError:
 }
 
 func (p *UserListReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetLimit() {
-		if err = oprot.WriteFieldBegin("limit", thrift.I64, 2); err != nil {
+	if p.IsSetPageSize() {
+		if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Limit); err != nil {
+		if err := oprot.WriteI64(*p.PageSize); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

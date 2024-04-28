@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"saas/app/admin/config"
@@ -65,6 +66,7 @@ func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, er
 	if req.Name != "" {
 		predicates = append(predicates, member.NameEQ(req.Name))
 	}
+	hlog.Info(req.PageSize)
 	lists, err := m.db.Member.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
