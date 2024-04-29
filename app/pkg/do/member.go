@@ -22,6 +22,7 @@ type CreateOrUpdateMemberReq struct {
 	Name     string `json:"Name,omitempty"`
 	Wecom    string `json:"wecom,omitempty"`
 	Gender   int64  `json:"gender,omitempty"`
+	Age      string `json:"age,omitempty"`
 	Birthday string `json:"birthday,omitempty"`
 }
 
@@ -45,6 +46,9 @@ type MemberInfo struct {
 	Mobile    string `json:"mobile,omitempty"`
 	Email     string `json:"email,omitempty"`
 	Avatar    string `json:"avatar,omitempty"`
+	Gender    string `json:"gender,omitempty"`
+	Age       string `json:"age,omitempty"`
+
 	//微信号
 	Wecom string `json:"wecom,omitempty"`
 	//身份证号

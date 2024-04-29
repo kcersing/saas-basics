@@ -16,9 +16,9 @@ import (
 )
 
 // Upload .
-// @router /api/pub/upload/ [POST]
+// @router /api/pub/upload [POST]
 func Upload(ctx context.Context, c *app.RequestContext) {
-	file, err := c.FormFile("file")
+	file, err := c.FormFile("files")
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

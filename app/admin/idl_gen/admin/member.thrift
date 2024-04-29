@@ -10,9 +10,10 @@ struct CreateOrUpdateMemberReq {
     4:  optional string mobile (api.raw = "mobile")
     5:  optional string email (api.raw = "email")
     6:  optional i64 status (api.raw = "status")
-    7:  optional string username (api.raw = "username")
-    8:  optional string nickname (api.raw = "nickname")
-    9:  optional string password (api.raw = "password")
+    7:  optional string name (api.raw = "name")
+    8:  optional string age (api.raw = "age")
+    9:  optional string gender (api.raw = "gender")
+    10:  optional string wecom (api.raw = "wecom")
 }
 
 // Get user list request | 获取用户列表请求参数
