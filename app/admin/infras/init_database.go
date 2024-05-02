@@ -566,35 +566,35 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//SetHideMenu(false)
 
 	menus[1] = I.DB.Menu.Create().
-		SetPath("").
+		SetPath("dashboard").
 		SetParentID(1).
 		SetName("仪表盘").SetOrderNo(0)
 	menus[2] = I.DB.Menu.Create().
-		SetPath("").
+		SetPath("sys").
 		SetParentID(1).
 		SetName("系统管理").SetOrderNo(7)
 	menus[3] = I.DB.Menu.Create().
-		SetPath("").
+		SetPath("sys/logs").
 		SetParentID(1).
 		SetName("运维管理").SetOrderNo(8)
 	menus[4] = I.DB.Menu.Create().
-		SetPath("").
+		SetPath("sys/order").
 		SetParentID(1).
 		SetName("订单管理").SetOrderNo(3)
 	menus[5] = I.DB.Menu.Create().
-		SetPath("").
+		SetPath("sys/product").
 		SetParentID(1).
 		SetName("产品管理").SetOrderNo(2)
 	menus[6] = I.DB.Menu.Create().
-		SetPath("").
+		SetPath("sys/member").
 		SetParentID(1).
 		SetName("会员管理").SetOrderNo(1)
 	menus[7] = I.DB.Menu.Create().
-		SetPath("").
+		SetPath("sys/schedule").
 		SetParentID(1).
 		SetName("预约排期").SetOrderNo(4)
 	menus[8] = I.DB.Menu.Create().
-		SetPath("").
+		SetPath("sys/statistical").
 		SetParentID(1).
 		SetName("数据分析").SetOrderNo(6)
 
