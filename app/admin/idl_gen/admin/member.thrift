@@ -19,7 +19,7 @@ struct CreateOrUpdateMemberReq {
 // Get user list request | 获取用户列表请求参数
 struct MemberListReq {
     1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "limit")
+    2:  optional i64 pageSize (api.raw = "pageSize")
     3:  optional string name (api.raw = "name")
     4:  optional string mobile (api.raw = "mobile")
 }

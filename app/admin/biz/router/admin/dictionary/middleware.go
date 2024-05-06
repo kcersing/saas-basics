@@ -84,3 +84,8 @@ func _updatedictionaryMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _detailbydictionarylistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

@@ -8,7 +8,7 @@ type Dictionary interface {
 	CreateDetail(req *DictionaryDetail) error
 	UpdateDetail(req *DictionaryDetail) error
 	DeleteDetail(id int64) error
-	DetailListByDictName(dictName string) (list []*DictionaryDetail, total int64, err error)
+	DetailListByDict(req *DetailListReq) (list []*DictionaryDetail, total int64, err error)
 	DetailByDictNameAndKey(dictName, key string) (detail *DictionaryDetail, err error)
 }
 
@@ -27,6 +27,11 @@ type DictListReq struct {
 	Name     string `json:"name,omitempty"`
 	Page     int64  `json:"page,omitempty"`
 	PageSize int64  `json:"pageSize,omitempty"`
+}
+
+type DetailListReq struct {
+	Name         string `json:"name,omitempty"`
+	DictionaryId int64  `json:"dictionaryId,omitempty"`
 }
 
 type DictionaryDetail struct {

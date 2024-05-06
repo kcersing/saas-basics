@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
@@ -115,7 +116,7 @@ func (d Dictionary) List(req *do.DictListReq) (list []*do.DictionaryInfo, total 
 			ID:          dict.ID,
 			Title:       dict.Title,
 			Name:        dict.Name,
-			Status:      int64(dict.Status),
+			Status:      dict.Status,
 			Description: dict.Description,
 			CreatedAt:   dict.CreatedAt.Format("2006-01-02 15:04:05"),
 			UpdatedAt:   dict.UpdatedAt.Format("2006-01-02 15:04:05"),
@@ -211,10 +212,23 @@ func (d Dictionary) DeleteDetail(id int64) error {
 	return nil
 }
 
-func (d Dictionary) DetailListByDictName(dictName string) (list []*do.DictionaryDetail, total int64, err error) {
+func (d Dictionary) DetailListByDict(req *do.DetailListReq) (list []*do.DictionaryDetail, total int64, err error) {
+
+	var predicates []predicate.DictionaryDetail
+	if req.Name != "" {
+		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary.NameEQ(req.Name)))
+	}
+
+	hlog.Info(req.DictionaryId)
+
+	if req.DictionaryId != 0 {
+		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary.IDEQ(req.DictionaryId)))
+	}
+
 	// query dictionary detail
 	details, err := d.db.DictionaryDetail.Query().
-		Where(dictionarydetail.HasDictionaryWith(dictionary.NameEQ(dictName))).
+		Where(predicates...).
+		//Where(dictionarydetail.HasDictionaryWith(dictionary.NameEQ(dictName))).
 		// union query to get the fields of the associated table
 		WithDictionary(func(q *ent.DictionaryQuery) {
 			// get all fields default, or use q.Select() to get some fields
@@ -260,7 +274,7 @@ func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *do.Dic
 	detail.Title = dictDetail.Title
 	detail.Key = dictDetail.Key
 	detail.Value = dictDetail.Value
-	detail.Status = int64(dictDetail.Status)
+	detail.Status = dictDetail.Status
 	detail.CreatedAt = dictDetail.CreatedAt.Format("2006-01-02 15:04:05")
 	detail.UpdatedAt = dictDetail.UpdatedAt.Format("2006-01-02 15:04:05")
 

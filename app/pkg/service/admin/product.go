@@ -79,6 +79,7 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 	if req.Name != "" {
 		predicates = append(predicates, productproperty.NameEQ(req.Name))
 	}
+
 	lists, err := p.db.ProductProperty.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(p.ctx)

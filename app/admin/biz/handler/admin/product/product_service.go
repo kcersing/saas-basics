@@ -230,7 +230,7 @@ func DeleteProperty(ctx context.Context, c *app.RequestContext) {
 }
 
 // ListProperty .
-// @router /api/admin/Property/list [POST]
+// @router /api/admin/property/list [POST]
 func ListProperty(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.ListReq

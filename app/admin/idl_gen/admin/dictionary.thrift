@@ -5,15 +5,17 @@ include "../base/data.thrift"
 
 // 字典列表请求数据
 struct DictionaryPageReq {
-    1:  string title (api.raw = "title" )
-    2:  string name (api.raw = "name" )
+    1:  optional string title (api.raw = "title" )
+    2:  optional string name (api.raw = "name" )
     3:  i64 page (api.raw = "page" )
     4:  i64 limit (api.raw = "limit" )
 }
 
 //字典名获取字典键值请求数据
 struct DictionaryDetailReq{
-    1:  string name (api.raw = "title" )
+    1:  optional string name (api.raw = "name" )
+    2:  optional i64 dictionaryId (api.raw = "dictionaryId" )
+
 }
 
 // dictionary service
@@ -40,6 +42,6 @@ service dictionaryService {
   base.NilResponse DeleteDictionaryDetail(1: base.IDReq req) (api.get = "/api/admin/dict/detail")
 
   // 根据字典名获取字典键值列表
-  base.NilResponse DetailByDictionaryName(1: DictionaryDetailReq req) (api.get = "/api/admin/dict/detail/list")
+  base.NilResponse DetailByDictionaryList(1: DictionaryDetailReq req) (api.post = "/api/admin/dict/detail/list")
 
 }

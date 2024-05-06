@@ -11,29 +11,39 @@ import (
 
 // 字典列表请求数据
 type DictionaryPageReq struct {
-	Title string `thrift:"title,1" form:"title" json:"title" query:"title"`
-	Name  string `thrift:"name,2" form:"name" json:"name" query:"name"`
-	Page  string `thrift:"page,3" form:"page" json:"page" query:"page"`
-	Limit string `thrift:"limit,4" form:"limit" json:"limit" query:"limit"`
+	Title *string `thrift:"title,1,optional" form:"title" json:"title" query:"title"`
+	Name  *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	Page  int64   `thrift:"page,3" form:"page" json:"page" query:"page"`
+	Limit int64   `thrift:"limit,4" form:"limit" json:"limit" query:"limit"`
 }
 
 func NewDictionaryPageReq() *DictionaryPageReq {
 	return &DictionaryPageReq{}
 }
 
+var DictionaryPageReq_Title_DEFAULT string
+
 func (p *DictionaryPageReq) GetTitle() (v string) {
-	return p.Title
+	if !p.IsSetTitle() {
+		return DictionaryPageReq_Title_DEFAULT
+	}
+	return *p.Title
 }
+
+var DictionaryPageReq_Name_DEFAULT string
 
 func (p *DictionaryPageReq) GetName() (v string) {
-	return p.Name
+	if !p.IsSetName() {
+		return DictionaryPageReq_Name_DEFAULT
+	}
+	return *p.Name
 }
 
-func (p *DictionaryPageReq) GetPage() (v string) {
+func (p *DictionaryPageReq) GetPage() (v int64) {
 	return p.Page
 }
 
-func (p *DictionaryPageReq) GetLimit() (v string) {
+func (p *DictionaryPageReq) GetLimit() (v int64) {
 	return p.Limit
 }
 
@@ -42,6 +52,14 @@ var fieldIDToName_DictionaryPageReq = map[int16]string{
 	2: "name",
 	3: "page",
 	4: "limit",
+}
+
+func (p *DictionaryPageReq) IsSetTitle() bool {
+	return p.Title != nil
+}
+
+func (p *DictionaryPageReq) IsSetName() bool {
+	return p.Name != nil
 }
 
 func (p *DictionaryPageReq) Read(iprot thrift.TProtocol) (err error) {
@@ -80,7 +98,7 @@ func (p *DictionaryPageReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -88,7 +106,7 @@ func (p *DictionaryPageReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -129,7 +147,7 @@ func (p *DictionaryPageReq) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Title = v
+		p.Title = &v
 	}
 	return nil
 }
@@ -138,13 +156,13 @@ func (p *DictionaryPageReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Name = v
+		p.Name = &v
 	}
 	return nil
 }
 func (p *DictionaryPageReq) ReadField3(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Page = v
@@ -153,7 +171,7 @@ func (p *DictionaryPageReq) ReadField3(iprot thrift.TProtocol) error {
 }
 func (p *DictionaryPageReq) ReadField4(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Limit = v
@@ -202,14 +220,16 @@ WriteStructEndError:
 }
 
 func (p *DictionaryPageReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("title", thrift.STRING, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Title); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetTitle() {
+		if err = oprot.WriteFieldBegin("title", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Title); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -219,14 +239,16 @@ WriteFieldEndError:
 }
 
 func (p *DictionaryPageReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Name); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -236,10 +258,10 @@ WriteFieldEndError:
 }
 
 func (p *DictionaryPageReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("page", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Page); err != nil {
+	if err := oprot.WriteI64(p.Page); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -253,10 +275,10 @@ WriteFieldEndError:
 }
 
 func (p *DictionaryPageReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("limit", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("limit", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Limit); err != nil {
+	if err := oprot.WriteI64(p.Limit); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -279,19 +301,43 @@ func (p *DictionaryPageReq) String() string {
 
 // 字典名获取字典键值请求数据
 type DictionaryDetailReq struct {
-	Name string `thrift:"name,1" form:"name" json:"name" query:"name"`
+	Name         *string `thrift:"name,1,optional" form:"name" json:"name" query:"name"`
+	DictionaryId *int64  `thrift:"dictionaryId,2,optional" form:"dictionaryId" json:"dictionaryId" query:"dictionaryId"`
 }
 
 func NewDictionaryDetailReq() *DictionaryDetailReq {
 	return &DictionaryDetailReq{}
 }
 
+var DictionaryDetailReq_Name_DEFAULT string
+
 func (p *DictionaryDetailReq) GetName() (v string) {
-	return p.Name
+	if !p.IsSetName() {
+		return DictionaryDetailReq_Name_DEFAULT
+	}
+	return *p.Name
+}
+
+var DictionaryDetailReq_DictionaryId_DEFAULT int64
+
+func (p *DictionaryDetailReq) GetDictionaryId() (v int64) {
+	if !p.IsSetDictionaryId() {
+		return DictionaryDetailReq_DictionaryId_DEFAULT
+	}
+	return *p.DictionaryId
 }
 
 var fieldIDToName_DictionaryDetailReq = map[int16]string{
 	1: "name",
+	2: "dictionaryId",
+}
+
+func (p *DictionaryDetailReq) IsSetName() bool {
+	return p.Name != nil
+}
+
+func (p *DictionaryDetailReq) IsSetDictionaryId() bool {
+	return p.DictionaryId != nil
 }
 
 func (p *DictionaryDetailReq) Read(iprot thrift.TProtocol) (err error) {
@@ -316,6 +362,14 @@ func (p *DictionaryDetailReq) Read(iprot thrift.TProtocol) (err error) {
 		case 1:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -355,7 +409,16 @@ func (p *DictionaryDetailReq) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Name = v
+		p.Name = &v
+	}
+	return nil
+}
+func (p *DictionaryDetailReq) ReadField2(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.DictionaryId = &v
 	}
 	return nil
 }
@@ -368,6 +431,10 @@ func (p *DictionaryDetailReq) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 	}
@@ -389,20 +456,41 @@ WriteStructEndError:
 }
 
 func (p *DictionaryDetailReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("name", thrift.STRING, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Name); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *DictionaryDetailReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetDictionaryId() {
+		if err = oprot.WriteFieldBegin("dictionaryId", thrift.I64, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.DictionaryId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *DictionaryDetailReq) String() string {
@@ -430,7 +518,7 @@ type DictionaryService interface {
 	// 删除字典键值信息
 	DeleteDictionaryDetail(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	// 根据字典名获取字典键值列表
-	DetailByDictionaryName(ctx context.Context, req *DictionaryDetailReq) (r *base.NilResponse, err error)
+	DetailByDictionaryList(ctx context.Context, req *DictionaryDetailReq) (r *base.NilResponse, err error)
 }
 
 type DictionaryServiceClient struct {
@@ -522,11 +610,11 @@ func (p *DictionaryServiceClient) DeleteDictionaryDetail(ctx context.Context, re
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *DictionaryServiceClient) DetailByDictionaryName(ctx context.Context, req *DictionaryDetailReq) (r *base.NilResponse, err error) {
-	var _args DictionaryServiceDetailByDictionaryNameArgs
+func (p *DictionaryServiceClient) DetailByDictionaryList(ctx context.Context, req *DictionaryDetailReq) (r *base.NilResponse, err error) {
+	var _args DictionaryServiceDetailByDictionaryListArgs
 	_args.Req = req
-	var _result DictionaryServiceDetailByDictionaryNameResult
-	if err = p.Client_().Call(ctx, "DetailByDictionaryName", &_args, &_result); err != nil {
+	var _result DictionaryServiceDetailByDictionaryListResult
+	if err = p.Client_().Call(ctx, "DetailByDictionaryList", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -559,7 +647,7 @@ func NewDictionaryServiceProcessor(handler DictionaryService) *DictionaryService
 	self.AddToProcessorMap("CreateDictionaryDetail", &dictionaryServiceProcessorCreateDictionaryDetail{handler: handler})
 	self.AddToProcessorMap("UpdateDictionaryDetail", &dictionaryServiceProcessorUpdateDictionaryDetail{handler: handler})
 	self.AddToProcessorMap("DeleteDictionaryDetail", &dictionaryServiceProcessorDeleteDictionaryDetail{handler: handler})
-	self.AddToProcessorMap("DetailByDictionaryName", &dictionaryServiceProcessorDetailByDictionaryName{handler: handler})
+	self.AddToProcessorMap("DetailByDictionaryList", &dictionaryServiceProcessorDetailByDictionaryList{handler: handler})
 	return self
 }
 func (p *DictionaryServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -916,16 +1004,16 @@ func (p *dictionaryServiceProcessorDeleteDictionaryDetail) Process(ctx context.C
 	return true, err
 }
 
-type dictionaryServiceProcessorDetailByDictionaryName struct {
+type dictionaryServiceProcessorDetailByDictionaryList struct {
 	handler DictionaryService
 }
 
-func (p *dictionaryServiceProcessorDetailByDictionaryName) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := DictionaryServiceDetailByDictionaryNameArgs{}
+func (p *dictionaryServiceProcessorDetailByDictionaryList) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := DictionaryServiceDetailByDictionaryListArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("DetailByDictionaryName", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("DetailByDictionaryList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -934,11 +1022,11 @@ func (p *dictionaryServiceProcessorDetailByDictionaryName) Process(ctx context.C
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := DictionaryServiceDetailByDictionaryNameResult{}
+	result := DictionaryServiceDetailByDictionaryListResult{}
 	var retval *base.NilResponse
-	if retval, err2 = p.handler.DetailByDictionaryName(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing DetailByDictionaryName: "+err2.Error())
-		oprot.WriteMessageBegin("DetailByDictionaryName", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.DetailByDictionaryList(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing DetailByDictionaryList: "+err2.Error())
+		oprot.WriteMessageBegin("DetailByDictionaryList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -946,7 +1034,7 @@ func (p *dictionaryServiceProcessorDetailByDictionaryName) Process(ctx context.C
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("DetailByDictionaryName", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("DetailByDictionaryList", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2966,32 +3054,32 @@ func (p *DictionaryServiceDeleteDictionaryDetailResult) String() string {
 
 }
 
-type DictionaryServiceDetailByDictionaryNameArgs struct {
+type DictionaryServiceDetailByDictionaryListArgs struct {
 	Req *DictionaryDetailReq `thrift:"req,1"`
 }
 
-func NewDictionaryServiceDetailByDictionaryNameArgs() *DictionaryServiceDetailByDictionaryNameArgs {
-	return &DictionaryServiceDetailByDictionaryNameArgs{}
+func NewDictionaryServiceDetailByDictionaryListArgs() *DictionaryServiceDetailByDictionaryListArgs {
+	return &DictionaryServiceDetailByDictionaryListArgs{}
 }
 
-var DictionaryServiceDetailByDictionaryNameArgs_Req_DEFAULT *DictionaryDetailReq
+var DictionaryServiceDetailByDictionaryListArgs_Req_DEFAULT *DictionaryDetailReq
 
-func (p *DictionaryServiceDetailByDictionaryNameArgs) GetReq() (v *DictionaryDetailReq) {
+func (p *DictionaryServiceDetailByDictionaryListArgs) GetReq() (v *DictionaryDetailReq) {
 	if !p.IsSetReq() {
-		return DictionaryServiceDetailByDictionaryNameArgs_Req_DEFAULT
+		return DictionaryServiceDetailByDictionaryListArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_DictionaryServiceDetailByDictionaryNameArgs = map[int16]string{
+var fieldIDToName_DictionaryServiceDetailByDictionaryListArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameArgs) IsSetReq() bool {
+func (p *DictionaryServiceDetailByDictionaryListArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *DictionaryServiceDetailByDictionaryListArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -3037,7 +3125,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_DictionaryServiceDetailByDictionaryNameArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_DictionaryServiceDetailByDictionaryListArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -3047,7 +3135,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *DictionaryServiceDetailByDictionaryListArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.Req = NewDictionaryDetailReq()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
@@ -3055,9 +3143,9 @@ func (p *DictionaryServiceDetailByDictionaryNameArgs) ReadField1(iprot thrift.TP
 	return nil
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *DictionaryServiceDetailByDictionaryListArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("DetailByDictionaryName_args"); err != nil {
+	if err = oprot.WriteStructBegin("DetailByDictionaryList_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -3083,7 +3171,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *DictionaryServiceDetailByDictionaryListArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -3100,40 +3188,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameArgs) String() string {
+func (p *DictionaryServiceDetailByDictionaryListArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("DictionaryServiceDetailByDictionaryNameArgs(%+v)", *p)
+	return fmt.Sprintf("DictionaryServiceDetailByDictionaryListArgs(%+v)", *p)
 
 }
 
-type DictionaryServiceDetailByDictionaryNameResult struct {
+type DictionaryServiceDetailByDictionaryListResult struct {
 	Success *base.NilResponse `thrift:"success,0,optional"`
 }
 
-func NewDictionaryServiceDetailByDictionaryNameResult() *DictionaryServiceDetailByDictionaryNameResult {
-	return &DictionaryServiceDetailByDictionaryNameResult{}
+func NewDictionaryServiceDetailByDictionaryListResult() *DictionaryServiceDetailByDictionaryListResult {
+	return &DictionaryServiceDetailByDictionaryListResult{}
 }
 
-var DictionaryServiceDetailByDictionaryNameResult_Success_DEFAULT *base.NilResponse
+var DictionaryServiceDetailByDictionaryListResult_Success_DEFAULT *base.NilResponse
 
-func (p *DictionaryServiceDetailByDictionaryNameResult) GetSuccess() (v *base.NilResponse) {
+func (p *DictionaryServiceDetailByDictionaryListResult) GetSuccess() (v *base.NilResponse) {
 	if !p.IsSetSuccess() {
-		return DictionaryServiceDetailByDictionaryNameResult_Success_DEFAULT
+		return DictionaryServiceDetailByDictionaryListResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_DictionaryServiceDetailByDictionaryNameResult = map[int16]string{
+var fieldIDToName_DictionaryServiceDetailByDictionaryListResult = map[int16]string{
 	0: "success",
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameResult) IsSetSuccess() bool {
+func (p *DictionaryServiceDetailByDictionaryListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *DictionaryServiceDetailByDictionaryListResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -3179,7 +3267,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_DictionaryServiceDetailByDictionaryNameResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_DictionaryServiceDetailByDictionaryListResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -3189,7 +3277,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *DictionaryServiceDetailByDictionaryListResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = base.NewNilResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
@@ -3197,9 +3285,9 @@ func (p *DictionaryServiceDetailByDictionaryNameResult) ReadField0(iprot thrift.
 	return nil
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *DictionaryServiceDetailByDictionaryListResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("DetailByDictionaryName_result"); err != nil {
+	if err = oprot.WriteStructBegin("DetailByDictionaryList_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -3225,7 +3313,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *DictionaryServiceDetailByDictionaryListResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -3244,10 +3332,10 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *DictionaryServiceDetailByDictionaryNameResult) String() string {
+func (p *DictionaryServiceDetailByDictionaryListResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("DictionaryServiceDetailByDictionaryNameResult(%+v)", *p)
+	return fmt.Sprintf("DictionaryServiceDetailByDictionaryListResult(%+v)", *p)
 
 }

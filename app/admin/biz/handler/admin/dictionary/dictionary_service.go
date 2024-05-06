@@ -190,18 +190,25 @@ func DeleteDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// DetailByDictionaryName .
-// @router /api/admin/dict/detail/list [GET]
-func DetailByDictionaryName(ctx context.Context, c *app.RequestContext) {
+// DetailByDictionaryList .
+// @router /api/admin/dict/detail/list [POST]
+func DetailByDictionaryList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req dictionary.DictionaryDetailReq
+
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	dictDetailList, total, err := admin.NewDictionary(ctx, c).DetailListByDictName(req.Name)
+	var DetailListReq do.DetailListReq
+	err = copier.Copy(&DetailListReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	dictDetailList, total, err := admin.NewDictionary(ctx, c).DetailListByDict(&DetailListReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
