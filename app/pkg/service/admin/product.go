@@ -2,6 +2,10 @@ package admin
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/dgraph-io/ristretto"
+	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
@@ -9,11 +13,7 @@ import (
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
-
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
-	"github.com/pkg/errors"
+	"saas/pkg/db/ent/venue"
 )
 
 type Product struct {
@@ -83,12 +83,38 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 	lists, err := p.db.ProductProperty.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(p.ctx)
+
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
 		return resp, total, err
 	}
 
 	err = copier.Copy(&resp, &lists)
+
+	for _, v := range lists {
+
+		var d = new(do.PropertyInfo)
+
+		d.ID = v.ID
+		d.Name = v.Name
+		d.Price = v.Price
+		d.Duration = v.Duration
+		d.Length = v.Length
+		d.Count = v.Count
+		d.Type = v.Type
+		d.Data = v.Data
+		d.Status = v.Status
+		d.CreateId = v.CreateID
+
+		venues, err := v.QueryVenues().Select(venue.FieldID, venue.FieldName).All(p.ctx)
+		if err == nil {
+			var ven []do.PropertyVenue
+			err = copier.Copy(&ven, &venues)
+			d.Venue = ven
+		}
+		resp = append(resp, d)
+	}
+
 	if err != nil {
 		err = errors.Wrap(err, "copy product info failed")
 		return resp, 0, err

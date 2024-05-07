@@ -53,8 +53,8 @@ type MemberProductProperty struct {
 type MemberProductPropertyEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *MemberProduct `json:"owner,omitempty"`
-	// MemberProductPropertyVenues holds the value of the member_product_property_venues edge.
-	MemberProductPropertyVenues []*MemberProductPropertyVenue `json:"member_product_property_venues,omitempty"`
+	// Venues holds the value of the venues edge.
+	Venues []*Venue `json:"venues,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [2]bool
@@ -73,13 +73,13 @@ func (e MemberProductPropertyEdges) OwnerOrErr() (*MemberProduct, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// MemberProductPropertyVenuesOrErr returns the MemberProductPropertyVenues value or an error if the edge
+// VenuesOrErr returns the Venues value or an error if the edge
 // was not loaded in eager-loading.
-func (e MemberProductPropertyEdges) MemberProductPropertyVenuesOrErr() ([]*MemberProductPropertyVenue, error) {
+func (e MemberProductPropertyEdges) VenuesOrErr() ([]*Venue, error) {
 	if e.loadedTypes[1] {
-		return e.MemberProductPropertyVenues, nil
+		return e.Venues, nil
 	}
-	return nil, &NotLoadedError{edge: "member_product_property_venues"}
+	return nil, &NotLoadedError{edge: "venues"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -206,9 +206,9 @@ func (mpp *MemberProductProperty) QueryOwner() *MemberProductQuery {
 	return NewMemberProductPropertyClient(mpp.config).QueryOwner(mpp)
 }
 
-// QueryMemberProductPropertyVenues queries the "member_product_property_venues" edge of the MemberProductProperty entity.
-func (mpp *MemberProductProperty) QueryMemberProductPropertyVenues() *MemberProductPropertyVenueQuery {
-	return NewMemberProductPropertyClient(mpp.config).QueryMemberProductPropertyVenues(mpp)
+// QueryVenues queries the "venues" edge of the MemberProductProperty entity.
+func (mpp *MemberProductProperty) QueryVenues() *VenueQuery {
+	return NewMemberProductPropertyClient(mpp.config).QueryVenues(mpp)
 }
 
 // Update returns a builder for updating this MemberProductProperty.

@@ -378,28 +378,6 @@ var (
 			},
 		},
 	}
-	// MemberProductPropertyVenueColumns holds the columns for the "member_product_property_venue" table.
-	MemberProductPropertyVenueColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
-		{Name: "member_product_property_id", Type: field.TypeInt64, Nullable: true},
-	}
-	// MemberProductPropertyVenueTable holds the schema information for the "member_product_property_venue" table.
-	MemberProductPropertyVenueTable = &schema.Table{
-		Name:       "member_product_property_venue",
-		Columns:    MemberProductPropertyVenueColumns,
-		PrimaryKey: []*schema.Column{MemberProductPropertyVenueColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "member_product_property_venue_member_product_property_member_product_property_venues",
-				Columns:    []*schema.Column{MemberProductPropertyVenueColumns[4]},
-				RefColumns: []*schema.Column{MemberProductPropertyColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-	}
 	// SysMenusColumns holds the columns for the "sys_menus" table.
 	SysMenusColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -674,20 +652,6 @@ var (
 		Columns:    ProductPropertyColumns,
 		PrimaryKey: []*schema.Column{ProductPropertyColumns[0]},
 	}
-	// ProductPropertyVenueColumns holds the columns for the "product_property_venue" table.
-	ProductPropertyVenueColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
-		{Name: "product_property_id", Type: field.TypeInt64, Nullable: true},
-	}
-	// ProductPropertyVenueTable holds the schema information for the "product_property_venue" table.
-	ProductPropertyVenueTable = &schema.Table{
-		Name:       "product_property_venue",
-		Columns:    ProductPropertyVenueColumns,
-		PrimaryKey: []*schema.Column{ProductPropertyVenueColumns[0]},
-	}
 	// SysRolesColumns holds the columns for the "sys_roles" table.
 	SysRolesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -821,6 +785,31 @@ var (
 			},
 		},
 	}
+	// MemberProductPropertyVenuesColumns holds the columns for the "member_product_property_venues" table.
+	MemberProductPropertyVenuesColumns = []*schema.Column{
+		{Name: "member_product_property_id", Type: field.TypeInt64},
+		{Name: "venue_id", Type: field.TypeInt64},
+	}
+	// MemberProductPropertyVenuesTable holds the schema information for the "member_product_property_venues" table.
+	MemberProductPropertyVenuesTable = &schema.Table{
+		Name:       "member_product_property_venues",
+		Columns:    MemberProductPropertyVenuesColumns,
+		PrimaryKey: []*schema.Column{MemberProductPropertyVenuesColumns[0], MemberProductPropertyVenuesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "member_product_property_venues_member_product_property_id",
+				Columns:    []*schema.Column{MemberProductPropertyVenuesColumns[0]},
+				RefColumns: []*schema.Column{MemberProductPropertyColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "member_product_property_venues_venue_id",
+				Columns:    []*schema.Column{MemberProductPropertyVenuesColumns[1]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ProductPropertysColumns holds the columns for the "product_propertys" table.
 	ProductPropertysColumns = []*schema.Column{
 		{Name: "product_id", Type: field.TypeInt64},
@@ -842,6 +831,31 @@ var (
 				Symbol:     "product_propertys_product_property_id",
 				Columns:    []*schema.Column{ProductPropertysColumns[1]},
 				RefColumns: []*schema.Column{ProductPropertyColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProductPropertyVenuesColumns holds the columns for the "product_property_venues" table.
+	ProductPropertyVenuesColumns = []*schema.Column{
+		{Name: "product_property_id", Type: field.TypeInt64},
+		{Name: "venue_id", Type: field.TypeInt64},
+	}
+	// ProductPropertyVenuesTable holds the schema information for the "product_property_venues" table.
+	ProductPropertyVenuesTable = &schema.Table{
+		Name:       "product_property_venues",
+		Columns:    ProductPropertyVenuesColumns,
+		PrimaryKey: []*schema.Column{ProductPropertyVenuesColumns[0], ProductPropertyVenuesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "product_property_venues_product_property_id",
+				Columns:    []*schema.Column{ProductPropertyVenuesColumns[0]},
+				RefColumns: []*schema.Column{ProductPropertyColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "product_property_venues_venue_id",
+				Columns:    []*schema.Column{ProductPropertyVenuesColumns[1]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -886,7 +900,6 @@ var (
 		MemberNoteTable,
 		MemberProductTable,
 		MemberProductPropertyTable,
-		MemberProductPropertyVenueTable,
 		SysMenusTable,
 		SysMenuParamsTable,
 		MessagesTable,
@@ -897,13 +910,14 @@ var (
 		OrderSalesTable,
 		ProductTable,
 		ProductPropertyTable,
-		ProductPropertyVenueTable,
 		SysRolesTable,
 		SysTokensTable,
 		SysUsersTable,
 		VenueTable,
 		VenuePlaceTable,
+		MemberProductPropertyVenuesTable,
 		ProductPropertysTable,
+		ProductPropertyVenuesTable,
 		RoleMenusTable,
 	}
 )
@@ -955,10 +969,6 @@ func init() {
 	MemberProductPropertyTable.Annotation = &entsql.Annotation{
 		Table: "member_product_property",
 	}
-	MemberProductPropertyVenueTable.ForeignKeys[0].RefTable = MemberProductPropertyTable
-	MemberProductPropertyVenueTable.Annotation = &entsql.Annotation{
-		Table: "member_product_property_venue",
-	}
 	SysMenusTable.ForeignKeys[0].RefTable = SysMenusTable
 	SysMenusTable.Annotation = &entsql.Annotation{
 		Table: "sys_menus",
@@ -995,9 +1005,6 @@ func init() {
 	ProductPropertyTable.Annotation = &entsql.Annotation{
 		Table: "product_property",
 	}
-	ProductPropertyVenueTable.Annotation = &entsql.Annotation{
-		Table: "product_property_venue",
-	}
 	SysRolesTable.Annotation = &entsql.Annotation{
 		Table: "sys_roles",
 	}
@@ -1015,8 +1022,12 @@ func init() {
 	VenuePlaceTable.Annotation = &entsql.Annotation{
 		Table: "venue_place",
 	}
+	MemberProductPropertyVenuesTable.ForeignKeys[0].RefTable = MemberProductPropertyTable
+	MemberProductPropertyVenuesTable.ForeignKeys[1].RefTable = VenueTable
 	ProductPropertysTable.ForeignKeys[0].RefTable = ProductTable
 	ProductPropertysTable.ForeignKeys[1].RefTable = ProductPropertyTable
+	ProductPropertyVenuesTable.ForeignKeys[0].RefTable = ProductPropertyTable
+	ProductPropertyVenuesTable.ForeignKeys[1].RefTable = VenueTable
 	RoleMenusTable.ForeignKeys[0].RefTable = SysRolesTable
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
 }

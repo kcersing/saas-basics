@@ -38,6 +38,10 @@ const (
 	FieldInformation = "information"
 	// EdgePlaces holds the string denoting the places edge name in mutations.
 	EdgePlaces = "places"
+	// EdgeMemberPropertyVenues holds the string denoting the member_property_venues edge name in mutations.
+	EdgeMemberPropertyVenues = "member_property_venues"
+	// EdgePropertyVenues holds the string denoting the property_venues edge name in mutations.
+	EdgePropertyVenues = "property_venues"
 	// Table holds the table name of the venue in the database.
 	Table = "venue"
 	// PlacesTable is the table that holds the places relation/edge.
@@ -47,6 +51,16 @@ const (
 	PlacesInverseTable = "venue_place"
 	// PlacesColumn is the table column denoting the places relation/edge.
 	PlacesColumn = "venue_id"
+	// MemberPropertyVenuesTable is the table that holds the member_property_venues relation/edge. The primary key declared below.
+	MemberPropertyVenuesTable = "member_product_property_venues"
+	// MemberPropertyVenuesInverseTable is the table name for the MemberProductProperty entity.
+	// It exists in this package in order to avoid circular dependency with the "memberproductproperty" package.
+	MemberPropertyVenuesInverseTable = "member_product_property"
+	// PropertyVenuesTable is the table that holds the property_venues relation/edge. The primary key declared below.
+	PropertyVenuesTable = "product_property_venues"
+	// PropertyVenuesInverseTable is the table name for the ProductProperty entity.
+	// It exists in this package in order to avoid circular dependency with the "productproperty" package.
+	PropertyVenuesInverseTable = "product_property"
 )
 
 // Columns holds all SQL columns for venue fields.
@@ -64,6 +78,15 @@ var Columns = []string{
 	FieldPic,
 	FieldInformation,
 }
+
+var (
+	// MemberPropertyVenuesPrimaryKey and MemberPropertyVenuesColumn2 are the table columns denoting the
+	// primary key for the member_property_venues relation (M2M).
+	MemberPropertyVenuesPrimaryKey = []string{"member_product_property_id", "venue_id"}
+	// PropertyVenuesPrimaryKey and PropertyVenuesColumn2 are the table columns denoting the
+	// primary key for the property_venues relation (M2M).
+	PropertyVenuesPrimaryKey = []string{"product_property_id", "venue_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -162,10 +185,52 @@ func ByPlaces(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newPlacesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMemberPropertyVenuesCount orders the results by member_property_venues count.
+func ByMemberPropertyVenuesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberPropertyVenuesStep(), opts...)
+	}
+}
+
+// ByMemberPropertyVenues orders the results by member_property_venues terms.
+func ByMemberPropertyVenues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberPropertyVenuesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPropertyVenuesCount orders the results by property_venues count.
+func ByPropertyVenuesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPropertyVenuesStep(), opts...)
+	}
+}
+
+// ByPropertyVenues orders the results by property_venues terms.
+func ByPropertyVenues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPropertyVenuesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newPlacesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlacesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PlacesTable, PlacesColumn),
+	)
+}
+func newMemberPropertyVenuesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberPropertyVenuesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MemberPropertyVenuesTable, MemberPropertyVenuesPrimaryKey...),
+	)
+}
+func newPropertyVenuesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PropertyVenuesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PropertyVenuesTable, PropertyVenuesPrimaryKey...),
 	)
 }

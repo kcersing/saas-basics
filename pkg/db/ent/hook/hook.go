@@ -164,18 +164,6 @@ func (f MemberProductPropertyFunc) Mutate(ctx context.Context, m ent.Mutation) (
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberProductPropertyMutation", m)
 }
 
-// The MemberProductPropertyVenueFunc type is an adapter to allow the use of ordinary
-// function as MemberProductPropertyVenue mutator.
-type MemberProductPropertyVenueFunc func(context.Context, *ent.MemberProductPropertyVenueMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f MemberProductPropertyVenueFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.MemberProductPropertyVenueMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberProductPropertyVenueMutation", m)
-}
-
 // The MenuFunc type is an adapter to allow the use of ordinary
 // function as Menu mutator.
 type MenuFunc func(context.Context, *ent.MenuMutation) (ent.Value, error)
@@ -294,18 +282,6 @@ func (f ProductPropertyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Va
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProductPropertyMutation", m)
-}
-
-// The ProductPropertyVenueFunc type is an adapter to allow the use of ordinary
-// function as ProductPropertyVenue mutator.
-type ProductPropertyVenueFunc func(context.Context, *ent.ProductPropertyVenueMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ProductPropertyVenueFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.ProductPropertyVenueMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProductPropertyVenueMutation", m)
 }
 
 // The RoleFunc type is an adapter to allow the use of ordinary

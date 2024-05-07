@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
+	"saas/pkg/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -196,6 +197,21 @@ func (ppc *ProductPropertyCreate) AddProduct(p ...*Product) *ProductPropertyCrea
 	return ppc.AddProductIDs(ids...)
 }
 
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (ppc *ProductPropertyCreate) AddVenueIDs(ids ...int64) *ProductPropertyCreate {
+	ppc.mutation.AddVenueIDs(ids...)
+	return ppc
+}
+
+// AddVenues adds the "venues" edges to the Venue entity.
+func (ppc *ProductPropertyCreate) AddVenues(v ...*Venue) *ProductPropertyCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ppc.AddVenueIDs(ids...)
+}
+
 // Mutation returns the ProductPropertyMutation object of the builder.
 func (ppc *ProductPropertyCreate) Mutation() *ProductPropertyMutation {
 	return ppc.mutation
@@ -338,6 +354,22 @@ func (ppc *ProductPropertyCreate) createSpec() (*ProductProperty, *sqlgraph.Crea
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ppc.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   productproperty.VenuesTable,
+			Columns: productproperty.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

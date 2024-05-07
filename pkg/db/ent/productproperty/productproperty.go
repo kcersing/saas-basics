@@ -38,6 +38,8 @@ const (
 	FieldCreateID = "create_id"
 	// EdgeProduct holds the string denoting the product edge name in mutations.
 	EdgeProduct = "product"
+	// EdgeVenues holds the string denoting the venues edge name in mutations.
+	EdgeVenues = "venues"
 	// Table holds the table name of the productproperty in the database.
 	Table = "product_property"
 	// ProductTable is the table that holds the product relation/edge. The primary key declared below.
@@ -45,6 +47,11 @@ const (
 	// ProductInverseTable is the table name for the Product entity.
 	// It exists in this package in order to avoid circular dependency with the "product" package.
 	ProductInverseTable = "product"
+	// VenuesTable is the table that holds the venues relation/edge. The primary key declared below.
+	VenuesTable = "product_property_venues"
+	// VenuesInverseTable is the table name for the Venue entity.
+	// It exists in this package in order to avoid circular dependency with the "venue" package.
+	VenuesInverseTable = "venue"
 )
 
 // Columns holds all SQL columns for productproperty fields.
@@ -67,6 +74,9 @@ var (
 	// ProductPrimaryKey and ProductColumn2 are the table columns denoting the
 	// primary key for the product relation (M2M).
 	ProductPrimaryKey = []string{"product_id", "product_property_id"}
+	// VenuesPrimaryKey and VenuesColumn2 are the table columns denoting the
+	// primary key for the venues relation (M2M).
+	VenuesPrimaryKey = []string{"product_property_id", "venue_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -166,10 +176,31 @@ func ByProduct(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProductStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByVenuesCount orders the results by venues count.
+func ByVenuesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVenuesStep(), opts...)
+	}
+}
+
+// ByVenues orders the results by venues terms.
+func ByVenues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVenuesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newProductStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProductInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProductTable, ProductPrimaryKey...),
+	)
+}
+func newVenuesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VenuesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, VenuesTable, VenuesPrimaryKey...),
 	)
 }

@@ -16,7 +16,6 @@ import (
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
-	"saas/pkg/db/ent/memberproductpropertyvenue"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
 	"saas/pkg/db/ent/messages"
@@ -27,7 +26,6 @@ import (
 	"saas/pkg/db/ent/ordersales"
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
-	"saas/pkg/db/ent/productpropertyvenue"
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/schema"
 	"saas/pkg/db/ent/token"
@@ -430,21 +428,6 @@ func init() {
 	memberproductpropertyDescCountSurplus := memberproductpropertyFields[7].Descriptor()
 	// memberproductproperty.DefaultCountSurplus holds the default value on creation for the count_surplus field.
 	memberproductproperty.DefaultCountSurplus = memberproductpropertyDescCountSurplus.Default.(int64)
-	memberproductpropertyvenueMixin := schema.MemberProductPropertyVenue{}.Mixin()
-	memberproductpropertyvenueMixinFields0 := memberproductpropertyvenueMixin[0].Fields()
-	_ = memberproductpropertyvenueMixinFields0
-	memberproductpropertyvenueFields := schema.MemberProductPropertyVenue{}.Fields()
-	_ = memberproductpropertyvenueFields
-	// memberproductpropertyvenueDescCreatedAt is the schema descriptor for created_at field.
-	memberproductpropertyvenueDescCreatedAt := memberproductpropertyvenueMixinFields0[1].Descriptor()
-	// memberproductpropertyvenue.DefaultCreatedAt holds the default value on creation for the created_at field.
-	memberproductpropertyvenue.DefaultCreatedAt = memberproductpropertyvenueDescCreatedAt.Default.(func() time.Time)
-	// memberproductpropertyvenueDescUpdatedAt is the schema descriptor for updated_at field.
-	memberproductpropertyvenueDescUpdatedAt := memberproductpropertyvenueMixinFields0[2].Descriptor()
-	// memberproductpropertyvenue.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	memberproductpropertyvenue.DefaultUpdatedAt = memberproductpropertyvenueDescUpdatedAt.Default.(func() time.Time)
-	// memberproductpropertyvenue.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	memberproductpropertyvenue.UpdateDefaultUpdatedAt = memberproductpropertyvenueDescUpdatedAt.UpdateDefault.(func() time.Time)
 	menuMixin := schema.Menu{}.Mixin()
 	menuMixinFields0 := menuMixin[0].Fields()
 	_ = menuMixinFields0
@@ -653,21 +636,6 @@ func init() {
 	productpropertyDescStatus := productpropertyMixinFields1[0].Descriptor()
 	// productproperty.DefaultStatus holds the default value on creation for the status field.
 	productproperty.DefaultStatus = productpropertyDescStatus.Default.(int64)
-	productpropertyvenueMixin := schema.ProductPropertyVenue{}.Mixin()
-	productpropertyvenueMixinFields0 := productpropertyvenueMixin[0].Fields()
-	_ = productpropertyvenueMixinFields0
-	productpropertyvenueFields := schema.ProductPropertyVenue{}.Fields()
-	_ = productpropertyvenueFields
-	// productpropertyvenueDescCreatedAt is the schema descriptor for created_at field.
-	productpropertyvenueDescCreatedAt := productpropertyvenueMixinFields0[1].Descriptor()
-	// productpropertyvenue.DefaultCreatedAt holds the default value on creation for the created_at field.
-	productpropertyvenue.DefaultCreatedAt = productpropertyvenueDescCreatedAt.Default.(func() time.Time)
-	// productpropertyvenueDescUpdatedAt is the schema descriptor for updated_at field.
-	productpropertyvenueDescUpdatedAt := productpropertyvenueMixinFields0[2].Descriptor()
-	// productpropertyvenue.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	productpropertyvenue.DefaultUpdatedAt = productpropertyvenueDescUpdatedAt.Default.(func() time.Time)
-	// productpropertyvenue.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	productpropertyvenue.UpdateDefaultUpdatedAt = productpropertyvenueDescUpdatedAt.UpdateDefault.(func() time.Time)
 	roleMixin := schema.Role{}.Mixin()
 	roleMixinFields0 := roleMixin[0].Fields()
 	_ = roleMixinFields0

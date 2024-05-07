@@ -16,19 +16,22 @@ type Product interface {
 }
 
 type PropertyInfo struct {
-	ID        int64   `json:"id,omitempty"`
-	ProductId int64   `json:"productId,omitempty"`
-	Name      string  `json:"name,omitempty"`
-	Price     float64 `json:"price,omitempty"`
-	Duration  int64   `json:"duration,omitempty"`
-	Length    int64   `json:"length,omitempty"`
-	Count     int64   `json:"count,omitempty"`
-	Type      string  `json:"type,omitempty"`
-	Data      string  `json:"data,omitempty"`
-	Status    int64   `json:"status,omitempty"`
-	CreateId  int64   `json:"create_id,omitempty"`
+	ID       int64           `json:"id,omitempty"`
+	Name     string          `json:"name,omitempty"`
+	Price    float64         `json:"price,omitempty"`
+	Duration int64           `json:"duration,omitempty"`
+	Length   int64           `json:"length,omitempty"`
+	Count    int64           `json:"count,omitempty"`
+	Type     string          `json:"type,omitempty"`
+	Data     string          `json:"data,omitempty"`
+	Status   int64           `json:"status,omitempty"`
+	CreateId int64           `json:"create_id,omitempty"`
+	Venue    []PropertyVenue `json:"venue,omitempty"`
 }
-
+type PropertyVenue struct {
+	ID   int64  `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+}
 type ProductInfo struct {
 	ID          int64          `json:"id,omitempty"`
 	Name        string         `json:"name,omitempty"`

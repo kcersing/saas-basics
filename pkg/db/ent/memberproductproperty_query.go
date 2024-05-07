@@ -9,8 +9,8 @@ import (
 	"math"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
-	"saas/pkg/db/ent/memberproductpropertyvenue"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/venue"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -20,12 +20,12 @@ import (
 // MemberProductPropertyQuery is the builder for querying MemberProductProperty entities.
 type MemberProductPropertyQuery struct {
 	config
-	ctx                             *QueryContext
-	order                           []memberproductproperty.OrderOption
-	inters                          []Interceptor
-	predicates                      []predicate.MemberProductProperty
-	withOwner                       *MemberProductQuery
-	withMemberProductPropertyVenues *MemberProductPropertyVenueQuery
+	ctx        *QueryContext
+	order      []memberproductproperty.OrderOption
+	inters     []Interceptor
+	predicates []predicate.MemberProductProperty
+	withOwner  *MemberProductQuery
+	withVenues *VenueQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -84,9 +84,9 @@ func (mppq *MemberProductPropertyQuery) QueryOwner() *MemberProductQuery {
 	return query
 }
 
-// QueryMemberProductPropertyVenues chains the current query on the "member_product_property_venues" edge.
-func (mppq *MemberProductPropertyQuery) QueryMemberProductPropertyVenues() *MemberProductPropertyVenueQuery {
-	query := (&MemberProductPropertyVenueClient{config: mppq.config}).Query()
+// QueryVenues chains the current query on the "venues" edge.
+func (mppq *MemberProductPropertyQuery) QueryVenues() *VenueQuery {
+	query := (&VenueClient{config: mppq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mppq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -97,8 +97,8 @@ func (mppq *MemberProductPropertyQuery) QueryMemberProductPropertyVenues() *Memb
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberproductproperty.Table, memberproductproperty.FieldID, selector),
-			sqlgraph.To(memberproductpropertyvenue.Table, memberproductpropertyvenue.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, memberproductproperty.MemberProductPropertyVenuesTable, memberproductproperty.MemberProductPropertyVenuesColumn),
+			sqlgraph.To(venue.Table, venue.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, memberproductproperty.VenuesTable, memberproductproperty.VenuesPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(mppq.driver.Dialect(), step)
 		return fromU, nil
@@ -293,13 +293,13 @@ func (mppq *MemberProductPropertyQuery) Clone() *MemberProductPropertyQuery {
 		return nil
 	}
 	return &MemberProductPropertyQuery{
-		config:                          mppq.config,
-		ctx:                             mppq.ctx.Clone(),
-		order:                           append([]memberproductproperty.OrderOption{}, mppq.order...),
-		inters:                          append([]Interceptor{}, mppq.inters...),
-		predicates:                      append([]predicate.MemberProductProperty{}, mppq.predicates...),
-		withOwner:                       mppq.withOwner.Clone(),
-		withMemberProductPropertyVenues: mppq.withMemberProductPropertyVenues.Clone(),
+		config:     mppq.config,
+		ctx:        mppq.ctx.Clone(),
+		order:      append([]memberproductproperty.OrderOption{}, mppq.order...),
+		inters:     append([]Interceptor{}, mppq.inters...),
+		predicates: append([]predicate.MemberProductProperty{}, mppq.predicates...),
+		withOwner:  mppq.withOwner.Clone(),
+		withVenues: mppq.withVenues.Clone(),
 		// clone intermediate query.
 		sql:  mppq.sql.Clone(),
 		path: mppq.path,
@@ -317,14 +317,14 @@ func (mppq *MemberProductPropertyQuery) WithOwner(opts ...func(*MemberProductQue
 	return mppq
 }
 
-// WithMemberProductPropertyVenues tells the query-builder to eager-load the nodes that are connected to
-// the "member_product_property_venues" edge. The optional arguments are used to configure the query builder of the edge.
-func (mppq *MemberProductPropertyQuery) WithMemberProductPropertyVenues(opts ...func(*MemberProductPropertyVenueQuery)) *MemberProductPropertyQuery {
-	query := (&MemberProductPropertyVenueClient{config: mppq.config}).Query()
+// WithVenues tells the query-builder to eager-load the nodes that are connected to
+// the "venues" edge. The optional arguments are used to configure the query builder of the edge.
+func (mppq *MemberProductPropertyQuery) WithVenues(opts ...func(*VenueQuery)) *MemberProductPropertyQuery {
+	query := (&VenueClient{config: mppq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mppq.withMemberProductPropertyVenues = query
+	mppq.withVenues = query
 	return mppq
 }
 
@@ -408,7 +408,7 @@ func (mppq *MemberProductPropertyQuery) sqlAll(ctx context.Context, hooks ...que
 		_spec       = mppq.querySpec()
 		loadedTypes = [2]bool{
 			mppq.withOwner != nil,
-			mppq.withMemberProductPropertyVenues != nil,
+			mppq.withVenues != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -435,12 +435,10 @@ func (mppq *MemberProductPropertyQuery) sqlAll(ctx context.Context, hooks ...que
 			return nil, err
 		}
 	}
-	if query := mppq.withMemberProductPropertyVenues; query != nil {
-		if err := mppq.loadMemberProductPropertyVenues(ctx, query, nodes,
-			func(n *MemberProductProperty) { n.Edges.MemberProductPropertyVenues = []*MemberProductPropertyVenue{} },
-			func(n *MemberProductProperty, e *MemberProductPropertyVenue) {
-				n.Edges.MemberProductPropertyVenues = append(n.Edges.MemberProductPropertyVenues, e)
-			}); err != nil {
+	if query := mppq.withVenues; query != nil {
+		if err := mppq.loadVenues(ctx, query, nodes,
+			func(n *MemberProductProperty) { n.Edges.Venues = []*Venue{} },
+			func(n *MemberProductProperty, e *Venue) { n.Edges.Venues = append(n.Edges.Venues, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -476,33 +474,64 @@ func (mppq *MemberProductPropertyQuery) loadOwner(ctx context.Context, query *Me
 	}
 	return nil
 }
-func (mppq *MemberProductPropertyQuery) loadMemberProductPropertyVenues(ctx context.Context, query *MemberProductPropertyVenueQuery, nodes []*MemberProductProperty, init func(*MemberProductProperty), assign func(*MemberProductProperty, *MemberProductPropertyVenue)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int64]*MemberProductProperty)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+func (mppq *MemberProductPropertyQuery) loadVenues(ctx context.Context, query *VenueQuery, nodes []*MemberProductProperty, init func(*MemberProductProperty), assign func(*MemberProductProperty, *Venue)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int64]*MemberProductProperty)
+	nids := make(map[int64]map[*MemberProductProperty]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(memberproductpropertyvenue.FieldMemberProductPropertyID)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(memberproductproperty.VenuesTable)
+		s.Join(joinT).On(s.C(venue.FieldID), joinT.C(memberproductproperty.VenuesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(memberproductproperty.VenuesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(memberproductproperty.VenuesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(predicate.MemberProductPropertyVenue(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(memberproductproperty.MemberProductPropertyVenuesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullInt64).Int64
+				inValue := values[1].(*sql.NullInt64).Int64
+				if nids[inValue] == nil {
+					nids[inValue] = map[*MemberProductProperty]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Venue](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.MemberProductPropertyID
-		node, ok := nodeids[fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "member_product_property_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected "venues" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

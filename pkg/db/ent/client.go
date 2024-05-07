@@ -24,7 +24,6 @@ import (
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
-	"saas/pkg/db/ent/memberproductpropertyvenue"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
 	"saas/pkg/db/ent/messages"
@@ -35,7 +34,6 @@ import (
 	"saas/pkg/db/ent/ordersales"
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
-	"saas/pkg/db/ent/productpropertyvenue"
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
@@ -79,8 +77,6 @@ type Client struct {
 	MemberProduct *MemberProductClient
 	// MemberProductProperty is the client for interacting with the MemberProductProperty builders.
 	MemberProductProperty *MemberProductPropertyClient
-	// MemberProductPropertyVenue is the client for interacting with the MemberProductPropertyVenue builders.
-	MemberProductPropertyVenue *MemberProductPropertyVenueClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
@@ -101,8 +97,6 @@ type Client struct {
 	Product *ProductClient
 	// ProductProperty is the client for interacting with the ProductProperty builders.
 	ProductProperty *ProductPropertyClient
-	// ProductPropertyVenue is the client for interacting with the ProductPropertyVenue builders.
-	ProductPropertyVenue *ProductPropertyVenueClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 	// Token is the client for interacting with the Token builders.
@@ -137,7 +131,6 @@ func (c *Client) init() {
 	c.MemberNote = NewMemberNoteClient(c.config)
 	c.MemberProduct = NewMemberProductClient(c.config)
 	c.MemberProductProperty = NewMemberProductPropertyClient(c.config)
-	c.MemberProductPropertyVenue = NewMemberProductPropertyVenueClient(c.config)
 	c.Menu = NewMenuClient(c.config)
 	c.MenuParam = NewMenuParamClient(c.config)
 	c.Messages = NewMessagesClient(c.config)
@@ -148,7 +141,6 @@ func (c *Client) init() {
 	c.OrderSales = NewOrderSalesClient(c.config)
 	c.Product = NewProductClient(c.config)
 	c.ProductProperty = NewProductPropertyClient(c.config)
-	c.ProductPropertyVenue = NewProductPropertyVenueClient(c.config)
 	c.Role = NewRoleClient(c.config)
 	c.Token = NewTokenClient(c.config)
 	c.User = NewUserClient(c.config)
@@ -244,38 +236,36 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                        ctx,
-		config:                     cfg,
-		API:                        NewAPIClient(cfg),
-		CourseRecordCoach:          NewCourseRecordCoachClient(cfg),
-		CourseRecordMember:         NewCourseRecordMemberClient(cfg),
-		CourseRecordSchedule:       NewCourseRecordScheduleClient(cfg),
-		Dictionary:                 NewDictionaryClient(cfg),
-		DictionaryDetail:           NewDictionaryDetailClient(cfg),
-		EntryLogs:                  NewEntryLogsClient(cfg),
-		Logs:                       NewLogsClient(cfg),
-		Member:                     NewMemberClient(cfg),
-		MemberDetails:              NewMemberDetailsClient(cfg),
-		MemberNote:                 NewMemberNoteClient(cfg),
-		MemberProduct:              NewMemberProductClient(cfg),
-		MemberProductProperty:      NewMemberProductPropertyClient(cfg),
-		MemberProductPropertyVenue: NewMemberProductPropertyVenueClient(cfg),
-		Menu:                       NewMenuClient(cfg),
-		MenuParam:                  NewMenuParamClient(cfg),
-		Messages:                   NewMessagesClient(cfg),
-		Order:                      NewOrderClient(cfg),
-		OrderAmount:                NewOrderAmountClient(cfg),
-		OrderItem:                  NewOrderItemClient(cfg),
-		OrderPay:                   NewOrderPayClient(cfg),
-		OrderSales:                 NewOrderSalesClient(cfg),
-		Product:                    NewProductClient(cfg),
-		ProductProperty:            NewProductPropertyClient(cfg),
-		ProductPropertyVenue:       NewProductPropertyVenueClient(cfg),
-		Role:                       NewRoleClient(cfg),
-		Token:                      NewTokenClient(cfg),
-		User:                       NewUserClient(cfg),
-		Venue:                      NewVenueClient(cfg),
-		VenuePlace:                 NewVenuePlaceClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		API:                   NewAPIClient(cfg),
+		CourseRecordCoach:     NewCourseRecordCoachClient(cfg),
+		CourseRecordMember:    NewCourseRecordMemberClient(cfg),
+		CourseRecordSchedule:  NewCourseRecordScheduleClient(cfg),
+		Dictionary:            NewDictionaryClient(cfg),
+		DictionaryDetail:      NewDictionaryDetailClient(cfg),
+		EntryLogs:             NewEntryLogsClient(cfg),
+		Logs:                  NewLogsClient(cfg),
+		Member:                NewMemberClient(cfg),
+		MemberDetails:         NewMemberDetailsClient(cfg),
+		MemberNote:            NewMemberNoteClient(cfg),
+		MemberProduct:         NewMemberProductClient(cfg),
+		MemberProductProperty: NewMemberProductPropertyClient(cfg),
+		Menu:                  NewMenuClient(cfg),
+		MenuParam:             NewMenuParamClient(cfg),
+		Messages:              NewMessagesClient(cfg),
+		Order:                 NewOrderClient(cfg),
+		OrderAmount:           NewOrderAmountClient(cfg),
+		OrderItem:             NewOrderItemClient(cfg),
+		OrderPay:              NewOrderPayClient(cfg),
+		OrderSales:            NewOrderSalesClient(cfg),
+		Product:               NewProductClient(cfg),
+		ProductProperty:       NewProductPropertyClient(cfg),
+		Role:                  NewRoleClient(cfg),
+		Token:                 NewTokenClient(cfg),
+		User:                  NewUserClient(cfg),
+		Venue:                 NewVenueClient(cfg),
+		VenuePlace:            NewVenuePlaceClient(cfg),
 	}, nil
 }
 
@@ -293,38 +283,36 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                        ctx,
-		config:                     cfg,
-		API:                        NewAPIClient(cfg),
-		CourseRecordCoach:          NewCourseRecordCoachClient(cfg),
-		CourseRecordMember:         NewCourseRecordMemberClient(cfg),
-		CourseRecordSchedule:       NewCourseRecordScheduleClient(cfg),
-		Dictionary:                 NewDictionaryClient(cfg),
-		DictionaryDetail:           NewDictionaryDetailClient(cfg),
-		EntryLogs:                  NewEntryLogsClient(cfg),
-		Logs:                       NewLogsClient(cfg),
-		Member:                     NewMemberClient(cfg),
-		MemberDetails:              NewMemberDetailsClient(cfg),
-		MemberNote:                 NewMemberNoteClient(cfg),
-		MemberProduct:              NewMemberProductClient(cfg),
-		MemberProductProperty:      NewMemberProductPropertyClient(cfg),
-		MemberProductPropertyVenue: NewMemberProductPropertyVenueClient(cfg),
-		Menu:                       NewMenuClient(cfg),
-		MenuParam:                  NewMenuParamClient(cfg),
-		Messages:                   NewMessagesClient(cfg),
-		Order:                      NewOrderClient(cfg),
-		OrderAmount:                NewOrderAmountClient(cfg),
-		OrderItem:                  NewOrderItemClient(cfg),
-		OrderPay:                   NewOrderPayClient(cfg),
-		OrderSales:                 NewOrderSalesClient(cfg),
-		Product:                    NewProductClient(cfg),
-		ProductProperty:            NewProductPropertyClient(cfg),
-		ProductPropertyVenue:       NewProductPropertyVenueClient(cfg),
-		Role:                       NewRoleClient(cfg),
-		Token:                      NewTokenClient(cfg),
-		User:                       NewUserClient(cfg),
-		Venue:                      NewVenueClient(cfg),
-		VenuePlace:                 NewVenuePlaceClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		API:                   NewAPIClient(cfg),
+		CourseRecordCoach:     NewCourseRecordCoachClient(cfg),
+		CourseRecordMember:    NewCourseRecordMemberClient(cfg),
+		CourseRecordSchedule:  NewCourseRecordScheduleClient(cfg),
+		Dictionary:            NewDictionaryClient(cfg),
+		DictionaryDetail:      NewDictionaryDetailClient(cfg),
+		EntryLogs:             NewEntryLogsClient(cfg),
+		Logs:                  NewLogsClient(cfg),
+		Member:                NewMemberClient(cfg),
+		MemberDetails:         NewMemberDetailsClient(cfg),
+		MemberNote:            NewMemberNoteClient(cfg),
+		MemberProduct:         NewMemberProductClient(cfg),
+		MemberProductProperty: NewMemberProductPropertyClient(cfg),
+		Menu:                  NewMenuClient(cfg),
+		MenuParam:             NewMenuParamClient(cfg),
+		Messages:              NewMessagesClient(cfg),
+		Order:                 NewOrderClient(cfg),
+		OrderAmount:           NewOrderAmountClient(cfg),
+		OrderItem:             NewOrderItemClient(cfg),
+		OrderPay:              NewOrderPayClient(cfg),
+		OrderSales:            NewOrderSalesClient(cfg),
+		Product:               NewProductClient(cfg),
+		ProductProperty:       NewProductPropertyClient(cfg),
+		Role:                  NewRoleClient(cfg),
+		Token:                 NewTokenClient(cfg),
+		User:                  NewUserClient(cfg),
+		Venue:                 NewVenueClient(cfg),
+		VenuePlace:            NewVenuePlaceClient(cfg),
 	}, nil
 }
 
@@ -357,10 +345,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.API, c.CourseRecordCoach, c.CourseRecordMember, c.CourseRecordSchedule,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberDetails, c.MemberNote, c.MemberProduct, c.MemberProductProperty,
-		c.MemberProductPropertyVenue, c.Menu, c.MenuParam, c.Messages, c.Order,
-		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product,
-		c.ProductProperty, c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue,
-		c.VenuePlace,
+		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
+		c.OrderPay, c.OrderSales, c.Product, c.ProductProperty, c.Role, c.Token,
+		c.User, c.Venue, c.VenuePlace,
 	} {
 		n.Use(hooks...)
 	}
@@ -373,10 +360,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.API, c.CourseRecordCoach, c.CourseRecordMember, c.CourseRecordSchedule,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberDetails, c.MemberNote, c.MemberProduct, c.MemberProductProperty,
-		c.MemberProductPropertyVenue, c.Menu, c.MenuParam, c.Messages, c.Order,
-		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product,
-		c.ProductProperty, c.ProductPropertyVenue, c.Role, c.Token, c.User, c.Venue,
-		c.VenuePlace,
+		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
+		c.OrderPay, c.OrderSales, c.Product, c.ProductProperty, c.Role, c.Token,
+		c.User, c.Venue, c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -411,8 +397,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.MemberProduct.mutate(ctx, m)
 	case *MemberProductPropertyMutation:
 		return c.MemberProductProperty.mutate(ctx, m)
-	case *MemberProductPropertyVenueMutation:
-		return c.MemberProductPropertyVenue.mutate(ctx, m)
 	case *MenuMutation:
 		return c.Menu.mutate(ctx, m)
 	case *MenuParamMutation:
@@ -433,8 +417,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Product.mutate(ctx, m)
 	case *ProductPropertyMutation:
 		return c.ProductProperty.mutate(ctx, m)
-	case *ProductPropertyVenueMutation:
-		return c.ProductPropertyVenue.mutate(ctx, m)
 	case *RoleMutation:
 		return c.Role.mutate(ctx, m)
 	case *TokenMutation:
@@ -2378,15 +2360,15 @@ func (c *MemberProductPropertyClient) QueryOwner(mpp *MemberProductProperty) *Me
 	return query
 }
 
-// QueryMemberProductPropertyVenues queries the member_product_property_venues edge of a MemberProductProperty.
-func (c *MemberProductPropertyClient) QueryMemberProductPropertyVenues(mpp *MemberProductProperty) *MemberProductPropertyVenueQuery {
-	query := (&MemberProductPropertyVenueClient{config: c.config}).Query()
+// QueryVenues queries the venues edge of a MemberProductProperty.
+func (c *MemberProductPropertyClient) QueryVenues(mpp *MemberProductProperty) *VenueQuery {
+	query := (&VenueClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mpp.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberproductproperty.Table, memberproductproperty.FieldID, id),
-			sqlgraph.To(memberproductpropertyvenue.Table, memberproductpropertyvenue.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, memberproductproperty.MemberProductPropertyVenuesTable, memberproductproperty.MemberProductPropertyVenuesColumn),
+			sqlgraph.To(venue.Table, venue.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, memberproductproperty.VenuesTable, memberproductproperty.VenuesPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(mpp.driver.Dialect(), step)
 		return fromV, nil
@@ -2416,155 +2398,6 @@ func (c *MemberProductPropertyClient) mutate(ctx context.Context, m *MemberProdu
 		return (&MemberProductPropertyDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown MemberProductProperty mutation op: %q", m.Op())
-	}
-}
-
-// MemberProductPropertyVenueClient is a client for the MemberProductPropertyVenue schema.
-type MemberProductPropertyVenueClient struct {
-	config
-}
-
-// NewMemberProductPropertyVenueClient returns a client for the MemberProductPropertyVenue from the given config.
-func NewMemberProductPropertyVenueClient(c config) *MemberProductPropertyVenueClient {
-	return &MemberProductPropertyVenueClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `memberproductpropertyvenue.Hooks(f(g(h())))`.
-func (c *MemberProductPropertyVenueClient) Use(hooks ...Hook) {
-	c.hooks.MemberProductPropertyVenue = append(c.hooks.MemberProductPropertyVenue, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `memberproductpropertyvenue.Intercept(f(g(h())))`.
-func (c *MemberProductPropertyVenueClient) Intercept(interceptors ...Interceptor) {
-	c.inters.MemberProductPropertyVenue = append(c.inters.MemberProductPropertyVenue, interceptors...)
-}
-
-// Create returns a builder for creating a MemberProductPropertyVenue entity.
-func (c *MemberProductPropertyVenueClient) Create() *MemberProductPropertyVenueCreate {
-	mutation := newMemberProductPropertyVenueMutation(c.config, OpCreate)
-	return &MemberProductPropertyVenueCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of MemberProductPropertyVenue entities.
-func (c *MemberProductPropertyVenueClient) CreateBulk(builders ...*MemberProductPropertyVenueCreate) *MemberProductPropertyVenueCreateBulk {
-	return &MemberProductPropertyVenueCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *MemberProductPropertyVenueClient) MapCreateBulk(slice any, setFunc func(*MemberProductPropertyVenueCreate, int)) *MemberProductPropertyVenueCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &MemberProductPropertyVenueCreateBulk{err: fmt.Errorf("calling to MemberProductPropertyVenueClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*MemberProductPropertyVenueCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &MemberProductPropertyVenueCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for MemberProductPropertyVenue.
-func (c *MemberProductPropertyVenueClient) Update() *MemberProductPropertyVenueUpdate {
-	mutation := newMemberProductPropertyVenueMutation(c.config, OpUpdate)
-	return &MemberProductPropertyVenueUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *MemberProductPropertyVenueClient) UpdateOne(mppv *MemberProductPropertyVenue) *MemberProductPropertyVenueUpdateOne {
-	mutation := newMemberProductPropertyVenueMutation(c.config, OpUpdateOne, withMemberProductPropertyVenue(mppv))
-	return &MemberProductPropertyVenueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *MemberProductPropertyVenueClient) UpdateOneID(id int64) *MemberProductPropertyVenueUpdateOne {
-	mutation := newMemberProductPropertyVenueMutation(c.config, OpUpdateOne, withMemberProductPropertyVenueID(id))
-	return &MemberProductPropertyVenueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for MemberProductPropertyVenue.
-func (c *MemberProductPropertyVenueClient) Delete() *MemberProductPropertyVenueDelete {
-	mutation := newMemberProductPropertyVenueMutation(c.config, OpDelete)
-	return &MemberProductPropertyVenueDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *MemberProductPropertyVenueClient) DeleteOne(mppv *MemberProductPropertyVenue) *MemberProductPropertyVenueDeleteOne {
-	return c.DeleteOneID(mppv.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *MemberProductPropertyVenueClient) DeleteOneID(id int64) *MemberProductPropertyVenueDeleteOne {
-	builder := c.Delete().Where(memberproductpropertyvenue.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &MemberProductPropertyVenueDeleteOne{builder}
-}
-
-// Query returns a query builder for MemberProductPropertyVenue.
-func (c *MemberProductPropertyVenueClient) Query() *MemberProductPropertyVenueQuery {
-	return &MemberProductPropertyVenueQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeMemberProductPropertyVenue},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a MemberProductPropertyVenue entity by its id.
-func (c *MemberProductPropertyVenueClient) Get(ctx context.Context, id int64) (*MemberProductPropertyVenue, error) {
-	return c.Query().Where(memberproductpropertyvenue.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *MemberProductPropertyVenueClient) GetX(ctx context.Context, id int64) *MemberProductPropertyVenue {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a MemberProductPropertyVenue.
-func (c *MemberProductPropertyVenueClient) QueryOwner(mppv *MemberProductPropertyVenue) *MemberProductPropertyQuery {
-	query := (&MemberProductPropertyClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := mppv.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(memberproductpropertyvenue.Table, memberproductpropertyvenue.FieldID, id),
-			sqlgraph.To(memberproductproperty.Table, memberproductproperty.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberproductpropertyvenue.OwnerTable, memberproductpropertyvenue.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(mppv.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *MemberProductPropertyVenueClient) Hooks() []Hook {
-	return c.hooks.MemberProductPropertyVenue
-}
-
-// Interceptors returns the client interceptors.
-func (c *MemberProductPropertyVenueClient) Interceptors() []Interceptor {
-	return c.inters.MemberProductPropertyVenue
-}
-
-func (c *MemberProductPropertyVenueClient) mutate(ctx context.Context, m *MemberProductPropertyVenueMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&MemberProductPropertyVenueCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&MemberProductPropertyVenueUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&MemberProductPropertyVenueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&MemberProductPropertyVenueDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown MemberProductPropertyVenue mutation op: %q", m.Op())
 	}
 }
 
@@ -4113,6 +3946,22 @@ func (c *ProductPropertyClient) QueryProduct(pp *ProductProperty) *ProductQuery 
 	return query
 }
 
+// QueryVenues queries the venues edge of a ProductProperty.
+func (c *ProductPropertyClient) QueryVenues(pp *ProductProperty) *VenueQuery {
+	query := (&VenueClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(productproperty.Table, productproperty.FieldID, id),
+			sqlgraph.To(venue.Table, venue.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, productproperty.VenuesTable, productproperty.VenuesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProductPropertyClient) Hooks() []Hook {
 	return c.hooks.ProductProperty
@@ -4135,139 +3984,6 @@ func (c *ProductPropertyClient) mutate(ctx context.Context, m *ProductPropertyMu
 		return (&ProductPropertyDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ProductProperty mutation op: %q", m.Op())
-	}
-}
-
-// ProductPropertyVenueClient is a client for the ProductPropertyVenue schema.
-type ProductPropertyVenueClient struct {
-	config
-}
-
-// NewProductPropertyVenueClient returns a client for the ProductPropertyVenue from the given config.
-func NewProductPropertyVenueClient(c config) *ProductPropertyVenueClient {
-	return &ProductPropertyVenueClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `productpropertyvenue.Hooks(f(g(h())))`.
-func (c *ProductPropertyVenueClient) Use(hooks ...Hook) {
-	c.hooks.ProductPropertyVenue = append(c.hooks.ProductPropertyVenue, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `productpropertyvenue.Intercept(f(g(h())))`.
-func (c *ProductPropertyVenueClient) Intercept(interceptors ...Interceptor) {
-	c.inters.ProductPropertyVenue = append(c.inters.ProductPropertyVenue, interceptors...)
-}
-
-// Create returns a builder for creating a ProductPropertyVenue entity.
-func (c *ProductPropertyVenueClient) Create() *ProductPropertyVenueCreate {
-	mutation := newProductPropertyVenueMutation(c.config, OpCreate)
-	return &ProductPropertyVenueCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of ProductPropertyVenue entities.
-func (c *ProductPropertyVenueClient) CreateBulk(builders ...*ProductPropertyVenueCreate) *ProductPropertyVenueCreateBulk {
-	return &ProductPropertyVenueCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *ProductPropertyVenueClient) MapCreateBulk(slice any, setFunc func(*ProductPropertyVenueCreate, int)) *ProductPropertyVenueCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &ProductPropertyVenueCreateBulk{err: fmt.Errorf("calling to ProductPropertyVenueClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*ProductPropertyVenueCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &ProductPropertyVenueCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for ProductPropertyVenue.
-func (c *ProductPropertyVenueClient) Update() *ProductPropertyVenueUpdate {
-	mutation := newProductPropertyVenueMutation(c.config, OpUpdate)
-	return &ProductPropertyVenueUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *ProductPropertyVenueClient) UpdateOne(ppv *ProductPropertyVenue) *ProductPropertyVenueUpdateOne {
-	mutation := newProductPropertyVenueMutation(c.config, OpUpdateOne, withProductPropertyVenue(ppv))
-	return &ProductPropertyVenueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *ProductPropertyVenueClient) UpdateOneID(id int64) *ProductPropertyVenueUpdateOne {
-	mutation := newProductPropertyVenueMutation(c.config, OpUpdateOne, withProductPropertyVenueID(id))
-	return &ProductPropertyVenueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for ProductPropertyVenue.
-func (c *ProductPropertyVenueClient) Delete() *ProductPropertyVenueDelete {
-	mutation := newProductPropertyVenueMutation(c.config, OpDelete)
-	return &ProductPropertyVenueDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *ProductPropertyVenueClient) DeleteOne(ppv *ProductPropertyVenue) *ProductPropertyVenueDeleteOne {
-	return c.DeleteOneID(ppv.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ProductPropertyVenueClient) DeleteOneID(id int64) *ProductPropertyVenueDeleteOne {
-	builder := c.Delete().Where(productpropertyvenue.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &ProductPropertyVenueDeleteOne{builder}
-}
-
-// Query returns a query builder for ProductPropertyVenue.
-func (c *ProductPropertyVenueClient) Query() *ProductPropertyVenueQuery {
-	return &ProductPropertyVenueQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeProductPropertyVenue},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a ProductPropertyVenue entity by its id.
-func (c *ProductPropertyVenueClient) Get(ctx context.Context, id int64) (*ProductPropertyVenue, error) {
-	return c.Query().Where(productpropertyvenue.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *ProductPropertyVenueClient) GetX(ctx context.Context, id int64) *ProductPropertyVenue {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *ProductPropertyVenueClient) Hooks() []Hook {
-	return c.hooks.ProductPropertyVenue
-}
-
-// Interceptors returns the client interceptors.
-func (c *ProductPropertyVenueClient) Interceptors() []Interceptor {
-	return c.inters.ProductPropertyVenue
-}
-
-func (c *ProductPropertyVenueClient) mutate(ctx context.Context, m *ProductPropertyVenueMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&ProductPropertyVenueCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&ProductPropertyVenueUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&ProductPropertyVenueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&ProductPropertyVenueDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown ProductPropertyVenue mutation op: %q", m.Op())
 	}
 }
 
@@ -4842,6 +4558,38 @@ func (c *VenueClient) QueryPlaces(v *Venue) *VenuePlaceQuery {
 	return query
 }
 
+// QueryMemberPropertyVenues queries the member_property_venues edge of a Venue.
+func (c *VenueClient) QueryMemberPropertyVenues(v *Venue) *MemberProductPropertyQuery {
+	query := (&MemberProductPropertyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(venue.Table, venue.FieldID, id),
+			sqlgraph.To(memberproductproperty.Table, memberproductproperty.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, venue.MemberPropertyVenuesTable, venue.MemberPropertyVenuesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPropertyVenues queries the property_venues edge of a Venue.
+func (c *VenueClient) QueryPropertyVenues(v *Venue) *ProductPropertyQuery {
+	query := (&ProductPropertyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(venue.Table, venue.FieldID, id),
+			sqlgraph.To(productproperty.Table, productproperty.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, venue.PropertyVenuesTable, venue.PropertyVenuesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *VenueClient) Hooks() []Hook {
 	return c.hooks.Venue
@@ -5021,17 +4769,15 @@ type (
 	hooks struct {
 		API, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule, Dictionary,
 		DictionaryDetail, EntryLogs, Logs, Member, MemberDetails, MemberNote,
-		MemberProduct, MemberProductProperty, MemberProductPropertyVenue, Menu,
-		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales,
-		Product, ProductProperty, ProductPropertyVenue, Role, Token, User, Venue,
-		VenuePlace []ent.Hook
+		MemberProduct, MemberProductProperty, Menu, MenuParam, Messages, Order,
+		OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductProperty, Role,
+		Token, User, Venue, VenuePlace []ent.Hook
 	}
 	inters struct {
 		API, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule, Dictionary,
 		DictionaryDetail, EntryLogs, Logs, Member, MemberDetails, MemberNote,
-		MemberProduct, MemberProductProperty, MemberProductPropertyVenue, Menu,
-		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales,
-		Product, ProductProperty, ProductPropertyVenue, Role, Token, User, Venue,
-		VenuePlace []ent.Interceptor
+		MemberProduct, MemberProductProperty, Menu, MenuParam, Messages, Order,
+		OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductProperty, Role,
+		Token, User, Venue, VenuePlace []ent.Interceptor
 	}
 )

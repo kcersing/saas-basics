@@ -36,6 +36,9 @@ func (Venue) Mixin() []ent.Mixin {
 func (Venue) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("places", VenuePlace.Type),
+
+		edge.From("member_property_venues", MemberProductProperty.Type).Ref("venues"),
+		edge.From("property_venues", ProductProperty.Type).Ref("venues"),
 	}
 }
 

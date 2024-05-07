@@ -36,11 +36,9 @@ func (MemberProductProperty) Mixin() []ent.Mixin {
 
 func (MemberProductProperty) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("owner", MemberProduct.Type).
-			Ref("member_product_propertys").
-			Field("member_product_id").
-			Unique(),
-		edge.To("member_product_property_venues", MemberProductPropertyVenue.Type),
+		edge.From("owner", MemberProduct.Type).Ref("member_product_propertys").Field("member_product_id").Unique(),
+
+		edge.To("venues", Venue.Type),
 	}
 }
 

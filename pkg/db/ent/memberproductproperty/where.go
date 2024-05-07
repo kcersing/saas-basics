@@ -748,21 +748,21 @@ func HasOwnerWith(preds ...predicate.MemberProduct) predicate.MemberProductPrope
 	})
 }
 
-// HasMemberProductPropertyVenues applies the HasEdge predicate on the "member_product_property_venues" edge.
-func HasMemberProductPropertyVenues() predicate.MemberProductProperty {
+// HasVenues applies the HasEdge predicate on the "venues" edge.
+func HasVenues() predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, MemberProductPropertyVenuesTable, MemberProductPropertyVenuesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, VenuesTable, VenuesPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasMemberProductPropertyVenuesWith applies the HasEdge predicate on the "member_product_property_venues" edge with a given conditions (other predicates).
-func HasMemberProductPropertyVenuesWith(preds ...predicate.MemberProductPropertyVenue) predicate.MemberProductProperty {
+// HasVenuesWith applies the HasEdge predicate on the "venues" edge with a given conditions (other predicates).
+func HasVenuesWith(preds ...predicate.Venue) predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(func(s *sql.Selector) {
-		step := newMemberProductPropertyVenuesStep()
+		step := newVenuesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

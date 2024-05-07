@@ -738,6 +738,29 @@ func HasProductWith(preds ...predicate.Product) predicate.ProductProperty {
 	})
 }
 
+// HasVenues applies the HasEdge predicate on the "venues" edge.
+func HasVenues() predicate.ProductProperty {
+	return predicate.ProductProperty(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, VenuesTable, VenuesPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVenuesWith applies the HasEdge predicate on the "venues" edge with a given conditions (other predicates).
+func HasVenuesWith(preds ...predicate.Venue) predicate.ProductProperty {
+	return predicate.ProductProperty(func(s *sql.Selector) {
+		step := newVenuesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.ProductProperty) predicate.ProductProperty {
 	return predicate.ProductProperty(sql.AndPredicates(predicates...))

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
-	"saas/pkg/db/ent/memberproductpropertyvenue"
+	"saas/pkg/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -215,19 +215,19 @@ func (mppc *MemberProductPropertyCreate) SetOwner(m *MemberProduct) *MemberProdu
 	return mppc.SetOwnerID(m.ID)
 }
 
-// AddMemberProductPropertyVenueIDs adds the "member_product_property_venues" edge to the MemberProductPropertyVenue entity by IDs.
-func (mppc *MemberProductPropertyCreate) AddMemberProductPropertyVenueIDs(ids ...int64) *MemberProductPropertyCreate {
-	mppc.mutation.AddMemberProductPropertyVenueIDs(ids...)
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (mppc *MemberProductPropertyCreate) AddVenueIDs(ids ...int64) *MemberProductPropertyCreate {
+	mppc.mutation.AddVenueIDs(ids...)
 	return mppc
 }
 
-// AddMemberProductPropertyVenues adds the "member_product_property_venues" edges to the MemberProductPropertyVenue entity.
-func (mppc *MemberProductPropertyCreate) AddMemberProductPropertyVenues(m ...*MemberProductPropertyVenue) *MemberProductPropertyCreate {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// AddVenues adds the "venues" edges to the Venue entity.
+func (mppc *MemberProductPropertyCreate) AddVenues(v ...*Venue) *MemberProductPropertyCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mppc.AddMemberProductPropertyVenueIDs(ids...)
+	return mppc.AddVenueIDs(ids...)
 }
 
 // Mutation returns the MemberProductPropertyMutation object of the builder.
@@ -388,15 +388,15 @@ func (mppc *MemberProductPropertyCreate) createSpec() (*MemberProductProperty, *
 		_node.MemberProductID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mppc.mutation.MemberProductPropertyVenuesIDs(); len(nodes) > 0 {
+	if nodes := mppc.mutation.VenuesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   memberproductproperty.MemberProductPropertyVenuesTable,
-			Columns: []string{memberproductproperty.MemberProductPropertyVenuesColumn},
+			Table:   memberproductproperty.VenuesTable,
+			Columns: memberproductproperty.VenuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(memberproductpropertyvenue.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

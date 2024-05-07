@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
-	"saas/pkg/db/ent/memberproductpropertyvenue"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -304,19 +304,19 @@ func (mppu *MemberProductPropertyUpdate) SetOwner(m *MemberProduct) *MemberProdu
 	return mppu.SetOwnerID(m.ID)
 }
 
-// AddMemberProductPropertyVenueIDs adds the "member_product_property_venues" edge to the MemberProductPropertyVenue entity by IDs.
-func (mppu *MemberProductPropertyUpdate) AddMemberProductPropertyVenueIDs(ids ...int64) *MemberProductPropertyUpdate {
-	mppu.mutation.AddMemberProductPropertyVenueIDs(ids...)
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (mppu *MemberProductPropertyUpdate) AddVenueIDs(ids ...int64) *MemberProductPropertyUpdate {
+	mppu.mutation.AddVenueIDs(ids...)
 	return mppu
 }
 
-// AddMemberProductPropertyVenues adds the "member_product_property_venues" edges to the MemberProductPropertyVenue entity.
-func (mppu *MemberProductPropertyUpdate) AddMemberProductPropertyVenues(m ...*MemberProductPropertyVenue) *MemberProductPropertyUpdate {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// AddVenues adds the "venues" edges to the Venue entity.
+func (mppu *MemberProductPropertyUpdate) AddVenues(v ...*Venue) *MemberProductPropertyUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mppu.AddMemberProductPropertyVenueIDs(ids...)
+	return mppu.AddVenueIDs(ids...)
 }
 
 // Mutation returns the MemberProductPropertyMutation object of the builder.
@@ -330,25 +330,25 @@ func (mppu *MemberProductPropertyUpdate) ClearOwner() *MemberProductPropertyUpda
 	return mppu
 }
 
-// ClearMemberProductPropertyVenues clears all "member_product_property_venues" edges to the MemberProductPropertyVenue entity.
-func (mppu *MemberProductPropertyUpdate) ClearMemberProductPropertyVenues() *MemberProductPropertyUpdate {
-	mppu.mutation.ClearMemberProductPropertyVenues()
+// ClearVenues clears all "venues" edges to the Venue entity.
+func (mppu *MemberProductPropertyUpdate) ClearVenues() *MemberProductPropertyUpdate {
+	mppu.mutation.ClearVenues()
 	return mppu
 }
 
-// RemoveMemberProductPropertyVenueIDs removes the "member_product_property_venues" edge to MemberProductPropertyVenue entities by IDs.
-func (mppu *MemberProductPropertyUpdate) RemoveMemberProductPropertyVenueIDs(ids ...int64) *MemberProductPropertyUpdate {
-	mppu.mutation.RemoveMemberProductPropertyVenueIDs(ids...)
+// RemoveVenueIDs removes the "venues" edge to Venue entities by IDs.
+func (mppu *MemberProductPropertyUpdate) RemoveVenueIDs(ids ...int64) *MemberProductPropertyUpdate {
+	mppu.mutation.RemoveVenueIDs(ids...)
 	return mppu
 }
 
-// RemoveMemberProductPropertyVenues removes "member_product_property_venues" edges to MemberProductPropertyVenue entities.
-func (mppu *MemberProductPropertyUpdate) RemoveMemberProductPropertyVenues(m ...*MemberProductPropertyVenue) *MemberProductPropertyUpdate {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// RemoveVenues removes "venues" edges to Venue entities.
+func (mppu *MemberProductPropertyUpdate) RemoveVenues(v ...*Venue) *MemberProductPropertyUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mppu.RemoveMemberProductPropertyVenueIDs(ids...)
+	return mppu.RemoveVenueIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -503,28 +503,28 @@ func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mppu.mutation.MemberProductPropertyVenuesCleared() {
+	if mppu.mutation.VenuesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   memberproductproperty.MemberProductPropertyVenuesTable,
-			Columns: []string{memberproductproperty.MemberProductPropertyVenuesColumn},
+			Table:   memberproductproperty.VenuesTable,
+			Columns: memberproductproperty.VenuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(memberproductpropertyvenue.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mppu.mutation.RemovedMemberProductPropertyVenuesIDs(); len(nodes) > 0 && !mppu.mutation.MemberProductPropertyVenuesCleared() {
+	if nodes := mppu.mutation.RemovedVenuesIDs(); len(nodes) > 0 && !mppu.mutation.VenuesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   memberproductproperty.MemberProductPropertyVenuesTable,
-			Columns: []string{memberproductproperty.MemberProductPropertyVenuesColumn},
+			Table:   memberproductproperty.VenuesTable,
+			Columns: memberproductproperty.VenuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(memberproductpropertyvenue.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -532,15 +532,15 @@ func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mppu.mutation.MemberProductPropertyVenuesIDs(); len(nodes) > 0 {
+	if nodes := mppu.mutation.VenuesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   memberproductproperty.MemberProductPropertyVenuesTable,
-			Columns: []string{memberproductproperty.MemberProductPropertyVenuesColumn},
+			Table:   memberproductproperty.VenuesTable,
+			Columns: memberproductproperty.VenuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(memberproductpropertyvenue.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -842,19 +842,19 @@ func (mppuo *MemberProductPropertyUpdateOne) SetOwner(m *MemberProduct) *MemberP
 	return mppuo.SetOwnerID(m.ID)
 }
 
-// AddMemberProductPropertyVenueIDs adds the "member_product_property_venues" edge to the MemberProductPropertyVenue entity by IDs.
-func (mppuo *MemberProductPropertyUpdateOne) AddMemberProductPropertyVenueIDs(ids ...int64) *MemberProductPropertyUpdateOne {
-	mppuo.mutation.AddMemberProductPropertyVenueIDs(ids...)
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (mppuo *MemberProductPropertyUpdateOne) AddVenueIDs(ids ...int64) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.AddVenueIDs(ids...)
 	return mppuo
 }
 
-// AddMemberProductPropertyVenues adds the "member_product_property_venues" edges to the MemberProductPropertyVenue entity.
-func (mppuo *MemberProductPropertyUpdateOne) AddMemberProductPropertyVenues(m ...*MemberProductPropertyVenue) *MemberProductPropertyUpdateOne {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// AddVenues adds the "venues" edges to the Venue entity.
+func (mppuo *MemberProductPropertyUpdateOne) AddVenues(v ...*Venue) *MemberProductPropertyUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mppuo.AddMemberProductPropertyVenueIDs(ids...)
+	return mppuo.AddVenueIDs(ids...)
 }
 
 // Mutation returns the MemberProductPropertyMutation object of the builder.
@@ -868,25 +868,25 @@ func (mppuo *MemberProductPropertyUpdateOne) ClearOwner() *MemberProductProperty
 	return mppuo
 }
 
-// ClearMemberProductPropertyVenues clears all "member_product_property_venues" edges to the MemberProductPropertyVenue entity.
-func (mppuo *MemberProductPropertyUpdateOne) ClearMemberProductPropertyVenues() *MemberProductPropertyUpdateOne {
-	mppuo.mutation.ClearMemberProductPropertyVenues()
+// ClearVenues clears all "venues" edges to the Venue entity.
+func (mppuo *MemberProductPropertyUpdateOne) ClearVenues() *MemberProductPropertyUpdateOne {
+	mppuo.mutation.ClearVenues()
 	return mppuo
 }
 
-// RemoveMemberProductPropertyVenueIDs removes the "member_product_property_venues" edge to MemberProductPropertyVenue entities by IDs.
-func (mppuo *MemberProductPropertyUpdateOne) RemoveMemberProductPropertyVenueIDs(ids ...int64) *MemberProductPropertyUpdateOne {
-	mppuo.mutation.RemoveMemberProductPropertyVenueIDs(ids...)
+// RemoveVenueIDs removes the "venues" edge to Venue entities by IDs.
+func (mppuo *MemberProductPropertyUpdateOne) RemoveVenueIDs(ids ...int64) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.RemoveVenueIDs(ids...)
 	return mppuo
 }
 
-// RemoveMemberProductPropertyVenues removes "member_product_property_venues" edges to MemberProductPropertyVenue entities.
-func (mppuo *MemberProductPropertyUpdateOne) RemoveMemberProductPropertyVenues(m ...*MemberProductPropertyVenue) *MemberProductPropertyUpdateOne {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// RemoveVenues removes "venues" edges to Venue entities.
+func (mppuo *MemberProductPropertyUpdateOne) RemoveVenues(v ...*Venue) *MemberProductPropertyUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mppuo.RemoveMemberProductPropertyVenueIDs(ids...)
+	return mppuo.RemoveVenueIDs(ids...)
 }
 
 // Where appends a list predicates to the MemberProductPropertyUpdate builder.
@@ -1071,28 +1071,28 @@ func (mppuo *MemberProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mppuo.mutation.MemberProductPropertyVenuesCleared() {
+	if mppuo.mutation.VenuesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   memberproductproperty.MemberProductPropertyVenuesTable,
-			Columns: []string{memberproductproperty.MemberProductPropertyVenuesColumn},
+			Table:   memberproductproperty.VenuesTable,
+			Columns: memberproductproperty.VenuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(memberproductpropertyvenue.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mppuo.mutation.RemovedMemberProductPropertyVenuesIDs(); len(nodes) > 0 && !mppuo.mutation.MemberProductPropertyVenuesCleared() {
+	if nodes := mppuo.mutation.RemovedVenuesIDs(); len(nodes) > 0 && !mppuo.mutation.VenuesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   memberproductproperty.MemberProductPropertyVenuesTable,
-			Columns: []string{memberproductproperty.MemberProductPropertyVenuesColumn},
+			Table:   memberproductproperty.VenuesTable,
+			Columns: memberproductproperty.VenuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(memberproductpropertyvenue.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1100,15 +1100,15 @@ func (mppuo *MemberProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mppuo.mutation.MemberProductPropertyVenuesIDs(); len(nodes) > 0 {
+	if nodes := mppuo.mutation.VenuesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   memberproductproperty.MemberProductPropertyVenuesTable,
-			Columns: []string{memberproductproperty.MemberProductPropertyVenuesColumn},
+			Table:   memberproductproperty.VenuesTable,
+			Columns: memberproductproperty.VenuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(memberproductpropertyvenue.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

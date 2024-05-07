@@ -45,9 +45,6 @@ type MemberProduct func(*sql.Selector)
 // MemberProductProperty is the predicate function for memberproductproperty builders.
 type MemberProductProperty func(*sql.Selector)
 
-// MemberProductPropertyVenue is the predicate function for memberproductpropertyvenue builders.
-type MemberProductPropertyVenue func(*sql.Selector)
-
 // Menu is the predicate function for menu builders.
 type Menu func(*sql.Selector)
 
@@ -77,9 +74,6 @@ type Product func(*sql.Selector)
 
 // ProductProperty is the predicate function for productproperty builders.
 type ProductProperty func(*sql.Selector)
-
-// ProductPropertyVenue is the predicate function for productpropertyvenue builders.
-type ProductPropertyVenue func(*sql.Selector)
 
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)

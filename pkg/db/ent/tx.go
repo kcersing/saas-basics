@@ -38,8 +38,6 @@ type Tx struct {
 	MemberProduct *MemberProductClient
 	// MemberProductProperty is the client for interacting with the MemberProductProperty builders.
 	MemberProductProperty *MemberProductPropertyClient
-	// MemberProductPropertyVenue is the client for interacting with the MemberProductPropertyVenue builders.
-	MemberProductPropertyVenue *MemberProductPropertyVenueClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
@@ -60,8 +58,6 @@ type Tx struct {
 	Product *ProductClient
 	// ProductProperty is the client for interacting with the ProductProperty builders.
 	ProductProperty *ProductPropertyClient
-	// ProductPropertyVenue is the client for interacting with the ProductPropertyVenue builders.
-	ProductPropertyVenue *ProductPropertyVenueClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 	// Token is the client for interacting with the Token builders.
@@ -216,7 +212,6 @@ func (tx *Tx) init() {
 	tx.MemberNote = NewMemberNoteClient(tx.config)
 	tx.MemberProduct = NewMemberProductClient(tx.config)
 	tx.MemberProductProperty = NewMemberProductPropertyClient(tx.config)
-	tx.MemberProductPropertyVenue = NewMemberProductPropertyVenueClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
 	tx.Messages = NewMessagesClient(tx.config)
@@ -227,7 +222,6 @@ func (tx *Tx) init() {
 	tx.OrderSales = NewOrderSalesClient(tx.config)
 	tx.Product = NewProductClient(tx.config)
 	tx.ProductProperty = NewProductPropertyClient(tx.config)
-	tx.ProductPropertyVenue = NewProductPropertyVenueClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
 	tx.Token = NewTokenClient(tx.config)
 	tx.User = NewUserClient(tx.config)

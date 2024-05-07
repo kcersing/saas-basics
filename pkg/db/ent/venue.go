@@ -50,9 +50,13 @@ type Venue struct {
 type VenueEdges struct {
 	// Places holds the value of the places edge.
 	Places []*VenuePlace `json:"places,omitempty"`
+	// MemberPropertyVenues holds the value of the member_property_venues edge.
+	MemberPropertyVenues []*MemberProductProperty `json:"member_property_venues,omitempty"`
+	// PropertyVenues holds the value of the property_venues edge.
+	PropertyVenues []*ProductProperty `json:"property_venues,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 }
 
 // PlacesOrErr returns the Places value or an error if the edge
@@ -62,6 +66,24 @@ func (e VenueEdges) PlacesOrErr() ([]*VenuePlace, error) {
 		return e.Places, nil
 	}
 	return nil, &NotLoadedError{edge: "places"}
+}
+
+// MemberPropertyVenuesOrErr returns the MemberPropertyVenues value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) MemberPropertyVenuesOrErr() ([]*MemberProductProperty, error) {
+	if e.loadedTypes[1] {
+		return e.MemberPropertyVenues, nil
+	}
+	return nil, &NotLoadedError{edge: "member_property_venues"}
+}
+
+// PropertyVenuesOrErr returns the PropertyVenues value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) PropertyVenuesOrErr() ([]*ProductProperty, error) {
+	if e.loadedTypes[2] {
+		return e.PropertyVenues, nil
+	}
+	return nil, &NotLoadedError{edge: "property_venues"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -178,6 +200,16 @@ func (v *Venue) Value(name string) (ent.Value, error) {
 // QueryPlaces queries the "places" edge of the Venue entity.
 func (v *Venue) QueryPlaces() *VenuePlaceQuery {
 	return NewVenueClient(v.config).QueryPlaces(v)
+}
+
+// QueryMemberPropertyVenues queries the "member_property_venues" edge of the Venue entity.
+func (v *Venue) QueryMemberPropertyVenues() *MemberProductPropertyQuery {
+	return NewVenueClient(v.config).QueryMemberPropertyVenues(v)
+}
+
+// QueryPropertyVenues queries the "property_venues" edge of the Venue entity.
+func (v *Venue) QueryPropertyVenues() *ProductPropertyQuery {
+	return NewVenueClient(v.config).QueryPropertyVenues(v)
 }
 
 // Update returns a builder for updating this Venue.

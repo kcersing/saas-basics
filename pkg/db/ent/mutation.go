@@ -19,7 +19,6 @@ import (
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
-	"saas/pkg/db/ent/memberproductpropertyvenue"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
 	"saas/pkg/db/ent/messages"
@@ -31,7 +30,6 @@ import (
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
-	"saas/pkg/db/ent/productpropertyvenue"
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
@@ -53,36 +51,34 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAPI                        = "API"
-	TypeCourseRecordCoach          = "CourseRecordCoach"
-	TypeCourseRecordMember         = "CourseRecordMember"
-	TypeCourseRecordSchedule       = "CourseRecordSchedule"
-	TypeDictionary                 = "Dictionary"
-	TypeDictionaryDetail           = "DictionaryDetail"
-	TypeEntryLogs                  = "EntryLogs"
-	TypeLogs                       = "Logs"
-	TypeMember                     = "Member"
-	TypeMemberDetails              = "MemberDetails"
-	TypeMemberNote                 = "MemberNote"
-	TypeMemberProduct              = "MemberProduct"
-	TypeMemberProductProperty      = "MemberProductProperty"
-	TypeMemberProductPropertyVenue = "MemberProductPropertyVenue"
-	TypeMenu                       = "Menu"
-	TypeMenuParam                  = "MenuParam"
-	TypeMessages                   = "Messages"
-	TypeOrder                      = "Order"
-	TypeOrderAmount                = "OrderAmount"
-	TypeOrderItem                  = "OrderItem"
-	TypeOrderPay                   = "OrderPay"
-	TypeOrderSales                 = "OrderSales"
-	TypeProduct                    = "Product"
-	TypeProductProperty            = "ProductProperty"
-	TypeProductPropertyVenue       = "ProductPropertyVenue"
-	TypeRole                       = "Role"
-	TypeToken                      = "Token"
-	TypeUser                       = "User"
-	TypeVenue                      = "Venue"
-	TypeVenuePlace                 = "VenuePlace"
+	TypeAPI                   = "API"
+	TypeCourseRecordCoach     = "CourseRecordCoach"
+	TypeCourseRecordMember    = "CourseRecordMember"
+	TypeCourseRecordSchedule  = "CourseRecordSchedule"
+	TypeDictionary            = "Dictionary"
+	TypeDictionaryDetail      = "DictionaryDetail"
+	TypeEntryLogs             = "EntryLogs"
+	TypeLogs                  = "Logs"
+	TypeMember                = "Member"
+	TypeMemberDetails         = "MemberDetails"
+	TypeMemberNote            = "MemberNote"
+	TypeMemberProduct         = "MemberProduct"
+	TypeMemberProductProperty = "MemberProductProperty"
+	TypeMenu                  = "Menu"
+	TypeMenuParam             = "MenuParam"
+	TypeMessages              = "Messages"
+	TypeOrder                 = "Order"
+	TypeOrderAmount           = "OrderAmount"
+	TypeOrderItem             = "OrderItem"
+	TypeOrderPay              = "OrderPay"
+	TypeOrderSales            = "OrderSales"
+	TypeProduct               = "Product"
+	TypeProductProperty       = "ProductProperty"
+	TypeRole                  = "Role"
+	TypeToken                 = "Token"
+	TypeUser                  = "User"
+	TypeVenue                 = "Venue"
+	TypeVenuePlace            = "VenuePlace"
 )
 
 // APIMutation represents an operation that mutates the API nodes in the graph.
@@ -13881,36 +13877,36 @@ func (m *MemberProductMutation) ResetEdge(name string) error {
 // MemberProductPropertyMutation represents an operation that mutates the MemberProductProperty nodes in the graph.
 type MemberProductPropertyMutation struct {
 	config
-	op                                    Op
-	typ                                   string
-	id                                    *int64
-	created_at                            *time.Time
-	updated_at                            *time.Time
-	status                                *int64
-	addstatus                             *int64
-	member_id                             *int64
-	addmember_id                          *int64
-	_type                                 *string
-	name                                  *string
-	duration                              *int64
-	addduration                           *int64
-	length                                *int64
-	addlength                             *int64
-	count                                 *int64
-	addcount                              *int64
-	count_surplus                         *int64
-	addcount_surplus                      *int64
-	price                                 *float64
-	addprice                              *float64
-	clearedFields                         map[string]struct{}
-	owner                                 *int64
-	clearedowner                          bool
-	member_product_property_venues        map[int64]struct{}
-	removedmember_product_property_venues map[int64]struct{}
-	clearedmember_product_property_venues bool
-	done                                  bool
-	oldValue                              func(context.Context) (*MemberProductProperty, error)
-	predicates                            []predicate.MemberProductProperty
+	op               Op
+	typ              string
+	id               *int64
+	created_at       *time.Time
+	updated_at       *time.Time
+	status           *int64
+	addstatus        *int64
+	member_id        *int64
+	addmember_id     *int64
+	_type            *string
+	name             *string
+	duration         *int64
+	addduration      *int64
+	length           *int64
+	addlength        *int64
+	count            *int64
+	addcount         *int64
+	count_surplus    *int64
+	addcount_surplus *int64
+	price            *float64
+	addprice         *float64
+	clearedFields    map[string]struct{}
+	owner            *int64
+	clearedowner     bool
+	venues           map[int64]struct{}
+	removedvenues    map[int64]struct{}
+	clearedvenues    bool
+	done             bool
+	oldValue         func(context.Context) (*MemberProductProperty, error)
+	predicates       []predicate.MemberProductProperty
 }
 
 var _ ent.Mutation = (*MemberProductPropertyMutation)(nil)
@@ -14766,58 +14762,58 @@ func (m *MemberProductPropertyMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
-// AddMemberProductPropertyVenueIDs adds the "member_product_property_venues" edge to the MemberProductPropertyVenue entity by ids.
-func (m *MemberProductPropertyMutation) AddMemberProductPropertyVenueIDs(ids ...int64) {
-	if m.member_product_property_venues == nil {
-		m.member_product_property_venues = make(map[int64]struct{})
+// AddVenueIDs adds the "venues" edge to the Venue entity by ids.
+func (m *MemberProductPropertyMutation) AddVenueIDs(ids ...int64) {
+	if m.venues == nil {
+		m.venues = make(map[int64]struct{})
 	}
 	for i := range ids {
-		m.member_product_property_venues[ids[i]] = struct{}{}
+		m.venues[ids[i]] = struct{}{}
 	}
 }
 
-// ClearMemberProductPropertyVenues clears the "member_product_property_venues" edge to the MemberProductPropertyVenue entity.
-func (m *MemberProductPropertyMutation) ClearMemberProductPropertyVenues() {
-	m.clearedmember_product_property_venues = true
+// ClearVenues clears the "venues" edge to the Venue entity.
+func (m *MemberProductPropertyMutation) ClearVenues() {
+	m.clearedvenues = true
 }
 
-// MemberProductPropertyVenuesCleared reports if the "member_product_property_venues" edge to the MemberProductPropertyVenue entity was cleared.
-func (m *MemberProductPropertyMutation) MemberProductPropertyVenuesCleared() bool {
-	return m.clearedmember_product_property_venues
+// VenuesCleared reports if the "venues" edge to the Venue entity was cleared.
+func (m *MemberProductPropertyMutation) VenuesCleared() bool {
+	return m.clearedvenues
 }
 
-// RemoveMemberProductPropertyVenueIDs removes the "member_product_property_venues" edge to the MemberProductPropertyVenue entity by IDs.
-func (m *MemberProductPropertyMutation) RemoveMemberProductPropertyVenueIDs(ids ...int64) {
-	if m.removedmember_product_property_venues == nil {
-		m.removedmember_product_property_venues = make(map[int64]struct{})
+// RemoveVenueIDs removes the "venues" edge to the Venue entity by IDs.
+func (m *MemberProductPropertyMutation) RemoveVenueIDs(ids ...int64) {
+	if m.removedvenues == nil {
+		m.removedvenues = make(map[int64]struct{})
 	}
 	for i := range ids {
-		delete(m.member_product_property_venues, ids[i])
-		m.removedmember_product_property_venues[ids[i]] = struct{}{}
+		delete(m.venues, ids[i])
+		m.removedvenues[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedMemberProductPropertyVenues returns the removed IDs of the "member_product_property_venues" edge to the MemberProductPropertyVenue entity.
-func (m *MemberProductPropertyMutation) RemovedMemberProductPropertyVenuesIDs() (ids []int64) {
-	for id := range m.removedmember_product_property_venues {
+// RemovedVenues returns the removed IDs of the "venues" edge to the Venue entity.
+func (m *MemberProductPropertyMutation) RemovedVenuesIDs() (ids []int64) {
+	for id := range m.removedvenues {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// MemberProductPropertyVenuesIDs returns the "member_product_property_venues" edge IDs in the mutation.
-func (m *MemberProductPropertyMutation) MemberProductPropertyVenuesIDs() (ids []int64) {
-	for id := range m.member_product_property_venues {
+// VenuesIDs returns the "venues" edge IDs in the mutation.
+func (m *MemberProductPropertyMutation) VenuesIDs() (ids []int64) {
+	for id := range m.venues {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetMemberProductPropertyVenues resets all changes to the "member_product_property_venues" edge.
-func (m *MemberProductPropertyMutation) ResetMemberProductPropertyVenues() {
-	m.member_product_property_venues = nil
-	m.clearedmember_product_property_venues = false
-	m.removedmember_product_property_venues = nil
+// ResetVenues resets all changes to the "venues" edge.
+func (m *MemberProductPropertyMutation) ResetVenues() {
+	m.venues = nil
+	m.clearedvenues = false
+	m.removedvenues = nil
 }
 
 // Where appends a list predicates to the MemberProductPropertyMutation builder.
@@ -15294,8 +15290,8 @@ func (m *MemberProductPropertyMutation) AddedEdges() []string {
 	if m.owner != nil {
 		edges = append(edges, memberproductproperty.EdgeOwner)
 	}
-	if m.member_product_property_venues != nil {
-		edges = append(edges, memberproductproperty.EdgeMemberProductPropertyVenues)
+	if m.venues != nil {
+		edges = append(edges, memberproductproperty.EdgeVenues)
 	}
 	return edges
 }
@@ -15308,9 +15304,9 @@ func (m *MemberProductPropertyMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
-	case memberproductproperty.EdgeMemberProductPropertyVenues:
-		ids := make([]ent.Value, 0, len(m.member_product_property_venues))
-		for id := range m.member_product_property_venues {
+	case memberproductproperty.EdgeVenues:
+		ids := make([]ent.Value, 0, len(m.venues))
+		for id := range m.venues {
 			ids = append(ids, id)
 		}
 		return ids
@@ -15321,8 +15317,8 @@ func (m *MemberProductPropertyMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MemberProductPropertyMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.removedmember_product_property_venues != nil {
-		edges = append(edges, memberproductproperty.EdgeMemberProductPropertyVenues)
+	if m.removedvenues != nil {
+		edges = append(edges, memberproductproperty.EdgeVenues)
 	}
 	return edges
 }
@@ -15331,9 +15327,9 @@ func (m *MemberProductPropertyMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *MemberProductPropertyMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case memberproductproperty.EdgeMemberProductPropertyVenues:
-		ids := make([]ent.Value, 0, len(m.removedmember_product_property_venues))
-		for id := range m.removedmember_product_property_venues {
+	case memberproductproperty.EdgeVenues:
+		ids := make([]ent.Value, 0, len(m.removedvenues))
+		for id := range m.removedvenues {
 			ids = append(ids, id)
 		}
 		return ids
@@ -15347,8 +15343,8 @@ func (m *MemberProductPropertyMutation) ClearedEdges() []string {
 	if m.clearedowner {
 		edges = append(edges, memberproductproperty.EdgeOwner)
 	}
-	if m.clearedmember_product_property_venues {
-		edges = append(edges, memberproductproperty.EdgeMemberProductPropertyVenues)
+	if m.clearedvenues {
+		edges = append(edges, memberproductproperty.EdgeVenues)
 	}
 	return edges
 }
@@ -15359,8 +15355,8 @@ func (m *MemberProductPropertyMutation) EdgeCleared(name string) bool {
 	switch name {
 	case memberproductproperty.EdgeOwner:
 		return m.clearedowner
-	case memberproductproperty.EdgeMemberProductPropertyVenues:
-		return m.clearedmember_product_property_venues
+	case memberproductproperty.EdgeVenues:
+		return m.clearedvenues
 	}
 	return false
 }
@@ -15383,650 +15379,11 @@ func (m *MemberProductPropertyMutation) ResetEdge(name string) error {
 	case memberproductproperty.EdgeOwner:
 		m.ResetOwner()
 		return nil
-	case memberproductproperty.EdgeMemberProductPropertyVenues:
-		m.ResetMemberProductPropertyVenues()
+	case memberproductproperty.EdgeVenues:
+		m.ResetVenues()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberProductProperty edge %s", name)
-}
-
-// MemberProductPropertyVenueMutation represents an operation that mutates the MemberProductPropertyVenue nodes in the graph.
-type MemberProductPropertyVenueMutation struct {
-	config
-	op            Op
-	typ           string
-	id            *int64
-	created_at    *time.Time
-	updated_at    *time.Time
-	venue_id      *int64
-	addvenue_id   *int64
-	clearedFields map[string]struct{}
-	owner         *int64
-	clearedowner  bool
-	done          bool
-	oldValue      func(context.Context) (*MemberProductPropertyVenue, error)
-	predicates    []predicate.MemberProductPropertyVenue
-}
-
-var _ ent.Mutation = (*MemberProductPropertyVenueMutation)(nil)
-
-// memberproductpropertyvenueOption allows management of the mutation configuration using functional options.
-type memberproductpropertyvenueOption func(*MemberProductPropertyVenueMutation)
-
-// newMemberProductPropertyVenueMutation creates new mutation for the MemberProductPropertyVenue entity.
-func newMemberProductPropertyVenueMutation(c config, op Op, opts ...memberproductpropertyvenueOption) *MemberProductPropertyVenueMutation {
-	m := &MemberProductPropertyVenueMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeMemberProductPropertyVenue,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withMemberProductPropertyVenueID sets the ID field of the mutation.
-func withMemberProductPropertyVenueID(id int64) memberproductpropertyvenueOption {
-	return func(m *MemberProductPropertyVenueMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *MemberProductPropertyVenue
-		)
-		m.oldValue = func(ctx context.Context) (*MemberProductPropertyVenue, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().MemberProductPropertyVenue.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withMemberProductPropertyVenue sets the old MemberProductPropertyVenue of the mutation.
-func withMemberProductPropertyVenue(node *MemberProductPropertyVenue) memberproductpropertyvenueOption {
-	return func(m *MemberProductPropertyVenueMutation) {
-		m.oldValue = func(context.Context) (*MemberProductPropertyVenue, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m MemberProductPropertyVenueMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m MemberProductPropertyVenueMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of MemberProductPropertyVenue entities.
-func (m *MemberProductPropertyVenueMutation) SetID(id int64) {
-	m.id = &id
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *MemberProductPropertyVenueMutation) ID() (id int64, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *MemberProductPropertyVenueMutation) IDs(ctx context.Context) ([]int64, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []int64{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().MemberProductPropertyVenue.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (m *MemberProductPropertyVenueMutation) SetCreatedAt(t time.Time) {
-	m.created_at = &t
-}
-
-// CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *MemberProductPropertyVenueMutation) CreatedAt() (r time.Time, exists bool) {
-	v := m.created_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedAt returns the old "created_at" field's value of the MemberProductPropertyVenue entity.
-// If the MemberProductPropertyVenue object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberProductPropertyVenueMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
-	}
-	return oldValue.CreatedAt, nil
-}
-
-// ResetCreatedAt resets all changes to the "created_at" field.
-func (m *MemberProductPropertyVenueMutation) ResetCreatedAt() {
-	m.created_at = nil
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (m *MemberProductPropertyVenueMutation) SetUpdatedAt(t time.Time) {
-	m.updated_at = &t
-}
-
-// UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *MemberProductPropertyVenueMutation) UpdatedAt() (r time.Time, exists bool) {
-	v := m.updated_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedAt returns the old "updated_at" field's value of the MemberProductPropertyVenue entity.
-// If the MemberProductPropertyVenue object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberProductPropertyVenueMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
-	}
-	return oldValue.UpdatedAt, nil
-}
-
-// ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *MemberProductPropertyVenueMutation) ResetUpdatedAt() {
-	m.updated_at = nil
-}
-
-// SetVenueID sets the "venue_id" field.
-func (m *MemberProductPropertyVenueMutation) SetVenueID(i int64) {
-	m.venue_id = &i
-	m.addvenue_id = nil
-}
-
-// VenueID returns the value of the "venue_id" field in the mutation.
-func (m *MemberProductPropertyVenueMutation) VenueID() (r int64, exists bool) {
-	v := m.venue_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldVenueID returns the old "venue_id" field's value of the MemberProductPropertyVenue entity.
-// If the MemberProductPropertyVenue object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberProductPropertyVenueMutation) OldVenueID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldVenueID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldVenueID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldVenueID: %w", err)
-	}
-	return oldValue.VenueID, nil
-}
-
-// AddVenueID adds i to the "venue_id" field.
-func (m *MemberProductPropertyVenueMutation) AddVenueID(i int64) {
-	if m.addvenue_id != nil {
-		*m.addvenue_id += i
-	} else {
-		m.addvenue_id = &i
-	}
-}
-
-// AddedVenueID returns the value that was added to the "venue_id" field in this mutation.
-func (m *MemberProductPropertyVenueMutation) AddedVenueID() (r int64, exists bool) {
-	v := m.addvenue_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearVenueID clears the value of the "venue_id" field.
-func (m *MemberProductPropertyVenueMutation) ClearVenueID() {
-	m.venue_id = nil
-	m.addvenue_id = nil
-	m.clearedFields[memberproductpropertyvenue.FieldVenueID] = struct{}{}
-}
-
-// VenueIDCleared returns if the "venue_id" field was cleared in this mutation.
-func (m *MemberProductPropertyVenueMutation) VenueIDCleared() bool {
-	_, ok := m.clearedFields[memberproductpropertyvenue.FieldVenueID]
-	return ok
-}
-
-// ResetVenueID resets all changes to the "venue_id" field.
-func (m *MemberProductPropertyVenueMutation) ResetVenueID() {
-	m.venue_id = nil
-	m.addvenue_id = nil
-	delete(m.clearedFields, memberproductpropertyvenue.FieldVenueID)
-}
-
-// SetMemberProductPropertyID sets the "member_product_property_id" field.
-func (m *MemberProductPropertyVenueMutation) SetMemberProductPropertyID(i int64) {
-	m.owner = &i
-}
-
-// MemberProductPropertyID returns the value of the "member_product_property_id" field in the mutation.
-func (m *MemberProductPropertyVenueMutation) MemberProductPropertyID() (r int64, exists bool) {
-	v := m.owner
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldMemberProductPropertyID returns the old "member_product_property_id" field's value of the MemberProductPropertyVenue entity.
-// If the MemberProductPropertyVenue object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberProductPropertyVenueMutation) OldMemberProductPropertyID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldMemberProductPropertyID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldMemberProductPropertyID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldMemberProductPropertyID: %w", err)
-	}
-	return oldValue.MemberProductPropertyID, nil
-}
-
-// ClearMemberProductPropertyID clears the value of the "member_product_property_id" field.
-func (m *MemberProductPropertyVenueMutation) ClearMemberProductPropertyID() {
-	m.owner = nil
-	m.clearedFields[memberproductpropertyvenue.FieldMemberProductPropertyID] = struct{}{}
-}
-
-// MemberProductPropertyIDCleared returns if the "member_product_property_id" field was cleared in this mutation.
-func (m *MemberProductPropertyVenueMutation) MemberProductPropertyIDCleared() bool {
-	_, ok := m.clearedFields[memberproductpropertyvenue.FieldMemberProductPropertyID]
-	return ok
-}
-
-// ResetMemberProductPropertyID resets all changes to the "member_product_property_id" field.
-func (m *MemberProductPropertyVenueMutation) ResetMemberProductPropertyID() {
-	m.owner = nil
-	delete(m.clearedFields, memberproductpropertyvenue.FieldMemberProductPropertyID)
-}
-
-// SetOwnerID sets the "owner" edge to the MemberProductProperty entity by id.
-func (m *MemberProductPropertyVenueMutation) SetOwnerID(id int64) {
-	m.owner = &id
-}
-
-// ClearOwner clears the "owner" edge to the MemberProductProperty entity.
-func (m *MemberProductPropertyVenueMutation) ClearOwner() {
-	m.clearedowner = true
-	m.clearedFields[memberproductpropertyvenue.FieldMemberProductPropertyID] = struct{}{}
-}
-
-// OwnerCleared reports if the "owner" edge to the MemberProductProperty entity was cleared.
-func (m *MemberProductPropertyVenueMutation) OwnerCleared() bool {
-	return m.MemberProductPropertyIDCleared() || m.clearedowner
-}
-
-// OwnerID returns the "owner" edge ID in the mutation.
-func (m *MemberProductPropertyVenueMutation) OwnerID() (id int64, exists bool) {
-	if m.owner != nil {
-		return *m.owner, true
-	}
-	return
-}
-
-// OwnerIDs returns the "owner" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// OwnerID instead. It exists only for internal usage by the builders.
-func (m *MemberProductPropertyVenueMutation) OwnerIDs() (ids []int64) {
-	if id := m.owner; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetOwner resets all changes to the "owner" edge.
-func (m *MemberProductPropertyVenueMutation) ResetOwner() {
-	m.owner = nil
-	m.clearedowner = false
-}
-
-// Where appends a list predicates to the MemberProductPropertyVenueMutation builder.
-func (m *MemberProductPropertyVenueMutation) Where(ps ...predicate.MemberProductPropertyVenue) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the MemberProductPropertyVenueMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *MemberProductPropertyVenueMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.MemberProductPropertyVenue, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *MemberProductPropertyVenueMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *MemberProductPropertyVenueMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (MemberProductPropertyVenue).
-func (m *MemberProductPropertyVenueMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *MemberProductPropertyVenueMutation) Fields() []string {
-	fields := make([]string, 0, 4)
-	if m.created_at != nil {
-		fields = append(fields, memberproductpropertyvenue.FieldCreatedAt)
-	}
-	if m.updated_at != nil {
-		fields = append(fields, memberproductpropertyvenue.FieldUpdatedAt)
-	}
-	if m.venue_id != nil {
-		fields = append(fields, memberproductpropertyvenue.FieldVenueID)
-	}
-	if m.owner != nil {
-		fields = append(fields, memberproductpropertyvenue.FieldMemberProductPropertyID)
-	}
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *MemberProductPropertyVenueMutation) Field(name string) (ent.Value, bool) {
-	switch name {
-	case memberproductpropertyvenue.FieldCreatedAt:
-		return m.CreatedAt()
-	case memberproductpropertyvenue.FieldUpdatedAt:
-		return m.UpdatedAt()
-	case memberproductpropertyvenue.FieldVenueID:
-		return m.VenueID()
-	case memberproductpropertyvenue.FieldMemberProductPropertyID:
-		return m.MemberProductPropertyID()
-	}
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *MemberProductPropertyVenueMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	switch name {
-	case memberproductpropertyvenue.FieldCreatedAt:
-		return m.OldCreatedAt(ctx)
-	case memberproductpropertyvenue.FieldUpdatedAt:
-		return m.OldUpdatedAt(ctx)
-	case memberproductpropertyvenue.FieldVenueID:
-		return m.OldVenueID(ctx)
-	case memberproductpropertyvenue.FieldMemberProductPropertyID:
-		return m.OldMemberProductPropertyID(ctx)
-	}
-	return nil, fmt.Errorf("unknown MemberProductPropertyVenue field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *MemberProductPropertyVenueMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	case memberproductpropertyvenue.FieldCreatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedAt(v)
-		return nil
-	case memberproductpropertyvenue.FieldUpdatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedAt(v)
-		return nil
-	case memberproductpropertyvenue.FieldVenueID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetVenueID(v)
-		return nil
-	case memberproductpropertyvenue.FieldMemberProductPropertyID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetMemberProductPropertyID(v)
-		return nil
-	}
-	return fmt.Errorf("unknown MemberProductPropertyVenue field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *MemberProductPropertyVenueMutation) AddedFields() []string {
-	var fields []string
-	if m.addvenue_id != nil {
-		fields = append(fields, memberproductpropertyvenue.FieldVenueID)
-	}
-	return fields
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *MemberProductPropertyVenueMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case memberproductpropertyvenue.FieldVenueID:
-		return m.AddedVenueID()
-	}
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *MemberProductPropertyVenueMutation) AddField(name string, value ent.Value) error {
-	switch name {
-	case memberproductpropertyvenue.FieldVenueID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddVenueID(v)
-		return nil
-	}
-	return fmt.Errorf("unknown MemberProductPropertyVenue numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *MemberProductPropertyVenueMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(memberproductpropertyvenue.FieldVenueID) {
-		fields = append(fields, memberproductpropertyvenue.FieldVenueID)
-	}
-	if m.FieldCleared(memberproductpropertyvenue.FieldMemberProductPropertyID) {
-		fields = append(fields, memberproductpropertyvenue.FieldMemberProductPropertyID)
-	}
-	return fields
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *MemberProductPropertyVenueMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *MemberProductPropertyVenueMutation) ClearField(name string) error {
-	switch name {
-	case memberproductpropertyvenue.FieldVenueID:
-		m.ClearVenueID()
-		return nil
-	case memberproductpropertyvenue.FieldMemberProductPropertyID:
-		m.ClearMemberProductPropertyID()
-		return nil
-	}
-	return fmt.Errorf("unknown MemberProductPropertyVenue nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *MemberProductPropertyVenueMutation) ResetField(name string) error {
-	switch name {
-	case memberproductpropertyvenue.FieldCreatedAt:
-		m.ResetCreatedAt()
-		return nil
-	case memberproductpropertyvenue.FieldUpdatedAt:
-		m.ResetUpdatedAt()
-		return nil
-	case memberproductpropertyvenue.FieldVenueID:
-		m.ResetVenueID()
-		return nil
-	case memberproductpropertyvenue.FieldMemberProductPropertyID:
-		m.ResetMemberProductPropertyID()
-		return nil
-	}
-	return fmt.Errorf("unknown MemberProductPropertyVenue field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *MemberProductPropertyVenueMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.owner != nil {
-		edges = append(edges, memberproductpropertyvenue.EdgeOwner)
-	}
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *MemberProductPropertyVenueMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case memberproductpropertyvenue.EdgeOwner:
-		if id := m.owner; id != nil {
-			return []ent.Value{*id}
-		}
-	}
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *MemberProductPropertyVenueMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *MemberProductPropertyVenueMutation) RemovedIDs(name string) []ent.Value {
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *MemberProductPropertyVenueMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedowner {
-		edges = append(edges, memberproductpropertyvenue.EdgeOwner)
-	}
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *MemberProductPropertyVenueMutation) EdgeCleared(name string) bool {
-	switch name {
-	case memberproductpropertyvenue.EdgeOwner:
-		return m.clearedowner
-	}
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *MemberProductPropertyVenueMutation) ClearEdge(name string) error {
-	switch name {
-	case memberproductpropertyvenue.EdgeOwner:
-		m.ClearOwner()
-		return nil
-	}
-	return fmt.Errorf("unknown MemberProductPropertyVenue unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *MemberProductPropertyVenueMutation) ResetEdge(name string) error {
-	switch name {
-	case memberproductpropertyvenue.EdgeOwner:
-		m.ResetOwner()
-		return nil
-	}
-	return fmt.Errorf("unknown MemberProductPropertyVenue edge %s", name)
 }
 
 // MenuMutation represents an operation that mutates the Menu nodes in the graph.
@@ -24688,6 +24045,9 @@ type ProductPropertyMutation struct {
 	product        map[int64]struct{}
 	removedproduct map[int64]struct{}
 	clearedproduct bool
+	venues         map[int64]struct{}
+	removedvenues  map[int64]struct{}
+	clearedvenues  bool
 	done           bool
 	oldValue       func(context.Context) (*ProductProperty, error)
 	predicates     []predicate.ProductProperty
@@ -25490,6 +24850,60 @@ func (m *ProductPropertyMutation) ResetProduct() {
 	m.removedproduct = nil
 }
 
+// AddVenueIDs adds the "venues" edge to the Venue entity by ids.
+func (m *ProductPropertyMutation) AddVenueIDs(ids ...int64) {
+	if m.venues == nil {
+		m.venues = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.venues[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVenues clears the "venues" edge to the Venue entity.
+func (m *ProductPropertyMutation) ClearVenues() {
+	m.clearedvenues = true
+}
+
+// VenuesCleared reports if the "venues" edge to the Venue entity was cleared.
+func (m *ProductPropertyMutation) VenuesCleared() bool {
+	return m.clearedvenues
+}
+
+// RemoveVenueIDs removes the "venues" edge to the Venue entity by IDs.
+func (m *ProductPropertyMutation) RemoveVenueIDs(ids ...int64) {
+	if m.removedvenues == nil {
+		m.removedvenues = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.venues, ids[i])
+		m.removedvenues[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVenues returns the removed IDs of the "venues" edge to the Venue entity.
+func (m *ProductPropertyMutation) RemovedVenuesIDs() (ids []int64) {
+	for id := range m.removedvenues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VenuesIDs returns the "venues" edge IDs in the mutation.
+func (m *ProductPropertyMutation) VenuesIDs() (ids []int64) {
+	for id := range m.venues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVenues resets all changes to the "venues" edge.
+func (m *ProductPropertyMutation) ResetVenues() {
+	m.venues = nil
+	m.clearedvenues = false
+	m.removedvenues = nil
+}
+
 // Where appends a list predicates to the ProductPropertyMutation builder.
 func (m *ProductPropertyMutation) Where(ps ...predicate.ProductProperty) {
 	m.predicates = append(m.predicates, ps...)
@@ -25925,9 +25339,12 @@ func (m *ProductPropertyMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProductPropertyMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.product != nil {
 		edges = append(edges, productproperty.EdgeProduct)
+	}
+	if m.venues != nil {
+		edges = append(edges, productproperty.EdgeVenues)
 	}
 	return edges
 }
@@ -25942,15 +25359,24 @@ func (m *ProductPropertyMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case productproperty.EdgeVenues:
+		ids := make([]ent.Value, 0, len(m.venues))
+		for id := range m.venues {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProductPropertyMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedproduct != nil {
 		edges = append(edges, productproperty.EdgeProduct)
+	}
+	if m.removedvenues != nil {
+		edges = append(edges, productproperty.EdgeVenues)
 	}
 	return edges
 }
@@ -25965,15 +25391,24 @@ func (m *ProductPropertyMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case productproperty.EdgeVenues:
+		ids := make([]ent.Value, 0, len(m.removedvenues))
+		for id := range m.removedvenues {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProductPropertyMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedproduct {
 		edges = append(edges, productproperty.EdgeProduct)
+	}
+	if m.clearedvenues {
+		edges = append(edges, productproperty.EdgeVenues)
 	}
 	return edges
 }
@@ -25984,6 +25419,8 @@ func (m *ProductPropertyMutation) EdgeCleared(name string) bool {
 	switch name {
 	case productproperty.EdgeProduct:
 		return m.clearedproduct
+	case productproperty.EdgeVenues:
+		return m.clearedvenues
 	}
 	return false
 }
@@ -26003,614 +25440,11 @@ func (m *ProductPropertyMutation) ResetEdge(name string) error {
 	case productproperty.EdgeProduct:
 		m.ResetProduct()
 		return nil
+	case productproperty.EdgeVenues:
+		m.ResetVenues()
+		return nil
 	}
 	return fmt.Errorf("unknown ProductProperty edge %s", name)
-}
-
-// ProductPropertyVenueMutation represents an operation that mutates the ProductPropertyVenue nodes in the graph.
-type ProductPropertyVenueMutation struct {
-	config
-	op                     Op
-	typ                    string
-	id                     *int64
-	created_at             *time.Time
-	updated_at             *time.Time
-	venue_id               *int64
-	addvenue_id            *int64
-	product_property_id    *int64
-	addproduct_property_id *int64
-	clearedFields          map[string]struct{}
-	done                   bool
-	oldValue               func(context.Context) (*ProductPropertyVenue, error)
-	predicates             []predicate.ProductPropertyVenue
-}
-
-var _ ent.Mutation = (*ProductPropertyVenueMutation)(nil)
-
-// productpropertyvenueOption allows management of the mutation configuration using functional options.
-type productpropertyvenueOption func(*ProductPropertyVenueMutation)
-
-// newProductPropertyVenueMutation creates new mutation for the ProductPropertyVenue entity.
-func newProductPropertyVenueMutation(c config, op Op, opts ...productpropertyvenueOption) *ProductPropertyVenueMutation {
-	m := &ProductPropertyVenueMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeProductPropertyVenue,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withProductPropertyVenueID sets the ID field of the mutation.
-func withProductPropertyVenueID(id int64) productpropertyvenueOption {
-	return func(m *ProductPropertyVenueMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *ProductPropertyVenue
-		)
-		m.oldValue = func(ctx context.Context) (*ProductPropertyVenue, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().ProductPropertyVenue.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withProductPropertyVenue sets the old ProductPropertyVenue of the mutation.
-func withProductPropertyVenue(node *ProductPropertyVenue) productpropertyvenueOption {
-	return func(m *ProductPropertyVenueMutation) {
-		m.oldValue = func(context.Context) (*ProductPropertyVenue, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m ProductPropertyVenueMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m ProductPropertyVenueMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of ProductPropertyVenue entities.
-func (m *ProductPropertyVenueMutation) SetID(id int64) {
-	m.id = &id
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *ProductPropertyVenueMutation) ID() (id int64, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *ProductPropertyVenueMutation) IDs(ctx context.Context) ([]int64, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []int64{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().ProductPropertyVenue.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (m *ProductPropertyVenueMutation) SetCreatedAt(t time.Time) {
-	m.created_at = &t
-}
-
-// CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *ProductPropertyVenueMutation) CreatedAt() (r time.Time, exists bool) {
-	v := m.created_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedAt returns the old "created_at" field's value of the ProductPropertyVenue entity.
-// If the ProductPropertyVenue object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductPropertyVenueMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
-	}
-	return oldValue.CreatedAt, nil
-}
-
-// ResetCreatedAt resets all changes to the "created_at" field.
-func (m *ProductPropertyVenueMutation) ResetCreatedAt() {
-	m.created_at = nil
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (m *ProductPropertyVenueMutation) SetUpdatedAt(t time.Time) {
-	m.updated_at = &t
-}
-
-// UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *ProductPropertyVenueMutation) UpdatedAt() (r time.Time, exists bool) {
-	v := m.updated_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedAt returns the old "updated_at" field's value of the ProductPropertyVenue entity.
-// If the ProductPropertyVenue object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductPropertyVenueMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
-	}
-	return oldValue.UpdatedAt, nil
-}
-
-// ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *ProductPropertyVenueMutation) ResetUpdatedAt() {
-	m.updated_at = nil
-}
-
-// SetVenueID sets the "venue_id" field.
-func (m *ProductPropertyVenueMutation) SetVenueID(i int64) {
-	m.venue_id = &i
-	m.addvenue_id = nil
-}
-
-// VenueID returns the value of the "venue_id" field in the mutation.
-func (m *ProductPropertyVenueMutation) VenueID() (r int64, exists bool) {
-	v := m.venue_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldVenueID returns the old "venue_id" field's value of the ProductPropertyVenue entity.
-// If the ProductPropertyVenue object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductPropertyVenueMutation) OldVenueID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldVenueID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldVenueID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldVenueID: %w", err)
-	}
-	return oldValue.VenueID, nil
-}
-
-// AddVenueID adds i to the "venue_id" field.
-func (m *ProductPropertyVenueMutation) AddVenueID(i int64) {
-	if m.addvenue_id != nil {
-		*m.addvenue_id += i
-	} else {
-		m.addvenue_id = &i
-	}
-}
-
-// AddedVenueID returns the value that was added to the "venue_id" field in this mutation.
-func (m *ProductPropertyVenueMutation) AddedVenueID() (r int64, exists bool) {
-	v := m.addvenue_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearVenueID clears the value of the "venue_id" field.
-func (m *ProductPropertyVenueMutation) ClearVenueID() {
-	m.venue_id = nil
-	m.addvenue_id = nil
-	m.clearedFields[productpropertyvenue.FieldVenueID] = struct{}{}
-}
-
-// VenueIDCleared returns if the "venue_id" field was cleared in this mutation.
-func (m *ProductPropertyVenueMutation) VenueIDCleared() bool {
-	_, ok := m.clearedFields[productpropertyvenue.FieldVenueID]
-	return ok
-}
-
-// ResetVenueID resets all changes to the "venue_id" field.
-func (m *ProductPropertyVenueMutation) ResetVenueID() {
-	m.venue_id = nil
-	m.addvenue_id = nil
-	delete(m.clearedFields, productpropertyvenue.FieldVenueID)
-}
-
-// SetProductPropertyID sets the "product_property_id" field.
-func (m *ProductPropertyVenueMutation) SetProductPropertyID(i int64) {
-	m.product_property_id = &i
-	m.addproduct_property_id = nil
-}
-
-// ProductPropertyID returns the value of the "product_property_id" field in the mutation.
-func (m *ProductPropertyVenueMutation) ProductPropertyID() (r int64, exists bool) {
-	v := m.product_property_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldProductPropertyID returns the old "product_property_id" field's value of the ProductPropertyVenue entity.
-// If the ProductPropertyVenue object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductPropertyVenueMutation) OldProductPropertyID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldProductPropertyID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldProductPropertyID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldProductPropertyID: %w", err)
-	}
-	return oldValue.ProductPropertyID, nil
-}
-
-// AddProductPropertyID adds i to the "product_property_id" field.
-func (m *ProductPropertyVenueMutation) AddProductPropertyID(i int64) {
-	if m.addproduct_property_id != nil {
-		*m.addproduct_property_id += i
-	} else {
-		m.addproduct_property_id = &i
-	}
-}
-
-// AddedProductPropertyID returns the value that was added to the "product_property_id" field in this mutation.
-func (m *ProductPropertyVenueMutation) AddedProductPropertyID() (r int64, exists bool) {
-	v := m.addproduct_property_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearProductPropertyID clears the value of the "product_property_id" field.
-func (m *ProductPropertyVenueMutation) ClearProductPropertyID() {
-	m.product_property_id = nil
-	m.addproduct_property_id = nil
-	m.clearedFields[productpropertyvenue.FieldProductPropertyID] = struct{}{}
-}
-
-// ProductPropertyIDCleared returns if the "product_property_id" field was cleared in this mutation.
-func (m *ProductPropertyVenueMutation) ProductPropertyIDCleared() bool {
-	_, ok := m.clearedFields[productpropertyvenue.FieldProductPropertyID]
-	return ok
-}
-
-// ResetProductPropertyID resets all changes to the "product_property_id" field.
-func (m *ProductPropertyVenueMutation) ResetProductPropertyID() {
-	m.product_property_id = nil
-	m.addproduct_property_id = nil
-	delete(m.clearedFields, productpropertyvenue.FieldProductPropertyID)
-}
-
-// Where appends a list predicates to the ProductPropertyVenueMutation builder.
-func (m *ProductPropertyVenueMutation) Where(ps ...predicate.ProductPropertyVenue) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the ProductPropertyVenueMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *ProductPropertyVenueMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.ProductPropertyVenue, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *ProductPropertyVenueMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *ProductPropertyVenueMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (ProductPropertyVenue).
-func (m *ProductPropertyVenueMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *ProductPropertyVenueMutation) Fields() []string {
-	fields := make([]string, 0, 4)
-	if m.created_at != nil {
-		fields = append(fields, productpropertyvenue.FieldCreatedAt)
-	}
-	if m.updated_at != nil {
-		fields = append(fields, productpropertyvenue.FieldUpdatedAt)
-	}
-	if m.venue_id != nil {
-		fields = append(fields, productpropertyvenue.FieldVenueID)
-	}
-	if m.product_property_id != nil {
-		fields = append(fields, productpropertyvenue.FieldProductPropertyID)
-	}
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *ProductPropertyVenueMutation) Field(name string) (ent.Value, bool) {
-	switch name {
-	case productpropertyvenue.FieldCreatedAt:
-		return m.CreatedAt()
-	case productpropertyvenue.FieldUpdatedAt:
-		return m.UpdatedAt()
-	case productpropertyvenue.FieldVenueID:
-		return m.VenueID()
-	case productpropertyvenue.FieldProductPropertyID:
-		return m.ProductPropertyID()
-	}
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *ProductPropertyVenueMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	switch name {
-	case productpropertyvenue.FieldCreatedAt:
-		return m.OldCreatedAt(ctx)
-	case productpropertyvenue.FieldUpdatedAt:
-		return m.OldUpdatedAt(ctx)
-	case productpropertyvenue.FieldVenueID:
-		return m.OldVenueID(ctx)
-	case productpropertyvenue.FieldProductPropertyID:
-		return m.OldProductPropertyID(ctx)
-	}
-	return nil, fmt.Errorf("unknown ProductPropertyVenue field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *ProductPropertyVenueMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	case productpropertyvenue.FieldCreatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedAt(v)
-		return nil
-	case productpropertyvenue.FieldUpdatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedAt(v)
-		return nil
-	case productpropertyvenue.FieldVenueID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetVenueID(v)
-		return nil
-	case productpropertyvenue.FieldProductPropertyID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetProductPropertyID(v)
-		return nil
-	}
-	return fmt.Errorf("unknown ProductPropertyVenue field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *ProductPropertyVenueMutation) AddedFields() []string {
-	var fields []string
-	if m.addvenue_id != nil {
-		fields = append(fields, productpropertyvenue.FieldVenueID)
-	}
-	if m.addproduct_property_id != nil {
-		fields = append(fields, productpropertyvenue.FieldProductPropertyID)
-	}
-	return fields
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *ProductPropertyVenueMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case productpropertyvenue.FieldVenueID:
-		return m.AddedVenueID()
-	case productpropertyvenue.FieldProductPropertyID:
-		return m.AddedProductPropertyID()
-	}
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *ProductPropertyVenueMutation) AddField(name string, value ent.Value) error {
-	switch name {
-	case productpropertyvenue.FieldVenueID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddVenueID(v)
-		return nil
-	case productpropertyvenue.FieldProductPropertyID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddProductPropertyID(v)
-		return nil
-	}
-	return fmt.Errorf("unknown ProductPropertyVenue numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *ProductPropertyVenueMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(productpropertyvenue.FieldVenueID) {
-		fields = append(fields, productpropertyvenue.FieldVenueID)
-	}
-	if m.FieldCleared(productpropertyvenue.FieldProductPropertyID) {
-		fields = append(fields, productpropertyvenue.FieldProductPropertyID)
-	}
-	return fields
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *ProductPropertyVenueMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *ProductPropertyVenueMutation) ClearField(name string) error {
-	switch name {
-	case productpropertyvenue.FieldVenueID:
-		m.ClearVenueID()
-		return nil
-	case productpropertyvenue.FieldProductPropertyID:
-		m.ClearProductPropertyID()
-		return nil
-	}
-	return fmt.Errorf("unknown ProductPropertyVenue nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *ProductPropertyVenueMutation) ResetField(name string) error {
-	switch name {
-	case productpropertyvenue.FieldCreatedAt:
-		m.ResetCreatedAt()
-		return nil
-	case productpropertyvenue.FieldUpdatedAt:
-		m.ResetUpdatedAt()
-		return nil
-	case productpropertyvenue.FieldVenueID:
-		m.ResetVenueID()
-		return nil
-	case productpropertyvenue.FieldProductPropertyID:
-		m.ResetProductPropertyID()
-		return nil
-	}
-	return fmt.Errorf("unknown ProductPropertyVenue field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *ProductPropertyVenueMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *ProductPropertyVenueMutation) AddedIDs(name string) []ent.Value {
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *ProductPropertyVenueMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *ProductPropertyVenueMutation) RemovedIDs(name string) []ent.Value {
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *ProductPropertyVenueMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *ProductPropertyVenueMutation) EdgeCleared(name string) bool {
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *ProductPropertyVenueMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown ProductPropertyVenue unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *ProductPropertyVenueMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown ProductPropertyVenue edge %s", name)
 }
 
 // RoleMutation represents an operation that mutates the Role nodes in the graph.
@@ -29708,28 +28542,34 @@ func (m *UserMutation) ResetEdge(name string) error {
 // VenueMutation represents an operation that mutates the Venue nodes in the graph.
 type VenueMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int64
-	created_at     *time.Time
-	updated_at     *time.Time
-	status         *int64
-	addstatus      *int64
-	name           *string
-	address        *string
-	address_detail *string
-	latitude       *string
-	longitude      *string
-	mobile         *string
-	pic            *string
-	information    *string
-	clearedFields  map[string]struct{}
-	places         map[int64]struct{}
-	removedplaces  map[int64]struct{}
-	clearedplaces  bool
-	done           bool
-	oldValue       func(context.Context) (*Venue, error)
-	predicates     []predicate.Venue
+	op                            Op
+	typ                           string
+	id                            *int64
+	created_at                    *time.Time
+	updated_at                    *time.Time
+	status                        *int64
+	addstatus                     *int64
+	name                          *string
+	address                       *string
+	address_detail                *string
+	latitude                      *string
+	longitude                     *string
+	mobile                        *string
+	pic                           *string
+	information                   *string
+	clearedFields                 map[string]struct{}
+	places                        map[int64]struct{}
+	removedplaces                 map[int64]struct{}
+	clearedplaces                 bool
+	member_property_venues        map[int64]struct{}
+	removedmember_property_venues map[int64]struct{}
+	clearedmember_property_venues bool
+	property_venues               map[int64]struct{}
+	removedproperty_venues        map[int64]struct{}
+	clearedproperty_venues        bool
+	done                          bool
+	oldValue                      func(context.Context) (*Venue, error)
+	predicates                    []predicate.Venue
 }
 
 var _ ent.Mutation = (*VenueMutation)(nil)
@@ -30424,6 +29264,114 @@ func (m *VenueMutation) ResetPlaces() {
 	m.removedplaces = nil
 }
 
+// AddMemberPropertyVenueIDs adds the "member_property_venues" edge to the MemberProductProperty entity by ids.
+func (m *VenueMutation) AddMemberPropertyVenueIDs(ids ...int64) {
+	if m.member_property_venues == nil {
+		m.member_property_venues = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.member_property_venues[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMemberPropertyVenues clears the "member_property_venues" edge to the MemberProductProperty entity.
+func (m *VenueMutation) ClearMemberPropertyVenues() {
+	m.clearedmember_property_venues = true
+}
+
+// MemberPropertyVenuesCleared reports if the "member_property_venues" edge to the MemberProductProperty entity was cleared.
+func (m *VenueMutation) MemberPropertyVenuesCleared() bool {
+	return m.clearedmember_property_venues
+}
+
+// RemoveMemberPropertyVenueIDs removes the "member_property_venues" edge to the MemberProductProperty entity by IDs.
+func (m *VenueMutation) RemoveMemberPropertyVenueIDs(ids ...int64) {
+	if m.removedmember_property_venues == nil {
+		m.removedmember_property_venues = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.member_property_venues, ids[i])
+		m.removedmember_property_venues[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMemberPropertyVenues returns the removed IDs of the "member_property_venues" edge to the MemberProductProperty entity.
+func (m *VenueMutation) RemovedMemberPropertyVenuesIDs() (ids []int64) {
+	for id := range m.removedmember_property_venues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MemberPropertyVenuesIDs returns the "member_property_venues" edge IDs in the mutation.
+func (m *VenueMutation) MemberPropertyVenuesIDs() (ids []int64) {
+	for id := range m.member_property_venues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMemberPropertyVenues resets all changes to the "member_property_venues" edge.
+func (m *VenueMutation) ResetMemberPropertyVenues() {
+	m.member_property_venues = nil
+	m.clearedmember_property_venues = false
+	m.removedmember_property_venues = nil
+}
+
+// AddPropertyVenueIDs adds the "property_venues" edge to the ProductProperty entity by ids.
+func (m *VenueMutation) AddPropertyVenueIDs(ids ...int64) {
+	if m.property_venues == nil {
+		m.property_venues = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.property_venues[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPropertyVenues clears the "property_venues" edge to the ProductProperty entity.
+func (m *VenueMutation) ClearPropertyVenues() {
+	m.clearedproperty_venues = true
+}
+
+// PropertyVenuesCleared reports if the "property_venues" edge to the ProductProperty entity was cleared.
+func (m *VenueMutation) PropertyVenuesCleared() bool {
+	return m.clearedproperty_venues
+}
+
+// RemovePropertyVenueIDs removes the "property_venues" edge to the ProductProperty entity by IDs.
+func (m *VenueMutation) RemovePropertyVenueIDs(ids ...int64) {
+	if m.removedproperty_venues == nil {
+		m.removedproperty_venues = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.property_venues, ids[i])
+		m.removedproperty_venues[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPropertyVenues returns the removed IDs of the "property_venues" edge to the ProductProperty entity.
+func (m *VenueMutation) RemovedPropertyVenuesIDs() (ids []int64) {
+	for id := range m.removedproperty_venues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PropertyVenuesIDs returns the "property_venues" edge IDs in the mutation.
+func (m *VenueMutation) PropertyVenuesIDs() (ids []int64) {
+	for id := range m.property_venues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPropertyVenues resets all changes to the "property_venues" edge.
+func (m *VenueMutation) ResetPropertyVenues() {
+	m.property_venues = nil
+	m.clearedproperty_venues = false
+	m.removedproperty_venues = nil
+}
+
 // Where appends a list predicates to the VenueMutation builder.
 func (m *VenueMutation) Where(ps ...predicate.Venue) {
 	m.predicates = append(m.predicates, ps...)
@@ -30799,9 +29747,15 @@ func (m *VenueMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VenueMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
 	if m.places != nil {
 		edges = append(edges, venue.EdgePlaces)
+	}
+	if m.member_property_venues != nil {
+		edges = append(edges, venue.EdgeMemberPropertyVenues)
+	}
+	if m.property_venues != nil {
+		edges = append(edges, venue.EdgePropertyVenues)
 	}
 	return edges
 }
@@ -30816,15 +29770,33 @@ func (m *VenueMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case venue.EdgeMemberPropertyVenues:
+		ids := make([]ent.Value, 0, len(m.member_property_venues))
+		for id := range m.member_property_venues {
+			ids = append(ids, id)
+		}
+		return ids
+	case venue.EdgePropertyVenues:
+		ids := make([]ent.Value, 0, len(m.property_venues))
+		for id := range m.property_venues {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VenueMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
 	if m.removedplaces != nil {
 		edges = append(edges, venue.EdgePlaces)
+	}
+	if m.removedmember_property_venues != nil {
+		edges = append(edges, venue.EdgeMemberPropertyVenues)
+	}
+	if m.removedproperty_venues != nil {
+		edges = append(edges, venue.EdgePropertyVenues)
 	}
 	return edges
 }
@@ -30839,15 +29811,33 @@ func (m *VenueMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case venue.EdgeMemberPropertyVenues:
+		ids := make([]ent.Value, 0, len(m.removedmember_property_venues))
+		for id := range m.removedmember_property_venues {
+			ids = append(ids, id)
+		}
+		return ids
+	case venue.EdgePropertyVenues:
+		ids := make([]ent.Value, 0, len(m.removedproperty_venues))
+		for id := range m.removedproperty_venues {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VenueMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
 	if m.clearedplaces {
 		edges = append(edges, venue.EdgePlaces)
+	}
+	if m.clearedmember_property_venues {
+		edges = append(edges, venue.EdgeMemberPropertyVenues)
+	}
+	if m.clearedproperty_venues {
+		edges = append(edges, venue.EdgePropertyVenues)
 	}
 	return edges
 }
@@ -30858,6 +29848,10 @@ func (m *VenueMutation) EdgeCleared(name string) bool {
 	switch name {
 	case venue.EdgePlaces:
 		return m.clearedplaces
+	case venue.EdgeMemberPropertyVenues:
+		return m.clearedmember_property_venues
+	case venue.EdgePropertyVenues:
+		return m.clearedproperty_venues
 	}
 	return false
 }
@@ -30876,6 +29870,12 @@ func (m *VenueMutation) ResetEdge(name string) error {
 	switch name {
 	case venue.EdgePlaces:
 		m.ResetPlaces()
+		return nil
+	case venue.EdgeMemberPropertyVenues:
+		m.ResetMemberPropertyVenues()
+		return nil
+	case venue.EdgePropertyVenues:
+		m.ResetPropertyVenues()
 		return nil
 	}
 	return fmt.Errorf("unknown Venue edge %s", name)

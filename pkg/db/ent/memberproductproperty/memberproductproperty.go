@@ -40,8 +40,8 @@ const (
 	FieldPrice = "price"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeMemberProductPropertyVenues holds the string denoting the member_product_property_venues edge name in mutations.
-	EdgeMemberProductPropertyVenues = "member_product_property_venues"
+	// EdgeVenues holds the string denoting the venues edge name in mutations.
+	EdgeVenues = "venues"
 	// Table holds the table name of the memberproductproperty in the database.
 	Table = "member_product_property"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -51,13 +51,11 @@ const (
 	OwnerInverseTable = "member_product"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "member_product_id"
-	// MemberProductPropertyVenuesTable is the table that holds the member_product_property_venues relation/edge.
-	MemberProductPropertyVenuesTable = "member_product_property_venue"
-	// MemberProductPropertyVenuesInverseTable is the table name for the MemberProductPropertyVenue entity.
-	// It exists in this package in order to avoid circular dependency with the "memberproductpropertyvenue" package.
-	MemberProductPropertyVenuesInverseTable = "member_product_property_venue"
-	// MemberProductPropertyVenuesColumn is the table column denoting the member_product_property_venues relation/edge.
-	MemberProductPropertyVenuesColumn = "member_product_property_id"
+	// VenuesTable is the table that holds the venues relation/edge. The primary key declared below.
+	VenuesTable = "member_product_property_venues"
+	// VenuesInverseTable is the table name for the Venue entity.
+	// It exists in this package in order to avoid circular dependency with the "venue" package.
+	VenuesInverseTable = "venue"
 )
 
 // Columns holds all SQL columns for memberproductproperty fields.
@@ -76,6 +74,12 @@ var Columns = []string{
 	FieldCountSurplus,
 	FieldPrice,
 }
+
+var (
+	// VenuesPrimaryKey and VenuesColumn2 are the table columns denoting the
+	// primary key for the venues relation (M2M).
+	VenuesPrimaryKey = []string{"member_product_property_id", "venue_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -177,17 +181,17 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByMemberProductPropertyVenuesCount orders the results by member_product_property_venues count.
-func ByMemberProductPropertyVenuesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByVenuesCount orders the results by venues count.
+func ByVenuesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newMemberProductPropertyVenuesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newVenuesStep(), opts...)
 	}
 }
 
-// ByMemberProductPropertyVenues orders the results by member_product_property_venues terms.
-func ByMemberProductPropertyVenues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByVenues orders the results by venues terms.
+func ByVenues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newMemberProductPropertyVenuesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newVenuesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -197,10 +201,10 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newMemberProductPropertyVenuesStep() *sqlgraph.Step {
+func newVenuesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(MemberProductPropertyVenuesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, MemberProductPropertyVenuesTable, MemberProductPropertyVenuesColumn),
+		sqlgraph.To(VenuesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, VenuesTable, VenuesPrimaryKey...),
 	)
 }
