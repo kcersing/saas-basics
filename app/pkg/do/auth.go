@@ -8,6 +8,6 @@ type Auth interface {
 }
 
 type ApiAuthInfo struct {
-	Path   string `json:"path,omitempty"`
-	Method string `json:"method,omitempty"`
+	Path   string `json:"path"`
+	Method string `json:"method"`
 }

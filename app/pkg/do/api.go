@@ -8,20 +8,20 @@ type Api interface {
 }
 
 type ApiInfo struct {
-	ID          int64  `json:"id,omitempty"`
-	CreatedAt   string `json:"createdAt,omitempty"`
-	UpdatedAt   string `json:"updatedAt,omitempty"`
-	Path        string `json:"path,omitempty"`
-	Description string `json:"description,omitempty"`
-	Group       string `json:"group,omitempty"`
-	Method      string `json:"method,omitempty"`
+	ID          int64  `json:"id"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
+	Path        string `json:"path"`
+	Description string `json:"description"`
+	Group       string `json:"group"`
+	Method      string `json:"method"`
 }
 
 type ListApiReq struct {
-	Page        int64  `json:"page,omitempty"`
-	PageSize    int64  `json:"pageSize,omitempty"`
-	Path        string `json:"path,omitempty"`
-	Description string `json:"description,omitempty"`
-	Method      string `json:"method,omitempty"`
-	Group       string `json:"group,omitempty"`
+	Page        int64  `json:"page"`
+	PageSize    int64  `json:"pageSize"`
+	Path        string `json:"path"`
+	Description string `json:"description"`
+	Method      string `json:"method"`
+	Group       string `json:"group"`
 }

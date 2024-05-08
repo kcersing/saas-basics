@@ -248,6 +248,7 @@ func ListProperty(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
+
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
 	return
 }

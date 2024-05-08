@@ -16,37 +16,40 @@ type Product interface {
 }
 
 type PropertyInfo struct {
-	ID       int64           `json:"id,omitempty"`
-	Name     string          `json:"name,omitempty"`
-	Price    float64         `json:"price,omitempty"`
-	Duration int64           `json:"duration,omitempty"`
-	Length   int64           `json:"length,omitempty"`
-	Count    int64           `json:"count,omitempty"`
-	Type     string          `json:"type,omitempty"`
-	Data     string          `json:"data,omitempty"`
-	Status   int64           `json:"status,omitempty"`
-	CreateId int64           `json:"create_id,omitempty"`
-	Venue    []PropertyVenue `json:"venue,omitempty"`
+	ID         int64           `json:"id"`
+	Name       string          `json:"name"`
+	Price      float64         `json:"price"`
+	Duration   int64           `json:"duration"`
+	Length     int64           `json:"length"`
+	Count      int64           `json:"count"`
+	Type       string          `json:"type"`
+	Data       string          `json:"data"`
+	Status     int64           `json:"status"`
+	CreateId   int64           `json:"create_id"`
+	CreateName string          `json:"create_name"`
+	Venue      []PropertyVenue `json:"venue"`
+	Venues     string          `json:"venues"`
+	VenueId    []int64         `json:"venueId"`
 }
 type PropertyVenue struct {
-	ID   int64  `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
 }
 type ProductInfo struct {
-	ID          int64          `json:"id,omitempty"`
-	Name        string         `json:"name,omitempty"`
-	Pic         string         `json:"pic,omitempty"`
-	Description string         `json:"description,omitempty"`
-	Property    []PropertyInfo `json:"property,omitempty"`
-	Price       float64        `json:"price,omitempty"`
-	Stock       int64          `json:"stock,omitempty"`
-	Status      int64          `json:"status,omitempty"`
-	CreateID    int64          `json:"create_id,omitempty"`
-	CreateName  string         `json:"create_name,omitempty"`
+	ID          int64          `json:"id"`
+	Name        string         `json:"name"`
+	Pic         string         `json:"pic"`
+	Description string         `json:"description"`
+	Property    []PropertyInfo `json:"property"`
+	Price       float64        `json:"price"`
+	Stock       int64          `json:"stock"`
+	Status      int64          `json:"status"`
+	CreateID    int64          `json:"create_id"`
+	CreateName  string         `json:"create_name"`
 }
 type ProductListReq struct {
-	Page     int64  `json:"page,omitempty"`
-	PageSize int64  `json:"pageSize,omitempty"`
-	Name     string `json:"name,omitempty"`
-	Status   int64  `json:"status,omitempty"`
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Name     string `json:"name"`
+	Status   int64  `json:"status"`
 }

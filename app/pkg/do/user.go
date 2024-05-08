@@ -16,56 +16,56 @@ type User interface {
 }
 
 type CreateOrUpdateUserReq struct {
-	ID       int64  `json:"id,omitempty"`
-	Avatar   string `json:"avatar,omitempty"`
-	RoleID   int64  `json:"roleID,omitempty"`
-	Mobile   string `json:"mobile,omitempty"`
-	Email    string `json:"email,omitempty"`
-	Status   int64  `json:"status,omitempty"`
-	Username string `json:"username,omitempty"`
-	Password string `json:"password,omitempty"`
-	Nickname string `json:"nickname,omitempty"`
+	ID       int64  `json:"id"`
+	Avatar   string `json:"avatar"`
+	RoleID   int64  `json:"roleID"`
+	Mobile   string `json:"mobile"`
+	Email    string `json:"email"`
+	Status   int64  `json:"status"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Nickname string `json:"nickname"`
 }
 
 type UserInfo struct {
-	ID          int64     `json:"id,omitempty"`
-	Status      int8      `json:"status,omitempty"`
-	Username    string    `json:"username,omitempty"`
-	Password    string    `json:"password,omitempty"`
-	Nickname    string    `json:"nickname,omitempty"`
-	SideMode    string    `json:"sideMode,omitempty"`
-	BaseColor   string    `json:"baseColor,omitempty"`
-	ActiveColor string    `json:"activeColor,omitempty"`
-	RoleID      int64     `json:"roleID,omitempty"`
-	Mobile      string    `json:"mobile,omitempty"`
-	Email       string    `json:"email,omitempty"`
-	Wecom       string    `json:"wecom,omitempty"`
-	Avatar      string    `json:"avatar,omitempty"`
+	ID          int64     `json:"id"`
+	Status      int8      `json:"status"`
+	Username    string    `json:"username"`
+	Password    string    `json:"password"`
+	Nickname    string    `json:"nickname"`
+	SideMode    string    `json:"sideMode"`
+	BaseColor   string    `json:"baseColor"`
+	ActiveColor string    `json:"activeColor"`
+	RoleID      int64     `json:"roleID"`
+	Mobile      string    `json:"mobile"`
+	Email       string    `json:"email"`
+	Wecom       string    `json:"wecom"`
+	Avatar      string    `json:"avatar"`
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
-	RoleName    string    `json:"roleName,omitempty"`
-	RoleValue   string    `json:"roleValue,omitempty"`
+	RoleName    string    `json:"roleName"`
+	RoleValue   string    `json:"roleValue"`
 
-	Job              string `json:"job,omitempty"`
-	JobName          string `json:"jobName,omitempty"`
-	Organization     string `json:"organization,omitempty"`
-	OrganizationName string `json:"organizationName,omitempty"`
+	Job              string `json:"job"`
+	JobName          string `json:"jobName"`
+	Organization     string `json:"organization"`
+	OrganizationName string `json:"organizationName"`
 }
 
 type UserListReq struct {
-	Page     int64  `json:"page,omitempty"`
-	PageSize int64  `json:"pageSize,omitempty"`
-	Username string `json:"username,omitempty"`
-	Nickname string `json:"nickname,omitempty"`
-	Email    string `json:"email,omitempty"`
-	Mobile   string `json:"mobile,omitempty"`
-	RoleID   int64  `json:"roleID,omitempty"`
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Username string `json:"username"`
+	Nickname string `json:"nickname"`
+	Email    string `json:"email"`
+	Mobile   string `json:"mobile"`
+	RoleID   int64  `json:"roleID"`
 }
 
 type UpdateUserProfileReq struct {
-	ID       int64  `json:"id,omitempty"`
-	Nickname string `json:"nickname,omitempty"`
-	Email    string `json:"email,omitempty"`
-	Mobile   string `json:"mobile,omitempty"`
-	Avatar   string `json:"avatar,omitempty"`
+	ID       int64  `json:"id"`
+	Nickname string `json:"nickname"`
+	Email    string `json:"email"`
+	Mobile   string `json:"mobile"`
+	Avatar   string `json:"avatar"`
 }

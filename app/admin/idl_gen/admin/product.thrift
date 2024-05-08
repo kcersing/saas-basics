@@ -6,7 +6,7 @@ include "../base/data.thrift"
 struct Property {
     1: i64 product_id
     2: string name // 名称
-    3: i64 price // 定价
+    3: double price // 定价
     4: i64 duration // 时长
     5: i64 length // 单次时长
     6: i64 count // 次数
@@ -20,7 +20,7 @@ struct Product {
     2: string pic // 主图
     3: string description // 详情
     4: list <Property> property // 属性
-    5: i64 price // 价格
+    5: double price // 价格
     6: i64 stock // 库存
     7: i64 status // 商品状态
     8: i64 id
@@ -28,7 +28,7 @@ struct Product {
 
 struct CreatePropertyReq {
     2: optional string name // 名称
-    3: optional i64 price // 定价
+    3: optional double price // 定价
     4: optional i64 duration // 时长
     5: optional i64 length // 单次时长
     6: optional i64 count // 次数
@@ -39,12 +39,16 @@ struct CreatePropertyReq {
 struct UpdatePropertyReq {
     1: required i64 id
     2: optional string name // 名称
-    3: optional i64 price // 定价
+    3: optional double price // 定价
     4: optional i64 duration // 时长
     5: optional i64 length // 单次时长
     6: optional i64 count // 次数
-    7: optional string type // 次数
+    7: optional string type // 类型
     8: optional list<i64> venueId
+
+
+
+
 }
 
 struct CreateReq {
@@ -52,7 +56,7 @@ struct CreateReq {
     2: optional string pic // 主图
     3: optional string description // 详情
     4: optional list<i64> propertyId
-    5: optional i64 price // 价格
+    5: optional double price // 价格
     6: optional i64 stock // 库存
 }
 
@@ -62,7 +66,7 @@ struct UpdateReq {
     3: optional string pic // 主图
     4: optional string description // 详情
     5: optional list <Property> propertyId  // 属性
-    6: optional i64 price // 价格
+    6: optional double price // 价格
     7: optional i64 stock // 库存
 }
 

@@ -46,7 +46,8 @@ func (p Product) CreateProperty(req do.PropertyInfo) error {
 }
 
 func (p Product) UpdateProperty(req do.PropertyInfo) error {
-	_, err := p.db.ProductProperty.Update().
+
+	_, err := p.db.Debug().ProductProperty.Update().
 		Where(productproperty.IDEQ(req.ID)).
 		SetName(req.Name).
 		SetType(req.Type).
@@ -56,7 +57,10 @@ func (p Product) UpdateProperty(req do.PropertyInfo) error {
 		SetCount(req.Count).
 		SetPrice(req.Price).
 		SetData("").
+		ClearVenues().
+		AddVenues(p.db.Venue.Query().Where(venue.IDIn(req.VenueId...)).AllX(p.ctx)...).
 		Save(p.ctx)
+
 	if err != nil {
 		err = errors.Wrap(err, "update Product Property failed")
 		return err
@@ -89,8 +93,6 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 		return resp, total, err
 	}
 
-	err = copier.Copy(&resp, &lists)
-
 	for _, v := range lists {
 
 		var d = new(do.PropertyInfo)
@@ -105,12 +107,21 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 		d.Data = v.Data
 		d.Status = v.Status
 		d.CreateId = v.CreateID
-
 		venues, err := v.QueryVenues().Select(venue.FieldID, venue.FieldName).All(p.ctx)
 		if err == nil {
 			var ven []do.PropertyVenue
 			err = copier.Copy(&ven, &venues)
 			d.Venue = ven
+			var str string
+			for i, v := range ven {
+				if i == 0 {
+					str = v.Name
+				} else {
+					str += ", " + v.Name
+				}
+			}
+			d.Venues = str
+			//d.Venues = strings.Join(ven, ",")
 		}
 		resp = append(resp, d)
 	}

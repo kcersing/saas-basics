@@ -9,33 +9,33 @@ type MemberProduct interface {
 	InfoByID(ID int64) (roleInfo *MemberProductInfo, err error)
 }
 type MemberProductInfo struct {
-	ID          int64          `json:"id,omitempty"`
-	MemberId    int64          `json:"member_id,omitempty"`
-	Name        string         `json:"name,omitempty"`
-	Pic         string         `json:"pic,omitempty"`
-	Description string         `json:"description,omitempty"`
-	Property    []PropertyInfo `json:"property,omitempty"`
-	Price       float64        `json:"price,omitempty"`
-	Stock       int64          `json:"stock,omitempty"`
-	Status      int64          `json:"status,omitempty"`
+	ID          int64          `json:"id"`
+	MemberId    int64          `json:"member_id"`
+	Name        string         `json:"name"`
+	Pic         string         `json:"pic"`
+	Description string         `json:"description"`
+	Property    []PropertyInfo `json:"property"`
+	Price       float64        `json:"price"`
+	Stock       int64          `json:"stock"`
+	Status      int64          `json:"status"`
 }
 type MemberProductListReq struct {
-	Page     int64  `json:"page,omitempty"`
-	PageSize int64  `json:"pageSize,omitempty"`
-	Mobile   string `json:"mobile,omitempty"`
-	Name     string `json:"name,omitempty"`
-	Status   int64  `json:"status,omitempty"`
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Mobile   string `json:"mobile"`
+	Name     string `json:"name"`
+	Status   int64  `json:"status"`
 }
 type MemberPropertyInfo struct {
-	ID        int64   `json:"id,omitempty"`
-	MemberId  int64   `json:"member_id,omitempty"`
-	ProductId int64   `json:"productId,omitempty"`
-	Name      string  `json:"name,omitempty"`
-	Price     float64 `json:"price,omitempty"`
-	Duration  int64   `json:"duration,omitempty"`
-	Length    int64   `json:"length,omitempty"`
-	Count     int64   `json:"count,omitempty"`
-	Type      string  `json:"type,omitempty"`
-	Data      string  `json:"data,omitempty"`
-	Status    int64   `json:"status,omitempty"`
+	ID        int64   `json:"id"`
+	MemberId  int64   `json:"member_id"`
+	ProductId int64   `json:"productId"`
+	Name      string  `json:"name"`
+	Price     float64 `json:"price"`
+	Duration  int64   `json:"duration"`
+	Length    int64   `json:"length"`
+	Count     int64   `json:"count"`
+	Type      string  `json:"type"`
+	Data      string  `json:"data"`
+	Status    int64   `json:"status"`
 }

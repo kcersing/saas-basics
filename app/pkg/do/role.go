@@ -10,18 +10,18 @@ type Role interface {
 }
 
 type RoleInfo struct {
-	ID            int64  `json:"id,omitempty"`
-	Name          string `json:"name,omitempty"`
-	Value         string `json:"value,omitempty"`
-	DefaultRouter string `json:"defaultRouter,omitempty"`
-	Status        int64  `json:"status,omitempty"`
-	Remark        string `json:"remark,omitempty"`
-	OrderNo       int32  `json:"orderNo,omitempty"`
-	CreatedAt     string `json:"createdAt,omitempty"`
-	UpdatedAt     string `json:"updatedAt,omitempty"`
+	ID            int64  `json:"id"`
+	Name          string `json:"name"`
+	Value         string `json:"value"`
+	DefaultRouter string `json:"defaultRouter"`
+	Status        int64  `json:"status"`
+	Remark        string `json:"remark"`
+	OrderNo       int32  `json:"orderNo"`
+	CreatedAt     string `json:"createdAt"`
+	UpdatedAt     string `json:"updatedAt"`
 }
 
 type RoleListReq struct {
-	Page     int64 `json:"page,omitempty"`
-	PageSize int64 `json:"pageSize,omitempty"`
+	Page     int64 `json:"page"`
+	PageSize int64 `json:"pageSize"`
 }

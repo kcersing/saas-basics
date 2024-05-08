@@ -9,19 +9,19 @@ type Token interface {
 }
 
 type TokenInfo struct {
-	ID        int64  `json:"id,omitempty"`
-	CreatedAt string `json:"createdAt,omitempty"`
-	UpdatedAt string `json:"updatedAt,omitempty"`
-	UserID    int64  `json:"userID,omitempty"`
-	UserName  string `json:"userName,omitempty"`
-	Token     string `json:"token,omitempty"`
-	Source    string `json:"source,omitempty"`
-	ExpiredAt string `json:"expiredAt,omitempty"`
+	ID        int64  `json:"id"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	UserID    int64  `json:"userID"`
+	UserName  string `json:"userName"`
+	Token     string `json:"token"`
+	Source    string `json:"source"`
+	ExpiredAt string `json:"expiredAt"`
 }
 
 type TokenListReq struct {
-	Page     int64  `json:"page,omitempty"`
-	PageSize int64  `json:"pageSize,omitempty"`
-	Username string `json:"username,omitempty"`
-	UserID   int64  `json:"userID,omitempty"`
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Username string `json:"username"`
+	UserID   int64  `json:"userID"`
 }

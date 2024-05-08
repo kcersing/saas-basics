@@ -13,34 +13,34 @@ type Dictionary interface {
 }
 
 type DictionaryInfo struct {
-	ID          int64  `json:"id,omitempty"`
-	Title       string `json:"title,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Status      int64  `json:"status,omitempty"`
-	Description string `json:"description,omitempty"`
-	CreatedAt   string `json:"createdAt,omitempty"`
-	UpdatedAt   string `json:"updatedAt,omitempty"`
+	ID          int64  `json:"id"`
+	Title       string `json:"title"`
+	Name        string `json:"name"`
+	Status      int64  `json:"status"`
+	Description string `json:"description"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
 }
 
 type DictListReq struct {
-	Title    string `json:"title,omitempty"`
-	Name     string `json:"name,omitempty"`
-	Page     int64  `json:"page,omitempty"`
-	PageSize int64  `json:"pageSize,omitempty"`
+	Title    string `json:"title"`
+	Name     string `json:"name"`
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
 }
 
 type DetailListReq struct {
-	Name         string `json:"name,omitempty"`
-	DictionaryId int64  `json:"dictionaryId,omitempty"`
+	Name         string `json:"name"`
+	DictionaryId int64  `json:"dictionaryId"`
 }
 
 type DictionaryDetail struct {
-	ID        int64  `json:"id,omitempty"`
-	Title     string `json:"title,omitempty"`
-	Key       string `json:"key,omitempty"`
-	Value     string `json:"value,omitempty"`
-	Status    int64  `json:"status,omitempty"`
-	CreatedAt string `json:"createdAt,omitempty"`
-	UpdatedAt string `json:"updatedAt,omitempty"`
-	ParentID  int64  `json:"parentID,omitempty"`
+	ID        int64  `json:"id"`
+	Title     string `json:"title"`
+	Key       string `json:"key"`
+	Value     string `json:"value"`
+	Status    int64  `json:"status"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	ParentID  int64  `json:"parentID"`
 }
