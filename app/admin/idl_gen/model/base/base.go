@@ -146,6 +146,14 @@ func (p *Err) Value() (driver.Value, error) {
 	return int64(*p), nil
 }
 
+// bool: 布尔值，对应Java中的boolean，
+// byte: 有符号字节，对应Java中的byte，对应MySQL的tinyint
+// i16: 16位有符号整型，对应Java中的short，对应MySQL的smallint
+// i32: 32位有符号整型，对应Java中的int，对应MySQL的int
+// i64: 64位有符号整型，对应Java中的long，对应MySQL的bigint
+// double: 64位浮点型，对应Java中的double
+// string: 字符串，对应Java中的String
+// binary: Blob 类型，对应Java中的byte[]
 type BaseResp struct {
 	Message string            `thrift:"message,1" form:"message" json:"message" query:"message"`
 	Code    int32             `thrift:"code,2" form:"code" json:"code" query:"code"`

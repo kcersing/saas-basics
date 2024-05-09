@@ -48,8 +48,11 @@ type ProductInfo struct {
 	CreateName  string         `json:"create_name"`
 }
 type ProductListReq struct {
-	Page     int64  `json:"page"`
-	PageSize int64  `json:"pageSize"`
-	Name     string `json:"name"`
-	Status   int64  `json:"status"`
+	Page        int64    `json:"page"`
+	PageSize    int64    `json:"pageSize"`
+	Name        string   `json:"name"`
+	Status      []int64  `json:"status"`
+	CreatedTime []string `json:"createdTime"`
+	Venue       []int64  `json:"venue"`
+	Type        string   `json:"type"`
 }

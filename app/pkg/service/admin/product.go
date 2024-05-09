@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
@@ -14,6 +15,7 @@ import (
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
 	"saas/pkg/db/ent/venue"
+	"time"
 )
 
 type Product struct {
@@ -26,7 +28,8 @@ type Product struct {
 
 func (p Product) CreateProperty(req do.PropertyInfo) error {
 
-	_, err := p.db.ProductProperty.Create().
+	hlog.Info(req)
+	_, err := p.db.Debug().ProductProperty.Create().
 		SetName(req.Name).
 		SetType(req.Type).
 		SetLength(req.Length).
@@ -35,8 +38,9 @@ func (p Product) CreateProperty(req do.PropertyInfo) error {
 		SetCount(req.Count).
 		SetPrice(req.Price).
 		SetData("").
-		SetCreateID(req.CreateId).
+		AddVenues(p.db.Venue.Query().Where(venue.IDIn(req.VenueId...)).AllX(p.ctx)...).
 		Save(p.ctx)
+
 	if err != nil {
 		err = errors.Wrap(err, "create user failed")
 		return err
@@ -79,12 +83,33 @@ func (p Product) DeleteProperty(id int64) error {
 
 func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, total int, err error) {
 
+	hlog.Info(req)
 	var predicates []predicate.ProductProperty
 	if req.Name != "" {
 		predicates = append(predicates, productproperty.NameEQ(req.Name))
 	}
+	if len(req.Status) > 0 {
+		predicates = append(predicates, productproperty.StatusIn(req.Status...))
+	}
+	if len(req.CreatedTime) > 0 {
+		s, _ := time.ParseInLocation("2006-01-02 15:04:05", req.CreatedTime[0], time.Local)
+		d, _ := time.ParseInLocation("2006-01-02 15:04:05", req.CreatedTime[1], time.Local)
+		predicates = append(predicates, productproperty.CreatedAtGTE(s))
+		predicates = append(predicates, productproperty.CreatedAtLTE(d))
+	}
 
-	lists, err := p.db.ProductProperty.Query().Where(predicates...).
+	if len(req.Venue) > 0 {
+		predicates = append(predicates, productproperty.HasVenuesWith(venue.IDIn(req.Venue...)))
+	}
+
+	if req.Type != "" {
+		predicates = append(predicates, productproperty.TypeEQ(req.Type))
+	}
+
+	lists, err := p.db.Debug().ProductProperty.
+		Query().
+		Where(predicates...).
+		Order(ent.Desc(productproperty.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(p.ctx)
 
@@ -94,9 +119,7 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 	}
 
 	for _, v := range lists {
-
 		var d = new(do.PropertyInfo)
-
 		d.ID = v.ID
 		d.Name = v.Name
 		d.Price = v.Price

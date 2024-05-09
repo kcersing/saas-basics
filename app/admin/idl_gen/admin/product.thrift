@@ -26,42 +26,20 @@ struct Product {
     8: i64 id
 }
 
-struct CreatePropertyReq {
-    2: optional string name // 名称
-    3: optional double price // 定价
-    4: optional i64 duration // 时长
-    5: optional i64 length // 单次时长
-    6: optional i64 count // 次数
-    7: optional string type // 次数
-    8: optional list<i64> venueId
-}
-
-struct UpdatePropertyReq {
-    1: required i64 id
-    2: optional string name // 名称
-    3: optional double price // 定价
-    4: optional i64 duration // 时长
-    5: optional i64 length // 单次时长
-    6: optional i64 count // 次数
-    7: optional string type // 类型
-    8: optional list<i64> venueId
-
-
-
+struct CreateOrUpdatePropertyReq {
+    1: optional i64 id (api.raw = "id")
+    2: optional string name (api.raw = "name")// 名称
+    3: optional double price (api.raw = "price")// 定价
+    4: optional i64 duration (api.raw = "duration")// 时长
+    5: optional i64 length (api.raw = "length")// 单次时长
+    6: optional i64 count (api.raw = "count")// 次数
+    7: optional string type (api.raw = "type") // 类型
+    8: optional list<i64> venueId (api.raw = "venueId")
 
 }
 
-struct CreateReq {
-    1: optional string name // 商品名
-    2: optional string pic // 主图
-    3: optional string description // 详情
-    4: optional list<i64> propertyId
-    5: optional double price // 价格
-    6: optional i64 stock // 库存
-}
-
-struct UpdateReq {
-    1: required i64 id
+struct CreateOrUpdateReq {
+    1: optional i64 id
     2: optional string name // 商品名
     3: optional string pic // 主图
     4: optional string description // 详情
@@ -71,28 +49,38 @@ struct UpdateReq {
 }
 
 struct ListReq {
-    1: i64 page,
-    2: i64 pageSize,
-    3: optional string name
-    5: optional i64 status
+    1: i64 page (api.raw = "page")
+    2: i64 pageSize (api.raw = "pageSize")
+    3: optional string name (api.raw = "name")
+    4: optional list<i64> status (api.raw = "status")
+    5: optional list<i64> venue (api.raw = "venue")
+    6: optional list<string> createdTime (api.raw = "createdTime")
+    7: optional string type (api.raw = "type") // 类型
 }
-
-
+struct PropertyListReq{
+    1: i64 page (api.raw = "page")
+    2: i64 pageSize (api.raw = "pageSize")
+    3: optional string name (api.raw = "name")
+    4: optional list<i64> status (api.raw = "status")
+    5: optional list<i64> venue (api.raw = "venue")
+    6: optional list<string> createdTime (api.raw = "createdTime")
+    7: optional string type (api.raw = "type") // 类型
+}
 
 service ProductService {
     // 添加属性
-    base.NilResponse CreateProperty(1: CreatePropertyReq req) (api.post = "/api/admin/property/create")
+    base.NilResponse CreateProperty(1: CreateOrUpdatePropertyReq req) (api.post = "/api/admin/property/create")
     // 编辑属性
-    base.NilResponse UpdateProperty(1: UpdatePropertyReq req) (api.post = "/api/admin/property/update")
+    base.NilResponse UpdateProperty(1: CreateOrUpdatePropertyReq req) (api.post = "/api/admin/property/update")
     // 删除属性
     base.NilResponse DeleteProperty(1: base.IDReq req) (api.post = "/api/admin/property/del")
     // 商品列表
-    base.NilResponse ListProperty(1: ListReq req) (api.post = "/api/admin/property/list")
+    base.NilResponse ListProperty(1: PropertyListReq req) (api.post = "/api/admin/property/list")
 
     // 添加商品
-    base.NilResponse Create(1: CreateReq req) (api.post = "/api/admin/product/create")
+    base.NilResponse Create(1: CreateOrUpdateReq req) (api.post = "/api/admin/product/create")
     // 编辑商品
-    base.NilResponse Update(1: UpdateReq req) (api.post = "/api/admin/product/update")
+    base.NilResponse Update(1: CreateOrUpdateReq req) (api.post = "/api/admin/product/update")
     // 删除商品
     base.NilResponse Delete(1: base.IDReq req) (api.post = "/api/admin/product/del")
     // 商品列表

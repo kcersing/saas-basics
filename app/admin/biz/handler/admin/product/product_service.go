@@ -19,7 +19,7 @@ import (
 // @router /api/admin/product/create [POST]
 func Create(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req product.CreateReq
+	var req product.CreateOrUpdateReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
@@ -46,7 +46,7 @@ func Create(ctx context.Context, c *app.RequestContext) {
 // @router /api/admin/product/update [POST]
 func Update(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req product.UpdateReq
+	var req product.CreateOrUpdateReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
@@ -158,7 +158,7 @@ func List(ctx context.Context, c *app.RequestContext) {
 // @router /api/admin/property/create [POST]
 func CreateProperty(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req product.CreatePropertyReq
+	var req product.CreateOrUpdatePropertyReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
@@ -186,7 +186,7 @@ func CreateProperty(ctx context.Context, c *app.RequestContext) {
 // @router /api/admin/property/update [POST]
 func UpdateProperty(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req product.UpdatePropertyReq
+	var req product.CreateOrUpdatePropertyReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
@@ -233,7 +233,7 @@ func DeleteProperty(ctx context.Context, c *app.RequestContext) {
 // @router /api/admin/property/list [POST]
 func ListProperty(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req product.ListReq
+	var req product.PropertyListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
@@ -241,8 +241,12 @@ func ListProperty(ctx context.Context, c *app.RequestContext) {
 	}
 
 	var listReq do.ProductListReq
-	listReq.Page = req.Page
-	listReq.PageSize = req.PageSize
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
 	list, total, err := admin.NewProduct(ctx, c).PropertyList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")

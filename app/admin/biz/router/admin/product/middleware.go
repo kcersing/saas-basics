@@ -95,3 +95,8 @@ func _property0Mw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _createorupdatepropertyMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
