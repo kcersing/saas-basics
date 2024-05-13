@@ -29,6 +29,8 @@ type MemberProductProperty struct {
 	MemberID int64 `json:"member_id,omitempty"`
 	// 会员产品ID
 	MemberProductID int64 `json:"member_product_id,omitempty"`
+	// 属性ID
+	PropertyID int64 `json:"property_id,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
 	// 名称
@@ -89,7 +91,7 @@ func (*MemberProductProperty) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberproductproperty.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case memberproductproperty.FieldID, memberproductproperty.FieldStatus, memberproductproperty.FieldMemberID, memberproductproperty.FieldMemberProductID, memberproductproperty.FieldDuration, memberproductproperty.FieldLength, memberproductproperty.FieldCount, memberproductproperty.FieldCountSurplus:
+		case memberproductproperty.FieldID, memberproductproperty.FieldStatus, memberproductproperty.FieldMemberID, memberproductproperty.FieldMemberProductID, memberproductproperty.FieldPropertyID, memberproductproperty.FieldDuration, memberproductproperty.FieldLength, memberproductproperty.FieldCount, memberproductproperty.FieldCountSurplus:
 			values[i] = new(sql.NullInt64)
 		case memberproductproperty.FieldType, memberproductproperty.FieldName:
 			values[i] = new(sql.NullString)
@@ -145,6 +147,12 @@ func (mpp *MemberProductProperty) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field member_product_id", values[i])
 			} else if value.Valid {
 				mpp.MemberProductID = value.Int64
+			}
+		case memberproductproperty.FieldPropertyID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field property_id", values[i])
+			} else if value.Valid {
+				mpp.PropertyID = value.Int64
 			}
 		case memberproductproperty.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -248,6 +256,9 @@ func (mpp *MemberProductProperty) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("member_product_id=")
 	builder.WriteString(fmt.Sprintf("%v", mpp.MemberProductID))
+	builder.WriteString(", ")
+	builder.WriteString("property_id=")
+	builder.WriteString(fmt.Sprintf("%v", mpp.PropertyID))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(mpp.Type)

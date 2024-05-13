@@ -31,7 +31,7 @@ func (OrderSales) Mixin() []ent.Mixin {
 
 func (OrderSales) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("owner", Order.Type).
+		edge.From("aufk", Order.Type).
 			Ref("sales").Unique().
 			Field("order_id"),
 	}

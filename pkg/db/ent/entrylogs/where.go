@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -199,26 +200,6 @@ func MemberIDNotIn(vs ...int64) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldNotIn(FieldMemberID, vs...))
 }
 
-// MemberIDGT applies the GT predicate on the "member_id" field.
-func MemberIDGT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGT(FieldMemberID, v))
-}
-
-// MemberIDGTE applies the GTE predicate on the "member_id" field.
-func MemberIDGTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGTE(FieldMemberID, v))
-}
-
-// MemberIDLT applies the LT predicate on the "member_id" field.
-func MemberIDLT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLT(FieldMemberID, v))
-}
-
-// MemberIDLTE applies the LTE predicate on the "member_id" field.
-func MemberIDLTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLTE(FieldMemberID, v))
-}
-
 // MemberIDIsNil applies the IsNil predicate on the "member_id" field.
 func MemberIDIsNil() predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldIsNull(FieldMemberID))
@@ -247,26 +228,6 @@ func UserIDIn(vs ...int64) predicate.EntryLogs {
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
 func UserIDNotIn(vs ...int64) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldNotIn(FieldUserID, vs...))
-}
-
-// UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGT(FieldUserID, v))
-}
-
-// UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGTE(FieldUserID, v))
-}
-
-// UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLT(FieldUserID, v))
-}
-
-// UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLTE(FieldUserID, v))
 }
 
 // UserIDIsNil applies the IsNil predicate on the "user_id" field.
@@ -299,26 +260,6 @@ func VenueIDNotIn(vs ...int64) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldNotIn(FieldVenueID, vs...))
 }
 
-// VenueIDGT applies the GT predicate on the "venue_id" field.
-func VenueIDGT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGT(FieldVenueID, v))
-}
-
-// VenueIDGTE applies the GTE predicate on the "venue_id" field.
-func VenueIDGTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGTE(FieldVenueID, v))
-}
-
-// VenueIDLT applies the LT predicate on the "venue_id" field.
-func VenueIDLT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLT(FieldVenueID, v))
-}
-
-// VenueIDLTE applies the LTE predicate on the "venue_id" field.
-func VenueIDLTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLTE(FieldVenueID, v))
-}
-
 // VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
 func VenueIDIsNil() predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldIsNull(FieldVenueID))
@@ -347,26 +288,6 @@ func MemberProductIDIn(vs ...int64) predicate.EntryLogs {
 // MemberProductIDNotIn applies the NotIn predicate on the "member_product_id" field.
 func MemberProductIDNotIn(vs ...int64) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldNotIn(FieldMemberProductID, vs...))
-}
-
-// MemberProductIDGT applies the GT predicate on the "member_product_id" field.
-func MemberProductIDGT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGT(FieldMemberProductID, v))
-}
-
-// MemberProductIDGTE applies the GTE predicate on the "member_product_id" field.
-func MemberProductIDGTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGTE(FieldMemberProductID, v))
-}
-
-// MemberProductIDLT applies the LT predicate on the "member_product_id" field.
-func MemberProductIDLT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLT(FieldMemberProductID, v))
-}
-
-// MemberProductIDLTE applies the LTE predicate on the "member_product_id" field.
-func MemberProductIDLTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLTE(FieldMemberProductID, v))
 }
 
 // MemberProductIDIsNil applies the IsNil predicate on the "member_product_id" field.
@@ -527,6 +448,98 @@ func LeavingTimeIsNil() predicate.EntryLogs {
 // LeavingTimeNotNil applies the NotNil predicate on the "leaving_time" field.
 func LeavingTimeNotNil() predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldNotNull(FieldLeavingTime))
+}
+
+// HasVenues applies the HasEdge predicate on the "venues" edge.
+func HasVenues() predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, VenuesTable, VenuesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVenuesWith applies the HasEdge predicate on the "venues" edge with a given conditions (other predicates).
+func HasVenuesWith(preds ...predicate.Venue) predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := newVenuesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMembers applies the HasEdge predicate on the "members" edge.
+func HasMembers() predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, MembersTable, MembersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMembersWith applies the HasEdge predicate on the "members" edge with a given conditions (other predicates).
+func HasMembersWith(preds ...predicate.Member) predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := newMembersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUsers applies the HasEdge predicate on the "users" edge.
+func HasUsers() predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, UsersTable, UsersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUsersWith applies the HasEdge predicate on the "users" edge with a given conditions (other predicates).
+func HasUsersWith(preds ...predicate.User) predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := newUsersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMemberProducts applies the HasEdge predicate on the "member_products" edge.
+func HasMemberProducts() predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, MemberProductsTable, MemberProductsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberProductsWith applies the HasEdge predicate on the "member_products" edge with a given conditions (other predicates).
+func HasMemberProductsWith(preds ...predicate.MemberProduct) predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := newMemberProductsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

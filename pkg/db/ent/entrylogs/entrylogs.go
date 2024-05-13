@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -31,8 +32,44 @@ const (
 	FieldEntryTime = "entry_time"
 	// FieldLeavingTime holds the string denoting the leaving_time field in the database.
 	FieldLeavingTime = "leaving_time"
+	// EdgeVenues holds the string denoting the venues edge name in mutations.
+	EdgeVenues = "venues"
+	// EdgeMembers holds the string denoting the members edge name in mutations.
+	EdgeMembers = "members"
+	// EdgeUsers holds the string denoting the users edge name in mutations.
+	EdgeUsers = "users"
+	// EdgeMemberProducts holds the string denoting the member_products edge name in mutations.
+	EdgeMemberProducts = "member_products"
 	// Table holds the table name of the entrylogs in the database.
 	Table = "entry_logs"
+	// VenuesTable is the table that holds the venues relation/edge.
+	VenuesTable = "entry_logs"
+	// VenuesInverseTable is the table name for the Venue entity.
+	// It exists in this package in order to avoid circular dependency with the "venue" package.
+	VenuesInverseTable = "venue"
+	// VenuesColumn is the table column denoting the venues relation/edge.
+	VenuesColumn = "venue_id"
+	// MembersTable is the table that holds the members relation/edge.
+	MembersTable = "entry_logs"
+	// MembersInverseTable is the table name for the Member entity.
+	// It exists in this package in order to avoid circular dependency with the "member" package.
+	MembersInverseTable = "member"
+	// MembersColumn is the table column denoting the members relation/edge.
+	MembersColumn = "member_id"
+	// UsersTable is the table that holds the users relation/edge.
+	UsersTable = "entry_logs"
+	// UsersInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UsersInverseTable = "sys_users"
+	// UsersColumn is the table column denoting the users relation/edge.
+	UsersColumn = "user_id"
+	// MemberProductsTable is the table that holds the member_products relation/edge.
+	MemberProductsTable = "entry_logs"
+	// MemberProductsInverseTable is the table name for the MemberProduct entity.
+	// It exists in this package in order to avoid circular dependency with the "memberproduct" package.
+	MemberProductsInverseTable = "member_product"
+	// MemberProductsColumn is the table column denoting the member_products relation/edge.
+	MemberProductsColumn = "member_product_id"
 )
 
 // Columns holds all SQL columns for entrylogs fields.
@@ -66,6 +103,10 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultMemberID holds the default value on creation for the "member_id" field.
+	DefaultMemberID int64
+	// DefaultUserID holds the default value on creation for the "user_id" field.
+	DefaultUserID int64
 	// DefaultEntryTime holds the default value on creation for the "entry_time" field.
 	DefaultEntryTime func() time.Time
 	// UpdateDefaultEntryTime holds the default value on update for the "entry_time" field.
@@ -127,4 +168,60 @@ func ByEntryTime(opts ...sql.OrderTermOption) OrderOption {
 // ByLeavingTime orders the results by the leaving_time field.
 func ByLeavingTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLeavingTime, opts...).ToFunc()
+}
+
+// ByVenuesField orders the results by venues field.
+func ByVenuesField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVenuesStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByMembersField orders the results by members field.
+func ByMembersField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMembersStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByUsersField orders the results by users field.
+func ByUsersField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByMemberProductsField orders the results by member_products field.
+func ByMemberProductsField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberProductsStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newVenuesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VenuesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, VenuesTable, VenuesColumn),
+	)
+}
+func newMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MembersTable, MembersColumn),
+	)
+}
+func newUsersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UsersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, UsersTable, UsersColumn),
+	)
+}
+func newMemberProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MemberProductsTable, MemberProductsColumn),
+	)
 }

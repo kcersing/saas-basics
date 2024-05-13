@@ -6,7 +6,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/memberproductproperty"
+	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/productproperty"
 	"saas/pkg/db/ent/venue"
 	"saas/pkg/db/ent/venueplace"
@@ -198,6 +200,36 @@ func (vc *VenueCreate) AddPlaces(v ...*VenuePlace) *VenueCreate {
 	return vc.AddPlaceIDs(ids...)
 }
 
+// AddVenueOrderIDs adds the "venue_orders" edge to the Order entity by IDs.
+func (vc *VenueCreate) AddVenueOrderIDs(ids ...int64) *VenueCreate {
+	vc.mutation.AddVenueOrderIDs(ids...)
+	return vc
+}
+
+// AddVenueOrders adds the "venue_orders" edges to the Order entity.
+func (vc *VenueCreate) AddVenueOrders(o ...*Order) *VenueCreate {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return vc.AddVenueOrderIDs(ids...)
+}
+
+// AddVenueEntryIDs adds the "venue_entry" edge to the EntryLogs entity by IDs.
+func (vc *VenueCreate) AddVenueEntryIDs(ids ...int64) *VenueCreate {
+	vc.mutation.AddVenueEntryIDs(ids...)
+	return vc
+}
+
+// AddVenueEntry adds the "venue_entry" edges to the EntryLogs entity.
+func (vc *VenueCreate) AddVenueEntry(e ...*EntryLogs) *VenueCreate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return vc.AddVenueEntryIDs(ids...)
+}
+
 // AddMemberPropertyVenueIDs adds the "member_property_venues" edge to the MemberProductProperty entity by IDs.
 func (vc *VenueCreate) AddMemberPropertyVenueIDs(ids ...int64) *VenueCreate {
 	vc.mutation.AddMemberPropertyVenueIDs(ids...)
@@ -370,6 +402,38 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vc.mutation.VenueOrdersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.VenueOrdersTable,
+			Columns: []string{venue.VenueOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vc.mutation.VenueEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.VenueEntryTable,
+			Columns: []string{venue.VenueEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

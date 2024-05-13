@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
@@ -150,6 +151,33 @@ func (mpu *MemberProductUpdate) ClearProductID() *MemberProductUpdate {
 	return mpu
 }
 
+// SetOrderID sets the "order_id" field.
+func (mpu *MemberProductUpdate) SetOrderID(i int64) *MemberProductUpdate {
+	mpu.mutation.ResetOrderID()
+	mpu.mutation.SetOrderID(i)
+	return mpu
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (mpu *MemberProductUpdate) SetNillableOrderID(i *int64) *MemberProductUpdate {
+	if i != nil {
+		mpu.SetOrderID(*i)
+	}
+	return mpu
+}
+
+// AddOrderID adds i to the "order_id" field.
+func (mpu *MemberProductUpdate) AddOrderID(i int64) *MemberProductUpdate {
+	mpu.mutation.AddOrderID(i)
+	return mpu
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (mpu *MemberProductUpdate) ClearOrderID() *MemberProductUpdate {
+	mpu.mutation.ClearOrderID()
+	return mpu
+}
+
 // SetName sets the "name" field.
 func (mpu *MemberProductUpdate) SetName(f float64) *MemberProductUpdate {
 	mpu.mutation.ResetName()
@@ -244,23 +272,23 @@ func (mpu *MemberProductUpdate) ClearCancelAt() *MemberProductUpdate {
 	return mpu
 }
 
-// SetOwnerID sets the "owner" edge to the Member entity by ID.
-func (mpu *MemberProductUpdate) SetOwnerID(id int64) *MemberProductUpdate {
-	mpu.mutation.SetOwnerID(id)
+// SetMembersID sets the "members" edge to the Member entity by ID.
+func (mpu *MemberProductUpdate) SetMembersID(id int64) *MemberProductUpdate {
+	mpu.mutation.SetMembersID(id)
 	return mpu
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Member entity by ID if the given value is not nil.
-func (mpu *MemberProductUpdate) SetNillableOwnerID(id *int64) *MemberProductUpdate {
+// SetNillableMembersID sets the "members" edge to the Member entity by ID if the given value is not nil.
+func (mpu *MemberProductUpdate) SetNillableMembersID(id *int64) *MemberProductUpdate {
 	if id != nil {
-		mpu = mpu.SetOwnerID(*id)
+		mpu = mpu.SetMembersID(*id)
 	}
 	return mpu
 }
 
-// SetOwner sets the "owner" edge to the Member entity.
-func (mpu *MemberProductUpdate) SetOwner(m *Member) *MemberProductUpdate {
-	return mpu.SetOwnerID(m.ID)
+// SetMembers sets the "members" edge to the Member entity.
+func (mpu *MemberProductUpdate) SetMembers(m *Member) *MemberProductUpdate {
+	return mpu.SetMembersID(m.ID)
 }
 
 // AddMemberProductPropertyIDs adds the "member_product_propertys" edge to the MemberProductProperty entity by IDs.
@@ -278,14 +306,29 @@ func (mpu *MemberProductUpdate) AddMemberProductPropertys(m ...*MemberProductPro
 	return mpu.AddMemberProductPropertyIDs(ids...)
 }
 
+// AddMemberProductEntryIDs adds the "member_product_entry" edge to the EntryLogs entity by IDs.
+func (mpu *MemberProductUpdate) AddMemberProductEntryIDs(ids ...int64) *MemberProductUpdate {
+	mpu.mutation.AddMemberProductEntryIDs(ids...)
+	return mpu
+}
+
+// AddMemberProductEntry adds the "member_product_entry" edges to the EntryLogs entity.
+func (mpu *MemberProductUpdate) AddMemberProductEntry(e ...*EntryLogs) *MemberProductUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return mpu.AddMemberProductEntryIDs(ids...)
+}
+
 // Mutation returns the MemberProductMutation object of the builder.
 func (mpu *MemberProductUpdate) Mutation() *MemberProductMutation {
 	return mpu.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Member entity.
-func (mpu *MemberProductUpdate) ClearOwner() *MemberProductUpdate {
-	mpu.mutation.ClearOwner()
+// ClearMembers clears the "members" edge to the Member entity.
+func (mpu *MemberProductUpdate) ClearMembers() *MemberProductUpdate {
+	mpu.mutation.ClearMembers()
 	return mpu
 }
 
@@ -308,6 +351,27 @@ func (mpu *MemberProductUpdate) RemoveMemberProductPropertys(m ...*MemberProduct
 		ids[i] = m[i].ID
 	}
 	return mpu.RemoveMemberProductPropertyIDs(ids...)
+}
+
+// ClearMemberProductEntry clears all "member_product_entry" edges to the EntryLogs entity.
+func (mpu *MemberProductUpdate) ClearMemberProductEntry() *MemberProductUpdate {
+	mpu.mutation.ClearMemberProductEntry()
+	return mpu
+}
+
+// RemoveMemberProductEntryIDs removes the "member_product_entry" edge to EntryLogs entities by IDs.
+func (mpu *MemberProductUpdate) RemoveMemberProductEntryIDs(ids ...int64) *MemberProductUpdate {
+	mpu.mutation.RemoveMemberProductEntryIDs(ids...)
+	return mpu
+}
+
+// RemoveMemberProductEntry removes "member_product_entry" edges to EntryLogs entities.
+func (mpu *MemberProductUpdate) RemoveMemberProductEntry(e ...*EntryLogs) *MemberProductUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return mpu.RemoveMemberProductEntryIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -388,6 +452,15 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mpu.mutation.ProductIDCleared() {
 		_spec.ClearField(memberproduct.FieldProductID, field.TypeInt64)
 	}
+	if value, ok := mpu.mutation.OrderID(); ok {
+		_spec.SetField(memberproduct.FieldOrderID, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedOrderID(); ok {
+		_spec.AddField(memberproduct.FieldOrderID, field.TypeInt64, value)
+	}
+	if mpu.mutation.OrderIDCleared() {
+		_spec.ClearField(memberproduct.FieldOrderID, field.TypeInt64)
+	}
 	if value, ok := mpu.mutation.Name(); ok {
 		_spec.SetField(memberproduct.FieldName, field.TypeFloat64, value)
 	}
@@ -418,12 +491,12 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mpu.mutation.CancelAtCleared() {
 		_spec.ClearField(memberproduct.FieldCancelAt, field.TypeTime)
 	}
-	if mpu.mutation.OwnerCleared() {
+	if mpu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproduct.OwnerTable,
-			Columns: []string{memberproduct.OwnerColumn},
+			Table:   memberproduct.MembersTable,
+			Columns: []string{memberproduct.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -431,12 +504,12 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mpu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := mpu.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproduct.OwnerTable,
-			Columns: []string{memberproduct.OwnerColumn},
+			Table:   memberproduct.MembersTable,
+			Columns: []string{memberproduct.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -485,6 +558,51 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproductproperty.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mpu.mutation.MemberProductEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductEntryTable,
+			Columns: []string{memberproduct.MemberProductEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpu.mutation.RemovedMemberProductEntryIDs(); len(nodes) > 0 && !mpu.mutation.MemberProductEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductEntryTable,
+			Columns: []string{memberproduct.MemberProductEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpu.mutation.MemberProductEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductEntryTable,
+			Columns: []string{memberproduct.MemberProductEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -632,6 +750,33 @@ func (mpuo *MemberProductUpdateOne) ClearProductID() *MemberProductUpdateOne {
 	return mpuo
 }
 
+// SetOrderID sets the "order_id" field.
+func (mpuo *MemberProductUpdateOne) SetOrderID(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.ResetOrderID()
+	mpuo.mutation.SetOrderID(i)
+	return mpuo
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (mpuo *MemberProductUpdateOne) SetNillableOrderID(i *int64) *MemberProductUpdateOne {
+	if i != nil {
+		mpuo.SetOrderID(*i)
+	}
+	return mpuo
+}
+
+// AddOrderID adds i to the "order_id" field.
+func (mpuo *MemberProductUpdateOne) AddOrderID(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddOrderID(i)
+	return mpuo
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (mpuo *MemberProductUpdateOne) ClearOrderID() *MemberProductUpdateOne {
+	mpuo.mutation.ClearOrderID()
+	return mpuo
+}
+
 // SetName sets the "name" field.
 func (mpuo *MemberProductUpdateOne) SetName(f float64) *MemberProductUpdateOne {
 	mpuo.mutation.ResetName()
@@ -726,23 +871,23 @@ func (mpuo *MemberProductUpdateOne) ClearCancelAt() *MemberProductUpdateOne {
 	return mpuo
 }
 
-// SetOwnerID sets the "owner" edge to the Member entity by ID.
-func (mpuo *MemberProductUpdateOne) SetOwnerID(id int64) *MemberProductUpdateOne {
-	mpuo.mutation.SetOwnerID(id)
+// SetMembersID sets the "members" edge to the Member entity by ID.
+func (mpuo *MemberProductUpdateOne) SetMembersID(id int64) *MemberProductUpdateOne {
+	mpuo.mutation.SetMembersID(id)
 	return mpuo
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Member entity by ID if the given value is not nil.
-func (mpuo *MemberProductUpdateOne) SetNillableOwnerID(id *int64) *MemberProductUpdateOne {
+// SetNillableMembersID sets the "members" edge to the Member entity by ID if the given value is not nil.
+func (mpuo *MemberProductUpdateOne) SetNillableMembersID(id *int64) *MemberProductUpdateOne {
 	if id != nil {
-		mpuo = mpuo.SetOwnerID(*id)
+		mpuo = mpuo.SetMembersID(*id)
 	}
 	return mpuo
 }
 
-// SetOwner sets the "owner" edge to the Member entity.
-func (mpuo *MemberProductUpdateOne) SetOwner(m *Member) *MemberProductUpdateOne {
-	return mpuo.SetOwnerID(m.ID)
+// SetMembers sets the "members" edge to the Member entity.
+func (mpuo *MemberProductUpdateOne) SetMembers(m *Member) *MemberProductUpdateOne {
+	return mpuo.SetMembersID(m.ID)
 }
 
 // AddMemberProductPropertyIDs adds the "member_product_propertys" edge to the MemberProductProperty entity by IDs.
@@ -760,14 +905,29 @@ func (mpuo *MemberProductUpdateOne) AddMemberProductPropertys(m ...*MemberProduc
 	return mpuo.AddMemberProductPropertyIDs(ids...)
 }
 
+// AddMemberProductEntryIDs adds the "member_product_entry" edge to the EntryLogs entity by IDs.
+func (mpuo *MemberProductUpdateOne) AddMemberProductEntryIDs(ids ...int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddMemberProductEntryIDs(ids...)
+	return mpuo
+}
+
+// AddMemberProductEntry adds the "member_product_entry" edges to the EntryLogs entity.
+func (mpuo *MemberProductUpdateOne) AddMemberProductEntry(e ...*EntryLogs) *MemberProductUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return mpuo.AddMemberProductEntryIDs(ids...)
+}
+
 // Mutation returns the MemberProductMutation object of the builder.
 func (mpuo *MemberProductUpdateOne) Mutation() *MemberProductMutation {
 	return mpuo.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Member entity.
-func (mpuo *MemberProductUpdateOne) ClearOwner() *MemberProductUpdateOne {
-	mpuo.mutation.ClearOwner()
+// ClearMembers clears the "members" edge to the Member entity.
+func (mpuo *MemberProductUpdateOne) ClearMembers() *MemberProductUpdateOne {
+	mpuo.mutation.ClearMembers()
 	return mpuo
 }
 
@@ -790,6 +950,27 @@ func (mpuo *MemberProductUpdateOne) RemoveMemberProductPropertys(m ...*MemberPro
 		ids[i] = m[i].ID
 	}
 	return mpuo.RemoveMemberProductPropertyIDs(ids...)
+}
+
+// ClearMemberProductEntry clears all "member_product_entry" edges to the EntryLogs entity.
+func (mpuo *MemberProductUpdateOne) ClearMemberProductEntry() *MemberProductUpdateOne {
+	mpuo.mutation.ClearMemberProductEntry()
+	return mpuo
+}
+
+// RemoveMemberProductEntryIDs removes the "member_product_entry" edge to EntryLogs entities by IDs.
+func (mpuo *MemberProductUpdateOne) RemoveMemberProductEntryIDs(ids ...int64) *MemberProductUpdateOne {
+	mpuo.mutation.RemoveMemberProductEntryIDs(ids...)
+	return mpuo
+}
+
+// RemoveMemberProductEntry removes "member_product_entry" edges to EntryLogs entities.
+func (mpuo *MemberProductUpdateOne) RemoveMemberProductEntry(e ...*EntryLogs) *MemberProductUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return mpuo.RemoveMemberProductEntryIDs(ids...)
 }
 
 // Where appends a list predicates to the MemberProductUpdate builder.
@@ -900,6 +1081,15 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	if mpuo.mutation.ProductIDCleared() {
 		_spec.ClearField(memberproduct.FieldProductID, field.TypeInt64)
 	}
+	if value, ok := mpuo.mutation.OrderID(); ok {
+		_spec.SetField(memberproduct.FieldOrderID, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedOrderID(); ok {
+		_spec.AddField(memberproduct.FieldOrderID, field.TypeInt64, value)
+	}
+	if mpuo.mutation.OrderIDCleared() {
+		_spec.ClearField(memberproduct.FieldOrderID, field.TypeInt64)
+	}
 	if value, ok := mpuo.mutation.Name(); ok {
 		_spec.SetField(memberproduct.FieldName, field.TypeFloat64, value)
 	}
@@ -930,12 +1120,12 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	if mpuo.mutation.CancelAtCleared() {
 		_spec.ClearField(memberproduct.FieldCancelAt, field.TypeTime)
 	}
-	if mpuo.mutation.OwnerCleared() {
+	if mpuo.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproduct.OwnerTable,
-			Columns: []string{memberproduct.OwnerColumn},
+			Table:   memberproduct.MembersTable,
+			Columns: []string{memberproduct.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -943,12 +1133,12 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mpuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := mpuo.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproduct.OwnerTable,
-			Columns: []string{memberproduct.OwnerColumn},
+			Table:   memberproduct.MembersTable,
+			Columns: []string{memberproduct.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -997,6 +1187,51 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproductproperty.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mpuo.mutation.MemberProductEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductEntryTable,
+			Columns: []string{memberproduct.MemberProductEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpuo.mutation.RemovedMemberProductEntryIDs(); len(nodes) > 0 && !mpuo.mutation.MemberProductEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductEntryTable,
+			Columns: []string{memberproduct.MemberProductEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpuo.mutation.MemberProductEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductEntryTable,
+			Columns: []string{memberproduct.MemberProductEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

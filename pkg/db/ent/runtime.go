@@ -222,6 +222,14 @@ func init() {
 	entrylogs.DefaultUpdatedAt = entrylogsDescUpdatedAt.Default.(func() time.Time)
 	// entrylogs.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	entrylogs.UpdateDefaultUpdatedAt = entrylogsDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// entrylogsDescMemberID is the schema descriptor for member_id field.
+	entrylogsDescMemberID := entrylogsFields[0].Descriptor()
+	// entrylogs.DefaultMemberID holds the default value on creation for the member_id field.
+	entrylogs.DefaultMemberID = entrylogsDescMemberID.Default.(int64)
+	// entrylogsDescUserID is the schema descriptor for user_id field.
+	entrylogsDescUserID := entrylogsFields[1].Descriptor()
+	// entrylogs.DefaultUserID holds the default value on creation for the user_id field.
+	entrylogs.DefaultUserID = entrylogsDescUserID.Default.(int64)
 	// entrylogsDescEntryTime is the schema descriptor for entry_time field.
 	entrylogsDescEntryTime := entrylogsFields[5].Descriptor()
 	// entrylogs.DefaultEntryTime holds the default value on creation for the entry_time field.
@@ -421,11 +429,11 @@ func init() {
 	// memberproductproperty.DefaultStatus holds the default value on creation for the status field.
 	memberproductproperty.DefaultStatus = memberproductpropertyDescStatus.Default.(int64)
 	// memberproductpropertyDescCount is the schema descriptor for count field.
-	memberproductpropertyDescCount := memberproductpropertyFields[6].Descriptor()
+	memberproductpropertyDescCount := memberproductpropertyFields[7].Descriptor()
 	// memberproductproperty.DefaultCount holds the default value on creation for the count field.
 	memberproductproperty.DefaultCount = memberproductpropertyDescCount.Default.(int64)
 	// memberproductpropertyDescCountSurplus is the schema descriptor for count_surplus field.
-	memberproductpropertyDescCountSurplus := memberproductpropertyFields[7].Descriptor()
+	memberproductpropertyDescCountSurplus := memberproductpropertyFields[8].Descriptor()
 	// memberproductproperty.DefaultCountSurplus holds the default value on creation for the count_surplus field.
 	memberproductproperty.DefaultCountSurplus = memberproductpropertyDescCountSurplus.Default.(int64)
 	menuMixin := schema.Menu{}.Mixin()

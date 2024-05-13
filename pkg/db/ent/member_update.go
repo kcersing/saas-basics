@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
+	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
 	"time"
 
@@ -241,6 +243,21 @@ func (mu *MemberUpdate) AddMemberNotes(m ...*MemberNote) *MemberUpdate {
 	return mu.AddMemberNoteIDs(ids...)
 }
 
+// AddMemberOrderIDs adds the "member_orders" edge to the Order entity by IDs.
+func (mu *MemberUpdate) AddMemberOrderIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.AddMemberOrderIDs(ids...)
+	return mu
+}
+
+// AddMemberOrders adds the "member_orders" edges to the Order entity.
+func (mu *MemberUpdate) AddMemberOrders(o ...*Order) *MemberUpdate {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return mu.AddMemberOrderIDs(ids...)
+}
+
 // AddMemberProductIDs adds the "member_products" edge to the MemberProduct entity by IDs.
 func (mu *MemberUpdate) AddMemberProductIDs(ids ...int64) *MemberUpdate {
 	mu.mutation.AddMemberProductIDs(ids...)
@@ -254,6 +271,21 @@ func (mu *MemberUpdate) AddMemberProducts(m ...*MemberProduct) *MemberUpdate {
 		ids[i] = m[i].ID
 	}
 	return mu.AddMemberProductIDs(ids...)
+}
+
+// AddMemberEntryIDs adds the "member_entry" edge to the EntryLogs entity by IDs.
+func (mu *MemberUpdate) AddMemberEntryIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.AddMemberEntryIDs(ids...)
+	return mu
+}
+
+// AddMemberEntry adds the "member_entry" edges to the EntryLogs entity.
+func (mu *MemberUpdate) AddMemberEntry(e ...*EntryLogs) *MemberUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return mu.AddMemberEntryIDs(ids...)
 }
 
 // Mutation returns the MemberMutation object of the builder.
@@ -303,6 +335,27 @@ func (mu *MemberUpdate) RemoveMemberNotes(m ...*MemberNote) *MemberUpdate {
 	return mu.RemoveMemberNoteIDs(ids...)
 }
 
+// ClearMemberOrders clears all "member_orders" edges to the Order entity.
+func (mu *MemberUpdate) ClearMemberOrders() *MemberUpdate {
+	mu.mutation.ClearMemberOrders()
+	return mu
+}
+
+// RemoveMemberOrderIDs removes the "member_orders" edge to Order entities by IDs.
+func (mu *MemberUpdate) RemoveMemberOrderIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.RemoveMemberOrderIDs(ids...)
+	return mu
+}
+
+// RemoveMemberOrders removes "member_orders" edges to Order entities.
+func (mu *MemberUpdate) RemoveMemberOrders(o ...*Order) *MemberUpdate {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return mu.RemoveMemberOrderIDs(ids...)
+}
+
 // ClearMemberProducts clears all "member_products" edges to the MemberProduct entity.
 func (mu *MemberUpdate) ClearMemberProducts() *MemberUpdate {
 	mu.mutation.ClearMemberProducts()
@@ -322,6 +375,27 @@ func (mu *MemberUpdate) RemoveMemberProducts(m ...*MemberProduct) *MemberUpdate 
 		ids[i] = m[i].ID
 	}
 	return mu.RemoveMemberProductIDs(ids...)
+}
+
+// ClearMemberEntry clears all "member_entry" edges to the EntryLogs entity.
+func (mu *MemberUpdate) ClearMemberEntry() *MemberUpdate {
+	mu.mutation.ClearMemberEntry()
+	return mu
+}
+
+// RemoveMemberEntryIDs removes the "member_entry" edge to EntryLogs entities by IDs.
+func (mu *MemberUpdate) RemoveMemberEntryIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.RemoveMemberEntryIDs(ids...)
+	return mu
+}
+
+// RemoveMemberEntry removes "member_entry" edges to EntryLogs entities.
+func (mu *MemberUpdate) RemoveMemberEntry(e ...*EntryLogs) *MemberUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return mu.RemoveMemberEntryIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -516,6 +590,51 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if mu.mutation.MemberOrdersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberOrdersTable,
+			Columns: []string{member.MemberOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.RemovedMemberOrdersIDs(); len(nodes) > 0 && !mu.mutation.MemberOrdersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberOrdersTable,
+			Columns: []string{member.MemberOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.MemberOrdersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberOrdersTable,
+			Columns: []string{member.MemberOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if mu.mutation.MemberProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -554,6 +673,51 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mu.mutation.MemberEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberEntryTable,
+			Columns: []string{member.MemberEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.RemovedMemberEntryIDs(); len(nodes) > 0 && !mu.mutation.MemberEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberEntryTable,
+			Columns: []string{member.MemberEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.MemberEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberEntryTable,
+			Columns: []string{member.MemberEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -791,6 +955,21 @@ func (muo *MemberUpdateOne) AddMemberNotes(m ...*MemberNote) *MemberUpdateOne {
 	return muo.AddMemberNoteIDs(ids...)
 }
 
+// AddMemberOrderIDs adds the "member_orders" edge to the Order entity by IDs.
+func (muo *MemberUpdateOne) AddMemberOrderIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.AddMemberOrderIDs(ids...)
+	return muo
+}
+
+// AddMemberOrders adds the "member_orders" edges to the Order entity.
+func (muo *MemberUpdateOne) AddMemberOrders(o ...*Order) *MemberUpdateOne {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return muo.AddMemberOrderIDs(ids...)
+}
+
 // AddMemberProductIDs adds the "member_products" edge to the MemberProduct entity by IDs.
 func (muo *MemberUpdateOne) AddMemberProductIDs(ids ...int64) *MemberUpdateOne {
 	muo.mutation.AddMemberProductIDs(ids...)
@@ -804,6 +983,21 @@ func (muo *MemberUpdateOne) AddMemberProducts(m ...*MemberProduct) *MemberUpdate
 		ids[i] = m[i].ID
 	}
 	return muo.AddMemberProductIDs(ids...)
+}
+
+// AddMemberEntryIDs adds the "member_entry" edge to the EntryLogs entity by IDs.
+func (muo *MemberUpdateOne) AddMemberEntryIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.AddMemberEntryIDs(ids...)
+	return muo
+}
+
+// AddMemberEntry adds the "member_entry" edges to the EntryLogs entity.
+func (muo *MemberUpdateOne) AddMemberEntry(e ...*EntryLogs) *MemberUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return muo.AddMemberEntryIDs(ids...)
 }
 
 // Mutation returns the MemberMutation object of the builder.
@@ -853,6 +1047,27 @@ func (muo *MemberUpdateOne) RemoveMemberNotes(m ...*MemberNote) *MemberUpdateOne
 	return muo.RemoveMemberNoteIDs(ids...)
 }
 
+// ClearMemberOrders clears all "member_orders" edges to the Order entity.
+func (muo *MemberUpdateOne) ClearMemberOrders() *MemberUpdateOne {
+	muo.mutation.ClearMemberOrders()
+	return muo
+}
+
+// RemoveMemberOrderIDs removes the "member_orders" edge to Order entities by IDs.
+func (muo *MemberUpdateOne) RemoveMemberOrderIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.RemoveMemberOrderIDs(ids...)
+	return muo
+}
+
+// RemoveMemberOrders removes "member_orders" edges to Order entities.
+func (muo *MemberUpdateOne) RemoveMemberOrders(o ...*Order) *MemberUpdateOne {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return muo.RemoveMemberOrderIDs(ids...)
+}
+
 // ClearMemberProducts clears all "member_products" edges to the MemberProduct entity.
 func (muo *MemberUpdateOne) ClearMemberProducts() *MemberUpdateOne {
 	muo.mutation.ClearMemberProducts()
@@ -872,6 +1087,27 @@ func (muo *MemberUpdateOne) RemoveMemberProducts(m ...*MemberProduct) *MemberUpd
 		ids[i] = m[i].ID
 	}
 	return muo.RemoveMemberProductIDs(ids...)
+}
+
+// ClearMemberEntry clears all "member_entry" edges to the EntryLogs entity.
+func (muo *MemberUpdateOne) ClearMemberEntry() *MemberUpdateOne {
+	muo.mutation.ClearMemberEntry()
+	return muo
+}
+
+// RemoveMemberEntryIDs removes the "member_entry" edge to EntryLogs entities by IDs.
+func (muo *MemberUpdateOne) RemoveMemberEntryIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.RemoveMemberEntryIDs(ids...)
+	return muo
+}
+
+// RemoveMemberEntry removes "member_entry" edges to EntryLogs entities.
+func (muo *MemberUpdateOne) RemoveMemberEntry(e ...*EntryLogs) *MemberUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return muo.RemoveMemberEntryIDs(ids...)
 }
 
 // Where appends a list predicates to the MemberUpdate builder.
@@ -1096,6 +1332,51 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if muo.mutation.MemberOrdersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberOrdersTable,
+			Columns: []string{member.MemberOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.RemovedMemberOrdersIDs(); len(nodes) > 0 && !muo.mutation.MemberOrdersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberOrdersTable,
+			Columns: []string{member.MemberOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.MemberOrdersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberOrdersTable,
+			Columns: []string{member.MemberOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if muo.mutation.MemberProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1134,6 +1415,51 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if muo.mutation.MemberEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberEntryTable,
+			Columns: []string{member.MemberEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.RemovedMemberEntryIDs(); len(nodes) > 0 && !muo.mutation.MemberEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberEntryTable,
+			Columns: []string{member.MemberEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.MemberEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberEntryTable,
+			Columns: []string{member.MemberEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

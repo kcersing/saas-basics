@@ -39,24 +39,24 @@ type OrderAmount struct {
 
 // OrderAmountEdges holds the relations/edges for other nodes in the graph.
 type OrderAmountEdges struct {
-	// Owner holds the value of the owner edge.
-	Owner *Order `json:"owner,omitempty"`
+	// Aufk holds the value of the aufk edge.
+	Aufk *Order `json:"aufk,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// OwnerOrErr returns the Owner value or an error if the edge
+// AufkOrErr returns the Aufk value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrderAmountEdges) OwnerOrErr() (*Order, error) {
+func (e OrderAmountEdges) AufkOrErr() (*Order, error) {
 	if e.loadedTypes[0] {
-		if e.Owner == nil {
+		if e.Aufk == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: order.Label}
 		}
-		return e.Owner, nil
+		return e.Aufk, nil
 	}
-	return nil, &NotLoadedError{edge: "owner"}
+	return nil, &NotLoadedError{edge: "aufk"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -140,9 +140,9 @@ func (oa *OrderAmount) Value(name string) (ent.Value, error) {
 	return oa.selectValues.Get(name)
 }
 
-// QueryOwner queries the "owner" edge of the OrderAmount entity.
-func (oa *OrderAmount) QueryOwner() *OrderQuery {
-	return NewOrderAmountClient(oa.config).QueryOwner(oa)
+// QueryAufk queries the "aufk" edge of the OrderAmount entity.
+func (oa *OrderAmount) QueryAufk() *OrderQuery {
+	return NewOrderAmountClient(oa.config).QueryAufk(oa)
 }
 
 // Update returns a builder for updating this OrderAmount.

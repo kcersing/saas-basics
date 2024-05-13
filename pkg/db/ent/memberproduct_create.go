@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
@@ -120,6 +121,20 @@ func (mpc *MemberProductCreate) SetNillableProductID(i *int64) *MemberProductCre
 	return mpc
 }
 
+// SetOrderID sets the "order_id" field.
+func (mpc *MemberProductCreate) SetOrderID(i int64) *MemberProductCreate {
+	mpc.mutation.SetOrderID(i)
+	return mpc
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableOrderID(i *int64) *MemberProductCreate {
+	if i != nil {
+		mpc.SetOrderID(*i)
+	}
+	return mpc
+}
+
 // SetName sets the "name" field.
 func (mpc *MemberProductCreate) SetName(f float64) *MemberProductCreate {
 	mpc.mutation.SetName(f)
@@ -182,23 +197,23 @@ func (mpc *MemberProductCreate) SetID(i int64) *MemberProductCreate {
 	return mpc
 }
 
-// SetOwnerID sets the "owner" edge to the Member entity by ID.
-func (mpc *MemberProductCreate) SetOwnerID(id int64) *MemberProductCreate {
-	mpc.mutation.SetOwnerID(id)
+// SetMembersID sets the "members" edge to the Member entity by ID.
+func (mpc *MemberProductCreate) SetMembersID(id int64) *MemberProductCreate {
+	mpc.mutation.SetMembersID(id)
 	return mpc
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Member entity by ID if the given value is not nil.
-func (mpc *MemberProductCreate) SetNillableOwnerID(id *int64) *MemberProductCreate {
+// SetNillableMembersID sets the "members" edge to the Member entity by ID if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableMembersID(id *int64) *MemberProductCreate {
 	if id != nil {
-		mpc = mpc.SetOwnerID(*id)
+		mpc = mpc.SetMembersID(*id)
 	}
 	return mpc
 }
 
-// SetOwner sets the "owner" edge to the Member entity.
-func (mpc *MemberProductCreate) SetOwner(m *Member) *MemberProductCreate {
-	return mpc.SetOwnerID(m.ID)
+// SetMembers sets the "members" edge to the Member entity.
+func (mpc *MemberProductCreate) SetMembers(m *Member) *MemberProductCreate {
+	return mpc.SetMembersID(m.ID)
 }
 
 // AddMemberProductPropertyIDs adds the "member_product_propertys" edge to the MemberProductProperty entity by IDs.
@@ -214,6 +229,21 @@ func (mpc *MemberProductCreate) AddMemberProductPropertys(m ...*MemberProductPro
 		ids[i] = m[i].ID
 	}
 	return mpc.AddMemberProductPropertyIDs(ids...)
+}
+
+// AddMemberProductEntryIDs adds the "member_product_entry" edge to the EntryLogs entity by IDs.
+func (mpc *MemberProductCreate) AddMemberProductEntryIDs(ids ...int64) *MemberProductCreate {
+	mpc.mutation.AddMemberProductEntryIDs(ids...)
+	return mpc
+}
+
+// AddMemberProductEntry adds the "member_product_entry" edges to the EntryLogs entity.
+func (mpc *MemberProductCreate) AddMemberProductEntry(e ...*EntryLogs) *MemberProductCreate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return mpc.AddMemberProductEntryIDs(ids...)
 }
 
 // Mutation returns the MemberProductMutation object of the builder.
@@ -329,6 +359,10 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 		_spec.SetField(memberproduct.FieldProductID, field.TypeInt64, value)
 		_node.ProductID = value
 	}
+	if value, ok := mpc.mutation.OrderID(); ok {
+		_spec.SetField(memberproduct.FieldOrderID, field.TypeInt64, value)
+		_node.OrderID = value
+	}
 	if value, ok := mpc.mutation.Name(); ok {
 		_spec.SetField(memberproduct.FieldName, field.TypeFloat64, value)
 		_node.Name = value
@@ -345,12 +379,12 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 		_spec.SetField(memberproduct.FieldCancelAt, field.TypeTime, value)
 		_node.CancelAt = value
 	}
-	if nodes := mpc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := mpc.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproduct.OwnerTable,
-			Columns: []string{memberproduct.OwnerColumn},
+			Table:   memberproduct.MembersTable,
+			Columns: []string{memberproduct.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -371,6 +405,22 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproductproperty.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mpc.mutation.MemberProductEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductEntryTable,
+			Columns: []string{memberproduct.MemberProductEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

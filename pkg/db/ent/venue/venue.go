@@ -38,6 +38,10 @@ const (
 	FieldInformation = "information"
 	// EdgePlaces holds the string denoting the places edge name in mutations.
 	EdgePlaces = "places"
+	// EdgeVenueOrders holds the string denoting the venue_orders edge name in mutations.
+	EdgeVenueOrders = "venue_orders"
+	// EdgeVenueEntry holds the string denoting the venue_entry edge name in mutations.
+	EdgeVenueEntry = "venue_entry"
 	// EdgeMemberPropertyVenues holds the string denoting the member_property_venues edge name in mutations.
 	EdgeMemberPropertyVenues = "member_property_venues"
 	// EdgePropertyVenues holds the string denoting the property_venues edge name in mutations.
@@ -51,6 +55,20 @@ const (
 	PlacesInverseTable = "venue_place"
 	// PlacesColumn is the table column denoting the places relation/edge.
 	PlacesColumn = "venue_id"
+	// VenueOrdersTable is the table that holds the venue_orders relation/edge.
+	VenueOrdersTable = "order"
+	// VenueOrdersInverseTable is the table name for the Order entity.
+	// It exists in this package in order to avoid circular dependency with the "order" package.
+	VenueOrdersInverseTable = "order"
+	// VenueOrdersColumn is the table column denoting the venue_orders relation/edge.
+	VenueOrdersColumn = "venue_id"
+	// VenueEntryTable is the table that holds the venue_entry relation/edge.
+	VenueEntryTable = "entry_logs"
+	// VenueEntryInverseTable is the table name for the EntryLogs entity.
+	// It exists in this package in order to avoid circular dependency with the "entrylogs" package.
+	VenueEntryInverseTable = "entry_logs"
+	// VenueEntryColumn is the table column denoting the venue_entry relation/edge.
+	VenueEntryColumn = "venue_id"
 	// MemberPropertyVenuesTable is the table that holds the member_property_venues relation/edge. The primary key declared below.
 	MemberPropertyVenuesTable = "member_product_property_venues"
 	// MemberPropertyVenuesInverseTable is the table name for the MemberProductProperty entity.
@@ -186,6 +204,34 @@ func ByPlaces(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByVenueOrdersCount orders the results by venue_orders count.
+func ByVenueOrdersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVenueOrdersStep(), opts...)
+	}
+}
+
+// ByVenueOrders orders the results by venue_orders terms.
+func ByVenueOrders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVenueOrdersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVenueEntryCount orders the results by venue_entry count.
+func ByVenueEntryCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVenueEntryStep(), opts...)
+	}
+}
+
+// ByVenueEntry orders the results by venue_entry terms.
+func ByVenueEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVenueEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMemberPropertyVenuesCount orders the results by member_property_venues count.
 func ByMemberPropertyVenuesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -218,6 +264,20 @@ func newPlacesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlacesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PlacesTable, PlacesColumn),
+	)
+}
+func newVenueOrdersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VenueOrdersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VenueOrdersTable, VenueOrdersColumn),
+	)
+}
+func newVenueEntryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VenueEntryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VenueEntryTable, VenueEntryColumn),
 	)
 }
 func newMemberPropertyVenuesStep() *sqlgraph.Step {

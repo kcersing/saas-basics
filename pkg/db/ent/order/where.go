@@ -280,26 +280,6 @@ func VenueIDNotIn(vs ...int64) predicate.Order {
 	return predicate.Order(sql.FieldNotIn(FieldVenueID, vs...))
 }
 
-// VenueIDGT applies the GT predicate on the "venue_id" field.
-func VenueIDGT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGT(FieldVenueID, v))
-}
-
-// VenueIDGTE applies the GTE predicate on the "venue_id" field.
-func VenueIDGTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGTE(FieldVenueID, v))
-}
-
-// VenueIDLT applies the LT predicate on the "venue_id" field.
-func VenueIDLT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLT(FieldVenueID, v))
-}
-
-// VenueIDLTE applies the LTE predicate on the "venue_id" field.
-func VenueIDLTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLTE(FieldVenueID, v))
-}
-
 // VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
 func VenueIDIsNil() predicate.Order {
 	return predicate.Order(sql.FieldIsNull(FieldVenueID))
@@ -328,26 +308,6 @@ func MemberIDIn(vs ...int64) predicate.Order {
 // MemberIDNotIn applies the NotIn predicate on the "member_id" field.
 func MemberIDNotIn(vs ...int64) predicate.Order {
 	return predicate.Order(sql.FieldNotIn(FieldMemberID, vs...))
-}
-
-// MemberIDGT applies the GT predicate on the "member_id" field.
-func MemberIDGT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGT(FieldMemberID, v))
-}
-
-// MemberIDGTE applies the GTE predicate on the "member_id" field.
-func MemberIDGTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGTE(FieldMemberID, v))
-}
-
-// MemberIDLT applies the LT predicate on the "member_id" field.
-func MemberIDLT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLT(FieldMemberID, v))
-}
-
-// MemberIDLTE applies the LTE predicate on the "member_id" field.
-func MemberIDLTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLTE(FieldMemberID, v))
 }
 
 // MemberIDIsNil applies the IsNil predicate on the "member_id" field.
@@ -630,26 +590,6 @@ func CreateIDNotIn(vs ...int64) predicate.Order {
 	return predicate.Order(sql.FieldNotIn(FieldCreateID, vs...))
 }
 
-// CreateIDGT applies the GT predicate on the "create_id" field.
-func CreateIDGT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGT(FieldCreateID, v))
-}
-
-// CreateIDGTE applies the GTE predicate on the "create_id" field.
-func CreateIDGTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGTE(FieldCreateID, v))
-}
-
-// CreateIDLT applies the LT predicate on the "create_id" field.
-func CreateIDLT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLT(FieldCreateID, v))
-}
-
-// CreateIDLTE applies the LTE predicate on the "create_id" field.
-func CreateIDLTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLTE(FieldCreateID, v))
-}
-
 // CreateIDIsNil applies the IsNil predicate on the "create_id" field.
 func CreateIDIsNil() predicate.Order {
 	return predicate.Order(sql.FieldIsNull(FieldCreateID))
@@ -744,6 +684,75 @@ func HasSales() predicate.Order {
 func HasSalesWith(preds ...predicate.OrderSales) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newSalesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOrderVenues applies the HasEdge predicate on the "order_venues" edge.
+func HasOrderVenues() predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OrderVenuesTable, OrderVenuesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrderVenuesWith applies the HasEdge predicate on the "order_venues" edge with a given conditions (other predicates).
+func HasOrderVenuesWith(preds ...predicate.Venue) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := newOrderVenuesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOrderMembers applies the HasEdge predicate on the "order_members" edge.
+func HasOrderMembers() predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OrderMembersTable, OrderMembersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrderMembersWith applies the HasEdge predicate on the "order_members" edge with a given conditions (other predicates).
+func HasOrderMembersWith(preds ...predicate.Member) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := newOrderMembersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOrderCreates applies the HasEdge predicate on the "order_creates" edge.
+func HasOrderCreates() predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OrderCreatesTable, OrderCreatesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrderCreatesWith applies the HasEdge predicate on the "order_creates" edge with a given conditions (other predicates).
+func HasOrderCreatesWith(preds ...predicate.User) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := newOrderCreatesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

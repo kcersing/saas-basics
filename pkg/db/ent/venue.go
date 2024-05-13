@@ -50,13 +50,17 @@ type Venue struct {
 type VenueEdges struct {
 	// Places holds the value of the places edge.
 	Places []*VenuePlace `json:"places,omitempty"`
+	// VenueOrders holds the value of the venue_orders edge.
+	VenueOrders []*Order `json:"venue_orders,omitempty"`
+	// VenueEntry holds the value of the venue_entry edge.
+	VenueEntry []*EntryLogs `json:"venue_entry,omitempty"`
 	// MemberPropertyVenues holds the value of the member_property_venues edge.
 	MemberPropertyVenues []*MemberProductProperty `json:"member_property_venues,omitempty"`
 	// PropertyVenues holds the value of the property_venues edge.
 	PropertyVenues []*ProductProperty `json:"property_venues,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 }
 
 // PlacesOrErr returns the Places value or an error if the edge
@@ -68,10 +72,28 @@ func (e VenueEdges) PlacesOrErr() ([]*VenuePlace, error) {
 	return nil, &NotLoadedError{edge: "places"}
 }
 
+// VenueOrdersOrErr returns the VenueOrders value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) VenueOrdersOrErr() ([]*Order, error) {
+	if e.loadedTypes[1] {
+		return e.VenueOrders, nil
+	}
+	return nil, &NotLoadedError{edge: "venue_orders"}
+}
+
+// VenueEntryOrErr returns the VenueEntry value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) VenueEntryOrErr() ([]*EntryLogs, error) {
+	if e.loadedTypes[2] {
+		return e.VenueEntry, nil
+	}
+	return nil, &NotLoadedError{edge: "venue_entry"}
+}
+
 // MemberPropertyVenuesOrErr returns the MemberPropertyVenues value or an error if the edge
 // was not loaded in eager-loading.
 func (e VenueEdges) MemberPropertyVenuesOrErr() ([]*MemberProductProperty, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.MemberPropertyVenues, nil
 	}
 	return nil, &NotLoadedError{edge: "member_property_venues"}
@@ -80,7 +102,7 @@ func (e VenueEdges) MemberPropertyVenuesOrErr() ([]*MemberProductProperty, error
 // PropertyVenuesOrErr returns the PropertyVenues value or an error if the edge
 // was not loaded in eager-loading.
 func (e VenueEdges) PropertyVenuesOrErr() ([]*ProductProperty, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.PropertyVenues, nil
 	}
 	return nil, &NotLoadedError{edge: "property_venues"}
@@ -200,6 +222,16 @@ func (v *Venue) Value(name string) (ent.Value, error) {
 // QueryPlaces queries the "places" edge of the Venue entity.
 func (v *Venue) QueryPlaces() *VenuePlaceQuery {
 	return NewVenueClient(v.config).QueryPlaces(v)
+}
+
+// QueryVenueOrders queries the "venue_orders" edge of the Venue entity.
+func (v *Venue) QueryVenueOrders() *OrderQuery {
+	return NewVenueClient(v.config).QueryVenueOrders(v)
+}
+
+// QueryVenueEntry queries the "venue_entry" edge of the Venue entity.
+func (v *Venue) QueryVenueEntry() *EntryLogsQuery {
+	return NewVenueClient(v.config).QueryVenueEntry(v)
 }
 
 // QueryMemberPropertyVenues queries the "member_property_venues" edge of the Venue entity.

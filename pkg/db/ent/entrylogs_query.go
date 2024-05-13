@@ -7,7 +7,11 @@ import (
 	"fmt"
 	"math"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -17,10 +21,14 @@ import (
 // EntryLogsQuery is the builder for querying EntryLogs entities.
 type EntryLogsQuery struct {
 	config
-	ctx        *QueryContext
-	order      []entrylogs.OrderOption
-	inters     []Interceptor
-	predicates []predicate.EntryLogs
+	ctx                *QueryContext
+	order              []entrylogs.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.EntryLogs
+	withVenues         *VenueQuery
+	withMembers        *MemberQuery
+	withUsers          *UserQuery
+	withMemberProducts *MemberProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +63,94 @@ func (elq *EntryLogsQuery) Unique(unique bool) *EntryLogsQuery {
 func (elq *EntryLogsQuery) Order(o ...entrylogs.OrderOption) *EntryLogsQuery {
 	elq.order = append(elq.order, o...)
 	return elq
+}
+
+// QueryVenues chains the current query on the "venues" edge.
+func (elq *EntryLogsQuery) QueryVenues() *VenueQuery {
+	query := (&VenueClient{config: elq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := elq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := elq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, selector),
+			sqlgraph.To(venue.Table, venue.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.VenuesTable, entrylogs.VenuesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMembers chains the current query on the "members" edge.
+func (elq *EntryLogsQuery) QueryMembers() *MemberQuery {
+	query := (&MemberClient{config: elq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := elq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := elq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, selector),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MembersTable, entrylogs.MembersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUsers chains the current query on the "users" edge.
+func (elq *EntryLogsQuery) QueryUsers() *UserQuery {
+	query := (&UserClient{config: elq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := elq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := elq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.UsersTable, entrylogs.UsersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberProducts chains the current query on the "member_products" edge.
+func (elq *EntryLogsQuery) QueryMemberProducts() *MemberProductQuery {
+	query := (&MemberProductClient{config: elq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := elq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := elq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, selector),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MemberProductsTable, entrylogs.MemberProductsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first EntryLogs entity from the query.
@@ -244,15 +340,63 @@ func (elq *EntryLogsQuery) Clone() *EntryLogsQuery {
 		return nil
 	}
 	return &EntryLogsQuery{
-		config:     elq.config,
-		ctx:        elq.ctx.Clone(),
-		order:      append([]entrylogs.OrderOption{}, elq.order...),
-		inters:     append([]Interceptor{}, elq.inters...),
-		predicates: append([]predicate.EntryLogs{}, elq.predicates...),
+		config:             elq.config,
+		ctx:                elq.ctx.Clone(),
+		order:              append([]entrylogs.OrderOption{}, elq.order...),
+		inters:             append([]Interceptor{}, elq.inters...),
+		predicates:         append([]predicate.EntryLogs{}, elq.predicates...),
+		withVenues:         elq.withVenues.Clone(),
+		withMembers:        elq.withMembers.Clone(),
+		withUsers:          elq.withUsers.Clone(),
+		withMemberProducts: elq.withMemberProducts.Clone(),
 		// clone intermediate query.
 		sql:  elq.sql.Clone(),
 		path: elq.path,
 	}
+}
+
+// WithVenues tells the query-builder to eager-load the nodes that are connected to
+// the "venues" edge. The optional arguments are used to configure the query builder of the edge.
+func (elq *EntryLogsQuery) WithVenues(opts ...func(*VenueQuery)) *EntryLogsQuery {
+	query := (&VenueClient{config: elq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	elq.withVenues = query
+	return elq
+}
+
+// WithMembers tells the query-builder to eager-load the nodes that are connected to
+// the "members" edge. The optional arguments are used to configure the query builder of the edge.
+func (elq *EntryLogsQuery) WithMembers(opts ...func(*MemberQuery)) *EntryLogsQuery {
+	query := (&MemberClient{config: elq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	elq.withMembers = query
+	return elq
+}
+
+// WithUsers tells the query-builder to eager-load the nodes that are connected to
+// the "users" edge. The optional arguments are used to configure the query builder of the edge.
+func (elq *EntryLogsQuery) WithUsers(opts ...func(*UserQuery)) *EntryLogsQuery {
+	query := (&UserClient{config: elq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	elq.withUsers = query
+	return elq
+}
+
+// WithMemberProducts tells the query-builder to eager-load the nodes that are connected to
+// the "member_products" edge. The optional arguments are used to configure the query builder of the edge.
+func (elq *EntryLogsQuery) WithMemberProducts(opts ...func(*MemberProductQuery)) *EntryLogsQuery {
+	query := (&MemberProductClient{config: elq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	elq.withMemberProducts = query
+	return elq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,8 +475,14 @@ func (elq *EntryLogsQuery) prepareQuery(ctx context.Context) error {
 
 func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EntryLogs, error) {
 	var (
-		nodes = []*EntryLogs{}
-		_spec = elq.querySpec()
+		nodes       = []*EntryLogs{}
+		_spec       = elq.querySpec()
+		loadedTypes = [4]bool{
+			elq.withVenues != nil,
+			elq.withMembers != nil,
+			elq.withUsers != nil,
+			elq.withMemberProducts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*EntryLogs).scanValues(nil, columns)
@@ -340,6 +490,7 @@ func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*E
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &EntryLogs{config: elq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +502,148 @@ func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*E
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := elq.withVenues; query != nil {
+		if err := elq.loadVenues(ctx, query, nodes, nil,
+			func(n *EntryLogs, e *Venue) { n.Edges.Venues = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := elq.withMembers; query != nil {
+		if err := elq.loadMembers(ctx, query, nodes, nil,
+			func(n *EntryLogs, e *Member) { n.Edges.Members = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := elq.withUsers; query != nil {
+		if err := elq.loadUsers(ctx, query, nodes, nil,
+			func(n *EntryLogs, e *User) { n.Edges.Users = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := elq.withMemberProducts; query != nil {
+		if err := elq.loadMemberProducts(ctx, query, nodes, nil,
+			func(n *EntryLogs, e *MemberProduct) { n.Edges.MemberProducts = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (elq *EntryLogsQuery) loadVenues(ctx context.Context, query *VenueQuery, nodes []*EntryLogs, init func(*EntryLogs), assign func(*EntryLogs, *Venue)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*EntryLogs)
+	for i := range nodes {
+		fk := nodes[i].VenueID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(venue.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "venue_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (elq *EntryLogsQuery) loadMembers(ctx context.Context, query *MemberQuery, nodes []*EntryLogs, init func(*EntryLogs), assign func(*EntryLogs, *Member)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*EntryLogs)
+	for i := range nodes {
+		fk := nodes[i].MemberID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(member.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "member_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (elq *EntryLogsQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*EntryLogs, init func(*EntryLogs), assign func(*EntryLogs, *User)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*EntryLogs)
+	for i := range nodes {
+		fk := nodes[i].UserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (elq *EntryLogsQuery) loadMemberProducts(ctx context.Context, query *MemberProductQuery, nodes []*EntryLogs, init func(*EntryLogs), assign func(*EntryLogs, *MemberProduct)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*EntryLogs)
+	for i := range nodes {
+		fk := nodes[i].MemberProductID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(memberproduct.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "member_product_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (elq *EntryLogsQuery) sqlCount(ctx context.Context) (int, error) {
@@ -378,6 +670,18 @@ func (elq *EntryLogsQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != entrylogs.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if elq.withVenues != nil {
+			_spec.Node.AddColumnOnce(entrylogs.FieldVenueID)
+		}
+		if elq.withMembers != nil {
+			_spec.Node.AddColumnOnce(entrylogs.FieldMemberID)
+		}
+		if elq.withUsers != nil {
+			_spec.Node.AddColumnOnce(entrylogs.FieldUserID)
+		}
+		if elq.withMemberProducts != nil {
+			_spec.Node.AddColumnOnce(entrylogs.FieldMemberProductID)
 		}
 	}
 	if ps := elq.predicates; len(ps) > 0 {

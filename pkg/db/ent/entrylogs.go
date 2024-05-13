@@ -5,6 +5,10 @@ package ent
 import (
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberproduct"
+	"saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
 	"strings"
 	"time"
 
@@ -30,13 +34,83 @@ type EntryLogs struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 用户产品id
 	MemberProductID int64 `json:"member_product_id,omitempty"`
-	// 场馆id
+	// 属性id
 	MemberPropertyID int64 `json:"member_property_id,omitempty"`
 	// 进场时间
 	EntryTime time.Time `json:"entry_time,omitempty"`
 	// 离场时间
-	LeavingTime  time.Time `json:"leaving_time,omitempty"`
+	LeavingTime time.Time `json:"leaving_time,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the EntryLogsQuery when eager-loading is set.
+	Edges        EntryLogsEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// EntryLogsEdges holds the relations/edges for other nodes in the graph.
+type EntryLogsEdges struct {
+	// Venues holds the value of the venues edge.
+	Venues *Venue `json:"venues,omitempty"`
+	// Members holds the value of the members edge.
+	Members *Member `json:"members,omitempty"`
+	// Users holds the value of the users edge.
+	Users *User `json:"users,omitempty"`
+	// MemberProducts holds the value of the member_products edge.
+	MemberProducts *MemberProduct `json:"member_products,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [4]bool
+}
+
+// VenuesOrErr returns the Venues value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntryLogsEdges) VenuesOrErr() (*Venue, error) {
+	if e.loadedTypes[0] {
+		if e.Venues == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: venue.Label}
+		}
+		return e.Venues, nil
+	}
+	return nil, &NotLoadedError{edge: "venues"}
+}
+
+// MembersOrErr returns the Members value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntryLogsEdges) MembersOrErr() (*Member, error) {
+	if e.loadedTypes[1] {
+		if e.Members == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: member.Label}
+		}
+		return e.Members, nil
+	}
+	return nil, &NotLoadedError{edge: "members"}
+}
+
+// UsersOrErr returns the Users value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntryLogsEdges) UsersOrErr() (*User, error) {
+	if e.loadedTypes[2] {
+		if e.Users == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: user.Label}
+		}
+		return e.Users, nil
+	}
+	return nil, &NotLoadedError{edge: "users"}
+}
+
+// MemberProductsOrErr returns the MemberProducts value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntryLogsEdges) MemberProductsOrErr() (*MemberProduct, error) {
+	if e.loadedTypes[3] {
+		if e.MemberProducts == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: memberproduct.Label}
+		}
+		return e.MemberProducts, nil
+	}
+	return nil, &NotLoadedError{edge: "member_products"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -134,6 +208,26 @@ func (el *EntryLogs) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (el *EntryLogs) Value(name string) (ent.Value, error) {
 	return el.selectValues.Get(name)
+}
+
+// QueryVenues queries the "venues" edge of the EntryLogs entity.
+func (el *EntryLogs) QueryVenues() *VenueQuery {
+	return NewEntryLogsClient(el.config).QueryVenues(el)
+}
+
+// QueryMembers queries the "members" edge of the EntryLogs entity.
+func (el *EntryLogs) QueryMembers() *MemberQuery {
+	return NewEntryLogsClient(el.config).QueryMembers(el)
+}
+
+// QueryUsers queries the "users" edge of the EntryLogs entity.
+func (el *EntryLogs) QueryUsers() *UserQuery {
+	return NewEntryLogsClient(el.config).QueryUsers(el)
+}
+
+// QueryMemberProducts queries the "member_products" edge of the EntryLogs entity.
+func (el *EntryLogs) QueryMemberProducts() *MemberProductQuery {
+	return NewEntryLogsClient(el.config).QueryMemberProducts(el)
 }
 
 // Update returns a builder for updating this EntryLogs.

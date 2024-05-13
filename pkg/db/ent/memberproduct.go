@@ -33,6 +33,8 @@ type MemberProduct struct {
 	MemberID int64 `json:"member_id,omitempty"`
 	// 产品ID
 	ProductID int64 `json:"product_id,omitempty"`
+	// 订单ID
+	OrderID int64 `json:"order_id,omitempty"`
 	// 产品名称
 	Name float64 `json:"name,omitempty"`
 	// 产品价格
@@ -49,26 +51,28 @@ type MemberProduct struct {
 
 // MemberProductEdges holds the relations/edges for other nodes in the graph.
 type MemberProductEdges struct {
-	// Owner holds the value of the owner edge.
-	Owner *Member `json:"owner,omitempty"`
+	// Members holds the value of the members edge.
+	Members *Member `json:"members,omitempty"`
 	// MemberProductPropertys holds the value of the member_product_propertys edge.
 	MemberProductPropertys []*MemberProductProperty `json:"member_product_propertys,omitempty"`
+	// MemberProductEntry holds the value of the member_product_entry edge.
+	MemberProductEntry []*EntryLogs `json:"member_product_entry,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
-// OwnerOrErr returns the Owner value or an error if the edge
+// MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e MemberProductEdges) OwnerOrErr() (*Member, error) {
+func (e MemberProductEdges) MembersOrErr() (*Member, error) {
 	if e.loadedTypes[0] {
-		if e.Owner == nil {
+		if e.Members == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: member.Label}
 		}
-		return e.Owner, nil
+		return e.Members, nil
 	}
-	return nil, &NotLoadedError{edge: "owner"}
+	return nil, &NotLoadedError{edge: "members"}
 }
 
 // MemberProductPropertysOrErr returns the MemberProductPropertys value or an error if the edge
@@ -80,6 +84,15 @@ func (e MemberProductEdges) MemberProductPropertysOrErr() ([]*MemberProductPrope
 	return nil, &NotLoadedError{edge: "member_product_propertys"}
 }
 
+// MemberProductEntryOrErr returns the MemberProductEntry value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberProductEdges) MemberProductEntryOrErr() ([]*EntryLogs, error) {
+	if e.loadedTypes[2] {
+		return e.MemberProductEntry, nil
+	}
+	return nil, &NotLoadedError{edge: "member_product_entry"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -87,7 +100,7 @@ func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberproduct.FieldName, memberproduct.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case memberproduct.FieldID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID:
+		case memberproduct.FieldID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldOrderID:
 			values[i] = new(sql.NullInt64)
 		case memberproduct.FieldSn, memberproduct.FieldType:
 			values[i] = new(sql.NullString)
@@ -156,6 +169,12 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mp.ProductID = value.Int64
 			}
+		case memberproduct.FieldOrderID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field order_id", values[i])
+			} else if value.Valid {
+				mp.OrderID = value.Int64
+			}
 		case memberproduct.FieldName:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -193,14 +212,19 @@ func (mp *MemberProduct) Value(name string) (ent.Value, error) {
 	return mp.selectValues.Get(name)
 }
 
-// QueryOwner queries the "owner" edge of the MemberProduct entity.
-func (mp *MemberProduct) QueryOwner() *MemberQuery {
-	return NewMemberProductClient(mp.config).QueryOwner(mp)
+// QueryMembers queries the "members" edge of the MemberProduct entity.
+func (mp *MemberProduct) QueryMembers() *MemberQuery {
+	return NewMemberProductClient(mp.config).QueryMembers(mp)
 }
 
 // QueryMemberProductPropertys queries the "member_product_propertys" edge of the MemberProduct entity.
 func (mp *MemberProduct) QueryMemberProductPropertys() *MemberProductPropertyQuery {
 	return NewMemberProductClient(mp.config).QueryMemberProductPropertys(mp)
+}
+
+// QueryMemberProductEntry queries the "member_product_entry" edge of the MemberProduct entity.
+func (mp *MemberProduct) QueryMemberProductEntry() *EntryLogsQuery {
+	return NewMemberProductClient(mp.config).QueryMemberProductEntry(mp)
 }
 
 // Update returns a builder for updating this MemberProduct.
@@ -246,6 +270,9 @@ func (mp *MemberProduct) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("product_id=")
 	builder.WriteString(fmt.Sprintf("%v", mp.ProductID))
+	builder.WriteString(", ")
+	builder.WriteString("order_id=")
+	builder.WriteString(fmt.Sprintf("%v", mp.OrderID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(fmt.Sprintf("%v", mp.Name))

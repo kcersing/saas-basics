@@ -3,13 +3,26 @@ package do
 import "time"
 
 type Order interface {
-	Create(req OrderInfo) error
+	Create(req CreateOrder) error
 	Update(req OrderInfo) error
 	Delete(id int64) error
 	List(req OrderListReq) (resp []*OrderInfo, total int, err error)
 	UpdateStatus(ID int64, status int64) error
 	Info(ID int64) (roleInfo *OrderInfo, err error)
 }
+
+type CreateOrder struct {
+	VenueId    int64   `json:"venue_id"`
+	MemberId   int64   `json:"member_id"`
+	CreateId   int64   `json:"create_id"`
+	Total      float64 `json:"total"`
+	Sales      []int64 `json:"sales"`
+	ProductId  int64   `json:"product_id"`
+	Quantity   int64   `json:"quantity"`
+	ContractId int64   `json:"contract_id"`
+	AssignAt   string  `json:"assign_at"`
+}
+
 type OrderInfo struct {
 	ID           int64     `json:"id"`
 	OrderSn      string    `json:"order_sn"`

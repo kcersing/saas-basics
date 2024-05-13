@@ -44,7 +44,9 @@ func (Member) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("member_details", MemberDetails.Type),
 		edge.To("member_notes", MemberNote.Type),
+		edge.To("member_orders", Order.Type),
 		edge.To("member_products", MemberProduct.Type),
+		edge.To("member_entry", EntryLogs.Type),
 	}
 }
 

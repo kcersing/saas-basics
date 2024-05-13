@@ -505,21 +505,21 @@ func CreateIDNotNil() predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldNotNull(FieldCreateID))
 }
 
-// HasOwner applies the HasEdge predicate on the "owner" edge.
-func HasOwner() predicate.OrderPay {
+// HasAufk applies the HasEdge predicate on the "aufk" edge.
+func HasAufk() predicate.OrderPay {
 	return predicate.OrderPay(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, AufkTable, AufkColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
-func HasOwnerWith(preds ...predicate.Order) predicate.OrderPay {
+// HasAufkWith applies the HasEdge predicate on the "aufk" edge with a given conditions (other predicates).
+func HasAufkWith(preds ...predicate.Order) predicate.OrderPay {
 	return predicate.OrderPay(func(s *sql.Selector) {
-		step := newOwnerStep()
+		step := newAufkStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

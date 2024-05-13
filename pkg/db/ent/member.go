@@ -50,11 +50,15 @@ type MemberEdges struct {
 	MemberDetails []*MemberDetails `json:"member_details,omitempty"`
 	// MemberNotes holds the value of the member_notes edge.
 	MemberNotes []*MemberNote `json:"member_notes,omitempty"`
+	// MemberOrders holds the value of the member_orders edge.
+	MemberOrders []*Order `json:"member_orders,omitempty"`
 	// MemberProducts holds the value of the member_products edge.
 	MemberProducts []*MemberProduct `json:"member_products,omitempty"`
+	// MemberEntry holds the value of the member_entry edge.
+	MemberEntry []*EntryLogs `json:"member_entry,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 }
 
 // MemberDetailsOrErr returns the MemberDetails value or an error if the edge
@@ -75,13 +79,31 @@ func (e MemberEdges) MemberNotesOrErr() ([]*MemberNote, error) {
 	return nil, &NotLoadedError{edge: "member_notes"}
 }
 
+// MemberOrdersOrErr returns the MemberOrders value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) MemberOrdersOrErr() ([]*Order, error) {
+	if e.loadedTypes[2] {
+		return e.MemberOrders, nil
+	}
+	return nil, &NotLoadedError{edge: "member_orders"}
+}
+
 // MemberProductsOrErr returns the MemberProducts value or an error if the edge
 // was not loaded in eager-loading.
 func (e MemberEdges) MemberProductsOrErr() ([]*MemberProduct, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.MemberProducts, nil
 	}
 	return nil, &NotLoadedError{edge: "member_products"}
+}
+
+// MemberEntryOrErr returns the MemberEntry value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) MemberEntryOrErr() ([]*EntryLogs, error) {
+	if e.loadedTypes[4] {
+		return e.MemberEntry, nil
+	}
+	return nil, &NotLoadedError{edge: "member_entry"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -199,9 +221,19 @@ func (m *Member) QueryMemberNotes() *MemberNoteQuery {
 	return NewMemberClient(m.config).QueryMemberNotes(m)
 }
 
+// QueryMemberOrders queries the "member_orders" edge of the Member entity.
+func (m *Member) QueryMemberOrders() *OrderQuery {
+	return NewMemberClient(m.config).QueryMemberOrders(m)
+}
+
 // QueryMemberProducts queries the "member_products" edge of the Member entity.
 func (m *Member) QueryMemberProducts() *MemberProductQuery {
 	return NewMemberClient(m.config).QueryMemberProducts(m)
+}
+
+// QueryMemberEntry queries the "member_entry" edge of the Member entity.
+func (m *Member) QueryMemberEntry() *EntryLogsQuery {
+	return NewMemberClient(m.config).QueryMemberEntry(m)
 }
 
 // Update returns a builder for updating this Member.

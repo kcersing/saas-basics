@@ -136,23 +136,23 @@ func (osu *OrderSalesUpdate) ClearSalesID() *OrderSalesUpdate {
 	return osu
 }
 
-// SetOwnerID sets the "owner" edge to the Order entity by ID.
-func (osu *OrderSalesUpdate) SetOwnerID(id int64) *OrderSalesUpdate {
-	osu.mutation.SetOwnerID(id)
+// SetAufkID sets the "aufk" edge to the Order entity by ID.
+func (osu *OrderSalesUpdate) SetAufkID(id int64) *OrderSalesUpdate {
+	osu.mutation.SetAufkID(id)
 	return osu
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Order entity by ID if the given value is not nil.
-func (osu *OrderSalesUpdate) SetNillableOwnerID(id *int64) *OrderSalesUpdate {
+// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
+func (osu *OrderSalesUpdate) SetNillableAufkID(id *int64) *OrderSalesUpdate {
 	if id != nil {
-		osu = osu.SetOwnerID(*id)
+		osu = osu.SetAufkID(*id)
 	}
 	return osu
 }
 
-// SetOwner sets the "owner" edge to the Order entity.
-func (osu *OrderSalesUpdate) SetOwner(o *Order) *OrderSalesUpdate {
-	return osu.SetOwnerID(o.ID)
+// SetAufk sets the "aufk" edge to the Order entity.
+func (osu *OrderSalesUpdate) SetAufk(o *Order) *OrderSalesUpdate {
+	return osu.SetAufkID(o.ID)
 }
 
 // Mutation returns the OrderSalesMutation object of the builder.
@@ -160,9 +160,9 @@ func (osu *OrderSalesUpdate) Mutation() *OrderSalesMutation {
 	return osu.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Order entity.
-func (osu *OrderSalesUpdate) ClearOwner() *OrderSalesUpdate {
-	osu.mutation.ClearOwner()
+// ClearAufk clears the "aufk" edge to the Order entity.
+func (osu *OrderSalesUpdate) ClearAufk() *OrderSalesUpdate {
+	osu.mutation.ClearAufk()
 	return osu
 }
 
@@ -241,12 +241,12 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if osu.mutation.SalesIDCleared() {
 		_spec.ClearField(ordersales.FieldSalesID, field.TypeInt64)
 	}
-	if osu.mutation.OwnerCleared() {
+	if osu.mutation.AufkCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   ordersales.OwnerTable,
-			Columns: []string{ordersales.OwnerColumn},
+			Table:   ordersales.AufkTable,
+			Columns: []string{ordersales.AufkColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -254,12 +254,12 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := osu.mutation.AufkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   ordersales.OwnerTable,
-			Columns: []string{ordersales.OwnerColumn},
+			Table:   ordersales.AufkTable,
+			Columns: []string{ordersales.AufkColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -397,23 +397,23 @@ func (osuo *OrderSalesUpdateOne) ClearSalesID() *OrderSalesUpdateOne {
 	return osuo
 }
 
-// SetOwnerID sets the "owner" edge to the Order entity by ID.
-func (osuo *OrderSalesUpdateOne) SetOwnerID(id int64) *OrderSalesUpdateOne {
-	osuo.mutation.SetOwnerID(id)
+// SetAufkID sets the "aufk" edge to the Order entity by ID.
+func (osuo *OrderSalesUpdateOne) SetAufkID(id int64) *OrderSalesUpdateOne {
+	osuo.mutation.SetAufkID(id)
 	return osuo
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Order entity by ID if the given value is not nil.
-func (osuo *OrderSalesUpdateOne) SetNillableOwnerID(id *int64) *OrderSalesUpdateOne {
+// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
+func (osuo *OrderSalesUpdateOne) SetNillableAufkID(id *int64) *OrderSalesUpdateOne {
 	if id != nil {
-		osuo = osuo.SetOwnerID(*id)
+		osuo = osuo.SetAufkID(*id)
 	}
 	return osuo
 }
 
-// SetOwner sets the "owner" edge to the Order entity.
-func (osuo *OrderSalesUpdateOne) SetOwner(o *Order) *OrderSalesUpdateOne {
-	return osuo.SetOwnerID(o.ID)
+// SetAufk sets the "aufk" edge to the Order entity.
+func (osuo *OrderSalesUpdateOne) SetAufk(o *Order) *OrderSalesUpdateOne {
+	return osuo.SetAufkID(o.ID)
 }
 
 // Mutation returns the OrderSalesMutation object of the builder.
@@ -421,9 +421,9 @@ func (osuo *OrderSalesUpdateOne) Mutation() *OrderSalesMutation {
 	return osuo.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Order entity.
-func (osuo *OrderSalesUpdateOne) ClearOwner() *OrderSalesUpdateOne {
-	osuo.mutation.ClearOwner()
+// ClearAufk clears the "aufk" edge to the Order entity.
+func (osuo *OrderSalesUpdateOne) ClearAufk() *OrderSalesUpdateOne {
+	osuo.mutation.ClearAufk()
 	return osuo
 }
 
@@ -532,12 +532,12 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 	if osuo.mutation.SalesIDCleared() {
 		_spec.ClearField(ordersales.FieldSalesID, field.TypeInt64)
 	}
-	if osuo.mutation.OwnerCleared() {
+	if osuo.mutation.AufkCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   ordersales.OwnerTable,
-			Columns: []string{ordersales.OwnerColumn},
+			Table:   ordersales.AufkTable,
+			Columns: []string{ordersales.AufkColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -545,12 +545,12 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := osuo.mutation.AufkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   ordersales.OwnerTable,
-			Columns: []string{ordersales.OwnerColumn},
+			Table:   ordersales.AufkTable,
+			Columns: []string{ordersales.AufkColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),

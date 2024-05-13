@@ -1208,6 +1208,52 @@ func HasTokenWith(preds ...predicate.Token) predicate.User {
 	})
 }
 
+// HasCreatedOrders applies the HasEdge predicate on the "created_orders" edge.
+func HasCreatedOrders() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CreatedOrdersTable, CreatedOrdersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCreatedOrdersWith applies the HasEdge predicate on the "created_orders" edge with a given conditions (other predicates).
+func HasCreatedOrdersWith(preds ...predicate.Order) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newCreatedOrdersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUserEntry applies the HasEdge predicate on the "user_entry" edge.
+func HasUserEntry() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, UserEntryTable, UserEntryColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUserEntryWith applies the HasEdge predicate on the "user_entry" edge with a given conditions (other predicates).
+func HasUserEntryWith(preds ...predicate.EntryLogs) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newUserEntryStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.User) predicate.User {
 	return predicate.User(sql.AndPredicates(predicates...))

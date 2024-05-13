@@ -7,6 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberproduct"
+	"saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -152,6 +156,82 @@ func (elc *EntryLogsCreate) SetID(i int64) *EntryLogsCreate {
 	return elc
 }
 
+// SetVenuesID sets the "venues" edge to the Venue entity by ID.
+func (elc *EntryLogsCreate) SetVenuesID(id int64) *EntryLogsCreate {
+	elc.mutation.SetVenuesID(id)
+	return elc
+}
+
+// SetNillableVenuesID sets the "venues" edge to the Venue entity by ID if the given value is not nil.
+func (elc *EntryLogsCreate) SetNillableVenuesID(id *int64) *EntryLogsCreate {
+	if id != nil {
+		elc = elc.SetVenuesID(*id)
+	}
+	return elc
+}
+
+// SetVenues sets the "venues" edge to the Venue entity.
+func (elc *EntryLogsCreate) SetVenues(v *Venue) *EntryLogsCreate {
+	return elc.SetVenuesID(v.ID)
+}
+
+// SetMembersID sets the "members" edge to the Member entity by ID.
+func (elc *EntryLogsCreate) SetMembersID(id int64) *EntryLogsCreate {
+	elc.mutation.SetMembersID(id)
+	return elc
+}
+
+// SetNillableMembersID sets the "members" edge to the Member entity by ID if the given value is not nil.
+func (elc *EntryLogsCreate) SetNillableMembersID(id *int64) *EntryLogsCreate {
+	if id != nil {
+		elc = elc.SetMembersID(*id)
+	}
+	return elc
+}
+
+// SetMembers sets the "members" edge to the Member entity.
+func (elc *EntryLogsCreate) SetMembers(m *Member) *EntryLogsCreate {
+	return elc.SetMembersID(m.ID)
+}
+
+// SetUsersID sets the "users" edge to the User entity by ID.
+func (elc *EntryLogsCreate) SetUsersID(id int64) *EntryLogsCreate {
+	elc.mutation.SetUsersID(id)
+	return elc
+}
+
+// SetNillableUsersID sets the "users" edge to the User entity by ID if the given value is not nil.
+func (elc *EntryLogsCreate) SetNillableUsersID(id *int64) *EntryLogsCreate {
+	if id != nil {
+		elc = elc.SetUsersID(*id)
+	}
+	return elc
+}
+
+// SetUsers sets the "users" edge to the User entity.
+func (elc *EntryLogsCreate) SetUsers(u *User) *EntryLogsCreate {
+	return elc.SetUsersID(u.ID)
+}
+
+// SetMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID.
+func (elc *EntryLogsCreate) SetMemberProductsID(id int64) *EntryLogsCreate {
+	elc.mutation.SetMemberProductsID(id)
+	return elc
+}
+
+// SetNillableMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID if the given value is not nil.
+func (elc *EntryLogsCreate) SetNillableMemberProductsID(id *int64) *EntryLogsCreate {
+	if id != nil {
+		elc = elc.SetMemberProductsID(*id)
+	}
+	return elc
+}
+
+// SetMemberProducts sets the "member_products" edge to the MemberProduct entity.
+func (elc *EntryLogsCreate) SetMemberProducts(m *MemberProduct) *EntryLogsCreate {
+	return elc.SetMemberProductsID(m.ID)
+}
+
 // Mutation returns the EntryLogsMutation object of the builder.
 func (elc *EntryLogsCreate) Mutation() *EntryLogsMutation {
 	return elc.mutation
@@ -194,6 +274,14 @@ func (elc *EntryLogsCreate) defaults() {
 	if _, ok := elc.mutation.UpdatedAt(); !ok {
 		v := entrylogs.DefaultUpdatedAt()
 		elc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := elc.mutation.MemberID(); !ok {
+		v := entrylogs.DefaultMemberID
+		elc.mutation.SetMemberID(v)
+	}
+	if _, ok := elc.mutation.UserID(); !ok {
+		v := entrylogs.DefaultUserID
+		elc.mutation.SetUserID(v)
 	}
 	if _, ok := elc.mutation.EntryTime(); !ok {
 		v := entrylogs.DefaultEntryTime()
@@ -253,22 +341,6 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := elc.mutation.MemberID(); ok {
-		_spec.SetField(entrylogs.FieldMemberID, field.TypeInt64, value)
-		_node.MemberID = value
-	}
-	if value, ok := elc.mutation.UserID(); ok {
-		_spec.SetField(entrylogs.FieldUserID, field.TypeInt64, value)
-		_node.UserID = value
-	}
-	if value, ok := elc.mutation.VenueID(); ok {
-		_spec.SetField(entrylogs.FieldVenueID, field.TypeInt64, value)
-		_node.VenueID = value
-	}
-	if value, ok := elc.mutation.MemberProductID(); ok {
-		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-		_node.MemberProductID = value
-	}
 	if value, ok := elc.mutation.MemberPropertyID(); ok {
 		_spec.SetField(entrylogs.FieldMemberPropertyID, field.TypeInt64, value)
 		_node.MemberPropertyID = value
@@ -280,6 +352,74 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 	if value, ok := elc.mutation.LeavingTime(); ok {
 		_spec.SetField(entrylogs.FieldLeavingTime, field.TypeTime, value)
 		_node.LeavingTime = value
+	}
+	if nodes := elc.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.VenuesTable,
+			Columns: []string{entrylogs.VenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.VenueID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := elc.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MembersTable,
+			Columns: []string{entrylogs.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.MemberID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := elc.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.UsersTable,
+			Columns: []string{entrylogs.UsersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := elc.mutation.MemberProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.MemberProductID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

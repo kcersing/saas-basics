@@ -28,6 +28,8 @@ const (
 	FieldMemberID = "member_id"
 	// FieldProductID holds the string denoting the product_id field in the database.
 	FieldProductID = "product_id"
+	// FieldOrderID holds the string denoting the order_id field in the database.
+	FieldOrderID = "order_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldPrice holds the string denoting the price field in the database.
@@ -36,19 +38,21 @@ const (
 	FieldValidityAt = "validity_at"
 	// FieldCancelAt holds the string denoting the cancel_at field in the database.
 	FieldCancelAt = "cancel_at"
-	// EdgeOwner holds the string denoting the owner edge name in mutations.
-	EdgeOwner = "owner"
+	// EdgeMembers holds the string denoting the members edge name in mutations.
+	EdgeMembers = "members"
 	// EdgeMemberProductPropertys holds the string denoting the member_product_propertys edge name in mutations.
 	EdgeMemberProductPropertys = "member_product_propertys"
+	// EdgeMemberProductEntry holds the string denoting the member_product_entry edge name in mutations.
+	EdgeMemberProductEntry = "member_product_entry"
 	// Table holds the table name of the memberproduct in the database.
 	Table = "member_product"
-	// OwnerTable is the table that holds the owner relation/edge.
-	OwnerTable = "member_product"
-	// OwnerInverseTable is the table name for the Member entity.
+	// MembersTable is the table that holds the members relation/edge.
+	MembersTable = "member_product"
+	// MembersInverseTable is the table name for the Member entity.
 	// It exists in this package in order to avoid circular dependency with the "member" package.
-	OwnerInverseTable = "member"
-	// OwnerColumn is the table column denoting the owner relation/edge.
-	OwnerColumn = "member_id"
+	MembersInverseTable = "member"
+	// MembersColumn is the table column denoting the members relation/edge.
+	MembersColumn = "member_id"
 	// MemberProductPropertysTable is the table that holds the member_product_propertys relation/edge.
 	MemberProductPropertysTable = "member_product_property"
 	// MemberProductPropertysInverseTable is the table name for the MemberProductProperty entity.
@@ -56,6 +60,13 @@ const (
 	MemberProductPropertysInverseTable = "member_product_property"
 	// MemberProductPropertysColumn is the table column denoting the member_product_propertys relation/edge.
 	MemberProductPropertysColumn = "member_product_id"
+	// MemberProductEntryTable is the table that holds the member_product_entry relation/edge.
+	MemberProductEntryTable = "entry_logs"
+	// MemberProductEntryInverseTable is the table name for the EntryLogs entity.
+	// It exists in this package in order to avoid circular dependency with the "entrylogs" package.
+	MemberProductEntryInverseTable = "entry_logs"
+	// MemberProductEntryColumn is the table column denoting the member_product_entry relation/edge.
+	MemberProductEntryColumn = "member_product_id"
 )
 
 // Columns holds all SQL columns for memberproduct fields.
@@ -68,6 +79,7 @@ var Columns = []string{
 	FieldType,
 	FieldMemberID,
 	FieldProductID,
+	FieldOrderID,
 	FieldName,
 	FieldPrice,
 	FieldValidityAt,
@@ -138,6 +150,11 @@ func ByProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductID, opts...).ToFunc()
 }
 
+// ByOrderID orders the results by the order_id field.
+func ByOrderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderID, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -158,10 +175,10 @@ func ByCancelAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCancelAt, opts...).ToFunc()
 }
 
-// ByOwnerField orders the results by owner field.
-func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByMembersField orders the results by members field.
+func ByMembersField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newMembersStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -178,11 +195,25 @@ func ByMemberProductPropertys(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 		sqlgraph.OrderByNeighborTerms(s, newMemberProductPropertysStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newOwnerStep() *sqlgraph.Step {
+
+// ByMemberProductEntryCount orders the results by member_product_entry count.
+func ByMemberProductEntryCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberProductEntryStep(), opts...)
+	}
+}
+
+// ByMemberProductEntry orders the results by member_product_entry terms.
+func ByMemberProductEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberProductEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newMembersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OwnerInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+		sqlgraph.To(MembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MembersTable, MembersColumn),
 	)
 }
 func newMemberProductPropertysStep() *sqlgraph.Step {
@@ -190,5 +221,12 @@ func newMemberProductPropertysStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MemberProductPropertysInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberProductPropertysTable, MemberProductPropertysColumn),
+	)
+}
+func newMemberProductEntryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberProductEntryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberProductEntryTable, MemberProductEntryColumn),
 	)
 }

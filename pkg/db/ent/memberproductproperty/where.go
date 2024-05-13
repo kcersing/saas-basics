@@ -80,6 +80,11 @@ func MemberProductID(v int64) predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldEQ(FieldMemberProductID, v))
 }
 
+// PropertyID applies equality check predicate on the "property_id" field. It's identical to PropertyIDEQ.
+func PropertyID(v int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEQ(FieldPropertyID, v))
+}
+
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
 func Type(v string) predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldEQ(FieldType, v))
@@ -323,6 +328,56 @@ func MemberProductIDIsNil() predicate.MemberProductProperty {
 // MemberProductIDNotNil applies the NotNil predicate on the "member_product_id" field.
 func MemberProductIDNotNil() predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldNotNull(FieldMemberProductID))
+}
+
+// PropertyIDEQ applies the EQ predicate on the "property_id" field.
+func PropertyIDEQ(v int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEQ(FieldPropertyID, v))
+}
+
+// PropertyIDNEQ applies the NEQ predicate on the "property_id" field.
+func PropertyIDNEQ(v int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNEQ(FieldPropertyID, v))
+}
+
+// PropertyIDIn applies the In predicate on the "property_id" field.
+func PropertyIDIn(vs ...int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldIn(FieldPropertyID, vs...))
+}
+
+// PropertyIDNotIn applies the NotIn predicate on the "property_id" field.
+func PropertyIDNotIn(vs ...int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNotIn(FieldPropertyID, vs...))
+}
+
+// PropertyIDGT applies the GT predicate on the "property_id" field.
+func PropertyIDGT(v int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldGT(FieldPropertyID, v))
+}
+
+// PropertyIDGTE applies the GTE predicate on the "property_id" field.
+func PropertyIDGTE(v int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldGTE(FieldPropertyID, v))
+}
+
+// PropertyIDLT applies the LT predicate on the "property_id" field.
+func PropertyIDLT(v int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldLT(FieldPropertyID, v))
+}
+
+// PropertyIDLTE applies the LTE predicate on the "property_id" field.
+func PropertyIDLTE(v int64) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldLTE(FieldPropertyID, v))
+}
+
+// PropertyIDIsNil applies the IsNil predicate on the "property_id" field.
+func PropertyIDIsNil() predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldIsNull(FieldPropertyID))
+}
+
+// PropertyIDNotNil applies the NotNil predicate on the "property_id" field.
+func PropertyIDNotNil() predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNotNull(FieldPropertyID))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.

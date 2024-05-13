@@ -61,9 +61,13 @@ type User struct {
 type UserEdges struct {
 	// Token holds the value of the token edge.
 	Token *Token `json:"token,omitempty"`
+	// CreatedOrders holds the value of the created_orders edge.
+	CreatedOrders []*Order `json:"created_orders,omitempty"`
+	// UserEntry holds the value of the user_entry edge.
+	UserEntry []*EntryLogs `json:"user_entry,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 }
 
 // TokenOrErr returns the Token value or an error if the edge
@@ -77,6 +81,24 @@ func (e UserEdges) TokenOrErr() (*Token, error) {
 		return e.Token, nil
 	}
 	return nil, &NotLoadedError{edge: "token"}
+}
+
+// CreatedOrdersOrErr returns the CreatedOrders value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) CreatedOrdersOrErr() ([]*Order, error) {
+	if e.loadedTypes[1] {
+		return e.CreatedOrders, nil
+	}
+	return nil, &NotLoadedError{edge: "created_orders"}
+}
+
+// UserEntryOrErr returns the UserEntry value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) UserEntryOrErr() ([]*EntryLogs, error) {
+	if e.loadedTypes[2] {
+		return e.UserEntry, nil
+	}
+	return nil, &NotLoadedError{edge: "user_entry"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -223,6 +245,16 @@ func (u *User) Value(name string) (ent.Value, error) {
 // QueryToken queries the "token" edge of the User entity.
 func (u *User) QueryToken() *TokenQuery {
 	return NewUserClient(u.config).QueryToken(u)
+}
+
+// QueryCreatedOrders queries the "created_orders" edge of the User entity.
+func (u *User) QueryCreatedOrders() *OrderQuery {
+	return NewUserClient(u.config).QueryCreatedOrders(u)
+}
+
+// QueryUserEntry queries the "user_entry" edge of the User entity.
+func (u *User) QueryUserEntry() *EntryLogsQuery {
+	return NewUserClient(u.config).QueryUserEntry(u)
 }
 
 // Update returns a builder for updating this User.

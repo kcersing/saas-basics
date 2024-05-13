@@ -38,8 +38,12 @@ const (
 	EdgeMemberDetails = "member_details"
 	// EdgeMemberNotes holds the string denoting the member_notes edge name in mutations.
 	EdgeMemberNotes = "member_notes"
+	// EdgeMemberOrders holds the string denoting the member_orders edge name in mutations.
+	EdgeMemberOrders = "member_orders"
 	// EdgeMemberProducts holds the string denoting the member_products edge name in mutations.
 	EdgeMemberProducts = "member_products"
+	// EdgeMemberEntry holds the string denoting the member_entry edge name in mutations.
+	EdgeMemberEntry = "member_entry"
 	// Table holds the table name of the member in the database.
 	Table = "member"
 	// MemberDetailsTable is the table that holds the member_details relation/edge.
@@ -56,6 +60,13 @@ const (
 	MemberNotesInverseTable = "member_note"
 	// MemberNotesColumn is the table column denoting the member_notes relation/edge.
 	MemberNotesColumn = "member_id"
+	// MemberOrdersTable is the table that holds the member_orders relation/edge.
+	MemberOrdersTable = "order"
+	// MemberOrdersInverseTable is the table name for the Order entity.
+	// It exists in this package in order to avoid circular dependency with the "order" package.
+	MemberOrdersInverseTable = "order"
+	// MemberOrdersColumn is the table column denoting the member_orders relation/edge.
+	MemberOrdersColumn = "member_id"
 	// MemberProductsTable is the table that holds the member_products relation/edge.
 	MemberProductsTable = "member_product"
 	// MemberProductsInverseTable is the table name for the MemberProduct entity.
@@ -63,6 +74,13 @@ const (
 	MemberProductsInverseTable = "member_product"
 	// MemberProductsColumn is the table column denoting the member_products relation/edge.
 	MemberProductsColumn = "member_id"
+	// MemberEntryTable is the table that holds the member_entry relation/edge.
+	MemberEntryTable = "entry_logs"
+	// MemberEntryInverseTable is the table name for the EntryLogs entity.
+	// It exists in this package in order to avoid circular dependency with the "entrylogs" package.
+	MemberEntryInverseTable = "entry_logs"
+	// MemberEntryColumn is the table column denoting the member_entry relation/edge.
+	MemberEntryColumn = "member_id"
 )
 
 // Columns holds all SQL columns for member fields.
@@ -191,6 +209,20 @@ func ByMemberNotes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByMemberOrdersCount orders the results by member_orders count.
+func ByMemberOrdersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberOrdersStep(), opts...)
+	}
+}
+
+// ByMemberOrders orders the results by member_orders terms.
+func ByMemberOrders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberOrdersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMemberProductsCount orders the results by member_products count.
 func ByMemberProductsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -202,6 +234,20 @@ func ByMemberProductsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByMemberProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newMemberProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMemberEntryCount orders the results by member_entry count.
+func ByMemberEntryCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberEntryStep(), opts...)
+	}
+}
+
+// ByMemberEntry orders the results by member_entry terms.
+func ByMemberEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newMemberDetailsStep() *sqlgraph.Step {
@@ -218,10 +264,24 @@ func newMemberNotesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberNotesTable, MemberNotesColumn),
 	)
 }
+func newMemberOrdersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberOrdersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberOrdersTable, MemberOrdersColumn),
+	)
+}
 func newMemberProductsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MemberProductsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberProductsTable, MemberProductsColumn),
+	)
+}
+func newMemberEntryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberEntryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberEntryTable, MemberEntryColumn),
 	)
 }

@@ -26,17 +26,17 @@ const (
 	FieldRemission = "remission"
 	// FieldPay holds the string denoting the pay field in the database.
 	FieldPay = "pay"
-	// EdgeOwner holds the string denoting the owner edge name in mutations.
-	EdgeOwner = "owner"
+	// EdgeAufk holds the string denoting the aufk edge name in mutations.
+	EdgeAufk = "aufk"
 	// Table holds the table name of the orderamount in the database.
 	Table = "order_amount"
-	// OwnerTable is the table that holds the owner relation/edge.
-	OwnerTable = "order_amount"
-	// OwnerInverseTable is the table name for the Order entity.
+	// AufkTable is the table that holds the aufk relation/edge.
+	AufkTable = "order_amount"
+	// AufkInverseTable is the table name for the Order entity.
 	// It exists in this package in order to avoid circular dependency with the "order" package.
-	OwnerInverseTable = "order"
-	// OwnerColumn is the table column denoting the owner relation/edge.
-	OwnerColumn = "order_id"
+	AufkInverseTable = "order"
+	// AufkColumn is the table column denoting the aufk relation/edge.
+	AufkColumn = "order_id"
 )
 
 // Columns holds all SQL columns for orderamount fields.
@@ -107,16 +107,16 @@ func ByPay(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPay, opts...).ToFunc()
 }
 
-// ByOwnerField orders the results by owner field.
-func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByAufkField orders the results by aufk field.
+func ByAufkField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newAufkStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newOwnerStep() *sqlgraph.Step {
+func newAufkStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OwnerInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+		sqlgraph.To(AufkInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, AufkTable, AufkColumn),
 	)
 }

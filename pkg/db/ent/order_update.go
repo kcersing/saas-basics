@@ -6,12 +6,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
 	"saas/pkg/db/ent/orderpay"
 	"saas/pkg/db/ent/ordersales"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -60,7 +63,6 @@ func (ou *OrderUpdate) ClearOrderSn() *OrderUpdate {
 
 // SetVenueID sets the "venue_id" field.
 func (ou *OrderUpdate) SetVenueID(i int64) *OrderUpdate {
-	ou.mutation.ResetVenueID()
 	ou.mutation.SetVenueID(i)
 	return ou
 }
@@ -73,12 +75,6 @@ func (ou *OrderUpdate) SetNillableVenueID(i *int64) *OrderUpdate {
 	return ou
 }
 
-// AddVenueID adds i to the "venue_id" field.
-func (ou *OrderUpdate) AddVenueID(i int64) *OrderUpdate {
-	ou.mutation.AddVenueID(i)
-	return ou
-}
-
 // ClearVenueID clears the value of the "venue_id" field.
 func (ou *OrderUpdate) ClearVenueID() *OrderUpdate {
 	ou.mutation.ClearVenueID()
@@ -87,7 +83,6 @@ func (ou *OrderUpdate) ClearVenueID() *OrderUpdate {
 
 // SetMemberID sets the "member_id" field.
 func (ou *OrderUpdate) SetMemberID(i int64) *OrderUpdate {
-	ou.mutation.ResetMemberID()
 	ou.mutation.SetMemberID(i)
 	return ou
 }
@@ -97,12 +92,6 @@ func (ou *OrderUpdate) SetNillableMemberID(i *int64) *OrderUpdate {
 	if i != nil {
 		ou.SetMemberID(*i)
 	}
-	return ou
-}
-
-// AddMemberID adds i to the "member_id" field.
-func (ou *OrderUpdate) AddMemberID(i int64) *OrderUpdate {
-	ou.mutation.AddMemberID(i)
 	return ou
 }
 
@@ -201,7 +190,6 @@ func (ou *OrderUpdate) ClearCompletionAt() *OrderUpdate {
 
 // SetCreateID sets the "create_id" field.
 func (ou *OrderUpdate) SetCreateID(i int64) *OrderUpdate {
-	ou.mutation.ResetCreateID()
 	ou.mutation.SetCreateID(i)
 	return ou
 }
@@ -211,12 +199,6 @@ func (ou *OrderUpdate) SetNillableCreateID(i *int64) *OrderUpdate {
 	if i != nil {
 		ou.SetCreateID(*i)
 	}
-	return ou
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (ou *OrderUpdate) AddCreateID(i int64) *OrderUpdate {
-	ou.mutation.AddCreateID(i)
 	return ou
 }
 
@@ -284,6 +266,63 @@ func (ou *OrderUpdate) AddSales(o ...*OrderSales) *OrderUpdate {
 		ids[i] = o[i].ID
 	}
 	return ou.AddSaleIDs(ids...)
+}
+
+// SetOrderVenuesID sets the "order_venues" edge to the Venue entity by ID.
+func (ou *OrderUpdate) SetOrderVenuesID(id int64) *OrderUpdate {
+	ou.mutation.SetOrderVenuesID(id)
+	return ou
+}
+
+// SetNillableOrderVenuesID sets the "order_venues" edge to the Venue entity by ID if the given value is not nil.
+func (ou *OrderUpdate) SetNillableOrderVenuesID(id *int64) *OrderUpdate {
+	if id != nil {
+		ou = ou.SetOrderVenuesID(*id)
+	}
+	return ou
+}
+
+// SetOrderVenues sets the "order_venues" edge to the Venue entity.
+func (ou *OrderUpdate) SetOrderVenues(v *Venue) *OrderUpdate {
+	return ou.SetOrderVenuesID(v.ID)
+}
+
+// SetOrderMembersID sets the "order_members" edge to the Member entity by ID.
+func (ou *OrderUpdate) SetOrderMembersID(id int64) *OrderUpdate {
+	ou.mutation.SetOrderMembersID(id)
+	return ou
+}
+
+// SetNillableOrderMembersID sets the "order_members" edge to the Member entity by ID if the given value is not nil.
+func (ou *OrderUpdate) SetNillableOrderMembersID(id *int64) *OrderUpdate {
+	if id != nil {
+		ou = ou.SetOrderMembersID(*id)
+	}
+	return ou
+}
+
+// SetOrderMembers sets the "order_members" edge to the Member entity.
+func (ou *OrderUpdate) SetOrderMembers(m *Member) *OrderUpdate {
+	return ou.SetOrderMembersID(m.ID)
+}
+
+// SetOrderCreatesID sets the "order_creates" edge to the User entity by ID.
+func (ou *OrderUpdate) SetOrderCreatesID(id int64) *OrderUpdate {
+	ou.mutation.SetOrderCreatesID(id)
+	return ou
+}
+
+// SetNillableOrderCreatesID sets the "order_creates" edge to the User entity by ID if the given value is not nil.
+func (ou *OrderUpdate) SetNillableOrderCreatesID(id *int64) *OrderUpdate {
+	if id != nil {
+		ou = ou.SetOrderCreatesID(*id)
+	}
+	return ou
+}
+
+// SetOrderCreates sets the "order_creates" edge to the User entity.
+func (ou *OrderUpdate) SetOrderCreates(u *User) *OrderUpdate {
+	return ou.SetOrderCreatesID(u.ID)
 }
 
 // Mutation returns the OrderMutation object of the builder.
@@ -375,6 +414,24 @@ func (ou *OrderUpdate) RemoveSales(o ...*OrderSales) *OrderUpdate {
 	return ou.RemoveSaleIDs(ids...)
 }
 
+// ClearOrderVenues clears the "order_venues" edge to the Venue entity.
+func (ou *OrderUpdate) ClearOrderVenues() *OrderUpdate {
+	ou.mutation.ClearOrderVenues()
+	return ou
+}
+
+// ClearOrderMembers clears the "order_members" edge to the Member entity.
+func (ou *OrderUpdate) ClearOrderMembers() *OrderUpdate {
+	ou.mutation.ClearOrderMembers()
+	return ou
+}
+
+// ClearOrderCreates clears the "order_creates" edge to the User entity.
+func (ou *OrderUpdate) ClearOrderCreates() *OrderUpdate {
+	ou.mutation.ClearOrderCreates()
+	return ou
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ou *OrderUpdate) Save(ctx context.Context) (int, error) {
 	ou.defaults()
@@ -429,24 +486,6 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.OrderSnCleared() {
 		_spec.ClearField(order.FieldOrderSn, field.TypeString)
 	}
-	if value, ok := ou.mutation.VenueID(); ok {
-		_spec.SetField(order.FieldVenueID, field.TypeInt64, value)
-	}
-	if value, ok := ou.mutation.AddedVenueID(); ok {
-		_spec.AddField(order.FieldVenueID, field.TypeInt64, value)
-	}
-	if ou.mutation.VenueIDCleared() {
-		_spec.ClearField(order.FieldVenueID, field.TypeInt64)
-	}
-	if value, ok := ou.mutation.MemberID(); ok {
-		_spec.SetField(order.FieldMemberID, field.TypeInt64, value)
-	}
-	if value, ok := ou.mutation.AddedMemberID(); ok {
-		_spec.AddField(order.FieldMemberID, field.TypeInt64, value)
-	}
-	if ou.mutation.MemberIDCleared() {
-		_spec.ClearField(order.FieldMemberID, field.TypeInt64)
-	}
 	if value, ok := ou.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
 	}
@@ -473,15 +512,6 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.CompletionAtCleared() {
 		_spec.ClearField(order.FieldCompletionAt, field.TypeTime)
-	}
-	if value, ok := ou.mutation.CreateID(); ok {
-		_spec.SetField(order.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := ou.mutation.AddedCreateID(); ok {
-		_spec.AddField(order.FieldCreateID, field.TypeInt64, value)
-	}
-	if ou.mutation.CreateIDCleared() {
-		_spec.ClearField(order.FieldCreateID, field.TypeInt64)
 	}
 	if ou.mutation.AmountCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -663,6 +693,93 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.OrderVenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderVenuesTable,
+			Columns: []string{order.OrderVenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.OrderVenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderVenuesTable,
+			Columns: []string{order.OrderVenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.OrderMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderMembersTable,
+			Columns: []string{order.OrderMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.OrderMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderMembersTable,
+			Columns: []string{order.OrderMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.OrderCreatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderCreatesTable,
+			Columns: []string{order.OrderCreatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.OrderCreatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderCreatesTable,
+			Columns: []string{order.OrderCreatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ou.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{order.Label}
@@ -711,7 +828,6 @@ func (ouo *OrderUpdateOne) ClearOrderSn() *OrderUpdateOne {
 
 // SetVenueID sets the "venue_id" field.
 func (ouo *OrderUpdateOne) SetVenueID(i int64) *OrderUpdateOne {
-	ouo.mutation.ResetVenueID()
 	ouo.mutation.SetVenueID(i)
 	return ouo
 }
@@ -724,12 +840,6 @@ func (ouo *OrderUpdateOne) SetNillableVenueID(i *int64) *OrderUpdateOne {
 	return ouo
 }
 
-// AddVenueID adds i to the "venue_id" field.
-func (ouo *OrderUpdateOne) AddVenueID(i int64) *OrderUpdateOne {
-	ouo.mutation.AddVenueID(i)
-	return ouo
-}
-
 // ClearVenueID clears the value of the "venue_id" field.
 func (ouo *OrderUpdateOne) ClearVenueID() *OrderUpdateOne {
 	ouo.mutation.ClearVenueID()
@@ -738,7 +848,6 @@ func (ouo *OrderUpdateOne) ClearVenueID() *OrderUpdateOne {
 
 // SetMemberID sets the "member_id" field.
 func (ouo *OrderUpdateOne) SetMemberID(i int64) *OrderUpdateOne {
-	ouo.mutation.ResetMemberID()
 	ouo.mutation.SetMemberID(i)
 	return ouo
 }
@@ -748,12 +857,6 @@ func (ouo *OrderUpdateOne) SetNillableMemberID(i *int64) *OrderUpdateOne {
 	if i != nil {
 		ouo.SetMemberID(*i)
 	}
-	return ouo
-}
-
-// AddMemberID adds i to the "member_id" field.
-func (ouo *OrderUpdateOne) AddMemberID(i int64) *OrderUpdateOne {
-	ouo.mutation.AddMemberID(i)
 	return ouo
 }
 
@@ -852,7 +955,6 @@ func (ouo *OrderUpdateOne) ClearCompletionAt() *OrderUpdateOne {
 
 // SetCreateID sets the "create_id" field.
 func (ouo *OrderUpdateOne) SetCreateID(i int64) *OrderUpdateOne {
-	ouo.mutation.ResetCreateID()
 	ouo.mutation.SetCreateID(i)
 	return ouo
 }
@@ -862,12 +964,6 @@ func (ouo *OrderUpdateOne) SetNillableCreateID(i *int64) *OrderUpdateOne {
 	if i != nil {
 		ouo.SetCreateID(*i)
 	}
-	return ouo
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (ouo *OrderUpdateOne) AddCreateID(i int64) *OrderUpdateOne {
-	ouo.mutation.AddCreateID(i)
 	return ouo
 }
 
@@ -935,6 +1031,63 @@ func (ouo *OrderUpdateOne) AddSales(o ...*OrderSales) *OrderUpdateOne {
 		ids[i] = o[i].ID
 	}
 	return ouo.AddSaleIDs(ids...)
+}
+
+// SetOrderVenuesID sets the "order_venues" edge to the Venue entity by ID.
+func (ouo *OrderUpdateOne) SetOrderVenuesID(id int64) *OrderUpdateOne {
+	ouo.mutation.SetOrderVenuesID(id)
+	return ouo
+}
+
+// SetNillableOrderVenuesID sets the "order_venues" edge to the Venue entity by ID if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableOrderVenuesID(id *int64) *OrderUpdateOne {
+	if id != nil {
+		ouo = ouo.SetOrderVenuesID(*id)
+	}
+	return ouo
+}
+
+// SetOrderVenues sets the "order_venues" edge to the Venue entity.
+func (ouo *OrderUpdateOne) SetOrderVenues(v *Venue) *OrderUpdateOne {
+	return ouo.SetOrderVenuesID(v.ID)
+}
+
+// SetOrderMembersID sets the "order_members" edge to the Member entity by ID.
+func (ouo *OrderUpdateOne) SetOrderMembersID(id int64) *OrderUpdateOne {
+	ouo.mutation.SetOrderMembersID(id)
+	return ouo
+}
+
+// SetNillableOrderMembersID sets the "order_members" edge to the Member entity by ID if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableOrderMembersID(id *int64) *OrderUpdateOne {
+	if id != nil {
+		ouo = ouo.SetOrderMembersID(*id)
+	}
+	return ouo
+}
+
+// SetOrderMembers sets the "order_members" edge to the Member entity.
+func (ouo *OrderUpdateOne) SetOrderMembers(m *Member) *OrderUpdateOne {
+	return ouo.SetOrderMembersID(m.ID)
+}
+
+// SetOrderCreatesID sets the "order_creates" edge to the User entity by ID.
+func (ouo *OrderUpdateOne) SetOrderCreatesID(id int64) *OrderUpdateOne {
+	ouo.mutation.SetOrderCreatesID(id)
+	return ouo
+}
+
+// SetNillableOrderCreatesID sets the "order_creates" edge to the User entity by ID if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableOrderCreatesID(id *int64) *OrderUpdateOne {
+	if id != nil {
+		ouo = ouo.SetOrderCreatesID(*id)
+	}
+	return ouo
+}
+
+// SetOrderCreates sets the "order_creates" edge to the User entity.
+func (ouo *OrderUpdateOne) SetOrderCreates(u *User) *OrderUpdateOne {
+	return ouo.SetOrderCreatesID(u.ID)
 }
 
 // Mutation returns the OrderMutation object of the builder.
@@ -1026,6 +1179,24 @@ func (ouo *OrderUpdateOne) RemoveSales(o ...*OrderSales) *OrderUpdateOne {
 	return ouo.RemoveSaleIDs(ids...)
 }
 
+// ClearOrderVenues clears the "order_venues" edge to the Venue entity.
+func (ouo *OrderUpdateOne) ClearOrderVenues() *OrderUpdateOne {
+	ouo.mutation.ClearOrderVenues()
+	return ouo
+}
+
+// ClearOrderMembers clears the "order_members" edge to the Member entity.
+func (ouo *OrderUpdateOne) ClearOrderMembers() *OrderUpdateOne {
+	ouo.mutation.ClearOrderMembers()
+	return ouo
+}
+
+// ClearOrderCreates clears the "order_creates" edge to the User entity.
+func (ouo *OrderUpdateOne) ClearOrderCreates() *OrderUpdateOne {
+	ouo.mutation.ClearOrderCreates()
+	return ouo
+}
+
 // Where appends a list predicates to the OrderUpdate builder.
 func (ouo *OrderUpdateOne) Where(ps ...predicate.Order) *OrderUpdateOne {
 	ouo.mutation.Where(ps...)
@@ -1110,24 +1281,6 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	if ouo.mutation.OrderSnCleared() {
 		_spec.ClearField(order.FieldOrderSn, field.TypeString)
 	}
-	if value, ok := ouo.mutation.VenueID(); ok {
-		_spec.SetField(order.FieldVenueID, field.TypeInt64, value)
-	}
-	if value, ok := ouo.mutation.AddedVenueID(); ok {
-		_spec.AddField(order.FieldVenueID, field.TypeInt64, value)
-	}
-	if ouo.mutation.VenueIDCleared() {
-		_spec.ClearField(order.FieldVenueID, field.TypeInt64)
-	}
-	if value, ok := ouo.mutation.MemberID(); ok {
-		_spec.SetField(order.FieldMemberID, field.TypeInt64, value)
-	}
-	if value, ok := ouo.mutation.AddedMemberID(); ok {
-		_spec.AddField(order.FieldMemberID, field.TypeInt64, value)
-	}
-	if ouo.mutation.MemberIDCleared() {
-		_spec.ClearField(order.FieldMemberID, field.TypeInt64)
-	}
 	if value, ok := ouo.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
 	}
@@ -1154,15 +1307,6 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	}
 	if ouo.mutation.CompletionAtCleared() {
 		_spec.ClearField(order.FieldCompletionAt, field.TypeTime)
-	}
-	if value, ok := ouo.mutation.CreateID(); ok {
-		_spec.SetField(order.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := ouo.mutation.AddedCreateID(); ok {
-		_spec.AddField(order.FieldCreateID, field.TypeInt64, value)
-	}
-	if ouo.mutation.CreateIDCleared() {
-		_spec.ClearField(order.FieldCreateID, field.TypeInt64)
 	}
 	if ouo.mutation.AmountCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1337,6 +1481,93 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.OrderVenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderVenuesTable,
+			Columns: []string{order.OrderVenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.OrderVenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderVenuesTable,
+			Columns: []string{order.OrderVenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.OrderMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderMembersTable,
+			Columns: []string{order.OrderMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.OrderMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderMembersTable,
+			Columns: []string{order.OrderMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.OrderCreatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderCreatesTable,
+			Columns: []string{order.OrderCreatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.OrderCreatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderCreatesTable,
+			Columns: []string{order.OrderCreatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

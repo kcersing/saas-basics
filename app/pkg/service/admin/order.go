@@ -10,9 +10,14 @@ import (
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
+	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/user"
+	venue2 "saas/pkg/db/ent/venue"
+	"saas/pkg/utils"
 	"sync"
+	"time"
 )
 
 type Order struct {
@@ -23,26 +28,44 @@ type Order struct {
 	cache *ristretto.Cache
 }
 
-func (o Order) Create(req do.OrderInfo) error {
+func (o Order) Create(req do.CreateOrder) error {
 
 	one := &ent.Order{}
 	var err error
-	errChan := make(chan error, 7)
+
+	venue, err := o.db.Venue.Query().Where(venue2.IDEQ(req.VenueId)).First(o.ctx)
+	if err != nil {
+		return errors.Wrap(err, "未找到场馆")
+	}
+
+	members, err := o.db.Member.Query().Where(member.IDEQ(req.MemberId)).First(o.ctx)
+
+	if err != nil {
+		return errors.Wrap(err, "未找到会员")
+	}
+
+	create, err := o.db.User.Query().Where(user.IDEQ(req.CreateId)).First(o.ctx)
+	if err != nil {
+		return errors.Wrap(err, "未找到创建人")
+	}
+
+	errChan := make(chan error, 15)
 	defer close(errChan)
 	var wg sync.WaitGroup
-	wg.Add(5)
+	wg.Add(4)
+
 	go func() {
 		one, err = o.db.Order.Create().
-			SetOrderSn("").
-			SetVenueID(req.VenueId).
-			SetMemberID(req.MemberId).
+			SetOrderSn(utils.CreateCn()).
+			SetOrderVenues(venue).
+			SetOrderMembers(members).
+			SetOrderCreates(create).
 			SetStatus(0).
 			//SetSource(req.Source).
 			//SetDevice(req.Device).
-			SetCreateID(req.CreateId).
 			Save(o.ctx)
 		if err != nil {
-			err = errors.Wrap(err, "create Order failed")
+			err = errors.Wrap(err, "创建订单失败")
 			errChan <- err
 		}
 		wg.Done()
@@ -50,37 +73,49 @@ func (o Order) Create(req do.OrderInfo) error {
 
 	go func() {
 		_, err = o.db.OrderAmount.Create().
-			SetOrderID(one.ID).
+			SetAufk(one).
+			SetTotal(req.Total).
 			Save(o.ctx)
 		if err != nil {
-			err = errors.Wrap(err, "create Order Amount failed")
+			err = errors.Wrap(err, "创建Order Amount失败")
 			errChan <- err
 		}
 		wg.Done()
 	}()
 
 	go func() {
-		_, err = o.db.OrderSales.Create().
-			SetOrderID(one.ID).
-			Save(o.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "create Order Sales failed")
-			errChan <- err
+		for _, v := range req.Sales {
+			_, err = o.db.OrderSales.Create().
+				SetAufk(one).
+				SetSalesID(v).
+				Save(o.ctx)
+			if err != nil {
+				err = errors.Wrap(err, "创建Order Sales失败")
+				errChan <- err
+			}
+
 		}
 		wg.Done()
 	}()
+
 	go func() {
+		layout := "2006-01-02 15:04:05" // Go中的时间格式化参考时间
+		assignAt, err := time.Parse(layout, req.AssignAt)
+		if err != nil {
+			err = errors.Wrap(err, "时间转换失败")
+			errChan <- err
+		}
 		_, err = o.db.OrderItem.Create().
-			SetOrderID(one.ID).
+			SetAufk(one).
+			SetProductID(req.ProductId).
+			SetQuantity(req.Quantity).
+			SetContractID(req.ContractId).
+			SetAssignAt(assignAt).
 			Save(o.ctx)
 		if err != nil {
-			err = errors.Wrap(err, "create Order Item failed")
+			err = errors.Wrap(err, "创建Order Item失败")
 			errChan <- err
 		}
-		wg.Done()
-	}()
-
-	go func() {
 		wg.Done()
 	}()
 

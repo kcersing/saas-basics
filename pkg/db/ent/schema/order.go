@@ -39,6 +39,10 @@ func (Order) Edges() []ent.Edge {
 		edge.To("item", OrderItem.Type),
 		edge.To("pay", OrderPay.Type),
 		edge.To("sales", OrderSales.Type),
+
+		edge.From("order_venues", Venue.Type).Ref("venue_orders").Field("venue_id").Unique(),
+		edge.From("order_members", Member.Type).Ref("member_orders").Field("member_id").Unique(),
+		edge.From("order_creates", User.Type).Ref("created_orders").Field("create_id").Unique(),
 	}
 }
 

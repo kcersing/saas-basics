@@ -6,11 +6,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
 	"saas/pkg/db/ent/orderpay"
 	"saas/pkg/db/ent/ordersales"
+	"saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -230,6 +233,63 @@ func (oc *OrderCreate) AddSales(o ...*OrderSales) *OrderCreate {
 	return oc.AddSaleIDs(ids...)
 }
 
+// SetOrderVenuesID sets the "order_venues" edge to the Venue entity by ID.
+func (oc *OrderCreate) SetOrderVenuesID(id int64) *OrderCreate {
+	oc.mutation.SetOrderVenuesID(id)
+	return oc
+}
+
+// SetNillableOrderVenuesID sets the "order_venues" edge to the Venue entity by ID if the given value is not nil.
+func (oc *OrderCreate) SetNillableOrderVenuesID(id *int64) *OrderCreate {
+	if id != nil {
+		oc = oc.SetOrderVenuesID(*id)
+	}
+	return oc
+}
+
+// SetOrderVenues sets the "order_venues" edge to the Venue entity.
+func (oc *OrderCreate) SetOrderVenues(v *Venue) *OrderCreate {
+	return oc.SetOrderVenuesID(v.ID)
+}
+
+// SetOrderMembersID sets the "order_members" edge to the Member entity by ID.
+func (oc *OrderCreate) SetOrderMembersID(id int64) *OrderCreate {
+	oc.mutation.SetOrderMembersID(id)
+	return oc
+}
+
+// SetNillableOrderMembersID sets the "order_members" edge to the Member entity by ID if the given value is not nil.
+func (oc *OrderCreate) SetNillableOrderMembersID(id *int64) *OrderCreate {
+	if id != nil {
+		oc = oc.SetOrderMembersID(*id)
+	}
+	return oc
+}
+
+// SetOrderMembers sets the "order_members" edge to the Member entity.
+func (oc *OrderCreate) SetOrderMembers(m *Member) *OrderCreate {
+	return oc.SetOrderMembersID(m.ID)
+}
+
+// SetOrderCreatesID sets the "order_creates" edge to the User entity by ID.
+func (oc *OrderCreate) SetOrderCreatesID(id int64) *OrderCreate {
+	oc.mutation.SetOrderCreatesID(id)
+	return oc
+}
+
+// SetNillableOrderCreatesID sets the "order_creates" edge to the User entity by ID if the given value is not nil.
+func (oc *OrderCreate) SetNillableOrderCreatesID(id *int64) *OrderCreate {
+	if id != nil {
+		oc = oc.SetOrderCreatesID(*id)
+	}
+	return oc
+}
+
+// SetOrderCreates sets the "order_creates" edge to the User entity.
+func (oc *OrderCreate) SetOrderCreates(u *User) *OrderCreate {
+	return oc.SetOrderCreatesID(u.ID)
+}
+
 // Mutation returns the OrderMutation object of the builder.
 func (oc *OrderCreate) Mutation() *OrderMutation {
 	return oc.mutation
@@ -339,14 +399,6 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)
 		_node.OrderSn = value
 	}
-	if value, ok := oc.mutation.VenueID(); ok {
-		_spec.SetField(order.FieldVenueID, field.TypeInt64, value)
-		_node.VenueID = value
-	}
-	if value, ok := oc.mutation.MemberID(); ok {
-		_spec.SetField(order.FieldMemberID, field.TypeInt64, value)
-		_node.MemberID = value
-	}
 	if value, ok := oc.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
@@ -362,10 +414,6 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 	if value, ok := oc.mutation.CompletionAt(); ok {
 		_spec.SetField(order.FieldCompletionAt, field.TypeTime, value)
 		_node.CompletionAt = value
-	}
-	if value, ok := oc.mutation.CreateID(); ok {
-		_spec.SetField(order.FieldCreateID, field.TypeInt64, value)
-		_node.CreateID = value
 	}
 	if nodes := oc.mutation.AmountIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -429,6 +477,57 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.OrderVenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderVenuesTable,
+			Columns: []string{order.OrderVenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.VenueID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.OrderMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderMembersTable,
+			Columns: []string{order.OrderMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.MemberID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.OrderCreatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.OrderCreatesTable,
+			Columns: []string{order.OrderCreatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

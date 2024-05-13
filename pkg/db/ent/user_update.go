@@ -6,6 +6,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
@@ -330,6 +332,36 @@ func (uu *UserUpdate) SetToken(t *Token) *UserUpdate {
 	return uu.SetTokenID(t.ID)
 }
 
+// AddCreatedOrderIDs adds the "created_orders" edge to the Order entity by IDs.
+func (uu *UserUpdate) AddCreatedOrderIDs(ids ...int64) *UserUpdate {
+	uu.mutation.AddCreatedOrderIDs(ids...)
+	return uu
+}
+
+// AddCreatedOrders adds the "created_orders" edges to the Order entity.
+func (uu *UserUpdate) AddCreatedOrders(o ...*Order) *UserUpdate {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uu.AddCreatedOrderIDs(ids...)
+}
+
+// AddUserEntryIDs adds the "user_entry" edge to the EntryLogs entity by IDs.
+func (uu *UserUpdate) AddUserEntryIDs(ids ...int64) *UserUpdate {
+	uu.mutation.AddUserEntryIDs(ids...)
+	return uu
+}
+
+// AddUserEntry adds the "user_entry" edges to the EntryLogs entity.
+func (uu *UserUpdate) AddUserEntry(e ...*EntryLogs) *UserUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return uu.AddUserEntryIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -339,6 +371,48 @@ func (uu *UserUpdate) Mutation() *UserMutation {
 func (uu *UserUpdate) ClearToken() *UserUpdate {
 	uu.mutation.ClearToken()
 	return uu
+}
+
+// ClearCreatedOrders clears all "created_orders" edges to the Order entity.
+func (uu *UserUpdate) ClearCreatedOrders() *UserUpdate {
+	uu.mutation.ClearCreatedOrders()
+	return uu
+}
+
+// RemoveCreatedOrderIDs removes the "created_orders" edge to Order entities by IDs.
+func (uu *UserUpdate) RemoveCreatedOrderIDs(ids ...int64) *UserUpdate {
+	uu.mutation.RemoveCreatedOrderIDs(ids...)
+	return uu
+}
+
+// RemoveCreatedOrders removes "created_orders" edges to Order entities.
+func (uu *UserUpdate) RemoveCreatedOrders(o ...*Order) *UserUpdate {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uu.RemoveCreatedOrderIDs(ids...)
+}
+
+// ClearUserEntry clears all "user_entry" edges to the EntryLogs entity.
+func (uu *UserUpdate) ClearUserEntry() *UserUpdate {
+	uu.mutation.ClearUserEntry()
+	return uu
+}
+
+// RemoveUserEntryIDs removes the "user_entry" edge to EntryLogs entities by IDs.
+func (uu *UserUpdate) RemoveUserEntryIDs(ids ...int64) *UserUpdate {
+	uu.mutation.RemoveUserEntryIDs(ids...)
+	return uu
+}
+
+// RemoveUserEntry removes "user_entry" edges to EntryLogs entities.
+func (uu *UserUpdate) RemoveUserEntry(e ...*EntryLogs) *UserUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return uu.RemoveUserEntryIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -492,6 +566,96 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.CreatedOrdersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedCreatedOrdersIDs(); len(nodes) > 0 && !uu.mutation.CreatedOrdersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.CreatedOrdersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.UserEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedUserEntryIDs(); len(nodes) > 0 && !uu.mutation.UserEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.UserEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -820,6 +984,36 @@ func (uuo *UserUpdateOne) SetToken(t *Token) *UserUpdateOne {
 	return uuo.SetTokenID(t.ID)
 }
 
+// AddCreatedOrderIDs adds the "created_orders" edge to the Order entity by IDs.
+func (uuo *UserUpdateOne) AddCreatedOrderIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.AddCreatedOrderIDs(ids...)
+	return uuo
+}
+
+// AddCreatedOrders adds the "created_orders" edges to the Order entity.
+func (uuo *UserUpdateOne) AddCreatedOrders(o ...*Order) *UserUpdateOne {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uuo.AddCreatedOrderIDs(ids...)
+}
+
+// AddUserEntryIDs adds the "user_entry" edge to the EntryLogs entity by IDs.
+func (uuo *UserUpdateOne) AddUserEntryIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.AddUserEntryIDs(ids...)
+	return uuo
+}
+
+// AddUserEntry adds the "user_entry" edges to the EntryLogs entity.
+func (uuo *UserUpdateOne) AddUserEntry(e ...*EntryLogs) *UserUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return uuo.AddUserEntryIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
@@ -829,6 +1023,48 @@ func (uuo *UserUpdateOne) Mutation() *UserMutation {
 func (uuo *UserUpdateOne) ClearToken() *UserUpdateOne {
 	uuo.mutation.ClearToken()
 	return uuo
+}
+
+// ClearCreatedOrders clears all "created_orders" edges to the Order entity.
+func (uuo *UserUpdateOne) ClearCreatedOrders() *UserUpdateOne {
+	uuo.mutation.ClearCreatedOrders()
+	return uuo
+}
+
+// RemoveCreatedOrderIDs removes the "created_orders" edge to Order entities by IDs.
+func (uuo *UserUpdateOne) RemoveCreatedOrderIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.RemoveCreatedOrderIDs(ids...)
+	return uuo
+}
+
+// RemoveCreatedOrders removes "created_orders" edges to Order entities.
+func (uuo *UserUpdateOne) RemoveCreatedOrders(o ...*Order) *UserUpdateOne {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uuo.RemoveCreatedOrderIDs(ids...)
+}
+
+// ClearUserEntry clears all "user_entry" edges to the EntryLogs entity.
+func (uuo *UserUpdateOne) ClearUserEntry() *UserUpdateOne {
+	uuo.mutation.ClearUserEntry()
+	return uuo
+}
+
+// RemoveUserEntryIDs removes the "user_entry" edge to EntryLogs entities by IDs.
+func (uuo *UserUpdateOne) RemoveUserEntryIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.RemoveUserEntryIDs(ids...)
+	return uuo
+}
+
+// RemoveUserEntry removes "user_entry" edges to EntryLogs entities.
+func (uuo *UserUpdateOne) RemoveUserEntry(e ...*EntryLogs) *UserUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return uuo.RemoveUserEntryIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -1012,6 +1248,96 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.CreatedOrdersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedCreatedOrdersIDs(); len(nodes) > 0 && !uuo.mutation.CreatedOrdersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.CreatedOrdersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.UserEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedUserEntryIDs(); len(nodes) > 0 && !uuo.mutation.UserEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.UserEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

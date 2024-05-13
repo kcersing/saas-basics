@@ -7,10 +7,12 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
+	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -27,7 +29,9 @@ type MemberQuery struct {
 	predicates         []predicate.Member
 	withMemberDetails  *MemberDetailsQuery
 	withMemberNotes    *MemberNoteQuery
+	withMemberOrders   *OrderQuery
 	withMemberProducts *MemberProductQuery
+	withMemberEntry    *EntryLogsQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -108,6 +112,28 @@ func (mq *MemberQuery) QueryMemberNotes() *MemberNoteQuery {
 	return query
 }
 
+// QueryMemberOrders chains the current query on the "member_orders" edge.
+func (mq *MemberQuery) QueryMemberOrders() *OrderQuery {
+	query := (&OrderClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, selector),
+			sqlgraph.To(order.Table, order.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberOrdersTable, member.MemberOrdersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMemberProducts chains the current query on the "member_products" edge.
 func (mq *MemberQuery) QueryMemberProducts() *MemberProductQuery {
 	query := (&MemberProductClient{config: mq.config}).Query()
@@ -123,6 +149,28 @@ func (mq *MemberQuery) QueryMemberProducts() *MemberProductQuery {
 			sqlgraph.From(member.Table, member.FieldID, selector),
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProductsTable, member.MemberProductsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberEntry chains the current query on the "member_entry" edge.
+func (mq *MemberQuery) QueryMemberEntry() *EntryLogsQuery {
+	query := (&EntryLogsClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, selector),
+			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberEntryTable, member.MemberEntryColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
@@ -324,7 +372,9 @@ func (mq *MemberQuery) Clone() *MemberQuery {
 		predicates:         append([]predicate.Member{}, mq.predicates...),
 		withMemberDetails:  mq.withMemberDetails.Clone(),
 		withMemberNotes:    mq.withMemberNotes.Clone(),
+		withMemberOrders:   mq.withMemberOrders.Clone(),
 		withMemberProducts: mq.withMemberProducts.Clone(),
+		withMemberEntry:    mq.withMemberEntry.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
@@ -353,6 +403,17 @@ func (mq *MemberQuery) WithMemberNotes(opts ...func(*MemberNoteQuery)) *MemberQu
 	return mq
 }
 
+// WithMemberOrders tells the query-builder to eager-load the nodes that are connected to
+// the "member_orders" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithMemberOrders(opts ...func(*OrderQuery)) *MemberQuery {
+	query := (&OrderClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withMemberOrders = query
+	return mq
+}
+
 // WithMemberProducts tells the query-builder to eager-load the nodes that are connected to
 // the "member_products" edge. The optional arguments are used to configure the query builder of the edge.
 func (mq *MemberQuery) WithMemberProducts(opts ...func(*MemberProductQuery)) *MemberQuery {
@@ -361,6 +422,17 @@ func (mq *MemberQuery) WithMemberProducts(opts ...func(*MemberProductQuery)) *Me
 		opt(query)
 	}
 	mq.withMemberProducts = query
+	return mq
+}
+
+// WithMemberEntry tells the query-builder to eager-load the nodes that are connected to
+// the "member_entry" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithMemberEntry(opts ...func(*EntryLogsQuery)) *MemberQuery {
+	query := (&EntryLogsClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withMemberEntry = query
 	return mq
 }
 
@@ -442,10 +514,12 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	var (
 		nodes       = []*Member{}
 		_spec       = mq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
 			mq.withMemberDetails != nil,
 			mq.withMemberNotes != nil,
+			mq.withMemberOrders != nil,
 			mq.withMemberProducts != nil,
+			mq.withMemberEntry != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -480,10 +554,24 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 			return nil, err
 		}
 	}
+	if query := mq.withMemberOrders; query != nil {
+		if err := mq.loadMemberOrders(ctx, query, nodes,
+			func(n *Member) { n.Edges.MemberOrders = []*Order{} },
+			func(n *Member, e *Order) { n.Edges.MemberOrders = append(n.Edges.MemberOrders, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := mq.withMemberProducts; query != nil {
 		if err := mq.loadMemberProducts(ctx, query, nodes,
 			func(n *Member) { n.Edges.MemberProducts = []*MemberProduct{} },
 			func(n *Member, e *MemberProduct) { n.Edges.MemberProducts = append(n.Edges.MemberProducts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := mq.withMemberEntry; query != nil {
+		if err := mq.loadMemberEntry(ctx, query, nodes,
+			func(n *Member) { n.Edges.MemberEntry = []*EntryLogs{} },
+			func(n *Member, e *EntryLogs) { n.Edges.MemberEntry = append(n.Edges.MemberEntry, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -550,6 +638,36 @@ func (mq *MemberQuery) loadMemberNotes(ctx context.Context, query *MemberNoteQue
 	}
 	return nil
 }
+func (mq *MemberQuery) loadMemberOrders(ctx context.Context, query *OrderQuery, nodes []*Member, init func(*Member), assign func(*Member, *Order)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Member)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(order.FieldMemberID)
+	}
+	query.Where(predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(member.MemberOrdersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.MemberID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (mq *MemberQuery) loadMemberProducts(ctx context.Context, query *MemberProductQuery, nodes []*Member, init func(*Member), assign func(*Member, *MemberProduct)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*Member)
@@ -565,6 +683,36 @@ func (mq *MemberQuery) loadMemberProducts(ctx context.Context, query *MemberProd
 	}
 	query.Where(predicate.MemberProduct(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(member.MemberProductsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.MemberID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (mq *MemberQuery) loadMemberEntry(ctx context.Context, query *EntryLogsQuery, nodes []*Member, init func(*Member), assign func(*Member, *EntryLogs)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Member)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(entrylogs.FieldMemberID)
+	}
+	query.Where(predicate.EntryLogs(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(member.MemberEntryColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {

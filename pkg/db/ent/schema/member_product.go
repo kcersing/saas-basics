@@ -20,6 +20,7 @@ func (MemberProduct) Fields() []ent.Field {
 		field.String("type").Comment("类型").Optional(),
 		field.Int64("member_id").Comment("会员id").Optional(),
 		field.Int64("product_id").Comment("产品ID").Optional(),
+		field.Int64("order_id").Comment("订单ID").Optional(),
 		field.Float("name").Comment("产品名称").Optional(),
 		field.Float("price").Comment("产品价格").Optional(),
 		field.Time("validity_at").Comment("生效时间").Optional(),
@@ -36,11 +37,13 @@ func (MemberProduct) Mixin() []ent.Mixin {
 
 func (MemberProduct) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("owner", Member.Type).
+		edge.From("members", Member.Type).
 			Ref("member_products").Unique().
 			Field("member_id").Unique(),
 
 		edge.To("member_product_propertys", MemberProductProperty.Type),
+
+		edge.To("member_product_entry", EntryLogs.Type),
 	}
 }
 

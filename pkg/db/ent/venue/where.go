@@ -863,6 +863,52 @@ func HasPlacesWith(preds ...predicate.VenuePlace) predicate.Venue {
 	})
 }
 
+// HasVenueOrders applies the HasEdge predicate on the "venue_orders" edge.
+func HasVenueOrders() predicate.Venue {
+	return predicate.Venue(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VenueOrdersTable, VenueOrdersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVenueOrdersWith applies the HasEdge predicate on the "venue_orders" edge with a given conditions (other predicates).
+func HasVenueOrdersWith(preds ...predicate.Order) predicate.Venue {
+	return predicate.Venue(func(s *sql.Selector) {
+		step := newVenueOrdersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVenueEntry applies the HasEdge predicate on the "venue_entry" edge.
+func HasVenueEntry() predicate.Venue {
+	return predicate.Venue(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VenueEntryTable, VenueEntryColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVenueEntryWith applies the HasEdge predicate on the "venue_entry" edge with a given conditions (other predicates).
+func HasVenueEntryWith(preds ...predicate.EntryLogs) predicate.Venue {
+	return predicate.Venue(func(s *sql.Selector) {
+		step := newVenueEntryStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMemberPropertyVenues applies the HasEdge predicate on the "member_property_venues" edge.
 func HasMemberPropertyVenues() predicate.Venue {
 	return predicate.Venue(func(s *sql.Selector) {

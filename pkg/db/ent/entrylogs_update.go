@@ -7,7 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -36,7 +40,6 @@ func (elu *EntryLogsUpdate) SetUpdatedAt(t time.Time) *EntryLogsUpdate {
 
 // SetMemberID sets the "member_id" field.
 func (elu *EntryLogsUpdate) SetMemberID(i int64) *EntryLogsUpdate {
-	elu.mutation.ResetMemberID()
 	elu.mutation.SetMemberID(i)
 	return elu
 }
@@ -49,12 +52,6 @@ func (elu *EntryLogsUpdate) SetNillableMemberID(i *int64) *EntryLogsUpdate {
 	return elu
 }
 
-// AddMemberID adds i to the "member_id" field.
-func (elu *EntryLogsUpdate) AddMemberID(i int64) *EntryLogsUpdate {
-	elu.mutation.AddMemberID(i)
-	return elu
-}
-
 // ClearMemberID clears the value of the "member_id" field.
 func (elu *EntryLogsUpdate) ClearMemberID() *EntryLogsUpdate {
 	elu.mutation.ClearMemberID()
@@ -63,7 +60,6 @@ func (elu *EntryLogsUpdate) ClearMemberID() *EntryLogsUpdate {
 
 // SetUserID sets the "user_id" field.
 func (elu *EntryLogsUpdate) SetUserID(i int64) *EntryLogsUpdate {
-	elu.mutation.ResetUserID()
 	elu.mutation.SetUserID(i)
 	return elu
 }
@@ -76,12 +72,6 @@ func (elu *EntryLogsUpdate) SetNillableUserID(i *int64) *EntryLogsUpdate {
 	return elu
 }
 
-// AddUserID adds i to the "user_id" field.
-func (elu *EntryLogsUpdate) AddUserID(i int64) *EntryLogsUpdate {
-	elu.mutation.AddUserID(i)
-	return elu
-}
-
 // ClearUserID clears the value of the "user_id" field.
 func (elu *EntryLogsUpdate) ClearUserID() *EntryLogsUpdate {
 	elu.mutation.ClearUserID()
@@ -90,7 +80,6 @@ func (elu *EntryLogsUpdate) ClearUserID() *EntryLogsUpdate {
 
 // SetVenueID sets the "venue_id" field.
 func (elu *EntryLogsUpdate) SetVenueID(i int64) *EntryLogsUpdate {
-	elu.mutation.ResetVenueID()
 	elu.mutation.SetVenueID(i)
 	return elu
 }
@@ -103,12 +92,6 @@ func (elu *EntryLogsUpdate) SetNillableVenueID(i *int64) *EntryLogsUpdate {
 	return elu
 }
 
-// AddVenueID adds i to the "venue_id" field.
-func (elu *EntryLogsUpdate) AddVenueID(i int64) *EntryLogsUpdate {
-	elu.mutation.AddVenueID(i)
-	return elu
-}
-
 // ClearVenueID clears the value of the "venue_id" field.
 func (elu *EntryLogsUpdate) ClearVenueID() *EntryLogsUpdate {
 	elu.mutation.ClearVenueID()
@@ -117,7 +100,6 @@ func (elu *EntryLogsUpdate) ClearVenueID() *EntryLogsUpdate {
 
 // SetMemberProductID sets the "member_product_id" field.
 func (elu *EntryLogsUpdate) SetMemberProductID(i int64) *EntryLogsUpdate {
-	elu.mutation.ResetMemberProductID()
 	elu.mutation.SetMemberProductID(i)
 	return elu
 }
@@ -127,12 +109,6 @@ func (elu *EntryLogsUpdate) SetNillableMemberProductID(i *int64) *EntryLogsUpdat
 	if i != nil {
 		elu.SetMemberProductID(*i)
 	}
-	return elu
-}
-
-// AddMemberProductID adds i to the "member_product_id" field.
-func (elu *EntryLogsUpdate) AddMemberProductID(i int64) *EntryLogsUpdate {
-	elu.mutation.AddMemberProductID(i)
 	return elu
 }
 
@@ -193,9 +169,109 @@ func (elu *EntryLogsUpdate) ClearLeavingTime() *EntryLogsUpdate {
 	return elu
 }
 
+// SetVenuesID sets the "venues" edge to the Venue entity by ID.
+func (elu *EntryLogsUpdate) SetVenuesID(id int64) *EntryLogsUpdate {
+	elu.mutation.SetVenuesID(id)
+	return elu
+}
+
+// SetNillableVenuesID sets the "venues" edge to the Venue entity by ID if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableVenuesID(id *int64) *EntryLogsUpdate {
+	if id != nil {
+		elu = elu.SetVenuesID(*id)
+	}
+	return elu
+}
+
+// SetVenues sets the "venues" edge to the Venue entity.
+func (elu *EntryLogsUpdate) SetVenues(v *Venue) *EntryLogsUpdate {
+	return elu.SetVenuesID(v.ID)
+}
+
+// SetMembersID sets the "members" edge to the Member entity by ID.
+func (elu *EntryLogsUpdate) SetMembersID(id int64) *EntryLogsUpdate {
+	elu.mutation.SetMembersID(id)
+	return elu
+}
+
+// SetNillableMembersID sets the "members" edge to the Member entity by ID if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableMembersID(id *int64) *EntryLogsUpdate {
+	if id != nil {
+		elu = elu.SetMembersID(*id)
+	}
+	return elu
+}
+
+// SetMembers sets the "members" edge to the Member entity.
+func (elu *EntryLogsUpdate) SetMembers(m *Member) *EntryLogsUpdate {
+	return elu.SetMembersID(m.ID)
+}
+
+// SetUsersID sets the "users" edge to the User entity by ID.
+func (elu *EntryLogsUpdate) SetUsersID(id int64) *EntryLogsUpdate {
+	elu.mutation.SetUsersID(id)
+	return elu
+}
+
+// SetNillableUsersID sets the "users" edge to the User entity by ID if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableUsersID(id *int64) *EntryLogsUpdate {
+	if id != nil {
+		elu = elu.SetUsersID(*id)
+	}
+	return elu
+}
+
+// SetUsers sets the "users" edge to the User entity.
+func (elu *EntryLogsUpdate) SetUsers(u *User) *EntryLogsUpdate {
+	return elu.SetUsersID(u.ID)
+}
+
+// SetMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID.
+func (elu *EntryLogsUpdate) SetMemberProductsID(id int64) *EntryLogsUpdate {
+	elu.mutation.SetMemberProductsID(id)
+	return elu
+}
+
+// SetNillableMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableMemberProductsID(id *int64) *EntryLogsUpdate {
+	if id != nil {
+		elu = elu.SetMemberProductsID(*id)
+	}
+	return elu
+}
+
+// SetMemberProducts sets the "member_products" edge to the MemberProduct entity.
+func (elu *EntryLogsUpdate) SetMemberProducts(m *MemberProduct) *EntryLogsUpdate {
+	return elu.SetMemberProductsID(m.ID)
+}
+
 // Mutation returns the EntryLogsMutation object of the builder.
 func (elu *EntryLogsUpdate) Mutation() *EntryLogsMutation {
 	return elu.mutation
+}
+
+// ClearVenues clears the "venues" edge to the Venue entity.
+func (elu *EntryLogsUpdate) ClearVenues() *EntryLogsUpdate {
+	elu.mutation.ClearVenues()
+	return elu
+}
+
+// ClearMembers clears the "members" edge to the Member entity.
+func (elu *EntryLogsUpdate) ClearMembers() *EntryLogsUpdate {
+	elu.mutation.ClearMembers()
+	return elu
+}
+
+// ClearUsers clears the "users" edge to the User entity.
+func (elu *EntryLogsUpdate) ClearUsers() *EntryLogsUpdate {
+	elu.mutation.ClearUsers()
+	return elu
+}
+
+// ClearMemberProducts clears the "member_products" edge to the MemberProduct entity.
+func (elu *EntryLogsUpdate) ClearMemberProducts() *EntryLogsUpdate {
+	elu.mutation.ClearMemberProducts()
+	return elu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -254,42 +330,6 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := elu.mutation.UpdatedAt(); ok {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := elu.mutation.MemberID(); ok {
-		_spec.SetField(entrylogs.FieldMemberID, field.TypeInt64, value)
-	}
-	if value, ok := elu.mutation.AddedMemberID(); ok {
-		_spec.AddField(entrylogs.FieldMemberID, field.TypeInt64, value)
-	}
-	if elu.mutation.MemberIDCleared() {
-		_spec.ClearField(entrylogs.FieldMemberID, field.TypeInt64)
-	}
-	if value, ok := elu.mutation.UserID(); ok {
-		_spec.SetField(entrylogs.FieldUserID, field.TypeInt64, value)
-	}
-	if value, ok := elu.mutation.AddedUserID(); ok {
-		_spec.AddField(entrylogs.FieldUserID, field.TypeInt64, value)
-	}
-	if elu.mutation.UserIDCleared() {
-		_spec.ClearField(entrylogs.FieldUserID, field.TypeInt64)
-	}
-	if value, ok := elu.mutation.VenueID(); ok {
-		_spec.SetField(entrylogs.FieldVenueID, field.TypeInt64, value)
-	}
-	if value, ok := elu.mutation.AddedVenueID(); ok {
-		_spec.AddField(entrylogs.FieldVenueID, field.TypeInt64, value)
-	}
-	if elu.mutation.VenueIDCleared() {
-		_spec.ClearField(entrylogs.FieldVenueID, field.TypeInt64)
-	}
-	if value, ok := elu.mutation.MemberProductID(); ok {
-		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-	}
-	if value, ok := elu.mutation.AddedMemberProductID(); ok {
-		_spec.AddField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-	}
-	if elu.mutation.MemberProductIDCleared() {
-		_spec.ClearField(entrylogs.FieldMemberProductID, field.TypeInt64)
-	}
 	if value, ok := elu.mutation.MemberPropertyID(); ok {
 		_spec.SetField(entrylogs.FieldMemberPropertyID, field.TypeInt64, value)
 	}
@@ -310,6 +350,122 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if elu.mutation.LeavingTimeCleared() {
 		_spec.ClearField(entrylogs.FieldLeavingTime, field.TypeTime)
+	}
+	if elu.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.VenuesTable,
+			Columns: []string{entrylogs.VenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := elu.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.VenuesTable,
+			Columns: []string{entrylogs.VenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if elu.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MembersTable,
+			Columns: []string{entrylogs.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := elu.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MembersTable,
+			Columns: []string{entrylogs.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if elu.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.UsersTable,
+			Columns: []string{entrylogs.UsersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := elu.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.UsersTable,
+			Columns: []string{entrylogs.UsersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if elu.mutation.MemberProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := elu.mutation.MemberProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, elu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -339,7 +495,6 @@ func (eluo *EntryLogsUpdateOne) SetUpdatedAt(t time.Time) *EntryLogsUpdateOne {
 
 // SetMemberID sets the "member_id" field.
 func (eluo *EntryLogsUpdateOne) SetMemberID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.ResetMemberID()
 	eluo.mutation.SetMemberID(i)
 	return eluo
 }
@@ -352,12 +507,6 @@ func (eluo *EntryLogsUpdateOne) SetNillableMemberID(i *int64) *EntryLogsUpdateOn
 	return eluo
 }
 
-// AddMemberID adds i to the "member_id" field.
-func (eluo *EntryLogsUpdateOne) AddMemberID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.AddMemberID(i)
-	return eluo
-}
-
 // ClearMemberID clears the value of the "member_id" field.
 func (eluo *EntryLogsUpdateOne) ClearMemberID() *EntryLogsUpdateOne {
 	eluo.mutation.ClearMemberID()
@@ -366,7 +515,6 @@ func (eluo *EntryLogsUpdateOne) ClearMemberID() *EntryLogsUpdateOne {
 
 // SetUserID sets the "user_id" field.
 func (eluo *EntryLogsUpdateOne) SetUserID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.ResetUserID()
 	eluo.mutation.SetUserID(i)
 	return eluo
 }
@@ -379,12 +527,6 @@ func (eluo *EntryLogsUpdateOne) SetNillableUserID(i *int64) *EntryLogsUpdateOne 
 	return eluo
 }
 
-// AddUserID adds i to the "user_id" field.
-func (eluo *EntryLogsUpdateOne) AddUserID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.AddUserID(i)
-	return eluo
-}
-
 // ClearUserID clears the value of the "user_id" field.
 func (eluo *EntryLogsUpdateOne) ClearUserID() *EntryLogsUpdateOne {
 	eluo.mutation.ClearUserID()
@@ -393,7 +535,6 @@ func (eluo *EntryLogsUpdateOne) ClearUserID() *EntryLogsUpdateOne {
 
 // SetVenueID sets the "venue_id" field.
 func (eluo *EntryLogsUpdateOne) SetVenueID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.ResetVenueID()
 	eluo.mutation.SetVenueID(i)
 	return eluo
 }
@@ -406,12 +547,6 @@ func (eluo *EntryLogsUpdateOne) SetNillableVenueID(i *int64) *EntryLogsUpdateOne
 	return eluo
 }
 
-// AddVenueID adds i to the "venue_id" field.
-func (eluo *EntryLogsUpdateOne) AddVenueID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.AddVenueID(i)
-	return eluo
-}
-
 // ClearVenueID clears the value of the "venue_id" field.
 func (eluo *EntryLogsUpdateOne) ClearVenueID() *EntryLogsUpdateOne {
 	eluo.mutation.ClearVenueID()
@@ -420,7 +555,6 @@ func (eluo *EntryLogsUpdateOne) ClearVenueID() *EntryLogsUpdateOne {
 
 // SetMemberProductID sets the "member_product_id" field.
 func (eluo *EntryLogsUpdateOne) SetMemberProductID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.ResetMemberProductID()
 	eluo.mutation.SetMemberProductID(i)
 	return eluo
 }
@@ -430,12 +564,6 @@ func (eluo *EntryLogsUpdateOne) SetNillableMemberProductID(i *int64) *EntryLogsU
 	if i != nil {
 		eluo.SetMemberProductID(*i)
 	}
-	return eluo
-}
-
-// AddMemberProductID adds i to the "member_product_id" field.
-func (eluo *EntryLogsUpdateOne) AddMemberProductID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.AddMemberProductID(i)
 	return eluo
 }
 
@@ -496,9 +624,109 @@ func (eluo *EntryLogsUpdateOne) ClearLeavingTime() *EntryLogsUpdateOne {
 	return eluo
 }
 
+// SetVenuesID sets the "venues" edge to the Venue entity by ID.
+func (eluo *EntryLogsUpdateOne) SetVenuesID(id int64) *EntryLogsUpdateOne {
+	eluo.mutation.SetVenuesID(id)
+	return eluo
+}
+
+// SetNillableVenuesID sets the "venues" edge to the Venue entity by ID if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableVenuesID(id *int64) *EntryLogsUpdateOne {
+	if id != nil {
+		eluo = eluo.SetVenuesID(*id)
+	}
+	return eluo
+}
+
+// SetVenues sets the "venues" edge to the Venue entity.
+func (eluo *EntryLogsUpdateOne) SetVenues(v *Venue) *EntryLogsUpdateOne {
+	return eluo.SetVenuesID(v.ID)
+}
+
+// SetMembersID sets the "members" edge to the Member entity by ID.
+func (eluo *EntryLogsUpdateOne) SetMembersID(id int64) *EntryLogsUpdateOne {
+	eluo.mutation.SetMembersID(id)
+	return eluo
+}
+
+// SetNillableMembersID sets the "members" edge to the Member entity by ID if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableMembersID(id *int64) *EntryLogsUpdateOne {
+	if id != nil {
+		eluo = eluo.SetMembersID(*id)
+	}
+	return eluo
+}
+
+// SetMembers sets the "members" edge to the Member entity.
+func (eluo *EntryLogsUpdateOne) SetMembers(m *Member) *EntryLogsUpdateOne {
+	return eluo.SetMembersID(m.ID)
+}
+
+// SetUsersID sets the "users" edge to the User entity by ID.
+func (eluo *EntryLogsUpdateOne) SetUsersID(id int64) *EntryLogsUpdateOne {
+	eluo.mutation.SetUsersID(id)
+	return eluo
+}
+
+// SetNillableUsersID sets the "users" edge to the User entity by ID if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableUsersID(id *int64) *EntryLogsUpdateOne {
+	if id != nil {
+		eluo = eluo.SetUsersID(*id)
+	}
+	return eluo
+}
+
+// SetUsers sets the "users" edge to the User entity.
+func (eluo *EntryLogsUpdateOne) SetUsers(u *User) *EntryLogsUpdateOne {
+	return eluo.SetUsersID(u.ID)
+}
+
+// SetMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID.
+func (eluo *EntryLogsUpdateOne) SetMemberProductsID(id int64) *EntryLogsUpdateOne {
+	eluo.mutation.SetMemberProductsID(id)
+	return eluo
+}
+
+// SetNillableMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableMemberProductsID(id *int64) *EntryLogsUpdateOne {
+	if id != nil {
+		eluo = eluo.SetMemberProductsID(*id)
+	}
+	return eluo
+}
+
+// SetMemberProducts sets the "member_products" edge to the MemberProduct entity.
+func (eluo *EntryLogsUpdateOne) SetMemberProducts(m *MemberProduct) *EntryLogsUpdateOne {
+	return eluo.SetMemberProductsID(m.ID)
+}
+
 // Mutation returns the EntryLogsMutation object of the builder.
 func (eluo *EntryLogsUpdateOne) Mutation() *EntryLogsMutation {
 	return eluo.mutation
+}
+
+// ClearVenues clears the "venues" edge to the Venue entity.
+func (eluo *EntryLogsUpdateOne) ClearVenues() *EntryLogsUpdateOne {
+	eluo.mutation.ClearVenues()
+	return eluo
+}
+
+// ClearMembers clears the "members" edge to the Member entity.
+func (eluo *EntryLogsUpdateOne) ClearMembers() *EntryLogsUpdateOne {
+	eluo.mutation.ClearMembers()
+	return eluo
+}
+
+// ClearUsers clears the "users" edge to the User entity.
+func (eluo *EntryLogsUpdateOne) ClearUsers() *EntryLogsUpdateOne {
+	eluo.mutation.ClearUsers()
+	return eluo
+}
+
+// ClearMemberProducts clears the "member_products" edge to the MemberProduct entity.
+func (eluo *EntryLogsUpdateOne) ClearMemberProducts() *EntryLogsUpdateOne {
+	eluo.mutation.ClearMemberProducts()
+	return eluo
 }
 
 // Where appends a list predicates to the EntryLogsUpdate builder.
@@ -587,42 +815,6 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 	if value, ok := eluo.mutation.UpdatedAt(); ok {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := eluo.mutation.MemberID(); ok {
-		_spec.SetField(entrylogs.FieldMemberID, field.TypeInt64, value)
-	}
-	if value, ok := eluo.mutation.AddedMemberID(); ok {
-		_spec.AddField(entrylogs.FieldMemberID, field.TypeInt64, value)
-	}
-	if eluo.mutation.MemberIDCleared() {
-		_spec.ClearField(entrylogs.FieldMemberID, field.TypeInt64)
-	}
-	if value, ok := eluo.mutation.UserID(); ok {
-		_spec.SetField(entrylogs.FieldUserID, field.TypeInt64, value)
-	}
-	if value, ok := eluo.mutation.AddedUserID(); ok {
-		_spec.AddField(entrylogs.FieldUserID, field.TypeInt64, value)
-	}
-	if eluo.mutation.UserIDCleared() {
-		_spec.ClearField(entrylogs.FieldUserID, field.TypeInt64)
-	}
-	if value, ok := eluo.mutation.VenueID(); ok {
-		_spec.SetField(entrylogs.FieldVenueID, field.TypeInt64, value)
-	}
-	if value, ok := eluo.mutation.AddedVenueID(); ok {
-		_spec.AddField(entrylogs.FieldVenueID, field.TypeInt64, value)
-	}
-	if eluo.mutation.VenueIDCleared() {
-		_spec.ClearField(entrylogs.FieldVenueID, field.TypeInt64)
-	}
-	if value, ok := eluo.mutation.MemberProductID(); ok {
-		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-	}
-	if value, ok := eluo.mutation.AddedMemberProductID(); ok {
-		_spec.AddField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-	}
-	if eluo.mutation.MemberProductIDCleared() {
-		_spec.ClearField(entrylogs.FieldMemberProductID, field.TypeInt64)
-	}
 	if value, ok := eluo.mutation.MemberPropertyID(); ok {
 		_spec.SetField(entrylogs.FieldMemberPropertyID, field.TypeInt64, value)
 	}
@@ -643,6 +835,122 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 	}
 	if eluo.mutation.LeavingTimeCleared() {
 		_spec.ClearField(entrylogs.FieldLeavingTime, field.TypeTime)
+	}
+	if eluo.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.VenuesTable,
+			Columns: []string{entrylogs.VenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eluo.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.VenuesTable,
+			Columns: []string{entrylogs.VenuesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eluo.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MembersTable,
+			Columns: []string{entrylogs.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eluo.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MembersTable,
+			Columns: []string{entrylogs.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eluo.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.UsersTable,
+			Columns: []string{entrylogs.UsersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eluo.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.UsersTable,
+			Columns: []string{entrylogs.UsersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eluo.mutation.MemberProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eluo.mutation.MemberProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &EntryLogs{config: eluo.config}
 	_spec.Assign = _node.assignValues

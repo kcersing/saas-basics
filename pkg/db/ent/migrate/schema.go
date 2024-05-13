@@ -187,24 +187,50 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
-		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "用户id"},
-		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
-		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "用户产品id"},
-		{Name: "member_property_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "member_property_id", Type: field.TypeInt64, Nullable: true, Comment: "属性id"},
 		{Name: "entry_time", Type: field.TypeTime, Nullable: true, Comment: "进场时间"},
 		{Name: "leaving_time", Type: field.TypeTime, Nullable: true, Comment: "离场时间"},
+		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id", Default: 0},
+		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "用户产品id"},
+		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "用户id", Default: 0},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 	}
 	// EntryLogsTable holds the schema information for the "entry_logs" table.
 	EntryLogsTable = &schema.Table{
 		Name:       "entry_logs",
 		Columns:    EntryLogsColumns,
 		PrimaryKey: []*schema.Column{EntryLogsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "entry_logs_member_member_entry",
+				Columns:    []*schema.Column{EntryLogsColumns[6]},
+				RefColumns: []*schema.Column{MemberColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entry_logs_member_product_member_product_entry",
+				Columns:    []*schema.Column{EntryLogsColumns[7]},
+				RefColumns: []*schema.Column{MemberProductColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entry_logs_sys_users_user_entry",
+				Columns:    []*schema.Column{EntryLogsColumns[8]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entry_logs_venue_venue_entry",
+				Columns:    []*schema.Column{EntryLogsColumns[9]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "entrylogs_venue_id_member_id_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntryLogsColumns[5], EntryLogsColumns[3], EntryLogsColumns[4]},
+				Columns: []*schema.Column{EntryLogsColumns[9], EntryLogsColumns[6], EntryLogsColumns[8]},
 			},
 		},
 	}
@@ -328,6 +354,7 @@ var (
 		{Name: "sn", Type: field.TypeString, Nullable: true, Comment: "编号"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品ID"},
+		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单ID"},
 		{Name: "name", Type: field.TypeFloat64, Nullable: true, Comment: "产品名称"},
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "产品价格"},
 		{Name: "validity_at", Type: field.TypeTime, Nullable: true, Comment: "生效时间"},
@@ -342,7 +369,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_member_member_products",
-				Columns:    []*schema.Column{MemberProductColumns[11]},
+				Columns:    []*schema.Column{MemberProductColumns[12]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -355,6 +382,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
+		{Name: "property_id", Type: field.TypeInt64, Nullable: true, Comment: "属性ID"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "duration", Type: field.TypeInt64, Nullable: true, Comment: "总时长"},
@@ -372,7 +400,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_property_member_product_member_product_propertys",
-				Columns:    []*schema.Column{MemberProductPropertyColumns[12]},
+				Columns:    []*schema.Column{MemberProductPropertyColumns[13]},
 				RefColumns: []*schema.Column{MemberProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -456,24 +484,44 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号"},
-		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
-		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态 | [0:正常;1:禁用]", Default: 0},
 		{Name: "source", Type: field.TypeString, Nullable: true, Comment: "订单来源", Default: ""},
 		{Name: "device", Type: field.TypeString, Nullable: true, Comment: "设备来源", Default: ""},
 		{Name: "completion_at", Type: field.TypeTime, Nullable: true, Comment: "订单完成时间"},
+		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人id"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 	}
 	// OrderTable holds the schema information for the "order" table.
 	OrderTable = &schema.Table{
 		Name:       "order",
 		Columns:    OrderColumns,
 		PrimaryKey: []*schema.Column{OrderColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "order_member_member_orders",
+				Columns:    []*schema.Column{OrderColumns[8]},
+				RefColumns: []*schema.Column{MemberColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "order_sys_users_created_orders",
+				Columns:    []*schema.Column{OrderColumns[9]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "order_venue_venue_orders",
+				Columns:    []*schema.Column{OrderColumns[10]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "order_member_id_order_sn",
 				Unique:  true,
-				Columns: []*schema.Column{OrderColumns[5], OrderColumns[3]},
+				Columns: []*schema.Column{OrderColumns[8], OrderColumns[3]},
 			},
 		},
 	}
@@ -944,6 +992,10 @@ func init() {
 	SysDictionaryDetailsTable.Annotation = &entsql.Annotation{
 		Table: "sys_dictionary_details",
 	}
+	EntryLogsTable.ForeignKeys[0].RefTable = MemberTable
+	EntryLogsTable.ForeignKeys[1].RefTable = MemberProductTable
+	EntryLogsTable.ForeignKeys[2].RefTable = SysUsersTable
+	EntryLogsTable.ForeignKeys[3].RefTable = VenueTable
 	EntryLogsTable.Annotation = &entsql.Annotation{
 		Table: "entry_logs",
 	}
@@ -980,6 +1032,9 @@ func init() {
 	MessagesTable.Annotation = &entsql.Annotation{
 		Table: "messages",
 	}
+	OrderTable.ForeignKeys[0].RefTable = MemberTable
+	OrderTable.ForeignKeys[1].RefTable = SysUsersTable
+	OrderTable.ForeignKeys[2].RefTable = VenueTable
 	OrderTable.Annotation = &entsql.Annotation{
 		Table: "order",
 	}

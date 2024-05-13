@@ -24,6 +24,8 @@ const (
 	FieldMemberID = "member_id"
 	// FieldMemberProductID holds the string denoting the member_product_id field in the database.
 	FieldMemberProductID = "member_product_id"
+	// FieldPropertyID holds the string denoting the property_id field in the database.
+	FieldPropertyID = "property_id"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
 	// FieldName holds the string denoting the name field in the database.
@@ -66,6 +68,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldMemberID,
 	FieldMemberProductID,
+	FieldPropertyID,
 	FieldType,
 	FieldName,
 	FieldDuration,
@@ -137,6 +140,11 @@ func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 // ByMemberProductID orders the results by the member_product_id field.
 func ByMemberProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberProductID, opts...).ToFunc()
+}
+
+// ByPropertyID orders the results by the property_id field.
+func ByPropertyID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPropertyID, opts...).ToFunc()
 }
 
 // ByType orders the results by the type field.

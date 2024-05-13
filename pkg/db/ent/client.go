@@ -1434,6 +1434,70 @@ func (c *EntryLogsClient) GetX(ctx context.Context, id int64) *EntryLogs {
 	return obj
 }
 
+// QueryVenues queries the venues edge of a EntryLogs.
+func (c *EntryLogsClient) QueryVenues(el *EntryLogs) *VenueQuery {
+	query := (&VenueClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := el.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, id),
+			sqlgraph.To(venue.Table, venue.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.VenuesTable, entrylogs.VenuesColumn),
+		)
+		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMembers queries the members edge of a EntryLogs.
+func (c *EntryLogsClient) QueryMembers(el *EntryLogs) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := el.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MembersTable, entrylogs.MembersColumn),
+		)
+		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsers queries the users edge of a EntryLogs.
+func (c *EntryLogsClient) QueryUsers(el *EntryLogs) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := el.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.UsersTable, entrylogs.UsersColumn),
+		)
+		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberProducts queries the member_products edge of a EntryLogs.
+func (c *EntryLogsClient) QueryMemberProducts(el *EntryLogs) *MemberProductQuery {
+	query := (&MemberProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := el.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, id),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MemberProductsTable, entrylogs.MemberProductsColumn),
+		)
+		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *EntryLogsClient) Hooks() []Hook {
 	return c.hooks.EntryLogs
@@ -1732,6 +1796,22 @@ func (c *MemberClient) QueryMemberNotes(m *Member) *MemberNoteQuery {
 	return query
 }
 
+// QueryMemberOrders queries the member_orders edge of a Member.
+func (c *MemberClient) QueryMemberOrders(m *Member) *OrderQuery {
+	query := (&OrderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(order.Table, order.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberOrdersTable, member.MemberOrdersColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMemberProducts queries the member_products edge of a Member.
 func (c *MemberClient) QueryMemberProducts(m *Member) *MemberProductQuery {
 	query := (&MemberProductClient{config: c.config}).Query()
@@ -1741,6 +1821,22 @@ func (c *MemberClient) QueryMemberProducts(m *Member) *MemberProductQuery {
 			sqlgraph.From(member.Table, member.FieldID, id),
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProductsTable, member.MemberProductsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberEntry queries the member_entry edge of a Member.
+func (c *MemberClient) QueryMemberEntry(m *Member) *EntryLogsQuery {
+	query := (&EntryLogsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberEntryTable, member.MemberEntryColumn),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
@@ -2179,15 +2275,15 @@ func (c *MemberProductClient) GetX(ctx context.Context, id int64) *MemberProduct
 	return obj
 }
 
-// QueryOwner queries the owner edge of a MemberProduct.
-func (c *MemberProductClient) QueryOwner(mp *MemberProduct) *MemberQuery {
+// QueryMembers queries the members edge of a MemberProduct.
+func (c *MemberProductClient) QueryMembers(mp *MemberProduct) *MemberQuery {
 	query := (&MemberClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mp.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
 			sqlgraph.To(member.Table, member.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberproduct.OwnerTable, memberproduct.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproduct.MembersTable, memberproduct.MembersColumn),
 		)
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
@@ -2204,6 +2300,22 @@ func (c *MemberProductClient) QueryMemberProductPropertys(mp *MemberProduct) *Me
 			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
 			sqlgraph.To(memberproductproperty.Table, memberproductproperty.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductPropertysTable, memberproduct.MemberProductPropertysColumn),
+		)
+		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberProductEntry queries the member_product_entry edge of a MemberProduct.
+func (c *MemberProductClient) QueryMemberProductEntry(mp *MemberProduct) *EntryLogsQuery {
+	query := (&EntryLogsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
+			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductEntryTable, memberproduct.MemberProductEntryColumn),
 		)
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
@@ -3052,6 +3164,54 @@ func (c *OrderClient) QuerySales(o *Order) *OrderSalesQuery {
 	return query
 }
 
+// QueryOrderVenues queries the order_venues edge of a Order.
+func (c *OrderClient) QueryOrderVenues(o *Order) *VenueQuery {
+	query := (&VenueClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, id),
+			sqlgraph.To(venue.Table, venue.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderVenuesTable, order.OrderVenuesColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrderMembers queries the order_members edge of a Order.
+func (c *OrderClient) QueryOrderMembers(o *Order) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderMembersTable, order.OrderMembersColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrderCreates queries the order_creates edge of a Order.
+func (c *OrderClient) QueryOrderCreates(o *Order) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderCreatesTable, order.OrderCreatesColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrderClient) Hooks() []Hook {
 	return c.hooks.Order
@@ -3185,15 +3345,15 @@ func (c *OrderAmountClient) GetX(ctx context.Context, id int64) *OrderAmount {
 	return obj
 }
 
-// QueryOwner queries the owner edge of a OrderAmount.
-func (c *OrderAmountClient) QueryOwner(oa *OrderAmount) *OrderQuery {
+// QueryAufk queries the aufk edge of a OrderAmount.
+func (c *OrderAmountClient) QueryAufk(oa *OrderAmount) *OrderQuery {
 	query := (&OrderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := oa.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orderamount.Table, orderamount.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orderamount.OwnerTable, orderamount.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, orderamount.AufkTable, orderamount.AufkColumn),
 		)
 		fromV = sqlgraph.Neighbors(oa.driver.Dialect(), step)
 		return fromV, nil
@@ -3334,15 +3494,15 @@ func (c *OrderItemClient) GetX(ctx context.Context, id int64) *OrderItem {
 	return obj
 }
 
-// QueryOwner queries the owner edge of a OrderItem.
-func (c *OrderItemClient) QueryOwner(oi *OrderItem) *OrderQuery {
+// QueryAufk queries the aufk edge of a OrderItem.
+func (c *OrderItemClient) QueryAufk(oi *OrderItem) *OrderQuery {
 	query := (&OrderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := oi.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orderitem.Table, orderitem.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orderitem.OwnerTable, orderitem.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, orderitem.AufkTable, orderitem.AufkColumn),
 		)
 		fromV = sqlgraph.Neighbors(oi.driver.Dialect(), step)
 		return fromV, nil
@@ -3483,15 +3643,15 @@ func (c *OrderPayClient) GetX(ctx context.Context, id int64) *OrderPay {
 	return obj
 }
 
-// QueryOwner queries the owner edge of a OrderPay.
-func (c *OrderPayClient) QueryOwner(op *OrderPay) *OrderQuery {
+// QueryAufk queries the aufk edge of a OrderPay.
+func (c *OrderPayClient) QueryAufk(op *OrderPay) *OrderQuery {
 	query := (&OrderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := op.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orderpay.Table, orderpay.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orderpay.OwnerTable, orderpay.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, orderpay.AufkTable, orderpay.AufkColumn),
 		)
 		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
 		return fromV, nil
@@ -3632,15 +3792,15 @@ func (c *OrderSalesClient) GetX(ctx context.Context, id int64) *OrderSales {
 	return obj
 }
 
-// QueryOwner queries the owner edge of a OrderSales.
-func (c *OrderSalesClient) QueryOwner(os *OrderSales) *OrderQuery {
+// QueryAufk queries the aufk edge of a OrderSales.
+func (c *OrderSalesClient) QueryAufk(os *OrderSales) *OrderQuery {
 	query := (&OrderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := os.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(ordersales.Table, ordersales.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ordersales.OwnerTable, ordersales.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, ordersales.AufkTable, ordersales.AufkColumn),
 		)
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
@@ -4409,6 +4569,38 @@ func (c *UserClient) QueryToken(u *User) *TokenQuery {
 	return query
 }
 
+// QueryCreatedOrders queries the created_orders edge of a User.
+func (c *UserClient) QueryCreatedOrders(u *User) *OrderQuery {
+	query := (&OrderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(order.Table, order.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.CreatedOrdersTable, user.CreatedOrdersColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUserEntry queries the user_entry edge of a User.
+func (c *UserClient) QueryUserEntry(u *User) *EntryLogsQuery {
+	query := (&EntryLogsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.UserEntryTable, user.UserEntryColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
 	return c.hooks.User
@@ -4551,6 +4743,38 @@ func (c *VenueClient) QueryPlaces(v *Venue) *VenuePlaceQuery {
 			sqlgraph.From(venue.Table, venue.FieldID, id),
 			sqlgraph.To(venueplace.Table, venueplace.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.PlacesTable, venue.PlacesColumn),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVenueOrders queries the venue_orders edge of a Venue.
+func (c *VenueClient) QueryVenueOrders(v *Venue) *OrderQuery {
+	query := (&OrderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(venue.Table, venue.FieldID, id),
+			sqlgraph.To(order.Table, order.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, venue.VenueOrdersTable, venue.VenueOrdersColumn),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVenueEntry queries the venue_entry edge of a Venue.
+func (c *VenueClient) QueryVenueEntry(v *Venue) *EntryLogsQuery {
+	query := (&EntryLogsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(venue.Table, venue.FieldID, id),
+			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, venue.VenueEntryTable, venue.VenueEntryColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil

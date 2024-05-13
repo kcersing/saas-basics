@@ -90,6 +90,11 @@ func ProductID(v int64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldProductID, v))
 }
 
+// OrderID applies equality check predicate on the "order_id" field. It's identical to OrderIDEQ.
+func OrderID(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldOrderID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v float64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldName, v))
@@ -470,6 +475,56 @@ func ProductIDNotNil() predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotNull(FieldProductID))
 }
 
+// OrderIDEQ applies the EQ predicate on the "order_id" field.
+func OrderIDEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldOrderID, v))
+}
+
+// OrderIDNEQ applies the NEQ predicate on the "order_id" field.
+func OrderIDNEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNEQ(FieldOrderID, v))
+}
+
+// OrderIDIn applies the In predicate on the "order_id" field.
+func OrderIDIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIn(FieldOrderID, vs...))
+}
+
+// OrderIDNotIn applies the NotIn predicate on the "order_id" field.
+func OrderIDNotIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotIn(FieldOrderID, vs...))
+}
+
+// OrderIDGT applies the GT predicate on the "order_id" field.
+func OrderIDGT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGT(FieldOrderID, v))
+}
+
+// OrderIDGTE applies the GTE predicate on the "order_id" field.
+func OrderIDGTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGTE(FieldOrderID, v))
+}
+
+// OrderIDLT applies the LT predicate on the "order_id" field.
+func OrderIDLT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLT(FieldOrderID, v))
+}
+
+// OrderIDLTE applies the LTE predicate on the "order_id" field.
+func OrderIDLTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLTE(FieldOrderID, v))
+}
+
+// OrderIDIsNil applies the IsNil predicate on the "order_id" field.
+func OrderIDIsNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIsNull(FieldOrderID))
+}
+
+// OrderIDNotNil applies the NotNil predicate on the "order_id" field.
+func OrderIDNotNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotNull(FieldOrderID))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v float64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldName, v))
@@ -670,21 +725,21 @@ func CancelAtNotNil() predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotNull(FieldCancelAt))
 }
 
-// HasOwner applies the HasEdge predicate on the "owner" edge.
-func HasOwner() predicate.MemberProduct {
+// HasMembers applies the HasEdge predicate on the "members" edge.
+func HasMembers() predicate.MemberProduct {
 	return predicate.MemberProduct(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, MembersTable, MembersColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
-func HasOwnerWith(preds ...predicate.Member) predicate.MemberProduct {
+// HasMembersWith applies the HasEdge predicate on the "members" edge with a given conditions (other predicates).
+func HasMembersWith(preds ...predicate.Member) predicate.MemberProduct {
 	return predicate.MemberProduct(func(s *sql.Selector) {
-		step := newOwnerStep()
+		step := newMembersStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -708,6 +763,29 @@ func HasMemberProductPropertys() predicate.MemberProduct {
 func HasMemberProductPropertysWith(preds ...predicate.MemberProductProperty) predicate.MemberProduct {
 	return predicate.MemberProduct(func(s *sql.Selector) {
 		step := newMemberProductPropertysStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMemberProductEntry applies the HasEdge predicate on the "member_product_entry" edge.
+func HasMemberProductEntry() predicate.MemberProduct {
+	return predicate.MemberProduct(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MemberProductEntryTable, MemberProductEntryColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberProductEntryWith applies the HasEdge predicate on the "member_product_entry" edge with a given conditions (other predicates).
+func HasMemberProductEntryWith(preds ...predicate.EntryLogs) predicate.MemberProduct {
+	return predicate.MemberProduct(func(s *sql.Selector) {
+		step := newMemberProductEntryStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

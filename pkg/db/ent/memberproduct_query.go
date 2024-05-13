@@ -7,6 +7,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
@@ -24,8 +25,9 @@ type MemberProductQuery struct {
 	order                      []memberproduct.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.MemberProduct
-	withOwner                  *MemberQuery
+	withMembers                *MemberQuery
 	withMemberProductPropertys *MemberProductPropertyQuery
+	withMemberProductEntry     *EntryLogsQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -62,8 +64,8 @@ func (mpq *MemberProductQuery) Order(o ...memberproduct.OrderOption) *MemberProd
 	return mpq
 }
 
-// QueryOwner chains the current query on the "owner" edge.
-func (mpq *MemberProductQuery) QueryOwner() *MemberQuery {
+// QueryMembers chains the current query on the "members" edge.
+func (mpq *MemberProductQuery) QueryMembers() *MemberQuery {
 	query := (&MemberClient{config: mpq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mpq.prepareQuery(ctx); err != nil {
@@ -76,7 +78,7 @@ func (mpq *MemberProductQuery) QueryOwner() *MemberQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, selector),
 			sqlgraph.To(member.Table, member.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberproduct.OwnerTable, memberproduct.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproduct.MembersTable, memberproduct.MembersColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
@@ -99,6 +101,28 @@ func (mpq *MemberProductQuery) QueryMemberProductPropertys() *MemberProductPrope
 			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, selector),
 			sqlgraph.To(memberproductproperty.Table, memberproductproperty.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductPropertysTable, memberproduct.MemberProductPropertysColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberProductEntry chains the current query on the "member_product_entry" edge.
+func (mpq *MemberProductQuery) QueryMemberProductEntry() *EntryLogsQuery {
+	query := (&EntryLogsClient{config: mpq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mpq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mpq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, selector),
+			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductEntryTable, memberproduct.MemberProductEntryColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
@@ -298,22 +322,23 @@ func (mpq *MemberProductQuery) Clone() *MemberProductQuery {
 		order:                      append([]memberproduct.OrderOption{}, mpq.order...),
 		inters:                     append([]Interceptor{}, mpq.inters...),
 		predicates:                 append([]predicate.MemberProduct{}, mpq.predicates...),
-		withOwner:                  mpq.withOwner.Clone(),
+		withMembers:                mpq.withMembers.Clone(),
 		withMemberProductPropertys: mpq.withMemberProductPropertys.Clone(),
+		withMemberProductEntry:     mpq.withMemberProductEntry.Clone(),
 		// clone intermediate query.
 		sql:  mpq.sql.Clone(),
 		path: mpq.path,
 	}
 }
 
-// WithOwner tells the query-builder to eager-load the nodes that are connected to
-// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (mpq *MemberProductQuery) WithOwner(opts ...func(*MemberQuery)) *MemberProductQuery {
+// WithMembers tells the query-builder to eager-load the nodes that are connected to
+// the "members" edge. The optional arguments are used to configure the query builder of the edge.
+func (mpq *MemberProductQuery) WithMembers(opts ...func(*MemberQuery)) *MemberProductQuery {
 	query := (&MemberClient{config: mpq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mpq.withOwner = query
+	mpq.withMembers = query
 	return mpq
 }
 
@@ -325,6 +350,17 @@ func (mpq *MemberProductQuery) WithMemberProductPropertys(opts ...func(*MemberPr
 		opt(query)
 	}
 	mpq.withMemberProductPropertys = query
+	return mpq
+}
+
+// WithMemberProductEntry tells the query-builder to eager-load the nodes that are connected to
+// the "member_product_entry" edge. The optional arguments are used to configure the query builder of the edge.
+func (mpq *MemberProductQuery) WithMemberProductEntry(opts ...func(*EntryLogsQuery)) *MemberProductQuery {
+	query := (&EntryLogsClient{config: mpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mpq.withMemberProductEntry = query
 	return mpq
 }
 
@@ -406,9 +442,10 @@ func (mpq *MemberProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*MemberProduct{}
 		_spec       = mpq.querySpec()
-		loadedTypes = [2]bool{
-			mpq.withOwner != nil,
+		loadedTypes = [3]bool{
+			mpq.withMembers != nil,
 			mpq.withMemberProductPropertys != nil,
+			mpq.withMemberProductEntry != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -429,9 +466,9 @@ func (mpq *MemberProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := mpq.withOwner; query != nil {
-		if err := mpq.loadOwner(ctx, query, nodes, nil,
-			func(n *MemberProduct, e *Member) { n.Edges.Owner = e }); err != nil {
+	if query := mpq.withMembers; query != nil {
+		if err := mpq.loadMembers(ctx, query, nodes, nil,
+			func(n *MemberProduct, e *Member) { n.Edges.Members = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -444,10 +481,19 @@ func (mpq *MemberProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := mpq.withMemberProductEntry; query != nil {
+		if err := mpq.loadMemberProductEntry(ctx, query, nodes,
+			func(n *MemberProduct) { n.Edges.MemberProductEntry = []*EntryLogs{} },
+			func(n *MemberProduct, e *EntryLogs) {
+				n.Edges.MemberProductEntry = append(n.Edges.MemberProductEntry, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
 }
 
-func (mpq *MemberProductQuery) loadOwner(ctx context.Context, query *MemberQuery, nodes []*MemberProduct, init func(*MemberProduct), assign func(*MemberProduct, *Member)) error {
+func (mpq *MemberProductQuery) loadMembers(ctx context.Context, query *MemberQuery, nodes []*MemberProduct, init func(*MemberProduct), assign func(*MemberProduct, *Member)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*MemberProduct)
 	for i := range nodes {
@@ -506,6 +552,36 @@ func (mpq *MemberProductQuery) loadMemberProductPropertys(ctx context.Context, q
 	}
 	return nil
 }
+func (mpq *MemberProductQuery) loadMemberProductEntry(ctx context.Context, query *EntryLogsQuery, nodes []*MemberProduct, init func(*MemberProduct), assign func(*MemberProduct, *EntryLogs)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*MemberProduct)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(entrylogs.FieldMemberProductID)
+	}
+	query.Where(predicate.EntryLogs(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(memberproduct.MemberProductEntryColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.MemberProductID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_product_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (mpq *MemberProductQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mpq.querySpec()
@@ -532,7 +608,7 @@ func (mpq *MemberProductQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if mpq.withOwner != nil {
+		if mpq.withMembers != nil {
 			_spec.Node.AddColumnOnce(memberproduct.FieldMemberID)
 		}
 	}

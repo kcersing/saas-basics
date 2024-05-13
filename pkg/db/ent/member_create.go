@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
+	"saas/pkg/db/ent/order"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -199,6 +201,21 @@ func (mc *MemberCreate) AddMemberNotes(m ...*MemberNote) *MemberCreate {
 	return mc.AddMemberNoteIDs(ids...)
 }
 
+// AddMemberOrderIDs adds the "member_orders" edge to the Order entity by IDs.
+func (mc *MemberCreate) AddMemberOrderIDs(ids ...int64) *MemberCreate {
+	mc.mutation.AddMemberOrderIDs(ids...)
+	return mc
+}
+
+// AddMemberOrders adds the "member_orders" edges to the Order entity.
+func (mc *MemberCreate) AddMemberOrders(o ...*Order) *MemberCreate {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return mc.AddMemberOrderIDs(ids...)
+}
+
 // AddMemberProductIDs adds the "member_products" edge to the MemberProduct entity by IDs.
 func (mc *MemberCreate) AddMemberProductIDs(ids ...int64) *MemberCreate {
 	mc.mutation.AddMemberProductIDs(ids...)
@@ -212,6 +229,21 @@ func (mc *MemberCreate) AddMemberProducts(m ...*MemberProduct) *MemberCreate {
 		ids[i] = m[i].ID
 	}
 	return mc.AddMemberProductIDs(ids...)
+}
+
+// AddMemberEntryIDs adds the "member_entry" edge to the EntryLogs entity by IDs.
+func (mc *MemberCreate) AddMemberEntryIDs(ids ...int64) *MemberCreate {
+	mc.mutation.AddMemberEntryIDs(ids...)
+	return mc
+}
+
+// AddMemberEntry adds the "member_entry" edges to the EntryLogs entity.
+func (mc *MemberCreate) AddMemberEntry(e ...*EntryLogs) *MemberCreate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return mc.AddMemberEntryIDs(ids...)
 }
 
 // Mutation returns the MemberMutation object of the builder.
@@ -383,6 +415,22 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := mc.mutation.MemberOrdersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberOrdersTable,
+			Columns: []string{member.MemberOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := mc.mutation.MemberProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -392,6 +440,22 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mc.mutation.MemberEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberEntryTable,
+			Columns: []string{member.MemberEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

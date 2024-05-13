@@ -139,23 +139,23 @@ func (opc *OrderPayCreate) SetID(i int64) *OrderPayCreate {
 	return opc
 }
 
-// SetOwnerID sets the "owner" edge to the Order entity by ID.
-func (opc *OrderPayCreate) SetOwnerID(id int64) *OrderPayCreate {
-	opc.mutation.SetOwnerID(id)
+// SetAufkID sets the "aufk" edge to the Order entity by ID.
+func (opc *OrderPayCreate) SetAufkID(id int64) *OrderPayCreate {
+	opc.mutation.SetAufkID(id)
 	return opc
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Order entity by ID if the given value is not nil.
-func (opc *OrderPayCreate) SetNillableOwnerID(id *int64) *OrderPayCreate {
+// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
+func (opc *OrderPayCreate) SetNillableAufkID(id *int64) *OrderPayCreate {
 	if id != nil {
-		opc = opc.SetOwnerID(*id)
+		opc = opc.SetAufkID(*id)
 	}
 	return opc
 }
 
-// SetOwner sets the "owner" edge to the Order entity.
-func (opc *OrderPayCreate) SetOwner(o *Order) *OrderPayCreate {
-	return opc.SetOwnerID(o.ID)
+// SetAufk sets the "aufk" edge to the Order entity.
+func (opc *OrderPayCreate) SetAufk(o *Order) *OrderPayCreate {
+	return opc.SetAufkID(o.ID)
 }
 
 // Mutation returns the OrderPayMutation object of the builder.
@@ -271,12 +271,12 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)
 		_node.CreateID = value
 	}
-	if nodes := opc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := opc.mutation.AufkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderpay.OwnerTable,
-			Columns: []string{orderpay.OwnerColumn},
+			Table:   orderpay.AufkTable,
+			Columns: []string{orderpay.AufkColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),

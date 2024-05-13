@@ -139,23 +139,23 @@ func (oic *OrderItemCreate) SetID(i int64) *OrderItemCreate {
 	return oic
 }
 
-// SetOwnerID sets the "owner" edge to the Order entity by ID.
-func (oic *OrderItemCreate) SetOwnerID(id int64) *OrderItemCreate {
-	oic.mutation.SetOwnerID(id)
+// SetAufkID sets the "aufk" edge to the Order entity by ID.
+func (oic *OrderItemCreate) SetAufkID(id int64) *OrderItemCreate {
+	oic.mutation.SetAufkID(id)
 	return oic
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Order entity by ID if the given value is not nil.
-func (oic *OrderItemCreate) SetNillableOwnerID(id *int64) *OrderItemCreate {
+// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
+func (oic *OrderItemCreate) SetNillableAufkID(id *int64) *OrderItemCreate {
 	if id != nil {
-		oic = oic.SetOwnerID(*id)
+		oic = oic.SetAufkID(*id)
 	}
 	return oic
 }
 
-// SetOwner sets the "owner" edge to the Order entity.
-func (oic *OrderItemCreate) SetOwner(o *Order) *OrderItemCreate {
-	return oic.SetOwnerID(o.ID)
+// SetAufk sets the "aufk" edge to the Order entity.
+func (oic *OrderItemCreate) SetAufk(o *Order) *OrderItemCreate {
+	return oic.SetAufkID(o.ID)
 }
 
 // Mutation returns the OrderItemMutation object of the builder.
@@ -287,12 +287,12 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 		_spec.SetField(orderitem.FieldAssignAt, field.TypeTime, value)
 		_node.AssignAt = value
 	}
-	if nodes := oic.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := oic.mutation.AufkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderitem.OwnerTable,
-			Columns: []string{orderitem.OwnerColumn},
+			Table:   orderitem.AufkTable,
+			Columns: []string{orderitem.AufkColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
