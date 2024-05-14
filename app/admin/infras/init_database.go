@@ -574,7 +574,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetParentID(1).
 		SetName("系统管理").SetOrderNo(7)
 	menus[3] = I.DB.Menu.Create().
-		SetPath("sys/logs").
+		SetPath("sys/devops").
 		SetParentID(1).
 		SetName("运维管理").SetOrderNo(8)
 	menus[4] = I.DB.Menu.Create().
@@ -629,7 +629,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetName("合同管理").SetOrderNo(6)
 
 	menus[16] = I.DB.Menu.Create().
-		SetPath("sys/logs").
+		SetPath("sys/devops/logs").
 		SetParentID(4).
 		SetName("日志管理").SetOrderNo(0)
 
@@ -638,21 +638,21 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetParentID(5).
 		SetName("创建订单").SetOrderNo(0)
 	menus[18] = I.DB.Menu.Create().
-		SetPath("sys/order").
+		SetPath("sys/order/list").
 		SetParentID(5).
 		SetName("订单列表").SetOrderNo(1)
 
 	menus[19] = I.DB.Menu.Create().
-		SetPath("sys/product").
+		SetPath("sys/product/list").
 		SetParentID(6).
 		SetName("产品列表").SetOrderNo(0)
 	menus[20] = I.DB.Menu.Create().
-		SetPath("sys/property").
+		SetPath("sys/property/list").
 		SetParentID(6).
 		SetName("属性列表").SetOrderNo(1)
 
 	menus[21] = I.DB.Menu.Create().
-		SetPath("sys/member").
+		SetPath("sys/member/list").
 		SetParentID(7).
 		SetName("会员列表").SetOrderNo(0)
 	menus[22] = I.DB.Menu.Create().
@@ -661,7 +661,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetName("课程预约").SetOrderNo(0)
 
 	menus[23] = I.DB.Menu.Create().
-		SetPath("sys/statistical").
+		SetPath("sys/statistical/all").
 		SetParentID(9).
 		SetName("数据汇总").SetOrderNo(0)
 

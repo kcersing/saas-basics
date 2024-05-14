@@ -25,7 +25,7 @@ func CreateOrder(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	var orderInfoReq do.OrderInfo
+	var orderInfoReq do.CreateOrder
 	err = copier.Copy(&orderInfoReq, &req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
