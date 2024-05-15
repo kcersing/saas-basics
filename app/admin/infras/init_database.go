@@ -574,27 +574,27 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetParentID(1).
 		SetName("系统管理").SetOrderNo(7)
 	menus[3] = I.DB.Menu.Create().
-		SetPath("sys/devops").
+		SetPath("devops").
 		SetParentID(1).
 		SetName("运维管理").SetOrderNo(8)
 	menus[4] = I.DB.Menu.Create().
-		SetPath("sys/order").
+		SetPath("orders").
 		SetParentID(1).
 		SetName("订单管理").SetOrderNo(3)
 	menus[5] = I.DB.Menu.Create().
-		SetPath("sys/product").
+		SetPath("products").
 		SetParentID(1).
 		SetName("产品管理").SetOrderNo(2)
 	menus[6] = I.DB.Menu.Create().
-		SetPath("sys/member").
+		SetPath("members").
 		SetParentID(1).
 		SetName("会员管理").SetOrderNo(1)
 	menus[7] = I.DB.Menu.Create().
-		SetPath("sys/schedule").
+		SetPath("schedules").
 		SetParentID(1).
 		SetName("预约排期").SetOrderNo(4)
 	menus[8] = I.DB.Menu.Create().
-		SetPath("sys/statistical").
+		SetPath("statisticals").
 		SetParentID(1).
 		SetName("数据分析").SetOrderNo(6)
 
@@ -629,39 +629,39 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetName("合同管理").SetOrderNo(6)
 
 	menus[16] = I.DB.Menu.Create().
-		SetPath("sys/devops/logs").
+		SetPath("devops/logs").
 		SetParentID(4).
 		SetName("日志管理").SetOrderNo(0)
 
 	menus[17] = I.DB.Menu.Create().
-		SetPath("sys/order/add").
+		SetPath("orders/add").
 		SetParentID(5).
 		SetName("创建订单").SetOrderNo(0)
 	menus[18] = I.DB.Menu.Create().
-		SetPath("sys/order/list").
+		SetPath("orders/list").
 		SetParentID(5).
 		SetName("订单列表").SetOrderNo(1)
 
 	menus[19] = I.DB.Menu.Create().
-		SetPath("sys/product/list").
+		SetPath("products/product").
 		SetParentID(6).
 		SetName("产品列表").SetOrderNo(0)
 	menus[20] = I.DB.Menu.Create().
-		SetPath("sys/property/list").
+		SetPath("products/property").
 		SetParentID(6).
 		SetName("属性列表").SetOrderNo(1)
 
 	menus[21] = I.DB.Menu.Create().
-		SetPath("sys/member/list").
+		SetPath("members/list").
 		SetParentID(7).
 		SetName("会员列表").SetOrderNo(0)
 	menus[22] = I.DB.Menu.Create().
-		SetPath("sys/schedule").
+		SetPath("schedules/schedule").
 		SetParentID(8).
 		SetName("课程预约").SetOrderNo(0)
 
 	menus[23] = I.DB.Menu.Create().
-		SetPath("sys/statistical/all").
+		SetPath("statisticals/all").
 		SetParentID(9).
 		SetName("数据汇总").SetOrderNo(0)
 
