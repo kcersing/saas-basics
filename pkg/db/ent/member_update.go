@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
 	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
@@ -288,6 +289,21 @@ func (mu *MemberUpdate) AddMemberEntry(e ...*EntryLogs) *MemberUpdate {
 	return mu.AddMemberEntryIDs(ids...)
 }
 
+// AddMemberContentIDs adds the "member_contents" edge to the MemberContract entity by IDs.
+func (mu *MemberUpdate) AddMemberContentIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.AddMemberContentIDs(ids...)
+	return mu
+}
+
+// AddMemberContents adds the "member_contents" edges to the MemberContract entity.
+func (mu *MemberUpdate) AddMemberContents(m ...*MemberContract) *MemberUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mu.AddMemberContentIDs(ids...)
+}
+
 // Mutation returns the MemberMutation object of the builder.
 func (mu *MemberUpdate) Mutation() *MemberMutation {
 	return mu.mutation
@@ -396,6 +412,27 @@ func (mu *MemberUpdate) RemoveMemberEntry(e ...*EntryLogs) *MemberUpdate {
 		ids[i] = e[i].ID
 	}
 	return mu.RemoveMemberEntryIDs(ids...)
+}
+
+// ClearMemberContents clears all "member_contents" edges to the MemberContract entity.
+func (mu *MemberUpdate) ClearMemberContents() *MemberUpdate {
+	mu.mutation.ClearMemberContents()
+	return mu
+}
+
+// RemoveMemberContentIDs removes the "member_contents" edge to MemberContract entities by IDs.
+func (mu *MemberUpdate) RemoveMemberContentIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.RemoveMemberContentIDs(ids...)
+	return mu
+}
+
+// RemoveMemberContents removes "member_contents" edges to MemberContract entities.
+func (mu *MemberUpdate) RemoveMemberContents(m ...*MemberContract) *MemberUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mu.RemoveMemberContentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -725,6 +762,51 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if mu.mutation.MemberContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberContentsTable,
+			Columns: []string{member.MemberContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.RemovedMemberContentsIDs(); len(nodes) > 0 && !mu.mutation.MemberContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberContentsTable,
+			Columns: []string{member.MemberContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.MemberContentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberContentsTable,
+			Columns: []string{member.MemberContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{member.Label}
@@ -1000,6 +1082,21 @@ func (muo *MemberUpdateOne) AddMemberEntry(e ...*EntryLogs) *MemberUpdateOne {
 	return muo.AddMemberEntryIDs(ids...)
 }
 
+// AddMemberContentIDs adds the "member_contents" edge to the MemberContract entity by IDs.
+func (muo *MemberUpdateOne) AddMemberContentIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.AddMemberContentIDs(ids...)
+	return muo
+}
+
+// AddMemberContents adds the "member_contents" edges to the MemberContract entity.
+func (muo *MemberUpdateOne) AddMemberContents(m ...*MemberContract) *MemberUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return muo.AddMemberContentIDs(ids...)
+}
+
 // Mutation returns the MemberMutation object of the builder.
 func (muo *MemberUpdateOne) Mutation() *MemberMutation {
 	return muo.mutation
@@ -1108,6 +1205,27 @@ func (muo *MemberUpdateOne) RemoveMemberEntry(e ...*EntryLogs) *MemberUpdateOne 
 		ids[i] = e[i].ID
 	}
 	return muo.RemoveMemberEntryIDs(ids...)
+}
+
+// ClearMemberContents clears all "member_contents" edges to the MemberContract entity.
+func (muo *MemberUpdateOne) ClearMemberContents() *MemberUpdateOne {
+	muo.mutation.ClearMemberContents()
+	return muo
+}
+
+// RemoveMemberContentIDs removes the "member_contents" edge to MemberContract entities by IDs.
+func (muo *MemberUpdateOne) RemoveMemberContentIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.RemoveMemberContentIDs(ids...)
+	return muo
+}
+
+// RemoveMemberContents removes "member_contents" edges to MemberContract entities.
+func (muo *MemberUpdateOne) RemoveMemberContents(m ...*MemberContract) *MemberUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return muo.RemoveMemberContentIDs(ids...)
 }
 
 // Where appends a list predicates to the MemberUpdate builder.
@@ -1460,6 +1578,51 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if muo.mutation.MemberContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberContentsTable,
+			Columns: []string{member.MemberContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.RemovedMemberContentsIDs(); len(nodes) > 0 && !muo.mutation.MemberContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberContentsTable,
+			Columns: []string{member.MemberContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.MemberContentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberContentsTable,
+			Columns: []string{member.MemberContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

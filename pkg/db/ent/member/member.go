@@ -44,6 +44,8 @@ const (
 	EdgeMemberProducts = "member_products"
 	// EdgeMemberEntry holds the string denoting the member_entry edge name in mutations.
 	EdgeMemberEntry = "member_entry"
+	// EdgeMemberContents holds the string denoting the member_contents edge name in mutations.
+	EdgeMemberContents = "member_contents"
 	// Table holds the table name of the member in the database.
 	Table = "member"
 	// MemberDetailsTable is the table that holds the member_details relation/edge.
@@ -81,6 +83,13 @@ const (
 	MemberEntryInverseTable = "entry_logs"
 	// MemberEntryColumn is the table column denoting the member_entry relation/edge.
 	MemberEntryColumn = "member_id"
+	// MemberContentsTable is the table that holds the member_contents relation/edge.
+	MemberContentsTable = "member_contract"
+	// MemberContentsInverseTable is the table name for the MemberContract entity.
+	// It exists in this package in order to avoid circular dependency with the "membercontract" package.
+	MemberContentsInverseTable = "member_contract"
+	// MemberContentsColumn is the table column denoting the member_contents relation/edge.
+	MemberContentsColumn = "member_id"
 )
 
 // Columns holds all SQL columns for member fields.
@@ -250,6 +259,20 @@ func ByMemberEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newMemberEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMemberContentsCount orders the results by member_contents count.
+func ByMemberContentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberContentsStep(), opts...)
+	}
+}
+
+// ByMemberContents orders the results by member_contents terms.
+func ByMemberContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberContentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newMemberDetailsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -283,5 +306,12 @@ func newMemberEntryStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MemberEntryInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberEntryTable, MemberEntryColumn),
+	)
+}
+func newMemberContentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberContentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberContentsTable, MemberContentsColumn),
 	)
 }

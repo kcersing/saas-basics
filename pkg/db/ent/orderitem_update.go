@@ -137,23 +137,16 @@ func (oiu *OrderItemUpdate) ClearRelatedUserProductID() *OrderItemUpdate {
 }
 
 // SetContractID sets the "contract_id" field.
-func (oiu *OrderItemUpdate) SetContractID(i int64) *OrderItemUpdate {
-	oiu.mutation.ResetContractID()
-	oiu.mutation.SetContractID(i)
+func (oiu *OrderItemUpdate) SetContractID(s string) *OrderItemUpdate {
+	oiu.mutation.SetContractID(s)
 	return oiu
 }
 
 // SetNillableContractID sets the "contract_id" field if the given value is not nil.
-func (oiu *OrderItemUpdate) SetNillableContractID(i *int64) *OrderItemUpdate {
-	if i != nil {
-		oiu.SetContractID(*i)
+func (oiu *OrderItemUpdate) SetNillableContractID(s *string) *OrderItemUpdate {
+	if s != nil {
+		oiu.SetContractID(*s)
 	}
-	return oiu
-}
-
-// AddContractID adds i to the "contract_id" field.
-func (oiu *OrderItemUpdate) AddContractID(i int64) *OrderItemUpdate {
-	oiu.mutation.AddContractID(i)
 	return oiu
 }
 
@@ -289,13 +282,10 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
 	if value, ok := oiu.mutation.ContractID(); ok {
-		_spec.SetField(orderitem.FieldContractID, field.TypeInt64, value)
-	}
-	if value, ok := oiu.mutation.AddedContractID(); ok {
-		_spec.AddField(orderitem.FieldContractID, field.TypeInt64, value)
+		_spec.SetField(orderitem.FieldContractID, field.TypeString, value)
 	}
 	if oiu.mutation.ContractIDCleared() {
-		_spec.ClearField(orderitem.FieldContractID, field.TypeInt64)
+		_spec.ClearField(orderitem.FieldContractID, field.TypeString)
 	}
 	if value, ok := oiu.mutation.AssignAt(); ok {
 		_spec.SetField(orderitem.FieldAssignAt, field.TypeTime, value)
@@ -460,23 +450,16 @@ func (oiuo *OrderItemUpdateOne) ClearRelatedUserProductID() *OrderItemUpdateOne 
 }
 
 // SetContractID sets the "contract_id" field.
-func (oiuo *OrderItemUpdateOne) SetContractID(i int64) *OrderItemUpdateOne {
-	oiuo.mutation.ResetContractID()
-	oiuo.mutation.SetContractID(i)
+func (oiuo *OrderItemUpdateOne) SetContractID(s string) *OrderItemUpdateOne {
+	oiuo.mutation.SetContractID(s)
 	return oiuo
 }
 
 // SetNillableContractID sets the "contract_id" field if the given value is not nil.
-func (oiuo *OrderItemUpdateOne) SetNillableContractID(i *int64) *OrderItemUpdateOne {
-	if i != nil {
-		oiuo.SetContractID(*i)
+func (oiuo *OrderItemUpdateOne) SetNillableContractID(s *string) *OrderItemUpdateOne {
+	if s != nil {
+		oiuo.SetContractID(*s)
 	}
-	return oiuo
-}
-
-// AddContractID adds i to the "contract_id" field.
-func (oiuo *OrderItemUpdateOne) AddContractID(i int64) *OrderItemUpdateOne {
-	oiuo.mutation.AddContractID(i)
 	return oiuo
 }
 
@@ -642,13 +625,10 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
 	if value, ok := oiuo.mutation.ContractID(); ok {
-		_spec.SetField(orderitem.FieldContractID, field.TypeInt64, value)
-	}
-	if value, ok := oiuo.mutation.AddedContractID(); ok {
-		_spec.AddField(orderitem.FieldContractID, field.TypeInt64, value)
+		_spec.SetField(orderitem.FieldContractID, field.TypeString, value)
 	}
 	if oiuo.mutation.ContractIDCleared() {
-		_spec.ClearField(orderitem.FieldContractID, field.TypeInt64)
+		_spec.ClearField(orderitem.FieldContractID, field.TypeString)
 	}
 	if value, ok := oiuo.mutation.AssignAt(); ok {
 		_spec.SetField(orderitem.FieldAssignAt, field.TypeTime, value)

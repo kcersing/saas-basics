@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"bytes"
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
@@ -16,6 +17,7 @@ import (
 	"saas/pkg/db/ent/user"
 	venue2 "saas/pkg/db/ent/venue"
 	"saas/pkg/utils"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -105,11 +107,19 @@ func (o Order) Create(req do.CreateOrder) error {
 			err = errors.Wrap(err, "时间转换失败")
 			errChan <- err
 		}
+
+		var buffer bytes.Buffer
+		for _, num := range req.ContractId {
+			buffer.WriteString(strconv.Itoa(int(num)))
+			buffer.WriteByte(',')
+		}
+		str := buffer.String()
+
 		_, err = o.db.OrderItem.Create().
 			SetAufk(one).
 			SetProductID(req.ProductId).
 			SetQuantity(req.Quantity).
-			SetContractID(req.ContractId).
+			SetContractID(str).
 			SetAssignAt(assignAt).
 			Save(o.ctx)
 		if err != nil {

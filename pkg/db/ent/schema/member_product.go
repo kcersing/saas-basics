@@ -40,10 +40,9 @@ func (MemberProduct) Edges() []ent.Edge {
 		edge.From("members", Member.Type).
 			Ref("member_products").Unique().
 			Field("member_id").Unique(),
-
 		edge.To("member_product_propertys", MemberProductProperty.Type),
-
 		edge.To("member_product_entry", EntryLogs.Type),
+		edge.To("member_product_contents", MemberContract.Type),
 	}
 }
 

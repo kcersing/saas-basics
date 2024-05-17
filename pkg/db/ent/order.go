@@ -57,6 +57,8 @@ type OrderEdges struct {
 	Pay []*OrderPay `json:"pay,omitempty"`
 	// Sales holds the value of the sales edge.
 	Sales []*OrderSales `json:"sales,omitempty"`
+	// OrderContents holds the value of the order_contents edge.
+	OrderContents []*MemberContract `json:"order_contents,omitempty"`
 	// OrderVenues holds the value of the order_venues edge.
 	OrderVenues *Venue `json:"order_venues,omitempty"`
 	// OrderMembers holds the value of the order_members edge.
@@ -65,7 +67,7 @@ type OrderEdges struct {
 	OrderCreates *User `json:"order_creates,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 }
 
 // AmountOrErr returns the Amount value or an error if the edge
@@ -104,10 +106,19 @@ func (e OrderEdges) SalesOrErr() ([]*OrderSales, error) {
 	return nil, &NotLoadedError{edge: "sales"}
 }
 
+// OrderContentsOrErr returns the OrderContents value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrderEdges) OrderContentsOrErr() ([]*MemberContract, error) {
+	if e.loadedTypes[4] {
+		return e.OrderContents, nil
+	}
+	return nil, &NotLoadedError{edge: "order_contents"}
+}
+
 // OrderVenuesOrErr returns the OrderVenues value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrderEdges) OrderVenuesOrErr() (*Venue, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		if e.OrderVenues == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: venue.Label}
@@ -120,7 +131,7 @@ func (e OrderEdges) OrderVenuesOrErr() (*Venue, error) {
 // OrderMembersOrErr returns the OrderMembers value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrderEdges) OrderMembersOrErr() (*Member, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		if e.OrderMembers == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: member.Label}
@@ -133,7 +144,7 @@ func (e OrderEdges) OrderMembersOrErr() (*Member, error) {
 // OrderCreatesOrErr returns the OrderCreates value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrderEdges) OrderCreatesOrErr() (*User, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		if e.OrderCreates == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: user.Label}
@@ -266,6 +277,11 @@ func (o *Order) QueryPay() *OrderPayQuery {
 // QuerySales queries the "sales" edge of the Order entity.
 func (o *Order) QuerySales() *OrderSalesQuery {
 	return NewOrderClient(o.config).QuerySales(o)
+}
+
+// QueryOrderContents queries the "order_contents" edge of the Order entity.
+func (o *Order) QueryOrderContents() *MemberContractQuery {
+	return NewOrderClient(o.config).QueryOrderContents(o)
 }
 
 // QueryOrderVenues queries the "order_venues" edge of the Order entity.

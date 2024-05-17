@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
@@ -218,8 +217,6 @@ func (d Dictionary) DetailListByDict(req *do.DetailListReq) (list []*do.Dictiona
 	if req.Name != "" {
 		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary.NameEQ(req.Name)))
 	}
-
-	hlog.Info(req.DictionaryId)
 
 	if req.DictionaryId != 0 {
 		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary.IDEQ(req.DictionaryId)))

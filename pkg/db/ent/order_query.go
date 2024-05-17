@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
@@ -25,17 +26,18 @@ import (
 // OrderQuery is the builder for querying Order entities.
 type OrderQuery struct {
 	config
-	ctx              *QueryContext
-	order            []order.OrderOption
-	inters           []Interceptor
-	predicates       []predicate.Order
-	withAmount       *OrderAmountQuery
-	withItem         *OrderItemQuery
-	withPay          *OrderPayQuery
-	withSales        *OrderSalesQuery
-	withOrderVenues  *VenueQuery
-	withOrderMembers *MemberQuery
-	withOrderCreates *UserQuery
+	ctx               *QueryContext
+	order             []order.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.Order
+	withAmount        *OrderAmountQuery
+	withItem          *OrderItemQuery
+	withPay           *OrderPayQuery
+	withSales         *OrderSalesQuery
+	withOrderContents *MemberContractQuery
+	withOrderVenues   *VenueQuery
+	withOrderMembers  *MemberQuery
+	withOrderCreates  *UserQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -153,6 +155,28 @@ func (oq *OrderQuery) QuerySales() *OrderSalesQuery {
 			sqlgraph.From(order.Table, order.FieldID, selector),
 			sqlgraph.To(ordersales.Table, ordersales.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.SalesTable, order.SalesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrderContents chains the current query on the "order_contents" edge.
+func (oq *OrderQuery) QueryOrderContents() *MemberContractQuery {
+	query := (&MemberContractClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, selector),
+			sqlgraph.To(membercontract.Table, membercontract.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, order.OrderContentsTable, order.OrderContentsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
@@ -413,18 +437,19 @@ func (oq *OrderQuery) Clone() *OrderQuery {
 		return nil
 	}
 	return &OrderQuery{
-		config:           oq.config,
-		ctx:              oq.ctx.Clone(),
-		order:            append([]order.OrderOption{}, oq.order...),
-		inters:           append([]Interceptor{}, oq.inters...),
-		predicates:       append([]predicate.Order{}, oq.predicates...),
-		withAmount:       oq.withAmount.Clone(),
-		withItem:         oq.withItem.Clone(),
-		withPay:          oq.withPay.Clone(),
-		withSales:        oq.withSales.Clone(),
-		withOrderVenues:  oq.withOrderVenues.Clone(),
-		withOrderMembers: oq.withOrderMembers.Clone(),
-		withOrderCreates: oq.withOrderCreates.Clone(),
+		config:            oq.config,
+		ctx:               oq.ctx.Clone(),
+		order:             append([]order.OrderOption{}, oq.order...),
+		inters:            append([]Interceptor{}, oq.inters...),
+		predicates:        append([]predicate.Order{}, oq.predicates...),
+		withAmount:        oq.withAmount.Clone(),
+		withItem:          oq.withItem.Clone(),
+		withPay:           oq.withPay.Clone(),
+		withSales:         oq.withSales.Clone(),
+		withOrderContents: oq.withOrderContents.Clone(),
+		withOrderVenues:   oq.withOrderVenues.Clone(),
+		withOrderMembers:  oq.withOrderMembers.Clone(),
+		withOrderCreates:  oq.withOrderCreates.Clone(),
 		// clone intermediate query.
 		sql:  oq.sql.Clone(),
 		path: oq.path,
@@ -472,6 +497,17 @@ func (oq *OrderQuery) WithSales(opts ...func(*OrderSalesQuery)) *OrderQuery {
 		opt(query)
 	}
 	oq.withSales = query
+	return oq
+}
+
+// WithOrderContents tells the query-builder to eager-load the nodes that are connected to
+// the "order_contents" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrderQuery) WithOrderContents(opts ...func(*MemberContractQuery)) *OrderQuery {
+	query := (&MemberContractClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withOrderContents = query
 	return oq
 }
 
@@ -586,11 +622,12 @@ func (oq *OrderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Order,
 	var (
 		nodes       = []*Order{}
 		_spec       = oq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			oq.withAmount != nil,
 			oq.withItem != nil,
 			oq.withPay != nil,
 			oq.withSales != nil,
+			oq.withOrderContents != nil,
 			oq.withOrderVenues != nil,
 			oq.withOrderMembers != nil,
 			oq.withOrderCreates != nil,
@@ -639,6 +676,13 @@ func (oq *OrderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Order,
 		if err := oq.loadSales(ctx, query, nodes,
 			func(n *Order) { n.Edges.Sales = []*OrderSales{} },
 			func(n *Order, e *OrderSales) { n.Edges.Sales = append(n.Edges.Sales, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withOrderContents; query != nil {
+		if err := oq.loadOrderContents(ctx, query, nodes,
+			func(n *Order) { n.Edges.OrderContents = []*MemberContract{} },
+			func(n *Order, e *MemberContract) { n.Edges.OrderContents = append(n.Edges.OrderContents, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -768,6 +812,36 @@ func (oq *OrderQuery) loadSales(ctx context.Context, query *OrderSalesQuery, nod
 	}
 	query.Where(predicate.OrderSales(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(order.SalesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OrderID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "order_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrderQuery) loadOrderContents(ctx context.Context, query *MemberContractQuery, nodes []*Order, init func(*Order), assign func(*Order, *MemberContract)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Order)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(membercontract.FieldOrderID)
+	}
+	query.Where(predicate.MemberContract(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(order.OrderContentsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {

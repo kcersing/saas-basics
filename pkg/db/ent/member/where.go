@@ -850,6 +850,29 @@ func HasMemberEntryWith(preds ...predicate.EntryLogs) predicate.Member {
 	})
 }
 
+// HasMemberContents applies the HasEdge predicate on the "member_contents" edge.
+func HasMemberContents() predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MemberContentsTable, MemberContentsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberContentsWith applies the HasEdge predicate on the "member_contents" edge with a given conditions (other predicates).
+func HasMemberContentsWith(preds ...predicate.MemberContract) predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := newMemberContentsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Member) predicate.Member {
 	return predicate.Member(sql.AndPredicates(predicates...))

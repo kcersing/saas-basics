@@ -692,6 +692,29 @@ func HasSalesWith(preds ...predicate.OrderSales) predicate.Order {
 	})
 }
 
+// HasOrderContents applies the HasEdge predicate on the "order_contents" edge.
+func HasOrderContents() predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrderContentsTable, OrderContentsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrderContentsWith applies the HasEdge predicate on the "order_contents" edge with a given conditions (other predicates).
+func HasOrderContentsWith(preds ...predicate.MemberContract) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := newOrderContentsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasOrderVenues applies the HasEdge predicate on the "order_venues" edge.
 func HasOrderVenues() predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {

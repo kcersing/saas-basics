@@ -12,6 +12,7 @@ import (
 	"saas/pkg/db/ent/migrate"
 
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/contract"
 	"saas/pkg/db/ent/courserecordcoach"
 	"saas/pkg/db/ent/courserecordmember"
 	"saas/pkg/db/ent/courserecordschedule"
@@ -20,6 +21,8 @@ import (
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
+	"saas/pkg/db/ent/membercontractcontent"
 	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
@@ -53,6 +56,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// API is the client for interacting with the API builders.
 	API *APIClient
+	// Contract is the client for interacting with the Contract builders.
+	Contract *ContractClient
 	// CourseRecordCoach is the client for interacting with the CourseRecordCoach builders.
 	CourseRecordCoach *CourseRecordCoachClient
 	// CourseRecordMember is the client for interacting with the CourseRecordMember builders.
@@ -69,6 +74,10 @@ type Client struct {
 	Logs *LogsClient
 	// Member is the client for interacting with the Member builders.
 	Member *MemberClient
+	// MemberContract is the client for interacting with the MemberContract builders.
+	MemberContract *MemberContractClient
+	// MemberContractContent is the client for interacting with the MemberContractContent builders.
+	MemberContractContent *MemberContractContentClient
 	// MemberDetails is the client for interacting with the MemberDetails builders.
 	MemberDetails *MemberDetailsClient
 	// MemberNote is the client for interacting with the MemberNote builders.
@@ -119,6 +128,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.API = NewAPIClient(c.config)
+	c.Contract = NewContractClient(c.config)
 	c.CourseRecordCoach = NewCourseRecordCoachClient(c.config)
 	c.CourseRecordMember = NewCourseRecordMemberClient(c.config)
 	c.CourseRecordSchedule = NewCourseRecordScheduleClient(c.config)
@@ -127,6 +137,8 @@ func (c *Client) init() {
 	c.EntryLogs = NewEntryLogsClient(c.config)
 	c.Logs = NewLogsClient(c.config)
 	c.Member = NewMemberClient(c.config)
+	c.MemberContract = NewMemberContractClient(c.config)
+	c.MemberContractContent = NewMemberContractContentClient(c.config)
 	c.MemberDetails = NewMemberDetailsClient(c.config)
 	c.MemberNote = NewMemberNoteClient(c.config)
 	c.MemberProduct = NewMemberProductClient(c.config)
@@ -239,6 +251,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                   ctx,
 		config:                cfg,
 		API:                   NewAPIClient(cfg),
+		Contract:              NewContractClient(cfg),
 		CourseRecordCoach:     NewCourseRecordCoachClient(cfg),
 		CourseRecordMember:    NewCourseRecordMemberClient(cfg),
 		CourseRecordSchedule:  NewCourseRecordScheduleClient(cfg),
@@ -247,6 +260,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		EntryLogs:             NewEntryLogsClient(cfg),
 		Logs:                  NewLogsClient(cfg),
 		Member:                NewMemberClient(cfg),
+		MemberContract:        NewMemberContractClient(cfg),
+		MemberContractContent: NewMemberContractContentClient(cfg),
 		MemberDetails:         NewMemberDetailsClient(cfg),
 		MemberNote:            NewMemberNoteClient(cfg),
 		MemberProduct:         NewMemberProductClient(cfg),
@@ -286,6 +301,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                   ctx,
 		config:                cfg,
 		API:                   NewAPIClient(cfg),
+		Contract:              NewContractClient(cfg),
 		CourseRecordCoach:     NewCourseRecordCoachClient(cfg),
 		CourseRecordMember:    NewCourseRecordMemberClient(cfg),
 		CourseRecordSchedule:  NewCourseRecordScheduleClient(cfg),
@@ -294,6 +310,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		EntryLogs:             NewEntryLogsClient(cfg),
 		Logs:                  NewLogsClient(cfg),
 		Member:                NewMemberClient(cfg),
+		MemberContract:        NewMemberContractClient(cfg),
+		MemberContractContent: NewMemberContractContentClient(cfg),
 		MemberDetails:         NewMemberDetailsClient(cfg),
 		MemberNote:            NewMemberNoteClient(cfg),
 		MemberProduct:         NewMemberProductClient(cfg),
@@ -342,12 +360,12 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.API, c.CourseRecordCoach, c.CourseRecordMember, c.CourseRecordSchedule,
-		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
-		c.MemberDetails, c.MemberNote, c.MemberProduct, c.MemberProductProperty,
-		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
-		c.OrderPay, c.OrderSales, c.Product, c.ProductProperty, c.Role, c.Token,
-		c.User, c.Venue, c.VenuePlace,
+		c.API, c.Contract, c.CourseRecordCoach, c.CourseRecordMember,
+		c.CourseRecordSchedule, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs,
+		c.Member, c.MemberContract, c.MemberContractContent, c.MemberDetails,
+		c.MemberNote, c.MemberProduct, c.MemberProductProperty, c.Menu, c.MenuParam,
+		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
+		c.Product, c.ProductProperty, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
 	} {
 		n.Use(hooks...)
 	}
@@ -357,12 +375,12 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.API, c.CourseRecordCoach, c.CourseRecordMember, c.CourseRecordSchedule,
-		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
-		c.MemberDetails, c.MemberNote, c.MemberProduct, c.MemberProductProperty,
-		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
-		c.OrderPay, c.OrderSales, c.Product, c.ProductProperty, c.Role, c.Token,
-		c.User, c.Venue, c.VenuePlace,
+		c.API, c.Contract, c.CourseRecordCoach, c.CourseRecordMember,
+		c.CourseRecordSchedule, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs,
+		c.Member, c.MemberContract, c.MemberContractContent, c.MemberDetails,
+		c.MemberNote, c.MemberProduct, c.MemberProductProperty, c.Menu, c.MenuParam,
+		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
+		c.Product, c.ProductProperty, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -373,6 +391,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *APIMutation:
 		return c.API.mutate(ctx, m)
+	case *ContractMutation:
+		return c.Contract.mutate(ctx, m)
 	case *CourseRecordCoachMutation:
 		return c.CourseRecordCoach.mutate(ctx, m)
 	case *CourseRecordMemberMutation:
@@ -389,6 +409,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Logs.mutate(ctx, m)
 	case *MemberMutation:
 		return c.Member.mutate(ctx, m)
+	case *MemberContractMutation:
+		return c.MemberContract.mutate(ctx, m)
+	case *MemberContractContentMutation:
+		return c.MemberContractContent.mutate(ctx, m)
 	case *MemberDetailsMutation:
 		return c.MemberDetails.mutate(ctx, m)
 	case *MemberNoteMutation:
@@ -562,6 +586,139 @@ func (c *APIClient) mutate(ctx context.Context, m *APIMutation) (Value, error) {
 		return (&APIDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown API mutation op: %q", m.Op())
+	}
+}
+
+// ContractClient is a client for the Contract schema.
+type ContractClient struct {
+	config
+}
+
+// NewContractClient returns a client for the Contract from the given config.
+func NewContractClient(c config) *ContractClient {
+	return &ContractClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `contract.Hooks(f(g(h())))`.
+func (c *ContractClient) Use(hooks ...Hook) {
+	c.hooks.Contract = append(c.hooks.Contract, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `contract.Intercept(f(g(h())))`.
+func (c *ContractClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Contract = append(c.inters.Contract, interceptors...)
+}
+
+// Create returns a builder for creating a Contract entity.
+func (c *ContractClient) Create() *ContractCreate {
+	mutation := newContractMutation(c.config, OpCreate)
+	return &ContractCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Contract entities.
+func (c *ContractClient) CreateBulk(builders ...*ContractCreate) *ContractCreateBulk {
+	return &ContractCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ContractClient) MapCreateBulk(slice any, setFunc func(*ContractCreate, int)) *ContractCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ContractCreateBulk{err: fmt.Errorf("calling to ContractClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ContractCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ContractCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Contract.
+func (c *ContractClient) Update() *ContractUpdate {
+	mutation := newContractMutation(c.config, OpUpdate)
+	return &ContractUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ContractClient) UpdateOne(co *Contract) *ContractUpdateOne {
+	mutation := newContractMutation(c.config, OpUpdateOne, withContract(co))
+	return &ContractUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ContractClient) UpdateOneID(id int64) *ContractUpdateOne {
+	mutation := newContractMutation(c.config, OpUpdateOne, withContractID(id))
+	return &ContractUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Contract.
+func (c *ContractClient) Delete() *ContractDelete {
+	mutation := newContractMutation(c.config, OpDelete)
+	return &ContractDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ContractClient) DeleteOne(co *Contract) *ContractDeleteOne {
+	return c.DeleteOneID(co.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ContractClient) DeleteOneID(id int64) *ContractDeleteOne {
+	builder := c.Delete().Where(contract.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ContractDeleteOne{builder}
+}
+
+// Query returns a query builder for Contract.
+func (c *ContractClient) Query() *ContractQuery {
+	return &ContractQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeContract},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Contract entity by its id.
+func (c *ContractClient) Get(ctx context.Context, id int64) (*Contract, error) {
+	return c.Query().Where(contract.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ContractClient) GetX(ctx context.Context, id int64) *Contract {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ContractClient) Hooks() []Hook {
+	return c.hooks.Contract
+}
+
+// Interceptors returns the client interceptors.
+func (c *ContractClient) Interceptors() []Interceptor {
+	return c.inters.Contract
+}
+
+func (c *ContractClient) mutate(ctx context.Context, m *ContractMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ContractCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ContractUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ContractUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ContractDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Contract mutation op: %q", m.Op())
 	}
 }
 
@@ -1844,6 +2001,22 @@ func (c *MemberClient) QueryMemberEntry(m *Member) *EntryLogsQuery {
 	return query
 }
 
+// QueryMemberContents queries the member_contents edge of a Member.
+func (c *MemberClient) QueryMemberContents(m *Member) *MemberContractQuery {
+	query := (&MemberContractClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(membercontract.Table, membercontract.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberContentsTable, member.MemberContentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *MemberClient) Hooks() []Hook {
 	return c.hooks.Member
@@ -1866,6 +2039,352 @@ func (c *MemberClient) mutate(ctx context.Context, m *MemberMutation) (Value, er
 		return (&MemberDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Member mutation op: %q", m.Op())
+	}
+}
+
+// MemberContractClient is a client for the MemberContract schema.
+type MemberContractClient struct {
+	config
+}
+
+// NewMemberContractClient returns a client for the MemberContract from the given config.
+func NewMemberContractClient(c config) *MemberContractClient {
+	return &MemberContractClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `membercontract.Hooks(f(g(h())))`.
+func (c *MemberContractClient) Use(hooks ...Hook) {
+	c.hooks.MemberContract = append(c.hooks.MemberContract, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `membercontract.Intercept(f(g(h())))`.
+func (c *MemberContractClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemberContract = append(c.inters.MemberContract, interceptors...)
+}
+
+// Create returns a builder for creating a MemberContract entity.
+func (c *MemberContractClient) Create() *MemberContractCreate {
+	mutation := newMemberContractMutation(c.config, OpCreate)
+	return &MemberContractCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemberContract entities.
+func (c *MemberContractClient) CreateBulk(builders ...*MemberContractCreate) *MemberContractCreateBulk {
+	return &MemberContractCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberContractClient) MapCreateBulk(slice any, setFunc func(*MemberContractCreate, int)) *MemberContractCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberContractCreateBulk{err: fmt.Errorf("calling to MemberContractClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberContractCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberContractCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemberContract.
+func (c *MemberContractClient) Update() *MemberContractUpdate {
+	mutation := newMemberContractMutation(c.config, OpUpdate)
+	return &MemberContractUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberContractClient) UpdateOne(mc *MemberContract) *MemberContractUpdateOne {
+	mutation := newMemberContractMutation(c.config, OpUpdateOne, withMemberContract(mc))
+	return &MemberContractUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberContractClient) UpdateOneID(id int64) *MemberContractUpdateOne {
+	mutation := newMemberContractMutation(c.config, OpUpdateOne, withMemberContractID(id))
+	return &MemberContractUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemberContract.
+func (c *MemberContractClient) Delete() *MemberContractDelete {
+	mutation := newMemberContractMutation(c.config, OpDelete)
+	return &MemberContractDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberContractClient) DeleteOne(mc *MemberContract) *MemberContractDeleteOne {
+	return c.DeleteOneID(mc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberContractClient) DeleteOneID(id int64) *MemberContractDeleteOne {
+	builder := c.Delete().Where(membercontract.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberContractDeleteOne{builder}
+}
+
+// Query returns a query builder for MemberContract.
+func (c *MemberContractClient) Query() *MemberContractQuery {
+	return &MemberContractQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemberContract},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemberContract entity by its id.
+func (c *MemberContractClient) Get(ctx context.Context, id int64) (*MemberContract, error) {
+	return c.Query().Where(membercontract.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberContractClient) GetX(ctx context.Context, id int64) *MemberContract {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryContent queries the content edge of a MemberContract.
+func (c *MemberContractClient) QueryContent(mc *MemberContract) *MemberContractContentQuery {
+	query := (&MemberContractContentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membercontract.Table, membercontract.FieldID, id),
+			sqlgraph.To(membercontractcontent.Table, membercontractcontent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, membercontract.ContentTable, membercontract.ContentColumn),
+		)
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMember queries the member edge of a MemberContract.
+func (c *MemberContractClient) QueryMember(mc *MemberContract) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membercontract.Table, membercontract.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.MemberTable, membercontract.MemberColumn),
+		)
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrder queries the order edge of a MemberContract.
+func (c *MemberContractClient) QueryOrder(mc *MemberContract) *OrderQuery {
+	query := (&OrderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membercontract.Table, membercontract.FieldID, id),
+			sqlgraph.To(order.Table, order.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.OrderTable, membercontract.OrderColumn),
+		)
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberProduct queries the member_product edge of a MemberContract.
+func (c *MemberContractClient) QueryMemberProduct(mc *MemberContract) *MemberProductQuery {
+	query := (&MemberProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membercontract.Table, membercontract.FieldID, id),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.MemberProductTable, membercontract.MemberProductColumn),
+		)
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemberContractClient) Hooks() []Hook {
+	return c.hooks.MemberContract
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberContractClient) Interceptors() []Interceptor {
+	return c.inters.MemberContract
+}
+
+func (c *MemberContractClient) mutate(ctx context.Context, m *MemberContractMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberContractCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberContractUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberContractUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberContractDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemberContract mutation op: %q", m.Op())
+	}
+}
+
+// MemberContractContentClient is a client for the MemberContractContent schema.
+type MemberContractContentClient struct {
+	config
+}
+
+// NewMemberContractContentClient returns a client for the MemberContractContent from the given config.
+func NewMemberContractContentClient(c config) *MemberContractContentClient {
+	return &MemberContractContentClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `membercontractcontent.Hooks(f(g(h())))`.
+func (c *MemberContractContentClient) Use(hooks ...Hook) {
+	c.hooks.MemberContractContent = append(c.hooks.MemberContractContent, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `membercontractcontent.Intercept(f(g(h())))`.
+func (c *MemberContractContentClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemberContractContent = append(c.inters.MemberContractContent, interceptors...)
+}
+
+// Create returns a builder for creating a MemberContractContent entity.
+func (c *MemberContractContentClient) Create() *MemberContractContentCreate {
+	mutation := newMemberContractContentMutation(c.config, OpCreate)
+	return &MemberContractContentCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemberContractContent entities.
+func (c *MemberContractContentClient) CreateBulk(builders ...*MemberContractContentCreate) *MemberContractContentCreateBulk {
+	return &MemberContractContentCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberContractContentClient) MapCreateBulk(slice any, setFunc func(*MemberContractContentCreate, int)) *MemberContractContentCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberContractContentCreateBulk{err: fmt.Errorf("calling to MemberContractContentClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberContractContentCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberContractContentCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemberContractContent.
+func (c *MemberContractContentClient) Update() *MemberContractContentUpdate {
+	mutation := newMemberContractContentMutation(c.config, OpUpdate)
+	return &MemberContractContentUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberContractContentClient) UpdateOne(mcc *MemberContractContent) *MemberContractContentUpdateOne {
+	mutation := newMemberContractContentMutation(c.config, OpUpdateOne, withMemberContractContent(mcc))
+	return &MemberContractContentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberContractContentClient) UpdateOneID(id int64) *MemberContractContentUpdateOne {
+	mutation := newMemberContractContentMutation(c.config, OpUpdateOne, withMemberContractContentID(id))
+	return &MemberContractContentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemberContractContent.
+func (c *MemberContractContentClient) Delete() *MemberContractContentDelete {
+	mutation := newMemberContractContentMutation(c.config, OpDelete)
+	return &MemberContractContentDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberContractContentClient) DeleteOne(mcc *MemberContractContent) *MemberContractContentDeleteOne {
+	return c.DeleteOneID(mcc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberContractContentClient) DeleteOneID(id int64) *MemberContractContentDeleteOne {
+	builder := c.Delete().Where(membercontractcontent.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberContractContentDeleteOne{builder}
+}
+
+// Query returns a query builder for MemberContractContent.
+func (c *MemberContractContentClient) Query() *MemberContractContentQuery {
+	return &MemberContractContentQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemberContractContent},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemberContractContent entity by its id.
+func (c *MemberContractContentClient) Get(ctx context.Context, id int64) (*MemberContractContent, error) {
+	return c.Query().Where(membercontractcontent.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberContractContentClient) GetX(ctx context.Context, id int64) *MemberContractContent {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryContract queries the contract edge of a MemberContractContent.
+func (c *MemberContractContentClient) QueryContract(mcc *MemberContractContent) *MemberContractQuery {
+	query := (&MemberContractClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mcc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membercontractcontent.Table, membercontractcontent.FieldID, id),
+			sqlgraph.To(membercontract.Table, membercontract.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, membercontractcontent.ContractTable, membercontractcontent.ContractColumn),
+		)
+		fromV = sqlgraph.Neighbors(mcc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemberContractContentClient) Hooks() []Hook {
+	return c.hooks.MemberContractContent
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberContractContentClient) Interceptors() []Interceptor {
+	return c.inters.MemberContractContent
+}
+
+func (c *MemberContractContentClient) mutate(ctx context.Context, m *MemberContractContentMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberContractContentCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberContractContentUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberContractContentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberContractContentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemberContractContent mutation op: %q", m.Op())
 	}
 }
 
@@ -2316,6 +2835,22 @@ func (c *MemberProductClient) QueryMemberProductEntry(mp *MemberProduct) *EntryL
 			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductEntryTable, memberproduct.MemberProductEntryColumn),
+		)
+		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberProductContents queries the member_product_contents edge of a MemberProduct.
+func (c *MemberProductClient) QueryMemberProductContents(mp *MemberProduct) *MemberContractQuery {
+	query := (&MemberContractClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
+			sqlgraph.To(membercontract.Table, membercontract.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductContentsTable, memberproduct.MemberProductContentsColumn),
 		)
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
@@ -3157,6 +3692,22 @@ func (c *OrderClient) QuerySales(o *Order) *OrderSalesQuery {
 			sqlgraph.From(order.Table, order.FieldID, id),
 			sqlgraph.To(ordersales.Table, ordersales.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.SalesTable, order.SalesColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrderContents queries the order_contents edge of a Order.
+func (c *OrderClient) QueryOrderContents(o *Order) *MemberContractQuery {
+	query := (&MemberContractClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, id),
+			sqlgraph.To(membercontract.Table, membercontract.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, order.OrderContentsTable, order.OrderContentsColumn),
 		)
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
@@ -4991,17 +5542,19 @@ func (c *VenuePlaceClient) mutate(ctx context.Context, m *VenuePlaceMutation) (V
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		API, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule, Dictionary,
-		DictionaryDetail, EntryLogs, Logs, Member, MemberDetails, MemberNote,
-		MemberProduct, MemberProductProperty, Menu, MenuParam, Messages, Order,
-		OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductProperty, Role,
-		Token, User, Venue, VenuePlace []ent.Hook
+		API, Contract, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule,
+		Dictionary, DictionaryDetail, EntryLogs, Logs, Member, MemberContract,
+		MemberContractContent, MemberDetails, MemberNote, MemberProduct,
+		MemberProductProperty, Menu, MenuParam, Messages, Order, OrderAmount,
+		OrderItem, OrderPay, OrderSales, Product, ProductProperty, Role, Token, User,
+		Venue, VenuePlace []ent.Hook
 	}
 	inters struct {
-		API, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule, Dictionary,
-		DictionaryDetail, EntryLogs, Logs, Member, MemberDetails, MemberNote,
-		MemberProduct, MemberProductProperty, Menu, MenuParam, Messages, Order,
-		OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductProperty, Role,
-		Token, User, Venue, VenuePlace []ent.Interceptor
+		API, Contract, CourseRecordCoach, CourseRecordMember, CourseRecordSchedule,
+		Dictionary, DictionaryDetail, EntryLogs, Logs, Member, MemberContract,
+		MemberContractContent, MemberDetails, MemberNote, MemberProduct,
+		MemberProductProperty, Menu, MenuParam, Messages, Order, OrderAmount,
+		OrderItem, OrderPay, OrderSales, Product, ProductProperty, Role, Token, User,
+		Venue, VenuePlace []ent.Interceptor
 	}
 )

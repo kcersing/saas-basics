@@ -77,8 +77,6 @@ var (
 	DefaultQuantity int64
 	// DefaultRelatedUserProductID holds the default value on creation for the "related_user_product_id" field.
 	DefaultRelatedUserProductID int64
-	// DefaultContractID holds the default value on creation for the "contract_id" field.
-	DefaultContractID int64
 	// DefaultAssignAt holds the default value on creation for the "assign_at" field.
 	DefaultAssignAt func() time.Time
 )

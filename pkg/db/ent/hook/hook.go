@@ -20,6 +20,18 @@ func (f APIFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.APIMutation", m)
 }
 
+// The ContractFunc type is an adapter to allow the use of ordinary
+// function as Contract mutator.
+type ContractFunc func(context.Context, *ent.ContractMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ContractFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ContractMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ContractMutation", m)
+}
+
 // The CourseRecordCoachFunc type is an adapter to allow the use of ordinary
 // function as CourseRecordCoach mutator.
 type CourseRecordCoachFunc func(context.Context, *ent.CourseRecordCoachMutation) (ent.Value, error)
@@ -114,6 +126,30 @@ func (f MemberFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, erro
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberMutation", m)
+}
+
+// The MemberContractFunc type is an adapter to allow the use of ordinary
+// function as MemberContract mutator.
+type MemberContractFunc func(context.Context, *ent.MemberContractMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemberContractFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemberContractMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberContractMutation", m)
+}
+
+// The MemberContractContentFunc type is an adapter to allow the use of ordinary
+// function as MemberContractContent mutator.
+type MemberContractContentFunc func(context.Context, *ent.MemberContractContentMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemberContractContentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemberContractContentMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberContractContentMutation", m)
 }
 
 // The MemberDetailsFunc type is an adapter to allow the use of ordinary

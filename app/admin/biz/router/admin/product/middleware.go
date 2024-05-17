@@ -100,3 +100,63 @@ func _createorupdatepropertyMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _sysMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _contractMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _contractlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _productlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _propertylistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _propertytypeMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _staffMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _stafflistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _userMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _userlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _venueMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _venuelistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

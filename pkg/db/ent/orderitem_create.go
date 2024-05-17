@@ -106,15 +106,15 @@ func (oic *OrderItemCreate) SetNillableRelatedUserProductID(i *int64) *OrderItem
 }
 
 // SetContractID sets the "contract_id" field.
-func (oic *OrderItemCreate) SetContractID(i int64) *OrderItemCreate {
-	oic.mutation.SetContractID(i)
+func (oic *OrderItemCreate) SetContractID(s string) *OrderItemCreate {
+	oic.mutation.SetContractID(s)
 	return oic
 }
 
 // SetNillableContractID sets the "contract_id" field if the given value is not nil.
-func (oic *OrderItemCreate) SetNillableContractID(i *int64) *OrderItemCreate {
-	if i != nil {
-		oic.SetContractID(*i)
+func (oic *OrderItemCreate) SetNillableContractID(s *string) *OrderItemCreate {
+	if s != nil {
+		oic.SetContractID(*s)
 	}
 	return oic
 }
@@ -209,10 +209,6 @@ func (oic *OrderItemCreate) defaults() {
 		v := orderitem.DefaultRelatedUserProductID
 		oic.mutation.SetRelatedUserProductID(v)
 	}
-	if _, ok := oic.mutation.ContractID(); !ok {
-		v := orderitem.DefaultContractID
-		oic.mutation.SetContractID(v)
-	}
 	if _, ok := oic.mutation.AssignAt(); !ok {
 		v := orderitem.DefaultAssignAt()
 		oic.mutation.SetAssignAt(v)
@@ -280,7 +276,7 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 		_node.RelatedUserProductID = value
 	}
 	if value, ok := oic.mutation.ContractID(); ok {
-		_spec.SetField(orderitem.FieldContractID, field.TypeInt64, value)
+		_spec.SetField(orderitem.FieldContractID, field.TypeString, value)
 		_node.ContractID = value
 	}
 	if value, ok := oic.mutation.AssignAt(); ok {

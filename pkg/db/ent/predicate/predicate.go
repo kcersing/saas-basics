@@ -9,6 +9,9 @@ import (
 // API is the predicate function for api builders.
 type API func(*sql.Selector)
 
+// Contract is the predicate function for contract builders.
+type Contract func(*sql.Selector)
+
 // CourseRecordCoach is the predicate function for courserecordcoach builders.
 type CourseRecordCoach func(*sql.Selector)
 
@@ -32,6 +35,12 @@ type Logs func(*sql.Selector)
 
 // Member is the predicate function for member builders.
 type Member func(*sql.Selector)
+
+// MemberContract is the predicate function for membercontract builders.
+type MemberContract func(*sql.Selector)
+
+// MemberContractContent is the predicate function for membercontractcontent builders.
+type MemberContractContent func(*sql.Selector)
 
 // MemberDetails is the predicate function for memberdetails builders.
 type MemberDetails func(*sql.Selector)

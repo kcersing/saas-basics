@@ -57,9 +57,11 @@ type MemberProductEdges struct {
 	MemberProductPropertys []*MemberProductProperty `json:"member_product_propertys,omitempty"`
 	// MemberProductEntry holds the value of the member_product_entry edge.
 	MemberProductEntry []*EntryLogs `json:"member_product_entry,omitempty"`
+	// MemberProductContents holds the value of the member_product_contents edge.
+	MemberProductContents []*MemberContract `json:"member_product_contents,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // MembersOrErr returns the Members value or an error if the edge
@@ -91,6 +93,15 @@ func (e MemberProductEdges) MemberProductEntryOrErr() ([]*EntryLogs, error) {
 		return e.MemberProductEntry, nil
 	}
 	return nil, &NotLoadedError{edge: "member_product_entry"}
+}
+
+// MemberProductContentsOrErr returns the MemberProductContents value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberProductEdges) MemberProductContentsOrErr() ([]*MemberContract, error) {
+	if e.loadedTypes[3] {
+		return e.MemberProductContents, nil
+	}
+	return nil, &NotLoadedError{edge: "member_product_contents"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -225,6 +236,11 @@ func (mp *MemberProduct) QueryMemberProductPropertys() *MemberProductPropertyQue
 // QueryMemberProductEntry queries the "member_product_entry" edge of the MemberProduct entity.
 func (mp *MemberProduct) QueryMemberProductEntry() *EntryLogsQuery {
 	return NewMemberProductClient(mp.config).QueryMemberProductEntry(mp)
+}
+
+// QueryMemberProductContents queries the "member_product_contents" edge of the MemberProduct entity.
+func (mp *MemberProduct) QueryMemberProductContents() *MemberContractQuery {
+	return NewMemberProductClient(mp.config).QueryMemberProductContents(mp)
 }
 
 // Update returns a builder for updating this MemberProduct.

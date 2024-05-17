@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// API is the client for interacting with the API builders.
 	API *APIClient
+	// Contract is the client for interacting with the Contract builders.
+	Contract *ContractClient
 	// CourseRecordCoach is the client for interacting with the CourseRecordCoach builders.
 	CourseRecordCoach *CourseRecordCoachClient
 	// CourseRecordMember is the client for interacting with the CourseRecordMember builders.
@@ -30,6 +32,10 @@ type Tx struct {
 	Logs *LogsClient
 	// Member is the client for interacting with the Member builders.
 	Member *MemberClient
+	// MemberContract is the client for interacting with the MemberContract builders.
+	MemberContract *MemberContractClient
+	// MemberContractContent is the client for interacting with the MemberContractContent builders.
+	MemberContractContent *MemberContractContentClient
 	// MemberDetails is the client for interacting with the MemberDetails builders.
 	MemberDetails *MemberDetailsClient
 	// MemberNote is the client for interacting with the MemberNote builders.
@@ -200,6 +206,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.API = NewAPIClient(tx.config)
+	tx.Contract = NewContractClient(tx.config)
 	tx.CourseRecordCoach = NewCourseRecordCoachClient(tx.config)
 	tx.CourseRecordMember = NewCourseRecordMemberClient(tx.config)
 	tx.CourseRecordSchedule = NewCourseRecordScheduleClient(tx.config)
@@ -208,6 +215,8 @@ func (tx *Tx) init() {
 	tx.EntryLogs = NewEntryLogsClient(tx.config)
 	tx.Logs = NewLogsClient(tx.config)
 	tx.Member = NewMemberClient(tx.config)
+	tx.MemberContract = NewMemberContractClient(tx.config)
+	tx.MemberContractContent = NewMemberContractContentClient(tx.config)
 	tx.MemberDetails = NewMemberDetailsClient(tx.config)
 	tx.MemberNote = NewMemberNoteClient(tx.config)
 	tx.MemberProduct = NewMemberProductClient(tx.config)

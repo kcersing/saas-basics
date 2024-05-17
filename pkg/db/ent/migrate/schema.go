@@ -32,6 +32,21 @@ var (
 			},
 		},
 	}
+	// SysContractsColumns holds the columns for the "sys_contracts" table.
+	SysContractsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 名称"},
+		{Name: "content", Type: field.TypeString, Nullable: true, Comment: "content | 内容"},
+	}
+	// SysContractsTable holds the schema information for the "sys_contracts" table.
+	SysContractsTable = &schema.Table{
+		Name:       "sys_contracts",
+		Columns:    SysContractsColumns,
+		PrimaryKey: []*schema.Column{SysContractsColumns[0]},
+	}
 	// CourseRecordCoachColumns holds the columns for the "course_record_coach" table.
 	CourseRecordCoachColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -282,6 +297,67 @@ var (
 		Name:       "member",
 		Columns:    MemberColumns,
 		PrimaryKey: []*schema.Column{MemberColumns[0]},
+	}
+	// MemberContractColumns holds the columns for the "member_contract" table.
+	MemberContractColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 名称"},
+		{Name: "sign", Type: field.TypeString, Nullable: true, Comment: "sign | 签字"},
+		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
+		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员产品ID"},
+		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
+	}
+	// MemberContractTable holds the schema information for the "member_contract" table.
+	MemberContractTable = &schema.Table{
+		Name:       "member_contract",
+		Columns:    MemberContractColumns,
+		PrimaryKey: []*schema.Column{MemberContractColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "member_contract_member_member_contents",
+				Columns:    []*schema.Column{MemberContractColumns[6]},
+				RefColumns: []*schema.Column{MemberColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "member_contract_member_product_member_product_contents",
+				Columns:    []*schema.Column{MemberContractColumns[7]},
+				RefColumns: []*schema.Column{MemberProductColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "member_contract_order_order_contents",
+				Columns:    []*schema.Column{MemberContractColumns[8]},
+				RefColumns: []*schema.Column{OrderColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// MemberContractContentColumns holds the columns for the "member_contract_content" table.
+	MemberContractContentColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
+		{Name: "content", Type: field.TypeString, Nullable: true, Comment: "content | 内容"},
+		{Name: "member_contract_id", Type: field.TypeInt64, Nullable: true, Comment: "合同ID"},
+	}
+	// MemberContractContentTable holds the schema information for the "member_contract_content" table.
+	MemberContractContentTable = &schema.Table{
+		Name:       "member_contract_content",
+		Columns:    MemberContractContentColumns,
+		PrimaryKey: []*schema.Column{MemberContractContentColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "member_contract_content_member_contract_content",
+				Columns:    []*schema.Column{MemberContractContentColumns[5]},
+				RefColumns: []*schema.Column{MemberContractColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// MemberDetailsColumns holds the columns for the "member_details" table.
 	MemberDetailsColumns = []*schema.Column{
@@ -564,7 +640,7 @@ var (
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品id"},
 		{Name: "quantity", Type: field.TypeInt64, Nullable: true, Comment: "购买数量", Default: 0},
 		{Name: "related_user_product_id", Type: field.TypeInt64, Nullable: true, Comment: "关联会员产品id", Default: 0},
-		{Name: "contract_id", Type: field.TypeInt64, Nullable: true, Comment: "合同ID", Default: 0},
+		{Name: "contract_id", Type: field.TypeString, Nullable: true, Comment: "合同ID"},
 		{Name: "assign_at", Type: field.TypeTime, Nullable: true, Comment: "指定时间"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
 	}
@@ -936,6 +1012,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
+		SysContractsTable,
 		CourseRecordCoachTable,
 		CourseRecordMemberTable,
 		CourseRecordScheduleTable,
@@ -944,6 +1021,8 @@ var (
 		EntryLogsTable,
 		SysLogsTable,
 		MemberTable,
+		MemberContractTable,
+		MemberContractContentTable,
 		MemberDetailsTable,
 		MemberNoteTable,
 		MemberProductTable,
@@ -973,6 +1052,9 @@ var (
 func init() {
 	SysApisTable.Annotation = &entsql.Annotation{
 		Table: "sys_apis",
+	}
+	SysContractsTable.Annotation = &entsql.Annotation{
+		Table: "sys_contracts",
 	}
 	CourseRecordCoachTable.ForeignKeys[0].RefTable = CourseRecordScheduleTable
 	CourseRecordCoachTable.Annotation = &entsql.Annotation{
@@ -1004,6 +1086,16 @@ func init() {
 	}
 	MemberTable.Annotation = &entsql.Annotation{
 		Table: "member",
+	}
+	MemberContractTable.ForeignKeys[0].RefTable = MemberTable
+	MemberContractTable.ForeignKeys[1].RefTable = MemberProductTable
+	MemberContractTable.ForeignKeys[2].RefTable = OrderTable
+	MemberContractTable.Annotation = &entsql.Annotation{
+		Table: "member_contract",
+	}
+	MemberContractContentTable.ForeignKeys[0].RefTable = MemberContractTable
+	MemberContractContentTable.Annotation = &entsql.Annotation{
+		Table: "member_contract_content",
 	}
 	MemberDetailsTable.ForeignKeys[0].RefTable = MemberTable
 	MemberDetailsTable.Annotation = &entsql.Annotation{

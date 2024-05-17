@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
 	"time"
@@ -246,6 +247,21 @@ func (mpc *MemberProductCreate) AddMemberProductEntry(e ...*EntryLogs) *MemberPr
 	return mpc.AddMemberProductEntryIDs(ids...)
 }
 
+// AddMemberProductContentIDs adds the "member_product_contents" edge to the MemberContract entity by IDs.
+func (mpc *MemberProductCreate) AddMemberProductContentIDs(ids ...int64) *MemberProductCreate {
+	mpc.mutation.AddMemberProductContentIDs(ids...)
+	return mpc
+}
+
+// AddMemberProductContents adds the "member_product_contents" edges to the MemberContract entity.
+func (mpc *MemberProductCreate) AddMemberProductContents(m ...*MemberContract) *MemberProductCreate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpc.AddMemberProductContentIDs(ids...)
+}
+
 // Mutation returns the MemberProductMutation object of the builder.
 func (mpc *MemberProductCreate) Mutation() *MemberProductMutation {
 	return mpc.mutation
@@ -421,6 +437,22 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mpc.mutation.MemberProductContentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductContentsTable,
+			Columns: []string{memberproduct.MemberProductContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

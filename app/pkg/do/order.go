@@ -19,7 +19,7 @@ type CreateOrder struct {
 	Sales      []int64 `json:"sales"`
 	ProductId  int64   `json:"product_id"`
 	Quantity   int64   `json:"quantity"`
-	ContractId int64   `json:"contract_id"`
+	ContractId []int64 `json:"contract_id"`
 	AssignAt   string  `json:"assign_at"`
 }
 

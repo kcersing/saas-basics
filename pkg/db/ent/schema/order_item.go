@@ -21,7 +21,7 @@ func (OrderItem) Fields() []ent.Field {
 		field.Int64("product_id").Comment("产品id").Optional(),
 		field.Int64("quantity").Default(0).Comment("购买数量").Optional(),
 		field.Int64("related_user_product_id").Default(0).Comment("关联会员产品id").Optional(),
-		field.Int64("contract_id").Default(0).Comment("合同ID").Optional(),
+		field.String("contract_id").Comment("合同ID").Optional(),
 		field.Time("assign_at").Default(time.Now).Comment("指定时间").Optional(),
 	}
 }

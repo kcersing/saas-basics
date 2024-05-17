@@ -42,6 +42,8 @@ const (
 	EdgePay = "pay"
 	// EdgeSales holds the string denoting the sales edge name in mutations.
 	EdgeSales = "sales"
+	// EdgeOrderContents holds the string denoting the order_contents edge name in mutations.
+	EdgeOrderContents = "order_contents"
 	// EdgeOrderVenues holds the string denoting the order_venues edge name in mutations.
 	EdgeOrderVenues = "order_venues"
 	// EdgeOrderMembers holds the string denoting the order_members edge name in mutations.
@@ -78,6 +80,13 @@ const (
 	SalesInverseTable = "order_sales"
 	// SalesColumn is the table column denoting the sales relation/edge.
 	SalesColumn = "order_id"
+	// OrderContentsTable is the table that holds the order_contents relation/edge.
+	OrderContentsTable = "member_contract"
+	// OrderContentsInverseTable is the table name for the MemberContract entity.
+	// It exists in this package in order to avoid circular dependency with the "membercontract" package.
+	OrderContentsInverseTable = "member_contract"
+	// OrderContentsColumn is the table column denoting the order_contents relation/edge.
+	OrderContentsColumn = "order_id"
 	// OrderVenuesTable is the table that holds the order_venues relation/edge.
 	OrderVenuesTable = "order"
 	// OrderVenuesInverseTable is the table name for the Venue entity.
@@ -255,6 +264,20 @@ func BySales(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByOrderContentsCount orders the results by order_contents count.
+func ByOrderContentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrderContentsStep(), opts...)
+	}
+}
+
+// ByOrderContents orders the results by order_contents terms.
+func ByOrderContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrderContentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByOrderVenuesField orders the results by order_venues field.
 func ByOrderVenuesField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -301,6 +324,13 @@ func newSalesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SalesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SalesTable, SalesColumn),
+	)
+}
+func newOrderContentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrderContentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrderContentsTable, OrderContentsColumn),
 	)
 }
 func newOrderVenuesStep() *sqlgraph.Step {

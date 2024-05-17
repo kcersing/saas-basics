@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
@@ -231,6 +232,21 @@ func (oc *OrderCreate) AddSales(o ...*OrderSales) *OrderCreate {
 		ids[i] = o[i].ID
 	}
 	return oc.AddSaleIDs(ids...)
+}
+
+// AddOrderContentIDs adds the "order_contents" edge to the MemberContract entity by IDs.
+func (oc *OrderCreate) AddOrderContentIDs(ids ...int64) *OrderCreate {
+	oc.mutation.AddOrderContentIDs(ids...)
+	return oc
+}
+
+// AddOrderContents adds the "order_contents" edges to the MemberContract entity.
+func (oc *OrderCreate) AddOrderContents(m ...*MemberContract) *OrderCreate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return oc.AddOrderContentIDs(ids...)
 }
 
 // SetOrderVenuesID sets the "order_venues" edge to the Venue entity by ID.
@@ -472,6 +488,22 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.OrderContentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   order.OrderContentsTable,
+			Columns: []string{order.OrderContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

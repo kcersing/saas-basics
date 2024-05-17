@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
 	"saas/pkg/db/ent/predicate"
@@ -321,6 +322,21 @@ func (mpu *MemberProductUpdate) AddMemberProductEntry(e ...*EntryLogs) *MemberPr
 	return mpu.AddMemberProductEntryIDs(ids...)
 }
 
+// AddMemberProductContentIDs adds the "member_product_contents" edge to the MemberContract entity by IDs.
+func (mpu *MemberProductUpdate) AddMemberProductContentIDs(ids ...int64) *MemberProductUpdate {
+	mpu.mutation.AddMemberProductContentIDs(ids...)
+	return mpu
+}
+
+// AddMemberProductContents adds the "member_product_contents" edges to the MemberContract entity.
+func (mpu *MemberProductUpdate) AddMemberProductContents(m ...*MemberContract) *MemberProductUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpu.AddMemberProductContentIDs(ids...)
+}
+
 // Mutation returns the MemberProductMutation object of the builder.
 func (mpu *MemberProductUpdate) Mutation() *MemberProductMutation {
 	return mpu.mutation
@@ -372,6 +388,27 @@ func (mpu *MemberProductUpdate) RemoveMemberProductEntry(e ...*EntryLogs) *Membe
 		ids[i] = e[i].ID
 	}
 	return mpu.RemoveMemberProductEntryIDs(ids...)
+}
+
+// ClearMemberProductContents clears all "member_product_contents" edges to the MemberContract entity.
+func (mpu *MemberProductUpdate) ClearMemberProductContents() *MemberProductUpdate {
+	mpu.mutation.ClearMemberProductContents()
+	return mpu
+}
+
+// RemoveMemberProductContentIDs removes the "member_product_contents" edge to MemberContract entities by IDs.
+func (mpu *MemberProductUpdate) RemoveMemberProductContentIDs(ids ...int64) *MemberProductUpdate {
+	mpu.mutation.RemoveMemberProductContentIDs(ids...)
+	return mpu
+}
+
+// RemoveMemberProductContents removes "member_product_contents" edges to MemberContract entities.
+func (mpu *MemberProductUpdate) RemoveMemberProductContents(m ...*MemberContract) *MemberProductUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpu.RemoveMemberProductContentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -603,6 +640,51 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mpu.mutation.MemberProductContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductContentsTable,
+			Columns: []string{memberproduct.MemberProductContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpu.mutation.RemovedMemberProductContentsIDs(); len(nodes) > 0 && !mpu.mutation.MemberProductContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductContentsTable,
+			Columns: []string{memberproduct.MemberProductContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpu.mutation.MemberProductContentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductContentsTable,
+			Columns: []string{memberproduct.MemberProductContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -920,6 +1002,21 @@ func (mpuo *MemberProductUpdateOne) AddMemberProductEntry(e ...*EntryLogs) *Memb
 	return mpuo.AddMemberProductEntryIDs(ids...)
 }
 
+// AddMemberProductContentIDs adds the "member_product_contents" edge to the MemberContract entity by IDs.
+func (mpuo *MemberProductUpdateOne) AddMemberProductContentIDs(ids ...int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddMemberProductContentIDs(ids...)
+	return mpuo
+}
+
+// AddMemberProductContents adds the "member_product_contents" edges to the MemberContract entity.
+func (mpuo *MemberProductUpdateOne) AddMemberProductContents(m ...*MemberContract) *MemberProductUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpuo.AddMemberProductContentIDs(ids...)
+}
+
 // Mutation returns the MemberProductMutation object of the builder.
 func (mpuo *MemberProductUpdateOne) Mutation() *MemberProductMutation {
 	return mpuo.mutation
@@ -971,6 +1068,27 @@ func (mpuo *MemberProductUpdateOne) RemoveMemberProductEntry(e ...*EntryLogs) *M
 		ids[i] = e[i].ID
 	}
 	return mpuo.RemoveMemberProductEntryIDs(ids...)
+}
+
+// ClearMemberProductContents clears all "member_product_contents" edges to the MemberContract entity.
+func (mpuo *MemberProductUpdateOne) ClearMemberProductContents() *MemberProductUpdateOne {
+	mpuo.mutation.ClearMemberProductContents()
+	return mpuo
+}
+
+// RemoveMemberProductContentIDs removes the "member_product_contents" edge to MemberContract entities by IDs.
+func (mpuo *MemberProductUpdateOne) RemoveMemberProductContentIDs(ids ...int64) *MemberProductUpdateOne {
+	mpuo.mutation.RemoveMemberProductContentIDs(ids...)
+	return mpuo
+}
+
+// RemoveMemberProductContents removes "member_product_contents" edges to MemberContract entities.
+func (mpuo *MemberProductUpdateOne) RemoveMemberProductContents(m ...*MemberContract) *MemberProductUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpuo.RemoveMemberProductContentIDs(ids...)
 }
 
 // Where appends a list predicates to the MemberProductUpdate builder.
@@ -1232,6 +1350,51 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mpuo.mutation.MemberProductContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductContentsTable,
+			Columns: []string{memberproduct.MemberProductContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpuo.mutation.RemovedMemberProductContentsIDs(); len(nodes) > 0 && !mpuo.mutation.MemberProductContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductContentsTable,
+			Columns: []string{memberproduct.MemberProductContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpuo.mutation.MemberProductContentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberProductContentsTable,
+			Columns: []string{memberproduct.MemberProductContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

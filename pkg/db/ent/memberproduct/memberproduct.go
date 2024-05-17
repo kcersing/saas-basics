@@ -44,6 +44,8 @@ const (
 	EdgeMemberProductPropertys = "member_product_propertys"
 	// EdgeMemberProductEntry holds the string denoting the member_product_entry edge name in mutations.
 	EdgeMemberProductEntry = "member_product_entry"
+	// EdgeMemberProductContents holds the string denoting the member_product_contents edge name in mutations.
+	EdgeMemberProductContents = "member_product_contents"
 	// Table holds the table name of the memberproduct in the database.
 	Table = "member_product"
 	// MembersTable is the table that holds the members relation/edge.
@@ -67,6 +69,13 @@ const (
 	MemberProductEntryInverseTable = "entry_logs"
 	// MemberProductEntryColumn is the table column denoting the member_product_entry relation/edge.
 	MemberProductEntryColumn = "member_product_id"
+	// MemberProductContentsTable is the table that holds the member_product_contents relation/edge.
+	MemberProductContentsTable = "member_contract"
+	// MemberProductContentsInverseTable is the table name for the MemberContract entity.
+	// It exists in this package in order to avoid circular dependency with the "membercontract" package.
+	MemberProductContentsInverseTable = "member_contract"
+	// MemberProductContentsColumn is the table column denoting the member_product_contents relation/edge.
+	MemberProductContentsColumn = "member_product_id"
 )
 
 // Columns holds all SQL columns for memberproduct fields.
@@ -209,6 +218,20 @@ func ByMemberProductEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 		sqlgraph.OrderByNeighborTerms(s, newMemberProductEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMemberProductContentsCount orders the results by member_product_contents count.
+func ByMemberProductContentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberProductContentsStep(), opts...)
+	}
+}
+
+// ByMemberProductContents orders the results by member_product_contents terms.
+func ByMemberProductContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberProductContentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newMembersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -228,5 +251,12 @@ func newMemberProductEntryStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MemberProductEntryInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberProductEntryTable, MemberProductEntryColumn),
+	)
+}
+func newMemberProductContentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberProductContentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberProductContentsTable, MemberProductContentsColumn),
 	)
 }

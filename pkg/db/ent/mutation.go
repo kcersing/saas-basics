@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/contract"
 	"saas/pkg/db/ent/courserecordcoach"
 	"saas/pkg/db/ent/courserecordmember"
 	"saas/pkg/db/ent/courserecordschedule"
@@ -15,6 +16,8 @@ import (
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
+	"saas/pkg/db/ent/membercontractcontent"
 	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
@@ -52,6 +55,7 @@ const (
 
 	// Node types.
 	TypeAPI                   = "API"
+	TypeContract              = "Contract"
 	TypeCourseRecordCoach     = "CourseRecordCoach"
 	TypeCourseRecordMember    = "CourseRecordMember"
 	TypeCourseRecordSchedule  = "CourseRecordSchedule"
@@ -60,6 +64,8 @@ const (
 	TypeEntryLogs             = "EntryLogs"
 	TypeLogs                  = "Logs"
 	TypeMember                = "Member"
+	TypeMemberContract        = "MemberContract"
+	TypeMemberContractContent = "MemberContractContent"
 	TypeMemberDetails         = "MemberDetails"
 	TypeMemberNote            = "MemberNote"
 	TypeMemberProduct         = "MemberProduct"
@@ -681,6 +687,651 @@ func (m *APIMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *APIMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown API edge %s", name)
+}
+
+// ContractMutation represents an operation that mutates the Contract nodes in the graph.
+type ContractMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int64
+	created_at    *time.Time
+	updated_at    *time.Time
+	status        *int64
+	addstatus     *int64
+	name          *string
+	content       *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Contract, error)
+	predicates    []predicate.Contract
+}
+
+var _ ent.Mutation = (*ContractMutation)(nil)
+
+// contractOption allows management of the mutation configuration using functional options.
+type contractOption func(*ContractMutation)
+
+// newContractMutation creates new mutation for the Contract entity.
+func newContractMutation(c config, op Op, opts ...contractOption) *ContractMutation {
+	m := &ContractMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeContract,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withContractID sets the ID field of the mutation.
+func withContractID(id int64) contractOption {
+	return func(m *ContractMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Contract
+		)
+		m.oldValue = func(ctx context.Context) (*Contract, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Contract.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withContract sets the old Contract of the mutation.
+func withContract(node *Contract) contractOption {
+	return func(m *ContractMutation) {
+		m.oldValue = func(context.Context) (*Contract, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ContractMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ContractMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Contract entities.
+func (m *ContractMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ContractMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ContractMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Contract.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ContractMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ContractMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Contract entity.
+// If the Contract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContractMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ContractMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ContractMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ContractMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Contract entity.
+// If the Contract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContractMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ContractMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *ContractMutation) SetStatus(i int64) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ContractMutation) Status() (r int64, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Contract entity.
+// If the Contract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContractMutation) OldStatus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *ContractMutation) AddStatus(i int64) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *ContractMutation) AddedStatus() (r int64, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *ContractMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[contract.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *ContractMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[contract.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ContractMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, contract.FieldStatus)
+}
+
+// SetName sets the "name" field.
+func (m *ContractMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ContractMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Contract entity.
+// If the Contract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContractMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ClearName clears the value of the "name" field.
+func (m *ContractMutation) ClearName() {
+	m.name = nil
+	m.clearedFields[contract.FieldName] = struct{}{}
+}
+
+// NameCleared returns if the "name" field was cleared in this mutation.
+func (m *ContractMutation) NameCleared() bool {
+	_, ok := m.clearedFields[contract.FieldName]
+	return ok
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ContractMutation) ResetName() {
+	m.name = nil
+	delete(m.clearedFields, contract.FieldName)
+}
+
+// SetContent sets the "content" field.
+func (m *ContractMutation) SetContent(s string) {
+	m.content = &s
+}
+
+// Content returns the value of the "content" field in the mutation.
+func (m *ContractMutation) Content() (r string, exists bool) {
+	v := m.content
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContent returns the old "content" field's value of the Contract entity.
+// If the Contract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContractMutation) OldContent(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContent: %w", err)
+	}
+	return oldValue.Content, nil
+}
+
+// ClearContent clears the value of the "content" field.
+func (m *ContractMutation) ClearContent() {
+	m.content = nil
+	m.clearedFields[contract.FieldContent] = struct{}{}
+}
+
+// ContentCleared returns if the "content" field was cleared in this mutation.
+func (m *ContractMutation) ContentCleared() bool {
+	_, ok := m.clearedFields[contract.FieldContent]
+	return ok
+}
+
+// ResetContent resets all changes to the "content" field.
+func (m *ContractMutation) ResetContent() {
+	m.content = nil
+	delete(m.clearedFields, contract.FieldContent)
+}
+
+// Where appends a list predicates to the ContractMutation builder.
+func (m *ContractMutation) Where(ps ...predicate.Contract) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ContractMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ContractMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Contract, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ContractMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ContractMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Contract).
+func (m *ContractMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ContractMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.created_at != nil {
+		fields = append(fields, contract.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, contract.FieldUpdatedAt)
+	}
+	if m.status != nil {
+		fields = append(fields, contract.FieldStatus)
+	}
+	if m.name != nil {
+		fields = append(fields, contract.FieldName)
+	}
+	if m.content != nil {
+		fields = append(fields, contract.FieldContent)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ContractMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case contract.FieldCreatedAt:
+		return m.CreatedAt()
+	case contract.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case contract.FieldStatus:
+		return m.Status()
+	case contract.FieldName:
+		return m.Name()
+	case contract.FieldContent:
+		return m.Content()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ContractMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case contract.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case contract.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case contract.FieldStatus:
+		return m.OldStatus(ctx)
+	case contract.FieldName:
+		return m.OldName(ctx)
+	case contract.FieldContent:
+		return m.OldContent(ctx)
+	}
+	return nil, fmt.Errorf("unknown Contract field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContractMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case contract.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case contract.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case contract.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case contract.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case contract.FieldContent:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContent(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Contract field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ContractMutation) AddedFields() []string {
+	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, contract.FieldStatus)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ContractMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case contract.FieldStatus:
+		return m.AddedStatus()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContractMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case contract.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Contract numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ContractMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(contract.FieldStatus) {
+		fields = append(fields, contract.FieldStatus)
+	}
+	if m.FieldCleared(contract.FieldName) {
+		fields = append(fields, contract.FieldName)
+	}
+	if m.FieldCleared(contract.FieldContent) {
+		fields = append(fields, contract.FieldContent)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ContractMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ContractMutation) ClearField(name string) error {
+	switch name {
+	case contract.FieldStatus:
+		m.ClearStatus()
+		return nil
+	case contract.FieldName:
+		m.ClearName()
+		return nil
+	case contract.FieldContent:
+		m.ClearContent()
+		return nil
+	}
+	return fmt.Errorf("unknown Contract nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ContractMutation) ResetField(name string) error {
+	switch name {
+	case contract.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case contract.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case contract.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case contract.FieldName:
+		m.ResetName()
+		return nil
+	case contract.FieldContent:
+		m.ResetContent()
+		return nil
+	}
+	return fmt.Errorf("unknown Contract field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ContractMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ContractMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ContractMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ContractMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ContractMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ContractMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ContractMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Contract unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ContractMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Contract edge %s", name)
 }
 
 // CourseRecordCoachMutation represents an operation that mutates the CourseRecordCoach nodes in the graph.
@@ -8599,6 +9250,9 @@ type MemberMutation struct {
 	member_entry           map[int64]struct{}
 	removedmember_entry    map[int64]struct{}
 	clearedmember_entry    bool
+	member_contents        map[int64]struct{}
+	removedmember_contents map[int64]struct{}
+	clearedmember_contents bool
 	done                   bool
 	oldValue               func(context.Context) (*Member, error)
 	predicates             []predicate.Member
@@ -9484,6 +10138,60 @@ func (m *MemberMutation) ResetMemberEntry() {
 	m.removedmember_entry = nil
 }
 
+// AddMemberContentIDs adds the "member_contents" edge to the MemberContract entity by ids.
+func (m *MemberMutation) AddMemberContentIDs(ids ...int64) {
+	if m.member_contents == nil {
+		m.member_contents = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.member_contents[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMemberContents clears the "member_contents" edge to the MemberContract entity.
+func (m *MemberMutation) ClearMemberContents() {
+	m.clearedmember_contents = true
+}
+
+// MemberContentsCleared reports if the "member_contents" edge to the MemberContract entity was cleared.
+func (m *MemberMutation) MemberContentsCleared() bool {
+	return m.clearedmember_contents
+}
+
+// RemoveMemberContentIDs removes the "member_contents" edge to the MemberContract entity by IDs.
+func (m *MemberMutation) RemoveMemberContentIDs(ids ...int64) {
+	if m.removedmember_contents == nil {
+		m.removedmember_contents = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.member_contents, ids[i])
+		m.removedmember_contents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMemberContents returns the removed IDs of the "member_contents" edge to the MemberContract entity.
+func (m *MemberMutation) RemovedMemberContentsIDs() (ids []int64) {
+	for id := range m.removedmember_contents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MemberContentsIDs returns the "member_contents" edge IDs in the mutation.
+func (m *MemberMutation) MemberContentsIDs() (ids []int64) {
+	for id := range m.member_contents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMemberContents resets all changes to the "member_contents" edge.
+func (m *MemberMutation) ResetMemberContents() {
+	m.member_contents = nil
+	m.clearedmember_contents = false
+	m.removedmember_contents = nil
+}
+
 // Where appends a list predicates to the MemberMutation builder.
 func (m *MemberMutation) Where(ps ...predicate.Member) {
 	m.predicates = append(m.predicates, ps...)
@@ -9848,7 +10556,7 @@ func (m *MemberMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MemberMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.member_details != nil {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -9863,6 +10571,9 @@ func (m *MemberMutation) AddedEdges() []string {
 	}
 	if m.member_entry != nil {
 		edges = append(edges, member.EdgeMemberEntry)
+	}
+	if m.member_contents != nil {
+		edges = append(edges, member.EdgeMemberContents)
 	}
 	return edges
 }
@@ -9901,13 +10612,19 @@ func (m *MemberMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case member.EdgeMemberContents:
+		ids := make([]ent.Value, 0, len(m.member_contents))
+		for id := range m.member_contents {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MemberMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedmember_details != nil {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -9922,6 +10639,9 @@ func (m *MemberMutation) RemovedEdges() []string {
 	}
 	if m.removedmember_entry != nil {
 		edges = append(edges, member.EdgeMemberEntry)
+	}
+	if m.removedmember_contents != nil {
+		edges = append(edges, member.EdgeMemberContents)
 	}
 	return edges
 }
@@ -9960,13 +10680,19 @@ func (m *MemberMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case member.EdgeMemberContents:
+		ids := make([]ent.Value, 0, len(m.removedmember_contents))
+		for id := range m.removedmember_contents {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MemberMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedmember_details {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -9981,6 +10707,9 @@ func (m *MemberMutation) ClearedEdges() []string {
 	}
 	if m.clearedmember_entry {
 		edges = append(edges, member.EdgeMemberEntry)
+	}
+	if m.clearedmember_contents {
+		edges = append(edges, member.EdgeMemberContents)
 	}
 	return edges
 }
@@ -9999,6 +10728,8 @@ func (m *MemberMutation) EdgeCleared(name string) bool {
 		return m.clearedmember_products
 	case member.EdgeMemberEntry:
 		return m.clearedmember_entry
+	case member.EdgeMemberContents:
+		return m.clearedmember_contents
 	}
 	return false
 }
@@ -10030,8 +10761,1818 @@ func (m *MemberMutation) ResetEdge(name string) error {
 	case member.EdgeMemberEntry:
 		m.ResetMemberEntry()
 		return nil
+	case member.EdgeMemberContents:
+		m.ResetMemberContents()
+		return nil
 	}
 	return fmt.Errorf("unknown Member edge %s", name)
+}
+
+// MemberContractMutation represents an operation that mutates the MemberContract nodes in the graph.
+type MemberContractMutation struct {
+	config
+	op                    Op
+	typ                   string
+	id                    *int64
+	created_at            *time.Time
+	updated_at            *time.Time
+	status                *int64
+	addstatus             *int64
+	name                  *string
+	sign                  *string
+	clearedFields         map[string]struct{}
+	content               map[int64]struct{}
+	removedcontent        map[int64]struct{}
+	clearedcontent        bool
+	member                *int64
+	clearedmember         bool
+	_order                *int64
+	cleared_order         bool
+	member_product        *int64
+	clearedmember_product bool
+	done                  bool
+	oldValue              func(context.Context) (*MemberContract, error)
+	predicates            []predicate.MemberContract
+}
+
+var _ ent.Mutation = (*MemberContractMutation)(nil)
+
+// membercontractOption allows management of the mutation configuration using functional options.
+type membercontractOption func(*MemberContractMutation)
+
+// newMemberContractMutation creates new mutation for the MemberContract entity.
+func newMemberContractMutation(c config, op Op, opts ...membercontractOption) *MemberContractMutation {
+	m := &MemberContractMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeMemberContract,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withMemberContractID sets the ID field of the mutation.
+func withMemberContractID(id int64) membercontractOption {
+	return func(m *MemberContractMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *MemberContract
+		)
+		m.oldValue = func(ctx context.Context) (*MemberContract, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().MemberContract.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withMemberContract sets the old MemberContract of the mutation.
+func withMemberContract(node *MemberContract) membercontractOption {
+	return func(m *MemberContractMutation) {
+		m.oldValue = func(context.Context) (*MemberContract, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m MemberContractMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m MemberContractMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of MemberContract entities.
+func (m *MemberContractMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *MemberContractMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *MemberContractMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().MemberContract.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *MemberContractMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *MemberContractMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *MemberContractMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *MemberContractMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *MemberContractMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *MemberContractMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *MemberContractMutation) SetStatus(i int64) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *MemberContractMutation) Status() (r int64, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldStatus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *MemberContractMutation) AddStatus(i int64) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *MemberContractMutation) AddedStatus() (r int64, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *MemberContractMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[membercontract.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *MemberContractMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[membercontract.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *MemberContractMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, membercontract.FieldStatus)
+}
+
+// SetMemberID sets the "member_id" field.
+func (m *MemberContractMutation) SetMemberID(i int64) {
+	m.member = &i
+}
+
+// MemberID returns the value of the "member_id" field in the mutation.
+func (m *MemberContractMutation) MemberID() (r int64, exists bool) {
+	v := m.member
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemberID returns the old "member_id" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldMemberID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemberID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemberID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemberID: %w", err)
+	}
+	return oldValue.MemberID, nil
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (m *MemberContractMutation) ClearMemberID() {
+	m.member = nil
+	m.clearedFields[membercontract.FieldMemberID] = struct{}{}
+}
+
+// MemberIDCleared returns if the "member_id" field was cleared in this mutation.
+func (m *MemberContractMutation) MemberIDCleared() bool {
+	_, ok := m.clearedFields[membercontract.FieldMemberID]
+	return ok
+}
+
+// ResetMemberID resets all changes to the "member_id" field.
+func (m *MemberContractMutation) ResetMemberID() {
+	m.member = nil
+	delete(m.clearedFields, membercontract.FieldMemberID)
+}
+
+// SetOrderID sets the "order_id" field.
+func (m *MemberContractMutation) SetOrderID(i int64) {
+	m._order = &i
+}
+
+// OrderID returns the value of the "order_id" field in the mutation.
+func (m *MemberContractMutation) OrderID() (r int64, exists bool) {
+	v := m._order
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrderID returns the old "order_id" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldOrderID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrderID: %w", err)
+	}
+	return oldValue.OrderID, nil
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (m *MemberContractMutation) ClearOrderID() {
+	m._order = nil
+	m.clearedFields[membercontract.FieldOrderID] = struct{}{}
+}
+
+// OrderIDCleared returns if the "order_id" field was cleared in this mutation.
+func (m *MemberContractMutation) OrderIDCleared() bool {
+	_, ok := m.clearedFields[membercontract.FieldOrderID]
+	return ok
+}
+
+// ResetOrderID resets all changes to the "order_id" field.
+func (m *MemberContractMutation) ResetOrderID() {
+	m._order = nil
+	delete(m.clearedFields, membercontract.FieldOrderID)
+}
+
+// SetMemberProductID sets the "member_product_id" field.
+func (m *MemberContractMutation) SetMemberProductID(i int64) {
+	m.member_product = &i
+}
+
+// MemberProductID returns the value of the "member_product_id" field in the mutation.
+func (m *MemberContractMutation) MemberProductID() (r int64, exists bool) {
+	v := m.member_product
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemberProductID returns the old "member_product_id" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldMemberProductID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemberProductID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemberProductID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemberProductID: %w", err)
+	}
+	return oldValue.MemberProductID, nil
+}
+
+// ClearMemberProductID clears the value of the "member_product_id" field.
+func (m *MemberContractMutation) ClearMemberProductID() {
+	m.member_product = nil
+	m.clearedFields[membercontract.FieldMemberProductID] = struct{}{}
+}
+
+// MemberProductIDCleared returns if the "member_product_id" field was cleared in this mutation.
+func (m *MemberContractMutation) MemberProductIDCleared() bool {
+	_, ok := m.clearedFields[membercontract.FieldMemberProductID]
+	return ok
+}
+
+// ResetMemberProductID resets all changes to the "member_product_id" field.
+func (m *MemberContractMutation) ResetMemberProductID() {
+	m.member_product = nil
+	delete(m.clearedFields, membercontract.FieldMemberProductID)
+}
+
+// SetName sets the "name" field.
+func (m *MemberContractMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *MemberContractMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ClearName clears the value of the "name" field.
+func (m *MemberContractMutation) ClearName() {
+	m.name = nil
+	m.clearedFields[membercontract.FieldName] = struct{}{}
+}
+
+// NameCleared returns if the "name" field was cleared in this mutation.
+func (m *MemberContractMutation) NameCleared() bool {
+	_, ok := m.clearedFields[membercontract.FieldName]
+	return ok
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *MemberContractMutation) ResetName() {
+	m.name = nil
+	delete(m.clearedFields, membercontract.FieldName)
+}
+
+// SetSign sets the "sign" field.
+func (m *MemberContractMutation) SetSign(s string) {
+	m.sign = &s
+}
+
+// Sign returns the value of the "sign" field in the mutation.
+func (m *MemberContractMutation) Sign() (r string, exists bool) {
+	v := m.sign
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSign returns the old "sign" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldSign(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSign is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSign requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSign: %w", err)
+	}
+	return oldValue.Sign, nil
+}
+
+// ClearSign clears the value of the "sign" field.
+func (m *MemberContractMutation) ClearSign() {
+	m.sign = nil
+	m.clearedFields[membercontract.FieldSign] = struct{}{}
+}
+
+// SignCleared returns if the "sign" field was cleared in this mutation.
+func (m *MemberContractMutation) SignCleared() bool {
+	_, ok := m.clearedFields[membercontract.FieldSign]
+	return ok
+}
+
+// ResetSign resets all changes to the "sign" field.
+func (m *MemberContractMutation) ResetSign() {
+	m.sign = nil
+	delete(m.clearedFields, membercontract.FieldSign)
+}
+
+// AddContentIDs adds the "content" edge to the MemberContractContent entity by ids.
+func (m *MemberContractMutation) AddContentIDs(ids ...int64) {
+	if m.content == nil {
+		m.content = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.content[ids[i]] = struct{}{}
+	}
+}
+
+// ClearContent clears the "content" edge to the MemberContractContent entity.
+func (m *MemberContractMutation) ClearContent() {
+	m.clearedcontent = true
+}
+
+// ContentCleared reports if the "content" edge to the MemberContractContent entity was cleared.
+func (m *MemberContractMutation) ContentCleared() bool {
+	return m.clearedcontent
+}
+
+// RemoveContentIDs removes the "content" edge to the MemberContractContent entity by IDs.
+func (m *MemberContractMutation) RemoveContentIDs(ids ...int64) {
+	if m.removedcontent == nil {
+		m.removedcontent = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.content, ids[i])
+		m.removedcontent[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedContent returns the removed IDs of the "content" edge to the MemberContractContent entity.
+func (m *MemberContractMutation) RemovedContentIDs() (ids []int64) {
+	for id := range m.removedcontent {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ContentIDs returns the "content" edge IDs in the mutation.
+func (m *MemberContractMutation) ContentIDs() (ids []int64) {
+	for id := range m.content {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetContent resets all changes to the "content" edge.
+func (m *MemberContractMutation) ResetContent() {
+	m.content = nil
+	m.clearedcontent = false
+	m.removedcontent = nil
+}
+
+// ClearMember clears the "member" edge to the Member entity.
+func (m *MemberContractMutation) ClearMember() {
+	m.clearedmember = true
+	m.clearedFields[membercontract.FieldMemberID] = struct{}{}
+}
+
+// MemberCleared reports if the "member" edge to the Member entity was cleared.
+func (m *MemberContractMutation) MemberCleared() bool {
+	return m.MemberIDCleared() || m.clearedmember
+}
+
+// MemberIDs returns the "member" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// MemberID instead. It exists only for internal usage by the builders.
+func (m *MemberContractMutation) MemberIDs() (ids []int64) {
+	if id := m.member; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMember resets all changes to the "member" edge.
+func (m *MemberContractMutation) ResetMember() {
+	m.member = nil
+	m.clearedmember = false
+}
+
+// ClearOrder clears the "order" edge to the Order entity.
+func (m *MemberContractMutation) ClearOrder() {
+	m.cleared_order = true
+	m.clearedFields[membercontract.FieldOrderID] = struct{}{}
+}
+
+// OrderCleared reports if the "order" edge to the Order entity was cleared.
+func (m *MemberContractMutation) OrderCleared() bool {
+	return m.OrderIDCleared() || m.cleared_order
+}
+
+// OrderIDs returns the "order" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OrderID instead. It exists only for internal usage by the builders.
+func (m *MemberContractMutation) OrderIDs() (ids []int64) {
+	if id := m._order; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOrder resets all changes to the "order" edge.
+func (m *MemberContractMutation) ResetOrder() {
+	m._order = nil
+	m.cleared_order = false
+}
+
+// ClearMemberProduct clears the "member_product" edge to the MemberProduct entity.
+func (m *MemberContractMutation) ClearMemberProduct() {
+	m.clearedmember_product = true
+	m.clearedFields[membercontract.FieldMemberProductID] = struct{}{}
+}
+
+// MemberProductCleared reports if the "member_product" edge to the MemberProduct entity was cleared.
+func (m *MemberContractMutation) MemberProductCleared() bool {
+	return m.MemberProductIDCleared() || m.clearedmember_product
+}
+
+// MemberProductIDs returns the "member_product" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// MemberProductID instead. It exists only for internal usage by the builders.
+func (m *MemberContractMutation) MemberProductIDs() (ids []int64) {
+	if id := m.member_product; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMemberProduct resets all changes to the "member_product" edge.
+func (m *MemberContractMutation) ResetMemberProduct() {
+	m.member_product = nil
+	m.clearedmember_product = false
+}
+
+// Where appends a list predicates to the MemberContractMutation builder.
+func (m *MemberContractMutation) Where(ps ...predicate.MemberContract) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the MemberContractMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *MemberContractMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.MemberContract, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *MemberContractMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *MemberContractMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (MemberContract).
+func (m *MemberContractMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *MemberContractMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.created_at != nil {
+		fields = append(fields, membercontract.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, membercontract.FieldUpdatedAt)
+	}
+	if m.status != nil {
+		fields = append(fields, membercontract.FieldStatus)
+	}
+	if m.member != nil {
+		fields = append(fields, membercontract.FieldMemberID)
+	}
+	if m._order != nil {
+		fields = append(fields, membercontract.FieldOrderID)
+	}
+	if m.member_product != nil {
+		fields = append(fields, membercontract.FieldMemberProductID)
+	}
+	if m.name != nil {
+		fields = append(fields, membercontract.FieldName)
+	}
+	if m.sign != nil {
+		fields = append(fields, membercontract.FieldSign)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *MemberContractMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case membercontract.FieldCreatedAt:
+		return m.CreatedAt()
+	case membercontract.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case membercontract.FieldStatus:
+		return m.Status()
+	case membercontract.FieldMemberID:
+		return m.MemberID()
+	case membercontract.FieldOrderID:
+		return m.OrderID()
+	case membercontract.FieldMemberProductID:
+		return m.MemberProductID()
+	case membercontract.FieldName:
+		return m.Name()
+	case membercontract.FieldSign:
+		return m.Sign()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *MemberContractMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case membercontract.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case membercontract.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case membercontract.FieldStatus:
+		return m.OldStatus(ctx)
+	case membercontract.FieldMemberID:
+		return m.OldMemberID(ctx)
+	case membercontract.FieldOrderID:
+		return m.OldOrderID(ctx)
+	case membercontract.FieldMemberProductID:
+		return m.OldMemberProductID(ctx)
+	case membercontract.FieldName:
+		return m.OldName(ctx)
+	case membercontract.FieldSign:
+		return m.OldSign(ctx)
+	}
+	return nil, fmt.Errorf("unknown MemberContract field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MemberContractMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case membercontract.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case membercontract.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case membercontract.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case membercontract.FieldMemberID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemberID(v)
+		return nil
+	case membercontract.FieldOrderID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrderID(v)
+		return nil
+	case membercontract.FieldMemberProductID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemberProductID(v)
+		return nil
+	case membercontract.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case membercontract.FieldSign:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSign(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContract field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *MemberContractMutation) AddedFields() []string {
+	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, membercontract.FieldStatus)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *MemberContractMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case membercontract.FieldStatus:
+		return m.AddedStatus()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MemberContractMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case membercontract.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContract numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *MemberContractMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(membercontract.FieldStatus) {
+		fields = append(fields, membercontract.FieldStatus)
+	}
+	if m.FieldCleared(membercontract.FieldMemberID) {
+		fields = append(fields, membercontract.FieldMemberID)
+	}
+	if m.FieldCleared(membercontract.FieldOrderID) {
+		fields = append(fields, membercontract.FieldOrderID)
+	}
+	if m.FieldCleared(membercontract.FieldMemberProductID) {
+		fields = append(fields, membercontract.FieldMemberProductID)
+	}
+	if m.FieldCleared(membercontract.FieldName) {
+		fields = append(fields, membercontract.FieldName)
+	}
+	if m.FieldCleared(membercontract.FieldSign) {
+		fields = append(fields, membercontract.FieldSign)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *MemberContractMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *MemberContractMutation) ClearField(name string) error {
+	switch name {
+	case membercontract.FieldStatus:
+		m.ClearStatus()
+		return nil
+	case membercontract.FieldMemberID:
+		m.ClearMemberID()
+		return nil
+	case membercontract.FieldOrderID:
+		m.ClearOrderID()
+		return nil
+	case membercontract.FieldMemberProductID:
+		m.ClearMemberProductID()
+		return nil
+	case membercontract.FieldName:
+		m.ClearName()
+		return nil
+	case membercontract.FieldSign:
+		m.ClearSign()
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContract nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *MemberContractMutation) ResetField(name string) error {
+	switch name {
+	case membercontract.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case membercontract.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case membercontract.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case membercontract.FieldMemberID:
+		m.ResetMemberID()
+		return nil
+	case membercontract.FieldOrderID:
+		m.ResetOrderID()
+		return nil
+	case membercontract.FieldMemberProductID:
+		m.ResetMemberProductID()
+		return nil
+	case membercontract.FieldName:
+		m.ResetName()
+		return nil
+	case membercontract.FieldSign:
+		m.ResetSign()
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContract field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *MemberContractMutation) AddedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.content != nil {
+		edges = append(edges, membercontract.EdgeContent)
+	}
+	if m.member != nil {
+		edges = append(edges, membercontract.EdgeMember)
+	}
+	if m._order != nil {
+		edges = append(edges, membercontract.EdgeOrder)
+	}
+	if m.member_product != nil {
+		edges = append(edges, membercontract.EdgeMemberProduct)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *MemberContractMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case membercontract.EdgeContent:
+		ids := make([]ent.Value, 0, len(m.content))
+		for id := range m.content {
+			ids = append(ids, id)
+		}
+		return ids
+	case membercontract.EdgeMember:
+		if id := m.member; id != nil {
+			return []ent.Value{*id}
+		}
+	case membercontract.EdgeOrder:
+		if id := m._order; id != nil {
+			return []ent.Value{*id}
+		}
+	case membercontract.EdgeMemberProduct:
+		if id := m.member_product; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *MemberContractMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.removedcontent != nil {
+		edges = append(edges, membercontract.EdgeContent)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *MemberContractMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case membercontract.EdgeContent:
+		ids := make([]ent.Value, 0, len(m.removedcontent))
+		for id := range m.removedcontent {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *MemberContractMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.clearedcontent {
+		edges = append(edges, membercontract.EdgeContent)
+	}
+	if m.clearedmember {
+		edges = append(edges, membercontract.EdgeMember)
+	}
+	if m.cleared_order {
+		edges = append(edges, membercontract.EdgeOrder)
+	}
+	if m.clearedmember_product {
+		edges = append(edges, membercontract.EdgeMemberProduct)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *MemberContractMutation) EdgeCleared(name string) bool {
+	switch name {
+	case membercontract.EdgeContent:
+		return m.clearedcontent
+	case membercontract.EdgeMember:
+		return m.clearedmember
+	case membercontract.EdgeOrder:
+		return m.cleared_order
+	case membercontract.EdgeMemberProduct:
+		return m.clearedmember_product
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *MemberContractMutation) ClearEdge(name string) error {
+	switch name {
+	case membercontract.EdgeMember:
+		m.ClearMember()
+		return nil
+	case membercontract.EdgeOrder:
+		m.ClearOrder()
+		return nil
+	case membercontract.EdgeMemberProduct:
+		m.ClearMemberProduct()
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContract unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *MemberContractMutation) ResetEdge(name string) error {
+	switch name {
+	case membercontract.EdgeContent:
+		m.ResetContent()
+		return nil
+	case membercontract.EdgeMember:
+		m.ResetMember()
+		return nil
+	case membercontract.EdgeOrder:
+		m.ResetOrder()
+		return nil
+	case membercontract.EdgeMemberProduct:
+		m.ResetMemberProduct()
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContract edge %s", name)
+}
+
+// MemberContractContentMutation represents an operation that mutates the MemberContractContent nodes in the graph.
+type MemberContractContentMutation struct {
+	config
+	op              Op
+	typ             string
+	id              *int64
+	created_at      *time.Time
+	updated_at      *time.Time
+	status          *int64
+	addstatus       *int64
+	content         *string
+	clearedFields   map[string]struct{}
+	contract        *int64
+	clearedcontract bool
+	done            bool
+	oldValue        func(context.Context) (*MemberContractContent, error)
+	predicates      []predicate.MemberContractContent
+}
+
+var _ ent.Mutation = (*MemberContractContentMutation)(nil)
+
+// membercontractcontentOption allows management of the mutation configuration using functional options.
+type membercontractcontentOption func(*MemberContractContentMutation)
+
+// newMemberContractContentMutation creates new mutation for the MemberContractContent entity.
+func newMemberContractContentMutation(c config, op Op, opts ...membercontractcontentOption) *MemberContractContentMutation {
+	m := &MemberContractContentMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeMemberContractContent,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withMemberContractContentID sets the ID field of the mutation.
+func withMemberContractContentID(id int64) membercontractcontentOption {
+	return func(m *MemberContractContentMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *MemberContractContent
+		)
+		m.oldValue = func(ctx context.Context) (*MemberContractContent, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().MemberContractContent.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withMemberContractContent sets the old MemberContractContent of the mutation.
+func withMemberContractContent(node *MemberContractContent) membercontractcontentOption {
+	return func(m *MemberContractContentMutation) {
+		m.oldValue = func(context.Context) (*MemberContractContent, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m MemberContractContentMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m MemberContractContentMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of MemberContractContent entities.
+func (m *MemberContractContentMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *MemberContractContentMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *MemberContractContentMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().MemberContractContent.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *MemberContractContentMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *MemberContractContentMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the MemberContractContent entity.
+// If the MemberContractContent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractContentMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *MemberContractContentMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *MemberContractContentMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *MemberContractContentMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the MemberContractContent entity.
+// If the MemberContractContent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractContentMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *MemberContractContentMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *MemberContractContentMutation) SetStatus(i int64) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *MemberContractContentMutation) Status() (r int64, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the MemberContractContent entity.
+// If the MemberContractContent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractContentMutation) OldStatus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *MemberContractContentMutation) AddStatus(i int64) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *MemberContractContentMutation) AddedStatus() (r int64, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *MemberContractContentMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[membercontractcontent.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *MemberContractContentMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[membercontractcontent.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *MemberContractContentMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, membercontractcontent.FieldStatus)
+}
+
+// SetMemberContractID sets the "member_contract_id" field.
+func (m *MemberContractContentMutation) SetMemberContractID(i int64) {
+	m.contract = &i
+}
+
+// MemberContractID returns the value of the "member_contract_id" field in the mutation.
+func (m *MemberContractContentMutation) MemberContractID() (r int64, exists bool) {
+	v := m.contract
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemberContractID returns the old "member_contract_id" field's value of the MemberContractContent entity.
+// If the MemberContractContent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractContentMutation) OldMemberContractID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemberContractID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemberContractID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemberContractID: %w", err)
+	}
+	return oldValue.MemberContractID, nil
+}
+
+// ClearMemberContractID clears the value of the "member_contract_id" field.
+func (m *MemberContractContentMutation) ClearMemberContractID() {
+	m.contract = nil
+	m.clearedFields[membercontractcontent.FieldMemberContractID] = struct{}{}
+}
+
+// MemberContractIDCleared returns if the "member_contract_id" field was cleared in this mutation.
+func (m *MemberContractContentMutation) MemberContractIDCleared() bool {
+	_, ok := m.clearedFields[membercontractcontent.FieldMemberContractID]
+	return ok
+}
+
+// ResetMemberContractID resets all changes to the "member_contract_id" field.
+func (m *MemberContractContentMutation) ResetMemberContractID() {
+	m.contract = nil
+	delete(m.clearedFields, membercontractcontent.FieldMemberContractID)
+}
+
+// SetContent sets the "content" field.
+func (m *MemberContractContentMutation) SetContent(s string) {
+	m.content = &s
+}
+
+// Content returns the value of the "content" field in the mutation.
+func (m *MemberContractContentMutation) Content() (r string, exists bool) {
+	v := m.content
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContent returns the old "content" field's value of the MemberContractContent entity.
+// If the MemberContractContent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractContentMutation) OldContent(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContent: %w", err)
+	}
+	return oldValue.Content, nil
+}
+
+// ClearContent clears the value of the "content" field.
+func (m *MemberContractContentMutation) ClearContent() {
+	m.content = nil
+	m.clearedFields[membercontractcontent.FieldContent] = struct{}{}
+}
+
+// ContentCleared returns if the "content" field was cleared in this mutation.
+func (m *MemberContractContentMutation) ContentCleared() bool {
+	_, ok := m.clearedFields[membercontractcontent.FieldContent]
+	return ok
+}
+
+// ResetContent resets all changes to the "content" field.
+func (m *MemberContractContentMutation) ResetContent() {
+	m.content = nil
+	delete(m.clearedFields, membercontractcontent.FieldContent)
+}
+
+// SetContractID sets the "contract" edge to the MemberContract entity by id.
+func (m *MemberContractContentMutation) SetContractID(id int64) {
+	m.contract = &id
+}
+
+// ClearContract clears the "contract" edge to the MemberContract entity.
+func (m *MemberContractContentMutation) ClearContract() {
+	m.clearedcontract = true
+	m.clearedFields[membercontractcontent.FieldMemberContractID] = struct{}{}
+}
+
+// ContractCleared reports if the "contract" edge to the MemberContract entity was cleared.
+func (m *MemberContractContentMutation) ContractCleared() bool {
+	return m.MemberContractIDCleared() || m.clearedcontract
+}
+
+// ContractID returns the "contract" edge ID in the mutation.
+func (m *MemberContractContentMutation) ContractID() (id int64, exists bool) {
+	if m.contract != nil {
+		return *m.contract, true
+	}
+	return
+}
+
+// ContractIDs returns the "contract" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ContractID instead. It exists only for internal usage by the builders.
+func (m *MemberContractContentMutation) ContractIDs() (ids []int64) {
+	if id := m.contract; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetContract resets all changes to the "contract" edge.
+func (m *MemberContractContentMutation) ResetContract() {
+	m.contract = nil
+	m.clearedcontract = false
+}
+
+// Where appends a list predicates to the MemberContractContentMutation builder.
+func (m *MemberContractContentMutation) Where(ps ...predicate.MemberContractContent) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the MemberContractContentMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *MemberContractContentMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.MemberContractContent, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *MemberContractContentMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *MemberContractContentMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (MemberContractContent).
+func (m *MemberContractContentMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *MemberContractContentMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.created_at != nil {
+		fields = append(fields, membercontractcontent.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, membercontractcontent.FieldUpdatedAt)
+	}
+	if m.status != nil {
+		fields = append(fields, membercontractcontent.FieldStatus)
+	}
+	if m.contract != nil {
+		fields = append(fields, membercontractcontent.FieldMemberContractID)
+	}
+	if m.content != nil {
+		fields = append(fields, membercontractcontent.FieldContent)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *MemberContractContentMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case membercontractcontent.FieldCreatedAt:
+		return m.CreatedAt()
+	case membercontractcontent.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case membercontractcontent.FieldStatus:
+		return m.Status()
+	case membercontractcontent.FieldMemberContractID:
+		return m.MemberContractID()
+	case membercontractcontent.FieldContent:
+		return m.Content()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *MemberContractContentMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case membercontractcontent.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case membercontractcontent.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case membercontractcontent.FieldStatus:
+		return m.OldStatus(ctx)
+	case membercontractcontent.FieldMemberContractID:
+		return m.OldMemberContractID(ctx)
+	case membercontractcontent.FieldContent:
+		return m.OldContent(ctx)
+	}
+	return nil, fmt.Errorf("unknown MemberContractContent field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MemberContractContentMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case membercontractcontent.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case membercontractcontent.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case membercontractcontent.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case membercontractcontent.FieldMemberContractID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemberContractID(v)
+		return nil
+	case membercontractcontent.FieldContent:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContent(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContractContent field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *MemberContractContentMutation) AddedFields() []string {
+	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, membercontractcontent.FieldStatus)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *MemberContractContentMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case membercontractcontent.FieldStatus:
+		return m.AddedStatus()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MemberContractContentMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case membercontractcontent.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContractContent numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *MemberContractContentMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(membercontractcontent.FieldStatus) {
+		fields = append(fields, membercontractcontent.FieldStatus)
+	}
+	if m.FieldCleared(membercontractcontent.FieldMemberContractID) {
+		fields = append(fields, membercontractcontent.FieldMemberContractID)
+	}
+	if m.FieldCleared(membercontractcontent.FieldContent) {
+		fields = append(fields, membercontractcontent.FieldContent)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *MemberContractContentMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *MemberContractContentMutation) ClearField(name string) error {
+	switch name {
+	case membercontractcontent.FieldStatus:
+		m.ClearStatus()
+		return nil
+	case membercontractcontent.FieldMemberContractID:
+		m.ClearMemberContractID()
+		return nil
+	case membercontractcontent.FieldContent:
+		m.ClearContent()
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContractContent nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *MemberContractContentMutation) ResetField(name string) error {
+	switch name {
+	case membercontractcontent.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case membercontractcontent.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case membercontractcontent.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case membercontractcontent.FieldMemberContractID:
+		m.ResetMemberContractID()
+		return nil
+	case membercontractcontent.FieldContent:
+		m.ResetContent()
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContractContent field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *MemberContractContentMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.contract != nil {
+		edges = append(edges, membercontractcontent.EdgeContract)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *MemberContractContentMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case membercontractcontent.EdgeContract:
+		if id := m.contract; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *MemberContractContentMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *MemberContractContentMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *MemberContractContentMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedcontract {
+		edges = append(edges, membercontractcontent.EdgeContract)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *MemberContractContentMutation) EdgeCleared(name string) bool {
+	switch name {
+	case membercontractcontent.EdgeContract:
+		return m.clearedcontract
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *MemberContractContentMutation) ClearEdge(name string) error {
+	switch name {
+	case membercontractcontent.EdgeContract:
+		m.ClearContract()
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContractContent unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *MemberContractContentMutation) ResetEdge(name string) error {
+	switch name {
+	case membercontractcontent.EdgeContract:
+		m.ResetContract()
+		return nil
+	}
+	return fmt.Errorf("unknown MemberContractContent edge %s", name)
 }
 
 // MemberDetailsMutation represents an operation that mutates the MemberDetails nodes in the graph.
@@ -12842,6 +15383,9 @@ type MemberProductMutation struct {
 	member_product_entry            map[int64]struct{}
 	removedmember_product_entry     map[int64]struct{}
 	clearedmember_product_entry     bool
+	member_product_contents         map[int64]struct{}
+	removedmember_product_contents  map[int64]struct{}
+	clearedmember_product_contents  bool
 	done                            bool
 	oldValue                        func(context.Context) (*MemberProduct, error)
 	predicates                      []predicate.MemberProduct
@@ -13766,6 +16310,60 @@ func (m *MemberProductMutation) ResetMemberProductEntry() {
 	m.removedmember_product_entry = nil
 }
 
+// AddMemberProductContentIDs adds the "member_product_contents" edge to the MemberContract entity by ids.
+func (m *MemberProductMutation) AddMemberProductContentIDs(ids ...int64) {
+	if m.member_product_contents == nil {
+		m.member_product_contents = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.member_product_contents[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMemberProductContents clears the "member_product_contents" edge to the MemberContract entity.
+func (m *MemberProductMutation) ClearMemberProductContents() {
+	m.clearedmember_product_contents = true
+}
+
+// MemberProductContentsCleared reports if the "member_product_contents" edge to the MemberContract entity was cleared.
+func (m *MemberProductMutation) MemberProductContentsCleared() bool {
+	return m.clearedmember_product_contents
+}
+
+// RemoveMemberProductContentIDs removes the "member_product_contents" edge to the MemberContract entity by IDs.
+func (m *MemberProductMutation) RemoveMemberProductContentIDs(ids ...int64) {
+	if m.removedmember_product_contents == nil {
+		m.removedmember_product_contents = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.member_product_contents, ids[i])
+		m.removedmember_product_contents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMemberProductContents returns the removed IDs of the "member_product_contents" edge to the MemberContract entity.
+func (m *MemberProductMutation) RemovedMemberProductContentsIDs() (ids []int64) {
+	for id := range m.removedmember_product_contents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MemberProductContentsIDs returns the "member_product_contents" edge IDs in the mutation.
+func (m *MemberProductMutation) MemberProductContentsIDs() (ids []int64) {
+	for id := range m.member_product_contents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMemberProductContents resets all changes to the "member_product_contents" edge.
+func (m *MemberProductMutation) ResetMemberProductContents() {
+	m.member_product_contents = nil
+	m.clearedmember_product_contents = false
+	m.removedmember_product_contents = nil
+}
+
 // Where appends a list predicates to the MemberProductMutation builder.
 func (m *MemberProductMutation) Where(ps ...predicate.MemberProduct) {
 	m.predicates = append(m.predicates, ps...)
@@ -14212,7 +16810,7 @@ func (m *MemberProductMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MemberProductMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.members != nil {
 		edges = append(edges, memberproduct.EdgeMembers)
 	}
@@ -14221,6 +16819,9 @@ func (m *MemberProductMutation) AddedEdges() []string {
 	}
 	if m.member_product_entry != nil {
 		edges = append(edges, memberproduct.EdgeMemberProductEntry)
+	}
+	if m.member_product_contents != nil {
+		edges = append(edges, memberproduct.EdgeMemberProductContents)
 	}
 	return edges
 }
@@ -14245,18 +16846,27 @@ func (m *MemberProductMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case memberproduct.EdgeMemberProductContents:
+		ids := make([]ent.Value, 0, len(m.member_product_contents))
+		for id := range m.member_product_contents {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MemberProductMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedmember_product_propertys != nil {
 		edges = append(edges, memberproduct.EdgeMemberProductPropertys)
 	}
 	if m.removedmember_product_entry != nil {
 		edges = append(edges, memberproduct.EdgeMemberProductEntry)
+	}
+	if m.removedmember_product_contents != nil {
+		edges = append(edges, memberproduct.EdgeMemberProductContents)
 	}
 	return edges
 }
@@ -14277,13 +16887,19 @@ func (m *MemberProductMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case memberproduct.EdgeMemberProductContents:
+		ids := make([]ent.Value, 0, len(m.removedmember_product_contents))
+		for id := range m.removedmember_product_contents {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MemberProductMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedmembers {
 		edges = append(edges, memberproduct.EdgeMembers)
 	}
@@ -14292,6 +16908,9 @@ func (m *MemberProductMutation) ClearedEdges() []string {
 	}
 	if m.clearedmember_product_entry {
 		edges = append(edges, memberproduct.EdgeMemberProductEntry)
+	}
+	if m.clearedmember_product_contents {
+		edges = append(edges, memberproduct.EdgeMemberProductContents)
 	}
 	return edges
 }
@@ -14306,6 +16925,8 @@ func (m *MemberProductMutation) EdgeCleared(name string) bool {
 		return m.clearedmember_product_propertys
 	case memberproduct.EdgeMemberProductEntry:
 		return m.clearedmember_product_entry
+	case memberproduct.EdgeMemberProductContents:
+		return m.clearedmember_product_contents
 	}
 	return false
 }
@@ -14333,6 +16954,9 @@ func (m *MemberProductMutation) ResetEdge(name string) error {
 		return nil
 	case memberproduct.EdgeMemberProductEntry:
 		m.ResetMemberProductEntry()
+		return nil
+	case memberproduct.EdgeMemberProductContents:
+		m.ResetMemberProductContents()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberProduct edge %s", name)
@@ -18268,39 +20892,42 @@ func (m *MessagesMutation) ResetEdge(name string) error {
 // OrderMutation represents an operation that mutates the Order nodes in the graph.
 type OrderMutation struct {
 	config
-	op                   Op
-	typ                  string
-	id                   *int64
-	created_at           *time.Time
-	updated_at           *time.Time
-	order_sn             *string
-	status               *int64
-	addstatus            *int64
-	source               *string
-	device               *string
-	completion_at        *time.Time
-	clearedFields        map[string]struct{}
-	amount               map[int64]struct{}
-	removedamount        map[int64]struct{}
-	clearedamount        bool
-	item                 map[int64]struct{}
-	removeditem          map[int64]struct{}
-	cleareditem          bool
-	pay                  map[int64]struct{}
-	removedpay           map[int64]struct{}
-	clearedpay           bool
-	sales                map[int64]struct{}
-	removedsales         map[int64]struct{}
-	clearedsales         bool
-	order_venues         *int64
-	clearedorder_venues  bool
-	order_members        *int64
-	clearedorder_members bool
-	order_creates        *int64
-	clearedorder_creates bool
-	done                 bool
-	oldValue             func(context.Context) (*Order, error)
-	predicates           []predicate.Order
+	op                    Op
+	typ                   string
+	id                    *int64
+	created_at            *time.Time
+	updated_at            *time.Time
+	order_sn              *string
+	status                *int64
+	addstatus             *int64
+	source                *string
+	device                *string
+	completion_at         *time.Time
+	clearedFields         map[string]struct{}
+	amount                map[int64]struct{}
+	removedamount         map[int64]struct{}
+	clearedamount         bool
+	item                  map[int64]struct{}
+	removeditem           map[int64]struct{}
+	cleareditem           bool
+	pay                   map[int64]struct{}
+	removedpay            map[int64]struct{}
+	clearedpay            bool
+	sales                 map[int64]struct{}
+	removedsales          map[int64]struct{}
+	clearedsales          bool
+	order_contents        map[int64]struct{}
+	removedorder_contents map[int64]struct{}
+	clearedorder_contents bool
+	order_venues          *int64
+	clearedorder_venues   bool
+	order_members         *int64
+	clearedorder_members  bool
+	order_creates         *int64
+	clearedorder_creates  bool
+	done                  bool
+	oldValue              func(context.Context) (*Order, error)
+	predicates            []predicate.Order
 }
 
 var _ ent.Mutation = (*OrderMutation)(nil)
@@ -19108,6 +21735,60 @@ func (m *OrderMutation) ResetSales() {
 	m.removedsales = nil
 }
 
+// AddOrderContentIDs adds the "order_contents" edge to the MemberContract entity by ids.
+func (m *OrderMutation) AddOrderContentIDs(ids ...int64) {
+	if m.order_contents == nil {
+		m.order_contents = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.order_contents[ids[i]] = struct{}{}
+	}
+}
+
+// ClearOrderContents clears the "order_contents" edge to the MemberContract entity.
+func (m *OrderMutation) ClearOrderContents() {
+	m.clearedorder_contents = true
+}
+
+// OrderContentsCleared reports if the "order_contents" edge to the MemberContract entity was cleared.
+func (m *OrderMutation) OrderContentsCleared() bool {
+	return m.clearedorder_contents
+}
+
+// RemoveOrderContentIDs removes the "order_contents" edge to the MemberContract entity by IDs.
+func (m *OrderMutation) RemoveOrderContentIDs(ids ...int64) {
+	if m.removedorder_contents == nil {
+		m.removedorder_contents = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.order_contents, ids[i])
+		m.removedorder_contents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedOrderContents returns the removed IDs of the "order_contents" edge to the MemberContract entity.
+func (m *OrderMutation) RemovedOrderContentsIDs() (ids []int64) {
+	for id := range m.removedorder_contents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// OrderContentsIDs returns the "order_contents" edge IDs in the mutation.
+func (m *OrderMutation) OrderContentsIDs() (ids []int64) {
+	for id := range m.order_contents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetOrderContents resets all changes to the "order_contents" edge.
+func (m *OrderMutation) ResetOrderContents() {
+	m.order_contents = nil
+	m.clearedorder_contents = false
+	m.removedorder_contents = nil
+}
+
 // SetOrderVenuesID sets the "order_venues" edge to the Venue entity by id.
 func (m *OrderMutation) SetOrderVenuesID(id int64) {
 	m.order_venues = &id
@@ -19580,7 +22261,7 @@ func (m *OrderMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrderMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.amount != nil {
 		edges = append(edges, order.EdgeAmount)
 	}
@@ -19592,6 +22273,9 @@ func (m *OrderMutation) AddedEdges() []string {
 	}
 	if m.sales != nil {
 		edges = append(edges, order.EdgeSales)
+	}
+	if m.order_contents != nil {
+		edges = append(edges, order.EdgeOrderContents)
 	}
 	if m.order_venues != nil {
 		edges = append(edges, order.EdgeOrderVenues)
@@ -19633,6 +22317,12 @@ func (m *OrderMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case order.EdgeOrderContents:
+		ids := make([]ent.Value, 0, len(m.order_contents))
+		for id := range m.order_contents {
+			ids = append(ids, id)
+		}
+		return ids
 	case order.EdgeOrderVenues:
 		if id := m.order_venues; id != nil {
 			return []ent.Value{*id}
@@ -19651,7 +22341,7 @@ func (m *OrderMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrderMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.removedamount != nil {
 		edges = append(edges, order.EdgeAmount)
 	}
@@ -19663,6 +22353,9 @@ func (m *OrderMutation) RemovedEdges() []string {
 	}
 	if m.removedsales != nil {
 		edges = append(edges, order.EdgeSales)
+	}
+	if m.removedorder_contents != nil {
+		edges = append(edges, order.EdgeOrderContents)
 	}
 	return edges
 }
@@ -19695,13 +22388,19 @@ func (m *OrderMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case order.EdgeOrderContents:
+		ids := make([]ent.Value, 0, len(m.removedorder_contents))
+		for id := range m.removedorder_contents {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrderMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.clearedamount {
 		edges = append(edges, order.EdgeAmount)
 	}
@@ -19713,6 +22412,9 @@ func (m *OrderMutation) ClearedEdges() []string {
 	}
 	if m.clearedsales {
 		edges = append(edges, order.EdgeSales)
+	}
+	if m.clearedorder_contents {
+		edges = append(edges, order.EdgeOrderContents)
 	}
 	if m.clearedorder_venues {
 		edges = append(edges, order.EdgeOrderVenues)
@@ -19738,6 +22440,8 @@ func (m *OrderMutation) EdgeCleared(name string) bool {
 		return m.clearedpay
 	case order.EdgeSales:
 		return m.clearedsales
+	case order.EdgeOrderContents:
+		return m.clearedorder_contents
 	case order.EdgeOrderVenues:
 		return m.clearedorder_venues
 	case order.EdgeOrderMembers:
@@ -19780,6 +22484,9 @@ func (m *OrderMutation) ResetEdge(name string) error {
 		return nil
 	case order.EdgeSales:
 		m.ResetSales()
+		return nil
+	case order.EdgeOrderContents:
+		m.ResetOrderContents()
 		return nil
 	case order.EdgeOrderVenues:
 		m.ResetOrderVenues()
@@ -20661,8 +23368,7 @@ type OrderItemMutation struct {
 	addquantity                *int64
 	related_user_product_id    *int64
 	addrelated_user_product_id *int64
-	contract_id                *int64
-	addcontract_id             *int64
+	contract_id                *string
 	assign_at                  *time.Time
 	clearedFields              map[string]struct{}
 	aufk                       *int64
@@ -21108,13 +23814,12 @@ func (m *OrderItemMutation) ResetRelatedUserProductID() {
 }
 
 // SetContractID sets the "contract_id" field.
-func (m *OrderItemMutation) SetContractID(i int64) {
-	m.contract_id = &i
-	m.addcontract_id = nil
+func (m *OrderItemMutation) SetContractID(s string) {
+	m.contract_id = &s
 }
 
 // ContractID returns the value of the "contract_id" field in the mutation.
-func (m *OrderItemMutation) ContractID() (r int64, exists bool) {
+func (m *OrderItemMutation) ContractID() (r string, exists bool) {
 	v := m.contract_id
 	if v == nil {
 		return
@@ -21125,7 +23830,7 @@ func (m *OrderItemMutation) ContractID() (r int64, exists bool) {
 // OldContractID returns the old "contract_id" field's value of the OrderItem entity.
 // If the OrderItem object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrderItemMutation) OldContractID(ctx context.Context) (v int64, err error) {
+func (m *OrderItemMutation) OldContractID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldContractID is only allowed on UpdateOne operations")
 	}
@@ -21139,28 +23844,9 @@ func (m *OrderItemMutation) OldContractID(ctx context.Context) (v int64, err err
 	return oldValue.ContractID, nil
 }
 
-// AddContractID adds i to the "contract_id" field.
-func (m *OrderItemMutation) AddContractID(i int64) {
-	if m.addcontract_id != nil {
-		*m.addcontract_id += i
-	} else {
-		m.addcontract_id = &i
-	}
-}
-
-// AddedContractID returns the value that was added to the "contract_id" field in this mutation.
-func (m *OrderItemMutation) AddedContractID() (r int64, exists bool) {
-	v := m.addcontract_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearContractID clears the value of the "contract_id" field.
 func (m *OrderItemMutation) ClearContractID() {
 	m.contract_id = nil
-	m.addcontract_id = nil
 	m.clearedFields[orderitem.FieldContractID] = struct{}{}
 }
 
@@ -21173,7 +23859,6 @@ func (m *OrderItemMutation) ContractIDCleared() bool {
 // ResetContractID resets all changes to the "contract_id" field.
 func (m *OrderItemMutation) ResetContractID() {
 	m.contract_id = nil
-	m.addcontract_id = nil
 	delete(m.clearedFields, orderitem.FieldContractID)
 }
 
@@ -21426,7 +24111,7 @@ func (m *OrderItemMutation) SetField(name string, value ent.Value) error {
 		m.SetRelatedUserProductID(v)
 		return nil
 	case orderitem.FieldContractID:
-		v, ok := value.(int64)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -21456,9 +24141,6 @@ func (m *OrderItemMutation) AddedFields() []string {
 	if m.addrelated_user_product_id != nil {
 		fields = append(fields, orderitem.FieldRelatedUserProductID)
 	}
-	if m.addcontract_id != nil {
-		fields = append(fields, orderitem.FieldContractID)
-	}
 	return fields
 }
 
@@ -21473,8 +24155,6 @@ func (m *OrderItemMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedQuantity()
 	case orderitem.FieldRelatedUserProductID:
 		return m.AddedRelatedUserProductID()
-	case orderitem.FieldContractID:
-		return m.AddedContractID()
 	}
 	return nil, false
 }
@@ -21504,13 +24184,6 @@ func (m *OrderItemMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddRelatedUserProductID(v)
-		return nil
-	case orderitem.FieldContractID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddContractID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown OrderItem numeric field %s", name)

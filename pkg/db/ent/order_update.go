@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
@@ -268,6 +269,21 @@ func (ou *OrderUpdate) AddSales(o ...*OrderSales) *OrderUpdate {
 	return ou.AddSaleIDs(ids...)
 }
 
+// AddOrderContentIDs adds the "order_contents" edge to the MemberContract entity by IDs.
+func (ou *OrderUpdate) AddOrderContentIDs(ids ...int64) *OrderUpdate {
+	ou.mutation.AddOrderContentIDs(ids...)
+	return ou
+}
+
+// AddOrderContents adds the "order_contents" edges to the MemberContract entity.
+func (ou *OrderUpdate) AddOrderContents(m ...*MemberContract) *OrderUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return ou.AddOrderContentIDs(ids...)
+}
+
 // SetOrderVenuesID sets the "order_venues" edge to the Venue entity by ID.
 func (ou *OrderUpdate) SetOrderVenuesID(id int64) *OrderUpdate {
 	ou.mutation.SetOrderVenuesID(id)
@@ -412,6 +428,27 @@ func (ou *OrderUpdate) RemoveSales(o ...*OrderSales) *OrderUpdate {
 		ids[i] = o[i].ID
 	}
 	return ou.RemoveSaleIDs(ids...)
+}
+
+// ClearOrderContents clears all "order_contents" edges to the MemberContract entity.
+func (ou *OrderUpdate) ClearOrderContents() *OrderUpdate {
+	ou.mutation.ClearOrderContents()
+	return ou
+}
+
+// RemoveOrderContentIDs removes the "order_contents" edge to MemberContract entities by IDs.
+func (ou *OrderUpdate) RemoveOrderContentIDs(ids ...int64) *OrderUpdate {
+	ou.mutation.RemoveOrderContentIDs(ids...)
+	return ou
+}
+
+// RemoveOrderContents removes "order_contents" edges to MemberContract entities.
+func (ou *OrderUpdate) RemoveOrderContents(m ...*MemberContract) *OrderUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return ou.RemoveOrderContentIDs(ids...)
 }
 
 // ClearOrderVenues clears the "order_venues" edge to the Venue entity.
@@ -686,6 +723,51 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.OrderContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   order.OrderContentsTable,
+			Columns: []string{order.OrderContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedOrderContentsIDs(); len(nodes) > 0 && !ou.mutation.OrderContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   order.OrderContentsTable,
+			Columns: []string{order.OrderContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.OrderContentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   order.OrderContentsTable,
+			Columns: []string{order.OrderContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1033,6 +1115,21 @@ func (ouo *OrderUpdateOne) AddSales(o ...*OrderSales) *OrderUpdateOne {
 	return ouo.AddSaleIDs(ids...)
 }
 
+// AddOrderContentIDs adds the "order_contents" edge to the MemberContract entity by IDs.
+func (ouo *OrderUpdateOne) AddOrderContentIDs(ids ...int64) *OrderUpdateOne {
+	ouo.mutation.AddOrderContentIDs(ids...)
+	return ouo
+}
+
+// AddOrderContents adds the "order_contents" edges to the MemberContract entity.
+func (ouo *OrderUpdateOne) AddOrderContents(m ...*MemberContract) *OrderUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return ouo.AddOrderContentIDs(ids...)
+}
+
 // SetOrderVenuesID sets the "order_venues" edge to the Venue entity by ID.
 func (ouo *OrderUpdateOne) SetOrderVenuesID(id int64) *OrderUpdateOne {
 	ouo.mutation.SetOrderVenuesID(id)
@@ -1177,6 +1274,27 @@ func (ouo *OrderUpdateOne) RemoveSales(o ...*OrderSales) *OrderUpdateOne {
 		ids[i] = o[i].ID
 	}
 	return ouo.RemoveSaleIDs(ids...)
+}
+
+// ClearOrderContents clears all "order_contents" edges to the MemberContract entity.
+func (ouo *OrderUpdateOne) ClearOrderContents() *OrderUpdateOne {
+	ouo.mutation.ClearOrderContents()
+	return ouo
+}
+
+// RemoveOrderContentIDs removes the "order_contents" edge to MemberContract entities by IDs.
+func (ouo *OrderUpdateOne) RemoveOrderContentIDs(ids ...int64) *OrderUpdateOne {
+	ouo.mutation.RemoveOrderContentIDs(ids...)
+	return ouo
+}
+
+// RemoveOrderContents removes "order_contents" edges to MemberContract entities.
+func (ouo *OrderUpdateOne) RemoveOrderContents(m ...*MemberContract) *OrderUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return ouo.RemoveOrderContentIDs(ids...)
 }
 
 // ClearOrderVenues clears the "order_venues" edge to the Venue entity.
@@ -1481,6 +1599,51 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.OrderContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   order.OrderContentsTable,
+			Columns: []string{order.OrderContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedOrderContentsIDs(); len(nodes) > 0 && !ouo.mutation.OrderContentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   order.OrderContentsTable,
+			Columns: []string{order.OrderContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.OrderContentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   order.OrderContentsTable,
+			Columns: []string{order.OrderContentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

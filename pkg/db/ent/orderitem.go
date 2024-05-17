@@ -32,7 +32,7 @@ type OrderItem struct {
 	// 关联会员产品id
 	RelatedUserProductID int64 `json:"related_user_product_id,omitempty"`
 	// 合同ID
-	ContractID int64 `json:"contract_id,omitempty"`
+	ContractID string `json:"contract_id,omitempty"`
 	// 指定时间
 	AssignAt time.Time `json:"assign_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -68,8 +68,10 @@ func (*OrderItem) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orderitem.FieldID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldQuantity, orderitem.FieldRelatedUserProductID, orderitem.FieldContractID:
+		case orderitem.FieldID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldQuantity, orderitem.FieldRelatedUserProductID:
 			values[i] = new(sql.NullInt64)
+		case orderitem.FieldContractID:
+			values[i] = new(sql.NullString)
 		case orderitem.FieldCreatedAt, orderitem.FieldUpdatedAt, orderitem.FieldAssignAt:
 			values[i] = new(sql.NullTime)
 		default:
@@ -130,10 +132,10 @@ func (oi *OrderItem) assignValues(columns []string, values []any) error {
 				oi.RelatedUserProductID = value.Int64
 			}
 		case orderitem.FieldContractID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field contract_id", values[i])
 			} else if value.Valid {
-				oi.ContractID = value.Int64
+				oi.ContractID = value.String
 			}
 		case orderitem.FieldAssignAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -201,7 +203,7 @@ func (oi *OrderItem) String() string {
 	builder.WriteString(fmt.Sprintf("%v", oi.RelatedUserProductID))
 	builder.WriteString(", ")
 	builder.WriteString("contract_id=")
-	builder.WriteString(fmt.Sprintf("%v", oi.ContractID))
+	builder.WriteString(oi.ContractID)
 	builder.WriteString(", ")
 	builder.WriteString("assign_at=")
 	builder.WriteString(oi.AssignAt.Format(time.ANSIC))

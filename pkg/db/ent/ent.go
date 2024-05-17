@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"reflect"
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/contract"
 	"saas/pkg/db/ent/courserecordcoach"
 	"saas/pkg/db/ent/courserecordmember"
 	"saas/pkg/db/ent/courserecordschedule"
@@ -16,6 +17,8 @@ import (
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
+	"saas/pkg/db/ent/membercontractcontent"
 	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/memberproduct"
@@ -101,6 +104,7 @@ func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			api.Table:                   api.ValidColumn,
+			contract.Table:              contract.ValidColumn,
 			courserecordcoach.Table:     courserecordcoach.ValidColumn,
 			courserecordmember.Table:    courserecordmember.ValidColumn,
 			courserecordschedule.Table:  courserecordschedule.ValidColumn,
@@ -109,6 +113,8 @@ func checkColumn(table, column string) error {
 			entrylogs.Table:             entrylogs.ValidColumn,
 			logs.Table:                  logs.ValidColumn,
 			member.Table:                member.ValidColumn,
+			membercontract.Table:        membercontract.ValidColumn,
+			membercontractcontent.Table: membercontractcontent.ValidColumn,
 			memberdetails.Table:         memberdetails.ValidColumn,
 			membernote.Table:            membernote.ValidColumn,
 			memberproduct.Table:         memberproduct.ValidColumn,
