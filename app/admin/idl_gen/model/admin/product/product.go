@@ -1536,12 +1536,18 @@ type CreateOrUpdateReq struct {
 	Pic *string `thrift:"pic,3,optional" form:"pic" json:"pic" query:"pic"`
 	// 详情
 	Description *string `thrift:"description,4,optional" form:"description" json:"description" query:"description"`
-	// 属性
-	PropertyId []*Property `thrift:"propertyId,5,optional" form:"propertyId" json:"propertyId" query:"propertyId"`
 	// 价格
-	Price *float64 `thrift:"price,6,optional" form:"price" json:"price" query:"price"`
+	Price *float64 `thrift:"price,5,optional" form:"price" json:"price" query:"price"`
 	// 库存
-	Stock *int64 `thrift:"stock,7,optional" form:"stock" json:"stock" query:"stock"`
+	Stock *int64 `thrift:"stock,6,optional" form:"stock" json:"stock" query:"stock"`
+	// 属性
+	CardProperty *int64 `thrift:"cardProperty,7,optional" form:"cardProperty" json:"cardProperty" query:"cardProperty"`
+	// 属性
+	ClassProperty []int64 `thrift:"classProperty,8,optional" form:"classProperty" json:"classProperty" query:"classProperty"`
+	// 属性
+	CourseProperty []int64 `thrift:"courseProperty,9,optional" form:"courseProperty" json:"courseProperty" query:"courseProperty"`
+	// 库存
+	CreateId *int64 `thrift:"CreateId,10,optional" form:"CreateId" json:"CreateId" query:"CreateId"`
 }
 
 func NewCreateOrUpdateReq() *CreateOrUpdateReq {
@@ -1584,15 +1590,6 @@ func (p *CreateOrUpdateReq) GetDescription() (v string) {
 	return *p.Description
 }
 
-var CreateOrUpdateReq_PropertyId_DEFAULT []*Property
-
-func (p *CreateOrUpdateReq) GetPropertyId() (v []*Property) {
-	if !p.IsSetPropertyId() {
-		return CreateOrUpdateReq_PropertyId_DEFAULT
-	}
-	return p.PropertyId
-}
-
 var CreateOrUpdateReq_Price_DEFAULT float64
 
 func (p *CreateOrUpdateReq) GetPrice() (v float64) {
@@ -1611,14 +1608,53 @@ func (p *CreateOrUpdateReq) GetStock() (v int64) {
 	return *p.Stock
 }
 
+var CreateOrUpdateReq_CardProperty_DEFAULT int64
+
+func (p *CreateOrUpdateReq) GetCardProperty() (v int64) {
+	if !p.IsSetCardProperty() {
+		return CreateOrUpdateReq_CardProperty_DEFAULT
+	}
+	return *p.CardProperty
+}
+
+var CreateOrUpdateReq_ClassProperty_DEFAULT []int64
+
+func (p *CreateOrUpdateReq) GetClassProperty() (v []int64) {
+	if !p.IsSetClassProperty() {
+		return CreateOrUpdateReq_ClassProperty_DEFAULT
+	}
+	return p.ClassProperty
+}
+
+var CreateOrUpdateReq_CourseProperty_DEFAULT []int64
+
+func (p *CreateOrUpdateReq) GetCourseProperty() (v []int64) {
+	if !p.IsSetCourseProperty() {
+		return CreateOrUpdateReq_CourseProperty_DEFAULT
+	}
+	return p.CourseProperty
+}
+
+var CreateOrUpdateReq_CreateId_DEFAULT int64
+
+func (p *CreateOrUpdateReq) GetCreateId() (v int64) {
+	if !p.IsSetCreateId() {
+		return CreateOrUpdateReq_CreateId_DEFAULT
+	}
+	return *p.CreateId
+}
+
 var fieldIDToName_CreateOrUpdateReq = map[int16]string{
-	1: "id",
-	2: "name",
-	3: "pic",
-	4: "description",
-	5: "propertyId",
-	6: "price",
-	7: "stock",
+	1:  "id",
+	2:  "name",
+	3:  "pic",
+	4:  "description",
+	5:  "price",
+	6:  "stock",
+	7:  "cardProperty",
+	8:  "classProperty",
+	9:  "courseProperty",
+	10: "CreateId",
 }
 
 func (p *CreateOrUpdateReq) IsSetID() bool {
@@ -1637,16 +1673,28 @@ func (p *CreateOrUpdateReq) IsSetDescription() bool {
 	return p.Description != nil
 }
 
-func (p *CreateOrUpdateReq) IsSetPropertyId() bool {
-	return p.PropertyId != nil
-}
-
 func (p *CreateOrUpdateReq) IsSetPrice() bool {
 	return p.Price != nil
 }
 
 func (p *CreateOrUpdateReq) IsSetStock() bool {
 	return p.Stock != nil
+}
+
+func (p *CreateOrUpdateReq) IsSetCardProperty() bool {
+	return p.CardProperty != nil
+}
+
+func (p *CreateOrUpdateReq) IsSetClassProperty() bool {
+	return p.ClassProperty != nil
+}
+
+func (p *CreateOrUpdateReq) IsSetCourseProperty() bool {
+	return p.CourseProperty != nil
+}
+
+func (p *CreateOrUpdateReq) IsSetCreateId() bool {
+	return p.CreateId != nil
 }
 
 func (p *CreateOrUpdateReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1701,7 +1749,7 @@ func (p *CreateOrUpdateReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 5:
-			if fieldTypeId == thrift.LIST {
+			if fieldTypeId == thrift.DOUBLE {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1709,7 +1757,7 @@ func (p *CreateOrUpdateReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 6:
-			if fieldTypeId == thrift.DOUBLE {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1719,6 +1767,30 @@ func (p *CreateOrUpdateReq) Read(iprot thrift.TProtocol) (err error) {
 		case 7:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField9(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 10:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField10(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1790,25 +1862,6 @@ func (p *CreateOrUpdateReq) ReadField4(iprot thrift.TProtocol) error {
 	return nil
 }
 func (p *CreateOrUpdateReq) ReadField5(iprot thrift.TProtocol) error {
-	_, size, err := iprot.ReadListBegin()
-	if err != nil {
-		return err
-	}
-	p.PropertyId = make([]*Property, 0, size)
-	for i := 0; i < size; i++ {
-		_elem := NewProperty()
-		if err := _elem.Read(iprot); err != nil {
-			return err
-		}
-
-		p.PropertyId = append(p.PropertyId, _elem)
-	}
-	if err := iprot.ReadListEnd(); err != nil {
-		return err
-	}
-	return nil
-}
-func (p *CreateOrUpdateReq) ReadField6(iprot thrift.TProtocol) error {
 
 	if v, err := iprot.ReadDouble(); err != nil {
 		return err
@@ -1817,12 +1870,74 @@ func (p *CreateOrUpdateReq) ReadField6(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
-func (p *CreateOrUpdateReq) ReadField7(iprot thrift.TProtocol) error {
+func (p *CreateOrUpdateReq) ReadField6(iprot thrift.TProtocol) error {
 
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Stock = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateReq) ReadField7(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.CardProperty = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateReq) ReadField8(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	p.ClassProperty = make([]int64, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem int64
+		if v, err := iprot.ReadI64(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		p.ClassProperty = append(p.ClassProperty, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	return nil
+}
+func (p *CreateOrUpdateReq) ReadField9(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	p.CourseProperty = make([]int64, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem int64
+		if v, err := iprot.ReadI64(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		p.CourseProperty = append(p.CourseProperty, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	return nil
+}
+func (p *CreateOrUpdateReq) ReadField10(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.CreateId = &v
 	}
 	return nil
 }
@@ -1859,6 +1974,18 @@ func (p *CreateOrUpdateReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField7(oprot); err != nil {
 			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
+			goto WriteFieldError
+		}
+		if err = p.writeField10(oprot); err != nil {
+			fieldId = 10
 			goto WriteFieldError
 		}
 	}
@@ -1956,19 +2083,11 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateReq) writeField5(oprot thrift.TProtocol) (err error) {
-	if p.IsSetPropertyId() {
-		if err = oprot.WriteFieldBegin("propertyId", thrift.LIST, 5); err != nil {
+	if p.IsSetPrice() {
+		if err = oprot.WriteFieldBegin("price", thrift.DOUBLE, 5); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.PropertyId)); err != nil {
-			return err
-		}
-		for _, v := range p.PropertyId {
-			if err := v.Write(oprot); err != nil {
-				return err
-			}
-		}
-		if err := oprot.WriteListEnd(); err != nil {
+		if err := oprot.WriteDouble(*p.Price); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1983,11 +2102,11 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateReq) writeField6(oprot thrift.TProtocol) (err error) {
-	if p.IsSetPrice() {
-		if err = oprot.WriteFieldBegin("price", thrift.DOUBLE, 6); err != nil {
+	if p.IsSetStock() {
+		if err = oprot.WriteFieldBegin("stock", thrift.I64, 6); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteDouble(*p.Price); err != nil {
+		if err := oprot.WriteI64(*p.Stock); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2002,11 +2121,11 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateReq) writeField7(oprot thrift.TProtocol) (err error) {
-	if p.IsSetStock() {
-		if err = oprot.WriteFieldBegin("stock", thrift.I64, 7); err != nil {
+	if p.IsSetCardProperty() {
+		if err = oprot.WriteFieldBegin("cardProperty", thrift.I64, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Stock); err != nil {
+		if err := oprot.WriteI64(*p.CardProperty); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2018,6 +2137,79 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateReq) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetClassProperty() {
+		if err = oprot.WriteFieldBegin("classProperty", thrift.LIST, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.I64, len(p.ClassProperty)); err != nil {
+			return err
+		}
+		for _, v := range p.ClassProperty {
+			if err := oprot.WriteI64(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateReq) writeField9(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCourseProperty() {
+		if err = oprot.WriteFieldBegin("courseProperty", thrift.LIST, 9); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.I64, len(p.CourseProperty)); err != nil {
+			return err
+		}
+		for _, v := range p.CourseProperty {
+			if err := oprot.WriteI64(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateReq) writeField10(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreateId() {
+		if err = oprot.WriteFieldBegin("CreateId", thrift.I64, 10); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.CreateId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 10 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
 }
 
 func (p *CreateOrUpdateReq) String() string {

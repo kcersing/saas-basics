@@ -7,7 +7,7 @@ type Product interface {
 	UpdatePropertyStatus(ID int64, status int64) error
 	PropertyList(req ProductListReq) (resp []*PropertyInfo, total int, err error)
 
-	Create(req ProductInfo) error
+	Create(req CreateOrUpdateProduct) error
 	Update(req ProductInfo) error
 	Delete(id int64) error
 	List(req ProductListReq) (resp []*ProductInfo, total int, err error)
@@ -35,6 +35,20 @@ type PropertyVenue struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
 }
+
+type CreateOrUpdateProduct struct {
+	ID             int64   `json:"id"`
+	Name           string  `json:"name"`
+	Pic            string  `json:"pic"`
+	Description    string  `json:"description"`
+	Price          float64 `json:"price"`
+	Stock          int64   `json:"stock"`
+	CreateID       int64   `json:"create_id"`
+	CardProperty   int64   `json:"cardProperty"`
+	ClassProperty  []int64 `json:"classProperty"`
+	CourseProperty []int64 `json:"courseProperty"`
+}
+
 type ProductInfo struct {
 	ID          int64          `json:"id"`
 	Name        string         `json:"name"`

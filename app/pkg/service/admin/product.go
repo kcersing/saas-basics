@@ -158,14 +158,25 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 
 }
 
-func (p Product) Create(req do.ProductInfo) error {
-	_, err := p.db.Product.Create().
+// propertys
+func (p Product) Create(req do.CreateOrUpdateProduct) error {
+	var property []int64
+	property = append(property, req.CardProperty)
+	property = append(property, req.CourseProperty...)
+	property = append(property, req.ClassProperty...)
+	properties, err := p.db.ProductProperty.Query().Where(
+		productproperty.IDIn(property...),
+	).First(p.ctx)
+	if err != nil {
+		return errors.Wrap(err, "未找到属性")
+	}
+	_, err = p.db.Product.Create().
 		SetName(req.Name).
 		SetPic(req.Pic).
 		SetDescription(req.Description).
-		SetStatus(req.Status).
 		SetPrice(req.Price).
 		SetStock(req.Stock).
+		AddPropertys(properties).
 		SetCreateID(req.CreateID).
 		Save(p.ctx)
 
@@ -208,6 +219,7 @@ func (p Product) List(req do.ProductListReq) (resp []*do.ProductInfo, total int,
 		predicates = append(predicates, product.NameEQ(req.Name))
 	}
 	lists, err := p.db.Product.Query().Where(predicates...).
+		Order(ent.Desc(product.FieldCreatedAt)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(p.ctx)
 	if err != nil {

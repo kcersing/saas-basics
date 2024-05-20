@@ -25,7 +25,7 @@ func CreateMember(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	var memberInfoReq do.MemberInfo
+	var memberInfoReq do.CreateOrUpdateMemberReq
 	err = copier.Copy(&memberInfoReq, &req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
@@ -53,7 +53,7 @@ func UpdateMember(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	var memberReq do.MemberInfo
+	var memberReq do.CreateOrUpdateMemberReq
 	err = copier.Copy(&memberReq, &req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")

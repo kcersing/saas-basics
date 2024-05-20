@@ -38,6 +38,8 @@ type Member struct {
 	Avatar string `json:"avatar,omitempty"`
 	// 状态[0:潜在;1:正式;2:到期]
 	Condition int64 `json:"condition,omitempty"`
+	// 创建人
+	CreateID int64 `json:"create_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberQuery when eager-loading is set.
 	Edges        MemberEdges `json:"edges"`
@@ -122,7 +124,7 @@ func (*Member) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case member.FieldID, member.FieldStatus, member.FieldCondition:
+		case member.FieldID, member.FieldStatus, member.FieldCondition, member.FieldCreateID:
 			values[i] = new(sql.NullInt64)
 		case member.FieldPassword, member.FieldName, member.FieldMobile, member.FieldEmail, member.FieldWecom, member.FieldAvatar:
 			values[i] = new(sql.NullString)
@@ -208,6 +210,12 @@ func (m *Member) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field condition", values[i])
 			} else if value.Valid {
 				m.Condition = value.Int64
+			}
+		case member.FieldCreateID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field create_id", values[i])
+			} else if value.Valid {
+				m.CreateID = value.Int64
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -304,6 +312,9 @@ func (m *Member) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("condition=")
 	builder.WriteString(fmt.Sprintf("%v", m.Condition))
+	builder.WriteString(", ")
+	builder.WriteString("create_id=")
+	builder.WriteString(fmt.Sprintf("%v", m.CreateID))
 	builder.WriteByte(')')
 	return builder.String()
 }

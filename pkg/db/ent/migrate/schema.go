@@ -291,6 +291,7 @@ var (
 		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:潜在;1:正式;2:到期]", Default: 1},
+		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人"},
 	}
 	// MemberTable holds the schema information for the "member" table.
 	MemberTable = &schema.Table{

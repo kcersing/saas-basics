@@ -214,6 +214,33 @@ func (mu *MemberUpdate) ClearCondition() *MemberUpdate {
 	return mu
 }
 
+// SetCreateID sets the "create_id" field.
+func (mu *MemberUpdate) SetCreateID(i int64) *MemberUpdate {
+	mu.mutation.ResetCreateID()
+	mu.mutation.SetCreateID(i)
+	return mu
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillableCreateID(i *int64) *MemberUpdate {
+	if i != nil {
+		mu.SetCreateID(*i)
+	}
+	return mu
+}
+
+// AddCreateID adds i to the "create_id" field.
+func (mu *MemberUpdate) AddCreateID(i int64) *MemberUpdate {
+	mu.mutation.AddCreateID(i)
+	return mu
+}
+
+// ClearCreateID clears the value of the "create_id" field.
+func (mu *MemberUpdate) ClearCreateID() *MemberUpdate {
+	mu.mutation.ClearCreateID()
+	return mu
+}
+
 // AddMemberDetailIDs adds the "member_details" edge to the MemberDetails entity by IDs.
 func (mu *MemberUpdate) AddMemberDetailIDs(ids ...int64) *MemberUpdate {
 	mu.mutation.AddMemberDetailIDs(ids...)
@@ -536,6 +563,15 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.ConditionCleared() {
 		_spec.ClearField(member.FieldCondition, field.TypeInt64)
+	}
+	if value, ok := mu.mutation.CreateID(); ok {
+		_spec.SetField(member.FieldCreateID, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.AddedCreateID(); ok {
+		_spec.AddField(member.FieldCreateID, field.TypeInt64, value)
+	}
+	if mu.mutation.CreateIDCleared() {
+		_spec.ClearField(member.FieldCreateID, field.TypeInt64)
 	}
 	if mu.mutation.MemberDetailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1007,6 +1043,33 @@ func (muo *MemberUpdateOne) ClearCondition() *MemberUpdateOne {
 	return muo
 }
 
+// SetCreateID sets the "create_id" field.
+func (muo *MemberUpdateOne) SetCreateID(i int64) *MemberUpdateOne {
+	muo.mutation.ResetCreateID()
+	muo.mutation.SetCreateID(i)
+	return muo
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableCreateID(i *int64) *MemberUpdateOne {
+	if i != nil {
+		muo.SetCreateID(*i)
+	}
+	return muo
+}
+
+// AddCreateID adds i to the "create_id" field.
+func (muo *MemberUpdateOne) AddCreateID(i int64) *MemberUpdateOne {
+	muo.mutation.AddCreateID(i)
+	return muo
+}
+
+// ClearCreateID clears the value of the "create_id" field.
+func (muo *MemberUpdateOne) ClearCreateID() *MemberUpdateOne {
+	muo.mutation.ClearCreateID()
+	return muo
+}
+
 // AddMemberDetailIDs adds the "member_details" edge to the MemberDetails entity by IDs.
 func (muo *MemberUpdateOne) AddMemberDetailIDs(ids ...int64) *MemberUpdateOne {
 	muo.mutation.AddMemberDetailIDs(ids...)
@@ -1359,6 +1422,15 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	}
 	if muo.mutation.ConditionCleared() {
 		_spec.ClearField(member.FieldCondition, field.TypeInt64)
+	}
+	if value, ok := muo.mutation.CreateID(); ok {
+		_spec.SetField(member.FieldCreateID, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.AddedCreateID(); ok {
+		_spec.AddField(member.FieldCreateID, field.TypeInt64, value)
+	}
+	if muo.mutation.CreateIDCleared() {
+		_spec.ClearField(member.FieldCreateID, field.TypeInt64)
 	}
 	if muo.mutation.MemberDetailsCleared() {
 		edge := &sqlgraph.EdgeSpec{

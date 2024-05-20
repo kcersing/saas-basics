@@ -32,13 +32,13 @@ func ProductList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, err := admin.NewSys(ctx, c).ProductList(listReq)
+	list, total, err := admin.NewSys(ctx, c).ProductList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, list, 0, "")
+	utils.SendResponse(c, errno.Success, list, total, "")
 	return
 }
 
@@ -60,13 +60,13 @@ func PropertyList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, err := admin.NewSys(ctx, c).PropertyList(listReq)
+	list, total, err := admin.NewSys(ctx, c).PropertyList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, list, 0, "")
+	utils.SendResponse(c, errno.Success, list, total, "")
 	return
 }
 
@@ -88,13 +88,13 @@ func PropertyType(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, err := admin.NewSys(ctx, c).PropertyType(listReq)
+	list, total, err := admin.NewSys(ctx, c).PropertyType(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, list, 0, "")
+	utils.SendResponse(c, errno.Success, list, total, "")
 	return
 }
 
@@ -116,13 +116,13 @@ func VenueList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, err := admin.NewSys(ctx, c).VenueList(listReq)
+	list, total, err := admin.NewSys(ctx, c).VenueList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, list, 0, "")
+	utils.SendResponse(c, errno.Success, list, total, "")
 	return
 }
 
@@ -143,13 +143,13 @@ func ContractList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, err := admin.NewSys(ctx, c).ContractList(listReq)
+	list, total, err := admin.NewSys(ctx, c).ContractList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, list, 0, "")
+	utils.SendResponse(c, errno.Success, list, total, "")
 	return
 }
 
@@ -171,13 +171,13 @@ func StaffList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, err := admin.NewSys(ctx, c).StaffList(listReq)
+	list, total, err := admin.NewSys(ctx, c).StaffList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, list, 0, "")
+	utils.SendResponse(c, errno.Success, list, total, "")
 	return
 }
 
@@ -199,12 +199,12 @@ func MemberList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, err := admin.NewSys(ctx, c).MemberList(listReq)
+	list, total, err := admin.NewSys(ctx, c).MemberList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, list, 0, "")
+	utils.SendResponse(c, errno.Success, list, total, "")
 	return
 }

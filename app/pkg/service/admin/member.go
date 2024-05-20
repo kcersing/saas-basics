@@ -13,6 +13,7 @@ import (
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/encrypt"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -25,14 +26,43 @@ type Member struct {
 	cache *ristretto.Cache
 }
 
-func (m Member) Create(req do.MemberInfo) error {
-	password, _ := encrypt.Crypt(req.Password)
-	_, err := m.db.Member.Create().
+func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
+	password, _ := encrypt.Crypt(req.Mobile)
+	noe, err := m.db.Member.Create().
 		SetPassword(password).
-		SetStatus(req.Status).
+		SetAvatar(req.Avatar).
 		SetMobile(req.Mobile).
 		SetEmail(req.Email).
+		SetStatus(req.Status).
+		SetName(req.Name).
+		SetWecom(req.Wecom).
+		SetCondition(0).
+		SetCreateID(req.CreateId).
 		Save(m.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "create user failed")
+		return err
+	}
+
+	layout := "2006-01-02"
+	// 解析字符串到 time.Time 类型
+	parsedTime, _ := time.Parse(layout, req.Birthday)
+
+	var gender int64
+	if req.Gender == "女性" {
+		gender = 0
+	} else if req.Gender == "男性" {
+		gender = 1
+	} else {
+		gender = 2
+	}
+	_, err = m.db.MemberDetails.Create().
+		SetNickname(req.Nickname).
+		SetGender(gender).
+		SetBirthday(parsedTime).
+		SetInfo(noe).
+		Save(m.ctx)
+
 	if err != nil {
 		err = errors.Wrap(err, "create user failed")
 		return err
@@ -40,7 +70,7 @@ func (m Member) Create(req do.MemberInfo) error {
 	return nil
 }
 
-func (m Member) Update(req do.MemberInfo) error {
+func (m Member) Update(req do.CreateOrUpdateMemberReq) error {
 	password, _ := encrypt.Crypt(req.Password)
 	_, err := m.db.Member.Update().
 		Where(member.IDEQ(req.ID)).
@@ -68,6 +98,7 @@ func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, er
 	}
 	hlog.Info(req.PageSize)
 	lists, err := m.db.Member.Query().Where(predicates...).
+		Order(ent.Desc(member.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {

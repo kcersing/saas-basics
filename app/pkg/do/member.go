@@ -3,8 +3,8 @@ package do
 import "time"
 
 type Member interface {
-	Create(req MemberInfo) error
-	Update(req MemberInfo) error
+	Create(req CreateOrUpdateMemberReq) error
+	Update(req CreateOrUpdateMemberReq) error
 	Delete(id int64) error
 	List(req MemberListReq) (resp []*MemberInfo, total int, err error)
 	Info(ID int64) (memberInfo *MemberInfo, err error)
@@ -21,9 +21,11 @@ type CreateOrUpdateMemberReq struct {
 	Nickname string `json:"nickname"`
 	Name     string `json:"Name"`
 	Wecom    string `json:"wecom"`
-	Gender   int64  `json:"gender"`
+	Gender   string `json:"gender"`
 	Age      string `json:"age"`
 	Birthday string `json:"birthday"`
+	Password string `json:"password"`
+	CreateId int64  `json:"createId"`
 }
 
 type CreateOrUpdateMemberPrivateReq struct {

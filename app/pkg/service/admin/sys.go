@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
@@ -28,7 +29,7 @@ type Sys struct {
 	cache *ristretto.Cache
 }
 
-func (s Sys) ProductList(req do.SysListReq) (list []do.SysList, err error) {
+func (s Sys) ProductList(req do.SysListReq) (list []do.SysList, total int64, err error) {
 	var predicates []predicate.Product
 
 	if req.Name != "" {
@@ -38,7 +39,7 @@ func (s Sys) ProductList(req do.SysListReq) (list []do.SysList, err error) {
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
-		return nil, err
+		return nil, 0, err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
@@ -46,21 +47,24 @@ func (s Sys) ProductList(req do.SysListReq) (list []do.SysList, err error) {
 			Name: v.Name,
 		})
 	}
-
+	total = int64(len(list))
 	return
 }
 
-func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, err error) {
+func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, total int64, err error) {
 	var predicates []predicate.ProductProperty
 
 	if req.Name != "" {
 		predicates = append(predicates, productproperty.NameEQ(req.Name))
 	}
+	if req.Type != "" {
+		predicates = append(predicates, productproperty.TypeEQ(req.Type))
+	}
 	lists, err := s.db.ProductProperty.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
-		return nil, err
+		return nil, 0, err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
@@ -68,11 +72,11 @@ func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, err error) {
 			Name: v.Name,
 		})
 	}
-
+	total = int64(len(list))
 	return
 }
 
-func (s Sys) PropertyType(req do.SysListReq) (list []do.SysList, err error) {
+func (s Sys) PropertyType(req do.SysListReq) (list []do.SysList, total int64, err error) {
 	var predicates []predicate.DictionaryDetail
 
 	if req.Name != "" {
@@ -86,19 +90,20 @@ func (s Sys) PropertyType(req do.SysListReq) (list []do.SysList, err error) {
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
-		return nil, err
+		return nil, 0, err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
 			ID:   v.ID,
 			Name: v.Value,
+			Key:  v.Key,
 		})
 	}
-
+	total = int64(len(list))
 	return
 }
 
-func (s Sys) VenueList(req do.SysListReq) (list []do.SysList, err error) {
+func (s Sys) VenueList(req do.SysListReq) (list []do.SysList, total int64, err error) {
 	var predicates []predicate.Venue
 
 	if req.Name != "" {
@@ -109,7 +114,7 @@ func (s Sys) VenueList(req do.SysListReq) (list []do.SysList, err error) {
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
-		return nil, err
+		return nil, 0, err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
@@ -117,11 +122,13 @@ func (s Sys) VenueList(req do.SysListReq) (list []do.SysList, err error) {
 			Name: v.Name,
 		})
 	}
+	total = int64(len(list))
 
+	hlog.Info(total)
 	return
 }
 
-func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, err error) {
+func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, total int64, err error) {
 	var predicates []predicate.Member
 
 	if req.Name != "" {
@@ -135,7 +142,7 @@ func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, err error) {
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
-		return nil, err
+		return nil, 0, err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
@@ -143,11 +150,11 @@ func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, err error) {
 			Name: v.Name,
 		})
 	}
-
+	total = int64(len(list))
 	return
 }
 
-func (s Sys) ContractList(req do.SysListReq) (list []do.SysList, err error) {
+func (s Sys) ContractList(req do.SysListReq) (list []do.SysList, total int64, err error) {
 	var predicates []predicate.Contract
 
 	if req.Name != "" {
@@ -158,7 +165,7 @@ func (s Sys) ContractList(req do.SysListReq) (list []do.SysList, err error) {
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
-		return nil, err
+		return nil, 0, err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
@@ -166,11 +173,11 @@ func (s Sys) ContractList(req do.SysListReq) (list []do.SysList, err error) {
 			Name: v.Name,
 		})
 	}
-
+	total = int64(len(list))
 	return
 }
 
-func (s Sys) StaffList(req do.SysListReq) (list []do.SysList, err error) {
+func (s Sys) StaffList(req do.SysListReq) (list []do.SysList, total int64, err error) {
 	var predicates []predicate.User
 
 	if req.Name != "" {
@@ -181,7 +188,7 @@ func (s Sys) StaffList(req do.SysListReq) (list []do.SysList, err error) {
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
-		return nil, err
+		return nil, 0, err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
@@ -189,7 +196,7 @@ func (s Sys) StaffList(req do.SysListReq) (list []do.SysList, err error) {
 			Name: v.Nickname,
 		})
 	}
-
+	total = int64(len(list))
 	return
 }
 
