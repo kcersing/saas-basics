@@ -34,6 +34,8 @@ const (
 	FieldAvatar = "avatar"
 	// FieldCondition holds the string denoting the condition field in the database.
 	FieldCondition = "condition"
+	// FieldCreateID holds the string denoting the create_id field in the database.
+	FieldCreateID = "create_id"
 	// EdgeMemberDetails holds the string denoting the member_details edge name in mutations.
 	EdgeMemberDetails = "member_details"
 	// EdgeMemberNotes holds the string denoting the member_notes edge name in mutations.
@@ -105,6 +107,7 @@ var Columns = []string{
 	FieldWecom,
 	FieldAvatar,
 	FieldCondition,
+	FieldCreateID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -188,6 +191,11 @@ func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 // ByCondition orders the results by the condition field.
 func ByCondition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCondition, opts...).ToFunc()
+}
+
+// ByCreateID orders the results by the create_id field.
+func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
 }
 
 // ByMemberDetailsCount orders the results by member_details count.

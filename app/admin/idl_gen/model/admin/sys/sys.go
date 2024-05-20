@@ -12,6 +12,8 @@ import (
 type ListReq struct {
 	Name         *string `thrift:"name,1,optional" form:"name" json:"name" query:"name"`
 	DictionaryId *int64  `thrift:"dictionaryId,2,optional" form:"dictionaryId" json:"dictionaryId" query:"dictionaryId"`
+	Type         *string `thrift:"type,3,optional" form:"type" json:"type" query:"type"`
+	Mobile       *string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
 }
 
 func NewListReq() *ListReq {
@@ -36,9 +38,29 @@ func (p *ListReq) GetDictionaryId() (v int64) {
 	return *p.DictionaryId
 }
 
+var ListReq_Type_DEFAULT string
+
+func (p *ListReq) GetType() (v string) {
+	if !p.IsSetType() {
+		return ListReq_Type_DEFAULT
+	}
+	return *p.Type
+}
+
+var ListReq_Mobile_DEFAULT string
+
+func (p *ListReq) GetMobile() (v string) {
+	if !p.IsSetMobile() {
+		return ListReq_Mobile_DEFAULT
+	}
+	return *p.Mobile
+}
+
 var fieldIDToName_ListReq = map[int16]string{
 	1: "name",
 	2: "dictionaryId",
+	3: "type",
+	4: "mobile",
 }
 
 func (p *ListReq) IsSetName() bool {
@@ -47,6 +69,14 @@ func (p *ListReq) IsSetName() bool {
 
 func (p *ListReq) IsSetDictionaryId() bool {
 	return p.DictionaryId != nil
+}
+
+func (p *ListReq) IsSetType() bool {
+	return p.Type != nil
+}
+
+func (p *ListReq) IsSetMobile() bool {
+	return p.Mobile != nil
 }
 
 func (p *ListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -79,6 +109,22 @@ func (p *ListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 2:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -131,6 +177,24 @@ func (p *ListReq) ReadField2(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
+func (p *ListReq) ReadField3(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Type = &v
+	}
+	return nil
+}
+func (p *ListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Mobile = &v
+	}
+	return nil
+}
 
 func (p *ListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -144,6 +208,14 @@ func (p *ListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -200,6 +272,44 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ListReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.STRING, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *ListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMobile() {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Mobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *ListReq) String() string {

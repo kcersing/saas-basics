@@ -30,6 +30,9 @@ func (Member) Fields() []ent.Field {
 			Default(1).
 			Optional().
 			Comment("状态[0:潜在;1:正式;2:到期]"),
+		field.Int64("create_id").
+			Optional().
+			Comment("创建人"),
 	}
 }
 

@@ -105,6 +105,11 @@ func Condition(v int64) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldCondition, v))
 }
 
+// CreateID applies equality check predicate on the "create_id" field. It's identical to CreateIDEQ.
+func CreateID(v int64) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldCreateID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldCreatedAt, v))
@@ -733,6 +738,56 @@ func ConditionIsNil() predicate.Member {
 // ConditionNotNil applies the NotNil predicate on the "condition" field.
 func ConditionNotNil() predicate.Member {
 	return predicate.Member(sql.FieldNotNull(FieldCondition))
+}
+
+// CreateIDEQ applies the EQ predicate on the "create_id" field.
+func CreateIDEQ(v int64) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldCreateID, v))
+}
+
+// CreateIDNEQ applies the NEQ predicate on the "create_id" field.
+func CreateIDNEQ(v int64) predicate.Member {
+	return predicate.Member(sql.FieldNEQ(FieldCreateID, v))
+}
+
+// CreateIDIn applies the In predicate on the "create_id" field.
+func CreateIDIn(vs ...int64) predicate.Member {
+	return predicate.Member(sql.FieldIn(FieldCreateID, vs...))
+}
+
+// CreateIDNotIn applies the NotIn predicate on the "create_id" field.
+func CreateIDNotIn(vs ...int64) predicate.Member {
+	return predicate.Member(sql.FieldNotIn(FieldCreateID, vs...))
+}
+
+// CreateIDGT applies the GT predicate on the "create_id" field.
+func CreateIDGT(v int64) predicate.Member {
+	return predicate.Member(sql.FieldGT(FieldCreateID, v))
+}
+
+// CreateIDGTE applies the GTE predicate on the "create_id" field.
+func CreateIDGTE(v int64) predicate.Member {
+	return predicate.Member(sql.FieldGTE(FieldCreateID, v))
+}
+
+// CreateIDLT applies the LT predicate on the "create_id" field.
+func CreateIDLT(v int64) predicate.Member {
+	return predicate.Member(sql.FieldLT(FieldCreateID, v))
+}
+
+// CreateIDLTE applies the LTE predicate on the "create_id" field.
+func CreateIDLTE(v int64) predicate.Member {
+	return predicate.Member(sql.FieldLTE(FieldCreateID, v))
+}
+
+// CreateIDIsNil applies the IsNil predicate on the "create_id" field.
+func CreateIDIsNil() predicate.Member {
+	return predicate.Member(sql.FieldIsNull(FieldCreateID))
+}
+
+// CreateIDNotNil applies the NotNil predicate on the "create_id" field.
+func CreateIDNotNil() predicate.Member {
+	return predicate.Member(sql.FieldNotNull(FieldCreateID))
 }
 
 // HasMemberDetails applies the HasEdge predicate on the "member_details" edge.

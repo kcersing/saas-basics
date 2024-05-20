@@ -125,6 +125,13 @@ func (I *InitDatabase) InitDatabase2() error {
 		return err
 	}
 
+	err = I.insertDictionariesNatureData(ctx)
+	if err != nil {
+		hlog.Error("insert dictionaries data failed", err)
+		err = errors.Wrap(err, "insert dictionaries data failed")
+		return err
+	}
+
 	// set init status
 	InitDatabaseStatus = true
 	return nil
@@ -1179,3 +1186,41 @@ func (I *InitDatabase) insertDictionariesOrganizationData(ctx context.Context) e
 
 	return nil
 }
+
+// init nature data
+func (I *InitDatabase) insertDictionariesNatureData(ctx context.Context) error {
+	data, err := I.DB.Dictionary.Create().
+		SetTitle("nature").
+		SetName("业务类型").
+		SetStatus(1).
+		SetDescription("业务类型").
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("新单").
+		SetValue("新单").
+		SetKey("1").
+		SetDictionary(data).
+		Save(ctx)
+
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+	_, err = I.DB.DictionaryDetail.Create().
+		SetStatus(1).
+		SetTitle("续约").
+		SetValue("续约").
+		SetKey("2").
+		SetDictionary(data).
+		Save(ctx)
+	if err != nil {
+		return errors.Wrap(err, "db failed")
+	}
+
+	return nil
+}
+
+//

@@ -39,13 +39,16 @@ struct CreateOrUpdatePropertyReq {
 }
 
 struct CreateOrUpdateReq {
-    1: optional i64 id
-    2: optional string name // 商品名
-    3: optional string pic // 主图
-    4: optional string description // 详情
-    5: optional list <Property> propertyId  // 属性
-    6: optional double price // 价格
-    7: optional i64 stock // 库存
+    1: optional i64 id (api.raw = "id")
+    2: optional string name (api.raw = "name") // 商品名
+    3: optional string pic (api.raw = "pic") // 主图
+    4: optional string description  (api.raw = "description")// 详情
+    5: optional double price (api.raw = "price") // 价格
+    6: optional i64 stock (api.raw = "stock") // 库存
+    7: optional i64 cardProperty (api.raw = "cardProperty")  // 属性
+    8: optional list<i64> classProperty  (api.raw = "classProperty") // 属性
+    9: optional list<i64> courseProperty  (api.raw = "courseProperty") // 属性
+    10: optional i64 CreateId (api.raw = "createId") // 库存
 }
 
 struct ListReq {

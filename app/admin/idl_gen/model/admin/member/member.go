@@ -16,9 +16,11 @@ type CreateOrUpdateMemberReq struct {
 	Mobile   *string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
 	Email    *string `thrift:"email,5,optional" form:"email" json:"email" query:"email"`
 	Status   *int64  `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
-	Username *string `thrift:"username,7,optional" form:"username" json:"username" query:"username"`
-	Nickname *string `thrift:"nickname,8,optional" form:"nickname" json:"nickname" query:"nickname"`
-	Password *string `thrift:"password,9,optional" form:"password" json:"password" query:"password"`
+	Name     *string `thrift:"name,7,optional" form:"name" json:"name" query:"name"`
+	Gender   *string `thrift:"gender,8,optional" form:"gender" json:"gender" query:"gender"`
+	Wecom    *string `thrift:"wecom,9,optional" form:"wecom" json:"wecom" query:"wecom"`
+	CreateId *int64  `thrift:"createId,10,optional" form:"createId" json:"createId" query:"createId"`
+	Birthday *string `thrift:"birthday,11,optional" form:"birthday" json:"birthday" query:"birthday"`
 }
 
 func NewCreateOrUpdateMemberReq() *CreateOrUpdateMemberReq {
@@ -65,42 +67,62 @@ func (p *CreateOrUpdateMemberReq) GetStatus() (v int64) {
 	return *p.Status
 }
 
-var CreateOrUpdateMemberReq_Username_DEFAULT string
+var CreateOrUpdateMemberReq_Name_DEFAULT string
 
-func (p *CreateOrUpdateMemberReq) GetUsername() (v string) {
-	if !p.IsSetUsername() {
-		return CreateOrUpdateMemberReq_Username_DEFAULT
+func (p *CreateOrUpdateMemberReq) GetName() (v string) {
+	if !p.IsSetName() {
+		return CreateOrUpdateMemberReq_Name_DEFAULT
 	}
-	return *p.Username
+	return *p.Name
 }
 
-var CreateOrUpdateMemberReq_Nickname_DEFAULT string
+var CreateOrUpdateMemberReq_Gender_DEFAULT string
 
-func (p *CreateOrUpdateMemberReq) GetNickname() (v string) {
-	if !p.IsSetNickname() {
-		return CreateOrUpdateMemberReq_Nickname_DEFAULT
+func (p *CreateOrUpdateMemberReq) GetGender() (v string) {
+	if !p.IsSetGender() {
+		return CreateOrUpdateMemberReq_Gender_DEFAULT
 	}
-	return *p.Nickname
+	return *p.Gender
 }
 
-var CreateOrUpdateMemberReq_Password_DEFAULT string
+var CreateOrUpdateMemberReq_Wecom_DEFAULT string
 
-func (p *CreateOrUpdateMemberReq) GetPassword() (v string) {
-	if !p.IsSetPassword() {
-		return CreateOrUpdateMemberReq_Password_DEFAULT
+func (p *CreateOrUpdateMemberReq) GetWecom() (v string) {
+	if !p.IsSetWecom() {
+		return CreateOrUpdateMemberReq_Wecom_DEFAULT
 	}
-	return *p.Password
+	return *p.Wecom
+}
+
+var CreateOrUpdateMemberReq_CreateId_DEFAULT int64
+
+func (p *CreateOrUpdateMemberReq) GetCreateId() (v int64) {
+	if !p.IsSetCreateId() {
+		return CreateOrUpdateMemberReq_CreateId_DEFAULT
+	}
+	return *p.CreateId
+}
+
+var CreateOrUpdateMemberReq_Birthday_DEFAULT string
+
+func (p *CreateOrUpdateMemberReq) GetBirthday() (v string) {
+	if !p.IsSetBirthday() {
+		return CreateOrUpdateMemberReq_Birthday_DEFAULT
+	}
+	return *p.Birthday
 }
 
 var fieldIDToName_CreateOrUpdateMemberReq = map[int16]string{
-	1: "id",
-	2: "avatar",
-	4: "mobile",
-	5: "email",
-	6: "status",
-	7: "username",
-	8: "nickname",
-	9: "password",
+	1:  "id",
+	2:  "avatar",
+	4:  "mobile",
+	5:  "email",
+	6:  "status",
+	7:  "name",
+	8:  "gender",
+	9:  "wecom",
+	10: "createId",
+	11: "birthday",
 }
 
 func (p *CreateOrUpdateMemberReq) IsSetAvatar() bool {
@@ -119,16 +141,24 @@ func (p *CreateOrUpdateMemberReq) IsSetStatus() bool {
 	return p.Status != nil
 }
 
-func (p *CreateOrUpdateMemberReq) IsSetUsername() bool {
-	return p.Username != nil
+func (p *CreateOrUpdateMemberReq) IsSetName() bool {
+	return p.Name != nil
 }
 
-func (p *CreateOrUpdateMemberReq) IsSetNickname() bool {
-	return p.Nickname != nil
+func (p *CreateOrUpdateMemberReq) IsSetGender() bool {
+	return p.Gender != nil
 }
 
-func (p *CreateOrUpdateMemberReq) IsSetPassword() bool {
-	return p.Password != nil
+func (p *CreateOrUpdateMemberReq) IsSetWecom() bool {
+	return p.Wecom != nil
+}
+
+func (p *CreateOrUpdateMemberReq) IsSetCreateId() bool {
+	return p.CreateId != nil
+}
+
+func (p *CreateOrUpdateMemberReq) IsSetBirthday() bool {
+	return p.Birthday != nil
 }
 
 func (p *CreateOrUpdateMemberReq) Read(iprot thrift.TProtocol) (err error) {
@@ -214,6 +244,22 @@ func (p *CreateOrUpdateMemberReq) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
+		case 10:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField10(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 11:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField11(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -293,7 +339,7 @@ func (p *CreateOrUpdateMemberReq) ReadField7(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Username = &v
+		p.Name = &v
 	}
 	return nil
 }
@@ -302,7 +348,7 @@ func (p *CreateOrUpdateMemberReq) ReadField8(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Nickname = &v
+		p.Gender = &v
 	}
 	return nil
 }
@@ -311,7 +357,25 @@ func (p *CreateOrUpdateMemberReq) ReadField9(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Password = &v
+		p.Wecom = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateMemberReq) ReadField10(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.CreateId = &v
+	}
+	return nil
+}
+func (p *CreateOrUpdateMemberReq) ReadField11(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Birthday = &v
 	}
 	return nil
 }
@@ -352,6 +416,14 @@ func (p *CreateOrUpdateMemberReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField9(oprot); err != nil {
 			fieldId = 9
+			goto WriteFieldError
+		}
+		if err = p.writeField10(oprot); err != nil {
+			fieldId = 10
+			goto WriteFieldError
+		}
+		if err = p.writeField11(oprot); err != nil {
+			fieldId = 11
 			goto WriteFieldError
 		}
 	}
@@ -466,11 +538,11 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateMemberReq) writeField7(oprot thrift.TProtocol) (err error) {
-	if p.IsSetUsername() {
-		if err = oprot.WriteFieldBegin("username", thrift.STRING, 7); err != nil {
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Username); err != nil {
+		if err := oprot.WriteString(*p.Name); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -485,11 +557,11 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateMemberReq) writeField8(oprot thrift.TProtocol) (err error) {
-	if p.IsSetNickname() {
-		if err = oprot.WriteFieldBegin("nickname", thrift.STRING, 8); err != nil {
+	if p.IsSetGender() {
+		if err = oprot.WriteFieldBegin("gender", thrift.STRING, 8); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Nickname); err != nil {
+		if err := oprot.WriteString(*p.Gender); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -504,11 +576,11 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateMemberReq) writeField9(oprot thrift.TProtocol) (err error) {
-	if p.IsSetPassword() {
-		if err = oprot.WriteFieldBegin("password", thrift.STRING, 9); err != nil {
+	if p.IsSetWecom() {
+		if err = oprot.WriteFieldBegin("wecom", thrift.STRING, 9); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Password); err != nil {
+		if err := oprot.WriteString(*p.Wecom); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -520,6 +592,44 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateMemberReq) writeField10(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreateId() {
+		if err = oprot.WriteFieldBegin("createId", thrift.I64, 10); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.CreateId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 10 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateMemberReq) writeField11(oprot thrift.TProtocol) (err error) {
+	if p.IsSetBirthday() {
+		if err = oprot.WriteFieldBegin("birthday", thrift.STRING, 11); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Birthday); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 11 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 11 end error: ", p), err)
 }
 
 func (p *CreateOrUpdateMemberReq) String() string {

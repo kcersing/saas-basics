@@ -7,6 +7,8 @@ include "../base/data.thrift"
 struct ListReq {
     1: optional string name (api.raw = "name")
     2: optional i64 dictionaryId (api.raw = "dictionaryId" )
+    3: optional string type (api.raw = "type" )
+    4: optional string mobile (api.raw = "mobile" )
 }
 
 service SysService {

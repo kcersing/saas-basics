@@ -25,7 +25,7 @@ func Create(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	var productReq do.ProductInfo
+	var productReq do.CreateOrUpdateProduct
 	err = copier.Copy(&productReq, &req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")

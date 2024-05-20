@@ -166,6 +166,20 @@ func (mc *MemberCreate) SetNillableCondition(i *int64) *MemberCreate {
 	return mc
 }
 
+// SetCreateID sets the "create_id" field.
+func (mc *MemberCreate) SetCreateID(i int64) *MemberCreate {
+	mc.mutation.SetCreateID(i)
+	return mc
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableCreateID(i *int64) *MemberCreate {
+	if i != nil {
+		mc.SetCreateID(*i)
+	}
+	return mc
+}
+
 // SetID sets the "id" field.
 func (mc *MemberCreate) SetID(i int64) *MemberCreate {
 	mc.mutation.SetID(i)
@@ -398,6 +412,10 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Condition(); ok {
 		_spec.SetField(member.FieldCondition, field.TypeInt64, value)
 		_node.Condition = value
+	}
+	if value, ok := mc.mutation.CreateID(); ok {
+		_spec.SetField(member.FieldCreateID, field.TypeInt64, value)
+		_node.CreateID = value
 	}
 	if nodes := mc.mutation.MemberDetailsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
