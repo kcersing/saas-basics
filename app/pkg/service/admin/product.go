@@ -166,7 +166,7 @@ func (p Product) Create(req do.CreateOrUpdateProduct) error {
 	property = append(property, req.ClassProperty...)
 	properties, err := p.db.ProductProperty.Query().Where(
 		productproperty.IDIn(property...),
-	).First(p.ctx)
+	).All(p.ctx)
 	if err != nil {
 		return errors.Wrap(err, "未找到属性")
 	}
@@ -176,7 +176,7 @@ func (p Product) Create(req do.CreateOrUpdateProduct) error {
 		SetDescription(req.Description).
 		SetPrice(req.Price).
 		SetStock(req.Stock).
-		AddPropertys(properties).
+		AddPropertys(properties...).
 		SetCreateID(req.CreateID).
 		Save(p.ctx)
 

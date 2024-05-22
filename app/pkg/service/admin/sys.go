@@ -19,6 +19,7 @@ import (
 	"saas/pkg/db/ent/productproperty"
 	"saas/pkg/db/ent/user"
 	venue2 "saas/pkg/db/ent/venue"
+	"strconv"
 )
 
 type Sys struct {
@@ -67,9 +68,11 @@ func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, total int64, er
 		return nil, 0, err
 	}
 	for _, v := range lists {
+		price := strconv.FormatFloat(v.Price, 'f', -1, 64)
 		list = append(list, do.SysList{
 			ID:   v.ID,
 			Name: v.Name,
+			Key:  price,
 		})
 	}
 	total = int64(len(list))

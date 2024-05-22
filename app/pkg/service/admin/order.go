@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
@@ -152,11 +153,6 @@ func (o Order) Update(req do.OrderInfo) error {
 	return nil
 }
 
-func (o Order) Delete(id int64) error {
-	//TODO implement me
-	panic("implement me")
-}
-
 func (o Order) List(req do.OrderListReq) (resp []*do.OrderInfo, total int, err error) {
 	var predicates []predicate.Order
 	if req.OrderSn != "" {
@@ -179,16 +175,43 @@ func (o Order) List(req do.OrderListReq) (resp []*do.OrderInfo, total int, err e
 	return
 }
 
-func (o Order) UpdateStatus(ID int64, status int64) error {
-	_, err := o.db.Order.Update().Where(order.IDEQ(ID)).SetStatus(int64(status)).Save(o.ctx)
+func (o Order) UpdateStatus(id int64, status int64) error {
+	_, err := o.db.Order.Update().Where(order.IDEQ(id)).SetStatus(int64(status)).Save(o.ctx)
 	return err
 }
 
-func (o Order) Info(ID int64) (roleInfo *do.OrderInfo, err error) {
-	//TODO implement me
-	panic("implement me")
+func (o Order) Info(id int64) (info *do.OrderInfo, err error) {
+	ret, err := o.db.Order.Query().
+		Where(order.IDEQ(id)).
+		Limit(1).
+		First(o.ctx)
+	if err != nil {
+		klog.Error(err)
+		return nil, err
+	}
+	info = &do.OrderInfo{
+		ID: ret.ID,
+	}
+	return
 }
-
+func (o Order) GetBySnOrder(sn string) (info *do.OrderInfo, err error) {
+	ret, err := o.db.Order.Query().
+		Where(order.OrderSnEQ(sn)).
+		Limit(1).
+		All(o.ctx)
+	if err != nil {
+		klog.Error(err)
+		return nil, err
+	}
+	if len(ret) == 0 {
+		return nil, errors.New("OrdersNoFound")
+	}
+	row := ret[0]
+	info = &do.OrderInfo{
+		ID: row.ID,
+	}
+	return
+}
 func NewOrder(ctx context.Context, c *app.RequestContext) do.Order {
 	return &Order{
 		ctx:   ctx,
