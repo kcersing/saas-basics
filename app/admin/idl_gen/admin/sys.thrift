@@ -9,6 +9,7 @@ struct ListReq {
     2: optional i64 dictionaryId (api.raw = "dictionaryId" )
     3: optional string type (api.raw = "type" )
     4: optional string mobile (api.raw = "mobile" )
+    5: optional i64 product (api.raw = "product" )
 }
 
 service SysService {
