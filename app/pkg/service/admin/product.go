@@ -232,6 +232,45 @@ func (p Product) List(req do.ProductListReq) (resp []*do.ProductInfo, total int,
 		err = errors.Wrap(err, "copy product info failed")
 		return resp, 0, err
 	}
+
+	for i, v := range lists {
+		//propertys
+
+		ds, _ := v.QueryPropertys().IDs(p.ctx)
+
+		all, err := p.db.ProductProperty.Query().Where(productproperty.IDIn(ds...)).All(p.ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		for _, p := range all {
+			pi := do.PropertyInfo{
+				ID:       p.ID,
+				Name:     p.Name,
+				Price:    p.Price,
+				Duration: p.Duration,
+				Length:   p.Length,
+				Count:    p.Count,
+				Type:     p.Type,
+				Data:     p.Data,
+				Status:   p.Status,
+			}
+			if p.Type == "card" {
+				resp[i].CardProperty = append(resp[i].CourseProperty, pi)
+			}
+			if p.Type == "course" {
+				resp[i].CourseProperty = append(resp[i].CourseProperty, pi)
+			}
+			if p.Type == "class" {
+				resp[i].ClassProperty = append(resp[i].CourseProperty, pi)
+			}
+		}
+
+		//v.CourseProperty
+		//v.ClassProperty
+		//v.CardProperty
+	}
+
 	total, _ = p.db.Product.Query().Where(predicates...).Count(p.ctx)
 	return
 

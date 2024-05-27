@@ -50,16 +50,19 @@ type CreateOrUpdateProduct struct {
 }
 
 type ProductInfo struct {
-	ID          int64          `json:"id"`
-	Name        string         `json:"name"`
-	Pic         string         `json:"pic"`
-	Description string         `json:"description"`
-	Property    []PropertyInfo `json:"property"`
-	Price       float64        `json:"price"`
-	Stock       int64          `json:"stock"`
-	Status      int64          `json:"status"`
-	CreateID    int64          `json:"create_id"`
-	CreateName  string         `json:"create_name"`
+	ID             int64          `json:"id"`
+	Name           string         `json:"name"`
+	Pic            string         `json:"pic"`
+	Description    string         `json:"description"`
+	CardProperty   []PropertyInfo `json:"cardProperty"`
+	ClassProperty  []PropertyInfo `json:"classProperty"`
+	CourseProperty []PropertyInfo `json:"courseProperty"`
+	Property       []PropertyInfo `json:"property"`
+	Price          float64        `json:"price"`
+	Stock          int64          `json:"stock"`
+	Status         int64          `json:"status"`
+	CreateID       int64          `json:"create_id"`
+	CreateName     string         `json:"create_name"`
 }
 type ProductListReq struct {
 	Page        int64    `json:"page"`

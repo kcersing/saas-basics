@@ -61,7 +61,11 @@ func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, total int64, er
 	if req.Type != "" {
 		predicates = append(predicates, productproperty.TypeEQ(req.Type))
 	}
-	lists, err := s.db.ProductProperty.Query().Where(predicates...).All(s.ctx)
+	if req.Product > 0 {
+		predicates = append(predicates, productproperty.HasProductWith(product.IDEQ(req.Product)))
+	}
+
+	lists, err := s.db.Debug().ProductProperty.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")

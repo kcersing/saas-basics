@@ -14,6 +14,7 @@ type ListReq struct {
 	DictionaryId *int64  `thrift:"dictionaryId,2,optional" form:"dictionaryId" json:"dictionaryId" query:"dictionaryId"`
 	Type         *string `thrift:"type,3,optional" form:"type" json:"type" query:"type"`
 	Mobile       *string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Product      *int64  `thrift:"product,5,optional" form:"product" json:"product" query:"product"`
 }
 
 func NewListReq() *ListReq {
@@ -56,11 +57,21 @@ func (p *ListReq) GetMobile() (v string) {
 	return *p.Mobile
 }
 
+var ListReq_Product_DEFAULT int64
+
+func (p *ListReq) GetProduct() (v int64) {
+	if !p.IsSetProduct() {
+		return ListReq_Product_DEFAULT
+	}
+	return *p.Product
+}
+
 var fieldIDToName_ListReq = map[int16]string{
 	1: "name",
 	2: "dictionaryId",
 	3: "type",
 	4: "mobile",
+	5: "product",
 }
 
 func (p *ListReq) IsSetName() bool {
@@ -77,6 +88,10 @@ func (p *ListReq) IsSetType() bool {
 
 func (p *ListReq) IsSetMobile() bool {
 	return p.Mobile != nil
+}
+
+func (p *ListReq) IsSetProduct() bool {
+	return p.Product != nil
 }
 
 func (p *ListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -125,6 +140,14 @@ func (p *ListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -195,6 +218,15 @@ func (p *ListReq) ReadField4(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
+func (p *ListReq) ReadField5(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.Product = &v
+	}
+	return nil
+}
 
 func (p *ListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -216,6 +248,10 @@ func (p *ListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -310,6 +346,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *ListReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetProduct() {
+		if err = oprot.WriteFieldBegin("product", thrift.I64, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Product); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *ListReq) String() string {
