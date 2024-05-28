@@ -102,6 +102,26 @@ func (mccu *MemberContractContentUpdate) ClearContent() *MemberContractContentUp
 	return mccu
 }
 
+// SetSignImg sets the "sign_img" field.
+func (mccu *MemberContractContentUpdate) SetSignImg(s string) *MemberContractContentUpdate {
+	mccu.mutation.SetSignImg(s)
+	return mccu
+}
+
+// SetNillableSignImg sets the "sign_img" field if the given value is not nil.
+func (mccu *MemberContractContentUpdate) SetNillableSignImg(s *string) *MemberContractContentUpdate {
+	if s != nil {
+		mccu.SetSignImg(*s)
+	}
+	return mccu
+}
+
+// ClearSignImg clears the value of the "sign_img" field.
+func (mccu *MemberContractContentUpdate) ClearSignImg() *MemberContractContentUpdate {
+	mccu.mutation.ClearSignImg()
+	return mccu
+}
+
 // SetContractID sets the "contract" edge to the MemberContract entity by ID.
 func (mccu *MemberContractContentUpdate) SetContractID(id int64) *MemberContractContentUpdate {
 	mccu.mutation.SetContractID(id)
@@ -194,6 +214,12 @@ func (mccu *MemberContractContentUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if mccu.mutation.ContentCleared() {
 		_spec.ClearField(membercontractcontent.FieldContent, field.TypeString)
+	}
+	if value, ok := mccu.mutation.SignImg(); ok {
+		_spec.SetField(membercontractcontent.FieldSignImg, field.TypeString, value)
+	}
+	if mccu.mutation.SignImgCleared() {
+		_spec.ClearField(membercontractcontent.FieldSignImg, field.TypeString)
 	}
 	if mccu.mutation.ContractCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -314,6 +340,26 @@ func (mccuo *MemberContractContentUpdateOne) SetNillableContent(s *string) *Memb
 // ClearContent clears the value of the "content" field.
 func (mccuo *MemberContractContentUpdateOne) ClearContent() *MemberContractContentUpdateOne {
 	mccuo.mutation.ClearContent()
+	return mccuo
+}
+
+// SetSignImg sets the "sign_img" field.
+func (mccuo *MemberContractContentUpdateOne) SetSignImg(s string) *MemberContractContentUpdateOne {
+	mccuo.mutation.SetSignImg(s)
+	return mccuo
+}
+
+// SetNillableSignImg sets the "sign_img" field if the given value is not nil.
+func (mccuo *MemberContractContentUpdateOne) SetNillableSignImg(s *string) *MemberContractContentUpdateOne {
+	if s != nil {
+		mccuo.SetSignImg(*s)
+	}
+	return mccuo
+}
+
+// ClearSignImg clears the value of the "sign_img" field.
+func (mccuo *MemberContractContentUpdateOne) ClearSignImg() *MemberContractContentUpdateOne {
+	mccuo.mutation.ClearSignImg()
 	return mccuo
 }
 
@@ -439,6 +485,12 @@ func (mccuo *MemberContractContentUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if mccuo.mutation.ContentCleared() {
 		_spec.ClearField(membercontractcontent.FieldContent, field.TypeString)
+	}
+	if value, ok := mccuo.mutation.SignImg(); ok {
+		_spec.SetField(membercontractcontent.FieldSignImg, field.TypeString, value)
+	}
+	if mccuo.mutation.SignImgCleared() {
+		_spec.ClearField(membercontractcontent.FieldSignImg, field.TypeString)
 	}
 	if mccuo.mutation.ContractCleared() {
 		edge := &sqlgraph.EdgeSpec{

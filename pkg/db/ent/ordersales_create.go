@@ -105,6 +105,20 @@ func (osc *OrderSalesCreate) SetNillableSalesID(i *int64) *OrderSalesCreate {
 	return osc
 }
 
+// SetRatio sets the "ratio" field.
+func (osc *OrderSalesCreate) SetRatio(i int64) *OrderSalesCreate {
+	osc.mutation.SetRatio(i)
+	return osc
+}
+
+// SetNillableRatio sets the "ratio" field if the given value is not nil.
+func (osc *OrderSalesCreate) SetNillableRatio(i *int64) *OrderSalesCreate {
+	if i != nil {
+		osc.SetRatio(*i)
+	}
+	return osc
+}
+
 // SetID sets the "id" field.
 func (osc *OrderSalesCreate) SetID(i int64) *OrderSalesCreate {
 	osc.mutation.SetID(i)
@@ -238,6 +252,10 @@ func (osc *OrderSalesCreate) createSpec() (*OrderSales, *sqlgraph.CreateSpec) {
 	if value, ok := osc.mutation.SalesID(); ok {
 		_spec.SetField(ordersales.FieldSalesID, field.TypeInt64, value)
 		_node.SalesID = value
+	}
+	if value, ok := osc.mutation.Ratio(); ok {
+		_spec.SetField(ordersales.FieldRatio, field.TypeInt64, value)
+		_node.Ratio = value
 	}
 	if nodes := osc.mutation.AufkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

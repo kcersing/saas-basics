@@ -31,6 +31,8 @@ type OrderSales struct {
 	MemberID int64 `json:"member_id,omitempty"`
 	// 销售id
 	SalesID int64 `json:"sales_id,omitempty"`
+	// Ratio holds the value of the "ratio" field.
+	Ratio int64 `json:"ratio,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderSalesQuery when eager-loading is set.
 	Edges        OrderSalesEdges `json:"edges"`
@@ -64,7 +66,7 @@ func (*OrderSales) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case ordersales.FieldID, ordersales.FieldStatus, ordersales.FieldOrderID, ordersales.FieldMemberID, ordersales.FieldSalesID:
+		case ordersales.FieldID, ordersales.FieldStatus, ordersales.FieldOrderID, ordersales.FieldMemberID, ordersales.FieldSalesID, ordersales.FieldRatio:
 			values[i] = new(sql.NullInt64)
 		case ordersales.FieldCreatedAt, ordersales.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -125,6 +127,12 @@ func (os *OrderSales) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				os.SalesID = value.Int64
 			}
+		case ordersales.FieldRatio:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ratio", values[i])
+			} else if value.Valid {
+				os.Ratio = value.Int64
+			}
 		default:
 			os.selectValues.Set(columns[i], values[i])
 		}
@@ -183,6 +191,9 @@ func (os *OrderSales) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sales_id=")
 	builder.WriteString(fmt.Sprintf("%v", os.SalesID))
+	builder.WriteString(", ")
+	builder.WriteString("ratio=")
+	builder.WriteString(fmt.Sprintf("%v", os.Ratio))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -38,4 +38,3 @@ hz update -idl idl_gen/admin/role.thrift -model_dir idl_gen/model/  --unset_omit
 hz update -idl idl_gen/admin/token.thrift -model_dir idl_gen/model/  --unset_omitempty
 hz update -idl idl_gen/admin/sys.thrift -model_dir idl_gen/model/  --unset_omitempty
 hz update -idl idl_gen/admin/product.thrift -model_dir idl_gen/model/  --unset_omitempty
-

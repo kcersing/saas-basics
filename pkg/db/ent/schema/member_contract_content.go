@@ -1,12 +1,13 @@
 package schema
 
 import (
+	"saas/pkg/db/ent/schema/mixins"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"saas/pkg/db/ent/schema/mixins"
 )
 
 type MemberContractContent struct {
@@ -17,6 +18,7 @@ func (MemberContractContent) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("member_contract_id").Comment("合同ID").Optional(),
 		field.String("content").Optional().Comment("content | 内容"),
+		field.String("sign_img").Optional().Comment("sign_img | 会员签字b64 预处理"),
 	}
 }
 

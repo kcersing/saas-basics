@@ -77,20 +77,6 @@ func (oic *OrderItemCreate) SetNillableProductID(i *int64) *OrderItemCreate {
 	return oic
 }
 
-// SetQuantity sets the "quantity" field.
-func (oic *OrderItemCreate) SetQuantity(i int64) *OrderItemCreate {
-	oic.mutation.SetQuantity(i)
-	return oic
-}
-
-// SetNillableQuantity sets the "quantity" field if the given value is not nil.
-func (oic *OrderItemCreate) SetNillableQuantity(i *int64) *OrderItemCreate {
-	if i != nil {
-		oic.SetQuantity(*i)
-	}
-	return oic
-}
-
 // SetRelatedUserProductID sets the "related_user_product_id" field.
 func (oic *OrderItemCreate) SetRelatedUserProductID(i int64) *OrderItemCreate {
 	oic.mutation.SetRelatedUserProductID(i)
@@ -105,30 +91,16 @@ func (oic *OrderItemCreate) SetNillableRelatedUserProductID(i *int64) *OrderItem
 	return oic
 }
 
-// SetContractID sets the "contract_id" field.
-func (oic *OrderItemCreate) SetContractID(s string) *OrderItemCreate {
-	oic.mutation.SetContractID(s)
+// SetData sets the "data" field.
+func (oic *OrderItemCreate) SetData(i int64) *OrderItemCreate {
+	oic.mutation.SetData(i)
 	return oic
 }
 
-// SetNillableContractID sets the "contract_id" field if the given value is not nil.
-func (oic *OrderItemCreate) SetNillableContractID(s *string) *OrderItemCreate {
-	if s != nil {
-		oic.SetContractID(*s)
-	}
-	return oic
-}
-
-// SetAssignAt sets the "assign_at" field.
-func (oic *OrderItemCreate) SetAssignAt(t time.Time) *OrderItemCreate {
-	oic.mutation.SetAssignAt(t)
-	return oic
-}
-
-// SetNillableAssignAt sets the "assign_at" field if the given value is not nil.
-func (oic *OrderItemCreate) SetNillableAssignAt(t *time.Time) *OrderItemCreate {
-	if t != nil {
-		oic.SetAssignAt(*t)
+// SetNillableData sets the "data" field if the given value is not nil.
+func (oic *OrderItemCreate) SetNillableData(i *int64) *OrderItemCreate {
+	if i != nil {
+		oic.SetData(*i)
 	}
 	return oic
 }
@@ -201,17 +173,13 @@ func (oic *OrderItemCreate) defaults() {
 		v := orderitem.DefaultUpdatedAt()
 		oic.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := oic.mutation.Quantity(); !ok {
-		v := orderitem.DefaultQuantity
-		oic.mutation.SetQuantity(v)
-	}
 	if _, ok := oic.mutation.RelatedUserProductID(); !ok {
 		v := orderitem.DefaultRelatedUserProductID
 		oic.mutation.SetRelatedUserProductID(v)
 	}
-	if _, ok := oic.mutation.AssignAt(); !ok {
-		v := orderitem.DefaultAssignAt()
-		oic.mutation.SetAssignAt(v)
+	if _, ok := oic.mutation.Data(); !ok {
+		v := orderitem.DefaultData
+		oic.mutation.SetData(v)
 	}
 }
 
@@ -267,21 +235,13 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 		_spec.SetField(orderitem.FieldProductID, field.TypeInt64, value)
 		_node.ProductID = value
 	}
-	if value, ok := oic.mutation.Quantity(); ok {
-		_spec.SetField(orderitem.FieldQuantity, field.TypeInt64, value)
-		_node.Quantity = value
-	}
 	if value, ok := oic.mutation.RelatedUserProductID(); ok {
 		_spec.SetField(orderitem.FieldRelatedUserProductID, field.TypeInt64, value)
 		_node.RelatedUserProductID = value
 	}
-	if value, ok := oic.mutation.ContractID(); ok {
-		_spec.SetField(orderitem.FieldContractID, field.TypeString, value)
-		_node.ContractID = value
-	}
-	if value, ok := oic.mutation.AssignAt(); ok {
-		_spec.SetField(orderitem.FieldAssignAt, field.TypeTime, value)
-		_node.AssignAt = value
+	if value, ok := oic.mutation.Data(); ok {
+		_spec.SetField(orderitem.FieldData, field.TypeInt64, value)
+		_node.Data = value
 	}
 	if nodes := oic.mutation.AufkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

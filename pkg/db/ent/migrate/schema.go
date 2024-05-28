@@ -344,6 +344,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "content", Type: field.TypeString, Nullable: true, Comment: "content | 内容"},
+		{Name: "sign_img", Type: field.TypeString, Nullable: true, Comment: "sign_img | 会员签字b64 预处理"},
 		{Name: "member_contract_id", Type: field.TypeInt64, Nullable: true, Comment: "合同ID"},
 	}
 	// MemberContractContentTable holds the schema information for the "member_contract_content" table.
@@ -354,7 +355,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_contract_content_member_contract_content",
-				Columns:    []*schema.Column{MemberContractContentColumns[5]},
+				Columns:    []*schema.Column{MemberContractContentColumns[6]},
 				RefColumns: []*schema.Column{MemberContractColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -431,8 +432,9 @@ var (
 		{Name: "sn", Type: field.TypeString, Nullable: true, Comment: "编号"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品ID"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆ID"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单ID"},
-		{Name: "name", Type: field.TypeFloat64, Nullable: true, Comment: "产品名称"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "产品名称"},
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "产品价格"},
 		{Name: "validity_at", Type: field.TypeTime, Nullable: true, Comment: "生效时间"},
 		{Name: "cancel_at", Type: field.TypeTime, Nullable: true, Comment: "作废时间"},
@@ -446,7 +448,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_member_member_products",
-				Columns:    []*schema.Column{MemberProductColumns[12]},
+				Columns:    []*schema.Column{MemberProductColumns[13]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -561,6 +563,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号"},
+		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员产品id"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态 | [0:正常;1:禁用]", Default: 0},
 		{Name: "source", Type: field.TypeString, Nullable: true, Comment: "订单来源", Default: ""},
 		{Name: "device", Type: field.TypeString, Nullable: true, Comment: "设备来源", Default: ""},
@@ -577,19 +580,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_member_member_orders",
-				Columns:    []*schema.Column{OrderColumns[8]},
+				Columns:    []*schema.Column{OrderColumns[9]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "order_sys_users_created_orders",
-				Columns:    []*schema.Column{OrderColumns[9]},
+				Columns:    []*schema.Column{OrderColumns[10]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "order_venue_venue_orders",
-				Columns:    []*schema.Column{OrderColumns[10]},
+				Columns:    []*schema.Column{OrderColumns[11]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -598,7 +601,7 @@ var (
 			{
 				Name:    "order_member_id_order_sn",
 				Unique:  true,
-				Columns: []*schema.Column{OrderColumns[8], OrderColumns[3]},
+				Columns: []*schema.Column{OrderColumns[9], OrderColumns[3]},
 			},
 		},
 	}
@@ -639,10 +642,8 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品id"},
-		{Name: "quantity", Type: field.TypeInt64, Nullable: true, Comment: "购买数量", Default: 0},
 		{Name: "related_user_product_id", Type: field.TypeInt64, Nullable: true, Comment: "关联会员产品id", Default: 0},
-		{Name: "contract_id", Type: field.TypeString, Nullable: true, Comment: "合同ID"},
-		{Name: "assign_at", Type: field.TypeTime, Nullable: true, Comment: "指定时间"},
+		{Name: "data", Type: field.TypeInt64, Nullable: true, Comment: "数据附件", Default: 0},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
 	}
 	// OrderItemTable holds the schema information for the "order_item" table.
@@ -653,7 +654,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_item_order_item",
-				Columns:    []*schema.Column{OrderItemColumns[8]},
+				Columns:    []*schema.Column{OrderItemColumns[6]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -662,7 +663,7 @@ var (
 			{
 				Name:    "orderitem_order_id",
 				Unique:  true,
-				Columns: []*schema.Column{OrderItemColumns[8]},
+				Columns: []*schema.Column{OrderItemColumns[6]},
 			},
 		},
 	}
@@ -707,6 +708,7 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "sales_id", Type: field.TypeInt64, Nullable: true, Comment: "销售id"},
+		{Name: "ratio", Type: field.TypeInt64, Nullable: true},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
 	}
 	// OrderSalesTable holds the schema information for the "order_sales" table.
@@ -717,7 +719,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_sales_order_sales",
-				Columns:    []*schema.Column{OrderSalesColumns[6]},
+				Columns:    []*schema.Column{OrderSalesColumns[7]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -726,7 +728,7 @@ var (
 			{
 				Name:    "ordersales_order_id",
 				Unique:  true,
-				Columns: []*schema.Column{OrderSalesColumns[6]},
+				Columns: []*schema.Column{OrderSalesColumns[7]},
 			},
 		},
 	}

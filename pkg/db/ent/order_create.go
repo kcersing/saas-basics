@@ -98,6 +98,20 @@ func (oc *OrderCreate) SetNillableMemberID(i *int64) *OrderCreate {
 	return oc
 }
 
+// SetMemberProductID sets the "member_product_id" field.
+func (oc *OrderCreate) SetMemberProductID(i int64) *OrderCreate {
+	oc.mutation.SetMemberProductID(i)
+	return oc
+}
+
+// SetNillableMemberProductID sets the "member_product_id" field if the given value is not nil.
+func (oc *OrderCreate) SetNillableMemberProductID(i *int64) *OrderCreate {
+	if i != nil {
+		oc.SetMemberProductID(*i)
+	}
+	return oc
+}
+
 // SetStatus sets the "status" field.
 func (oc *OrderCreate) SetStatus(i int64) *OrderCreate {
 	oc.mutation.SetStatus(i)
@@ -414,6 +428,10 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 	if value, ok := oc.mutation.OrderSn(); ok {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)
 		_node.OrderSn = value
+	}
+	if value, ok := oc.mutation.MemberProductID(); ok {
+		_spec.SetField(order.FieldMemberProductID, field.TypeInt64, value)
+		_node.MemberProductID = value
 	}
 	if value, ok := oc.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)

@@ -29,6 +29,8 @@ type MemberContractContent struct {
 	MemberContractID int64 `json:"member_contract_id,omitempty"`
 	// content | 内容
 	Content string `json:"content,omitempty"`
+	// sign_img | 会员签字b64 预处理
+	SignImg string `json:"sign_img,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberContractContentQuery when eager-loading is set.
 	Edges        MemberContractContentEdges `json:"edges"`
@@ -64,7 +66,7 @@ func (*MemberContractContent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case membercontractcontent.FieldID, membercontractcontent.FieldStatus, membercontractcontent.FieldMemberContractID:
 			values[i] = new(sql.NullInt64)
-		case membercontractcontent.FieldContent:
+		case membercontractcontent.FieldContent, membercontractcontent.FieldSignImg:
 			values[i] = new(sql.NullString)
 		case membercontractcontent.FieldCreatedAt, membercontractcontent.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -118,6 +120,12 @@ func (mcc *MemberContractContent) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field content", values[i])
 			} else if value.Valid {
 				mcc.Content = value.String
+			}
+		case membercontractcontent.FieldSignImg:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sign_img", values[i])
+			} else if value.Valid {
+				mcc.SignImg = value.String
 			}
 		default:
 			mcc.selectValues.Set(columns[i], values[i])
@@ -174,6 +182,9 @@ func (mcc *MemberContractContent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("content=")
 	builder.WriteString(mcc.Content)
+	builder.WriteString(", ")
+	builder.WriteString("sign_img=")
+	builder.WriteString(mcc.SignImg)
 	builder.WriteByte(')')
 	return builder.String()
 }

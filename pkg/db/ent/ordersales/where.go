@@ -85,6 +85,11 @@ func SalesID(v int64) predicate.OrderSales {
 	return predicate.OrderSales(sql.FieldEQ(FieldSalesID, v))
 }
 
+// Ratio applies equality check predicate on the "ratio" field. It's identical to RatioEQ.
+func Ratio(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldEQ(FieldRatio, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.OrderSales {
 	return predicate.OrderSales(sql.FieldEQ(FieldCreatedAt, v))
@@ -343,6 +348,56 @@ func SalesIDIsNil() predicate.OrderSales {
 // SalesIDNotNil applies the NotNil predicate on the "sales_id" field.
 func SalesIDNotNil() predicate.OrderSales {
 	return predicate.OrderSales(sql.FieldNotNull(FieldSalesID))
+}
+
+// RatioEQ applies the EQ predicate on the "ratio" field.
+func RatioEQ(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldEQ(FieldRatio, v))
+}
+
+// RatioNEQ applies the NEQ predicate on the "ratio" field.
+func RatioNEQ(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNEQ(FieldRatio, v))
+}
+
+// RatioIn applies the In predicate on the "ratio" field.
+func RatioIn(vs ...int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldIn(FieldRatio, vs...))
+}
+
+// RatioNotIn applies the NotIn predicate on the "ratio" field.
+func RatioNotIn(vs ...int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNotIn(FieldRatio, vs...))
+}
+
+// RatioGT applies the GT predicate on the "ratio" field.
+func RatioGT(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldGT(FieldRatio, v))
+}
+
+// RatioGTE applies the GTE predicate on the "ratio" field.
+func RatioGTE(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldGTE(FieldRatio, v))
+}
+
+// RatioLT applies the LT predicate on the "ratio" field.
+func RatioLT(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldLT(FieldRatio, v))
+}
+
+// RatioLTE applies the LTE predicate on the "ratio" field.
+func RatioLTE(v int64) predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldLTE(FieldRatio, v))
+}
+
+// RatioIsNil applies the IsNil predicate on the "ratio" field.
+func RatioIsNil() predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldIsNull(FieldRatio))
+}
+
+// RatioNotNil applies the NotNil predicate on the "ratio" field.
+func RatioNotNil() predicate.OrderSales {
+	return predicate.OrderSales(sql.FieldNotNull(FieldRatio))
 }
 
 // HasAufk applies the HasEdge predicate on the "aufk" edge.

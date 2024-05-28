@@ -26,6 +26,8 @@ const (
 	FieldMemberID = "member_id"
 	// FieldSalesID holds the string denoting the sales_id field in the database.
 	FieldSalesID = "sales_id"
+	// FieldRatio holds the string denoting the ratio field in the database.
+	FieldRatio = "ratio"
 	// EdgeAufk holds the string denoting the aufk edge name in mutations.
 	EdgeAufk = "aufk"
 	// Table holds the table name of the ordersales in the database.
@@ -48,6 +50,7 @@ var Columns = []string{
 	FieldOrderID,
 	FieldMemberID,
 	FieldSalesID,
+	FieldRatio,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -107,6 +110,11 @@ func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 // BySalesID orders the results by the sales_id field.
 func BySalesID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSalesID, opts...).ToFunc()
+}
+
+// ByRatio orders the results by the ratio field.
+func ByRatio(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRatio, opts...).ToFunc()
 }
 
 // ByAufkField orders the results by aufk field.

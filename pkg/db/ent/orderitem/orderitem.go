@@ -22,14 +22,10 @@ const (
 	FieldOrderID = "order_id"
 	// FieldProductID holds the string denoting the product_id field in the database.
 	FieldProductID = "product_id"
-	// FieldQuantity holds the string denoting the quantity field in the database.
-	FieldQuantity = "quantity"
 	// FieldRelatedUserProductID holds the string denoting the related_user_product_id field in the database.
 	FieldRelatedUserProductID = "related_user_product_id"
-	// FieldContractID holds the string denoting the contract_id field in the database.
-	FieldContractID = "contract_id"
-	// FieldAssignAt holds the string denoting the assign_at field in the database.
-	FieldAssignAt = "assign_at"
+	// FieldData holds the string denoting the data field in the database.
+	FieldData = "data"
 	// EdgeAufk holds the string denoting the aufk edge name in mutations.
 	EdgeAufk = "aufk"
 	// Table holds the table name of the orderitem in the database.
@@ -50,10 +46,8 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldOrderID,
 	FieldProductID,
-	FieldQuantity,
 	FieldRelatedUserProductID,
-	FieldContractID,
-	FieldAssignAt,
+	FieldData,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -73,12 +67,10 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultQuantity holds the default value on creation for the "quantity" field.
-	DefaultQuantity int64
 	// DefaultRelatedUserProductID holds the default value on creation for the "related_user_product_id" field.
 	DefaultRelatedUserProductID int64
-	// DefaultAssignAt holds the default value on creation for the "assign_at" field.
-	DefaultAssignAt func() time.Time
+	// DefaultData holds the default value on creation for the "data" field.
+	DefaultData int64
 )
 
 // OrderOption defines the ordering options for the OrderItem queries.
@@ -109,24 +101,14 @@ func ByProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductID, opts...).ToFunc()
 }
 
-// ByQuantity orders the results by the quantity field.
-func ByQuantity(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldQuantity, opts...).ToFunc()
-}
-
 // ByRelatedUserProductID orders the results by the related_user_product_id field.
 func ByRelatedUserProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelatedUserProductID, opts...).ToFunc()
 }
 
-// ByContractID orders the results by the contract_id field.
-func ByContractID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldContractID, opts...).ToFunc()
-}
-
-// ByAssignAt orders the results by the assign_at field.
-func ByAssignAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssignAt, opts...).ToFunc()
+// ByData orders the results by the data field.
+func ByData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldData, opts...).ToFunc()
 }
 
 // ByAufkField orders the results by aufk field.

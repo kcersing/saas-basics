@@ -82,33 +82,6 @@ func (oiu *OrderItemUpdate) ClearProductID() *OrderItemUpdate {
 	return oiu
 }
 
-// SetQuantity sets the "quantity" field.
-func (oiu *OrderItemUpdate) SetQuantity(i int64) *OrderItemUpdate {
-	oiu.mutation.ResetQuantity()
-	oiu.mutation.SetQuantity(i)
-	return oiu
-}
-
-// SetNillableQuantity sets the "quantity" field if the given value is not nil.
-func (oiu *OrderItemUpdate) SetNillableQuantity(i *int64) *OrderItemUpdate {
-	if i != nil {
-		oiu.SetQuantity(*i)
-	}
-	return oiu
-}
-
-// AddQuantity adds i to the "quantity" field.
-func (oiu *OrderItemUpdate) AddQuantity(i int64) *OrderItemUpdate {
-	oiu.mutation.AddQuantity(i)
-	return oiu
-}
-
-// ClearQuantity clears the value of the "quantity" field.
-func (oiu *OrderItemUpdate) ClearQuantity() *OrderItemUpdate {
-	oiu.mutation.ClearQuantity()
-	return oiu
-}
-
 // SetRelatedUserProductID sets the "related_user_product_id" field.
 func (oiu *OrderItemUpdate) SetRelatedUserProductID(i int64) *OrderItemUpdate {
 	oiu.mutation.ResetRelatedUserProductID()
@@ -136,43 +109,30 @@ func (oiu *OrderItemUpdate) ClearRelatedUserProductID() *OrderItemUpdate {
 	return oiu
 }
 
-// SetContractID sets the "contract_id" field.
-func (oiu *OrderItemUpdate) SetContractID(s string) *OrderItemUpdate {
-	oiu.mutation.SetContractID(s)
+// SetData sets the "data" field.
+func (oiu *OrderItemUpdate) SetData(i int64) *OrderItemUpdate {
+	oiu.mutation.ResetData()
+	oiu.mutation.SetData(i)
 	return oiu
 }
 
-// SetNillableContractID sets the "contract_id" field if the given value is not nil.
-func (oiu *OrderItemUpdate) SetNillableContractID(s *string) *OrderItemUpdate {
-	if s != nil {
-		oiu.SetContractID(*s)
+// SetNillableData sets the "data" field if the given value is not nil.
+func (oiu *OrderItemUpdate) SetNillableData(i *int64) *OrderItemUpdate {
+	if i != nil {
+		oiu.SetData(*i)
 	}
 	return oiu
 }
 
-// ClearContractID clears the value of the "contract_id" field.
-func (oiu *OrderItemUpdate) ClearContractID() *OrderItemUpdate {
-	oiu.mutation.ClearContractID()
+// AddData adds i to the "data" field.
+func (oiu *OrderItemUpdate) AddData(i int64) *OrderItemUpdate {
+	oiu.mutation.AddData(i)
 	return oiu
 }
 
-// SetAssignAt sets the "assign_at" field.
-func (oiu *OrderItemUpdate) SetAssignAt(t time.Time) *OrderItemUpdate {
-	oiu.mutation.SetAssignAt(t)
-	return oiu
-}
-
-// SetNillableAssignAt sets the "assign_at" field if the given value is not nil.
-func (oiu *OrderItemUpdate) SetNillableAssignAt(t *time.Time) *OrderItemUpdate {
-	if t != nil {
-		oiu.SetAssignAt(*t)
-	}
-	return oiu
-}
-
-// ClearAssignAt clears the value of the "assign_at" field.
-func (oiu *OrderItemUpdate) ClearAssignAt() *OrderItemUpdate {
-	oiu.mutation.ClearAssignAt()
+// ClearData clears the value of the "data" field.
+func (oiu *OrderItemUpdate) ClearData() *OrderItemUpdate {
+	oiu.mutation.ClearData()
 	return oiu
 }
 
@@ -263,15 +223,6 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if oiu.mutation.ProductIDCleared() {
 		_spec.ClearField(orderitem.FieldProductID, field.TypeInt64)
 	}
-	if value, ok := oiu.mutation.Quantity(); ok {
-		_spec.SetField(orderitem.FieldQuantity, field.TypeInt64, value)
-	}
-	if value, ok := oiu.mutation.AddedQuantity(); ok {
-		_spec.AddField(orderitem.FieldQuantity, field.TypeInt64, value)
-	}
-	if oiu.mutation.QuantityCleared() {
-		_spec.ClearField(orderitem.FieldQuantity, field.TypeInt64)
-	}
 	if value, ok := oiu.mutation.RelatedUserProductID(); ok {
 		_spec.SetField(orderitem.FieldRelatedUserProductID, field.TypeInt64, value)
 	}
@@ -281,17 +232,14 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if oiu.mutation.RelatedUserProductIDCleared() {
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
-	if value, ok := oiu.mutation.ContractID(); ok {
-		_spec.SetField(orderitem.FieldContractID, field.TypeString, value)
+	if value, ok := oiu.mutation.Data(); ok {
+		_spec.SetField(orderitem.FieldData, field.TypeInt64, value)
 	}
-	if oiu.mutation.ContractIDCleared() {
-		_spec.ClearField(orderitem.FieldContractID, field.TypeString)
+	if value, ok := oiu.mutation.AddedData(); ok {
+		_spec.AddField(orderitem.FieldData, field.TypeInt64, value)
 	}
-	if value, ok := oiu.mutation.AssignAt(); ok {
-		_spec.SetField(orderitem.FieldAssignAt, field.TypeTime, value)
-	}
-	if oiu.mutation.AssignAtCleared() {
-		_spec.ClearField(orderitem.FieldAssignAt, field.TypeTime)
+	if oiu.mutation.DataCleared() {
+		_spec.ClearField(orderitem.FieldData, field.TypeInt64)
 	}
 	if oiu.mutation.AufkCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -395,33 +343,6 @@ func (oiuo *OrderItemUpdateOne) ClearProductID() *OrderItemUpdateOne {
 	return oiuo
 }
 
-// SetQuantity sets the "quantity" field.
-func (oiuo *OrderItemUpdateOne) SetQuantity(i int64) *OrderItemUpdateOne {
-	oiuo.mutation.ResetQuantity()
-	oiuo.mutation.SetQuantity(i)
-	return oiuo
-}
-
-// SetNillableQuantity sets the "quantity" field if the given value is not nil.
-func (oiuo *OrderItemUpdateOne) SetNillableQuantity(i *int64) *OrderItemUpdateOne {
-	if i != nil {
-		oiuo.SetQuantity(*i)
-	}
-	return oiuo
-}
-
-// AddQuantity adds i to the "quantity" field.
-func (oiuo *OrderItemUpdateOne) AddQuantity(i int64) *OrderItemUpdateOne {
-	oiuo.mutation.AddQuantity(i)
-	return oiuo
-}
-
-// ClearQuantity clears the value of the "quantity" field.
-func (oiuo *OrderItemUpdateOne) ClearQuantity() *OrderItemUpdateOne {
-	oiuo.mutation.ClearQuantity()
-	return oiuo
-}
-
 // SetRelatedUserProductID sets the "related_user_product_id" field.
 func (oiuo *OrderItemUpdateOne) SetRelatedUserProductID(i int64) *OrderItemUpdateOne {
 	oiuo.mutation.ResetRelatedUserProductID()
@@ -449,43 +370,30 @@ func (oiuo *OrderItemUpdateOne) ClearRelatedUserProductID() *OrderItemUpdateOne 
 	return oiuo
 }
 
-// SetContractID sets the "contract_id" field.
-func (oiuo *OrderItemUpdateOne) SetContractID(s string) *OrderItemUpdateOne {
-	oiuo.mutation.SetContractID(s)
+// SetData sets the "data" field.
+func (oiuo *OrderItemUpdateOne) SetData(i int64) *OrderItemUpdateOne {
+	oiuo.mutation.ResetData()
+	oiuo.mutation.SetData(i)
 	return oiuo
 }
 
-// SetNillableContractID sets the "contract_id" field if the given value is not nil.
-func (oiuo *OrderItemUpdateOne) SetNillableContractID(s *string) *OrderItemUpdateOne {
-	if s != nil {
-		oiuo.SetContractID(*s)
+// SetNillableData sets the "data" field if the given value is not nil.
+func (oiuo *OrderItemUpdateOne) SetNillableData(i *int64) *OrderItemUpdateOne {
+	if i != nil {
+		oiuo.SetData(*i)
 	}
 	return oiuo
 }
 
-// ClearContractID clears the value of the "contract_id" field.
-func (oiuo *OrderItemUpdateOne) ClearContractID() *OrderItemUpdateOne {
-	oiuo.mutation.ClearContractID()
+// AddData adds i to the "data" field.
+func (oiuo *OrderItemUpdateOne) AddData(i int64) *OrderItemUpdateOne {
+	oiuo.mutation.AddData(i)
 	return oiuo
 }
 
-// SetAssignAt sets the "assign_at" field.
-func (oiuo *OrderItemUpdateOne) SetAssignAt(t time.Time) *OrderItemUpdateOne {
-	oiuo.mutation.SetAssignAt(t)
-	return oiuo
-}
-
-// SetNillableAssignAt sets the "assign_at" field if the given value is not nil.
-func (oiuo *OrderItemUpdateOne) SetNillableAssignAt(t *time.Time) *OrderItemUpdateOne {
-	if t != nil {
-		oiuo.SetAssignAt(*t)
-	}
-	return oiuo
-}
-
-// ClearAssignAt clears the value of the "assign_at" field.
-func (oiuo *OrderItemUpdateOne) ClearAssignAt() *OrderItemUpdateOne {
-	oiuo.mutation.ClearAssignAt()
+// ClearData clears the value of the "data" field.
+func (oiuo *OrderItemUpdateOne) ClearData() *OrderItemUpdateOne {
+	oiuo.mutation.ClearData()
 	return oiuo
 }
 
@@ -606,15 +514,6 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 	if oiuo.mutation.ProductIDCleared() {
 		_spec.ClearField(orderitem.FieldProductID, field.TypeInt64)
 	}
-	if value, ok := oiuo.mutation.Quantity(); ok {
-		_spec.SetField(orderitem.FieldQuantity, field.TypeInt64, value)
-	}
-	if value, ok := oiuo.mutation.AddedQuantity(); ok {
-		_spec.AddField(orderitem.FieldQuantity, field.TypeInt64, value)
-	}
-	if oiuo.mutation.QuantityCleared() {
-		_spec.ClearField(orderitem.FieldQuantity, field.TypeInt64)
-	}
 	if value, ok := oiuo.mutation.RelatedUserProductID(); ok {
 		_spec.SetField(orderitem.FieldRelatedUserProductID, field.TypeInt64, value)
 	}
@@ -624,17 +523,14 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 	if oiuo.mutation.RelatedUserProductIDCleared() {
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
-	if value, ok := oiuo.mutation.ContractID(); ok {
-		_spec.SetField(orderitem.FieldContractID, field.TypeString, value)
+	if value, ok := oiuo.mutation.Data(); ok {
+		_spec.SetField(orderitem.FieldData, field.TypeInt64, value)
 	}
-	if oiuo.mutation.ContractIDCleared() {
-		_spec.ClearField(orderitem.FieldContractID, field.TypeString)
+	if value, ok := oiuo.mutation.AddedData(); ok {
+		_spec.AddField(orderitem.FieldData, field.TypeInt64, value)
 	}
-	if value, ok := oiuo.mutation.AssignAt(); ok {
-		_spec.SetField(orderitem.FieldAssignAt, field.TypeTime, value)
-	}
-	if oiuo.mutation.AssignAtCleared() {
-		_spec.ClearField(orderitem.FieldAssignAt, field.TypeTime)
+	if oiuo.mutation.DataCleared() {
+		_spec.ClearField(orderitem.FieldData, field.TypeInt64)
 	}
 	if oiuo.mutation.AufkCleared() {
 		edge := &sqlgraph.EdgeSpec{

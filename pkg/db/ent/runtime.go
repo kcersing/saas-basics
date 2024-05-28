@@ -575,15 +575,15 @@ func init() {
 	// order.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	order.UpdateDefaultUpdatedAt = orderDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// orderDescStatus is the schema descriptor for status field.
-	orderDescStatus := orderFields[3].Descriptor()
+	orderDescStatus := orderFields[4].Descriptor()
 	// order.DefaultStatus holds the default value on creation for the status field.
 	order.DefaultStatus = orderDescStatus.Default.(int64)
 	// orderDescSource is the schema descriptor for source field.
-	orderDescSource := orderFields[4].Descriptor()
+	orderDescSource := orderFields[5].Descriptor()
 	// order.DefaultSource holds the default value on creation for the source field.
 	order.DefaultSource = orderDescSource.Default.(string)
 	// orderDescDevice is the schema descriptor for device field.
-	orderDescDevice := orderFields[5].Descriptor()
+	orderDescDevice := orderFields[6].Descriptor()
 	// order.DefaultDevice holds the default value on creation for the device field.
 	order.DefaultDevice = orderDescDevice.Default.(string)
 	orderamountMixin := schema.OrderAmount{}.Mixin()
@@ -616,18 +616,14 @@ func init() {
 	orderitem.DefaultUpdatedAt = orderitemDescUpdatedAt.Default.(func() time.Time)
 	// orderitem.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	orderitem.UpdateDefaultUpdatedAt = orderitemDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// orderitemDescQuantity is the schema descriptor for quantity field.
-	orderitemDescQuantity := orderitemFields[2].Descriptor()
-	// orderitem.DefaultQuantity holds the default value on creation for the quantity field.
-	orderitem.DefaultQuantity = orderitemDescQuantity.Default.(int64)
 	// orderitemDescRelatedUserProductID is the schema descriptor for related_user_product_id field.
-	orderitemDescRelatedUserProductID := orderitemFields[3].Descriptor()
+	orderitemDescRelatedUserProductID := orderitemFields[2].Descriptor()
 	// orderitem.DefaultRelatedUserProductID holds the default value on creation for the related_user_product_id field.
 	orderitem.DefaultRelatedUserProductID = orderitemDescRelatedUserProductID.Default.(int64)
-	// orderitemDescAssignAt is the schema descriptor for assign_at field.
-	orderitemDescAssignAt := orderitemFields[5].Descriptor()
-	// orderitem.DefaultAssignAt holds the default value on creation for the assign_at field.
-	orderitem.DefaultAssignAt = orderitemDescAssignAt.Default.(func() time.Time)
+	// orderitemDescData is the schema descriptor for data field.
+	orderitemDescData := orderitemFields[3].Descriptor()
+	// orderitem.DefaultData holds the default value on creation for the data field.
+	orderitem.DefaultData = orderitemDescData.Default.(int64)
 	orderpayMixin := schema.OrderPay{}.Mixin()
 	orderpayMixinFields0 := orderpayMixin[0].Fields()
 	_ = orderpayMixinFields0

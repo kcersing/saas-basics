@@ -91,6 +91,20 @@ func (mccc *MemberContractContentCreate) SetNillableContent(s *string) *MemberCo
 	return mccc
 }
 
+// SetSignImg sets the "sign_img" field.
+func (mccc *MemberContractContentCreate) SetSignImg(s string) *MemberContractContentCreate {
+	mccc.mutation.SetSignImg(s)
+	return mccc
+}
+
+// SetNillableSignImg sets the "sign_img" field if the given value is not nil.
+func (mccc *MemberContractContentCreate) SetNillableSignImg(s *string) *MemberContractContentCreate {
+	if s != nil {
+		mccc.SetSignImg(*s)
+	}
+	return mccc
+}
+
 // SetID sets the "id" field.
 func (mccc *MemberContractContentCreate) SetID(i int64) *MemberContractContentCreate {
 	mccc.mutation.SetID(i)
@@ -220,6 +234,10 @@ func (mccc *MemberContractContentCreate) createSpec() (*MemberContractContent, *
 	if value, ok := mccc.mutation.Content(); ok {
 		_spec.SetField(membercontractcontent.FieldContent, field.TypeString, value)
 		_node.Content = value
+	}
+	if value, ok := mccc.mutation.SignImg(); ok {
+		_spec.SetField(membercontractcontent.FieldSignImg, field.TypeString, value)
+		_node.SignImg = value
 	}
 	if nodes := mccc.mutation.ContractIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

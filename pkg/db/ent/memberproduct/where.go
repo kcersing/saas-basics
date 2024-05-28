@@ -90,13 +90,18 @@ func ProductID(v int64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldProductID, v))
 }
 
+// VenueID applies equality check predicate on the "venue_id" field. It's identical to VenueIDEQ.
+func VenueID(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldVenueID, v))
+}
+
 // OrderID applies equality check predicate on the "order_id" field. It's identical to OrderIDEQ.
 func OrderID(v int64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldOrderID, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v float64) predicate.MemberProduct {
+func Name(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldName, v))
 }
 
@@ -475,6 +480,56 @@ func ProductIDNotNil() predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotNull(FieldProductID))
 }
 
+// VenueIDEQ applies the EQ predicate on the "venue_id" field.
+func VenueIDEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldVenueID, v))
+}
+
+// VenueIDNEQ applies the NEQ predicate on the "venue_id" field.
+func VenueIDNEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNEQ(FieldVenueID, v))
+}
+
+// VenueIDIn applies the In predicate on the "venue_id" field.
+func VenueIDIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIn(FieldVenueID, vs...))
+}
+
+// VenueIDNotIn applies the NotIn predicate on the "venue_id" field.
+func VenueIDNotIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotIn(FieldVenueID, vs...))
+}
+
+// VenueIDGT applies the GT predicate on the "venue_id" field.
+func VenueIDGT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGT(FieldVenueID, v))
+}
+
+// VenueIDGTE applies the GTE predicate on the "venue_id" field.
+func VenueIDGTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGTE(FieldVenueID, v))
+}
+
+// VenueIDLT applies the LT predicate on the "venue_id" field.
+func VenueIDLT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLT(FieldVenueID, v))
+}
+
+// VenueIDLTE applies the LTE predicate on the "venue_id" field.
+func VenueIDLTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLTE(FieldVenueID, v))
+}
+
+// VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
+func VenueIDIsNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIsNull(FieldVenueID))
+}
+
+// VenueIDNotNil applies the NotNil predicate on the "venue_id" field.
+func VenueIDNotNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotNull(FieldVenueID))
+}
+
 // OrderIDEQ applies the EQ predicate on the "order_id" field.
 func OrderIDEQ(v int64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldOrderID, v))
@@ -526,43 +581,58 @@ func OrderIDNotNil() predicate.MemberProduct {
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v float64) predicate.MemberProduct {
+func NameEQ(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldName, v))
 }
 
 // NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v float64) predicate.MemberProduct {
+func NameNEQ(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNEQ(FieldName, v))
 }
 
 // NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...float64) predicate.MemberProduct {
+func NameIn(vs ...string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldIn(FieldName, vs...))
 }
 
 // NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...float64) predicate.MemberProduct {
+func NameNotIn(vs ...string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotIn(FieldName, vs...))
 }
 
 // NameGT applies the GT predicate on the "name" field.
-func NameGT(v float64) predicate.MemberProduct {
+func NameGT(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldGT(FieldName, v))
 }
 
 // NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v float64) predicate.MemberProduct {
+func NameGTE(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldGTE(FieldName, v))
 }
 
 // NameLT applies the LT predicate on the "name" field.
-func NameLT(v float64) predicate.MemberProduct {
+func NameLT(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldLT(FieldName, v))
 }
 
 // NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v float64) predicate.MemberProduct {
+func NameLTE(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldLTE(FieldName, v))
+}
+
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldContains(FieldName, v))
+}
+
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldHasPrefix(FieldName, v))
+}
+
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldHasSuffix(FieldName, v))
 }
 
 // NameIsNil applies the IsNil predicate on the "name" field.
@@ -573,6 +643,16 @@ func NameIsNil() predicate.MemberProduct {
 // NameNotNil applies the NotNil predicate on the "name" field.
 func NameNotNil() predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotNull(FieldName))
+}
+
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEqualFold(FieldName, v))
+}
+
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldContainsFold(FieldName, v))
 }
 
 // PriceEQ applies the EQ predicate on the "price" field.

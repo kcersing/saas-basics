@@ -1,11 +1,12 @@
 package schema
 
 import (
+	"saas/pkg/db/ent/schema/mixins"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"saas/pkg/db/ent/schema/mixins"
 )
 
 type Contract struct {

@@ -102,6 +102,33 @@ func (ou *OrderUpdate) ClearMemberID() *OrderUpdate {
 	return ou
 }
 
+// SetMemberProductID sets the "member_product_id" field.
+func (ou *OrderUpdate) SetMemberProductID(i int64) *OrderUpdate {
+	ou.mutation.ResetMemberProductID()
+	ou.mutation.SetMemberProductID(i)
+	return ou
+}
+
+// SetNillableMemberProductID sets the "member_product_id" field if the given value is not nil.
+func (ou *OrderUpdate) SetNillableMemberProductID(i *int64) *OrderUpdate {
+	if i != nil {
+		ou.SetMemberProductID(*i)
+	}
+	return ou
+}
+
+// AddMemberProductID adds i to the "member_product_id" field.
+func (ou *OrderUpdate) AddMemberProductID(i int64) *OrderUpdate {
+	ou.mutation.AddMemberProductID(i)
+	return ou
+}
+
+// ClearMemberProductID clears the value of the "member_product_id" field.
+func (ou *OrderUpdate) ClearMemberProductID() *OrderUpdate {
+	ou.mutation.ClearMemberProductID()
+	return ou
+}
+
 // SetStatus sets the "status" field.
 func (ou *OrderUpdate) SetStatus(i int64) *OrderUpdate {
 	ou.mutation.ResetStatus()
@@ -522,6 +549,15 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.OrderSnCleared() {
 		_spec.ClearField(order.FieldOrderSn, field.TypeString)
+	}
+	if value, ok := ou.mutation.MemberProductID(); ok {
+		_spec.SetField(order.FieldMemberProductID, field.TypeInt64, value)
+	}
+	if value, ok := ou.mutation.AddedMemberProductID(); ok {
+		_spec.AddField(order.FieldMemberProductID, field.TypeInt64, value)
+	}
+	if ou.mutation.MemberProductIDCleared() {
+		_spec.ClearField(order.FieldMemberProductID, field.TypeInt64)
 	}
 	if value, ok := ou.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
@@ -945,6 +981,33 @@ func (ouo *OrderUpdateOne) SetNillableMemberID(i *int64) *OrderUpdateOne {
 // ClearMemberID clears the value of the "member_id" field.
 func (ouo *OrderUpdateOne) ClearMemberID() *OrderUpdateOne {
 	ouo.mutation.ClearMemberID()
+	return ouo
+}
+
+// SetMemberProductID sets the "member_product_id" field.
+func (ouo *OrderUpdateOne) SetMemberProductID(i int64) *OrderUpdateOne {
+	ouo.mutation.ResetMemberProductID()
+	ouo.mutation.SetMemberProductID(i)
+	return ouo
+}
+
+// SetNillableMemberProductID sets the "member_product_id" field if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableMemberProductID(i *int64) *OrderUpdateOne {
+	if i != nil {
+		ouo.SetMemberProductID(*i)
+	}
+	return ouo
+}
+
+// AddMemberProductID adds i to the "member_product_id" field.
+func (ouo *OrderUpdateOne) AddMemberProductID(i int64) *OrderUpdateOne {
+	ouo.mutation.AddMemberProductID(i)
+	return ouo
+}
+
+// ClearMemberProductID clears the value of the "member_product_id" field.
+func (ouo *OrderUpdateOne) ClearMemberProductID() *OrderUpdateOne {
+	ouo.mutation.ClearMemberProductID()
 	return ouo
 }
 
@@ -1398,6 +1461,15 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	}
 	if ouo.mutation.OrderSnCleared() {
 		_spec.ClearField(order.FieldOrderSn, field.TypeString)
+	}
+	if value, ok := ouo.mutation.MemberProductID(); ok {
+		_spec.SetField(order.FieldMemberProductID, field.TypeInt64, value)
+	}
+	if value, ok := ouo.mutation.AddedMemberProductID(); ok {
+		_spec.AddField(order.FieldMemberProductID, field.TypeInt64, value)
+	}
+	if ouo.mutation.MemberProductIDCleared() {
+		_spec.ClearField(order.FieldMemberProductID, field.TypeInt64)
 	}
 	if value, ok := ouo.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)

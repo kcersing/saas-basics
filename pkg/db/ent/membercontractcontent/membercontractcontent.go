@@ -24,6 +24,8 @@ const (
 	FieldMemberContractID = "member_contract_id"
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
+	// FieldSignImg holds the string denoting the sign_img field in the database.
+	FieldSignImg = "sign_img"
 	// EdgeContract holds the string denoting the contract edge name in mutations.
 	EdgeContract = "contract"
 	// Table holds the table name of the membercontractcontent in the database.
@@ -45,6 +47,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldMemberContractID,
 	FieldContent,
+	FieldSignImg,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -99,6 +102,11 @@ func ByMemberContractID(opts ...sql.OrderTermOption) OrderOption {
 // ByContent orders the results by the content field.
 func ByContent(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContent, opts...).ToFunc()
+}
+
+// BySignImg orders the results by the sign_img field.
+func BySignImg(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSignImg, opts...).ToFunc()
 }
 
 // ByContractField orders the results by contract field.

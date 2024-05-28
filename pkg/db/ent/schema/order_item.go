@@ -1,14 +1,14 @@
 package schema
 
 import (
+	"saas/pkg/db/ent/schema/mixins"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"saas/pkg/db/ent/schema/mixins"
-	"time"
 )
 
 type OrderItem struct {
@@ -19,10 +19,8 @@ func (OrderItem) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("order_id").Comment("订单id").Optional(),
 		field.Int64("product_id").Comment("产品id").Optional(),
-		field.Int64("quantity").Default(0).Comment("购买数量").Optional(),
 		field.Int64("related_user_product_id").Default(0).Comment("关联会员产品id").Optional(),
-		field.String("contract_id").Comment("合同ID").Optional(),
-		field.Time("assign_at").Default(time.Now).Comment("指定时间").Optional(),
+		field.Int64("data").Default(0).Comment("数据附件").Optional(),
 	}
 }
 

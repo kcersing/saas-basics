@@ -152,6 +152,33 @@ func (mpu *MemberProductUpdate) ClearProductID() *MemberProductUpdate {
 	return mpu
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mpu *MemberProductUpdate) SetVenueID(i int64) *MemberProductUpdate {
+	mpu.mutation.ResetVenueID()
+	mpu.mutation.SetVenueID(i)
+	return mpu
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mpu *MemberProductUpdate) SetNillableVenueID(i *int64) *MemberProductUpdate {
+	if i != nil {
+		mpu.SetVenueID(*i)
+	}
+	return mpu
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mpu *MemberProductUpdate) AddVenueID(i int64) *MemberProductUpdate {
+	mpu.mutation.AddVenueID(i)
+	return mpu
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mpu *MemberProductUpdate) ClearVenueID() *MemberProductUpdate {
+	mpu.mutation.ClearVenueID()
+	return mpu
+}
+
 // SetOrderID sets the "order_id" field.
 func (mpu *MemberProductUpdate) SetOrderID(i int64) *MemberProductUpdate {
 	mpu.mutation.ResetOrderID()
@@ -180,23 +207,16 @@ func (mpu *MemberProductUpdate) ClearOrderID() *MemberProductUpdate {
 }
 
 // SetName sets the "name" field.
-func (mpu *MemberProductUpdate) SetName(f float64) *MemberProductUpdate {
-	mpu.mutation.ResetName()
-	mpu.mutation.SetName(f)
+func (mpu *MemberProductUpdate) SetName(s string) *MemberProductUpdate {
+	mpu.mutation.SetName(s)
 	return mpu
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (mpu *MemberProductUpdate) SetNillableName(f *float64) *MemberProductUpdate {
-	if f != nil {
-		mpu.SetName(*f)
+func (mpu *MemberProductUpdate) SetNillableName(s *string) *MemberProductUpdate {
+	if s != nil {
+		mpu.SetName(*s)
 	}
-	return mpu
-}
-
-// AddName adds f to the "name" field.
-func (mpu *MemberProductUpdate) AddName(f float64) *MemberProductUpdate {
-	mpu.mutation.AddName(f)
 	return mpu
 }
 
@@ -489,6 +509,15 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mpu.mutation.ProductIDCleared() {
 		_spec.ClearField(memberproduct.FieldProductID, field.TypeInt64)
 	}
+	if value, ok := mpu.mutation.VenueID(); ok {
+		_spec.SetField(memberproduct.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedVenueID(); ok {
+		_spec.AddField(memberproduct.FieldVenueID, field.TypeInt64, value)
+	}
+	if mpu.mutation.VenueIDCleared() {
+		_spec.ClearField(memberproduct.FieldVenueID, field.TypeInt64)
+	}
 	if value, ok := mpu.mutation.OrderID(); ok {
 		_spec.SetField(memberproduct.FieldOrderID, field.TypeInt64, value)
 	}
@@ -499,13 +528,10 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		_spec.ClearField(memberproduct.FieldOrderID, field.TypeInt64)
 	}
 	if value, ok := mpu.mutation.Name(); ok {
-		_spec.SetField(memberproduct.FieldName, field.TypeFloat64, value)
-	}
-	if value, ok := mpu.mutation.AddedName(); ok {
-		_spec.AddField(memberproduct.FieldName, field.TypeFloat64, value)
+		_spec.SetField(memberproduct.FieldName, field.TypeString, value)
 	}
 	if mpu.mutation.NameCleared() {
-		_spec.ClearField(memberproduct.FieldName, field.TypeFloat64)
+		_spec.ClearField(memberproduct.FieldName, field.TypeString)
 	}
 	if value, ok := mpu.mutation.Price(); ok {
 		_spec.SetField(memberproduct.FieldPrice, field.TypeFloat64, value)
@@ -832,6 +858,33 @@ func (mpuo *MemberProductUpdateOne) ClearProductID() *MemberProductUpdateOne {
 	return mpuo
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mpuo *MemberProductUpdateOne) SetVenueID(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.ResetVenueID()
+	mpuo.mutation.SetVenueID(i)
+	return mpuo
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mpuo *MemberProductUpdateOne) SetNillableVenueID(i *int64) *MemberProductUpdateOne {
+	if i != nil {
+		mpuo.SetVenueID(*i)
+	}
+	return mpuo
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mpuo *MemberProductUpdateOne) AddVenueID(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddVenueID(i)
+	return mpuo
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mpuo *MemberProductUpdateOne) ClearVenueID() *MemberProductUpdateOne {
+	mpuo.mutation.ClearVenueID()
+	return mpuo
+}
+
 // SetOrderID sets the "order_id" field.
 func (mpuo *MemberProductUpdateOne) SetOrderID(i int64) *MemberProductUpdateOne {
 	mpuo.mutation.ResetOrderID()
@@ -860,23 +913,16 @@ func (mpuo *MemberProductUpdateOne) ClearOrderID() *MemberProductUpdateOne {
 }
 
 // SetName sets the "name" field.
-func (mpuo *MemberProductUpdateOne) SetName(f float64) *MemberProductUpdateOne {
-	mpuo.mutation.ResetName()
-	mpuo.mutation.SetName(f)
+func (mpuo *MemberProductUpdateOne) SetName(s string) *MemberProductUpdateOne {
+	mpuo.mutation.SetName(s)
 	return mpuo
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (mpuo *MemberProductUpdateOne) SetNillableName(f *float64) *MemberProductUpdateOne {
-	if f != nil {
-		mpuo.SetName(*f)
+func (mpuo *MemberProductUpdateOne) SetNillableName(s *string) *MemberProductUpdateOne {
+	if s != nil {
+		mpuo.SetName(*s)
 	}
-	return mpuo
-}
-
-// AddName adds f to the "name" field.
-func (mpuo *MemberProductUpdateOne) AddName(f float64) *MemberProductUpdateOne {
-	mpuo.mutation.AddName(f)
 	return mpuo
 }
 
@@ -1199,6 +1245,15 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	if mpuo.mutation.ProductIDCleared() {
 		_spec.ClearField(memberproduct.FieldProductID, field.TypeInt64)
 	}
+	if value, ok := mpuo.mutation.VenueID(); ok {
+		_spec.SetField(memberproduct.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedVenueID(); ok {
+		_spec.AddField(memberproduct.FieldVenueID, field.TypeInt64, value)
+	}
+	if mpuo.mutation.VenueIDCleared() {
+		_spec.ClearField(memberproduct.FieldVenueID, field.TypeInt64)
+	}
 	if value, ok := mpuo.mutation.OrderID(); ok {
 		_spec.SetField(memberproduct.FieldOrderID, field.TypeInt64, value)
 	}
@@ -1209,13 +1264,10 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 		_spec.ClearField(memberproduct.FieldOrderID, field.TypeInt64)
 	}
 	if value, ok := mpuo.mutation.Name(); ok {
-		_spec.SetField(memberproduct.FieldName, field.TypeFloat64, value)
-	}
-	if value, ok := mpuo.mutation.AddedName(); ok {
-		_spec.AddField(memberproduct.FieldName, field.TypeFloat64, value)
+		_spec.SetField(memberproduct.FieldName, field.TypeString, value)
 	}
 	if mpuo.mutation.NameCleared() {
-		_spec.ClearField(memberproduct.FieldName, field.TypeFloat64)
+		_spec.ClearField(memberproduct.FieldName, field.TypeString)
 	}
 	if value, ok := mpuo.mutation.Price(); ok {
 		_spec.SetField(memberproduct.FieldPrice, field.TypeFloat64, value)

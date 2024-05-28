@@ -122,6 +122,20 @@ func (mpc *MemberProductCreate) SetNillableProductID(i *int64) *MemberProductCre
 	return mpc
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mpc *MemberProductCreate) SetVenueID(i int64) *MemberProductCreate {
+	mpc.mutation.SetVenueID(i)
+	return mpc
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableVenueID(i *int64) *MemberProductCreate {
+	if i != nil {
+		mpc.SetVenueID(*i)
+	}
+	return mpc
+}
+
 // SetOrderID sets the "order_id" field.
 func (mpc *MemberProductCreate) SetOrderID(i int64) *MemberProductCreate {
 	mpc.mutation.SetOrderID(i)
@@ -137,15 +151,15 @@ func (mpc *MemberProductCreate) SetNillableOrderID(i *int64) *MemberProductCreat
 }
 
 // SetName sets the "name" field.
-func (mpc *MemberProductCreate) SetName(f float64) *MemberProductCreate {
-	mpc.mutation.SetName(f)
+func (mpc *MemberProductCreate) SetName(s string) *MemberProductCreate {
+	mpc.mutation.SetName(s)
 	return mpc
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (mpc *MemberProductCreate) SetNillableName(f *float64) *MemberProductCreate {
-	if f != nil {
-		mpc.SetName(*f)
+func (mpc *MemberProductCreate) SetNillableName(s *string) *MemberProductCreate {
+	if s != nil {
+		mpc.SetName(*s)
 	}
 	return mpc
 }
@@ -375,12 +389,16 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 		_spec.SetField(memberproduct.FieldProductID, field.TypeInt64, value)
 		_node.ProductID = value
 	}
+	if value, ok := mpc.mutation.VenueID(); ok {
+		_spec.SetField(memberproduct.FieldVenueID, field.TypeInt64, value)
+		_node.VenueID = value
+	}
 	if value, ok := mpc.mutation.OrderID(); ok {
 		_spec.SetField(memberproduct.FieldOrderID, field.TypeInt64, value)
 		_node.OrderID = value
 	}
 	if value, ok := mpc.mutation.Name(); ok {
-		_spec.SetField(memberproduct.FieldName, field.TypeFloat64, value)
+		_spec.SetField(memberproduct.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := mpc.mutation.Price(); ok {

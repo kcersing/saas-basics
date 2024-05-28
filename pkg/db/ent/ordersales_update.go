@@ -136,6 +136,33 @@ func (osu *OrderSalesUpdate) ClearSalesID() *OrderSalesUpdate {
 	return osu
 }
 
+// SetRatio sets the "ratio" field.
+func (osu *OrderSalesUpdate) SetRatio(i int64) *OrderSalesUpdate {
+	osu.mutation.ResetRatio()
+	osu.mutation.SetRatio(i)
+	return osu
+}
+
+// SetNillableRatio sets the "ratio" field if the given value is not nil.
+func (osu *OrderSalesUpdate) SetNillableRatio(i *int64) *OrderSalesUpdate {
+	if i != nil {
+		osu.SetRatio(*i)
+	}
+	return osu
+}
+
+// AddRatio adds i to the "ratio" field.
+func (osu *OrderSalesUpdate) AddRatio(i int64) *OrderSalesUpdate {
+	osu.mutation.AddRatio(i)
+	return osu
+}
+
+// ClearRatio clears the value of the "ratio" field.
+func (osu *OrderSalesUpdate) ClearRatio() *OrderSalesUpdate {
+	osu.mutation.ClearRatio()
+	return osu
+}
+
 // SetAufkID sets the "aufk" edge to the Order entity by ID.
 func (osu *OrderSalesUpdate) SetAufkID(id int64) *OrderSalesUpdate {
 	osu.mutation.SetAufkID(id)
@@ -240,6 +267,15 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if osu.mutation.SalesIDCleared() {
 		_spec.ClearField(ordersales.FieldSalesID, field.TypeInt64)
+	}
+	if value, ok := osu.mutation.Ratio(); ok {
+		_spec.SetField(ordersales.FieldRatio, field.TypeInt64, value)
+	}
+	if value, ok := osu.mutation.AddedRatio(); ok {
+		_spec.AddField(ordersales.FieldRatio, field.TypeInt64, value)
+	}
+	if osu.mutation.RatioCleared() {
+		_spec.ClearField(ordersales.FieldRatio, field.TypeInt64)
 	}
 	if osu.mutation.AufkCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -397,6 +433,33 @@ func (osuo *OrderSalesUpdateOne) ClearSalesID() *OrderSalesUpdateOne {
 	return osuo
 }
 
+// SetRatio sets the "ratio" field.
+func (osuo *OrderSalesUpdateOne) SetRatio(i int64) *OrderSalesUpdateOne {
+	osuo.mutation.ResetRatio()
+	osuo.mutation.SetRatio(i)
+	return osuo
+}
+
+// SetNillableRatio sets the "ratio" field if the given value is not nil.
+func (osuo *OrderSalesUpdateOne) SetNillableRatio(i *int64) *OrderSalesUpdateOne {
+	if i != nil {
+		osuo.SetRatio(*i)
+	}
+	return osuo
+}
+
+// AddRatio adds i to the "ratio" field.
+func (osuo *OrderSalesUpdateOne) AddRatio(i int64) *OrderSalesUpdateOne {
+	osuo.mutation.AddRatio(i)
+	return osuo
+}
+
+// ClearRatio clears the value of the "ratio" field.
+func (osuo *OrderSalesUpdateOne) ClearRatio() *OrderSalesUpdateOne {
+	osuo.mutation.ClearRatio()
+	return osuo
+}
+
 // SetAufkID sets the "aufk" edge to the Order entity by ID.
 func (osuo *OrderSalesUpdateOne) SetAufkID(id int64) *OrderSalesUpdateOne {
 	osuo.mutation.SetAufkID(id)
@@ -531,6 +594,15 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 	}
 	if osuo.mutation.SalesIDCleared() {
 		_spec.ClearField(ordersales.FieldSalesID, field.TypeInt64)
+	}
+	if value, ok := osuo.mutation.Ratio(); ok {
+		_spec.SetField(ordersales.FieldRatio, field.TypeInt64, value)
+	}
+	if value, ok := osuo.mutation.AddedRatio(); ok {
+		_spec.AddField(ordersales.FieldRatio, field.TypeInt64, value)
+	}
+	if osuo.mutation.RatioCleared() {
+		_spec.ClearField(ordersales.FieldRatio, field.TypeInt64)
 	}
 	if osuo.mutation.AufkCleared() {
 		edge := &sqlgraph.EdgeSpec{

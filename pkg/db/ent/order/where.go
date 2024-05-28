@@ -80,6 +80,11 @@ func MemberID(v int64) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldMemberID, v))
 }
 
+// MemberProductID applies equality check predicate on the "member_product_id" field. It's identical to MemberProductIDEQ.
+func MemberProductID(v int64) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldMemberProductID, v))
+}
+
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v int64) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldStatus, v))
@@ -318,6 +323,56 @@ func MemberIDIsNil() predicate.Order {
 // MemberIDNotNil applies the NotNil predicate on the "member_id" field.
 func MemberIDNotNil() predicate.Order {
 	return predicate.Order(sql.FieldNotNull(FieldMemberID))
+}
+
+// MemberProductIDEQ applies the EQ predicate on the "member_product_id" field.
+func MemberProductIDEQ(v int64) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldMemberProductID, v))
+}
+
+// MemberProductIDNEQ applies the NEQ predicate on the "member_product_id" field.
+func MemberProductIDNEQ(v int64) predicate.Order {
+	return predicate.Order(sql.FieldNEQ(FieldMemberProductID, v))
+}
+
+// MemberProductIDIn applies the In predicate on the "member_product_id" field.
+func MemberProductIDIn(vs ...int64) predicate.Order {
+	return predicate.Order(sql.FieldIn(FieldMemberProductID, vs...))
+}
+
+// MemberProductIDNotIn applies the NotIn predicate on the "member_product_id" field.
+func MemberProductIDNotIn(vs ...int64) predicate.Order {
+	return predicate.Order(sql.FieldNotIn(FieldMemberProductID, vs...))
+}
+
+// MemberProductIDGT applies the GT predicate on the "member_product_id" field.
+func MemberProductIDGT(v int64) predicate.Order {
+	return predicate.Order(sql.FieldGT(FieldMemberProductID, v))
+}
+
+// MemberProductIDGTE applies the GTE predicate on the "member_product_id" field.
+func MemberProductIDGTE(v int64) predicate.Order {
+	return predicate.Order(sql.FieldGTE(FieldMemberProductID, v))
+}
+
+// MemberProductIDLT applies the LT predicate on the "member_product_id" field.
+func MemberProductIDLT(v int64) predicate.Order {
+	return predicate.Order(sql.FieldLT(FieldMemberProductID, v))
+}
+
+// MemberProductIDLTE applies the LTE predicate on the "member_product_id" field.
+func MemberProductIDLTE(v int64) predicate.Order {
+	return predicate.Order(sql.FieldLTE(FieldMemberProductID, v))
+}
+
+// MemberProductIDIsNil applies the IsNil predicate on the "member_product_id" field.
+func MemberProductIDIsNil() predicate.Order {
+	return predicate.Order(sql.FieldIsNull(FieldMemberProductID))
+}
+
+// MemberProductIDNotNil applies the NotNil predicate on the "member_product_id" field.
+func MemberProductIDNotNil() predicate.Order {
+	return predicate.Order(sql.FieldNotNull(FieldMemberProductID))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

@@ -24,6 +24,8 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
+	// FieldMemberProductID holds the string denoting the member_product_id field in the database.
+	FieldMemberProductID = "member_product_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -118,6 +120,7 @@ var Columns = []string{
 	FieldOrderSn,
 	FieldVenueID,
 	FieldMemberID,
+	FieldMemberProductID,
 	FieldStatus,
 	FieldSource,
 	FieldDevice,
@@ -181,6 +184,11 @@ func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 // ByMemberID orders the results by the member_id field.
 func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
+}
+
+// ByMemberProductID orders the results by the member_product_id field.
+func ByMemberProductID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMemberProductID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

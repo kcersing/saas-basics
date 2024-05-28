@@ -27,14 +27,10 @@ type OrderItem struct {
 	OrderID int64 `json:"order_id,omitempty"`
 	// 产品id
 	ProductID int64 `json:"product_id,omitempty"`
-	// 购买数量
-	Quantity int64 `json:"quantity,omitempty"`
 	// 关联会员产品id
 	RelatedUserProductID int64 `json:"related_user_product_id,omitempty"`
-	// 合同ID
-	ContractID string `json:"contract_id,omitempty"`
-	// 指定时间
-	AssignAt time.Time `json:"assign_at,omitempty"`
+	// 数据附件
+	Data int64 `json:"data,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderItemQuery when eager-loading is set.
 	Edges        OrderItemEdges `json:"edges"`
@@ -68,11 +64,9 @@ func (*OrderItem) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orderitem.FieldID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldQuantity, orderitem.FieldRelatedUserProductID:
+		case orderitem.FieldID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID, orderitem.FieldData:
 			values[i] = new(sql.NullInt64)
-		case orderitem.FieldContractID:
-			values[i] = new(sql.NullString)
-		case orderitem.FieldCreatedAt, orderitem.FieldUpdatedAt, orderitem.FieldAssignAt:
+		case orderitem.FieldCreatedAt, orderitem.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -119,29 +113,17 @@ func (oi *OrderItem) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				oi.ProductID = value.Int64
 			}
-		case orderitem.FieldQuantity:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field quantity", values[i])
-			} else if value.Valid {
-				oi.Quantity = value.Int64
-			}
 		case orderitem.FieldRelatedUserProductID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field related_user_product_id", values[i])
 			} else if value.Valid {
 				oi.RelatedUserProductID = value.Int64
 			}
-		case orderitem.FieldContractID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field contract_id", values[i])
+		case orderitem.FieldData:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field data", values[i])
 			} else if value.Valid {
-				oi.ContractID = value.String
-			}
-		case orderitem.FieldAssignAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field assign_at", values[i])
-			} else if value.Valid {
-				oi.AssignAt = value.Time
+				oi.Data = value.Int64
 			}
 		default:
 			oi.selectValues.Set(columns[i], values[i])
@@ -196,17 +178,11 @@ func (oi *OrderItem) String() string {
 	builder.WriteString("product_id=")
 	builder.WriteString(fmt.Sprintf("%v", oi.ProductID))
 	builder.WriteString(", ")
-	builder.WriteString("quantity=")
-	builder.WriteString(fmt.Sprintf("%v", oi.Quantity))
-	builder.WriteString(", ")
 	builder.WriteString("related_user_product_id=")
 	builder.WriteString(fmt.Sprintf("%v", oi.RelatedUserProductID))
 	builder.WriteString(", ")
-	builder.WriteString("contract_id=")
-	builder.WriteString(oi.ContractID)
-	builder.WriteString(", ")
-	builder.WriteString("assign_at=")
-	builder.WriteString(oi.AssignAt.Format(time.ANSIC))
+	builder.WriteString("data=")
+	builder.WriteString(fmt.Sprintf("%v", oi.Data))
 	builder.WriteByte(')')
 	return builder.String()
 }

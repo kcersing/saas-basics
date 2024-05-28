@@ -80,6 +80,11 @@ func Content(v string) predicate.MemberContractContent {
 	return predicate.MemberContractContent(sql.FieldEQ(FieldContent, v))
 }
 
+// SignImg applies equality check predicate on the "sign_img" field. It's identical to SignImgEQ.
+func SignImg(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldEQ(FieldSignImg, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.MemberContractContent {
 	return predicate.MemberContractContent(sql.FieldEQ(FieldCreatedAt, v))
@@ -313,6 +318,81 @@ func ContentEqualFold(v string) predicate.MemberContractContent {
 // ContentContainsFold applies the ContainsFold predicate on the "content" field.
 func ContentContainsFold(v string) predicate.MemberContractContent {
 	return predicate.MemberContractContent(sql.FieldContainsFold(FieldContent, v))
+}
+
+// SignImgEQ applies the EQ predicate on the "sign_img" field.
+func SignImgEQ(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldEQ(FieldSignImg, v))
+}
+
+// SignImgNEQ applies the NEQ predicate on the "sign_img" field.
+func SignImgNEQ(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldNEQ(FieldSignImg, v))
+}
+
+// SignImgIn applies the In predicate on the "sign_img" field.
+func SignImgIn(vs ...string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldIn(FieldSignImg, vs...))
+}
+
+// SignImgNotIn applies the NotIn predicate on the "sign_img" field.
+func SignImgNotIn(vs ...string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldNotIn(FieldSignImg, vs...))
+}
+
+// SignImgGT applies the GT predicate on the "sign_img" field.
+func SignImgGT(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldGT(FieldSignImg, v))
+}
+
+// SignImgGTE applies the GTE predicate on the "sign_img" field.
+func SignImgGTE(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldGTE(FieldSignImg, v))
+}
+
+// SignImgLT applies the LT predicate on the "sign_img" field.
+func SignImgLT(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldLT(FieldSignImg, v))
+}
+
+// SignImgLTE applies the LTE predicate on the "sign_img" field.
+func SignImgLTE(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldLTE(FieldSignImg, v))
+}
+
+// SignImgContains applies the Contains predicate on the "sign_img" field.
+func SignImgContains(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldContains(FieldSignImg, v))
+}
+
+// SignImgHasPrefix applies the HasPrefix predicate on the "sign_img" field.
+func SignImgHasPrefix(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldHasPrefix(FieldSignImg, v))
+}
+
+// SignImgHasSuffix applies the HasSuffix predicate on the "sign_img" field.
+func SignImgHasSuffix(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldHasSuffix(FieldSignImg, v))
+}
+
+// SignImgIsNil applies the IsNil predicate on the "sign_img" field.
+func SignImgIsNil() predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldIsNull(FieldSignImg))
+}
+
+// SignImgNotNil applies the NotNil predicate on the "sign_img" field.
+func SignImgNotNil() predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldNotNull(FieldSignImg))
+}
+
+// SignImgEqualFold applies the EqualFold predicate on the "sign_img" field.
+func SignImgEqualFold(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldEqualFold(FieldSignImg, v))
+}
+
+// SignImgContainsFold applies the ContainsFold predicate on the "sign_img" field.
+func SignImgContainsFold(v string) predicate.MemberContractContent {
+	return predicate.MemberContractContent(sql.FieldContainsFold(FieldSignImg, v))
 }
 
 // HasContract applies the HasEdge predicate on the "contract" edge.

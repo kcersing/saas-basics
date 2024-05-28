@@ -33,10 +33,12 @@ type MemberProduct struct {
 	MemberID int64 `json:"member_id,omitempty"`
 	// 产品ID
 	ProductID int64 `json:"product_id,omitempty"`
+	// 场馆ID
+	VenueID int64 `json:"venue_id,omitempty"`
 	// 订单ID
 	OrderID int64 `json:"order_id,omitempty"`
 	// 产品名称
-	Name float64 `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
 	// 产品价格
 	Price float64 `json:"price,omitempty"`
 	// 生效时间
@@ -109,11 +111,11 @@ func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case memberproduct.FieldName, memberproduct.FieldPrice:
+		case memberproduct.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case memberproduct.FieldID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldOrderID:
+		case memberproduct.FieldID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldVenueID, memberproduct.FieldOrderID:
 			values[i] = new(sql.NullInt64)
-		case memberproduct.FieldSn, memberproduct.FieldType:
+		case memberproduct.FieldSn, memberproduct.FieldType, memberproduct.FieldName:
 			values[i] = new(sql.NullString)
 		case memberproduct.FieldCreatedAt, memberproduct.FieldUpdatedAt, memberproduct.FieldValidityAt, memberproduct.FieldCancelAt:
 			values[i] = new(sql.NullTime)
@@ -180,6 +182,12 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mp.ProductID = value.Int64
 			}
+		case memberproduct.FieldVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
+			} else if value.Valid {
+				mp.VenueID = value.Int64
+			}
 		case memberproduct.FieldOrderID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field order_id", values[i])
@@ -187,10 +195,10 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 				mp.OrderID = value.Int64
 			}
 		case memberproduct.FieldName:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				mp.Name = value.Float64
+				mp.Name = value.String
 			}
 		case memberproduct.FieldPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
@@ -287,11 +295,14 @@ func (mp *MemberProduct) String() string {
 	builder.WriteString("product_id=")
 	builder.WriteString(fmt.Sprintf("%v", mp.ProductID))
 	builder.WriteString(", ")
+	builder.WriteString("venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", mp.VenueID))
+	builder.WriteString(", ")
 	builder.WriteString("order_id=")
 	builder.WriteString(fmt.Sprintf("%v", mp.OrderID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(fmt.Sprintf("%v", mp.Name))
+	builder.WriteString(mp.Name)
 	builder.WriteString(", ")
 	builder.WriteString("price=")
 	builder.WriteString(fmt.Sprintf("%v", mp.Price))
