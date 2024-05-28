@@ -31,7 +31,6 @@ func CreateOrder(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
 	err = admin.NewOrder(ctx, c).Create(orderInfoReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")

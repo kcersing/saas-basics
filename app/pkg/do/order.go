@@ -14,15 +14,27 @@ type Order interface {
 }
 
 type CreateOrder struct {
-	VenueId    int64   `json:"venue_id"`
-	MemberId   int64   `json:"member_id"`
-	CreateId   int64   `json:"create_id"`
-	Total      float64 `json:"total"`
-	Sales      []int64 `json:"sales"`
-	ProductId  int64   `json:"product_id"`
-	Quantity   int64   `json:"quantity"`
-	ContractId []int64 `json:"contract_id"`
-	AssignAt   string  `json:"assign_at"`
+	AssignAt       string         `json:"assign_at,omitempty"`
+	CardProperty   []PropertyItem `json:"cardProperty,omitempty"`
+	CourseProperty []PropertyItem `json:"courseProperty,omitempty"`
+	ClassProperty  []PropertyItem `json:"classProperty,omitempty"`
+	Venue          int64          `json:"venue,omitempty"`
+	Member         int64          `json:"member,omitempty"`
+	Product        int64          `json:"product,omitempty"`
+	NatureType     int64          `json:"natureType,omitempty"`
+	Total          float64        `json:"total,omitempty"`
+	Staffs         []StaffItem    `json:"staffs,omitempty"`
+	Contract       []int64        `json:"contract,omitempty"`
+	SignImg        string         `json:"signImg,omitempty"`
+}
+
+type PropertyItem struct {
+	Property int64 `json:"property,omitempty"`
+	Quantity int64 `json:"quantity,omitempty"`
+}
+type StaffItem struct {
+	Id    int64 `json:"id,omitempty"`
+	Ratio int64 `json:"ratio,omitempty"`
 }
 
 type OrderInfo struct {

@@ -1,9 +1,9 @@
 package admin
 
 import (
-	"bytes"
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
@@ -12,15 +12,8 @@ import (
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
-	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
-	"saas/pkg/db/ent/user"
-	venue2 "saas/pkg/db/ent/venue"
-	"saas/pkg/utils"
-	"strconv"
-	"sync"
-	"time"
 )
 
 type Order struct {
@@ -33,110 +26,113 @@ type Order struct {
 
 func (o Order) Create(req do.CreateOrder) error {
 
-	one := &ent.Order{}
-	var err error
-
-	venue, err := o.db.Venue.Query().Where(venue2.IDEQ(req.VenueId)).First(o.ctx)
-	if err != nil {
-		return errors.Wrap(err, "未找到场馆")
-	}
-
-	members, err := o.db.Member.Query().Where(member.IDEQ(req.MemberId)).First(o.ctx)
-
-	if err != nil {
-		return errors.Wrap(err, "未找到会员")
-	}
-
-	create, err := o.db.User.Query().Where(user.IDEQ(req.CreateId)).First(o.ctx)
-	if err != nil {
-		return errors.Wrap(err, "未找到创建人")
-	}
-
-	errChan := make(chan error, 15)
-	defer close(errChan)
-	var wg sync.WaitGroup
-	wg.Add(4)
-
-	go func() {
-		one, err = o.db.Order.Create().
-			SetOrderSn(utils.CreateCn()).
-			SetOrderVenues(venue).
-			SetOrderMembers(members).
-			SetOrderCreates(create).
-			SetStatus(0).
-			//SetSource(req.Source).
-			//SetDevice(req.Device).
-			Save(o.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "创建订单失败")
-			errChan <- err
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		_, err = o.db.OrderAmount.Create().
-			SetAufk(one).
-			SetTotal(req.Total).
-			Save(o.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "创建Order Amount失败")
-			errChan <- err
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		for _, v := range req.Sales {
-			_, err = o.db.OrderSales.Create().
-				SetAufk(one).
-				SetSalesID(v).
-				Save(o.ctx)
-			if err != nil {
-				err = errors.Wrap(err, "创建Order Sales失败")
-				errChan <- err
-			}
-
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		layout := "2006-01-02 15:04:05" // Go中的时间格式化参考时间
-		assignAt, err := time.Parse(layout, req.AssignAt)
-		if err != nil {
-			err = errors.Wrap(err, "时间转换失败")
-			errChan <- err
-		}
-
-		var buffer bytes.Buffer
-		for _, num := range req.ContractId {
-			buffer.WriteString(strconv.Itoa(int(num)))
-			buffer.WriteByte(',')
-		}
-		str := buffer.String()
-
-		_, err = o.db.OrderItem.Create().
-			SetAufk(one).
-			SetProductID(req.ProductId).
-			SetQuantity(req.Quantity).
-			SetContractID(str).
-			SetAssignAt(assignAt).
-			Save(o.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "创建Order Item失败")
-			errChan <- err
-		}
-		wg.Done()
-	}()
-
-	wg.Wait()
-	select {
-	case result := <-errChan:
-		return result
-	default:
-	}
+	hlog.Info("=============")
+	hlog.Info(req)
 	return nil
+	//one := &ent.Order{}
+	//var err error
+	//
+	//venue, err := o.db.Venue.Query().Where(venue2.IDEQ(req.VenueId)).First(o.ctx)
+	//if err != nil {
+	//	return errors.Wrap(err, "未找到场馆")
+	//}
+	//
+	//members, err := o.db.Member.Query().Where(member.IDEQ(req.MemberId)).First(o.ctx)
+	//
+	//if err != nil {
+	//	return errors.Wrap(err, "未找到会员")
+	//}
+	//
+	//create, err := o.db.User.Query().Where(user.IDEQ(req.CreateId)).First(o.ctx)
+	//if err != nil {
+	//	return errors.Wrap(err, "未找到创建人")
+	//}
+	//
+	//errChan := make(chan error, 15)
+	//defer close(errChan)
+	//var wg sync.WaitGroup
+	//wg.Add(4)
+	//
+	//go func() {
+	//	one, err = o.db.Order.Create().
+	//		SetOrderSn(utils.CreateCn()).
+	//		SetOrderVenues(venue).
+	//		SetOrderMembers(members).
+	//		SetOrderCreates(create).
+	//		SetStatus(0).
+	//		//SetSource(req.Source).
+	//		//SetDevice(req.Device).
+	//		Save(o.ctx)
+	//	if err != nil {
+	//		err = errors.Wrap(err, "创建订单失败")
+	//		errChan <- err
+	//	}
+	//	wg.Done()
+	//}()
+	//
+	//go func() {
+	//	_, err = o.db.OrderAmount.Create().
+	//		SetAufk(one).
+	//		SetTotal(req.Total).
+	//		Save(o.ctx)
+	//	if err != nil {
+	//		err = errors.Wrap(err, "创建Order Amount失败")
+	//		errChan <- err
+	//	}
+	//	wg.Done()
+	//}()
+	//
+	//go func() {
+	//	for _, v := range req.Sales {
+	//		_, err = o.db.OrderSales.Create().
+	//			SetAufk(one).
+	//			SetSalesID(v).
+	//			Save(o.ctx)
+	//		if err != nil {
+	//			err = errors.Wrap(err, "创建Order Sales失败")
+	//			errChan <- err
+	//		}
+	//
+	//	}
+	//	wg.Done()
+	//}()
+	//
+	//go func() {
+	//	layout := "2006-01-02 15:04:05" // Go中的时间格式化参考时间
+	//	assignAt, err := time.Parse(layout, req.AssignAt)
+	//	if err != nil {
+	//		err = errors.Wrap(err, "时间转换失败")
+	//		errChan <- err
+	//	}
+	//
+	//	var buffer bytes.Buffer
+	//	for _, num := range req.ContractId {
+	//		buffer.WriteString(strconv.Itoa(int(num)))
+	//		buffer.WriteByte(',')
+	//	}
+	//	str := buffer.String()
+	//
+	//	_, err = o.db.OrderItem.Create().
+	//		SetAufk(one).
+	//		SetProductID(req.ProductId).
+	//		SetQuantity(req.Quantity).
+	//		SetContractID(str).
+	//		SetAssignAt(assignAt).
+	//		Save(o.ctx)
+	//	if err != nil {
+	//		err = errors.Wrap(err, "创建Order Item失败")
+	//		errChan <- err
+	//	}
+	//	wg.Done()
+	//}()
+	//
+	//wg.Wait()
+	//select {
+	//case result := <-errChan:
+	//	return result
+	//default:
+	//}
+	//return nil
 }
 func (o Order) Update(req do.OrderInfo) error {
 	_, err := o.db.Order.Update().

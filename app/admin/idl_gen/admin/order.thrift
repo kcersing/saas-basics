@@ -14,13 +14,27 @@ struct OrderItem {
 }
 
 struct CreateOrderReq {
-    1: required i64 user_id
-    2: required list<i64> sell_id
-    3: required i64 product_id
-    4: required i64 stock_num
-    5: required i64 venue_id
-    6: required i64 create_id
+    1: optional string assign_at
+    2: optional list<propertyItem> cardProperty
+    3: optional list<propertyItem> courseProperty
+    4: optional list<propertyItem> classProperty
+    5: optional i64 member
+    6: optional i64 natureType
+    7: optional i64 product
+    8: optional double total
+    9: optional i64 venue
+    10: optional list<staffItem> staffs
+    11:optional string signImg
+    12:optional list<i64> contract
+}
 
+struct propertyItem{
+    1:optional i64 property
+    2:optional i64 quantity
+}
+struct staffItem{
+    1:optional i64 id
+    2:optional i64 ratio
 }
 
 struct ListOrderReq {
@@ -30,7 +44,6 @@ struct ListOrderReq {
     4:  optional list<i64> sell (api.raw = "sell")
     5:  optional list<i64> product (api.raw = "product")
     6:  optional list<i64> venue (api.raw = "venue")
-
 }
 
 struct UpdateOrderReq {
