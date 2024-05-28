@@ -35,10 +35,7 @@ type Order struct {
 }
 
 func (o Order) Create(req do.CreateOrder) error {
-	hlog.Info("=============")
 	hlog.Info(fmt.Sprintf("%+v", req))
-	hlog.Info("=============")
-	return nil
 
 	one := &ent.Order{}
 	mp := &ent.MemberProduct{}
