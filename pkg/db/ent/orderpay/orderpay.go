@@ -30,17 +30,17 @@ const (
 	FieldNote = "note"
 	// FieldCreateID holds the string denoting the create_id field in the database.
 	FieldCreateID = "create_id"
-	// EdgeAufk holds the string denoting the aufk edge name in mutations.
-	EdgeAufk = "aufk"
+	// EdgeOrder holds the string denoting the order edge name in mutations.
+	EdgeOrder = "order"
 	// Table holds the table name of the orderpay in the database.
 	Table = "order_pay"
-	// AufkTable is the table that holds the aufk relation/edge.
-	AufkTable = "order_pay"
-	// AufkInverseTable is the table name for the Order entity.
+	// OrderTable is the table that holds the order relation/edge.
+	OrderTable = "order_pay"
+	// OrderInverseTable is the table name for the Order entity.
 	// It exists in this package in order to avoid circular dependency with the "order" package.
-	AufkInverseTable = "order"
-	// AufkColumn is the table column denoting the aufk relation/edge.
-	AufkColumn = "order_id"
+	OrderInverseTable = "order"
+	// OrderColumn is the table column denoting the order relation/edge.
+	OrderColumn = "order_id"
 )
 
 // Columns holds all SQL columns for orderpay fields.
@@ -123,16 +123,16 @@ func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
 }
 
-// ByAufkField orders the results by aufk field.
-func ByAufkField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByOrderField orders the results by order field.
+func ByOrderField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newAufkStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newOrderStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newAufkStep() *sqlgraph.Step {
+func newOrderStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(AufkInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, AufkTable, AufkColumn),
+		sqlgraph.To(OrderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OrderTable, OrderColumn),
 	)
 }

@@ -139,23 +139,9 @@ func (opc *OrderPayCreate) SetID(i int64) *OrderPayCreate {
 	return opc
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (opc *OrderPayCreate) SetAufkID(id int64) *OrderPayCreate {
-	opc.mutation.SetAufkID(id)
-	return opc
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (opc *OrderPayCreate) SetNillableAufkID(id *int64) *OrderPayCreate {
-	if id != nil {
-		opc = opc.SetAufkID(*id)
-	}
-	return opc
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (opc *OrderPayCreate) SetAufk(o *Order) *OrderPayCreate {
-	return opc.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (opc *OrderPayCreate) SetOrder(o *Order) *OrderPayCreate {
+	return opc.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderPayMutation object of the builder.
@@ -271,12 +257,12 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)
 		_node.CreateID = value
 	}
-	if nodes := opc.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := opc.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderpay.AufkTable,
-			Columns: []string{orderpay.AufkColumn},
+			Table:   orderpay.OrderTable,
+			Columns: []string{orderpay.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),

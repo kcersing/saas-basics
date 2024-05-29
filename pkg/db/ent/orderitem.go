@@ -30,7 +30,7 @@ type OrderItem struct {
 	// 关联会员产品id
 	RelatedUserProductID int64 `json:"related_user_product_id,omitempty"`
 	// 数据附件
-	Data int64 `json:"data,omitempty"`
+	Data string `json:"data,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderItemQuery when eager-loading is set.
 	Edges        OrderItemEdges `json:"edges"`
@@ -39,24 +39,24 @@ type OrderItem struct {
 
 // OrderItemEdges holds the relations/edges for other nodes in the graph.
 type OrderItemEdges struct {
-	// Aufk holds the value of the aufk edge.
-	Aufk *Order `json:"aufk,omitempty"`
+	// Order holds the value of the order edge.
+	Order *Order `json:"order,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// AufkOrErr returns the Aufk value or an error if the edge
+// OrderOrErr returns the Order value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrderItemEdges) AufkOrErr() (*Order, error) {
+func (e OrderItemEdges) OrderOrErr() (*Order, error) {
 	if e.loadedTypes[0] {
-		if e.Aufk == nil {
+		if e.Order == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: order.Label}
 		}
-		return e.Aufk, nil
+		return e.Order, nil
 	}
-	return nil, &NotLoadedError{edge: "aufk"}
+	return nil, &NotLoadedError{edge: "order"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -64,8 +64,10 @@ func (*OrderItem) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orderitem.FieldID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID, orderitem.FieldData:
+		case orderitem.FieldID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID:
 			values[i] = new(sql.NullInt64)
+		case orderitem.FieldData:
+			values[i] = new(sql.NullString)
 		case orderitem.FieldCreatedAt, orderitem.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
@@ -120,10 +122,10 @@ func (oi *OrderItem) assignValues(columns []string, values []any) error {
 				oi.RelatedUserProductID = value.Int64
 			}
 		case orderitem.FieldData:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field data", values[i])
 			} else if value.Valid {
-				oi.Data = value.Int64
+				oi.Data = value.String
 			}
 		default:
 			oi.selectValues.Set(columns[i], values[i])
@@ -138,9 +140,9 @@ func (oi *OrderItem) Value(name string) (ent.Value, error) {
 	return oi.selectValues.Get(name)
 }
 
-// QueryAufk queries the "aufk" edge of the OrderItem entity.
-func (oi *OrderItem) QueryAufk() *OrderQuery {
-	return NewOrderItemClient(oi.config).QueryAufk(oi)
+// QueryOrder queries the "order" edge of the OrderItem entity.
+func (oi *OrderItem) QueryOrder() *OrderQuery {
+	return NewOrderItemClient(oi.config).QueryOrder(oi)
 }
 
 // Update returns a builder for updating this OrderItem.
@@ -182,7 +184,7 @@ func (oi *OrderItem) String() string {
 	builder.WriteString(fmt.Sprintf("%v", oi.RelatedUserProductID))
 	builder.WriteString(", ")
 	builder.WriteString("data=")
-	builder.WriteString(fmt.Sprintf("%v", oi.Data))
+	builder.WriteString(oi.Data)
 	builder.WriteByte(')')
 	return builder.String()
 }

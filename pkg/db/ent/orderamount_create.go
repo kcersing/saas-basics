@@ -111,23 +111,9 @@ func (oac *OrderAmountCreate) SetID(i int64) *OrderAmountCreate {
 	return oac
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (oac *OrderAmountCreate) SetAufkID(id int64) *OrderAmountCreate {
-	oac.mutation.SetAufkID(id)
-	return oac
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (oac *OrderAmountCreate) SetNillableAufkID(id *int64) *OrderAmountCreate {
-	if id != nil {
-		oac = oac.SetAufkID(*id)
-	}
-	return oac
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (oac *OrderAmountCreate) SetAufk(o *Order) *OrderAmountCreate {
-	return oac.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (oac *OrderAmountCreate) SetOrder(o *Order) *OrderAmountCreate {
+	return oac.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderAmountMutation object of the builder.
@@ -183,6 +169,11 @@ func (oac *OrderAmountCreate) check() error {
 	if _, ok := oac.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OrderAmount.updated_at"`)}
 	}
+	if v, ok := oac.mutation.OrderID(); ok {
+		if err := orderamount.OrderIDValidator(v); err != nil {
+			return &ValidationError{Name: "order_id", err: fmt.Errorf(`ent: validator failed for field "OrderAmount.order_id": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -235,12 +226,12 @@ func (oac *OrderAmountCreate) createSpec() (*OrderAmount, *sqlgraph.CreateSpec) 
 		_spec.SetField(orderamount.FieldPay, field.TypeFloat64, value)
 		_node.Pay = value
 	}
-	if nodes := oac.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := oac.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderamount.AufkTable,
-			Columns: []string{orderamount.AufkColumn},
+			Table:   orderamount.OrderTable,
+			Columns: []string{orderamount.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),

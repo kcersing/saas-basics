@@ -39,6 +39,8 @@ type Order struct {
 	Source string `json:"source,omitempty"`
 	// 设备来源
 	Device string `json:"device,omitempty"`
+	// 业务类型
+	Nature int64 `json:"nature,omitempty"`
 	// 订单完成时间
 	CompletionAt time.Time `json:"completion_at,omitempty"`
 	// 创建人id
@@ -52,15 +54,15 @@ type Order struct {
 // OrderEdges holds the relations/edges for other nodes in the graph.
 type OrderEdges struct {
 	// Amount holds the value of the amount edge.
-	Amount []*OrderAmount `json:"amounts"`
+	Amount []*OrderAmount `json:"amount,omitempty"`
 	// Item holds the value of the item edge.
 	Item []*OrderItem `json:"item,omitempty"`
 	// Pay holds the value of the pay edge.
 	Pay []*OrderPay `json:"pay,omitempty"`
-	// Sales holds the value of the sales edge.
-	Sales []*OrderSales `json:"sales,omitempty"`
 	// OrderContents holds the value of the order_contents edge.
 	OrderContents []*MemberContract `json:"order_contents,omitempty"`
+	// Sales holds the value of the sales edge.
+	Sales []*OrderSales `json:"sales,omitempty"`
 	// OrderVenues holds the value of the order_venues edge.
 	OrderVenues *Venue `json:"order_venues,omitempty"`
 	// OrderMembers holds the value of the order_members edge.
@@ -99,22 +101,22 @@ func (e OrderEdges) PayOrErr() ([]*OrderPay, error) {
 	return nil, &NotLoadedError{edge: "pay"}
 }
 
-// SalesOrErr returns the Sales value or an error if the edge
-// was not loaded in eager-loading.
-func (e OrderEdges) SalesOrErr() ([]*OrderSales, error) {
-	if e.loadedTypes[3] {
-		return e.Sales, nil
-	}
-	return nil, &NotLoadedError{edge: "sales"}
-}
-
 // OrderContentsOrErr returns the OrderContents value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrderEdges) OrderContentsOrErr() ([]*MemberContract, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		return e.OrderContents, nil
 	}
 	return nil, &NotLoadedError{edge: "order_contents"}
+}
+
+// SalesOrErr returns the Sales value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrderEdges) SalesOrErr() ([]*OrderSales, error) {
+	if e.loadedTypes[4] {
+		return e.Sales, nil
+	}
+	return nil, &NotLoadedError{edge: "sales"}
 }
 
 // OrderVenuesOrErr returns the OrderVenues value or an error if the edge
@@ -161,7 +163,7 @@ func (*Order) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case order.FieldID, order.FieldVenueID, order.FieldMemberID, order.FieldMemberProductID, order.FieldStatus, order.FieldCreateID:
+		case order.FieldID, order.FieldVenueID, order.FieldMemberID, order.FieldMemberProductID, order.FieldStatus, order.FieldNature, order.FieldCreateID:
 			values[i] = new(sql.NullInt64)
 		case order.FieldOrderSn, order.FieldSource, order.FieldDevice:
 			values[i] = new(sql.NullString)
@@ -242,6 +244,12 @@ func (o *Order) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				o.Device = value.String
 			}
+		case order.FieldNature:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field nature", values[i])
+			} else if value.Valid {
+				o.Nature = value.Int64
+			}
 		case order.FieldCompletionAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field completion_at", values[i])
@@ -282,14 +290,14 @@ func (o *Order) QueryPay() *OrderPayQuery {
 	return NewOrderClient(o.config).QueryPay(o)
 }
 
-// QuerySales queries the "sales" edge of the Order entity.
-func (o *Order) QuerySales() *OrderSalesQuery {
-	return NewOrderClient(o.config).QuerySales(o)
-}
-
 // QueryOrderContents queries the "order_contents" edge of the Order entity.
 func (o *Order) QueryOrderContents() *MemberContractQuery {
 	return NewOrderClient(o.config).QueryOrderContents(o)
+}
+
+// QuerySales queries the "sales" edge of the Order entity.
+func (o *Order) QuerySales() *OrderSalesQuery {
+	return NewOrderClient(o.config).QuerySales(o)
 }
 
 // QueryOrderVenues queries the "order_venues" edge of the Order entity.
@@ -356,6 +364,9 @@ func (o *Order) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("device=")
 	builder.WriteString(o.Device)
+	builder.WriteString(", ")
+	builder.WriteString("nature=")
+	builder.WriteString(fmt.Sprintf("%v", o.Nature))
 	builder.WriteString(", ")
 	builder.WriteString("completion_at=")
 	builder.WriteString(o.CompletionAt.Format(time.ANSIC))

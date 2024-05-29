@@ -163,23 +163,9 @@ func (osu *OrderSalesUpdate) ClearRatio() *OrderSalesUpdate {
 	return osu
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (osu *OrderSalesUpdate) SetAufkID(id int64) *OrderSalesUpdate {
-	osu.mutation.SetAufkID(id)
-	return osu
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (osu *OrderSalesUpdate) SetNillableAufkID(id *int64) *OrderSalesUpdate {
-	if id != nil {
-		osu = osu.SetAufkID(*id)
-	}
-	return osu
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (osu *OrderSalesUpdate) SetAufk(o *Order) *OrderSalesUpdate {
-	return osu.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (osu *OrderSalesUpdate) SetOrder(o *Order) *OrderSalesUpdate {
+	return osu.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderSalesMutation object of the builder.
@@ -187,9 +173,9 @@ func (osu *OrderSalesUpdate) Mutation() *OrderSalesMutation {
 	return osu.mutation
 }
 
-// ClearAufk clears the "aufk" edge to the Order entity.
-func (osu *OrderSalesUpdate) ClearAufk() *OrderSalesUpdate {
-	osu.mutation.ClearAufk()
+// ClearOrder clears the "order" edge to the Order entity.
+func (osu *OrderSalesUpdate) ClearOrder() *OrderSalesUpdate {
+	osu.mutation.ClearOrder()
 	return osu
 }
 
@@ -277,12 +263,12 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if osu.mutation.RatioCleared() {
 		_spec.ClearField(ordersales.FieldRatio, field.TypeInt64)
 	}
-	if osu.mutation.AufkCleared() {
+	if osu.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   ordersales.AufkTable,
-			Columns: []string{ordersales.AufkColumn},
+			Table:   ordersales.OrderTable,
+			Columns: []string{ordersales.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -290,12 +276,12 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := osu.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   ordersales.AufkTable,
-			Columns: []string{ordersales.AufkColumn},
+			Table:   ordersales.OrderTable,
+			Columns: []string{ordersales.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -460,23 +446,9 @@ func (osuo *OrderSalesUpdateOne) ClearRatio() *OrderSalesUpdateOne {
 	return osuo
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (osuo *OrderSalesUpdateOne) SetAufkID(id int64) *OrderSalesUpdateOne {
-	osuo.mutation.SetAufkID(id)
-	return osuo
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (osuo *OrderSalesUpdateOne) SetNillableAufkID(id *int64) *OrderSalesUpdateOne {
-	if id != nil {
-		osuo = osuo.SetAufkID(*id)
-	}
-	return osuo
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (osuo *OrderSalesUpdateOne) SetAufk(o *Order) *OrderSalesUpdateOne {
-	return osuo.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (osuo *OrderSalesUpdateOne) SetOrder(o *Order) *OrderSalesUpdateOne {
+	return osuo.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderSalesMutation object of the builder.
@@ -484,9 +456,9 @@ func (osuo *OrderSalesUpdateOne) Mutation() *OrderSalesMutation {
 	return osuo.mutation
 }
 
-// ClearAufk clears the "aufk" edge to the Order entity.
-func (osuo *OrderSalesUpdateOne) ClearAufk() *OrderSalesUpdateOne {
-	osuo.mutation.ClearAufk()
+// ClearOrder clears the "order" edge to the Order entity.
+func (osuo *OrderSalesUpdateOne) ClearOrder() *OrderSalesUpdateOne {
+	osuo.mutation.ClearOrder()
 	return osuo
 }
 
@@ -604,12 +576,12 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 	if osuo.mutation.RatioCleared() {
 		_spec.ClearField(ordersales.FieldRatio, field.TypeInt64)
 	}
-	if osuo.mutation.AufkCleared() {
+	if osuo.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   ordersales.AufkTable,
-			Columns: []string{ordersales.AufkColumn},
+			Table:   ordersales.OrderTable,
+			Columns: []string{ordersales.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -617,12 +589,12 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := osuo.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   ordersales.AufkTable,
-			Columns: []string{ordersales.AufkColumn},
+			Table:   ordersales.OrderTable,
+			Columns: []string{ordersales.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),

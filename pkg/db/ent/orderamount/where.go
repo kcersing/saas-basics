@@ -345,21 +345,21 @@ func PayNotNil() predicate.OrderAmount {
 	return predicate.OrderAmount(sql.FieldNotNull(FieldPay))
 }
 
-// HasAufk applies the HasEdge predicate on the "aufk" edge.
-func HasAufk() predicate.OrderAmount {
+// HasOrder applies the HasEdge predicate on the "order" edge.
+func HasOrder() predicate.OrderAmount {
 	return predicate.OrderAmount(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, AufkTable, AufkColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, OrderTable, OrderColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasAufkWith applies the HasEdge predicate on the "aufk" edge with a given conditions (other predicates).
-func HasAufkWith(preds ...predicate.Order) predicate.OrderAmount {
+// HasOrderWith applies the HasEdge predicate on the "order" edge with a given conditions (other predicates).
+func HasOrderWith(preds ...predicate.Order) predicate.OrderAmount {
 	return predicate.OrderAmount(func(s *sql.Selector) {
-		step := newAufkStep()
+		step := newOrderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

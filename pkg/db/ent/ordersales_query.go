@@ -22,7 +22,7 @@ type OrderSalesQuery struct {
 	order      []ordersales.OrderOption
 	inters     []Interceptor
 	predicates []predicate.OrderSales
-	withAufk   *OrderQuery
+	withOrder  *OrderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -59,8 +59,8 @@ func (osq *OrderSalesQuery) Order(o ...ordersales.OrderOption) *OrderSalesQuery 
 	return osq
 }
 
-// QueryAufk chains the current query on the "aufk" edge.
-func (osq *OrderSalesQuery) QueryAufk() *OrderQuery {
+// QueryOrder chains the current query on the "order" edge.
+func (osq *OrderSalesQuery) QueryOrder() *OrderQuery {
 	query := (&OrderClient{config: osq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := osq.prepareQuery(ctx); err != nil {
@@ -73,7 +73,7 @@ func (osq *OrderSalesQuery) QueryAufk() *OrderQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(ordersales.Table, ordersales.FieldID, selector),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ordersales.AufkTable, ordersales.AufkColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, ordersales.OrderTable, ordersales.OrderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,21 +273,21 @@ func (osq *OrderSalesQuery) Clone() *OrderSalesQuery {
 		order:      append([]ordersales.OrderOption{}, osq.order...),
 		inters:     append([]Interceptor{}, osq.inters...),
 		predicates: append([]predicate.OrderSales{}, osq.predicates...),
-		withAufk:   osq.withAufk.Clone(),
+		withOrder:  osq.withOrder.Clone(),
 		// clone intermediate query.
 		sql:  osq.sql.Clone(),
 		path: osq.path,
 	}
 }
 
-// WithAufk tells the query-builder to eager-load the nodes that are connected to
-// the "aufk" edge. The optional arguments are used to configure the query builder of the edge.
-func (osq *OrderSalesQuery) WithAufk(opts ...func(*OrderQuery)) *OrderSalesQuery {
+// WithOrder tells the query-builder to eager-load the nodes that are connected to
+// the "order" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrderSalesQuery) WithOrder(opts ...func(*OrderQuery)) *OrderSalesQuery {
 	query := (&OrderClient{config: osq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	osq.withAufk = query
+	osq.withOrder = query
 	return osq
 }
 
@@ -370,7 +370,7 @@ func (osq *OrderSalesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*OrderSales{}
 		_spec       = osq.querySpec()
 		loadedTypes = [1]bool{
-			osq.withAufk != nil,
+			osq.withOrder != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -391,16 +391,16 @@ func (osq *OrderSalesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := osq.withAufk; query != nil {
-		if err := osq.loadAufk(ctx, query, nodes, nil,
-			func(n *OrderSales, e *Order) { n.Edges.Aufk = e }); err != nil {
+	if query := osq.withOrder; query != nil {
+		if err := osq.loadOrder(ctx, query, nodes, nil,
+			func(n *OrderSales, e *Order) { n.Edges.Order = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (osq *OrderSalesQuery) loadAufk(ctx context.Context, query *OrderQuery, nodes []*OrderSales, init func(*OrderSales), assign func(*OrderSales, *Order)) error {
+func (osq *OrderSalesQuery) loadOrder(ctx context.Context, query *OrderQuery, nodes []*OrderSales, init func(*OrderSales), assign func(*OrderSales, *Order)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*OrderSales)
 	for i := range nodes {
@@ -455,7 +455,7 @@ func (osq *OrderSalesQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if osq.withAufk != nil {
+		if osq.withOrder != nil {
 			_spec.Node.AddColumnOnce(ordersales.FieldOrderID)
 		}
 	}

@@ -3683,22 +3683,6 @@ func (c *OrderClient) QueryPay(o *Order) *OrderPayQuery {
 	return query
 }
 
-// QuerySales queries the sales edge of a Order.
-func (c *OrderClient) QuerySales(o *Order) *OrderSalesQuery {
-	query := (&OrderSalesClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(order.Table, order.FieldID, id),
-			sqlgraph.To(ordersales.Table, ordersales.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, order.SalesTable, order.SalesColumn),
-		)
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryOrderContents queries the order_contents edge of a Order.
 func (c *OrderClient) QueryOrderContents(o *Order) *MemberContractQuery {
 	query := (&MemberContractClient{config: c.config}).Query()
@@ -3708,6 +3692,22 @@ func (c *OrderClient) QueryOrderContents(o *Order) *MemberContractQuery {
 			sqlgraph.From(order.Table, order.FieldID, id),
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.OrderContentsTable, order.OrderContentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySales queries the sales edge of a Order.
+func (c *OrderClient) QuerySales(o *Order) *OrderSalesQuery {
+	query := (&OrderSalesClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, id),
+			sqlgraph.To(ordersales.Table, ordersales.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, order.SalesTable, order.SalesColumn),
 		)
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
@@ -3896,15 +3896,15 @@ func (c *OrderAmountClient) GetX(ctx context.Context, id int64) *OrderAmount {
 	return obj
 }
 
-// QueryAufk queries the aufk edge of a OrderAmount.
-func (c *OrderAmountClient) QueryAufk(oa *OrderAmount) *OrderQuery {
+// QueryOrder queries the order edge of a OrderAmount.
+func (c *OrderAmountClient) QueryOrder(oa *OrderAmount) *OrderQuery {
 	query := (&OrderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := oa.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orderamount.Table, orderamount.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orderamount.AufkTable, orderamount.AufkColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, orderamount.OrderTable, orderamount.OrderColumn),
 		)
 		fromV = sqlgraph.Neighbors(oa.driver.Dialect(), step)
 		return fromV, nil
@@ -4045,15 +4045,15 @@ func (c *OrderItemClient) GetX(ctx context.Context, id int64) *OrderItem {
 	return obj
 }
 
-// QueryAufk queries the aufk edge of a OrderItem.
-func (c *OrderItemClient) QueryAufk(oi *OrderItem) *OrderQuery {
+// QueryOrder queries the order edge of a OrderItem.
+func (c *OrderItemClient) QueryOrder(oi *OrderItem) *OrderQuery {
 	query := (&OrderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := oi.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orderitem.Table, orderitem.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orderitem.AufkTable, orderitem.AufkColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, orderitem.OrderTable, orderitem.OrderColumn),
 		)
 		fromV = sqlgraph.Neighbors(oi.driver.Dialect(), step)
 		return fromV, nil
@@ -4194,15 +4194,15 @@ func (c *OrderPayClient) GetX(ctx context.Context, id int64) *OrderPay {
 	return obj
 }
 
-// QueryAufk queries the aufk edge of a OrderPay.
-func (c *OrderPayClient) QueryAufk(op *OrderPay) *OrderQuery {
+// QueryOrder queries the order edge of a OrderPay.
+func (c *OrderPayClient) QueryOrder(op *OrderPay) *OrderQuery {
 	query := (&OrderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := op.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orderpay.Table, orderpay.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orderpay.AufkTable, orderpay.AufkColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, orderpay.OrderTable, orderpay.OrderColumn),
 		)
 		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
 		return fromV, nil
@@ -4343,15 +4343,15 @@ func (c *OrderSalesClient) GetX(ctx context.Context, id int64) *OrderSales {
 	return obj
 }
 
-// QueryAufk queries the aufk edge of a OrderSales.
-func (c *OrderSalesClient) QueryAufk(os *OrderSales) *OrderQuery {
+// QueryOrder queries the order edge of a OrderSales.
+func (c *OrderSalesClient) QueryOrder(os *OrderSales) *OrderQuery {
 	query := (&OrderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := os.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(ordersales.Table, ordersales.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ordersales.AufkTable, ordersales.AufkColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, ordersales.OrderTable, ordersales.OrderColumn),
 		)
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil

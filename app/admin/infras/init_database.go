@@ -38,13 +38,13 @@ func NewInitDatabase() *InitDatabase {
 	}
 }
 
-func (I *InitDatabase) InitDatabase() error {
+func (I *InitDatabase) InitDatabaseUser() error {
 	// add lock to avoid duplicate initialization
 	I.Mu.Lock()
 	defer I.Mu.Unlock()
 	ctx := context.Background()
 	// judge if the initialization had been done
-	check, err := I.DB.API.Query().Count(ctx)
+	check, err := I.DB.User.Query().Count(ctx)
 	if InitDatabaseStatus || check > 0 {
 		return errors.New("Database had been initialized")
 	}
@@ -56,12 +56,68 @@ func (I *InitDatabase) InitDatabase() error {
 		err = errors.Wrap(err, "insert user data failed")
 		return err
 	}
-
 	err = I.insertRoleData(ctx)
 	if err != nil {
 		hlog.Error("insert role data failed", err)
 		err = errors.Wrap(err, "insert role data failed")
 		return err
+	}
+	// set init status
+	InitDatabaseStatus = true
+	return nil
+}
+
+func (I *InitDatabase) InitDatabaseDict() error {
+	// add lock to avoid duplicate initialization
+	I.Mu.Lock()
+	defer I.Mu.Unlock()
+	ctx := context.Background()
+	// judge if the initialization had been done
+	check, err := I.DB.Dictionary.Query().Count(ctx)
+	if InitDatabaseStatus || check > 0 {
+		return errors.New("Database had been initialized")
+	}
+
+	err = I.insertDictionariesPropertyTypeData(ctx)
+	if err != nil {
+		hlog.Error("insert dictionaries data failed", err)
+		err = errors.Wrap(err, "insert dictionaries data failed")
+		return err
+	}
+	err = I.insertDictionariesOrganizationData(ctx)
+	if err != nil {
+		hlog.Error("insert dictionaries data failed", err)
+		err = errors.Wrap(err, "insert dictionaries data failed")
+		return err
+	}
+	err = I.insertDictionariesJobData(ctx)
+	if err != nil {
+		hlog.Error("insert dictionaries data failed", err)
+		err = errors.Wrap(err, "insert dictionaries data failed")
+		return err
+	}
+
+	err = I.insertDictionariesNatureData(ctx)
+	if err != nil {
+		hlog.Error("insert dictionaries data failed", err)
+		err = errors.Wrap(err, "insert dictionaries data failed")
+		return err
+	}
+
+	// set init status
+	InitDatabaseStatus = true
+	return nil
+}
+
+func (I *InitDatabase) InitDatabaseApi() error {
+	// add lock to avoid duplicate initialization
+	I.Mu.Lock()
+	defer I.Mu.Unlock()
+	ctx := context.Background()
+	// judge if the initialization had been done
+	check, err := I.DB.API.Query().Count(ctx)
+	if InitDatabaseStatus || check > 0 {
+		return errors.New("Database had been initialized")
 	}
 
 	err = I.insertMenuData(ctx)
@@ -87,48 +143,6 @@ func (I *InitDatabase) InitDatabase() error {
 	if err != nil {
 		hlog.Error("insert casbin policies data failed", err)
 		err = errors.Wrap(err, "insert casbin policies data failed")
-		return err
-	}
-
-	// set init status
-	InitDatabaseStatus = true
-	return nil
-}
-
-func (I *InitDatabase) InitDatabase2() error {
-	// add lock to avoid duplicate initialization
-	I.Mu.Lock()
-	defer I.Mu.Unlock()
-	ctx := context.Background()
-	// judge if the initialization had been done
-	// check, err := I.DB.API.Query().Count(ctx)
-	// if InitDatabaseStatus || check > 0 {
-	// 	return errors.New("Database had been initialized")
-	// }
-
-	err := I.insertDictionariesPropertyTypeData(ctx)
-	if err != nil {
-		hlog.Error("insert dictionaries data failed", err)
-		err = errors.Wrap(err, "insert dictionaries data failed")
-		return err
-	}
-	err = I.insertDictionariesOrganizationData(ctx)
-	if err != nil {
-		hlog.Error("insert dictionaries data failed", err)
-		err = errors.Wrap(err, "insert dictionaries data failed")
-		return err
-	}
-	err = I.insertDictionariesJobData(ctx)
-	if err != nil {
-		hlog.Error("insert dictionaries data failed", err)
-		err = errors.Wrap(err, "insert dictionaries data failed")
-		return err
-	}
-
-	err = I.insertDictionariesNatureData(ctx)
-	if err != nil {
-		hlog.Error("insert dictionaries data failed", err)
-		err = errors.Wrap(err, "insert dictionaries data failed")
 		return err
 	}
 
@@ -183,371 +197,116 @@ func (I *InitDatabase) insertRoleData(ctx context.Context) error {
 
 // insert init API data
 func (I *InitDatabase) insertApiData(ctx context.Context) error {
+
+	type api struct {
+		Method      string
+		Path        string
+		Description string
+		Group       string
+	}
+	apiArr := []api{
+		{Method: "POST", Path: "/api/admin/member/create", Description: "member.CreateMember", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/member/info", Description: "member.MemberInfo", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/member/list", Description: "member.MemberList", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/member/status", Description: "member.UpdateMemberStatus", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/member/update", Description: "member.UpdateMember", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/order/create", Description: "order.CreateOrder", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/order/info", Description: "order.GetOrderById", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/order/list", Description: "order.ListOrder", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/order/status", Description: "order.UpdateStatus", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/order/update", Description: "order.UpdateOrder", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/place/create", Description: "venue.CreatePlace", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/place/list", Description: "venue.PlaceList", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/place/status", Description: "venue.PlaceUpdateStatus", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/place/update", Description: "venue.UpdatePlace", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/venue/create", Description: "venue.Create", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/venue/list", Description: "venue.List", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/venue/status", Description: "venue.UpdateStatus", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/venue/update", Description: "venue.Update", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/product/create", Description: "product.Create", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/product/del", Description: "product.Delete", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/product/info", Description: "product.InfoByID", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/product/list", Description: "product.List", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/product/status", Description: "product.UpdateStatus", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/product/update", Description: "product.Update", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/property/create", Description: "product.CreateProperty", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/property/del", Description: "product.DeleteProperty", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/property/list", Description: "product.ListProperty", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/property/update", Description: "product.UpdateProperty", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/api", Description: "role.DeleteApi", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/api/list", Description: "role.ApiList", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/role", Description: "role.RoleByID", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/api/create", Description: "role.CreateApi", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/api/update", Description: "role.UpdateApi", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/authority/api/create", Description: "role.CreateAuthority", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/authority/api/role", Description: "role.ApiAuthority", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/authority/api/update", Description: "role.UpdateApiAuthority", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/authority/menu/create", Description: "role.CreateMenuAuthority", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/authority/menu/role", Description: "role.MenuAuthority", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/authority/menu/update", Description: "role.UpdateMenuAuthority", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/role", Description: "role.DeleteRole", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/role/list", Description: "role.RoleList", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/role/status", Description: "role.UpdateRoleStatus", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/role/create", Description: "role.CreateRole", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/role/update", Description: "role.UpdateRole", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/menu", Description: "menu.DeleteMenu", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/menu/list", Description: "menu.MenuLists", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/menu/param", Description: "menu.DeleteMenuParam", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/menu/param/list", Description: "menu.MenuParamListByMenuID", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/menu/role", Description: "menu.MenuByRole", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/menu/param/create", Description: "menu.CreateMenuParam", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/menu/param/update", Description: "menu.UpdateMenuParam", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/menu/create", Description: "menu.CreateMenu", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/menu/update", Description: "menu.UpdateMenu", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/logs/deleteAll", Description: "logs.DeleteLogs", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/logs/list", Description: "logs.GetLogsList", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/dict", Description: "dictionary.DeleteDictionary", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/dict/detail", Description: "dictionary.DeleteDictionaryDetail", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/dict/detail/list", Description: "dictionary.DetailByDictionaryList", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/dict/list", Description: "dictionary.DictionaryList", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/dict/detail/create", Description: "dictionary.CreateDictionaryDetail", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/dict/detail/update", Description: "dictionary.UpdateDictionaryDetail", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/dict/create", Description: "dictionary.CreateDictionary", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/dict/update", Description: "dictionary.UpdateDictionary", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/user", Description: "user.DeleteUser", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/user/profile", Description: "user.UserProfile", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/user/profile-update", Description: "user.UpdateProfile", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/user/status", Description: "user.UpdateUserStatus", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/user/change-password", Description: "user.ChangePassword", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/user/create", Description: "user.CreateUser", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/user/info", Description: "user.UserInfo", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/user/list", Description: "user.UserList", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/user/perm", Description: "user.UserPermCode", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/user/update", Description: "user.UpdateUser", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/token", Description: "token.DeleteToken", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/token/list", Description: "token.TokenList", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/token/update", Description: "token.UpdateToken", Group: "admin"},
+
+		{Method: "GET", Path: "/__vite_ping", Description: "handler.Ping", Group: "open"},
+		{Method: "POST", Path: "/api/login", Description: "", Group: "open"},
+		{Method: "POST", Path: "/api/logout", Description: "", Group: "open"},
+		{Method: "POST", Path: "/api/refresh_token", Description: "", Group: "open"},
+		{Method: "GET", Path: "/src/*name", Description: "", Group: "open"},
+		{Method: "POST", Path: "/api/sys/contract/list", Description: "sys.ContractList", Group: "open"},
+		{Method: "POST", Path: "/api/sys/member/list", Description: "sys.MemberList", Group: "open"},
+		{Method: "POST", Path: "/api/sys/product/list", Description: "sys.ProductList", Group: "open"},
+		{Method: "POST", Path: "/api/sys/property/list", Description: "sys.PropertyList", Group: "open"},
+		{Method: "POST", Path: "/api/sys/property/type", Description: "sys.PropertyType", Group: "open"},
+		{Method: "POST", Path: "/api/sys/staff/list", Description: "sys.StaffList", Group: "open"},
+		{Method: "POST", Path: "/api/sys/venue/list", Description: "sys.VenueList", Group: "open"},
+		{Method: "POST", Path: "/api/pub/upload", Description: "pub.Upload", Group: "open"},
+	}
+	//
 	var apis []*ent.APICreate
-	apis = make([]*ent.APICreate, 59)
-	// USER
-	apis[0] = I.DB.API.Create().
-		SetPath("/api/admin/user/login").
-		SetDescription("apiDesc.userLogin").
-		SetAPIGroup("user").
-		SetMethod("POST")
+	apis = make([]*ent.APICreate, len(apiArr))
 
-	apis[1] = I.DB.API.Create().
-		SetPath("/api/admin/user/register").
-		SetDescription("apiDesc.userRegister").
-		SetAPIGroup("user").
-		SetMethod("POST")
-
-	apis[2] = I.DB.API.Create().
-		SetPath("/api/admin/user/create").
-		SetDescription("apiDesc.createUser").
-		SetAPIGroup("user").
-		SetMethod("POST")
-
-	apis[3] = I.DB.API.Create().
-		SetPath("/api/admin/user/update").
-		SetDescription("apiDesc.updateUser").
-		SetAPIGroup("user").
-		SetMethod("POST")
-
-	apis[4] = I.DB.API.Create().
-		SetPath("/api/admin/user/change-password").
-		SetDescription("apiDesc.userChangePassword").
-		SetAPIGroup("user").
-		SetMethod("POST")
-
-	apis[5] = I.DB.API.Create().
-		SetPath("/api/admin/user/info").
-		SetDescription("apiDesc.OauthUserInfo").
-		SetAPIGroup("user").
-		SetMethod("GET")
-
-	apis[6] = I.DB.API.Create().
-		SetPath("/api/admin/user/list").
-		SetDescription("apiDesc.userList").
-		SetAPIGroup("user").
-		SetMethod("GET")
-
-	apis[7] = I.DB.API.Create().
-		SetPath("/api/admin/user").
-		SetDescription("apiDesc.deleteUser").
-		SetAPIGroup("user").
-		SetMethod("DELETE")
-
-	apis[8] = I.DB.API.Create().
-		SetPath("/api/admin/user/perm").
-		SetDescription("apiDesc.userPermissions").
-		SetAPIGroup("user").
-		SetMethod("GET")
-
-	apis[9] = I.DB.API.Create().
-		SetPath("/api/admin/user/profile").
-		SetDescription("apiDesc.userProfile").
-		SetAPIGroup("user").
-		SetMethod("GET")
-
-	apis[10] = I.DB.API.Create().
-		SetPath("/api/admin/user/profile").
-		SetDescription("apiDesc.updateProfile").
-		SetAPIGroup("user").
-		SetMethod("POST")
-
-	apis[11] = I.DB.API.Create().
-		SetPath("/api/admin/user/logout").
-		SetDescription("apiDesc.logout").
-		SetAPIGroup("user").
-		SetMethod("GET")
-
-	apis[12] = I.DB.API.Create().
-		SetPath("/api/admin/user/status").
-		SetDescription("apiDesc.updateUserStatus").
-		SetAPIGroup("user").
-		SetMethod("POST")
-
-	// ROLE
-	apis[13] = I.DB.API.Create().
-		SetPath("/api/admin/role/create").
-		SetDescription("apiDesc.createRole").
-		SetAPIGroup("role").
-		SetMethod("POST")
-
-	apis[14] = I.DB.API.Create().
-		SetPath("/api/admin/role/update").
-		SetDescription("apiDesc.updateRole").
-		SetAPIGroup("role").
-		SetMethod("POST")
-
-	apis[15] = I.DB.API.Create().
-		SetPath("/api/admin/role").
-		SetDescription("apiDesc.deleteRole").
-		SetAPIGroup("role").
-		SetMethod("DELETE")
-
-	apis[16] = I.DB.API.Create().
-		SetPath("/api/admin/role/list").
-		SetDescription("apiDesc.roleList").
-		SetAPIGroup("role").
-		SetMethod("GET")
-
-	apis[17] = I.DB.API.Create().
-		SetPath("/api/admin/role/status").
-		SetDescription("apiDesc.setRoleStatus").
-		SetAPIGroup("role").
-		SetMethod("POST")
-
-	// MENU
-	apis[18] = I.DB.API.Create().
-		SetPath("/api/admin/menu/create").
-		SetDescription("apiDesc.createMenu").
-		SetAPIGroup("menu").
-		SetMethod("POST")
-
-	apis[19] = I.DB.API.Create().
-		SetPath("/api/admin/menu/update").
-		SetDescription("apiDesc.updateMenu").
-		SetAPIGroup("menu").
-		SetMethod("POST")
-
-	apis[20] = I.DB.API.Create().
-		SetPath("/api/admin/menu").
-		SetDescription("apiDesc.deleteMenu").
-		SetAPIGroup("menu").
-		SetMethod("DELETE")
-
-	apis[21] = I.DB.API.Create().
-		SetPath("/api/admin/menu/list").
-		SetDescription("apiDesc.menuList").
-		SetAPIGroup("menu").
-		SetMethod("GET")
-
-	apis[22] = I.DB.API.Create().
-		SetPath("/api/admin/menu/role").
-		SetDescription("apiDesc.roleMenu").
-		SetAPIGroup("menu").
-		SetMethod("GET")
-
-	apis[23] = I.DB.API.Create().
-		SetPath("/api/admin/menu/param/create").
-		SetDescription("apiDesc.createMenuParam").
-		SetAPIGroup("menu").
-		SetMethod("POST")
-
-	apis[24] = I.DB.API.Create().
-		SetPath("/api/admin/menu/param/update").
-		SetDescription("apiDesc.updateMenuParam").
-		SetAPIGroup("menu").
-		SetMethod("POST")
-
-	apis[25] = I.DB.API.Create().
-		SetPath("/api/admin/menu/param/list").
-		SetDescription("apiDesc.menuParamListByMenuID").
-		SetAPIGroup("menu").
-		SetMethod("GET")
-
-	apis[26] = I.DB.API.Create().
-		SetPath("/api/admin/menu/param").
-		SetDescription("apiDesc.deleteMenuParam").
-		SetAPIGroup("menu").
-		SetMethod("DELETE")
-
-	// CAPTCHA
-	apis[27] = I.DB.API.Create().
-		SetPath("/api/admin/captcha").
-		SetDescription("apiDesc.captcha").
-		SetAPIGroup("captcha").
-		SetMethod("GET")
-
-	// AUTHORIZATION
-	apis[28] = I.DB.API.Create().
-		SetPath("/api/admin/authority/api/create").
-		SetDescription("apiDesc.createApiAuthority").
-		SetAPIGroup("authority").
-		SetMethod("POST")
-
-	apis[29] = I.DB.API.Create().
-		SetPath("/api/admin/authority/api/update").
-		SetDescription("apiDesc.updateApiAuthority").
-		SetAPIGroup("authority").
-		SetMethod("POST")
-
-	apis[30] = I.DB.API.Create().
-		SetPath("/api/admin/authority/api/role").
-		SetDescription("apiDesc.APIAuthorityOfRole").
-		SetAPIGroup("authority").
-		SetMethod("POST")
-
-	apis[31] = I.DB.API.Create().
-		SetPath("/api/admin/authority/menu/create").
-		SetDescription("apiDesc.createMenuAuthority").
-		SetAPIGroup("authority").
-		SetMethod("POST")
-
-	apis[32] = I.DB.API.Create().
-		SetPath("/api/admin/authority/menu/update").
-		SetDescription("apiDesc.updateMenuAuthority").
-		SetAPIGroup("authority").
-		SetMethod("POST")
-
-	apis[33] = I.DB.API.Create().
-		SetPath("/api/admin/authority/menu/role").
-		SetDescription("apiDesc.menuAuthorityOfRole").
-		SetAPIGroup("authority").
-		SetMethod("POST")
-
-	// API
-	apis[34] = I.DB.API.Create().
-		SetPath("/api/admin/api/create").
-		SetDescription("apiDesc.createApi").
-		SetAPIGroup("api").
-		SetMethod("POST")
-
-	apis[35] = I.DB.API.Create().
-		SetPath("/api/admin/api/update").
-		SetDescription("apiDesc.updateApi").
-		SetAPIGroup("api").
-		SetMethod("POST")
-
-	apis[36] = I.DB.API.Create().
-		SetPath("/api/admin/api").
-		SetDescription("apiDesc.deleteAPI").
-		SetAPIGroup("api").
-		SetMethod("DELETE")
-
-	apis[37] = I.DB.API.Create().
-		SetPath("/api/admin/api/list").
-		SetDescription("apiDesc.APIList").
-		SetAPIGroup("api").
-		SetMethod("GET")
-
-	// DICTIONARY
-	apis[38] = I.DB.API.Create().
-		SetPath("/api/admin/dict/create").
-		SetDescription("apiDesc.createDictionary").
-		SetAPIGroup("dictionary").
-		SetMethod("POST")
-
-	apis[39] = I.DB.API.Create().
-		SetPath("/api/admin/dict/update").
-		SetDescription("apiDesc.updateDictionary").
-		SetAPIGroup("dictionary").
-		SetMethod("POST")
-
-	apis[40] = I.DB.API.Create().
-		SetPath("/api/admin/dict").
-		SetDescription("apiDesc.deleteDictionary").
-		SetAPIGroup("dictionary").
-		SetMethod("DELETE")
-
-	apis[41] = I.DB.API.Create().
-		SetPath("/api/admin/dict/detail").
-		SetDescription("apiDesc.deleteDictionaryDetail").
-		SetAPIGroup("dictionary").
-		SetMethod("DELETE")
-
-	apis[42] = I.DB.API.Create().
-		SetPath("/api/admin/dict/detail/create").
-		SetDescription("apiDesc.createDictionaryDetail").
-		SetAPIGroup("dictionary").
-		SetMethod("POST")
-
-	apis[43] = I.DB.API.Create().
-		SetPath("/api/admin/dict/detail/update").
-		SetDescription("apiDesc.updateDictionaryDetail").
-		SetAPIGroup("dictionary").
-		SetMethod("POST")
-
-	apis[44] = I.DB.API.Create().
-		SetPath("/api/admin/dict/detail/list").
-		SetDescription("apiDesc.getDictionaryListDetail").
-		SetAPIGroup("dictionary").
-		SetMethod("GET")
-
-	apis[45] = I.DB.API.Create().
-		SetPath("/api/admin/dict/list").
-		SetDescription("apiDesc.getDictionaryList").
-		SetAPIGroup("dictionary").
-		SetMethod("GET")
-
-	// OAUTH
-	apis[46] = I.DB.API.Create().
-		SetPath("/api/admin/oauth/provider/create").
-		SetDescription("apiDesc.createProvider").
-		SetAPIGroup("oauth").
-		SetMethod("POST")
-
-	apis[47] = I.DB.API.Create().
-		SetPath("/api/admin/oauth/provider/update").
-		SetDescription("apiDesc.updateProvider").
-		SetAPIGroup("oauth").
-		SetMethod("POST")
-
-	apis[48] = I.DB.API.Create().
-		SetPath("/api/admin/oauth/provider").
-		SetDescription("apiDesc.deleteProvider").
-		SetAPIGroup("oauth").
-		SetMethod("DELETE")
-
-	apis[49] = I.DB.API.Create().
-		SetPath("/api/admin/oauth/provider/list").
-		SetDescription("apiDesc.geProviderList").
-		SetAPIGroup("oauth").
-		SetMethod("GET")
-
-	apis[50] = I.DB.API.Create().
-		SetPath("/api/admin/oauth/login").
-		SetDescription("apiDesc.oauthLogin").
-		SetAPIGroup("oauth").
-		SetMethod("POST")
-
-	// TOKEN
-	apis[51] = I.DB.API.Create().
-		SetPath("/api/admin/token/create").
-		SetDescription("apiDesc.createToken").
-		SetAPIGroup("token").
-		SetMethod("POST")
-
-	apis[52] = I.DB.API.Create().
-		SetPath("/api/admin/token/update").
-		SetDescription("apiDesc.updateToken").
-		SetAPIGroup("token").
-		SetMethod("POST")
-
-	apis[53] = I.DB.API.Create().
-		SetPath("/api/admin/token").
-		SetDescription("apiDesc.deleteToken").
-		SetAPIGroup("token").
-		SetMethod("DELETE")
-
-	apis[54] = I.DB.API.Create().
-		SetPath("/api/admin/token/list").
-		SetDescription("apiDesc.getTokenList").
-		SetAPIGroup("token").
-		SetMethod("GET")
-
-	apis[55] = I.DB.API.Create().
-		SetPath("/api/admin/token/status").
-		SetDescription("apiDesc.setTokenStatus").
-		SetAPIGroup("token").
-		SetMethod("POST")
-
-	apis[56] = I.DB.API.Create().
-		SetPath("/api/admin/token/logout").
-		SetDescription("user.forceLoggingOut").
-		SetAPIGroup("token").
-		SetMethod("POST")
-
-	apis[57] = I.DB.API.Create().
-		SetPath("/api/admin/logs/list").
-		SetDescription("apiDesc.getLogsList").
-		SetAPIGroup("logs").
-		SetMethod("GET")
-
-	apis[58] = I.DB.API.Create().
-		SetPath("/api/admin/logs/deleteAll").
-		SetDescription("apiDesc.deleteLogs").
-		SetAPIGroup("logs").
-		SetMethod("DELETE")
-
+	for i, v := range apiArr {
+		apis[i] = I.DB.API.Create().
+			SetPath(v.Path).
+			SetDescription(v.Description).
+			SetAPIGroup(v.Group).
+			SetMethod(v.Method)
+	}
 	err := I.DB.API.CreateBulk(apis...).Exec(ctx)
 	if err != nil {
 		return errors.Wrap(err, "db failed")

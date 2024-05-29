@@ -29,7 +29,7 @@ type Product struct {
 func (p Product) CreateProperty(req do.PropertyInfo) error {
 
 	hlog.Info(req)
-	_, err := p.db.Debug().ProductProperty.Create().
+	_, err := p.db.ProductProperty.Create().
 		SetName(req.Name).
 		SetType(req.Type).
 		SetLength(req.Length).
@@ -51,7 +51,7 @@ func (p Product) CreateProperty(req do.PropertyInfo) error {
 
 func (p Product) UpdateProperty(req do.PropertyInfo) error {
 
-	_, err := p.db.Debug().ProductProperty.Update().
+	_, err := p.db.ProductProperty.Update().
 		Where(productproperty.IDEQ(req.ID)).
 		SetName(req.Name).
 		SetType(req.Type).
@@ -106,7 +106,7 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 		predicates = append(predicates, productproperty.TypeEQ(req.Type))
 	}
 
-	lists, err := p.db.Debug().ProductProperty.
+	lists, err := p.db.ProductProperty.
 		Query().
 		Where(predicates...).
 		Order(ent.Desc(productproperty.FieldID)).

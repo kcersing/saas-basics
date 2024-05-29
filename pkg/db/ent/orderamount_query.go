@@ -22,7 +22,7 @@ type OrderAmountQuery struct {
 	order      []orderamount.OrderOption
 	inters     []Interceptor
 	predicates []predicate.OrderAmount
-	withAufk   *OrderQuery
+	withOrder  *OrderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -59,8 +59,8 @@ func (oaq *OrderAmountQuery) Order(o ...orderamount.OrderOption) *OrderAmountQue
 	return oaq
 }
 
-// QueryAufk chains the current query on the "aufk" edge.
-func (oaq *OrderAmountQuery) QueryAufk() *OrderQuery {
+// QueryOrder chains the current query on the "order" edge.
+func (oaq *OrderAmountQuery) QueryOrder() *OrderQuery {
 	query := (&OrderClient{config: oaq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := oaq.prepareQuery(ctx); err != nil {
@@ -73,7 +73,7 @@ func (oaq *OrderAmountQuery) QueryAufk() *OrderQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orderamount.Table, orderamount.FieldID, selector),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orderamount.AufkTable, orderamount.AufkColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, orderamount.OrderTable, orderamount.OrderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(oaq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,21 +273,21 @@ func (oaq *OrderAmountQuery) Clone() *OrderAmountQuery {
 		order:      append([]orderamount.OrderOption{}, oaq.order...),
 		inters:     append([]Interceptor{}, oaq.inters...),
 		predicates: append([]predicate.OrderAmount{}, oaq.predicates...),
-		withAufk:   oaq.withAufk.Clone(),
+		withOrder:  oaq.withOrder.Clone(),
 		// clone intermediate query.
 		sql:  oaq.sql.Clone(),
 		path: oaq.path,
 	}
 }
 
-// WithAufk tells the query-builder to eager-load the nodes that are connected to
-// the "aufk" edge. The optional arguments are used to configure the query builder of the edge.
-func (oaq *OrderAmountQuery) WithAufk(opts ...func(*OrderQuery)) *OrderAmountQuery {
+// WithOrder tells the query-builder to eager-load the nodes that are connected to
+// the "order" edge. The optional arguments are used to configure the query builder of the edge.
+func (oaq *OrderAmountQuery) WithOrder(opts ...func(*OrderQuery)) *OrderAmountQuery {
 	query := (&OrderClient{config: oaq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	oaq.withAufk = query
+	oaq.withOrder = query
 	return oaq
 }
 
@@ -370,7 +370,7 @@ func (oaq *OrderAmountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		nodes       = []*OrderAmount{}
 		_spec       = oaq.querySpec()
 		loadedTypes = [1]bool{
-			oaq.withAufk != nil,
+			oaq.withOrder != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -391,16 +391,16 @@ func (oaq *OrderAmountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := oaq.withAufk; query != nil {
-		if err := oaq.loadAufk(ctx, query, nodes, nil,
-			func(n *OrderAmount, e *Order) { n.Edges.Aufk = e }); err != nil {
+	if query := oaq.withOrder; query != nil {
+		if err := oaq.loadOrder(ctx, query, nodes, nil,
+			func(n *OrderAmount, e *Order) { n.Edges.Order = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (oaq *OrderAmountQuery) loadAufk(ctx context.Context, query *OrderQuery, nodes []*OrderAmount, init func(*OrderAmount), assign func(*OrderAmount, *Order)) error {
+func (oaq *OrderAmountQuery) loadOrder(ctx context.Context, query *OrderQuery, nodes []*OrderAmount, init func(*OrderAmount), assign func(*OrderAmount, *Order)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*OrderAmount)
 	for i := range nodes {
@@ -455,7 +455,7 @@ func (oaq *OrderAmountQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if oaq.withAufk != nil {
+		if oaq.withOrder != nil {
 			_spec.Node.AddColumnOnce(orderamount.FieldOrderID)
 		}
 	}

@@ -14,8 +14,6 @@ func rootMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	// your code...
-	// add jwt Auth middleware
 	return []app.HandlerFunc{
 		mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
 		mw.LogMw(),

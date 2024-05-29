@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 )
 
 type OrderSales struct {
@@ -33,17 +32,13 @@ func (OrderSales) Mixin() []ent.Mixin {
 
 func (OrderSales) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("aufk", Order.Type).
-			Ref("sales").Unique().
-			Field("order_id"),
+		edge.From("order", Order.Type).
+			Ref("sales").
+			Field("order_id").Unique(),
 	}
 }
-
 func (OrderSales) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("order_id").
-			Unique(),
-	}
+	return []ent.Index{}
 }
 
 func (OrderSales) Annotations() []schema.Annotation {

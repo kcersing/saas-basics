@@ -43,24 +43,24 @@ type OrderPay struct {
 
 // OrderPayEdges holds the relations/edges for other nodes in the graph.
 type OrderPayEdges struct {
-	// Aufk holds the value of the aufk edge.
-	Aufk *Order `json:"aufk,omitempty"`
+	// Order holds the value of the order edge.
+	Order *Order `json:"order,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// AufkOrErr returns the Aufk value or an error if the edge
+// OrderOrErr returns the Order value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrderPayEdges) AufkOrErr() (*Order, error) {
+func (e OrderPayEdges) OrderOrErr() (*Order, error) {
 	if e.loadedTypes[0] {
-		if e.Aufk == nil {
+		if e.Order == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: order.Label}
 		}
-		return e.Aufk, nil
+		return e.Order, nil
 	}
-	return nil, &NotLoadedError{edge: "aufk"}
+	return nil, &NotLoadedError{edge: "order"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -158,9 +158,9 @@ func (op *OrderPay) Value(name string) (ent.Value, error) {
 	return op.selectValues.Get(name)
 }
 
-// QueryAufk queries the "aufk" edge of the OrderPay entity.
-func (op *OrderPay) QueryAufk() *OrderQuery {
-	return NewOrderPayClient(op.config).QueryAufk(op)
+// QueryOrder queries the "order" edge of the OrderPay entity.
+func (op *OrderPay) QueryOrder() *OrderQuery {
+	return NewOrderPayClient(op.config).QueryOrder(op)
 }
 
 // Update returns a builder for updating this OrderPay.

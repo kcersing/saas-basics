@@ -87,28 +87,6 @@ func (u User) ChangePassword(userID int64, oldPassword, newPassword string) erro
 func (u User) UserInfo(id int64) (userInfo *do.UserInfo, err error) {
 	userInfo = new(do.UserInfo)
 
-	//errChan := make(chan error, 7)
-	//defer close(errChan)
-	//var wg sync.WaitGroup
-	//wg.Add(7)
-	//go func() {
-	//
-	//	//userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
-	//	//if exist {
-	//	//	if u, ok := userInterface.(*do.UserInfo); ok {
-	//	//		errChan <- err
-	//	//	}
-	//	//}
-	//
-	//	wg.Done()
-	//}()
-	//wg.Wait()
-	//select {
-	//case result := <-errChan:
-	//	return &do.UserInfo{}, result
-	//default:
-	//}
-
 	userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
 	if exist {
 		if u, ok := userInterface.(*do.UserInfo); ok {

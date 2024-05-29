@@ -42,6 +42,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 		Timeout:     time.Duration(config.GlobalServerConfig.Auth.AccessExpire) * time.Second,
 		MaxRefresh:  time.Hour,
 		IdentityKey: identityKey,
+		// PayloadFunc is used to define a custom token payload.
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(map[string]interface{}); ok {
 				return jwt.MapClaims{
@@ -50,6 +51,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			}
 			return jwt.MapClaims{}
 		},
+		// IdentityHandler is used to define a custom identity handler.
 		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {
 			claims := jwt.ExtractClaims(ctx, c)
 			payloadMap, ok := claims[identityKey].(map[string]interface{})
@@ -63,6 +65,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			c.Set("user_id", payloadMap["user_id"])
 			return payloadMap
 		},
+		// Authenticator is used to validate the login data.
 		Authenticator: func(ctx context.Context, c *app.RequestContext) (interface{}, error) {
 			res := new(do.LoginResp)
 
@@ -97,9 +100,10 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			payLoadMap["user_id"] = strconv.Itoa(int(res.UserID))
 			return payLoadMap, nil
 		},
+		// Authorizator is used to validate the authentication of the current request.
 		Authorizator: func(data interface{}, ctx context.Context, c *app.RequestContext) bool {
-			//obj := string(c.URI().Path())
-			//act := string(c.Method())
+			obj := string(c.URI().Path())
+			act := string(c.Method())
 			payloadMap, ok := data.(map[string]interface{})
 			if !ok {
 				hlog.Error("get payloadMap error:", " claims data:", data)
@@ -132,19 +136,19 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				hlog.Error("role cache is not a valid *ent.Role or the role is not active")
 				return false
 			}
-			//
-			//sub := roleId
-			//
-			//pass, err := enforcer.Enforce(sub, obj, act)
-			//if err != nil {
-			//	hlog.Error("casbin err,  role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass, " err: ", err.Error())
-			//	return false
-			//}
-			//if !pass {
-			//	hlog.Info("casbin forbid role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
-			//}
-			//hlog.Info("casbin allow role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
-			//return pass
+
+			sub := roleId
+			//check the permission
+			pass, err := enforcer.Enforce(sub, obj, act)
+			if err != nil {
+				hlog.Error("casbin err,  role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass, " err: ", err.Error())
+				return false
+			}
+			if !pass {
+				hlog.Info("casbin forbid role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
+			}
+			hlog.Info("casbin allow role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
+			return pass
 
 			return true
 		},

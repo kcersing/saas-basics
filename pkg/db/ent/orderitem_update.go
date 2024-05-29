@@ -110,23 +110,16 @@ func (oiu *OrderItemUpdate) ClearRelatedUserProductID() *OrderItemUpdate {
 }
 
 // SetData sets the "data" field.
-func (oiu *OrderItemUpdate) SetData(i int64) *OrderItemUpdate {
-	oiu.mutation.ResetData()
-	oiu.mutation.SetData(i)
+func (oiu *OrderItemUpdate) SetData(s string) *OrderItemUpdate {
+	oiu.mutation.SetData(s)
 	return oiu
 }
 
 // SetNillableData sets the "data" field if the given value is not nil.
-func (oiu *OrderItemUpdate) SetNillableData(i *int64) *OrderItemUpdate {
-	if i != nil {
-		oiu.SetData(*i)
+func (oiu *OrderItemUpdate) SetNillableData(s *string) *OrderItemUpdate {
+	if s != nil {
+		oiu.SetData(*s)
 	}
-	return oiu
-}
-
-// AddData adds i to the "data" field.
-func (oiu *OrderItemUpdate) AddData(i int64) *OrderItemUpdate {
-	oiu.mutation.AddData(i)
 	return oiu
 }
 
@@ -136,23 +129,9 @@ func (oiu *OrderItemUpdate) ClearData() *OrderItemUpdate {
 	return oiu
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (oiu *OrderItemUpdate) SetAufkID(id int64) *OrderItemUpdate {
-	oiu.mutation.SetAufkID(id)
-	return oiu
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (oiu *OrderItemUpdate) SetNillableAufkID(id *int64) *OrderItemUpdate {
-	if id != nil {
-		oiu = oiu.SetAufkID(*id)
-	}
-	return oiu
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (oiu *OrderItemUpdate) SetAufk(o *Order) *OrderItemUpdate {
-	return oiu.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (oiu *OrderItemUpdate) SetOrder(o *Order) *OrderItemUpdate {
+	return oiu.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderItemMutation object of the builder.
@@ -160,9 +139,9 @@ func (oiu *OrderItemUpdate) Mutation() *OrderItemMutation {
 	return oiu.mutation
 }
 
-// ClearAufk clears the "aufk" edge to the Order entity.
-func (oiu *OrderItemUpdate) ClearAufk() *OrderItemUpdate {
-	oiu.mutation.ClearAufk()
+// ClearOrder clears the "order" edge to the Order entity.
+func (oiu *OrderItemUpdate) ClearOrder() *OrderItemUpdate {
+	oiu.mutation.ClearOrder()
 	return oiu
 }
 
@@ -233,20 +212,17 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
 	if value, ok := oiu.mutation.Data(); ok {
-		_spec.SetField(orderitem.FieldData, field.TypeInt64, value)
-	}
-	if value, ok := oiu.mutation.AddedData(); ok {
-		_spec.AddField(orderitem.FieldData, field.TypeInt64, value)
+		_spec.SetField(orderitem.FieldData, field.TypeString, value)
 	}
 	if oiu.mutation.DataCleared() {
-		_spec.ClearField(orderitem.FieldData, field.TypeInt64)
+		_spec.ClearField(orderitem.FieldData, field.TypeString)
 	}
-	if oiu.mutation.AufkCleared() {
+	if oiu.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderitem.AufkTable,
-			Columns: []string{orderitem.AufkColumn},
+			Table:   orderitem.OrderTable,
+			Columns: []string{orderitem.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -254,12 +230,12 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := oiu.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := oiu.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderitem.AufkTable,
-			Columns: []string{orderitem.AufkColumn},
+			Table:   orderitem.OrderTable,
+			Columns: []string{orderitem.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -371,23 +347,16 @@ func (oiuo *OrderItemUpdateOne) ClearRelatedUserProductID() *OrderItemUpdateOne 
 }
 
 // SetData sets the "data" field.
-func (oiuo *OrderItemUpdateOne) SetData(i int64) *OrderItemUpdateOne {
-	oiuo.mutation.ResetData()
-	oiuo.mutation.SetData(i)
+func (oiuo *OrderItemUpdateOne) SetData(s string) *OrderItemUpdateOne {
+	oiuo.mutation.SetData(s)
 	return oiuo
 }
 
 // SetNillableData sets the "data" field if the given value is not nil.
-func (oiuo *OrderItemUpdateOne) SetNillableData(i *int64) *OrderItemUpdateOne {
-	if i != nil {
-		oiuo.SetData(*i)
+func (oiuo *OrderItemUpdateOne) SetNillableData(s *string) *OrderItemUpdateOne {
+	if s != nil {
+		oiuo.SetData(*s)
 	}
-	return oiuo
-}
-
-// AddData adds i to the "data" field.
-func (oiuo *OrderItemUpdateOne) AddData(i int64) *OrderItemUpdateOne {
-	oiuo.mutation.AddData(i)
 	return oiuo
 }
 
@@ -397,23 +366,9 @@ func (oiuo *OrderItemUpdateOne) ClearData() *OrderItemUpdateOne {
 	return oiuo
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (oiuo *OrderItemUpdateOne) SetAufkID(id int64) *OrderItemUpdateOne {
-	oiuo.mutation.SetAufkID(id)
-	return oiuo
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (oiuo *OrderItemUpdateOne) SetNillableAufkID(id *int64) *OrderItemUpdateOne {
-	if id != nil {
-		oiuo = oiuo.SetAufkID(*id)
-	}
-	return oiuo
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (oiuo *OrderItemUpdateOne) SetAufk(o *Order) *OrderItemUpdateOne {
-	return oiuo.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (oiuo *OrderItemUpdateOne) SetOrder(o *Order) *OrderItemUpdateOne {
+	return oiuo.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderItemMutation object of the builder.
@@ -421,9 +376,9 @@ func (oiuo *OrderItemUpdateOne) Mutation() *OrderItemMutation {
 	return oiuo.mutation
 }
 
-// ClearAufk clears the "aufk" edge to the Order entity.
-func (oiuo *OrderItemUpdateOne) ClearAufk() *OrderItemUpdateOne {
-	oiuo.mutation.ClearAufk()
+// ClearOrder clears the "order" edge to the Order entity.
+func (oiuo *OrderItemUpdateOne) ClearOrder() *OrderItemUpdateOne {
+	oiuo.mutation.ClearOrder()
 	return oiuo
 }
 
@@ -524,20 +479,17 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
 	if value, ok := oiuo.mutation.Data(); ok {
-		_spec.SetField(orderitem.FieldData, field.TypeInt64, value)
-	}
-	if value, ok := oiuo.mutation.AddedData(); ok {
-		_spec.AddField(orderitem.FieldData, field.TypeInt64, value)
+		_spec.SetField(orderitem.FieldData, field.TypeString, value)
 	}
 	if oiuo.mutation.DataCleared() {
-		_spec.ClearField(orderitem.FieldData, field.TypeInt64)
+		_spec.ClearField(orderitem.FieldData, field.TypeString)
 	}
-	if oiuo.mutation.AufkCleared() {
+	if oiuo.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderitem.AufkTable,
-			Columns: []string{orderitem.AufkColumn},
+			Table:   orderitem.OrderTable,
+			Columns: []string{orderitem.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -545,12 +497,12 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := oiuo.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := oiuo.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderitem.AufkTable,
-			Columns: []string{orderitem.AufkColumn},
+			Table:   orderitem.OrderTable,
+			Columns: []string{orderitem.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),

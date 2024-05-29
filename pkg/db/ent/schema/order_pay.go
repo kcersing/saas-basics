@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 	"saas/pkg/db/ent/schema/mixins"
 )
 
@@ -33,17 +32,14 @@ func (OrderPay) Mixin() []ent.Mixin {
 
 func (OrderPay) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("aufk", Order.Type).
-			Ref("pay").Unique().
-			Field("order_id"),
+		edge.From("order", Order.Type).
+			Ref("pay").
+			Field("order_id").Unique(),
 	}
 }
 
 func (OrderPay) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("order_id").
-			Unique(),
-	}
+	return []ent.Index{}
 }
 
 func (OrderPay) Annotations() []schema.Annotation {

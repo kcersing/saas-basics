@@ -92,15 +92,15 @@ func (oic *OrderItemCreate) SetNillableRelatedUserProductID(i *int64) *OrderItem
 }
 
 // SetData sets the "data" field.
-func (oic *OrderItemCreate) SetData(i int64) *OrderItemCreate {
-	oic.mutation.SetData(i)
+func (oic *OrderItemCreate) SetData(s string) *OrderItemCreate {
+	oic.mutation.SetData(s)
 	return oic
 }
 
 // SetNillableData sets the "data" field if the given value is not nil.
-func (oic *OrderItemCreate) SetNillableData(i *int64) *OrderItemCreate {
-	if i != nil {
-		oic.SetData(*i)
+func (oic *OrderItemCreate) SetNillableData(s *string) *OrderItemCreate {
+	if s != nil {
+		oic.SetData(*s)
 	}
 	return oic
 }
@@ -111,23 +111,9 @@ func (oic *OrderItemCreate) SetID(i int64) *OrderItemCreate {
 	return oic
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (oic *OrderItemCreate) SetAufkID(id int64) *OrderItemCreate {
-	oic.mutation.SetAufkID(id)
-	return oic
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (oic *OrderItemCreate) SetNillableAufkID(id *int64) *OrderItemCreate {
-	if id != nil {
-		oic = oic.SetAufkID(*id)
-	}
-	return oic
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (oic *OrderItemCreate) SetAufk(o *Order) *OrderItemCreate {
-	return oic.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (oic *OrderItemCreate) SetOrder(o *Order) *OrderItemCreate {
+	return oic.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderItemMutation object of the builder.
@@ -240,15 +226,15 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 		_node.RelatedUserProductID = value
 	}
 	if value, ok := oic.mutation.Data(); ok {
-		_spec.SetField(orderitem.FieldData, field.TypeInt64, value)
+		_spec.SetField(orderitem.FieldData, field.TypeString, value)
 		_node.Data = value
 	}
-	if nodes := oic.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := oic.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderitem.AufkTable,
-			Columns: []string{orderitem.AufkColumn},
+			Table:   orderitem.OrderTable,
+			Columns: []string{orderitem.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),

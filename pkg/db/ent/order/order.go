@@ -32,6 +32,8 @@ const (
 	FieldSource = "source"
 	// FieldDevice holds the string denoting the device field in the database.
 	FieldDevice = "device"
+	// FieldNature holds the string denoting the nature field in the database.
+	FieldNature = "nature"
 	// FieldCompletionAt holds the string denoting the completion_at field in the database.
 	FieldCompletionAt = "completion_at"
 	// FieldCreateID holds the string denoting the create_id field in the database.
@@ -42,10 +44,10 @@ const (
 	EdgeItem = "item"
 	// EdgePay holds the string denoting the pay edge name in mutations.
 	EdgePay = "pay"
-	// EdgeSales holds the string denoting the sales edge name in mutations.
-	EdgeSales = "sales"
 	// EdgeOrderContents holds the string denoting the order_contents edge name in mutations.
 	EdgeOrderContents = "order_contents"
+	// EdgeSales holds the string denoting the sales edge name in mutations.
+	EdgeSales = "sales"
 	// EdgeOrderVenues holds the string denoting the order_venues edge name in mutations.
 	EdgeOrderVenues = "order_venues"
 	// EdgeOrderMembers holds the string denoting the order_members edge name in mutations.
@@ -75,13 +77,6 @@ const (
 	PayInverseTable = "order_pay"
 	// PayColumn is the table column denoting the pay relation/edge.
 	PayColumn = "order_id"
-	// SalesTable is the table that holds the sales relation/edge.
-	SalesTable = "order_sales"
-	// SalesInverseTable is the table name for the OrderSales entity.
-	// It exists in this package in order to avoid circular dependency with the "ordersales" package.
-	SalesInverseTable = "order_sales"
-	// SalesColumn is the table column denoting the sales relation/edge.
-	SalesColumn = "order_id"
 	// OrderContentsTable is the table that holds the order_contents relation/edge.
 	OrderContentsTable = "member_contract"
 	// OrderContentsInverseTable is the table name for the MemberContract entity.
@@ -89,6 +84,13 @@ const (
 	OrderContentsInverseTable = "member_contract"
 	// OrderContentsColumn is the table column denoting the order_contents relation/edge.
 	OrderContentsColumn = "order_id"
+	// SalesTable is the table that holds the sales relation/edge.
+	SalesTable = "order_sales"
+	// SalesInverseTable is the table name for the OrderSales entity.
+	// It exists in this package in order to avoid circular dependency with the "ordersales" package.
+	SalesInverseTable = "order_sales"
+	// SalesColumn is the table column denoting the sales relation/edge.
+	SalesColumn = "order_id"
 	// OrderVenuesTable is the table that holds the order_venues relation/edge.
 	OrderVenuesTable = "order"
 	// OrderVenuesInverseTable is the table name for the Venue entity.
@@ -124,6 +126,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldSource,
 	FieldDevice,
+	FieldNature,
 	FieldCompletionAt,
 	FieldCreateID,
 }
@@ -206,6 +209,11 @@ func ByDevice(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDevice, opts...).ToFunc()
 }
 
+// ByNature orders the results by the nature field.
+func ByNature(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNature, opts...).ToFunc()
+}
+
 // ByCompletionAt orders the results by the completion_at field.
 func ByCompletionAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompletionAt, opts...).ToFunc()
@@ -258,20 +266,6 @@ func ByPay(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// BySalesCount orders the results by sales count.
-func BySalesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newSalesStep(), opts...)
-	}
-}
-
-// BySales orders the results by sales terms.
-func BySales(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSalesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByOrderContentsCount orders the results by order_contents count.
 func ByOrderContentsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -283,6 +277,20 @@ func ByOrderContentsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByOrderContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOrderContentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySalesCount orders the results by sales count.
+func BySalesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSalesStep(), opts...)
+	}
+}
+
+// BySales orders the results by sales terms.
+func BySales(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSalesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -327,18 +335,18 @@ func newPayStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, PayTable, PayColumn),
 	)
 }
-func newSalesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SalesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SalesTable, SalesColumn),
-	)
-}
 func newOrderContentsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OrderContentsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, OrderContentsTable, OrderContentsColumn),
+	)
+}
+func newSalesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SalesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SalesTable, SalesColumn),
 	)
 }
 func newOrderVenuesStep() *sqlgraph.Step {

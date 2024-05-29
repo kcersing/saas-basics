@@ -41,24 +41,24 @@ type OrderSales struct {
 
 // OrderSalesEdges holds the relations/edges for other nodes in the graph.
 type OrderSalesEdges struct {
-	// Aufk holds the value of the aufk edge.
-	Aufk *Order `json:"aufk,omitempty"`
+	// Order holds the value of the order edge.
+	Order *Order `json:"order,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// AufkOrErr returns the Aufk value or an error if the edge
+// OrderOrErr returns the Order value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrderSalesEdges) AufkOrErr() (*Order, error) {
+func (e OrderSalesEdges) OrderOrErr() (*Order, error) {
 	if e.loadedTypes[0] {
-		if e.Aufk == nil {
+		if e.Order == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: order.Label}
 		}
-		return e.Aufk, nil
+		return e.Order, nil
 	}
-	return nil, &NotLoadedError{edge: "aufk"}
+	return nil, &NotLoadedError{edge: "order"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -146,9 +146,9 @@ func (os *OrderSales) Value(name string) (ent.Value, error) {
 	return os.selectValues.Get(name)
 }
 
-// QueryAufk queries the "aufk" edge of the OrderSales entity.
-func (os *OrderSales) QueryAufk() *OrderQuery {
-	return NewOrderSalesClient(os.config).QueryAufk(os)
+// QueryOrder queries the "order" edge of the OrderSales entity.
+func (os *OrderSales) QueryOrder() *OrderQuery {
+	return NewOrderSalesClient(os.config).QueryOrder(os)
 }
 
 // Update returns a builder for updating this OrderSales.

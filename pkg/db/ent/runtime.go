@@ -601,6 +601,10 @@ func init() {
 	orderamount.DefaultUpdatedAt = orderamountDescUpdatedAt.Default.(func() time.Time)
 	// orderamount.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	orderamount.UpdateDefaultUpdatedAt = orderamountDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// orderamountDescOrderID is the schema descriptor for order_id field.
+	orderamountDescOrderID := orderamountFields[0].Descriptor()
+	// orderamount.OrderIDValidator is a validator for the "order_id" field. It is called by the builders before save.
+	orderamount.OrderIDValidator = orderamountDescOrderID.Validators[0].(func(int64) error)
 	orderitemMixin := schema.OrderItem{}.Mixin()
 	orderitemMixinFields0 := orderitemMixin[0].Fields()
 	_ = orderitemMixinFields0
@@ -623,7 +627,7 @@ func init() {
 	// orderitemDescData is the schema descriptor for data field.
 	orderitemDescData := orderitemFields[3].Descriptor()
 	// orderitem.DefaultData holds the default value on creation for the data field.
-	orderitem.DefaultData = orderitemDescData.Default.(int64)
+	orderitem.DefaultData = orderitemDescData.Default.(string)
 	orderpayMixin := schema.OrderPay{}.Mixin()
 	orderpayMixinFields0 := orderpayMixin[0].Fields()
 	_ = orderpayMixinFields0

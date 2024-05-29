@@ -22,7 +22,7 @@ type OrderPayQuery struct {
 	order      []orderpay.OrderOption
 	inters     []Interceptor
 	predicates []predicate.OrderPay
-	withAufk   *OrderQuery
+	withOrder  *OrderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -59,8 +59,8 @@ func (opq *OrderPayQuery) Order(o ...orderpay.OrderOption) *OrderPayQuery {
 	return opq
 }
 
-// QueryAufk chains the current query on the "aufk" edge.
-func (opq *OrderPayQuery) QueryAufk() *OrderQuery {
+// QueryOrder chains the current query on the "order" edge.
+func (opq *OrderPayQuery) QueryOrder() *OrderQuery {
 	query := (&OrderClient{config: opq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := opq.prepareQuery(ctx); err != nil {
@@ -73,7 +73,7 @@ func (opq *OrderPayQuery) QueryAufk() *OrderQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orderpay.Table, orderpay.FieldID, selector),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orderpay.AufkTable, orderpay.AufkColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, orderpay.OrderTable, orderpay.OrderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(opq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,21 +273,21 @@ func (opq *OrderPayQuery) Clone() *OrderPayQuery {
 		order:      append([]orderpay.OrderOption{}, opq.order...),
 		inters:     append([]Interceptor{}, opq.inters...),
 		predicates: append([]predicate.OrderPay{}, opq.predicates...),
-		withAufk:   opq.withAufk.Clone(),
+		withOrder:  opq.withOrder.Clone(),
 		// clone intermediate query.
 		sql:  opq.sql.Clone(),
 		path: opq.path,
 	}
 }
 
-// WithAufk tells the query-builder to eager-load the nodes that are connected to
-// the "aufk" edge. The optional arguments are used to configure the query builder of the edge.
-func (opq *OrderPayQuery) WithAufk(opts ...func(*OrderQuery)) *OrderPayQuery {
+// WithOrder tells the query-builder to eager-load the nodes that are connected to
+// the "order" edge. The optional arguments are used to configure the query builder of the edge.
+func (opq *OrderPayQuery) WithOrder(opts ...func(*OrderQuery)) *OrderPayQuery {
 	query := (&OrderClient{config: opq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	opq.withAufk = query
+	opq.withOrder = query
 	return opq
 }
 
@@ -370,7 +370,7 @@ func (opq *OrderPayQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Or
 		nodes       = []*OrderPay{}
 		_spec       = opq.querySpec()
 		loadedTypes = [1]bool{
-			opq.withAufk != nil,
+			opq.withOrder != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -391,16 +391,16 @@ func (opq *OrderPayQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Or
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := opq.withAufk; query != nil {
-		if err := opq.loadAufk(ctx, query, nodes, nil,
-			func(n *OrderPay, e *Order) { n.Edges.Aufk = e }); err != nil {
+	if query := opq.withOrder; query != nil {
+		if err := opq.loadOrder(ctx, query, nodes, nil,
+			func(n *OrderPay, e *Order) { n.Edges.Order = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (opq *OrderPayQuery) loadAufk(ctx context.Context, query *OrderQuery, nodes []*OrderPay, init func(*OrderPay), assign func(*OrderPay, *Order)) error {
+func (opq *OrderPayQuery) loadOrder(ctx context.Context, query *OrderQuery, nodes []*OrderPay, init func(*OrderPay), assign func(*OrderPay, *Order)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*OrderPay)
 	for i := range nodes {
@@ -455,7 +455,7 @@ func (opq *OrderPayQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if opq.withAufk != nil {
+		if opq.withOrder != nil {
 			_spec.Node.AddColumnOnce(orderpay.FieldOrderID)
 		}
 	}

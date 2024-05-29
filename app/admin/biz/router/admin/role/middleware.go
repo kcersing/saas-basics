@@ -19,12 +19,10 @@ func _apiMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	// your code...
 	return []app.HandlerFunc{
 		mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
 		mw.LogMw(),
 	}
-
 }
 
 func _api0Mw() []app.HandlerFunc {

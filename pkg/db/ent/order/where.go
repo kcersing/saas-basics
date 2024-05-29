@@ -100,6 +100,11 @@ func Device(v string) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldDevice, v))
 }
 
+// Nature applies equality check predicate on the "nature" field. It's identical to NatureEQ.
+func Nature(v int64) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldNature, v))
+}
+
 // CompletionAt applies equality check predicate on the "completion_at" field. It's identical to CompletionAtEQ.
 func CompletionAt(v time.Time) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldCompletionAt, v))
@@ -575,6 +580,56 @@ func DeviceContainsFold(v string) predicate.Order {
 	return predicate.Order(sql.FieldContainsFold(FieldDevice, v))
 }
 
+// NatureEQ applies the EQ predicate on the "nature" field.
+func NatureEQ(v int64) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldNature, v))
+}
+
+// NatureNEQ applies the NEQ predicate on the "nature" field.
+func NatureNEQ(v int64) predicate.Order {
+	return predicate.Order(sql.FieldNEQ(FieldNature, v))
+}
+
+// NatureIn applies the In predicate on the "nature" field.
+func NatureIn(vs ...int64) predicate.Order {
+	return predicate.Order(sql.FieldIn(FieldNature, vs...))
+}
+
+// NatureNotIn applies the NotIn predicate on the "nature" field.
+func NatureNotIn(vs ...int64) predicate.Order {
+	return predicate.Order(sql.FieldNotIn(FieldNature, vs...))
+}
+
+// NatureGT applies the GT predicate on the "nature" field.
+func NatureGT(v int64) predicate.Order {
+	return predicate.Order(sql.FieldGT(FieldNature, v))
+}
+
+// NatureGTE applies the GTE predicate on the "nature" field.
+func NatureGTE(v int64) predicate.Order {
+	return predicate.Order(sql.FieldGTE(FieldNature, v))
+}
+
+// NatureLT applies the LT predicate on the "nature" field.
+func NatureLT(v int64) predicate.Order {
+	return predicate.Order(sql.FieldLT(FieldNature, v))
+}
+
+// NatureLTE applies the LTE predicate on the "nature" field.
+func NatureLTE(v int64) predicate.Order {
+	return predicate.Order(sql.FieldLTE(FieldNature, v))
+}
+
+// NatureIsNil applies the IsNil predicate on the "nature" field.
+func NatureIsNil() predicate.Order {
+	return predicate.Order(sql.FieldIsNull(FieldNature))
+}
+
+// NatureNotNil applies the NotNil predicate on the "nature" field.
+func NatureNotNil() predicate.Order {
+	return predicate.Order(sql.FieldNotNull(FieldNature))
+}
+
 // CompletionAtEQ applies the EQ predicate on the "completion_at" field.
 func CompletionAtEQ(v time.Time) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldCompletionAt, v))
@@ -724,29 +779,6 @@ func HasPayWith(preds ...predicate.OrderPay) predicate.Order {
 	})
 }
 
-// HasSales applies the HasEdge predicate on the "sales" edge.
-func HasSales() predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, SalesTable, SalesColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasSalesWith applies the HasEdge predicate on the "sales" edge with a given conditions (other predicates).
-func HasSalesWith(preds ...predicate.OrderSales) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		step := newSalesStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasOrderContents applies the HasEdge predicate on the "order_contents" edge.
 func HasOrderContents() predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
@@ -762,6 +794,29 @@ func HasOrderContents() predicate.Order {
 func HasOrderContentsWith(preds ...predicate.MemberContract) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newOrderContentsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSales applies the HasEdge predicate on the "sales" edge.
+func HasSales() predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SalesTable, SalesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSalesWith applies the HasEdge predicate on the "sales" edge with a given conditions (other predicates).
+func HasSalesWith(preds ...predicate.OrderSales) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := newSalesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

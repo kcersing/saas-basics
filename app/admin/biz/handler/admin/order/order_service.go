@@ -18,6 +18,7 @@ import (
 // CreateOrder .
 // @router /api/admin/order/create [POST]
 func CreateOrder(ctx context.Context, c *app.RequestContext) {
+
 	var err error
 	var req order.CreateOrderReq
 	err = c.BindAndValidate(&req)
@@ -36,7 +37,6 @@ func CreateOrder(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }

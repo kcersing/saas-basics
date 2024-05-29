@@ -4,6 +4,8 @@ package product
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"saas/app/admin/biz/handler/mw"
+	"saas/app/admin/infras"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -17,10 +19,11 @@ func _apiMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
+		mw.LogMw(),
+	}
 }
-
 func _productMw() []app.HandlerFunc {
 	// your code...
 	return nil

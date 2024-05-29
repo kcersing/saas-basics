@@ -58,7 +58,7 @@ func LogMw() app.HandlerFunc {
 		userInfo, _ := admin.NewUser(ctx, c).UserInfo(int64(userID))
 
 		if userInfo != nil {
-			username = userInfo.Username
+			username = userInfo.Nickname
 		}
 
 		logs.Operator = username

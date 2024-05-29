@@ -29,13 +29,10 @@ func _registerMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	// your code...
-
 	return []app.HandlerFunc{
 		mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
 		mw.LogMw(),
 	}
-
 }
 
 func _userMw() []app.HandlerFunc {

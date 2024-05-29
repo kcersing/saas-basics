@@ -176,23 +176,9 @@ func (opu *OrderPayUpdate) ClearCreateID() *OrderPayUpdate {
 	return opu
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (opu *OrderPayUpdate) SetAufkID(id int64) *OrderPayUpdate {
-	opu.mutation.SetAufkID(id)
-	return opu
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (opu *OrderPayUpdate) SetNillableAufkID(id *int64) *OrderPayUpdate {
-	if id != nil {
-		opu = opu.SetAufkID(*id)
-	}
-	return opu
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (opu *OrderPayUpdate) SetAufk(o *Order) *OrderPayUpdate {
-	return opu.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (opu *OrderPayUpdate) SetOrder(o *Order) *OrderPayUpdate {
+	return opu.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderPayMutation object of the builder.
@@ -200,9 +186,9 @@ func (opu *OrderPayUpdate) Mutation() *OrderPayMutation {
 	return opu.mutation
 }
 
-// ClearAufk clears the "aufk" edge to the Order entity.
-func (opu *OrderPayUpdate) ClearAufk() *OrderPayUpdate {
-	opu.mutation.ClearAufk()
+// ClearOrder clears the "order" edge to the Order entity.
+func (opu *OrderPayUpdate) ClearOrder() *OrderPayUpdate {
+	opu.mutation.ClearOrder()
 	return opu
 }
 
@@ -293,12 +279,12 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if opu.mutation.CreateIDCleared() {
 		_spec.ClearField(orderpay.FieldCreateID, field.TypeInt64)
 	}
-	if opu.mutation.AufkCleared() {
+	if opu.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderpay.AufkTable,
-			Columns: []string{orderpay.AufkColumn},
+			Table:   orderpay.OrderTable,
+			Columns: []string{orderpay.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -306,12 +292,12 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := opu.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := opu.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderpay.AufkTable,
-			Columns: []string{orderpay.AufkColumn},
+			Table:   orderpay.OrderTable,
+			Columns: []string{orderpay.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -489,23 +475,9 @@ func (opuo *OrderPayUpdateOne) ClearCreateID() *OrderPayUpdateOne {
 	return opuo
 }
 
-// SetAufkID sets the "aufk" edge to the Order entity by ID.
-func (opuo *OrderPayUpdateOne) SetAufkID(id int64) *OrderPayUpdateOne {
-	opuo.mutation.SetAufkID(id)
-	return opuo
-}
-
-// SetNillableAufkID sets the "aufk" edge to the Order entity by ID if the given value is not nil.
-func (opuo *OrderPayUpdateOne) SetNillableAufkID(id *int64) *OrderPayUpdateOne {
-	if id != nil {
-		opuo = opuo.SetAufkID(*id)
-	}
-	return opuo
-}
-
-// SetAufk sets the "aufk" edge to the Order entity.
-func (opuo *OrderPayUpdateOne) SetAufk(o *Order) *OrderPayUpdateOne {
-	return opuo.SetAufkID(o.ID)
+// SetOrder sets the "order" edge to the Order entity.
+func (opuo *OrderPayUpdateOne) SetOrder(o *Order) *OrderPayUpdateOne {
+	return opuo.SetOrderID(o.ID)
 }
 
 // Mutation returns the OrderPayMutation object of the builder.
@@ -513,9 +485,9 @@ func (opuo *OrderPayUpdateOne) Mutation() *OrderPayMutation {
 	return opuo.mutation
 }
 
-// ClearAufk clears the "aufk" edge to the Order entity.
-func (opuo *OrderPayUpdateOne) ClearAufk() *OrderPayUpdateOne {
-	opuo.mutation.ClearAufk()
+// ClearOrder clears the "order" edge to the Order entity.
+func (opuo *OrderPayUpdateOne) ClearOrder() *OrderPayUpdateOne {
+	opuo.mutation.ClearOrder()
 	return opuo
 }
 
@@ -636,12 +608,12 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 	if opuo.mutation.CreateIDCleared() {
 		_spec.ClearField(orderpay.FieldCreateID, field.TypeInt64)
 	}
-	if opuo.mutation.AufkCleared() {
+	if opuo.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderpay.AufkTable,
-			Columns: []string{orderpay.AufkColumn},
+			Table:   orderpay.OrderTable,
+			Columns: []string{orderpay.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -649,12 +621,12 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := opuo.mutation.AufkIDs(); len(nodes) > 0 {
+	if nodes := opuo.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   orderpay.AufkTable,
-			Columns: []string{orderpay.AufkColumn},
+			Table:   orderpay.OrderTable,
+			Columns: []string{orderpay.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),

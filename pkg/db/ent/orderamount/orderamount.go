@@ -26,17 +26,17 @@ const (
 	FieldRemission = "remission"
 	// FieldPay holds the string denoting the pay field in the database.
 	FieldPay = "pay"
-	// EdgeAufk holds the string denoting the aufk edge name in mutations.
-	EdgeAufk = "aufk"
+	// EdgeOrder holds the string denoting the order edge name in mutations.
+	EdgeOrder = "order"
 	// Table holds the table name of the orderamount in the database.
 	Table = "order_amount"
-	// AufkTable is the table that holds the aufk relation/edge.
-	AufkTable = "order_amount"
-	// AufkInverseTable is the table name for the Order entity.
+	// OrderTable is the table that holds the order relation/edge.
+	OrderTable = "order_amount"
+	// OrderInverseTable is the table name for the Order entity.
 	// It exists in this package in order to avoid circular dependency with the "order" package.
-	AufkInverseTable = "order"
-	// AufkColumn is the table column denoting the aufk relation/edge.
-	AufkColumn = "order_id"
+	OrderInverseTable = "order"
+	// OrderColumn is the table column denoting the order relation/edge.
+	OrderColumn = "order_id"
 )
 
 // Columns holds all SQL columns for orderamount fields.
@@ -67,6 +67,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// OrderIDValidator is a validator for the "order_id" field. It is called by the builders before save.
+	OrderIDValidator func(int64) error
 )
 
 // OrderOption defines the ordering options for the OrderAmount queries.
@@ -107,16 +109,16 @@ func ByPay(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPay, opts...).ToFunc()
 }
 
-// ByAufkField orders the results by aufk field.
-func ByAufkField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByOrderField orders the results by order field.
+func ByOrderField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newAufkStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newOrderStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newAufkStep() *sqlgraph.Step {
+func newOrderStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(AufkInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, AufkTable, AufkColumn),
+		sqlgraph.To(OrderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OrderTable, OrderColumn),
 	)
 }

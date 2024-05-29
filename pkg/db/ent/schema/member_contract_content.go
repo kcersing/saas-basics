@@ -18,7 +18,7 @@ func (MemberContractContent) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("member_contract_id").Comment("合同ID").Optional(),
 		field.String("content").Optional().Comment("content | 内容"),
-		field.String("sign_img").Optional().Comment("sign_img | 会员签字b64 预处理"),
+		field.Text("sign_img").Optional().Comment("sign_img | 会员签字b64 预处理"),
 	}
 }
 
