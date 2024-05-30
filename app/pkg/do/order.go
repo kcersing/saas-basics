@@ -41,22 +41,26 @@ type StaffItem struct {
 }
 
 type OrderInfo struct {
-	ID           int64     `json:"id"`
-	OrderSn      string    `json:"order_sn"`
-	Status       int64     `json:"status"`
-	VenueId      int64     `json:"venue_id"`
-	VenueName    string    `json:"venue_name"`
-	MemberId     int64     `json:"member_id"`
-	MemberName   string    `json:"member_name"`
-	Source       int64     `json:"source"`
-	SourceName   string    `json:"source_name"`
-	Device       int64     `json:"device"`
-	DeviceName   string    `json:"device_name"`
-	CreateId     int64     `json:"create_id"`
-	CreateName   int64     `json:"create_name"`
-	CreatedAt    time.Time `json:"createdAt"`
-	UpdatedAt    time.Time `json:"updatedAt"`
-	CompletionAt time.Time `json:"completionAt"`
+	ID           int64        `json:"id"`
+	OrderSn      string       `json:"order_sn"`
+	Status       int64        `json:"status"`
+	VenueId      int64        `json:"venue_id"`
+	VenueName    string       `json:"venue_name"`
+	MemberId     int64        `json:"member_id"`
+	MemberName   string       `json:"member_name"`
+	Source       int64        `json:"source"`
+	SourceName   string       `json:"source_name"`
+	Device       int64        `json:"device"`
+	DeviceName   string       `json:"device_name"`
+	CreateId     int64        `json:"create_id"`
+	CreateName   int64        `json:"create_name"`
+	CreatedAt    time.Time    `json:"createdAt"`
+	UpdatedAt    time.Time    `json:"updatedAt"`
+	CompletionAt time.Time    `json:"completionAt"`
+	OrderPay     []OrderPay   `json:"order_pay"`
+	OrderSales   []OrderSales `json:"order_sales"`
+	OrderItem    OrderItem    `json:"order_item "`
+	OrderAmount  OrderAmount  `json:"order_amount"`
 }
 type OrderListReq struct {
 	ID           int64     `json:"id"`
@@ -80,6 +84,7 @@ type OrderSales struct {
 	OrderId   int64     `json:"order_id"`
 	SalesId   int64     `json:"sales_id"`
 	SalesName string    `json:"sales_name"`
+	Ratio     int64     `json:"ratio"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -95,9 +100,17 @@ type OrderPay struct {
 	UpdatedAt  time.Time `json:"updatedAt"`
 }
 type OrderItem struct {
+	OrderId              int64  `json:"order_id"`
+	ProductId            int64  `json:"product_id"`
+	RelatedUserProductId int64  `json:"related_user_product_id"`
+	Data                 string `json:"data"`
 }
 type OrderAmount struct {
-	Residue float64 `json:"residue"`
+	OrderId   int64   `json:"order_id"`
+	Total     float64 `json:"total"`
+	Remission float64 `json:"remission"`
+	Actual    float64 `json:"actual"`
+	Residue   float64 `json:"residue"`
 }
 type UnifyPayReq struct {
 	OrderSn   string  `json:"orderSn"`
