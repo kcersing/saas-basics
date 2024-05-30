@@ -24,7 +24,7 @@ const (
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
 	// Table holds the table name of the contract in the database.
-	Table = "sys_contracts"
+	Table = "contracts"
 )
 
 // Columns holds all SQL columns for contract fields.

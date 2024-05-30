@@ -210,11 +210,16 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 		{Method: "POST", Path: "/api/admin/member/list", Description: "member.MemberList", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/member/status", Description: "member.UpdateMemberStatus", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/member/update", Description: "member.UpdateMember", Group: "admin"},
+
 		{Method: "POST", Path: "/api/admin/order/create", Description: "order.CreateOrder", Group: "admin"},
 		{Method: "GET", Path: "/api/admin/order/info", Description: "order.GetOrderById", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/order/list", Description: "order.ListOrder", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/order/status", Description: "order.UpdateStatus", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/order/update", Description: "order.UpdateOrder", Group: "admin"},
+
+		{Method: "POST", Path: "/api/admin/order/unifyPay", Description: "order.UnifyPay", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/order/QRPay", Description: "order.QRPay", Group: "admin"},
+
 		{Method: "POST", Path: "/api/admin/place/create", Description: "venue.CreatePlace", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/place/list", Description: "venue.PlaceList", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/place/status", Description: "venue.PlaceUpdateStatus", Group: "admin"},

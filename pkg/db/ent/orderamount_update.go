@@ -82,6 +82,60 @@ func (oau *OrderAmountUpdate) ClearTotal() *OrderAmountUpdate {
 	return oau
 }
 
+// SetActual sets the "actual" field.
+func (oau *OrderAmountUpdate) SetActual(f float64) *OrderAmountUpdate {
+	oau.mutation.ResetActual()
+	oau.mutation.SetActual(f)
+	return oau
+}
+
+// SetNillableActual sets the "actual" field if the given value is not nil.
+func (oau *OrderAmountUpdate) SetNillableActual(f *float64) *OrderAmountUpdate {
+	if f != nil {
+		oau.SetActual(*f)
+	}
+	return oau
+}
+
+// AddActual adds f to the "actual" field.
+func (oau *OrderAmountUpdate) AddActual(f float64) *OrderAmountUpdate {
+	oau.mutation.AddActual(f)
+	return oau
+}
+
+// ClearActual clears the value of the "actual" field.
+func (oau *OrderAmountUpdate) ClearActual() *OrderAmountUpdate {
+	oau.mutation.ClearActual()
+	return oau
+}
+
+// SetResidue sets the "residue" field.
+func (oau *OrderAmountUpdate) SetResidue(f float64) *OrderAmountUpdate {
+	oau.mutation.ResetResidue()
+	oau.mutation.SetResidue(f)
+	return oau
+}
+
+// SetNillableResidue sets the "residue" field if the given value is not nil.
+func (oau *OrderAmountUpdate) SetNillableResidue(f *float64) *OrderAmountUpdate {
+	if f != nil {
+		oau.SetResidue(*f)
+	}
+	return oau
+}
+
+// AddResidue adds f to the "residue" field.
+func (oau *OrderAmountUpdate) AddResidue(f float64) *OrderAmountUpdate {
+	oau.mutation.AddResidue(f)
+	return oau
+}
+
+// ClearResidue clears the value of the "residue" field.
+func (oau *OrderAmountUpdate) ClearResidue() *OrderAmountUpdate {
+	oau.mutation.ClearResidue()
+	return oau
+}
+
 // SetRemission sets the "remission" field.
 func (oau *OrderAmountUpdate) SetRemission(f float64) *OrderAmountUpdate {
 	oau.mutation.ResetRemission()
@@ -106,33 +160,6 @@ func (oau *OrderAmountUpdate) AddRemission(f float64) *OrderAmountUpdate {
 // ClearRemission clears the value of the "remission" field.
 func (oau *OrderAmountUpdate) ClearRemission() *OrderAmountUpdate {
 	oau.mutation.ClearRemission()
-	return oau
-}
-
-// SetPay sets the "pay" field.
-func (oau *OrderAmountUpdate) SetPay(f float64) *OrderAmountUpdate {
-	oau.mutation.ResetPay()
-	oau.mutation.SetPay(f)
-	return oau
-}
-
-// SetNillablePay sets the "pay" field if the given value is not nil.
-func (oau *OrderAmountUpdate) SetNillablePay(f *float64) *OrderAmountUpdate {
-	if f != nil {
-		oau.SetPay(*f)
-	}
-	return oau
-}
-
-// AddPay adds f to the "pay" field.
-func (oau *OrderAmountUpdate) AddPay(f float64) *OrderAmountUpdate {
-	oau.mutation.AddPay(f)
-	return oau
-}
-
-// ClearPay clears the value of the "pay" field.
-func (oau *OrderAmountUpdate) ClearPay() *OrderAmountUpdate {
-	oau.mutation.ClearPay()
 	return oau
 }
 
@@ -222,6 +249,24 @@ func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if oau.mutation.TotalCleared() {
 		_spec.ClearField(orderamount.FieldTotal, field.TypeFloat64)
 	}
+	if value, ok := oau.mutation.Actual(); ok {
+		_spec.SetField(orderamount.FieldActual, field.TypeFloat64, value)
+	}
+	if value, ok := oau.mutation.AddedActual(); ok {
+		_spec.AddField(orderamount.FieldActual, field.TypeFloat64, value)
+	}
+	if oau.mutation.ActualCleared() {
+		_spec.ClearField(orderamount.FieldActual, field.TypeFloat64)
+	}
+	if value, ok := oau.mutation.Residue(); ok {
+		_spec.SetField(orderamount.FieldResidue, field.TypeFloat64, value)
+	}
+	if value, ok := oau.mutation.AddedResidue(); ok {
+		_spec.AddField(orderamount.FieldResidue, field.TypeFloat64, value)
+	}
+	if oau.mutation.ResidueCleared() {
+		_spec.ClearField(orderamount.FieldResidue, field.TypeFloat64)
+	}
 	if value, ok := oau.mutation.Remission(); ok {
 		_spec.SetField(orderamount.FieldRemission, field.TypeFloat64, value)
 	}
@@ -230,15 +275,6 @@ func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if oau.mutation.RemissionCleared() {
 		_spec.ClearField(orderamount.FieldRemission, field.TypeFloat64)
-	}
-	if value, ok := oau.mutation.Pay(); ok {
-		_spec.SetField(orderamount.FieldPay, field.TypeFloat64, value)
-	}
-	if value, ok := oau.mutation.AddedPay(); ok {
-		_spec.AddField(orderamount.FieldPay, field.TypeFloat64, value)
-	}
-	if oau.mutation.PayCleared() {
-		_spec.ClearField(orderamount.FieldPay, field.TypeFloat64)
 	}
 	if oau.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -342,6 +378,60 @@ func (oauo *OrderAmountUpdateOne) ClearTotal() *OrderAmountUpdateOne {
 	return oauo
 }
 
+// SetActual sets the "actual" field.
+func (oauo *OrderAmountUpdateOne) SetActual(f float64) *OrderAmountUpdateOne {
+	oauo.mutation.ResetActual()
+	oauo.mutation.SetActual(f)
+	return oauo
+}
+
+// SetNillableActual sets the "actual" field if the given value is not nil.
+func (oauo *OrderAmountUpdateOne) SetNillableActual(f *float64) *OrderAmountUpdateOne {
+	if f != nil {
+		oauo.SetActual(*f)
+	}
+	return oauo
+}
+
+// AddActual adds f to the "actual" field.
+func (oauo *OrderAmountUpdateOne) AddActual(f float64) *OrderAmountUpdateOne {
+	oauo.mutation.AddActual(f)
+	return oauo
+}
+
+// ClearActual clears the value of the "actual" field.
+func (oauo *OrderAmountUpdateOne) ClearActual() *OrderAmountUpdateOne {
+	oauo.mutation.ClearActual()
+	return oauo
+}
+
+// SetResidue sets the "residue" field.
+func (oauo *OrderAmountUpdateOne) SetResidue(f float64) *OrderAmountUpdateOne {
+	oauo.mutation.ResetResidue()
+	oauo.mutation.SetResidue(f)
+	return oauo
+}
+
+// SetNillableResidue sets the "residue" field if the given value is not nil.
+func (oauo *OrderAmountUpdateOne) SetNillableResidue(f *float64) *OrderAmountUpdateOne {
+	if f != nil {
+		oauo.SetResidue(*f)
+	}
+	return oauo
+}
+
+// AddResidue adds f to the "residue" field.
+func (oauo *OrderAmountUpdateOne) AddResidue(f float64) *OrderAmountUpdateOne {
+	oauo.mutation.AddResidue(f)
+	return oauo
+}
+
+// ClearResidue clears the value of the "residue" field.
+func (oauo *OrderAmountUpdateOne) ClearResidue() *OrderAmountUpdateOne {
+	oauo.mutation.ClearResidue()
+	return oauo
+}
+
 // SetRemission sets the "remission" field.
 func (oauo *OrderAmountUpdateOne) SetRemission(f float64) *OrderAmountUpdateOne {
 	oauo.mutation.ResetRemission()
@@ -366,33 +456,6 @@ func (oauo *OrderAmountUpdateOne) AddRemission(f float64) *OrderAmountUpdateOne 
 // ClearRemission clears the value of the "remission" field.
 func (oauo *OrderAmountUpdateOne) ClearRemission() *OrderAmountUpdateOne {
 	oauo.mutation.ClearRemission()
-	return oauo
-}
-
-// SetPay sets the "pay" field.
-func (oauo *OrderAmountUpdateOne) SetPay(f float64) *OrderAmountUpdateOne {
-	oauo.mutation.ResetPay()
-	oauo.mutation.SetPay(f)
-	return oauo
-}
-
-// SetNillablePay sets the "pay" field if the given value is not nil.
-func (oauo *OrderAmountUpdateOne) SetNillablePay(f *float64) *OrderAmountUpdateOne {
-	if f != nil {
-		oauo.SetPay(*f)
-	}
-	return oauo
-}
-
-// AddPay adds f to the "pay" field.
-func (oauo *OrderAmountUpdateOne) AddPay(f float64) *OrderAmountUpdateOne {
-	oauo.mutation.AddPay(f)
-	return oauo
-}
-
-// ClearPay clears the value of the "pay" field.
-func (oauo *OrderAmountUpdateOne) ClearPay() *OrderAmountUpdateOne {
-	oauo.mutation.ClearPay()
 	return oauo
 }
 
@@ -512,6 +575,24 @@ func (oauo *OrderAmountUpdateOne) sqlSave(ctx context.Context) (_node *OrderAmou
 	if oauo.mutation.TotalCleared() {
 		_spec.ClearField(orderamount.FieldTotal, field.TypeFloat64)
 	}
+	if value, ok := oauo.mutation.Actual(); ok {
+		_spec.SetField(orderamount.FieldActual, field.TypeFloat64, value)
+	}
+	if value, ok := oauo.mutation.AddedActual(); ok {
+		_spec.AddField(orderamount.FieldActual, field.TypeFloat64, value)
+	}
+	if oauo.mutation.ActualCleared() {
+		_spec.ClearField(orderamount.FieldActual, field.TypeFloat64)
+	}
+	if value, ok := oauo.mutation.Residue(); ok {
+		_spec.SetField(orderamount.FieldResidue, field.TypeFloat64, value)
+	}
+	if value, ok := oauo.mutation.AddedResidue(); ok {
+		_spec.AddField(orderamount.FieldResidue, field.TypeFloat64, value)
+	}
+	if oauo.mutation.ResidueCleared() {
+		_spec.ClearField(orderamount.FieldResidue, field.TypeFloat64)
+	}
 	if value, ok := oauo.mutation.Remission(); ok {
 		_spec.SetField(orderamount.FieldRemission, field.TypeFloat64, value)
 	}
@@ -520,15 +601,6 @@ func (oauo *OrderAmountUpdateOne) sqlSave(ctx context.Context) (_node *OrderAmou
 	}
 	if oauo.mutation.RemissionCleared() {
 		_spec.ClearField(orderamount.FieldRemission, field.TypeFloat64)
-	}
-	if value, ok := oauo.mutation.Pay(); ok {
-		_spec.SetField(orderamount.FieldPay, field.TypeFloat64, value)
-	}
-	if value, ok := oauo.mutation.AddedPay(); ok {
-		_spec.AddField(orderamount.FieldPay, field.TypeFloat64, value)
-	}
-	if oauo.mutation.PayCleared() {
-		_spec.ClearField(orderamount.FieldPay, field.TypeFloat64)
 	}
 	if oauo.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{

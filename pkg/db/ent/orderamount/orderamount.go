@@ -22,10 +22,12 @@ const (
 	FieldOrderID = "order_id"
 	// FieldTotal holds the string denoting the total field in the database.
 	FieldTotal = "total"
+	// FieldActual holds the string denoting the actual field in the database.
+	FieldActual = "actual"
+	// FieldResidue holds the string denoting the residue field in the database.
+	FieldResidue = "residue"
 	// FieldRemission holds the string denoting the remission field in the database.
 	FieldRemission = "remission"
-	// FieldPay holds the string denoting the pay field in the database.
-	FieldPay = "pay"
 	// EdgeOrder holds the string denoting the order edge name in mutations.
 	EdgeOrder = "order"
 	// Table holds the table name of the orderamount in the database.
@@ -46,8 +48,9 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldOrderID,
 	FieldTotal,
+	FieldActual,
+	FieldResidue,
 	FieldRemission,
-	FieldPay,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -99,14 +102,19 @@ func ByTotal(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTotal, opts...).ToFunc()
 }
 
+// ByActual orders the results by the actual field.
+func ByActual(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActual, opts...).ToFunc()
+}
+
+// ByResidue orders the results by the residue field.
+func ByResidue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResidue, opts...).ToFunc()
+}
+
 // ByRemission orders the results by the remission field.
 func ByRemission(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRemission, opts...).ToFunc()
-}
-
-// ByPay orders the results by the pay field.
-func ByPay(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPay, opts...).ToFunc()
 }
 
 // ByOrderField orders the results by order field.

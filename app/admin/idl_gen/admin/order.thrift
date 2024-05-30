@@ -48,7 +48,17 @@ struct ListOrderReq {
 
 struct UpdateOrderReq {
     1: OrderItem order
+}
+struct UnifyPayReq {
+    1: string orderSn,
+    2: double payment,
+    3: double remission,
+    4: string note,
+}
 
+struct QRPayReq {
+    1: string orderSn,
+    2: string payType,
 }
 
 service OrderService {
@@ -61,4 +71,9 @@ service OrderService {
     base.NilResponse ListOrder(1: ListOrderReq req )(api.post = "/api/admin/order/list") // 订单列表
 
     base.NilResponse GetOrderById(1: base.IDReq req) (api.get = "/api/admin/order/info") // 订单详情
+
+    base.NilResponse UnifyPay(1: UnifyPayReq req) (api.post = "/api/admin/order/unifyPay") // 订单详情
+
+    base.NilResponse QRPay(1: QRPayReq req) (api.post = "/api/admin/order/QRPay") // 订单详情
+
 }

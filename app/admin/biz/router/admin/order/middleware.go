@@ -64,3 +64,13 @@ func _updateorderMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _qrpayMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _unifypayMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

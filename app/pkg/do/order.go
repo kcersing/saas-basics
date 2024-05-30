@@ -5,12 +5,15 @@ import (
 )
 
 type Order interface {
-	Create(req CreateOrder) error
+	Create(req CreateOrder) (string, error)
 	Update(req OrderInfo) error
 	List(req OrderListReq) (resp []*OrderInfo, total int, err error)
 	UpdateStatus(id int64, status int64) error
 	Info(id int64) (info *OrderInfo, err error)
 	GetBySnOrder(sn string) (info *OrderInfo, err error)
+
+	UnifyPay(req UnifyPayReq) error
+	QRPay(req QRPayReq) (string, error)
 }
 
 type CreateOrder struct {
@@ -94,4 +97,40 @@ type OrderPay struct {
 type OrderItem struct {
 }
 type OrderAmount struct {
+	Residue float64 `json:"residue"`
+}
+type UnifyPayReq struct {
+	OrderSn   string  `json:"orderSn"`
+	Note      string  `json:"note"`
+	Payment   float64 `json:"payment"`
+	Remission float64 `json:"remission"`
+}
+type QRPayReq struct {
+	OrderSn string `json:"orderSn"`
+	PayType string `json:"payType"`
+}
+
+// OrderStatus 订单状态
+type OrderStatus int
+
+const (
+	OrderStatusUnpaid = iota
+	OrderStatusPartial
+	OrderStatusCompleted
+	OrderStatusPending
+	OrderStatusRefunded
+	OrderStatusReversed
+)
+
+var OrderStatusNames = map[OrderStatus]string{
+	OrderStatusUnpaid:    "未付款",
+	OrderStatusPartial:   "部分付款",
+	OrderStatusCompleted: "已完成",
+	OrderStatusPending:   "退款中",
+	OrderStatusRefunded:  "已退款",
+	OrderStatusReversed:  "已取消",
+}
+
+func (s OrderStatus) String() string {
+	return OrderStatusNames[s]
 }

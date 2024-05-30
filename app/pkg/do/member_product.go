@@ -39,3 +39,30 @@ type MemberPropertyInfo struct {
 	Data      string  `json:"data"`
 	Status    int64   `json:"status"`
 }
+
+// MPStatus 会员产品状态
+type MPStatus int
+
+const (
+	MPStatusUnfinished = iota
+	MPStatusNotActivated
+	MPStatusActivated
+	MPStatusExpire
+	MPStatusExhaust
+	MPStatusUpgrade
+	MPStatusFreeze
+)
+
+var MPStatusNames = map[MPStatus]string{
+	MPStatusUnfinished:   "未完成",
+	MPStatusNotActivated: "未激活",
+	MPStatusActivated:    "已激活",
+	MPStatusExpire:       "已到期",
+	MPStatusExhaust:      "已完结",
+	MPStatusUpgrade:      "已升级",
+	MPStatusFreeze:       "已冻结",
+}
+
+func (s MPStatus) String() string {
+	return MPStatusNames[s]
+}

@@ -27,10 +27,12 @@ type OrderAmount struct {
 	OrderID int64 `json:"order_id,omitempty"`
 	// 总金额
 	Total float64 `json:"total,omitempty"`
+	// 实际已付款
+	Actual float64 `json:"actual,omitempty"`
+	// 未支付金额
+	Residue float64 `json:"residue,omitempty"`
 	// 减免
 	Remission float64 `json:"remission,omitempty"`
-	// 实际付款
-	Pay float64 `json:"pay,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderAmountQuery when eager-loading is set.
 	Edges        OrderAmountEdges `json:"edges"`
@@ -64,7 +66,7 @@ func (*OrderAmount) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orderamount.FieldTotal, orderamount.FieldRemission, orderamount.FieldPay:
+		case orderamount.FieldTotal, orderamount.FieldActual, orderamount.FieldResidue, orderamount.FieldRemission:
 			values[i] = new(sql.NullFloat64)
 		case orderamount.FieldID, orderamount.FieldOrderID:
 			values[i] = new(sql.NullInt64)
@@ -115,17 +117,23 @@ func (oa *OrderAmount) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				oa.Total = value.Float64
 			}
+		case orderamount.FieldActual:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field actual", values[i])
+			} else if value.Valid {
+				oa.Actual = value.Float64
+			}
+		case orderamount.FieldResidue:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field residue", values[i])
+			} else if value.Valid {
+				oa.Residue = value.Float64
+			}
 		case orderamount.FieldRemission:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field remission", values[i])
 			} else if value.Valid {
 				oa.Remission = value.Float64
-			}
-		case orderamount.FieldPay:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
-				return fmt.Errorf("unexpected type %T for field pay", values[i])
-			} else if value.Valid {
-				oa.Pay = value.Float64
 			}
 		default:
 			oa.selectValues.Set(columns[i], values[i])
@@ -180,11 +188,14 @@ func (oa *OrderAmount) String() string {
 	builder.WriteString("total=")
 	builder.WriteString(fmt.Sprintf("%v", oa.Total))
 	builder.WriteString(", ")
+	builder.WriteString("actual=")
+	builder.WriteString(fmt.Sprintf("%v", oa.Actual))
+	builder.WriteString(", ")
+	builder.WriteString("residue=")
+	builder.WriteString(fmt.Sprintf("%v", oa.Residue))
+	builder.WriteString(", ")
 	builder.WriteString("remission=")
 	builder.WriteString(fmt.Sprintf("%v", oa.Remission))
-	builder.WriteString(", ")
-	builder.WriteString("pay=")
-	builder.WriteString(fmt.Sprintf("%v", oa.Pay))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -17,8 +17,9 @@ func (OrderAmount) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("order_id").NonNegative().Comment("订单id").Optional(),
 		field.Float("total").Comment("总金额").Optional(),
+		field.Float("actual").Comment("实际已付款").Optional(),
+		field.Float("residue").Comment("未支付金额").Optional(),
 		field.Float("remission").Comment("减免").Optional(),
-		field.Float("pay").Comment("实际付款").Optional(),
 	}
 }
 

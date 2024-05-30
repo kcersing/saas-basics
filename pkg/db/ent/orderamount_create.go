@@ -77,6 +77,34 @@ func (oac *OrderAmountCreate) SetNillableTotal(f *float64) *OrderAmountCreate {
 	return oac
 }
 
+// SetActual sets the "actual" field.
+func (oac *OrderAmountCreate) SetActual(f float64) *OrderAmountCreate {
+	oac.mutation.SetActual(f)
+	return oac
+}
+
+// SetNillableActual sets the "actual" field if the given value is not nil.
+func (oac *OrderAmountCreate) SetNillableActual(f *float64) *OrderAmountCreate {
+	if f != nil {
+		oac.SetActual(*f)
+	}
+	return oac
+}
+
+// SetResidue sets the "residue" field.
+func (oac *OrderAmountCreate) SetResidue(f float64) *OrderAmountCreate {
+	oac.mutation.SetResidue(f)
+	return oac
+}
+
+// SetNillableResidue sets the "residue" field if the given value is not nil.
+func (oac *OrderAmountCreate) SetNillableResidue(f *float64) *OrderAmountCreate {
+	if f != nil {
+		oac.SetResidue(*f)
+	}
+	return oac
+}
+
 // SetRemission sets the "remission" field.
 func (oac *OrderAmountCreate) SetRemission(f float64) *OrderAmountCreate {
 	oac.mutation.SetRemission(f)
@@ -87,20 +115,6 @@ func (oac *OrderAmountCreate) SetRemission(f float64) *OrderAmountCreate {
 func (oac *OrderAmountCreate) SetNillableRemission(f *float64) *OrderAmountCreate {
 	if f != nil {
 		oac.SetRemission(*f)
-	}
-	return oac
-}
-
-// SetPay sets the "pay" field.
-func (oac *OrderAmountCreate) SetPay(f float64) *OrderAmountCreate {
-	oac.mutation.SetPay(f)
-	return oac
-}
-
-// SetNillablePay sets the "pay" field if the given value is not nil.
-func (oac *OrderAmountCreate) SetNillablePay(f *float64) *OrderAmountCreate {
-	if f != nil {
-		oac.SetPay(*f)
 	}
 	return oac
 }
@@ -218,13 +232,17 @@ func (oac *OrderAmountCreate) createSpec() (*OrderAmount, *sqlgraph.CreateSpec) 
 		_spec.SetField(orderamount.FieldTotal, field.TypeFloat64, value)
 		_node.Total = value
 	}
+	if value, ok := oac.mutation.Actual(); ok {
+		_spec.SetField(orderamount.FieldActual, field.TypeFloat64, value)
+		_node.Actual = value
+	}
+	if value, ok := oac.mutation.Residue(); ok {
+		_spec.SetField(orderamount.FieldResidue, field.TypeFloat64, value)
+		_node.Residue = value
+	}
 	if value, ok := oac.mutation.Remission(); ok {
 		_spec.SetField(orderamount.FieldRemission, field.TypeFloat64, value)
 		_node.Remission = value
-	}
-	if value, ok := oac.mutation.Pay(); ok {
-		_spec.SetField(orderamount.FieldPay, field.TypeFloat64, value)
-		_node.Pay = value
 	}
 	if nodes := oac.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

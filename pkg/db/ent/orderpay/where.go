@@ -70,11 +70,6 @@ func OrderID(v int64) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldOrderID, v))
 }
 
-// PaySn applies equality check predicate on the "pay_sn" field. It's identical to PaySnEQ.
-func PaySn(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldEQ(FieldPaySn, v))
-}
-
 // Remission applies equality check predicate on the "remission" field. It's identical to RemissionEQ.
 func Remission(v float64) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldRemission, v))
@@ -88,6 +83,11 @@ func Pay(v float64) predicate.OrderPay {
 // Note applies equality check predicate on the "note" field. It's identical to NoteEQ.
 func Note(v string) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldNote, v))
+}
+
+// PayWay applies equality check predicate on the "pay_way" field. It's identical to PayWayEQ.
+func PayWay(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldPayWay, v))
 }
 
 // CreateID applies equality check predicate on the "create_id" field. It's identical to CreateIDEQ.
@@ -203,81 +203,6 @@ func OrderIDIsNil() predicate.OrderPay {
 // OrderIDNotNil applies the NotNil predicate on the "order_id" field.
 func OrderIDNotNil() predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldNotNull(FieldOrderID))
-}
-
-// PaySnEQ applies the EQ predicate on the "pay_sn" field.
-func PaySnEQ(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldEQ(FieldPaySn, v))
-}
-
-// PaySnNEQ applies the NEQ predicate on the "pay_sn" field.
-func PaySnNEQ(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldNEQ(FieldPaySn, v))
-}
-
-// PaySnIn applies the In predicate on the "pay_sn" field.
-func PaySnIn(vs ...string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldIn(FieldPaySn, vs...))
-}
-
-// PaySnNotIn applies the NotIn predicate on the "pay_sn" field.
-func PaySnNotIn(vs ...string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldNotIn(FieldPaySn, vs...))
-}
-
-// PaySnGT applies the GT predicate on the "pay_sn" field.
-func PaySnGT(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldGT(FieldPaySn, v))
-}
-
-// PaySnGTE applies the GTE predicate on the "pay_sn" field.
-func PaySnGTE(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldGTE(FieldPaySn, v))
-}
-
-// PaySnLT applies the LT predicate on the "pay_sn" field.
-func PaySnLT(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldLT(FieldPaySn, v))
-}
-
-// PaySnLTE applies the LTE predicate on the "pay_sn" field.
-func PaySnLTE(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldLTE(FieldPaySn, v))
-}
-
-// PaySnContains applies the Contains predicate on the "pay_sn" field.
-func PaySnContains(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldContains(FieldPaySn, v))
-}
-
-// PaySnHasPrefix applies the HasPrefix predicate on the "pay_sn" field.
-func PaySnHasPrefix(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldHasPrefix(FieldPaySn, v))
-}
-
-// PaySnHasSuffix applies the HasSuffix predicate on the "pay_sn" field.
-func PaySnHasSuffix(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldHasSuffix(FieldPaySn, v))
-}
-
-// PaySnIsNil applies the IsNil predicate on the "pay_sn" field.
-func PaySnIsNil() predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldIsNull(FieldPaySn))
-}
-
-// PaySnNotNil applies the NotNil predicate on the "pay_sn" field.
-func PaySnNotNil() predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldNotNull(FieldPaySn))
-}
-
-// PaySnEqualFold applies the EqualFold predicate on the "pay_sn" field.
-func PaySnEqualFold(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldEqualFold(FieldPaySn, v))
-}
-
-// PaySnContainsFold applies the ContainsFold predicate on the "pay_sn" field.
-func PaySnContainsFold(v string) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldContainsFold(FieldPaySn, v))
 }
 
 // RemissionEQ applies the EQ predicate on the "remission" field.
@@ -453,6 +378,81 @@ func NoteEqualFold(v string) predicate.OrderPay {
 // NoteContainsFold applies the ContainsFold predicate on the "note" field.
 func NoteContainsFold(v string) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldContainsFold(FieldNote, v))
+}
+
+// PayWayEQ applies the EQ predicate on the "pay_way" field.
+func PayWayEQ(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldPayWay, v))
+}
+
+// PayWayNEQ applies the NEQ predicate on the "pay_way" field.
+func PayWayNEQ(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNEQ(FieldPayWay, v))
+}
+
+// PayWayIn applies the In predicate on the "pay_way" field.
+func PayWayIn(vs ...string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIn(FieldPayWay, vs...))
+}
+
+// PayWayNotIn applies the NotIn predicate on the "pay_way" field.
+func PayWayNotIn(vs ...string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotIn(FieldPayWay, vs...))
+}
+
+// PayWayGT applies the GT predicate on the "pay_way" field.
+func PayWayGT(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGT(FieldPayWay, v))
+}
+
+// PayWayGTE applies the GTE predicate on the "pay_way" field.
+func PayWayGTE(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGTE(FieldPayWay, v))
+}
+
+// PayWayLT applies the LT predicate on the "pay_way" field.
+func PayWayLT(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLT(FieldPayWay, v))
+}
+
+// PayWayLTE applies the LTE predicate on the "pay_way" field.
+func PayWayLTE(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLTE(FieldPayWay, v))
+}
+
+// PayWayContains applies the Contains predicate on the "pay_way" field.
+func PayWayContains(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldContains(FieldPayWay, v))
+}
+
+// PayWayHasPrefix applies the HasPrefix predicate on the "pay_way" field.
+func PayWayHasPrefix(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldHasPrefix(FieldPayWay, v))
+}
+
+// PayWayHasSuffix applies the HasSuffix predicate on the "pay_way" field.
+func PayWayHasSuffix(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldHasSuffix(FieldPayWay, v))
+}
+
+// PayWayIsNil applies the IsNil predicate on the "pay_way" field.
+func PayWayIsNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIsNull(FieldPayWay))
+}
+
+// PayWayNotNil applies the NotNil predicate on the "pay_way" field.
+func PayWayNotNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotNull(FieldPayWay))
+}
+
+// PayWayEqualFold applies the EqualFold predicate on the "pay_way" field.
+func PayWayEqualFold(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEqualFold(FieldPayWay, v))
+}
+
+// PayWayContainsFold applies the ContainsFold predicate on the "pay_way" field.
+func PayWayContainsFold(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldContainsFold(FieldPayWay, v))
 }
 
 // CreateIDEQ applies the EQ predicate on the "create_id" field.

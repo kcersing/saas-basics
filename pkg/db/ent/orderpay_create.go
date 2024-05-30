@@ -63,20 +63,6 @@ func (opc *OrderPayCreate) SetNillableOrderID(i *int64) *OrderPayCreate {
 	return opc
 }
 
-// SetPaySn sets the "pay_sn" field.
-func (opc *OrderPayCreate) SetPaySn(s string) *OrderPayCreate {
-	opc.mutation.SetPaySn(s)
-	return opc
-}
-
-// SetNillablePaySn sets the "pay_sn" field if the given value is not nil.
-func (opc *OrderPayCreate) SetNillablePaySn(s *string) *OrderPayCreate {
-	if s != nil {
-		opc.SetPaySn(*s)
-	}
-	return opc
-}
-
 // SetRemission sets the "remission" field.
 func (opc *OrderPayCreate) SetRemission(f float64) *OrderPayCreate {
 	opc.mutation.SetRemission(f)
@@ -115,6 +101,20 @@ func (opc *OrderPayCreate) SetNote(s string) *OrderPayCreate {
 func (opc *OrderPayCreate) SetNillableNote(s *string) *OrderPayCreate {
 	if s != nil {
 		opc.SetNote(*s)
+	}
+	return opc
+}
+
+// SetPayWay sets the "pay_way" field.
+func (opc *OrderPayCreate) SetPayWay(s string) *OrderPayCreate {
+	opc.mutation.SetPayWay(s)
+	return opc
+}
+
+// SetNillablePayWay sets the "pay_way" field if the given value is not nil.
+func (opc *OrderPayCreate) SetNillablePayWay(s *string) *OrderPayCreate {
+	if s != nil {
+		opc.SetPayWay(*s)
 	}
 	return opc
 }
@@ -237,10 +237,6 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 		_spec.SetField(orderpay.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := opc.mutation.PaySn(); ok {
-		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)
-		_node.PaySn = value
-	}
 	if value, ok := opc.mutation.Remission(); ok {
 		_spec.SetField(orderpay.FieldRemission, field.TypeFloat64, value)
 		_node.Remission = value
@@ -252,6 +248,10 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 	if value, ok := opc.mutation.Note(); ok {
 		_spec.SetField(orderpay.FieldNote, field.TypeString, value)
 		_node.Note = value
+	}
+	if value, ok := opc.mutation.PayWay(); ok {
+		_spec.SetField(orderpay.FieldPayWay, field.TypeString, value)
+		_node.PayWay = value
 	}
 	if value, ok := opc.mutation.CreateID(); ok {
 		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)

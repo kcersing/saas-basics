@@ -20,14 +20,14 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldOrderID holds the string denoting the order_id field in the database.
 	FieldOrderID = "order_id"
-	// FieldPaySn holds the string denoting the pay_sn field in the database.
-	FieldPaySn = "pay_sn"
 	// FieldRemission holds the string denoting the remission field in the database.
 	FieldRemission = "remission"
 	// FieldPay holds the string denoting the pay field in the database.
 	FieldPay = "pay"
 	// FieldNote holds the string denoting the note field in the database.
 	FieldNote = "note"
+	// FieldPayWay holds the string denoting the pay_way field in the database.
+	FieldPayWay = "pay_way"
 	// FieldCreateID holds the string denoting the create_id field in the database.
 	FieldCreateID = "create_id"
 	// EdgeOrder holds the string denoting the order edge name in mutations.
@@ -49,10 +49,10 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldOrderID,
-	FieldPaySn,
 	FieldRemission,
 	FieldPay,
 	FieldNote,
+	FieldPayWay,
 	FieldCreateID,
 }
 
@@ -98,11 +98,6 @@ func ByOrderID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrderID, opts...).ToFunc()
 }
 
-// ByPaySn orders the results by the pay_sn field.
-func ByPaySn(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPaySn, opts...).ToFunc()
-}
-
 // ByRemission orders the results by the remission field.
 func ByRemission(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRemission, opts...).ToFunc()
@@ -116,6 +111,11 @@ func ByPay(opts ...sql.OrderTermOption) OrderOption {
 // ByNote orders the results by the note field.
 func ByNote(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNote, opts...).ToFunc()
+}
+
+// ByPayWay orders the results by the pay_way field.
+func ByPayWay(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPayWay, opts...).ToFunc()
 }
 
 // ByCreateID orders the results by the create_id field.

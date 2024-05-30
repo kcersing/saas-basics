@@ -55,26 +55,6 @@ func (opu *OrderPayUpdate) ClearOrderID() *OrderPayUpdate {
 	return opu
 }
 
-// SetPaySn sets the "pay_sn" field.
-func (opu *OrderPayUpdate) SetPaySn(s string) *OrderPayUpdate {
-	opu.mutation.SetPaySn(s)
-	return opu
-}
-
-// SetNillablePaySn sets the "pay_sn" field if the given value is not nil.
-func (opu *OrderPayUpdate) SetNillablePaySn(s *string) *OrderPayUpdate {
-	if s != nil {
-		opu.SetPaySn(*s)
-	}
-	return opu
-}
-
-// ClearPaySn clears the value of the "pay_sn" field.
-func (opu *OrderPayUpdate) ClearPaySn() *OrderPayUpdate {
-	opu.mutation.ClearPaySn()
-	return opu
-}
-
 // SetRemission sets the "remission" field.
 func (opu *OrderPayUpdate) SetRemission(f float64) *OrderPayUpdate {
 	opu.mutation.ResetRemission()
@@ -146,6 +126,26 @@ func (opu *OrderPayUpdate) SetNillableNote(s *string) *OrderPayUpdate {
 // ClearNote clears the value of the "note" field.
 func (opu *OrderPayUpdate) ClearNote() *OrderPayUpdate {
 	opu.mutation.ClearNote()
+	return opu
+}
+
+// SetPayWay sets the "pay_way" field.
+func (opu *OrderPayUpdate) SetPayWay(s string) *OrderPayUpdate {
+	opu.mutation.SetPayWay(s)
+	return opu
+}
+
+// SetNillablePayWay sets the "pay_way" field if the given value is not nil.
+func (opu *OrderPayUpdate) SetNillablePayWay(s *string) *OrderPayUpdate {
+	if s != nil {
+		opu.SetPayWay(*s)
+	}
+	return opu
+}
+
+// ClearPayWay clears the value of the "pay_way" field.
+func (opu *OrderPayUpdate) ClearPayWay() *OrderPayUpdate {
+	opu.mutation.ClearPayWay()
 	return opu
 }
 
@@ -240,12 +240,6 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := opu.mutation.UpdatedAt(); ok {
 		_spec.SetField(orderpay.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := opu.mutation.PaySn(); ok {
-		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)
-	}
-	if opu.mutation.PaySnCleared() {
-		_spec.ClearField(orderpay.FieldPaySn, field.TypeString)
-	}
 	if value, ok := opu.mutation.Remission(); ok {
 		_spec.SetField(orderpay.FieldRemission, field.TypeFloat64, value)
 	}
@@ -269,6 +263,12 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if opu.mutation.NoteCleared() {
 		_spec.ClearField(orderpay.FieldNote, field.TypeString)
+	}
+	if value, ok := opu.mutation.PayWay(); ok {
+		_spec.SetField(orderpay.FieldPayWay, field.TypeString, value)
+	}
+	if opu.mutation.PayWayCleared() {
+		_spec.ClearField(orderpay.FieldPayWay, field.TypeString)
 	}
 	if value, ok := opu.mutation.CreateID(); ok {
 		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)
@@ -354,26 +354,6 @@ func (opuo *OrderPayUpdateOne) ClearOrderID() *OrderPayUpdateOne {
 	return opuo
 }
 
-// SetPaySn sets the "pay_sn" field.
-func (opuo *OrderPayUpdateOne) SetPaySn(s string) *OrderPayUpdateOne {
-	opuo.mutation.SetPaySn(s)
-	return opuo
-}
-
-// SetNillablePaySn sets the "pay_sn" field if the given value is not nil.
-func (opuo *OrderPayUpdateOne) SetNillablePaySn(s *string) *OrderPayUpdateOne {
-	if s != nil {
-		opuo.SetPaySn(*s)
-	}
-	return opuo
-}
-
-// ClearPaySn clears the value of the "pay_sn" field.
-func (opuo *OrderPayUpdateOne) ClearPaySn() *OrderPayUpdateOne {
-	opuo.mutation.ClearPaySn()
-	return opuo
-}
-
 // SetRemission sets the "remission" field.
 func (opuo *OrderPayUpdateOne) SetRemission(f float64) *OrderPayUpdateOne {
 	opuo.mutation.ResetRemission()
@@ -445,6 +425,26 @@ func (opuo *OrderPayUpdateOne) SetNillableNote(s *string) *OrderPayUpdateOne {
 // ClearNote clears the value of the "note" field.
 func (opuo *OrderPayUpdateOne) ClearNote() *OrderPayUpdateOne {
 	opuo.mutation.ClearNote()
+	return opuo
+}
+
+// SetPayWay sets the "pay_way" field.
+func (opuo *OrderPayUpdateOne) SetPayWay(s string) *OrderPayUpdateOne {
+	opuo.mutation.SetPayWay(s)
+	return opuo
+}
+
+// SetNillablePayWay sets the "pay_way" field if the given value is not nil.
+func (opuo *OrderPayUpdateOne) SetNillablePayWay(s *string) *OrderPayUpdateOne {
+	if s != nil {
+		opuo.SetPayWay(*s)
+	}
+	return opuo
+}
+
+// ClearPayWay clears the value of the "pay_way" field.
+func (opuo *OrderPayUpdateOne) ClearPayWay() *OrderPayUpdateOne {
+	opuo.mutation.ClearPayWay()
 	return opuo
 }
 
@@ -569,12 +569,6 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 	if value, ok := opuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(orderpay.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := opuo.mutation.PaySn(); ok {
-		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)
-	}
-	if opuo.mutation.PaySnCleared() {
-		_spec.ClearField(orderpay.FieldPaySn, field.TypeString)
-	}
 	if value, ok := opuo.mutation.Remission(); ok {
 		_spec.SetField(orderpay.FieldRemission, field.TypeFloat64, value)
 	}
@@ -598,6 +592,12 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 	}
 	if opuo.mutation.NoteCleared() {
 		_spec.ClearField(orderpay.FieldNote, field.TypeString)
+	}
+	if value, ok := opuo.mutation.PayWay(); ok {
+		_spec.SetField(orderpay.FieldPayWay, field.TypeString, value)
+	}
+	if opuo.mutation.PayWayCleared() {
+		_spec.ClearField(orderpay.FieldPayWay, field.TypeString)
 	}
 	if value, ok := opuo.mutation.CreateID(); ok {
 		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)

@@ -75,14 +75,19 @@ func Total(v float64) predicate.OrderAmount {
 	return predicate.OrderAmount(sql.FieldEQ(FieldTotal, v))
 }
 
+// Actual applies equality check predicate on the "actual" field. It's identical to ActualEQ.
+func Actual(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldEQ(FieldActual, v))
+}
+
+// Residue applies equality check predicate on the "residue" field. It's identical to ResidueEQ.
+func Residue(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldEQ(FieldResidue, v))
+}
+
 // Remission applies equality check predicate on the "remission" field. It's identical to RemissionEQ.
 func Remission(v float64) predicate.OrderAmount {
 	return predicate.OrderAmount(sql.FieldEQ(FieldRemission, v))
-}
-
-// Pay applies equality check predicate on the "pay" field. It's identical to PayEQ.
-func Pay(v float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldEQ(FieldPay, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -245,6 +250,106 @@ func TotalNotNil() predicate.OrderAmount {
 	return predicate.OrderAmount(sql.FieldNotNull(FieldTotal))
 }
 
+// ActualEQ applies the EQ predicate on the "actual" field.
+func ActualEQ(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldEQ(FieldActual, v))
+}
+
+// ActualNEQ applies the NEQ predicate on the "actual" field.
+func ActualNEQ(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldNEQ(FieldActual, v))
+}
+
+// ActualIn applies the In predicate on the "actual" field.
+func ActualIn(vs ...float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldIn(FieldActual, vs...))
+}
+
+// ActualNotIn applies the NotIn predicate on the "actual" field.
+func ActualNotIn(vs ...float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldNotIn(FieldActual, vs...))
+}
+
+// ActualGT applies the GT predicate on the "actual" field.
+func ActualGT(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldGT(FieldActual, v))
+}
+
+// ActualGTE applies the GTE predicate on the "actual" field.
+func ActualGTE(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldGTE(FieldActual, v))
+}
+
+// ActualLT applies the LT predicate on the "actual" field.
+func ActualLT(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldLT(FieldActual, v))
+}
+
+// ActualLTE applies the LTE predicate on the "actual" field.
+func ActualLTE(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldLTE(FieldActual, v))
+}
+
+// ActualIsNil applies the IsNil predicate on the "actual" field.
+func ActualIsNil() predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldIsNull(FieldActual))
+}
+
+// ActualNotNil applies the NotNil predicate on the "actual" field.
+func ActualNotNil() predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldNotNull(FieldActual))
+}
+
+// ResidueEQ applies the EQ predicate on the "residue" field.
+func ResidueEQ(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldEQ(FieldResidue, v))
+}
+
+// ResidueNEQ applies the NEQ predicate on the "residue" field.
+func ResidueNEQ(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldNEQ(FieldResidue, v))
+}
+
+// ResidueIn applies the In predicate on the "residue" field.
+func ResidueIn(vs ...float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldIn(FieldResidue, vs...))
+}
+
+// ResidueNotIn applies the NotIn predicate on the "residue" field.
+func ResidueNotIn(vs ...float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldNotIn(FieldResidue, vs...))
+}
+
+// ResidueGT applies the GT predicate on the "residue" field.
+func ResidueGT(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldGT(FieldResidue, v))
+}
+
+// ResidueGTE applies the GTE predicate on the "residue" field.
+func ResidueGTE(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldGTE(FieldResidue, v))
+}
+
+// ResidueLT applies the LT predicate on the "residue" field.
+func ResidueLT(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldLT(FieldResidue, v))
+}
+
+// ResidueLTE applies the LTE predicate on the "residue" field.
+func ResidueLTE(v float64) predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldLTE(FieldResidue, v))
+}
+
+// ResidueIsNil applies the IsNil predicate on the "residue" field.
+func ResidueIsNil() predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldIsNull(FieldResidue))
+}
+
+// ResidueNotNil applies the NotNil predicate on the "residue" field.
+func ResidueNotNil() predicate.OrderAmount {
+	return predicate.OrderAmount(sql.FieldNotNull(FieldResidue))
+}
+
 // RemissionEQ applies the EQ predicate on the "remission" field.
 func RemissionEQ(v float64) predicate.OrderAmount {
 	return predicate.OrderAmount(sql.FieldEQ(FieldRemission, v))
@@ -293,56 +398,6 @@ func RemissionIsNil() predicate.OrderAmount {
 // RemissionNotNil applies the NotNil predicate on the "remission" field.
 func RemissionNotNil() predicate.OrderAmount {
 	return predicate.OrderAmount(sql.FieldNotNull(FieldRemission))
-}
-
-// PayEQ applies the EQ predicate on the "pay" field.
-func PayEQ(v float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldEQ(FieldPay, v))
-}
-
-// PayNEQ applies the NEQ predicate on the "pay" field.
-func PayNEQ(v float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldNEQ(FieldPay, v))
-}
-
-// PayIn applies the In predicate on the "pay" field.
-func PayIn(vs ...float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldIn(FieldPay, vs...))
-}
-
-// PayNotIn applies the NotIn predicate on the "pay" field.
-func PayNotIn(vs ...float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldNotIn(FieldPay, vs...))
-}
-
-// PayGT applies the GT predicate on the "pay" field.
-func PayGT(v float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldGT(FieldPay, v))
-}
-
-// PayGTE applies the GTE predicate on the "pay" field.
-func PayGTE(v float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldGTE(FieldPay, v))
-}
-
-// PayLT applies the LT predicate on the "pay" field.
-func PayLT(v float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldLT(FieldPay, v))
-}
-
-// PayLTE applies the LTE predicate on the "pay" field.
-func PayLTE(v float64) predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldLTE(FieldPay, v))
-}
-
-// PayIsNil applies the IsNil predicate on the "pay" field.
-func PayIsNil() predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldIsNull(FieldPay))
-}
-
-// PayNotNil applies the NotNil predicate on the "pay" field.
-func PayNotNil() predicate.OrderAmount {
-	return predicate.OrderAmount(sql.FieldNotNull(FieldPay))
 }
 
 // HasOrder applies the HasEdge predicate on the "order" edge.

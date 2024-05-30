@@ -32,12 +32,12 @@ func CreateOrder(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	err = admin.NewOrder(ctx, c).Create(orderInfoReq)
+	sn, err := admin.NewOrder(ctx, c).Create(orderInfoReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	utils.SendResponse(c, errno.Success, nil, 0, "")
+	utils.SendResponse(c, errno.Success, sn, 0, "")
 	return
 }
 
@@ -130,5 +130,61 @@ func UpdateStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
+
+// UnifyPay .
+// @router /api/admin/order/UnifyPay [POST]
+func UnifyPay(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.UnifyPayReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	var unifyPayReq do.UnifyPayReq
+	err = copier.Copy(&unifyPayReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	err = admin.NewOrder(ctx, c).UnifyPay(unifyPayReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
+
+// QRPay .
+// @router /api/admin/order/QRPay [POST]
+func QRPay(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.QRPayReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	var qRPayReq do.QRPayReq
+	err = copier.Copy(&qRPayReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	str, err := admin.NewOrder(ctx, c).QRPay(qRPayReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, str, 1, "")
 	return
 }

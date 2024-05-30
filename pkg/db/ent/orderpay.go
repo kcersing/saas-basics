@@ -25,14 +25,14 @@ type OrderPay struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// 订单id
 	OrderID int64 `json:"order_id,omitempty"`
-	// 支付编号
-	PaySn string `json:"pay_sn,omitempty"`
 	// 减免
 	Remission float64 `json:"remission,omitempty"`
 	// 实际付款
 	Pay float64 `json:"pay,omitempty"`
 	// 备注
 	Note string `json:"note,omitempty"`
+	// 支付方式
+	PayWay string `json:"pay_way,omitempty"`
 	// 操作人id
 	CreateID int64 `json:"create_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -72,7 +72,7 @@ func (*OrderPay) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case orderpay.FieldID, orderpay.FieldOrderID, orderpay.FieldCreateID:
 			values[i] = new(sql.NullInt64)
-		case orderpay.FieldPaySn, orderpay.FieldNote:
+		case orderpay.FieldNote, orderpay.FieldPayWay:
 			values[i] = new(sql.NullString)
 		case orderpay.FieldCreatedAt, orderpay.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -115,12 +115,6 @@ func (op *OrderPay) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				op.OrderID = value.Int64
 			}
-		case orderpay.FieldPaySn:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field pay_sn", values[i])
-			} else if value.Valid {
-				op.PaySn = value.String
-			}
 		case orderpay.FieldRemission:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field remission", values[i])
@@ -138,6 +132,12 @@ func (op *OrderPay) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field note", values[i])
 			} else if value.Valid {
 				op.Note = value.String
+			}
+		case orderpay.FieldPayWay:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field pay_way", values[i])
+			} else if value.Valid {
+				op.PayWay = value.String
 			}
 		case orderpay.FieldCreateID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -195,9 +195,6 @@ func (op *OrderPay) String() string {
 	builder.WriteString("order_id=")
 	builder.WriteString(fmt.Sprintf("%v", op.OrderID))
 	builder.WriteString(", ")
-	builder.WriteString("pay_sn=")
-	builder.WriteString(op.PaySn)
-	builder.WriteString(", ")
 	builder.WriteString("remission=")
 	builder.WriteString(fmt.Sprintf("%v", op.Remission))
 	builder.WriteString(", ")
@@ -206,6 +203,9 @@ func (op *OrderPay) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("note=")
 	builder.WriteString(op.Note)
+	builder.WriteString(", ")
+	builder.WriteString("pay_way=")
+	builder.WriteString(op.PayWay)
 	builder.WriteString(", ")
 	builder.WriteString("create_id=")
 	builder.WriteString(fmt.Sprintf("%v", op.CreateID))

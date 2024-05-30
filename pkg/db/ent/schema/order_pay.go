@@ -16,10 +16,10 @@ type OrderPay struct {
 func (OrderPay) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("order_id").Comment("订单id").Optional(),
-		field.String("pay_sn").Comment("支付编号").Optional(),
 		field.Float("remission").Comment("减免").Optional(),
 		field.Float("pay").Comment("实际付款").Optional(),
 		field.String("note").Comment("备注").Optional(),
+		field.String("pay_way").Comment("支付方式").Optional(),
 		field.Int64("create_id").Comment("操作人id").Optional(),
 	}
 }
