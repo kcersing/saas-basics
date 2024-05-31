@@ -11,6 +11,7 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/predicate"
+	"time"
 )
 
 type Logs struct {
@@ -87,8 +88,8 @@ func (l Logs) List(req *do.LogsListReq) (list []*do.LogsInfo, total int, err err
 			UserAgent:   v.UserAgent,
 			Operator:    v.Operator,
 			Time:        int32(v.Time),
-			CreatedAt:   v.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt:   v.UpdatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt:   v.CreatedAt.Format(time.DateTime),
+			UpdatedAt:   v.UpdatedAt.Format(time.DateTime),
 		})
 	}
 	total, err = l.db.Logs.Query().Where(predicates...).Count(l.ctx)

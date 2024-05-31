@@ -3,6 +3,8 @@ package admin
 import (
 	"github.com/pkg/errors"
 	"saas/app/pkg/do"
+	"saas/pkg/db/ent/memberproduct"
+	"saas/pkg/db/ent/memberproductproperty"
 	order2 "saas/pkg/db/ent/order"
 )
 
@@ -52,15 +54,15 @@ func (o Order) UnifyPay(req do.UnifyPayReq) error {
 	}
 
 	if (amount.Residue - req.Remission - req.Payment) == 0 {
-		_, err = o.db.Order.Update().Where().SetStatus(2).Save(o.ctx)
+		_, err = o.db.Order.Update().Where(order2.IDEQ(order.ID)).SetStatus(2).Save(o.ctx)
 		if err != nil {
 			return err
 		}
-		_, err = o.db.MemberProduct.Update().Where().SetStatus(1).Save(o.ctx)
+		_, err = o.db.MemberProduct.Update().Where(memberproduct.IDEQ(order.MemberProductID)).SetStatus(1).Save(o.ctx)
 		if err != nil {
 			return err
 		}
-		_, err = o.db.MemberProductProperty.Update().Where().SetStatus(1).Save(o.ctx)
+		_, err = o.db.MemberProductProperty.Update().Where(memberproductproperty.MemberProductID(order.MemberProductID)).SetStatus(1).Save(o.ctx)
 		if err != nil {
 			return err
 		}

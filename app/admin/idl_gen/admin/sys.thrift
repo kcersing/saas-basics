@@ -10,6 +10,7 @@ struct ListReq {
     3: optional string type (api.raw = "type" )
     4: optional string mobile (api.raw = "mobile" )
     5: optional i64 product (api.raw = "product" )
+    6: optional i64 venue (api.raw = "venue" )
 }
 
 service SysService {
@@ -33,6 +34,10 @@ service SysService {
 
     // 员工列表
     base.NilResponse StaffList(1: ListReq req) (api.post = "/api/sys/staff/list")
+
+    // 场地列表
+    base.NilResponse PlaceList(1: ListReq req) (api.post = "/api/sys/place/list")
+
 
 
 }

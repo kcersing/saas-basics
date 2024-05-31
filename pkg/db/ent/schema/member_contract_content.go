@@ -25,7 +25,6 @@ func (MemberContractContent) Fields() []ent.Field {
 func (MemberContractContent) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
-		mixins.StatusMixin{},
 	}
 }
 

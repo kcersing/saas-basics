@@ -12,6 +12,7 @@ import (
 	"saas/pkg/db/ent"
 	menu2 "saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/role"
+	"time"
 )
 
 type Menu struct {
@@ -249,8 +250,8 @@ func (m Menu) MenuParamListByMenuID(menuID int64) (list []do.MenuParam, total in
 		p.Type = v.Type
 		p.Key = v.Key
 		p.Value = v.Value
-		p.CreatedAt = v.CreatedAt.Format("2006-01-02 15:04:05")
-		p.UpdatedAt = v.UpdatedAt.Format("2006-01-02 15:04:05")
+		p.CreatedAt = v.CreatedAt.Format(time.DateTime)
+		p.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
 		list = append(list, p)
 	}
 
@@ -283,8 +284,8 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*do.MenuInfoTree {
 			m.Key = v.Path
 			m.OrderNo = v.OrderNo
 
-			//m.CreatedAt = v.CreatedAt.Format("2006-01-02 15:04:05")
-			//m.UpdatedAt = v.UpdatedAt.Format("2006-01-02 15:04:05")
+			//m.CreatedAt = v.CreatedAt.Format(time.DateTime)
+			//m.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
 			//m.MenuType = v.MenuType
 			//m.Level = v.MenuLevel
 

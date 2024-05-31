@@ -287,6 +287,12 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 		{Method: "POST", Path: "/api/admin/token/list", Description: "token.TokenList", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/token/update", Description: "token.UpdateToken", Group: "admin"},
 
+		{Method: "POST", Path: "/api/admin/schedule/create", Description: "schedule.CreateSchedule", Group: "admin"},
+		{Method: "GET", Path: "/api/admin/schedule/info", Description: "schedule.GetScheduleById", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/schedule/list", Description: "schedule.ListSchedule", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/schedule/status", Description: "schedule.UpdateStatus", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/schedule/update", Description: "schedule.UpdateSchedule", Group: "admin"},
+
 		{Method: "GET", Path: "/__vite_ping", Description: "handler.Ping", Group: "open"},
 		{Method: "POST", Path: "/api/login", Description: "", Group: "open"},
 		{Method: "POST", Path: "/api/logout", Description: "", Group: "open"},

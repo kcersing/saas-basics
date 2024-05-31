@@ -49,20 +49,6 @@ func (mccc *MemberContractContentCreate) SetNillableUpdatedAt(t *time.Time) *Mem
 	return mccc
 }
 
-// SetStatus sets the "status" field.
-func (mccc *MemberContractContentCreate) SetStatus(i int64) *MemberContractContentCreate {
-	mccc.mutation.SetStatus(i)
-	return mccc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (mccc *MemberContractContentCreate) SetNillableStatus(i *int64) *MemberContractContentCreate {
-	if i != nil {
-		mccc.SetStatus(*i)
-	}
-	return mccc
-}
-
 // SetMemberContractID sets the "member_contract_id" field.
 func (mccc *MemberContractContentCreate) SetMemberContractID(i int64) *MemberContractContentCreate {
 	mccc.mutation.SetMemberContractID(i)
@@ -173,10 +159,6 @@ func (mccc *MemberContractContentCreate) defaults() {
 		v := membercontractcontent.DefaultUpdatedAt()
 		mccc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := mccc.mutation.Status(); !ok {
-		v := membercontractcontent.DefaultStatus
-		mccc.mutation.SetStatus(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -226,10 +208,6 @@ func (mccc *MemberContractContentCreate) createSpec() (*MemberContractContent, *
 	if value, ok := mccc.mutation.UpdatedAt(); ok {
 		_spec.SetField(membercontractcontent.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if value, ok := mccc.mutation.Status(); ok {
-		_spec.SetField(membercontractcontent.FieldStatus, field.TypeInt64, value)
-		_node.Status = value
 	}
 	if value, ok := mccc.mutation.Content(); ok {
 		_spec.SetField(membercontractcontent.FieldContent, field.TypeString, value)

@@ -95,3 +95,13 @@ func _memberlistMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _placeMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _placelistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

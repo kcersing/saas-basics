@@ -12,15 +12,6 @@ type API func(*sql.Selector)
 // Contract is the predicate function for contract builders.
 type Contract func(*sql.Selector)
 
-// CourseRecordCoach is the predicate function for courserecordcoach builders.
-type CourseRecordCoach func(*sql.Selector)
-
-// CourseRecordMember is the predicate function for courserecordmember builders.
-type CourseRecordMember func(*sql.Selector)
-
-// CourseRecordSchedule is the predicate function for courserecordschedule builders.
-type CourseRecordSchedule func(*sql.Selector)
-
 // Dictionary is the predicate function for dictionary builders.
 type Dictionary func(*sql.Selector)
 
@@ -86,6 +77,15 @@ type ProductProperty func(*sql.Selector)
 
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)
+
+// Schedule is the predicate function for schedule builders.
+type Schedule func(*sql.Selector)
+
+// ScheduleCoach is the predicate function for schedulecoach builders.
+type ScheduleCoach func(*sql.Selector)
+
+// ScheduleMember is the predicate function for schedulemember builders.
+type ScheduleMember func(*sql.Selector)
 
 // Token is the predicate function for token builders.
 type Token func(*sql.Selector)

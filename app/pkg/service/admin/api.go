@@ -11,6 +11,7 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/predicate"
+	"time"
 )
 
 type Api struct {
@@ -79,8 +80,8 @@ func (a Api) List(req do.ListApiReq) (resp []*do.ApiInfo, total int, err error) 
 	for _, a := range apis {
 		resp = append(resp, &do.ApiInfo{
 			ID:          a.ID,
-			CreatedAt:   a.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt:   a.UpdatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt:   a.CreatedAt.Format(time.DateTime),
+			UpdatedAt:   a.UpdatedAt.Format(time.DateTime),
 			Path:        a.Path,
 			Description: a.Description,
 			Group:       a.APIGroup,

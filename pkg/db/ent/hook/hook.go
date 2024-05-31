@@ -32,42 +32,6 @@ func (f ContractFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ContractMutation", m)
 }
 
-// The CourseRecordCoachFunc type is an adapter to allow the use of ordinary
-// function as CourseRecordCoach mutator.
-type CourseRecordCoachFunc func(context.Context, *ent.CourseRecordCoachMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f CourseRecordCoachFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.CourseRecordCoachMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CourseRecordCoachMutation", m)
-}
-
-// The CourseRecordMemberFunc type is an adapter to allow the use of ordinary
-// function as CourseRecordMember mutator.
-type CourseRecordMemberFunc func(context.Context, *ent.CourseRecordMemberMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f CourseRecordMemberFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.CourseRecordMemberMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CourseRecordMemberMutation", m)
-}
-
-// The CourseRecordScheduleFunc type is an adapter to allow the use of ordinary
-// function as CourseRecordSchedule mutator.
-type CourseRecordScheduleFunc func(context.Context, *ent.CourseRecordScheduleMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f CourseRecordScheduleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.CourseRecordScheduleMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CourseRecordScheduleMutation", m)
-}
-
 // The DictionaryFunc type is an adapter to allow the use of ordinary
 // function as Dictionary mutator.
 type DictionaryFunc func(context.Context, *ent.DictionaryMutation) (ent.Value, error)
@@ -330,6 +294,42 @@ func (f RoleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RoleMutation", m)
+}
+
+// The ScheduleFunc type is an adapter to allow the use of ordinary
+// function as Schedule mutator.
+type ScheduleFunc func(context.Context, *ent.ScheduleMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScheduleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ScheduleMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ScheduleMutation", m)
+}
+
+// The ScheduleCoachFunc type is an adapter to allow the use of ordinary
+// function as ScheduleCoach mutator.
+type ScheduleCoachFunc func(context.Context, *ent.ScheduleCoachMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScheduleCoachFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ScheduleCoachMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ScheduleCoachMutation", m)
+}
+
+// The ScheduleMemberFunc type is an adapter to allow the use of ordinary
+// function as ScheduleMember mutator.
+type ScheduleMemberFunc func(context.Context, *ent.ScheduleMemberMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScheduleMemberFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ScheduleMemberMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ScheduleMemberMutation", m)
 }
 
 // The TokenFunc type is an adapter to allow the use of ordinary

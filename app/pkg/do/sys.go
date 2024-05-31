@@ -8,6 +8,7 @@ type Sys interface {
 	MemberList(req SysListReq) (list []SysList, total int64, err error)
 	ContractList(req SysListReq) (list []SysList, total int64, err error)
 	StaffList(req SysListReq) (list []SysList, total int64, err error)
+	PlaceList(req SysListReq) (list []SysList, total int64, err error)
 }
 type SysList struct {
 	ID   int64  `json:"id"`
@@ -20,4 +21,5 @@ type SysListReq struct {
 	Mobile       string `json:"mobile"`
 	Type         string `json:"type"`
 	Product      int64  `json:"product"`
+	Venue        int64  `json:"venue"`
 }

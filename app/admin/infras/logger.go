@@ -20,7 +20,7 @@ func InitLogger() {
 	}
 
 	// Set filename to date
-	logFileName := time.Now().Format("2006-01-02") + ".log"
+	logFileName := time.Now().Format(time.DateOnly) + ".log"
 	fileName := path.Join(logFilePath, logFileName)
 	if _, err := os.Stat(fileName); err != nil {
 		if _, err := os.Create(fileName); err != nil {

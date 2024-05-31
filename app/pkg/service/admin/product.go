@@ -92,8 +92,8 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 		predicates = append(predicates, productproperty.StatusIn(req.Status...))
 	}
 	if len(req.CreatedTime) > 0 {
-		s, _ := time.ParseInLocation("2006-01-02 15:04:05", req.CreatedTime[0], time.Local)
-		d, _ := time.ParseInLocation("2006-01-02 15:04:05", req.CreatedTime[1], time.Local)
+		s, _ := time.ParseInLocation(time.DateTime, req.CreatedTime[0], time.Local)
+		d, _ := time.ParseInLocation(time.DateTime, req.CreatedTime[1], time.Local)
 		predicates = append(predicates, productproperty.CreatedAtGTE(s))
 		predicates = append(predicates, productproperty.CreatedAtLTE(d))
 	}

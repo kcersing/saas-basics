@@ -35,33 +35,6 @@ func (mccu *MemberContractContentUpdate) SetUpdatedAt(t time.Time) *MemberContra
 	return mccu
 }
 
-// SetStatus sets the "status" field.
-func (mccu *MemberContractContentUpdate) SetStatus(i int64) *MemberContractContentUpdate {
-	mccu.mutation.ResetStatus()
-	mccu.mutation.SetStatus(i)
-	return mccu
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (mccu *MemberContractContentUpdate) SetNillableStatus(i *int64) *MemberContractContentUpdate {
-	if i != nil {
-		mccu.SetStatus(*i)
-	}
-	return mccu
-}
-
-// AddStatus adds i to the "status" field.
-func (mccu *MemberContractContentUpdate) AddStatus(i int64) *MemberContractContentUpdate {
-	mccu.mutation.AddStatus(i)
-	return mccu
-}
-
-// ClearStatus clears the value of the "status" field.
-func (mccu *MemberContractContentUpdate) ClearStatus() *MemberContractContentUpdate {
-	mccu.mutation.ClearStatus()
-	return mccu
-}
-
 // SetMemberContractID sets the "member_contract_id" field.
 func (mccu *MemberContractContentUpdate) SetMemberContractID(i int64) *MemberContractContentUpdate {
 	mccu.mutation.SetMemberContractID(i)
@@ -200,15 +173,6 @@ func (mccu *MemberContractContentUpdate) sqlSave(ctx context.Context) (n int, er
 	if value, ok := mccu.mutation.UpdatedAt(); ok {
 		_spec.SetField(membercontractcontent.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := mccu.mutation.Status(); ok {
-		_spec.SetField(membercontractcontent.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := mccu.mutation.AddedStatus(); ok {
-		_spec.AddField(membercontractcontent.FieldStatus, field.TypeInt64, value)
-	}
-	if mccu.mutation.StatusCleared() {
-		_spec.ClearField(membercontractcontent.FieldStatus, field.TypeInt64)
-	}
 	if value, ok := mccu.mutation.Content(); ok {
 		_spec.SetField(membercontractcontent.FieldContent, field.TypeString, value)
 	}
@@ -273,33 +237,6 @@ type MemberContractContentUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (mccuo *MemberContractContentUpdateOne) SetUpdatedAt(t time.Time) *MemberContractContentUpdateOne {
 	mccuo.mutation.SetUpdatedAt(t)
-	return mccuo
-}
-
-// SetStatus sets the "status" field.
-func (mccuo *MemberContractContentUpdateOne) SetStatus(i int64) *MemberContractContentUpdateOne {
-	mccuo.mutation.ResetStatus()
-	mccuo.mutation.SetStatus(i)
-	return mccuo
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (mccuo *MemberContractContentUpdateOne) SetNillableStatus(i *int64) *MemberContractContentUpdateOne {
-	if i != nil {
-		mccuo.SetStatus(*i)
-	}
-	return mccuo
-}
-
-// AddStatus adds i to the "status" field.
-func (mccuo *MemberContractContentUpdateOne) AddStatus(i int64) *MemberContractContentUpdateOne {
-	mccuo.mutation.AddStatus(i)
-	return mccuo
-}
-
-// ClearStatus clears the value of the "status" field.
-func (mccuo *MemberContractContentUpdateOne) ClearStatus() *MemberContractContentUpdateOne {
-	mccuo.mutation.ClearStatus()
 	return mccuo
 }
 
@@ -470,15 +407,6 @@ func (mccuo *MemberContractContentUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if value, ok := mccuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(membercontractcontent.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := mccuo.mutation.Status(); ok {
-		_spec.SetField(membercontractcontent.FieldStatus, field.TypeInt64, value)
-	}
-	if value, ok := mccuo.mutation.AddedStatus(); ok {
-		_spec.AddField(membercontractcontent.FieldStatus, field.TypeInt64, value)
-	}
-	if mccuo.mutation.StatusCleared() {
-		_spec.ClearField(membercontractcontent.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := mccuo.mutation.Content(); ok {
 		_spec.SetField(membercontractcontent.FieldContent, field.TypeString, value)

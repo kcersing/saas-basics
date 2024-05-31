@@ -44,9 +44,7 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		return err
 	}
 
-	layout := "2006-01-02"
-	// 解析字符串到 time.Time 类型
-	parsedTime, _ := time.Parse(layout, req.Birthday)
+	parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
 
 	var gender int64
 	if req.Gender == "女性" {

@@ -95,8 +95,8 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *do.RoleInfo, err error) {
 				Status:        l.Status,
 				Remark:        l.Remark,
 				OrderNo:       l.OrderNo,
-				CreatedAt:     l.CreatedAt.Format("2006-01-02 15:04:05"),
-				UpdatedAt:     l.UpdatedAt.Format("2006-01-02 15:04:05"),
+				CreatedAt:     l.CreatedAt.Format(time.DateTime),
+				UpdatedAt:     l.UpdatedAt.Format(time.DateTime),
 			}, nil
 		}
 	}
@@ -117,8 +117,8 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *do.RoleInfo, err error) {
 		Status:        int64(roleEnt.Status),
 		Remark:        roleEnt.Remark,
 		OrderNo:       roleEnt.OrderNo,
-		CreatedAt:     roleEnt.CreatedAt.Format("2006-01-02 15:04:05"),
-		UpdatedAt:     roleEnt.UpdatedAt.Format("2006-01-02 15:04:05"),
+		CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
+		UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
 	}
 	return
 }
@@ -141,8 +141,8 @@ func (r Role) List(req *do.RoleListReq) (roleInfoList []*do.RoleInfo, total int,
 			Status:        int64(roleEnt.Status),
 			Remark:        roleEnt.Remark,
 			OrderNo:       roleEnt.OrderNo,
-			CreatedAt:     roleEnt.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt:     roleEnt.UpdatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
+			UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
 		})
 	}
 	total, _ = r.db.Role.Query().Count(r.ctx)

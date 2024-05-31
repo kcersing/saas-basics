@@ -4,7 +4,6 @@ package role
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/jinzhu/copier"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
@@ -85,9 +84,6 @@ func ApiAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	roleId := strconv.FormatInt(req.ID, 10)
-	hlog.Info("00000000000000000000000000000000")
-	hlog.Info(roleId)
-	hlog.Info("00000000000000000000000000000000")
 	if roleId == "0" {
 		c.String(consts.StatusBadRequest, "roleId 不应为0")
 		return

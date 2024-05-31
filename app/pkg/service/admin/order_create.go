@@ -8,6 +8,7 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/contract"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
 	"saas/pkg/db/ent/user"
@@ -56,7 +57,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		return "", errors.Wrap(err, "未找到产品")
 	}
 
-	layout := "2006-01-02"
+	layout := time.DateOnly
 	assignAt, err := time.Parse(layout, req.AssignAt)
 	if err != nil {
 		hlog.Error(err)
@@ -80,8 +81,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		Save(o.ctx)
 	if err != nil {
 		hlog.Error(err)
-		err = errors.Wrap(err, "创建 Order 失败")
-		errChan <- err
+		return "", errors.Wrap(err, "创建 Order 失败")
 	}
 	mp, err = o.db.MemberProduct.Create().
 		SetProductID(req.Product).
@@ -95,8 +95,15 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		Save(o.ctx)
 	if err != nil {
 		hlog.Error(err)
-		err = errors.Wrap(err, "创建会员产品失败")
-		errChan <- err
+		return "", errors.Wrap(err, "创建会员产品失败")
+	}
+	_, err = o.db.Order.Update().
+		Where(order.ID(one.ID)).
+		SetMemberProductID(mp.ID).
+		SetOrderVenues(venue).
+		Save(o.ctx)
+	if err != nil {
+		return "", errors.Wrap(err, "创建 Order 失败")
 	}
 
 	go func() {

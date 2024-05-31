@@ -23,8 +23,6 @@ type MemberContractContent struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// 状态[0:禁用;1:正常]
-	Status int64 `json:"status,omitempty"`
 	// 合同ID
 	MemberContractID int64 `json:"member_contract_id,omitempty"`
 	// content | 内容
@@ -64,7 +62,7 @@ func (*MemberContractContent) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case membercontractcontent.FieldID, membercontractcontent.FieldStatus, membercontractcontent.FieldMemberContractID:
+		case membercontractcontent.FieldID, membercontractcontent.FieldMemberContractID:
 			values[i] = new(sql.NullInt64)
 		case membercontractcontent.FieldContent, membercontractcontent.FieldSignImg:
 			values[i] = new(sql.NullString)
@@ -102,12 +100,6 @@ func (mcc *MemberContractContent) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				mcc.UpdatedAt = value.Time
-			}
-		case membercontractcontent.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				mcc.Status = value.Int64
 			}
 		case membercontractcontent.FieldMemberContractID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -173,9 +165,6 @@ func (mcc *MemberContractContent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(mcc.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", mcc.Status))
 	builder.WriteString(", ")
 	builder.WriteString("member_contract_id=")
 	builder.WriteString(fmt.Sprintf("%v", mcc.MemberContractID))

@@ -26,7 +26,7 @@ func SendResponse(c *app.RequestContext, err error, data interface{}, Total int6
 		Message:   Err.ErrMsg,
 		Data:      data,
 		Total:     Total,
-		Time:      time.Now().Format("2006-01-02 15:04:05"),
+		Time:      time.Now().Format(time.DateTime),
 		CacheTime: cacheTime,
 	})
 }
@@ -37,7 +37,7 @@ func SendErr(c *app.RequestContext, err error, data interface{}, cacheTime strin
 		Code:      Err.ErrCode,
 		Message:   Err.ErrMsg,
 		Data:      data,
-		Time:      time.Now().Format("2006-01-02 15:04:05"),
+		Time:      time.Now().Format(time.DateTime),
 		CacheTime: cacheTime,
 	})
 }

@@ -9,9 +9,6 @@ import (
 	"reflect"
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/contract"
-	"saas/pkg/db/ent/courserecordcoach"
-	"saas/pkg/db/ent/courserecordmember"
-	"saas/pkg/db/ent/courserecordschedule"
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/entrylogs"
@@ -34,6 +31,9 @@ import (
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
 	"saas/pkg/db/ent/role"
+	"saas/pkg/db/ent/schedule"
+	"saas/pkg/db/ent/schedulecoach"
+	"saas/pkg/db/ent/schedulemember"
 	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
@@ -105,9 +105,6 @@ func checkColumn(table, column string) error {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			api.Table:                   api.ValidColumn,
 			contract.Table:              contract.ValidColumn,
-			courserecordcoach.Table:     courserecordcoach.ValidColumn,
-			courserecordmember.Table:    courserecordmember.ValidColumn,
-			courserecordschedule.Table:  courserecordschedule.ValidColumn,
 			dictionary.Table:            dictionary.ValidColumn,
 			dictionarydetail.Table:      dictionarydetail.ValidColumn,
 			entrylogs.Table:             entrylogs.ValidColumn,
@@ -130,6 +127,9 @@ func checkColumn(table, column string) error {
 			product.Table:               product.ValidColumn,
 			productproperty.Table:       productproperty.ValidColumn,
 			role.Table:                  role.ValidColumn,
+			schedule.Table:              schedule.ValidColumn,
+			schedulecoach.Table:         schedulecoach.ValidColumn,
+			schedulemember.Table:        schedulemember.ValidColumn,
 			token.Table:                 token.ValidColumn,
 			user.Table:                  user.ValidColumn,
 			venue.Table:                 venue.ValidColumn,

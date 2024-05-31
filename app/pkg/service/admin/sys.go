@@ -3,7 +3,6 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
@@ -19,6 +18,7 @@ import (
 	"saas/pkg/db/ent/productproperty"
 	"saas/pkg/db/ent/user"
 	venue2 "saas/pkg/db/ent/venue"
+	"saas/pkg/db/ent/venueplace"
 	"strconv"
 )
 
@@ -28,6 +28,30 @@ type Sys struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+}
+
+func (s Sys) PlaceList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+	var predicates []predicate.VenuePlace
+
+	if req.Venue > 0 {
+		predicates = append(predicates, venueplace.VenueID(req.Venue))
+	}
+
+	lists, err := s.db.VenuePlace.Query().Where(predicates...).All(s.ctx)
+
+	if err != nil {
+		err = errors.Wrap(err, "get VenuePlace list failed")
+		return nil, 0, err
+	}
+	for _, v := range lists {
+		list = append(list, do.SysList{
+			ID:   v.ID,
+			Name: v.Name,
+		})
+	}
+	total = int64(len(list))
+
+	return
 }
 
 func (s Sys) ProductList(req do.SysListReq) (list []do.SysList, total int64, err error) {
@@ -63,6 +87,9 @@ func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, total int64, er
 	}
 	if req.Product > 0 {
 		predicates = append(predicates, productproperty.HasProductWith(product.IDEQ(req.Product)))
+	}
+	if req.Venue > 0 {
+		predicates = append(predicates, productproperty.HasVenuesWith(venue2.IDEQ(req.Venue)))
 	}
 
 	lists, err := s.db.ProductProperty.Query().Where(predicates...).All(s.ctx)
@@ -131,7 +158,6 @@ func (s Sys) VenueList(req do.SysListReq) (list []do.SysList, total int64, err e
 	}
 	total = int64(len(list))
 
-	hlog.Info(total)
 	return
 }
 

@@ -117,8 +117,8 @@ func (d Dictionary) List(req *do.DictListReq) (list []*do.DictionaryInfo, total 
 			Name:        dict.Name,
 			Status:      dict.Status,
 			Description: dict.Description,
-			CreatedAt:   dict.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt:   dict.UpdatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt:   dict.CreatedAt.Format(time.DateTime),
+			UpdatedAt:   dict.UpdatedAt.Format(time.DateTime),
 		})
 	}
 	total, _ = d.db.Dictionary.Query().Where(predicates...).Count(d.ctx)
@@ -242,8 +242,8 @@ func (d Dictionary) DetailListByDict(req *do.DetailListReq) (list []*do.Dictiona
 			Key:       detail.Key,
 			Value:     detail.Value,
 			Status:    detail.Status,
-			CreatedAt: detail.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt: detail.UpdatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt: detail.CreatedAt.Format(time.DateTime),
+			UpdatedAt: detail.UpdatedAt.Format(time.DateTime),
 			ParentID:  detail.Edges.Dictionary.ID,
 		})
 	}
@@ -272,8 +272,8 @@ func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *do.Dic
 	detail.Key = dictDetail.Key
 	detail.Value = dictDetail.Value
 	detail.Status = dictDetail.Status
-	detail.CreatedAt = dictDetail.CreatedAt.Format("2006-01-02 15:04:05")
-	detail.UpdatedAt = dictDetail.UpdatedAt.Format("2006-01-02 15:04:05")
+	detail.CreatedAt = dictDetail.CreatedAt.Format(time.DateTime)
+	detail.UpdatedAt = dictDetail.UpdatedAt.Format(time.DateTime)
 
 	// set cache
 	d.cache.SetWithTTL(fmt.Sprintf("Dictionary%s-key%s", dictName, key), detail, 1, 72*time.Hour)

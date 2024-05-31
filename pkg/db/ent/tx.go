@@ -16,12 +16,6 @@ type Tx struct {
 	API *APIClient
 	// Contract is the client for interacting with the Contract builders.
 	Contract *ContractClient
-	// CourseRecordCoach is the client for interacting with the CourseRecordCoach builders.
-	CourseRecordCoach *CourseRecordCoachClient
-	// CourseRecordMember is the client for interacting with the CourseRecordMember builders.
-	CourseRecordMember *CourseRecordMemberClient
-	// CourseRecordSchedule is the client for interacting with the CourseRecordSchedule builders.
-	CourseRecordSchedule *CourseRecordScheduleClient
 	// Dictionary is the client for interacting with the Dictionary builders.
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
@@ -66,6 +60,12 @@ type Tx struct {
 	ProductProperty *ProductPropertyClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
+	// Schedule is the client for interacting with the Schedule builders.
+	Schedule *ScheduleClient
+	// ScheduleCoach is the client for interacting with the ScheduleCoach builders.
+	ScheduleCoach *ScheduleCoachClient
+	// ScheduleMember is the client for interacting with the ScheduleMember builders.
+	ScheduleMember *ScheduleMemberClient
 	// Token is the client for interacting with the Token builders.
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
@@ -207,9 +207,6 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.API = NewAPIClient(tx.config)
 	tx.Contract = NewContractClient(tx.config)
-	tx.CourseRecordCoach = NewCourseRecordCoachClient(tx.config)
-	tx.CourseRecordMember = NewCourseRecordMemberClient(tx.config)
-	tx.CourseRecordSchedule = NewCourseRecordScheduleClient(tx.config)
 	tx.Dictionary = NewDictionaryClient(tx.config)
 	tx.DictionaryDetail = NewDictionaryDetailClient(tx.config)
 	tx.EntryLogs = NewEntryLogsClient(tx.config)
@@ -232,6 +229,9 @@ func (tx *Tx) init() {
 	tx.Product = NewProductClient(tx.config)
 	tx.ProductProperty = NewProductPropertyClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
+	tx.Schedule = NewScheduleClient(tx.config)
+	tx.ScheduleCoach = NewScheduleCoachClient(tx.config)
+	tx.ScheduleMember = NewScheduleMemberClient(tx.config)
 	tx.Token = NewTokenClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.Venue = NewVenueClient(tx.config)

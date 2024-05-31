@@ -26,7 +26,7 @@ type Token struct {
 }
 
 func (t Token) Create(req *do.TokenInfo) error {
-	expiredAt, _ := time.ParseInLocation("2006-01-02 15:04:05", req.ExpiredAt, time.Local)
+	expiredAt, _ := time.ParseInLocation(time.DateTime, req.ExpiredAt, time.Local)
 	if expiredAt.Sub(time.Now()).Seconds() < 5 {
 		return errors.New("expired time must be greater than now, more than 5s")
 	}
@@ -62,7 +62,7 @@ func (t Token) Create(req *do.TokenInfo) error {
 
 func (t Token) Update(req *do.TokenInfo) error {
 	//TODO implement me
-	expiredAt, _ := time.ParseInLocation("2006-01-02 15:04:05", req.ExpiredAt, time.Local)
+	expiredAt, _ := time.ParseInLocation(time.DateTime, req.ExpiredAt, time.Local)
 	if expiredAt.Sub(time.Now()).Seconds() < 5 {
 		return errors.New("expired time must be greater than now, more than 5s")
 	}
@@ -124,9 +124,9 @@ func (t Token) List(req *do.TokenListReq) (res []*do.TokenInfo, total int, err e
 			UserName:  userEnt.Username,
 			Token:     userEnt.Edges.Token.Token,
 			Source:    userEnt.Edges.Token.Source,
-			CreatedAt: userEnt.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt: userEnt.UpdatedAt.Format("2006-01-02 15:04:05"),
-			ExpiredAt: userEnt.Edges.Token.ExpiredAt.Format("2006-01-02 15:04:05"),
+			CreatedAt: userEnt.CreatedAt.Format(time.DateTime),
+			UpdatedAt: userEnt.UpdatedAt.Format(time.DateTime),
+			ExpiredAt: userEnt.Edges.Token.ExpiredAt.Format(time.DateTime),
 		})
 
 		// delete expired token from db

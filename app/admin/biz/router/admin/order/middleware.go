@@ -74,3 +74,28 @@ func _unifypayMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _scheduleMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createscheduleMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getschedulebyidMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _listscheduleMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatescheduleMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

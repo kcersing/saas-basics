@@ -87,7 +87,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			var tokenInfo do.TokenInfo
 			tokenInfo.UserID = res.UserID
 			tokenInfo.UserName = res.Username
-			tokenInfo.ExpiredAt = time.Now().Add(time.Duration(config.GlobalServerConfig.Auth.AccessExpire) * time.Second).Format("2006-01-02 15:04:05")
+			tokenInfo.ExpiredAt = time.Now().Add(time.Duration(config.GlobalServerConfig.Auth.AccessExpire) * time.Second).Format(time.DateTime)
 
 			err = admin.NewToken(ctx, c).Create(&tokenInfo)
 			if err != nil {

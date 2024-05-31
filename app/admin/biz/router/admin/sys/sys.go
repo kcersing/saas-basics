@@ -30,6 +30,10 @@ func Register(r *server.Hertz) {
 				_member.POST("/list", append(_memberlistMw(), sys.MemberList)...)
 			}
 			{
+				_place := _sys.Group("/place", _placeMw()...)
+				_place.POST("/list", append(_placelistMw(), sys.PlaceList)...)
+			}
+			{
 				_product := _sys.Group("/product", _productMw()...)
 				_product.POST("/list", append(_productlistMw(), sys.ProductList)...)
 			}
