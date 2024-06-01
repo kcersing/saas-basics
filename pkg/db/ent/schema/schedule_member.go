@@ -47,8 +47,7 @@ func (ScheduleMember) Edges() []ent.Edge {
 
 func (ScheduleMember) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("member_id").
-			Unique(),
+		index.Fields("member_id"),
 	}
 }
 

@@ -1,14 +1,22 @@
+/*
+ * @Author: kcersing wt4@live.cn
+ * @Date: 2024-06-01 23:43:32
+ * @LastEditors: kcersing wt4@live.cn
+ * @LastEditTime: 2024-06-02 01:49:02
+ * @FilePath: \saas\pkg\db\ent\schema\schedule_coach.go
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 package schema
 
 import (
+	"saas/pkg/db/ent/schema/mixins"
+	"time"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
-	"saas/pkg/db/ent/schema/mixins"
-	"time"
 )
 
 type ScheduleCoach struct {
@@ -44,10 +52,7 @@ func (ScheduleCoach) Edges() []ent.Edge {
 }
 
 func (ScheduleCoach) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("coach_id").
-			Unique(),
-	}
+	return []ent.Index{}
 }
 
 func (ScheduleCoach) Annotations() []schema.Annotation {

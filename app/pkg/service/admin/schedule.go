@@ -2,11 +2,6 @@ package admin
 
 import (
 	"context"
-	"github.com/casbin/casbin/v2"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
-	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
@@ -14,6 +9,12 @@ import (
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/schedule"
 	"time"
+
+	"github.com/casbin/casbin/v2"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/dgraph-io/ristretto"
+	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
 )
 
 type Schedule struct {
@@ -81,12 +82,12 @@ func (s Schedule) ScheduleList(req do.ScheduleListReq) (resp []*do.ScheduleInfo,
 func (s Schedule) ScheduleDateList(req do.ScheduleListReq) (resp map[string][]*do.ScheduleInfo, total int, err error) {
 	lists, total, err := s.ScheduleList(req)
 
-	for _, v := range lists {
-		resp["1"] = append(resp["1"], v)
+	for i, v := range lists {
+		resp = map[string][]*do.ScheduleInfo{v.Date: lists[i : i+1]}
 
 	}
-	return
 
+	return
 }
 
 func (s Schedule) ScheduleUpdateStatus(ID int64, status int64) error {
