@@ -40,5 +40,7 @@ service ScheduleService {
 
     base.NilResponse ListSchedule(1: ListScheduleReq req )(api.post = "/api/admin/schedule/list")
 
+    base.NilResponse DateListSchedule(1: ListScheduleReq req )(api.post = "/api/admin/schedule/date-list")
+
     base.NilResponse GetScheduleById(1: base.IDReq req) (api.get = "/api/admin/schedule/info")
 }

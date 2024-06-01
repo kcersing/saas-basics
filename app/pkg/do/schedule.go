@@ -7,6 +7,7 @@ type Schedule interface {
 	ScheduleUpdate(req CreateOrUpdateScheduleReq) error
 	ScheduleDelete(id int64) error
 	ScheduleList(req ScheduleListReq) (resp []*ScheduleInfo, total int, err error)
+	ScheduleDateList(req ScheduleListReq) (resp map[string][]*ScheduleInfo, total int, err error)
 	ScheduleUpdateStatus(ID int64, status int64) error
 	ScheduleInfo(ID int64) (roleInfo *ScheduleInfo, err error)
 

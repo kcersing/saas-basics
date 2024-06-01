@@ -212,15 +212,15 @@ func (su *ScheduleUpdate) ClearNum() *ScheduleUpdate {
 }
 
 // SetDate sets the "date" field.
-func (su *ScheduleUpdate) SetDate(t time.Time) *ScheduleUpdate {
-	su.mutation.SetDate(t)
+func (su *ScheduleUpdate) SetDate(s string) *ScheduleUpdate {
+	su.mutation.SetDate(s)
 	return su
 }
 
 // SetNillableDate sets the "date" field if the given value is not nil.
-func (su *ScheduleUpdate) SetNillableDate(t *time.Time) *ScheduleUpdate {
-	if t != nil {
-		su.SetDate(*t)
+func (su *ScheduleUpdate) SetNillableDate(s *string) *ScheduleUpdate {
+	if s != nil {
+		su.SetDate(*s)
 	}
 	return su
 }
@@ -501,10 +501,10 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(schedule.FieldNum, field.TypeInt64)
 	}
 	if value, ok := su.mutation.Date(); ok {
-		_spec.SetField(schedule.FieldDate, field.TypeTime, value)
+		_spec.SetField(schedule.FieldDate, field.TypeString, value)
 	}
 	if su.mutation.DateCleared() {
-		_spec.ClearField(schedule.FieldDate, field.TypeTime)
+		_spec.ClearField(schedule.FieldDate, field.TypeString)
 	}
 	if value, ok := su.mutation.StartTime(); ok {
 		_spec.SetField(schedule.FieldStartTime, field.TypeTime, value)
@@ -825,15 +825,15 @@ func (suo *ScheduleUpdateOne) ClearNum() *ScheduleUpdateOne {
 }
 
 // SetDate sets the "date" field.
-func (suo *ScheduleUpdateOne) SetDate(t time.Time) *ScheduleUpdateOne {
-	suo.mutation.SetDate(t)
+func (suo *ScheduleUpdateOne) SetDate(s string) *ScheduleUpdateOne {
+	suo.mutation.SetDate(s)
 	return suo
 }
 
 // SetNillableDate sets the "date" field if the given value is not nil.
-func (suo *ScheduleUpdateOne) SetNillableDate(t *time.Time) *ScheduleUpdateOne {
-	if t != nil {
-		suo.SetDate(*t)
+func (suo *ScheduleUpdateOne) SetNillableDate(s *string) *ScheduleUpdateOne {
+	if s != nil {
+		suo.SetDate(*s)
 	}
 	return suo
 }
@@ -1144,10 +1144,10 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 		_spec.ClearField(schedule.FieldNum, field.TypeInt64)
 	}
 	if value, ok := suo.mutation.Date(); ok {
-		_spec.SetField(schedule.FieldDate, field.TypeTime, value)
+		_spec.SetField(schedule.FieldDate, field.TypeString, value)
 	}
 	if suo.mutation.DateCleared() {
-		_spec.ClearField(schedule.FieldDate, field.TypeTime)
+		_spec.ClearField(schedule.FieldDate, field.TypeString)
 	}
 	if value, ok := suo.mutation.StartTime(); ok {
 		_spec.SetField(schedule.FieldStartTime, field.TypeTime, value)

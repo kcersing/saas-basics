@@ -50,3 +50,8 @@ func _updatescheduleMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _datelistscheduleMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

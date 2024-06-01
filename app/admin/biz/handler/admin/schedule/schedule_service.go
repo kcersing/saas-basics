@@ -109,6 +109,27 @@ func ListSchedule(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
+// DateListSchedule .
+// @router /api/admin/schedule/date-list [POST]
+func DateListSchedule(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req schedule.ListScheduleReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	var listReq do.ScheduleListReq
+	list, total, err := admin.NewSchedule(ctx, c).ScheduleDateList(listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
+}
+
 // GetScheduleById .
 // @router /api/admin/schedule/info [GET]
 func GetScheduleById(ctx context.Context, c *app.RequestContext) {

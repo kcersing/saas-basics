@@ -647,10 +647,6 @@ func init() {
 	scheduleDescStatus := scheduleMixinFields1[0].Descriptor()
 	// schedule.DefaultStatus holds the default value on creation for the status field.
 	schedule.DefaultStatus = scheduleDescStatus.Default.(int64)
-	// scheduleDescDate is the schema descriptor for date field.
-	scheduleDescDate := scheduleFields[6].Descriptor()
-	// schedule.DefaultDate holds the default value on creation for the date field.
-	schedule.DefaultDate = scheduleDescDate.Default.(func() time.Time)
 	// scheduleDescPrice is the schema descriptor for price field.
 	scheduleDescPrice := scheduleFields[9].Descriptor()
 	// schedule.DefaultPrice holds the default value on creation for the price field.

@@ -55,7 +55,6 @@ func (s Schedule) ScheduleList(req do.ScheduleListReq) (resp []*do.ScheduleInfo,
 		predicates = append(predicates, schedule.StartTimeGTE(startTime))
 		//小于
 		predicates = append(predicates, schedule.EndTimeLTE(startTime.Add(7*24*time.Hour)))
-
 	}
 	lists, err := s.db.Schedule.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -74,11 +73,20 @@ func (s Schedule) ScheduleList(req do.ScheduleListReq) (resp []*do.ScheduleInfo,
 	for i, v := range lists {
 		resp[i].StartTime = v.StartTime.Format(time.DateTime)
 		resp[i].EndTime = v.EndTime.Format(time.DateTime)
-		resp[i].Date = v.StartTime.Format(time.DateOnly)
 	}
 
 	total, _ = s.db.Schedule.Query().Where(predicates...).Count(s.ctx)
 	return
+}
+func (s Schedule) ScheduleDateList(req do.ScheduleListReq) (resp map[string][]*do.ScheduleInfo, total int, err error) {
+	lists, total, err := s.ScheduleList(req)
+
+	for _, v := range lists {
+		resp["1"] = append(resp["1"], v)
+
+	}
+	return
+
 }
 
 func (s Schedule) ScheduleUpdateStatus(ID int64, status int64) error {

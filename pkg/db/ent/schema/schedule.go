@@ -22,7 +22,7 @@ func (Schedule) Fields() []ent.Field {
 		field.Int64("place_id").Comment("场地ID").Optional(),
 		field.Int64("num").Comment("上课人数").Optional(),
 
-		field.Time("data").Comment("日期").Optional(),
+		field.String("date").Comment("日期").Optional(),
 		field.Time("start_time").Comment("开始时间").Optional(),
 		field.Time("end_time").Comment("开始时间").Optional(),
 		field.Float("price").Default(0).Comment("课程价格").Optional(),

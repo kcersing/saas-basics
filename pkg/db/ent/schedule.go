@@ -37,7 +37,7 @@ type Schedule struct {
 	// 上课人数
 	Num int64 `json:"num,omitempty"`
 	// 日期
-	Date time.Time `json:"date,omitempty"`
+	Date string `json:"date,omitempty"`
 	// 开始时间
 	StartTime time.Time `json:"start_time,omitempty"`
 	// 开始时间
@@ -90,9 +90,9 @@ func (*Schedule) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case schedule.FieldID, schedule.FieldStatus, schedule.FieldVenueID, schedule.FieldPropertyID, schedule.FieldPlaceID, schedule.FieldNum:
 			values[i] = new(sql.NullInt64)
-		case schedule.FieldType, schedule.FieldName, schedule.FieldRemark:
+		case schedule.FieldType, schedule.FieldName, schedule.FieldDate, schedule.FieldRemark:
 			values[i] = new(sql.NullString)
-		case schedule.FieldCreatedAt, schedule.FieldUpdatedAt, schedule.FieldDate, schedule.FieldStartTime, schedule.FieldEndTime:
+		case schedule.FieldCreatedAt, schedule.FieldUpdatedAt, schedule.FieldStartTime, schedule.FieldEndTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -170,10 +170,10 @@ func (s *Schedule) assignValues(columns []string, values []any) error {
 				s.Num = value.Int64
 			}
 		case schedule.FieldDate:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field date", values[i])
 			} else if value.Valid {
-				s.Date = value.Time
+				s.Date = value.String
 			}
 		case schedule.FieldStartTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -273,7 +273,7 @@ func (s *Schedule) String() string {
 	builder.WriteString(fmt.Sprintf("%v", s.Num))
 	builder.WriteString(", ")
 	builder.WriteString("date=")
-	builder.WriteString(s.Date.Format(time.ANSIC))
+	builder.WriteString(s.Date)
 	builder.WriteString(", ")
 	builder.WriteString("start_time=")
 	builder.WriteString(s.StartTime.Format(time.ANSIC))

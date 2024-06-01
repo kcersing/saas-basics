@@ -101,7 +101,7 @@ func Num(v int64) predicate.Schedule {
 }
 
 // Date applies equality check predicate on the "date" field. It's identical to DateEQ.
-func Date(v time.Time) predicate.Schedule {
+func Date(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldDate, v))
 }
 
@@ -606,43 +606,58 @@ func NumNotNil() predicate.Schedule {
 }
 
 // DateEQ applies the EQ predicate on the "date" field.
-func DateEQ(v time.Time) predicate.Schedule {
+func DateEQ(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldDate, v))
 }
 
 // DateNEQ applies the NEQ predicate on the "date" field.
-func DateNEQ(v time.Time) predicate.Schedule {
+func DateNEQ(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldNEQ(FieldDate, v))
 }
 
 // DateIn applies the In predicate on the "date" field.
-func DateIn(vs ...time.Time) predicate.Schedule {
+func DateIn(vs ...string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldIn(FieldDate, vs...))
 }
 
 // DateNotIn applies the NotIn predicate on the "date" field.
-func DateNotIn(vs ...time.Time) predicate.Schedule {
+func DateNotIn(vs ...string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldNotIn(FieldDate, vs...))
 }
 
 // DateGT applies the GT predicate on the "date" field.
-func DateGT(v time.Time) predicate.Schedule {
+func DateGT(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldGT(FieldDate, v))
 }
 
 // DateGTE applies the GTE predicate on the "date" field.
-func DateGTE(v time.Time) predicate.Schedule {
+func DateGTE(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldGTE(FieldDate, v))
 }
 
 // DateLT applies the LT predicate on the "date" field.
-func DateLT(v time.Time) predicate.Schedule {
+func DateLT(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldLT(FieldDate, v))
 }
 
 // DateLTE applies the LTE predicate on the "date" field.
-func DateLTE(v time.Time) predicate.Schedule {
+func DateLTE(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldLTE(FieldDate, v))
+}
+
+// DateContains applies the Contains predicate on the "date" field.
+func DateContains(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldContains(FieldDate, v))
+}
+
+// DateHasPrefix applies the HasPrefix predicate on the "date" field.
+func DateHasPrefix(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldHasPrefix(FieldDate, v))
+}
+
+// DateHasSuffix applies the HasSuffix predicate on the "date" field.
+func DateHasSuffix(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldHasSuffix(FieldDate, v))
 }
 
 // DateIsNil applies the IsNil predicate on the "date" field.
@@ -653,6 +668,16 @@ func DateIsNil() predicate.Schedule {
 // DateNotNil applies the NotNil predicate on the "date" field.
 func DateNotNil() predicate.Schedule {
 	return predicate.Schedule(sql.FieldNotNull(FieldDate))
+}
+
+// DateEqualFold applies the EqualFold predicate on the "date" field.
+func DateEqualFold(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEqualFold(FieldDate, v))
+}
+
+// DateContainsFold applies the ContainsFold predicate on the "date" field.
+func DateContainsFold(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldContainsFold(FieldDate, v))
 }
 
 // StartTimeEQ applies the EQ predicate on the "start_time" field.

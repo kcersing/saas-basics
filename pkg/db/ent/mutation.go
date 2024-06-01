@@ -25944,7 +25944,7 @@ type ScheduleMutation struct {
 	addplace_id    *int64
 	num            *int64
 	addnum         *int64
-	date           *time.Time
+	date           *string
 	start_time     *time.Time
 	end_time       *time.Time
 	price          *float64
@@ -26587,12 +26587,12 @@ func (m *ScheduleMutation) ResetNum() {
 }
 
 // SetDate sets the "date" field.
-func (m *ScheduleMutation) SetDate(t time.Time) {
-	m.date = &t
+func (m *ScheduleMutation) SetDate(s string) {
+	m.date = &s
 }
 
 // Date returns the value of the "date" field in the mutation.
-func (m *ScheduleMutation) Date() (r time.Time, exists bool) {
+func (m *ScheduleMutation) Date() (r string, exists bool) {
 	v := m.date
 	if v == nil {
 		return
@@ -26603,7 +26603,7 @@ func (m *ScheduleMutation) Date() (r time.Time, exists bool) {
 // OldDate returns the old "date" field's value of the Schedule entity.
 // If the Schedule object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ScheduleMutation) OldDate(ctx context.Context) (v time.Time, err error) {
+func (m *ScheduleMutation) OldDate(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDate is only allowed on UpdateOne operations")
 	}
@@ -27183,7 +27183,7 @@ func (m *ScheduleMutation) SetField(name string, value ent.Value) error {
 		m.SetNum(v)
 		return nil
 	case schedule.FieldDate:
-		v, ok := value.(time.Time)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

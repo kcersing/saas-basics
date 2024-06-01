@@ -12,7 +12,6 @@ func (c Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 
 	// 解析字符串到 time.Time 类型
 	startTime, _ := time.Parse(time.DateTime, req.StartTime)
-	data, _ := time.Parse(time.DateOnly, req.StartTime)
 	property, err := c.db.ProductProperty.Query().
 		Where(productproperty.ID(req.PropertyId)).
 		First(c.ctx)
@@ -28,7 +27,7 @@ func (c Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 		SetPlaceID(req.PlaceID).
 		SetPropertyID(req.PropertyId).
 		SetNum(req.Num).
-		SetDate(data).
+		SetDate(startTime.Format(time.DateOnly)).
 		SetStartTime(startTime).
 		SetEndTime(startTime.Add(time.Duration(property.Length) * time.Minute)).
 		SetPrice(req.Price).

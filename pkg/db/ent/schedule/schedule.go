@@ -102,8 +102,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int64
-	// DefaultDate holds the default value on creation for the "date" field.
-	DefaultDate func() time.Time
 	// DefaultPrice holds the default value on creation for the "price" field.
 	DefaultPrice float64
 )

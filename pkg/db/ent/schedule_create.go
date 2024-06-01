@@ -149,15 +149,15 @@ func (sc *ScheduleCreate) SetNillableNum(i *int64) *ScheduleCreate {
 }
 
 // SetDate sets the "date" field.
-func (sc *ScheduleCreate) SetDate(t time.Time) *ScheduleCreate {
-	sc.mutation.SetDate(t)
+func (sc *ScheduleCreate) SetDate(s string) *ScheduleCreate {
+	sc.mutation.SetDate(s)
 	return sc
 }
 
 // SetNillableDate sets the "date" field if the given value is not nil.
-func (sc *ScheduleCreate) SetNillableDate(t *time.Time) *ScheduleCreate {
-	if t != nil {
-		sc.SetDate(*t)
+func (sc *ScheduleCreate) SetNillableDate(s *string) *ScheduleCreate {
+	if s != nil {
+		sc.SetDate(*s)
 	}
 	return sc
 }
@@ -301,10 +301,6 @@ func (sc *ScheduleCreate) defaults() {
 		v := schedule.DefaultStatus
 		sc.mutation.SetStatus(v)
 	}
-	if _, ok := sc.mutation.Date(); !ok {
-		v := schedule.DefaultDate()
-		sc.mutation.SetDate(v)
-	}
 	if _, ok := sc.mutation.Price(); !ok {
 		v := schedule.DefaultPrice
 		sc.mutation.SetPrice(v)
@@ -388,7 +384,7 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 		_node.Num = value
 	}
 	if value, ok := sc.mutation.Date(); ok {
-		_spec.SetField(schedule.FieldDate, field.TypeTime, value)
+		_spec.SetField(schedule.FieldDate, field.TypeString, value)
 		_node.Date = value
 	}
 	if value, ok := sc.mutation.StartTime(); ok {
