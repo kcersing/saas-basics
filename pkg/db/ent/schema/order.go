@@ -52,8 +52,11 @@ func (Order) Edges() []ent.Edge {
 
 func (Order) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("member_id", "order_sn").
-			Unique(),
+		index.Fields("order_sn"),
+		index.Fields("venue_id"),
+		index.Fields("member_id"),
+		index.Fields("completion_at"),
+		index.Fields("member_product_id"),
 	}
 }
 

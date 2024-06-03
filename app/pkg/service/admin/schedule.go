@@ -72,26 +72,28 @@ func (s Schedule) ScheduleList(req do.ScheduleListReq) (resp []*do.ScheduleInfo,
 	}
 
 	for i, v := range lists {
-		resp[i].StartTime = v.StartTime.Format(time.DateTime)
-		resp[i].EndTime = v.EndTime.Format(time.DateTime)
+		resp[i].StartTime = v.StartTime.Format("15:04")
+		resp[i].EndTime = v.EndTime.Format("15:04")
 	}
 
 	total, _ = s.db.Schedule.Query().Where(predicates...).Count(s.ctx)
 	return
 }
-func (s Schedule) ScheduleDateList(req do.ScheduleListReq) (resp map[string][]*do.ScheduleInfo, total int, err error) {
+func (s Schedule) ScheduleDateList(req do.ScheduleListReq) (map[string][]*do.ScheduleInfo, int, error) {
+	req.Page = 1
+	req.PageSize = 1000
 	lists, total, err := s.ScheduleList(req)
+	m := make(map[string][]*do.ScheduleInfo)
+	for _, v := range lists {
 
-	for i, v := range lists {
-		resp = map[string][]*do.ScheduleInfo{v.Date: lists[i : i+1]}
-
+		m[v.Date] = append(m[v.Date], v)
 	}
 
-	return
+	return m, total, err
 }
 
 func (s Schedule) ScheduleUpdateStatus(ID int64, status int64) error {
-	_, err := s.db.Schedule.Update().Where(schedule.IDEQ(ID)).SetStatus(int64(status)).Save(s.ctx)
+	_, err := s.db.Schedule.Update().Where(schedule.IDEQ(ID)).SetStatus(status).Save(s.ctx)
 	return err
 }
 

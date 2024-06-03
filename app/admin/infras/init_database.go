@@ -26,8 +26,7 @@ type InitDatabase struct {
 }
 
 var (
-	mutex              = new(sync.Mutex)
-	InitDatabaseStatus bool
+	mutex = new(sync.Mutex)
 )
 
 func NewInitDatabase() *InitDatabase {
@@ -45,7 +44,7 @@ func (I *InitDatabase) InitDatabaseUser() error {
 	ctx := context.Background()
 	// judge if the initialization had been done
 	check, err := I.DB.User.Query().Count(ctx)
-	if InitDatabaseStatus || check > 0 {
+	if check > 0 {
 		return errors.New("Database had been initialized")
 	}
 
@@ -63,7 +62,6 @@ func (I *InitDatabase) InitDatabaseUser() error {
 		return err
 	}
 	// set init status
-	InitDatabaseStatus = true
 	return nil
 }
 
@@ -74,7 +72,7 @@ func (I *InitDatabase) InitDatabaseDict() error {
 	ctx := context.Background()
 	// judge if the initialization had been done
 	check, err := I.DB.Dictionary.Query().Count(ctx)
-	if InitDatabaseStatus || check > 0 {
+	if check > 0 {
 		return errors.New("Database had been initialized")
 	}
 
@@ -104,8 +102,6 @@ func (I *InitDatabase) InitDatabaseDict() error {
 		return err
 	}
 
-	// set init status
-	InitDatabaseStatus = true
 	return nil
 }
 
@@ -116,7 +112,7 @@ func (I *InitDatabase) InitDatabaseApi() error {
 	ctx := context.Background()
 	// judge if the initialization had been done
 	check, err := I.DB.API.Query().Count(ctx)
-	if InitDatabaseStatus || check > 0 {
+	if check > 0 {
 		return errors.New("Database had been initialized")
 	}
 
@@ -146,8 +142,6 @@ func (I *InitDatabase) InitDatabaseApi() error {
 		return err
 	}
 
-	// set init status
-	InitDatabaseStatus = true
 	return nil
 }
 

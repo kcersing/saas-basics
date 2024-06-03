@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"saas/pkg/db/ent/schema/mixins"
 )
 
@@ -36,7 +37,9 @@ func (VenuePlace) Edges() []ent.Edge {
 }
 
 func (VenuePlace) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("venue_id"),
+	}
 }
 
 func (VenuePlace) Annotations() []schema.Annotation {

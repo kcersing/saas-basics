@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/ent/schema/index"
 	"saas/pkg/db/ent/schema/mixins"
 
 	"entgo.io/ent"
@@ -38,7 +39,11 @@ func (OrderSales) Edges() []ent.Edge {
 	}
 }
 func (OrderSales) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("order_id"),
+		index.Fields("member_id"),
+		index.Fields("sales_id"),
+	}
 }
 
 func (OrderSales) Annotations() []schema.Annotation {

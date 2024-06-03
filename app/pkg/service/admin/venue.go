@@ -33,7 +33,6 @@ func (v Venue) Create(req *do.VenueInfo) error {
 		SetMobile(req.Mobile).
 		SetPic(req.Pic).
 		SetInformation(req.Information).
-		SetStatus(req.Status).
 		Save(v.ctx)
 
 	if err != nil {
@@ -99,7 +98,6 @@ func (v Venue) CreatePlace(req *do.VenuePlaceInfo) error {
 		SetName(req.Name).
 		SetPic(req.Pic).
 		SetVenueID(req.VenueId).
-		SetStatus(req.Status).
 		Save(v.ctx)
 
 	if err != nil {
@@ -114,9 +112,9 @@ func (v Venue) UpdatePlace(req *do.VenuePlaceInfo) error {
 	_, err := v.db.VenuePlace.Update().
 		Where(venueplace.IDEQ(req.ID)).
 		SetName(req.Name).
-		SetPic(req.Pic).
-		SetVenueID(req.VenueId).
-		SetStatus(req.Status).
+		//SetPic(req.Pic).
+		//SetVenueID(req.VenueId).
+		//SetStatus(req.Status).
 		Save(v.ctx)
 
 	if err != nil {

@@ -9,6 +9,7 @@
 package schema
 
 import (
+	"entgo.io/ent/schema/index"
 	"saas/pkg/db/ent/schema/mixins"
 	"time"
 
@@ -52,7 +53,11 @@ func (ScheduleCoach) Edges() []ent.Edge {
 }
 
 func (ScheduleCoach) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("venue_id"),
+		index.Fields("coach_id"),
+		index.Fields("schedule_id"),
+	}
 }
 
 func (ScheduleCoach) Annotations() []schema.Annotation {

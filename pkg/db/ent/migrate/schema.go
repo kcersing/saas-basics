@@ -234,6 +234,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "membercontract_order_id_member_id_member_product_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberContractColumns[8], MemberContractColumns[6], MemberContractColumns[7]},
+			},
+		},
 	}
 	// MemberContractContentColumns holds the columns for the "member_contract_content" table.
 	MemberContractContentColumns = []*schema.Column{
@@ -255,6 +262,13 @@ var (
 				Columns:    []*schema.Column{MemberContractContentColumns[5]},
 				RefColumns: []*schema.Column{MemberContractColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "membercontractcontent_member_contract_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberContractContentColumns[5]},
 			},
 		},
 	}
@@ -296,6 +310,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "memberdetails_member_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberDetailsColumns[21]},
+			},
+		},
 	}
 	// MemberNoteColumns holds the columns for the "member_note" table.
 	MemberNoteColumns = []*schema.Column{
@@ -317,6 +338,13 @@ var (
 				Columns:    []*schema.Column{MemberNoteColumns[5]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "membernote_member_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberNoteColumns[5]},
 			},
 		},
 	}
@@ -350,6 +378,18 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "memberproduct_venue_id_member_id_product_id_order_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductColumns[7], MemberProductColumns[13], MemberProductColumns[6], MemberProductColumns[8]},
+			},
+			{
+				Name:    "memberproduct_validity_at_cancel_at",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductColumns[11], MemberProductColumns[12]},
+			},
+		},
 	}
 	// MemberProductPropertyColumns holds the columns for the "member_product_property" table.
 	MemberProductPropertyColumns = []*schema.Column{
@@ -379,6 +419,13 @@ var (
 				Columns:    []*schema.Column{MemberProductPropertyColumns[13]},
 				RefColumns: []*schema.Column{MemberProductColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "memberproductproperty_property_id_member_id_member_product_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductPropertyColumns[5], MemberProductPropertyColumns[4], MemberProductPropertyColumns[13]},
 			},
 		},
 	}
@@ -497,9 +544,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "order_member_id_order_sn",
-				Unique:  true,
-				Columns: []*schema.Column{OrderColumns[10], OrderColumns[3]},
+				Name:    "order_order_sn_venue_id_member_id_completion_at_member_product_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderColumns[3], OrderColumns[12], OrderColumns[10], OrderColumns[9], OrderColumns[4]},
 			},
 		},
 	}
@@ -527,6 +574,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orderamount_order_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderAmountColumns[7]},
+			},
+		},
 	}
 	// OrderItemColumns holds the columns for the "order_item" table.
 	OrderItemColumns = []*schema.Column{
@@ -549,6 +603,18 @@ var (
 				Columns:    []*schema.Column{OrderItemColumns[6]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orderitem_order_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderItemColumns[6]},
+			},
+			{
+				Name:    "orderitem_product_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderItemColumns[3]},
 			},
 		},
 	}
@@ -577,6 +643,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orderpay_order_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderPayColumns[8]},
+			},
+		},
 	}
 	// OrderSalesColumns holds the columns for the "order_sales" table.
 	OrderSalesColumns = []*schema.Column{
@@ -600,6 +673,23 @@ var (
 				Columns:    []*schema.Column{OrderSalesColumns[7]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "ordersales_order_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderSalesColumns[7]},
+			},
+			{
+				Name:    "ordersales_member_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderSalesColumns[4]},
+			},
+			{
+				Name:    "ordersales_sales_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderSalesColumns[5]},
 			},
 		},
 	}
@@ -691,6 +781,28 @@ var (
 		Name:       "schedule",
 		Columns:    ScheduleColumns,
 		PrimaryKey: []*schema.Column{ScheduleColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "schedule_venue_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduleColumns[6]},
+			},
+			{
+				Name:    "schedule_property_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduleColumns[7]},
+			},
+			{
+				Name:    "schedule_start_time",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduleColumns[11]},
+			},
+			{
+				Name:    "schedule_end_time",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduleColumns[12]},
+			},
+		},
 	}
 	// ScheduleCoachColumns holds the columns for the "schedule_coach" table.
 	ScheduleCoachColumns = []*schema.Column{
@@ -722,9 +834,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "schedulecoach_venue_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduleCoachColumns[4]},
+			},
+			{
 				Name:    "schedulecoach_coach_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{ScheduleCoachColumns[5]},
+			},
+			{
+				Name:    "schedulecoach_schedule_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduleCoachColumns[11]},
 			},
 		},
 	}
@@ -760,9 +882,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "schedulemember_venue_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduleMemberColumns[4]},
+			},
+			{
 				Name:    "schedulemember_member_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{ScheduleMemberColumns[5]},
+			},
+			{
+				Name:    "schedulemember_schedule_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduleMemberColumns[13]},
 			},
 		},
 	}
@@ -878,6 +1010,13 @@ var (
 				Columns:    []*schema.Column{VenuePlaceColumns[6]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "venueplace_venue_id",
+				Unique:  false,
+				Columns: []*schema.Column{VenuePlaceColumns[6]},
 			},
 		},
 	}

@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"saas/pkg/db/ent/schema/mixins"
 )
 
@@ -44,7 +45,11 @@ func (MemberProductProperty) Edges() []ent.Edge {
 }
 
 func (MemberProductProperty) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("property_id"),
+		index.Fields("member_id"),
+		index.Fields("member_product_id"),
+	}
 }
 
 func (MemberProductProperty) Annotations() []schema.Annotation {
