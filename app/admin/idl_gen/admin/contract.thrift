@@ -1,19 +1,20 @@
-namespace go admin.admin
+namespace go admin.contract
 
 include "../base/base.thrift"
 include "../base/data.thrift"
 
 
 struct ContractListReq {
-    1:  i64 page (api.raw = "page")
-    2:  i64 limit (api.raw = "limit")
-    3:  string name (api.raw = "name")
-    4:  string status (api.raw = "status")
+    1: optional i64 page (api.raw = "page")
+    2: optional i64 limit (api.raw = "limit")
+    3: optional string name (api.raw = "name")
+    4: optional string status (api.raw = "status")
 }
 struct CreateOrUpdateContractReq {
-    1:  string name (api.raw = "name")
-    2:  string status (api.raw = "status")
-    3:  string content (api.raw = "content")
+    1:  optional i64 id (api.raw = "id")
+    2:  optional string name (api.raw = "name")
+    3:  optional i64 status (api.raw = "status")
+    4:  optional string content (api.raw = "content")
 }
 service ContractService {
    base.NilResponse ContractList(1: ContractListReq req) (api.post = "/api/admin/contract/list")

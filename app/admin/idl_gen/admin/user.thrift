@@ -39,7 +39,7 @@ struct ChangePasswordReq {
 
 // Create or update user information request | 创建或更新用户信息
 struct CreateOrUpdateUserReq {
-    1:  i64 id (api.raw = "id")
+    1:  optional i64 id (api.raw = "id")
     2:  optional string avatar (api.raw = "avatar")
     3:  optional i64 role_id (api.raw = "role_id")
     4:  optional string mobile (api.raw = "mobile")

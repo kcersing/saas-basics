@@ -24,7 +24,7 @@ struct ListReq {
     11:  optional i64 status (api.raw = "status")
 }
 struct CreateOrUpdateVenueReq {
-    1:  i64 id (api.raw = "id")
+    1:  optional i64 id (api.raw = "id")
     2:  optional string name (api.raw = "name")
     3:  optional string address (api.raw = "address")
     4:  optional string addressDetail (api.raw = "address_detail")
@@ -37,7 +37,7 @@ struct CreateOrUpdateVenueReq {
 }
 
 struct CreateOrUpdateVenuePlaceReq {
-    1:  i64 id (api.raw = "id")
+    1:  optional i64 id (api.raw = "id")
     2:  optional string name (api.raw = "name")
     3:  optional i64 venueId (api.raw = "venue_id")
     4:  optional string pic (api.raw = "pic")
@@ -55,7 +55,6 @@ service VenueService {
     base.NilResponse PlaceUpdateStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/place/status")
     // 列表
     base.NilResponse PlaceList(1: ListReq req) (api.post = "/api/admin/place/list")
-
 
      // 添加
      base.NilResponse Create(1: CreateOrUpdateVenueReq req) (api.post = "/api/admin/venue/create")

@@ -963,7 +963,7 @@ func (p *ListReq) String() string {
 }
 
 type CreateOrUpdateVenueReq struct {
-	ID            int64   `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID            *int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
 	Name          *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
 	Address       *string `thrift:"address,3,optional" form:"address" json:"address" query:"address"`
 	AddressDetail *string `thrift:"addressDetail,4,optional" form:"addressDetail" json:"addressDetail" query:"addressDetail"`
@@ -979,8 +979,13 @@ func NewCreateOrUpdateVenueReq() *CreateOrUpdateVenueReq {
 	return &CreateOrUpdateVenueReq{}
 }
 
+var CreateOrUpdateVenueReq_ID_DEFAULT int64
+
 func (p *CreateOrUpdateVenueReq) GetID() (v int64) {
-	return p.ID
+	if !p.IsSetID() {
+		return CreateOrUpdateVenueReq_ID_DEFAULT
+	}
+	return *p.ID
 }
 
 var CreateOrUpdateVenueReq_Name_DEFAULT string
@@ -1075,6 +1080,10 @@ var fieldIDToName_CreateOrUpdateVenueReq = map[int16]string{
 	8:  "pic",
 	9:  "information",
 	10: "status",
+}
+
+func (p *CreateOrUpdateVenueReq) IsSetID() bool {
+	return p.ID != nil
 }
 
 func (p *CreateOrUpdateVenueReq) IsSetName() bool {
@@ -1246,7 +1255,7 @@ func (p *CreateOrUpdateVenueReq) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.ID = v
+		p.ID = &v
 	}
 	return nil
 }
@@ -1397,14 +1406,16 @@ WriteStructEndError:
 }
 
 func (p *CreateOrUpdateVenueReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.ID); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetID() {
+		if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.ID); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1593,7 +1604,7 @@ func (p *CreateOrUpdateVenueReq) String() string {
 }
 
 type CreateOrUpdateVenuePlaceReq struct {
-	ID      int64   `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID      *int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
 	Name    *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
 	VenueId *int64  `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
 	Pic     *string `thrift:"pic,4,optional" form:"pic" json:"pic" query:"pic"`
@@ -1604,8 +1615,13 @@ func NewCreateOrUpdateVenuePlaceReq() *CreateOrUpdateVenuePlaceReq {
 	return &CreateOrUpdateVenuePlaceReq{}
 }
 
+var CreateOrUpdateVenuePlaceReq_ID_DEFAULT int64
+
 func (p *CreateOrUpdateVenuePlaceReq) GetID() (v int64) {
-	return p.ID
+	if !p.IsSetID() {
+		return CreateOrUpdateVenuePlaceReq_ID_DEFAULT
+	}
+	return *p.ID
 }
 
 var CreateOrUpdateVenuePlaceReq_Name_DEFAULT string
@@ -1650,6 +1666,10 @@ var fieldIDToName_CreateOrUpdateVenuePlaceReq = map[int16]string{
 	3: "venueId",
 	4: "pic",
 	5: "status",
+}
+
+func (p *CreateOrUpdateVenuePlaceReq) IsSetID() bool {
+	return p.ID != nil
 }
 
 func (p *CreateOrUpdateVenuePlaceReq) IsSetName() bool {
@@ -1761,7 +1781,7 @@ func (p *CreateOrUpdateVenuePlaceReq) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.ID = v
+		p.ID = &v
 	}
 	return nil
 }
@@ -1847,14 +1867,16 @@ WriteStructEndError:
 }
 
 func (p *CreateOrUpdateVenuePlaceReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.ID); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetID() {
+		if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.ID); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1961,7 +1983,7 @@ type VenueService interface {
 	Create(ctx context.Context, req *CreateOrUpdateVenueReq) (r *base.NilResponse, err error)
 	// 编辑
 	Update(ctx context.Context, req *CreateOrUpdateVenueReq) (r *base.NilResponse, err error)
-	// 删除
+
 	UpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
 	// 列表
 	List(ctx context.Context, req *ListReq) (r *base.NilResponse, err error)

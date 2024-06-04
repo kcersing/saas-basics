@@ -5,7 +5,7 @@ include "../base/data.thrift"
 
 // Create or update user information request | 创建或更新用户信息
 struct CreateOrUpdateMemberReq {
-    1:  i64 id (api.raw = "id")
+    1:  optional i64 id (api.raw = "id")
     2:  optional string avatar (api.raw = "avatar")
     4:  optional string mobile (api.raw = "mobile")
     5:  optional string email (api.raw = "email")

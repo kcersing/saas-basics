@@ -114,7 +114,7 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	err = admin.NewUser(ctx, c).Update(do.CreateOrUpdateUserReq{
-		ID:       req.ID,
+		ID:       *req.ID,
 		Username: *req.Username,
 		Password: *req.Password,
 		Email:    *req.Email,

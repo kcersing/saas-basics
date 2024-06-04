@@ -7,7 +7,7 @@ type Schedule interface {
 	ScheduleUpdate(req CreateOrUpdateScheduleReq) error
 	ScheduleDelete(id int64) error
 	ScheduleList(req ScheduleListReq) (resp []*ScheduleInfo, total int, err error)
-	ScheduleDateList(req ScheduleListReq) (resp map[string][]*ScheduleInfo, total int, err error)
+	ScheduleDateList(req ScheduleListReq) (map[string][]*ScheduleInfo, int, error)
 	ScheduleUpdateStatus(ID int64, status int64) error
 	ScheduleInfo(ID int64) (roleInfo *ScheduleInfo, err error)
 
@@ -45,11 +45,13 @@ type CreateOrUpdateScheduleReq struct {
 type ScheduleInfo struct {
 	ID int64 `json:"id"`
 
-	Type                string  `json:"type"`
-	PropertyId          int64   `json:"property_id"`
-	VenueId             int64   `json:"venue_id"`
-	PlaceID             int64   `json:"place_iid"`
+	Type       string `json:"type"`
+	PropertyId int64  `json:"property_id"`
+	VenueId    int64  `json:"venue_id"`
+	PlaceID    int64  `json:"place_id"`
+
 	Num                 int64   `json:"num"`
+	NumSurplus          int64   `json:"num_surplus"`
 	Date                string  `json:"data"`
 	StartTime           string  `json:"start_time"`
 	EndTime             string  `json:"end_time"`
@@ -61,6 +63,14 @@ type ScheduleInfo struct {
 	MemberProductID     int64   `json:"member_product_id"`
 	MemberProductItemID int64   `json:"member_product_property_id"`
 
+	PropertyName          string `json:"property_name"`
+	VenueName             string `json:"venue_name"`
+	PlaceName             string `json:"place_name"`
+	CoachName             string `json:"coach_name"`
+	MemberName            string `json:"member_name"`
+	MemberProductName     string `json:"member_product_name"`
+	MemberProductItemName string `json:"member_product_property_name"`
+
 	ScheduleMember []ScheduleMemberInfo `json:"member_course_record"`
 	ScheduleCoach  []ScheduleCoachInfo  `json:"coach_course_record"`
 
@@ -70,28 +80,43 @@ type ScheduleInfo struct {
 
 type ScheduleListReq struct {
 	VenueId    int64  `json:"venue"`
+	PlaceID    int64  `json:"place_id"`
 	PropertyId int64  `json:"property"`
-	ProductId  int64  `json:"product"`
 	CoachId    int64  `json:"coach"`
-	MemberId   int64  `json:"member"`
 	StartTime  string `json:"startTime"`
-	Page       int64  `json:"page"`
-	PageSize   int64  `json:"pageSize"`
+	EndTime    string `json:"end_time"`
+
+	Page     int64 `json:"page"`
+	PageSize int64 `json:"pageSize"`
+
+	PropertyName string `json:"property_name"`
+	VenueName    string `json:"venue_name"`
+	PlaceName    string `json:"place_name"`
+	CoachName    string `json:"coach_name"`
 }
 
 type ScheduleMemberInfo struct {
-	ID                 int64     `json:"id"`
-	MemberId           int64     `json:"member_id"`
-	VenueId            int64     `json:"venue_id"`
-	ScheduleScheduleId int64     `json:"course_record_schedule_id"`
-	Type               int64     `json:"type"`
-	CreatedAt          time.Time `json:"createdAt"`
-	UpdatedAt          time.Time `json:"updatedAt"`
-	StartTime          time.Time `json:"start_time"`
-	EndTime            time.Time `json:"end_time"`
-	SignStartTime      time.Time `json:"sign_start_time"`
-	SignEndTime        time.Time `json:"sign_end_time"`
-	Status             int64     `json:"status"`
+	ID                  int64     `json:"id"`
+	MemberId            int64     `json:"member_id"`
+	VenueId             int64     `json:"venue"`
+	PlaceID             int64     `json:"place_id"`
+	PropertyId          int64     `json:"property"`
+	ScheduleScheduleId  int64     `json:"course_record_schedule_id"`
+	Type                int64     `json:"type"`
+	CreatedAt           time.Time `json:"createdAt"`
+	UpdatedAt           time.Time `json:"updatedAt"`
+	StartTime           time.Time `json:"start_time"`
+	EndTime             time.Time `json:"end_time"`
+	SignStartTime       time.Time `json:"sign_start_time"`
+	SignEndTime         time.Time `json:"sign_end_time"`
+	Status              int64     `json:"status"`
+	MemberProductID     int64     `json:"member_product_id"`
+	MemberProductItemID int64     `json:"member_product_property_id"`
+
+	VenueName             string `json:"venue_name"`
+	MemberName            string `json:"member_name"`
+	MemberProductName     string `json:"member_product_name"`
+	MemberProductItemName string `json:"member_product_property_name"`
 }
 
 type ScheduleMemberListReq struct {
@@ -100,7 +125,9 @@ type ScheduleMemberListReq struct {
 type ScheduleCoachInfo struct {
 	ID                 int64     `json:"id"`
 	CoachId            int64     `json:"coach_id"`
-	VenueId            int64     `json:"venue_id"`
+	VenueId            int64     `json:"venue"`
+	PlaceID            int64     `json:"place_id"`
+	PropertyId         int64     `json:"property"`
 	ScheduleScheduleId int64     `json:"course_record_schedule_id"`
 	Type               int64     `json:"type"`
 	CreatedAt          time.Time `json:"createdAt"`
@@ -110,6 +137,11 @@ type ScheduleCoachInfo struct {
 	SignStartTime      time.Time `json:"sign_start_time"`
 	SignEndTime        time.Time `json:"sign_end_time"`
 	Status             int64     `json:"status"`
+
+	PropertyName string `json:"property_name"`
+	VenueName    string `json:"venue_name"`
+	PlaceName    string `json:"place_name"`
+	CoachName    string `json:"coach_name"`
 }
 
 type ScheduleCoachListReq struct {

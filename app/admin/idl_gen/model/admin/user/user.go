@@ -1183,7 +1183,7 @@ func (p *ChangePasswordReq) String() string {
 
 // Create or update user information request | 创建或更新用户信息
 type CreateOrUpdateUserReq struct {
-	ID       int64   `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID       *int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
 	Avatar   *string `thrift:"avatar,2,optional" form:"avatar" json:"avatar" query:"avatar"`
 	RoleID   *int64  `thrift:"role_id,3,optional" form:"role_id" json:"role_id" query:"role_id"`
 	Mobile   *string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
@@ -1198,8 +1198,13 @@ func NewCreateOrUpdateUserReq() *CreateOrUpdateUserReq {
 	return &CreateOrUpdateUserReq{}
 }
 
+var CreateOrUpdateUserReq_ID_DEFAULT int64
+
 func (p *CreateOrUpdateUserReq) GetID() (v int64) {
-	return p.ID
+	if !p.IsSetID() {
+		return CreateOrUpdateUserReq_ID_DEFAULT
+	}
+	return *p.ID
 }
 
 var CreateOrUpdateUserReq_Avatar_DEFAULT string
@@ -1284,6 +1289,10 @@ var fieldIDToName_CreateOrUpdateUserReq = map[int16]string{
 	7: "username",
 	8: "nickname",
 	9: "password",
+}
+
+func (p *CreateOrUpdateUserReq) IsSetID() bool {
+	return p.ID != nil
 }
 
 func (p *CreateOrUpdateUserReq) IsSetAvatar() bool {
@@ -1443,7 +1452,7 @@ func (p *CreateOrUpdateUserReq) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.ID = v
+		p.ID = &v
 	}
 	return nil
 }
@@ -1581,14 +1590,16 @@ WriteStructEndError:
 }
 
 func (p *CreateOrUpdateUserReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.ID); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetID() {
+		if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.ID); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
