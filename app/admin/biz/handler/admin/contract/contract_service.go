@@ -4,9 +4,13 @@ package contract
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"saas/app/pkg/service/admin"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	contract "saas/app/admin/idl_gen/model/admin/contract"
 	base "saas/app/admin/idl_gen/model/base"
 )
@@ -18,13 +22,17 @@ func ContractList(ctx context.Context, c *app.RequestContext) {
 	var req contract.ContractListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	var listReq do.ContractListReq
+	list, total, err := admin.NewContract(ctx, c).List(&listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // ContractCreate .
@@ -34,13 +42,24 @@ func ContractCreate(ctx context.Context, c *app.RequestContext) {
 	var req contract.CreateOrUpdateContractReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var contractReq do.ContractInfo
+	err = copier.Copy(&contractReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewContract(ctx, c).Create(&contractReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ContractUpdate .
@@ -50,13 +69,25 @@ func ContractUpdate(ctx context.Context, c *app.RequestContext) {
 	var req contract.CreateOrUpdateContractReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var contractReq do.ContractInfo
+	err = copier.Copy(&contractReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewContract(ctx, c).Update(&contractReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ContractUpdateStatus .
@@ -66,13 +97,17 @@ func ContractUpdateStatus(ctx context.Context, c *app.RequestContext) {
 	var req base.StatusCodeReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewContract(ctx, c).UpdateStatus(int64(req.ID), req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ContractByID .
@@ -82,11 +117,15 @@ func ContractByID(ctx context.Context, c *app.RequestContext) {
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	one, err := admin.NewContract(ctx, c).ByID(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, one, 1, "")
+	return
 }

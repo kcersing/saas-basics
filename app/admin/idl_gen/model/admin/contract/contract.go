@@ -10,10 +10,10 @@ import (
 )
 
 type ContractListReq struct {
-	Page   *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	Limit  *int64  `thrift:"limit,2,optional" form:"limit" json:"limit" query:"limit"`
-	Name   *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	Status *string `thrift:"status,4,optional" form:"status" json:"status" query:"status"`
+	Page     *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize *int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Name     *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
+	Status   *string `thrift:"status,4,optional" form:"status" json:"status" query:"status"`
 }
 
 func NewContractListReq() *ContractListReq {
@@ -29,13 +29,13 @@ func (p *ContractListReq) GetPage() (v int64) {
 	return *p.Page
 }
 
-var ContractListReq_Limit_DEFAULT int64
+var ContractListReq_PageSize_DEFAULT int64
 
-func (p *ContractListReq) GetLimit() (v int64) {
-	if !p.IsSetLimit() {
-		return ContractListReq_Limit_DEFAULT
+func (p *ContractListReq) GetPageSize() (v int64) {
+	if !p.IsSetPageSize() {
+		return ContractListReq_PageSize_DEFAULT
 	}
-	return *p.Limit
+	return *p.PageSize
 }
 
 var ContractListReq_Name_DEFAULT string
@@ -58,7 +58,7 @@ func (p *ContractListReq) GetStatus() (v string) {
 
 var fieldIDToName_ContractListReq = map[int16]string{
 	1: "page",
-	2: "limit",
+	2: "pageSize",
 	3: "name",
 	4: "status",
 }
@@ -67,8 +67,8 @@ func (p *ContractListReq) IsSetPage() bool {
 	return p.Page != nil
 }
 
-func (p *ContractListReq) IsSetLimit() bool {
-	return p.Limit != nil
+func (p *ContractListReq) IsSetPageSize() bool {
+	return p.PageSize != nil
 }
 
 func (p *ContractListReq) IsSetName() bool {
@@ -173,7 +173,7 @@ func (p *ContractListReq) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Limit = &v
+		p.PageSize = &v
 	}
 	return nil
 }
@@ -256,11 +256,11 @@ WriteFieldEndError:
 }
 
 func (p *ContractListReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetLimit() {
-		if err = oprot.WriteFieldBegin("limit", thrift.I64, 2); err != nil {
+	if p.IsSetPageSize() {
+		if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Limit); err != nil {
+		if err := oprot.WriteI64(*p.PageSize); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

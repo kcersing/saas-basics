@@ -1,11 +1,11 @@
 package do
 
 type Contract interface {
-	ContractList(req *MenuListReq) (list []*ContractInfo, total int, err error)
-	ContractCreate(req *ContractInfo) error
-	ContractUpdate(req *ContractInfo) error
-	ContractUpdateStatus(ID int64, status int64) error
-	ContractByID(id int64) (*ContractInfo, error)
+	Create(req *ContractInfo) error
+	Update(req *ContractInfo) error
+	UpdateStatus(ID int64, status int64) error
+	ByID(id int64) (*ContractInfo, error)
+	List(req *ContractListReq) (list []*ContractInfo, total int, err error)
 }
 
 type ContractInfo struct {
@@ -13,4 +13,9 @@ type ContractInfo struct {
 	Name    string `json:"name"`
 	Status  int64  `json:"status"`
 	Content string `json:"content"`
+}
+type ContractListReq struct {
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Name     string `json:"name"`
 }

@@ -5,8 +5,8 @@ include "../base/data.thrift"
 
 
 struct ContractListReq {
-    1: optional i64 page (api.raw = "page")
-    2: optional i64 limit (api.raw = "limit")
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 pageSize (api.raw = "pageSize")
     3: optional string name (api.raw = "name")
     4: optional string status (api.raw = "status")
 }
