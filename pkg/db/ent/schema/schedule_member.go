@@ -27,6 +27,10 @@ func (ScheduleMember) Fields() []ent.Field {
 		field.Time("end_time").Default(time.Now).Comment("结束时间").Optional(),
 		field.Time("sign_start_time").Default(time.Now).Comment("上课签到时间").Optional(),
 		field.Time("sign_end_time").Default(time.Now).Comment("下课签到时间").Optional(),
+
+		field.String("member_name").Comment("会员名称").Optional(),
+		field.String("member_product_name").Comment("会员产品名称").Optional(),
+		field.String("member_product_property_name").Comment("会员产品属性名称").Optional(),
 	}
 }
 

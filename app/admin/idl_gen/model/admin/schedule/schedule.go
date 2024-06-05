@@ -821,7 +821,7 @@ type ListScheduleReq struct {
 	Member    *int64  `thrift:"member,3,optional" form:"member" json:"member" query:"member"`
 	Coach     []int64 `thrift:"coach,4,optional" form:"coach" json:"coach" query:"coach"`
 	Product   []int64 `thrift:"product,5,optional" form:"product" json:"product" query:"product"`
-	Venue     []int64 `thrift:"venue,6,optional" form:"venue" json:"venue" query:"venue"`
+	VenueId   *int64  `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
 	Property  []int64 `thrift:"property,7,optional" form:"property" json:"property" query:"property"`
 	StartTime *string `thrift:"startTime,8,optional" form:"startTime" json:"startTime" query:"startTime"`
 }
@@ -875,13 +875,13 @@ func (p *ListScheduleReq) GetProduct() (v []int64) {
 	return p.Product
 }
 
-var ListScheduleReq_Venue_DEFAULT []int64
+var ListScheduleReq_VenueId_DEFAULT int64
 
-func (p *ListScheduleReq) GetVenue() (v []int64) {
-	if !p.IsSetVenue() {
-		return ListScheduleReq_Venue_DEFAULT
+func (p *ListScheduleReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return ListScheduleReq_VenueId_DEFAULT
 	}
-	return p.Venue
+	return *p.VenueId
 }
 
 var ListScheduleReq_Property_DEFAULT []int64
@@ -908,7 +908,7 @@ var fieldIDToName_ListScheduleReq = map[int16]string{
 	3: "member",
 	4: "coach",
 	5: "product",
-	6: "venue",
+	6: "venueId",
 	7: "property",
 	8: "startTime",
 }
@@ -933,8 +933,8 @@ func (p *ListScheduleReq) IsSetProduct() bool {
 	return p.Product != nil
 }
 
-func (p *ListScheduleReq) IsSetVenue() bool {
-	return p.Venue != nil
+func (p *ListScheduleReq) IsSetVenueId() bool {
+	return p.VenueId != nil
 }
 
 func (p *ListScheduleReq) IsSetProperty() bool {
@@ -1005,7 +1005,7 @@ func (p *ListScheduleReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 6:
-			if fieldTypeId == thrift.LIST {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1129,24 +1129,11 @@ func (p *ListScheduleReq) ReadField5(iprot thrift.TProtocol) error {
 	return nil
 }
 func (p *ListScheduleReq) ReadField6(iprot thrift.TProtocol) error {
-	_, size, err := iprot.ReadListBegin()
-	if err != nil {
-		return err
-	}
-	p.Venue = make([]int64, 0, size)
-	for i := 0; i < size; i++ {
 
-		var _elem int64
-		if v, err := iprot.ReadI64(); err != nil {
-			return err
-		} else {
-			_elem = v
-		}
-
-		p.Venue = append(p.Venue, _elem)
-	}
-	if err := iprot.ReadListEnd(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
+	} else {
+		p.VenueId = &v
 	}
 	return nil
 }
@@ -1350,19 +1337,11 @@ WriteFieldEndError:
 }
 
 func (p *ListScheduleReq) writeField6(oprot thrift.TProtocol) (err error) {
-	if p.IsSetVenue() {
-		if err = oprot.WriteFieldBegin("venue", thrift.LIST, 6); err != nil {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 6); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteListBegin(thrift.I64, len(p.Venue)); err != nil {
-			return err
-		}
-		for _, v := range p.Venue {
-			if err := oprot.WriteI64(v); err != nil {
-				return err
-			}
-		}
-		if err := oprot.WriteListEnd(); err != nil {
+		if err := oprot.WriteI64(*p.VenueId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

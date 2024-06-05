@@ -45,6 +45,12 @@ type ScheduleMember struct {
 	SignStartTime time.Time `json:"sign_start_time,omitempty"`
 	// 下课签到时间
 	SignEndTime time.Time `json:"sign_end_time,omitempty"`
+	// 会员名称
+	MemberName string `json:"member_name,omitempty"`
+	// 会员产品名称
+	MemberProductName string `json:"member_product_name,omitempty"`
+	// 会员产品属性名称
+	MemberProductPropertyName string `json:"member_product_property_name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduleMemberQuery when eager-loading is set.
 	Edges        ScheduleMemberEdges `json:"edges"`
@@ -80,7 +86,7 @@ func (*ScheduleMember) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedulemember.FieldID, schedulemember.FieldStatus, schedulemember.FieldVenueID, schedulemember.FieldScheduleID, schedulemember.FieldMemberID, schedulemember.FieldMemberProductID, schedulemember.FieldMemberProductPropertyID:
 			values[i] = new(sql.NullInt64)
-		case schedulemember.FieldType:
+		case schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldMemberProductPropertyName:
 			values[i] = new(sql.NullString)
 		case schedulemember.FieldCreatedAt, schedulemember.FieldUpdatedAt, schedulemember.FieldStartTime, schedulemember.FieldEndTime, schedulemember.FieldSignStartTime, schedulemember.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
@@ -183,6 +189,24 @@ func (sm *ScheduleMember) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sm.SignEndTime = value.Time
 			}
+		case schedulemember.FieldMemberName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field member_name", values[i])
+			} else if value.Valid {
+				sm.MemberName = value.String
+			}
+		case schedulemember.FieldMemberProductName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field member_product_name", values[i])
+			} else if value.Valid {
+				sm.MemberProductName = value.String
+			}
+		case schedulemember.FieldMemberProductPropertyName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field member_product_property_name", values[i])
+			} else if value.Valid {
+				sm.MemberProductPropertyName = value.String
+			}
 		default:
 			sm.selectValues.Set(columns[i], values[i])
 		}
@@ -262,6 +286,15 @@ func (sm *ScheduleMember) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sign_end_time=")
 	builder.WriteString(sm.SignEndTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("member_name=")
+	builder.WriteString(sm.MemberName)
+	builder.WriteString(", ")
+	builder.WriteString("member_product_name=")
+	builder.WriteString(sm.MemberProductName)
+	builder.WriteString(", ")
+	builder.WriteString("member_product_property_name=")
+	builder.WriteString(sm.MemberProductPropertyName)
 	builder.WriteByte(')')
 	return builder.String()
 }

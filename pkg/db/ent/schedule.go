@@ -46,6 +46,10 @@ type Schedule struct {
 	Price float64 `json:"price,omitempty"`
 	// 备注
 	Remark string `json:"remark,omitempty"`
+	// 场馆名称
+	VenueName string `json:"venue_name,omitempty"`
+	// 场地名称
+	PlaceName string `json:"place_name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduleQuery when eager-loading is set.
 	Edges        ScheduleEdges `json:"edges"`
@@ -90,7 +94,7 @@ func (*Schedule) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case schedule.FieldID, schedule.FieldStatus, schedule.FieldVenueID, schedule.FieldPropertyID, schedule.FieldPlaceID, schedule.FieldNum:
 			values[i] = new(sql.NullInt64)
-		case schedule.FieldType, schedule.FieldName, schedule.FieldDate, schedule.FieldRemark:
+		case schedule.FieldType, schedule.FieldName, schedule.FieldDate, schedule.FieldRemark, schedule.FieldVenueName, schedule.FieldPlaceName:
 			values[i] = new(sql.NullString)
 		case schedule.FieldCreatedAt, schedule.FieldUpdatedAt, schedule.FieldStartTime, schedule.FieldEndTime:
 			values[i] = new(sql.NullTime)
@@ -199,6 +203,18 @@ func (s *Schedule) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Remark = value.String
 			}
+		case schedule.FieldVenueName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_name", values[i])
+			} else if value.Valid {
+				s.VenueName = value.String
+			}
+		case schedule.FieldPlaceName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field place_name", values[i])
+			} else if value.Valid {
+				s.PlaceName = value.String
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -286,6 +302,12 @@ func (s *Schedule) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("remark=")
 	builder.WriteString(s.Remark)
+	builder.WriteString(", ")
+	builder.WriteString("venue_name=")
+	builder.WriteString(s.VenueName)
+	builder.WriteString(", ")
+	builder.WriteString("place_name=")
+	builder.WriteString(s.PlaceName)
 	builder.WriteByte(')')
 	return builder.String()
 }

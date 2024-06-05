@@ -25950,6 +25950,8 @@ type ScheduleMutation struct {
 	price          *float64
 	addprice       *float64
 	remark         *string
+	venue_name     *string
+	place_name     *string
 	clearedFields  map[string]struct{}
 	members        map[int64]struct{}
 	removedmembers map[int64]struct{}
@@ -26852,6 +26854,104 @@ func (m *ScheduleMutation) ResetRemark() {
 	delete(m.clearedFields, schedule.FieldRemark)
 }
 
+// SetVenueName sets the "venue_name" field.
+func (m *ScheduleMutation) SetVenueName(s string) {
+	m.venue_name = &s
+}
+
+// VenueName returns the value of the "venue_name" field in the mutation.
+func (m *ScheduleMutation) VenueName() (r string, exists bool) {
+	v := m.venue_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVenueName returns the old "venue_name" field's value of the Schedule entity.
+// If the Schedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMutation) OldVenueName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVenueName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVenueName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVenueName: %w", err)
+	}
+	return oldValue.VenueName, nil
+}
+
+// ClearVenueName clears the value of the "venue_name" field.
+func (m *ScheduleMutation) ClearVenueName() {
+	m.venue_name = nil
+	m.clearedFields[schedule.FieldVenueName] = struct{}{}
+}
+
+// VenueNameCleared returns if the "venue_name" field was cleared in this mutation.
+func (m *ScheduleMutation) VenueNameCleared() bool {
+	_, ok := m.clearedFields[schedule.FieldVenueName]
+	return ok
+}
+
+// ResetVenueName resets all changes to the "venue_name" field.
+func (m *ScheduleMutation) ResetVenueName() {
+	m.venue_name = nil
+	delete(m.clearedFields, schedule.FieldVenueName)
+}
+
+// SetPlaceName sets the "place_name" field.
+func (m *ScheduleMutation) SetPlaceName(s string) {
+	m.place_name = &s
+}
+
+// PlaceName returns the value of the "place_name" field in the mutation.
+func (m *ScheduleMutation) PlaceName() (r string, exists bool) {
+	v := m.place_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPlaceName returns the old "place_name" field's value of the Schedule entity.
+// If the Schedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMutation) OldPlaceName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPlaceName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPlaceName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPlaceName: %w", err)
+	}
+	return oldValue.PlaceName, nil
+}
+
+// ClearPlaceName clears the value of the "place_name" field.
+func (m *ScheduleMutation) ClearPlaceName() {
+	m.place_name = nil
+	m.clearedFields[schedule.FieldPlaceName] = struct{}{}
+}
+
+// PlaceNameCleared returns if the "place_name" field was cleared in this mutation.
+func (m *ScheduleMutation) PlaceNameCleared() bool {
+	_, ok := m.clearedFields[schedule.FieldPlaceName]
+	return ok
+}
+
+// ResetPlaceName resets all changes to the "place_name" field.
+func (m *ScheduleMutation) ResetPlaceName() {
+	m.place_name = nil
+	delete(m.clearedFields, schedule.FieldPlaceName)
+}
+
 // AddMemberIDs adds the "members" edge to the ScheduleMember entity by ids.
 func (m *ScheduleMutation) AddMemberIDs(ids ...int64) {
 	if m.members == nil {
@@ -26994,7 +27094,7 @@ func (m *ScheduleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, schedule.FieldCreatedAt)
 	}
@@ -27037,6 +27137,12 @@ func (m *ScheduleMutation) Fields() []string {
 	if m.remark != nil {
 		fields = append(fields, schedule.FieldRemark)
 	}
+	if m.venue_name != nil {
+		fields = append(fields, schedule.FieldVenueName)
+	}
+	if m.place_name != nil {
+		fields = append(fields, schedule.FieldPlaceName)
+	}
 	return fields
 }
 
@@ -27073,6 +27179,10 @@ func (m *ScheduleMutation) Field(name string) (ent.Value, bool) {
 		return m.Price()
 	case schedule.FieldRemark:
 		return m.Remark()
+	case schedule.FieldVenueName:
+		return m.VenueName()
+	case schedule.FieldPlaceName:
+		return m.PlaceName()
 	}
 	return nil, false
 }
@@ -27110,6 +27220,10 @@ func (m *ScheduleMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldPrice(ctx)
 	case schedule.FieldRemark:
 		return m.OldRemark(ctx)
+	case schedule.FieldVenueName:
+		return m.OldVenueName(ctx)
+	case schedule.FieldPlaceName:
+		return m.OldPlaceName(ctx)
 	}
 	return nil, fmt.Errorf("unknown Schedule field %s", name)
 }
@@ -27216,6 +27330,20 @@ func (m *ScheduleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRemark(v)
+		return nil
+	case schedule.FieldVenueName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVenueName(v)
+		return nil
+	case schedule.FieldPlaceName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPlaceName(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Schedule field %s", name)
@@ -27358,6 +27486,12 @@ func (m *ScheduleMutation) ClearedFields() []string {
 	if m.FieldCleared(schedule.FieldRemark) {
 		fields = append(fields, schedule.FieldRemark)
 	}
+	if m.FieldCleared(schedule.FieldVenueName) {
+		fields = append(fields, schedule.FieldVenueName)
+	}
+	if m.FieldCleared(schedule.FieldPlaceName) {
+		fields = append(fields, schedule.FieldPlaceName)
+	}
 	return fields
 }
 
@@ -27408,6 +27542,12 @@ func (m *ScheduleMutation) ClearField(name string) error {
 	case schedule.FieldRemark:
 		m.ClearRemark()
 		return nil
+	case schedule.FieldVenueName:
+		m.ClearVenueName()
+		return nil
+	case schedule.FieldPlaceName:
+		m.ClearPlaceName()
+		return nil
 	}
 	return fmt.Errorf("unknown Schedule nullable field %s", name)
 }
@@ -27457,6 +27597,12 @@ func (m *ScheduleMutation) ResetField(name string) error {
 		return nil
 	case schedule.FieldRemark:
 		m.ResetRemark()
+		return nil
+	case schedule.FieldVenueName:
+		m.ResetVenueName()
+		return nil
+	case schedule.FieldPlaceName:
+		m.ResetPlaceName()
 		return nil
 	}
 	return fmt.Errorf("unknown Schedule field %s", name)
@@ -27591,6 +27737,7 @@ type ScheduleCoachMutation struct {
 	end_time        *time.Time
 	sign_start_time *time.Time
 	sign_end_time   *time.Time
+	coach_name      *string
 	clearedFields   map[string]struct{}
 	schedule        *int64
 	clearedschedule bool
@@ -28279,6 +28426,55 @@ func (m *ScheduleCoachMutation) ResetSignEndTime() {
 	delete(m.clearedFields, schedulecoach.FieldSignEndTime)
 }
 
+// SetCoachName sets the "coach_name" field.
+func (m *ScheduleCoachMutation) SetCoachName(s string) {
+	m.coach_name = &s
+}
+
+// CoachName returns the value of the "coach_name" field in the mutation.
+func (m *ScheduleCoachMutation) CoachName() (r string, exists bool) {
+	v := m.coach_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCoachName returns the old "coach_name" field's value of the ScheduleCoach entity.
+// If the ScheduleCoach object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleCoachMutation) OldCoachName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCoachName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCoachName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCoachName: %w", err)
+	}
+	return oldValue.CoachName, nil
+}
+
+// ClearCoachName clears the value of the "coach_name" field.
+func (m *ScheduleCoachMutation) ClearCoachName() {
+	m.coach_name = nil
+	m.clearedFields[schedulecoach.FieldCoachName] = struct{}{}
+}
+
+// CoachNameCleared returns if the "coach_name" field was cleared in this mutation.
+func (m *ScheduleCoachMutation) CoachNameCleared() bool {
+	_, ok := m.clearedFields[schedulecoach.FieldCoachName]
+	return ok
+}
+
+// ResetCoachName resets all changes to the "coach_name" field.
+func (m *ScheduleCoachMutation) ResetCoachName() {
+	m.coach_name = nil
+	delete(m.clearedFields, schedulecoach.FieldCoachName)
+}
+
 // ClearSchedule clears the "schedule" edge to the Schedule entity.
 func (m *ScheduleCoachMutation) ClearSchedule() {
 	m.clearedschedule = true
@@ -28340,7 +28536,7 @@ func (m *ScheduleCoachMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleCoachMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, schedulecoach.FieldCreatedAt)
 	}
@@ -28374,6 +28570,9 @@ func (m *ScheduleCoachMutation) Fields() []string {
 	if m.sign_end_time != nil {
 		fields = append(fields, schedulecoach.FieldSignEndTime)
 	}
+	if m.coach_name != nil {
+		fields = append(fields, schedulecoach.FieldCoachName)
+	}
 	return fields
 }
 
@@ -28404,6 +28603,8 @@ func (m *ScheduleCoachMutation) Field(name string) (ent.Value, bool) {
 		return m.SignStartTime()
 	case schedulecoach.FieldSignEndTime:
 		return m.SignEndTime()
+	case schedulecoach.FieldCoachName:
+		return m.CoachName()
 	}
 	return nil, false
 }
@@ -28435,6 +28636,8 @@ func (m *ScheduleCoachMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldSignStartTime(ctx)
 	case schedulecoach.FieldSignEndTime:
 		return m.OldSignEndTime(ctx)
+	case schedulecoach.FieldCoachName:
+		return m.OldCoachName(ctx)
 	}
 	return nil, fmt.Errorf("unknown ScheduleCoach field %s", name)
 }
@@ -28520,6 +28723,13 @@ func (m *ScheduleCoachMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSignEndTime(v)
+		return nil
+	case schedulecoach.FieldCoachName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCoachName(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleCoach field %s", name)
@@ -28617,6 +28827,9 @@ func (m *ScheduleCoachMutation) ClearedFields() []string {
 	if m.FieldCleared(schedulecoach.FieldSignEndTime) {
 		fields = append(fields, schedulecoach.FieldSignEndTime)
 	}
+	if m.FieldCleared(schedulecoach.FieldCoachName) {
+		fields = append(fields, schedulecoach.FieldCoachName)
+	}
 	return fields
 }
 
@@ -28658,6 +28871,9 @@ func (m *ScheduleCoachMutation) ClearField(name string) error {
 	case schedulecoach.FieldSignEndTime:
 		m.ClearSignEndTime()
 		return nil
+	case schedulecoach.FieldCoachName:
+		m.ClearCoachName()
+		return nil
 	}
 	return fmt.Errorf("unknown ScheduleCoach nullable field %s", name)
 }
@@ -28698,6 +28914,9 @@ func (m *ScheduleCoachMutation) ResetField(name string) error {
 		return nil
 	case schedulecoach.FieldSignEndTime:
 		m.ResetSignEndTime()
+		return nil
+	case schedulecoach.FieldCoachName:
+		m.ResetCoachName()
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleCoach field %s", name)
@@ -28800,6 +29019,9 @@ type ScheduleMemberMutation struct {
 	end_time                      *time.Time
 	sign_start_time               *time.Time
 	sign_end_time                 *time.Time
+	member_name                   *string
+	member_product_name           *string
+	member_product_property_name  *string
 	clearedFields                 map[string]struct{}
 	schedule                      *int64
 	clearedschedule               bool
@@ -29628,6 +29850,153 @@ func (m *ScheduleMemberMutation) ResetSignEndTime() {
 	delete(m.clearedFields, schedulemember.FieldSignEndTime)
 }
 
+// SetMemberName sets the "member_name" field.
+func (m *ScheduleMemberMutation) SetMemberName(s string) {
+	m.member_name = &s
+}
+
+// MemberName returns the value of the "member_name" field in the mutation.
+func (m *ScheduleMemberMutation) MemberName() (r string, exists bool) {
+	v := m.member_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemberName returns the old "member_name" field's value of the ScheduleMember entity.
+// If the ScheduleMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMemberMutation) OldMemberName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemberName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemberName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemberName: %w", err)
+	}
+	return oldValue.MemberName, nil
+}
+
+// ClearMemberName clears the value of the "member_name" field.
+func (m *ScheduleMemberMutation) ClearMemberName() {
+	m.member_name = nil
+	m.clearedFields[schedulemember.FieldMemberName] = struct{}{}
+}
+
+// MemberNameCleared returns if the "member_name" field was cleared in this mutation.
+func (m *ScheduleMemberMutation) MemberNameCleared() bool {
+	_, ok := m.clearedFields[schedulemember.FieldMemberName]
+	return ok
+}
+
+// ResetMemberName resets all changes to the "member_name" field.
+func (m *ScheduleMemberMutation) ResetMemberName() {
+	m.member_name = nil
+	delete(m.clearedFields, schedulemember.FieldMemberName)
+}
+
+// SetMemberProductName sets the "member_product_name" field.
+func (m *ScheduleMemberMutation) SetMemberProductName(s string) {
+	m.member_product_name = &s
+}
+
+// MemberProductName returns the value of the "member_product_name" field in the mutation.
+func (m *ScheduleMemberMutation) MemberProductName() (r string, exists bool) {
+	v := m.member_product_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemberProductName returns the old "member_product_name" field's value of the ScheduleMember entity.
+// If the ScheduleMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMemberMutation) OldMemberProductName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemberProductName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemberProductName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemberProductName: %w", err)
+	}
+	return oldValue.MemberProductName, nil
+}
+
+// ClearMemberProductName clears the value of the "member_product_name" field.
+func (m *ScheduleMemberMutation) ClearMemberProductName() {
+	m.member_product_name = nil
+	m.clearedFields[schedulemember.FieldMemberProductName] = struct{}{}
+}
+
+// MemberProductNameCleared returns if the "member_product_name" field was cleared in this mutation.
+func (m *ScheduleMemberMutation) MemberProductNameCleared() bool {
+	_, ok := m.clearedFields[schedulemember.FieldMemberProductName]
+	return ok
+}
+
+// ResetMemberProductName resets all changes to the "member_product_name" field.
+func (m *ScheduleMemberMutation) ResetMemberProductName() {
+	m.member_product_name = nil
+	delete(m.clearedFields, schedulemember.FieldMemberProductName)
+}
+
+// SetMemberProductPropertyName sets the "member_product_property_name" field.
+func (m *ScheduleMemberMutation) SetMemberProductPropertyName(s string) {
+	m.member_product_property_name = &s
+}
+
+// MemberProductPropertyName returns the value of the "member_product_property_name" field in the mutation.
+func (m *ScheduleMemberMutation) MemberProductPropertyName() (r string, exists bool) {
+	v := m.member_product_property_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemberProductPropertyName returns the old "member_product_property_name" field's value of the ScheduleMember entity.
+// If the ScheduleMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMemberMutation) OldMemberProductPropertyName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemberProductPropertyName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemberProductPropertyName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemberProductPropertyName: %w", err)
+	}
+	return oldValue.MemberProductPropertyName, nil
+}
+
+// ClearMemberProductPropertyName clears the value of the "member_product_property_name" field.
+func (m *ScheduleMemberMutation) ClearMemberProductPropertyName() {
+	m.member_product_property_name = nil
+	m.clearedFields[schedulemember.FieldMemberProductPropertyName] = struct{}{}
+}
+
+// MemberProductPropertyNameCleared returns if the "member_product_property_name" field was cleared in this mutation.
+func (m *ScheduleMemberMutation) MemberProductPropertyNameCleared() bool {
+	_, ok := m.clearedFields[schedulemember.FieldMemberProductPropertyName]
+	return ok
+}
+
+// ResetMemberProductPropertyName resets all changes to the "member_product_property_name" field.
+func (m *ScheduleMemberMutation) ResetMemberProductPropertyName() {
+	m.member_product_property_name = nil
+	delete(m.clearedFields, schedulemember.FieldMemberProductPropertyName)
+}
+
 // ClearSchedule clears the "schedule" edge to the Schedule entity.
 func (m *ScheduleMemberMutation) ClearSchedule() {
 	m.clearedschedule = true
@@ -29689,7 +30058,7 @@ func (m *ScheduleMemberMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleMemberMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, schedulemember.FieldCreatedAt)
 	}
@@ -29729,6 +30098,15 @@ func (m *ScheduleMemberMutation) Fields() []string {
 	if m.sign_end_time != nil {
 		fields = append(fields, schedulemember.FieldSignEndTime)
 	}
+	if m.member_name != nil {
+		fields = append(fields, schedulemember.FieldMemberName)
+	}
+	if m.member_product_name != nil {
+		fields = append(fields, schedulemember.FieldMemberProductName)
+	}
+	if m.member_product_property_name != nil {
+		fields = append(fields, schedulemember.FieldMemberProductPropertyName)
+	}
 	return fields
 }
 
@@ -29763,6 +30141,12 @@ func (m *ScheduleMemberMutation) Field(name string) (ent.Value, bool) {
 		return m.SignStartTime()
 	case schedulemember.FieldSignEndTime:
 		return m.SignEndTime()
+	case schedulemember.FieldMemberName:
+		return m.MemberName()
+	case schedulemember.FieldMemberProductName:
+		return m.MemberProductName()
+	case schedulemember.FieldMemberProductPropertyName:
+		return m.MemberProductPropertyName()
 	}
 	return nil, false
 }
@@ -29798,6 +30182,12 @@ func (m *ScheduleMemberMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldSignStartTime(ctx)
 	case schedulemember.FieldSignEndTime:
 		return m.OldSignEndTime(ctx)
+	case schedulemember.FieldMemberName:
+		return m.OldMemberName(ctx)
+	case schedulemember.FieldMemberProductName:
+		return m.OldMemberProductName(ctx)
+	case schedulemember.FieldMemberProductPropertyName:
+		return m.OldMemberProductPropertyName(ctx)
 	}
 	return nil, fmt.Errorf("unknown ScheduleMember field %s", name)
 }
@@ -29897,6 +30287,27 @@ func (m *ScheduleMemberMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSignEndTime(v)
+		return nil
+	case schedulemember.FieldMemberName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemberName(v)
+		return nil
+	case schedulemember.FieldMemberProductName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemberProductName(v)
+		return nil
+	case schedulemember.FieldMemberProductPropertyName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemberProductPropertyName(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleMember field %s", name)
@@ -30024,6 +30435,15 @@ func (m *ScheduleMemberMutation) ClearedFields() []string {
 	if m.FieldCleared(schedulemember.FieldSignEndTime) {
 		fields = append(fields, schedulemember.FieldSignEndTime)
 	}
+	if m.FieldCleared(schedulemember.FieldMemberName) {
+		fields = append(fields, schedulemember.FieldMemberName)
+	}
+	if m.FieldCleared(schedulemember.FieldMemberProductName) {
+		fields = append(fields, schedulemember.FieldMemberProductName)
+	}
+	if m.FieldCleared(schedulemember.FieldMemberProductPropertyName) {
+		fields = append(fields, schedulemember.FieldMemberProductPropertyName)
+	}
 	return fields
 }
 
@@ -30071,6 +30491,15 @@ func (m *ScheduleMemberMutation) ClearField(name string) error {
 	case schedulemember.FieldSignEndTime:
 		m.ClearSignEndTime()
 		return nil
+	case schedulemember.FieldMemberName:
+		m.ClearMemberName()
+		return nil
+	case schedulemember.FieldMemberProductName:
+		m.ClearMemberProductName()
+		return nil
+	case schedulemember.FieldMemberProductPropertyName:
+		m.ClearMemberProductPropertyName()
+		return nil
 	}
 	return fmt.Errorf("unknown ScheduleMember nullable field %s", name)
 }
@@ -30117,6 +30546,15 @@ func (m *ScheduleMemberMutation) ResetField(name string) error {
 		return nil
 	case schedulemember.FieldSignEndTime:
 		m.ResetSignEndTime()
+		return nil
+	case schedulemember.FieldMemberName:
+		m.ResetMemberName()
+		return nil
+	case schedulemember.FieldMemberProductName:
+		m.ResetMemberProductName()
+		return nil
+	case schedulemember.FieldMemberProductPropertyName:
+		m.ResetMemberProductPropertyName()
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleMember field %s", name)

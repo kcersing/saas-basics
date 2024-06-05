@@ -41,6 +41,8 @@ type ScheduleCoach struct {
 	SignStartTime time.Time `json:"sign_start_time,omitempty"`
 	// 下课签到时间
 	SignEndTime time.Time `json:"sign_end_time,omitempty"`
+	// 教练名称
+	CoachName string `json:"coach_name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduleCoachQuery when eager-loading is set.
 	Edges        ScheduleCoachEdges `json:"edges"`
@@ -76,7 +78,7 @@ func (*ScheduleCoach) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedulecoach.FieldID, schedulecoach.FieldStatus, schedulecoach.FieldVenueID, schedulecoach.FieldCoachID, schedulecoach.FieldScheduleID:
 			values[i] = new(sql.NullInt64)
-		case schedulecoach.FieldType:
+		case schedulecoach.FieldType, schedulecoach.FieldCoachName:
 			values[i] = new(sql.NullString)
 		case schedulecoach.FieldCreatedAt, schedulecoach.FieldUpdatedAt, schedulecoach.FieldStartTime, schedulecoach.FieldEndTime, schedulecoach.FieldSignStartTime, schedulecoach.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
@@ -167,6 +169,12 @@ func (sc *ScheduleCoach) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sc.SignEndTime = value.Time
 			}
+		case schedulecoach.FieldCoachName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field coach_name", values[i])
+			} else if value.Valid {
+				sc.CoachName = value.String
+			}
 		default:
 			sc.selectValues.Set(columns[i], values[i])
 		}
@@ -240,6 +248,9 @@ func (sc *ScheduleCoach) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sign_end_time=")
 	builder.WriteString(sc.SignEndTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("coach_name=")
+	builder.WriteString(sc.CoachName)
 	builder.WriteByte(')')
 	return builder.String()
 }

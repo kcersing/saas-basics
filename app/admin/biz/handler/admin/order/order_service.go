@@ -4,6 +4,7 @@ package order
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/jinzhu/copier"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
@@ -32,6 +33,7 @@ func CreateOrder(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	sn, err := admin.NewOrder(ctx, c).Create(orderInfoReq)
+	hlog.Error(err)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

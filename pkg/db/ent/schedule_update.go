@@ -318,6 +318,46 @@ func (su *ScheduleUpdate) ClearRemark() *ScheduleUpdate {
 	return su
 }
 
+// SetVenueName sets the "venue_name" field.
+func (su *ScheduleUpdate) SetVenueName(s string) *ScheduleUpdate {
+	su.mutation.SetVenueName(s)
+	return su
+}
+
+// SetNillableVenueName sets the "venue_name" field if the given value is not nil.
+func (su *ScheduleUpdate) SetNillableVenueName(s *string) *ScheduleUpdate {
+	if s != nil {
+		su.SetVenueName(*s)
+	}
+	return su
+}
+
+// ClearVenueName clears the value of the "venue_name" field.
+func (su *ScheduleUpdate) ClearVenueName() *ScheduleUpdate {
+	su.mutation.ClearVenueName()
+	return su
+}
+
+// SetPlaceName sets the "place_name" field.
+func (su *ScheduleUpdate) SetPlaceName(s string) *ScheduleUpdate {
+	su.mutation.SetPlaceName(s)
+	return su
+}
+
+// SetNillablePlaceName sets the "place_name" field if the given value is not nil.
+func (su *ScheduleUpdate) SetNillablePlaceName(s *string) *ScheduleUpdate {
+	if s != nil {
+		su.SetPlaceName(*s)
+	}
+	return su
+}
+
+// ClearPlaceName clears the value of the "place_name" field.
+func (su *ScheduleUpdate) ClearPlaceName() *ScheduleUpdate {
+	su.mutation.ClearPlaceName()
+	return su
+}
+
 // AddMemberIDs adds the "members" edge to the ScheduleMember entity by IDs.
 func (su *ScheduleUpdate) AddMemberIDs(ids ...int64) *ScheduleUpdate {
 	su.mutation.AddMemberIDs(ids...)
@@ -532,6 +572,18 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.RemarkCleared() {
 		_spec.ClearField(schedule.FieldRemark, field.TypeString)
+	}
+	if value, ok := su.mutation.VenueName(); ok {
+		_spec.SetField(schedule.FieldVenueName, field.TypeString, value)
+	}
+	if su.mutation.VenueNameCleared() {
+		_spec.ClearField(schedule.FieldVenueName, field.TypeString)
+	}
+	if value, ok := su.mutation.PlaceName(); ok {
+		_spec.SetField(schedule.FieldPlaceName, field.TypeString, value)
+	}
+	if su.mutation.PlaceNameCleared() {
+		_spec.ClearField(schedule.FieldPlaceName, field.TypeString)
 	}
 	if su.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -931,6 +983,46 @@ func (suo *ScheduleUpdateOne) ClearRemark() *ScheduleUpdateOne {
 	return suo
 }
 
+// SetVenueName sets the "venue_name" field.
+func (suo *ScheduleUpdateOne) SetVenueName(s string) *ScheduleUpdateOne {
+	suo.mutation.SetVenueName(s)
+	return suo
+}
+
+// SetNillableVenueName sets the "venue_name" field if the given value is not nil.
+func (suo *ScheduleUpdateOne) SetNillableVenueName(s *string) *ScheduleUpdateOne {
+	if s != nil {
+		suo.SetVenueName(*s)
+	}
+	return suo
+}
+
+// ClearVenueName clears the value of the "venue_name" field.
+func (suo *ScheduleUpdateOne) ClearVenueName() *ScheduleUpdateOne {
+	suo.mutation.ClearVenueName()
+	return suo
+}
+
+// SetPlaceName sets the "place_name" field.
+func (suo *ScheduleUpdateOne) SetPlaceName(s string) *ScheduleUpdateOne {
+	suo.mutation.SetPlaceName(s)
+	return suo
+}
+
+// SetNillablePlaceName sets the "place_name" field if the given value is not nil.
+func (suo *ScheduleUpdateOne) SetNillablePlaceName(s *string) *ScheduleUpdateOne {
+	if s != nil {
+		suo.SetPlaceName(*s)
+	}
+	return suo
+}
+
+// ClearPlaceName clears the value of the "place_name" field.
+func (suo *ScheduleUpdateOne) ClearPlaceName() *ScheduleUpdateOne {
+	suo.mutation.ClearPlaceName()
+	return suo
+}
+
 // AddMemberIDs adds the "members" edge to the ScheduleMember entity by IDs.
 func (suo *ScheduleUpdateOne) AddMemberIDs(ids ...int64) *ScheduleUpdateOne {
 	suo.mutation.AddMemberIDs(ids...)
@@ -1175,6 +1267,18 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 	}
 	if suo.mutation.RemarkCleared() {
 		_spec.ClearField(schedule.FieldRemark, field.TypeString)
+	}
+	if value, ok := suo.mutation.VenueName(); ok {
+		_spec.SetField(schedule.FieldVenueName, field.TypeString, value)
+	}
+	if suo.mutation.VenueNameCleared() {
+		_spec.ClearField(schedule.FieldVenueName, field.TypeString)
+	}
+	if value, ok := suo.mutation.PlaceName(); ok {
+		_spec.SetField(schedule.FieldPlaceName, field.TypeString, value)
+	}
+	if suo.mutation.PlaceNameCleared() {
+		_spec.ClearField(schedule.FieldPlaceName, field.TypeString)
 	}
 	if suo.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{

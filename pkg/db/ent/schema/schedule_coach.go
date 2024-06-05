@@ -34,6 +34,8 @@ func (ScheduleCoach) Fields() []ent.Field {
 		field.Time("end_time").Default(time.Now).Comment("结束时间").Optional(),
 		field.Time("sign_start_time").Default(time.Now).Comment("上课签到时间").Optional(),
 		field.Time("sign_end_time").Default(time.Now).Comment("下课签到时间").Optional(),
+
+		field.String("coach_name").Comment("教练名称").Optional(),
 	}
 }
 

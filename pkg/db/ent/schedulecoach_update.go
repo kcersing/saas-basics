@@ -236,6 +236,26 @@ func (scu *ScheduleCoachUpdate) ClearSignEndTime() *ScheduleCoachUpdate {
 	return scu
 }
 
+// SetCoachName sets the "coach_name" field.
+func (scu *ScheduleCoachUpdate) SetCoachName(s string) *ScheduleCoachUpdate {
+	scu.mutation.SetCoachName(s)
+	return scu
+}
+
+// SetNillableCoachName sets the "coach_name" field if the given value is not nil.
+func (scu *ScheduleCoachUpdate) SetNillableCoachName(s *string) *ScheduleCoachUpdate {
+	if s != nil {
+		scu.SetCoachName(*s)
+	}
+	return scu
+}
+
+// ClearCoachName clears the value of the "coach_name" field.
+func (scu *ScheduleCoachUpdate) ClearCoachName() *ScheduleCoachUpdate {
+	scu.mutation.ClearCoachName()
+	return scu
+}
+
 // SetSchedule sets the "schedule" edge to the Schedule entity.
 func (scu *ScheduleCoachUpdate) SetSchedule(s *Schedule) *ScheduleCoachUpdate {
 	return scu.SetScheduleID(s.ID)
@@ -356,6 +376,12 @@ func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if scu.mutation.SignEndTimeCleared() {
 		_spec.ClearField(schedulecoach.FieldSignEndTime, field.TypeTime)
+	}
+	if value, ok := scu.mutation.CoachName(); ok {
+		_spec.SetField(schedulecoach.FieldCoachName, field.TypeString, value)
+	}
+	if scu.mutation.CoachNameCleared() {
+		_spec.ClearField(schedulecoach.FieldCoachName, field.TypeString)
 	}
 	if scu.mutation.ScheduleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -613,6 +639,26 @@ func (scuo *ScheduleCoachUpdateOne) ClearSignEndTime() *ScheduleCoachUpdateOne {
 	return scuo
 }
 
+// SetCoachName sets the "coach_name" field.
+func (scuo *ScheduleCoachUpdateOne) SetCoachName(s string) *ScheduleCoachUpdateOne {
+	scuo.mutation.SetCoachName(s)
+	return scuo
+}
+
+// SetNillableCoachName sets the "coach_name" field if the given value is not nil.
+func (scuo *ScheduleCoachUpdateOne) SetNillableCoachName(s *string) *ScheduleCoachUpdateOne {
+	if s != nil {
+		scuo.SetCoachName(*s)
+	}
+	return scuo
+}
+
+// ClearCoachName clears the value of the "coach_name" field.
+func (scuo *ScheduleCoachUpdateOne) ClearCoachName() *ScheduleCoachUpdateOne {
+	scuo.mutation.ClearCoachName()
+	return scuo
+}
+
 // SetSchedule sets the "schedule" edge to the Schedule entity.
 func (scuo *ScheduleCoachUpdateOne) SetSchedule(s *Schedule) *ScheduleCoachUpdateOne {
 	return scuo.SetScheduleID(s.ID)
@@ -763,6 +809,12 @@ func (scuo *ScheduleCoachUpdateOne) sqlSave(ctx context.Context) (_node *Schedul
 	}
 	if scuo.mutation.SignEndTimeCleared() {
 		_spec.ClearField(schedulecoach.FieldSignEndTime, field.TypeTime)
+	}
+	if value, ok := scuo.mutation.CoachName(); ok {
+		_spec.SetField(schedulecoach.FieldCoachName, field.TypeString, value)
+	}
+	if scuo.mutation.CoachNameCleared() {
+		_spec.ClearField(schedulecoach.FieldCoachName, field.TypeString)
 	}
 	if scuo.mutation.ScheduleCleared() {
 		edge := &sqlgraph.EdgeSpec{

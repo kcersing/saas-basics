@@ -175,6 +175,20 @@ func (scc *ScheduleCoachCreate) SetNillableSignEndTime(t *time.Time) *ScheduleCo
 	return scc
 }
 
+// SetCoachName sets the "coach_name" field.
+func (scc *ScheduleCoachCreate) SetCoachName(s string) *ScheduleCoachCreate {
+	scc.mutation.SetCoachName(s)
+	return scc
+}
+
+// SetNillableCoachName sets the "coach_name" field if the given value is not nil.
+func (scc *ScheduleCoachCreate) SetNillableCoachName(s *string) *ScheduleCoachCreate {
+	if s != nil {
+		scc.SetCoachName(*s)
+	}
+	return scc
+}
+
 // SetID sets the "id" field.
 func (scc *ScheduleCoachCreate) SetID(i int64) *ScheduleCoachCreate {
 	scc.mutation.SetID(i)
@@ -330,6 +344,10 @@ func (scc *ScheduleCoachCreate) createSpec() (*ScheduleCoach, *sqlgraph.CreateSp
 	if value, ok := scc.mutation.SignEndTime(); ok {
 		_spec.SetField(schedulecoach.FieldSignEndTime, field.TypeTime, value)
 		_node.SignEndTime = value
+	}
+	if value, ok := scc.mutation.CoachName(); ok {
+		_spec.SetField(schedulecoach.FieldCoachName, field.TypeString, value)
+		_node.CoachName = value
 	}
 	if nodes := scc.mutation.ScheduleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

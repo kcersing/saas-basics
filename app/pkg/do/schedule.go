@@ -79,20 +79,14 @@ type ScheduleInfo struct {
 }
 
 type ScheduleListReq struct {
-	VenueId    int64  `json:"venue"`
-	PlaceID    int64  `json:"place_id"`
+	PlaceID    int64  `json:"place"`
 	PropertyId int64  `json:"property"`
 	CoachId    int64  `json:"coach"`
 	StartTime  string `json:"startTime"`
-	EndTime    string `json:"end_time"`
-
-	Page     int64 `json:"page"`
-	PageSize int64 `json:"pageSize"`
-
-	PropertyName string `json:"property_name"`
-	VenueName    string `json:"venue_name"`
-	PlaceName    string `json:"place_name"`
-	CoachName    string `json:"coach_name"`
+	EndTime    string `json:"endTime"`
+	VenueId    int64  `json:"venueId"`
+	Page       int64  `json:"page"`
+	PageSize   int64  `json:"pageSize"`
 }
 
 type ScheduleMemberInfo struct {

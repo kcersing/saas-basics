@@ -98,8 +98,12 @@ func ListSchedule(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
 	var listReq do.ScheduleListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 	list, total, err := admin.NewSchedule(ctx, c).ScheduleList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
@@ -121,6 +125,12 @@ func DateListSchedule(ctx context.Context, c *app.RequestContext) {
 	}
 
 	var listReq do.ScheduleListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
 	list, total, err := admin.NewSchedule(ctx, c).ScheduleDateList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")

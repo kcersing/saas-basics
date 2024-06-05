@@ -26,9 +26,9 @@ struct ListScheduleReq {
     3:  optional i64 member (api.raw = "member")
     4:  optional list<i64> coach (api.raw = "coach")
     5:  optional list<i64> product (api.raw = "product")
-    6:  optional list<i64> venue (api.raw = "venue")
+    6:  optional i64 venueId (api.raw = "venueId")
     7:  optional list<i64> property (api.raw = "property")
-    8: optional string startTime  (api.raw = "startTime")
+    8:  optional string startTime  (api.raw = "startTime")
 }
 
 service ScheduleService {

@@ -203,6 +203,48 @@ func (smc *ScheduleMemberCreate) SetNillableSignEndTime(t *time.Time) *ScheduleM
 	return smc
 }
 
+// SetMemberName sets the "member_name" field.
+func (smc *ScheduleMemberCreate) SetMemberName(s string) *ScheduleMemberCreate {
+	smc.mutation.SetMemberName(s)
+	return smc
+}
+
+// SetNillableMemberName sets the "member_name" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableMemberName(s *string) *ScheduleMemberCreate {
+	if s != nil {
+		smc.SetMemberName(*s)
+	}
+	return smc
+}
+
+// SetMemberProductName sets the "member_product_name" field.
+func (smc *ScheduleMemberCreate) SetMemberProductName(s string) *ScheduleMemberCreate {
+	smc.mutation.SetMemberProductName(s)
+	return smc
+}
+
+// SetNillableMemberProductName sets the "member_product_name" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableMemberProductName(s *string) *ScheduleMemberCreate {
+	if s != nil {
+		smc.SetMemberProductName(*s)
+	}
+	return smc
+}
+
+// SetMemberProductPropertyName sets the "member_product_property_name" field.
+func (smc *ScheduleMemberCreate) SetMemberProductPropertyName(s string) *ScheduleMemberCreate {
+	smc.mutation.SetMemberProductPropertyName(s)
+	return smc
+}
+
+// SetNillableMemberProductPropertyName sets the "member_product_property_name" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableMemberProductPropertyName(s *string) *ScheduleMemberCreate {
+	if s != nil {
+		smc.SetMemberProductPropertyName(*s)
+	}
+	return smc
+}
+
 // SetID sets the "id" field.
 func (smc *ScheduleMemberCreate) SetID(i int64) *ScheduleMemberCreate {
 	smc.mutation.SetID(i)
@@ -366,6 +408,18 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 	if value, ok := smc.mutation.SignEndTime(); ok {
 		_spec.SetField(schedulemember.FieldSignEndTime, field.TypeTime, value)
 		_node.SignEndTime = value
+	}
+	if value, ok := smc.mutation.MemberName(); ok {
+		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)
+		_node.MemberName = value
+	}
+	if value, ok := smc.mutation.MemberProductName(); ok {
+		_spec.SetField(schedulemember.FieldMemberProductName, field.TypeString, value)
+		_node.MemberProductName = value
+	}
+	if value, ok := smc.mutation.MemberProductPropertyName(); ok {
+		_spec.SetField(schedulemember.FieldMemberProductPropertyName, field.TypeString, value)
+		_node.MemberProductPropertyName = value
 	}
 	if nodes := smc.mutation.ScheduleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

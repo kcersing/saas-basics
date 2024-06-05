@@ -110,6 +110,11 @@ func SignEndTime(v time.Time) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldSignEndTime, v))
 }
 
+// CoachName applies equality check predicate on the "coach_name" field. It's identical to CoachNameEQ.
+func CoachName(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEQ(FieldCoachName, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldCreatedAt, v))
@@ -643,6 +648,81 @@ func SignEndTimeIsNil() predicate.ScheduleCoach {
 // SignEndTimeNotNil applies the NotNil predicate on the "sign_end_time" field.
 func SignEndTimeNotNil() predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldNotNull(FieldSignEndTime))
+}
+
+// CoachNameEQ applies the EQ predicate on the "coach_name" field.
+func CoachNameEQ(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEQ(FieldCoachName, v))
+}
+
+// CoachNameNEQ applies the NEQ predicate on the "coach_name" field.
+func CoachNameNEQ(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNEQ(FieldCoachName, v))
+}
+
+// CoachNameIn applies the In predicate on the "coach_name" field.
+func CoachNameIn(vs ...string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldIn(FieldCoachName, vs...))
+}
+
+// CoachNameNotIn applies the NotIn predicate on the "coach_name" field.
+func CoachNameNotIn(vs ...string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNotIn(FieldCoachName, vs...))
+}
+
+// CoachNameGT applies the GT predicate on the "coach_name" field.
+func CoachNameGT(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldGT(FieldCoachName, v))
+}
+
+// CoachNameGTE applies the GTE predicate on the "coach_name" field.
+func CoachNameGTE(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldGTE(FieldCoachName, v))
+}
+
+// CoachNameLT applies the LT predicate on the "coach_name" field.
+func CoachNameLT(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldLT(FieldCoachName, v))
+}
+
+// CoachNameLTE applies the LTE predicate on the "coach_name" field.
+func CoachNameLTE(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldLTE(FieldCoachName, v))
+}
+
+// CoachNameContains applies the Contains predicate on the "coach_name" field.
+func CoachNameContains(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldContains(FieldCoachName, v))
+}
+
+// CoachNameHasPrefix applies the HasPrefix predicate on the "coach_name" field.
+func CoachNameHasPrefix(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldHasPrefix(FieldCoachName, v))
+}
+
+// CoachNameHasSuffix applies the HasSuffix predicate on the "coach_name" field.
+func CoachNameHasSuffix(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldHasSuffix(FieldCoachName, v))
+}
+
+// CoachNameIsNil applies the IsNil predicate on the "coach_name" field.
+func CoachNameIsNil() predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldIsNull(FieldCoachName))
+}
+
+// CoachNameNotNil applies the NotNil predicate on the "coach_name" field.
+func CoachNameNotNil() predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNotNull(FieldCoachName))
+}
+
+// CoachNameEqualFold applies the EqualFold predicate on the "coach_name" field.
+func CoachNameEqualFold(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEqualFold(FieldCoachName, v))
+}
+
+// CoachNameContainsFold applies the ContainsFold predicate on the "coach_name" field.
+func CoachNameContainsFold(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldContainsFold(FieldCoachName, v))
 }
 
 // HasSchedule applies the HasEdge predicate on the "schedule" edge.

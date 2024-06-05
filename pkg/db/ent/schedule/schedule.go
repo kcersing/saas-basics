@@ -42,6 +42,10 @@ const (
 	FieldPrice = "price"
 	// FieldRemark holds the string denoting the remark field in the database.
 	FieldRemark = "remark"
+	// FieldVenueName holds the string denoting the venue_name field in the database.
+	FieldVenueName = "venue_name"
+	// FieldPlaceName holds the string denoting the place_name field in the database.
+	FieldPlaceName = "place_name"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// EdgeCoachs holds the string denoting the coachs edge name in mutations.
@@ -81,6 +85,8 @@ var Columns = []string{
 	FieldEndTime,
 	FieldPrice,
 	FieldRemark,
+	FieldVenueName,
+	FieldPlaceName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -182,6 +188,16 @@ func ByPrice(opts ...sql.OrderTermOption) OrderOption {
 // ByRemark orders the results by the remark field.
 func ByRemark(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRemark, opts...).ToFunc()
+}
+
+// ByVenueName orders the results by the venue_name field.
+func ByVenueName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVenueName, opts...).ToFunc()
+}
+
+// ByPlaceName orders the results by the place_name field.
+func ByPlaceName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlaceName, opts...).ToFunc()
 }
 
 // ByMembersCount orders the results by members count.

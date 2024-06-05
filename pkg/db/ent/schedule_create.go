@@ -218,6 +218,34 @@ func (sc *ScheduleCreate) SetNillableRemark(s *string) *ScheduleCreate {
 	return sc
 }
 
+// SetVenueName sets the "venue_name" field.
+func (sc *ScheduleCreate) SetVenueName(s string) *ScheduleCreate {
+	sc.mutation.SetVenueName(s)
+	return sc
+}
+
+// SetNillableVenueName sets the "venue_name" field if the given value is not nil.
+func (sc *ScheduleCreate) SetNillableVenueName(s *string) *ScheduleCreate {
+	if s != nil {
+		sc.SetVenueName(*s)
+	}
+	return sc
+}
+
+// SetPlaceName sets the "place_name" field.
+func (sc *ScheduleCreate) SetPlaceName(s string) *ScheduleCreate {
+	sc.mutation.SetPlaceName(s)
+	return sc
+}
+
+// SetNillablePlaceName sets the "place_name" field if the given value is not nil.
+func (sc *ScheduleCreate) SetNillablePlaceName(s *string) *ScheduleCreate {
+	if s != nil {
+		sc.SetPlaceName(*s)
+	}
+	return sc
+}
+
 // SetID sets the "id" field.
 func (sc *ScheduleCreate) SetID(i int64) *ScheduleCreate {
 	sc.mutation.SetID(i)
@@ -402,6 +430,14 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Remark(); ok {
 		_spec.SetField(schedule.FieldRemark, field.TypeString, value)
 		_node.Remark = value
+	}
+	if value, ok := sc.mutation.VenueName(); ok {
+		_spec.SetField(schedule.FieldVenueName, field.TypeString, value)
+		_node.VenueName = value
+	}
+	if value, ok := sc.mutation.PlaceName(); ok {
+		_spec.SetField(schedule.FieldPlaceName, field.TypeString, value)
+		_node.PlaceName = value
 	}
 	if nodes := sc.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -44,7 +44,7 @@ func (c Contract) Update(req *do.ContractInfo) error {
 		Save(c.ctx)
 
 	if err != nil {
-		err = errors.Wrap(err, "create Venue failed")
+		err = errors.Wrap(err, "create Contract failed")
 		return err
 	}
 
@@ -90,7 +90,9 @@ func (c Contract) List(req *do.ContractListReq) (list []*do.ContractInfo, total 
 		predicates = append(predicates, contract.NameEQ(req.Name))
 	}
 
-	all, err := c.db.Contract.Query().Where(predicates...).
+	all, err := c.db.Contract.
+		Query().
+		Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(c.ctx)
 	if err != nil {

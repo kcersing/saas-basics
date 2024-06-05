@@ -60,7 +60,6 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 	layout := time.DateOnly
 	assignAt, err := time.Parse(layout, req.AssignAt)
 	if err != nil {
-		hlog.Error(err)
 		return "", errors.Wrap(err, "时间转换失败")
 	}
 
@@ -69,7 +68,13 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 	var wg sync.WaitGroup
 	wg.Add(5)
 
-	one, err = o.db.Order.Create().
+	tx, err := o.db.Tx(o.ctx)
+
+	if err != nil {
+		return "", errors.Wrap(err, "starting a transaction:")
+	}
+
+	one, err = tx.Order.Create().
 		SetOrderSn(utils.CreateCn()).
 		SetOrderVenues(venue).
 		SetOrderMembers(members).
@@ -80,10 +85,13 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		//SetDevice(req.Device).
 		Save(o.ctx)
 	if err != nil {
-		hlog.Error(err)
-		return "", errors.Wrap(err, "创建 Order 失败")
+		err1 := rollback(tx, errors.Wrap(err, "创建 Order 失败"))
+		if err1 != nil {
+			return "", err1
+		}
+		return "", err
 	}
-	mp, err = o.db.MemberProduct.Create().
+	mp, err = tx.MemberProduct.Create().
 		SetProductID(req.Product).
 		// SetVenue (req.Venue).
 		SetSn(utils.CreateCn()).
@@ -94,26 +102,33 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		SetStatus(0).
 		Save(o.ctx)
 	if err != nil {
-		hlog.Error(err)
-		return "", errors.Wrap(err, "创建会员产品失败")
+		err1 := rollback(tx, errors.Wrap(err, "创建会员产品失败"))
+		if err1 != nil {
+			return "", err1
+		}
+		return "", err
 	}
-	_, err = o.db.Order.Update().
+	_, err = tx.Order.Update().
 		Where(order.ID(one.ID)).
 		SetMemberProductID(mp.ID).
 		SetOrderVenues(venue).
 		Save(o.ctx)
+
 	if err != nil {
-		return "", errors.Wrap(err, "创建 Order 失败")
+		err1 := rollback(tx, errors.Wrap(err, "创建 Order 失败"))
+		if err1 != nil {
+			return "", err1
+		}
+		return "", err
 	}
 
 	go func() {
-		_, err := o.db.OrderItem.Create().
+		_, err := tx.OrderItem.Create().
 			SetOrder(one).
 			SetProductID(products.ID).
 			SetData(fmt.Sprintf("%+v", req)).
 			Save(o.ctx)
 		if err != nil {
-			hlog.Error(err)
 			err = errors.Wrap(err, "创建 Order Item 失败")
 			errChan <- err
 		}
@@ -121,13 +136,12 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 	}()
 
 	go func() {
-		_, err = o.db.OrderAmount.Create().
+		_, err = tx.OrderAmount.Create().
 			SetOrder(one).
 			SetTotal(req.Total).
 			SetResidue(req.Total).
 			Save(o.ctx)
 		if err != nil {
-			hlog.Error(err)
 			err = errors.Wrap(err, "创建Order Amount失败")
 			errChan <- err
 		}
@@ -136,14 +150,13 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 
 	go func() {
 		for _, v := range req.Staffs {
-			_, err = o.db.OrderSales.Create().
+			_, err = tx.OrderSales.Create().
 				SetOrder(one).
 				SetSalesID(v.Id).
 				SetRatio(v.Ratio).
 				SetMemberID(members.ID).
 				Save(o.ctx)
 			if err != nil {
-				hlog.Error(err)
 				err = errors.Wrap(err, "创建Order Sales失败")
 				errChan <- err
 			}
@@ -158,27 +171,25 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		property = append(property, req.CardProperty...)
 		property = append(property, req.CourseProperty...)
 		property = append(property, req.ClassProperty...)
-
 		if len(property) > 0 {
 			for _, v := range property {
+				//if v.Property > 0 {
 				p, err := o.db.ProductProperty.Query().
 					Where(productproperty.IDEQ(v.Property)).
 					First(o.ctx)
 
 				if err != nil {
-					hlog.Error(err)
 					err = errors.Wrap(err, "查询Product Property失败")
 					errChan <- err
 				}
 
 				venues, err := p.QueryVenues().All(o.ctx)
 				if err != nil {
-					hlog.Error(err)
 					err = errors.Wrap(err, "查询Product Property venues失败")
 					errChan <- err
 				}
 
-				_, err = o.db.MemberProductProperty.Create().
+				_, err = tx.MemberProductProperty.Create().
 					SetMemberID(members.ID).
 					SetOwner(mp).
 					SetType(p.Type).
@@ -196,9 +207,9 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 					err = errors.Wrap(err, "创建Member Product Property失败")
 					errChan <- err
 				}
+				//}
 			}
 		}
-
 		wg.Done()
 	}()
 
@@ -208,14 +219,14 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		//// 将字符串写入Buffer
 		//_, err = buffer.WriteString(req.SignImg)
 		//if err != nil {
-		//	hlog.Error(err)
+		//
 		//	err = errors.Wrap(err, "写入失败")
 		//	errChan <- err
 		//}
 		//uploadinfo, err := minio.PutToBucketByBuf(o.ctx, config.GlobalServerConfig.Minio.ImgBucketName, filename, buffer)
 		//
 		//if err != nil {
-		//	hlog.Error(err)
+		//
 		//	err = errors.Wrap(err, "签名上传失败")
 		//	errChan <- err
 		//}
@@ -226,11 +237,11 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 				Where(contract.IDEQ(v)).
 				First(o.ctx)
 			if err != nil {
-				hlog.Error(err)
+
 				err = errors.Wrap(err, "合同 Contract 失败")
 				errChan <- err
 			}
-			memberContract, err := o.db.MemberContract.Create().
+			memberContract, err := tx.MemberContract.Create().
 				SetMember(members).
 				SetOrderID(one.ID).
 				SetMemberProduct(mp).
@@ -239,18 +250,18 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 				SetStatus(0).
 				Save(o.ctx)
 			if err != nil {
-				hlog.Error(err)
+
 				err = errors.Wrap(err, "创建Member Contract "+string(i)+" 失败")
 				errChan <- err
 			}
 
-			_, err = o.db.MemberContractContent.Create().
+			_, err = tx.MemberContractContent.Create().
 				SetContract(memberContract).
 				SetContent(contracts.Content).
 				Save(o.ctx)
 
 			if err != nil {
-				hlog.Error(err)
+
 				err = errors.Wrap(err, "创建 Member Contract Content 失败")
 				errChan <- err
 			}
@@ -258,13 +269,26 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 
 		wg.Done()
 	}()
-
+	hlog.Info("--------------------")
+	hlog.Info(errChan)
+	hlog.Info("--------------------")
 	wg.Wait()
 	select {
 	case result := <-errChan:
+		hlog.Info(errChan)
+		if result != nil {
+			err1 := rollback(tx, result)
+			if err1 != nil {
+				return "", err1
+			}
+			return "", err
+		}
 		return "", result
 	default:
 	}
-
+	if err = tx.Commit(); err != nil {
+		return "", err
+	}
 	return one.OrderSn, nil
+
 }

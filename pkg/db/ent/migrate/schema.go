@@ -236,9 +236,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "membercontract_order_id_member_id_member_product_id",
+				Name:    "membercontract_order_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberContractColumns[8], MemberContractColumns[6], MemberContractColumns[7]},
+				Columns: []*schema.Column{MemberContractColumns[8]},
+			},
+			{
+				Name:    "membercontract_member_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberContractColumns[6]},
+			},
+			{
+				Name:    "membercontract_member_product_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberContractColumns[7]},
 			},
 		},
 	}
@@ -380,14 +390,34 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "memberproduct_venue_id_member_id_product_id_order_id",
+				Name:    "memberproduct_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[7], MemberProductColumns[13], MemberProductColumns[6], MemberProductColumns[8]},
+				Columns: []*schema.Column{MemberProductColumns[7]},
 			},
 			{
-				Name:    "memberproduct_validity_at_cancel_at",
+				Name:    "memberproduct_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[11], MemberProductColumns[12]},
+				Columns: []*schema.Column{MemberProductColumns[13]},
+			},
+			{
+				Name:    "memberproduct_product_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductColumns[6]},
+			},
+			{
+				Name:    "memberproduct_order_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductColumns[8]},
+			},
+			{
+				Name:    "memberproduct_validity_at",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductColumns[11]},
+			},
+			{
+				Name:    "memberproduct_cancel_at",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductColumns[12]},
 			},
 		},
 	}
@@ -423,9 +453,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "memberproductproperty_property_id_member_id_member_product_id",
+				Name:    "memberproductproperty_property_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductPropertyColumns[5], MemberProductPropertyColumns[4], MemberProductPropertyColumns[13]},
+				Columns: []*schema.Column{MemberProductPropertyColumns[5]},
+			},
+			{
+				Name:    "memberproductproperty_member_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductPropertyColumns[4]},
+			},
+			{
+				Name:    "memberproductproperty_member_product_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberProductPropertyColumns[13]},
 			},
 		},
 	}
@@ -544,9 +584,29 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "order_order_sn_venue_id_member_id_completion_at_member_product_id",
+				Name:    "order_order_sn",
 				Unique:  false,
-				Columns: []*schema.Column{OrderColumns[3], OrderColumns[12], OrderColumns[10], OrderColumns[9], OrderColumns[4]},
+				Columns: []*schema.Column{OrderColumns[3]},
+			},
+			{
+				Name:    "order_venue_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderColumns[12]},
+			},
+			{
+				Name:    "order_member_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderColumns[10]},
+			},
+			{
+				Name:    "order_completion_at",
+				Unique:  false,
+				Columns: []*schema.Column{OrderColumns[9]},
+			},
+			{
+				Name:    "order_member_product_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrderColumns[4]},
 			},
 		},
 	}
@@ -775,6 +835,8 @@ var (
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "课程价格", Default: 0},
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
+		{Name: "venue_name", Type: field.TypeString, Nullable: true, Comment: "场馆名称"},
+		{Name: "place_name", Type: field.TypeString, Nullable: true, Comment: "场地名称"},
 	}
 	// ScheduleTable holds the schema information for the "schedule" table.
 	ScheduleTable = &schema.Table{
@@ -817,6 +879,7 @@ var (
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "结束时间"},
 		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
 		{Name: "sign_end_time", Type: field.TypeTime, Nullable: true, Comment: "下课签到时间"},
+		{Name: "coach_name", Type: field.TypeString, Nullable: true, Comment: "教练名称"},
 		{Name: "schedule_id", Type: field.TypeInt64, Nullable: true, Comment: "课程ID"},
 	}
 	// ScheduleCoachTable holds the schema information for the "schedule_coach" table.
@@ -827,7 +890,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_coach_schedule_coachs",
-				Columns:    []*schema.Column{ScheduleCoachColumns[11]},
+				Columns:    []*schema.Column{ScheduleCoachColumns[12]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -846,7 +909,7 @@ var (
 			{
 				Name:    "schedulecoach_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleCoachColumns[11]},
+				Columns: []*schema.Column{ScheduleCoachColumns[12]},
 			},
 		},
 	}
@@ -865,6 +928,9 @@ var (
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "结束时间"},
 		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
 		{Name: "sign_end_time", Type: field.TypeTime, Nullable: true, Comment: "下课签到时间"},
+		{Name: "member_name", Type: field.TypeString, Nullable: true, Comment: "会员名称"},
+		{Name: "member_product_name", Type: field.TypeString, Nullable: true, Comment: "会员产品名称"},
+		{Name: "member_product_property_name", Type: field.TypeString, Nullable: true, Comment: "会员产品属性名称"},
 		{Name: "schedule_id", Type: field.TypeInt64, Nullable: true, Comment: "课程ID"},
 	}
 	// ScheduleMemberTable holds the schema information for the "schedule_member" table.
@@ -875,7 +941,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_member_schedule_members",
-				Columns:    []*schema.Column{ScheduleMemberColumns[13]},
+				Columns:    []*schema.Column{ScheduleMemberColumns[16]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -894,7 +960,7 @@ var (
 			{
 				Name:    "schedulemember_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleMemberColumns[13]},
+				Columns: []*schema.Column{ScheduleMemberColumns[16]},
 			},
 		},
 	}

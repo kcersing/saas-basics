@@ -125,6 +125,16 @@ func Remark(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldRemark, v))
 }
 
+// VenueName applies equality check predicate on the "venue_name" field. It's identical to VenueNameEQ.
+func VenueName(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldVenueName, v))
+}
+
+// PlaceName applies equality check predicate on the "place_name" field. It's identical to PlaceNameEQ.
+func PlaceName(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldPlaceName, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldCreatedAt, v))
@@ -903,6 +913,156 @@ func RemarkEqualFold(v string) predicate.Schedule {
 // RemarkContainsFold applies the ContainsFold predicate on the "remark" field.
 func RemarkContainsFold(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldContainsFold(FieldRemark, v))
+}
+
+// VenueNameEQ applies the EQ predicate on the "venue_name" field.
+func VenueNameEQ(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldVenueName, v))
+}
+
+// VenueNameNEQ applies the NEQ predicate on the "venue_name" field.
+func VenueNameNEQ(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNEQ(FieldVenueName, v))
+}
+
+// VenueNameIn applies the In predicate on the "venue_name" field.
+func VenueNameIn(vs ...string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldIn(FieldVenueName, vs...))
+}
+
+// VenueNameNotIn applies the NotIn predicate on the "venue_name" field.
+func VenueNameNotIn(vs ...string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotIn(FieldVenueName, vs...))
+}
+
+// VenueNameGT applies the GT predicate on the "venue_name" field.
+func VenueNameGT(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGT(FieldVenueName, v))
+}
+
+// VenueNameGTE applies the GTE predicate on the "venue_name" field.
+func VenueNameGTE(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGTE(FieldVenueName, v))
+}
+
+// VenueNameLT applies the LT predicate on the "venue_name" field.
+func VenueNameLT(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLT(FieldVenueName, v))
+}
+
+// VenueNameLTE applies the LTE predicate on the "venue_name" field.
+func VenueNameLTE(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLTE(FieldVenueName, v))
+}
+
+// VenueNameContains applies the Contains predicate on the "venue_name" field.
+func VenueNameContains(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldContains(FieldVenueName, v))
+}
+
+// VenueNameHasPrefix applies the HasPrefix predicate on the "venue_name" field.
+func VenueNameHasPrefix(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldHasPrefix(FieldVenueName, v))
+}
+
+// VenueNameHasSuffix applies the HasSuffix predicate on the "venue_name" field.
+func VenueNameHasSuffix(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldHasSuffix(FieldVenueName, v))
+}
+
+// VenueNameIsNil applies the IsNil predicate on the "venue_name" field.
+func VenueNameIsNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldIsNull(FieldVenueName))
+}
+
+// VenueNameNotNil applies the NotNil predicate on the "venue_name" field.
+func VenueNameNotNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotNull(FieldVenueName))
+}
+
+// VenueNameEqualFold applies the EqualFold predicate on the "venue_name" field.
+func VenueNameEqualFold(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEqualFold(FieldVenueName, v))
+}
+
+// VenueNameContainsFold applies the ContainsFold predicate on the "venue_name" field.
+func VenueNameContainsFold(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldContainsFold(FieldVenueName, v))
+}
+
+// PlaceNameEQ applies the EQ predicate on the "place_name" field.
+func PlaceNameEQ(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldPlaceName, v))
+}
+
+// PlaceNameNEQ applies the NEQ predicate on the "place_name" field.
+func PlaceNameNEQ(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNEQ(FieldPlaceName, v))
+}
+
+// PlaceNameIn applies the In predicate on the "place_name" field.
+func PlaceNameIn(vs ...string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldIn(FieldPlaceName, vs...))
+}
+
+// PlaceNameNotIn applies the NotIn predicate on the "place_name" field.
+func PlaceNameNotIn(vs ...string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotIn(FieldPlaceName, vs...))
+}
+
+// PlaceNameGT applies the GT predicate on the "place_name" field.
+func PlaceNameGT(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGT(FieldPlaceName, v))
+}
+
+// PlaceNameGTE applies the GTE predicate on the "place_name" field.
+func PlaceNameGTE(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGTE(FieldPlaceName, v))
+}
+
+// PlaceNameLT applies the LT predicate on the "place_name" field.
+func PlaceNameLT(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLT(FieldPlaceName, v))
+}
+
+// PlaceNameLTE applies the LTE predicate on the "place_name" field.
+func PlaceNameLTE(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLTE(FieldPlaceName, v))
+}
+
+// PlaceNameContains applies the Contains predicate on the "place_name" field.
+func PlaceNameContains(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldContains(FieldPlaceName, v))
+}
+
+// PlaceNameHasPrefix applies the HasPrefix predicate on the "place_name" field.
+func PlaceNameHasPrefix(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldHasPrefix(FieldPlaceName, v))
+}
+
+// PlaceNameHasSuffix applies the HasSuffix predicate on the "place_name" field.
+func PlaceNameHasSuffix(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldHasSuffix(FieldPlaceName, v))
+}
+
+// PlaceNameIsNil applies the IsNil predicate on the "place_name" field.
+func PlaceNameIsNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldIsNull(FieldPlaceName))
+}
+
+// PlaceNameNotNil applies the NotNil predicate on the "place_name" field.
+func PlaceNameNotNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotNull(FieldPlaceName))
+}
+
+// PlaceNameEqualFold applies the EqualFold predicate on the "place_name" field.
+func PlaceNameEqualFold(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEqualFold(FieldPlaceName, v))
+}
+
+// PlaceNameContainsFold applies the ContainsFold predicate on the "place_name" field.
+func PlaceNameContainsFold(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldContainsFold(FieldPlaceName, v))
 }
 
 // HasMembers applies the HasEdge predicate on the "members" edge.

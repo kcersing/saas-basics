@@ -120,6 +120,21 @@ func SignEndTime(v time.Time) predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldEQ(FieldSignEndTime, v))
 }
 
+// MemberName applies equality check predicate on the "member_name" field. It's identical to MemberNameEQ.
+func MemberName(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldMemberName, v))
+}
+
+// MemberProductName applies equality check predicate on the "member_product_name" field. It's identical to MemberProductNameEQ.
+func MemberProductName(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldMemberProductName, v))
+}
+
+// MemberProductPropertyName applies equality check predicate on the "member_product_property_name" field. It's identical to MemberProductPropertyNameEQ.
+func MemberProductPropertyName(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldMemberProductPropertyName, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldEQ(FieldCreatedAt, v))
@@ -753,6 +768,231 @@ func SignEndTimeIsNil() predicate.ScheduleMember {
 // SignEndTimeNotNil applies the NotNil predicate on the "sign_end_time" field.
 func SignEndTimeNotNil() predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldNotNull(FieldSignEndTime))
+}
+
+// MemberNameEQ applies the EQ predicate on the "member_name" field.
+func MemberNameEQ(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldMemberName, v))
+}
+
+// MemberNameNEQ applies the NEQ predicate on the "member_name" field.
+func MemberNameNEQ(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNEQ(FieldMemberName, v))
+}
+
+// MemberNameIn applies the In predicate on the "member_name" field.
+func MemberNameIn(vs ...string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIn(FieldMemberName, vs...))
+}
+
+// MemberNameNotIn applies the NotIn predicate on the "member_name" field.
+func MemberNameNotIn(vs ...string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotIn(FieldMemberName, vs...))
+}
+
+// MemberNameGT applies the GT predicate on the "member_name" field.
+func MemberNameGT(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGT(FieldMemberName, v))
+}
+
+// MemberNameGTE applies the GTE predicate on the "member_name" field.
+func MemberNameGTE(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGTE(FieldMemberName, v))
+}
+
+// MemberNameLT applies the LT predicate on the "member_name" field.
+func MemberNameLT(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLT(FieldMemberName, v))
+}
+
+// MemberNameLTE applies the LTE predicate on the "member_name" field.
+func MemberNameLTE(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLTE(FieldMemberName, v))
+}
+
+// MemberNameContains applies the Contains predicate on the "member_name" field.
+func MemberNameContains(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldContains(FieldMemberName, v))
+}
+
+// MemberNameHasPrefix applies the HasPrefix predicate on the "member_name" field.
+func MemberNameHasPrefix(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldHasPrefix(FieldMemberName, v))
+}
+
+// MemberNameHasSuffix applies the HasSuffix predicate on the "member_name" field.
+func MemberNameHasSuffix(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldHasSuffix(FieldMemberName, v))
+}
+
+// MemberNameIsNil applies the IsNil predicate on the "member_name" field.
+func MemberNameIsNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIsNull(FieldMemberName))
+}
+
+// MemberNameNotNil applies the NotNil predicate on the "member_name" field.
+func MemberNameNotNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotNull(FieldMemberName))
+}
+
+// MemberNameEqualFold applies the EqualFold predicate on the "member_name" field.
+func MemberNameEqualFold(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEqualFold(FieldMemberName, v))
+}
+
+// MemberNameContainsFold applies the ContainsFold predicate on the "member_name" field.
+func MemberNameContainsFold(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldContainsFold(FieldMemberName, v))
+}
+
+// MemberProductNameEQ applies the EQ predicate on the "member_product_name" field.
+func MemberProductNameEQ(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldMemberProductName, v))
+}
+
+// MemberProductNameNEQ applies the NEQ predicate on the "member_product_name" field.
+func MemberProductNameNEQ(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNEQ(FieldMemberProductName, v))
+}
+
+// MemberProductNameIn applies the In predicate on the "member_product_name" field.
+func MemberProductNameIn(vs ...string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIn(FieldMemberProductName, vs...))
+}
+
+// MemberProductNameNotIn applies the NotIn predicate on the "member_product_name" field.
+func MemberProductNameNotIn(vs ...string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotIn(FieldMemberProductName, vs...))
+}
+
+// MemberProductNameGT applies the GT predicate on the "member_product_name" field.
+func MemberProductNameGT(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGT(FieldMemberProductName, v))
+}
+
+// MemberProductNameGTE applies the GTE predicate on the "member_product_name" field.
+func MemberProductNameGTE(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGTE(FieldMemberProductName, v))
+}
+
+// MemberProductNameLT applies the LT predicate on the "member_product_name" field.
+func MemberProductNameLT(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLT(FieldMemberProductName, v))
+}
+
+// MemberProductNameLTE applies the LTE predicate on the "member_product_name" field.
+func MemberProductNameLTE(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLTE(FieldMemberProductName, v))
+}
+
+// MemberProductNameContains applies the Contains predicate on the "member_product_name" field.
+func MemberProductNameContains(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldContains(FieldMemberProductName, v))
+}
+
+// MemberProductNameHasPrefix applies the HasPrefix predicate on the "member_product_name" field.
+func MemberProductNameHasPrefix(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldHasPrefix(FieldMemberProductName, v))
+}
+
+// MemberProductNameHasSuffix applies the HasSuffix predicate on the "member_product_name" field.
+func MemberProductNameHasSuffix(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldHasSuffix(FieldMemberProductName, v))
+}
+
+// MemberProductNameIsNil applies the IsNil predicate on the "member_product_name" field.
+func MemberProductNameIsNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIsNull(FieldMemberProductName))
+}
+
+// MemberProductNameNotNil applies the NotNil predicate on the "member_product_name" field.
+func MemberProductNameNotNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotNull(FieldMemberProductName))
+}
+
+// MemberProductNameEqualFold applies the EqualFold predicate on the "member_product_name" field.
+func MemberProductNameEqualFold(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEqualFold(FieldMemberProductName, v))
+}
+
+// MemberProductNameContainsFold applies the ContainsFold predicate on the "member_product_name" field.
+func MemberProductNameContainsFold(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldContainsFold(FieldMemberProductName, v))
+}
+
+// MemberProductPropertyNameEQ applies the EQ predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameEQ(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameNEQ applies the NEQ predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameNEQ(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNEQ(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameIn applies the In predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameIn(vs ...string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIn(FieldMemberProductPropertyName, vs...))
+}
+
+// MemberProductPropertyNameNotIn applies the NotIn predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameNotIn(vs ...string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotIn(FieldMemberProductPropertyName, vs...))
+}
+
+// MemberProductPropertyNameGT applies the GT predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameGT(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGT(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameGTE applies the GTE predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameGTE(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGTE(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameLT applies the LT predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameLT(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLT(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameLTE applies the LTE predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameLTE(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLTE(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameContains applies the Contains predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameContains(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldContains(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameHasPrefix applies the HasPrefix predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameHasPrefix(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldHasPrefix(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameHasSuffix applies the HasSuffix predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameHasSuffix(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldHasSuffix(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameIsNil applies the IsNil predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameIsNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIsNull(FieldMemberProductPropertyName))
+}
+
+// MemberProductPropertyNameNotNil applies the NotNil predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameNotNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotNull(FieldMemberProductPropertyName))
+}
+
+// MemberProductPropertyNameEqualFold applies the EqualFold predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameEqualFold(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEqualFold(FieldMemberProductPropertyName, v))
+}
+
+// MemberProductPropertyNameContainsFold applies the ContainsFold predicate on the "member_product_property_name" field.
+func MemberProductPropertyNameContainsFold(v string) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldContainsFold(FieldMemberProductPropertyName, v))
 }
 
 // HasSchedule applies the HasEdge predicate on the "schedule" edge.

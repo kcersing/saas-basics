@@ -36,6 +36,8 @@ const (
 	FieldSignStartTime = "sign_start_time"
 	// FieldSignEndTime holds the string denoting the sign_end_time field in the database.
 	FieldSignEndTime = "sign_end_time"
+	// FieldCoachName holds the string denoting the coach_name field in the database.
+	FieldCoachName = "coach_name"
 	// EdgeSchedule holds the string denoting the schedule edge name in mutations.
 	EdgeSchedule = "schedule"
 	// Table holds the table name of the schedulecoach in the database.
@@ -63,6 +65,7 @@ var Columns = []string{
 	FieldEndTime,
 	FieldSignStartTime,
 	FieldSignEndTime,
+	FieldCoachName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -155,6 +158,11 @@ func BySignStartTime(opts ...sql.OrderTermOption) OrderOption {
 // BySignEndTime orders the results by the sign_end_time field.
 func BySignEndTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSignEndTime, opts...).ToFunc()
+}
+
+// ByCoachName orders the results by the coach_name field.
+func ByCoachName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCoachName, opts...).ToFunc()
 }
 
 // ByScheduleField orders the results by schedule field.

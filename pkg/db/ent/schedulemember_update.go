@@ -290,6 +290,66 @@ func (smu *ScheduleMemberUpdate) ClearSignEndTime() *ScheduleMemberUpdate {
 	return smu
 }
 
+// SetMemberName sets the "member_name" field.
+func (smu *ScheduleMemberUpdate) SetMemberName(s string) *ScheduleMemberUpdate {
+	smu.mutation.SetMemberName(s)
+	return smu
+}
+
+// SetNillableMemberName sets the "member_name" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableMemberName(s *string) *ScheduleMemberUpdate {
+	if s != nil {
+		smu.SetMemberName(*s)
+	}
+	return smu
+}
+
+// ClearMemberName clears the value of the "member_name" field.
+func (smu *ScheduleMemberUpdate) ClearMemberName() *ScheduleMemberUpdate {
+	smu.mutation.ClearMemberName()
+	return smu
+}
+
+// SetMemberProductName sets the "member_product_name" field.
+func (smu *ScheduleMemberUpdate) SetMemberProductName(s string) *ScheduleMemberUpdate {
+	smu.mutation.SetMemberProductName(s)
+	return smu
+}
+
+// SetNillableMemberProductName sets the "member_product_name" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableMemberProductName(s *string) *ScheduleMemberUpdate {
+	if s != nil {
+		smu.SetMemberProductName(*s)
+	}
+	return smu
+}
+
+// ClearMemberProductName clears the value of the "member_product_name" field.
+func (smu *ScheduleMemberUpdate) ClearMemberProductName() *ScheduleMemberUpdate {
+	smu.mutation.ClearMemberProductName()
+	return smu
+}
+
+// SetMemberProductPropertyName sets the "member_product_property_name" field.
+func (smu *ScheduleMemberUpdate) SetMemberProductPropertyName(s string) *ScheduleMemberUpdate {
+	smu.mutation.SetMemberProductPropertyName(s)
+	return smu
+}
+
+// SetNillableMemberProductPropertyName sets the "member_product_property_name" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableMemberProductPropertyName(s *string) *ScheduleMemberUpdate {
+	if s != nil {
+		smu.SetMemberProductPropertyName(*s)
+	}
+	return smu
+}
+
+// ClearMemberProductPropertyName clears the value of the "member_product_property_name" field.
+func (smu *ScheduleMemberUpdate) ClearMemberProductPropertyName() *ScheduleMemberUpdate {
+	smu.mutation.ClearMemberProductPropertyName()
+	return smu
+}
+
 // SetSchedule sets the "schedule" edge to the Schedule entity.
 func (smu *ScheduleMemberUpdate) SetSchedule(s *Schedule) *ScheduleMemberUpdate {
 	return smu.SetScheduleID(s.ID)
@@ -428,6 +488,24 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if smu.mutation.SignEndTimeCleared() {
 		_spec.ClearField(schedulemember.FieldSignEndTime, field.TypeTime)
+	}
+	if value, ok := smu.mutation.MemberName(); ok {
+		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)
+	}
+	if smu.mutation.MemberNameCleared() {
+		_spec.ClearField(schedulemember.FieldMemberName, field.TypeString)
+	}
+	if value, ok := smu.mutation.MemberProductName(); ok {
+		_spec.SetField(schedulemember.FieldMemberProductName, field.TypeString, value)
+	}
+	if smu.mutation.MemberProductNameCleared() {
+		_spec.ClearField(schedulemember.FieldMemberProductName, field.TypeString)
+	}
+	if value, ok := smu.mutation.MemberProductPropertyName(); ok {
+		_spec.SetField(schedulemember.FieldMemberProductPropertyName, field.TypeString, value)
+	}
+	if smu.mutation.MemberProductPropertyNameCleared() {
+		_spec.ClearField(schedulemember.FieldMemberProductPropertyName, field.TypeString)
 	}
 	if smu.mutation.ScheduleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -739,6 +817,66 @@ func (smuo *ScheduleMemberUpdateOne) ClearSignEndTime() *ScheduleMemberUpdateOne
 	return smuo
 }
 
+// SetMemberName sets the "member_name" field.
+func (smuo *ScheduleMemberUpdateOne) SetMemberName(s string) *ScheduleMemberUpdateOne {
+	smuo.mutation.SetMemberName(s)
+	return smuo
+}
+
+// SetNillableMemberName sets the "member_name" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableMemberName(s *string) *ScheduleMemberUpdateOne {
+	if s != nil {
+		smuo.SetMemberName(*s)
+	}
+	return smuo
+}
+
+// ClearMemberName clears the value of the "member_name" field.
+func (smuo *ScheduleMemberUpdateOne) ClearMemberName() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearMemberName()
+	return smuo
+}
+
+// SetMemberProductName sets the "member_product_name" field.
+func (smuo *ScheduleMemberUpdateOne) SetMemberProductName(s string) *ScheduleMemberUpdateOne {
+	smuo.mutation.SetMemberProductName(s)
+	return smuo
+}
+
+// SetNillableMemberProductName sets the "member_product_name" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableMemberProductName(s *string) *ScheduleMemberUpdateOne {
+	if s != nil {
+		smuo.SetMemberProductName(*s)
+	}
+	return smuo
+}
+
+// ClearMemberProductName clears the value of the "member_product_name" field.
+func (smuo *ScheduleMemberUpdateOne) ClearMemberProductName() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearMemberProductName()
+	return smuo
+}
+
+// SetMemberProductPropertyName sets the "member_product_property_name" field.
+func (smuo *ScheduleMemberUpdateOne) SetMemberProductPropertyName(s string) *ScheduleMemberUpdateOne {
+	smuo.mutation.SetMemberProductPropertyName(s)
+	return smuo
+}
+
+// SetNillableMemberProductPropertyName sets the "member_product_property_name" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableMemberProductPropertyName(s *string) *ScheduleMemberUpdateOne {
+	if s != nil {
+		smuo.SetMemberProductPropertyName(*s)
+	}
+	return smuo
+}
+
+// ClearMemberProductPropertyName clears the value of the "member_product_property_name" field.
+func (smuo *ScheduleMemberUpdateOne) ClearMemberProductPropertyName() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearMemberProductPropertyName()
+	return smuo
+}
+
 // SetSchedule sets the "schedule" edge to the Schedule entity.
 func (smuo *ScheduleMemberUpdateOne) SetSchedule(s *Schedule) *ScheduleMemberUpdateOne {
 	return smuo.SetScheduleID(s.ID)
@@ -907,6 +1045,24 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	}
 	if smuo.mutation.SignEndTimeCleared() {
 		_spec.ClearField(schedulemember.FieldSignEndTime, field.TypeTime)
+	}
+	if value, ok := smuo.mutation.MemberName(); ok {
+		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)
+	}
+	if smuo.mutation.MemberNameCleared() {
+		_spec.ClearField(schedulemember.FieldMemberName, field.TypeString)
+	}
+	if value, ok := smuo.mutation.MemberProductName(); ok {
+		_spec.SetField(schedulemember.FieldMemberProductName, field.TypeString, value)
+	}
+	if smuo.mutation.MemberProductNameCleared() {
+		_spec.ClearField(schedulemember.FieldMemberProductName, field.TypeString)
+	}
+	if value, ok := smuo.mutation.MemberProductPropertyName(); ok {
+		_spec.SetField(schedulemember.FieldMemberProductPropertyName, field.TypeString, value)
+	}
+	if smuo.mutation.MemberProductPropertyNameCleared() {
+		_spec.ClearField(schedulemember.FieldMemberProductPropertyName, field.TypeString)
 	}
 	if smuo.mutation.ScheduleCleared() {
 		edge := &sqlgraph.EdgeSpec{
