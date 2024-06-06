@@ -2,7 +2,6 @@ package admin
 
 import (
 	"fmt"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
@@ -63,7 +62,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		return "", errors.Wrap(err, "时间转换失败")
 	}
 
-	errChan := make(chan error)
+	errChan := make(chan error, 99)
 	defer close(errChan)
 	var wg sync.WaitGroup
 	wg.Add(5)
@@ -132,6 +131,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 			err = errors.Wrap(err, "创建 Order Item 失败")
 			errChan <- err
 		}
+
 		wg.Done()
 	}()
 
@@ -145,6 +145,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 			err = errors.Wrap(err, "创建Order Amount失败")
 			errChan <- err
 		}
+
 		wg.Done()
 	}()
 
@@ -160,8 +161,8 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 				err = errors.Wrap(err, "创建Order Sales失败")
 				errChan <- err
 			}
-
 		}
+
 		wg.Done()
 	}()
 
@@ -173,41 +174,39 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		property = append(property, req.ClassProperty...)
 		if len(property) > 0 {
 			for _, v := range property {
-				//if v.Property > 0 {
-				p, err := o.db.ProductProperty.Query().
-					Where(productproperty.IDEQ(v.Property)).
-					First(o.ctx)
-
-				if err != nil {
-					err = errors.Wrap(err, "查询Product Property失败")
-					errChan <- err
+				if v.Property > 0 {
+					p, err := o.db.ProductProperty.Query().
+						Where(productproperty.IDEQ(v.Property)).
+						First(o.ctx)
+					if err != nil {
+						err = errors.Wrap(err, "查询Product Property失败")
+						errChan <- err
+					} else {
+						venues, err := p.QueryVenues().All(o.ctx)
+						if err != nil {
+							err = errors.Wrap(err, "查询Product Property venues失败")
+							errChan <- err
+						}
+						_, err = tx.MemberProductProperty.Create().
+							SetMemberID(members.ID).
+							SetOwner(mp).
+							SetType(p.Type).
+							SetPropertyID(p.ID).
+							SetPrice(p.Price).
+							SetDuration(p.Duration).
+							SetLength(p.Length).
+							SetName(p.Name).
+							SetCount(v.Quantity).
+							SetCountSurplus(v.Quantity).
+							AddVenues(venues...).
+							SetStatus(0).
+							Save(o.ctx)
+						if err != nil {
+							err = errors.Wrap(err, "创建Member Product Property失败")
+							errChan <- err
+						}
+					}
 				}
-
-				venues, err := p.QueryVenues().All(o.ctx)
-				if err != nil {
-					err = errors.Wrap(err, "查询Product Property venues失败")
-					errChan <- err
-				}
-
-				_, err = tx.MemberProductProperty.Create().
-					SetMemberID(members.ID).
-					SetOwner(mp).
-					SetType(p.Type).
-					SetPropertyID(p.ID).
-					SetPrice(p.Price).
-					SetDuration(p.Duration).
-					SetLength(p.Length).
-					SetName(p.Name).
-					SetCount(v.Quantity).
-					SetCountSurplus(v.Quantity).
-					AddVenues(venues...).
-					SetStatus(0).
-					Save(o.ctx)
-				if err != nil {
-					err = errors.Wrap(err, "创建Member Product Property失败")
-					errChan <- err
-				}
-				//}
 			}
 		}
 		wg.Done()
@@ -237,7 +236,6 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 				Where(contract.IDEQ(v)).
 				First(o.ctx)
 			if err != nil {
-
 				err = errors.Wrap(err, "合同 Contract 失败")
 				errChan <- err
 			}
@@ -250,7 +248,6 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 				SetStatus(0).
 				Save(o.ctx)
 			if err != nil {
-
 				err = errors.Wrap(err, "创建Member Contract "+string(i)+" 失败")
 				errChan <- err
 			}
@@ -261,7 +258,6 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 				Save(o.ctx)
 
 			if err != nil {
-
 				err = errors.Wrap(err, "创建 Member Contract Content 失败")
 				errChan <- err
 			}
@@ -269,23 +265,18 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 
 		wg.Done()
 	}()
-	hlog.Info("--------------------")
-	hlog.Info(errChan)
-	hlog.Info("--------------------")
+
 	wg.Wait()
 	select {
 	case result := <-errChan:
-		hlog.Info(errChan)
-		if result != nil {
-			err1 := rollback(tx, result)
-			if err1 != nil {
-				return "", err1
-			}
-			return "", err
+		err1 := rollback(tx, result)
+		if err1 != nil {
+			return "", err1
 		}
 		return "", result
 	default:
 	}
+
 	if err = tx.Commit(); err != nil {
 		return "", err
 	}

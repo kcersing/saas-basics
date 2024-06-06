@@ -1,9 +1,12 @@
 package infras
 
 import (
+	"fmt"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	hertzlogrus "github.com/hertz-contrib/obs-opentelemetry/logging/logrus"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"log"
 	"os"
 	"path"
 	"runtime"
@@ -24,11 +27,14 @@ func InitLogger() {
 	fileName := path.Join(logFilePath, logFileName)
 	if _, err := os.Stat(fileName); err != nil {
 		if _, err := os.Create(fileName); err != nil {
-			panic(err)
+			log.Println(err.Error())
+			return
 		}
 	}
-
 	logger := hertzlogrus.NewLogger()
+	logger.Logger().SetReportCaller(true)
+	// hlog will warp a layer of logrus, so you need to calculate the depth of the caller file separately.
+	logger.Logger().AddHook(NewCustomHook(10))
 	// Provides compression and deletion
 	lumberjackLogger := &lumberjack.Logger{
 		Filename:   fileName,
@@ -39,10 +45,38 @@ func InitLogger() {
 	}
 	if runtime.GOOS == "linux" {
 		logger.SetOutput(lumberjackLogger)
-		logger.SetLevel(hlog.LevelWarn)
+		logger.SetLevel(hlog.LevelDebug)
 	} else {
+		logger.SetOutput(lumberjackLogger)
 		logger.SetLevel(hlog.LevelDebug)
 	}
 
 	hlog.SetLogger(logger)
+
+}
+
+// CustomHook Custom Hook for processing logs
+type CustomHook struct {
+	CallerDepth int
+}
+
+func NewCustomHook(depth int) *CustomHook {
+	return &CustomHook{
+		CallerDepth: depth,
+	}
+}
+
+func (hook *CustomHook) Levels() []logrus.Level {
+	return logrus.AllLevels
+}
+
+func (hook *CustomHook) Fire(entry *logrus.Entry) error {
+	// Get caller information and specify depth
+	pc, file, line, ok := runtime.Caller(hook.CallerDepth)
+	if ok {
+		funcName := runtime.FuncForPC(pc).Name()
+		entry.Data["caller"] = fmt.Sprintf("%s:%d %s", file, line, funcName)
+	}
+
+	return nil
 }
