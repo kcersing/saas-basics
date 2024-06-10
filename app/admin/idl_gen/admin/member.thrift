@@ -25,6 +25,11 @@ struct MemberListReq {
     4:  optional string mobile (api.raw = "mobile")
 }
 
+struct MemberSearchReq {
+    1:  string value (api.raw = "value")
+    2:  string option (api.raw = "option")
+}
+
 
 service MemberService {
 
@@ -42,5 +47,8 @@ service MemberService {
 
   // 更新用户状态
   base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/member/status")
+
+  // 更新用户状态
+  base.NilResponse MemberSearch(1: MemberSearchReq req) (api.post = "/api/admin/member/search")
 
 }

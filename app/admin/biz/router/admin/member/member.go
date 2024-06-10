@@ -26,6 +26,7 @@ func Register(r *server.Hertz) {
 				_member.POST("/create", append(_creatememberMw(), member.CreateMember)...)
 				_member.GET("/info", append(_memberinfoMw(), member.MemberInfo)...)
 				_member.POST("/list", append(_memberlistMw(), member.MemberList)...)
+				_member.POST("/search", append(_membersearchMw(), member.MemberSearch)...)
 				_member.POST("/status", append(_updatememberstatusMw(), member.UpdateMemberStatus)...)
 				_member.POST("/update", append(_updatememberMw(), member.UpdateMember)...)
 			}

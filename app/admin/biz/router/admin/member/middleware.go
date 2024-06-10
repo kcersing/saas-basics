@@ -64,3 +64,8 @@ func _updatememberMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _membersearchMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
