@@ -144,11 +144,16 @@ func MemberSearch(ctx context.Context, c *app.RequestContext) {
 	var req member.MemberSearchReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	info, err := admin.NewMember(ctx, c).Search(req.Option, req.Value)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }

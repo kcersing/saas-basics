@@ -10,6 +10,7 @@ type Member interface {
 	Info(ID int64) (memberInfo *MemberInfo, err error)
 	ChangePassword(ID int64, oldPassword, newPassword string) error
 	UpdateStatus(ID int64, status int64) error
+	Search(option string, value string) (memberInfo *MemberInfo, err error)
 }
 
 type CreateOrUpdateMemberReq struct {
@@ -43,7 +44,6 @@ type MemberInfo struct {
 	Condition int64  `json:"condition"`
 	Status    int64  `json:"status"`
 	Username  string `json:"username"`
-	Password  string `json:"password"`
 	Nickname  string `json:"nickname"`
 	Mobile    string `json:"mobile"`
 	Email     string `json:"email"`

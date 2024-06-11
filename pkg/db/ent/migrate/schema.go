@@ -428,6 +428,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
+		{Name: "sn", Type: field.TypeString, Nullable: true, Comment: "编号"},
 		{Name: "property_id", Type: field.TypeInt64, Nullable: true, Comment: "属性ID"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
@@ -446,7 +447,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_property_member_product_member_product_propertys",
-				Columns:    []*schema.Column{MemberProductPropertyColumns[13]},
+				Columns:    []*schema.Column{MemberProductPropertyColumns[14]},
 				RefColumns: []*schema.Column{MemberProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -455,7 +456,7 @@ var (
 			{
 				Name:    "memberproductproperty_property_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductPropertyColumns[5]},
+				Columns: []*schema.Column{MemberProductPropertyColumns[6]},
 			},
 			{
 				Name:    "memberproductproperty_member_id",
@@ -465,7 +466,7 @@ var (
 			{
 				Name:    "memberproductproperty_member_product_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductPropertyColumns[13]},
+				Columns: []*schema.Column{MemberProductPropertyColumns[14]},
 			},
 		},
 	}

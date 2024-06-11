@@ -80,6 +80,11 @@ func MemberProductID(v int64) predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldEQ(FieldMemberProductID, v))
 }
 
+// Sn applies equality check predicate on the "sn" field. It's identical to SnEQ.
+func Sn(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEQ(FieldSn, v))
+}
+
 // PropertyID applies equality check predicate on the "property_id" field. It's identical to PropertyIDEQ.
 func PropertyID(v int64) predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldEQ(FieldPropertyID, v))
@@ -328,6 +333,81 @@ func MemberProductIDIsNil() predicate.MemberProductProperty {
 // MemberProductIDNotNil applies the NotNil predicate on the "member_product_id" field.
 func MemberProductIDNotNil() predicate.MemberProductProperty {
 	return predicate.MemberProductProperty(sql.FieldNotNull(FieldMemberProductID))
+}
+
+// SnEQ applies the EQ predicate on the "sn" field.
+func SnEQ(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEQ(FieldSn, v))
+}
+
+// SnNEQ applies the NEQ predicate on the "sn" field.
+func SnNEQ(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNEQ(FieldSn, v))
+}
+
+// SnIn applies the In predicate on the "sn" field.
+func SnIn(vs ...string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldIn(FieldSn, vs...))
+}
+
+// SnNotIn applies the NotIn predicate on the "sn" field.
+func SnNotIn(vs ...string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNotIn(FieldSn, vs...))
+}
+
+// SnGT applies the GT predicate on the "sn" field.
+func SnGT(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldGT(FieldSn, v))
+}
+
+// SnGTE applies the GTE predicate on the "sn" field.
+func SnGTE(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldGTE(FieldSn, v))
+}
+
+// SnLT applies the LT predicate on the "sn" field.
+func SnLT(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldLT(FieldSn, v))
+}
+
+// SnLTE applies the LTE predicate on the "sn" field.
+func SnLTE(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldLTE(FieldSn, v))
+}
+
+// SnContains applies the Contains predicate on the "sn" field.
+func SnContains(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldContains(FieldSn, v))
+}
+
+// SnHasPrefix applies the HasPrefix predicate on the "sn" field.
+func SnHasPrefix(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldHasPrefix(FieldSn, v))
+}
+
+// SnHasSuffix applies the HasSuffix predicate on the "sn" field.
+func SnHasSuffix(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldHasSuffix(FieldSn, v))
+}
+
+// SnIsNil applies the IsNil predicate on the "sn" field.
+func SnIsNil() predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldIsNull(FieldSn))
+}
+
+// SnNotNil applies the NotNil predicate on the "sn" field.
+func SnNotNil() predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldNotNull(FieldSn))
+}
+
+// SnEqualFold applies the EqualFold predicate on the "sn" field.
+func SnEqualFold(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldEqualFold(FieldSn, v))
+}
+
+// SnContainsFold applies the ContainsFold predicate on the "sn" field.
+func SnContainsFold(v string) predicate.MemberProductProperty {
+	return predicate.MemberProductProperty(sql.FieldContainsFold(FieldSn, v))
 }
 
 // PropertyIDEQ applies the EQ predicate on the "property_id" field.

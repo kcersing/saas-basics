@@ -13041,6 +13041,7 @@ type MemberProductPropertyMutation struct {
 	addstatus        *int64
 	member_id        *int64
 	addmember_id     *int64
+	sn               *string
 	property_id      *int64
 	addproperty_id   *int64
 	_type            *string
@@ -13429,6 +13430,55 @@ func (m *MemberProductPropertyMutation) MemberProductIDCleared() bool {
 func (m *MemberProductPropertyMutation) ResetMemberProductID() {
 	m.owner = nil
 	delete(m.clearedFields, memberproductproperty.FieldMemberProductID)
+}
+
+// SetSn sets the "sn" field.
+func (m *MemberProductPropertyMutation) SetSn(s string) {
+	m.sn = &s
+}
+
+// Sn returns the value of the "sn" field in the mutation.
+func (m *MemberProductPropertyMutation) Sn() (r string, exists bool) {
+	v := m.sn
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSn returns the old "sn" field's value of the MemberProductProperty entity.
+// If the MemberProductProperty object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberProductPropertyMutation) OldSn(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSn is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSn requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSn: %w", err)
+	}
+	return oldValue.Sn, nil
+}
+
+// ClearSn clears the value of the "sn" field.
+func (m *MemberProductPropertyMutation) ClearSn() {
+	m.sn = nil
+	m.clearedFields[memberproductproperty.FieldSn] = struct{}{}
+}
+
+// SnCleared returns if the "sn" field was cleared in this mutation.
+func (m *MemberProductPropertyMutation) SnCleared() bool {
+	_, ok := m.clearedFields[memberproductproperty.FieldSn]
+	return ok
+}
+
+// ResetSn resets all changes to the "sn" field.
+func (m *MemberProductPropertyMutation) ResetSn() {
+	m.sn = nil
+	delete(m.clearedFields, memberproductproperty.FieldSn)
 }
 
 // SetPropertyID sets the "property_id" field.
@@ -14077,7 +14127,7 @@ func (m *MemberProductPropertyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberProductPropertyMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.created_at != nil {
 		fields = append(fields, memberproductproperty.FieldCreatedAt)
 	}
@@ -14092,6 +14142,9 @@ func (m *MemberProductPropertyMutation) Fields() []string {
 	}
 	if m.owner != nil {
 		fields = append(fields, memberproductproperty.FieldMemberProductID)
+	}
+	if m.sn != nil {
+		fields = append(fields, memberproductproperty.FieldSn)
 	}
 	if m.property_id != nil {
 		fields = append(fields, memberproductproperty.FieldPropertyID)
@@ -14135,6 +14188,8 @@ func (m *MemberProductPropertyMutation) Field(name string) (ent.Value, bool) {
 		return m.MemberID()
 	case memberproductproperty.FieldMemberProductID:
 		return m.MemberProductID()
+	case memberproductproperty.FieldSn:
+		return m.Sn()
 	case memberproductproperty.FieldPropertyID:
 		return m.PropertyID()
 	case memberproductproperty.FieldType:
@@ -14170,6 +14225,8 @@ func (m *MemberProductPropertyMutation) OldField(ctx context.Context, name strin
 		return m.OldMemberID(ctx)
 	case memberproductproperty.FieldMemberProductID:
 		return m.OldMemberProductID(ctx)
+	case memberproductproperty.FieldSn:
+		return m.OldSn(ctx)
 	case memberproductproperty.FieldPropertyID:
 		return m.OldPropertyID(ctx)
 	case memberproductproperty.FieldType:
@@ -14229,6 +14286,13 @@ func (m *MemberProductPropertyMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMemberProductID(v)
+		return nil
+	case memberproductproperty.FieldSn:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSn(v)
 		return nil
 	case memberproductproperty.FieldPropertyID:
 		v, ok := value.(int64)
@@ -14424,6 +14488,9 @@ func (m *MemberProductPropertyMutation) ClearedFields() []string {
 	if m.FieldCleared(memberproductproperty.FieldMemberProductID) {
 		fields = append(fields, memberproductproperty.FieldMemberProductID)
 	}
+	if m.FieldCleared(memberproductproperty.FieldSn) {
+		fields = append(fields, memberproductproperty.FieldSn)
+	}
 	if m.FieldCleared(memberproductproperty.FieldPropertyID) {
 		fields = append(fields, memberproductproperty.FieldPropertyID)
 	}
@@ -14471,6 +14538,9 @@ func (m *MemberProductPropertyMutation) ClearField(name string) error {
 	case memberproductproperty.FieldMemberProductID:
 		m.ClearMemberProductID()
 		return nil
+	case memberproductproperty.FieldSn:
+		m.ClearSn()
+		return nil
 	case memberproductproperty.FieldPropertyID:
 		m.ClearPropertyID()
 		return nil
@@ -14517,6 +14587,9 @@ func (m *MemberProductPropertyMutation) ResetField(name string) error {
 		return nil
 	case memberproductproperty.FieldMemberProductID:
 		m.ResetMemberProductID()
+		return nil
+	case memberproductproperty.FieldSn:
+		m.ResetSn()
 		return nil
 	case memberproductproperty.FieldPropertyID:
 		m.ResetPropertyID()

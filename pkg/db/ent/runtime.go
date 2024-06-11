@@ -382,11 +382,11 @@ func init() {
 	// memberproductproperty.DefaultStatus holds the default value on creation for the status field.
 	memberproductproperty.DefaultStatus = memberproductpropertyDescStatus.Default.(int64)
 	// memberproductpropertyDescCount is the schema descriptor for count field.
-	memberproductpropertyDescCount := memberproductpropertyFields[7].Descriptor()
+	memberproductpropertyDescCount := memberproductpropertyFields[8].Descriptor()
 	// memberproductproperty.DefaultCount holds the default value on creation for the count field.
 	memberproductproperty.DefaultCount = memberproductpropertyDescCount.Default.(int64)
 	// memberproductpropertyDescCountSurplus is the schema descriptor for count_surplus field.
-	memberproductpropertyDescCountSurplus := memberproductpropertyFields[8].Descriptor()
+	memberproductpropertyDescCountSurplus := memberproductpropertyFields[9].Descriptor()
 	// memberproductproperty.DefaultCountSurplus holds the default value on creation for the count_surplus field.
 	memberproductproperty.DefaultCountSurplus = memberproductpropertyDescCountSurplus.Default.(int64)
 	menuMixin := schema.Menu{}.Mixin()

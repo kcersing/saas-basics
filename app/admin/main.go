@@ -34,6 +34,7 @@ func init() {
 	infras.InitCache()
 	infras.NewInitDatabase().InitDatabaseUser()
 	infras.NewInitDatabase().InitDatabaseDict()
+	infras.NewInitDatabase().InsertDatabaseMenuData()
 	infras.NewInitDatabase().InitDatabaseApi()
 	minio.Init()
 }

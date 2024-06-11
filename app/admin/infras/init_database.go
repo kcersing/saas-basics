@@ -104,7 +104,31 @@ func (I *InitDatabase) InitDatabaseDict() error {
 
 	return nil
 }
+func (I *InitDatabase) InsertDatabaseMenuData() error {
+	// add lock to avoid duplicate initialization
+	I.Mu.Lock()
+	defer I.Mu.Unlock()
+	ctx := context.Background()
+	// judge if the initialization had been done
+	check, err := I.DB.Menu.Query().Count(ctx)
+	if check > 0 {
+		return errors.New("Database had been initialized")
+	}
 
+	err = I.insertMenuData(ctx)
+	if err != nil {
+		hlog.Error("insert menu data failed", err)
+		err = errors.Wrap(err, "insert menu data failed")
+		return err
+	}
+	err = I.insertRoleMenuAuthorityData(ctx)
+	if err != nil {
+		hlog.Error("insert role menu authority data failed", err)
+		err = errors.Wrap(err, "insert role menu authority data failed")
+		return err
+	}
+	return nil
+}
 func (I *InitDatabase) InitDatabaseApi() error {
 	// add lock to avoid duplicate initialization
 	I.Mu.Lock()
@@ -116,25 +140,13 @@ func (I *InitDatabase) InitDatabaseApi() error {
 		return errors.New("Database had been initialized")
 	}
 
-	err = I.insertMenuData(ctx)
-	if err != nil {
-		hlog.Error("insert menu data failed", err)
-		err = errors.Wrap(err, "insert menu data failed")
-		return err
-	}
-
 	err = I.insertApiData(ctx)
 	if err != nil {
 		hlog.Error("insert api data failed", err)
 		err = errors.Wrap(err, "insert api data failed")
 		return err
 	}
-	err = I.insertRoleMenuAuthorityData(ctx)
-	if err != nil {
-		hlog.Error("insert role menu authority data failed", err)
-		err = errors.Wrap(err, "insert role menu authority data failed")
-		return err
-	}
+
 	err = I.insertCasbinPoliciesData(ctx)
 	if err != nil {
 		hlog.Error("insert casbin policies data failed", err)
@@ -204,6 +216,7 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 		{Method: "POST", Path: "/api/admin/member/list", Description: "member.MemberList", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/member/status", Description: "member.UpdateMemberStatus", Group: "admin"},
 		{Method: "POST", Path: "/api/admin/member/update", Description: "member.UpdateMember", Group: "admin"},
+		{Method: "POST", Path: "/api/admin/member/search", Description: "member.MemberSearch", Group: "admin"},
 
 		{Method: "POST", Path: "/api/admin/order/create", Description: "order.CreateOrder", Group: "admin"},
 		{Method: "GET", Path: "/api/admin/order/info", Description: "order.GetOrderById", Group: "admin"},

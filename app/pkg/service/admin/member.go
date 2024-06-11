@@ -11,8 +11,11 @@ import (
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberproduct"
+	"saas/pkg/db/ent/memberproductproperty"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/encrypt"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -114,10 +117,64 @@ func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, er
 }
 
 func (m Member) Info(ID int64) (memberInfo *do.MemberInfo, err error) {
-	//TODO implement me
-	panic("implement me")
+
+	memberInfo = new(do.MemberInfo)
+
+	userInterface, exist := m.cache.Get("memberInfo" + strconv.Itoa(int(ID)))
+	if exist {
+		if u, ok := userInterface.(*do.MemberInfo); ok {
+			return u, nil
+		}
+	}
+	memberEnt, err := m.db.Member.Query().Where(member.IDEQ(ID)).First(m.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get member failed")
+		return memberInfo, err
+	}
+	err = copier.Copy(&memberInfo, &memberEnt)
+	if err != nil {
+		err = errors.Wrap(err, "copy member info failed")
+		return memberInfo, err
+	}
+
+	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(memberInfo.ID)), &memberInfo, 1, 72*time.Hour)
+	return
+
 }
 
+func (m Member) Search(option string, value string) (memberInfo *do.MemberInfo, err error) {
+	memberInfo = new(do.MemberInfo)
+	switch option {
+	case "1":
+		id, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return memberInfo, errors.New("会员账号ID不正确")
+		}
+		return m.Info(id)
+	case "2":
+		id, err := m.db.Member.Query().Where(member.Mobile(value)).FirstID(m.ctx)
+		if err != nil {
+			return memberInfo, errors.New("未找到该会员")
+		}
+		return m.Info(id)
+	case "3":
+		p, err := m.db.MemberProduct.Query().Where(memberproduct.SnEQ(value)).First(m.ctx)
+		if err != nil {
+			return memberInfo, errors.New("未找到该会员商品")
+		}
+		return m.Info(p.MemberID)
+	case "4":
+		p, err := m.db.MemberProductProperty.Query().Where(memberproductproperty.SnEQ(value)).First(m.ctx)
+		if err != nil {
+			return memberInfo, errors.New("未找到该会员商品属性")
+		}
+		return m.Info(p.MemberID)
+	default:
+		return memberInfo, errors.New("搜索类型不规范")
+	}
+
+	panic("implement me")
+}
 func (m Member) ChangePassword(ID int64, oldPassword, newPassword string) error {
 
 	targetMember, err := m.db.Member.Query().Where(member.IDEQ(ID)).First(m.ctx)

@@ -110,6 +110,26 @@ func (mppu *MemberProductPropertyUpdate) ClearMemberProductID() *MemberProductPr
 	return mppu
 }
 
+// SetSn sets the "sn" field.
+func (mppu *MemberProductPropertyUpdate) SetSn(s string) *MemberProductPropertyUpdate {
+	mppu.mutation.SetSn(s)
+	return mppu
+}
+
+// SetNillableSn sets the "sn" field if the given value is not nil.
+func (mppu *MemberProductPropertyUpdate) SetNillableSn(s *string) *MemberProductPropertyUpdate {
+	if s != nil {
+		mppu.SetSn(*s)
+	}
+	return mppu
+}
+
+// ClearSn clears the value of the "sn" field.
+func (mppu *MemberProductPropertyUpdate) ClearSn() *MemberProductPropertyUpdate {
+	mppu.mutation.ClearSn()
+	return mppu
+}
+
 // SetPropertyID sets the "property_id" field.
 func (mppu *MemberProductPropertyUpdate) SetPropertyID(i int64) *MemberProductPropertyUpdate {
 	mppu.mutation.ResetPropertyID()
@@ -444,6 +464,12 @@ func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, er
 	if mppu.mutation.MemberIDCleared() {
 		_spec.ClearField(memberproductproperty.FieldMemberID, field.TypeInt64)
 	}
+	if value, ok := mppu.mutation.Sn(); ok {
+		_spec.SetField(memberproductproperty.FieldSn, field.TypeString, value)
+	}
+	if mppu.mutation.SnCleared() {
+		_spec.ClearField(memberproductproperty.FieldSn, field.TypeString)
+	}
 	if value, ok := mppu.mutation.PropertyID(); ok {
 		_spec.SetField(memberproductproperty.FieldPropertyID, field.TypeInt64, value)
 	}
@@ -681,6 +707,26 @@ func (mppuo *MemberProductPropertyUpdateOne) SetNillableMemberProductID(i *int64
 // ClearMemberProductID clears the value of the "member_product_id" field.
 func (mppuo *MemberProductPropertyUpdateOne) ClearMemberProductID() *MemberProductPropertyUpdateOne {
 	mppuo.mutation.ClearMemberProductID()
+	return mppuo
+}
+
+// SetSn sets the "sn" field.
+func (mppuo *MemberProductPropertyUpdateOne) SetSn(s string) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.SetSn(s)
+	return mppuo
+}
+
+// SetNillableSn sets the "sn" field if the given value is not nil.
+func (mppuo *MemberProductPropertyUpdateOne) SetNillableSn(s *string) *MemberProductPropertyUpdateOne {
+	if s != nil {
+		mppuo.SetSn(*s)
+	}
+	return mppuo
+}
+
+// ClearSn clears the value of the "sn" field.
+func (mppuo *MemberProductPropertyUpdateOne) ClearSn() *MemberProductPropertyUpdateOne {
+	mppuo.mutation.ClearSn()
 	return mppuo
 }
 
@@ -1047,6 +1093,12 @@ func (mppuo *MemberProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if mppuo.mutation.MemberIDCleared() {
 		_spec.ClearField(memberproductproperty.FieldMemberID, field.TypeInt64)
+	}
+	if value, ok := mppuo.mutation.Sn(); ok {
+		_spec.SetField(memberproductproperty.FieldSn, field.TypeString, value)
+	}
+	if mppuo.mutation.SnCleared() {
+		_spec.ClearField(memberproductproperty.FieldSn, field.TypeString)
 	}
 	if value, ok := mppuo.mutation.PropertyID(); ok {
 		_spec.SetField(memberproductproperty.FieldPropertyID, field.TypeInt64, value)

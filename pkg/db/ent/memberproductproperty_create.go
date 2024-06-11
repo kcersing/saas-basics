@@ -92,6 +92,20 @@ func (mppc *MemberProductPropertyCreate) SetNillableMemberProductID(i *int64) *M
 	return mppc
 }
 
+// SetSn sets the "sn" field.
+func (mppc *MemberProductPropertyCreate) SetSn(s string) *MemberProductPropertyCreate {
+	mppc.mutation.SetSn(s)
+	return mppc
+}
+
+// SetNillableSn sets the "sn" field if the given value is not nil.
+func (mppc *MemberProductPropertyCreate) SetNillableSn(s *string) *MemberProductPropertyCreate {
+	if s != nil {
+		mppc.SetSn(*s)
+	}
+	return mppc
+}
+
 // SetPropertyID sets the "property_id" field.
 func (mppc *MemberProductPropertyCreate) SetPropertyID(i int64) *MemberProductPropertyCreate {
 	mppc.mutation.SetPropertyID(i)
@@ -356,6 +370,10 @@ func (mppc *MemberProductPropertyCreate) createSpec() (*MemberProductProperty, *
 	if value, ok := mppc.mutation.MemberID(); ok {
 		_spec.SetField(memberproductproperty.FieldMemberID, field.TypeInt64, value)
 		_node.MemberID = value
+	}
+	if value, ok := mppc.mutation.Sn(); ok {
+		_spec.SetField(memberproductproperty.FieldSn, field.TypeString, value)
+		_node.Sn = value
 	}
 	if value, ok := mppc.mutation.PropertyID(); ok {
 		_spec.SetField(memberproductproperty.FieldPropertyID, field.TypeInt64, value)
