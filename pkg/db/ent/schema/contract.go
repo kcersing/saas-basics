@@ -37,7 +37,7 @@ func (Contract) Indexes() []ent.Index {
 
 func (Contract) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "contracts"},
+		entsql.Annotation{Table: "contracts", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

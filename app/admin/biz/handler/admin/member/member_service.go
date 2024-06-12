@@ -80,7 +80,6 @@ func MemberList(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
 	var listReq do.MemberListReq
 	err = copier.Copy(&listReq, &req)
 	if err != nil {

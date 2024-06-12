@@ -45,7 +45,7 @@ func (OrderAmount) Indexes() []ent.Index {
 
 func (OrderAmount) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "order_amount"},
+		entsql.Annotation{Table: "order_amount", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

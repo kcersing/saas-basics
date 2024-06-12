@@ -48,7 +48,7 @@ func (ProductProperty) Indexes() []ent.Index {
 
 func (ProductProperty) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "product_property"},
+		entsql.Annotation{Table: "product_property", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

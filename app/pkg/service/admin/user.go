@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
+	"saas/app/admin/pkg/minio"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/predicate"
@@ -111,7 +112,8 @@ func (u User) UserInfo(id int64) (userInfo *do.UserInfo, err error) {
 			userInfo.RoleValue = role.Value
 		}
 	}
-	u.cache.SetWithTTL("userInfo"+strconv.Itoa(int(userInfo.ID)), &userInfo, 1, 72*time.Hour)
+	userInfo.Avatar = minio.URLconvert(u.ctx, u.c, userInfo.Avatar)
+	u.cache.SetWithTTL("userInfo"+strconv.Itoa(int(userInfo.ID)), &userInfo, 1, 1*time.Hour)
 	return
 }
 
@@ -149,6 +151,10 @@ func (u User) List(req do.UserListReq) (userList []*do.UserInfo, total int, err 
 	if err != nil {
 		err = errors.Wrap(err, "copy user info failed")
 		return userList, 0, err
+	}
+
+	for _, v := range userList {
+		v.Avatar = minio.URLconvert(u.ctx, u.c, v.Avatar)
 	}
 	total, _ = u.db.User.Query().Where(predicates...).Count(u.ctx)
 	return

@@ -3,11 +3,11 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
+	"saas/app/admin/pkg/minio"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/member"
@@ -30,8 +30,12 @@ type Member struct {
 }
 
 func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
+	tx, err := m.db.Tx(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "starting a transaction:")
+	}
 	password, _ := encrypt.Crypt(req.Mobile)
-	noe, err := m.db.Member.Create().
+	noe, err := tx.Member.Create().
 		SetPassword(password).
 		SetAvatar(req.Avatar).
 		SetMobile(req.Mobile).
@@ -43,7 +47,7 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		SetCreateID(req.CreateId).
 		Save(m.ctx)
 	if err != nil {
-		err = errors.Wrap(err, "create user failed")
+		err = rollback(tx, errors.Wrap(err, "create user failed"))
 		return err
 	}
 
@@ -57,7 +61,7 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 	} else {
 		gender = 2
 	}
-	_, err = m.db.MemberDetails.Create().
+	_, err = tx.MemberDetails.Create().
 		SetNickname(req.Nickname).
 		SetGender(gender).
 		SetBirthday(parsedTime).
@@ -65,7 +69,10 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		Save(m.ctx)
 
 	if err != nil {
-		err = errors.Wrap(err, "create user failed")
+		err = rollback(tx, errors.Wrap(err, "create user failed"))
+		return err
+	}
+	if err = tx.Commit(); err != nil {
 		return err
 	}
 	return nil
@@ -97,7 +104,6 @@ func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, er
 	if req.Name != "" {
 		predicates = append(predicates, member.NameEQ(req.Name))
 	}
-	hlog.Info(req.PageSize)
 	lists, err := m.db.Member.Query().Where(predicates...).
 		Order(ent.Desc(member.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -112,6 +118,11 @@ func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, er
 		err = errors.Wrap(err, "copy Member info failed")
 		return resp, 0, err
 	}
+
+	for _, v := range resp {
+		v.Avatar = minio.URLconvert(m.ctx, m.c, v.Avatar)
+	}
+
 	total, _ = m.db.Member.Query().Where(predicates...).Count(m.ctx)
 	return
 }
@@ -136,8 +147,8 @@ func (m Member) Info(ID int64) (memberInfo *do.MemberInfo, err error) {
 		err = errors.Wrap(err, "copy member info failed")
 		return memberInfo, err
 	}
-
-	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(memberInfo.ID)), &memberInfo, 1, 72*time.Hour)
+	memberInfo.Avatar = minio.URLconvert(m.ctx, m.c, memberInfo.Avatar)
+	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(memberInfo.ID)), &memberInfo, 1, 1*time.Hour)
 	return
 
 }
@@ -173,7 +184,6 @@ func (m Member) Search(option string, value string) (memberInfo *do.MemberInfo, 
 		return memberInfo, errors.New("搜索类型不规范")
 	}
 
-	panic("implement me")
 }
 func (m Member) ChangePassword(ID int64, oldPassword, newPassword string) error {
 

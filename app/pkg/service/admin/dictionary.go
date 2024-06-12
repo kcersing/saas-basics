@@ -276,7 +276,7 @@ func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *do.Dic
 	detail.UpdatedAt = dictDetail.UpdatedAt.Format(time.DateTime)
 
 	// set cache
-	d.cache.SetWithTTL(fmt.Sprintf("Dictionary%s-key%s", dictName, key), detail, 1, 72*time.Hour)
+	d.cache.SetWithTTL(fmt.Sprintf("Dictionary%s-key%s", dictName, key), detail, 1, 1*time.Hour)
 	return detail, nil
 }
 

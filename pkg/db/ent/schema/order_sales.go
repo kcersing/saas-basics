@@ -48,7 +48,7 @@ func (OrderSales) Indexes() []ent.Index {
 
 func (OrderSales) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "order_sales"},
+		entsql.Annotation{Table: "order_sales", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

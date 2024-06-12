@@ -103,7 +103,7 @@ func (MemberDetails) Indexes() []ent.Index {
 
 func (MemberDetails) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "member_details"},
+		entsql.Annotation{Table: "member_details", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

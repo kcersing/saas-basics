@@ -47,7 +47,7 @@ func (OrderPay) Indexes() []ent.Index {
 
 func (OrderPay) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "order_pay"},
+		entsql.Annotation{Table: "order_pay", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

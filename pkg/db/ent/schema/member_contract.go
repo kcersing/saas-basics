@@ -52,7 +52,7 @@ func (MemberContract) Indexes() []ent.Index {
 
 func (MemberContract) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "member_contract"},
+		entsql.Annotation{Table: "member_contract", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

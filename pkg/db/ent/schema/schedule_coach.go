@@ -64,7 +64,7 @@ func (ScheduleCoach) Indexes() []ent.Index {
 
 func (ScheduleCoach) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "schedule_coach"},
+		entsql.Annotation{Table: "schedule_coach", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

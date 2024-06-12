@@ -1,8 +1,11 @@
 package admin
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/pkg/errors"
+	"saas/app/admin/config"
+	"saas/app/admin/pkg/minio"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/contract"
@@ -187,6 +190,9 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 							err = errors.Wrap(err, "查询Product Property venues失败")
 							errChan <- err
 						}
+
+						//ppid := strconv.FormatInt(v.Property, 10)
+						//mpid := strconv.FormatInt(mp.ID, 10)
 						_, err = tx.MemberProductProperty.Create().
 							SetMemberID(members.ID).
 							SetOwner(mp).
@@ -201,6 +207,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 							AddVenues(venues...).
 							SetStatus(0).
 							Save(o.ctx)
+						//tx.MemberProductProperty.Update().Where(memberproductproperty.ID(pp.ID)).SetSn(pp.ID).Save()
 						if err != nil {
 							err = errors.Wrap(err, "创建Member Product Property失败")
 							errChan <- err
@@ -213,24 +220,25 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 	}()
 
 	go func() {
-		//filename := minio.NewFileName(0, time.Now().UnixMicro()) + ".png"
-		//buffer := new(bytes.Buffer)
-		//// 将字符串写入Buffer
-		//_, err = buffer.WriteString(req.SignImg)
-		//if err != nil {
-		//
-		//	err = errors.Wrap(err, "写入失败")
-		//	errChan <- err
-		//}
-		//uploadinfo, err := minio.PutToBucketByBuf(o.ctx, config.GlobalServerConfig.Minio.ImgBucketName, filename, buffer)
-		//
-		//if err != nil {
-		//
-		//	err = errors.Wrap(err, "签名上传失败")
-		//	errChan <- err
-		//}
-		//signImg := config.GlobalServerConfig.Minio.ImgBucketName + "/" + uploadinfo.Key
 		signImg := ""
+		if req.SignImg != "" {
+			filename := minio.NewFileName(0, time.Now().UnixMicro()) + ".png"
+			buffer := new(bytes.Buffer)
+			// 将字符串写入Buffer
+			_, err = buffer.WriteString(req.SignImg)
+			if err != nil {
+				err = errors.Wrap(err, "写入失败")
+				errChan <- err
+			}
+			uploadInfo, err := minio.PutToBucketByBuf(o.ctx, config.GlobalServerConfig.Minio.ImgBucketName, filename, buffer)
+
+			if err != nil {
+				err = errors.Wrap(err, "签名上传失败")
+				errChan <- err
+			}
+			signImg = config.GlobalServerConfig.Minio.ImgBucketName + "/" + uploadInfo.Key
+		}
+
 		for i, v := range req.Contract {
 			contracts, err := o.db.Contract.Query().
 				Where(contract.IDEQ(v)).

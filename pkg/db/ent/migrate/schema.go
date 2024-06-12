@@ -1232,7 +1232,8 @@ func init() {
 		Table: "sys_apis",
 	}
 	ContractsTable.Annotation = &entsql.Annotation{
-		Table: "contracts",
+		Table:   "contracts",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	SysDictionariesTable.Annotation = &entsql.Annotation{
 		Table: "sys_dictionaries",
@@ -1246,39 +1247,47 @@ func init() {
 	EntryLogsTable.ForeignKeys[2].RefTable = SysUsersTable
 	EntryLogsTable.ForeignKeys[3].RefTable = VenueTable
 	EntryLogsTable.Annotation = &entsql.Annotation{
-		Table: "entry_logs",
+		Table:   "entry_logs",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	SysLogsTable.Annotation = &entsql.Annotation{
 		Table: "sys_logs",
 	}
 	MemberTable.Annotation = &entsql.Annotation{
-		Table: "member",
+		Table:   "member",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	MemberContractTable.ForeignKeys[0].RefTable = MemberTable
 	MemberContractTable.ForeignKeys[1].RefTable = MemberProductTable
 	MemberContractTable.ForeignKeys[2].RefTable = OrderTable
 	MemberContractTable.Annotation = &entsql.Annotation{
-		Table: "member_contract",
+		Table:   "member_contract",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	MemberContractContentTable.ForeignKeys[0].RefTable = MemberContractTable
 	MemberContractContentTable.Annotation = &entsql.Annotation{
-		Table: "member_contract_content",
+		Table:   "member_contract_content",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	MemberDetailsTable.ForeignKeys[0].RefTable = MemberTable
 	MemberDetailsTable.Annotation = &entsql.Annotation{
-		Table: "member_details",
+		Table:   "member_details",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	MemberNoteTable.ForeignKeys[0].RefTable = MemberTable
 	MemberNoteTable.Annotation = &entsql.Annotation{
-		Table: "member_note",
+		Table:   "member_note",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	MemberProductTable.ForeignKeys[0].RefTable = MemberTable
 	MemberProductTable.Annotation = &entsql.Annotation{
-		Table: "member_product",
+		Table:   "member_product",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	MemberProductPropertyTable.ForeignKeys[0].RefTable = MemberProductTable
 	MemberProductPropertyTable.Annotation = &entsql.Annotation{
-		Table: "member_product_property",
+		Table:   "member_product_property",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	SysMenusTable.ForeignKeys[0].RefTable = SysMenusTable
 	SysMenusTable.Annotation = &entsql.Annotation{
@@ -1295,57 +1304,70 @@ func init() {
 	OrderTable.ForeignKeys[1].RefTable = SysUsersTable
 	OrderTable.ForeignKeys[2].RefTable = VenueTable
 	OrderTable.Annotation = &entsql.Annotation{
-		Table: "order",
+		Table:   "order",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	OrderAmountTable.ForeignKeys[0].RefTable = OrderTable
 	OrderAmountTable.Annotation = &entsql.Annotation{
-		Table: "order_amount",
+		Table:   "order_amount",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	OrderItemTable.ForeignKeys[0].RefTable = OrderTable
 	OrderItemTable.Annotation = &entsql.Annotation{
-		Table: "order_item",
+		Table:   "order_item",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	OrderPayTable.ForeignKeys[0].RefTable = OrderTable
 	OrderPayTable.Annotation = &entsql.Annotation{
-		Table: "order_pay",
+		Table:   "order_pay",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	OrderSalesTable.ForeignKeys[0].RefTable = OrderTable
 	OrderSalesTable.Annotation = &entsql.Annotation{
-		Table: "order_sales",
+		Table:   "order_sales",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	ProductTable.Annotation = &entsql.Annotation{
-		Table: "product",
+		Table:   "product",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	ProductPropertyTable.Annotation = &entsql.Annotation{
-		Table: "product_property",
+		Table:   "product_property",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	SysRolesTable.Annotation = &entsql.Annotation{
 		Table: "sys_roles",
 	}
 	ScheduleTable.Annotation = &entsql.Annotation{
-		Table: "schedule",
+		Table:   "schedule",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	ScheduleCoachTable.ForeignKeys[0].RefTable = ScheduleTable
 	ScheduleCoachTable.Annotation = &entsql.Annotation{
-		Table: "schedule_coach",
+		Table:   "schedule_coach",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	ScheduleMemberTable.ForeignKeys[0].RefTable = ScheduleTable
 	ScheduleMemberTable.Annotation = &entsql.Annotation{
-		Table: "schedule_member",
+		Table:   "schedule_member",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	SysTokensTable.ForeignKeys[0].RefTable = SysUsersTable
 	SysTokensTable.Annotation = &entsql.Annotation{
 		Table: "sys_tokens",
 	}
 	SysUsersTable.Annotation = &entsql.Annotation{
-		Table: "sys_users",
+		Table:   "sys_users",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	VenueTable.Annotation = &entsql.Annotation{
-		Table: "venue",
+		Table:   "venue",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	VenuePlaceTable.ForeignKeys[0].RefTable = VenueTable
 	VenuePlaceTable.Annotation = &entsql.Annotation{
-		Table: "venue_place",
+		Table:   "venue_place",
+		Options: "AUTO_INCREMENT = 100000",
 	}
 	MemberProductPropertyVenuesTable.ForeignKeys[0].RefTable = MemberProductPropertyTable
 	MemberProductPropertyVenuesTable.ForeignKeys[1].RefTable = VenueTable

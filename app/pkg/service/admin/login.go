@@ -70,7 +70,7 @@ func (l *Login) getRoleInfo(roleID int64) (roleName, roleValue string, err error
 	}
 
 	for _, v := range roleData {
-		l.cache.SetWithTTL("roleData"+strconv.Itoa(int(v.ID)), v, 1, 24*time.Hour)
+		l.cache.SetWithTTL("roleData"+strconv.Itoa(int(v.ID)), v, 1, 1*time.Hour)
 		if v.ID == roleID {
 			roleName = v.Name
 			roleValue = v.Value

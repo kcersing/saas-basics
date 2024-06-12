@@ -61,7 +61,11 @@ func (MemberProduct) Indexes() []ent.Index {
 
 func (MemberProduct) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "member_product"},
+		entsql.Annotation{
+			Table: "member_product",
+			//OnDelete: entsql.Cascade,
+			Options: "AUTO_INCREMENT = 100000",
+		},
 		entsql.WithComments(true),
 	}
 }

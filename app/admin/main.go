@@ -46,7 +46,6 @@ func minioReverseProxy(c context.Context, ctx *app.RequestContext) {
 }
 
 func main() {
-
 	h := server.Default(
 		server.WithStreamBody(true),
 		server.WithHostPorts(fmt.Sprintf("%s:%d", config.GlobalServerConfig.Host, config.GlobalServerConfig.Port)),

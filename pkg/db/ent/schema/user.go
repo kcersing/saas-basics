@@ -63,7 +63,7 @@ func (User) Indexes() []ent.Index {
 
 func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "sys_users"},
+		entsql.Annotation{Table: "sys_users", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

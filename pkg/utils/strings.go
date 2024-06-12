@@ -21,7 +21,7 @@ func CreateCn() string {
 	}
 
 	// 格式化时间
-	formatted := time.Now().Format("20060102150405")
+	formatted := time.Now().Format("060102150405")
 
 	str := strconv.FormatInt(intFromBytes, 10)
 	return formatted + str[1:5]

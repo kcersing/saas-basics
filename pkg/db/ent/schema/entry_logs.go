@@ -60,7 +60,7 @@ func (EntryLogs) Indexes() []ent.Index {
 
 func (EntryLogs) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "entry_logs"},
+		entsql.Annotation{Table: "entry_logs", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

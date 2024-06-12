@@ -44,7 +44,7 @@ func (VenuePlace) Indexes() []ent.Index {
 
 func (VenuePlace) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "venue_place"},
+		entsql.Annotation{Table: "venue_place", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

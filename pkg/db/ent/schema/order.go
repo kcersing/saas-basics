@@ -62,7 +62,7 @@ func (Order) Indexes() []ent.Index {
 
 func (Order) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "order"},
+		entsql.Annotation{Table: "order", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

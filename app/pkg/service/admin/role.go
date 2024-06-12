@@ -38,7 +38,7 @@ func (r Role) Create(req do.RoleInfo) error {
 	}
 
 	// set roleEnt to cache
-	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(roleEnt.ID)), roleEnt, 1, 24*time.Hour)
+	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(roleEnt.ID)), roleEnt, 1, 1*time.Hour)
 	return nil
 }
 
@@ -58,7 +58,7 @@ func (r Role) Update(req do.RoleInfo) error {
 	}
 
 	// set roleEnt to cache
-	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(roleEnt.ID)), roleEnt, 1, 24*time.Hour)
+	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(roleEnt.ID)), roleEnt, 1, 1*time.Hour)
 	return nil
 }
 
@@ -107,7 +107,7 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *do.RoleInfo, err error) {
 		return nil, err
 	}
 	// set role to cache
-	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(ID)), roleEnt, 1, 24*time.Hour)
+	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(ID)), roleEnt, 1, 1*time.Hour)
 	// convert to RoleInfo
 	roleInfo = &do.RoleInfo{
 		ID:            roleEnt.ID,
@@ -157,7 +157,7 @@ func (r Role) UpdateStatus(ID int64, status int64) error {
 		return err
 	}
 	// set role to cache
-	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(ID)), roleEnt, 1, 24*time.Hour)
+	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(ID)), roleEnt, 1, 1*time.Hour)
 
 	return nil
 }

@@ -74,7 +74,7 @@ func (c Contract) ByID(id int64) (*do.ContractInfo, error) {
 		return nil, err
 	}
 	// set Content to cache
-	c.cache.SetWithTTL("contractData"+strconv.Itoa(int(id)), contentEnt, 1, 24*time.Hour)
+	c.cache.SetWithTTL("contractData"+strconv.Itoa(int(id)), contentEnt, 1, 1*time.Hour)
 	// convert to contentInfo
 	return &do.ContractInfo{
 		ID:      contentEnt.ID,

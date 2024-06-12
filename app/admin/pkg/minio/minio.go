@@ -104,7 +104,8 @@ func URLconvert(ctx context.Context, c *app.RequestContext, path string) (fullUR
 		return ""
 	}
 	u.Scheme = string(c.URI().Scheme())
-	u.Host = string(c.URI().Host())
+	//u.Host = string(c.URI().Host())
+	u.Host = "127.0.0.1:9039"
 	u.Path = "/src" + u.Path
 	return u.String()
 }
