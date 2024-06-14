@@ -80,6 +80,7 @@ func (s Schedule) ScheduleList(req do.ScheduleListReq) (resp []*do.ScheduleInfo,
 		resp[i].EndTime = v.EndTime.Format("15:04")
 
 		coach, _ := v.QueryCoachs().First(s.ctx)
+		resp[i].CoachID = coach.CoachID
 		resp[i].CoachName = coach.CoachName
 
 		if v.Type == "course" {

@@ -181,6 +181,7 @@ func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, total int64, err 
 		list = append(list, do.SysList{
 			ID:   v.ID,
 			Name: v.Name,
+			Key:  v.Mobile,
 		})
 	}
 	total = int64(len(list))

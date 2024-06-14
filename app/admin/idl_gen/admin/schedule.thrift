@@ -30,6 +30,17 @@ struct ListScheduleReq {
     7:  optional list<i64> property (api.raw = "property")
     8:  optional string startTime  (api.raw = "startTime")
 }
+struct ScheduleMemberReq {
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 pageSize (api.raw = "pageSize")
+    3:  optional i64 member (api.raw = "member")
+    4:  optional i64 schedule (api.raw = "schedule")
+}
+
+struct ScheduleMemberSubscribe{
+    1:  optional list<i64> member (api.raw = "member")
+    2:  optional i64 schedule (api.raw = "schedule")
+}
 
 service ScheduleService {
     base.NilResponse CreateSchedule(1: CreateOrUpdateScheduleReq req)  (api.post = "/api/admin/schedule/create")
@@ -43,4 +54,9 @@ service ScheduleService {
     base.NilResponse DateListSchedule(1: ListScheduleReq req )(api.post = "/api/admin/schedule/date-list")
 
     base.NilResponse GetScheduleById(1: base.IDReq req) (api.get = "/api/admin/schedule/info")
+
+    base.NilResponse GetScheduleMemberList(1: ScheduleMemberReq req) (api.post = "/api/admin/schedule/schedule-member-list")
+
+    base.NilResponse ScheduleMemberSubscribe(1: ScheduleMemberReq req) (api.post = "/api/admin/schedule/schedule-member-subscribe")
+
 }

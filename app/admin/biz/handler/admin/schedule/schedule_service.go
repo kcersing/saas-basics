@@ -160,3 +160,57 @@ func GetScheduleById(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, info, 0, "")
 	return
 }
+
+// GetScheduleMemberList .
+// @router /api/admin/schedule/schedule-member-list [POST]
+func GetScheduleMemberList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req schedule.ScheduleMemberReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var listReq do.ScheduleMemberListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	list, total, err := admin.NewSchedule(ctx, c).MemberList(listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
+}
+
+// ScheduleMemberSubscribe .
+// @router /api/admin/schedule/schedule-member-subscribe [POST]
+func ScheduleMemberSubscribe(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req schedule.ScheduleMemberReq
+
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	var createReq do.ScheduleMemberCreate
+	err = copier.Copy(&createReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	err = admin.NewSchedule(ctx, c).MemberCreate(createReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}

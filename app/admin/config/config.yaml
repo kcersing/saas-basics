@@ -19,8 +19,8 @@ Redis:
   Port: 6379
   Type: node
 MySql:
-  Host: root:X3MeAGAmPSZp8A3H@tcp(121.40.98.240:3306)/saas?parseTime=True
-  #  Host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
+  #  Host: root:X3MeAGAmPSZp8A3H@tcp(121.40.98.240:3306)/saas?parseTime=True
+  Host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
   Salt: YOUR_SALT
 
 Casbin:

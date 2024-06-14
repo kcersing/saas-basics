@@ -55,3 +55,13 @@ func _datelistscheduleMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _getschedulememberlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _schedulemembersubscribeMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

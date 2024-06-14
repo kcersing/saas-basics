@@ -11,7 +11,7 @@ type Schedule interface {
 	ScheduleUpdateStatus(ID int64, status int64) error
 	ScheduleInfo(ID int64) (roleInfo *ScheduleInfo, err error)
 
-	MemberCreate(req ScheduleMemberInfo) error
+	MemberCreate(req ScheduleMemberCreate) error
 	MemberUpdate(req ScheduleMemberInfo) error
 	MemberDelete(id int64) error
 	MemberList(req ScheduleMemberListReq) (resp []*ScheduleMemberInfo, total int, err error)
@@ -112,8 +112,15 @@ type ScheduleMemberInfo struct {
 	MemberProductName     string `json:"member_product_name"`
 	MemberProductItemName string `json:"member_product_property_name"`
 }
-
+type ScheduleMemberCreate struct {
+	Member   []int64 `json:"member"`
+	Schedule int64   `json:"schedule"`
+}
 type ScheduleMemberListReq struct {
+	Page     int64 `json:"page"`
+	PageSize int64 `json:"pageSize"`
+	Member   int64 `json:"member"`
+	Schedule int64 `json:"schedule"`
 }
 
 type ScheduleCoachInfo struct {
