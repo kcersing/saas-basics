@@ -170,8 +170,20 @@ func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, total int64, err 
 	if req.Mobile != "" {
 		predicates = append(predicates, member.Mobile(req.Mobile))
 	}
+	if req.Product > 0 {
 
-	lists, err := s.db.Member.Query().Where(predicates...).All(s.ctx)
+		ints, err := s.db.Debug().MemberProductProperty.Query().Where().GroupBy(member.FieldID).Ints(s.ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		var mids []int64
+		for _, v := range ints {
+			mids = append(mids, int64(v))
+		}
+		predicates = append(predicates, member.IDIn(mids...))
+	}
+	lists, err := s.db.Debug().Member.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")

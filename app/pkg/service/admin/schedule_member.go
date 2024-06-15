@@ -34,10 +34,10 @@ func (c Schedule) MemberCreate(req do.ScheduleMemberCreate) error {
 				SetMemberID(v).
 				SetType(sc.Type).
 				SetVenueID(sc.VenueID).
-				SetMemberProductID().
-				SetMemberProductName().
-				SetMemberProductPropertyID().
-				SetMemberProductPropertyName().
+				//SetMemberProductID().
+				//SetMemberProductName().
+				//SetMemberProductPropertyID().
+				//SetMemberProductPropertyName().
 				Save(c.ctx)
 		}
 
