@@ -32,6 +32,8 @@ const (
 	FieldPlaceID = "place_id"
 	// FieldNum holds the string denoting the num field in the database.
 	FieldNum = "num"
+	// FieldNumSurplus holds the string denoting the num_surplus field in the database.
+	FieldNumSurplus = "num_surplus"
 	// FieldDate holds the string denoting the date field in the database.
 	FieldDate = "date"
 	// FieldStartTime holds the string denoting the start_time field in the database.
@@ -80,6 +82,7 @@ var Columns = []string{
 	FieldPropertyID,
 	FieldPlaceID,
 	FieldNum,
+	FieldNumSurplus,
 	FieldDate,
 	FieldStartTime,
 	FieldEndTime,
@@ -163,6 +166,11 @@ func ByPlaceID(opts ...sql.OrderTermOption) OrderOption {
 // ByNum orders the results by the num field.
 func ByNum(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNum, opts...).ToFunc()
+}
+
+// ByNumSurplus orders the results by the num_surplus field.
+func ByNumSurplus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumSurplus, opts...).ToFunc()
 }
 
 // ByDate orders the results by the date field.

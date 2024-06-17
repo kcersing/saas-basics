@@ -245,6 +245,20 @@ func (smc *ScheduleMemberCreate) SetNillableMemberProductPropertyName(s *string)
 	return smc
 }
 
+// SetRemark sets the "remark" field.
+func (smc *ScheduleMemberCreate) SetRemark(s string) *ScheduleMemberCreate {
+	smc.mutation.SetRemark(s)
+	return smc
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableRemark(s *string) *ScheduleMemberCreate {
+	if s != nil {
+		smc.SetRemark(*s)
+	}
+	return smc
+}
+
 // SetID sets the "id" field.
 func (smc *ScheduleMemberCreate) SetID(i int64) *ScheduleMemberCreate {
 	smc.mutation.SetID(i)
@@ -420,6 +434,10 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 	if value, ok := smc.mutation.MemberProductPropertyName(); ok {
 		_spec.SetField(schedulemember.FieldMemberProductPropertyName, field.TypeString, value)
 		_node.MemberProductPropertyName = value
+	}
+	if value, ok := smc.mutation.Remark(); ok {
+		_spec.SetField(schedulemember.FieldRemark, field.TypeString, value)
+		_node.Remark = value
 	}
 	if nodes := smc.mutation.ScheduleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

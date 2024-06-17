@@ -831,6 +831,7 @@ var (
 		{Name: "property_id", Type: field.TypeInt64, Nullable: true, Comment: "课程"},
 		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
 		{Name: "num", Type: field.TypeInt64, Nullable: true, Comment: "上课人数"},
+		{Name: "num_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余可约人数"},
 		{Name: "date", Type: field.TypeString, Nullable: true, Comment: "日期"},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
@@ -858,12 +859,12 @@ var (
 			{
 				Name:    "schedule_start_time",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleColumns[11]},
+				Columns: []*schema.Column{ScheduleColumns[12]},
 			},
 			{
 				Name:    "schedule_end_time",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleColumns[12]},
+				Columns: []*schema.Column{ScheduleColumns[13]},
 			},
 		},
 	}
@@ -932,6 +933,7 @@ var (
 		{Name: "member_name", Type: field.TypeString, Nullable: true, Comment: "会员名称"},
 		{Name: "member_product_name", Type: field.TypeString, Nullable: true, Comment: "会员产品名称"},
 		{Name: "member_product_property_name", Type: field.TypeString, Nullable: true, Comment: "会员产品属性名称"},
+		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
 		{Name: "schedule_id", Type: field.TypeInt64, Nullable: true, Comment: "课程ID"},
 	}
 	// ScheduleMemberTable holds the schema information for the "schedule_member" table.
@@ -942,7 +944,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_member_schedule_members",
-				Columns:    []*schema.Column{ScheduleMemberColumns[16]},
+				Columns:    []*schema.Column{ScheduleMemberColumns[17]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -961,7 +963,7 @@ var (
 			{
 				Name:    "schedulemember_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleMemberColumns[16]},
+				Columns: []*schema.Column{ScheduleMemberColumns[17]},
 			},
 		},
 	}

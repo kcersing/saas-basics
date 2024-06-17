@@ -26017,6 +26017,8 @@ type ScheduleMutation struct {
 	addplace_id    *int64
 	num            *int64
 	addnum         *int64
+	num_surplus    *int64
+	addnum_surplus *int64
 	date           *string
 	start_time     *time.Time
 	end_time       *time.Time
@@ -26661,6 +26663,76 @@ func (m *ScheduleMutation) ResetNum() {
 	delete(m.clearedFields, schedule.FieldNum)
 }
 
+// SetNumSurplus sets the "num_surplus" field.
+func (m *ScheduleMutation) SetNumSurplus(i int64) {
+	m.num_surplus = &i
+	m.addnum_surplus = nil
+}
+
+// NumSurplus returns the value of the "num_surplus" field in the mutation.
+func (m *ScheduleMutation) NumSurplus() (r int64, exists bool) {
+	v := m.num_surplus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumSurplus returns the old "num_surplus" field's value of the Schedule entity.
+// If the Schedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMutation) OldNumSurplus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumSurplus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumSurplus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumSurplus: %w", err)
+	}
+	return oldValue.NumSurplus, nil
+}
+
+// AddNumSurplus adds i to the "num_surplus" field.
+func (m *ScheduleMutation) AddNumSurplus(i int64) {
+	if m.addnum_surplus != nil {
+		*m.addnum_surplus += i
+	} else {
+		m.addnum_surplus = &i
+	}
+}
+
+// AddedNumSurplus returns the value that was added to the "num_surplus" field in this mutation.
+func (m *ScheduleMutation) AddedNumSurplus() (r int64, exists bool) {
+	v := m.addnum_surplus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearNumSurplus clears the value of the "num_surplus" field.
+func (m *ScheduleMutation) ClearNumSurplus() {
+	m.num_surplus = nil
+	m.addnum_surplus = nil
+	m.clearedFields[schedule.FieldNumSurplus] = struct{}{}
+}
+
+// NumSurplusCleared returns if the "num_surplus" field was cleared in this mutation.
+func (m *ScheduleMutation) NumSurplusCleared() bool {
+	_, ok := m.clearedFields[schedule.FieldNumSurplus]
+	return ok
+}
+
+// ResetNumSurplus resets all changes to the "num_surplus" field.
+func (m *ScheduleMutation) ResetNumSurplus() {
+	m.num_surplus = nil
+	m.addnum_surplus = nil
+	delete(m.clearedFields, schedule.FieldNumSurplus)
+}
+
 // SetDate sets the "date" field.
 func (m *ScheduleMutation) SetDate(s string) {
 	m.date = &s
@@ -27167,7 +27239,7 @@ func (m *ScheduleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, schedule.FieldCreatedAt)
 	}
@@ -27194,6 +27266,9 @@ func (m *ScheduleMutation) Fields() []string {
 	}
 	if m.num != nil {
 		fields = append(fields, schedule.FieldNum)
+	}
+	if m.num_surplus != nil {
+		fields = append(fields, schedule.FieldNumSurplus)
 	}
 	if m.date != nil {
 		fields = append(fields, schedule.FieldDate)
@@ -27242,6 +27317,8 @@ func (m *ScheduleMutation) Field(name string) (ent.Value, bool) {
 		return m.PlaceID()
 	case schedule.FieldNum:
 		return m.Num()
+	case schedule.FieldNumSurplus:
+		return m.NumSurplus()
 	case schedule.FieldDate:
 		return m.Date()
 	case schedule.FieldStartTime:
@@ -27283,6 +27360,8 @@ func (m *ScheduleMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldPlaceID(ctx)
 	case schedule.FieldNum:
 		return m.OldNum(ctx)
+	case schedule.FieldNumSurplus:
+		return m.OldNumSurplus(ctx)
 	case schedule.FieldDate:
 		return m.OldDate(ctx)
 	case schedule.FieldStartTime:
@@ -27369,6 +27448,13 @@ func (m *ScheduleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetNum(v)
 		return nil
+	case schedule.FieldNumSurplus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumSurplus(v)
+		return nil
 	case schedule.FieldDate:
 		v, ok := value.(string)
 		if !ok {
@@ -27441,6 +27527,9 @@ func (m *ScheduleMutation) AddedFields() []string {
 	if m.addnum != nil {
 		fields = append(fields, schedule.FieldNum)
 	}
+	if m.addnum_surplus != nil {
+		fields = append(fields, schedule.FieldNumSurplus)
+	}
 	if m.addprice != nil {
 		fields = append(fields, schedule.FieldPrice)
 	}
@@ -27462,6 +27551,8 @@ func (m *ScheduleMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedPlaceID()
 	case schedule.FieldNum:
 		return m.AddedNum()
+	case schedule.FieldNumSurplus:
+		return m.AddedNumSurplus()
 	case schedule.FieldPrice:
 		return m.AddedPrice()
 	}
@@ -27508,6 +27599,13 @@ func (m *ScheduleMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddNum(v)
 		return nil
+	case schedule.FieldNumSurplus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddNumSurplus(v)
+		return nil
 	case schedule.FieldPrice:
 		v, ok := value.(float64)
 		if !ok {
@@ -27543,6 +27641,9 @@ func (m *ScheduleMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(schedule.FieldNum) {
 		fields = append(fields, schedule.FieldNum)
+	}
+	if m.FieldCleared(schedule.FieldNumSurplus) {
+		fields = append(fields, schedule.FieldNumSurplus)
 	}
 	if m.FieldCleared(schedule.FieldDate) {
 		fields = append(fields, schedule.FieldDate)
@@ -27600,6 +27701,9 @@ func (m *ScheduleMutation) ClearField(name string) error {
 	case schedule.FieldNum:
 		m.ClearNum()
 		return nil
+	case schedule.FieldNumSurplus:
+		m.ClearNumSurplus()
+		return nil
 	case schedule.FieldDate:
 		m.ClearDate()
 		return nil
@@ -27655,6 +27759,9 @@ func (m *ScheduleMutation) ResetField(name string) error {
 		return nil
 	case schedule.FieldNum:
 		m.ResetNum()
+		return nil
+	case schedule.FieldNumSurplus:
+		m.ResetNumSurplus()
 		return nil
 	case schedule.FieldDate:
 		m.ResetDate()
@@ -29095,6 +29202,7 @@ type ScheduleMemberMutation struct {
 	member_name                   *string
 	member_product_name           *string
 	member_product_property_name  *string
+	remark                        *string
 	clearedFields                 map[string]struct{}
 	schedule                      *int64
 	clearedschedule               bool
@@ -30070,6 +30178,55 @@ func (m *ScheduleMemberMutation) ResetMemberProductPropertyName() {
 	delete(m.clearedFields, schedulemember.FieldMemberProductPropertyName)
 }
 
+// SetRemark sets the "remark" field.
+func (m *ScheduleMemberMutation) SetRemark(s string) {
+	m.remark = &s
+}
+
+// Remark returns the value of the "remark" field in the mutation.
+func (m *ScheduleMemberMutation) Remark() (r string, exists bool) {
+	v := m.remark
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRemark returns the old "remark" field's value of the ScheduleMember entity.
+// If the ScheduleMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMemberMutation) OldRemark(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRemark is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRemark requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRemark: %w", err)
+	}
+	return oldValue.Remark, nil
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (m *ScheduleMemberMutation) ClearRemark() {
+	m.remark = nil
+	m.clearedFields[schedulemember.FieldRemark] = struct{}{}
+}
+
+// RemarkCleared returns if the "remark" field was cleared in this mutation.
+func (m *ScheduleMemberMutation) RemarkCleared() bool {
+	_, ok := m.clearedFields[schedulemember.FieldRemark]
+	return ok
+}
+
+// ResetRemark resets all changes to the "remark" field.
+func (m *ScheduleMemberMutation) ResetRemark() {
+	m.remark = nil
+	delete(m.clearedFields, schedulemember.FieldRemark)
+}
+
 // ClearSchedule clears the "schedule" edge to the Schedule entity.
 func (m *ScheduleMemberMutation) ClearSchedule() {
 	m.clearedschedule = true
@@ -30131,7 +30288,7 @@ func (m *ScheduleMemberMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleMemberMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, schedulemember.FieldCreatedAt)
 	}
@@ -30180,6 +30337,9 @@ func (m *ScheduleMemberMutation) Fields() []string {
 	if m.member_product_property_name != nil {
 		fields = append(fields, schedulemember.FieldMemberProductPropertyName)
 	}
+	if m.remark != nil {
+		fields = append(fields, schedulemember.FieldRemark)
+	}
 	return fields
 }
 
@@ -30220,6 +30380,8 @@ func (m *ScheduleMemberMutation) Field(name string) (ent.Value, bool) {
 		return m.MemberProductName()
 	case schedulemember.FieldMemberProductPropertyName:
 		return m.MemberProductPropertyName()
+	case schedulemember.FieldRemark:
+		return m.Remark()
 	}
 	return nil, false
 }
@@ -30261,6 +30423,8 @@ func (m *ScheduleMemberMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldMemberProductName(ctx)
 	case schedulemember.FieldMemberProductPropertyName:
 		return m.OldMemberProductPropertyName(ctx)
+	case schedulemember.FieldRemark:
+		return m.OldRemark(ctx)
 	}
 	return nil, fmt.Errorf("unknown ScheduleMember field %s", name)
 }
@@ -30381,6 +30545,13 @@ func (m *ScheduleMemberMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMemberProductPropertyName(v)
+		return nil
+	case schedulemember.FieldRemark:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRemark(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleMember field %s", name)
@@ -30517,6 +30688,9 @@ func (m *ScheduleMemberMutation) ClearedFields() []string {
 	if m.FieldCleared(schedulemember.FieldMemberProductPropertyName) {
 		fields = append(fields, schedulemember.FieldMemberProductPropertyName)
 	}
+	if m.FieldCleared(schedulemember.FieldRemark) {
+		fields = append(fields, schedulemember.FieldRemark)
+	}
 	return fields
 }
 
@@ -30573,6 +30747,9 @@ func (m *ScheduleMemberMutation) ClearField(name string) error {
 	case schedulemember.FieldMemberProductPropertyName:
 		m.ClearMemberProductPropertyName()
 		return nil
+	case schedulemember.FieldRemark:
+		m.ClearRemark()
+		return nil
 	}
 	return fmt.Errorf("unknown ScheduleMember nullable field %s", name)
 }
@@ -30628,6 +30805,9 @@ func (m *ScheduleMemberMutation) ResetField(name string) error {
 		return nil
 	case schedulemember.FieldMemberProductPropertyName:
 		m.ResetMemberProductPropertyName()
+		return nil
+	case schedulemember.FieldRemark:
+		m.ResetRemark()
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleMember field %s", name)

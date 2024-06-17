@@ -87,28 +87,21 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		//SetDevice(req.Device).
 		Save(o.ctx)
 	if err != nil {
-		err1 := rollback(tx, errors.Wrap(err, "创建 Order 失败"))
-		if err1 != nil {
-			return "", err1
-		}
-		return "", err
+		return "", rollback(tx, errors.Wrap(err, "创建 Order 失败"))
 	}
 	mp, err = tx.MemberProduct.Create().
 		SetProductID(req.Product).
 		// SetVenue (req.Venue).
 		SetSn(utils.CreateCn()).
 		SetMembers(members).
+		SetVenueID(venue.ID).
 		SetOrderID(one.ID).
 		SetValidityAt(assignAt).
 		SetName(products.Name).
 		SetStatus(0).
 		Save(o.ctx)
 	if err != nil {
-		err1 := rollback(tx, errors.Wrap(err, "创建会员产品失败"))
-		if err1 != nil {
-			return "", err1
-		}
-		return "", err
+		return "", rollback(tx, errors.Wrap(err, "创建会员产品失败"))
 	}
 	_, err = tx.Order.Update().
 		Where(order.ID(one.ID)).
@@ -117,11 +110,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		Save(o.ctx)
 
 	if err != nil {
-		err1 := rollback(tx, errors.Wrap(err, "创建 Order 失败"))
-		if err1 != nil {
-			return "", err1
-		}
-		return "", err
+		return "", rollback(tx, errors.Wrap(err, "创建 Order 失败"))
 	}
 
 	go func() {
@@ -277,11 +266,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 	wg.Wait()
 	select {
 	case result := <-errChan:
-		err1 := rollback(tx, result)
-		if err1 != nil {
-			return "", err1
-		}
-		return "", result
+		return "", rollback(tx, result)
 	default:
 	}
 

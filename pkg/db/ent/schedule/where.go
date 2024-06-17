@@ -100,6 +100,11 @@ func Num(v int64) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldNum, v))
 }
 
+// NumSurplus applies equality check predicate on the "num_surplus" field. It's identical to NumSurplusEQ.
+func NumSurplus(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldNumSurplus, v))
+}
+
 // Date applies equality check predicate on the "date" field. It's identical to DateEQ.
 func Date(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldDate, v))
@@ -613,6 +618,56 @@ func NumIsNil() predicate.Schedule {
 // NumNotNil applies the NotNil predicate on the "num" field.
 func NumNotNil() predicate.Schedule {
 	return predicate.Schedule(sql.FieldNotNull(FieldNum))
+}
+
+// NumSurplusEQ applies the EQ predicate on the "num_surplus" field.
+func NumSurplusEQ(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldNumSurplus, v))
+}
+
+// NumSurplusNEQ applies the NEQ predicate on the "num_surplus" field.
+func NumSurplusNEQ(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNEQ(FieldNumSurplus, v))
+}
+
+// NumSurplusIn applies the In predicate on the "num_surplus" field.
+func NumSurplusIn(vs ...int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldIn(FieldNumSurplus, vs...))
+}
+
+// NumSurplusNotIn applies the NotIn predicate on the "num_surplus" field.
+func NumSurplusNotIn(vs ...int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotIn(FieldNumSurplus, vs...))
+}
+
+// NumSurplusGT applies the GT predicate on the "num_surplus" field.
+func NumSurplusGT(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGT(FieldNumSurplus, v))
+}
+
+// NumSurplusGTE applies the GTE predicate on the "num_surplus" field.
+func NumSurplusGTE(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGTE(FieldNumSurplus, v))
+}
+
+// NumSurplusLT applies the LT predicate on the "num_surplus" field.
+func NumSurplusLT(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLT(FieldNumSurplus, v))
+}
+
+// NumSurplusLTE applies the LTE predicate on the "num_surplus" field.
+func NumSurplusLTE(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLTE(FieldNumSurplus, v))
+}
+
+// NumSurplusIsNil applies the IsNil predicate on the "num_surplus" field.
+func NumSurplusIsNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldIsNull(FieldNumSurplus))
+}
+
+// NumSurplusNotNil applies the NotNil predicate on the "num_surplus" field.
+func NumSurplusNotNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotNull(FieldNumSurplus))
 }
 
 // DateEQ applies the EQ predicate on the "date" field.

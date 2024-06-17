@@ -51,6 +51,8 @@ type ScheduleMember struct {
 	MemberProductName string `json:"member_product_name,omitempty"`
 	// 会员产品属性名称
 	MemberProductPropertyName string `json:"member_product_property_name,omitempty"`
+	// 备注
+	Remark string `json:"remark,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduleMemberQuery when eager-loading is set.
 	Edges        ScheduleMemberEdges `json:"edges"`
@@ -86,7 +88,7 @@ func (*ScheduleMember) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedulemember.FieldID, schedulemember.FieldStatus, schedulemember.FieldVenueID, schedulemember.FieldScheduleID, schedulemember.FieldMemberID, schedulemember.FieldMemberProductID, schedulemember.FieldMemberProductPropertyID:
 			values[i] = new(sql.NullInt64)
-		case schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldMemberProductPropertyName:
+		case schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldMemberProductPropertyName, schedulemember.FieldRemark:
 			values[i] = new(sql.NullString)
 		case schedulemember.FieldCreatedAt, schedulemember.FieldUpdatedAt, schedulemember.FieldStartTime, schedulemember.FieldEndTime, schedulemember.FieldSignStartTime, schedulemember.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
@@ -207,6 +209,12 @@ func (sm *ScheduleMember) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sm.MemberProductPropertyName = value.String
 			}
+		case schedulemember.FieldRemark:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remark", values[i])
+			} else if value.Valid {
+				sm.Remark = value.String
+			}
 		default:
 			sm.selectValues.Set(columns[i], values[i])
 		}
@@ -295,6 +303,9 @@ func (sm *ScheduleMember) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("member_product_property_name=")
 	builder.WriteString(sm.MemberProductPropertyName)
+	builder.WriteString(", ")
+	builder.WriteString("remark=")
+	builder.WriteString(sm.Remark)
 	builder.WriteByte(')')
 	return builder.String()
 }

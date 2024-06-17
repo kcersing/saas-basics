@@ -350,6 +350,26 @@ func (smu *ScheduleMemberUpdate) ClearMemberProductPropertyName() *ScheduleMembe
 	return smu
 }
 
+// SetRemark sets the "remark" field.
+func (smu *ScheduleMemberUpdate) SetRemark(s string) *ScheduleMemberUpdate {
+	smu.mutation.SetRemark(s)
+	return smu
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableRemark(s *string) *ScheduleMemberUpdate {
+	if s != nil {
+		smu.SetRemark(*s)
+	}
+	return smu
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (smu *ScheduleMemberUpdate) ClearRemark() *ScheduleMemberUpdate {
+	smu.mutation.ClearRemark()
+	return smu
+}
+
 // SetSchedule sets the "schedule" edge to the Schedule entity.
 func (smu *ScheduleMemberUpdate) SetSchedule(s *Schedule) *ScheduleMemberUpdate {
 	return smu.SetScheduleID(s.ID)
@@ -506,6 +526,12 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if smu.mutation.MemberProductPropertyNameCleared() {
 		_spec.ClearField(schedulemember.FieldMemberProductPropertyName, field.TypeString)
+	}
+	if value, ok := smu.mutation.Remark(); ok {
+		_spec.SetField(schedulemember.FieldRemark, field.TypeString, value)
+	}
+	if smu.mutation.RemarkCleared() {
+		_spec.ClearField(schedulemember.FieldRemark, field.TypeString)
 	}
 	if smu.mutation.ScheduleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -877,6 +903,26 @@ func (smuo *ScheduleMemberUpdateOne) ClearMemberProductPropertyName() *ScheduleM
 	return smuo
 }
 
+// SetRemark sets the "remark" field.
+func (smuo *ScheduleMemberUpdateOne) SetRemark(s string) *ScheduleMemberUpdateOne {
+	smuo.mutation.SetRemark(s)
+	return smuo
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableRemark(s *string) *ScheduleMemberUpdateOne {
+	if s != nil {
+		smuo.SetRemark(*s)
+	}
+	return smuo
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (smuo *ScheduleMemberUpdateOne) ClearRemark() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearRemark()
+	return smuo
+}
+
 // SetSchedule sets the "schedule" edge to the Schedule entity.
 func (smuo *ScheduleMemberUpdateOne) SetSchedule(s *Schedule) *ScheduleMemberUpdateOne {
 	return smuo.SetScheduleID(s.ID)
@@ -1063,6 +1109,12 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	}
 	if smuo.mutation.MemberProductPropertyNameCleared() {
 		_spec.ClearField(schedulemember.FieldMemberProductPropertyName, field.TypeString)
+	}
+	if value, ok := smuo.mutation.Remark(); ok {
+		_spec.SetField(schedulemember.FieldRemark, field.TypeString, value)
+	}
+	if smuo.mutation.RemarkCleared() {
+		_spec.ClearField(schedulemember.FieldRemark, field.TypeString)
 	}
 	if smuo.mutation.ScheduleCleared() {
 		edge := &sqlgraph.EdgeSpec{

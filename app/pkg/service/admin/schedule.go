@@ -87,13 +87,14 @@ func (s Schedule) ScheduleList(req do.ScheduleListReq) (resp []*do.ScheduleInfo,
 			member, _ := v.QueryMembers().First(s.ctx)
 			resp[i].MemberName = member.MemberName
 			resp[i].MemberProductName = member.MemberProductName
-			resp[i].MemberProductItemName = member.MemberProductPropertyName
+			resp[i].MemberProductPropertyName = member.MemberProductPropertyName
 		}
 	}
 
 	total, _ = s.db.Schedule.Query().Where(predicates...).Count(s.ctx)
 	return
 }
+
 func (s Schedule) ScheduleDateList(req do.ScheduleListReq) (map[string][]*do.ScheduleInfo, int, error) {
 	req.Page = 1
 	req.PageSize = 1000

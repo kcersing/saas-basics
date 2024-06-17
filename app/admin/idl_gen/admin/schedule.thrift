@@ -37,9 +37,16 @@ struct ScheduleMemberReq {
     4:  optional i64 schedule (api.raw = "schedule")
 }
 
-struct ScheduleMemberSubscribe{
-    1:  optional list<i64> member (api.raw = "member")
+
+struct SearchSubscribeByMemberReq{
+    1:  optional i64	propertyId  (api.raw = "propertyId")
+    2:  optional string	mobile      (api.raw = "mobile")
+    3:  optional i64	venue       (api.raw = "venue")
+}
+struct MemberSubscribeReq{
+    1:  optional list<i64> memberProductPropertyId (api.raw = "memberProductPropertyId")
     2:  optional i64 schedule (api.raw = "schedule")
+    3:  optional string remark (api.raw = "remark")
 }
 
 service ScheduleService {
@@ -57,6 +64,11 @@ service ScheduleService {
 
     base.NilResponse GetScheduleMemberList(1: ScheduleMemberReq req) (api.post = "/api/admin/schedule/schedule-member-list")
 
-    base.NilResponse ScheduleMemberSubscribe(1: ScheduleMemberReq req) (api.post = "/api/admin/schedule/schedule-member-subscribe")
+    base.NilResponse SearchSubscribeByMember(1: SearchSubscribeByMemberReq req) (api.post = "/api/admin/schedule/search-subscribe-by-member")
+
+//"/api/admin/schedule/search-subscribe-by-member","/api/admin/schedule/member-subscribe"
+
+    base.NilResponse MemberSubscribe(1: MemberSubscribeReq req) (api.post = "/api/admin/schedule/member-subscribe")
+
 
 }

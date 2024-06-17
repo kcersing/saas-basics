@@ -46,6 +46,8 @@ const (
 	FieldMemberProductName = "member_product_name"
 	// FieldMemberProductPropertyName holds the string denoting the member_product_property_name field in the database.
 	FieldMemberProductPropertyName = "member_product_property_name"
+	// FieldRemark holds the string denoting the remark field in the database.
+	FieldRemark = "remark"
 	// EdgeSchedule holds the string denoting the schedule edge name in mutations.
 	EdgeSchedule = "schedule"
 	// Table holds the table name of the schedulemember in the database.
@@ -78,6 +80,7 @@ var Columns = []string{
 	FieldMemberName,
 	FieldMemberProductName,
 	FieldMemberProductPropertyName,
+	FieldRemark,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -195,6 +198,11 @@ func ByMemberProductName(opts ...sql.OrderTermOption) OrderOption {
 // ByMemberProductPropertyName orders the results by the member_product_property_name field.
 func ByMemberProductPropertyName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberProductPropertyName, opts...).ToFunc()
+}
+
+// ByRemark orders the results by the remark field.
+func ByRemark(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemark, opts...).ToFunc()
 }
 
 // ByScheduleField orders the results by schedule field.

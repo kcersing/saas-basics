@@ -72,7 +72,7 @@ service OrderService {
 
     base.NilResponse GetOrderById(1: base.IDReq req) (api.get = "/api/admin/order/info") // 订单详情
 
-    base.NilResponse UnifyPay(1: UnifyPayReq req) (api.post = "/api/admin/order/unifyPay") // 订单详情
+    base.NilResponse UnifyPay(1: UnifyPayReq req) (api.post = "/api/admin/order/unifyPay") // 支付
 
     base.NilResponse QRPay(1: QRPayReq req) (api.post = "/api/admin/order/QRPay") // 订单详情
 

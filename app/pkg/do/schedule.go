@@ -17,6 +17,7 @@ type Schedule interface {
 	MemberList(req ScheduleMemberListReq) (resp []*ScheduleMemberInfo, total int, err error)
 	UpdateMemberStatus(ID int64, status int64) error
 	MemberInfo(ID int64) (roleInfo *ScheduleMemberInfo, err error)
+	SearchSubscribeByMember(req SearchSubscribeByMemberReq) (list []SubscribeByMember, total int64, err error)
 
 	CoachCreate(req ScheduleCoachInfo) error
 	CoachUpdate(req ScheduleCoachInfo) error
@@ -50,26 +51,26 @@ type ScheduleInfo struct {
 	VenueId    int64  `json:"venue_id"`
 	PlaceID    int64  `json:"place_id"`
 
-	Num                 int64   `json:"num"`
-	NumSurplus          int64   `json:"num_surplus"`
-	Date                string  `json:"data"`
-	StartTime           string  `json:"start_time"`
-	EndTime             string  `json:"end_time"`
-	Price               float64 `json:"price"`
-	Name                string  `json:"name"`
-	Remark              string  `json:"remark"`
-	CoachID             int64   `json:"coach_id"`
-	MemberID            int64   `json:"member_id"`
-	MemberProductID     int64   `json:"member_product_id"`
-	MemberProductItemID int64   `json:"member_product_property_id"`
+	Num                     int64   `json:"num"`
+	NumSurplus              int64   `json:"num_surplus"`
+	Date                    string  `json:"data"`
+	StartTime               string  `json:"start_time"`
+	EndTime                 string  `json:"end_time"`
+	Price                   float64 `json:"price"`
+	Name                    string  `json:"name"`
+	Remark                  string  `json:"remark"`
+	CoachID                 int64   `json:"coach_id"`
+	MemberID                int64   `json:"member_id"`
+	MemberProductID         int64   `json:"member_product_id"`
+	MemberProductPropertyID int64   `json:"member_product_property_id"`
 
-	PropertyName          string `json:"property_name"`
-	VenueName             string `json:"venue_name"`
-	PlaceName             string `json:"place_name"`
-	CoachName             string `json:"coach_name"`
-	MemberName            string `json:"member_name"`
-	MemberProductName     string `json:"member_product_name"`
-	MemberProductItemName string `json:"member_product_property_name"`
+	PropertyName              string `json:"property_name"`
+	VenueName                 string `json:"venue_name"`
+	PlaceName                 string `json:"place_name"`
+	CoachName                 string `json:"coach_name"`
+	MemberName                string `json:"member_name"`
+	MemberProductName         string `json:"member_product_name"`
+	MemberProductPropertyName string `json:"member_product_property_name"`
 
 	ScheduleMember []ScheduleMemberInfo `json:"member_course_record"`
 	ScheduleCoach  []ScheduleCoachInfo  `json:"coach_course_record"`
@@ -90,31 +91,35 @@ type ScheduleListReq struct {
 }
 
 type ScheduleMemberInfo struct {
-	ID                  int64     `json:"id"`
-	MemberId            int64     `json:"member_id"`
-	VenueId             int64     `json:"venue"`
-	PlaceID             int64     `json:"place_id"`
-	PropertyId          int64     `json:"property"`
-	ScheduleScheduleId  int64     `json:"course_record_schedule_id"`
-	Type                int64     `json:"type"`
-	CreatedAt           time.Time `json:"createdAt"`
-	UpdatedAt           time.Time `json:"updatedAt"`
-	StartTime           time.Time `json:"start_time"`
-	EndTime             time.Time `json:"end_time"`
-	SignStartTime       time.Time `json:"sign_start_time"`
-	SignEndTime         time.Time `json:"sign_end_time"`
-	Status              int64     `json:"status"`
-	MemberProductID     int64     `json:"member_product_id"`
-	MemberProductItemID int64     `json:"member_product_property_id"`
+	ID                  int64  `json:"id"`
+	MemberId            int64  `json:"member_id"`
+	VenueId             int64  `json:"venue"`
+	PlaceID             int64  `json:"place_id"`
+	PropertyId          int64  `json:"property"`
+	ScheduleScheduleId  int64  `json:"course_record_schedule_id"`
+	Type                int64  `json:"type"`
+	CreatedAt           string `json:"createdAt"`
+	UpdatedAt           string `json:"updatedAt"`
+	StartTime           string `json:"start_time"`
+	EndTime             string `json:"end_time"`
+	SignStartTime       string `json:"sign_start_time"`
+	SignEndTime         string `json:"sign_end_time"`
+	Status              int64  `json:"status"`
+	MemberProductID     int64  `json:"member_product_id"`
+	MemberProductItemID int64  `json:"member_product_property_id"`
 
-	VenueName             string `json:"venue_name"`
-	MemberName            string `json:"member_name"`
-	MemberProductName     string `json:"member_product_name"`
-	MemberProductItemName string `json:"member_product_property_name"`
+	VenueName                 string `json:"venue_name"`
+	MemberName                string `json:"member_name"`
+	MemberProductName         string `json:"member_product_name"`
+	MemberProductPropertyName string `json:"member_product_property_name"`
+	Gender                    string `json:"gender"`
+	Birthday                  int64  `json:"birthday"`
+	Mobile                    string `json:"mobile"`
 }
 type ScheduleMemberCreate struct {
-	Member   []int64 `json:"member"`
-	Schedule int64   `json:"schedule"`
+	MemberProductPropertyID []int64 `json:"memberProductPropertyId"`
+	Schedule                int64   `json:"schedule"`
+	Remark                  string  `json:"remark"`
 }
 type ScheduleMemberListReq struct {
 	Page     int64 `json:"page"`
@@ -146,4 +151,21 @@ type ScheduleCoachInfo struct {
 }
 
 type ScheduleCoachListReq struct {
+}
+
+type SubscribeByMember struct {
+	Avatar                  string `json:"avatar"`
+	Mobile                  string `json:"mobile"`
+	MemberID                int64  `json:"member_id"`
+	MemberProductID         int64  `json:"member_product_id"`
+	MemberProductPropertyId int64  `json:"member_product_property_id"`
+
+	MemberName                string `json:"member_name"`
+	MemberProductName         string `json:"member_product_name"`
+	MemberProductPropertyName string `json:"member_product_property_name"`
+}
+type SearchSubscribeByMemberReq struct {
+	PropertyId int64  `json:"propertyId"`
+	Mobile     string `json:"mobile"`
+	Venue      int64  `json:"venue"`
 }

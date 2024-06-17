@@ -53,13 +53,13 @@ type OrderInfo struct {
 	Device       int64        `json:"device"`
 	DeviceName   string       `json:"device_name"`
 	CreateId     int64        `json:"create_id"`
-	CreateName   int64        `json:"create_name"`
+	CreateName   string       `json:"create_name"`
 	CreatedAt    time.Time    `json:"createdAt"`
 	UpdatedAt    time.Time    `json:"updatedAt"`
 	CompletionAt time.Time    `json:"completionAt"`
 	OrderPay     []OrderPay   `json:"order_pay"`
 	OrderSales   []OrderSales `json:"order_sales"`
-	OrderItem    OrderItem    `json:"order_item "`
+	OrderItem    OrderItem    `json:"order_item"`
 	OrderAmount  OrderAmount  `json:"order_amount"`
 }
 type OrderListReq struct {

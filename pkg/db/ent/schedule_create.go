@@ -148,6 +148,20 @@ func (sc *ScheduleCreate) SetNillableNum(i *int64) *ScheduleCreate {
 	return sc
 }
 
+// SetNumSurplus sets the "num_surplus" field.
+func (sc *ScheduleCreate) SetNumSurplus(i int64) *ScheduleCreate {
+	sc.mutation.SetNumSurplus(i)
+	return sc
+}
+
+// SetNillableNumSurplus sets the "num_surplus" field if the given value is not nil.
+func (sc *ScheduleCreate) SetNillableNumSurplus(i *int64) *ScheduleCreate {
+	if i != nil {
+		sc.SetNumSurplus(*i)
+	}
+	return sc
+}
+
 // SetDate sets the "date" field.
 func (sc *ScheduleCreate) SetDate(s string) *ScheduleCreate {
 	sc.mutation.SetDate(s)
@@ -410,6 +424,10 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Num(); ok {
 		_spec.SetField(schedule.FieldNum, field.TypeInt64, value)
 		_node.Num = value
+	}
+	if value, ok := sc.mutation.NumSurplus(); ok {
+		_spec.SetField(schedule.FieldNumSurplus, field.TypeInt64, value)
+		_node.NumSurplus = value
 	}
 	if value, ok := sc.mutation.Date(); ok {
 		_spec.SetField(schedule.FieldDate, field.TypeString, value)

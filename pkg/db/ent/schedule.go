@@ -36,6 +36,8 @@ type Schedule struct {
 	PlaceID int64 `json:"place_id,omitempty"`
 	// 上课人数
 	Num int64 `json:"num,omitempty"`
+	// 剩余可约人数
+	NumSurplus int64 `json:"num_surplus,omitempty"`
 	// 日期
 	Date string `json:"date,omitempty"`
 	// 开始时间
@@ -92,7 +94,7 @@ func (*Schedule) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedule.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case schedule.FieldID, schedule.FieldStatus, schedule.FieldVenueID, schedule.FieldPropertyID, schedule.FieldPlaceID, schedule.FieldNum:
+		case schedule.FieldID, schedule.FieldStatus, schedule.FieldVenueID, schedule.FieldPropertyID, schedule.FieldPlaceID, schedule.FieldNum, schedule.FieldNumSurplus:
 			values[i] = new(sql.NullInt64)
 		case schedule.FieldType, schedule.FieldName, schedule.FieldDate, schedule.FieldRemark, schedule.FieldVenueName, schedule.FieldPlaceName:
 			values[i] = new(sql.NullString)
@@ -172,6 +174,12 @@ func (s *Schedule) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field num", values[i])
 			} else if value.Valid {
 				s.Num = value.Int64
+			}
+		case schedule.FieldNumSurplus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field num_surplus", values[i])
+			} else if value.Valid {
+				s.NumSurplus = value.Int64
 			}
 		case schedule.FieldDate:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -287,6 +295,9 @@ func (s *Schedule) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("num=")
 	builder.WriteString(fmt.Sprintf("%v", s.Num))
+	builder.WriteString(", ")
+	builder.WriteString("num_surplus=")
+	builder.WriteString(fmt.Sprintf("%v", s.NumSurplus))
 	builder.WriteString(", ")
 	builder.WriteString("date=")
 	builder.WriteString(s.Date)

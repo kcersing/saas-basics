@@ -211,6 +211,33 @@ func (su *ScheduleUpdate) ClearNum() *ScheduleUpdate {
 	return su
 }
 
+// SetNumSurplus sets the "num_surplus" field.
+func (su *ScheduleUpdate) SetNumSurplus(i int64) *ScheduleUpdate {
+	su.mutation.ResetNumSurplus()
+	su.mutation.SetNumSurplus(i)
+	return su
+}
+
+// SetNillableNumSurplus sets the "num_surplus" field if the given value is not nil.
+func (su *ScheduleUpdate) SetNillableNumSurplus(i *int64) *ScheduleUpdate {
+	if i != nil {
+		su.SetNumSurplus(*i)
+	}
+	return su
+}
+
+// AddNumSurplus adds i to the "num_surplus" field.
+func (su *ScheduleUpdate) AddNumSurplus(i int64) *ScheduleUpdate {
+	su.mutation.AddNumSurplus(i)
+	return su
+}
+
+// ClearNumSurplus clears the value of the "num_surplus" field.
+func (su *ScheduleUpdate) ClearNumSurplus() *ScheduleUpdate {
+	su.mutation.ClearNumSurplus()
+	return su
+}
+
 // SetDate sets the "date" field.
 func (su *ScheduleUpdate) SetDate(s string) *ScheduleUpdate {
 	su.mutation.SetDate(s)
@@ -539,6 +566,15 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.NumCleared() {
 		_spec.ClearField(schedule.FieldNum, field.TypeInt64)
+	}
+	if value, ok := su.mutation.NumSurplus(); ok {
+		_spec.SetField(schedule.FieldNumSurplus, field.TypeInt64, value)
+	}
+	if value, ok := su.mutation.AddedNumSurplus(); ok {
+		_spec.AddField(schedule.FieldNumSurplus, field.TypeInt64, value)
+	}
+	if su.mutation.NumSurplusCleared() {
+		_spec.ClearField(schedule.FieldNumSurplus, field.TypeInt64)
 	}
 	if value, ok := su.mutation.Date(); ok {
 		_spec.SetField(schedule.FieldDate, field.TypeString, value)
@@ -873,6 +909,33 @@ func (suo *ScheduleUpdateOne) AddNum(i int64) *ScheduleUpdateOne {
 // ClearNum clears the value of the "num" field.
 func (suo *ScheduleUpdateOne) ClearNum() *ScheduleUpdateOne {
 	suo.mutation.ClearNum()
+	return suo
+}
+
+// SetNumSurplus sets the "num_surplus" field.
+func (suo *ScheduleUpdateOne) SetNumSurplus(i int64) *ScheduleUpdateOne {
+	suo.mutation.ResetNumSurplus()
+	suo.mutation.SetNumSurplus(i)
+	return suo
+}
+
+// SetNillableNumSurplus sets the "num_surplus" field if the given value is not nil.
+func (suo *ScheduleUpdateOne) SetNillableNumSurplus(i *int64) *ScheduleUpdateOne {
+	if i != nil {
+		suo.SetNumSurplus(*i)
+	}
+	return suo
+}
+
+// AddNumSurplus adds i to the "num_surplus" field.
+func (suo *ScheduleUpdateOne) AddNumSurplus(i int64) *ScheduleUpdateOne {
+	suo.mutation.AddNumSurplus(i)
+	return suo
+}
+
+// ClearNumSurplus clears the value of the "num_surplus" field.
+func (suo *ScheduleUpdateOne) ClearNumSurplus() *ScheduleUpdateOne {
+	suo.mutation.ClearNumSurplus()
 	return suo
 }
 
@@ -1234,6 +1297,15 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 	}
 	if suo.mutation.NumCleared() {
 		_spec.ClearField(schedule.FieldNum, field.TypeInt64)
+	}
+	if value, ok := suo.mutation.NumSurplus(); ok {
+		_spec.SetField(schedule.FieldNumSurplus, field.TypeInt64, value)
+	}
+	if value, ok := suo.mutation.AddedNumSurplus(); ok {
+		_spec.AddField(schedule.FieldNumSurplus, field.TypeInt64, value)
+	}
+	if suo.mutation.NumSurplusCleared() {
+		_spec.ClearField(schedule.FieldNumSurplus, field.TypeInt64)
 	}
 	if value, ok := suo.mutation.Date(); ok {
 		_spec.SetField(schedule.FieldDate, field.TypeString, value)

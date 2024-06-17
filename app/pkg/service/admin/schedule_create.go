@@ -37,12 +37,11 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 	}
 	placeName := ""
 	if req.PlaceID != 0 {
-		place, _ := s.db.VenuePlace.Query().
+		place, err := s.db.VenuePlace.Query().
 			Where(venueplace.ID(req.PropertyId)).
 			First(s.ctx)
 		if err == nil {
 			placeName = place.Name
-
 		}
 	}
 
@@ -54,11 +53,12 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 
 	one, err := tx.Schedule.Create().
 		SetType(req.Type).
-		SetStatus(0).
+		SetStatus(1).
 		SetVenueID(req.VenueId).
 		SetPlaceID(req.PlaceID).
 		SetPropertyID(req.PropertyId).
 		SetNum(req.Num).
+		SetNumSurplus(req.Num).
 		SetDate(startTime.Format(time.DateOnly)).
 		SetStartTime(startTime).
 		SetEndTime(startTime.Add(time.Duration(property.Length) * time.Minute)).
@@ -91,7 +91,7 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 			SetCoachID(req.CoachID).
 			SetStartTime(startTime).
 			SetEndTime(startTime.Add(time.Duration(property.Length) * time.Minute)).
-			SetStatus(0).
+			SetStatus(1).
 			SetCoachName(u.Nickname).
 			Save(s.ctx)
 		if err != nil {

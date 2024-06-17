@@ -65,3 +65,13 @@ func _schedulemembersubscribeMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _searchsubscribebymemberMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _membersubscribeMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

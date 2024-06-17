@@ -31,6 +31,8 @@ func (ScheduleMember) Fields() []ent.Field {
 		field.String("member_name").Comment("会员名称").Optional(),
 		field.String("member_product_name").Comment("会员产品名称").Optional(),
 		field.String("member_product_property_name").Comment("会员产品属性名称").Optional(),
+
+		field.String("remark").Comment("备注").Optional(),
 	}
 }
 

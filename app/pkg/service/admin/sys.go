@@ -170,8 +170,8 @@ func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, total int64, err 
 	if req.Mobile != "" {
 		predicates = append(predicates, member.Mobile(req.Mobile))
 	}
-	if req.Product > 0 {
 
+	if req.Product > 0 {
 		ints, err := s.db.Debug().MemberProductProperty.Query().Where().GroupBy(member.FieldID).Ints(s.ctx)
 		if err != nil {
 			return nil, 0, err

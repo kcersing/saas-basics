@@ -4,6 +4,7 @@ package schedule
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/jinzhu/copier"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
@@ -173,6 +174,8 @@ func GetScheduleMemberList(ctx context.Context, c *app.RequestContext) {
 	}
 	var listReq do.ScheduleMemberListReq
 	err = copier.Copy(&listReq, &req)
+
+	hlog.Info(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -186,31 +189,52 @@ func GetScheduleMemberList(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// ScheduleMemberSubscribe .
-// @router /api/admin/schedule/schedule-member-subscribe [POST]
-func ScheduleMemberSubscribe(ctx context.Context, c *app.RequestContext) {
+// SearchSubscribeByMember .
+// @router /api/admin/schedule/search-subscribe-by-member [POST]
+func SearchSubscribeByMember(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req schedule.ScheduleMemberReq
-
+	var req schedule.SearchSubscribeByMemberReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
-	var createReq do.ScheduleMemberCreate
-	err = copier.Copy(&createReq, &req)
+	var listReq do.SearchSubscribeByMemberReq
+	err = copier.Copy(&listReq, &req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
-	err = admin.NewSchedule(ctx, c).MemberCreate(createReq)
+	list, total, err := admin.NewSchedule(ctx, c).SearchSubscribeByMember(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
+}
 
+// MemberSubscribe .
+// @router /api/admin/schedule/member-subscribe [POST]
+func MemberSubscribe(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req schedule.MemberSubscribeReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var create do.ScheduleMemberCreate
+	err = copier.Copy(&create, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	err = admin.NewSchedule(ctx, c).MemberCreate(create)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }

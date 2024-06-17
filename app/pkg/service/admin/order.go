@@ -56,6 +56,39 @@ func (o Order) List(req do.OrderListReq) (resp []*do.OrderInfo, total int, err e
 		err = errors.Wrap(err, "copy Order info failed")
 		return resp, 0, err
 	}
+
+	for i, v := range lists {
+		ven, _ := v.QueryOrderVenues().First(o.ctx)
+		resp[i].VenueName = ven.Name
+
+		amount, _ := v.QueryAmount().First(o.ctx)
+		var amo do.OrderAmount
+		err = copier.Copy(&amo, &amount)
+		if err != nil {
+			err = errors.Wrap(err, "copy Order info failed")
+			return resp, 0, err
+		}
+		resp[i].OrderAmount = amo
+		item, _ := v.QueryItem().First(o.ctx)
+		var ite do.OrderItem
+		err = copier.Copy(&ite, &item)
+		if err != nil {
+			err = errors.Wrap(err, "copy Order info failed")
+			return resp, 0, err
+		}
+		resp[i].OrderItem = ite
+		member, _ := v.QueryOrderMembers().First(o.ctx)
+
+		resp[i].MemberName = member.Name
+
+		cre, _ := v.QueryOrderCreates().First(o.ctx)
+		resp[i].CreateName = cre.Nickname
+		//		OrderPay     []OrderPay   `json:"order_pay"`
+		//	OrderSales   []OrderSales `json:"order_sales"`
+		//	OrderItem    OrderItem    `json:"order_item "`
+		//	OrderAmount  OrderAmount  `json:"order_amount"`
+	}
+
 	total, _ = o.db.Order.Query().Where(predicates...).Count(o.ctx)
 	return
 }
