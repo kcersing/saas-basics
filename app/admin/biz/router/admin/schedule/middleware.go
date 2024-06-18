@@ -75,3 +75,8 @@ func _membersubscribeMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _updatememberstatusMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

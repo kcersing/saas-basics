@@ -38,8 +38,8 @@ func NewSchedule(ctx context.Context, c *app.RequestContext) do.Schedule {
 }
 
 func (s Schedule) ScheduleUpdate(req do.CreateOrUpdateScheduleReq) error {
-	//TODO implement me
-	panic("implement me")
+
+	return nil
 }
 
 func (s Schedule) ScheduleDelete(id int64) error {

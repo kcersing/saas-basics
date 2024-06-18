@@ -153,8 +153,8 @@ func (c Schedule) MemberList(req do.ScheduleMemberListReq) (resp []*do.ScheduleM
 }
 
 func (c Schedule) UpdateMemberStatus(ID int64, status int64) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := c.db.ScheduleMember.Update().Where(schedulemember.ID(ID)).SetStatus(status).Save(c.ctx)
+	return err
 }
 
 func (c Schedule) MemberInfo(ID int64) (roleInfo *do.ScheduleMemberInfo, err error) {

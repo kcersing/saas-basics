@@ -238,3 +238,23 @@ func MemberSubscribe(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
+
+// UpdateMemberStatus .
+// @router /api/admin/schedule/schedule-member-status [POST]
+func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.StatusCodeReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	err = admin.NewSchedule(ctx, c).UpdateMemberStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}

@@ -70,5 +70,5 @@ service ScheduleService {
 
     base.NilResponse MemberSubscribe(1: MemberSubscribeReq req) (api.post = "/api/admin/schedule/member-subscribe")
 
-
+    base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/schedule/schedule-member-status")
 }
