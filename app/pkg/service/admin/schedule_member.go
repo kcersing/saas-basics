@@ -157,9 +157,23 @@ func (c Schedule) UpdateMemberStatus(ID int64, status int64) error {
 	return err
 }
 
-func (c Schedule) MemberInfo(ID int64) (roleInfo *do.ScheduleMemberInfo, err error) {
-	//TODO implement me
-	panic("implement me")
+func (c Schedule) MemberInfo(ID int64) (info *do.ScheduleMemberInfo, err error) {
+
+	m, err := c.db.ScheduleMember.Query().Where(schedulemember.ID(ID)).First(c.ctx)
+
+	if err != nil {
+		err = errors.Wrap(err, "get Schedule Member failed")
+		return info, err
+	}
+
+	err = copier.Copy(&info, &m)
+	if err != nil {
+		err = errors.Wrap(err, "copy Schedule Member info failed")
+		return info, err
+	}
+
+	return info, nil
+
 }
 
 func (s Schedule) SearchSubscribeByMember(req do.SearchSubscribeByMemberReq) (list []do.SubscribeByMember, total int64, err error) {
