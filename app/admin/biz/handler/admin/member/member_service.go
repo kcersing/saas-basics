@@ -156,3 +156,136 @@ func MemberSearch(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, info, 0, "")
 	return
 }
+
+// MemberProductList .
+// @router /api/admin/member/product-list [POST]
+func MemberProductList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberProductListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var listReq do.MemberListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	userList, total, err := admin.NewMember(ctx, c).List(listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, userList, int64(total), "")
+	return
+}
+
+// MemberPropertyList .
+// @router /api/admin/member/property-list [POST]
+func MemberPropertyList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberPropertyListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var listReq do.MemberListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	userList, total, err := admin.NewMember(ctx, c).List(listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, userList, int64(total), "")
+	return
+}
+
+// MemberProductDetail .
+// @router /api/admin/member/product-detail [GET]
+func MemberProductDetail(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	info, err := admin.NewMember(ctx, c).Info(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}
+
+// MemberPropertyDetail .
+// @router /api/admin/member/property-detail [GET]
+func MemberPropertyDetail(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	info, err := admin.NewMember(ctx, c).Info(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}
+
+// MemberEntryList .
+// @router /api/admin/member/entry-list [POST]
+func MemberEntryList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberEntryListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var listReq do.MemberListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	userList, total, err := admin.NewMember(ctx, c).List(listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, userList, int64(total), "")
+	return
+}
+
+// MemberPropertyUpdate .
+// @router /api/admin/member/property-update [POST]
+func MemberPropertyUpdate(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberPropertyListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

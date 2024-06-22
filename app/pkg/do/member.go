@@ -1,6 +1,8 @@
 package do
 
-import "time"
+import (
+	"time"
+)
 
 type Member interface {
 	Create(req CreateOrUpdateMemberReq) error

@@ -30,6 +30,25 @@ struct MemberSearchReq {
     2:  string option (api.raw = "option")
 }
 
+struct MemberProductListReq {
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 pageSize (api.raw = "pageSize")
+    3:  optional string id (api.raw = "id")
+    4:  optional string type (api.raw = "type")
+}
+struct MemberPropertyListReq{
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 pageSize (api.raw = "pageSize")
+    3:  optional string id (api.raw = "id")
+    4:  optional string type (api.raw = "type")
+}
+
+struct MemberEntryListReq{
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 pageSize (api.raw = "pageSize")
+    3:  optional string id (api.raw = "id")
+    4:  optional string type (api.raw = "type")
+}
 
 service MemberService {
 
@@ -51,4 +70,16 @@ service MemberService {
   // 更新用户状态
   base.NilResponse MemberSearch(1: MemberSearchReq req) (api.post = "/api/admin/member/search")
 
+  base.NilResponse MemberProductList(1: MemberProductListReq req) (api.post = "/api/admin/member/product-list")
+
+  base.NilResponse MemberPropertyList(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-list")
+
+  base.NilResponse MemberProductDetail(1: base.IDReq req) (api.get = "/api/admin/member/product-detail")
+
+  base.NilResponse MemberPropertyDetail(1: base.IDReq req) (api.get = "/api/admin/member/property-detail")
+
+
+  base.NilResponse MemberPropertyUpdate(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-update")
+
+  base.NilResponse MemberEntryList(1: MemberEntryListReq req) (api.post = "/api/admin/member/entry-list")
 }

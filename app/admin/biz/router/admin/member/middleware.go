@@ -69,3 +69,33 @@ func _membersearchMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _memberentrylistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberproductdetailMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberproductlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberpropertydetailMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberpropertylistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberpropertyupdateMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

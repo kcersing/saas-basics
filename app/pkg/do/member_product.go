@@ -1,12 +1,17 @@
 package do
 
 type MemberProduct interface {
-	Create(req MemberProductInfo) error
-	Update(req MemberProductInfo) error
-	Delete(id int64) error
-	List(req MemberProductListReq) (resp []*MemberProductInfo, total int, err error)
-	UpdateStatus(ID int64, status int64) error
-	InfoByID(ID int64) (roleInfo *MemberProductInfo, err error)
+	ProductList(req MemberProductListReq) (resp []*MemberProductInfo, total int, err error)
+	ProductDetail(ID int64) (roleInfo *MemberProductInfo, err error)
+	ProductUpdate(req MemberProductInfo) error
+	ProductUpdateStatus(ID int64, status int64) error
+
+	PropertyList(req MemberPropertyListReq) (resp []*MemberPropertyInfo, total int, err error)
+	PropertyDetail(ID int64) (roleInfo *MemberPropertyInfo, err error)
+	PropertyUpdate(req MemberPropertyInfo) error
+	PropertyUpdateStatus(ID int64, status int64) error
+
+	EntryList(req MemberEntryListReq) (resp []*MemberEntryInfo, total int, err error)
 }
 type MemberProductInfo struct {
 	ID          int64          `json:"id"`
@@ -19,6 +24,22 @@ type MemberProductInfo struct {
 	Stock       int64          `json:"stock"`
 	Status      int64          `json:"status"`
 }
+type MemberPropertyListReq struct {
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Mobile   string `json:"mobile"`
+	Name     string `json:"name"`
+	Status   int64  `json:"status"`
+}
+
+type MemberEntryListReq struct {
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Mobile   string `json:"mobile"`
+	Name     string `json:"name"`
+	Status   int64  `json:"status"`
+}
+
 type MemberProductListReq struct {
 	Page     int64  `json:"page"`
 	PageSize int64  `json:"pageSize"`
@@ -26,6 +47,7 @@ type MemberProductListReq struct {
 	Name     string `json:"name"`
 	Status   int64  `json:"status"`
 }
+
 type MemberPropertyInfo struct {
 	ID        int64   `json:"id"`
 	MemberId  int64   `json:"member_id"`
@@ -38,6 +60,10 @@ type MemberPropertyInfo struct {
 	Type      string  `json:"type"`
 	Data      string  `json:"data"`
 	Status    int64   `json:"status"`
+}
+
+type MemberEntryInfo struct {
+	ID int64 `json:"id"`
 }
 
 // MPStatus 会员产品状态
