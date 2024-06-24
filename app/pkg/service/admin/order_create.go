@@ -96,7 +96,6 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		SetMembers(members).
 		SetVenueID(venue.ID).
 		SetOrderID(one.ID).
-		SetValidityAt(assignAt).
 		SetName(products.Name).
 		SetStatus(0).
 		Save(o.ctx)
@@ -180,8 +179,6 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 							errChan <- err
 						}
 
-						//ppid := strconv.FormatInt(v.Property, 10)
-						//mpid := strconv.FormatInt(mp.ID, 10)
 						_, err = tx.MemberProductProperty.Create().
 							SetMemberID(members.ID).
 							SetOwner(mp).
@@ -194,6 +191,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 							SetCount(v.Quantity).
 							SetCountSurplus(v.Quantity).
 							AddVenues(venues...).
+							SetValidityAt(assignAt).
 							SetStatus(0).
 							Save(o.ctx)
 						//tx.MemberProductProperty.Update().Where(memberproductproperty.ID(pp.ID)).SetSn(pp.ID).Save()

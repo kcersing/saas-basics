@@ -41,10 +41,6 @@ type MemberProduct struct {
 	Name string `json:"name,omitempty"`
 	// 产品价格
 	Price float64 `json:"price,omitempty"`
-	// 生效时间
-	ValidityAt time.Time `json:"validity_at,omitempty"`
-	// 作废时间
-	CancelAt time.Time `json:"cancel_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberProductQuery when eager-loading is set.
 	Edges        MemberProductEdges `json:"edges"`
@@ -117,7 +113,7 @@ func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case memberproduct.FieldSn, memberproduct.FieldType, memberproduct.FieldName:
 			values[i] = new(sql.NullString)
-		case memberproduct.FieldCreatedAt, memberproduct.FieldUpdatedAt, memberproduct.FieldValidityAt, memberproduct.FieldCancelAt:
+		case memberproduct.FieldCreatedAt, memberproduct.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -205,18 +201,6 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
 				mp.Price = value.Float64
-			}
-		case memberproduct.FieldValidityAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field validity_at", values[i])
-			} else if value.Valid {
-				mp.ValidityAt = value.Time
-			}
-		case memberproduct.FieldCancelAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field cancel_at", values[i])
-			} else if value.Valid {
-				mp.CancelAt = value.Time
 			}
 		default:
 			mp.selectValues.Set(columns[i], values[i])
@@ -306,12 +290,6 @@ func (mp *MemberProduct) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("price=")
 	builder.WriteString(fmt.Sprintf("%v", mp.Price))
-	builder.WriteString(", ")
-	builder.WriteString("validity_at=")
-	builder.WriteString(mp.ValidityAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("cancel_at=")
-	builder.WriteString(mp.CancelAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

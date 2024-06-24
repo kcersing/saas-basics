@@ -28,8 +28,8 @@ type PropertyInfo struct {
 	CreateId   int64           `json:"create_id"`
 	CreateName string          `json:"create_name"`
 	Venue      []PropertyVenue `json:"venue"`
-	Venues     string          `json:"venues"`
 	VenueId    []int64         `json:"venueId"`
+	Venues     string          `json:"venues"`
 }
 type PropertyVenue struct {
 	ID   int64  `json:"id"`

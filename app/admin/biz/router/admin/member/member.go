@@ -24,7 +24,6 @@ func Register(r *server.Hertz) {
 			{
 				_member := _admin.Group("/member", _memberMw()...)
 				_member.POST("/create", append(_creatememberMw(), member.CreateMember)...)
-				_member.POST("/entry-list", append(_memberentrylistMw(), member.MemberEntryList)...)
 				_member.GET("/info", append(_memberinfoMw(), member.MemberInfo)...)
 				_member.POST("/list", append(_memberlistMw(), member.MemberList)...)
 				_member.GET("/product-detail", append(_memberproductdetailMw(), member.MemberProductDetail)...)

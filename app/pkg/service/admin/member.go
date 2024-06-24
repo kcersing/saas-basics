@@ -11,6 +11,7 @@ import (
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/memberproduct"
 	"saas/pkg/db/ent/memberproductproperty"
 	"saas/pkg/db/ent/predicate"
@@ -39,12 +40,10 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		SetPassword(password).
 		SetAvatar(req.Avatar).
 		SetMobile(req.Mobile).
-		SetEmail(req.Email).
+		SetNickname(req.Nickname).
 		SetStatus(req.Status).
 		SetName(req.Name).
-		SetWecom(req.Wecom).
 		SetCondition(0).
-		SetCreateID(req.CreateId).
 		Save(m.ctx)
 	if err != nil {
 		err = rollback(tx, errors.Wrap(err, "create user failed"))
@@ -62,7 +61,9 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		gender = 2
 	}
 	_, err = tx.MemberDetails.Create().
-		SetNickname(req.Nickname).
+		SetEmail(req.Email).
+		SetWecom(req.Wecom).
+		SetCreateID(req.CreateId).
 		SetGender(gender).
 		SetBirthday(parsedTime).
 		SetInfo(noe).
@@ -85,12 +86,21 @@ func (m Member) Update(req do.CreateOrUpdateMemberReq) error {
 		SetPassword(password).
 		SetStatus(req.Status).
 		SetMobile(req.Mobile).
+		Save(m.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "create user failed")
+		return err
+	}
+
+	_, err = m.db.MemberDetails.Update().
+		Where(memberdetails.MemberIDEQ(req.ID)).
 		SetEmail(req.Email).
 		Save(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create user failed")
 		return err
 	}
+
 	return nil
 }
 
@@ -142,12 +152,38 @@ func (m Member) Info(ID int64) (memberInfo *do.MemberInfo, err error) {
 		err = errors.Wrap(err, "get member failed")
 		return memberInfo, err
 	}
-	err = copier.Copy(&memberInfo, &memberEnt)
+	memberDetails, err := m.db.MemberDetails.Query().Where(memberdetails.MemberIDEQ(ID)).First(m.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get member Details failed")
+		return memberInfo, err
+	}
+	err = copier.Copy(&memberInfo, &memberDetails)
 	if err != nil {
 		err = errors.Wrap(err, "copy member info failed")
 		return memberInfo, err
 	}
-	memberInfo.Avatar = minio.URLconvert(m.ctx, m.c, memberInfo.Avatar)
+
+	memberInfo.Avatar = minio.URLconvert(m.ctx, m.c, memberEnt.Avatar)
+	memberInfo.Name = memberEnt.Name
+	memberInfo.Mobile = memberEnt.Mobile
+	memberInfo.ID = memberEnt.ID
+	memberInfo.Nickname = memberEnt.Nickname
+	memberInfo.CreatedAt = memberEnt.CreatedAt.Format(time.DateTime)
+	memberInfo.Condition = memberEnt.Condition
+	memberInfo.Birthday = memberDetails.Birthday.Format(time.DateOnly)
+
+	if memberDetails.Gender == 0 {
+		memberInfo.Gender = "女性"
+	} else if memberDetails.Gender == 1 {
+		memberInfo.Gender = "男性"
+	} else {
+		memberInfo.Gender = "保密"
+	}
+
+	if !memberDetails.Birthday.IsZero() {
+		memberInfo.Age = int64(time.Now().Sub(memberDetails.Birthday).Hours() / 24 / 365)
+	}
+
 	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(memberInfo.ID)), &memberInfo, 1, 1*time.Hour)
 	return
 

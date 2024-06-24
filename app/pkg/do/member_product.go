@@ -2,68 +2,86 @@ package do
 
 type MemberProduct interface {
 	ProductList(req MemberProductListReq) (resp []*MemberProductInfo, total int, err error)
-	ProductDetail(ID int64) (roleInfo *MemberProductInfo, err error)
+	ProductDetail(ID int64) (info *MemberProductInfo, err error)
 	ProductUpdate(req MemberProductInfo) error
 	ProductUpdateStatus(ID int64, status int64) error
 
 	PropertyList(req MemberPropertyListReq) (resp []*MemberPropertyInfo, total int, err error)
-	PropertyDetail(ID int64) (roleInfo *MemberPropertyInfo, err error)
+	PropertyDetail(ID int64) (info *MemberPropertyInfo, err error)
 	PropertyUpdate(req MemberPropertyInfo) error
 	PropertyUpdateStatus(ID int64, status int64) error
-
-	EntryList(req MemberEntryListReq) (resp []*MemberEntryInfo, total int, err error)
 }
 type MemberProductInfo struct {
-	ID          int64          `json:"id"`
-	MemberId    int64          `json:"member_id"`
-	Name        string         `json:"name"`
-	Pic         string         `json:"pic"`
-	Description string         `json:"description"`
-	Property    []PropertyInfo `json:"property"`
-	Price       float64        `json:"price"`
-	Stock       int64          `json:"stock"`
-	Status      int64          `json:"status"`
-}
-type MemberPropertyListReq struct {
-	Page     int64  `json:"page"`
-	PageSize int64  `json:"pageSize"`
-	Mobile   string `json:"mobile"`
-	Name     string `json:"name"`
-	Status   int64  `json:"status"`
-}
+	ID        int64   `json:"id"`
+	Name      string  `json:"name"`
+	Price     float64 `json:"price"`
+	Status    int64   `json:"status"`
+	CreatedAt string  `json:"created_at"`
+	Sn        string  `json:"sn"`
+	MemberId  int64   `json:"member_id"`
+	OrderId   int64   `json:"order_id"`
+	VenueId   int64   `json:"venue_id"`
 
-type MemberEntryListReq struct {
-	Page     int64  `json:"page"`
-	PageSize int64  `json:"pageSize"`
-	Mobile   string `json:"mobile"`
-	Name     string `json:"name"`
-	Status   int64  `json:"status"`
+	VenueName int64 `json:"venue_name"`
+	ProductId int64 `json:"product_id"`
+
+	Property []MemberPropertyInfo `json:"property"`
 }
 
 type MemberProductListReq struct {
-	Page     int64  `json:"page"`
-	PageSize int64  `json:"pageSize"`
-	Mobile   string `json:"mobile"`
 	Name     string `json:"name"`
+	MemberId int64  `json:"member_id"`
+	VenueId  int64  `json:"venue_id"`
 	Status   int64  `json:"status"`
+
+	Page     int64 `json:"page"`
+	PageSize int64 `json:"pageSize"`
+}
+
+type MemberPropertyListReq struct {
+	Name            string `json:"name"`
+	MemberId        int64  `json:"member_id"`
+	MemberProductId int64  `json:"member_product_id"`
+	Type            string `json:"type"`
+	Status          int64  `json:"status"`
+	VenueId         int64  `json:"venue_id"`
+
+	Page     int64 `json:"page"`
+	PageSize int64 `json:"pageSize"`
 }
 
 type MemberPropertyInfo struct {
-	ID        int64   `json:"id"`
-	MemberId  int64   `json:"member_id"`
-	ProductId int64   `json:"productId"`
-	Name      string  `json:"name"`
-	Price     float64 `json:"price"`
-	Duration  int64   `json:"duration"`
-	Length    int64   `json:"length"`
-	Count     int64   `json:"count"`
-	Type      string  `json:"type"`
-	Data      string  `json:"data"`
-	Status    int64   `json:"status"`
+	ID              int64           `json:"id"`
+	Sn              string          `json:"sn"`
+	MemberId        int64           `json:"member_id"`
+	MemberProductId int64           `json:"member_product_id"`
+	PropertyId      int64           `json:"property_id"`
+	Name            string          `json:"name"`
+	Price           float64         `json:"price"`
+	Duration        int64           `json:"duration"`
+	Length          int64           `json:"length"`
+	Count           int64           `json:"count"`
+	CountSurplus    int64           `json:"count_surplus"`
+	Type            string          `json:"type"`
+	Status          int64           `json:"status"`
+	CreatedAt       string          `json:"created_at"`
+	ValidityAt      string          `json:"validity_at"`
+	CancelAt        string          `json:"cancel_at"`
+	Venue           []PropertyVenue `json:"venue"`
+	VenueId         []int64         `json:"venueId"`
+	Venues          string          `json:"venues"`
 }
 
 type MemberEntryInfo struct {
-	ID int64 `json:"id"`
+	ID               int64  `json:"id"`
+	CreatedAt        string `json:"created_at"`
+	MemberPropertyId int64  `json:"member_property_id"`
+	EntryTime        string `json:"entry_time"`
+	LeavingTime      string `json:"leaving_time"`
+	MemberId         int64  `json:"member_id"`
+	MemberProductId  int64  `json:"member_product_id"`
+	UserId           int64  `json:"user_id"`
+	VenueId          int64  `json:"venue_id"`
 }
 
 // MPStatus 会员产品状态

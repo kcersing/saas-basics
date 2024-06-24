@@ -167,13 +167,13 @@ func MemberProductList(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	var listReq do.MemberListReq
+	var listReq do.MemberProductListReq
 	err = copier.Copy(&listReq, &req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	userList, total, err := admin.NewMember(ctx, c).List(listReq)
+	userList, total, err := admin.NewMemberProduct(ctx, c).ProductList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -249,31 +249,6 @@ func MemberPropertyDetail(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// MemberEntryList .
-// @router /api/admin/member/entry-list [POST]
-func MemberEntryList(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req member.MemberEntryListReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	var listReq do.MemberListReq
-	err = copier.Copy(&listReq, &req)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	userList, total, err := admin.NewMember(ctx, c).List(listReq)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, userList, int64(total), "")
-	return
-}
-
 // MemberPropertyUpdate .
 // @router /api/admin/member/property-update [POST]
 func MemberPropertyUpdate(ctx context.Context, c *app.RequestContext) {
@@ -281,11 +256,23 @@ func MemberPropertyUpdate(ctx context.Context, c *app.RequestContext) {
 	var req member.MemberPropertyListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	var createOrUpdateMemberReq do.CreateOrUpdateMemberReq
+	err = copier.Copy(&createOrUpdateMemberReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewMember(ctx, c).Update(createOrUpdateMemberReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }

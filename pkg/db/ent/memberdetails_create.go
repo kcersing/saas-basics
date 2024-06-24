@@ -63,16 +63,30 @@ func (mdc *MemberDetailsCreate) SetNillableMemberID(i *int64) *MemberDetailsCrea
 	return mdc
 }
 
-// SetNickname sets the "nickname" field.
-func (mdc *MemberDetailsCreate) SetNickname(s string) *MemberDetailsCreate {
-	mdc.mutation.SetNickname(s)
+// SetEmail sets the "email" field.
+func (mdc *MemberDetailsCreate) SetEmail(s string) *MemberDetailsCreate {
+	mdc.mutation.SetEmail(s)
 	return mdc
 }
 
-// SetNillableNickname sets the "nickname" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableNickname(s *string) *MemberDetailsCreate {
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableEmail(s *string) *MemberDetailsCreate {
 	if s != nil {
-		mdc.SetNickname(*s)
+		mdc.SetEmail(*s)
+	}
+	return mdc
+}
+
+// SetWecom sets the "wecom" field.
+func (mdc *MemberDetailsCreate) SetWecom(s string) *MemberDetailsCreate {
+	mdc.mutation.SetWecom(s)
+	return mdc
+}
+
+// SetNillableWecom sets the "wecom" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableWecom(s *string) *MemberDetailsCreate {
+	if s != nil {
+		mdc.SetWecom(*s)
 	}
 	return mdc
 }
@@ -217,6 +231,20 @@ func (mdc *MemberDetailsCreate) SetNillableProductID(i *int64) *MemberDetailsCre
 	return mdc
 }
 
+// SetProductName sets the "product_name" field.
+func (mdc *MemberDetailsCreate) SetProductName(s string) *MemberDetailsCreate {
+	mdc.mutation.SetProductName(s)
+	return mdc
+}
+
+// SetNillableProductName sets the "product_name" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableProductName(s *string) *MemberDetailsCreate {
+	if s != nil {
+		mdc.SetProductName(*s)
+	}
+	return mdc
+}
+
 // SetProductVenue sets the "product_venue" field.
 func (mdc *MemberDetailsCreate) SetProductVenue(i int64) *MemberDetailsCreate {
 	mdc.mutation.SetProductVenue(i)
@@ -227,6 +255,20 @@ func (mdc *MemberDetailsCreate) SetProductVenue(i int64) *MemberDetailsCreate {
 func (mdc *MemberDetailsCreate) SetNillableProductVenue(i *int64) *MemberDetailsCreate {
 	if i != nil {
 		mdc.SetProductVenue(*i)
+	}
+	return mdc
+}
+
+// SetProductVenueName sets the "product_venue_name" field.
+func (mdc *MemberDetailsCreate) SetProductVenueName(s string) *MemberDetailsCreate {
+	mdc.mutation.SetProductVenueName(s)
+	return mdc
+}
+
+// SetNillableProductVenueName sets the "product_venue_name" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableProductVenueName(s *string) *MemberDetailsCreate {
+	if s != nil {
+		mdc.SetProductVenueName(*s)
 	}
 	return mdc
 }
@@ -301,6 +343,20 @@ func (mdc *MemberDetailsCreate) SetNillableRelationUID(i *int64) *MemberDetailsC
 	return mdc
 }
 
+// SetRelationUname sets the "relation_uname" field.
+func (mdc *MemberDetailsCreate) SetRelationUname(s string) *MemberDetailsCreate {
+	mdc.mutation.SetRelationUname(s)
+	return mdc
+}
+
+// SetNillableRelationUname sets the "relation_uname" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableRelationUname(s *string) *MemberDetailsCreate {
+	if s != nil {
+		mdc.SetRelationUname(*s)
+	}
+	return mdc
+}
+
 // SetRelationMid sets the "relation_mid" field.
 func (mdc *MemberDetailsCreate) SetRelationMid(i int64) *MemberDetailsCreate {
 	mdc.mutation.SetRelationMid(i)
@@ -311,6 +367,48 @@ func (mdc *MemberDetailsCreate) SetRelationMid(i int64) *MemberDetailsCreate {
 func (mdc *MemberDetailsCreate) SetNillableRelationMid(i *int64) *MemberDetailsCreate {
 	if i != nil {
 		mdc.SetRelationMid(*i)
+	}
+	return mdc
+}
+
+// SetRelationMame sets the "relation_mame" field.
+func (mdc *MemberDetailsCreate) SetRelationMame(s string) *MemberDetailsCreate {
+	mdc.mutation.SetRelationMame(s)
+	return mdc
+}
+
+// SetNillableRelationMame sets the "relation_mame" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableRelationMame(s *string) *MemberDetailsCreate {
+	if s != nil {
+		mdc.SetRelationMame(*s)
+	}
+	return mdc
+}
+
+// SetCreateID sets the "create_id" field.
+func (mdc *MemberDetailsCreate) SetCreateID(i int64) *MemberDetailsCreate {
+	mdc.mutation.SetCreateID(i)
+	return mdc
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableCreateID(i *int64) *MemberDetailsCreate {
+	if i != nil {
+		mdc.SetCreateID(*i)
+	}
+	return mdc
+}
+
+// SetCreateName sets the "create_name" field.
+func (mdc *MemberDetailsCreate) SetCreateName(s string) *MemberDetailsCreate {
+	mdc.mutation.SetCreateName(s)
+	return mdc
+}
+
+// SetNillableCreateName sets the "create_name" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableCreateName(s *string) *MemberDetailsCreate {
+	if s != nil {
+		mdc.SetCreateName(*s)
 	}
 	return mdc
 }
@@ -423,18 +521,6 @@ func (mdc *MemberDetailsCreate) defaults() {
 		v := memberdetails.DefaultEntrySum
 		mdc.mutation.SetEntrySum(v)
 	}
-	if _, ok := mdc.mutation.EntryLastTime(); !ok {
-		v := memberdetails.DefaultEntryLastTime()
-		mdc.mutation.SetEntryLastTime(v)
-	}
-	if _, ok := mdc.mutation.EntryDeadlineTime(); !ok {
-		v := memberdetails.DefaultEntryDeadlineTime()
-		mdc.mutation.SetEntryDeadlineTime(v)
-	}
-	if _, ok := mdc.mutation.ClassLastTime(); !ok {
-		v := memberdetails.DefaultClassLastTime()
-		mdc.mutation.SetClassLastTime(v)
-	}
 	if _, ok := mdc.mutation.RelationUID(); !ok {
 		v := memberdetails.DefaultRelationUID
 		mdc.mutation.SetRelationUID(v)
@@ -496,9 +582,13 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 		_spec.SetField(memberdetails.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mdc.mutation.Nickname(); ok {
-		_spec.SetField(memberdetails.FieldNickname, field.TypeString, value)
-		_node.Nickname = value
+	if value, ok := mdc.mutation.Email(); ok {
+		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)
+		_node.Email = value
+	}
+	if value, ok := mdc.mutation.Wecom(); ok {
+		_spec.SetField(memberdetails.FieldWecom, field.TypeString, value)
+		_node.Wecom = value
 	}
 	if value, ok := mdc.mutation.Gender(); ok {
 		_spec.SetField(memberdetails.FieldGender, field.TypeInt64, value)
@@ -540,9 +630,17 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 		_spec.SetField(memberdetails.FieldProductID, field.TypeInt64, value)
 		_node.ProductID = value
 	}
+	if value, ok := mdc.mutation.ProductName(); ok {
+		_spec.SetField(memberdetails.FieldProductName, field.TypeString, value)
+		_node.ProductName = value
+	}
 	if value, ok := mdc.mutation.ProductVenue(); ok {
 		_spec.SetField(memberdetails.FieldProductVenue, field.TypeInt64, value)
 		_node.ProductVenue = value
+	}
+	if value, ok := mdc.mutation.ProductVenueName(); ok {
+		_spec.SetField(memberdetails.FieldProductVenueName, field.TypeString, value)
+		_node.ProductVenueName = value
 	}
 	if value, ok := mdc.mutation.EntrySum(); ok {
 		_spec.SetField(memberdetails.FieldEntrySum, field.TypeInt64, value)
@@ -564,9 +662,25 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 		_spec.SetField(memberdetails.FieldRelationUID, field.TypeInt64, value)
 		_node.RelationUID = value
 	}
+	if value, ok := mdc.mutation.RelationUname(); ok {
+		_spec.SetField(memberdetails.FieldRelationUname, field.TypeString, value)
+		_node.RelationUname = value
+	}
 	if value, ok := mdc.mutation.RelationMid(); ok {
 		_spec.SetField(memberdetails.FieldRelationMid, field.TypeInt64, value)
 		_node.RelationMid = value
+	}
+	if value, ok := mdc.mutation.RelationMame(); ok {
+		_spec.SetField(memberdetails.FieldRelationMame, field.TypeString, value)
+		_node.RelationMame = value
+	}
+	if value, ok := mdc.mutation.CreateID(); ok {
+		_spec.SetField(memberdetails.FieldCreateID, field.TypeInt64, value)
+		_node.CreateID = value
+	}
+	if value, ok := mdc.mutation.CreateName(); ok {
+		_spec.SetField(memberdetails.FieldCreateName, field.TypeString, value)
+		_node.CreateName = value
 	}
 	if nodes := mdc.mutation.InfoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

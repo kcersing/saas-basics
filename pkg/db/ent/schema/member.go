@@ -17,10 +17,10 @@ type Member struct {
 func (Member) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("password").Optional().Comment("password | 密码"),
-		field.String("name").Optional().Comment("name | 名称"),
+		field.String("name").Optional().Comment("name | 账号"),
+		field.String("nickname").Unique().Comment("nickname | 姓名").Optional(),
 		field.String("mobile").Optional().Comment("mobile number | 手机号"),
-		field.String("email").Optional().Comment("email | 邮箱号"),
-		field.String("wecom").Optional().Comment("wecom | 微信号"),
+
 		field.String("avatar").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Optional().
@@ -29,10 +29,7 @@ func (Member) Fields() []ent.Field {
 		field.Int64("condition").
 			Default(1).
 			Optional().
-			Comment("状态[0:潜在;1:正式;2:到期]"),
-		field.Int64("create_id").
-			Optional().
-			Comment("创建人"),
+			Comment("状态[0:潜在;1:正式;3:冻结;4:到期]"),
 	}
 }
 

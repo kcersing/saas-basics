@@ -42,6 +42,10 @@ const (
 	FieldCountSurplus = "count_surplus"
 	// FieldPrice holds the string denoting the price field in the database.
 	FieldPrice = "price"
+	// FieldValidityAt holds the string denoting the validity_at field in the database.
+	FieldValidityAt = "validity_at"
+	// FieldCancelAt holds the string denoting the cancel_at field in the database.
+	FieldCancelAt = "cancel_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeVenues holds the string denoting the venues edge name in mutations.
@@ -79,6 +83,8 @@ var Columns = []string{
 	FieldCount,
 	FieldCountSurplus,
 	FieldPrice,
+	FieldValidityAt,
+	FieldCancelAt,
 }
 
 var (
@@ -188,6 +194,16 @@ func ByCountSurplus(opts ...sql.OrderTermOption) OrderOption {
 // ByPrice orders the results by the price field.
 func ByPrice(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrice, opts...).ToFunc()
+}
+
+// ByValidityAt orders the results by the validity_at field.
+func ByValidityAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldValidityAt, opts...).ToFunc()
+}
+
+// ByCancelAt orders the results by the cancel_at field.
+func ByCancelAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCancelAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

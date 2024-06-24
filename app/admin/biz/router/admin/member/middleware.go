@@ -4,8 +4,6 @@ package member
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
-	"saas/app/admin/biz/handler/mw"
-	"saas/app/admin/infras"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -19,10 +17,11 @@ func _apiMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
-		mw.LogMw(),
-	}
+	//return []app.HandlerFunc{
+	//	mw.GetJWTMw(infras.CasbinEnforcer()).MiddlewareFunc(),
+	//	mw.LogMw(),
+	//}
+	return nil
 }
 
 func _memberMw() []app.HandlerFunc {
@@ -96,6 +95,11 @@ func _memberpropertylistMw() []app.HandlerFunc {
 }
 
 func _memberpropertyupdateMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _entryMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

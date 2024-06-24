@@ -107,6 +107,26 @@ func (mu *MemberUpdate) ClearName() *MemberUpdate {
 	return mu
 }
 
+// SetNickname sets the "nickname" field.
+func (mu *MemberUpdate) SetNickname(s string) *MemberUpdate {
+	mu.mutation.SetNickname(s)
+	return mu
+}
+
+// SetNillableNickname sets the "nickname" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillableNickname(s *string) *MemberUpdate {
+	if s != nil {
+		mu.SetNickname(*s)
+	}
+	return mu
+}
+
+// ClearNickname clears the value of the "nickname" field.
+func (mu *MemberUpdate) ClearNickname() *MemberUpdate {
+	mu.mutation.ClearNickname()
+	return mu
+}
+
 // SetMobile sets the "mobile" field.
 func (mu *MemberUpdate) SetMobile(s string) *MemberUpdate {
 	mu.mutation.SetMobile(s)
@@ -124,46 +144,6 @@ func (mu *MemberUpdate) SetNillableMobile(s *string) *MemberUpdate {
 // ClearMobile clears the value of the "mobile" field.
 func (mu *MemberUpdate) ClearMobile() *MemberUpdate {
 	mu.mutation.ClearMobile()
-	return mu
-}
-
-// SetEmail sets the "email" field.
-func (mu *MemberUpdate) SetEmail(s string) *MemberUpdate {
-	mu.mutation.SetEmail(s)
-	return mu
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (mu *MemberUpdate) SetNillableEmail(s *string) *MemberUpdate {
-	if s != nil {
-		mu.SetEmail(*s)
-	}
-	return mu
-}
-
-// ClearEmail clears the value of the "email" field.
-func (mu *MemberUpdate) ClearEmail() *MemberUpdate {
-	mu.mutation.ClearEmail()
-	return mu
-}
-
-// SetWecom sets the "wecom" field.
-func (mu *MemberUpdate) SetWecom(s string) *MemberUpdate {
-	mu.mutation.SetWecom(s)
-	return mu
-}
-
-// SetNillableWecom sets the "wecom" field if the given value is not nil.
-func (mu *MemberUpdate) SetNillableWecom(s *string) *MemberUpdate {
-	if s != nil {
-		mu.SetWecom(*s)
-	}
-	return mu
-}
-
-// ClearWecom clears the value of the "wecom" field.
-func (mu *MemberUpdate) ClearWecom() *MemberUpdate {
-	mu.mutation.ClearWecom()
 	return mu
 }
 
@@ -211,33 +191,6 @@ func (mu *MemberUpdate) AddCondition(i int64) *MemberUpdate {
 // ClearCondition clears the value of the "condition" field.
 func (mu *MemberUpdate) ClearCondition() *MemberUpdate {
 	mu.mutation.ClearCondition()
-	return mu
-}
-
-// SetCreateID sets the "create_id" field.
-func (mu *MemberUpdate) SetCreateID(i int64) *MemberUpdate {
-	mu.mutation.ResetCreateID()
-	mu.mutation.SetCreateID(i)
-	return mu
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (mu *MemberUpdate) SetNillableCreateID(i *int64) *MemberUpdate {
-	if i != nil {
-		mu.SetCreateID(*i)
-	}
-	return mu
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (mu *MemberUpdate) AddCreateID(i int64) *MemberUpdate {
-	mu.mutation.AddCreateID(i)
-	return mu
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (mu *MemberUpdate) ClearCreateID() *MemberUpdate {
-	mu.mutation.ClearCreateID()
 	return mu
 }
 
@@ -531,23 +484,17 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if mu.mutation.NameCleared() {
 		_spec.ClearField(member.FieldName, field.TypeString)
 	}
+	if value, ok := mu.mutation.Nickname(); ok {
+		_spec.SetField(member.FieldNickname, field.TypeString, value)
+	}
+	if mu.mutation.NicknameCleared() {
+		_spec.ClearField(member.FieldNickname, field.TypeString)
+	}
 	if value, ok := mu.mutation.Mobile(); ok {
 		_spec.SetField(member.FieldMobile, field.TypeString, value)
 	}
 	if mu.mutation.MobileCleared() {
 		_spec.ClearField(member.FieldMobile, field.TypeString)
-	}
-	if value, ok := mu.mutation.Email(); ok {
-		_spec.SetField(member.FieldEmail, field.TypeString, value)
-	}
-	if mu.mutation.EmailCleared() {
-		_spec.ClearField(member.FieldEmail, field.TypeString)
-	}
-	if value, ok := mu.mutation.Wecom(); ok {
-		_spec.SetField(member.FieldWecom, field.TypeString, value)
-	}
-	if mu.mutation.WecomCleared() {
-		_spec.ClearField(member.FieldWecom, field.TypeString)
 	}
 	if value, ok := mu.mutation.Avatar(); ok {
 		_spec.SetField(member.FieldAvatar, field.TypeString, value)
@@ -563,15 +510,6 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.ConditionCleared() {
 		_spec.ClearField(member.FieldCondition, field.TypeInt64)
-	}
-	if value, ok := mu.mutation.CreateID(); ok {
-		_spec.SetField(member.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := mu.mutation.AddedCreateID(); ok {
-		_spec.AddField(member.FieldCreateID, field.TypeInt64, value)
-	}
-	if mu.mutation.CreateIDCleared() {
-		_spec.ClearField(member.FieldCreateID, field.TypeInt64)
 	}
 	if mu.mutation.MemberDetailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -936,6 +874,26 @@ func (muo *MemberUpdateOne) ClearName() *MemberUpdateOne {
 	return muo
 }
 
+// SetNickname sets the "nickname" field.
+func (muo *MemberUpdateOne) SetNickname(s string) *MemberUpdateOne {
+	muo.mutation.SetNickname(s)
+	return muo
+}
+
+// SetNillableNickname sets the "nickname" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableNickname(s *string) *MemberUpdateOne {
+	if s != nil {
+		muo.SetNickname(*s)
+	}
+	return muo
+}
+
+// ClearNickname clears the value of the "nickname" field.
+func (muo *MemberUpdateOne) ClearNickname() *MemberUpdateOne {
+	muo.mutation.ClearNickname()
+	return muo
+}
+
 // SetMobile sets the "mobile" field.
 func (muo *MemberUpdateOne) SetMobile(s string) *MemberUpdateOne {
 	muo.mutation.SetMobile(s)
@@ -953,46 +911,6 @@ func (muo *MemberUpdateOne) SetNillableMobile(s *string) *MemberUpdateOne {
 // ClearMobile clears the value of the "mobile" field.
 func (muo *MemberUpdateOne) ClearMobile() *MemberUpdateOne {
 	muo.mutation.ClearMobile()
-	return muo
-}
-
-// SetEmail sets the "email" field.
-func (muo *MemberUpdateOne) SetEmail(s string) *MemberUpdateOne {
-	muo.mutation.SetEmail(s)
-	return muo
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (muo *MemberUpdateOne) SetNillableEmail(s *string) *MemberUpdateOne {
-	if s != nil {
-		muo.SetEmail(*s)
-	}
-	return muo
-}
-
-// ClearEmail clears the value of the "email" field.
-func (muo *MemberUpdateOne) ClearEmail() *MemberUpdateOne {
-	muo.mutation.ClearEmail()
-	return muo
-}
-
-// SetWecom sets the "wecom" field.
-func (muo *MemberUpdateOne) SetWecom(s string) *MemberUpdateOne {
-	muo.mutation.SetWecom(s)
-	return muo
-}
-
-// SetNillableWecom sets the "wecom" field if the given value is not nil.
-func (muo *MemberUpdateOne) SetNillableWecom(s *string) *MemberUpdateOne {
-	if s != nil {
-		muo.SetWecom(*s)
-	}
-	return muo
-}
-
-// ClearWecom clears the value of the "wecom" field.
-func (muo *MemberUpdateOne) ClearWecom() *MemberUpdateOne {
-	muo.mutation.ClearWecom()
 	return muo
 }
 
@@ -1040,33 +958,6 @@ func (muo *MemberUpdateOne) AddCondition(i int64) *MemberUpdateOne {
 // ClearCondition clears the value of the "condition" field.
 func (muo *MemberUpdateOne) ClearCondition() *MemberUpdateOne {
 	muo.mutation.ClearCondition()
-	return muo
-}
-
-// SetCreateID sets the "create_id" field.
-func (muo *MemberUpdateOne) SetCreateID(i int64) *MemberUpdateOne {
-	muo.mutation.ResetCreateID()
-	muo.mutation.SetCreateID(i)
-	return muo
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (muo *MemberUpdateOne) SetNillableCreateID(i *int64) *MemberUpdateOne {
-	if i != nil {
-		muo.SetCreateID(*i)
-	}
-	return muo
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (muo *MemberUpdateOne) AddCreateID(i int64) *MemberUpdateOne {
-	muo.mutation.AddCreateID(i)
-	return muo
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (muo *MemberUpdateOne) ClearCreateID() *MemberUpdateOne {
-	muo.mutation.ClearCreateID()
 	return muo
 }
 
@@ -1390,23 +1281,17 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	if muo.mutation.NameCleared() {
 		_spec.ClearField(member.FieldName, field.TypeString)
 	}
+	if value, ok := muo.mutation.Nickname(); ok {
+		_spec.SetField(member.FieldNickname, field.TypeString, value)
+	}
+	if muo.mutation.NicknameCleared() {
+		_spec.ClearField(member.FieldNickname, field.TypeString)
+	}
 	if value, ok := muo.mutation.Mobile(); ok {
 		_spec.SetField(member.FieldMobile, field.TypeString, value)
 	}
 	if muo.mutation.MobileCleared() {
 		_spec.ClearField(member.FieldMobile, field.TypeString)
-	}
-	if value, ok := muo.mutation.Email(); ok {
-		_spec.SetField(member.FieldEmail, field.TypeString, value)
-	}
-	if muo.mutation.EmailCleared() {
-		_spec.ClearField(member.FieldEmail, field.TypeString)
-	}
-	if value, ok := muo.mutation.Wecom(); ok {
-		_spec.SetField(member.FieldWecom, field.TypeString, value)
-	}
-	if muo.mutation.WecomCleared() {
-		_spec.ClearField(member.FieldWecom, field.TypeString)
 	}
 	if value, ok := muo.mutation.Avatar(); ok {
 		_spec.SetField(member.FieldAvatar, field.TypeString, value)
@@ -1422,15 +1307,6 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	}
 	if muo.mutation.ConditionCleared() {
 		_spec.ClearField(member.FieldCondition, field.TypeInt64)
-	}
-	if value, ok := muo.mutation.CreateID(); ok {
-		_spec.SetField(member.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := muo.mutation.AddedCreateID(); ok {
-		_spec.AddField(member.FieldCreateID, field.TypeInt64, value)
-	}
-	if muo.mutation.CreateIDCleared() {
-		_spec.ClearField(member.FieldCreateID, field.TypeInt64)
 	}
 	if muo.mutation.MemberDetailsCleared() {
 		edge := &sqlgraph.EdgeSpec{

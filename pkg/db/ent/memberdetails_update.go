@@ -55,23 +55,43 @@ func (mdu *MemberDetailsUpdate) ClearMemberID() *MemberDetailsUpdate {
 	return mdu
 }
 
-// SetNickname sets the "nickname" field.
-func (mdu *MemberDetailsUpdate) SetNickname(s string) *MemberDetailsUpdate {
-	mdu.mutation.SetNickname(s)
+// SetEmail sets the "email" field.
+func (mdu *MemberDetailsUpdate) SetEmail(s string) *MemberDetailsUpdate {
+	mdu.mutation.SetEmail(s)
 	return mdu
 }
 
-// SetNillableNickname sets the "nickname" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableNickname(s *string) *MemberDetailsUpdate {
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableEmail(s *string) *MemberDetailsUpdate {
 	if s != nil {
-		mdu.SetNickname(*s)
+		mdu.SetEmail(*s)
 	}
 	return mdu
 }
 
-// ClearNickname clears the value of the "nickname" field.
-func (mdu *MemberDetailsUpdate) ClearNickname() *MemberDetailsUpdate {
-	mdu.mutation.ClearNickname()
+// ClearEmail clears the value of the "email" field.
+func (mdu *MemberDetailsUpdate) ClearEmail() *MemberDetailsUpdate {
+	mdu.mutation.ClearEmail()
+	return mdu
+}
+
+// SetWecom sets the "wecom" field.
+func (mdu *MemberDetailsUpdate) SetWecom(s string) *MemberDetailsUpdate {
+	mdu.mutation.SetWecom(s)
+	return mdu
+}
+
+// SetNillableWecom sets the "wecom" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableWecom(s *string) *MemberDetailsUpdate {
+	if s != nil {
+		mdu.SetWecom(*s)
+	}
+	return mdu
+}
+
+// ClearWecom clears the value of the "wecom" field.
+func (mdu *MemberDetailsUpdate) ClearWecom() *MemberDetailsUpdate {
+	mdu.mutation.ClearWecom()
 	return mdu
 }
 
@@ -276,6 +296,26 @@ func (mdu *MemberDetailsUpdate) ClearProductID() *MemberDetailsUpdate {
 	return mdu
 }
 
+// SetProductName sets the "product_name" field.
+func (mdu *MemberDetailsUpdate) SetProductName(s string) *MemberDetailsUpdate {
+	mdu.mutation.SetProductName(s)
+	return mdu
+}
+
+// SetNillableProductName sets the "product_name" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableProductName(s *string) *MemberDetailsUpdate {
+	if s != nil {
+		mdu.SetProductName(*s)
+	}
+	return mdu
+}
+
+// ClearProductName clears the value of the "product_name" field.
+func (mdu *MemberDetailsUpdate) ClearProductName() *MemberDetailsUpdate {
+	mdu.mutation.ClearProductName()
+	return mdu
+}
+
 // SetProductVenue sets the "product_venue" field.
 func (mdu *MemberDetailsUpdate) SetProductVenue(i int64) *MemberDetailsUpdate {
 	mdu.mutation.ResetProductVenue()
@@ -300,6 +340,26 @@ func (mdu *MemberDetailsUpdate) AddProductVenue(i int64) *MemberDetailsUpdate {
 // ClearProductVenue clears the value of the "product_venue" field.
 func (mdu *MemberDetailsUpdate) ClearProductVenue() *MemberDetailsUpdate {
 	mdu.mutation.ClearProductVenue()
+	return mdu
+}
+
+// SetProductVenueName sets the "product_venue_name" field.
+func (mdu *MemberDetailsUpdate) SetProductVenueName(s string) *MemberDetailsUpdate {
+	mdu.mutation.SetProductVenueName(s)
+	return mdu
+}
+
+// SetNillableProductVenueName sets the "product_venue_name" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableProductVenueName(s *string) *MemberDetailsUpdate {
+	if s != nil {
+		mdu.SetProductVenueName(*s)
+	}
+	return mdu
+}
+
+// ClearProductVenueName clears the value of the "product_venue_name" field.
+func (mdu *MemberDetailsUpdate) ClearProductVenueName() *MemberDetailsUpdate {
+	mdu.mutation.ClearProductVenueName()
 	return mdu
 }
 
@@ -417,6 +477,26 @@ func (mdu *MemberDetailsUpdate) ClearRelationUID() *MemberDetailsUpdate {
 	return mdu
 }
 
+// SetRelationUname sets the "relation_uname" field.
+func (mdu *MemberDetailsUpdate) SetRelationUname(s string) *MemberDetailsUpdate {
+	mdu.mutation.SetRelationUname(s)
+	return mdu
+}
+
+// SetNillableRelationUname sets the "relation_uname" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableRelationUname(s *string) *MemberDetailsUpdate {
+	if s != nil {
+		mdu.SetRelationUname(*s)
+	}
+	return mdu
+}
+
+// ClearRelationUname clears the value of the "relation_uname" field.
+func (mdu *MemberDetailsUpdate) ClearRelationUname() *MemberDetailsUpdate {
+	mdu.mutation.ClearRelationUname()
+	return mdu
+}
+
 // SetRelationMid sets the "relation_mid" field.
 func (mdu *MemberDetailsUpdate) SetRelationMid(i int64) *MemberDetailsUpdate {
 	mdu.mutation.ResetRelationMid()
@@ -441,6 +521,73 @@ func (mdu *MemberDetailsUpdate) AddRelationMid(i int64) *MemberDetailsUpdate {
 // ClearRelationMid clears the value of the "relation_mid" field.
 func (mdu *MemberDetailsUpdate) ClearRelationMid() *MemberDetailsUpdate {
 	mdu.mutation.ClearRelationMid()
+	return mdu
+}
+
+// SetRelationMame sets the "relation_mame" field.
+func (mdu *MemberDetailsUpdate) SetRelationMame(s string) *MemberDetailsUpdate {
+	mdu.mutation.SetRelationMame(s)
+	return mdu
+}
+
+// SetNillableRelationMame sets the "relation_mame" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableRelationMame(s *string) *MemberDetailsUpdate {
+	if s != nil {
+		mdu.SetRelationMame(*s)
+	}
+	return mdu
+}
+
+// ClearRelationMame clears the value of the "relation_mame" field.
+func (mdu *MemberDetailsUpdate) ClearRelationMame() *MemberDetailsUpdate {
+	mdu.mutation.ClearRelationMame()
+	return mdu
+}
+
+// SetCreateID sets the "create_id" field.
+func (mdu *MemberDetailsUpdate) SetCreateID(i int64) *MemberDetailsUpdate {
+	mdu.mutation.ResetCreateID()
+	mdu.mutation.SetCreateID(i)
+	return mdu
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableCreateID(i *int64) *MemberDetailsUpdate {
+	if i != nil {
+		mdu.SetCreateID(*i)
+	}
+	return mdu
+}
+
+// AddCreateID adds i to the "create_id" field.
+func (mdu *MemberDetailsUpdate) AddCreateID(i int64) *MemberDetailsUpdate {
+	mdu.mutation.AddCreateID(i)
+	return mdu
+}
+
+// ClearCreateID clears the value of the "create_id" field.
+func (mdu *MemberDetailsUpdate) ClearCreateID() *MemberDetailsUpdate {
+	mdu.mutation.ClearCreateID()
+	return mdu
+}
+
+// SetCreateName sets the "create_name" field.
+func (mdu *MemberDetailsUpdate) SetCreateName(s string) *MemberDetailsUpdate {
+	mdu.mutation.SetCreateName(s)
+	return mdu
+}
+
+// SetNillableCreateName sets the "create_name" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableCreateName(s *string) *MemberDetailsUpdate {
+	if s != nil {
+		mdu.SetCreateName(*s)
+	}
+	return mdu
+}
+
+// ClearCreateName clears the value of the "create_name" field.
+func (mdu *MemberDetailsUpdate) ClearCreateName() *MemberDetailsUpdate {
+	mdu.mutation.ClearCreateName()
 	return mdu
 }
 
@@ -522,11 +669,17 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if value, ok := mdu.mutation.UpdatedAt(); ok {
 		_spec.SetField(memberdetails.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := mdu.mutation.Nickname(); ok {
-		_spec.SetField(memberdetails.FieldNickname, field.TypeString, value)
+	if value, ok := mdu.mutation.Email(); ok {
+		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)
 	}
-	if mdu.mutation.NicknameCleared() {
-		_spec.ClearField(memberdetails.FieldNickname, field.TypeString)
+	if mdu.mutation.EmailCleared() {
+		_spec.ClearField(memberdetails.FieldEmail, field.TypeString)
+	}
+	if value, ok := mdu.mutation.Wecom(); ok {
+		_spec.SetField(memberdetails.FieldWecom, field.TypeString, value)
+	}
+	if mdu.mutation.WecomCleared() {
+		_spec.ClearField(memberdetails.FieldWecom, field.TypeString)
 	}
 	if value, ok := mdu.mutation.Gender(); ok {
 		_spec.SetField(memberdetails.FieldGender, field.TypeInt64, value)
@@ -591,6 +744,12 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mdu.mutation.ProductIDCleared() {
 		_spec.ClearField(memberdetails.FieldProductID, field.TypeInt64)
 	}
+	if value, ok := mdu.mutation.ProductName(); ok {
+		_spec.SetField(memberdetails.FieldProductName, field.TypeString, value)
+	}
+	if mdu.mutation.ProductNameCleared() {
+		_spec.ClearField(memberdetails.FieldProductName, field.TypeString)
+	}
 	if value, ok := mdu.mutation.ProductVenue(); ok {
 		_spec.SetField(memberdetails.FieldProductVenue, field.TypeInt64, value)
 	}
@@ -599,6 +758,12 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mdu.mutation.ProductVenueCleared() {
 		_spec.ClearField(memberdetails.FieldProductVenue, field.TypeInt64)
+	}
+	if value, ok := mdu.mutation.ProductVenueName(); ok {
+		_spec.SetField(memberdetails.FieldProductVenueName, field.TypeString, value)
+	}
+	if mdu.mutation.ProductVenueNameCleared() {
+		_spec.ClearField(memberdetails.FieldProductVenueName, field.TypeString)
 	}
 	if value, ok := mdu.mutation.EntrySum(); ok {
 		_spec.SetField(memberdetails.FieldEntrySum, field.TypeInt64, value)
@@ -636,6 +801,12 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mdu.mutation.RelationUIDCleared() {
 		_spec.ClearField(memberdetails.FieldRelationUID, field.TypeInt64)
 	}
+	if value, ok := mdu.mutation.RelationUname(); ok {
+		_spec.SetField(memberdetails.FieldRelationUname, field.TypeString, value)
+	}
+	if mdu.mutation.RelationUnameCleared() {
+		_spec.ClearField(memberdetails.FieldRelationUname, field.TypeString)
+	}
 	if value, ok := mdu.mutation.RelationMid(); ok {
 		_spec.SetField(memberdetails.FieldRelationMid, field.TypeInt64, value)
 	}
@@ -644,6 +815,27 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mdu.mutation.RelationMidCleared() {
 		_spec.ClearField(memberdetails.FieldRelationMid, field.TypeInt64)
+	}
+	if value, ok := mdu.mutation.RelationMame(); ok {
+		_spec.SetField(memberdetails.FieldRelationMame, field.TypeString, value)
+	}
+	if mdu.mutation.RelationMameCleared() {
+		_spec.ClearField(memberdetails.FieldRelationMame, field.TypeString)
+	}
+	if value, ok := mdu.mutation.CreateID(); ok {
+		_spec.SetField(memberdetails.FieldCreateID, field.TypeInt64, value)
+	}
+	if value, ok := mdu.mutation.AddedCreateID(); ok {
+		_spec.AddField(memberdetails.FieldCreateID, field.TypeInt64, value)
+	}
+	if mdu.mutation.CreateIDCleared() {
+		_spec.ClearField(memberdetails.FieldCreateID, field.TypeInt64)
+	}
+	if value, ok := mdu.mutation.CreateName(); ok {
+		_spec.SetField(memberdetails.FieldCreateName, field.TypeString, value)
+	}
+	if mdu.mutation.CreateNameCleared() {
+		_spec.ClearField(memberdetails.FieldCreateName, field.TypeString)
 	}
 	if mdu.mutation.InfoCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -720,23 +912,43 @@ func (mduo *MemberDetailsUpdateOne) ClearMemberID() *MemberDetailsUpdateOne {
 	return mduo
 }
 
-// SetNickname sets the "nickname" field.
-func (mduo *MemberDetailsUpdateOne) SetNickname(s string) *MemberDetailsUpdateOne {
-	mduo.mutation.SetNickname(s)
+// SetEmail sets the "email" field.
+func (mduo *MemberDetailsUpdateOne) SetEmail(s string) *MemberDetailsUpdateOne {
+	mduo.mutation.SetEmail(s)
 	return mduo
 }
 
-// SetNillableNickname sets the "nickname" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableNickname(s *string) *MemberDetailsUpdateOne {
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableEmail(s *string) *MemberDetailsUpdateOne {
 	if s != nil {
-		mduo.SetNickname(*s)
+		mduo.SetEmail(*s)
 	}
 	return mduo
 }
 
-// ClearNickname clears the value of the "nickname" field.
-func (mduo *MemberDetailsUpdateOne) ClearNickname() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearNickname()
+// ClearEmail clears the value of the "email" field.
+func (mduo *MemberDetailsUpdateOne) ClearEmail() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearEmail()
+	return mduo
+}
+
+// SetWecom sets the "wecom" field.
+func (mduo *MemberDetailsUpdateOne) SetWecom(s string) *MemberDetailsUpdateOne {
+	mduo.mutation.SetWecom(s)
+	return mduo
+}
+
+// SetNillableWecom sets the "wecom" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableWecom(s *string) *MemberDetailsUpdateOne {
+	if s != nil {
+		mduo.SetWecom(*s)
+	}
+	return mduo
+}
+
+// ClearWecom clears the value of the "wecom" field.
+func (mduo *MemberDetailsUpdateOne) ClearWecom() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearWecom()
 	return mduo
 }
 
@@ -941,6 +1153,26 @@ func (mduo *MemberDetailsUpdateOne) ClearProductID() *MemberDetailsUpdateOne {
 	return mduo
 }
 
+// SetProductName sets the "product_name" field.
+func (mduo *MemberDetailsUpdateOne) SetProductName(s string) *MemberDetailsUpdateOne {
+	mduo.mutation.SetProductName(s)
+	return mduo
+}
+
+// SetNillableProductName sets the "product_name" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableProductName(s *string) *MemberDetailsUpdateOne {
+	if s != nil {
+		mduo.SetProductName(*s)
+	}
+	return mduo
+}
+
+// ClearProductName clears the value of the "product_name" field.
+func (mduo *MemberDetailsUpdateOne) ClearProductName() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearProductName()
+	return mduo
+}
+
 // SetProductVenue sets the "product_venue" field.
 func (mduo *MemberDetailsUpdateOne) SetProductVenue(i int64) *MemberDetailsUpdateOne {
 	mduo.mutation.ResetProductVenue()
@@ -965,6 +1197,26 @@ func (mduo *MemberDetailsUpdateOne) AddProductVenue(i int64) *MemberDetailsUpdat
 // ClearProductVenue clears the value of the "product_venue" field.
 func (mduo *MemberDetailsUpdateOne) ClearProductVenue() *MemberDetailsUpdateOne {
 	mduo.mutation.ClearProductVenue()
+	return mduo
+}
+
+// SetProductVenueName sets the "product_venue_name" field.
+func (mduo *MemberDetailsUpdateOne) SetProductVenueName(s string) *MemberDetailsUpdateOne {
+	mduo.mutation.SetProductVenueName(s)
+	return mduo
+}
+
+// SetNillableProductVenueName sets the "product_venue_name" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableProductVenueName(s *string) *MemberDetailsUpdateOne {
+	if s != nil {
+		mduo.SetProductVenueName(*s)
+	}
+	return mduo
+}
+
+// ClearProductVenueName clears the value of the "product_venue_name" field.
+func (mduo *MemberDetailsUpdateOne) ClearProductVenueName() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearProductVenueName()
 	return mduo
 }
 
@@ -1082,6 +1334,26 @@ func (mduo *MemberDetailsUpdateOne) ClearRelationUID() *MemberDetailsUpdateOne {
 	return mduo
 }
 
+// SetRelationUname sets the "relation_uname" field.
+func (mduo *MemberDetailsUpdateOne) SetRelationUname(s string) *MemberDetailsUpdateOne {
+	mduo.mutation.SetRelationUname(s)
+	return mduo
+}
+
+// SetNillableRelationUname sets the "relation_uname" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableRelationUname(s *string) *MemberDetailsUpdateOne {
+	if s != nil {
+		mduo.SetRelationUname(*s)
+	}
+	return mduo
+}
+
+// ClearRelationUname clears the value of the "relation_uname" field.
+func (mduo *MemberDetailsUpdateOne) ClearRelationUname() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearRelationUname()
+	return mduo
+}
+
 // SetRelationMid sets the "relation_mid" field.
 func (mduo *MemberDetailsUpdateOne) SetRelationMid(i int64) *MemberDetailsUpdateOne {
 	mduo.mutation.ResetRelationMid()
@@ -1106,6 +1378,73 @@ func (mduo *MemberDetailsUpdateOne) AddRelationMid(i int64) *MemberDetailsUpdate
 // ClearRelationMid clears the value of the "relation_mid" field.
 func (mduo *MemberDetailsUpdateOne) ClearRelationMid() *MemberDetailsUpdateOne {
 	mduo.mutation.ClearRelationMid()
+	return mduo
+}
+
+// SetRelationMame sets the "relation_mame" field.
+func (mduo *MemberDetailsUpdateOne) SetRelationMame(s string) *MemberDetailsUpdateOne {
+	mduo.mutation.SetRelationMame(s)
+	return mduo
+}
+
+// SetNillableRelationMame sets the "relation_mame" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableRelationMame(s *string) *MemberDetailsUpdateOne {
+	if s != nil {
+		mduo.SetRelationMame(*s)
+	}
+	return mduo
+}
+
+// ClearRelationMame clears the value of the "relation_mame" field.
+func (mduo *MemberDetailsUpdateOne) ClearRelationMame() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearRelationMame()
+	return mduo
+}
+
+// SetCreateID sets the "create_id" field.
+func (mduo *MemberDetailsUpdateOne) SetCreateID(i int64) *MemberDetailsUpdateOne {
+	mduo.mutation.ResetCreateID()
+	mduo.mutation.SetCreateID(i)
+	return mduo
+}
+
+// SetNillableCreateID sets the "create_id" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableCreateID(i *int64) *MemberDetailsUpdateOne {
+	if i != nil {
+		mduo.SetCreateID(*i)
+	}
+	return mduo
+}
+
+// AddCreateID adds i to the "create_id" field.
+func (mduo *MemberDetailsUpdateOne) AddCreateID(i int64) *MemberDetailsUpdateOne {
+	mduo.mutation.AddCreateID(i)
+	return mduo
+}
+
+// ClearCreateID clears the value of the "create_id" field.
+func (mduo *MemberDetailsUpdateOne) ClearCreateID() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearCreateID()
+	return mduo
+}
+
+// SetCreateName sets the "create_name" field.
+func (mduo *MemberDetailsUpdateOne) SetCreateName(s string) *MemberDetailsUpdateOne {
+	mduo.mutation.SetCreateName(s)
+	return mduo
+}
+
+// SetNillableCreateName sets the "create_name" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableCreateName(s *string) *MemberDetailsUpdateOne {
+	if s != nil {
+		mduo.SetCreateName(*s)
+	}
+	return mduo
+}
+
+// ClearCreateName clears the value of the "create_name" field.
+func (mduo *MemberDetailsUpdateOne) ClearCreateName() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearCreateName()
 	return mduo
 }
 
@@ -1217,11 +1556,17 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	if value, ok := mduo.mutation.UpdatedAt(); ok {
 		_spec.SetField(memberdetails.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := mduo.mutation.Nickname(); ok {
-		_spec.SetField(memberdetails.FieldNickname, field.TypeString, value)
+	if value, ok := mduo.mutation.Email(); ok {
+		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)
 	}
-	if mduo.mutation.NicknameCleared() {
-		_spec.ClearField(memberdetails.FieldNickname, field.TypeString)
+	if mduo.mutation.EmailCleared() {
+		_spec.ClearField(memberdetails.FieldEmail, field.TypeString)
+	}
+	if value, ok := mduo.mutation.Wecom(); ok {
+		_spec.SetField(memberdetails.FieldWecom, field.TypeString, value)
+	}
+	if mduo.mutation.WecomCleared() {
+		_spec.ClearField(memberdetails.FieldWecom, field.TypeString)
 	}
 	if value, ok := mduo.mutation.Gender(); ok {
 		_spec.SetField(memberdetails.FieldGender, field.TypeInt64, value)
@@ -1286,6 +1631,12 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	if mduo.mutation.ProductIDCleared() {
 		_spec.ClearField(memberdetails.FieldProductID, field.TypeInt64)
 	}
+	if value, ok := mduo.mutation.ProductName(); ok {
+		_spec.SetField(memberdetails.FieldProductName, field.TypeString, value)
+	}
+	if mduo.mutation.ProductNameCleared() {
+		_spec.ClearField(memberdetails.FieldProductName, field.TypeString)
+	}
 	if value, ok := mduo.mutation.ProductVenue(); ok {
 		_spec.SetField(memberdetails.FieldProductVenue, field.TypeInt64, value)
 	}
@@ -1294,6 +1645,12 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	}
 	if mduo.mutation.ProductVenueCleared() {
 		_spec.ClearField(memberdetails.FieldProductVenue, field.TypeInt64)
+	}
+	if value, ok := mduo.mutation.ProductVenueName(); ok {
+		_spec.SetField(memberdetails.FieldProductVenueName, field.TypeString, value)
+	}
+	if mduo.mutation.ProductVenueNameCleared() {
+		_spec.ClearField(memberdetails.FieldProductVenueName, field.TypeString)
 	}
 	if value, ok := mduo.mutation.EntrySum(); ok {
 		_spec.SetField(memberdetails.FieldEntrySum, field.TypeInt64, value)
@@ -1331,6 +1688,12 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	if mduo.mutation.RelationUIDCleared() {
 		_spec.ClearField(memberdetails.FieldRelationUID, field.TypeInt64)
 	}
+	if value, ok := mduo.mutation.RelationUname(); ok {
+		_spec.SetField(memberdetails.FieldRelationUname, field.TypeString, value)
+	}
+	if mduo.mutation.RelationUnameCleared() {
+		_spec.ClearField(memberdetails.FieldRelationUname, field.TypeString)
+	}
 	if value, ok := mduo.mutation.RelationMid(); ok {
 		_spec.SetField(memberdetails.FieldRelationMid, field.TypeInt64, value)
 	}
@@ -1339,6 +1702,27 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	}
 	if mduo.mutation.RelationMidCleared() {
 		_spec.ClearField(memberdetails.FieldRelationMid, field.TypeInt64)
+	}
+	if value, ok := mduo.mutation.RelationMame(); ok {
+		_spec.SetField(memberdetails.FieldRelationMame, field.TypeString, value)
+	}
+	if mduo.mutation.RelationMameCleared() {
+		_spec.ClearField(memberdetails.FieldRelationMame, field.TypeString)
+	}
+	if value, ok := mduo.mutation.CreateID(); ok {
+		_spec.SetField(memberdetails.FieldCreateID, field.TypeInt64, value)
+	}
+	if value, ok := mduo.mutation.AddedCreateID(); ok {
+		_spec.AddField(memberdetails.FieldCreateID, field.TypeInt64, value)
+	}
+	if mduo.mutation.CreateIDCleared() {
+		_spec.ClearField(memberdetails.FieldCreateID, field.TypeInt64)
+	}
+	if value, ok := mduo.mutation.CreateName(); ok {
+		_spec.SetField(memberdetails.FieldCreateName, field.TypeString, value)
+	}
+	if mduo.mutation.CreateNameCleared() {
+		_spec.ClearField(memberdetails.FieldCreateName, field.TypeString)
 	}
 	if mduo.mutation.InfoCleared() {
 		edge := &sqlgraph.EdgeSpec{

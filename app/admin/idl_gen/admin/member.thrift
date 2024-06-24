@@ -33,21 +33,21 @@ struct MemberSearchReq {
 struct MemberProductListReq {
     1:  optional i64 page (api.raw = "page")
     2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string id (api.raw = "id")
-    4:  optional string type (api.raw = "type")
+    3:  optional i64 memberId (api.raw = "member_id")
+    4:  optional string name (api.raw = "name")
+    5:  optional i64 venueId (api.raw = "venue_id")
+    6:  optional i64 status (api.raw = "status")
 }
 struct MemberPropertyListReq{
     1:  optional i64 page (api.raw = "page")
     2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string id (api.raw = "id")
+    3:  optional i64 memberId (api.raw = "member_id")
     4:  optional string type (api.raw = "type")
-}
+    5:  optional string name (api.raw = "name")
+    6:  optional i64 venueId (api.raw = "venue_id")
+    7:  optional i64 status (api.raw = "status")
+    8:  optional i64 memberProductId (api.raw = "member_product_id")
 
-struct MemberEntryListReq{
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string id (api.raw = "id")
-    4:  optional string type (api.raw = "type")
 }
 
 service MemberService {
@@ -78,8 +78,7 @@ service MemberService {
 
   base.NilResponse MemberPropertyDetail(1: base.IDReq req) (api.get = "/api/admin/member/property-detail")
 
-
   base.NilResponse MemberPropertyUpdate(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-update")
 
-  base.NilResponse MemberEntryList(1: MemberEntryListReq req) (api.post = "/api/admin/member/entry-list")
+
 }

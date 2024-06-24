@@ -25,8 +25,6 @@ func (MemberProduct) Fields() []ent.Field {
 		field.Int64("order_id").Comment("订单ID").Optional(),
 		field.String("name").Comment("产品名称").Optional(),
 		field.Float("price").Comment("产品价格").Optional(),
-		field.Time("validity_at").Comment("生效时间").Optional(),
-		field.Time("cancel_at").Comment("作废时间").Optional(),
 	}
 }
 
@@ -54,8 +52,6 @@ func (MemberProduct) Indexes() []ent.Index {
 		index.Fields("member_id"),
 		index.Fields("product_id"),
 		index.Fields("order_id"),
-		index.Fields("validity_at"),
-		index.Fields("cancel_at"),
 	}
 }
 

@@ -1,9 +1,5 @@
 package do
 
-import (
-	"time"
-)
-
 type Member interface {
 	Create(req CreateOrUpdateMemberReq) error
 	Update(req CreateOrUpdateMemberReq) error
@@ -45,14 +41,13 @@ type MemberInfo struct {
 	Name      string `json:"name"`
 	Condition int64  `json:"condition"`
 	Status    int64  `json:"status"`
-	Username  string `json:"username"`
 	Nickname  string `json:"nickname"`
 	Mobile    string `json:"mobile"`
 	Email     string `json:"email"`
 	Avatar    string `json:"avatar"`
 	Gender    string `json:"gender"`
-	Age       string `json:"age"`
-
+	Age       int64  `json:"age"`
+	Birthday  string `json:"birthday"`
 	//微信号
 	Wecom string `json:"wecom"`
 	//身份证号
@@ -70,24 +65,28 @@ type MemberInfo struct {
 	//消费总金额
 	MoneySum float64 `json:"money_sum"`
 	//首次的产品
-	ProductId int64 `json:"product_id"`
+	ProductId   int64 `json:"product_id"`
+	ProductName int64 `json:"product_name"`
 	//首次消费场馆
-	ProductVenue int64 `json:"product_venue"`
+	ProductVenue     int64 `json:"product_venue"`
+	ProductVenueName int64 `json:"product_venue_name"`
 	//进馆总次数
 	EntrySum int64 `json:"entry_sum"`
 	//最后一次进馆时间
-	EntryLastTime int64 `json:"entry_last_time"`
+	EntryLastTime string `json:"entry_last_time"`
 	//进馆最后期限时间
-	EntryDeadlineTime int64 `json:"entry_deadline_time"`
+	EntryDeadlineTime string `json:"entry_deadline_time"`
 	//最后一次上课时间
-	ClassLastTime int64 `json:"class_last_time"`
+	ClassLastTime string `json:"class_last_time"`
 	//关联员工
-	RelationUid int64 `json:"relation_uid"`
+	RelationUid   int64 `json:"relation_uid"`
+	RelationUname int64 `json:"relation_uname"`
 	//关联会员
-	RelationMid int64 `json:"relation_mid"`
+	RelationMid   int64 `json:"relation_mid"`
+	RelationMname int64 `json:"relation_mname"`
 
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
 type MemberListReq struct {

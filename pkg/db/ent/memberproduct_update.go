@@ -253,46 +253,6 @@ func (mpu *MemberProductUpdate) ClearPrice() *MemberProductUpdate {
 	return mpu
 }
 
-// SetValidityAt sets the "validity_at" field.
-func (mpu *MemberProductUpdate) SetValidityAt(t time.Time) *MemberProductUpdate {
-	mpu.mutation.SetValidityAt(t)
-	return mpu
-}
-
-// SetNillableValidityAt sets the "validity_at" field if the given value is not nil.
-func (mpu *MemberProductUpdate) SetNillableValidityAt(t *time.Time) *MemberProductUpdate {
-	if t != nil {
-		mpu.SetValidityAt(*t)
-	}
-	return mpu
-}
-
-// ClearValidityAt clears the value of the "validity_at" field.
-func (mpu *MemberProductUpdate) ClearValidityAt() *MemberProductUpdate {
-	mpu.mutation.ClearValidityAt()
-	return mpu
-}
-
-// SetCancelAt sets the "cancel_at" field.
-func (mpu *MemberProductUpdate) SetCancelAt(t time.Time) *MemberProductUpdate {
-	mpu.mutation.SetCancelAt(t)
-	return mpu
-}
-
-// SetNillableCancelAt sets the "cancel_at" field if the given value is not nil.
-func (mpu *MemberProductUpdate) SetNillableCancelAt(t *time.Time) *MemberProductUpdate {
-	if t != nil {
-		mpu.SetCancelAt(*t)
-	}
-	return mpu
-}
-
-// ClearCancelAt clears the value of the "cancel_at" field.
-func (mpu *MemberProductUpdate) ClearCancelAt() *MemberProductUpdate {
-	mpu.mutation.ClearCancelAt()
-	return mpu
-}
-
 // SetMembersID sets the "members" edge to the Member entity by ID.
 func (mpu *MemberProductUpdate) SetMembersID(id int64) *MemberProductUpdate {
 	mpu.mutation.SetMembersID(id)
@@ -541,18 +501,6 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mpu.mutation.PriceCleared() {
 		_spec.ClearField(memberproduct.FieldPrice, field.TypeFloat64)
-	}
-	if value, ok := mpu.mutation.ValidityAt(); ok {
-		_spec.SetField(memberproduct.FieldValidityAt, field.TypeTime, value)
-	}
-	if mpu.mutation.ValidityAtCleared() {
-		_spec.ClearField(memberproduct.FieldValidityAt, field.TypeTime)
-	}
-	if value, ok := mpu.mutation.CancelAt(); ok {
-		_spec.SetField(memberproduct.FieldCancelAt, field.TypeTime, value)
-	}
-	if mpu.mutation.CancelAtCleared() {
-		_spec.ClearField(memberproduct.FieldCancelAt, field.TypeTime)
 	}
 	if mpu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -959,46 +907,6 @@ func (mpuo *MemberProductUpdateOne) ClearPrice() *MemberProductUpdateOne {
 	return mpuo
 }
 
-// SetValidityAt sets the "validity_at" field.
-func (mpuo *MemberProductUpdateOne) SetValidityAt(t time.Time) *MemberProductUpdateOne {
-	mpuo.mutation.SetValidityAt(t)
-	return mpuo
-}
-
-// SetNillableValidityAt sets the "validity_at" field if the given value is not nil.
-func (mpuo *MemberProductUpdateOne) SetNillableValidityAt(t *time.Time) *MemberProductUpdateOne {
-	if t != nil {
-		mpuo.SetValidityAt(*t)
-	}
-	return mpuo
-}
-
-// ClearValidityAt clears the value of the "validity_at" field.
-func (mpuo *MemberProductUpdateOne) ClearValidityAt() *MemberProductUpdateOne {
-	mpuo.mutation.ClearValidityAt()
-	return mpuo
-}
-
-// SetCancelAt sets the "cancel_at" field.
-func (mpuo *MemberProductUpdateOne) SetCancelAt(t time.Time) *MemberProductUpdateOne {
-	mpuo.mutation.SetCancelAt(t)
-	return mpuo
-}
-
-// SetNillableCancelAt sets the "cancel_at" field if the given value is not nil.
-func (mpuo *MemberProductUpdateOne) SetNillableCancelAt(t *time.Time) *MemberProductUpdateOne {
-	if t != nil {
-		mpuo.SetCancelAt(*t)
-	}
-	return mpuo
-}
-
-// ClearCancelAt clears the value of the "cancel_at" field.
-func (mpuo *MemberProductUpdateOne) ClearCancelAt() *MemberProductUpdateOne {
-	mpuo.mutation.ClearCancelAt()
-	return mpuo
-}
-
 // SetMembersID sets the "members" edge to the Member entity by ID.
 func (mpuo *MemberProductUpdateOne) SetMembersID(id int64) *MemberProductUpdateOne {
 	mpuo.mutation.SetMembersID(id)
@@ -1277,18 +1185,6 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	}
 	if mpuo.mutation.PriceCleared() {
 		_spec.ClearField(memberproduct.FieldPrice, field.TypeFloat64)
-	}
-	if value, ok := mpuo.mutation.ValidityAt(); ok {
-		_spec.SetField(memberproduct.FieldValidityAt, field.TypeTime, value)
-	}
-	if mpuo.mutation.ValidityAtCleared() {
-		_spec.ClearField(memberproduct.FieldValidityAt, field.TypeTime)
-	}
-	if value, ok := mpuo.mutation.CancelAt(); ok {
-		_spec.SetField(memberproduct.FieldCancelAt, field.TypeTime, value)
-	}
-	if mpuo.mutation.CancelAtCleared() {
-		_spec.ClearField(memberproduct.FieldCancelAt, field.TypeTime)
 	}
 	if mpuo.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{

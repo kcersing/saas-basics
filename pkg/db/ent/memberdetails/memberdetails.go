@@ -20,8 +20,10 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
-	// FieldNickname holds the string denoting the nickname field in the database.
-	FieldNickname = "nickname"
+	// FieldEmail holds the string denoting the email field in the database.
+	FieldEmail = "email"
+	// FieldWecom holds the string denoting the wecom field in the database.
+	FieldWecom = "wecom"
 	// FieldGender holds the string denoting the gender field in the database.
 	FieldGender = "gender"
 	// FieldBirthday holds the string denoting the birthday field in the database.
@@ -42,8 +44,12 @@ const (
 	FieldMoneySum = "money_sum"
 	// FieldProductID holds the string denoting the product_id field in the database.
 	FieldProductID = "product_id"
+	// FieldProductName holds the string denoting the product_name field in the database.
+	FieldProductName = "product_name"
 	// FieldProductVenue holds the string denoting the product_venue field in the database.
 	FieldProductVenue = "product_venue"
+	// FieldProductVenueName holds the string denoting the product_venue_name field in the database.
+	FieldProductVenueName = "product_venue_name"
 	// FieldEntrySum holds the string denoting the entry_sum field in the database.
 	FieldEntrySum = "entry_sum"
 	// FieldEntryLastTime holds the string denoting the entry_last_time field in the database.
@@ -54,8 +60,16 @@ const (
 	FieldClassLastTime = "class_last_time"
 	// FieldRelationUID holds the string denoting the relation_uid field in the database.
 	FieldRelationUID = "relation_uid"
+	// FieldRelationUname holds the string denoting the relation_uname field in the database.
+	FieldRelationUname = "relation_uname"
 	// FieldRelationMid holds the string denoting the relation_mid field in the database.
 	FieldRelationMid = "relation_mid"
+	// FieldRelationMame holds the string denoting the relation_mame field in the database.
+	FieldRelationMame = "relation_mame"
+	// FieldCreateID holds the string denoting the create_id field in the database.
+	FieldCreateID = "create_id"
+	// FieldCreateName holds the string denoting the create_name field in the database.
+	FieldCreateName = "create_name"
 	// EdgeInfo holds the string denoting the info edge name in mutations.
 	EdgeInfo = "info"
 	// Table holds the table name of the memberdetails in the database.
@@ -75,7 +89,8 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldMemberID,
-	FieldNickname,
+	FieldEmail,
+	FieldWecom,
 	FieldGender,
 	FieldBirthday,
 	FieldIdentityCard,
@@ -86,13 +101,19 @@ var Columns = []string{
 	FieldFacePicUpdatedTime,
 	FieldMoneySum,
 	FieldProductID,
+	FieldProductName,
 	FieldProductVenue,
+	FieldProductVenueName,
 	FieldEntrySum,
 	FieldEntryLastTime,
 	FieldEntryDeadlineTime,
 	FieldClassLastTime,
 	FieldRelationUID,
+	FieldRelationUname,
 	FieldRelationMid,
+	FieldRelationMame,
+	FieldCreateID,
+	FieldCreateName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -132,12 +153,6 @@ var (
 	DefaultProductVenue int64
 	// DefaultEntrySum holds the default value on creation for the "entry_sum" field.
 	DefaultEntrySum int64
-	// DefaultEntryLastTime holds the default value on creation for the "entry_last_time" field.
-	DefaultEntryLastTime func() time.Time
-	// DefaultEntryDeadlineTime holds the default value on creation for the "entry_deadline_time" field.
-	DefaultEntryDeadlineTime func() time.Time
-	// DefaultClassLastTime holds the default value on creation for the "class_last_time" field.
-	DefaultClassLastTime func() time.Time
 	// DefaultRelationUID holds the default value on creation for the "relation_uid" field.
 	DefaultRelationUID int64
 	// DefaultRelationMid holds the default value on creation for the "relation_mid" field.
@@ -167,9 +182,14 @@ func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
 }
 
-// ByNickname orders the results by the nickname field.
-func ByNickname(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNickname, opts...).ToFunc()
+// ByEmail orders the results by the email field.
+func ByEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// ByWecom orders the results by the wecom field.
+func ByWecom(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWecom, opts...).ToFunc()
 }
 
 // ByGender orders the results by the gender field.
@@ -222,9 +242,19 @@ func ByProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductID, opts...).ToFunc()
 }
 
+// ByProductName orders the results by the product_name field.
+func ByProductName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProductName, opts...).ToFunc()
+}
+
 // ByProductVenue orders the results by the product_venue field.
 func ByProductVenue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductVenue, opts...).ToFunc()
+}
+
+// ByProductVenueName orders the results by the product_venue_name field.
+func ByProductVenueName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProductVenueName, opts...).ToFunc()
 }
 
 // ByEntrySum orders the results by the entry_sum field.
@@ -252,9 +282,29 @@ func ByRelationUID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelationUID, opts...).ToFunc()
 }
 
+// ByRelationUname orders the results by the relation_uname field.
+func ByRelationUname(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRelationUname, opts...).ToFunc()
+}
+
 // ByRelationMid orders the results by the relation_mid field.
 func ByRelationMid(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelationMid, opts...).ToFunc()
+}
+
+// ByRelationMame orders the results by the relation_mame field.
+func ByRelationMame(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRelationMame, opts...).ToFunc()
+}
+
+// ByCreateID orders the results by the create_id field.
+func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
+}
+
+// ByCreateName orders the results by the create_name field.
+func ByCreateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateName, opts...).ToFunc()
 }
 
 // ByInfoField orders the results by info field.

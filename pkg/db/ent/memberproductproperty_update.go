@@ -332,6 +332,46 @@ func (mppu *MemberProductPropertyUpdate) ClearPrice() *MemberProductPropertyUpda
 	return mppu
 }
 
+// SetValidityAt sets the "validity_at" field.
+func (mppu *MemberProductPropertyUpdate) SetValidityAt(t time.Time) *MemberProductPropertyUpdate {
+	mppu.mutation.SetValidityAt(t)
+	return mppu
+}
+
+// SetNillableValidityAt sets the "validity_at" field if the given value is not nil.
+func (mppu *MemberProductPropertyUpdate) SetNillableValidityAt(t *time.Time) *MemberProductPropertyUpdate {
+	if t != nil {
+		mppu.SetValidityAt(*t)
+	}
+	return mppu
+}
+
+// ClearValidityAt clears the value of the "validity_at" field.
+func (mppu *MemberProductPropertyUpdate) ClearValidityAt() *MemberProductPropertyUpdate {
+	mppu.mutation.ClearValidityAt()
+	return mppu
+}
+
+// SetCancelAt sets the "cancel_at" field.
+func (mppu *MemberProductPropertyUpdate) SetCancelAt(t time.Time) *MemberProductPropertyUpdate {
+	mppu.mutation.SetCancelAt(t)
+	return mppu
+}
+
+// SetNillableCancelAt sets the "cancel_at" field if the given value is not nil.
+func (mppu *MemberProductPropertyUpdate) SetNillableCancelAt(t *time.Time) *MemberProductPropertyUpdate {
+	if t != nil {
+		mppu.SetCancelAt(*t)
+	}
+	return mppu
+}
+
+// ClearCancelAt clears the value of the "cancel_at" field.
+func (mppu *MemberProductPropertyUpdate) ClearCancelAt() *MemberProductPropertyUpdate {
+	mppu.mutation.ClearCancelAt()
+	return mppu
+}
+
 // SetOwnerID sets the "owner" edge to the MemberProduct entity by ID.
 func (mppu *MemberProductPropertyUpdate) SetOwnerID(id int64) *MemberProductPropertyUpdate {
 	mppu.mutation.SetOwnerID(id)
@@ -535,6 +575,18 @@ func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if mppu.mutation.PriceCleared() {
 		_spec.ClearField(memberproductproperty.FieldPrice, field.TypeFloat64)
+	}
+	if value, ok := mppu.mutation.ValidityAt(); ok {
+		_spec.SetField(memberproductproperty.FieldValidityAt, field.TypeTime, value)
+	}
+	if mppu.mutation.ValidityAtCleared() {
+		_spec.ClearField(memberproductproperty.FieldValidityAt, field.TypeTime)
+	}
+	if value, ok := mppu.mutation.CancelAt(); ok {
+		_spec.SetField(memberproductproperty.FieldCancelAt, field.TypeTime, value)
+	}
+	if mppu.mutation.CancelAtCleared() {
+		_spec.ClearField(memberproductproperty.FieldCancelAt, field.TypeTime)
 	}
 	if mppu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -932,6 +984,46 @@ func (mppuo *MemberProductPropertyUpdateOne) ClearPrice() *MemberProductProperty
 	return mppuo
 }
 
+// SetValidityAt sets the "validity_at" field.
+func (mppuo *MemberProductPropertyUpdateOne) SetValidityAt(t time.Time) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.SetValidityAt(t)
+	return mppuo
+}
+
+// SetNillableValidityAt sets the "validity_at" field if the given value is not nil.
+func (mppuo *MemberProductPropertyUpdateOne) SetNillableValidityAt(t *time.Time) *MemberProductPropertyUpdateOne {
+	if t != nil {
+		mppuo.SetValidityAt(*t)
+	}
+	return mppuo
+}
+
+// ClearValidityAt clears the value of the "validity_at" field.
+func (mppuo *MemberProductPropertyUpdateOne) ClearValidityAt() *MemberProductPropertyUpdateOne {
+	mppuo.mutation.ClearValidityAt()
+	return mppuo
+}
+
+// SetCancelAt sets the "cancel_at" field.
+func (mppuo *MemberProductPropertyUpdateOne) SetCancelAt(t time.Time) *MemberProductPropertyUpdateOne {
+	mppuo.mutation.SetCancelAt(t)
+	return mppuo
+}
+
+// SetNillableCancelAt sets the "cancel_at" field if the given value is not nil.
+func (mppuo *MemberProductPropertyUpdateOne) SetNillableCancelAt(t *time.Time) *MemberProductPropertyUpdateOne {
+	if t != nil {
+		mppuo.SetCancelAt(*t)
+	}
+	return mppuo
+}
+
+// ClearCancelAt clears the value of the "cancel_at" field.
+func (mppuo *MemberProductPropertyUpdateOne) ClearCancelAt() *MemberProductPropertyUpdateOne {
+	mppuo.mutation.ClearCancelAt()
+	return mppuo
+}
+
 // SetOwnerID sets the "owner" edge to the MemberProduct entity by ID.
 func (mppuo *MemberProductPropertyUpdateOne) SetOwnerID(id int64) *MemberProductPropertyUpdateOne {
 	mppuo.mutation.SetOwnerID(id)
@@ -1165,6 +1257,18 @@ func (mppuo *MemberProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if mppuo.mutation.PriceCleared() {
 		_spec.ClearField(memberproductproperty.FieldPrice, field.TypeFloat64)
+	}
+	if value, ok := mppuo.mutation.ValidityAt(); ok {
+		_spec.SetField(memberproductproperty.FieldValidityAt, field.TypeTime, value)
+	}
+	if mppuo.mutation.ValidityAtCleared() {
+		_spec.ClearField(memberproductproperty.FieldValidityAt, field.TypeTime)
+	}
+	if value, ok := mppuo.mutation.CancelAt(); ok {
+		_spec.SetField(memberproductproperty.FieldCancelAt, field.TypeTime, value)
+	}
+	if mppuo.mutation.CancelAtCleared() {
+		_spec.ClearField(memberproductproperty.FieldCancelAt, field.TypeTime)
 	}
 	if mppuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

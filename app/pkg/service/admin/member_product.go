@@ -4,11 +4,16 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
+	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/memberproduct"
+	"saas/pkg/db/ent/memberproductproperty"
+	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/venue"
 )
 
 type MemberProduct struct {
@@ -17,6 +22,136 @@ type MemberProduct struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+}
+
+func (m MemberProduct) ProductList(req do.MemberProductListReq) (resp []*do.MemberProductInfo, total int, err error) {
+	var predicates []predicate.MemberProduct
+	if req.MemberId > 0 {
+		predicates = append(predicates, memberproduct.MemberID(req.MemberId))
+	}
+	if req.VenueId > 0 {
+		predicates = append(predicates, memberproduct.VenueID(req.VenueId))
+	}
+	if req.Name != "" {
+		predicates = append(predicates, memberproduct.Name(req.Name))
+	}
+	if req.Status > 0 {
+		predicates = append(predicates, memberproduct.Status(req.Status))
+	}
+
+	lists, err := m.db.MemberProduct.Query().Where(predicates...).
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(m.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get Member Product list failed")
+		return resp, total, err
+	}
+
+	err = copier.Copy(&resp, &lists)
+	if err != nil {
+		err = errors.Wrap(err, "copy Member Product info failed")
+		return resp, 0, err
+	}
+	for i, v := range lists {
+		list, _, err := m.PropertyList(do.MemberPropertyListReq{
+			MemberProductId: v.ID,
+			Page:            1,
+			PageSize:        99,
+		})
+		if err == nil {
+			copier.Copy(&resp[i].Property, &list)
+		}
+
+	}
+
+	total, _ = m.db.MemberProduct.Query().Where(predicates...).Count(m.ctx)
+	return
+}
+
+func (m MemberProduct) ProductDetail(ID int64) (info *do.MemberProductInfo, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MemberProduct) ProductUpdate(req do.MemberProductInfo) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MemberProduct) ProductUpdateStatus(ID int64, status int64) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MemberProduct) PropertyList(req do.MemberPropertyListReq) (resp []*do.MemberPropertyInfo, total int, err error) {
+	var predicates []predicate.MemberProductProperty
+	if req.MemberId > 0 {
+		predicates = append(predicates, memberproductproperty.MemberID(req.MemberId))
+	}
+	if req.VenueId > 0 {
+		predicates = append(predicates, memberproductproperty.HasVenuesWith(venue.ID(req.VenueId)))
+	}
+	if req.MemberProductId > 0 {
+		predicates = append(predicates, memberproductproperty.MemberProductID(req.MemberProductId))
+	}
+	if req.Type != "" {
+		predicates = append(predicates, memberproductproperty.Type(req.Type))
+	}
+	if req.Name != "" {
+		predicates = append(predicates, memberproductproperty.Name(req.Name))
+	}
+	if req.Status > 0 {
+		predicates = append(predicates, memberproductproperty.Status(req.Status))
+	}
+
+	lists, err := m.db.MemberProductProperty.Query().Where(predicates...).
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(m.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get Member Product list failed")
+		return resp, total, err
+	}
+
+	err = copier.Copy(&resp, &lists)
+	if err != nil {
+		err = errors.Wrap(err, "copy Member Product info failed")
+		return resp, 0, err
+	}
+
+	for i, v := range lists {
+		venues, err := v.QueryVenues().Select(venue.FieldID, venue.FieldName).All(m.ctx)
+		if err == nil {
+			var ven []do.PropertyVenue
+			err = copier.Copy(&ven, &venues)
+			resp[i].Venue = ven
+			for i, v := range ven {
+				if i == 0 {
+					resp[i].Venues = v.Name
+				} else {
+					resp[i].Venues += ", " + v.Name
+				}
+				resp[i].VenueId = append(resp[i].VenueId, v.ID)
+			}
+		}
+	}
+
+	total, _ = m.db.MemberProductProperty.Query().Where(predicates...).Count(m.ctx)
+	return
+}
+
+func (m MemberProduct) PropertyDetail(ID int64) (info *do.MemberPropertyInfo, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MemberProduct) PropertyUpdate(req do.MemberPropertyInfo) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MemberProduct) PropertyUpdateStatus(ID int64, status int64) error {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (m MemberProduct) Create(req do.MemberProductInfo) error {

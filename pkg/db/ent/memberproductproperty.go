@@ -47,6 +47,10 @@ type MemberProductProperty struct {
 	CountSurplus int64 `json:"count_surplus,omitempty"`
 	// 定价
 	Price float64 `json:"price,omitempty"`
+	// 生效时间
+	ValidityAt time.Time `json:"validity_at,omitempty"`
+	// 作废时间
+	CancelAt time.Time `json:"cancel_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberProductPropertyQuery when eager-loading is set.
 	Edges        MemberProductPropertyEdges `json:"edges"`
@@ -97,7 +101,7 @@ func (*MemberProductProperty) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case memberproductproperty.FieldSn, memberproductproperty.FieldType, memberproductproperty.FieldName:
 			values[i] = new(sql.NullString)
-		case memberproductproperty.FieldCreatedAt, memberproductproperty.FieldUpdatedAt:
+		case memberproductproperty.FieldCreatedAt, memberproductproperty.FieldUpdatedAt, memberproductproperty.FieldValidityAt, memberproductproperty.FieldCancelAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -204,6 +208,18 @@ func (mpp *MemberProductProperty) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				mpp.Price = value.Float64
 			}
+		case memberproductproperty.FieldValidityAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field validity_at", values[i])
+			} else if value.Valid {
+				mpp.ValidityAt = value.Time
+			}
+		case memberproductproperty.FieldCancelAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field cancel_at", values[i])
+			} else if value.Valid {
+				mpp.CancelAt = value.Time
+			}
 		default:
 			mpp.selectValues.Set(columns[i], values[i])
 		}
@@ -291,6 +307,12 @@ func (mpp *MemberProductProperty) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("price=")
 	builder.WriteString(fmt.Sprintf("%v", mpp.Price))
+	builder.WriteString(", ")
+	builder.WriteString("validity_at=")
+	builder.WriteString(mpp.ValidityAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("cancel_at=")
+	builder.WriteString(mpp.CancelAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

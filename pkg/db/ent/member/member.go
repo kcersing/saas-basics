@@ -24,18 +24,14 @@ const (
 	FieldPassword = "password"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldNickname holds the string denoting the nickname field in the database.
+	FieldNickname = "nickname"
 	// FieldMobile holds the string denoting the mobile field in the database.
 	FieldMobile = "mobile"
-	// FieldEmail holds the string denoting the email field in the database.
-	FieldEmail = "email"
-	// FieldWecom holds the string denoting the wecom field in the database.
-	FieldWecom = "wecom"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
 	// FieldCondition holds the string denoting the condition field in the database.
 	FieldCondition = "condition"
-	// FieldCreateID holds the string denoting the create_id field in the database.
-	FieldCreateID = "create_id"
 	// EdgeMemberDetails holds the string denoting the member_details edge name in mutations.
 	EdgeMemberDetails = "member_details"
 	// EdgeMemberNotes holds the string denoting the member_notes edge name in mutations.
@@ -102,12 +98,10 @@ var Columns = []string{
 	FieldStatus,
 	FieldPassword,
 	FieldName,
+	FieldNickname,
 	FieldMobile,
-	FieldEmail,
-	FieldWecom,
 	FieldAvatar,
 	FieldCondition,
-	FieldCreateID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -168,19 +162,14 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
+// ByNickname orders the results by the nickname field.
+func ByNickname(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNickname, opts...).ToFunc()
+}
+
 // ByMobile orders the results by the mobile field.
 func ByMobile(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMobile, opts...).ToFunc()
-}
-
-// ByEmail orders the results by the email field.
-func ByEmail(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmail, opts...).ToFunc()
-}
-
-// ByWecom orders the results by the wecom field.
-func ByWecom(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldWecom, opts...).ToFunc()
 }
 
 // ByAvatar orders the results by the avatar field.
@@ -191,11 +180,6 @@ func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 // ByCondition orders the results by the condition field.
 func ByCondition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCondition, opts...).ToFunc()
-}
-
-// ByCreateID orders the results by the create_id field.
-func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
 }
 
 // ByMemberDetailsCount orders the results by member_details count.

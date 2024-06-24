@@ -196,11 +196,11 @@ func init() {
 	// member.DefaultStatus holds the default value on creation for the status field.
 	member.DefaultStatus = memberDescStatus.Default.(int64)
 	// memberDescAvatar is the schema descriptor for avatar field.
-	memberDescAvatar := memberFields[5].Descriptor()
+	memberDescAvatar := memberFields[4].Descriptor()
 	// member.DefaultAvatar holds the default value on creation for the avatar field.
 	member.DefaultAvatar = memberDescAvatar.Default.(string)
 	// memberDescCondition is the schema descriptor for condition field.
-	memberDescCondition := memberFields[6].Descriptor()
+	memberDescCondition := memberFields[5].Descriptor()
 	// member.DefaultCondition holds the default value on creation for the condition field.
 	member.DefaultCondition = memberDescCondition.Default.(int64)
 	membercontractMixin := schema.MemberContract{}.Mixin()
@@ -255,63 +255,51 @@ func init() {
 	// memberdetails.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	memberdetails.UpdateDefaultUpdatedAt = memberdetailsDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// memberdetailsDescGender is the schema descriptor for gender field.
-	memberdetailsDescGender := memberdetailsFields[2].Descriptor()
+	memberdetailsDescGender := memberdetailsFields[3].Descriptor()
 	// memberdetails.DefaultGender holds the default value on creation for the gender field.
 	memberdetails.DefaultGender = memberdetailsDescGender.Default.(int64)
 	// memberdetailsDescFaceIdentityCard is the schema descriptor for face_identity_card field.
-	memberdetailsDescFaceIdentityCard := memberdetailsFields[5].Descriptor()
+	memberdetailsDescFaceIdentityCard := memberdetailsFields[6].Descriptor()
 	// memberdetails.DefaultFaceIdentityCard holds the default value on creation for the face_identity_card field.
 	memberdetails.DefaultFaceIdentityCard = memberdetailsDescFaceIdentityCard.Default.(string)
 	// memberdetailsDescBackIdentityCard is the schema descriptor for back_identity_card field.
-	memberdetailsDescBackIdentityCard := memberdetailsFields[6].Descriptor()
+	memberdetailsDescBackIdentityCard := memberdetailsFields[7].Descriptor()
 	// memberdetails.DefaultBackIdentityCard holds the default value on creation for the back_identity_card field.
 	memberdetails.DefaultBackIdentityCard = memberdetailsDescBackIdentityCard.Default.(string)
 	// memberdetailsDescFacePic is the schema descriptor for face_pic field.
-	memberdetailsDescFacePic := memberdetailsFields[7].Descriptor()
+	memberdetailsDescFacePic := memberdetailsFields[8].Descriptor()
 	// memberdetails.DefaultFacePic holds the default value on creation for the face_pic field.
 	memberdetails.DefaultFacePic = memberdetailsDescFacePic.Default.(string)
 	// memberdetailsDescFaceEigenvalue is the schema descriptor for face_eigenvalue field.
-	memberdetailsDescFaceEigenvalue := memberdetailsFields[8].Descriptor()
+	memberdetailsDescFaceEigenvalue := memberdetailsFields[9].Descriptor()
 	// memberdetails.DefaultFaceEigenvalue holds the default value on creation for the face_eigenvalue field.
 	memberdetails.DefaultFaceEigenvalue = memberdetailsDescFaceEigenvalue.Default.(string)
 	// memberdetailsDescFacePicUpdatedTime is the schema descriptor for face_pic_updated_time field.
-	memberdetailsDescFacePicUpdatedTime := memberdetailsFields[9].Descriptor()
+	memberdetailsDescFacePicUpdatedTime := memberdetailsFields[10].Descriptor()
 	// memberdetails.DefaultFacePicUpdatedTime holds the default value on creation for the face_pic_updated_time field.
 	memberdetails.DefaultFacePicUpdatedTime = memberdetailsDescFacePicUpdatedTime.Default.(func() time.Time)
 	// memberdetailsDescMoneySum is the schema descriptor for money_sum field.
-	memberdetailsDescMoneySum := memberdetailsFields[10].Descriptor()
+	memberdetailsDescMoneySum := memberdetailsFields[11].Descriptor()
 	// memberdetails.DefaultMoneySum holds the default value on creation for the money_sum field.
 	memberdetails.DefaultMoneySum = memberdetailsDescMoneySum.Default.(float64)
 	// memberdetailsDescProductID is the schema descriptor for product_id field.
-	memberdetailsDescProductID := memberdetailsFields[11].Descriptor()
+	memberdetailsDescProductID := memberdetailsFields[12].Descriptor()
 	// memberdetails.DefaultProductID holds the default value on creation for the product_id field.
 	memberdetails.DefaultProductID = memberdetailsDescProductID.Default.(int64)
 	// memberdetailsDescProductVenue is the schema descriptor for product_venue field.
-	memberdetailsDescProductVenue := memberdetailsFields[12].Descriptor()
+	memberdetailsDescProductVenue := memberdetailsFields[14].Descriptor()
 	// memberdetails.DefaultProductVenue holds the default value on creation for the product_venue field.
 	memberdetails.DefaultProductVenue = memberdetailsDescProductVenue.Default.(int64)
 	// memberdetailsDescEntrySum is the schema descriptor for entry_sum field.
-	memberdetailsDescEntrySum := memberdetailsFields[13].Descriptor()
+	memberdetailsDescEntrySum := memberdetailsFields[16].Descriptor()
 	// memberdetails.DefaultEntrySum holds the default value on creation for the entry_sum field.
 	memberdetails.DefaultEntrySum = memberdetailsDescEntrySum.Default.(int64)
-	// memberdetailsDescEntryLastTime is the schema descriptor for entry_last_time field.
-	memberdetailsDescEntryLastTime := memberdetailsFields[14].Descriptor()
-	// memberdetails.DefaultEntryLastTime holds the default value on creation for the entry_last_time field.
-	memberdetails.DefaultEntryLastTime = memberdetailsDescEntryLastTime.Default.(func() time.Time)
-	// memberdetailsDescEntryDeadlineTime is the schema descriptor for entry_deadline_time field.
-	memberdetailsDescEntryDeadlineTime := memberdetailsFields[15].Descriptor()
-	// memberdetails.DefaultEntryDeadlineTime holds the default value on creation for the entry_deadline_time field.
-	memberdetails.DefaultEntryDeadlineTime = memberdetailsDescEntryDeadlineTime.Default.(func() time.Time)
-	// memberdetailsDescClassLastTime is the schema descriptor for class_last_time field.
-	memberdetailsDescClassLastTime := memberdetailsFields[16].Descriptor()
-	// memberdetails.DefaultClassLastTime holds the default value on creation for the class_last_time field.
-	memberdetails.DefaultClassLastTime = memberdetailsDescClassLastTime.Default.(func() time.Time)
 	// memberdetailsDescRelationUID is the schema descriptor for relation_uid field.
-	memberdetailsDescRelationUID := memberdetailsFields[17].Descriptor()
+	memberdetailsDescRelationUID := memberdetailsFields[20].Descriptor()
 	// memberdetails.DefaultRelationUID holds the default value on creation for the relation_uid field.
 	memberdetails.DefaultRelationUID = memberdetailsDescRelationUID.Default.(int64)
 	// memberdetailsDescRelationMid is the schema descriptor for relation_mid field.
-	memberdetailsDescRelationMid := memberdetailsFields[18].Descriptor()
+	memberdetailsDescRelationMid := memberdetailsFields[22].Descriptor()
 	// memberdetails.DefaultRelationMid holds the default value on creation for the relation_mid field.
 	memberdetails.DefaultRelationMid = memberdetailsDescRelationMid.Default.(int64)
 	membernoteMixin := schema.MemberNote{}.Mixin()

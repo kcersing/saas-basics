@@ -118,41 +118,31 @@ func (p Product) PropertyList(req do.ProductListReq) (resp []*do.PropertyInfo, t
 		return resp, total, err
 	}
 
-	for _, v := range lists {
-		var d = new(do.PropertyInfo)
-		d.ID = v.ID
-		d.Name = v.Name
-		d.Price = v.Price
-		d.Duration = v.Duration
-		d.Length = v.Length
-		d.Count = v.Count
-		d.Type = v.Type
-		d.Data = v.Data
-		d.Status = v.Status
-		d.CreateId = v.CreateID
+	err = copier.Copy(&resp, &lists)
+	if err != nil {
+		err = errors.Wrap(err, "copy Product info failed")
+		return resp, 0, err
+	}
+
+	for i, v := range lists {
 		venues, err := v.QueryVenues().Select(venue.FieldID, venue.FieldName).All(p.ctx)
 		if err == nil {
 			var ven []do.PropertyVenue
 			err = copier.Copy(&ven, &venues)
-			d.Venue = ven
-			var str string
-			for i, v := range ven {
-				if i == 0 {
-					str = v.Name
+			resp[i].Venue = ven
+
+			for i2, v := range ven {
+				if i2 == 0 {
+					resp[i].Venues = v.Name
 				} else {
-					str += ", " + v.Name
+					resp[i].Venues += ", " + v.Name
 				}
+				resp[i].VenueId = append(resp[i].VenueId, v.ID)
 			}
-			d.Venues = str
-			//d.Venues = strings.Join(ven, ",")
+
 		}
-		resp = append(resp, d)
 	}
 
-	if err != nil {
-		err = errors.Wrap(err, "copy product info failed")
-		return resp, 0, err
-	}
 	total, _ = p.db.ProductProperty.Query().Where(predicates...).Count(p.ctx)
 	return
 

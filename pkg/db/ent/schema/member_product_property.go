@@ -27,6 +27,8 @@ func (MemberProductProperty) Fields() []ent.Field {
 		field.Int64("count").Default(0).Comment("总次数").Optional(),
 		field.Int64("count_surplus").Default(0).Comment("剩余次数").Optional(),
 		field.Float("price").Comment("定价").Optional(),
+		field.Time("validity_at").Comment("生效时间").Optional(),
+		field.Time("cancel_at").Comment("作废时间").Optional(),
 	}
 }
 
@@ -50,6 +52,8 @@ func (MemberProductProperty) Indexes() []ent.Index {
 		index.Fields("property_id"),
 		index.Fields("member_id"),
 		index.Fields("member_product_id"),
+		index.Fields("validity_at"),
+		index.Fields("cancel_at"),
 	}
 }
 

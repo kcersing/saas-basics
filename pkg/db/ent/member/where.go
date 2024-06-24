@@ -80,19 +80,14 @@ func Name(v string) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldName, v))
 }
 
+// Nickname applies equality check predicate on the "nickname" field. It's identical to NicknameEQ.
+func Nickname(v string) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldNickname, v))
+}
+
 // Mobile applies equality check predicate on the "mobile" field. It's identical to MobileEQ.
 func Mobile(v string) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldMobile, v))
-}
-
-// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
-func Email(v string) predicate.Member {
-	return predicate.Member(sql.FieldEQ(FieldEmail, v))
-}
-
-// Wecom applies equality check predicate on the "wecom" field. It's identical to WecomEQ.
-func Wecom(v string) predicate.Member {
-	return predicate.Member(sql.FieldEQ(FieldWecom, v))
 }
 
 // Avatar applies equality check predicate on the "avatar" field. It's identical to AvatarEQ.
@@ -103,11 +98,6 @@ func Avatar(v string) predicate.Member {
 // Condition applies equality check predicate on the "condition" field. It's identical to ConditionEQ.
 func Condition(v int64) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldCondition, v))
-}
-
-// CreateID applies equality check predicate on the "create_id" field. It's identical to CreateIDEQ.
-func CreateID(v int64) predicate.Member {
-	return predicate.Member(sql.FieldEQ(FieldCreateID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -390,6 +380,81 @@ func NameContainsFold(v string) predicate.Member {
 	return predicate.Member(sql.FieldContainsFold(FieldName, v))
 }
 
+// NicknameEQ applies the EQ predicate on the "nickname" field.
+func NicknameEQ(v string) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldNickname, v))
+}
+
+// NicknameNEQ applies the NEQ predicate on the "nickname" field.
+func NicknameNEQ(v string) predicate.Member {
+	return predicate.Member(sql.FieldNEQ(FieldNickname, v))
+}
+
+// NicknameIn applies the In predicate on the "nickname" field.
+func NicknameIn(vs ...string) predicate.Member {
+	return predicate.Member(sql.FieldIn(FieldNickname, vs...))
+}
+
+// NicknameNotIn applies the NotIn predicate on the "nickname" field.
+func NicknameNotIn(vs ...string) predicate.Member {
+	return predicate.Member(sql.FieldNotIn(FieldNickname, vs...))
+}
+
+// NicknameGT applies the GT predicate on the "nickname" field.
+func NicknameGT(v string) predicate.Member {
+	return predicate.Member(sql.FieldGT(FieldNickname, v))
+}
+
+// NicknameGTE applies the GTE predicate on the "nickname" field.
+func NicknameGTE(v string) predicate.Member {
+	return predicate.Member(sql.FieldGTE(FieldNickname, v))
+}
+
+// NicknameLT applies the LT predicate on the "nickname" field.
+func NicknameLT(v string) predicate.Member {
+	return predicate.Member(sql.FieldLT(FieldNickname, v))
+}
+
+// NicknameLTE applies the LTE predicate on the "nickname" field.
+func NicknameLTE(v string) predicate.Member {
+	return predicate.Member(sql.FieldLTE(FieldNickname, v))
+}
+
+// NicknameContains applies the Contains predicate on the "nickname" field.
+func NicknameContains(v string) predicate.Member {
+	return predicate.Member(sql.FieldContains(FieldNickname, v))
+}
+
+// NicknameHasPrefix applies the HasPrefix predicate on the "nickname" field.
+func NicknameHasPrefix(v string) predicate.Member {
+	return predicate.Member(sql.FieldHasPrefix(FieldNickname, v))
+}
+
+// NicknameHasSuffix applies the HasSuffix predicate on the "nickname" field.
+func NicknameHasSuffix(v string) predicate.Member {
+	return predicate.Member(sql.FieldHasSuffix(FieldNickname, v))
+}
+
+// NicknameIsNil applies the IsNil predicate on the "nickname" field.
+func NicknameIsNil() predicate.Member {
+	return predicate.Member(sql.FieldIsNull(FieldNickname))
+}
+
+// NicknameNotNil applies the NotNil predicate on the "nickname" field.
+func NicknameNotNil() predicate.Member {
+	return predicate.Member(sql.FieldNotNull(FieldNickname))
+}
+
+// NicknameEqualFold applies the EqualFold predicate on the "nickname" field.
+func NicknameEqualFold(v string) predicate.Member {
+	return predicate.Member(sql.FieldEqualFold(FieldNickname, v))
+}
+
+// NicknameContainsFold applies the ContainsFold predicate on the "nickname" field.
+func NicknameContainsFold(v string) predicate.Member {
+	return predicate.Member(sql.FieldContainsFold(FieldNickname, v))
+}
+
 // MobileEQ applies the EQ predicate on the "mobile" field.
 func MobileEQ(v string) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldMobile, v))
@@ -463,156 +528,6 @@ func MobileEqualFold(v string) predicate.Member {
 // MobileContainsFold applies the ContainsFold predicate on the "mobile" field.
 func MobileContainsFold(v string) predicate.Member {
 	return predicate.Member(sql.FieldContainsFold(FieldMobile, v))
-}
-
-// EmailEQ applies the EQ predicate on the "email" field.
-func EmailEQ(v string) predicate.Member {
-	return predicate.Member(sql.FieldEQ(FieldEmail, v))
-}
-
-// EmailNEQ applies the NEQ predicate on the "email" field.
-func EmailNEQ(v string) predicate.Member {
-	return predicate.Member(sql.FieldNEQ(FieldEmail, v))
-}
-
-// EmailIn applies the In predicate on the "email" field.
-func EmailIn(vs ...string) predicate.Member {
-	return predicate.Member(sql.FieldIn(FieldEmail, vs...))
-}
-
-// EmailNotIn applies the NotIn predicate on the "email" field.
-func EmailNotIn(vs ...string) predicate.Member {
-	return predicate.Member(sql.FieldNotIn(FieldEmail, vs...))
-}
-
-// EmailGT applies the GT predicate on the "email" field.
-func EmailGT(v string) predicate.Member {
-	return predicate.Member(sql.FieldGT(FieldEmail, v))
-}
-
-// EmailGTE applies the GTE predicate on the "email" field.
-func EmailGTE(v string) predicate.Member {
-	return predicate.Member(sql.FieldGTE(FieldEmail, v))
-}
-
-// EmailLT applies the LT predicate on the "email" field.
-func EmailLT(v string) predicate.Member {
-	return predicate.Member(sql.FieldLT(FieldEmail, v))
-}
-
-// EmailLTE applies the LTE predicate on the "email" field.
-func EmailLTE(v string) predicate.Member {
-	return predicate.Member(sql.FieldLTE(FieldEmail, v))
-}
-
-// EmailContains applies the Contains predicate on the "email" field.
-func EmailContains(v string) predicate.Member {
-	return predicate.Member(sql.FieldContains(FieldEmail, v))
-}
-
-// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
-func EmailHasPrefix(v string) predicate.Member {
-	return predicate.Member(sql.FieldHasPrefix(FieldEmail, v))
-}
-
-// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
-func EmailHasSuffix(v string) predicate.Member {
-	return predicate.Member(sql.FieldHasSuffix(FieldEmail, v))
-}
-
-// EmailIsNil applies the IsNil predicate on the "email" field.
-func EmailIsNil() predicate.Member {
-	return predicate.Member(sql.FieldIsNull(FieldEmail))
-}
-
-// EmailNotNil applies the NotNil predicate on the "email" field.
-func EmailNotNil() predicate.Member {
-	return predicate.Member(sql.FieldNotNull(FieldEmail))
-}
-
-// EmailEqualFold applies the EqualFold predicate on the "email" field.
-func EmailEqualFold(v string) predicate.Member {
-	return predicate.Member(sql.FieldEqualFold(FieldEmail, v))
-}
-
-// EmailContainsFold applies the ContainsFold predicate on the "email" field.
-func EmailContainsFold(v string) predicate.Member {
-	return predicate.Member(sql.FieldContainsFold(FieldEmail, v))
-}
-
-// WecomEQ applies the EQ predicate on the "wecom" field.
-func WecomEQ(v string) predicate.Member {
-	return predicate.Member(sql.FieldEQ(FieldWecom, v))
-}
-
-// WecomNEQ applies the NEQ predicate on the "wecom" field.
-func WecomNEQ(v string) predicate.Member {
-	return predicate.Member(sql.FieldNEQ(FieldWecom, v))
-}
-
-// WecomIn applies the In predicate on the "wecom" field.
-func WecomIn(vs ...string) predicate.Member {
-	return predicate.Member(sql.FieldIn(FieldWecom, vs...))
-}
-
-// WecomNotIn applies the NotIn predicate on the "wecom" field.
-func WecomNotIn(vs ...string) predicate.Member {
-	return predicate.Member(sql.FieldNotIn(FieldWecom, vs...))
-}
-
-// WecomGT applies the GT predicate on the "wecom" field.
-func WecomGT(v string) predicate.Member {
-	return predicate.Member(sql.FieldGT(FieldWecom, v))
-}
-
-// WecomGTE applies the GTE predicate on the "wecom" field.
-func WecomGTE(v string) predicate.Member {
-	return predicate.Member(sql.FieldGTE(FieldWecom, v))
-}
-
-// WecomLT applies the LT predicate on the "wecom" field.
-func WecomLT(v string) predicate.Member {
-	return predicate.Member(sql.FieldLT(FieldWecom, v))
-}
-
-// WecomLTE applies the LTE predicate on the "wecom" field.
-func WecomLTE(v string) predicate.Member {
-	return predicate.Member(sql.FieldLTE(FieldWecom, v))
-}
-
-// WecomContains applies the Contains predicate on the "wecom" field.
-func WecomContains(v string) predicate.Member {
-	return predicate.Member(sql.FieldContains(FieldWecom, v))
-}
-
-// WecomHasPrefix applies the HasPrefix predicate on the "wecom" field.
-func WecomHasPrefix(v string) predicate.Member {
-	return predicate.Member(sql.FieldHasPrefix(FieldWecom, v))
-}
-
-// WecomHasSuffix applies the HasSuffix predicate on the "wecom" field.
-func WecomHasSuffix(v string) predicate.Member {
-	return predicate.Member(sql.FieldHasSuffix(FieldWecom, v))
-}
-
-// WecomIsNil applies the IsNil predicate on the "wecom" field.
-func WecomIsNil() predicate.Member {
-	return predicate.Member(sql.FieldIsNull(FieldWecom))
-}
-
-// WecomNotNil applies the NotNil predicate on the "wecom" field.
-func WecomNotNil() predicate.Member {
-	return predicate.Member(sql.FieldNotNull(FieldWecom))
-}
-
-// WecomEqualFold applies the EqualFold predicate on the "wecom" field.
-func WecomEqualFold(v string) predicate.Member {
-	return predicate.Member(sql.FieldEqualFold(FieldWecom, v))
-}
-
-// WecomContainsFold applies the ContainsFold predicate on the "wecom" field.
-func WecomContainsFold(v string) predicate.Member {
-	return predicate.Member(sql.FieldContainsFold(FieldWecom, v))
 }
 
 // AvatarEQ applies the EQ predicate on the "avatar" field.
@@ -738,56 +653,6 @@ func ConditionIsNil() predicate.Member {
 // ConditionNotNil applies the NotNil predicate on the "condition" field.
 func ConditionNotNil() predicate.Member {
 	return predicate.Member(sql.FieldNotNull(FieldCondition))
-}
-
-// CreateIDEQ applies the EQ predicate on the "create_id" field.
-func CreateIDEQ(v int64) predicate.Member {
-	return predicate.Member(sql.FieldEQ(FieldCreateID, v))
-}
-
-// CreateIDNEQ applies the NEQ predicate on the "create_id" field.
-func CreateIDNEQ(v int64) predicate.Member {
-	return predicate.Member(sql.FieldNEQ(FieldCreateID, v))
-}
-
-// CreateIDIn applies the In predicate on the "create_id" field.
-func CreateIDIn(vs ...int64) predicate.Member {
-	return predicate.Member(sql.FieldIn(FieldCreateID, vs...))
-}
-
-// CreateIDNotIn applies the NotIn predicate on the "create_id" field.
-func CreateIDNotIn(vs ...int64) predicate.Member {
-	return predicate.Member(sql.FieldNotIn(FieldCreateID, vs...))
-}
-
-// CreateIDGT applies the GT predicate on the "create_id" field.
-func CreateIDGT(v int64) predicate.Member {
-	return predicate.Member(sql.FieldGT(FieldCreateID, v))
-}
-
-// CreateIDGTE applies the GTE predicate on the "create_id" field.
-func CreateIDGTE(v int64) predicate.Member {
-	return predicate.Member(sql.FieldGTE(FieldCreateID, v))
-}
-
-// CreateIDLT applies the LT predicate on the "create_id" field.
-func CreateIDLT(v int64) predicate.Member {
-	return predicate.Member(sql.FieldLT(FieldCreateID, v))
-}
-
-// CreateIDLTE applies the LTE predicate on the "create_id" field.
-func CreateIDLTE(v int64) predicate.Member {
-	return predicate.Member(sql.FieldLTE(FieldCreateID, v))
-}
-
-// CreateIDIsNil applies the IsNil predicate on the "create_id" field.
-func CreateIDIsNil() predicate.Member {
-	return predicate.Member(sql.FieldIsNull(FieldCreateID))
-}
-
-// CreateIDNotNil applies the NotNil predicate on the "create_id" field.
-func CreateIDNotNil() predicate.Member {
-	return predicate.Member(sql.FieldNotNull(FieldCreateID))
 }
 
 // HasMemberDetails applies the HasEdge predicate on the "member_details" edge.

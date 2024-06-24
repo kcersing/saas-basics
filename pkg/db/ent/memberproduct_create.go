@@ -178,34 +178,6 @@ func (mpc *MemberProductCreate) SetNillablePrice(f *float64) *MemberProductCreat
 	return mpc
 }
 
-// SetValidityAt sets the "validity_at" field.
-func (mpc *MemberProductCreate) SetValidityAt(t time.Time) *MemberProductCreate {
-	mpc.mutation.SetValidityAt(t)
-	return mpc
-}
-
-// SetNillableValidityAt sets the "validity_at" field if the given value is not nil.
-func (mpc *MemberProductCreate) SetNillableValidityAt(t *time.Time) *MemberProductCreate {
-	if t != nil {
-		mpc.SetValidityAt(*t)
-	}
-	return mpc
-}
-
-// SetCancelAt sets the "cancel_at" field.
-func (mpc *MemberProductCreate) SetCancelAt(t time.Time) *MemberProductCreate {
-	mpc.mutation.SetCancelAt(t)
-	return mpc
-}
-
-// SetNillableCancelAt sets the "cancel_at" field if the given value is not nil.
-func (mpc *MemberProductCreate) SetNillableCancelAt(t *time.Time) *MemberProductCreate {
-	if t != nil {
-		mpc.SetCancelAt(*t)
-	}
-	return mpc
-}
-
 // SetID sets the "id" field.
 func (mpc *MemberProductCreate) SetID(i int64) *MemberProductCreate {
 	mpc.mutation.SetID(i)
@@ -404,14 +376,6 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 	if value, ok := mpc.mutation.Price(); ok {
 		_spec.SetField(memberproduct.FieldPrice, field.TypeFloat64, value)
 		_node.Price = value
-	}
-	if value, ok := mpc.mutation.ValidityAt(); ok {
-		_spec.SetField(memberproduct.FieldValidityAt, field.TypeTime, value)
-		_node.ValidityAt = value
-	}
-	if value, ok := mpc.mutation.CancelAt(); ok {
-		_spec.SetField(memberproduct.FieldCancelAt, field.TypeTime, value)
-		_node.CancelAt = value
 	}
 	if nodes := mpc.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

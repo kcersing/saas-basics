@@ -110,16 +110,6 @@ func Price(v float64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldPrice, v))
 }
 
-// ValidityAt applies equality check predicate on the "validity_at" field. It's identical to ValidityAtEQ.
-func ValidityAt(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldValidityAt, v))
-}
-
-// CancelAt applies equality check predicate on the "cancel_at" field. It's identical to CancelAtEQ.
-func CancelAt(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldCancelAt, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldCreatedAt, v))
@@ -703,106 +693,6 @@ func PriceIsNil() predicate.MemberProduct {
 // PriceNotNil applies the NotNil predicate on the "price" field.
 func PriceNotNil() predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotNull(FieldPrice))
-}
-
-// ValidityAtEQ applies the EQ predicate on the "validity_at" field.
-func ValidityAtEQ(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldValidityAt, v))
-}
-
-// ValidityAtNEQ applies the NEQ predicate on the "validity_at" field.
-func ValidityAtNEQ(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNEQ(FieldValidityAt, v))
-}
-
-// ValidityAtIn applies the In predicate on the "validity_at" field.
-func ValidityAtIn(vs ...time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIn(FieldValidityAt, vs...))
-}
-
-// ValidityAtNotIn applies the NotIn predicate on the "validity_at" field.
-func ValidityAtNotIn(vs ...time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotIn(FieldValidityAt, vs...))
-}
-
-// ValidityAtGT applies the GT predicate on the "validity_at" field.
-func ValidityAtGT(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGT(FieldValidityAt, v))
-}
-
-// ValidityAtGTE applies the GTE predicate on the "validity_at" field.
-func ValidityAtGTE(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGTE(FieldValidityAt, v))
-}
-
-// ValidityAtLT applies the LT predicate on the "validity_at" field.
-func ValidityAtLT(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLT(FieldValidityAt, v))
-}
-
-// ValidityAtLTE applies the LTE predicate on the "validity_at" field.
-func ValidityAtLTE(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLTE(FieldValidityAt, v))
-}
-
-// ValidityAtIsNil applies the IsNil predicate on the "validity_at" field.
-func ValidityAtIsNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIsNull(FieldValidityAt))
-}
-
-// ValidityAtNotNil applies the NotNil predicate on the "validity_at" field.
-func ValidityAtNotNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotNull(FieldValidityAt))
-}
-
-// CancelAtEQ applies the EQ predicate on the "cancel_at" field.
-func CancelAtEQ(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldCancelAt, v))
-}
-
-// CancelAtNEQ applies the NEQ predicate on the "cancel_at" field.
-func CancelAtNEQ(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNEQ(FieldCancelAt, v))
-}
-
-// CancelAtIn applies the In predicate on the "cancel_at" field.
-func CancelAtIn(vs ...time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIn(FieldCancelAt, vs...))
-}
-
-// CancelAtNotIn applies the NotIn predicate on the "cancel_at" field.
-func CancelAtNotIn(vs ...time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotIn(FieldCancelAt, vs...))
-}
-
-// CancelAtGT applies the GT predicate on the "cancel_at" field.
-func CancelAtGT(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGT(FieldCancelAt, v))
-}
-
-// CancelAtGTE applies the GTE predicate on the "cancel_at" field.
-func CancelAtGTE(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGTE(FieldCancelAt, v))
-}
-
-// CancelAtLT applies the LT predicate on the "cancel_at" field.
-func CancelAtLT(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLT(FieldCancelAt, v))
-}
-
-// CancelAtLTE applies the LTE predicate on the "cancel_at" field.
-func CancelAtLTE(v time.Time) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLTE(FieldCancelAt, v))
-}
-
-// CancelAtIsNil applies the IsNil predicate on the "cancel_at" field.
-func CancelAtIsNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIsNull(FieldCancelAt))
-}
-
-// CancelAtNotNil applies the NotNil predicate on the "cancel_at" field.
-func CancelAtNotNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotNull(FieldCancelAt))
 }
 
 // HasMembers applies the HasEdge predicate on the "members" edge.

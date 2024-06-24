@@ -96,6 +96,20 @@ func (mc *MemberCreate) SetNillableName(s *string) *MemberCreate {
 	return mc
 }
 
+// SetNickname sets the "nickname" field.
+func (mc *MemberCreate) SetNickname(s string) *MemberCreate {
+	mc.mutation.SetNickname(s)
+	return mc
+}
+
+// SetNillableNickname sets the "nickname" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableNickname(s *string) *MemberCreate {
+	if s != nil {
+		mc.SetNickname(*s)
+	}
+	return mc
+}
+
 // SetMobile sets the "mobile" field.
 func (mc *MemberCreate) SetMobile(s string) *MemberCreate {
 	mc.mutation.SetMobile(s)
@@ -106,34 +120,6 @@ func (mc *MemberCreate) SetMobile(s string) *MemberCreate {
 func (mc *MemberCreate) SetNillableMobile(s *string) *MemberCreate {
 	if s != nil {
 		mc.SetMobile(*s)
-	}
-	return mc
-}
-
-// SetEmail sets the "email" field.
-func (mc *MemberCreate) SetEmail(s string) *MemberCreate {
-	mc.mutation.SetEmail(s)
-	return mc
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableEmail(s *string) *MemberCreate {
-	if s != nil {
-		mc.SetEmail(*s)
-	}
-	return mc
-}
-
-// SetWecom sets the "wecom" field.
-func (mc *MemberCreate) SetWecom(s string) *MemberCreate {
-	mc.mutation.SetWecom(s)
-	return mc
-}
-
-// SetNillableWecom sets the "wecom" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableWecom(s *string) *MemberCreate {
-	if s != nil {
-		mc.SetWecom(*s)
 	}
 	return mc
 }
@@ -162,20 +148,6 @@ func (mc *MemberCreate) SetCondition(i int64) *MemberCreate {
 func (mc *MemberCreate) SetNillableCondition(i *int64) *MemberCreate {
 	if i != nil {
 		mc.SetCondition(*i)
-	}
-	return mc
-}
-
-// SetCreateID sets the "create_id" field.
-func (mc *MemberCreate) SetCreateID(i int64) *MemberCreate {
-	mc.mutation.SetCreateID(i)
-	return mc
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableCreateID(i *int64) *MemberCreate {
-	if i != nil {
-		mc.SetCreateID(*i)
 	}
 	return mc
 }
@@ -393,17 +365,13 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		_spec.SetField(member.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
+	if value, ok := mc.mutation.Nickname(); ok {
+		_spec.SetField(member.FieldNickname, field.TypeString, value)
+		_node.Nickname = value
+	}
 	if value, ok := mc.mutation.Mobile(); ok {
 		_spec.SetField(member.FieldMobile, field.TypeString, value)
 		_node.Mobile = value
-	}
-	if value, ok := mc.mutation.Email(); ok {
-		_spec.SetField(member.FieldEmail, field.TypeString, value)
-		_node.Email = value
-	}
-	if value, ok := mc.mutation.Wecom(); ok {
-		_spec.SetField(member.FieldWecom, field.TypeString, value)
-		_node.Wecom = value
 	}
 	if value, ok := mc.mutation.Avatar(); ok {
 		_spec.SetField(member.FieldAvatar, field.TypeString, value)
@@ -412,10 +380,6 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Condition(); ok {
 		_spec.SetField(member.FieldCondition, field.TypeInt64, value)
 		_node.Condition = value
-	}
-	if value, ok := mc.mutation.CreateID(); ok {
-		_spec.SetField(member.FieldCreateID, field.TypeInt64, value)
-		_node.CreateID = value
 	}
 	if nodes := mc.mutation.MemberDetailsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
