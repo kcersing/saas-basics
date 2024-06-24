@@ -168,9 +168,12 @@ func (m Member) Info(ID int64) (memberInfo *do.MemberInfo, err error) {
 	memberInfo.Mobile = memberEnt.Mobile
 	memberInfo.ID = memberEnt.ID
 	memberInfo.Nickname = memberEnt.Nickname
-	memberInfo.CreatedAt = memberEnt.CreatedAt.Format(time.DateTime)
 	memberInfo.Condition = memberEnt.Condition
+	memberInfo.CreatedAt = memberEnt.CreatedAt.Format(time.DateTime)
 	memberInfo.Birthday = memberDetails.Birthday.Format(time.DateOnly)
+	memberInfo.EntryDeadlineTime = memberDetails.EntryDeadlineTime.Format(time.DateOnly)
+	memberInfo.EntryLastTime = memberDetails.EntryLastTime.Format(time.DateOnly)
+	memberInfo.ClassLastTime = memberDetails.ClassLastTime.Format(time.DateOnly)
 
 	if memberDetails.Gender == 0 {
 		memberInfo.Gender = "女性"
