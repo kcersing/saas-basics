@@ -24,6 +24,29 @@ type Contract struct {
 	cache *ristretto.Cache
 }
 
+func (c Contract) Info(id int64) (info *do.ContractInfo, err error) {
+	inter, exist := c.cache.Get("contractInfo" + strconv.Itoa(int(id)))
+	if exist {
+		if v, ok := inter.(*do.ContractInfo); ok {
+			return v, nil
+		}
+	}
+	one, err := c.db.Contract.Query().Where(contract.IDEQ(id)).First(c.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get contract failed")
+		return info, err
+	}
+
+	err = copier.Copy(&info, &one)
+	if err != nil {
+		err = errors.Wrap(err, "copy contract info failed")
+		return info, err
+	}
+
+	c.cache.SetWithTTL("contractInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
+	return
+}
+
 func (c Contract) Create(req *do.ContractInfo) error {
 	_, err := c.db.Contract.Create().
 		SetName(req.Name).
@@ -54,33 +77,6 @@ func (c Contract) Update(req *do.ContractInfo) error {
 func (c Contract) UpdateStatus(ID int64, status int64) error {
 	_, err := c.db.Contract.Update().Where(contract.IDEQ(ID)).SetStatus(status).Save(c.ctx)
 	return err
-}
-
-func (c Contract) ByID(id int64) (*do.ContractInfo, error) {
-	contractInterface, ok := c.cache.Get("contractData" + strconv.Itoa(int(id)))
-	if ok {
-		if l, ok := contractInterface.(*ent.Contract); ok {
-			return &do.ContractInfo{
-				ID:      l.ID,
-				Name:    l.Name,
-				Content: l.Content,
-			}, nil
-		}
-	}
-	// get Content from db
-	contentEnt, err := c.db.Contract.Query().Where(contract.IDEQ(id)).Only(c.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "get Contract failed")
-		return nil, err
-	}
-	// set Content to cache
-	c.cache.SetWithTTL("contractData"+strconv.Itoa(int(id)), contentEnt, 1, 1*time.Hour)
-	// convert to contentInfo
-	return &do.ContractInfo{
-		ID:      contentEnt.ID,
-		Name:    contentEnt.Name,
-		Content: contentEnt.Content,
-	}, err
 }
 
 func (c Contract) List(req *do.ContractListReq) (list []*do.ContractInfo, total int, err error) {

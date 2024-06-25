@@ -13,6 +13,8 @@ import (
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/venue"
 	"saas/pkg/db/ent/venueplace"
+	"strconv"
+	"time"
 )
 
 type Venue struct {
@@ -21,6 +23,52 @@ type Venue struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+}
+
+func (v Venue) VenueInfo(id int64) (info *do.VenueInfo, err error) {
+	inter, exist := v.cache.Get("venueInfo" + strconv.Itoa(int(id)))
+	if exist {
+		if v, ok := inter.(*do.VenueInfo); ok {
+			return v, nil
+		}
+	}
+	one, err := v.db.Venue.Query().Where(venue.IDEQ(id)).First(v.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get venue failed")
+		return info, err
+	}
+
+	err = copier.Copy(&info, &one)
+	if err != nil {
+		err = errors.Wrap(err, "copy venue info failed")
+		return info, err
+	}
+
+	v.cache.SetWithTTL("venueInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
+	return
+}
+
+func (v Venue) PlaceInfo(id int64) (info *do.VenuePlaceInfo, err error) {
+	inter, exist := v.cache.Get("placeInfo" + strconv.Itoa(int(id)))
+	if exist {
+		if v, ok := inter.(*do.VenuePlaceInfo); ok {
+			return v, nil
+		}
+	}
+	one, err := v.db.VenuePlace.Query().Where(venueplace.IDEQ(id)).First(v.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get venue place failed")
+		return info, err
+	}
+
+	err = copier.Copy(&info, &one)
+	if err != nil {
+		err = errors.Wrap(err, "copy venue place info failed")
+		return info, err
+	}
+
+	v.cache.SetWithTTL("placeInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
+	return
 }
 
 func (v Venue) Create(req *do.VenueInfo) error {

@@ -14,7 +14,9 @@ import (
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/product"
 	"saas/pkg/db/ent/productproperty"
+	"saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
+	"strconv"
 	"time"
 )
 
@@ -26,9 +28,44 @@ type Product struct {
 	cache *ristretto.Cache
 }
 
+func (p Product) Info(id int64) (info *do.ProductInfo, err error) {
+	inter, exist := p.cache.Get("productInfo" + strconv.Itoa(int(id)))
+	if exist {
+		if v, ok := inter.(*do.ProductInfo); ok {
+			return v, nil
+		}
+	}
+	one, err := p.db.Product.Query().Where(product.IDEQ(id)).First(p.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get product failed")
+		return info, err
+	}
+
+	info = &do.ProductInfo{
+		ID:          one.ID,
+		Name:        one.Name,
+		Pic:         one.Pic,
+		Description: one.Description,
+		Price:       one.Price,
+		Stock:       one.Stock,
+		Status:      one.Status,
+		CreateID:    one.CreateID,
+	}
+	if one.CreateID != 0 {
+		create, err := p.db.User.Query().Where(user.IDEQ(one.CreateID)).First(p.ctx)
+		if err != nil {
+			err = errors.Wrap(err, "get user failed")
+			return info, err
+		}
+		info.CreateName = create.Nickname
+	}
+
+	p.cache.SetWithTTL("productInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
+	return
+}
+
 func (p Product) CreateProperty(req do.PropertyInfo) error {
 
-	hlog.Info(req)
 	_, err := p.db.ProductProperty.Create().
 		SetName(req.Name).
 		SetType(req.Type).
@@ -269,11 +306,6 @@ func (p Product) List(req do.ProductListReq) (resp []*do.ProductInfo, total int,
 func (p Product) UpdateStatus(ID int64, status int64) error {
 	_, err := p.db.Product.Update().Where(product.IDEQ(ID)).SetStatus(int64(status)).Save(p.ctx)
 	return err
-}
-
-func (p Product) InfoByID(ID int64) (roleInfo *do.ProductInfo, err error) {
-	//TODO implement me
-	panic("implement me")
 }
 
 func NewProduct(ctx context.Context, c *app.RequestContext) do.Product {

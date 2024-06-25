@@ -11722,7 +11722,6 @@ type MemberProductMutation struct {
 	status                          *int64
 	addstatus                       *int64
 	sn                              *string
-	_type                           *string
 	product_id                      *int64
 	addproduct_id                   *int64
 	venue_id                        *int64
@@ -12042,55 +12041,6 @@ func (m *MemberProductMutation) SnCleared() bool {
 func (m *MemberProductMutation) ResetSn() {
 	m.sn = nil
 	delete(m.clearedFields, memberproduct.FieldSn)
-}
-
-// SetType sets the "type" field.
-func (m *MemberProductMutation) SetType(s string) {
-	m._type = &s
-}
-
-// GetType returns the value of the "type" field in the mutation.
-func (m *MemberProductMutation) GetType() (r string, exists bool) {
-	v := m._type
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldType returns the old "type" field's value of the MemberProduct entity.
-// If the MemberProduct object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberProductMutation) OldType(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldType is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldType requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldType: %w", err)
-	}
-	return oldValue.Type, nil
-}
-
-// ClearType clears the value of the "type" field.
-func (m *MemberProductMutation) ClearType() {
-	m._type = nil
-	m.clearedFields[memberproduct.FieldType] = struct{}{}
-}
-
-// TypeCleared returns if the "type" field was cleared in this mutation.
-func (m *MemberProductMutation) TypeCleared() bool {
-	_, ok := m.clearedFields[memberproduct.FieldType]
-	return ok
-}
-
-// ResetType resets all changes to the "type" field.
-func (m *MemberProductMutation) ResetType() {
-	m._type = nil
-	delete(m.clearedFields, memberproduct.FieldType)
 }
 
 // SetMemberID sets the "member_id" field.
@@ -12707,7 +12657,7 @@ func (m *MemberProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberProductMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, memberproduct.FieldCreatedAt)
 	}
@@ -12719,9 +12669,6 @@ func (m *MemberProductMutation) Fields() []string {
 	}
 	if m.sn != nil {
 		fields = append(fields, memberproduct.FieldSn)
-	}
-	if m._type != nil {
-		fields = append(fields, memberproduct.FieldType)
 	}
 	if m.members != nil {
 		fields = append(fields, memberproduct.FieldMemberID)
@@ -12757,8 +12704,6 @@ func (m *MemberProductMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case memberproduct.FieldSn:
 		return m.Sn()
-	case memberproduct.FieldType:
-		return m.GetType()
 	case memberproduct.FieldMemberID:
 		return m.MemberID()
 	case memberproduct.FieldProductID:
@@ -12788,8 +12733,6 @@ func (m *MemberProductMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldStatus(ctx)
 	case memberproduct.FieldSn:
 		return m.OldSn(ctx)
-	case memberproduct.FieldType:
-		return m.OldType(ctx)
 	case memberproduct.FieldMemberID:
 		return m.OldMemberID(ctx)
 	case memberproduct.FieldProductID:
@@ -12838,13 +12781,6 @@ func (m *MemberProductMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSn(v)
-		return nil
-	case memberproduct.FieldType:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetType(v)
 		return nil
 	case memberproduct.FieldMemberID:
 		v, ok := value.(int64)
@@ -12987,9 +12923,6 @@ func (m *MemberProductMutation) ClearedFields() []string {
 	if m.FieldCleared(memberproduct.FieldSn) {
 		fields = append(fields, memberproduct.FieldSn)
 	}
-	if m.FieldCleared(memberproduct.FieldType) {
-		fields = append(fields, memberproduct.FieldType)
-	}
 	if m.FieldCleared(memberproduct.FieldMemberID) {
 		fields = append(fields, memberproduct.FieldMemberID)
 	}
@@ -13028,9 +12961,6 @@ func (m *MemberProductMutation) ClearField(name string) error {
 	case memberproduct.FieldSn:
 		m.ClearSn()
 		return nil
-	case memberproduct.FieldType:
-		m.ClearType()
-		return nil
 	case memberproduct.FieldMemberID:
 		m.ClearMemberID()
 		return nil
@@ -13068,9 +12998,6 @@ func (m *MemberProductMutation) ResetField(name string) error {
 		return nil
 	case memberproduct.FieldSn:
 		m.ResetSn()
-		return nil
-	case memberproduct.FieldType:
-		m.ResetType()
 		return nil
 	case memberproduct.FieldMemberID:
 		m.ResetMemberID()

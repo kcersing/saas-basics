@@ -5,7 +5,7 @@ type Member interface {
 	Update(req CreateOrUpdateMemberReq) error
 	Delete(id int64) error
 	List(req MemberListReq) (resp []*MemberInfo, total int, err error)
-	Info(ID int64) (memberInfo *MemberInfo, err error)
+	Info(id int64) (info *MemberInfo, err error)
 	ChangePassword(ID int64, oldPassword, newPassword string) error
 	UpdateStatus(ID int64, status int64) error
 	Search(option string, value string) (memberInfo *MemberInfo, err error)

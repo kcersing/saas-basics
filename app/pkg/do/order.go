@@ -54,9 +54,9 @@ type OrderInfo struct {
 	DeviceName   string       `json:"device_name"`
 	CreateId     int64        `json:"create_id"`
 	CreateName   string       `json:"create_name"`
-	CreatedAt    time.Time    `json:"createdAt"`
-	UpdatedAt    time.Time    `json:"updatedAt"`
-	CompletionAt time.Time    `json:"completionAt"`
+	CreatedAt    string       `json:"createdAt"`
+	UpdatedAt    string       `json:"updatedAt"`
+	CompletionAt string       `json:"completionAt"`
 	OrderPay     []OrderPay   `json:"order_pay"`
 	OrderSales   []OrderSales `json:"order_sales"`
 	OrderItem    OrderItem    `json:"order_item"`
@@ -100,10 +100,12 @@ type OrderPay struct {
 	UpdatedAt  time.Time `json:"updatedAt"`
 }
 type OrderItem struct {
-	OrderId              int64  `json:"order_id"`
-	ProductId            int64  `json:"product_id"`
-	RelatedUserProductId int64  `json:"related_user_product_id"`
-	Data                 string `json:"data"`
+	OrderId                int64  `json:"order_id"`
+	ProductId              int64  `json:"product_id"`
+	ProductName            string `json:"product_name"`
+	RelatedUserProductId   int64  `json:"related_user_product_id"`
+	RelatedUserProductName string `json:"related_user_product_name"`
+	Data                   string `json:"data"`
 }
 type OrderAmount struct {
 	OrderId   int64   `json:"order_id"`

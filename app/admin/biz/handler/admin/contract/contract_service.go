@@ -120,7 +120,7 @@ func ContractByID(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	one, err := admin.NewContract(ctx, c).ByID(req.ID)
+	one, err := admin.NewContract(ctx, c).Info(req.ID)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

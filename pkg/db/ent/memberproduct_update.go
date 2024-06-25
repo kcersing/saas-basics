@@ -85,26 +85,6 @@ func (mpu *MemberProductUpdate) ClearSn() *MemberProductUpdate {
 	return mpu
 }
 
-// SetType sets the "type" field.
-func (mpu *MemberProductUpdate) SetType(s string) *MemberProductUpdate {
-	mpu.mutation.SetType(s)
-	return mpu
-}
-
-// SetNillableType sets the "type" field if the given value is not nil.
-func (mpu *MemberProductUpdate) SetNillableType(s *string) *MemberProductUpdate {
-	if s != nil {
-		mpu.SetType(*s)
-	}
-	return mpu
-}
-
-// ClearType clears the value of the "type" field.
-func (mpu *MemberProductUpdate) ClearType() *MemberProductUpdate {
-	mpu.mutation.ClearType()
-	return mpu
-}
-
 // SetMemberID sets the "member_id" field.
 func (mpu *MemberProductUpdate) SetMemberID(i int64) *MemberProductUpdate {
 	mpu.mutation.SetMemberID(i)
@@ -454,12 +434,6 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mpu.mutation.SnCleared() {
 		_spec.ClearField(memberproduct.FieldSn, field.TypeString)
 	}
-	if value, ok := mpu.mutation.GetType(); ok {
-		_spec.SetField(memberproduct.FieldType, field.TypeString, value)
-	}
-	if mpu.mutation.TypeCleared() {
-		_spec.ClearField(memberproduct.FieldType, field.TypeString)
-	}
 	if value, ok := mpu.mutation.ProductID(); ok {
 		_spec.SetField(memberproduct.FieldProductID, field.TypeInt64, value)
 	}
@@ -736,26 +710,6 @@ func (mpuo *MemberProductUpdateOne) SetNillableSn(s *string) *MemberProductUpdat
 // ClearSn clears the value of the "sn" field.
 func (mpuo *MemberProductUpdateOne) ClearSn() *MemberProductUpdateOne {
 	mpuo.mutation.ClearSn()
-	return mpuo
-}
-
-// SetType sets the "type" field.
-func (mpuo *MemberProductUpdateOne) SetType(s string) *MemberProductUpdateOne {
-	mpuo.mutation.SetType(s)
-	return mpuo
-}
-
-// SetNillableType sets the "type" field if the given value is not nil.
-func (mpuo *MemberProductUpdateOne) SetNillableType(s *string) *MemberProductUpdateOne {
-	if s != nil {
-		mpuo.SetType(*s)
-	}
-	return mpuo
-}
-
-// ClearType clears the value of the "type" field.
-func (mpuo *MemberProductUpdateOne) ClearType() *MemberProductUpdateOne {
-	mpuo.mutation.ClearType()
 	return mpuo
 }
 
@@ -1137,12 +1091,6 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	}
 	if mpuo.mutation.SnCleared() {
 		_spec.ClearField(memberproduct.FieldSn, field.TypeString)
-	}
-	if value, ok := mpuo.mutation.GetType(); ok {
-		_spec.SetField(memberproduct.FieldType, field.TypeString, value)
-	}
-	if mpuo.mutation.TypeCleared() {
-		_spec.ClearField(memberproduct.FieldType, field.TypeString)
 	}
 	if value, ok := mpuo.mutation.ProductID(); ok {
 		_spec.SetField(memberproduct.FieldProductID, field.TypeInt64, value)

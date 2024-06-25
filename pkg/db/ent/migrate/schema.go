@@ -370,7 +370,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "sn", Type: field.TypeString, Nullable: true, Comment: "编号"},
-		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品ID"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆ID"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单ID"},
@@ -386,7 +385,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_member_member_products",
-				Columns:    []*schema.Column{MemberProductColumns[11]},
+				Columns:    []*schema.Column{MemberProductColumns[10]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -395,22 +394,22 @@ var (
 			{
 				Name:    "memberproduct_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[7]},
+				Columns: []*schema.Column{MemberProductColumns[6]},
 			},
 			{
 				Name:    "memberproduct_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[11]},
+				Columns: []*schema.Column{MemberProductColumns[10]},
 			},
 			{
 				Name:    "memberproduct_product_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[6]},
+				Columns: []*schema.Column{MemberProductColumns[5]},
 			},
 			{
 				Name:    "memberproduct_order_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[8]},
+				Columns: []*schema.Column{MemberProductColumns[7]},
 			},
 		},
 	}

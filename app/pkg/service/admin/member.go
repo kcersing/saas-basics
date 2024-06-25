@@ -137,59 +137,58 @@ func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, er
 	return
 }
 
-func (m Member) Info(ID int64) (memberInfo *do.MemberInfo, err error) {
+func (m Member) Info(id int64) (info *do.MemberInfo, err error) {
 
-	memberInfo = new(do.MemberInfo)
+	info = new(do.MemberInfo)
 
-	userInterface, exist := m.cache.Get("memberInfo" + strconv.Itoa(int(ID)))
+	userInterface, exist := m.cache.Get("memberInfo" + strconv.Itoa(int(id)))
 	if exist {
 		if u, ok := userInterface.(*do.MemberInfo); ok {
 			return u, nil
 		}
 	}
-	memberEnt, err := m.db.Member.Query().Where(member.IDEQ(ID)).First(m.ctx)
+	memberEnt, err := m.db.Member.Query().Where(member.IDEQ(id)).First(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get member failed")
-		return memberInfo, err
+		return info, err
 	}
-	memberDetails, err := m.db.MemberDetails.Query().Where(memberdetails.MemberIDEQ(ID)).First(m.ctx)
+	memberDetails, err := m.db.MemberDetails.Query().Where(memberdetails.MemberIDEQ(id)).First(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get member Details failed")
-		return memberInfo, err
+		return info, err
 	}
-	err = copier.Copy(&memberInfo, &memberDetails)
+	err = copier.Copy(&info, &memberDetails)
 	if err != nil {
 		err = errors.Wrap(err, "copy member info failed")
-		return memberInfo, err
+		return info, err
 	}
 
-	memberInfo.Avatar = minio.URLconvert(m.ctx, m.c, memberEnt.Avatar)
-	memberInfo.Name = memberEnt.Name
-	memberInfo.Mobile = memberEnt.Mobile
-	memberInfo.ID = memberEnt.ID
-	memberInfo.Nickname = memberEnt.Nickname
-	memberInfo.Condition = memberEnt.Condition
-	memberInfo.CreatedAt = memberEnt.CreatedAt.Format(time.DateTime)
-	memberInfo.Birthday = memberDetails.Birthday.Format(time.DateOnly)
-	memberInfo.EntryDeadlineTime = memberDetails.EntryDeadlineTime.Format(time.DateOnly)
-	memberInfo.EntryLastTime = memberDetails.EntryLastTime.Format(time.DateOnly)
-	memberInfo.ClassLastTime = memberDetails.ClassLastTime.Format(time.DateOnly)
+	info.Avatar = minio.URLconvert(m.ctx, m.c, memberEnt.Avatar)
+	info.Name = memberEnt.Name
+	info.Mobile = memberEnt.Mobile
+	info.ID = memberEnt.ID
+	info.Nickname = memberEnt.Nickname
+	info.Condition = memberEnt.Condition
+	info.CreatedAt = memberEnt.CreatedAt.Format(time.DateTime)
+	info.Birthday = memberDetails.Birthday.Format(time.DateOnly)
+	info.EntryDeadlineTime = memberDetails.EntryDeadlineTime.Format(time.DateOnly)
+	info.EntryLastTime = memberDetails.EntryLastTime.Format(time.DateOnly)
+	info.ClassLastTime = memberDetails.ClassLastTime.Format(time.DateOnly)
 
 	if memberDetails.Gender == 0 {
-		memberInfo.Gender = "女性"
+		info.Gender = "女性"
 	} else if memberDetails.Gender == 1 {
-		memberInfo.Gender = "男性"
+		info.Gender = "男性"
 	} else {
-		memberInfo.Gender = "保密"
+		info.Gender = "保密"
 	}
 
 	if !memberDetails.Birthday.IsZero() {
-		memberInfo.Age = int64(time.Now().Sub(memberDetails.Birthday).Hours() / 24 / 365)
+		info.Age = int64(time.Now().Sub(memberDetails.Birthday).Hours() / 24 / 365)
 	}
 
-	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(memberInfo.ID)), &memberInfo, 1, 1*time.Hour)
+	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
 	return
-
 }
 
 func (m Member) Search(option string, value string) (memberInfo *do.MemberInfo, err error) {

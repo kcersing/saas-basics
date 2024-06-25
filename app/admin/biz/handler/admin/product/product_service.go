@@ -121,7 +121,7 @@ func InfoByID(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	info, err := admin.NewProduct(ctx, c).InfoByID(req.ID)
+	info, err := admin.NewProduct(ctx, c).Info(req.ID)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

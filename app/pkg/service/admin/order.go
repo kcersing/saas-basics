@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
@@ -13,6 +14,7 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
+	"time"
 )
 
 type Order struct {
@@ -60,7 +62,6 @@ func (o Order) List(req do.OrderListReq) (resp []*do.OrderInfo, total int, err e
 	for i, v := range lists {
 		ven, _ := v.QueryOrderVenues().First(o.ctx)
 		resp[i].VenueName = ven.Name
-
 		amount, _ := v.QueryAmount().First(o.ctx)
 		var amo do.OrderAmount
 		err = copier.Copy(&amo, &amount)
@@ -77,16 +78,37 @@ func (o Order) List(req do.OrderListReq) (resp []*do.OrderInfo, total int, err e
 			return resp, 0, err
 		}
 		resp[i].OrderItem = ite
+		itemProductInfo, err := NewProduct(o.ctx, o.c).Info(ite.ProductId)
+		if err == nil {
+			resp[i].OrderItem.ProductName = itemProductInfo.Name
+		} else {
+			hlog.Error(err)
+		}
 		member, _ := v.QueryOrderMembers().First(o.ctx)
-
 		resp[i].MemberName = member.Name
-
 		cre, _ := v.QueryOrderCreates().First(o.ctx)
 		resp[i].CreateName = cre.Nickname
-		//		OrderPay     []OrderPay   `json:"order_pay"`
-		//	OrderSales   []OrderSales `json:"order_sales"`
-		//	OrderItem    OrderItem    `json:"order_item "`
-		//	OrderAmount  OrderAmount  `json:"order_amount"`
+
+		sales, _ := v.QuerySales().All(o.ctx)
+		var sale []do.OrderSales
+		err = copier.Copy(&sale, &sales)
+		if err != nil {
+			err = errors.Wrap(err, "copy Order Sales failed")
+			return resp, 0, err
+		}
+		resp[i].OrderSales = sale
+		for i2, orderSale := range resp[i].OrderSales {
+			info, err := NewUser(o.ctx, o.c).Info(orderSale.SalesId)
+			if err == nil {
+				resp[i].OrderSales[i2].SalesName = info.Nickname
+			} else {
+				hlog.Error(err)
+			}
+		}
+		resp[i].CreatedAt = v.CreatedAt.Format(time.DateTime)
+		resp[i].CompletionAt = v.CreatedAt.Format(time.DateTime)
+
+		//	OrderPay     []OrderPay   `json:"order_pay"`
 	}
 
 	total, _ = o.db.Order.Query().Where(predicates...).Count(o.ctx)

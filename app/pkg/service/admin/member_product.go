@@ -53,6 +53,13 @@ func (m MemberProduct) ProductList(req do.MemberProductListReq) (resp []*do.Memb
 		return resp, 0, err
 	}
 	for i, v := range lists {
+		venue, err := m.db.Venue.Query().Where(venue.ID(resp[i].VenueId)).First(m.ctx)
+		if err == nil {
+			resp[i].VenueName = venue.Name
+		}
+
+		resp[i].StatusName = do.MPStatusNames[do.MPStatus(v.Status)]
+
 		list, _, err := m.PropertyList(do.MemberPropertyListReq{
 			MemberProductId: v.ID,
 			Page:            1,
@@ -124,8 +131,8 @@ func (m MemberProduct) PropertyList(req do.MemberPropertyListReq) (resp []*do.Me
 			var ven []do.PropertyVenue
 			err = copier.Copy(&ven, &venues)
 			resp[i].Venue = ven
-			for i, v := range ven {
-				if i == 0 {
+			for i2, v := range ven {
+				if i2 == 0 {
 					resp[i].Venues = v.Name
 				} else {
 					resp[i].Venues += ", " + v.Name

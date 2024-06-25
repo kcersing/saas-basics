@@ -55,7 +55,7 @@ func LogMw() app.HandlerFunc {
 
 		userID, _ := strconv.Atoi(userIDStr)
 
-		userInfo, _ := admin.NewUser(ctx, c).UserInfo(int64(userID))
+		userInfo, _ := admin.NewUser(ctx, c).Info(int64(userID))
 
 		if userInfo != nil {
 			username = userInfo.Nickname

@@ -75,11 +75,6 @@ func Sn(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldSn, v))
 }
 
-// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
-func Type(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldType, v))
-}
-
 // MemberID applies equality check predicate on the "member_id" field. It's identical to MemberIDEQ.
 func MemberID(v int64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldMemberID, v))
@@ -313,81 +308,6 @@ func SnEqualFold(v string) predicate.MemberProduct {
 // SnContainsFold applies the ContainsFold predicate on the "sn" field.
 func SnContainsFold(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldContainsFold(FieldSn, v))
-}
-
-// TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldType, v))
-}
-
-// TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNEQ(FieldType, v))
-}
-
-// TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIn(FieldType, vs...))
-}
-
-// TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotIn(FieldType, vs...))
-}
-
-// TypeGT applies the GT predicate on the "type" field.
-func TypeGT(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGT(FieldType, v))
-}
-
-// TypeGTE applies the GTE predicate on the "type" field.
-func TypeGTE(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGTE(FieldType, v))
-}
-
-// TypeLT applies the LT predicate on the "type" field.
-func TypeLT(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLT(FieldType, v))
-}
-
-// TypeLTE applies the LTE predicate on the "type" field.
-func TypeLTE(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLTE(FieldType, v))
-}
-
-// TypeContains applies the Contains predicate on the "type" field.
-func TypeContains(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldContains(FieldType, v))
-}
-
-// TypeHasPrefix applies the HasPrefix predicate on the "type" field.
-func TypeHasPrefix(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldHasPrefix(FieldType, v))
-}
-
-// TypeHasSuffix applies the HasSuffix predicate on the "type" field.
-func TypeHasSuffix(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldHasSuffix(FieldType, v))
-}
-
-// TypeIsNil applies the IsNil predicate on the "type" field.
-func TypeIsNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIsNull(FieldType))
-}
-
-// TypeNotNil applies the NotNil predicate on the "type" field.
-func TypeNotNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotNull(FieldType))
-}
-
-// TypeEqualFold applies the EqualFold predicate on the "type" field.
-func TypeEqualFold(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEqualFold(FieldType, v))
-}
-
-// TypeContainsFold applies the ContainsFold predicate on the "type" field.
-func TypeContainsFold(v string) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldContainsFold(FieldType, v))
 }
 
 // MemberIDEQ applies the EQ predicate on the "member_id" field.

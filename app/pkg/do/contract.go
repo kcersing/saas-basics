@@ -4,7 +4,7 @@ type Contract interface {
 	Create(req *ContractInfo) error
 	Update(req *ContractInfo) error
 	UpdateStatus(ID int64, status int64) error
-	ByID(id int64) (*ContractInfo, error)
+	Info(id int64) (info *ContractInfo, err error)
 	List(req *ContractListReq) (list []*ContractInfo, total int, err error)
 }
 

@@ -80,20 +80,6 @@ func (mpc *MemberProductCreate) SetNillableSn(s *string) *MemberProductCreate {
 	return mpc
 }
 
-// SetType sets the "type" field.
-func (mpc *MemberProductCreate) SetType(s string) *MemberProductCreate {
-	mpc.mutation.SetType(s)
-	return mpc
-}
-
-// SetNillableType sets the "type" field if the given value is not nil.
-func (mpc *MemberProductCreate) SetNillableType(s *string) *MemberProductCreate {
-	if s != nil {
-		mpc.SetType(*s)
-	}
-	return mpc
-}
-
 // SetMemberID sets the "member_id" field.
 func (mpc *MemberProductCreate) SetMemberID(i int64) *MemberProductCreate {
 	mpc.mutation.SetMemberID(i)
@@ -352,10 +338,6 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 	if value, ok := mpc.mutation.Sn(); ok {
 		_spec.SetField(memberproduct.FieldSn, field.TypeString, value)
 		_node.Sn = value
-	}
-	if value, ok := mpc.mutation.GetType(); ok {
-		_spec.SetField(memberproduct.FieldType, field.TypeString, value)
-		_node.Type = value
 	}
 	if value, ok := mpc.mutation.ProductID(); ok {
 		_spec.SetField(memberproduct.FieldProductID, field.TypeInt64, value)

@@ -18,7 +18,6 @@ func (MemberProduct) Fields() []ent.Field {
 
 	return []ent.Field{
 		field.String("sn").Comment("编号").Optional(),
-		field.String("type").Comment("类型").Optional(),
 		field.Int64("member_id").Comment("会员id").Optional(),
 		field.Int64("product_id").Comment("产品ID").Optional(),
 		field.Int64("venue_id").Comment("场馆ID").Optional(),

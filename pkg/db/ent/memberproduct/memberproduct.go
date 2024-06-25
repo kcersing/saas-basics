@@ -22,8 +22,6 @@ const (
 	FieldStatus = "status"
 	// FieldSn holds the string denoting the sn field in the database.
 	FieldSn = "sn"
-	// FieldType holds the string denoting the type field in the database.
-	FieldType = "type"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
 	// FieldProductID holds the string denoting the product_id field in the database.
@@ -83,7 +81,6 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldStatus,
 	FieldSn,
-	FieldType,
 	FieldMemberID,
 	FieldProductID,
 	FieldVenueID,
@@ -139,11 +136,6 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // BySn orders the results by the sn field.
 func BySn(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSn, opts...).ToFunc()
-}
-
-// ByType orders the results by the type field.
-func ByType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByMemberID orders the results by the member_id field.

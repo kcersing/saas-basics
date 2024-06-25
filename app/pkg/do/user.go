@@ -8,7 +8,7 @@ type User interface {
 	Create(req CreateOrUpdateUserReq) error
 	Update(req CreateOrUpdateUserReq) error
 	ChangePassword(userID int64, oldPassword, newPassword string) error
-	UserInfo(id int64) (userInfo *UserInfo, err error)
+	Info(id int64) (info *UserInfo, err error)
 	List(req UserListReq) (userList []*UserInfo, total int, err error)
 	UpdateUserStatus(id int64, status int64) error
 	DeleteUser(id int64) error

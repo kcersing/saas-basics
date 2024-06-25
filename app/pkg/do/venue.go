@@ -10,6 +10,9 @@ type Venue interface {
 	UpdatePlace(req *VenuePlaceInfo) error
 	PlaceList(req *VenuePlaceListReq) (list []*VenuePlaceInfo, total int, err error)
 	UpdatePlaceStatus(id int64, status int64) error
+
+	VenueInfo(id int64) (info *VenueInfo, err error)
+	PlaceInfo(id int64) (info *VenuePlaceInfo, err error)
 }
 
 type VenueListReq struct {

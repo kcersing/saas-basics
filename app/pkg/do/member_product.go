@@ -12,18 +12,19 @@ type MemberProduct interface {
 	PropertyUpdateStatus(ID int64, status int64) error
 }
 type MemberProductInfo struct {
-	ID        int64   `json:"id"`
-	Name      string  `json:"name"`
-	Price     float64 `json:"price"`
-	Status    int64   `json:"status"`
-	CreatedAt string  `json:"created_at"`
-	Sn        string  `json:"sn"`
-	MemberId  int64   `json:"member_id"`
-	OrderId   int64   `json:"order_id"`
-	VenueId   int64   `json:"venue_id"`
+	ID         int64   `json:"id"`
+	Name       string  `json:"name"`
+	Price      float64 `json:"price"`
+	Status     int64   `json:"status"`
+	StatusName string  `json:"status_name"`
+	CreatedAt  string  `json:"created_at"`
+	Sn         string  `json:"sn"`
+	MemberId   int64   `json:"member_id"`
+	OrderId    int64   `json:"order_id"`
+	VenueId    int64   `json:"venue_id"`
 
-	VenueName int64 `json:"venue_name"`
-	ProductId int64 `json:"product_id"`
+	VenueName string `json:"venue_name"`
+	ProductId int64  `json:"product_id"`
 
 	Property []MemberPropertyInfo `json:"property"`
 }

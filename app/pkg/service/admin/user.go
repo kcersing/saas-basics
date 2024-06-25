@@ -26,6 +26,37 @@ type User struct {
 	cache *ristretto.Cache
 }
 
+func (u User) Info(id int64) (info *do.UserInfo, err error) {
+	info = new(do.UserInfo)
+	userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
+	if exist {
+		if u, ok := userInterface.(*do.UserInfo); ok {
+			return u, nil
+		}
+	}
+	userEnt, err := u.db.User.Query().Where(user.IDEQ(id)).First(u.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get user failed")
+		return info, err
+	}
+	err = copier.Copy(&info, &userEnt)
+	if err != nil {
+		err = errors.Wrap(err, "copy user info failed")
+		return info, err
+	}
+
+	roleInterface, exist := u.cache.Get("roleData" + strconv.Itoa(int(info.RoleID)))
+	if exist {
+		if role, ok := roleInterface.(*ent.Role); ok {
+			info.RoleName = role.Name
+			info.RoleValue = role.Value
+		}
+	}
+	info.Avatar = minio.URLconvert(u.ctx, u.c, info.Avatar)
+	u.cache.SetWithTTL("userInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
+	return
+}
+
 func (u User) Create(req do.CreateOrUpdateUserReq) error {
 	password, _ := encrypt.Crypt(req.Password)
 	_, err := u.db.User.Create().
@@ -83,38 +114,6 @@ func (u User) ChangePassword(userID int64, oldPassword, newPassword string) erro
 	_, err = u.db.User.Update().Where(user.IDEQ(userID)).SetPassword(password).Save(u.ctx)
 
 	return err
-}
-
-func (u User) UserInfo(id int64) (userInfo *do.UserInfo, err error) {
-	userInfo = new(do.UserInfo)
-
-	userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
-	if exist {
-		if u, ok := userInterface.(*do.UserInfo); ok {
-			return u, nil
-		}
-	}
-	userEnt, err := u.db.User.Query().Where(user.IDEQ(id)).First(u.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "get user failed")
-		return userInfo, err
-	}
-	err = copier.Copy(&userInfo, &userEnt)
-	if err != nil {
-		err = errors.Wrap(err, "copy user info failed")
-		return userInfo, err
-	}
-
-	roleInterface, exist := u.cache.Get("roleData" + strconv.Itoa(int(userInfo.RoleID)))
-	if exist {
-		if role, ok := roleInterface.(*ent.Role); ok {
-			userInfo.RoleName = role.Name
-			userInfo.RoleValue = role.Value
-		}
-	}
-	userInfo.Avatar = minio.URLconvert(u.ctx, u.c, userInfo.Avatar)
-	u.cache.SetWithTTL("userInfo"+strconv.Itoa(int(userInfo.ID)), &userInfo, 1, 1*time.Hour)
-	return
 }
 
 func (u User) List(req do.UserListReq) (userList []*do.UserInfo, total int, err error) {
