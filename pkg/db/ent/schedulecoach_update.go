@@ -136,6 +136,26 @@ func (scu *ScheduleCoachUpdate) ClearScheduleID() *ScheduleCoachUpdate {
 	return scu
 }
 
+// SetScheduleName sets the "schedule_name" field.
+func (scu *ScheduleCoachUpdate) SetScheduleName(s string) *ScheduleCoachUpdate {
+	scu.mutation.SetScheduleName(s)
+	return scu
+}
+
+// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
+func (scu *ScheduleCoachUpdate) SetNillableScheduleName(s *string) *ScheduleCoachUpdate {
+	if s != nil {
+		scu.SetScheduleName(*s)
+	}
+	return scu
+}
+
+// ClearScheduleName clears the value of the "schedule_name" field.
+func (scu *ScheduleCoachUpdate) ClearScheduleName() *ScheduleCoachUpdate {
+	scu.mutation.ClearScheduleName()
+	return scu
+}
+
 // SetType sets the "type" field.
 func (scu *ScheduleCoachUpdate) SetType(s string) *ScheduleCoachUpdate {
 	scu.mutation.SetType(s)
@@ -347,6 +367,12 @@ func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if scu.mutation.CoachIDCleared() {
 		_spec.ClearField(schedulecoach.FieldCoachID, field.TypeInt64)
 	}
+	if value, ok := scu.mutation.ScheduleName(); ok {
+		_spec.SetField(schedulecoach.FieldScheduleName, field.TypeString, value)
+	}
+	if scu.mutation.ScheduleNameCleared() {
+		_spec.ClearField(schedulecoach.FieldScheduleName, field.TypeString)
+	}
 	if value, ok := scu.mutation.GetType(); ok {
 		_spec.SetField(schedulecoach.FieldType, field.TypeString, value)
 	}
@@ -536,6 +562,26 @@ func (scuo *ScheduleCoachUpdateOne) SetNillableScheduleID(i *int64) *ScheduleCoa
 // ClearScheduleID clears the value of the "schedule_id" field.
 func (scuo *ScheduleCoachUpdateOne) ClearScheduleID() *ScheduleCoachUpdateOne {
 	scuo.mutation.ClearScheduleID()
+	return scuo
+}
+
+// SetScheduleName sets the "schedule_name" field.
+func (scuo *ScheduleCoachUpdateOne) SetScheduleName(s string) *ScheduleCoachUpdateOne {
+	scuo.mutation.SetScheduleName(s)
+	return scuo
+}
+
+// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
+func (scuo *ScheduleCoachUpdateOne) SetNillableScheduleName(s *string) *ScheduleCoachUpdateOne {
+	if s != nil {
+		scuo.SetScheduleName(*s)
+	}
+	return scuo
+}
+
+// ClearScheduleName clears the value of the "schedule_name" field.
+func (scuo *ScheduleCoachUpdateOne) ClearScheduleName() *ScheduleCoachUpdateOne {
+	scuo.mutation.ClearScheduleName()
 	return scuo
 }
 
@@ -779,6 +825,12 @@ func (scuo *ScheduleCoachUpdateOne) sqlSave(ctx context.Context) (_node *Schedul
 	}
 	if scuo.mutation.CoachIDCleared() {
 		_spec.ClearField(schedulecoach.FieldCoachID, field.TypeInt64)
+	}
+	if value, ok := scuo.mutation.ScheduleName(); ok {
+		_spec.SetField(schedulecoach.FieldScheduleName, field.TypeString, value)
+	}
+	if scuo.mutation.ScheduleNameCleared() {
+		_spec.ClearField(schedulecoach.FieldScheduleName, field.TypeString)
 	}
 	if value, ok := scuo.mutation.GetType(); ok {
 		_spec.SetField(schedulecoach.FieldType, field.TypeString, value)

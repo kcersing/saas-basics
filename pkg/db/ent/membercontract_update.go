@@ -85,6 +85,33 @@ func (mcu *MemberContractUpdate) ClearMemberID() *MemberContractUpdate {
 	return mcu
 }
 
+// SetContractID sets the "contract_id" field.
+func (mcu *MemberContractUpdate) SetContractID(i int64) *MemberContractUpdate {
+	mcu.mutation.ResetContractID()
+	mcu.mutation.SetContractID(i)
+	return mcu
+}
+
+// SetNillableContractID sets the "contract_id" field if the given value is not nil.
+func (mcu *MemberContractUpdate) SetNillableContractID(i *int64) *MemberContractUpdate {
+	if i != nil {
+		mcu.SetContractID(*i)
+	}
+	return mcu
+}
+
+// AddContractID adds i to the "contract_id" field.
+func (mcu *MemberContractUpdate) AddContractID(i int64) *MemberContractUpdate {
+	mcu.mutation.AddContractID(i)
+	return mcu
+}
+
+// ClearContractID clears the value of the "contract_id" field.
+func (mcu *MemberContractUpdate) ClearContractID() *MemberContractUpdate {
+	mcu.mutation.ClearContractID()
+	return mcu
+}
+
 // SetOrderID sets the "order_id" field.
 func (mcu *MemberContractUpdate) SetOrderID(i int64) *MemberContractUpdate {
 	mcu.mutation.SetOrderID(i)
@@ -102,6 +129,33 @@ func (mcu *MemberContractUpdate) SetNillableOrderID(i *int64) *MemberContractUpd
 // ClearOrderID clears the value of the "order_id" field.
 func (mcu *MemberContractUpdate) ClearOrderID() *MemberContractUpdate {
 	mcu.mutation.ClearOrderID()
+	return mcu
+}
+
+// SetVenueID sets the "venue_id" field.
+func (mcu *MemberContractUpdate) SetVenueID(i int64) *MemberContractUpdate {
+	mcu.mutation.ResetVenueID()
+	mcu.mutation.SetVenueID(i)
+	return mcu
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mcu *MemberContractUpdate) SetNillableVenueID(i *int64) *MemberContractUpdate {
+	if i != nil {
+		mcu.SetVenueID(*i)
+	}
+	return mcu
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mcu *MemberContractUpdate) AddVenueID(i int64) *MemberContractUpdate {
+	mcu.mutation.AddVenueID(i)
+	return mcu
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mcu *MemberContractUpdate) ClearVenueID() *MemberContractUpdate {
+	mcu.mutation.ClearVenueID()
 	return mcu
 }
 
@@ -295,6 +349,24 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if mcu.mutation.StatusCleared() {
 		_spec.ClearField(membercontract.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := mcu.mutation.ContractID(); ok {
+		_spec.SetField(membercontract.FieldContractID, field.TypeInt64, value)
+	}
+	if value, ok := mcu.mutation.AddedContractID(); ok {
+		_spec.AddField(membercontract.FieldContractID, field.TypeInt64, value)
+	}
+	if mcu.mutation.ContractIDCleared() {
+		_spec.ClearField(membercontract.FieldContractID, field.TypeInt64)
+	}
+	if value, ok := mcu.mutation.VenueID(); ok {
+		_spec.SetField(membercontract.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mcu.mutation.AddedVenueID(); ok {
+		_spec.AddField(membercontract.FieldVenueID, field.TypeInt64, value)
+	}
+	if mcu.mutation.VenueIDCleared() {
+		_spec.ClearField(membercontract.FieldVenueID, field.TypeInt64)
 	}
 	if value, ok := mcu.mutation.Name(); ok {
 		_spec.SetField(membercontract.FieldName, field.TypeString, value)
@@ -513,6 +585,33 @@ func (mcuo *MemberContractUpdateOne) ClearMemberID() *MemberContractUpdateOne {
 	return mcuo
 }
 
+// SetContractID sets the "contract_id" field.
+func (mcuo *MemberContractUpdateOne) SetContractID(i int64) *MemberContractUpdateOne {
+	mcuo.mutation.ResetContractID()
+	mcuo.mutation.SetContractID(i)
+	return mcuo
+}
+
+// SetNillableContractID sets the "contract_id" field if the given value is not nil.
+func (mcuo *MemberContractUpdateOne) SetNillableContractID(i *int64) *MemberContractUpdateOne {
+	if i != nil {
+		mcuo.SetContractID(*i)
+	}
+	return mcuo
+}
+
+// AddContractID adds i to the "contract_id" field.
+func (mcuo *MemberContractUpdateOne) AddContractID(i int64) *MemberContractUpdateOne {
+	mcuo.mutation.AddContractID(i)
+	return mcuo
+}
+
+// ClearContractID clears the value of the "contract_id" field.
+func (mcuo *MemberContractUpdateOne) ClearContractID() *MemberContractUpdateOne {
+	mcuo.mutation.ClearContractID()
+	return mcuo
+}
+
 // SetOrderID sets the "order_id" field.
 func (mcuo *MemberContractUpdateOne) SetOrderID(i int64) *MemberContractUpdateOne {
 	mcuo.mutation.SetOrderID(i)
@@ -530,6 +629,33 @@ func (mcuo *MemberContractUpdateOne) SetNillableOrderID(i *int64) *MemberContrac
 // ClearOrderID clears the value of the "order_id" field.
 func (mcuo *MemberContractUpdateOne) ClearOrderID() *MemberContractUpdateOne {
 	mcuo.mutation.ClearOrderID()
+	return mcuo
+}
+
+// SetVenueID sets the "venue_id" field.
+func (mcuo *MemberContractUpdateOne) SetVenueID(i int64) *MemberContractUpdateOne {
+	mcuo.mutation.ResetVenueID()
+	mcuo.mutation.SetVenueID(i)
+	return mcuo
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mcuo *MemberContractUpdateOne) SetNillableVenueID(i *int64) *MemberContractUpdateOne {
+	if i != nil {
+		mcuo.SetVenueID(*i)
+	}
+	return mcuo
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mcuo *MemberContractUpdateOne) AddVenueID(i int64) *MemberContractUpdateOne {
+	mcuo.mutation.AddVenueID(i)
+	return mcuo
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mcuo *MemberContractUpdateOne) ClearVenueID() *MemberContractUpdateOne {
+	mcuo.mutation.ClearVenueID()
 	return mcuo
 }
 
@@ -753,6 +879,24 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 	}
 	if mcuo.mutation.StatusCleared() {
 		_spec.ClearField(membercontract.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := mcuo.mutation.ContractID(); ok {
+		_spec.SetField(membercontract.FieldContractID, field.TypeInt64, value)
+	}
+	if value, ok := mcuo.mutation.AddedContractID(); ok {
+		_spec.AddField(membercontract.FieldContractID, field.TypeInt64, value)
+	}
+	if mcuo.mutation.ContractIDCleared() {
+		_spec.ClearField(membercontract.FieldContractID, field.TypeInt64)
+	}
+	if value, ok := mcuo.mutation.VenueID(); ok {
+		_spec.SetField(membercontract.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mcuo.mutation.AddedVenueID(); ok {
+		_spec.AddField(membercontract.FieldVenueID, field.TypeInt64, value)
+	}
+	if mcuo.mutation.VenueIDCleared() {
+		_spec.ClearField(membercontract.FieldVenueID, field.TypeInt64)
 	}
 	if value, ok := mcuo.mutation.Name(); ok {
 		_spec.SetField(membercontract.FieldName, field.TypeString, value)

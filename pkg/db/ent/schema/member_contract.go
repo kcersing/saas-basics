@@ -17,8 +17,10 @@ type MemberContract struct {
 func (MemberContract) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("member_id").Comment("会员id").Optional(),
+		field.Int64("contract_id").Comment("原始合同id").Optional(),
 		field.Int64("order_id").Comment("订单id").Optional(),
-		field.Int64("member_product_id").Comment("会员产品ID").Optional(),
+		field.Int64("venue_id").Comment("场馆id").Optional(),
+		field.Int64("member_product_id").Comment("会员产品id").Optional(),
 		field.String("name").Optional().Comment("name | 名称"),
 		field.String("sign").Optional().Comment("sign | 签字"),
 	}

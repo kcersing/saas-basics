@@ -276,3 +276,28 @@ func MemberPropertyUpdate(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
+
+// MemberContractList .
+// @router /api/admin/member/contract-list [POST]
+func MemberContractList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberPropertyListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var listReq do.MemberContractListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	userList, total, err := admin.NewMemberProduct(ctx, c).ContractList(listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, userList, int64(total), "")
+	return
+}

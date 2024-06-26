@@ -29,6 +29,8 @@ type ScheduleMember struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 课程ID
 	ScheduleID int64 `json:"schedule_id,omitempty"`
+	// 课程名称
+	ScheduleName string `json:"schedule_name,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
 	// 会员购买课ID
@@ -88,7 +90,7 @@ func (*ScheduleMember) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedulemember.FieldID, schedulemember.FieldStatus, schedulemember.FieldVenueID, schedulemember.FieldScheduleID, schedulemember.FieldMemberID, schedulemember.FieldMemberProductID, schedulemember.FieldMemberProductPropertyID:
 			values[i] = new(sql.NullInt64)
-		case schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldMemberProductPropertyName, schedulemember.FieldRemark:
+		case schedulemember.FieldScheduleName, schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldMemberProductPropertyName, schedulemember.FieldRemark:
 			values[i] = new(sql.NullString)
 		case schedulemember.FieldCreatedAt, schedulemember.FieldUpdatedAt, schedulemember.FieldStartTime, schedulemember.FieldEndTime, schedulemember.FieldSignStartTime, schedulemember.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
@@ -142,6 +144,12 @@ func (sm *ScheduleMember) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field schedule_id", values[i])
 			} else if value.Valid {
 				sm.ScheduleID = value.Int64
+			}
+		case schedulemember.FieldScheduleName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field schedule_name", values[i])
+			} else if value.Valid {
+				sm.ScheduleName = value.String
 			}
 		case schedulemember.FieldMemberID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -270,6 +278,9 @@ func (sm *ScheduleMember) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("schedule_id=")
 	builder.WriteString(fmt.Sprintf("%v", sm.ScheduleID))
+	builder.WriteString(", ")
+	builder.WriteString("schedule_name=")
+	builder.WriteString(sm.ScheduleName)
 	builder.WriteString(", ")
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", sm.MemberID))

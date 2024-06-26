@@ -10,7 +10,31 @@ type MemberProduct interface {
 	PropertyDetail(ID int64) (info *MemberPropertyInfo, err error)
 	PropertyUpdate(req MemberPropertyInfo) error
 	PropertyUpdateStatus(ID int64, status int64) error
+
+	ContractList(req MemberContractListReq) (resp []*MemberContractInfo, total int, err error)
 }
+type MemberContractListReq struct {
+	MemberId   int64 `json:"member_id"`
+	VenueId    int64 `json:"venue_id"`
+	ContractId int64 `json:"contract_id"`
+	Page       int64 `json:"page"`
+	PageSize   int64 `json:"pageSize"`
+}
+type MemberContractInfo struct {
+	Name              string `json:"name"`
+	MemberId          int64  `json:"member_id"`
+	MemberName        int64  `json:"member_name"`
+	VenueId           int64  `json:"venue_id"`
+	VenueName         string `json:"venue_name"`
+	MemberProductId   int64  `json:"member_product_id"`
+	MemberProductName string `json:"member_product_name"`
+	ContractId        int64  `json:"contract_id"`
+	ContractName      int64  `json:"contract_name"`
+	Sign              string `json:"sign"`
+	SignImg           string `json:"sign_img"`
+	Content           string `json:"content"`
+}
+
 type MemberProductInfo struct {
 	ID         int64   `json:"id"`
 	Name       string  `json:"name"`

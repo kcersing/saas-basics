@@ -85,6 +85,11 @@ func ScheduleID(v int64) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldScheduleID, v))
 }
 
+// ScheduleName applies equality check predicate on the "schedule_name" field. It's identical to ScheduleNameEQ.
+func ScheduleName(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEQ(FieldScheduleName, v))
+}
+
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
 func Type(v string) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldType, v))
@@ -373,6 +378,81 @@ func ScheduleIDIsNil() predicate.ScheduleCoach {
 // ScheduleIDNotNil applies the NotNil predicate on the "schedule_id" field.
 func ScheduleIDNotNil() predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldNotNull(FieldScheduleID))
+}
+
+// ScheduleNameEQ applies the EQ predicate on the "schedule_name" field.
+func ScheduleNameEQ(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEQ(FieldScheduleName, v))
+}
+
+// ScheduleNameNEQ applies the NEQ predicate on the "schedule_name" field.
+func ScheduleNameNEQ(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNEQ(FieldScheduleName, v))
+}
+
+// ScheduleNameIn applies the In predicate on the "schedule_name" field.
+func ScheduleNameIn(vs ...string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldIn(FieldScheduleName, vs...))
+}
+
+// ScheduleNameNotIn applies the NotIn predicate on the "schedule_name" field.
+func ScheduleNameNotIn(vs ...string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNotIn(FieldScheduleName, vs...))
+}
+
+// ScheduleNameGT applies the GT predicate on the "schedule_name" field.
+func ScheduleNameGT(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldGT(FieldScheduleName, v))
+}
+
+// ScheduleNameGTE applies the GTE predicate on the "schedule_name" field.
+func ScheduleNameGTE(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldGTE(FieldScheduleName, v))
+}
+
+// ScheduleNameLT applies the LT predicate on the "schedule_name" field.
+func ScheduleNameLT(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldLT(FieldScheduleName, v))
+}
+
+// ScheduleNameLTE applies the LTE predicate on the "schedule_name" field.
+func ScheduleNameLTE(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldLTE(FieldScheduleName, v))
+}
+
+// ScheduleNameContains applies the Contains predicate on the "schedule_name" field.
+func ScheduleNameContains(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldContains(FieldScheduleName, v))
+}
+
+// ScheduleNameHasPrefix applies the HasPrefix predicate on the "schedule_name" field.
+func ScheduleNameHasPrefix(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldHasPrefix(FieldScheduleName, v))
+}
+
+// ScheduleNameHasSuffix applies the HasSuffix predicate on the "schedule_name" field.
+func ScheduleNameHasSuffix(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldHasSuffix(FieldScheduleName, v))
+}
+
+// ScheduleNameIsNil applies the IsNil predicate on the "schedule_name" field.
+func ScheduleNameIsNil() predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldIsNull(FieldScheduleName))
+}
+
+// ScheduleNameNotNil applies the NotNil predicate on the "schedule_name" field.
+func ScheduleNameNotNil() predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNotNull(FieldScheduleName))
+}
+
+// ScheduleNameEqualFold applies the EqualFold predicate on the "schedule_name" field.
+func ScheduleNameEqualFold(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEqualFold(FieldScheduleName, v))
+}
+
+// ScheduleNameContainsFold applies the ContainsFold predicate on the "schedule_name" field.
+func ScheduleNameContainsFold(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldContainsFold(FieldScheduleName, v))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.

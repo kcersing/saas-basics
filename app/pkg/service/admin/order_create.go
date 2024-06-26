@@ -237,6 +237,7 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 			memberContract, err := tx.MemberContract.Create().
 				SetMember(members).
 				SetOrderID(one.ID).
+				SetContractID(contracts.ID).
 				SetMemberProduct(mp).
 				SetName(contracts.Name).
 				SetSign(signImg).

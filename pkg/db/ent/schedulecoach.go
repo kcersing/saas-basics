@@ -31,6 +31,8 @@ type ScheduleCoach struct {
 	CoachID int64 `json:"coach_id,omitempty"`
 	// 课程ID
 	ScheduleID int64 `json:"schedule_id,omitempty"`
+	// 课程名称
+	ScheduleName string `json:"schedule_name,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
 	// 开始时间
@@ -78,7 +80,7 @@ func (*ScheduleCoach) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedulecoach.FieldID, schedulecoach.FieldStatus, schedulecoach.FieldVenueID, schedulecoach.FieldCoachID, schedulecoach.FieldScheduleID:
 			values[i] = new(sql.NullInt64)
-		case schedulecoach.FieldType, schedulecoach.FieldCoachName:
+		case schedulecoach.FieldScheduleName, schedulecoach.FieldType, schedulecoach.FieldCoachName:
 			values[i] = new(sql.NullString)
 		case schedulecoach.FieldCreatedAt, schedulecoach.FieldUpdatedAt, schedulecoach.FieldStartTime, schedulecoach.FieldEndTime, schedulecoach.FieldSignStartTime, schedulecoach.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
@@ -138,6 +140,12 @@ func (sc *ScheduleCoach) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field schedule_id", values[i])
 			} else if value.Valid {
 				sc.ScheduleID = value.Int64
+			}
+		case schedulecoach.FieldScheduleName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field schedule_name", values[i])
+			} else if value.Valid {
+				sc.ScheduleName = value.String
 			}
 		case schedulecoach.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -233,6 +241,9 @@ func (sc *ScheduleCoach) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("schedule_id=")
 	builder.WriteString(fmt.Sprintf("%v", sc.ScheduleID))
+	builder.WriteString(", ")
+	builder.WriteString("schedule_name=")
+	builder.WriteString(sc.ScheduleName)
 	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(sc.Type)

@@ -109,6 +109,26 @@ func (smu *ScheduleMemberUpdate) ClearScheduleID() *ScheduleMemberUpdate {
 	return smu
 }
 
+// SetScheduleName sets the "schedule_name" field.
+func (smu *ScheduleMemberUpdate) SetScheduleName(s string) *ScheduleMemberUpdate {
+	smu.mutation.SetScheduleName(s)
+	return smu
+}
+
+// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableScheduleName(s *string) *ScheduleMemberUpdate {
+	if s != nil {
+		smu.SetScheduleName(*s)
+	}
+	return smu
+}
+
+// ClearScheduleName clears the value of the "schedule_name" field.
+func (smu *ScheduleMemberUpdate) ClearScheduleName() *ScheduleMemberUpdate {
+	smu.mutation.ClearScheduleName()
+	return smu
+}
+
 // SetMemberID sets the "member_id" field.
 func (smu *ScheduleMemberUpdate) SetMemberID(i int64) *ScheduleMemberUpdate {
 	smu.mutation.ResetMemberID()
@@ -452,6 +472,12 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if smu.mutation.VenueIDCleared() {
 		_spec.ClearField(schedulemember.FieldVenueID, field.TypeInt64)
 	}
+	if value, ok := smu.mutation.ScheduleName(); ok {
+		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
+	}
+	if smu.mutation.ScheduleNameCleared() {
+		_spec.ClearField(schedulemember.FieldScheduleName, field.TypeString)
+	}
 	if value, ok := smu.mutation.MemberID(); ok {
 		_spec.SetField(schedulemember.FieldMemberID, field.TypeInt64, value)
 	}
@@ -659,6 +685,26 @@ func (smuo *ScheduleMemberUpdateOne) SetNillableScheduleID(i *int64) *ScheduleMe
 // ClearScheduleID clears the value of the "schedule_id" field.
 func (smuo *ScheduleMemberUpdateOne) ClearScheduleID() *ScheduleMemberUpdateOne {
 	smuo.mutation.ClearScheduleID()
+	return smuo
+}
+
+// SetScheduleName sets the "schedule_name" field.
+func (smuo *ScheduleMemberUpdateOne) SetScheduleName(s string) *ScheduleMemberUpdateOne {
+	smuo.mutation.SetScheduleName(s)
+	return smuo
+}
+
+// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableScheduleName(s *string) *ScheduleMemberUpdateOne {
+	if s != nil {
+		smuo.SetScheduleName(*s)
+	}
+	return smuo
+}
+
+// ClearScheduleName clears the value of the "schedule_name" field.
+func (smuo *ScheduleMemberUpdateOne) ClearScheduleName() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearScheduleName()
 	return smuo
 }
 
@@ -1034,6 +1080,12 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	}
 	if smuo.mutation.VenueIDCleared() {
 		_spec.ClearField(schedulemember.FieldVenueID, field.TypeInt64)
+	}
+	if value, ok := smuo.mutation.ScheduleName(); ok {
+		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
+	}
+	if smuo.mutation.ScheduleNameCleared() {
+		_spec.ClearField(schedulemember.FieldScheduleName, field.TypeString)
 	}
 	if value, ok := smuo.mutation.MemberID(); ok {
 		_spec.SetField(schedulemember.FieldMemberID, field.TypeInt64, value)

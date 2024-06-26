@@ -6626,6 +6626,10 @@ type MemberContractMutation struct {
 	updated_at            *time.Time
 	status                *int64
 	addstatus             *int64
+	contract_id           *int64
+	addcontract_id        *int64
+	venue_id              *int64
+	addvenue_id           *int64
 	name                  *string
 	sign                  *string
 	clearedFields         map[string]struct{}
@@ -6938,6 +6942,76 @@ func (m *MemberContractMutation) ResetMemberID() {
 	delete(m.clearedFields, membercontract.FieldMemberID)
 }
 
+// SetContractID sets the "contract_id" field.
+func (m *MemberContractMutation) SetContractID(i int64) {
+	m.contract_id = &i
+	m.addcontract_id = nil
+}
+
+// ContractID returns the value of the "contract_id" field in the mutation.
+func (m *MemberContractMutation) ContractID() (r int64, exists bool) {
+	v := m.contract_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContractID returns the old "contract_id" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldContractID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContractID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContractID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContractID: %w", err)
+	}
+	return oldValue.ContractID, nil
+}
+
+// AddContractID adds i to the "contract_id" field.
+func (m *MemberContractMutation) AddContractID(i int64) {
+	if m.addcontract_id != nil {
+		*m.addcontract_id += i
+	} else {
+		m.addcontract_id = &i
+	}
+}
+
+// AddedContractID returns the value that was added to the "contract_id" field in this mutation.
+func (m *MemberContractMutation) AddedContractID() (r int64, exists bool) {
+	v := m.addcontract_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearContractID clears the value of the "contract_id" field.
+func (m *MemberContractMutation) ClearContractID() {
+	m.contract_id = nil
+	m.addcontract_id = nil
+	m.clearedFields[membercontract.FieldContractID] = struct{}{}
+}
+
+// ContractIDCleared returns if the "contract_id" field was cleared in this mutation.
+func (m *MemberContractMutation) ContractIDCleared() bool {
+	_, ok := m.clearedFields[membercontract.FieldContractID]
+	return ok
+}
+
+// ResetContractID resets all changes to the "contract_id" field.
+func (m *MemberContractMutation) ResetContractID() {
+	m.contract_id = nil
+	m.addcontract_id = nil
+	delete(m.clearedFields, membercontract.FieldContractID)
+}
+
 // SetOrderID sets the "order_id" field.
 func (m *MemberContractMutation) SetOrderID(i int64) {
 	m._order = &i
@@ -6985,6 +7059,76 @@ func (m *MemberContractMutation) OrderIDCleared() bool {
 func (m *MemberContractMutation) ResetOrderID() {
 	m._order = nil
 	delete(m.clearedFields, membercontract.FieldOrderID)
+}
+
+// SetVenueID sets the "venue_id" field.
+func (m *MemberContractMutation) SetVenueID(i int64) {
+	m.venue_id = &i
+	m.addvenue_id = nil
+}
+
+// VenueID returns the value of the "venue_id" field in the mutation.
+func (m *MemberContractMutation) VenueID() (r int64, exists bool) {
+	v := m.venue_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVenueID returns the old "venue_id" field's value of the MemberContract entity.
+// If the MemberContract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberContractMutation) OldVenueID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVenueID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVenueID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVenueID: %w", err)
+	}
+	return oldValue.VenueID, nil
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (m *MemberContractMutation) AddVenueID(i int64) {
+	if m.addvenue_id != nil {
+		*m.addvenue_id += i
+	} else {
+		m.addvenue_id = &i
+	}
+}
+
+// AddedVenueID returns the value that was added to the "venue_id" field in this mutation.
+func (m *MemberContractMutation) AddedVenueID() (r int64, exists bool) {
+	v := m.addvenue_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (m *MemberContractMutation) ClearVenueID() {
+	m.venue_id = nil
+	m.addvenue_id = nil
+	m.clearedFields[membercontract.FieldVenueID] = struct{}{}
+}
+
+// VenueIDCleared returns if the "venue_id" field was cleared in this mutation.
+func (m *MemberContractMutation) VenueIDCleared() bool {
+	_, ok := m.clearedFields[membercontract.FieldVenueID]
+	return ok
+}
+
+// ResetVenueID resets all changes to the "venue_id" field.
+func (m *MemberContractMutation) ResetVenueID() {
+	m.venue_id = nil
+	m.addvenue_id = nil
+	delete(m.clearedFields, membercontract.FieldVenueID)
 }
 
 // SetMemberProductID sets the "member_product_id" field.
@@ -7303,7 +7447,7 @@ func (m *MemberContractMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberContractMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, membercontract.FieldCreatedAt)
 	}
@@ -7316,8 +7460,14 @@ func (m *MemberContractMutation) Fields() []string {
 	if m.member != nil {
 		fields = append(fields, membercontract.FieldMemberID)
 	}
+	if m.contract_id != nil {
+		fields = append(fields, membercontract.FieldContractID)
+	}
 	if m._order != nil {
 		fields = append(fields, membercontract.FieldOrderID)
+	}
+	if m.venue_id != nil {
+		fields = append(fields, membercontract.FieldVenueID)
 	}
 	if m.member_product != nil {
 		fields = append(fields, membercontract.FieldMemberProductID)
@@ -7344,8 +7494,12 @@ func (m *MemberContractMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case membercontract.FieldMemberID:
 		return m.MemberID()
+	case membercontract.FieldContractID:
+		return m.ContractID()
 	case membercontract.FieldOrderID:
 		return m.OrderID()
+	case membercontract.FieldVenueID:
+		return m.VenueID()
 	case membercontract.FieldMemberProductID:
 		return m.MemberProductID()
 	case membercontract.FieldName:
@@ -7369,8 +7523,12 @@ func (m *MemberContractMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldStatus(ctx)
 	case membercontract.FieldMemberID:
 		return m.OldMemberID(ctx)
+	case membercontract.FieldContractID:
+		return m.OldContractID(ctx)
 	case membercontract.FieldOrderID:
 		return m.OldOrderID(ctx)
+	case membercontract.FieldVenueID:
+		return m.OldVenueID(ctx)
 	case membercontract.FieldMemberProductID:
 		return m.OldMemberProductID(ctx)
 	case membercontract.FieldName:
@@ -7414,12 +7572,26 @@ func (m *MemberContractMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMemberID(v)
 		return nil
+	case membercontract.FieldContractID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContractID(v)
+		return nil
 	case membercontract.FieldOrderID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOrderID(v)
+		return nil
+	case membercontract.FieldVenueID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVenueID(v)
 		return nil
 	case membercontract.FieldMemberProductID:
 		v, ok := value.(int64)
@@ -7453,6 +7625,12 @@ func (m *MemberContractMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, membercontract.FieldStatus)
 	}
+	if m.addcontract_id != nil {
+		fields = append(fields, membercontract.FieldContractID)
+	}
+	if m.addvenue_id != nil {
+		fields = append(fields, membercontract.FieldVenueID)
+	}
 	return fields
 }
 
@@ -7463,6 +7641,10 @@ func (m *MemberContractMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case membercontract.FieldStatus:
 		return m.AddedStatus()
+	case membercontract.FieldContractID:
+		return m.AddedContractID()
+	case membercontract.FieldVenueID:
+		return m.AddedVenueID()
 	}
 	return nil, false
 }
@@ -7479,6 +7661,20 @@ func (m *MemberContractMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddStatus(v)
 		return nil
+	case membercontract.FieldContractID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddContractID(v)
+		return nil
+	case membercontract.FieldVenueID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddVenueID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown MemberContract numeric field %s", name)
 }
@@ -7493,8 +7689,14 @@ func (m *MemberContractMutation) ClearedFields() []string {
 	if m.FieldCleared(membercontract.FieldMemberID) {
 		fields = append(fields, membercontract.FieldMemberID)
 	}
+	if m.FieldCleared(membercontract.FieldContractID) {
+		fields = append(fields, membercontract.FieldContractID)
+	}
 	if m.FieldCleared(membercontract.FieldOrderID) {
 		fields = append(fields, membercontract.FieldOrderID)
+	}
+	if m.FieldCleared(membercontract.FieldVenueID) {
+		fields = append(fields, membercontract.FieldVenueID)
 	}
 	if m.FieldCleared(membercontract.FieldMemberProductID) {
 		fields = append(fields, membercontract.FieldMemberProductID)
@@ -7525,8 +7727,14 @@ func (m *MemberContractMutation) ClearField(name string) error {
 	case membercontract.FieldMemberID:
 		m.ClearMemberID()
 		return nil
+	case membercontract.FieldContractID:
+		m.ClearContractID()
+		return nil
 	case membercontract.FieldOrderID:
 		m.ClearOrderID()
+		return nil
+	case membercontract.FieldVenueID:
+		m.ClearVenueID()
 		return nil
 	case membercontract.FieldMemberProductID:
 		m.ClearMemberProductID()
@@ -7557,8 +7765,14 @@ func (m *MemberContractMutation) ResetField(name string) error {
 	case membercontract.FieldMemberID:
 		m.ResetMemberID()
 		return nil
+	case membercontract.FieldContractID:
+		m.ResetContractID()
+		return nil
 	case membercontract.FieldOrderID:
 		m.ResetOrderID()
+		return nil
+	case membercontract.FieldVenueID:
+		m.ResetVenueID()
 		return nil
 	case membercontract.FieldMemberProductID:
 		m.ResetMemberProductID()
@@ -28204,6 +28418,7 @@ type ScheduleCoachMutation struct {
 	addvenue_id     *int64
 	coach_id        *int64
 	addcoach_id     *int64
+	schedule_name   *string
 	_type           *string
 	start_time      *time.Time
 	end_time        *time.Time
@@ -28653,6 +28868,55 @@ func (m *ScheduleCoachMutation) ResetScheduleID() {
 	delete(m.clearedFields, schedulecoach.FieldScheduleID)
 }
 
+// SetScheduleName sets the "schedule_name" field.
+func (m *ScheduleCoachMutation) SetScheduleName(s string) {
+	m.schedule_name = &s
+}
+
+// ScheduleName returns the value of the "schedule_name" field in the mutation.
+func (m *ScheduleCoachMutation) ScheduleName() (r string, exists bool) {
+	v := m.schedule_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldScheduleName returns the old "schedule_name" field's value of the ScheduleCoach entity.
+// If the ScheduleCoach object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleCoachMutation) OldScheduleName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldScheduleName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldScheduleName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldScheduleName: %w", err)
+	}
+	return oldValue.ScheduleName, nil
+}
+
+// ClearScheduleName clears the value of the "schedule_name" field.
+func (m *ScheduleCoachMutation) ClearScheduleName() {
+	m.schedule_name = nil
+	m.clearedFields[schedulecoach.FieldScheduleName] = struct{}{}
+}
+
+// ScheduleNameCleared returns if the "schedule_name" field was cleared in this mutation.
+func (m *ScheduleCoachMutation) ScheduleNameCleared() bool {
+	_, ok := m.clearedFields[schedulecoach.FieldScheduleName]
+	return ok
+}
+
+// ResetScheduleName resets all changes to the "schedule_name" field.
+func (m *ScheduleCoachMutation) ResetScheduleName() {
+	m.schedule_name = nil
+	delete(m.clearedFields, schedulecoach.FieldScheduleName)
+}
+
 // SetType sets the "type" field.
 func (m *ScheduleCoachMutation) SetType(s string) {
 	m._type = &s
@@ -29008,7 +29272,7 @@ func (m *ScheduleCoachMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleCoachMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, schedulecoach.FieldCreatedAt)
 	}
@@ -29026,6 +29290,9 @@ func (m *ScheduleCoachMutation) Fields() []string {
 	}
 	if m.schedule != nil {
 		fields = append(fields, schedulecoach.FieldScheduleID)
+	}
+	if m.schedule_name != nil {
+		fields = append(fields, schedulecoach.FieldScheduleName)
 	}
 	if m._type != nil {
 		fields = append(fields, schedulecoach.FieldType)
@@ -29065,6 +29332,8 @@ func (m *ScheduleCoachMutation) Field(name string) (ent.Value, bool) {
 		return m.CoachID()
 	case schedulecoach.FieldScheduleID:
 		return m.ScheduleID()
+	case schedulecoach.FieldScheduleName:
+		return m.ScheduleName()
 	case schedulecoach.FieldType:
 		return m.GetType()
 	case schedulecoach.FieldStartTime:
@@ -29098,6 +29367,8 @@ func (m *ScheduleCoachMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldCoachID(ctx)
 	case schedulecoach.FieldScheduleID:
 		return m.OldScheduleID(ctx)
+	case schedulecoach.FieldScheduleName:
+		return m.OldScheduleName(ctx)
 	case schedulecoach.FieldType:
 		return m.OldType(ctx)
 	case schedulecoach.FieldStartTime:
@@ -29160,6 +29431,13 @@ func (m *ScheduleCoachMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetScheduleID(v)
+		return nil
+	case schedulecoach.FieldScheduleName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetScheduleName(v)
 		return nil
 	case schedulecoach.FieldType:
 		v, ok := value.(string)
@@ -29284,6 +29562,9 @@ func (m *ScheduleCoachMutation) ClearedFields() []string {
 	if m.FieldCleared(schedulecoach.FieldScheduleID) {
 		fields = append(fields, schedulecoach.FieldScheduleID)
 	}
+	if m.FieldCleared(schedulecoach.FieldScheduleName) {
+		fields = append(fields, schedulecoach.FieldScheduleName)
+	}
 	if m.FieldCleared(schedulecoach.FieldType) {
 		fields = append(fields, schedulecoach.FieldType)
 	}
@@ -29328,6 +29609,9 @@ func (m *ScheduleCoachMutation) ClearField(name string) error {
 	case schedulecoach.FieldScheduleID:
 		m.ClearScheduleID()
 		return nil
+	case schedulecoach.FieldScheduleName:
+		m.ClearScheduleName()
+		return nil
 	case schedulecoach.FieldType:
 		m.ClearType()
 		return nil
@@ -29371,6 +29655,9 @@ func (m *ScheduleCoachMutation) ResetField(name string) error {
 		return nil
 	case schedulecoach.FieldScheduleID:
 		m.ResetScheduleID()
+		return nil
+	case schedulecoach.FieldScheduleName:
+		m.ResetScheduleName()
 		return nil
 	case schedulecoach.FieldType:
 		m.ResetType()
@@ -29480,6 +29767,7 @@ type ScheduleMemberMutation struct {
 	addstatus                     *int64
 	venue_id                      *int64
 	addvenue_id                   *int64
+	schedule_name                 *string
 	member_id                     *int64
 	addmember_id                  *int64
 	member_product_id             *int64
@@ -29866,6 +30154,55 @@ func (m *ScheduleMemberMutation) ScheduleIDCleared() bool {
 func (m *ScheduleMemberMutation) ResetScheduleID() {
 	m.schedule = nil
 	delete(m.clearedFields, schedulemember.FieldScheduleID)
+}
+
+// SetScheduleName sets the "schedule_name" field.
+func (m *ScheduleMemberMutation) SetScheduleName(s string) {
+	m.schedule_name = &s
+}
+
+// ScheduleName returns the value of the "schedule_name" field in the mutation.
+func (m *ScheduleMemberMutation) ScheduleName() (r string, exists bool) {
+	v := m.schedule_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldScheduleName returns the old "schedule_name" field's value of the ScheduleMember entity.
+// If the ScheduleMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMemberMutation) OldScheduleName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldScheduleName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldScheduleName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldScheduleName: %w", err)
+	}
+	return oldValue.ScheduleName, nil
+}
+
+// ClearScheduleName clears the value of the "schedule_name" field.
+func (m *ScheduleMemberMutation) ClearScheduleName() {
+	m.schedule_name = nil
+	m.clearedFields[schedulemember.FieldScheduleName] = struct{}{}
+}
+
+// ScheduleNameCleared returns if the "schedule_name" field was cleared in this mutation.
+func (m *ScheduleMemberMutation) ScheduleNameCleared() bool {
+	_, ok := m.clearedFields[schedulemember.FieldScheduleName]
+	return ok
+}
+
+// ResetScheduleName resets all changes to the "schedule_name" field.
+func (m *ScheduleMemberMutation) ResetScheduleName() {
+	m.schedule_name = nil
+	delete(m.clearedFields, schedulemember.FieldScheduleName)
 }
 
 // SetMemberID sets the "member_id" field.
@@ -30580,7 +30917,7 @@ func (m *ScheduleMemberMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleMemberMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, schedulemember.FieldCreatedAt)
 	}
@@ -30595,6 +30932,9 @@ func (m *ScheduleMemberMutation) Fields() []string {
 	}
 	if m.schedule != nil {
 		fields = append(fields, schedulemember.FieldScheduleID)
+	}
+	if m.schedule_name != nil {
+		fields = append(fields, schedulemember.FieldScheduleName)
 	}
 	if m.member_id != nil {
 		fields = append(fields, schedulemember.FieldMemberID)
@@ -30650,6 +30990,8 @@ func (m *ScheduleMemberMutation) Field(name string) (ent.Value, bool) {
 		return m.VenueID()
 	case schedulemember.FieldScheduleID:
 		return m.ScheduleID()
+	case schedulemember.FieldScheduleName:
+		return m.ScheduleName()
 	case schedulemember.FieldMemberID:
 		return m.MemberID()
 	case schedulemember.FieldMemberProductID:
@@ -30693,6 +31035,8 @@ func (m *ScheduleMemberMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldVenueID(ctx)
 	case schedulemember.FieldScheduleID:
 		return m.OldScheduleID(ctx)
+	case schedulemember.FieldScheduleName:
+		return m.OldScheduleName(ctx)
 	case schedulemember.FieldMemberID:
 		return m.OldMemberID(ctx)
 	case schedulemember.FieldMemberProductID:
@@ -30760,6 +31104,13 @@ func (m *ScheduleMemberMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetScheduleID(v)
+		return nil
+	case schedulemember.FieldScheduleName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetScheduleName(v)
 		return nil
 	case schedulemember.FieldMemberID:
 		v, ok := value.(int64)
@@ -30947,6 +31298,9 @@ func (m *ScheduleMemberMutation) ClearedFields() []string {
 	if m.FieldCleared(schedulemember.FieldScheduleID) {
 		fields = append(fields, schedulemember.FieldScheduleID)
 	}
+	if m.FieldCleared(schedulemember.FieldScheduleName) {
+		fields = append(fields, schedulemember.FieldScheduleName)
+	}
 	if m.FieldCleared(schedulemember.FieldMemberID) {
 		fields = append(fields, schedulemember.FieldMemberID)
 	}
@@ -31006,6 +31360,9 @@ func (m *ScheduleMemberMutation) ClearField(name string) error {
 	case schedulemember.FieldScheduleID:
 		m.ClearScheduleID()
 		return nil
+	case schedulemember.FieldScheduleName:
+		m.ClearScheduleName()
+		return nil
 	case schedulemember.FieldMemberID:
 		m.ClearMemberID()
 		return nil
@@ -31064,6 +31421,9 @@ func (m *ScheduleMemberMutation) ResetField(name string) error {
 		return nil
 	case schedulemember.FieldScheduleID:
 		m.ResetScheduleID()
+		return nil
+	case schedulemember.FieldScheduleName:
+		m.ResetScheduleName()
 		return nil
 	case schedulemember.FieldMemberID:
 		m.ResetMemberID()

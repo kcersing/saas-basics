@@ -105,6 +105,20 @@ func (scc *ScheduleCoachCreate) SetNillableScheduleID(i *int64) *ScheduleCoachCr
 	return scc
 }
 
+// SetScheduleName sets the "schedule_name" field.
+func (scc *ScheduleCoachCreate) SetScheduleName(s string) *ScheduleCoachCreate {
+	scc.mutation.SetScheduleName(s)
+	return scc
+}
+
+// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
+func (scc *ScheduleCoachCreate) SetNillableScheduleName(s *string) *ScheduleCoachCreate {
+	if s != nil {
+		scc.SetScheduleName(*s)
+	}
+	return scc
+}
+
 // SetType sets the "type" field.
 func (scc *ScheduleCoachCreate) SetType(s string) *ScheduleCoachCreate {
 	scc.mutation.SetType(s)
@@ -324,6 +338,10 @@ func (scc *ScheduleCoachCreate) createSpec() (*ScheduleCoach, *sqlgraph.CreateSp
 	if value, ok := scc.mutation.CoachID(); ok {
 		_spec.SetField(schedulecoach.FieldCoachID, field.TypeInt64, value)
 		_node.CoachID = value
+	}
+	if value, ok := scc.mutation.ScheduleName(); ok {
+		_spec.SetField(schedulecoach.FieldScheduleName, field.TypeString, value)
+		_node.ScheduleName = value
 	}
 	if value, ok := scc.mutation.GetType(); ok {
 		_spec.SetField(schedulecoach.FieldType, field.TypeString, value)

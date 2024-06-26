@@ -47,8 +47,16 @@ struct MemberPropertyListReq{
     6:  optional i64 venueId (api.raw = "venue_id")
     7:  optional i64 status (api.raw = "status")
     8:  optional i64 memberProductId (api.raw = "member_product_id")
-
 }
+
+struct MemberContractListReq{
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 pageSize (api.raw = "pageSize")
+    3:  optional i64 memberId (api.raw = "member_id")
+    4:  optional i64 venueId (api.raw = "venue_id")
+    5:  optional i64 contractId (api.raw = "contract_id")
+}
+
 
 service MemberService {
 
@@ -80,5 +88,6 @@ service MemberService {
 
   base.NilResponse MemberPropertyUpdate(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-update")
 
+  base.NilResponse MemberContractList(1: MemberPropertyListReq req) (api.post = "/api/admin/member/contract-list")
 
 }

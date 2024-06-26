@@ -29,9 +29,13 @@ type MemberContract struct {
 	Status int64 `json:"status,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
+	// 原始合同id
+	ContractID int64 `json:"contract_id,omitempty"`
 	// 订单id
 	OrderID int64 `json:"order_id,omitempty"`
-	// 会员产品ID
+	// 场馆id
+	VenueID int64 `json:"venue_id,omitempty"`
+	// 会员产品id
 	MemberProductID int64 `json:"member_product_id,omitempty"`
 	// name | 名称
 	Name string `json:"name,omitempty"`
@@ -111,7 +115,7 @@ func (*MemberContract) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case membercontract.FieldID, membercontract.FieldStatus, membercontract.FieldMemberID, membercontract.FieldOrderID, membercontract.FieldMemberProductID:
+		case membercontract.FieldID, membercontract.FieldStatus, membercontract.FieldMemberID, membercontract.FieldContractID, membercontract.FieldOrderID, membercontract.FieldVenueID, membercontract.FieldMemberProductID:
 			values[i] = new(sql.NullInt64)
 		case membercontract.FieldName, membercontract.FieldSign:
 			values[i] = new(sql.NullString)
@@ -162,11 +166,23 @@ func (mc *MemberContract) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mc.MemberID = value.Int64
 			}
+		case membercontract.FieldContractID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field contract_id", values[i])
+			} else if value.Valid {
+				mc.ContractID = value.Int64
+			}
 		case membercontract.FieldOrderID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field order_id", values[i])
 			} else if value.Valid {
 				mc.OrderID = value.Int64
+			}
+		case membercontract.FieldVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
+			} else if value.Valid {
+				mc.VenueID = value.Int64
 			}
 		case membercontract.FieldMemberProductID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -254,8 +270,14 @@ func (mc *MemberContract) String() string {
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", mc.MemberID))
 	builder.WriteString(", ")
+	builder.WriteString("contract_id=")
+	builder.WriteString(fmt.Sprintf("%v", mc.ContractID))
+	builder.WriteString(", ")
 	builder.WriteString("order_id=")
 	builder.WriteString(fmt.Sprintf("%v", mc.OrderID))
+	builder.WriteString(", ")
+	builder.WriteString("venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", mc.VenueID))
 	builder.WriteString(", ")
 	builder.WriteString("member_product_id=")
 	builder.WriteString(fmt.Sprintf("%v", mc.MemberProductID))

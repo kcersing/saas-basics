@@ -23,6 +23,7 @@ func Register(r *server.Hertz) {
 			_admin := _api.Group("/admin", _adminMw()...)
 			{
 				_member := _admin.Group("/member", _memberMw()...)
+				_member.POST("/contract-list", append(_membercontractlistMw(), member.MemberContractList)...)
 				_member.POST("/create", append(_creatememberMw(), member.CreateMember)...)
 				_member.GET("/info", append(_memberinfoMw(), member.MemberInfo)...)
 				_member.POST("/list", append(_memberlistMw(), member.MemberList)...)

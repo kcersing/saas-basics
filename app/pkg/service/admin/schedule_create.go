@@ -86,6 +86,7 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 
 		_, err = tx.ScheduleCoach.Create().
 			SetSchedule(one).
+			SetScheduleName(one.Name).
 			SetType(req.Type).
 			SetVenueID(req.VenueId).
 			SetCoachID(req.CoachID).

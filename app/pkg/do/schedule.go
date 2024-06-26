@@ -97,6 +97,7 @@ type ScheduleMemberInfo struct {
 	PlaceID             int64  `json:"place_id"`
 	PropertyId          int64  `json:"property_id"`
 	ScheduleId          int64  `json:"schedule_id"`
+	ScheduleName        string `json:"schedule_name"`
 	Type                int64  `json:"type"`
 	CreatedAt           string `json:"createdAt"`
 	UpdatedAt           string `json:"updatedAt"`

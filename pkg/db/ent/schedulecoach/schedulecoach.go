@@ -26,6 +26,8 @@ const (
 	FieldCoachID = "coach_id"
 	// FieldScheduleID holds the string denoting the schedule_id field in the database.
 	FieldScheduleID = "schedule_id"
+	// FieldScheduleName holds the string denoting the schedule_name field in the database.
+	FieldScheduleName = "schedule_name"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
 	// FieldStartTime holds the string denoting the start_time field in the database.
@@ -60,6 +62,7 @@ var Columns = []string{
 	FieldVenueID,
 	FieldCoachID,
 	FieldScheduleID,
+	FieldScheduleName,
 	FieldType,
 	FieldStartTime,
 	FieldEndTime,
@@ -133,6 +136,11 @@ func ByCoachID(opts ...sql.OrderTermOption) OrderOption {
 // ByScheduleID orders the results by the schedule_id field.
 func ByScheduleID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScheduleID, opts...).ToFunc()
+}
+
+// ByScheduleName orders the results by the schedule_name field.
+func ByScheduleName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScheduleName, opts...).ToFunc()
 }
 
 // ByType orders the results by the type field.

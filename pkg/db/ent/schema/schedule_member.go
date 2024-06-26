@@ -19,6 +19,7 @@ func (ScheduleMember) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("schedule_id").Comment("课程ID").Optional(),
+		field.String("schedule_name").Comment("课程名称").Optional(),
 		field.Int64("member_id").Comment("会员id").Optional(),
 		field.Int64("member_product_id").Comment("会员购买课ID").Optional(),
 		field.Int64("member_product_property_id").Comment("会员购买课ID").Optional(),

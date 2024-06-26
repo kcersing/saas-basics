@@ -29,6 +29,7 @@ func (ScheduleCoach) Fields() []ent.Field {
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("coach_id").Comment("教练ID").Optional(),
 		field.Int64("schedule_id").Comment("课程ID").Optional(),
+		field.String("schedule_name").Comment("课程名称").Optional(),
 		field.String("type").Comment("类型").Optional(),
 		field.Time("start_time").Default(time.Now).Comment("开始时间").Optional(),
 		field.Time("end_time").Default(time.Now).Comment("结束时间").Optional(),

@@ -103,3 +103,8 @@ func _entryMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _membercontractlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

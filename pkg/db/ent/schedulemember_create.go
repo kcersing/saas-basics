@@ -91,6 +91,20 @@ func (smc *ScheduleMemberCreate) SetNillableScheduleID(i *int64) *ScheduleMember
 	return smc
 }
 
+// SetScheduleName sets the "schedule_name" field.
+func (smc *ScheduleMemberCreate) SetScheduleName(s string) *ScheduleMemberCreate {
+	smc.mutation.SetScheduleName(s)
+	return smc
+}
+
+// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableScheduleName(s *string) *ScheduleMemberCreate {
+	if s != nil {
+		smc.SetScheduleName(*s)
+	}
+	return smc
+}
+
 // SetMemberID sets the "member_id" field.
 func (smc *ScheduleMemberCreate) SetMemberID(i int64) *ScheduleMemberCreate {
 	smc.mutation.SetMemberID(i)
@@ -390,6 +404,10 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 	if value, ok := smc.mutation.VenueID(); ok {
 		_spec.SetField(schedulemember.FieldVenueID, field.TypeInt64, value)
 		_node.VenueID = value
+	}
+	if value, ok := smc.mutation.ScheduleName(); ok {
+		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
+		_node.ScheduleName = value
 	}
 	if value, ok := smc.mutation.MemberID(); ok {
 		_spec.SetField(schedulemember.FieldMemberID, field.TypeInt64, value)

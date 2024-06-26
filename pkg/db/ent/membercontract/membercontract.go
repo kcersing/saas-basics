@@ -22,8 +22,12 @@ const (
 	FieldStatus = "status"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
+	// FieldContractID holds the string denoting the contract_id field in the database.
+	FieldContractID = "contract_id"
 	// FieldOrderID holds the string denoting the order_id field in the database.
 	FieldOrderID = "order_id"
+	// FieldVenueID holds the string denoting the venue_id field in the database.
+	FieldVenueID = "venue_id"
 	// FieldMemberProductID holds the string denoting the member_product_id field in the database.
 	FieldMemberProductID = "member_product_id"
 	// FieldName holds the string denoting the name field in the database.
@@ -77,7 +81,9 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldStatus,
 	FieldMemberID,
+	FieldContractID,
 	FieldOrderID,
+	FieldVenueID,
 	FieldMemberProductID,
 	FieldName,
 	FieldSign,
@@ -132,9 +138,19 @@ func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
 }
 
+// ByContractID orders the results by the contract_id field.
+func ByContractID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContractID, opts...).ToFunc()
+}
+
 // ByOrderID orders the results by the order_id field.
 func ByOrderID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrderID, opts...).ToFunc()
+}
+
+// ByVenueID orders the results by the venue_id field.
+func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
 }
 
 // ByMemberProductID orders the results by the member_product_id field.

@@ -24,6 +24,8 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldScheduleID holds the string denoting the schedule_id field in the database.
 	FieldScheduleID = "schedule_id"
+	// FieldScheduleName holds the string denoting the schedule_name field in the database.
+	FieldScheduleName = "schedule_name"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
 	// FieldMemberProductID holds the string denoting the member_product_id field in the database.
@@ -69,6 +71,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldVenueID,
 	FieldScheduleID,
+	FieldScheduleName,
 	FieldMemberID,
 	FieldMemberProductID,
 	FieldMemberProductPropertyID,
@@ -143,6 +146,11 @@ func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 // ByScheduleID orders the results by the schedule_id field.
 func ByScheduleID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScheduleID, opts...).ToFunc()
+}
+
+// ByScheduleName orders the results by the schedule_name field.
+func ByScheduleName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScheduleName, opts...).ToFunc()
 }
 
 // ByMemberID orders the results by the member_id field.

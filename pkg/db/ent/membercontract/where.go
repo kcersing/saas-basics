@@ -75,9 +75,19 @@ func MemberID(v int64) predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldEQ(FieldMemberID, v))
 }
 
+// ContractID applies equality check predicate on the "contract_id" field. It's identical to ContractIDEQ.
+func ContractID(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldEQ(FieldContractID, v))
+}
+
 // OrderID applies equality check predicate on the "order_id" field. It's identical to OrderIDEQ.
 func OrderID(v int64) predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldEQ(FieldOrderID, v))
+}
+
+// VenueID applies equality check predicate on the "venue_id" field. It's identical to VenueIDEQ.
+func VenueID(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldEQ(FieldVenueID, v))
 }
 
 // MemberProductID applies equality check predicate on the "member_product_id" field. It's identical to MemberProductIDEQ.
@@ -255,6 +265,56 @@ func MemberIDNotNil() predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldNotNull(FieldMemberID))
 }
 
+// ContractIDEQ applies the EQ predicate on the "contract_id" field.
+func ContractIDEQ(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldEQ(FieldContractID, v))
+}
+
+// ContractIDNEQ applies the NEQ predicate on the "contract_id" field.
+func ContractIDNEQ(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNEQ(FieldContractID, v))
+}
+
+// ContractIDIn applies the In predicate on the "contract_id" field.
+func ContractIDIn(vs ...int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldIn(FieldContractID, vs...))
+}
+
+// ContractIDNotIn applies the NotIn predicate on the "contract_id" field.
+func ContractIDNotIn(vs ...int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNotIn(FieldContractID, vs...))
+}
+
+// ContractIDGT applies the GT predicate on the "contract_id" field.
+func ContractIDGT(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldGT(FieldContractID, v))
+}
+
+// ContractIDGTE applies the GTE predicate on the "contract_id" field.
+func ContractIDGTE(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldGTE(FieldContractID, v))
+}
+
+// ContractIDLT applies the LT predicate on the "contract_id" field.
+func ContractIDLT(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldLT(FieldContractID, v))
+}
+
+// ContractIDLTE applies the LTE predicate on the "contract_id" field.
+func ContractIDLTE(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldLTE(FieldContractID, v))
+}
+
+// ContractIDIsNil applies the IsNil predicate on the "contract_id" field.
+func ContractIDIsNil() predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldIsNull(FieldContractID))
+}
+
+// ContractIDNotNil applies the NotNil predicate on the "contract_id" field.
+func ContractIDNotNil() predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNotNull(FieldContractID))
+}
+
 // OrderIDEQ applies the EQ predicate on the "order_id" field.
 func OrderIDEQ(v int64) predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldEQ(FieldOrderID, v))
@@ -283,6 +343,56 @@ func OrderIDIsNil() predicate.MemberContract {
 // OrderIDNotNil applies the NotNil predicate on the "order_id" field.
 func OrderIDNotNil() predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldNotNull(FieldOrderID))
+}
+
+// VenueIDEQ applies the EQ predicate on the "venue_id" field.
+func VenueIDEQ(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldEQ(FieldVenueID, v))
+}
+
+// VenueIDNEQ applies the NEQ predicate on the "venue_id" field.
+func VenueIDNEQ(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNEQ(FieldVenueID, v))
+}
+
+// VenueIDIn applies the In predicate on the "venue_id" field.
+func VenueIDIn(vs ...int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldIn(FieldVenueID, vs...))
+}
+
+// VenueIDNotIn applies the NotIn predicate on the "venue_id" field.
+func VenueIDNotIn(vs ...int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNotIn(FieldVenueID, vs...))
+}
+
+// VenueIDGT applies the GT predicate on the "venue_id" field.
+func VenueIDGT(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldGT(FieldVenueID, v))
+}
+
+// VenueIDGTE applies the GTE predicate on the "venue_id" field.
+func VenueIDGTE(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldGTE(FieldVenueID, v))
+}
+
+// VenueIDLT applies the LT predicate on the "venue_id" field.
+func VenueIDLT(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldLT(FieldVenueID, v))
+}
+
+// VenueIDLTE applies the LTE predicate on the "venue_id" field.
+func VenueIDLTE(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldLTE(FieldVenueID, v))
+}
+
+// VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
+func VenueIDIsNil() predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldIsNull(FieldVenueID))
+}
+
+// VenueIDNotNil applies the NotNil predicate on the "venue_id" field.
+func VenueIDNotNil() predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNotNull(FieldVenueID))
 }
 
 // MemberProductIDEQ applies the EQ predicate on the "member_product_id" field.

@@ -80,6 +80,20 @@ func (mcc *MemberContractCreate) SetNillableMemberID(i *int64) *MemberContractCr
 	return mcc
 }
 
+// SetContractID sets the "contract_id" field.
+func (mcc *MemberContractCreate) SetContractID(i int64) *MemberContractCreate {
+	mcc.mutation.SetContractID(i)
+	return mcc
+}
+
+// SetNillableContractID sets the "contract_id" field if the given value is not nil.
+func (mcc *MemberContractCreate) SetNillableContractID(i *int64) *MemberContractCreate {
+	if i != nil {
+		mcc.SetContractID(*i)
+	}
+	return mcc
+}
+
 // SetOrderID sets the "order_id" field.
 func (mcc *MemberContractCreate) SetOrderID(i int64) *MemberContractCreate {
 	mcc.mutation.SetOrderID(i)
@@ -90,6 +104,20 @@ func (mcc *MemberContractCreate) SetOrderID(i int64) *MemberContractCreate {
 func (mcc *MemberContractCreate) SetNillableOrderID(i *int64) *MemberContractCreate {
 	if i != nil {
 		mcc.SetOrderID(*i)
+	}
+	return mcc
+}
+
+// SetVenueID sets the "venue_id" field.
+func (mcc *MemberContractCreate) SetVenueID(i int64) *MemberContractCreate {
+	mcc.mutation.SetVenueID(i)
+	return mcc
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mcc *MemberContractCreate) SetNillableVenueID(i *int64) *MemberContractCreate {
+	if i != nil {
+		mcc.SetVenueID(*i)
 	}
 	return mcc
 }
@@ -272,6 +300,14 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 	if value, ok := mcc.mutation.Status(); ok {
 		_spec.SetField(membercontract.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
+	}
+	if value, ok := mcc.mutation.ContractID(); ok {
+		_spec.SetField(membercontract.FieldContractID, field.TypeInt64, value)
+		_node.ContractID = value
+	}
+	if value, ok := mcc.mutation.VenueID(); ok {
+		_spec.SetField(membercontract.FieldVenueID, field.TypeInt64, value)
+		_node.VenueID = value
 	}
 	if value, ok := mcc.mutation.Name(); ok {
 		_spec.SetField(membercontract.FieldName, field.TypeString, value)

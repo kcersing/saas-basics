@@ -661,19 +661,19 @@ func init() {
 	// schedulecoach.DefaultStatus holds the default value on creation for the status field.
 	schedulecoach.DefaultStatus = schedulecoachDescStatus.Default.(int64)
 	// schedulecoachDescStartTime is the schema descriptor for start_time field.
-	schedulecoachDescStartTime := schedulecoachFields[4].Descriptor()
+	schedulecoachDescStartTime := schedulecoachFields[5].Descriptor()
 	// schedulecoach.DefaultStartTime holds the default value on creation for the start_time field.
 	schedulecoach.DefaultStartTime = schedulecoachDescStartTime.Default.(func() time.Time)
 	// schedulecoachDescEndTime is the schema descriptor for end_time field.
-	schedulecoachDescEndTime := schedulecoachFields[5].Descriptor()
+	schedulecoachDescEndTime := schedulecoachFields[6].Descriptor()
 	// schedulecoach.DefaultEndTime holds the default value on creation for the end_time field.
 	schedulecoach.DefaultEndTime = schedulecoachDescEndTime.Default.(func() time.Time)
 	// schedulecoachDescSignStartTime is the schema descriptor for sign_start_time field.
-	schedulecoachDescSignStartTime := schedulecoachFields[6].Descriptor()
+	schedulecoachDescSignStartTime := schedulecoachFields[7].Descriptor()
 	// schedulecoach.DefaultSignStartTime holds the default value on creation for the sign_start_time field.
 	schedulecoach.DefaultSignStartTime = schedulecoachDescSignStartTime.Default.(func() time.Time)
 	// schedulecoachDescSignEndTime is the schema descriptor for sign_end_time field.
-	schedulecoachDescSignEndTime := schedulecoachFields[7].Descriptor()
+	schedulecoachDescSignEndTime := schedulecoachFields[8].Descriptor()
 	// schedulecoach.DefaultSignEndTime holds the default value on creation for the sign_end_time field.
 	schedulecoach.DefaultSignEndTime = schedulecoachDescSignEndTime.Default.(func() time.Time)
 	schedulememberMixin := schema.ScheduleMember{}.Mixin()
@@ -698,19 +698,19 @@ func init() {
 	// schedulemember.DefaultStatus holds the default value on creation for the status field.
 	schedulemember.DefaultStatus = schedulememberDescStatus.Default.(int64)
 	// schedulememberDescStartTime is the schema descriptor for start_time field.
-	schedulememberDescStartTime := schedulememberFields[6].Descriptor()
+	schedulememberDescStartTime := schedulememberFields[7].Descriptor()
 	// schedulemember.DefaultStartTime holds the default value on creation for the start_time field.
 	schedulemember.DefaultStartTime = schedulememberDescStartTime.Default.(func() time.Time)
 	// schedulememberDescEndTime is the schema descriptor for end_time field.
-	schedulememberDescEndTime := schedulememberFields[7].Descriptor()
+	schedulememberDescEndTime := schedulememberFields[8].Descriptor()
 	// schedulemember.DefaultEndTime holds the default value on creation for the end_time field.
 	schedulemember.DefaultEndTime = schedulememberDescEndTime.Default.(func() time.Time)
 	// schedulememberDescSignStartTime is the schema descriptor for sign_start_time field.
-	schedulememberDescSignStartTime := schedulememberFields[8].Descriptor()
+	schedulememberDescSignStartTime := schedulememberFields[9].Descriptor()
 	// schedulemember.DefaultSignStartTime holds the default value on creation for the sign_start_time field.
 	schedulemember.DefaultSignStartTime = schedulememberDescSignStartTime.Default.(func() time.Time)
 	// schedulememberDescSignEndTime is the schema descriptor for sign_end_time field.
-	schedulememberDescSignEndTime := schedulememberFields[9].Descriptor()
+	schedulememberDescSignEndTime := schedulememberFields[10].Descriptor()
 	// schedulemember.DefaultSignEndTime holds the default value on creation for the sign_end_time field.
 	schedulemember.DefaultSignEndTime = schedulememberDescSignEndTime.Default.(func() time.Time)
 	tokenMixin := schema.Token{}.Mixin()

@@ -201,10 +201,12 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
+		{Name: "contract_id", Type: field.TypeInt64, Nullable: true, Comment: "原始合同id"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 名称"},
 		{Name: "sign", Type: field.TypeString, Nullable: true, Comment: "sign | 签字"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
-		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员产品ID"},
+		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员产品id"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
 	}
 	// MemberContractTable holds the schema information for the "member_contract" table.
@@ -215,19 +217,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_contract_member_member_contents",
-				Columns:    []*schema.Column{MemberContractColumns[6]},
+				Columns:    []*schema.Column{MemberContractColumns[8]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "member_contract_member_product_member_product_contents",
-				Columns:    []*schema.Column{MemberContractColumns[7]},
+				Columns:    []*schema.Column{MemberContractColumns[9]},
 				RefColumns: []*schema.Column{MemberProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "member_contract_order_order_contents",
-				Columns:    []*schema.Column{MemberContractColumns[8]},
+				Columns:    []*schema.Column{MemberContractColumns[10]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -236,17 +238,17 @@ var (
 			{
 				Name:    "membercontract_order_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberContractColumns[8]},
+				Columns: []*schema.Column{MemberContractColumns[10]},
 			},
 			{
 				Name:    "membercontract_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberContractColumns[6]},
+				Columns: []*schema.Column{MemberContractColumns[8]},
 			},
 			{
 				Name:    "membercontract_member_product_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberContractColumns[7]},
+				Columns: []*schema.Column{MemberContractColumns[9]},
 			},
 		},
 	}
@@ -880,6 +882,7 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "coach_id", Type: field.TypeInt64, Nullable: true, Comment: "教练ID"},
+		{Name: "schedule_name", Type: field.TypeString, Nullable: true, Comment: "课程名称"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "结束时间"},
@@ -896,7 +899,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_coach_schedule_coachs",
-				Columns:    []*schema.Column{ScheduleCoachColumns[12]},
+				Columns:    []*schema.Column{ScheduleCoachColumns[13]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -915,7 +918,7 @@ var (
 			{
 				Name:    "schedulecoach_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleCoachColumns[12]},
+				Columns: []*schema.Column{ScheduleCoachColumns[13]},
 			},
 		},
 	}
@@ -926,6 +929,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "schedule_name", Type: field.TypeString, Nullable: true, Comment: "课程名称"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员购买课ID"},
 		{Name: "member_product_property_id", Type: field.TypeInt64, Nullable: true, Comment: "会员购买课ID"},
@@ -948,7 +952,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_member_schedule_members",
-				Columns:    []*schema.Column{ScheduleMemberColumns[17]},
+				Columns:    []*schema.Column{ScheduleMemberColumns[18]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -962,12 +966,12 @@ var (
 			{
 				Name:    "schedulemember_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleMemberColumns[5]},
+				Columns: []*schema.Column{ScheduleMemberColumns[6]},
 			},
 			{
 				Name:    "schedulemember_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleMemberColumns[17]},
+				Columns: []*schema.Column{ScheduleMemberColumns[18]},
 			},
 		},
 	}

@@ -58,6 +58,7 @@ func (c Schedule) MemberCreate(req do.ScheduleMemberCreate) error {
 
 		_, err = c.db.ScheduleMember.Create().
 			SetSchedule(sc).
+			SetScheduleName(sc.Name).
 			SetMemberName(m.Name).
 			SetStatus(1).
 			SetStartTime(sc.StartTime).
@@ -142,7 +143,6 @@ func (c Schedule) MemberList(req do.ScheduleMemberListReq) (resp []*do.ScheduleM
 
 			}
 		}
-
 		resp[i].CreatedAt = v.CreatedAt.Format(time.DateTime)
 
 	}
