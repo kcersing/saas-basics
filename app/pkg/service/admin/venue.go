@@ -37,12 +37,24 @@ func (v Venue) VenueInfo(id int64) (info *do.VenueInfo, err error) {
 		err = errors.Wrap(err, "get venue failed")
 		return info, err
 	}
-
-	err = copier.Copy(&info, &one)
-	if err != nil {
-		err = errors.Wrap(err, "copy venue info failed")
-		return info, err
+	info = &do.VenueInfo{
+		ID:        one.ID,
+		Name:      one.Name,
+		Address:   one.Address,
+		Pic:       one.Pic,
+		Mobile:    one.Mobile,
+		Latitude:  one.Latitude,
+		Longitude: one.Longitude,
+		Status:    one.Status,
+		CreatedAt: one.CreatedAt.Format(time.DateTime),
+		UpdatedAt: one.UpdatedAt.Format(time.DateTime),
 	}
+	//err = copier.CopyWithOption(info, one, copier.Option{IgnoreEmpty: true, DeepCopy: true})
+	//hlog.Info("err :", err)
+	//if err != nil {
+	//	err = errors.Wrap(err, "copy venue info failed")
+	//	return info, err
+	//}
 
 	v.cache.SetWithTTL("venueInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
 	return

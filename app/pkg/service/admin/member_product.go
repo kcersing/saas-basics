@@ -95,14 +95,11 @@ func (m MemberProduct) ProductList(req do.MemberProductListReq) (resp []*do.Memb
 		return resp, 0, err
 	}
 	for i, v := range lists {
-
 		vInfo, err := NewVenue(m.ctx, m.c).VenueInfo(v.VenueID)
 		if err == nil {
 			resp[i].VenueName = vInfo.Name
 		}
-
 		resp[i].StatusName = do.MPStatusNames[do.MPStatus(v.Status)]
-
 		list, _, err := m.PropertyList(do.MemberPropertyListReq{
 			MemberProductId: v.ID,
 			Page:            1,

@@ -31,8 +31,8 @@ type VenueInfo struct {
 	Pic           string `json:"pic"`
 	Information   string `json:"information"`
 	Status        int64  `json:"status"`
-	CreatedAt     string `json:"createdAt"`
-	UpdatedAt     string `json:"updatedAt"`
+	CreatedAt     string `json:"created_at"`
+	UpdatedAt     string `json:"updated_at"`
 }
 
 type VenuePlaceListReq struct {
