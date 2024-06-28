@@ -22,6 +22,8 @@ type Tx struct {
 	DictionaryDetail *DictionaryDetailClient
 	// EntryLogs is the client for interacting with the EntryLogs builders.
 	EntryLogs *EntryLogsClient
+	// Face is the client for interacting with the Face builders.
+	Face *FaceClient
 	// Logs is the client for interacting with the Logs builders.
 	Logs *LogsClient
 	// Member is the client for interacting with the Member builders.
@@ -210,6 +212,7 @@ func (tx *Tx) init() {
 	tx.Dictionary = NewDictionaryClient(tx.config)
 	tx.DictionaryDetail = NewDictionaryDetailClient(tx.config)
 	tx.EntryLogs = NewEntryLogsClient(tx.config)
+	tx.Face = NewFaceClient(tx.config)
 	tx.Logs = NewLogsClient(tx.config)
 	tx.Member = NewMemberClient(tx.config)
 	tx.MemberContract = NewMemberContractClient(tx.config)

@@ -53,13 +53,39 @@ func (u User) Info(id int64) (info *do.UserInfo, err error) {
 		}
 	}
 	info.Avatar = minio.URLconvert(u.ctx, u.c, info.Avatar)
+	if userEnt.Gender == 0 {
+		info.Gender = "女性"
+	} else if userEnt.Gender == 1 {
+		info.Gender = "男性"
+	} else {
+		info.Gender = "保密"
+	}
+	if !userEnt.Birthday.IsZero() {
+		info.Age = int64(time.Now().Sub(userEnt.Birthday).Hours() / 24 / 365)
+	}
+	info.Birthday = userEnt.Birthday.Format(time.DateOnly)
 	u.cache.SetWithTTL("userInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
 	return
 }
 
 func (u User) Create(req do.CreateOrUpdateUserReq) error {
 	password, _ := encrypt.Crypt(req.Password)
-	_, err := u.db.User.Create().
+	var gender int64
+	if req.Gender == "女性" {
+		gender = 0
+	} else if req.Gender == "男性" {
+		gender = 1
+	} else {
+		gender = 2
+	}
+	parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
+
+	tx, err := u.db.Tx(u.ctx)
+	if err != nil {
+		return errors.Wrap(err, "starting a transaction:")
+	}
+
+	noe, err := tx.User.Create().
 		SetAvatar(req.Avatar).
 		SetRoleID(req.RoleID).
 		SetMobile(req.Mobile).
@@ -68,12 +94,26 @@ func (u User) Create(req do.CreateOrUpdateUserReq) error {
 		SetUsername(req.Username).
 		SetPassword(password).
 		SetNickname(req.Nickname).
+		SetBirthday(parsedTime).
+		SetGender(gender).
 		Save(u.ctx)
+
 	if err != nil {
-		err = errors.Wrap(err, "create user failed")
+		err = rollback(tx, errors.Wrap(err, "create user failed"))
+		return err
+	}
+	_, err = tx.Face.Create().
+		SetUserFaces(noe).
+		Save(u.ctx)
+
+	if err != nil {
+		err = rollback(tx, errors.Wrap(err, "create Face failed"))
 		return err
 	}
 
+	if err = tx.Commit(); err != nil {
+		return err
+	}
 	return nil
 }
 

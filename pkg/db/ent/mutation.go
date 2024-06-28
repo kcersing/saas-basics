@@ -11,6 +11,7 @@ import (
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/membercontract"
@@ -59,6 +60,7 @@ const (
 	TypeDictionary            = "Dictionary"
 	TypeDictionaryDetail      = "DictionaryDetail"
 	TypeEntryLogs             = "EntryLogs"
+	TypeFace                  = "Face"
 	TypeLogs                  = "Logs"
 	TypeMember                = "Member"
 	TypeMemberContract        = "MemberContract"
@@ -4057,6 +4059,1108 @@ func (m *EntryLogsMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown EntryLogs edge %s", name)
 }
 
+// FaceMutation represents an operation that mutates the Face nodes in the graph.
+type FaceMutation struct {
+	config
+	op                    Op
+	typ                   string
+	id                    *int64
+	created_at            *time.Time
+	updated_at            *time.Time
+	identity_card         *string
+	face_identity_card    *string
+	back_identity_card    *string
+	face_pic              *string
+	face_eigenvalue       *string
+	face_pic_updated_time *time.Time
+	clearedFields         map[string]struct{}
+	member_faces          *int64
+	clearedmember_faces   bool
+	user_faces            *int64
+	cleareduser_faces     bool
+	done                  bool
+	oldValue              func(context.Context) (*Face, error)
+	predicates            []predicate.Face
+}
+
+var _ ent.Mutation = (*FaceMutation)(nil)
+
+// faceOption allows management of the mutation configuration using functional options.
+type faceOption func(*FaceMutation)
+
+// newFaceMutation creates new mutation for the Face entity.
+func newFaceMutation(c config, op Op, opts ...faceOption) *FaceMutation {
+	m := &FaceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeFace,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withFaceID sets the ID field of the mutation.
+func withFaceID(id int64) faceOption {
+	return func(m *FaceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Face
+		)
+		m.oldValue = func(ctx context.Context) (*Face, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Face.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withFace sets the old Face of the mutation.
+func withFace(node *Face) faceOption {
+	return func(m *FaceMutation) {
+		m.oldValue = func(context.Context) (*Face, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m FaceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m FaceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Face entities.
+func (m *FaceMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *FaceMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *FaceMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Face.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *FaceMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *FaceMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *FaceMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *FaceMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *FaceMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *FaceMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetMemberID sets the "member_id" field.
+func (m *FaceMutation) SetMemberID(i int64) {
+	m.member_faces = &i
+}
+
+// MemberID returns the value of the "member_id" field in the mutation.
+func (m *FaceMutation) MemberID() (r int64, exists bool) {
+	v := m.member_faces
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemberID returns the old "member_id" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldMemberID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemberID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemberID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemberID: %w", err)
+	}
+	return oldValue.MemberID, nil
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (m *FaceMutation) ClearMemberID() {
+	m.member_faces = nil
+	m.clearedFields[face.FieldMemberID] = struct{}{}
+}
+
+// MemberIDCleared returns if the "member_id" field was cleared in this mutation.
+func (m *FaceMutation) MemberIDCleared() bool {
+	_, ok := m.clearedFields[face.FieldMemberID]
+	return ok
+}
+
+// ResetMemberID resets all changes to the "member_id" field.
+func (m *FaceMutation) ResetMemberID() {
+	m.member_faces = nil
+	delete(m.clearedFields, face.FieldMemberID)
+}
+
+// SetUserID sets the "user_id" field.
+func (m *FaceMutation) SetUserID(i int64) {
+	m.user_faces = &i
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *FaceMutation) UserID() (r int64, exists bool) {
+	v := m.user_faces
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ClearUserID clears the value of the "user_id" field.
+func (m *FaceMutation) ClearUserID() {
+	m.user_faces = nil
+	m.clearedFields[face.FieldUserID] = struct{}{}
+}
+
+// UserIDCleared returns if the "user_id" field was cleared in this mutation.
+func (m *FaceMutation) UserIDCleared() bool {
+	_, ok := m.clearedFields[face.FieldUserID]
+	return ok
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *FaceMutation) ResetUserID() {
+	m.user_faces = nil
+	delete(m.clearedFields, face.FieldUserID)
+}
+
+// SetIdentityCard sets the "identity_card" field.
+func (m *FaceMutation) SetIdentityCard(s string) {
+	m.identity_card = &s
+}
+
+// IdentityCard returns the value of the "identity_card" field in the mutation.
+func (m *FaceMutation) IdentityCard() (r string, exists bool) {
+	v := m.identity_card
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIdentityCard returns the old "identity_card" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldIdentityCard(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIdentityCard is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIdentityCard requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIdentityCard: %w", err)
+	}
+	return oldValue.IdentityCard, nil
+}
+
+// ClearIdentityCard clears the value of the "identity_card" field.
+func (m *FaceMutation) ClearIdentityCard() {
+	m.identity_card = nil
+	m.clearedFields[face.FieldIdentityCard] = struct{}{}
+}
+
+// IdentityCardCleared returns if the "identity_card" field was cleared in this mutation.
+func (m *FaceMutation) IdentityCardCleared() bool {
+	_, ok := m.clearedFields[face.FieldIdentityCard]
+	return ok
+}
+
+// ResetIdentityCard resets all changes to the "identity_card" field.
+func (m *FaceMutation) ResetIdentityCard() {
+	m.identity_card = nil
+	delete(m.clearedFields, face.FieldIdentityCard)
+}
+
+// SetFaceIdentityCard sets the "face_identity_card" field.
+func (m *FaceMutation) SetFaceIdentityCard(s string) {
+	m.face_identity_card = &s
+}
+
+// FaceIdentityCard returns the value of the "face_identity_card" field in the mutation.
+func (m *FaceMutation) FaceIdentityCard() (r string, exists bool) {
+	v := m.face_identity_card
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFaceIdentityCard returns the old "face_identity_card" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldFaceIdentityCard(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFaceIdentityCard is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFaceIdentityCard requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFaceIdentityCard: %w", err)
+	}
+	return oldValue.FaceIdentityCard, nil
+}
+
+// ClearFaceIdentityCard clears the value of the "face_identity_card" field.
+func (m *FaceMutation) ClearFaceIdentityCard() {
+	m.face_identity_card = nil
+	m.clearedFields[face.FieldFaceIdentityCard] = struct{}{}
+}
+
+// FaceIdentityCardCleared returns if the "face_identity_card" field was cleared in this mutation.
+func (m *FaceMutation) FaceIdentityCardCleared() bool {
+	_, ok := m.clearedFields[face.FieldFaceIdentityCard]
+	return ok
+}
+
+// ResetFaceIdentityCard resets all changes to the "face_identity_card" field.
+func (m *FaceMutation) ResetFaceIdentityCard() {
+	m.face_identity_card = nil
+	delete(m.clearedFields, face.FieldFaceIdentityCard)
+}
+
+// SetBackIdentityCard sets the "back_identity_card" field.
+func (m *FaceMutation) SetBackIdentityCard(s string) {
+	m.back_identity_card = &s
+}
+
+// BackIdentityCard returns the value of the "back_identity_card" field in the mutation.
+func (m *FaceMutation) BackIdentityCard() (r string, exists bool) {
+	v := m.back_identity_card
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBackIdentityCard returns the old "back_identity_card" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldBackIdentityCard(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBackIdentityCard is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBackIdentityCard requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBackIdentityCard: %w", err)
+	}
+	return oldValue.BackIdentityCard, nil
+}
+
+// ClearBackIdentityCard clears the value of the "back_identity_card" field.
+func (m *FaceMutation) ClearBackIdentityCard() {
+	m.back_identity_card = nil
+	m.clearedFields[face.FieldBackIdentityCard] = struct{}{}
+}
+
+// BackIdentityCardCleared returns if the "back_identity_card" field was cleared in this mutation.
+func (m *FaceMutation) BackIdentityCardCleared() bool {
+	_, ok := m.clearedFields[face.FieldBackIdentityCard]
+	return ok
+}
+
+// ResetBackIdentityCard resets all changes to the "back_identity_card" field.
+func (m *FaceMutation) ResetBackIdentityCard() {
+	m.back_identity_card = nil
+	delete(m.clearedFields, face.FieldBackIdentityCard)
+}
+
+// SetFacePic sets the "face_pic" field.
+func (m *FaceMutation) SetFacePic(s string) {
+	m.face_pic = &s
+}
+
+// FacePic returns the value of the "face_pic" field in the mutation.
+func (m *FaceMutation) FacePic() (r string, exists bool) {
+	v := m.face_pic
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFacePic returns the old "face_pic" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldFacePic(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFacePic is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFacePic requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFacePic: %w", err)
+	}
+	return oldValue.FacePic, nil
+}
+
+// ClearFacePic clears the value of the "face_pic" field.
+func (m *FaceMutation) ClearFacePic() {
+	m.face_pic = nil
+	m.clearedFields[face.FieldFacePic] = struct{}{}
+}
+
+// FacePicCleared returns if the "face_pic" field was cleared in this mutation.
+func (m *FaceMutation) FacePicCleared() bool {
+	_, ok := m.clearedFields[face.FieldFacePic]
+	return ok
+}
+
+// ResetFacePic resets all changes to the "face_pic" field.
+func (m *FaceMutation) ResetFacePic() {
+	m.face_pic = nil
+	delete(m.clearedFields, face.FieldFacePic)
+}
+
+// SetFaceEigenvalue sets the "face_eigenvalue" field.
+func (m *FaceMutation) SetFaceEigenvalue(s string) {
+	m.face_eigenvalue = &s
+}
+
+// FaceEigenvalue returns the value of the "face_eigenvalue" field in the mutation.
+func (m *FaceMutation) FaceEigenvalue() (r string, exists bool) {
+	v := m.face_eigenvalue
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFaceEigenvalue returns the old "face_eigenvalue" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldFaceEigenvalue(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFaceEigenvalue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFaceEigenvalue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFaceEigenvalue: %w", err)
+	}
+	return oldValue.FaceEigenvalue, nil
+}
+
+// ClearFaceEigenvalue clears the value of the "face_eigenvalue" field.
+func (m *FaceMutation) ClearFaceEigenvalue() {
+	m.face_eigenvalue = nil
+	m.clearedFields[face.FieldFaceEigenvalue] = struct{}{}
+}
+
+// FaceEigenvalueCleared returns if the "face_eigenvalue" field was cleared in this mutation.
+func (m *FaceMutation) FaceEigenvalueCleared() bool {
+	_, ok := m.clearedFields[face.FieldFaceEigenvalue]
+	return ok
+}
+
+// ResetFaceEigenvalue resets all changes to the "face_eigenvalue" field.
+func (m *FaceMutation) ResetFaceEigenvalue() {
+	m.face_eigenvalue = nil
+	delete(m.clearedFields, face.FieldFaceEigenvalue)
+}
+
+// SetFacePicUpdatedTime sets the "face_pic_updated_time" field.
+func (m *FaceMutation) SetFacePicUpdatedTime(t time.Time) {
+	m.face_pic_updated_time = &t
+}
+
+// FacePicUpdatedTime returns the value of the "face_pic_updated_time" field in the mutation.
+func (m *FaceMutation) FacePicUpdatedTime() (r time.Time, exists bool) {
+	v := m.face_pic_updated_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFacePicUpdatedTime returns the old "face_pic_updated_time" field's value of the Face entity.
+// If the Face object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FaceMutation) OldFacePicUpdatedTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFacePicUpdatedTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFacePicUpdatedTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFacePicUpdatedTime: %w", err)
+	}
+	return oldValue.FacePicUpdatedTime, nil
+}
+
+// ClearFacePicUpdatedTime clears the value of the "face_pic_updated_time" field.
+func (m *FaceMutation) ClearFacePicUpdatedTime() {
+	m.face_pic_updated_time = nil
+	m.clearedFields[face.FieldFacePicUpdatedTime] = struct{}{}
+}
+
+// FacePicUpdatedTimeCleared returns if the "face_pic_updated_time" field was cleared in this mutation.
+func (m *FaceMutation) FacePicUpdatedTimeCleared() bool {
+	_, ok := m.clearedFields[face.FieldFacePicUpdatedTime]
+	return ok
+}
+
+// ResetFacePicUpdatedTime resets all changes to the "face_pic_updated_time" field.
+func (m *FaceMutation) ResetFacePicUpdatedTime() {
+	m.face_pic_updated_time = nil
+	delete(m.clearedFields, face.FieldFacePicUpdatedTime)
+}
+
+// SetMemberFacesID sets the "member_faces" edge to the Member entity by id.
+func (m *FaceMutation) SetMemberFacesID(id int64) {
+	m.member_faces = &id
+}
+
+// ClearMemberFaces clears the "member_faces" edge to the Member entity.
+func (m *FaceMutation) ClearMemberFaces() {
+	m.clearedmember_faces = true
+	m.clearedFields[face.FieldMemberID] = struct{}{}
+}
+
+// MemberFacesCleared reports if the "member_faces" edge to the Member entity was cleared.
+func (m *FaceMutation) MemberFacesCleared() bool {
+	return m.MemberIDCleared() || m.clearedmember_faces
+}
+
+// MemberFacesID returns the "member_faces" edge ID in the mutation.
+func (m *FaceMutation) MemberFacesID() (id int64, exists bool) {
+	if m.member_faces != nil {
+		return *m.member_faces, true
+	}
+	return
+}
+
+// MemberFacesIDs returns the "member_faces" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// MemberFacesID instead. It exists only for internal usage by the builders.
+func (m *FaceMutation) MemberFacesIDs() (ids []int64) {
+	if id := m.member_faces; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMemberFaces resets all changes to the "member_faces" edge.
+func (m *FaceMutation) ResetMemberFaces() {
+	m.member_faces = nil
+	m.clearedmember_faces = false
+}
+
+// SetUserFacesID sets the "user_faces" edge to the User entity by id.
+func (m *FaceMutation) SetUserFacesID(id int64) {
+	m.user_faces = &id
+}
+
+// ClearUserFaces clears the "user_faces" edge to the User entity.
+func (m *FaceMutation) ClearUserFaces() {
+	m.cleareduser_faces = true
+	m.clearedFields[face.FieldUserID] = struct{}{}
+}
+
+// UserFacesCleared reports if the "user_faces" edge to the User entity was cleared.
+func (m *FaceMutation) UserFacesCleared() bool {
+	return m.UserIDCleared() || m.cleareduser_faces
+}
+
+// UserFacesID returns the "user_faces" edge ID in the mutation.
+func (m *FaceMutation) UserFacesID() (id int64, exists bool) {
+	if m.user_faces != nil {
+		return *m.user_faces, true
+	}
+	return
+}
+
+// UserFacesIDs returns the "user_faces" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// UserFacesID instead. It exists only for internal usage by the builders.
+func (m *FaceMutation) UserFacesIDs() (ids []int64) {
+	if id := m.user_faces; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUserFaces resets all changes to the "user_faces" edge.
+func (m *FaceMutation) ResetUserFaces() {
+	m.user_faces = nil
+	m.cleareduser_faces = false
+}
+
+// Where appends a list predicates to the FaceMutation builder.
+func (m *FaceMutation) Where(ps ...predicate.Face) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the FaceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FaceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Face, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *FaceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FaceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Face).
+func (m *FaceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *FaceMutation) Fields() []string {
+	fields := make([]string, 0, 10)
+	if m.created_at != nil {
+		fields = append(fields, face.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, face.FieldUpdatedAt)
+	}
+	if m.member_faces != nil {
+		fields = append(fields, face.FieldMemberID)
+	}
+	if m.user_faces != nil {
+		fields = append(fields, face.FieldUserID)
+	}
+	if m.identity_card != nil {
+		fields = append(fields, face.FieldIdentityCard)
+	}
+	if m.face_identity_card != nil {
+		fields = append(fields, face.FieldFaceIdentityCard)
+	}
+	if m.back_identity_card != nil {
+		fields = append(fields, face.FieldBackIdentityCard)
+	}
+	if m.face_pic != nil {
+		fields = append(fields, face.FieldFacePic)
+	}
+	if m.face_eigenvalue != nil {
+		fields = append(fields, face.FieldFaceEigenvalue)
+	}
+	if m.face_pic_updated_time != nil {
+		fields = append(fields, face.FieldFacePicUpdatedTime)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *FaceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case face.FieldCreatedAt:
+		return m.CreatedAt()
+	case face.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case face.FieldMemberID:
+		return m.MemberID()
+	case face.FieldUserID:
+		return m.UserID()
+	case face.FieldIdentityCard:
+		return m.IdentityCard()
+	case face.FieldFaceIdentityCard:
+		return m.FaceIdentityCard()
+	case face.FieldBackIdentityCard:
+		return m.BackIdentityCard()
+	case face.FieldFacePic:
+		return m.FacePic()
+	case face.FieldFaceEigenvalue:
+		return m.FaceEigenvalue()
+	case face.FieldFacePicUpdatedTime:
+		return m.FacePicUpdatedTime()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *FaceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case face.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case face.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case face.FieldMemberID:
+		return m.OldMemberID(ctx)
+	case face.FieldUserID:
+		return m.OldUserID(ctx)
+	case face.FieldIdentityCard:
+		return m.OldIdentityCard(ctx)
+	case face.FieldFaceIdentityCard:
+		return m.OldFaceIdentityCard(ctx)
+	case face.FieldBackIdentityCard:
+		return m.OldBackIdentityCard(ctx)
+	case face.FieldFacePic:
+		return m.OldFacePic(ctx)
+	case face.FieldFaceEigenvalue:
+		return m.OldFaceEigenvalue(ctx)
+	case face.FieldFacePicUpdatedTime:
+		return m.OldFacePicUpdatedTime(ctx)
+	}
+	return nil, fmt.Errorf("unknown Face field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FaceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case face.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case face.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case face.FieldMemberID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemberID(v)
+		return nil
+	case face.FieldUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case face.FieldIdentityCard:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIdentityCard(v)
+		return nil
+	case face.FieldFaceIdentityCard:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFaceIdentityCard(v)
+		return nil
+	case face.FieldBackIdentityCard:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBackIdentityCard(v)
+		return nil
+	case face.FieldFacePic:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFacePic(v)
+		return nil
+	case face.FieldFaceEigenvalue:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFaceEigenvalue(v)
+		return nil
+	case face.FieldFacePicUpdatedTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFacePicUpdatedTime(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Face field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *FaceMutation) AddedFields() []string {
+	var fields []string
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *FaceMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FaceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Face numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *FaceMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(face.FieldMemberID) {
+		fields = append(fields, face.FieldMemberID)
+	}
+	if m.FieldCleared(face.FieldUserID) {
+		fields = append(fields, face.FieldUserID)
+	}
+	if m.FieldCleared(face.FieldIdentityCard) {
+		fields = append(fields, face.FieldIdentityCard)
+	}
+	if m.FieldCleared(face.FieldFaceIdentityCard) {
+		fields = append(fields, face.FieldFaceIdentityCard)
+	}
+	if m.FieldCleared(face.FieldBackIdentityCard) {
+		fields = append(fields, face.FieldBackIdentityCard)
+	}
+	if m.FieldCleared(face.FieldFacePic) {
+		fields = append(fields, face.FieldFacePic)
+	}
+	if m.FieldCleared(face.FieldFaceEigenvalue) {
+		fields = append(fields, face.FieldFaceEigenvalue)
+	}
+	if m.FieldCleared(face.FieldFacePicUpdatedTime) {
+		fields = append(fields, face.FieldFacePicUpdatedTime)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *FaceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *FaceMutation) ClearField(name string) error {
+	switch name {
+	case face.FieldMemberID:
+		m.ClearMemberID()
+		return nil
+	case face.FieldUserID:
+		m.ClearUserID()
+		return nil
+	case face.FieldIdentityCard:
+		m.ClearIdentityCard()
+		return nil
+	case face.FieldFaceIdentityCard:
+		m.ClearFaceIdentityCard()
+		return nil
+	case face.FieldBackIdentityCard:
+		m.ClearBackIdentityCard()
+		return nil
+	case face.FieldFacePic:
+		m.ClearFacePic()
+		return nil
+	case face.FieldFaceEigenvalue:
+		m.ClearFaceEigenvalue()
+		return nil
+	case face.FieldFacePicUpdatedTime:
+		m.ClearFacePicUpdatedTime()
+		return nil
+	}
+	return fmt.Errorf("unknown Face nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *FaceMutation) ResetField(name string) error {
+	switch name {
+	case face.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case face.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case face.FieldMemberID:
+		m.ResetMemberID()
+		return nil
+	case face.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case face.FieldIdentityCard:
+		m.ResetIdentityCard()
+		return nil
+	case face.FieldFaceIdentityCard:
+		m.ResetFaceIdentityCard()
+		return nil
+	case face.FieldBackIdentityCard:
+		m.ResetBackIdentityCard()
+		return nil
+	case face.FieldFacePic:
+		m.ResetFacePic()
+		return nil
+	case face.FieldFaceEigenvalue:
+		m.ResetFaceEigenvalue()
+		return nil
+	case face.FieldFacePicUpdatedTime:
+		m.ResetFacePicUpdatedTime()
+		return nil
+	}
+	return fmt.Errorf("unknown Face field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *FaceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.member_faces != nil {
+		edges = append(edges, face.EdgeMemberFaces)
+	}
+	if m.user_faces != nil {
+		edges = append(edges, face.EdgeUserFaces)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *FaceMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case face.EdgeMemberFaces:
+		if id := m.member_faces; id != nil {
+			return []ent.Value{*id}
+		}
+	case face.EdgeUserFaces:
+		if id := m.user_faces; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *FaceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *FaceMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *FaceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedmember_faces {
+		edges = append(edges, face.EdgeMemberFaces)
+	}
+	if m.cleareduser_faces {
+		edges = append(edges, face.EdgeUserFaces)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *FaceMutation) EdgeCleared(name string) bool {
+	switch name {
+	case face.EdgeMemberFaces:
+		return m.clearedmember_faces
+	case face.EdgeUserFaces:
+		return m.cleareduser_faces
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *FaceMutation) ClearEdge(name string) error {
+	switch name {
+	case face.EdgeMemberFaces:
+		m.ClearMemberFaces()
+		return nil
+	case face.EdgeUserFaces:
+		m.ClearUserFaces()
+		return nil
+	}
+	return fmt.Errorf("unknown Face unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *FaceMutation) ResetEdge(name string) error {
+	switch name {
+	case face.EdgeMemberFaces:
+		m.ResetMemberFaces()
+		return nil
+	case face.EdgeUserFaces:
+		m.ResetUserFaces()
+		return nil
+	}
+	return fmt.Errorf("unknown Face edge %s", name)
+}
+
 // LogsMutation represents an operation that mutates the Logs nodes in the graph.
 type LogsMutation struct {
 	config
@@ -5173,6 +6277,9 @@ type MemberMutation struct {
 	member_contents        map[int64]struct{}
 	removedmember_contents map[int64]struct{}
 	clearedmember_contents bool
+	member_face            map[int64]struct{}
+	removedmember_face     map[int64]struct{}
+	clearedmember_face     bool
 	done                   bool
 	oldValue               func(context.Context) (*Member, error)
 	predicates             []predicate.Member
@@ -6063,6 +7170,60 @@ func (m *MemberMutation) ResetMemberContents() {
 	m.removedmember_contents = nil
 }
 
+// AddMemberFaceIDs adds the "member_face" edge to the Face entity by ids.
+func (m *MemberMutation) AddMemberFaceIDs(ids ...int64) {
+	if m.member_face == nil {
+		m.member_face = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.member_face[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMemberFace clears the "member_face" edge to the Face entity.
+func (m *MemberMutation) ClearMemberFace() {
+	m.clearedmember_face = true
+}
+
+// MemberFaceCleared reports if the "member_face" edge to the Face entity was cleared.
+func (m *MemberMutation) MemberFaceCleared() bool {
+	return m.clearedmember_face
+}
+
+// RemoveMemberFaceIDs removes the "member_face" edge to the Face entity by IDs.
+func (m *MemberMutation) RemoveMemberFaceIDs(ids ...int64) {
+	if m.removedmember_face == nil {
+		m.removedmember_face = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.member_face, ids[i])
+		m.removedmember_face[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMemberFace returns the removed IDs of the "member_face" edge to the Face entity.
+func (m *MemberMutation) RemovedMemberFaceIDs() (ids []int64) {
+	for id := range m.removedmember_face {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MemberFaceIDs returns the "member_face" edge IDs in the mutation.
+func (m *MemberMutation) MemberFaceIDs() (ids []int64) {
+	for id := range m.member_face {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMemberFace resets all changes to the "member_face" edge.
+func (m *MemberMutation) ResetMemberFace() {
+	m.member_face = nil
+	m.clearedmember_face = false
+	m.removedmember_face = nil
+}
+
 // Where appends a list predicates to the MemberMutation builder.
 func (m *MemberMutation) Where(ps ...predicate.Member) {
 	m.predicates = append(m.predicates, ps...)
@@ -6404,7 +7565,7 @@ func (m *MemberMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MemberMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.member_details != nil {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -6422,6 +7583,9 @@ func (m *MemberMutation) AddedEdges() []string {
 	}
 	if m.member_contents != nil {
 		edges = append(edges, member.EdgeMemberContents)
+	}
+	if m.member_face != nil {
+		edges = append(edges, member.EdgeMemberFace)
 	}
 	return edges
 }
@@ -6466,13 +7630,19 @@ func (m *MemberMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case member.EdgeMemberFace:
+		ids := make([]ent.Value, 0, len(m.member_face))
+		for id := range m.member_face {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MemberMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedmember_details != nil {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -6490,6 +7660,9 @@ func (m *MemberMutation) RemovedEdges() []string {
 	}
 	if m.removedmember_contents != nil {
 		edges = append(edges, member.EdgeMemberContents)
+	}
+	if m.removedmember_face != nil {
+		edges = append(edges, member.EdgeMemberFace)
 	}
 	return edges
 }
@@ -6534,13 +7707,19 @@ func (m *MemberMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case member.EdgeMemberFace:
+		ids := make([]ent.Value, 0, len(m.removedmember_face))
+		for id := range m.removedmember_face {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MemberMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedmember_details {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -6558,6 +7737,9 @@ func (m *MemberMutation) ClearedEdges() []string {
 	}
 	if m.clearedmember_contents {
 		edges = append(edges, member.EdgeMemberContents)
+	}
+	if m.clearedmember_face {
+		edges = append(edges, member.EdgeMemberFace)
 	}
 	return edges
 }
@@ -6578,6 +7760,8 @@ func (m *MemberMutation) EdgeCleared(name string) bool {
 		return m.clearedmember_entry
 	case member.EdgeMemberContents:
 		return m.clearedmember_contents
+	case member.EdgeMemberFace:
+		return m.clearedmember_face
 	}
 	return false
 }
@@ -6611,6 +7795,9 @@ func (m *MemberMutation) ResetEdge(name string) error {
 		return nil
 	case member.EdgeMemberContents:
 		m.ResetMemberContents()
+		return nil
+	case member.EdgeMemberFace:
+		m.ResetMemberFace()
 		return nil
 	}
 	return fmt.Errorf("unknown Member edge %s", name)
@@ -8606,50 +9793,44 @@ func (m *MemberContractContentMutation) ResetEdge(name string) error {
 // MemberDetailsMutation represents an operation that mutates the MemberDetails nodes in the graph.
 type MemberDetailsMutation struct {
 	config
-	op                    Op
-	typ                   string
-	id                    *int64
-	created_at            *time.Time
-	updated_at            *time.Time
-	email                 *string
-	wecom                 *string
-	gender                *int64
-	addgender             *int64
-	birthday              *time.Time
-	identity_card         *string
-	face_identity_card    *string
-	back_identity_card    *string
-	face_pic              *string
-	face_eigenvalue       *string
-	face_pic_updated_time *time.Time
-	money_sum             *float64
-	addmoney_sum          *float64
-	product_id            *int64
-	addproduct_id         *int64
-	product_name          *string
-	product_venue         *int64
-	addproduct_venue      *int64
-	product_venue_name    *string
-	entry_sum             *int64
-	addentry_sum          *int64
-	entry_last_time       *time.Time
-	entry_deadline_time   *time.Time
-	class_last_time       *time.Time
-	relation_uid          *int64
-	addrelation_uid       *int64
-	relation_uname        *string
-	relation_mid          *int64
-	addrelation_mid       *int64
-	relation_mame         *string
-	create_id             *int64
-	addcreate_id          *int64
-	create_name           *string
-	clearedFields         map[string]struct{}
-	info                  *int64
-	clearedinfo           bool
-	done                  bool
-	oldValue              func(context.Context) (*MemberDetails, error)
-	predicates            []predicate.MemberDetails
+	op                  Op
+	typ                 string
+	id                  *int64
+	created_at          *time.Time
+	updated_at          *time.Time
+	email               *string
+	wecom               *string
+	gender              *int64
+	addgender           *int64
+	birthday            *time.Time
+	money_sum           *float64
+	addmoney_sum        *float64
+	product_id          *int64
+	addproduct_id       *int64
+	product_name        *string
+	product_venue       *int64
+	addproduct_venue    *int64
+	product_venue_name  *string
+	entry_sum           *int64
+	addentry_sum        *int64
+	entry_last_time     *time.Time
+	entry_deadline_time *time.Time
+	class_last_time     *time.Time
+	relation_uid        *int64
+	addrelation_uid     *int64
+	relation_uname      *string
+	relation_mid        *int64
+	addrelation_mid     *int64
+	relation_mame       *string
+	create_id           *int64
+	addcreate_id        *int64
+	create_name         *string
+	clearedFields       map[string]struct{}
+	info                *int64
+	clearedinfo         bool
+	done                bool
+	oldValue            func(context.Context) (*MemberDetails, error)
+	predicates          []predicate.MemberDetails
 }
 
 var _ ent.Mutation = (*MemberDetailsMutation)(nil)
@@ -9092,287 +10273,6 @@ func (m *MemberDetailsMutation) BirthdayCleared() bool {
 func (m *MemberDetailsMutation) ResetBirthday() {
 	m.birthday = nil
 	delete(m.clearedFields, memberdetails.FieldBirthday)
-}
-
-// SetIdentityCard sets the "identity_card" field.
-func (m *MemberDetailsMutation) SetIdentityCard(s string) {
-	m.identity_card = &s
-}
-
-// IdentityCard returns the value of the "identity_card" field in the mutation.
-func (m *MemberDetailsMutation) IdentityCard() (r string, exists bool) {
-	v := m.identity_card
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldIdentityCard returns the old "identity_card" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldIdentityCard(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldIdentityCard is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldIdentityCard requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldIdentityCard: %w", err)
-	}
-	return oldValue.IdentityCard, nil
-}
-
-// ClearIdentityCard clears the value of the "identity_card" field.
-func (m *MemberDetailsMutation) ClearIdentityCard() {
-	m.identity_card = nil
-	m.clearedFields[memberdetails.FieldIdentityCard] = struct{}{}
-}
-
-// IdentityCardCleared returns if the "identity_card" field was cleared in this mutation.
-func (m *MemberDetailsMutation) IdentityCardCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldIdentityCard]
-	return ok
-}
-
-// ResetIdentityCard resets all changes to the "identity_card" field.
-func (m *MemberDetailsMutation) ResetIdentityCard() {
-	m.identity_card = nil
-	delete(m.clearedFields, memberdetails.FieldIdentityCard)
-}
-
-// SetFaceIdentityCard sets the "face_identity_card" field.
-func (m *MemberDetailsMutation) SetFaceIdentityCard(s string) {
-	m.face_identity_card = &s
-}
-
-// FaceIdentityCard returns the value of the "face_identity_card" field in the mutation.
-func (m *MemberDetailsMutation) FaceIdentityCard() (r string, exists bool) {
-	v := m.face_identity_card
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFaceIdentityCard returns the old "face_identity_card" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldFaceIdentityCard(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFaceIdentityCard is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFaceIdentityCard requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFaceIdentityCard: %w", err)
-	}
-	return oldValue.FaceIdentityCard, nil
-}
-
-// ClearFaceIdentityCard clears the value of the "face_identity_card" field.
-func (m *MemberDetailsMutation) ClearFaceIdentityCard() {
-	m.face_identity_card = nil
-	m.clearedFields[memberdetails.FieldFaceIdentityCard] = struct{}{}
-}
-
-// FaceIdentityCardCleared returns if the "face_identity_card" field was cleared in this mutation.
-func (m *MemberDetailsMutation) FaceIdentityCardCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldFaceIdentityCard]
-	return ok
-}
-
-// ResetFaceIdentityCard resets all changes to the "face_identity_card" field.
-func (m *MemberDetailsMutation) ResetFaceIdentityCard() {
-	m.face_identity_card = nil
-	delete(m.clearedFields, memberdetails.FieldFaceIdentityCard)
-}
-
-// SetBackIdentityCard sets the "back_identity_card" field.
-func (m *MemberDetailsMutation) SetBackIdentityCard(s string) {
-	m.back_identity_card = &s
-}
-
-// BackIdentityCard returns the value of the "back_identity_card" field in the mutation.
-func (m *MemberDetailsMutation) BackIdentityCard() (r string, exists bool) {
-	v := m.back_identity_card
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldBackIdentityCard returns the old "back_identity_card" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldBackIdentityCard(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldBackIdentityCard is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldBackIdentityCard requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBackIdentityCard: %w", err)
-	}
-	return oldValue.BackIdentityCard, nil
-}
-
-// ClearBackIdentityCard clears the value of the "back_identity_card" field.
-func (m *MemberDetailsMutation) ClearBackIdentityCard() {
-	m.back_identity_card = nil
-	m.clearedFields[memberdetails.FieldBackIdentityCard] = struct{}{}
-}
-
-// BackIdentityCardCleared returns if the "back_identity_card" field was cleared in this mutation.
-func (m *MemberDetailsMutation) BackIdentityCardCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldBackIdentityCard]
-	return ok
-}
-
-// ResetBackIdentityCard resets all changes to the "back_identity_card" field.
-func (m *MemberDetailsMutation) ResetBackIdentityCard() {
-	m.back_identity_card = nil
-	delete(m.clearedFields, memberdetails.FieldBackIdentityCard)
-}
-
-// SetFacePic sets the "face_pic" field.
-func (m *MemberDetailsMutation) SetFacePic(s string) {
-	m.face_pic = &s
-}
-
-// FacePic returns the value of the "face_pic" field in the mutation.
-func (m *MemberDetailsMutation) FacePic() (r string, exists bool) {
-	v := m.face_pic
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFacePic returns the old "face_pic" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldFacePic(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFacePic is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFacePic requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFacePic: %w", err)
-	}
-	return oldValue.FacePic, nil
-}
-
-// ClearFacePic clears the value of the "face_pic" field.
-func (m *MemberDetailsMutation) ClearFacePic() {
-	m.face_pic = nil
-	m.clearedFields[memberdetails.FieldFacePic] = struct{}{}
-}
-
-// FacePicCleared returns if the "face_pic" field was cleared in this mutation.
-func (m *MemberDetailsMutation) FacePicCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldFacePic]
-	return ok
-}
-
-// ResetFacePic resets all changes to the "face_pic" field.
-func (m *MemberDetailsMutation) ResetFacePic() {
-	m.face_pic = nil
-	delete(m.clearedFields, memberdetails.FieldFacePic)
-}
-
-// SetFaceEigenvalue sets the "face_eigenvalue" field.
-func (m *MemberDetailsMutation) SetFaceEigenvalue(s string) {
-	m.face_eigenvalue = &s
-}
-
-// FaceEigenvalue returns the value of the "face_eigenvalue" field in the mutation.
-func (m *MemberDetailsMutation) FaceEigenvalue() (r string, exists bool) {
-	v := m.face_eigenvalue
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFaceEigenvalue returns the old "face_eigenvalue" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldFaceEigenvalue(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFaceEigenvalue is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFaceEigenvalue requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFaceEigenvalue: %w", err)
-	}
-	return oldValue.FaceEigenvalue, nil
-}
-
-// ClearFaceEigenvalue clears the value of the "face_eigenvalue" field.
-func (m *MemberDetailsMutation) ClearFaceEigenvalue() {
-	m.face_eigenvalue = nil
-	m.clearedFields[memberdetails.FieldFaceEigenvalue] = struct{}{}
-}
-
-// FaceEigenvalueCleared returns if the "face_eigenvalue" field was cleared in this mutation.
-func (m *MemberDetailsMutation) FaceEigenvalueCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldFaceEigenvalue]
-	return ok
-}
-
-// ResetFaceEigenvalue resets all changes to the "face_eigenvalue" field.
-func (m *MemberDetailsMutation) ResetFaceEigenvalue() {
-	m.face_eigenvalue = nil
-	delete(m.clearedFields, memberdetails.FieldFaceEigenvalue)
-}
-
-// SetFacePicUpdatedTime sets the "face_pic_updated_time" field.
-func (m *MemberDetailsMutation) SetFacePicUpdatedTime(t time.Time) {
-	m.face_pic_updated_time = &t
-}
-
-// FacePicUpdatedTime returns the value of the "face_pic_updated_time" field in the mutation.
-func (m *MemberDetailsMutation) FacePicUpdatedTime() (r time.Time, exists bool) {
-	v := m.face_pic_updated_time
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFacePicUpdatedTime returns the old "face_pic_updated_time" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldFacePicUpdatedTime(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFacePicUpdatedTime is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFacePicUpdatedTime requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFacePicUpdatedTime: %w", err)
-	}
-	return oldValue.FacePicUpdatedTime, nil
-}
-
-// ResetFacePicUpdatedTime resets all changes to the "face_pic_updated_time" field.
-func (m *MemberDetailsMutation) ResetFacePicUpdatedTime() {
-	m.face_pic_updated_time = nil
 }
 
 // SetMoneySum sets the "money_sum" field.
@@ -10331,7 +11231,7 @@ func (m *MemberDetailsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberDetailsMutation) Fields() []string {
-	fields := make([]string, 0, 28)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, memberdetails.FieldCreatedAt)
 	}
@@ -10352,24 +11252,6 @@ func (m *MemberDetailsMutation) Fields() []string {
 	}
 	if m.birthday != nil {
 		fields = append(fields, memberdetails.FieldBirthday)
-	}
-	if m.identity_card != nil {
-		fields = append(fields, memberdetails.FieldIdentityCard)
-	}
-	if m.face_identity_card != nil {
-		fields = append(fields, memberdetails.FieldFaceIdentityCard)
-	}
-	if m.back_identity_card != nil {
-		fields = append(fields, memberdetails.FieldBackIdentityCard)
-	}
-	if m.face_pic != nil {
-		fields = append(fields, memberdetails.FieldFacePic)
-	}
-	if m.face_eigenvalue != nil {
-		fields = append(fields, memberdetails.FieldFaceEigenvalue)
-	}
-	if m.face_pic_updated_time != nil {
-		fields = append(fields, memberdetails.FieldFacePicUpdatedTime)
 	}
 	if m.money_sum != nil {
 		fields = append(fields, memberdetails.FieldMoneySum)
@@ -10438,18 +11320,6 @@ func (m *MemberDetailsMutation) Field(name string) (ent.Value, bool) {
 		return m.Gender()
 	case memberdetails.FieldBirthday:
 		return m.Birthday()
-	case memberdetails.FieldIdentityCard:
-		return m.IdentityCard()
-	case memberdetails.FieldFaceIdentityCard:
-		return m.FaceIdentityCard()
-	case memberdetails.FieldBackIdentityCard:
-		return m.BackIdentityCard()
-	case memberdetails.FieldFacePic:
-		return m.FacePic()
-	case memberdetails.FieldFaceEigenvalue:
-		return m.FaceEigenvalue()
-	case memberdetails.FieldFacePicUpdatedTime:
-		return m.FacePicUpdatedTime()
 	case memberdetails.FieldMoneySum:
 		return m.MoneySum()
 	case memberdetails.FieldProductID:
@@ -10503,18 +11373,6 @@ func (m *MemberDetailsMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldGender(ctx)
 	case memberdetails.FieldBirthday:
 		return m.OldBirthday(ctx)
-	case memberdetails.FieldIdentityCard:
-		return m.OldIdentityCard(ctx)
-	case memberdetails.FieldFaceIdentityCard:
-		return m.OldFaceIdentityCard(ctx)
-	case memberdetails.FieldBackIdentityCard:
-		return m.OldBackIdentityCard(ctx)
-	case memberdetails.FieldFacePic:
-		return m.OldFacePic(ctx)
-	case memberdetails.FieldFaceEigenvalue:
-		return m.OldFaceEigenvalue(ctx)
-	case memberdetails.FieldFacePicUpdatedTime:
-		return m.OldFacePicUpdatedTime(ctx)
 	case memberdetails.FieldMoneySum:
 		return m.OldMoneySum(ctx)
 	case memberdetails.FieldProductID:
@@ -10602,48 +11460,6 @@ func (m *MemberDetailsMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetBirthday(v)
-		return nil
-	case memberdetails.FieldIdentityCard:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetIdentityCard(v)
-		return nil
-	case memberdetails.FieldFaceIdentityCard:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFaceIdentityCard(v)
-		return nil
-	case memberdetails.FieldBackIdentityCard:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetBackIdentityCard(v)
-		return nil
-	case memberdetails.FieldFacePic:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFacePic(v)
-		return nil
-	case memberdetails.FieldFaceEigenvalue:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFaceEigenvalue(v)
-		return nil
-	case memberdetails.FieldFacePicUpdatedTime:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFacePicUpdatedTime(v)
 		return nil
 	case memberdetails.FieldMoneySum:
 		v, ok := value.(float64)
@@ -10894,21 +11710,6 @@ func (m *MemberDetailsMutation) ClearedFields() []string {
 	if m.FieldCleared(memberdetails.FieldBirthday) {
 		fields = append(fields, memberdetails.FieldBirthday)
 	}
-	if m.FieldCleared(memberdetails.FieldIdentityCard) {
-		fields = append(fields, memberdetails.FieldIdentityCard)
-	}
-	if m.FieldCleared(memberdetails.FieldFaceIdentityCard) {
-		fields = append(fields, memberdetails.FieldFaceIdentityCard)
-	}
-	if m.FieldCleared(memberdetails.FieldBackIdentityCard) {
-		fields = append(fields, memberdetails.FieldBackIdentityCard)
-	}
-	if m.FieldCleared(memberdetails.FieldFacePic) {
-		fields = append(fields, memberdetails.FieldFacePic)
-	}
-	if m.FieldCleared(memberdetails.FieldFaceEigenvalue) {
-		fields = append(fields, memberdetails.FieldFaceEigenvalue)
-	}
 	if m.FieldCleared(memberdetails.FieldMoneySum) {
 		fields = append(fields, memberdetails.FieldMoneySum)
 	}
@@ -10983,21 +11784,6 @@ func (m *MemberDetailsMutation) ClearField(name string) error {
 	case memberdetails.FieldBirthday:
 		m.ClearBirthday()
 		return nil
-	case memberdetails.FieldIdentityCard:
-		m.ClearIdentityCard()
-		return nil
-	case memberdetails.FieldFaceIdentityCard:
-		m.ClearFaceIdentityCard()
-		return nil
-	case memberdetails.FieldBackIdentityCard:
-		m.ClearBackIdentityCard()
-		return nil
-	case memberdetails.FieldFacePic:
-		m.ClearFacePic()
-		return nil
-	case memberdetails.FieldFaceEigenvalue:
-		m.ClearFaceEigenvalue()
-		return nil
 	case memberdetails.FieldMoneySum:
 		m.ClearMoneySum()
 		return nil
@@ -11071,24 +11857,6 @@ func (m *MemberDetailsMutation) ResetField(name string) error {
 		return nil
 	case memberdetails.FieldBirthday:
 		m.ResetBirthday()
-		return nil
-	case memberdetails.FieldIdentityCard:
-		m.ResetIdentityCard()
-		return nil
-	case memberdetails.FieldFaceIdentityCard:
-		m.ResetFaceIdentityCard()
-		return nil
-	case memberdetails.FieldBackIdentityCard:
-		m.ResetBackIdentityCard()
-		return nil
-	case memberdetails.FieldFacePic:
-		m.ResetFacePic()
-		return nil
-	case memberdetails.FieldFaceEigenvalue:
-		m.ResetFaceEigenvalue()
-		return nil
-	case memberdetails.FieldFacePicUpdatedTime:
-		m.ResetFacePicUpdatedTime()
 		return nil
 	case memberdetails.FieldMoneySum:
 		m.ResetMoneySum()
@@ -32268,6 +33036,9 @@ type UserMutation struct {
 	job                   *string
 	organization          *string
 	avatar                *string
+	gender                *int64
+	addgender             *int64
+	birthday              *time.Time
 	clearedFields         map[string]struct{}
 	token                 *int64
 	clearedtoken          bool
@@ -32277,6 +33048,9 @@ type UserMutation struct {
 	user_entry            map[int64]struct{}
 	removeduser_entry     map[int64]struct{}
 	cleareduser_entry     bool
+	user_face             map[int64]struct{}
+	removeduser_face      map[int64]struct{}
+	cleareduser_face      bool
 	done                  bool
 	oldValue              func(context.Context) (*User, error)
 	predicates            []predicate.User
@@ -33147,6 +33921,125 @@ func (m *UserMutation) ResetAvatar() {
 	delete(m.clearedFields, user.FieldAvatar)
 }
 
+// SetGender sets the "gender" field.
+func (m *UserMutation) SetGender(i int64) {
+	m.gender = &i
+	m.addgender = nil
+}
+
+// Gender returns the value of the "gender" field in the mutation.
+func (m *UserMutation) Gender() (r int64, exists bool) {
+	v := m.gender
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGender returns the old "gender" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldGender(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGender is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGender requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGender: %w", err)
+	}
+	return oldValue.Gender, nil
+}
+
+// AddGender adds i to the "gender" field.
+func (m *UserMutation) AddGender(i int64) {
+	if m.addgender != nil {
+		*m.addgender += i
+	} else {
+		m.addgender = &i
+	}
+}
+
+// AddedGender returns the value that was added to the "gender" field in this mutation.
+func (m *UserMutation) AddedGender() (r int64, exists bool) {
+	v := m.addgender
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearGender clears the value of the "gender" field.
+func (m *UserMutation) ClearGender() {
+	m.gender = nil
+	m.addgender = nil
+	m.clearedFields[user.FieldGender] = struct{}{}
+}
+
+// GenderCleared returns if the "gender" field was cleared in this mutation.
+func (m *UserMutation) GenderCleared() bool {
+	_, ok := m.clearedFields[user.FieldGender]
+	return ok
+}
+
+// ResetGender resets all changes to the "gender" field.
+func (m *UserMutation) ResetGender() {
+	m.gender = nil
+	m.addgender = nil
+	delete(m.clearedFields, user.FieldGender)
+}
+
+// SetBirthday sets the "birthday" field.
+func (m *UserMutation) SetBirthday(t time.Time) {
+	m.birthday = &t
+}
+
+// Birthday returns the value of the "birthday" field in the mutation.
+func (m *UserMutation) Birthday() (r time.Time, exists bool) {
+	v := m.birthday
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBirthday returns the old "birthday" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldBirthday(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBirthday is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBirthday requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBirthday: %w", err)
+	}
+	return oldValue.Birthday, nil
+}
+
+// ClearBirthday clears the value of the "birthday" field.
+func (m *UserMutation) ClearBirthday() {
+	m.birthday = nil
+	m.clearedFields[user.FieldBirthday] = struct{}{}
+}
+
+// BirthdayCleared returns if the "birthday" field was cleared in this mutation.
+func (m *UserMutation) BirthdayCleared() bool {
+	_, ok := m.clearedFields[user.FieldBirthday]
+	return ok
+}
+
+// ResetBirthday resets all changes to the "birthday" field.
+func (m *UserMutation) ResetBirthday() {
+	m.birthday = nil
+	delete(m.clearedFields, user.FieldBirthday)
+}
+
 // SetTokenID sets the "token" edge to the Token entity by id.
 func (m *UserMutation) SetTokenID(id int64) {
 	m.token = &id
@@ -33294,6 +34187,60 @@ func (m *UserMutation) ResetUserEntry() {
 	m.removeduser_entry = nil
 }
 
+// AddUserFaceIDs adds the "user_face" edge to the Face entity by ids.
+func (m *UserMutation) AddUserFaceIDs(ids ...int64) {
+	if m.user_face == nil {
+		m.user_face = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.user_face[ids[i]] = struct{}{}
+	}
+}
+
+// ClearUserFace clears the "user_face" edge to the Face entity.
+func (m *UserMutation) ClearUserFace() {
+	m.cleareduser_face = true
+}
+
+// UserFaceCleared reports if the "user_face" edge to the Face entity was cleared.
+func (m *UserMutation) UserFaceCleared() bool {
+	return m.cleareduser_face
+}
+
+// RemoveUserFaceIDs removes the "user_face" edge to the Face entity by IDs.
+func (m *UserMutation) RemoveUserFaceIDs(ids ...int64) {
+	if m.removeduser_face == nil {
+		m.removeduser_face = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.user_face, ids[i])
+		m.removeduser_face[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedUserFace returns the removed IDs of the "user_face" edge to the Face entity.
+func (m *UserMutation) RemovedUserFaceIDs() (ids []int64) {
+	for id := range m.removeduser_face {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// UserFaceIDs returns the "user_face" edge IDs in the mutation.
+func (m *UserMutation) UserFaceIDs() (ids []int64) {
+	for id := range m.user_face {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetUserFace resets all changes to the "user_face" edge.
+func (m *UserMutation) ResetUserFace() {
+	m.user_face = nil
+	m.cleareduser_face = false
+	m.removeduser_face = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -33328,7 +34275,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, user.FieldCreatedAt)
 	}
@@ -33377,6 +34324,12 @@ func (m *UserMutation) Fields() []string {
 	if m.avatar != nil {
 		fields = append(fields, user.FieldAvatar)
 	}
+	if m.gender != nil {
+		fields = append(fields, user.FieldGender)
+	}
+	if m.birthday != nil {
+		fields = append(fields, user.FieldBirthday)
+	}
 	return fields
 }
 
@@ -33417,6 +34370,10 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Organization()
 	case user.FieldAvatar:
 		return m.Avatar()
+	case user.FieldGender:
+		return m.Gender()
+	case user.FieldBirthday:
+		return m.Birthday()
 	}
 	return nil, false
 }
@@ -33458,6 +34415,10 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldOrganization(ctx)
 	case user.FieldAvatar:
 		return m.OldAvatar(ctx)
+	case user.FieldGender:
+		return m.OldGender(ctx)
+	case user.FieldBirthday:
+		return m.OldBirthday(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -33579,6 +34540,20 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAvatar(v)
 		return nil
+	case user.FieldGender:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGender(v)
+		return nil
+	case user.FieldBirthday:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBirthday(v)
+		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
 }
@@ -33593,6 +34568,9 @@ func (m *UserMutation) AddedFields() []string {
 	if m.addrole_id != nil {
 		fields = append(fields, user.FieldRoleID)
 	}
+	if m.addgender != nil {
+		fields = append(fields, user.FieldGender)
+	}
 	return fields
 }
 
@@ -33605,6 +34583,8 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedStatus()
 	case user.FieldRoleID:
 		return m.AddedRoleID()
+	case user.FieldGender:
+		return m.AddedGender()
 	}
 	return nil, false
 }
@@ -33627,6 +34607,13 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddRoleID(v)
+		return nil
+	case user.FieldGender:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddGender(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User numeric field %s", name)
@@ -33668,6 +34655,12 @@ func (m *UserMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(user.FieldAvatar) {
 		fields = append(fields, user.FieldAvatar)
+	}
+	if m.FieldCleared(user.FieldGender) {
+		fields = append(fields, user.FieldGender)
+	}
+	if m.FieldCleared(user.FieldBirthday) {
+		fields = append(fields, user.FieldBirthday)
 	}
 	return fields
 }
@@ -33715,6 +34708,12 @@ func (m *UserMutation) ClearField(name string) error {
 		return nil
 	case user.FieldAvatar:
 		m.ClearAvatar()
+		return nil
+	case user.FieldGender:
+		m.ClearGender()
+		return nil
+	case user.FieldBirthday:
+		m.ClearBirthday()
 		return nil
 	}
 	return fmt.Errorf("unknown User nullable field %s", name)
@@ -33772,13 +34771,19 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldAvatar:
 		m.ResetAvatar()
 		return nil
+	case user.FieldGender:
+		m.ResetGender()
+		return nil
+	case user.FieldBirthday:
+		m.ResetBirthday()
+		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.token != nil {
 		edges = append(edges, user.EdgeToken)
 	}
@@ -33787,6 +34792,9 @@ func (m *UserMutation) AddedEdges() []string {
 	}
 	if m.user_entry != nil {
 		edges = append(edges, user.EdgeUserEntry)
+	}
+	if m.user_face != nil {
+		edges = append(edges, user.EdgeUserFace)
 	}
 	return edges
 }
@@ -33811,18 +34819,27 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeUserFace:
+		ids := make([]ent.Value, 0, len(m.user_face))
+		for id := range m.user_face {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedcreated_orders != nil {
 		edges = append(edges, user.EdgeCreatedOrders)
 	}
 	if m.removeduser_entry != nil {
 		edges = append(edges, user.EdgeUserEntry)
+	}
+	if m.removeduser_face != nil {
+		edges = append(edges, user.EdgeUserFace)
 	}
 	return edges
 }
@@ -33843,13 +34860,19 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeUserFace:
+		ids := make([]ent.Value, 0, len(m.removeduser_face))
+		for id := range m.removeduser_face {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedtoken {
 		edges = append(edges, user.EdgeToken)
 	}
@@ -33858,6 +34881,9 @@ func (m *UserMutation) ClearedEdges() []string {
 	}
 	if m.cleareduser_entry {
 		edges = append(edges, user.EdgeUserEntry)
+	}
+	if m.cleareduser_face {
+		edges = append(edges, user.EdgeUserFace)
 	}
 	return edges
 }
@@ -33872,6 +34898,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 		return m.clearedcreated_orders
 	case user.EdgeUserEntry:
 		return m.cleareduser_entry
+	case user.EdgeUserFace:
+		return m.cleareduser_face
 	}
 	return false
 }
@@ -33899,6 +34927,9 @@ func (m *UserMutation) ResetEdge(name string) error {
 		return nil
 	case user.EdgeUserEntry:
 		m.ResetUserEntry()
+		return nil
+	case user.EdgeUserFace:
+		m.ResetUserFace()
 		return nil
 	}
 	return fmt.Errorf("unknown User edge %s", name)

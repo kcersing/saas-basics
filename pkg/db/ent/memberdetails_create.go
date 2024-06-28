@@ -119,90 +119,6 @@ func (mdc *MemberDetailsCreate) SetNillableBirthday(t *time.Time) *MemberDetails
 	return mdc
 }
 
-// SetIdentityCard sets the "identity_card" field.
-func (mdc *MemberDetailsCreate) SetIdentityCard(s string) *MemberDetailsCreate {
-	mdc.mutation.SetIdentityCard(s)
-	return mdc
-}
-
-// SetNillableIdentityCard sets the "identity_card" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableIdentityCard(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetIdentityCard(*s)
-	}
-	return mdc
-}
-
-// SetFaceIdentityCard sets the "face_identity_card" field.
-func (mdc *MemberDetailsCreate) SetFaceIdentityCard(s string) *MemberDetailsCreate {
-	mdc.mutation.SetFaceIdentityCard(s)
-	return mdc
-}
-
-// SetNillableFaceIdentityCard sets the "face_identity_card" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableFaceIdentityCard(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetFaceIdentityCard(*s)
-	}
-	return mdc
-}
-
-// SetBackIdentityCard sets the "back_identity_card" field.
-func (mdc *MemberDetailsCreate) SetBackIdentityCard(s string) *MemberDetailsCreate {
-	mdc.mutation.SetBackIdentityCard(s)
-	return mdc
-}
-
-// SetNillableBackIdentityCard sets the "back_identity_card" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableBackIdentityCard(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetBackIdentityCard(*s)
-	}
-	return mdc
-}
-
-// SetFacePic sets the "face_pic" field.
-func (mdc *MemberDetailsCreate) SetFacePic(s string) *MemberDetailsCreate {
-	mdc.mutation.SetFacePic(s)
-	return mdc
-}
-
-// SetNillableFacePic sets the "face_pic" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableFacePic(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetFacePic(*s)
-	}
-	return mdc
-}
-
-// SetFaceEigenvalue sets the "face_eigenvalue" field.
-func (mdc *MemberDetailsCreate) SetFaceEigenvalue(s string) *MemberDetailsCreate {
-	mdc.mutation.SetFaceEigenvalue(s)
-	return mdc
-}
-
-// SetNillableFaceEigenvalue sets the "face_eigenvalue" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableFaceEigenvalue(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetFaceEigenvalue(*s)
-	}
-	return mdc
-}
-
-// SetFacePicUpdatedTime sets the "face_pic_updated_time" field.
-func (mdc *MemberDetailsCreate) SetFacePicUpdatedTime(t time.Time) *MemberDetailsCreate {
-	mdc.mutation.SetFacePicUpdatedTime(t)
-	return mdc
-}
-
-// SetNillableFacePicUpdatedTime sets the "face_pic_updated_time" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableFacePicUpdatedTime(t *time.Time) *MemberDetailsCreate {
-	if t != nil {
-		mdc.SetFacePicUpdatedTime(*t)
-	}
-	return mdc
-}
-
 // SetMoneySum sets the "money_sum" field.
 func (mdc *MemberDetailsCreate) SetMoneySum(f float64) *MemberDetailsCreate {
 	mdc.mutation.SetMoneySum(f)
@@ -485,26 +401,6 @@ func (mdc *MemberDetailsCreate) defaults() {
 		v := memberdetails.DefaultGender
 		mdc.mutation.SetGender(v)
 	}
-	if _, ok := mdc.mutation.FaceIdentityCard(); !ok {
-		v := memberdetails.DefaultFaceIdentityCard
-		mdc.mutation.SetFaceIdentityCard(v)
-	}
-	if _, ok := mdc.mutation.BackIdentityCard(); !ok {
-		v := memberdetails.DefaultBackIdentityCard
-		mdc.mutation.SetBackIdentityCard(v)
-	}
-	if _, ok := mdc.mutation.FacePic(); !ok {
-		v := memberdetails.DefaultFacePic
-		mdc.mutation.SetFacePic(v)
-	}
-	if _, ok := mdc.mutation.FaceEigenvalue(); !ok {
-		v := memberdetails.DefaultFaceEigenvalue
-		mdc.mutation.SetFaceEigenvalue(v)
-	}
-	if _, ok := mdc.mutation.FacePicUpdatedTime(); !ok {
-		v := memberdetails.DefaultFacePicUpdatedTime()
-		mdc.mutation.SetFacePicUpdatedTime(v)
-	}
 	if _, ok := mdc.mutation.MoneySum(); !ok {
 		v := memberdetails.DefaultMoneySum
 		mdc.mutation.SetMoneySum(v)
@@ -538,9 +434,6 @@ func (mdc *MemberDetailsCreate) check() error {
 	}
 	if _, ok := mdc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "MemberDetails.updated_at"`)}
-	}
-	if _, ok := mdc.mutation.FacePicUpdatedTime(); !ok {
-		return &ValidationError{Name: "face_pic_updated_time", err: errors.New(`ent: missing required field "MemberDetails.face_pic_updated_time"`)}
 	}
 	return nil
 }
@@ -597,30 +490,6 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 	if value, ok := mdc.mutation.Birthday(); ok {
 		_spec.SetField(memberdetails.FieldBirthday, field.TypeTime, value)
 		_node.Birthday = value
-	}
-	if value, ok := mdc.mutation.IdentityCard(); ok {
-		_spec.SetField(memberdetails.FieldIdentityCard, field.TypeString, value)
-		_node.IdentityCard = value
-	}
-	if value, ok := mdc.mutation.FaceIdentityCard(); ok {
-		_spec.SetField(memberdetails.FieldFaceIdentityCard, field.TypeString, value)
-		_node.FaceIdentityCard = value
-	}
-	if value, ok := mdc.mutation.BackIdentityCard(); ok {
-		_spec.SetField(memberdetails.FieldBackIdentityCard, field.TypeString, value)
-		_node.BackIdentityCard = value
-	}
-	if value, ok := mdc.mutation.FacePic(); ok {
-		_spec.SetField(memberdetails.FieldFacePic, field.TypeString, value)
-		_node.FacePic = value
-	}
-	if value, ok := mdc.mutation.FaceEigenvalue(); ok {
-		_spec.SetField(memberdetails.FieldFaceEigenvalue, field.TypeString, value)
-		_node.FaceEigenvalue = value
-	}
-	if value, ok := mdc.mutation.FacePicUpdatedTime(); ok {
-		_spec.SetField(memberdetails.FieldFacePicUpdatedTime, field.TypeTime, value)
-		_node.FacePicUpdatedTime = value
 	}
 	if value, ok := mdc.mutation.MoneySum(); ok {
 		_spec.SetField(memberdetails.FieldMoneySum, field.TypeFloat64, value)

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/membercontract"
 	"saas/pkg/db/ent/memberdetails"
@@ -284,6 +285,21 @@ func (mu *MemberUpdate) AddMemberContents(m ...*MemberContract) *MemberUpdate {
 	return mu.AddMemberContentIDs(ids...)
 }
 
+// AddMemberFaceIDs adds the "member_face" edge to the Face entity by IDs.
+func (mu *MemberUpdate) AddMemberFaceIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.AddMemberFaceIDs(ids...)
+	return mu
+}
+
+// AddMemberFace adds the "member_face" edges to the Face entity.
+func (mu *MemberUpdate) AddMemberFace(f ...*Face) *MemberUpdate {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return mu.AddMemberFaceIDs(ids...)
+}
+
 // Mutation returns the MemberMutation object of the builder.
 func (mu *MemberUpdate) Mutation() *MemberMutation {
 	return mu.mutation
@@ -413,6 +429,27 @@ func (mu *MemberUpdate) RemoveMemberContents(m ...*MemberContract) *MemberUpdate
 		ids[i] = m[i].ID
 	}
 	return mu.RemoveMemberContentIDs(ids...)
+}
+
+// ClearMemberFace clears all "member_face" edges to the Face entity.
+func (mu *MemberUpdate) ClearMemberFace() *MemberUpdate {
+	mu.mutation.ClearMemberFace()
+	return mu
+}
+
+// RemoveMemberFaceIDs removes the "member_face" edge to Face entities by IDs.
+func (mu *MemberUpdate) RemoveMemberFaceIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.RemoveMemberFaceIDs(ids...)
+	return mu
+}
+
+// RemoveMemberFace removes "member_face" edges to Face entities.
+func (mu *MemberUpdate) RemoveMemberFace(f ...*Face) *MemberUpdate {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return mu.RemoveMemberFaceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -781,6 +818,51 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if mu.mutation.MemberFaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberFaceTable,
+			Columns: []string{member.MemberFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.RemovedMemberFaceIDs(); len(nodes) > 0 && !mu.mutation.MemberFaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberFaceTable,
+			Columns: []string{member.MemberFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.MemberFaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberFaceTable,
+			Columns: []string{member.MemberFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{member.Label}
@@ -1051,6 +1133,21 @@ func (muo *MemberUpdateOne) AddMemberContents(m ...*MemberContract) *MemberUpdat
 	return muo.AddMemberContentIDs(ids...)
 }
 
+// AddMemberFaceIDs adds the "member_face" edge to the Face entity by IDs.
+func (muo *MemberUpdateOne) AddMemberFaceIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.AddMemberFaceIDs(ids...)
+	return muo
+}
+
+// AddMemberFace adds the "member_face" edges to the Face entity.
+func (muo *MemberUpdateOne) AddMemberFace(f ...*Face) *MemberUpdateOne {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return muo.AddMemberFaceIDs(ids...)
+}
+
 // Mutation returns the MemberMutation object of the builder.
 func (muo *MemberUpdateOne) Mutation() *MemberMutation {
 	return muo.mutation
@@ -1180,6 +1277,27 @@ func (muo *MemberUpdateOne) RemoveMemberContents(m ...*MemberContract) *MemberUp
 		ids[i] = m[i].ID
 	}
 	return muo.RemoveMemberContentIDs(ids...)
+}
+
+// ClearMemberFace clears all "member_face" edges to the Face entity.
+func (muo *MemberUpdateOne) ClearMemberFace() *MemberUpdateOne {
+	muo.mutation.ClearMemberFace()
+	return muo
+}
+
+// RemoveMemberFaceIDs removes the "member_face" edge to Face entities by IDs.
+func (muo *MemberUpdateOne) RemoveMemberFaceIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.RemoveMemberFaceIDs(ids...)
+	return muo
+}
+
+// RemoveMemberFace removes "member_face" edges to Face entities.
+func (muo *MemberUpdateOne) RemoveMemberFace(f ...*Face) *MemberUpdateOne {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return muo.RemoveMemberFaceIDs(ids...)
 }
 
 // Where appends a list predicates to the MemberUpdate builder.
@@ -1571,6 +1689,51 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if muo.mutation.MemberFaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberFaceTable,
+			Columns: []string{member.MemberFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.RemovedMemberFaceIDs(); len(nodes) > 0 && !muo.mutation.MemberFaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberFaceTable,
+			Columns: []string{member.MemberFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.MemberFaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberFaceTable,
+			Columns: []string{member.MemberFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

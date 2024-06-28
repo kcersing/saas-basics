@@ -28,18 +28,6 @@ const (
 	FieldGender = "gender"
 	// FieldBirthday holds the string denoting the birthday field in the database.
 	FieldBirthday = "birthday"
-	// FieldIdentityCard holds the string denoting the identity_card field in the database.
-	FieldIdentityCard = "identity_card"
-	// FieldFaceIdentityCard holds the string denoting the face_identity_card field in the database.
-	FieldFaceIdentityCard = "face_identity_card"
-	// FieldBackIdentityCard holds the string denoting the back_identity_card field in the database.
-	FieldBackIdentityCard = "back_identity_card"
-	// FieldFacePic holds the string denoting the face_pic field in the database.
-	FieldFacePic = "face_pic"
-	// FieldFaceEigenvalue holds the string denoting the face_eigenvalue field in the database.
-	FieldFaceEigenvalue = "face_eigenvalue"
-	// FieldFacePicUpdatedTime holds the string denoting the face_pic_updated_time field in the database.
-	FieldFacePicUpdatedTime = "face_pic_updated_time"
 	// FieldMoneySum holds the string denoting the money_sum field in the database.
 	FieldMoneySum = "money_sum"
 	// FieldProductID holds the string denoting the product_id field in the database.
@@ -93,12 +81,6 @@ var Columns = []string{
 	FieldWecom,
 	FieldGender,
 	FieldBirthday,
-	FieldIdentityCard,
-	FieldFaceIdentityCard,
-	FieldBackIdentityCard,
-	FieldFacePic,
-	FieldFaceEigenvalue,
-	FieldFacePicUpdatedTime,
 	FieldMoneySum,
 	FieldProductID,
 	FieldProductName,
@@ -135,16 +117,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultGender holds the default value on creation for the "gender" field.
 	DefaultGender int64
-	// DefaultFaceIdentityCard holds the default value on creation for the "face_identity_card" field.
-	DefaultFaceIdentityCard string
-	// DefaultBackIdentityCard holds the default value on creation for the "back_identity_card" field.
-	DefaultBackIdentityCard string
-	// DefaultFacePic holds the default value on creation for the "face_pic" field.
-	DefaultFacePic string
-	// DefaultFaceEigenvalue holds the default value on creation for the "face_eigenvalue" field.
-	DefaultFaceEigenvalue string
-	// DefaultFacePicUpdatedTime holds the default value on creation for the "face_pic_updated_time" field.
-	DefaultFacePicUpdatedTime func() time.Time
 	// DefaultMoneySum holds the default value on creation for the "money_sum" field.
 	DefaultMoneySum float64
 	// DefaultProductID holds the default value on creation for the "product_id" field.
@@ -200,36 +172,6 @@ func ByGender(opts ...sql.OrderTermOption) OrderOption {
 // ByBirthday orders the results by the birthday field.
 func ByBirthday(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBirthday, opts...).ToFunc()
-}
-
-// ByIdentityCard orders the results by the identity_card field.
-func ByIdentityCard(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIdentityCard, opts...).ToFunc()
-}
-
-// ByFaceIdentityCard orders the results by the face_identity_card field.
-func ByFaceIdentityCard(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFaceIdentityCard, opts...).ToFunc()
-}
-
-// ByBackIdentityCard orders the results by the back_identity_card field.
-func ByBackIdentityCard(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBackIdentityCard, opts...).ToFunc()
-}
-
-// ByFacePic orders the results by the face_pic field.
-func ByFacePic(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFacePic, opts...).ToFunc()
-}
-
-// ByFaceEigenvalue orders the results by the face_eigenvalue field.
-func ByFaceEigenvalue(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFaceEigenvalue, opts...).ToFunc()
-}
-
-// ByFacePicUpdatedTime orders the results by the face_pic_updated_time field.
-func ByFacePicUpdatedTime(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFacePicUpdatedTime, opts...).ToFunc()
 }
 
 // ByMoneySum orders the results by the money_sum field.

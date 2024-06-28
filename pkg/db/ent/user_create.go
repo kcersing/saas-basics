@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
@@ -223,6 +224,34 @@ func (uc *UserCreate) SetNillableAvatar(s *string) *UserCreate {
 	return uc
 }
 
+// SetGender sets the "gender" field.
+func (uc *UserCreate) SetGender(i int64) *UserCreate {
+	uc.mutation.SetGender(i)
+	return uc
+}
+
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (uc *UserCreate) SetNillableGender(i *int64) *UserCreate {
+	if i != nil {
+		uc.SetGender(*i)
+	}
+	return uc
+}
+
+// SetBirthday sets the "birthday" field.
+func (uc *UserCreate) SetBirthday(t time.Time) *UserCreate {
+	uc.mutation.SetBirthday(t)
+	return uc
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (uc *UserCreate) SetNillableBirthday(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetBirthday(*t)
+	}
+	return uc
+}
+
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(i int64) *UserCreate {
 	uc.mutation.SetID(i)
@@ -276,6 +305,21 @@ func (uc *UserCreate) AddUserEntry(e ...*EntryLogs) *UserCreate {
 		ids[i] = e[i].ID
 	}
 	return uc.AddUserEntryIDs(ids...)
+}
+
+// AddUserFaceIDs adds the "user_face" edge to the Face entity by IDs.
+func (uc *UserCreate) AddUserFaceIDs(ids ...int64) *UserCreate {
+	uc.mutation.AddUserFaceIDs(ids...)
+	return uc
+}
+
+// AddUserFace adds the "user_face" edges to the Face entity.
+func (uc *UserCreate) AddUserFace(f ...*Face) *UserCreate {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return uc.AddUserFaceIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -340,6 +384,10 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.RoleID(); !ok {
 		v := user.DefaultRoleID
 		uc.mutation.SetRoleID(v)
+	}
+	if _, ok := uc.mutation.Gender(); !ok {
+		v := user.DefaultGender
+		uc.mutation.SetGender(v)
 	}
 }
 
@@ -456,6 +504,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)
 		_node.Avatar = value
 	}
+	if value, ok := uc.mutation.Gender(); ok {
+		_spec.SetField(user.FieldGender, field.TypeInt64, value)
+		_node.Gender = value
+	}
+	if value, ok := uc.mutation.Birthday(); ok {
+		_spec.SetField(user.FieldBirthday, field.TypeTime, value)
+		_node.Birthday = value
+	}
 	if nodes := uc.mutation.TokenIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -497,6 +553,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.UserFaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserFaceTable,
+			Columns: []string{user.UserFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

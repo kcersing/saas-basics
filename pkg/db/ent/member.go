@@ -56,9 +56,11 @@ type MemberEdges struct {
 	MemberEntry []*EntryLogs `json:"member_entry,omitempty"`
 	// MemberContents holds the value of the member_contents edge.
 	MemberContents []*MemberContract `json:"member_contents,omitempty"`
+	// MemberFace holds the value of the member_face edge.
+	MemberFace []*Face `json:"member_face,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 }
 
 // MemberDetailsOrErr returns the MemberDetails value or an error if the edge
@@ -113,6 +115,15 @@ func (e MemberEdges) MemberContentsOrErr() ([]*MemberContract, error) {
 		return e.MemberContents, nil
 	}
 	return nil, &NotLoadedError{edge: "member_contents"}
+}
+
+// MemberFaceOrErr returns the MemberFace value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) MemberFaceOrErr() ([]*Face, error) {
+	if e.loadedTypes[6] {
+		return e.MemberFace, nil
+	}
+	return nil, &NotLoadedError{edge: "member_face"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -242,6 +253,11 @@ func (m *Member) QueryMemberEntry() *EntryLogsQuery {
 // QueryMemberContents queries the "member_contents" edge of the Member entity.
 func (m *Member) QueryMemberContents() *MemberContractQuery {
 	return NewMemberClient(m.config).QueryMemberContents(m)
+}
+
+// QueryMemberFace queries the "member_face" edge of the Member entity.
+func (m *Member) QueryMemberFace() *FaceQuery {
+	return NewMemberClient(m.config).QueryMemberFace(m)
 }
 
 // Update returns a builder for updating this Member.

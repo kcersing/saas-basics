@@ -2,14 +2,12 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"saas/pkg/db/ent/schema/mixins"
-	"time"
 )
 
 type MemberDetails struct {
@@ -24,35 +22,6 @@ func (MemberDetails) Fields() []ent.Field {
 		field.String("wecom").Optional().Comment("wecom | 微信号"),
 		field.Int64("gender").Default(3).Comment("性别 | [0:女性;1:男性;3:保密]").Optional(),
 		field.Time("birthday").Comment("出生日期").Optional(),
-
-		field.String("identity_card").Comment("正面证件号").Optional(),
-		field.String("face_identity_card").
-			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
-			Optional().
-			Default("").
-			Comment("face_identity_card | 正面证件照片"),
-		field.String("back_identity_card").
-			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
-			Optional().
-			Default("").
-			Comment("back_identity_card | 反面证件照片"),
-
-		field.String("face_pic").
-			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
-			Optional().
-			Default("").
-			Comment("face_pic | 人脸照片"),
-
-		field.String("face_eigenvalue").
-			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
-			Optional().
-			Default("").
-			Comment("人脸特征值"),
-
-		field.Time("face_pic_updated_time").
-			Immutable().
-			Default(time.Now).
-			Comment("人脸更新时间"),
 
 		field.Float("money_sum").Default(3).Comment("消费总金额").Optional(),
 
@@ -92,7 +61,7 @@ func (MemberDetails) Mixin() []ent.Mixin {
 func (MemberDetails) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("info", Member.Type).
-			Ref("member_details").Unique().
+			Ref("member_details").
 			Field("member_id").Unique(),
 	}
 }

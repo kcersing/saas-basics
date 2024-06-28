@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"saas/pkg/db/ent/schema/mixins"
-
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
@@ -10,6 +8,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"saas/pkg/db/ent/schema/mixins"
 )
 
 type User struct {
@@ -36,6 +35,9 @@ func (User) Fields() []ent.Field {
 			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Optional().
 			Comment("avatar | 头像路径"),
+
+		field.Int64("gender").Default(3).Comment("性别 | [0:女性;1:男性;3:保密]").Optional(),
+		field.Time("birthday").Comment("出生日期").Optional(),
 	}
 }
 
@@ -51,6 +53,7 @@ func (User) Edges() []ent.Edge {
 		edge.To("token", Token.Type).Unique(),
 		edge.To("created_orders", Order.Type),
 		edge.To("user_entry", EntryLogs.Type),
+		edge.To("user_face", Face.Type),
 	}
 }
 

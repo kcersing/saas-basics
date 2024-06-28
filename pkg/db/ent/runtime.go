@@ -8,6 +8,7 @@ import (
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/membercontract"
@@ -159,6 +160,41 @@ func init() {
 	entrylogs.DefaultLeavingTime = entrylogsDescLeavingTime.Default.(func() time.Time)
 	// entrylogs.UpdateDefaultLeavingTime holds the default value on update for the leaving_time field.
 	entrylogs.UpdateDefaultLeavingTime = entrylogsDescLeavingTime.UpdateDefault.(func() time.Time)
+	faceMixin := schema.Face{}.Mixin()
+	faceMixinFields0 := faceMixin[0].Fields()
+	_ = faceMixinFields0
+	faceFields := schema.Face{}.Fields()
+	_ = faceFields
+	// faceDescCreatedAt is the schema descriptor for created_at field.
+	faceDescCreatedAt := faceMixinFields0[1].Descriptor()
+	// face.DefaultCreatedAt holds the default value on creation for the created_at field.
+	face.DefaultCreatedAt = faceDescCreatedAt.Default.(func() time.Time)
+	// faceDescUpdatedAt is the schema descriptor for updated_at field.
+	faceDescUpdatedAt := faceMixinFields0[2].Descriptor()
+	// face.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	face.DefaultUpdatedAt = faceDescUpdatedAt.Default.(func() time.Time)
+	// face.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	face.UpdateDefaultUpdatedAt = faceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// faceDescFaceIdentityCard is the schema descriptor for face_identity_card field.
+	faceDescFaceIdentityCard := faceFields[3].Descriptor()
+	// face.DefaultFaceIdentityCard holds the default value on creation for the face_identity_card field.
+	face.DefaultFaceIdentityCard = faceDescFaceIdentityCard.Default.(string)
+	// faceDescBackIdentityCard is the schema descriptor for back_identity_card field.
+	faceDescBackIdentityCard := faceFields[4].Descriptor()
+	// face.DefaultBackIdentityCard holds the default value on creation for the back_identity_card field.
+	face.DefaultBackIdentityCard = faceDescBackIdentityCard.Default.(string)
+	// faceDescFacePic is the schema descriptor for face_pic field.
+	faceDescFacePic := faceFields[5].Descriptor()
+	// face.DefaultFacePic holds the default value on creation for the face_pic field.
+	face.DefaultFacePic = faceDescFacePic.Default.(string)
+	// faceDescFaceEigenvalue is the schema descriptor for face_eigenvalue field.
+	faceDescFaceEigenvalue := faceFields[6].Descriptor()
+	// face.DefaultFaceEigenvalue holds the default value on creation for the face_eigenvalue field.
+	face.DefaultFaceEigenvalue = faceDescFaceEigenvalue.Default.(string)
+	// faceDescFacePicUpdatedTime is the schema descriptor for face_pic_updated_time field.
+	faceDescFacePicUpdatedTime := faceFields[7].Descriptor()
+	// face.DefaultFacePicUpdatedTime holds the default value on creation for the face_pic_updated_time field.
+	face.DefaultFacePicUpdatedTime = faceDescFacePicUpdatedTime.Default.(func() time.Time)
 	logsMixin := schema.Logs{}.Mixin()
 	logsMixinFields0 := logsMixin[0].Fields()
 	_ = logsMixinFields0
@@ -258,48 +294,28 @@ func init() {
 	memberdetailsDescGender := memberdetailsFields[3].Descriptor()
 	// memberdetails.DefaultGender holds the default value on creation for the gender field.
 	memberdetails.DefaultGender = memberdetailsDescGender.Default.(int64)
-	// memberdetailsDescFaceIdentityCard is the schema descriptor for face_identity_card field.
-	memberdetailsDescFaceIdentityCard := memberdetailsFields[6].Descriptor()
-	// memberdetails.DefaultFaceIdentityCard holds the default value on creation for the face_identity_card field.
-	memberdetails.DefaultFaceIdentityCard = memberdetailsDescFaceIdentityCard.Default.(string)
-	// memberdetailsDescBackIdentityCard is the schema descriptor for back_identity_card field.
-	memberdetailsDescBackIdentityCard := memberdetailsFields[7].Descriptor()
-	// memberdetails.DefaultBackIdentityCard holds the default value on creation for the back_identity_card field.
-	memberdetails.DefaultBackIdentityCard = memberdetailsDescBackIdentityCard.Default.(string)
-	// memberdetailsDescFacePic is the schema descriptor for face_pic field.
-	memberdetailsDescFacePic := memberdetailsFields[8].Descriptor()
-	// memberdetails.DefaultFacePic holds the default value on creation for the face_pic field.
-	memberdetails.DefaultFacePic = memberdetailsDescFacePic.Default.(string)
-	// memberdetailsDescFaceEigenvalue is the schema descriptor for face_eigenvalue field.
-	memberdetailsDescFaceEigenvalue := memberdetailsFields[9].Descriptor()
-	// memberdetails.DefaultFaceEigenvalue holds the default value on creation for the face_eigenvalue field.
-	memberdetails.DefaultFaceEigenvalue = memberdetailsDescFaceEigenvalue.Default.(string)
-	// memberdetailsDescFacePicUpdatedTime is the schema descriptor for face_pic_updated_time field.
-	memberdetailsDescFacePicUpdatedTime := memberdetailsFields[10].Descriptor()
-	// memberdetails.DefaultFacePicUpdatedTime holds the default value on creation for the face_pic_updated_time field.
-	memberdetails.DefaultFacePicUpdatedTime = memberdetailsDescFacePicUpdatedTime.Default.(func() time.Time)
 	// memberdetailsDescMoneySum is the schema descriptor for money_sum field.
-	memberdetailsDescMoneySum := memberdetailsFields[11].Descriptor()
+	memberdetailsDescMoneySum := memberdetailsFields[5].Descriptor()
 	// memberdetails.DefaultMoneySum holds the default value on creation for the money_sum field.
 	memberdetails.DefaultMoneySum = memberdetailsDescMoneySum.Default.(float64)
 	// memberdetailsDescProductID is the schema descriptor for product_id field.
-	memberdetailsDescProductID := memberdetailsFields[12].Descriptor()
+	memberdetailsDescProductID := memberdetailsFields[6].Descriptor()
 	// memberdetails.DefaultProductID holds the default value on creation for the product_id field.
 	memberdetails.DefaultProductID = memberdetailsDescProductID.Default.(int64)
 	// memberdetailsDescProductVenue is the schema descriptor for product_venue field.
-	memberdetailsDescProductVenue := memberdetailsFields[14].Descriptor()
+	memberdetailsDescProductVenue := memberdetailsFields[8].Descriptor()
 	// memberdetails.DefaultProductVenue holds the default value on creation for the product_venue field.
 	memberdetails.DefaultProductVenue = memberdetailsDescProductVenue.Default.(int64)
 	// memberdetailsDescEntrySum is the schema descriptor for entry_sum field.
-	memberdetailsDescEntrySum := memberdetailsFields[16].Descriptor()
+	memberdetailsDescEntrySum := memberdetailsFields[10].Descriptor()
 	// memberdetails.DefaultEntrySum holds the default value on creation for the entry_sum field.
 	memberdetails.DefaultEntrySum = memberdetailsDescEntrySum.Default.(int64)
 	// memberdetailsDescRelationUID is the schema descriptor for relation_uid field.
-	memberdetailsDescRelationUID := memberdetailsFields[20].Descriptor()
+	memberdetailsDescRelationUID := memberdetailsFields[14].Descriptor()
 	// memberdetails.DefaultRelationUID holds the default value on creation for the relation_uid field.
 	memberdetails.DefaultRelationUID = memberdetailsDescRelationUID.Default.(int64)
 	// memberdetailsDescRelationMid is the schema descriptor for relation_mid field.
-	memberdetailsDescRelationMid := memberdetailsFields[22].Descriptor()
+	memberdetailsDescRelationMid := memberdetailsFields[16].Descriptor()
 	// memberdetails.DefaultRelationMid holds the default value on creation for the relation_mid field.
 	memberdetails.DefaultRelationMid = memberdetailsDescRelationMid.Default.(int64)
 	membernoteMixin := schema.MemberNote{}.Mixin()
@@ -765,6 +781,10 @@ func init() {
 	userDescRoleID := userFields[6].Descriptor()
 	// user.DefaultRoleID holds the default value on creation for the role_id field.
 	user.DefaultRoleID = userDescRoleID.Default.(int64)
+	// userDescGender is the schema descriptor for gender field.
+	userDescGender := userFields[13].Descriptor()
+	// user.DefaultGender holds the default value on creation for the gender field.
+	user.DefaultGender = userDescGender.Default.(int64)
 	venueMixin := schema.Venue{}.Mixin()
 	venueMixinFields0 := venueMixin[0].Fields()
 	_ = venueMixinFields0

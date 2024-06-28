@@ -18,10 +18,10 @@ type ApiInfo struct {
 }
 
 type ListApiReq struct {
-	Page        int64  `json:"page"`
-	PageSize    int64  `json:"pageSize"`
-	Path        string `json:"path"`
-	Description string `json:"description"`
-	Method      string `json:"method"`
-	Group       string `json:"group"`
+	Page     int64 `json:"page"`
+	PageSize int64 `json:"pageSize"`
+	//Path        string `json:"path"`
+	//Description string `json:"description"`
+	//Method      string `json:"method"`
+	//Group       string `json:"group"`
 }

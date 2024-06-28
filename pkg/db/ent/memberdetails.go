@@ -33,18 +33,6 @@ type MemberDetails struct {
 	Gender int64 `json:"gender,omitempty"`
 	// 出生日期
 	Birthday time.Time `json:"birthday,omitempty"`
-	// 正面证件号
-	IdentityCard string `json:"identity_card,omitempty"`
-	// face_identity_card | 正面证件照片
-	FaceIdentityCard string `json:"face_identity_card,omitempty"`
-	// back_identity_card | 反面证件照片
-	BackIdentityCard string `json:"back_identity_card,omitempty"`
-	// face_pic | 人脸照片
-	FacePic string `json:"face_pic,omitempty"`
-	// 人脸特征值
-	FaceEigenvalue string `json:"face_eigenvalue,omitempty"`
-	// 人脸更新时间
-	FacePicUpdatedTime time.Time `json:"face_pic_updated_time,omitempty"`
 	// 消费总金额
 	MoneySum float64 `json:"money_sum,omitempty"`
 	// 首次的产品
@@ -112,9 +100,9 @@ func (*MemberDetails) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case memberdetails.FieldID, memberdetails.FieldMemberID, memberdetails.FieldGender, memberdetails.FieldProductID, memberdetails.FieldProductVenue, memberdetails.FieldEntrySum, memberdetails.FieldRelationUID, memberdetails.FieldRelationMid, memberdetails.FieldCreateID:
 			values[i] = new(sql.NullInt64)
-		case memberdetails.FieldEmail, memberdetails.FieldWecom, memberdetails.FieldIdentityCard, memberdetails.FieldFaceIdentityCard, memberdetails.FieldBackIdentityCard, memberdetails.FieldFacePic, memberdetails.FieldFaceEigenvalue, memberdetails.FieldProductName, memberdetails.FieldProductVenueName, memberdetails.FieldRelationUname, memberdetails.FieldRelationMame, memberdetails.FieldCreateName:
+		case memberdetails.FieldEmail, memberdetails.FieldWecom, memberdetails.FieldProductName, memberdetails.FieldProductVenueName, memberdetails.FieldRelationUname, memberdetails.FieldRelationMame, memberdetails.FieldCreateName:
 			values[i] = new(sql.NullString)
-		case memberdetails.FieldCreatedAt, memberdetails.FieldUpdatedAt, memberdetails.FieldBirthday, memberdetails.FieldFacePicUpdatedTime, memberdetails.FieldEntryLastTime, memberdetails.FieldEntryDeadlineTime, memberdetails.FieldClassLastTime:
+		case memberdetails.FieldCreatedAt, memberdetails.FieldUpdatedAt, memberdetails.FieldBirthday, memberdetails.FieldEntryLastTime, memberdetails.FieldEntryDeadlineTime, memberdetails.FieldClassLastTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -178,42 +166,6 @@ func (md *MemberDetails) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field birthday", values[i])
 			} else if value.Valid {
 				md.Birthday = value.Time
-			}
-		case memberdetails.FieldIdentityCard:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field identity_card", values[i])
-			} else if value.Valid {
-				md.IdentityCard = value.String
-			}
-		case memberdetails.FieldFaceIdentityCard:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field face_identity_card", values[i])
-			} else if value.Valid {
-				md.FaceIdentityCard = value.String
-			}
-		case memberdetails.FieldBackIdentityCard:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field back_identity_card", values[i])
-			} else if value.Valid {
-				md.BackIdentityCard = value.String
-			}
-		case memberdetails.FieldFacePic:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field face_pic", values[i])
-			} else if value.Valid {
-				md.FacePic = value.String
-			}
-		case memberdetails.FieldFaceEigenvalue:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field face_eigenvalue", values[i])
-			} else if value.Valid {
-				md.FaceEigenvalue = value.String
-			}
-		case memberdetails.FieldFacePicUpdatedTime:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field face_pic_updated_time", values[i])
-			} else if value.Valid {
-				md.FacePicUpdatedTime = value.Time
 			}
 		case memberdetails.FieldMoneySum:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
@@ -366,24 +318,6 @@ func (md *MemberDetails) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("birthday=")
 	builder.WriteString(md.Birthday.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("identity_card=")
-	builder.WriteString(md.IdentityCard)
-	builder.WriteString(", ")
-	builder.WriteString("face_identity_card=")
-	builder.WriteString(md.FaceIdentityCard)
-	builder.WriteString(", ")
-	builder.WriteString("back_identity_card=")
-	builder.WriteString(md.BackIdentityCard)
-	builder.WriteString(", ")
-	builder.WriteString("face_pic=")
-	builder.WriteString(md.FacePic)
-	builder.WriteString(", ")
-	builder.WriteString("face_eigenvalue=")
-	builder.WriteString(md.FaceEigenvalue)
-	builder.WriteString(", ")
-	builder.WriteString("face_pic_updated_time=")
-	builder.WriteString(md.FacePicUpdatedTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("money_sum=")
 	builder.WriteString(fmt.Sprintf("%v", md.MoneySum))

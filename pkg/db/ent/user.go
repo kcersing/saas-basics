@@ -51,6 +51,10 @@ type User struct {
 	Organization string `json:"organization,omitempty"`
 	// avatar | 头像路径
 	Avatar string `json:"avatar,omitempty"`
+	// 性别 | [0:女性;1:男性;3:保密]
+	Gender int64 `json:"gender,omitempty"`
+	// 出生日期
+	Birthday time.Time `json:"birthday,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
 	Edges        UserEdges `json:"edges"`
@@ -65,9 +69,11 @@ type UserEdges struct {
 	CreatedOrders []*Order `json:"created_orders,omitempty"`
 	// UserEntry holds the value of the user_entry edge.
 	UserEntry []*EntryLogs `json:"user_entry,omitempty"`
+	// UserFace holds the value of the user_face edge.
+	UserFace []*Face `json:"user_face,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // TokenOrErr returns the Token value or an error if the edge
@@ -101,16 +107,25 @@ func (e UserEdges) UserEntryOrErr() ([]*EntryLogs, error) {
 	return nil, &NotLoadedError{edge: "user_entry"}
 }
 
+// UserFaceOrErr returns the UserFace value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) UserFaceOrErr() ([]*Face, error) {
+	if e.loadedTypes[3] {
+		return e.UserFace, nil
+	}
+	return nil, &NotLoadedError{edge: "user_face"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldStatus, user.FieldRoleID:
+		case user.FieldID, user.FieldStatus, user.FieldRoleID, user.FieldGender:
 			values[i] = new(sql.NullInt64)
 		case user.FieldUsername, user.FieldPassword, user.FieldNickname, user.FieldSideMode, user.FieldBaseColor, user.FieldActiveColor, user.FieldMobile, user.FieldEmail, user.FieldWecom, user.FieldJob, user.FieldOrganization, user.FieldAvatar:
 			values[i] = new(sql.NullString)
-		case user.FieldCreatedAt, user.FieldUpdatedAt:
+		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldBirthday:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -229,6 +244,18 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.Avatar = value.String
 			}
+		case user.FieldGender:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field gender", values[i])
+			} else if value.Valid {
+				u.Gender = value.Int64
+			}
+		case user.FieldBirthday:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field birthday", values[i])
+			} else if value.Valid {
+				u.Birthday = value.Time
+			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
 		}
@@ -255,6 +282,11 @@ func (u *User) QueryCreatedOrders() *OrderQuery {
 // QueryUserEntry queries the "user_entry" edge of the User entity.
 func (u *User) QueryUserEntry() *EntryLogsQuery {
 	return NewUserClient(u.config).QueryUserEntry(u)
+}
+
+// QueryUserFace queries the "user_face" edge of the User entity.
+func (u *User) QueryUserFace() *FaceQuery {
+	return NewUserClient(u.config).QueryUserFace(u)
 }
 
 // Update returns a builder for updating this User.
@@ -327,6 +359,12 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("avatar=")
 	builder.WriteString(u.Avatar)
+	builder.WriteString(", ")
+	builder.WriteString("gender=")
+	builder.WriteString(fmt.Sprintf("%v", u.Gender))
+	builder.WriteString(", ")
+	builder.WriteString("birthday=")
+	builder.WriteString(u.Birthday.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

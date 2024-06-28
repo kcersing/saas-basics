@@ -21,6 +21,9 @@ type DictionaryDetail func(*sql.Selector)
 // EntryLogs is the predicate function for entrylogs builders.
 type EntryLogs func(*sql.Selector)
 
+// Face is the predicate function for face builders.
+type Face func(*sql.Selector)
+
 // Logs is the predicate function for logs builders.
 type Logs func(*sql.Selector)
 

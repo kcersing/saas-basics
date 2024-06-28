@@ -12,6 +12,7 @@ import (
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/membercontract"
@@ -108,6 +109,7 @@ func checkColumn(table, column string) error {
 			dictionary.Table:            dictionary.ValidColumn,
 			dictionarydetail.Table:      dictionarydetail.ValidColumn,
 			entrylogs.Table:             entrylogs.ValidColumn,
+			face.Table:                  face.ValidColumn,
 			logs.Table:                  logs.ValidColumn,
 			member.Table:                member.ValidColumn,
 			membercontract.Table:        membercontract.ValidColumn,

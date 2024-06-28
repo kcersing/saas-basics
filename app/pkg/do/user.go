@@ -25,31 +25,36 @@ type CreateOrUpdateUserReq struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Nickname string `json:"nickname"`
+	Gender   string `json:"gender"`
+	Age      string `json:"age"`
+	Birthday string `json:"birthday"`
 }
 
 type UserInfo struct {
-	ID          int64     `json:"id"`
-	Status      int8      `json:"status"`
-	Username    string    `json:"username"`
-	Password    string    `json:"password"`
-	Nickname    string    `json:"nickname"`
-	SideMode    string    `json:"sideMode"`
-	BaseColor   string    `json:"baseColor"`
-	ActiveColor string    `json:"activeColor"`
-	RoleID      int64     `json:"roleID"`
-	Mobile      string    `json:"mobile"`
-	Email       string    `json:"email"`
-	Wecom       string    `json:"wecom"`
-	Avatar      string    `json:"avatar"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
-	RoleName    string    `json:"roleName"`
-	RoleValue   string    `json:"roleValue"`
-
-	Job              string `json:"job"`
-	JobName          string `json:"jobName"`
-	Organization     string `json:"organization"`
-	OrganizationName string `json:"organizationName"`
+	ID               int64     `json:"id"`
+	Status           int8      `json:"status"`
+	Username         string    `json:"username"`
+	Password         string    `json:"password"`
+	Nickname         string    `json:"nickname"`
+	SideMode         string    `json:"sideMode"`
+	BaseColor        string    `json:"baseColor"`
+	ActiveColor      string    `json:"activeColor"`
+	RoleID           int64     `json:"roleID"`
+	Mobile           string    `json:"mobile"`
+	Email            string    `json:"email"`
+	Wecom            string    `json:"wecom"`
+	Avatar           string    `json:"avatar"`
+	CreatedAt        time.Time `json:"createdAt"`
+	UpdatedAt        time.Time `json:"updatedAt"`
+	RoleName         string    `json:"roleName"`
+	RoleValue        string    `json:"roleValue"`
+	Gender           string    `json:"gender"`
+	Age              int64     `json:"age"`
+	Birthday         string    `json:"birthday"`
+	Job              string    `json:"job"`
+	JobName          string    `json:"jobName"`
+	Organization     string    `json:"organization"`
+	OrganizationName string    `json:"organizationName"`
 }
 
 type UserListReq struct {

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/membercontract"
 	"saas/pkg/db/ent/memberdetails"
@@ -248,6 +249,21 @@ func (mc *MemberCreate) AddMemberContents(m ...*MemberContract) *MemberCreate {
 	return mc.AddMemberContentIDs(ids...)
 }
 
+// AddMemberFaceIDs adds the "member_face" edge to the Face entity by IDs.
+func (mc *MemberCreate) AddMemberFaceIDs(ids ...int64) *MemberCreate {
+	mc.mutation.AddMemberFaceIDs(ids...)
+	return mc
+}
+
+// AddMemberFace adds the "member_face" edges to the Face entity.
+func (mc *MemberCreate) AddMemberFace(f ...*Face) *MemberCreate {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return mc.AddMemberFaceIDs(ids...)
+}
+
 // Mutation returns the MemberMutation object of the builder.
 func (mc *MemberCreate) Mutation() *MemberMutation {
 	return mc.mutation
@@ -470,6 +486,22 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mc.mutation.MemberFaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   member.MemberFaceTable,
+			Columns: []string{member.MemberFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

@@ -48,6 +48,8 @@ func (Member) Edges() []ent.Edge {
 		edge.To("member_products", MemberProduct.Type),
 		edge.To("member_entry", EntryLogs.Type),
 		edge.To("member_contents", MemberContract.Type),
+
+		edge.To("member_face", Face.Type),
 	}
 }
 

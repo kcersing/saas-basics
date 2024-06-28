@@ -48,6 +48,8 @@ struct CreateOrUpdateUserReq {
     7:  optional string username (api.raw = "username")
     8:  optional string nickname (api.raw = "nickname")
     9:  optional string password (api.raw = "password")
+
+
 }
 
 // Get user list request | 获取用户列表请求参数

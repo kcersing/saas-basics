@@ -147,6 +147,40 @@ var (
 			},
 		},
 	}
+	// FacesColumns holds the columns for the "faces" table.
+	FacesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "identity_card", Type: field.TypeString, Nullable: true, Comment: "证件号"},
+		{Name: "face_identity_card", Type: field.TypeString, Nullable: true, Comment: "face_identity_card | 证件照片", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "back_identity_card", Type: field.TypeString, Nullable: true, Comment: "back_identity_card | 证件照片", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "face_pic", Type: field.TypeString, Nullable: true, Comment: "face_pic | 人脸照片", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "face_eigenvalue", Type: field.TypeString, Nullable: true, Comment: "人脸特征值", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "face_pic_updated_time", Type: field.TypeTime, Nullable: true, Comment: "人脸更新时间"},
+		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
+		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "user id"},
+	}
+	// FacesTable holds the schema information for the "faces" table.
+	FacesTable = &schema.Table{
+		Name:       "faces",
+		Columns:    FacesColumns,
+		PrimaryKey: []*schema.Column{FacesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "faces_member_member_face",
+				Columns:    []*schema.Column{FacesColumns[9]},
+				RefColumns: []*schema.Column{MemberColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "faces_sys_users_user_face",
+				Columns:    []*schema.Column{FacesColumns[10]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// SysLogsColumns holds the columns for the "sys_logs" table.
 	SysLogsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -291,12 +325,6 @@ var (
 		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
 		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [0:女性;1:男性;3:保密]", Default: 3},
 		{Name: "birthday", Type: field.TypeTime, Nullable: true, Comment: "出生日期"},
-		{Name: "identity_card", Type: field.TypeString, Nullable: true, Comment: "正面证件号"},
-		{Name: "face_identity_card", Type: field.TypeString, Nullable: true, Comment: "face_identity_card | 正面证件照片", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
-		{Name: "back_identity_card", Type: field.TypeString, Nullable: true, Comment: "back_identity_card | 反面证件照片", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
-		{Name: "face_pic", Type: field.TypeString, Nullable: true, Comment: "face_pic | 人脸照片", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
-		{Name: "face_eigenvalue", Type: field.TypeString, Nullable: true, Comment: "人脸特征值", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
-		{Name: "face_pic_updated_time", Type: field.TypeTime, Comment: "人脸更新时间"},
 		{Name: "money_sum", Type: field.TypeFloat64, Nullable: true, Comment: "消费总金额", Default: 3},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "首次的产品", Default: 0},
 		{Name: "product_name", Type: field.TypeString, Nullable: true, Comment: "首次的产品"},
@@ -322,7 +350,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_details_member_member_details",
-				Columns:    []*schema.Column{MemberDetailsColumns[28]},
+				Columns:    []*schema.Column{MemberDetailsColumns[22]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -331,7 +359,7 @@ var (
 			{
 				Name:    "memberdetails_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberDetailsColumns[28]},
+				Columns: []*schema.Column{MemberDetailsColumns[22]},
 			},
 		},
 	}
@@ -1031,6 +1059,8 @@ var (
 		{Name: "job", Type: field.TypeString, Nullable: true, Comment: "职业"},
 		{Name: "organization", Type: field.TypeString, Nullable: true, Comment: "部门"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [0:女性;1:男性;3:保密]", Default: 3},
+		{Name: "birthday", Type: field.TypeTime, Nullable: true, Comment: "出生日期"},
 	}
 	// SysUsersTable holds the schema information for the "sys_users" table.
 	SysUsersTable = &schema.Table{
@@ -1204,6 +1234,7 @@ var (
 		SysDictionariesTable,
 		SysDictionaryDetailsTable,
 		EntryLogsTable,
+		FacesTable,
 		SysLogsTable,
 		MemberTable,
 		MemberContractTable,
@@ -1258,6 +1289,12 @@ func init() {
 	EntryLogsTable.ForeignKeys[3].RefTable = VenueTable
 	EntryLogsTable.Annotation = &entsql.Annotation{
 		Table:   "entry_logs",
+		Options: "AUTO_INCREMENT = 100000",
+	}
+	FacesTable.ForeignKeys[0].RefTable = MemberTable
+	FacesTable.ForeignKeys[1].RefTable = SysUsersTable
+	FacesTable.Annotation = &entsql.Annotation{
+		Table:   "faces",
 		Options: "AUTO_INCREMENT = 100000",
 	}
 	SysLogsTable.Annotation = &entsql.Annotation{

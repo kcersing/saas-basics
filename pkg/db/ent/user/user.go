@@ -46,12 +46,18 @@ const (
 	FieldOrganization = "organization"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
+	// FieldGender holds the string denoting the gender field in the database.
+	FieldGender = "gender"
+	// FieldBirthday holds the string denoting the birthday field in the database.
+	FieldBirthday = "birthday"
 	// EdgeToken holds the string denoting the token edge name in mutations.
 	EdgeToken = "token"
 	// EdgeCreatedOrders holds the string denoting the created_orders edge name in mutations.
 	EdgeCreatedOrders = "created_orders"
 	// EdgeUserEntry holds the string denoting the user_entry edge name in mutations.
 	EdgeUserEntry = "user_entry"
+	// EdgeUserFace holds the string denoting the user_face edge name in mutations.
+	EdgeUserFace = "user_face"
 	// Table holds the table name of the user in the database.
 	Table = "sys_users"
 	// TokenTable is the table that holds the token relation/edge.
@@ -75,6 +81,13 @@ const (
 	UserEntryInverseTable = "entry_logs"
 	// UserEntryColumn is the table column denoting the user_entry relation/edge.
 	UserEntryColumn = "user_id"
+	// UserFaceTable is the table that holds the user_face relation/edge.
+	UserFaceTable = "faces"
+	// UserFaceInverseTable is the table name for the Face entity.
+	// It exists in this package in order to avoid circular dependency with the "face" package.
+	UserFaceInverseTable = "faces"
+	// UserFaceColumn is the table column denoting the user_face relation/edge.
+	UserFaceColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -96,6 +109,8 @@ var Columns = []string{
 	FieldJob,
 	FieldOrganization,
 	FieldAvatar,
+	FieldGender,
+	FieldBirthday,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -125,6 +140,8 @@ var (
 	DefaultActiveColor string
 	// DefaultRoleID holds the default value on creation for the "role_id" field.
 	DefaultRoleID int64
+	// DefaultGender holds the default value on creation for the "gender" field.
+	DefaultGender int64
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -215,6 +232,16 @@ func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatar, opts...).ToFunc()
 }
 
+// ByGender orders the results by the gender field.
+func ByGender(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGender, opts...).ToFunc()
+}
+
+// ByBirthday orders the results by the birthday field.
+func ByBirthday(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBirthday, opts...).ToFunc()
+}
+
 // ByTokenField orders the results by token field.
 func ByTokenField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -249,6 +276,20 @@ func ByUserEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUserEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByUserFaceCount orders the results by user_face count.
+func ByUserFaceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUserFaceStep(), opts...)
+	}
+}
+
+// ByUserFace orders the results by user_face terms.
+func ByUserFace(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserFaceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTokenStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -268,5 +309,12 @@ func newUserEntryStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserEntryInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, UserEntryTable, UserEntryColumn),
+	)
+}
+func newUserFaceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserFaceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, UserFaceTable, UserFaceColumn),
 	)
 }

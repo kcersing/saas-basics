@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/token"
@@ -313,6 +314,53 @@ func (uu *UserUpdate) ClearAvatar() *UserUpdate {
 	return uu
 }
 
+// SetGender sets the "gender" field.
+func (uu *UserUpdate) SetGender(i int64) *UserUpdate {
+	uu.mutation.ResetGender()
+	uu.mutation.SetGender(i)
+	return uu
+}
+
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableGender(i *int64) *UserUpdate {
+	if i != nil {
+		uu.SetGender(*i)
+	}
+	return uu
+}
+
+// AddGender adds i to the "gender" field.
+func (uu *UserUpdate) AddGender(i int64) *UserUpdate {
+	uu.mutation.AddGender(i)
+	return uu
+}
+
+// ClearGender clears the value of the "gender" field.
+func (uu *UserUpdate) ClearGender() *UserUpdate {
+	uu.mutation.ClearGender()
+	return uu
+}
+
+// SetBirthday sets the "birthday" field.
+func (uu *UserUpdate) SetBirthday(t time.Time) *UserUpdate {
+	uu.mutation.SetBirthday(t)
+	return uu
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableBirthday(t *time.Time) *UserUpdate {
+	if t != nil {
+		uu.SetBirthday(*t)
+	}
+	return uu
+}
+
+// ClearBirthday clears the value of the "birthday" field.
+func (uu *UserUpdate) ClearBirthday() *UserUpdate {
+	uu.mutation.ClearBirthday()
+	return uu
+}
+
 // SetTokenID sets the "token" edge to the Token entity by ID.
 func (uu *UserUpdate) SetTokenID(id int64) *UserUpdate {
 	uu.mutation.SetTokenID(id)
@@ -360,6 +408,21 @@ func (uu *UserUpdate) AddUserEntry(e ...*EntryLogs) *UserUpdate {
 		ids[i] = e[i].ID
 	}
 	return uu.AddUserEntryIDs(ids...)
+}
+
+// AddUserFaceIDs adds the "user_face" edge to the Face entity by IDs.
+func (uu *UserUpdate) AddUserFaceIDs(ids ...int64) *UserUpdate {
+	uu.mutation.AddUserFaceIDs(ids...)
+	return uu
+}
+
+// AddUserFace adds the "user_face" edges to the Face entity.
+func (uu *UserUpdate) AddUserFace(f ...*Face) *UserUpdate {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return uu.AddUserFaceIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -413,6 +476,27 @@ func (uu *UserUpdate) RemoveUserEntry(e ...*EntryLogs) *UserUpdate {
 		ids[i] = e[i].ID
 	}
 	return uu.RemoveUserEntryIDs(ids...)
+}
+
+// ClearUserFace clears all "user_face" edges to the Face entity.
+func (uu *UserUpdate) ClearUserFace() *UserUpdate {
+	uu.mutation.ClearUserFace()
+	return uu
+}
+
+// RemoveUserFaceIDs removes the "user_face" edge to Face entities by IDs.
+func (uu *UserUpdate) RemoveUserFaceIDs(ids ...int64) *UserUpdate {
+	uu.mutation.RemoveUserFaceIDs(ids...)
+	return uu
+}
+
+// RemoveUserFace removes "user_face" edges to Face entities.
+func (uu *UserUpdate) RemoveUserFace(f ...*Face) *UserUpdate {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return uu.RemoveUserFaceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -544,6 +628,21 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uu.mutation.AvatarCleared() {
 		_spec.ClearField(user.FieldAvatar, field.TypeString)
 	}
+	if value, ok := uu.mutation.Gender(); ok {
+		_spec.SetField(user.FieldGender, field.TypeInt64, value)
+	}
+	if value, ok := uu.mutation.AddedGender(); ok {
+		_spec.AddField(user.FieldGender, field.TypeInt64, value)
+	}
+	if uu.mutation.GenderCleared() {
+		_spec.ClearField(user.FieldGender, field.TypeInt64)
+	}
+	if value, ok := uu.mutation.Birthday(); ok {
+		_spec.SetField(user.FieldBirthday, field.TypeTime, value)
+	}
+	if uu.mutation.BirthdayCleared() {
+		_spec.ClearField(user.FieldBirthday, field.TypeTime)
+	}
 	if uu.mutation.TokenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -656,6 +755,51 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.UserFaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserFaceTable,
+			Columns: []string{user.UserFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedUserFaceIDs(); len(nodes) > 0 && !uu.mutation.UserFaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserFaceTable,
+			Columns: []string{user.UserFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.UserFaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserFaceTable,
+			Columns: []string{user.UserFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -965,6 +1109,53 @@ func (uuo *UserUpdateOne) ClearAvatar() *UserUpdateOne {
 	return uuo
 }
 
+// SetGender sets the "gender" field.
+func (uuo *UserUpdateOne) SetGender(i int64) *UserUpdateOne {
+	uuo.mutation.ResetGender()
+	uuo.mutation.SetGender(i)
+	return uuo
+}
+
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableGender(i *int64) *UserUpdateOne {
+	if i != nil {
+		uuo.SetGender(*i)
+	}
+	return uuo
+}
+
+// AddGender adds i to the "gender" field.
+func (uuo *UserUpdateOne) AddGender(i int64) *UserUpdateOne {
+	uuo.mutation.AddGender(i)
+	return uuo
+}
+
+// ClearGender clears the value of the "gender" field.
+func (uuo *UserUpdateOne) ClearGender() *UserUpdateOne {
+	uuo.mutation.ClearGender()
+	return uuo
+}
+
+// SetBirthday sets the "birthday" field.
+func (uuo *UserUpdateOne) SetBirthday(t time.Time) *UserUpdateOne {
+	uuo.mutation.SetBirthday(t)
+	return uuo
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableBirthday(t *time.Time) *UserUpdateOne {
+	if t != nil {
+		uuo.SetBirthday(*t)
+	}
+	return uuo
+}
+
+// ClearBirthday clears the value of the "birthday" field.
+func (uuo *UserUpdateOne) ClearBirthday() *UserUpdateOne {
+	uuo.mutation.ClearBirthday()
+	return uuo
+}
+
 // SetTokenID sets the "token" edge to the Token entity by ID.
 func (uuo *UserUpdateOne) SetTokenID(id int64) *UserUpdateOne {
 	uuo.mutation.SetTokenID(id)
@@ -1012,6 +1203,21 @@ func (uuo *UserUpdateOne) AddUserEntry(e ...*EntryLogs) *UserUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return uuo.AddUserEntryIDs(ids...)
+}
+
+// AddUserFaceIDs adds the "user_face" edge to the Face entity by IDs.
+func (uuo *UserUpdateOne) AddUserFaceIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.AddUserFaceIDs(ids...)
+	return uuo
+}
+
+// AddUserFace adds the "user_face" edges to the Face entity.
+func (uuo *UserUpdateOne) AddUserFace(f ...*Face) *UserUpdateOne {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return uuo.AddUserFaceIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -1065,6 +1271,27 @@ func (uuo *UserUpdateOne) RemoveUserEntry(e ...*EntryLogs) *UserUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return uuo.RemoveUserEntryIDs(ids...)
+}
+
+// ClearUserFace clears all "user_face" edges to the Face entity.
+func (uuo *UserUpdateOne) ClearUserFace() *UserUpdateOne {
+	uuo.mutation.ClearUserFace()
+	return uuo
+}
+
+// RemoveUserFaceIDs removes the "user_face" edge to Face entities by IDs.
+func (uuo *UserUpdateOne) RemoveUserFaceIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.RemoveUserFaceIDs(ids...)
+	return uuo
+}
+
+// RemoveUserFace removes "user_face" edges to Face entities.
+func (uuo *UserUpdateOne) RemoveUserFace(f ...*Face) *UserUpdateOne {
+	ids := make([]int64, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return uuo.RemoveUserFaceIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -1226,6 +1453,21 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if uuo.mutation.AvatarCleared() {
 		_spec.ClearField(user.FieldAvatar, field.TypeString)
 	}
+	if value, ok := uuo.mutation.Gender(); ok {
+		_spec.SetField(user.FieldGender, field.TypeInt64, value)
+	}
+	if value, ok := uuo.mutation.AddedGender(); ok {
+		_spec.AddField(user.FieldGender, field.TypeInt64, value)
+	}
+	if uuo.mutation.GenderCleared() {
+		_spec.ClearField(user.FieldGender, field.TypeInt64)
+	}
+	if value, ok := uuo.mutation.Birthday(); ok {
+		_spec.SetField(user.FieldBirthday, field.TypeTime, value)
+	}
+	if uuo.mutation.BirthdayCleared() {
+		_spec.ClearField(user.FieldBirthday, field.TypeTime)
+	}
 	if uuo.mutation.TokenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -1338,6 +1580,51 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.UserFaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserFaceTable,
+			Columns: []string{user.UserFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedUserFaceIDs(); len(nodes) > 0 && !uuo.mutation.UserFaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserFaceTable,
+			Columns: []string{user.UserFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.UserFaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserFaceTable,
+			Columns: []string{user.UserFaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

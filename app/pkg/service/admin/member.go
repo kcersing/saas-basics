@@ -10,6 +10,7 @@ import (
 	"saas/app/admin/pkg/minio"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/memberdetails"
 	"saas/pkg/db/ent/memberproduct"
@@ -31,11 +32,25 @@ type Member struct {
 }
 
 func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
+
+	parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
+
+	password, _ := encrypt.Crypt(req.Mobile)
+
+	var gender int64
+	if req.Gender == "女性" {
+		gender = 0
+	} else if req.Gender == "男性" {
+		gender = 1
+	} else {
+		gender = 2
+	}
+
 	tx, err := m.db.Tx(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "starting a transaction:")
 	}
-	password, _ := encrypt.Crypt(req.Mobile)
+
 	noe, err := tx.Member.Create().
 		SetPassword(password).
 		SetAvatar(req.Avatar).
@@ -50,16 +65,6 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		return err
 	}
 
-	parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
-
-	var gender int64
-	if req.Gender == "女性" {
-		gender = 0
-	} else if req.Gender == "男性" {
-		gender = 1
-	} else {
-		gender = 2
-	}
 	_, err = tx.MemberDetails.Create().
 		SetEmail(req.Email).
 		SetWecom(req.Wecom).
@@ -70,9 +75,19 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		Save(m.ctx)
 
 	if err != nil {
-		err = rollback(tx, errors.Wrap(err, "create user failed"))
+		err = rollback(tx, errors.Wrap(err, "create Member Details failed"))
 		return err
 	}
+
+	_, err = tx.Face.Create().
+		SetMemberFaces(noe).
+		Save(m.ctx)
+
+	if err != nil {
+		err = rollback(tx, errors.Wrap(err, "create Face failed"))
+		return err
+	}
+
 	if err = tx.Commit(); err != nil {
 		return err
 	}
@@ -81,7 +96,12 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 
 func (m Member) Update(req do.CreateOrUpdateMemberReq) error {
 	password, _ := encrypt.Crypt(req.Password)
-	_, err := m.db.Member.Update().
+
+	tx, err := m.db.Tx(m.ctx)
+	if err != nil {
+		return errors.Wrap(err, "starting a transaction:")
+	}
+	_, err = tx.Member.Update().
 		Where(member.IDEQ(req.ID)).
 		SetPassword(password).
 		SetStatus(req.Status).
@@ -92,12 +112,16 @@ func (m Member) Update(req do.CreateOrUpdateMemberReq) error {
 		return err
 	}
 
-	_, err = m.db.MemberDetails.Update().
+	_, err = tx.MemberDetails.Update().
 		Where(memberdetails.MemberIDEQ(req.ID)).
 		SetEmail(req.Email).
 		Save(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create user failed")
+		return err
+	}
+
+	if err = tx.Commit(); err != nil {
 		return err
 	}
 
@@ -156,6 +180,8 @@ func (m Member) Info(id int64) (info *do.MemberInfo, err error) {
 	if err != nil {
 		err = errors.Wrap(err, "get member Details failed")
 		return info, err
+	} else {
+
 	}
 	err = copier.Copy(&info, &memberDetails)
 	if err != nil {
@@ -186,7 +212,18 @@ func (m Member) Info(id int64) (info *do.MemberInfo, err error) {
 	if !memberDetails.Birthday.IsZero() {
 		info.Age = int64(time.Now().Sub(memberDetails.Birthday).Hours() / 24 / 365)
 	}
-
+	faceFirst, err := m.db.Face.Query().Where(face.MemberIDEQ(id)).First(m.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get member face failed")
+		return info, err
+	} else {
+		info.IdentityCard = faceFirst.IdentityCard
+		info.FaceIdentityCard = faceFirst.FaceIdentityCard
+		info.BackIdentityCard = faceFirst.BackIdentityCard
+		info.FacePic = faceFirst.FacePic
+		info.FaceEigenvalue = faceFirst.FaceEigenvalue
+		info.FacePicUpdatedTime = faceFirst.FacePicUpdatedTime.Format(time.DateOnly)
+	}
 	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
 	return
 }

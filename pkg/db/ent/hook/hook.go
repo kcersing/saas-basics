@@ -68,6 +68,18 @@ func (f EntryLogsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, e
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EntryLogsMutation", m)
 }
 
+// The FaceFunc type is an adapter to allow the use of ordinary
+// function as Face mutator.
+type FaceFunc func(context.Context, *ent.FaceMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FaceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.FaceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FaceMutation", m)
+}
+
 // The LogsFunc type is an adapter to allow the use of ordinary
 // function as Logs mutator.
 type LogsFunc func(context.Context, *ent.LogsMutation) (ent.Value, error)

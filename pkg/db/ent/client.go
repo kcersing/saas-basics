@@ -16,6 +16,7 @@ import (
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/face"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/membercontract"
@@ -64,6 +65,8 @@ type Client struct {
 	DictionaryDetail *DictionaryDetailClient
 	// EntryLogs is the client for interacting with the EntryLogs builders.
 	EntryLogs *EntryLogsClient
+	// Face is the client for interacting with the Face builders.
+	Face *FaceClient
 	// Logs is the client for interacting with the Logs builders.
 	Logs *LogsClient
 	// Member is the client for interacting with the Member builders.
@@ -132,6 +135,7 @@ func (c *Client) init() {
 	c.Dictionary = NewDictionaryClient(c.config)
 	c.DictionaryDetail = NewDictionaryDetailClient(c.config)
 	c.EntryLogs = NewEntryLogsClient(c.config)
+	c.Face = NewFaceClient(c.config)
 	c.Logs = NewLogsClient(c.config)
 	c.Member = NewMemberClient(c.config)
 	c.MemberContract = NewMemberContractClient(c.config)
@@ -255,6 +259,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Dictionary:            NewDictionaryClient(cfg),
 		DictionaryDetail:      NewDictionaryDetailClient(cfg),
 		EntryLogs:             NewEntryLogsClient(cfg),
+		Face:                  NewFaceClient(cfg),
 		Logs:                  NewLogsClient(cfg),
 		Member:                NewMemberClient(cfg),
 		MemberContract:        NewMemberContractClient(cfg),
@@ -305,6 +310,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Dictionary:            NewDictionaryClient(cfg),
 		DictionaryDetail:      NewDictionaryDetailClient(cfg),
 		EntryLogs:             NewEntryLogsClient(cfg),
+		Face:                  NewFaceClient(cfg),
 		Logs:                  NewLogsClient(cfg),
 		Member:                NewMemberClient(cfg),
 		MemberContract:        NewMemberContractClient(cfg),
@@ -360,8 +366,8 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.API, c.Contract, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs,
-		c.Member, c.MemberContract, c.MemberContractContent, c.MemberDetails,
+		c.API, c.Contract, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Face,
+		c.Logs, c.Member, c.MemberContract, c.MemberContractContent, c.MemberDetails,
 		c.MemberNote, c.MemberProduct, c.MemberProductProperty, c.Menu, c.MenuParam,
 		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
 		c.Product, c.ProductProperty, c.Role, c.Schedule, c.ScheduleCoach,
@@ -375,8 +381,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.API, c.Contract, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs,
-		c.Member, c.MemberContract, c.MemberContractContent, c.MemberDetails,
+		c.API, c.Contract, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Face,
+		c.Logs, c.Member, c.MemberContract, c.MemberContractContent, c.MemberDetails,
 		c.MemberNote, c.MemberProduct, c.MemberProductProperty, c.Menu, c.MenuParam,
 		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
 		c.Product, c.ProductProperty, c.Role, c.Schedule, c.ScheduleCoach,
@@ -399,6 +405,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.DictionaryDetail.mutate(ctx, m)
 	case *EntryLogsMutation:
 		return c.EntryLogs.mutate(ctx, m)
+	case *FaceMutation:
+		return c.Face.mutate(ctx, m)
 	case *LogsMutation:
 		return c.Logs.mutate(ctx, m)
 	case *MemberMutation:
@@ -1217,6 +1225,171 @@ func (c *EntryLogsClient) mutate(ctx context.Context, m *EntryLogsMutation) (Val
 	}
 }
 
+// FaceClient is a client for the Face schema.
+type FaceClient struct {
+	config
+}
+
+// NewFaceClient returns a client for the Face from the given config.
+func NewFaceClient(c config) *FaceClient {
+	return &FaceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `face.Hooks(f(g(h())))`.
+func (c *FaceClient) Use(hooks ...Hook) {
+	c.hooks.Face = append(c.hooks.Face, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `face.Intercept(f(g(h())))`.
+func (c *FaceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Face = append(c.inters.Face, interceptors...)
+}
+
+// Create returns a builder for creating a Face entity.
+func (c *FaceClient) Create() *FaceCreate {
+	mutation := newFaceMutation(c.config, OpCreate)
+	return &FaceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Face entities.
+func (c *FaceClient) CreateBulk(builders ...*FaceCreate) *FaceCreateBulk {
+	return &FaceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FaceClient) MapCreateBulk(slice any, setFunc func(*FaceCreate, int)) *FaceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FaceCreateBulk{err: fmt.Errorf("calling to FaceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FaceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FaceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Face.
+func (c *FaceClient) Update() *FaceUpdate {
+	mutation := newFaceMutation(c.config, OpUpdate)
+	return &FaceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FaceClient) UpdateOne(f *Face) *FaceUpdateOne {
+	mutation := newFaceMutation(c.config, OpUpdateOne, withFace(f))
+	return &FaceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FaceClient) UpdateOneID(id int64) *FaceUpdateOne {
+	mutation := newFaceMutation(c.config, OpUpdateOne, withFaceID(id))
+	return &FaceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Face.
+func (c *FaceClient) Delete() *FaceDelete {
+	mutation := newFaceMutation(c.config, OpDelete)
+	return &FaceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FaceClient) DeleteOne(f *Face) *FaceDeleteOne {
+	return c.DeleteOneID(f.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FaceClient) DeleteOneID(id int64) *FaceDeleteOne {
+	builder := c.Delete().Where(face.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FaceDeleteOne{builder}
+}
+
+// Query returns a query builder for Face.
+func (c *FaceClient) Query() *FaceQuery {
+	return &FaceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFace},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Face entity by its id.
+func (c *FaceClient) Get(ctx context.Context, id int64) (*Face, error) {
+	return c.Query().Where(face.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FaceClient) GetX(ctx context.Context, id int64) *Face {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryMemberFaces queries the member_faces edge of a Face.
+func (c *FaceClient) QueryMemberFaces(f *Face) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(face.Table, face.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, face.MemberFacesTable, face.MemberFacesColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUserFaces queries the user_faces edge of a Face.
+func (c *FaceClient) QueryUserFaces(f *Face) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(face.Table, face.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, face.UserFacesTable, face.UserFacesColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FaceClient) Hooks() []Hook {
+	return c.hooks.Face
+}
+
+// Interceptors returns the client interceptors.
+func (c *FaceClient) Interceptors() []Interceptor {
+	return c.inters.Face
+}
+
+func (c *FaceClient) mutate(ctx context.Context, m *FaceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FaceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FaceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FaceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FaceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Face mutation op: %q", m.Op())
+	}
+}
+
 // LogsClient is a client for the Logs schema.
 type LogsClient struct {
 	config
@@ -1547,6 +1720,22 @@ func (c *MemberClient) QueryMemberContents(m *Member) *MemberContractQuery {
 			sqlgraph.From(member.Table, member.FieldID, id),
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberContentsTable, member.MemberContentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberFace queries the member_face edge of a Member.
+func (c *MemberClient) QueryMemberFace(m *Member) *FaceQuery {
+	query := (&FaceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(face.Table, face.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberFaceTable, member.MemberFaceColumn),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
@@ -5152,6 +5341,22 @@ func (c *UserClient) QueryUserEntry(u *User) *EntryLogsQuery {
 	return query
 }
 
+// QueryUserFace queries the user_face edge of a User.
+func (c *UserClient) QueryUserFace(u *User) *FaceQuery {
+	query := (&FaceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(face.Table, face.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.UserFaceTable, user.UserFaceColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
 	return c.hooks.User
@@ -5542,7 +5747,7 @@ func (c *VenuePlaceClient) mutate(ctx context.Context, m *VenuePlaceMutation) (V
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		API, Contract, Dictionary, DictionaryDetail, EntryLogs, Logs, Member,
+		API, Contract, Dictionary, DictionaryDetail, EntryLogs, Face, Logs, Member,
 		MemberContract, MemberContractContent, MemberDetails, MemberNote,
 		MemberProduct, MemberProductProperty, Menu, MenuParam, Messages, Order,
 		OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductProperty, Role,
@@ -5550,7 +5755,7 @@ type (
 		VenuePlace []ent.Hook
 	}
 	inters struct {
-		API, Contract, Dictionary, DictionaryDetail, EntryLogs, Logs, Member,
+		API, Contract, Dictionary, DictionaryDetail, EntryLogs, Face, Logs, Member,
 		MemberContract, MemberContractContent, MemberDetails, MemberNote,
 		MemberProduct, MemberProductProperty, Menu, MenuParam, Messages, Order,
 		OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductProperty, Role,

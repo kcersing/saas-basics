@@ -44,6 +44,8 @@ const (
 	EdgeMemberEntry = "member_entry"
 	// EdgeMemberContents holds the string denoting the member_contents edge name in mutations.
 	EdgeMemberContents = "member_contents"
+	// EdgeMemberFace holds the string denoting the member_face edge name in mutations.
+	EdgeMemberFace = "member_face"
 	// Table holds the table name of the member in the database.
 	Table = "member"
 	// MemberDetailsTable is the table that holds the member_details relation/edge.
@@ -88,6 +90,13 @@ const (
 	MemberContentsInverseTable = "member_contract"
 	// MemberContentsColumn is the table column denoting the member_contents relation/edge.
 	MemberContentsColumn = "member_id"
+	// MemberFaceTable is the table that holds the member_face relation/edge.
+	MemberFaceTable = "faces"
+	// MemberFaceInverseTable is the table name for the Face entity.
+	// It exists in this package in order to avoid circular dependency with the "face" package.
+	MemberFaceInverseTable = "faces"
+	// MemberFaceColumn is the table column denoting the member_face relation/edge.
+	MemberFaceColumn = "member_id"
 )
 
 // Columns holds all SQL columns for member fields.
@@ -265,6 +274,20 @@ func ByMemberContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newMemberContentsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMemberFaceCount orders the results by member_face count.
+func ByMemberFaceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberFaceStep(), opts...)
+	}
+}
+
+// ByMemberFace orders the results by member_face terms.
+func ByMemberFace(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberFaceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newMemberDetailsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -305,5 +328,12 @@ func newMemberContentsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MemberContentsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberContentsTable, MemberContentsColumn),
+	)
+}
+func newMemberFaceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberFaceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberFaceTable, MemberFaceColumn),
 	)
 }
