@@ -250,3 +250,28 @@ func MenuParamListByMenuID(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, menuParams, total, "")
 	return
 }
+
+// ApiTree .
+// @router /api/admin/menu/tree [POST]
+func ApiTree(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.PageInfoReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var listReq do.MenuListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	menuTree, total, err := admin.NewMenu(ctx, c).MenuTree(&listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, menuTree, int64(total), "")
+	return
+}

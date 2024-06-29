@@ -10,7 +10,9 @@ import (
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
+	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/predicate"
+	"strconv"
 	"time"
 )
 
@@ -20,6 +22,48 @@ type Api struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+}
+
+func (a Api) ApiTree(req do.ListApiReq) (resp []*do.Tree, total int, err error) {
+
+	inter, exist := a.cache.Get("ApiTree")
+	if exist {
+		if v, ok := inter.([]*do.Tree); ok {
+			return v, len(v), nil
+		}
+	}
+
+	var predicates []predicate.API
+
+	apis, err := a.db.API.Query().All(a.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get api list failed")
+		return resp, total, err
+	}
+	apiGroups, err := a.db.API.Query().GroupBy(api.FieldAPIGroup).Strings(a.ctx)
+
+	for _, apiGroup := range apiGroups {
+		g := &do.Tree{
+			Title: apiGroup,
+		}
+		for _, v := range apis {
+			if v.APIGroup == g.Title {
+
+				g.Children = append(g.Children, &do.Tree{
+					Title: v.Title,
+					Value: strconv.FormatInt(v.ID, 10),
+					Key:   strconv.FormatInt(v.ID, 10), // map[string]string{"path": v.Path, "method": v.Method},
+				})
+			}
+		}
+
+		resp = append(resp, g)
+	}
+
+	total, _ = a.db.API.Query().Where(predicates...).Count(a.ctx)
+
+	a.cache.SetWithTTL("ApiTree", &resp, 1, 30*time.Hour)
+	return
 }
 
 func (a Api) Create(req do.ApiInfo) error {
@@ -57,18 +101,18 @@ func (a Api) Delete(id int64) error {
 
 func (a Api) List(req do.ListApiReq) (resp []*do.ApiInfo, total int, err error) {
 	var predicates []predicate.API
-	//if req.Path != "" {
-	//	predicates = append(predicates, api.PathContains(req.Path))
-	//}
-	//if req.Description != "" {
-	//	predicates = append(predicates, api.DescriptionContains(req.Description))
-	//}
-	//if req.Method != "" {
-	//	predicates = append(predicates, api.MethodContains(req.Method))
-	//}
-	//if req.Group != "" {
-	//	predicates = append(predicates, api.APIGroupContains(req.Group))
-	//}
+	if req.Path != "" {
+		predicates = append(predicates, api.PathContains(req.Path))
+	}
+	if req.Description != "" {
+		predicates = append(predicates, api.DescriptionContains(req.Description))
+	}
+	if req.Method != "" {
+		predicates = append(predicates, api.MethodContains(req.Method))
+	}
+	if req.Group != "" {
+		predicates = append(predicates, api.APIGroupContains(req.Group))
+	}
 
 	apis, err := a.db.API.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -83,30 +127,6 @@ func (a Api) List(req do.ListApiReq) (resp []*do.ApiInfo, total int, err error) 
 		err = errors.Wrap(err, "copy Api failed")
 		return resp, 0, err
 	}
-	//  {
-	//    title: 'Trunk 0-0',
-	//    value: 'Trunk 0-0',
-	//    key: '0-0',
-	//    children: [
-	//      {
-	//        title: 'Leaf 0-0-1',
-	//        value: 'Leaf 0-0-1',
-	//        key: '0-0-1',
-	//      },
-	//      {
-	//        title: 'Branch 0-0-2',
-	//        value: 'Branch 0-0-2',
-	//        key: '0-0-2',
-	//        children: [
-	//          {
-	//            title: 'Leaf 0-0-2-1',
-	//            value: 'Leaf 0-0-2-1',
-	//            key: '0-0-2-1',
-	//          },
-	//        ],
-	//      },
-	//    ],
-	//  },
 	for i, v := range apis {
 		resp[i].CreatedAt = v.CreatedAt.Format(time.DateTime)
 		resp[i].UpdatedAt = v.UpdatedAt.Format(time.DateTime)

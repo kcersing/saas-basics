@@ -54,6 +54,12 @@ func (ac *APICreate) SetPath(s string) *APICreate {
 	return ac
 }
 
+// SetTitle sets the "title" field.
+func (ac *APICreate) SetTitle(s string) *APICreate {
+	ac.mutation.SetTitle(s)
+	return ac
+}
+
 // SetDescription sets the "description" field.
 func (ac *APICreate) SetDescription(s string) *APICreate {
 	ac.mutation.SetDescription(s)
@@ -146,6 +152,9 @@ func (ac *APICreate) check() error {
 	if _, ok := ac.mutation.Path(); !ok {
 		return &ValidationError{Name: "path", err: errors.New(`ent: missing required field "API.path"`)}
 	}
+	if _, ok := ac.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "API.title"`)}
+	}
 	if _, ok := ac.mutation.Description(); !ok {
 		return &ValidationError{Name: "description", err: errors.New(`ent: missing required field "API.description"`)}
 	}
@@ -198,6 +207,10 @@ func (ac *APICreate) createSpec() (*API, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Path(); ok {
 		_spec.SetField(api.FieldPath, field.TypeString, value)
 		_node.Path = value
+	}
+	if value, ok := ac.mutation.Title(); ok {
+		_spec.SetField(api.FieldTitle, field.TypeString, value)
+		_node.Title = value
 	}
 	if value, ok := ac.mutation.Description(); ok {
 		_spec.SetField(api.FieldDescription, field.TypeString, value)

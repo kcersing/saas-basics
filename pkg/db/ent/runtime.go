@@ -59,7 +59,7 @@ func init() {
 	// api.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	api.UpdateDefaultUpdatedAt = apiDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// apiDescMethod is the schema descriptor for method field.
-	apiDescMethod := apiFields[3].Descriptor()
+	apiDescMethod := apiFields[4].Descriptor()
 	// api.DefaultMethod holds the default value on creation for the method field.
 	api.DefaultMethod = apiDescMethod.Default.(string)
 	contractMixin := schema.Contract{}.Mixin()

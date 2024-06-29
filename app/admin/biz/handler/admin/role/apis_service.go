@@ -111,3 +111,29 @@ func ApiList(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
 	return
 }
+
+// ApiTree .
+// @router /api/admin/api/tree [POST]
+func ApiTree(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req role.ApiPageReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	var ApiPageReq do.ListApiReq
+	err = copier.Copy(&ApiPageReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	list, total, err := admin.NewApi(ctx, c).ApiTree(ApiPageReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
+}

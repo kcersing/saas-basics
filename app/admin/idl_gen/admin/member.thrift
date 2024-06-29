@@ -67,7 +67,7 @@ service MemberService {
   base.NilResponse UpdateMember(1: CreateOrUpdateMemberReq req) (api.post = "/api/admin/member/update")
 
   // 获取用户基本信息
-  base.NilResponse MemberInfo(1: base.IDReq req) (api.get = "/api/admin/member/info")
+  base.NilResponse MemberInfo(1: base.IDReq req) (api.post = "/api/admin/member/info")
 
   // 获取用户列表
   base.NilResponse MemberList(1: MemberListReq req) (api.post = "/api/admin/member/list")
@@ -82,9 +82,9 @@ service MemberService {
 
   base.NilResponse MemberPropertyList(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-list")
 
-  base.NilResponse MemberProductDetail(1: base.IDReq req) (api.get = "/api/admin/member/product-detail")
+  base.NilResponse MemberProductDetail(1: base.IDReq req) (api.post = "/api/admin/member/product-detail")
 
-  base.NilResponse MemberPropertyDetail(1: base.IDReq req) (api.get = "/api/admin/member/property-detail")
+  base.NilResponse MemberPropertyDetail(1: base.IDReq req) (api.post = "/api/admin/member/property-detail")
 
   base.NilResponse MemberPropertyUpdate(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-update")
 

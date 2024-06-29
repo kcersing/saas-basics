@@ -15,6 +15,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "path", Type: field.TypeString, Comment: "API path | API 路径"},
+		{Name: "title", Type: field.TypeString, Comment: "API title | API 名称"},
 		{Name: "description", Type: field.TypeString, Comment: "API description | API 描述"},
 		{Name: "api_group", Type: field.TypeString, Comment: "API group | API 分组"},
 		{Name: "method", Type: field.TypeString, Comment: "HTTP method | HTTP 请求类型", Default: "POST"},
@@ -28,7 +29,7 @@ var (
 			{
 				Name:    "api_path_method",
 				Unique:  true,
-				Columns: []*schema.Column{SysApisColumns[3], SysApisColumns[6]},
+				Columns: []*schema.Column{SysApisColumns[3], SysApisColumns[7]},
 			},
 		},
 	}
@@ -1294,8 +1295,7 @@ func init() {
 	FacesTable.ForeignKeys[0].RefTable = MemberTable
 	FacesTable.ForeignKeys[1].RefTable = SysUsersTable
 	FacesTable.Annotation = &entsql.Annotation{
-		Table:   "faces",
-		Options: "AUTO_INCREMENT = 100000",
+		Table: "faces",
 	}
 	SysLogsTable.Annotation = &entsql.Annotation{
 		Table: "sys_logs",

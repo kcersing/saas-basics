@@ -64,10 +64,12 @@ service MenuService {
   base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/api/admin/menu")
 
   //获取角色菜单列表
-  base.NilResponse MenuByRole(1: base.Empty req) (api.get = "/api/admin/menu/role")
+  base.NilResponse MenuByRole(1: base.Empty req) (api.post = "/api/admin/menu/role")
 
   //获取菜单列表
-  base.NilResponse MenuLists(1: base.PageInfoReq req) (api.get = "/api/admin/menu/list")
+  base.NilResponse MenuLists(1: base.PageInfoReq req) (api.post = "/api/admin/menu/list")
+
+  base.NilResponse ApiTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
 
   //创建菜单额外参数
   base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/create")

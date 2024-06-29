@@ -60,13 +60,11 @@ service ScheduleService {
 
     base.NilResponse DateListSchedule(1: ListScheduleReq req )(api.post = "/api/admin/schedule/date-list")
 
-    base.NilResponse GetScheduleById(1: base.IDReq req) (api.get = "/api/admin/schedule/info")
+    base.NilResponse GetScheduleById(1: base.IDReq req) (api.post = "/api/admin/schedule/info")
 
     base.NilResponse GetScheduleMemberList(1: ScheduleMemberReq req) (api.post = "/api/admin/schedule/schedule-member-list")
 
     base.NilResponse SearchSubscribeByMember(1: SearchSubscribeByMemberReq req) (api.post = "/api/admin/schedule/search-subscribe-by-member")
-
-//"/api/admin/schedule/search-subscribe-by-member","/api/admin/schedule/member-subscribe"
 
     base.NilResponse MemberSubscribe(1: MemberSubscribeReq req) (api.post = "/api/admin/schedule/member-subscribe")
 

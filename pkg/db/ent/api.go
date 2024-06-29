@@ -24,6 +24,8 @@ type API struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// API path | API 路径
 	Path string `json:"path,omitempty"`
+	// API title | API 名称
+	Title string `json:"title,omitempty"`
 	// API description | API 描述
 	Description string `json:"description,omitempty"`
 	// API group | API 分组
@@ -40,7 +42,7 @@ func (*API) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case api.FieldID:
 			values[i] = new(sql.NullInt64)
-		case api.FieldPath, api.FieldDescription, api.FieldAPIGroup, api.FieldMethod:
+		case api.FieldPath, api.FieldTitle, api.FieldDescription, api.FieldAPIGroup, api.FieldMethod:
 			values[i] = new(sql.NullString)
 		case api.FieldCreatedAt, api.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -82,6 +84,12 @@ func (a *API) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field path", values[i])
 			} else if value.Valid {
 				a.Path = value.String
+			}
+		case api.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				a.Title = value.String
 			}
 		case api.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -145,6 +153,9 @@ func (a *API) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("path=")
 	builder.WriteString(a.Path)
+	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(a.Title)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(a.Description)

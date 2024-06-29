@@ -25,7 +25,7 @@ func Register(r *server.Hertz) {
 				_schedule := _admin.Group("/schedule", _scheduleMw()...)
 				_schedule.POST("/create", append(_createscheduleMw(), schedule.CreateSchedule)...)
 				_schedule.POST("/date-list", append(_datelistscheduleMw(), schedule.DateListSchedule)...)
-				_schedule.GET("/info", append(_getschedulebyidMw(), schedule.GetScheduleById)...)
+				_schedule.POST("/info", append(_getschedulebyidMw(), schedule.GetScheduleById)...)
 				_schedule.POST("/list", append(_listscheduleMw(), schedule.ListSchedule)...)
 				_schedule.POST("/member-subscribe", append(_membersubscribeMw(), schedule.MemberSubscribe)...)
 				_schedule.POST("/schedule-member-list", append(_getschedulememberlistMw(), schedule.GetScheduleMemberList)...)

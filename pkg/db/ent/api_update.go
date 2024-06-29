@@ -48,6 +48,20 @@ func (au *APIUpdate) SetNillablePath(s *string) *APIUpdate {
 	return au
 }
 
+// SetTitle sets the "title" field.
+func (au *APIUpdate) SetTitle(s string) *APIUpdate {
+	au.mutation.SetTitle(s)
+	return au
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (au *APIUpdate) SetNillableTitle(s *string) *APIUpdate {
+	if s != nil {
+		au.SetTitle(*s)
+	}
+	return au
+}
+
 // SetDescription sets the "description" field.
 func (au *APIUpdate) SetDescription(s string) *APIUpdate {
 	au.mutation.SetDescription(s)
@@ -146,6 +160,9 @@ func (au *APIUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := au.mutation.Path(); ok {
 		_spec.SetField(api.FieldPath, field.TypeString, value)
 	}
+	if value, ok := au.mutation.Title(); ok {
+		_spec.SetField(api.FieldTitle, field.TypeString, value)
+	}
 	if value, ok := au.mutation.Description(); ok {
 		_spec.SetField(api.FieldDescription, field.TypeString, value)
 	}
@@ -191,6 +208,20 @@ func (auo *APIUpdateOne) SetPath(s string) *APIUpdateOne {
 func (auo *APIUpdateOne) SetNillablePath(s *string) *APIUpdateOne {
 	if s != nil {
 		auo.SetPath(*s)
+	}
+	return auo
+}
+
+// SetTitle sets the "title" field.
+func (auo *APIUpdateOne) SetTitle(s string) *APIUpdateOne {
+	auo.mutation.SetTitle(s)
+	return auo
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (auo *APIUpdateOne) SetNillableTitle(s *string) *APIUpdateOne {
+	if s != nil {
+		auo.SetTitle(*s)
 	}
 	return auo
 }
@@ -322,6 +353,9 @@ func (auo *APIUpdateOne) sqlSave(ctx context.Context) (_node *API, err error) {
 	}
 	if value, ok := auo.mutation.Path(); ok {
 		_spec.SetField(api.FieldPath, field.TypeString, value)
+	}
+	if value, ok := auo.mutation.Title(); ok {
+		_spec.SetField(api.FieldTitle, field.TypeString, value)
 	}
 	if value, ok := auo.mutation.Description(); ok {
 		_spec.SetField(api.FieldDescription, field.TypeString, value)

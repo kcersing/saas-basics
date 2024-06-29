@@ -2269,7 +2269,7 @@ type ScheduleService interface {
 	GetScheduleMemberList(ctx context.Context, req *ScheduleMemberReq) (r *base.NilResponse, err error)
 
 	SearchSubscribeByMember(ctx context.Context, req *SearchSubscribeByMemberReq) (r *base.NilResponse, err error)
-	//"/api/admin/schedule/search-subscribe-by-member","/api/admin/schedule/member-subscribe"
+
 	MemberSubscribe(ctx context.Context, req *MemberSubscribeReq) (r *base.NilResponse, err error)
 
 	UpdateMemberStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)

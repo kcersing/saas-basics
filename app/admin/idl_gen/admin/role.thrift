@@ -49,6 +49,7 @@ struct ApiAuthorityInfo {
 struct CreateOrUpdateApiAuthorityReq {
     1:  i64 role_id (api.raw = "role_id")
     2:  ApiAuthorityInfo data (api.raw = "api_authority_info")
+    3:  list<i64> api_ids (api.raw = "api_ids")
 }
 
 // 菜单授权请求数据
@@ -114,5 +115,8 @@ service ApisService {
   base.NilResponse DeleteApi(1: base.IDReq req) (api.post = "/api/admin/api")
 
   // 获取API列表
-  base.NilResponse ApiList(1: ApiPageReq req) (api.get = "/api/admin/api/list")
+  base.NilResponse ApiList(1: ApiPageReq req) (api.post = "/api/admin/api/list")
+
+  base.NilResponse ApiTree(1: ApiPageReq req) (api.post = "/api/admin/api/tree")
+
 }

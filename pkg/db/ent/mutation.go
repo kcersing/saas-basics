@@ -98,6 +98,7 @@ type APIMutation struct {
 	created_at    *time.Time
 	updated_at    *time.Time
 	_path         *string
+	title         *string
 	description   *string
 	api_group     *string
 	method        *string
@@ -319,6 +320,42 @@ func (m *APIMutation) ResetPath() {
 	m._path = nil
 }
 
+// SetTitle sets the "title" field.
+func (m *APIMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *APIMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the API entity.
+// If the API object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *APIMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *APIMutation) ResetTitle() {
+	m.title = nil
+}
+
 // SetDescription sets the "description" field.
 func (m *APIMutation) SetDescription(s string) {
 	m.description = &s
@@ -461,7 +498,7 @@ func (m *APIMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *APIMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.created_at != nil {
 		fields = append(fields, api.FieldCreatedAt)
 	}
@@ -470,6 +507,9 @@ func (m *APIMutation) Fields() []string {
 	}
 	if m._path != nil {
 		fields = append(fields, api.FieldPath)
+	}
+	if m.title != nil {
+		fields = append(fields, api.FieldTitle)
 	}
 	if m.description != nil {
 		fields = append(fields, api.FieldDescription)
@@ -494,6 +534,8 @@ func (m *APIMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case api.FieldPath:
 		return m.Path()
+	case api.FieldTitle:
+		return m.Title()
 	case api.FieldDescription:
 		return m.Description()
 	case api.FieldAPIGroup:
@@ -515,6 +557,8 @@ func (m *APIMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldUpdatedAt(ctx)
 	case api.FieldPath:
 		return m.OldPath(ctx)
+	case api.FieldTitle:
+		return m.OldTitle(ctx)
 	case api.FieldDescription:
 		return m.OldDescription(ctx)
 	case api.FieldAPIGroup:
@@ -550,6 +594,13 @@ func (m *APIMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPath(v)
+		return nil
+	case api.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
 		return nil
 	case api.FieldDescription:
 		v, ok := value.(string)
@@ -629,6 +680,9 @@ func (m *APIMutation) ResetField(name string) error {
 		return nil
 	case api.FieldPath:
 		m.ResetPath()
+		return nil
+	case api.FieldTitle:
+		m.ResetTitle()
 		return nil
 	case api.FieldDescription:
 		m.ResetDescription()

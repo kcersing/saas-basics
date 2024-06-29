@@ -12,6 +12,7 @@ import (
 	"saas/pkg/db/ent"
 	menu2 "saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/role"
+	"strconv"
 	"time"
 )
 
@@ -179,6 +180,28 @@ func (m Menu) List(req *do.MenuListReq) (list []*do.MenuInfoTree, total int, err
 	total, _ = m.db.Menu.Query().Count(m.ctx)
 	return
 }
+func (m Menu) MenuTree(req *do.MenuListReq) (list []*do.Tree, total int, err error) {
+
+	inter, exist := m.cache.Get("MenuTree")
+	if exist {
+		if v, ok := inter.([]*do.Tree); ok {
+			return v, len(v), nil
+		}
+	}
+	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldOrderNo)).
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(m.ctx)
+	if err != nil {
+		return nil, 0, errors.Wrap(err, "query menu list failed")
+	}
+
+	list = findMenuTreeChildren(menus, 1)
+
+	total, _ = m.db.Menu.Query().Count(m.ctx)
+
+	m.cache.SetWithTTL("MenuTree", &list, 1, 30*time.Hour)
+	return
+}
 
 func (m Menu) CreateMenuParam(req *do.MenuParam) error {
 	// check menu whether exist
@@ -311,6 +334,24 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*do.MenuInfoTree {
 			//}
 
 			m.Children = findMenuChildren(data, v.ID)
+			result = append(result, m)
+		}
+	}
+	return result
+}
+
+func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*do.Tree {
+	if data == nil {
+		return nil
+	}
+	var result []*do.Tree
+	for _, v := range data {
+		if v.ParentID == parentID && v.ID != parentID {
+			var m = new(do.Tree)
+			m.Title = v.Name
+			m.Value = strconv.FormatInt(v.ID, 10)
+			m.Key = strconv.FormatInt(v.ID, 10)
+			m.Children = findMenuTreeChildren(data, v.ID)
 			result = append(result, m)
 		}
 	}

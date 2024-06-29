@@ -6,6 +6,9 @@ type Menu interface {
 	Delete(id int64) error
 	ListByRole(roleID int64) (list []*MenuInfoTree, total int64, err error)
 	List(req *MenuListReq) (list []*MenuInfoTree, total int, err error)
+
+	MenuTree(req *MenuListReq) (list []*Tree, total int, err error)
+
 	CreateMenuParam(req *MenuParam) error
 	UpdateMenuParam(req *MenuParam) error
 	DeleteMenuParam(menuParamID int64) error
