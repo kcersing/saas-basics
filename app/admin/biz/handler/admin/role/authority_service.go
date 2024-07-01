@@ -129,7 +129,7 @@ func UpdateMenuAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	err = admin.NewAuth(ctx, c).UpdateMenuAuth(int64(req.RoleID), req.MenuIds)
+	err = admin.NewAuth(ctx, c).UpdateMenuAuth(req.RoleID, req.MenuIds)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

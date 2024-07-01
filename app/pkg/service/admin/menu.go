@@ -12,7 +12,6 @@ import (
 	"saas/pkg/db/ent"
 	menu2 "saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/role"
-	"strconv"
 	"time"
 )
 
@@ -349,8 +348,8 @@ func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*do.Tree {
 		if v.ParentID == parentID && v.ID != parentID {
 			var m = new(do.Tree)
 			m.Title = v.Name
-			m.Value = strconv.FormatInt(v.ID, 10)
-			m.Key = strconv.FormatInt(v.ID, 10)
+			m.Value = v.ID
+			m.Key = v.ID
 			m.Children = findMenuTreeChildren(data, v.ID)
 			result = append(result, m)
 		}

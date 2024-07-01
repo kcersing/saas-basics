@@ -25,7 +25,6 @@ func Register(r *server.Hertz) {
 			_api0 := _admin.Group("/api", _api0Mw()...)
 			_api0.POST("/list", append(_apilistMw(), role.ApiList)...)
 			_api0.POST("/tree", append(_apitreeMw(), role.ApiTree)...)
-			_admin.GET("/role", append(_rolebyidMw(), role.RoleByID)...)
 			{
 				_api1 := _admin.Group("/api", _api1Mw()...)
 				_api1.POST("/create", append(_createapiMw(), role.CreateApi)...)
@@ -46,13 +45,14 @@ func Register(r *server.Hertz) {
 					_menu.POST("/update", append(_updatemenuauthorityMw(), role.UpdateMenuAuthority)...)
 				}
 			}
-			_admin.POST("/role", append(_deleteroleMw(), role.DeleteRole)...)
+			_admin.GET("/role", append(_rolebyidMw(), role.RoleByID)...)
 			_role := _admin.Group("/role", _roleMw()...)
 			_role.GET("/list", append(_rolelistMw(), role.RoleList)...)
 			_role.POST("/status", append(_updaterolestatusMw(), role.UpdateRoleStatus)...)
 			{
 				_role0 := _admin.Group("/role", _role0Mw()...)
 				_role0.POST("/create", append(_createroleMw(), role.CreateRole)...)
+				_role0.POST("/del", append(_deleteroleMw(), role.DeleteRole)...)
 				_role0.POST("/update", append(_updateroleMw(), role.UpdateRole)...)
 			}
 		}

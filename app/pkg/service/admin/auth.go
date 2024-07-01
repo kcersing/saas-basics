@@ -77,6 +77,7 @@ func (a Auth) UpdateMenuAuth(roleID int64, menuIDs []int64) error {
 		}
 	}()
 
+	//tx.Role.UpdateOneID(roleID).ClearMenus().Exec(a.ctx)
 	err = tx.Role.UpdateOneID(roleID).ClearMenus().Exec(a.ctx)
 	if err != nil {
 		return errors.Wrap(err, "delete role's menu failed, error")

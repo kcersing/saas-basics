@@ -26,7 +26,7 @@ service RoleService {
   base.NilResponse UpdateRole(1: RoleInfo req) (api.post = "/api/admin/role/update")
 
   // Delete role information | 删除角色信息
-  base.NilResponse DeleteRole(1: base.IDReq req) (api.post = "/api/admin/role")
+  base.NilResponse DeleteRole(1: base.IDReq req) (api.post = "/api/admin/role/del")
 
   // Get role information | 获取角色信息
   base.NilResponse RoleByID(1: base.IDReq req) (api.get = "/api/admin/role")

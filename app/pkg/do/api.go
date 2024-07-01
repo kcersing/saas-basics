@@ -20,9 +20,9 @@ type ApiInfo struct {
 
 type Tree struct {
 	Title    string      `json:"title,omitempty"`
-	Value    string      `json:"value,omitempty"`
+	Value    interface{} `json:"value,omitempty"`
 	Key      interface{} `json:"key,omitempty"`
-	Method   string      `json:"method,omitempty"`
+	Method   interface{} `json:"method,omitempty"`
 	Children []*Tree     `json:"children"`
 }
 

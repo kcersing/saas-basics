@@ -12,7 +12,6 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/predicate"
-	"strconv"
 	"time"
 )
 
@@ -48,11 +47,10 @@ func (a Api) ApiTree(req do.ListApiReq) (resp []*do.Tree, total int, err error) 
 		}
 		for _, v := range apis {
 			if v.APIGroup == g.Title {
-
 				g.Children = append(g.Children, &do.Tree{
 					Title: v.Title,
-					Value: strconv.FormatInt(v.ID, 10),
-					Key:   strconv.FormatInt(v.ID, 10), // map[string]string{"path": v.Path, "method": v.Method},
+					Value: map[string]string{"path": v.Path, "method": v.Method},
+					Key:   v.ID, // map[string]string{"path": v.Path, "method": v.Method},
 				})
 			}
 		}

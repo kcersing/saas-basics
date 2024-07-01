@@ -9,6 +9,7 @@ import (
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
+	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/user"
 	"strconv"
@@ -133,16 +134,19 @@ func (r Role) List(req *do.RoleListReq) (roleInfoList []*do.RoleInfo, total int,
 	}
 	// convert to List
 	for _, roleEnt := range roleEntList {
+		menuArr, _ := roleEnt.QueryMenus().GroupBy(menu.FieldID).Ints(r.ctx)
+
 		roleInfoList = append(roleInfoList, &do.RoleInfo{
 			ID:            roleEnt.ID,
 			Name:          roleEnt.Name,
 			Value:         roleEnt.Value,
 			DefaultRouter: roleEnt.DefaultRouter,
-			Status:        int64(roleEnt.Status),
+			Status:        roleEnt.Status,
 			Remark:        roleEnt.Remark,
 			OrderNo:       roleEnt.OrderNo,
 			CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
 			UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
+			Menus:         menuArr,
 		})
 	}
 	total, _ = r.db.Role.Query().Count(r.ctx)

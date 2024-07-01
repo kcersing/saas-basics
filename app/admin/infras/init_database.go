@@ -278,7 +278,7 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 		{Method: "POST", Path: "/api/admin/authority/menu/role", Description: "role.MenuAuthority", Title: "角色菜单列表", Group: "role"},
 		{Method: "POST", Path: "/api/admin/authority/menu/update", Description: "role.UpdateMenuAuthority", Title: "更新角色菜单", Group: "role"},
 
-		{Method: "GET", Path: "/api/admin/role", Description: "role.RoleByID", Title: "角色详情", Group: "role"},
+		{Method: "GET", Path: "/api/admin/role/del", Description: "role.RoleByID", Title: "角色详情", Group: "role"},
 		{Method: "POST", Path: "/api/admin/role", Description: "role.DeleteRole", Title: "删除角色", Group: "role"},
 		{Method: "GET", Path: "/api/admin/role/list", Description: "role.RoleList", Title: "角色列表", Group: "role"},
 		{Method: "POST", Path: "/api/admin/role/status", Description: "role.UpdateRoleStatus", Title: "更新角色状态", Group: "role"},

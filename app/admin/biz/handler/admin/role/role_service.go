@@ -70,7 +70,7 @@ func UpdateRole(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteRole .
-// @router /api/admin/role [POST]
+// @router /api/admin/role/del [POST]
 func DeleteRole(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
