@@ -13,6 +13,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 )
 
@@ -139,6 +140,18 @@ func (ru *RoleUpdate) AddOrderNo(i int32) *RoleUpdate {
 	return ru
 }
 
+// SetApis sets the "apis" field.
+func (ru *RoleUpdate) SetApis(i []int) *RoleUpdate {
+	ru.mutation.SetApis(i)
+	return ru
+}
+
+// AppendApis appends i to the "apis" field.
+func (ru *RoleUpdate) AppendApis(i []int) *RoleUpdate {
+	ru.mutation.AppendApis(i)
+	return ru
+}
+
 // AddMenuIDs adds the "menus" edge to the Menu entity by IDs.
 func (ru *RoleUpdate) AddMenuIDs(ids ...int64) *RoleUpdate {
 	ru.mutation.AddMenuIDs(ids...)
@@ -254,6 +267,14 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := ru.mutation.AddedOrderNo(); ok {
 		_spec.AddField(role.FieldOrderNo, field.TypeInt32, value)
+	}
+	if value, ok := ru.mutation.Apis(); ok {
+		_spec.SetField(role.FieldApis, field.TypeJSON, value)
+	}
+	if value, ok := ru.mutation.AppendedApis(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, role.FieldApis, value)
+		})
 	}
 	if ru.mutation.MenusCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -430,6 +451,18 @@ func (ruo *RoleUpdateOne) AddOrderNo(i int32) *RoleUpdateOne {
 	return ruo
 }
 
+// SetApis sets the "apis" field.
+func (ruo *RoleUpdateOne) SetApis(i []int) *RoleUpdateOne {
+	ruo.mutation.SetApis(i)
+	return ruo
+}
+
+// AppendApis appends i to the "apis" field.
+func (ruo *RoleUpdateOne) AppendApis(i []int) *RoleUpdateOne {
+	ruo.mutation.AppendApis(i)
+	return ruo
+}
+
 // AddMenuIDs adds the "menus" edge to the Menu entity by IDs.
 func (ruo *RoleUpdateOne) AddMenuIDs(ids ...int64) *RoleUpdateOne {
 	ruo.mutation.AddMenuIDs(ids...)
@@ -575,6 +608,14 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 	}
 	if value, ok := ruo.mutation.AddedOrderNo(); ok {
 		_spec.AddField(role.FieldOrderNo, field.TypeInt32, value)
+	}
+	if value, ok := ruo.mutation.Apis(); ok {
+		_spec.SetField(role.FieldApis, field.TypeJSON, value)
+	}
+	if value, ok := ruo.mutation.AppendedApis(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, role.FieldApis, value)
+		})
 	}
 	if ruo.mutation.MenusCleared() {
 		edge := &sqlgraph.EdgeSpec{

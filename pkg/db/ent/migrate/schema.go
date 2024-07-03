@@ -847,6 +847,7 @@ var (
 		{Name: "default_router", Type: field.TypeString, Comment: "default menu : dashboard | 默认登录页面", Default: "dashboard"},
 		{Name: "remark", Type: field.TypeString, Comment: "remark | 备注", Default: ""},
 		{Name: "order_no", Type: field.TypeInt32, Comment: "order number | 排序编号", Default: 0},
+		{Name: "apis", Type: field.TypeJSON, Comment: "apis"},
 	}
 	// SysRolesTable holds the schema information for the "sys_roles" table.
 	SysRolesTable = &schema.Table{

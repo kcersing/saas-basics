@@ -107,14 +107,6 @@ var (
 	DefaultMemberID int64
 	// DefaultUserID holds the default value on creation for the "user_id" field.
 	DefaultUserID int64
-	// DefaultEntryTime holds the default value on creation for the "entry_time" field.
-	DefaultEntryTime func() time.Time
-	// UpdateDefaultEntryTime holds the default value on update for the "entry_time" field.
-	UpdateDefaultEntryTime func() time.Time
-	// DefaultLeavingTime holds the default value on creation for the "leaving_time" field.
-	DefaultLeavingTime func() time.Time
-	// UpdateDefaultLeavingTime holds the default value on update for the "leaving_time" field.
-	UpdateDefaultLeavingTime func() time.Time
 )
 
 // OrderOption defines the ordering options for the EntryLogs queries.

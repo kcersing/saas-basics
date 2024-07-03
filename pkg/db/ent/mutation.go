@@ -26446,6 +26446,8 @@ type RoleMutation struct {
 	remark         *string
 	order_no       *int32
 	addorder_no    *int32
+	apis           *[]int
+	appendapis     []int
 	clearedFields  map[string]struct{}
 	menus          map[int64]struct{}
 	removedmenus   map[int64]struct{}
@@ -26901,6 +26903,57 @@ func (m *RoleMutation) ResetOrderNo() {
 	m.addorder_no = nil
 }
 
+// SetApis sets the "apis" field.
+func (m *RoleMutation) SetApis(i []int) {
+	m.apis = &i
+	m.appendapis = nil
+}
+
+// Apis returns the value of the "apis" field in the mutation.
+func (m *RoleMutation) Apis() (r []int, exists bool) {
+	v := m.apis
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApis returns the old "apis" field's value of the Role entity.
+// If the Role object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RoleMutation) OldApis(ctx context.Context) (v []int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApis is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApis requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApis: %w", err)
+	}
+	return oldValue.Apis, nil
+}
+
+// AppendApis adds i to the "apis" field.
+func (m *RoleMutation) AppendApis(i []int) {
+	m.appendapis = append(m.appendapis, i...)
+}
+
+// AppendedApis returns the list of values that were appended to the "apis" field in this mutation.
+func (m *RoleMutation) AppendedApis() ([]int, bool) {
+	if len(m.appendapis) == 0 {
+		return nil, false
+	}
+	return m.appendapis, true
+}
+
+// ResetApis resets all changes to the "apis" field.
+func (m *RoleMutation) ResetApis() {
+	m.apis = nil
+	m.appendapis = nil
+}
+
 // AddMenuIDs adds the "menus" edge to the Menu entity by ids.
 func (m *RoleMutation) AddMenuIDs(ids ...int64) {
 	if m.menus == nil {
@@ -26989,7 +27042,7 @@ func (m *RoleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RoleMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, role.FieldCreatedAt)
 	}
@@ -27013,6 +27066,9 @@ func (m *RoleMutation) Fields() []string {
 	}
 	if m.order_no != nil {
 		fields = append(fields, role.FieldOrderNo)
+	}
+	if m.apis != nil {
+		fields = append(fields, role.FieldApis)
 	}
 	return fields
 }
@@ -27038,6 +27094,8 @@ func (m *RoleMutation) Field(name string) (ent.Value, bool) {
 		return m.Remark()
 	case role.FieldOrderNo:
 		return m.OrderNo()
+	case role.FieldApis:
+		return m.Apis()
 	}
 	return nil, false
 }
@@ -27063,6 +27121,8 @@ func (m *RoleMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldRemark(ctx)
 	case role.FieldOrderNo:
 		return m.OldOrderNo(ctx)
+	case role.FieldApis:
+		return m.OldApis(ctx)
 	}
 	return nil, fmt.Errorf("unknown Role field %s", name)
 }
@@ -27127,6 +27187,13 @@ func (m *RoleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOrderNo(v)
+		return nil
+	case role.FieldApis:
+		v, ok := value.([]int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApis(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Role field %s", name)
@@ -27236,6 +27303,9 @@ func (m *RoleMutation) ResetField(name string) error {
 		return nil
 	case role.FieldOrderNo:
 		m.ResetOrderNo()
+		return nil
+	case role.FieldApis:
+		m.ResetApis()
 		return nil
 	}
 	return fmt.Errorf("unknown Role field %s", name)

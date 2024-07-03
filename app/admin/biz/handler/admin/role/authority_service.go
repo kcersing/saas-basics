@@ -4,10 +4,8 @@ package role
 
 import (
 	"context"
-	"github.com/jinzhu/copier"
 	"saas/app/admin/pkg/errno"
 	"saas/app/admin/pkg/utils"
-	"saas/app/pkg/do"
 	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -28,14 +26,14 @@ func CreateAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	var apiInfos []*do.ApiAuthInfo
-	err = copier.Copy(&apiInfos, &req.Data)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
+	//var apiInfos []*do.ApiAuthInfo
+	//err = copier.Copy(&apiInfos, &req.Data)
+	//if err != nil {
+	//	utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+	//	return
+	//}
 
-	err = admin.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), apiInfos)
+	err = admin.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), req.Apis)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -56,14 +54,14 @@ func UpdateApiAuthority(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	var apiInfos []*do.ApiAuthInfo
-	err = copier.Copy(&apiInfos, &req.Data)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
+	//var apiInfos []*do.ApiAuthInfo
+	//err = copier.Copy(&apiInfos, &req)
+	//if err != nil {
+	//	utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+	//	return
+	//}
 
-	err = admin.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), apiInfos)
+	err = admin.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), req.Apis)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

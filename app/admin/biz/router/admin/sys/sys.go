@@ -43,6 +43,10 @@ func Register(r *server.Hertz) {
 				_property.POST("/type", append(_propertytypeMw(), sys.PropertyType)...)
 			}
 			{
+				_role := _sys.Group("/role", _roleMw()...)
+				_role.POST("/list", append(_rolelistMw(), sys.RoleList)...)
+			}
+			{
 				_staff := _sys.Group("/staff", _staffMw()...)
 				_staff.POST("/list", append(_stafflistMw(), sys.StaffList)...)
 			}

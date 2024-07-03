@@ -38,6 +38,7 @@ service SysService {
     // 场地列表
     base.NilResponse PlaceList(1: ListReq req) (api.post = "/api/sys/place/list")
 
+    base.NilResponse RoleList(1: ListReq req) (api.post = "/api/sys/role/list")
 
 
 }

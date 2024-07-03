@@ -680,9 +680,9 @@ func (p *ApiAuthorityInfo) String() string {
 
 // 创建或更新API授权信息
 type CreateOrUpdateApiAuthorityReq struct {
-	RoleID int64             `thrift:"role_id,1" form:"role_id" json:"role_id" query:"role_id"`
-	Data   *ApiAuthorityInfo `thrift:"data,2" form:"data" json:"data" query:"data"`
-	APIIds []int64           `thrift:"api_ids,3" form:"api_ids" json:"api_ids" query:"api_ids"`
+	RoleID int64 `thrift:"role_id,1" form:"role_id" json:"role_id" query:"role_id"`
+	//    2:  ApiAuthorityInfo data (api.raw = "api_authority_info")
+	Apis []int64 `thrift:"apis,2" form:"apis" json:"apis" query:"apis"`
 }
 
 func NewCreateOrUpdateApiAuthorityReq() *CreateOrUpdateApiAuthorityReq {
@@ -693,27 +693,13 @@ func (p *CreateOrUpdateApiAuthorityReq) GetRoleID() (v int64) {
 	return p.RoleID
 }
 
-var CreateOrUpdateApiAuthorityReq_Data_DEFAULT *ApiAuthorityInfo
-
-func (p *CreateOrUpdateApiAuthorityReq) GetData() (v *ApiAuthorityInfo) {
-	if !p.IsSetData() {
-		return CreateOrUpdateApiAuthorityReq_Data_DEFAULT
-	}
-	return p.Data
-}
-
-func (p *CreateOrUpdateApiAuthorityReq) GetAPIIds() (v []int64) {
-	return p.APIIds
+func (p *CreateOrUpdateApiAuthorityReq) GetApis() (v []int64) {
+	return p.Apis
 }
 
 var fieldIDToName_CreateOrUpdateApiAuthorityReq = map[int16]string{
 	1: "role_id",
-	2: "data",
-	3: "api_ids",
-}
-
-func (p *CreateOrUpdateApiAuthorityReq) IsSetData() bool {
-	return p.Data != nil
+	2: "apis",
 }
 
 func (p *CreateOrUpdateApiAuthorityReq) Read(iprot thrift.TProtocol) (err error) {
@@ -744,16 +730,8 @@ func (p *CreateOrUpdateApiAuthorityReq) Read(iprot thrift.TProtocol) (err error)
 				goto SkipFieldError
 			}
 		case 2:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 3:
 			if fieldTypeId == thrift.LIST {
-				if err = p.ReadField3(iprot); err != nil {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -798,18 +776,11 @@ func (p *CreateOrUpdateApiAuthorityReq) ReadField1(iprot thrift.TProtocol) error
 	return nil
 }
 func (p *CreateOrUpdateApiAuthorityReq) ReadField2(iprot thrift.TProtocol) error {
-	p.Data = NewApiAuthorityInfo()
-	if err := p.Data.Read(iprot); err != nil {
-		return err
-	}
-	return nil
-}
-func (p *CreateOrUpdateApiAuthorityReq) ReadField3(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return err
 	}
-	p.APIIds = make([]int64, 0, size)
+	p.Apis = make([]int64, 0, size)
 	for i := 0; i < size; i++ {
 
 		var _elem int64
@@ -819,7 +790,7 @@ func (p *CreateOrUpdateApiAuthorityReq) ReadField3(iprot thrift.TProtocol) error
 			_elem = v
 		}
 
-		p.APIIds = append(p.APIIds, _elem)
+		p.Apis = append(p.Apis, _elem)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return err
@@ -839,10 +810,6 @@ func (p *CreateOrUpdateApiAuthorityReq) Write(oprot thrift.TProtocol) (err error
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
 			goto WriteFieldError
 		}
 	}
@@ -881,30 +848,13 @@ WriteFieldEndError:
 }
 
 func (p *CreateOrUpdateApiAuthorityReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("data", thrift.STRUCT, 2); err != nil {
+	if err = oprot.WriteFieldBegin("apis", thrift.LIST, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := p.Data.Write(oprot); err != nil {
+	if err := oprot.WriteListBegin(thrift.I64, len(p.Apis)); err != nil {
 		return err
 	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *CreateOrUpdateApiAuthorityReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("api_ids", thrift.LIST, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteListBegin(thrift.I64, len(p.APIIds)); err != nil {
-		return err
-	}
-	for _, v := range p.APIIds {
+	for _, v := range p.Apis {
 		if err := oprot.WriteI64(v); err != nil {
 			return err
 		}
@@ -917,9 +867,9 @@ func (p *CreateOrUpdateApiAuthorityReq) writeField3(oprot thrift.TProtocol) (err
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *CreateOrUpdateApiAuthorityReq) String() string {

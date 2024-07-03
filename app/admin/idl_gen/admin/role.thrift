@@ -48,8 +48,8 @@ struct ApiAuthorityInfo {
 // 创建或更新API授权信息
 struct CreateOrUpdateApiAuthorityReq {
     1:  i64 role_id (api.raw = "role_id")
-    2:  ApiAuthorityInfo data (api.raw = "api_authority_info")
-    3:  list<i64> api_ids (api.raw = "api_ids")
+//    2:  ApiAuthorityInfo data (api.raw = "api_authority_info")
+    2:  list<i64> apis (api.raw = "apis")
 }
 
 // 菜单授权请求数据

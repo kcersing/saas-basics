@@ -20,6 +20,7 @@ type RoleInfo struct {
 	CreatedAt     string `json:"createdAt"`
 	UpdatedAt     string `json:"updatedAt"`
 	Menus         []int  `json:"menus"`
+	Apis          []int  `json:"apis"`
 }
 
 type RoleListReq struct {

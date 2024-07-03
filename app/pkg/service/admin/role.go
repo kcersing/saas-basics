@@ -125,6 +125,7 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *do.RoleInfo, err error) {
 }
 
 func (r Role) List(req *do.RoleListReq) (roleInfoList []*do.RoleInfo, total int, err error) {
+
 	roleEntList, err := r.db.Role.Query().Order(ent.Asc(role.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(r.ctx)
@@ -147,6 +148,7 @@ func (r Role) List(req *do.RoleListReq) (roleInfoList []*do.RoleInfo, total int,
 			CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
 			UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
 			Menus:         menuArr,
+			Apis:          roleEnt.Apis,
 		})
 	}
 	total, _ = r.db.Role.Query().Count(r.ctx)

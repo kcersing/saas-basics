@@ -148,18 +148,6 @@ func init() {
 	entrylogsDescUserID := entrylogsFields[1].Descriptor()
 	// entrylogs.DefaultUserID holds the default value on creation for the user_id field.
 	entrylogs.DefaultUserID = entrylogsDescUserID.Default.(int64)
-	// entrylogsDescEntryTime is the schema descriptor for entry_time field.
-	entrylogsDescEntryTime := entrylogsFields[5].Descriptor()
-	// entrylogs.DefaultEntryTime holds the default value on creation for the entry_time field.
-	entrylogs.DefaultEntryTime = entrylogsDescEntryTime.Default.(func() time.Time)
-	// entrylogs.UpdateDefaultEntryTime holds the default value on update for the entry_time field.
-	entrylogs.UpdateDefaultEntryTime = entrylogsDescEntryTime.UpdateDefault.(func() time.Time)
-	// entrylogsDescLeavingTime is the schema descriptor for leaving_time field.
-	entrylogsDescLeavingTime := entrylogsFields[6].Descriptor()
-	// entrylogs.DefaultLeavingTime holds the default value on creation for the leaving_time field.
-	entrylogs.DefaultLeavingTime = entrylogsDescLeavingTime.Default.(func() time.Time)
-	// entrylogs.UpdateDefaultLeavingTime holds the default value on update for the leaving_time field.
-	entrylogs.UpdateDefaultLeavingTime = entrylogsDescLeavingTime.UpdateDefault.(func() time.Time)
 	faceMixin := schema.Face{}.Mixin()
 	faceMixinFields0 := faceMixin[0].Fields()
 	_ = faceMixinFields0

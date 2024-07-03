@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	_ "entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -20,6 +21,9 @@ func (Role) Fields() []ent.Field {
 		field.String("default_router").Default("dashboard").Comment("default menu : dashboard | 默认登录页面"),
 		field.String("remark").Default("").Comment("remark | 备注"),
 		field.Int32("order_no").Default(0).Comment("order number | 排序编号"),
+		field.Ints("apis").Default([]int{}).
+			//SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
+			Comment("apis"),
 	}
 }
 

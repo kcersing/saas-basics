@@ -117,6 +117,12 @@ func (rc *RoleCreate) SetNillableOrderNo(i *int32) *RoleCreate {
 	return rc
 }
 
+// SetApis sets the "apis" field.
+func (rc *RoleCreate) SetApis(i []int) *RoleCreate {
+	rc.mutation.SetApis(i)
+	return rc
+}
+
 // SetID sets the "id" field.
 func (rc *RoleCreate) SetID(i int64) *RoleCreate {
 	rc.mutation.SetID(i)
@@ -222,6 +228,9 @@ func (rc *RoleCreate) check() error {
 	if _, ok := rc.mutation.OrderNo(); !ok {
 		return &ValidationError{Name: "order_no", err: errors.New(`ent: missing required field "Role.order_no"`)}
 	}
+	if _, ok := rc.mutation.Apis(); !ok {
+		return &ValidationError{Name: "apis", err: errors.New(`ent: missing required field "Role.apis"`)}
+	}
 	return nil
 }
 
@@ -285,6 +294,10 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 	if value, ok := rc.mutation.OrderNo(); ok {
 		_spec.SetField(role.FieldOrderNo, field.TypeInt32, value)
 		_node.OrderNo = value
+	}
+	if value, ok := rc.mutation.Apis(); ok {
+		_spec.SetField(role.FieldApis, field.TypeJSON, value)
+		_node.Apis = value
 	}
 	if nodes := rc.mutation.MenusIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

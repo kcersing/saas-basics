@@ -236,3 +236,30 @@ func PlaceList(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, list, total, "")
 	return
 }
+
+// RoleList .
+// @router /api/sys/role/list [POST]
+func RoleList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req sys.ListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	var listReq do.SysListReq
+	err = copier.Copy(&listReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	list, total, err := admin.NewSys(ctx, c).RoleList(listReq)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, total, "")
+	return
+}

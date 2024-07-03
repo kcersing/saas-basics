@@ -151,6 +151,14 @@ func (elu *EntryLogsUpdate) SetEntryTime(t time.Time) *EntryLogsUpdate {
 	return elu
 }
 
+// SetNillableEntryTime sets the "entry_time" field if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableEntryTime(t *time.Time) *EntryLogsUpdate {
+	if t != nil {
+		elu.SetEntryTime(*t)
+	}
+	return elu
+}
+
 // ClearEntryTime clears the value of the "entry_time" field.
 func (elu *EntryLogsUpdate) ClearEntryTime() *EntryLogsUpdate {
 	elu.mutation.ClearEntryTime()
@@ -160,6 +168,14 @@ func (elu *EntryLogsUpdate) ClearEntryTime() *EntryLogsUpdate {
 // SetLeavingTime sets the "leaving_time" field.
 func (elu *EntryLogsUpdate) SetLeavingTime(t time.Time) *EntryLogsUpdate {
 	elu.mutation.SetLeavingTime(t)
+	return elu
+}
+
+// SetNillableLeavingTime sets the "leaving_time" field if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableLeavingTime(t *time.Time) *EntryLogsUpdate {
+	if t != nil {
+		elu.SetLeavingTime(*t)
+	}
 	return elu
 }
 
@@ -307,14 +323,6 @@ func (elu *EntryLogsUpdate) defaults() {
 	if _, ok := elu.mutation.UpdatedAt(); !ok {
 		v := entrylogs.UpdateDefaultUpdatedAt()
 		elu.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := elu.mutation.EntryTime(); !ok && !elu.mutation.EntryTimeCleared() {
-		v := entrylogs.UpdateDefaultEntryTime()
-		elu.mutation.SetEntryTime(v)
-	}
-	if _, ok := elu.mutation.LeavingTime(); !ok && !elu.mutation.LeavingTimeCleared() {
-		v := entrylogs.UpdateDefaultLeavingTime()
-		elu.mutation.SetLeavingTime(v)
 	}
 }
 
@@ -606,6 +614,14 @@ func (eluo *EntryLogsUpdateOne) SetEntryTime(t time.Time) *EntryLogsUpdateOne {
 	return eluo
 }
 
+// SetNillableEntryTime sets the "entry_time" field if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableEntryTime(t *time.Time) *EntryLogsUpdateOne {
+	if t != nil {
+		eluo.SetEntryTime(*t)
+	}
+	return eluo
+}
+
 // ClearEntryTime clears the value of the "entry_time" field.
 func (eluo *EntryLogsUpdateOne) ClearEntryTime() *EntryLogsUpdateOne {
 	eluo.mutation.ClearEntryTime()
@@ -615,6 +631,14 @@ func (eluo *EntryLogsUpdateOne) ClearEntryTime() *EntryLogsUpdateOne {
 // SetLeavingTime sets the "leaving_time" field.
 func (eluo *EntryLogsUpdateOne) SetLeavingTime(t time.Time) *EntryLogsUpdateOne {
 	eluo.mutation.SetLeavingTime(t)
+	return eluo
+}
+
+// SetNillableLeavingTime sets the "leaving_time" field if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableLeavingTime(t *time.Time) *EntryLogsUpdateOne {
+	if t != nil {
+		eluo.SetLeavingTime(*t)
+	}
 	return eluo
 }
 
@@ -775,14 +799,6 @@ func (eluo *EntryLogsUpdateOne) defaults() {
 	if _, ok := eluo.mutation.UpdatedAt(); !ok {
 		v := entrylogs.UpdateDefaultUpdatedAt()
 		eluo.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := eluo.mutation.EntryTime(); !ok && !eluo.mutation.EntryTimeCleared() {
-		v := entrylogs.UpdateDefaultEntryTime()
-		eluo.mutation.SetEntryTime(v)
-	}
-	if _, ok := eluo.mutation.LeavingTime(); !ok && !eluo.mutation.LeavingTimeCleared() {
-		v := entrylogs.UpdateDefaultLeavingTime()
-		eluo.mutation.SetLeavingTime(v)
 	}
 }
 

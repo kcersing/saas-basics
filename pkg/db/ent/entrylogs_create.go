@@ -283,14 +283,6 @@ func (elc *EntryLogsCreate) defaults() {
 		v := entrylogs.DefaultUserID
 		elc.mutation.SetUserID(v)
 	}
-	if _, ok := elc.mutation.EntryTime(); !ok {
-		v := entrylogs.DefaultEntryTime()
-		elc.mutation.SetEntryTime(v)
-	}
-	if _, ok := elc.mutation.LeavingTime(); !ok {
-		v := entrylogs.DefaultLeavingTime()
-		elc.mutation.SetLeavingTime(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -105,3 +105,13 @@ func _placelistMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _roleMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _rolelistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

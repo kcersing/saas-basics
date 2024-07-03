@@ -30,6 +30,8 @@ const (
 	FieldRemark = "remark"
 	// FieldOrderNo holds the string denoting the order_no field in the database.
 	FieldOrderNo = "order_no"
+	// FieldApis holds the string denoting the apis field in the database.
+	FieldApis = "apis"
 	// EdgeMenus holds the string denoting the menus edge name in mutations.
 	EdgeMenus = "menus"
 	// Table holds the table name of the role in the database.
@@ -52,6 +54,7 @@ var Columns = []string{
 	FieldDefaultRouter,
 	FieldRemark,
 	FieldOrderNo,
+	FieldApis,
 }
 
 var (

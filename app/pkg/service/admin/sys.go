@@ -30,6 +30,25 @@ type Sys struct {
 	cache *ristretto.Cache
 }
 
+func (s Sys) RoleList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+	var predicates []predicate.Role
+
+	lists, err := s.db.Role.Query().Where(predicates...).All(s.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get Role list failed")
+		return nil, 0, err
+	}
+	for _, v := range lists {
+		list = append(list, do.SysList{
+			ID:   v.ID,
+			Name: v.Remark,
+		})
+	}
+	total = int64(len(list))
+
+	return
+}
+
 func (s Sys) PlaceList(req do.SysListReq) (list []do.SysList, total int64, err error) {
 	var predicates []predicate.VenuePlace
 

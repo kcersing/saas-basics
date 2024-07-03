@@ -2,16 +2,20 @@ package admin
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/casbin/casbin/v2"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
+	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
+	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/role"
+	"strconv"
 )
 
 type Auth struct {
@@ -23,7 +27,31 @@ type Auth struct {
 	cache *ristretto.Cache
 }
 
-func (a Auth) UpdateApiAuth(roleIDStr string, infos []*do.ApiAuthInfo) error {
+func (a Auth) QueryApiAll(id []int64) (resp []*do.ApiAuthInfo, err error) {
+
+	//ApiAuthInterface, exist := a.cache.Get("apiAll")
+	//if exist {
+	//	if u, ok := ApiAuthInterface.([]*do.ApiAuthInfo); ok {
+	//		return u, nil
+	//	}
+	//}
+	all, err := a.db.API.Query().Where(api.IDIn(id...)).All(a.ctx)
+	if err != nil {
+		return resp, err
+	}
+
+	err = copier.Copy(&resp, &all)
+	if err != nil {
+		err = errors.Wrap(err, "copy api all failed")
+		return resp, err
+	}
+
+	//a.cache.SetWithTTL("apiAll", &resp, 1, 30*time.Hour)
+	return
+
+}
+
+func (a Auth) UpdateApiAuth(roleIDStr string, apis []int64) error {
 	// clear old policies
 	var oldPolicies [][]string
 	oldPolicies = a.Cbs.GetFilteredPolicy(0, roleIDStr)
@@ -36,6 +64,7 @@ func (a Auth) UpdateApiAuth(roleIDStr string, infos []*do.ApiAuthInfo) error {
 			return errors.New("casbin policies remove failed")
 		}
 	}
+	infos, _ := a.QueryApiAll(apis)
 	// add new policies
 	var policies [][]string
 	for _, v := range infos {
@@ -48,6 +77,13 @@ func (a Auth) UpdateApiAuth(roleIDStr string, infos []*do.ApiAuthInfo) error {
 	if !addResult {
 		return errors.New("casbin policies add failed")
 	}
+	roleId, _ := strconv.ParseUint(roleIDStr, 10, 64)
+
+	jsonBytes, _ := json.Marshal(apis)
+	var intSlice []int
+	json.Unmarshal(jsonBytes, &intSlice)
+
+	a.db.Role.Update().Where(role.ID(int64(roleId))).SetApis(intSlice).Save(a.ctx)
 	return nil
 }
 

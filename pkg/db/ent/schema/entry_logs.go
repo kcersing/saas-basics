@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"saas/pkg/db/ent/schema/mixins"
-	"time"
 )
 
 type EntryLogs struct {
@@ -25,13 +24,9 @@ func (EntryLogs) Fields() []ent.Field {
 		field.Int64("member_property_id").Comment("属性id").Optional(),
 
 		field.Time("entry_time").
-			Default(time.Now).
-			UpdateDefault(time.Now).
 			Comment("进场时间").
 			Optional(),
 		field.Time("leaving_time").
-			Default(time.Now).
-			UpdateDefault(time.Now).
 			Comment("离场时间").
 			Optional(),
 	}
