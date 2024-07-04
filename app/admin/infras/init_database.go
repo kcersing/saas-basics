@@ -318,6 +318,7 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 		{Method: "POST", Path: "/api/admin/user/list", Description: "user.UserList", Title: "员工列表", Group: "user"},
 		{Method: "POST", Path: "/api/admin/user/perm", Description: "user.UserPermCode", Title: "员工权限", Group: "user"},
 		{Method: "POST", Path: "/api/admin/user/update", Description: "user.UpdateUser", Title: "更新员工", Group: "user"},
+		{Method: "POST", Path: "/api/admin/user/set-role", Description: "user.SetUserRole", Title: "更新用户角色", Group: "user"},
 
 		//{Method: "POST", Path: "/api/admin/token", Description: "token.DeleteToken", Group: "token"},
 		//{Method: "POST", Path: "/api/admin/token/list", Description: "token.TokenList", Title: "列表", Group: "token"},

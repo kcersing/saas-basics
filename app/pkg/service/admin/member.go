@@ -55,7 +55,7 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		SetPassword(password).
 		SetAvatar(req.Avatar).
 		SetMobile(req.Mobile).
-		SetNickname(req.Nickname).
+		SetNickname(req.Name).
 		SetStatus(req.Status).
 		SetName(req.Name).
 		SetCondition(0).

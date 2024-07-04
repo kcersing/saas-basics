@@ -7,27 +7,27 @@ import (
 type User interface {
 	Create(req CreateOrUpdateUserReq) error
 	Update(req CreateOrUpdateUserReq) error
-	ChangePassword(userID int64, oldPassword, newPassword string) error
+	ChangePassword(userID int64, newPassword string) error
 	Info(id int64) (info *UserInfo, err error)
 	List(req UserListReq) (userList []*UserInfo, total int, err error)
 	UpdateUserStatus(id int64, status int64) error
 	DeleteUser(id int64) error
 	UpdateProfile(req UpdateUserProfileReq) error
+	SetRole(id, roleID int64) error
 }
 
 type CreateOrUpdateUserReq struct {
 	ID       int64  `json:"id"`
 	Avatar   string `json:"avatar"`
-	RoleID   int64  `json:"roleID"`
 	Mobile   string `json:"mobile"`
 	Email    string `json:"email"`
 	Status   int64  `json:"status"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Nickname string `json:"nickname"`
+	Name     string `json:"Name"`
+	Wecom    string `json:"wecom"`
 	Gender   string `json:"gender"`
-	Age      string `json:"age"`
 	Birthday string `json:"birthday"`
+	Password string `json:"password"`
+	CreateId int64  `json:"createId"`
 }
 
 type UserInfo struct {

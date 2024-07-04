@@ -26,6 +26,20 @@ type User struct {
 	cache *ristretto.Cache
 }
 
+func (u User) SetRole(id, roleID int64) error {
+	_, err := u.db.User.Update().
+		Where(user.IDEQ(id)).
+		SetRoleID(roleID).
+		Save(u.ctx)
+
+	if err != nil {
+		err = errors.Wrap(err, "update user role failed")
+		return err
+	}
+
+	return nil
+}
+
 func (u User) Info(id int64) (info *do.UserInfo, err error) {
 	info = new(do.UserInfo)
 	userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
@@ -84,18 +98,17 @@ func (u User) Create(req do.CreateOrUpdateUserReq) error {
 	if err != nil {
 		return errors.Wrap(err, "starting a transaction:")
 	}
-
 	noe, err := tx.User.Create().
 		SetAvatar(req.Avatar).
-		SetRoleID(req.RoleID).
 		SetMobile(req.Mobile).
 		SetEmail(req.Email).
 		SetStatus(req.Status).
-		SetUsername(req.Username).
+		SetUsername(req.Mobile).
 		SetPassword(password).
-		SetNickname(req.Nickname).
+		SetNickname(req.Name).
 		SetBirthday(parsedTime).
 		SetGender(gender).
+		SetWecom(req.Wecom).
 		Save(u.ctx)
 
 	if err != nil {
@@ -118,18 +131,33 @@ func (u User) Create(req do.CreateOrUpdateUserReq) error {
 }
 
 func (u User) Update(req do.CreateOrUpdateUserReq) error {
+
+	var gender int64
+	if req.Gender == "女性" {
+		gender = 0
+	} else if req.Gender == "男性" {
+		gender = 1
+	} else {
+		gender = 2
+	}
+	parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
+
 	password, _ := encrypt.Crypt(req.Password)
 	_, err := u.db.User.Update().
 		Where(user.IDEQ(req.ID)).
 		SetAvatar(req.Avatar).
-		SetRoleID(req.RoleID).
 		SetMobile(req.Mobile).
 		SetEmail(req.Email).
 		SetStatus(req.Status).
-		SetUsername(req.Username).
+		SetUsername(req.Mobile).
 		SetPassword(password).
-		SetNickname(req.Nickname).
+		SetNickname(req.Name).
+		SetBirthday(parsedTime).
+		SetGender(gender).
+		SetStatus(1).
+		SetWecom(req.Wecom).
 		Save(u.ctx)
+
 	if err != nil {
 		err = errors.Wrap(err, "update user failed")
 		return err
@@ -138,20 +166,20 @@ func (u User) Update(req do.CreateOrUpdateUserReq) error {
 	return nil
 }
 
-func (u User) ChangePassword(userID int64, oldPassword, newPassword string) error {
-	// get user info
-	targetUser, err := u.db.User.Query().Where(user.IDEQ(userID)).First(u.ctx)
-	if err != nil {
-		return errors.Wrap(err, "targetUser not found")
-	}
-	// check old password
-	if ok := encrypt.VerifyPassword(oldPassword, targetUser.Password); !ok {
-		err = errors.New("wrong old password")
-		return err
-	}
+func (u User) ChangePassword(userID int64, newPassword string) error {
+	////get user info
+	//targetUser, err := u.db.User.Query().Where(user.IDEQ(userID)).First(u.ctx)
+	//if err != nil {
+	//	return errors.Wrap(err, "targetUser not found")
+	//}
+	//// check old password
+	//if ok := encrypt.VerifyPassword(oldPassword, targetUser.Password); !ok {
+	//	err = errors.New("wrong old password")
+	//	return err
+	//}
 	// update password
 	password, _ := encrypt.Crypt(newPassword)
-	_, err = u.db.User.Update().Where(user.IDEQ(userID)).SetPassword(password).Save(u.ctx)
+	_, err := u.db.User.Update().Where(user.IDEQ(userID)).SetPassword(password).Save(u.ctx)
 
 	return err
 }

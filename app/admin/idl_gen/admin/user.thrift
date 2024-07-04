@@ -33,22 +33,22 @@ struct RegisterReq {
 // change user's password request | 修改密码请求参数
 struct ChangePasswordReq {
     1:  i64 user_id (api.raw = "user_id")
-    2:  string old_password (api.raw = "old_password")
-    3:  string new_password (api.raw = "new_password")
+//    2:  string old_password (api.raw = "old_password")
+    2:  string new_password (api.raw = "new_password")
 }
 
 // Create or update user information request | 创建或更新用户信息
 struct CreateOrUpdateUserReq {
     1:  optional i64 id (api.raw = "id")
     2:  optional string avatar (api.raw = "avatar")
-    3:  optional i64 role_id (api.raw = "role_id")
     4:  optional string mobile (api.raw = "mobile")
     5:  optional string email (api.raw = "email")
     6:  optional i64 status (api.raw = "status")
-    7:  optional string username (api.raw = "username")
-    8:  optional string nickname (api.raw = "nickname")
-    9:  optional string password (api.raw = "password")
-
+    7:  optional string name (api.raw = "name")
+    8:  optional string gender (api.raw = "gender")
+    9:  optional string wecom (api.raw = "wecom")
+    10: optional i64 createId (api.raw = "createId")
+    11: optional string birthday (api.raw = "birthday")
 
 }
 
@@ -63,6 +63,10 @@ struct UserListReq {
     7:  optional i64 role_id (api.raw = "role_id")
 }
 
+struct SetUserRole{
+    1:  optional i64 id (api.raw = "id")
+    2:  optional i64 role_id (api.raw = "role_id")
+}
 
 service UserService {
   // 注册
@@ -100,5 +104,8 @@ service UserService {
 
   // 更新用户状态
   base.NilResponse UpdateUserStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/user/status")
+
+  // 设置用户角色
+  base.NilResponse SetUserRole(1: SetUserRole req) (api.post = "/api/admin/user/set-role")
 
 }

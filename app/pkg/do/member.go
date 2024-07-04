@@ -21,7 +21,6 @@ type CreateOrUpdateMemberReq struct {
 	Name     string `json:"Name"`
 	Wecom    string `json:"wecom"`
 	Gender   string `json:"gender"`
-	Age      string `json:"age"`
 	Birthday string `json:"birthday"`
 	Password string `json:"password"`
 	CreateId int64  `json:"createId"`

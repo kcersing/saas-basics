@@ -62,7 +62,7 @@ func ChangePassword(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	err = admin.NewUser(ctx, c).ChangePassword(req.UserID, req.OldPassword, req.NewPassword)
+	err = admin.NewUser(ctx, c).ChangePassword(req.UserID, req.NewPassword)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -82,18 +82,14 @@ func CreateUser(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
+	var infoReq do.CreateOrUpdateUserReq
+	err = copier.Copy(&infoReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	err = admin.NewUser(ctx, c).Create(do.CreateOrUpdateUserReq{
-		Username: *req.Username,
-		Password: *req.Password,
-		Email:    *req.Email,
-		Mobile:   *req.Mobile,
-		RoleID:   *req.RoleID,
-		Avatar:   *req.Avatar,
-		Nickname: *req.Nickname,
-		Status:   *req.Status,
-	})
-
+	err = admin.NewUser(ctx, c).Create(infoReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -113,17 +109,14 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	err = admin.NewUser(ctx, c).Update(do.CreateOrUpdateUserReq{
-		ID:       *req.ID,
-		Username: *req.Username,
-		Password: *req.Password,
-		Email:    *req.Email,
-		Mobile:   *req.Mobile,
-		RoleID:   *req.RoleID,
-		Avatar:   *req.Avatar,
-		Nickname: *req.Nickname,
-		Status:   *req.Status,
-	})
+	var infoReq do.CreateOrUpdateUserReq
+	err = copier.Copy(&infoReq, &req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	err = admin.NewUser(ctx, c).Update(infoReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -288,4 +281,20 @@ func UpdateUserStatus(ctx context.Context, c *app.RequestContext) {
 
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
+}
+
+// SetUserRole .
+// @router /api/admin/user/set-role [POST]
+func SetUserRole(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req user.SetUserRole
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
 }

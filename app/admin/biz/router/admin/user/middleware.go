@@ -129,3 +129,8 @@ func _updatememberMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _setuserroleMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
