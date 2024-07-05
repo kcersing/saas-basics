@@ -203,6 +203,10 @@ func (rc *RoleCreate) defaults() {
 		v := role.DefaultOrderNo
 		rc.mutation.SetOrderNo(v)
 	}
+	if _, ok := rc.mutation.Apis(); !ok {
+		v := role.DefaultApis
+		rc.mutation.SetApis(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -20,6 +20,7 @@ func (Schedule) Fields() []ent.Field {
 		field.String("name").Comment("名称").Optional(),
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("property_id").Comment("课程").Optional(),
+		field.Int64("length").Comment("时长").Optional(),
 		field.Int64("place_id").Comment("场地ID").Optional(),
 		field.Int64("num").Comment("上课人数").Optional(),
 		field.Int64("num_surplus").Comment("剩余可约人数").Optional(),

@@ -3,7 +3,9 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
+	"saas/app/pkg/do"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderitem"
 	"strings"
@@ -30,7 +32,7 @@ type OrderItem struct {
 	// 关联会员产品id
 	RelatedUserProductID int64 `json:"related_user_product_id,omitempty"`
 	// 数据附件
-	Data string `json:"data,omitempty"`
+	Data do.CreateOrder `json:"data,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderItemQuery when eager-loading is set.
 	Edges        OrderItemEdges `json:"edges"`
@@ -64,10 +66,10 @@ func (*OrderItem) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case orderitem.FieldData:
+			values[i] = new([]byte)
 		case orderitem.FieldID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID:
 			values[i] = new(sql.NullInt64)
-		case orderitem.FieldData:
-			values[i] = new(sql.NullString)
 		case orderitem.FieldCreatedAt, orderitem.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
@@ -122,10 +124,12 @@ func (oi *OrderItem) assignValues(columns []string, values []any) error {
 				oi.RelatedUserProductID = value.Int64
 			}
 		case orderitem.FieldData:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field data", values[i])
-			} else if value.Valid {
-				oi.Data = value.String
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &oi.Data); err != nil {
+					return fmt.Errorf("unmarshal field data: %w", err)
+				}
 			}
 		default:
 			oi.selectValues.Set(columns[i], values[i])
@@ -184,7 +188,7 @@ func (oi *OrderItem) String() string {
 	builder.WriteString(fmt.Sprintf("%v", oi.RelatedUserProductID))
 	builder.WriteString(", ")
 	builder.WriteString("data=")
-	builder.WriteString(oi.Data)
+	builder.WriteString(fmt.Sprintf("%v", oi.Data))
 	builder.WriteByte(')')
 	return builder.String()
 }

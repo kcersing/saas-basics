@@ -80,11 +80,6 @@ func RelatedUserProductID(v int64) predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldEQ(FieldRelatedUserProductID, v))
 }
 
-// Data applies equality check predicate on the "data" field. It's identical to DataEQ.
-func Data(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldEQ(FieldData, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldEQ(FieldCreatedAt, v))
@@ -295,61 +290,6 @@ func RelatedUserProductIDNotNil() predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldNotNull(FieldRelatedUserProductID))
 }
 
-// DataEQ applies the EQ predicate on the "data" field.
-func DataEQ(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldEQ(FieldData, v))
-}
-
-// DataNEQ applies the NEQ predicate on the "data" field.
-func DataNEQ(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldNEQ(FieldData, v))
-}
-
-// DataIn applies the In predicate on the "data" field.
-func DataIn(vs ...string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldIn(FieldData, vs...))
-}
-
-// DataNotIn applies the NotIn predicate on the "data" field.
-func DataNotIn(vs ...string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldNotIn(FieldData, vs...))
-}
-
-// DataGT applies the GT predicate on the "data" field.
-func DataGT(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldGT(FieldData, v))
-}
-
-// DataGTE applies the GTE predicate on the "data" field.
-func DataGTE(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldGTE(FieldData, v))
-}
-
-// DataLT applies the LT predicate on the "data" field.
-func DataLT(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldLT(FieldData, v))
-}
-
-// DataLTE applies the LTE predicate on the "data" field.
-func DataLTE(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldLTE(FieldData, v))
-}
-
-// DataContains applies the Contains predicate on the "data" field.
-func DataContains(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldContains(FieldData, v))
-}
-
-// DataHasPrefix applies the HasPrefix predicate on the "data" field.
-func DataHasPrefix(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldHasPrefix(FieldData, v))
-}
-
-// DataHasSuffix applies the HasSuffix predicate on the "data" field.
-func DataHasSuffix(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldHasSuffix(FieldData, v))
-}
-
 // DataIsNil applies the IsNil predicate on the "data" field.
 func DataIsNil() predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldIsNull(FieldData))
@@ -358,16 +298,6 @@ func DataIsNil() predicate.OrderItem {
 // DataNotNil applies the NotNil predicate on the "data" field.
 func DataNotNil() predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldNotNull(FieldData))
-}
-
-// DataEqualFold applies the EqualFold predicate on the "data" field.
-func DataEqualFold(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldEqualFold(FieldData, v))
-}
-
-// DataContainsFold applies the ContainsFold predicate on the "data" field.
-func DataContainsFold(v string) predicate.OrderItem {
-	return predicate.OrderItem(sql.FieldContainsFold(FieldData, v))
 }
 
 // HasOrder applies the HasEdge predicate on the "order" edge.

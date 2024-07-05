@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/app/pkg/do"
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/contract"
 	"saas/pkg/db/ent/dictionary"
@@ -21142,7 +21143,7 @@ type OrderItemMutation struct {
 	addproduct_id              *int64
 	related_user_product_id    *int64
 	addrelated_user_product_id *int64
-	data                       *string
+	data                       *do.CreateOrder
 	clearedFields              map[string]struct{}
 	_order                     *int64
 	cleared_order              bool
@@ -21517,12 +21518,12 @@ func (m *OrderItemMutation) ResetRelatedUserProductID() {
 }
 
 // SetData sets the "data" field.
-func (m *OrderItemMutation) SetData(s string) {
-	m.data = &s
+func (m *OrderItemMutation) SetData(do do.CreateOrder) {
+	m.data = &do
 }
 
 // Data returns the value of the "data" field in the mutation.
-func (m *OrderItemMutation) Data() (r string, exists bool) {
+func (m *OrderItemMutation) Data() (r do.CreateOrder, exists bool) {
 	v := m.data
 	if v == nil {
 		return
@@ -21533,7 +21534,7 @@ func (m *OrderItemMutation) Data() (r string, exists bool) {
 // OldData returns the old "data" field's value of the OrderItem entity.
 // If the OrderItem object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrderItemMutation) OldData(ctx context.Context) (v string, err error) {
+func (m *OrderItemMutation) OldData(ctx context.Context) (v do.CreateOrder, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldData is only allowed on UpdateOne operations")
 	}
@@ -21731,7 +21732,7 @@ func (m *OrderItemMutation) SetField(name string, value ent.Value) error {
 		m.SetRelatedUserProductID(v)
 		return nil
 	case orderitem.FieldData:
-		v, ok := value.(string)
+		v, ok := value.(do.CreateOrder)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -27411,6 +27412,8 @@ type ScheduleMutation struct {
 	addvenue_id    *int64
 	property_id    *int64
 	addproperty_id *int64
+	length         *int64
+	addlength      *int64
 	place_id       *int64
 	addplace_id    *int64
 	num            *int64
@@ -27919,6 +27922,76 @@ func (m *ScheduleMutation) ResetPropertyID() {
 	m.property_id = nil
 	m.addproperty_id = nil
 	delete(m.clearedFields, schedule.FieldPropertyID)
+}
+
+// SetLength sets the "length" field.
+func (m *ScheduleMutation) SetLength(i int64) {
+	m.length = &i
+	m.addlength = nil
+}
+
+// Length returns the value of the "length" field in the mutation.
+func (m *ScheduleMutation) Length() (r int64, exists bool) {
+	v := m.length
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLength returns the old "length" field's value of the Schedule entity.
+// If the Schedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMutation) OldLength(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLength is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLength requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLength: %w", err)
+	}
+	return oldValue.Length, nil
+}
+
+// AddLength adds i to the "length" field.
+func (m *ScheduleMutation) AddLength(i int64) {
+	if m.addlength != nil {
+		*m.addlength += i
+	} else {
+		m.addlength = &i
+	}
+}
+
+// AddedLength returns the value that was added to the "length" field in this mutation.
+func (m *ScheduleMutation) AddedLength() (r int64, exists bool) {
+	v := m.addlength
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearLength clears the value of the "length" field.
+func (m *ScheduleMutation) ClearLength() {
+	m.length = nil
+	m.addlength = nil
+	m.clearedFields[schedule.FieldLength] = struct{}{}
+}
+
+// LengthCleared returns if the "length" field was cleared in this mutation.
+func (m *ScheduleMutation) LengthCleared() bool {
+	_, ok := m.clearedFields[schedule.FieldLength]
+	return ok
+}
+
+// ResetLength resets all changes to the "length" field.
+func (m *ScheduleMutation) ResetLength() {
+	m.length = nil
+	m.addlength = nil
+	delete(m.clearedFields, schedule.FieldLength)
 }
 
 // SetPlaceID sets the "place_id" field.
@@ -28637,7 +28710,7 @@ func (m *ScheduleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, schedule.FieldCreatedAt)
 	}
@@ -28658,6 +28731,9 @@ func (m *ScheduleMutation) Fields() []string {
 	}
 	if m.property_id != nil {
 		fields = append(fields, schedule.FieldPropertyID)
+	}
+	if m.length != nil {
+		fields = append(fields, schedule.FieldLength)
 	}
 	if m.place_id != nil {
 		fields = append(fields, schedule.FieldPlaceID)
@@ -28711,6 +28787,8 @@ func (m *ScheduleMutation) Field(name string) (ent.Value, bool) {
 		return m.VenueID()
 	case schedule.FieldPropertyID:
 		return m.PropertyID()
+	case schedule.FieldLength:
+		return m.Length()
 	case schedule.FieldPlaceID:
 		return m.PlaceID()
 	case schedule.FieldNum:
@@ -28754,6 +28832,8 @@ func (m *ScheduleMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldVenueID(ctx)
 	case schedule.FieldPropertyID:
 		return m.OldPropertyID(ctx)
+	case schedule.FieldLength:
+		return m.OldLength(ctx)
 	case schedule.FieldPlaceID:
 		return m.OldPlaceID(ctx)
 	case schedule.FieldNum:
@@ -28831,6 +28911,13 @@ func (m *ScheduleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPropertyID(v)
+		return nil
+	case schedule.FieldLength:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLength(v)
 		return nil
 	case schedule.FieldPlaceID:
 		v, ok := value.(int64)
@@ -28919,6 +29006,9 @@ func (m *ScheduleMutation) AddedFields() []string {
 	if m.addproperty_id != nil {
 		fields = append(fields, schedule.FieldPropertyID)
 	}
+	if m.addlength != nil {
+		fields = append(fields, schedule.FieldLength)
+	}
 	if m.addplace_id != nil {
 		fields = append(fields, schedule.FieldPlaceID)
 	}
@@ -28945,6 +29035,8 @@ func (m *ScheduleMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedVenueID()
 	case schedule.FieldPropertyID:
 		return m.AddedPropertyID()
+	case schedule.FieldLength:
+		return m.AddedLength()
 	case schedule.FieldPlaceID:
 		return m.AddedPlaceID()
 	case schedule.FieldNum:
@@ -28982,6 +29074,13 @@ func (m *ScheduleMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddPropertyID(v)
+		return nil
+	case schedule.FieldLength:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLength(v)
 		return nil
 	case schedule.FieldPlaceID:
 		v, ok := value.(int64)
@@ -29033,6 +29132,9 @@ func (m *ScheduleMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(schedule.FieldPropertyID) {
 		fields = append(fields, schedule.FieldPropertyID)
+	}
+	if m.FieldCleared(schedule.FieldLength) {
+		fields = append(fields, schedule.FieldLength)
 	}
 	if m.FieldCleared(schedule.FieldPlaceID) {
 		fields = append(fields, schedule.FieldPlaceID)
@@ -29093,6 +29195,9 @@ func (m *ScheduleMutation) ClearField(name string) error {
 	case schedule.FieldPropertyID:
 		m.ClearPropertyID()
 		return nil
+	case schedule.FieldLength:
+		m.ClearLength()
+		return nil
 	case schedule.FieldPlaceID:
 		m.ClearPlaceID()
 		return nil
@@ -29151,6 +29256,9 @@ func (m *ScheduleMutation) ResetField(name string) error {
 		return nil
 	case schedule.FieldPropertyID:
 		m.ResetPropertyID()
+		return nil
+	case schedule.FieldLength:
+		m.ResetLength()
 		return nil
 	case schedule.FieldPlaceID:
 		m.ResetPlaceID()

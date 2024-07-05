@@ -36,7 +36,12 @@ struct ScheduleMemberReq {
     3:  optional i64 member (api.raw = "member")
     4:  optional i64 schedule (api.raw = "schedule")
 }
-
+struct ScheduleCoachReq{
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 pageSize (api.raw = "pageSize")
+    3:  optional i64 member (api.raw = "coach")
+    4:  optional i64 schedule (api.raw = "schedule")
+}
 
 struct SearchSubscribeByMemberReq{
     1:  optional i64	propertyId  (api.raw = "propertyId")
@@ -69,4 +74,10 @@ service ScheduleService {
     base.NilResponse MemberSubscribe(1: MemberSubscribeReq req) (api.post = "/api/admin/schedule/member-subscribe")
 
     base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/schedule/schedule-member-status")
+
+
+    base.NilResponse GetScheduleCoachList(1: ScheduleMemberReq req) (api.post = "/api/admin/schedule/schedule-coach-list")
+
+    base.NilResponse UpdateCoachStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/schedule/schedule-coach-status")
+
 }

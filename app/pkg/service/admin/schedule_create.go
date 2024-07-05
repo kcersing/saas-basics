@@ -64,6 +64,7 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 		SetEndTime(startTime.Add(time.Duration(property.Length) * time.Minute)).
 		SetPrice(req.Price).
 		SetRemark(req.Remark).
+		SetLength(property.Length).
 		SetName(property.Name).
 		SetVenueName(venueName).
 		SetPlaceName(placeName).

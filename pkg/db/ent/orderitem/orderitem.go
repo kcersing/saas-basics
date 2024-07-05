@@ -69,8 +69,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultRelatedUserProductID holds the default value on creation for the "related_user_product_id" field.
 	DefaultRelatedUserProductID int64
-	// DefaultData holds the default value on creation for the "data" field.
-	DefaultData string
 )
 
 // OrderOption defines the ordering options for the OrderItem queries.
@@ -104,11 +102,6 @@ func ByProductID(opts ...sql.OrderTermOption) OrderOption {
 // ByRelatedUserProductID orders the results by the related_user_product_id field.
 func ByRelatedUserProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelatedUserProductID, opts...).ToFunc()
-}
-
-// ByData orders the results by the data field.
-func ByData(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldData, opts...).ToFunc()
 }
 
 // ByOrderField orders the results by order field.

@@ -88,6 +88,8 @@ var (
 	DefaultRemark string
 	// DefaultOrderNo holds the default value on creation for the "order_no" field.
 	DefaultOrderNo int32
+	// DefaultApis holds the default value on creation for the "apis" field.
+	DefaultApis []int
 )
 
 // OrderOption defines the ordering options for the Role queries.

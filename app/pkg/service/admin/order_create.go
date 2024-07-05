@@ -2,7 +2,6 @@ package admin
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/pkg/minio"
@@ -116,7 +115,8 @@ func (o Order) Create(req do.CreateOrder) (string, error) {
 		_, err := tx.OrderItem.Create().
 			SetOrder(one).
 			SetProductID(products.ID).
-			SetData(fmt.Sprintf("%+v", req)).
+			//SetData(fmt.Sprintf("%+v", req)).
+			SetData(req).
 			Save(o.ctx)
 		if err != nil {
 			err = errors.Wrap(err, "创建 Order Item 失败")

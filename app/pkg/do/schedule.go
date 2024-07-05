@@ -139,19 +139,34 @@ type ScheduleCoachInfo struct {
 	Type          int64  `json:"type"`
 	CreatedAt     string `json:"createdAt"`
 	UpdatedAt     string `json:"updatedAt"`
+	Date          string `json:"date"`
 	StartTime     string `json:"start_time"`
 	EndTime       string `json:"end_time"`
 	SignStartTime string `json:"sign_start_time"`
 	SignEndTime   string `json:"sign_end_time"`
 	Status        int64  `json:"status"`
 
+	ScheduleName string `json:"schedule_name"`
 	PropertyName string `json:"property_name"`
 	VenueName    string `json:"venue_name"`
 	PlaceName    string `json:"place_name"`
 	CoachName    string `json:"coach_name"`
+	CoachAvatar  string `json:"coach_avatar"`
+
+	Mobile                    string `json:"mobile"`
+	MemberName                string `json:"member_name"`
+	MemberAvatar              string `json:"member_avatar"`
+	MemberProductName         string `json:"member_product_name"`
+	MemberProductPropertyName string `json:"member_product_property_name"`
+	Remark                    string `json:"remark"`
+	MRemark                   string `json:"m_remark"`
 }
 
 type ScheduleCoachListReq struct {
+	Page     int64 `json:"page"`
+	PageSize int64 `json:"pageSize"`
+	Coach    int64 `json:"coach"`
+	Schedule int64 `json:"schedule"`
 }
 
 type SubscribeByMember struct {

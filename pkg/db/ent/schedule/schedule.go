@@ -28,6 +28,8 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldPropertyID holds the string denoting the property_id field in the database.
 	FieldPropertyID = "property_id"
+	// FieldLength holds the string denoting the length field in the database.
+	FieldLength = "length"
 	// FieldPlaceID holds the string denoting the place_id field in the database.
 	FieldPlaceID = "place_id"
 	// FieldNum holds the string denoting the num field in the database.
@@ -80,6 +82,7 @@ var Columns = []string{
 	FieldName,
 	FieldVenueID,
 	FieldPropertyID,
+	FieldLength,
 	FieldPlaceID,
 	FieldNum,
 	FieldNumSurplus,
@@ -156,6 +159,11 @@ func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 // ByPropertyID orders the results by the property_id field.
 func ByPropertyID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPropertyID, opts...).ToFunc()
+}
+
+// ByLength orders the results by the length field.
+func ByLength(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLength, opts...).ToFunc()
 }
 
 // ByPlaceID orders the results by the place_id field.

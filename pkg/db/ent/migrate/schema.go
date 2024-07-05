@@ -685,7 +685,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品id"},
 		{Name: "related_user_product_id", Type: field.TypeInt64, Nullable: true, Comment: "关联会员产品id", Default: 0},
-		{Name: "data", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "数据附件", Default: ""},
+		{Name: "data", Type: field.TypeJSON, Nullable: true, Comment: "数据附件"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
 	}
 	// OrderItemTable holds the schema information for the "order_item" table.
@@ -865,6 +865,7 @@ var (
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "property_id", Type: field.TypeInt64, Nullable: true, Comment: "课程"},
+		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "时长"},
 		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
 		{Name: "num", Type: field.TypeInt64, Nullable: true, Comment: "上课人数"},
 		{Name: "num_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余可约人数"},
@@ -895,12 +896,12 @@ var (
 			{
 				Name:    "schedule_start_time",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleColumns[12]},
+				Columns: []*schema.Column{ScheduleColumns[13]},
 			},
 			{
 				Name:    "schedule_end_time",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleColumns[13]},
+				Columns: []*schema.Column{ScheduleColumns[14]},
 			},
 		},
 	}

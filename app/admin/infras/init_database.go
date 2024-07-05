@@ -334,6 +334,8 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 		{Method: "POST", Path: "/api/admin/schedule/schedule-member-list", Description: "schedule.GetScheduleMemberList", Title: "课程会员列表", Group: "schedule"},
 		{Method: "POST", Path: "/api/admin/schedule/schedule-member-status", Description: "schedule.UpdateMemberStatus", Title: "更新会员课程状态", Group: "schedule"},
 		{Method: "POST", Path: "/api/admin/schedule/search-subscribe-by-member", Description: "schedule.SearchSubscribeByMember", Title: "查询可上课程会员", Group: "schedule"},
+		{Method: "POST", Path: "/api/admin/schedule/schedule-coach-list", Description: "schedule.GetScheduleCoachList", Title: "课程教练列表", Group: "schedule"},
+		{Method: "POST", Path: "/api/admin/schedule/schedule-coach-status", Description: "schedule.UpdateCoachStatus", Title: "更新教练课程状态", Group: "schedule"},
 	}
 	//
 	var apis []*ent.APICreate
@@ -357,7 +359,7 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 // init menu data
 func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	var menus []*ent.MenuCreate
-	menus = make([]*ent.MenuCreate, 24)
+	menus = make([]*ent.MenuCreate, 25)
 	menus[0] = I.DB.Menu.Create().
 		//SetMenuLevel(0).
 		//SetMenuType(0).
@@ -464,9 +466,12 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	menus[22] = I.DB.Menu.Create().
 		SetPath("schedules/schedule").
 		SetParentID(8).
-		SetName("课程预约").SetOrderNo(0)
-
+		SetName("团课课程").SetOrderNo(0)
 	menus[23] = I.DB.Menu.Create().
+		SetPath("schedules/course").
+		SetParentID(8).
+		SetName("私教课程").SetOrderNo(0)
+	menus[24] = I.DB.Menu.Create().
 		SetPath("statisticals/all").
 		SetParentID(9).
 		SetName("数据汇总").SetOrderNo(0)

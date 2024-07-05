@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/app/pkg/do"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderitem"
 	"saas/pkg/db/ent/predicate"
@@ -110,15 +111,15 @@ func (oiu *OrderItemUpdate) ClearRelatedUserProductID() *OrderItemUpdate {
 }
 
 // SetData sets the "data" field.
-func (oiu *OrderItemUpdate) SetData(s string) *OrderItemUpdate {
-	oiu.mutation.SetData(s)
+func (oiu *OrderItemUpdate) SetData(do do.CreateOrder) *OrderItemUpdate {
+	oiu.mutation.SetData(do)
 	return oiu
 }
 
 // SetNillableData sets the "data" field if the given value is not nil.
-func (oiu *OrderItemUpdate) SetNillableData(s *string) *OrderItemUpdate {
-	if s != nil {
-		oiu.SetData(*s)
+func (oiu *OrderItemUpdate) SetNillableData(do *do.CreateOrder) *OrderItemUpdate {
+	if do != nil {
+		oiu.SetData(*do)
 	}
 	return oiu
 }
@@ -212,10 +213,10 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
 	if value, ok := oiu.mutation.Data(); ok {
-		_spec.SetField(orderitem.FieldData, field.TypeString, value)
+		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)
 	}
 	if oiu.mutation.DataCleared() {
-		_spec.ClearField(orderitem.FieldData, field.TypeString)
+		_spec.ClearField(orderitem.FieldData, field.TypeJSON)
 	}
 	if oiu.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -347,15 +348,15 @@ func (oiuo *OrderItemUpdateOne) ClearRelatedUserProductID() *OrderItemUpdateOne 
 }
 
 // SetData sets the "data" field.
-func (oiuo *OrderItemUpdateOne) SetData(s string) *OrderItemUpdateOne {
-	oiuo.mutation.SetData(s)
+func (oiuo *OrderItemUpdateOne) SetData(do do.CreateOrder) *OrderItemUpdateOne {
+	oiuo.mutation.SetData(do)
 	return oiuo
 }
 
 // SetNillableData sets the "data" field if the given value is not nil.
-func (oiuo *OrderItemUpdateOne) SetNillableData(s *string) *OrderItemUpdateOne {
-	if s != nil {
-		oiuo.SetData(*s)
+func (oiuo *OrderItemUpdateOne) SetNillableData(do *do.CreateOrder) *OrderItemUpdateOne {
+	if do != nil {
+		oiuo.SetData(*do)
 	}
 	return oiuo
 }
@@ -479,10 +480,10 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
 	if value, ok := oiuo.mutation.Data(); ok {
-		_spec.SetField(orderitem.FieldData, field.TypeString, value)
+		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)
 	}
 	if oiuo.mutation.DataCleared() {
-		_spec.ClearField(orderitem.FieldData, field.TypeString)
+		_spec.ClearField(orderitem.FieldData, field.TypeJSON)
 	}
 	if oiuo.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{

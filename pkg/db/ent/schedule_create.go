@@ -120,6 +120,20 @@ func (sc *ScheduleCreate) SetNillablePropertyID(i *int64) *ScheduleCreate {
 	return sc
 }
 
+// SetLength sets the "length" field.
+func (sc *ScheduleCreate) SetLength(i int64) *ScheduleCreate {
+	sc.mutation.SetLength(i)
+	return sc
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (sc *ScheduleCreate) SetNillableLength(i *int64) *ScheduleCreate {
+	if i != nil {
+		sc.SetLength(*i)
+	}
+	return sc
+}
+
 // SetPlaceID sets the "place_id" field.
 func (sc *ScheduleCreate) SetPlaceID(i int64) *ScheduleCreate {
 	sc.mutation.SetPlaceID(i)
@@ -416,6 +430,10 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.PropertyID(); ok {
 		_spec.SetField(schedule.FieldPropertyID, field.TypeInt64, value)
 		_node.PropertyID = value
+	}
+	if value, ok := sc.mutation.Length(); ok {
+		_spec.SetField(schedule.FieldLength, field.TypeInt64, value)
+		_node.Length = value
 	}
 	if value, ok := sc.mutation.PlaceID(); ok {
 		_spec.SetField(schedule.FieldPlaceID, field.TypeInt64, value)

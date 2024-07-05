@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/app/pkg/do"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderitem"
 	"time"
@@ -92,15 +93,15 @@ func (oic *OrderItemCreate) SetNillableRelatedUserProductID(i *int64) *OrderItem
 }
 
 // SetData sets the "data" field.
-func (oic *OrderItemCreate) SetData(s string) *OrderItemCreate {
-	oic.mutation.SetData(s)
+func (oic *OrderItemCreate) SetData(do do.CreateOrder) *OrderItemCreate {
+	oic.mutation.SetData(do)
 	return oic
 }
 
 // SetNillableData sets the "data" field if the given value is not nil.
-func (oic *OrderItemCreate) SetNillableData(s *string) *OrderItemCreate {
-	if s != nil {
-		oic.SetData(*s)
+func (oic *OrderItemCreate) SetNillableData(do *do.CreateOrder) *OrderItemCreate {
+	if do != nil {
+		oic.SetData(*do)
 	}
 	return oic
 }
@@ -163,10 +164,6 @@ func (oic *OrderItemCreate) defaults() {
 		v := orderitem.DefaultRelatedUserProductID
 		oic.mutation.SetRelatedUserProductID(v)
 	}
-	if _, ok := oic.mutation.Data(); !ok {
-		v := orderitem.DefaultData
-		oic.mutation.SetData(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -226,7 +223,7 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 		_node.RelatedUserProductID = value
 	}
 	if value, ok := oic.mutation.Data(); ok {
-		_spec.SetField(orderitem.FieldData, field.TypeString, value)
+		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)
 		_node.Data = value
 	}
 	if nodes := oic.mutation.OrderIDs(); len(nodes) > 0 {

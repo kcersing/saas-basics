@@ -80,3 +80,13 @@ func _updatememberstatusMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _getschedulecoachlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatecoachstatusMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

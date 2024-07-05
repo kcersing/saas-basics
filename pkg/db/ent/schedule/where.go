@@ -90,6 +90,11 @@ func PropertyID(v int64) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldPropertyID, v))
 }
 
+// Length applies equality check predicate on the "length" field. It's identical to LengthEQ.
+func Length(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldLength, v))
+}
+
 // PlaceID applies equality check predicate on the "place_id" field. It's identical to PlaceIDEQ.
 func PlaceID(v int64) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldPlaceID, v))
@@ -518,6 +523,56 @@ func PropertyIDIsNil() predicate.Schedule {
 // PropertyIDNotNil applies the NotNil predicate on the "property_id" field.
 func PropertyIDNotNil() predicate.Schedule {
 	return predicate.Schedule(sql.FieldNotNull(FieldPropertyID))
+}
+
+// LengthEQ applies the EQ predicate on the "length" field.
+func LengthEQ(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldLength, v))
+}
+
+// LengthNEQ applies the NEQ predicate on the "length" field.
+func LengthNEQ(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNEQ(FieldLength, v))
+}
+
+// LengthIn applies the In predicate on the "length" field.
+func LengthIn(vs ...int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldIn(FieldLength, vs...))
+}
+
+// LengthNotIn applies the NotIn predicate on the "length" field.
+func LengthNotIn(vs ...int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotIn(FieldLength, vs...))
+}
+
+// LengthGT applies the GT predicate on the "length" field.
+func LengthGT(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGT(FieldLength, v))
+}
+
+// LengthGTE applies the GTE predicate on the "length" field.
+func LengthGTE(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGTE(FieldLength, v))
+}
+
+// LengthLT applies the LT predicate on the "length" field.
+func LengthLT(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLT(FieldLength, v))
+}
+
+// LengthLTE applies the LTE predicate on the "length" field.
+func LengthLTE(v int64) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLTE(FieldLength, v))
+}
+
+// LengthIsNil applies the IsNil predicate on the "length" field.
+func LengthIsNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldIsNull(FieldLength))
+}
+
+// LengthNotNil applies the NotNil predicate on the "length" field.
+func LengthNotNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotNull(FieldLength))
 }
 
 // PlaceIDEQ applies the EQ predicate on the "place_id" field.

@@ -115,17 +115,16 @@ func (c Schedule) MemberList(req do.ScheduleMemberListReq) (resp []*do.ScheduleM
 		return resp, 0, err
 	}
 	for i, v := range lists {
-		ven, _ := c.db.Venue.Query().Where(venue.ID(v.VenueID)).First(c.ctx)
-		resp[i].VenueName = ven.Name
-
-		m, err := c.db.Member.Query().Where(member.ID(v.MemberID)).First(c.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "未找到会员")
-			return resp, 0, err
-		} else {
+		vInfo, err := NewVenue(c.ctx, c.c).VenueInfo(v.VenueID)
+		if err == nil {
+			resp[i].VenueName = vInfo.Name
+		}
+		m, err := NewMember(c.ctx, c.c).Info(v.MemberID)
+		if err == nil {
 			resp[i].Mobile = m.Mobile
 			resp[i].MemberName = m.Name
 		}
+
 		md, err := c.db.MemberDetails.Query().Where(memberdetails.MemberID(v.MemberID)).First(c.ctx)
 		if err != nil {
 			err = errors.Wrap(err, "未找到会员详情")

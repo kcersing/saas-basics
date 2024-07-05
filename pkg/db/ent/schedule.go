@@ -32,6 +32,8 @@ type Schedule struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 课程
 	PropertyID int64 `json:"property_id,omitempty"`
+	// 时长
+	Length int64 `json:"length,omitempty"`
 	// 场地ID
 	PlaceID int64 `json:"place_id,omitempty"`
 	// 上课人数
@@ -94,7 +96,7 @@ func (*Schedule) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedule.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case schedule.FieldID, schedule.FieldStatus, schedule.FieldVenueID, schedule.FieldPropertyID, schedule.FieldPlaceID, schedule.FieldNum, schedule.FieldNumSurplus:
+		case schedule.FieldID, schedule.FieldStatus, schedule.FieldVenueID, schedule.FieldPropertyID, schedule.FieldLength, schedule.FieldPlaceID, schedule.FieldNum, schedule.FieldNumSurplus:
 			values[i] = new(sql.NullInt64)
 		case schedule.FieldType, schedule.FieldName, schedule.FieldDate, schedule.FieldRemark, schedule.FieldVenueName, schedule.FieldPlaceName:
 			values[i] = new(sql.NullString)
@@ -162,6 +164,12 @@ func (s *Schedule) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field property_id", values[i])
 			} else if value.Valid {
 				s.PropertyID = value.Int64
+			}
+		case schedule.FieldLength:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field length", values[i])
+			} else if value.Valid {
+				s.Length = value.Int64
 			}
 		case schedule.FieldPlaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -289,6 +297,9 @@ func (s *Schedule) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("property_id=")
 	builder.WriteString(fmt.Sprintf("%v", s.PropertyID))
+	builder.WriteString(", ")
+	builder.WriteString("length=")
+	builder.WriteString(fmt.Sprintf("%v", s.Length))
 	builder.WriteString(", ")
 	builder.WriteString("place_id=")
 	builder.WriteString(fmt.Sprintf("%v", s.PlaceID))

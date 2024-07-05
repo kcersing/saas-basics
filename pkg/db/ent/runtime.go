@@ -503,10 +503,6 @@ func init() {
 	orderitemDescRelatedUserProductID := orderitemFields[2].Descriptor()
 	// orderitem.DefaultRelatedUserProductID holds the default value on creation for the related_user_product_id field.
 	orderitem.DefaultRelatedUserProductID = orderitemDescRelatedUserProductID.Default.(int64)
-	// orderitemDescData is the schema descriptor for data field.
-	orderitemDescData := orderitemFields[3].Descriptor()
-	// orderitem.DefaultData holds the default value on creation for the data field.
-	orderitem.DefaultData = orderitemDescData.Default.(string)
 	orderpayMixin := schema.OrderPay{}.Mixin()
 	orderpayMixinFields0 := orderpayMixin[0].Fields()
 	_ = orderpayMixinFields0
@@ -618,6 +614,10 @@ func init() {
 	roleDescOrderNo := roleFields[4].Descriptor()
 	// role.DefaultOrderNo holds the default value on creation for the order_no field.
 	role.DefaultOrderNo = roleDescOrderNo.Default.(int32)
+	// roleDescApis is the schema descriptor for apis field.
+	roleDescApis := roleFields[5].Descriptor()
+	// role.DefaultApis holds the default value on creation for the apis field.
+	role.DefaultApis = roleDescApis.Default.([]int)
 	scheduleMixin := schema.Schedule{}.Mixin()
 	scheduleMixinFields0 := scheduleMixin[0].Fields()
 	_ = scheduleMixinFields0
@@ -640,7 +640,7 @@ func init() {
 	// schedule.DefaultStatus holds the default value on creation for the status field.
 	schedule.DefaultStatus = scheduleDescStatus.Default.(int64)
 	// scheduleDescPrice is the schema descriptor for price field.
-	scheduleDescPrice := scheduleFields[10].Descriptor()
+	scheduleDescPrice := scheduleFields[11].Descriptor()
 	// schedule.DefaultPrice holds the default value on creation for the price field.
 	schedule.DefaultPrice = scheduleDescPrice.Default.(float64)
 	schedulecoachMixin := schema.ScheduleCoach{}.Mixin()

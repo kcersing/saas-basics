@@ -157,6 +157,33 @@ func (su *ScheduleUpdate) ClearPropertyID() *ScheduleUpdate {
 	return su
 }
 
+// SetLength sets the "length" field.
+func (su *ScheduleUpdate) SetLength(i int64) *ScheduleUpdate {
+	su.mutation.ResetLength()
+	su.mutation.SetLength(i)
+	return su
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (su *ScheduleUpdate) SetNillableLength(i *int64) *ScheduleUpdate {
+	if i != nil {
+		su.SetLength(*i)
+	}
+	return su
+}
+
+// AddLength adds i to the "length" field.
+func (su *ScheduleUpdate) AddLength(i int64) *ScheduleUpdate {
+	su.mutation.AddLength(i)
+	return su
+}
+
+// ClearLength clears the value of the "length" field.
+func (su *ScheduleUpdate) ClearLength() *ScheduleUpdate {
+	su.mutation.ClearLength()
+	return su
+}
+
 // SetPlaceID sets the "place_id" field.
 func (su *ScheduleUpdate) SetPlaceID(i int64) *ScheduleUpdate {
 	su.mutation.ResetPlaceID()
@@ -549,6 +576,15 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.PropertyIDCleared() {
 		_spec.ClearField(schedule.FieldPropertyID, field.TypeInt64)
 	}
+	if value, ok := su.mutation.Length(); ok {
+		_spec.SetField(schedule.FieldLength, field.TypeInt64, value)
+	}
+	if value, ok := su.mutation.AddedLength(); ok {
+		_spec.AddField(schedule.FieldLength, field.TypeInt64, value)
+	}
+	if su.mutation.LengthCleared() {
+		_spec.ClearField(schedule.FieldLength, field.TypeInt64)
+	}
 	if value, ok := su.mutation.PlaceID(); ok {
 		_spec.SetField(schedule.FieldPlaceID, field.TypeInt64, value)
 	}
@@ -855,6 +891,33 @@ func (suo *ScheduleUpdateOne) AddPropertyID(i int64) *ScheduleUpdateOne {
 // ClearPropertyID clears the value of the "property_id" field.
 func (suo *ScheduleUpdateOne) ClearPropertyID() *ScheduleUpdateOne {
 	suo.mutation.ClearPropertyID()
+	return suo
+}
+
+// SetLength sets the "length" field.
+func (suo *ScheduleUpdateOne) SetLength(i int64) *ScheduleUpdateOne {
+	suo.mutation.ResetLength()
+	suo.mutation.SetLength(i)
+	return suo
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (suo *ScheduleUpdateOne) SetNillableLength(i *int64) *ScheduleUpdateOne {
+	if i != nil {
+		suo.SetLength(*i)
+	}
+	return suo
+}
+
+// AddLength adds i to the "length" field.
+func (suo *ScheduleUpdateOne) AddLength(i int64) *ScheduleUpdateOne {
+	suo.mutation.AddLength(i)
+	return suo
+}
+
+// ClearLength clears the value of the "length" field.
+func (suo *ScheduleUpdateOne) ClearLength() *ScheduleUpdateOne {
+	suo.mutation.ClearLength()
 	return suo
 }
 
@@ -1279,6 +1342,15 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 	}
 	if suo.mutation.PropertyIDCleared() {
 		_spec.ClearField(schedule.FieldPropertyID, field.TypeInt64)
+	}
+	if value, ok := suo.mutation.Length(); ok {
+		_spec.SetField(schedule.FieldLength, field.TypeInt64, value)
+	}
+	if value, ok := suo.mutation.AddedLength(); ok {
+		_spec.AddField(schedule.FieldLength, field.TypeInt64, value)
+	}
+	if suo.mutation.LengthCleared() {
+		_spec.ClearField(schedule.FieldLength, field.TypeInt64)
 	}
 	if value, ok := suo.mutation.PlaceID(); ok {
 		_spec.SetField(schedule.FieldPlaceID, field.TypeInt64, value)
