@@ -2,6 +2,19 @@ version: '3'
 
 services:
 
+  #golang 服务
+  golang:
+    hostname: golang
+    #image: golang:latest  # 父镜像名称
+    image: golang:1.21.4
+    volumes: # 挂载卷
+      - /D/docker/go-project:/go
+    ports: # 端口映射
+      - "9039:9039"
+    stdin_open: true
+    tty: true
+    # command: 启动后运行的命令
+
   minio:
     image: minio/minio
     container_name: saas_minio
