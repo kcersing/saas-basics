@@ -9,10 +9,12 @@ type Contract interface {
 }
 
 type ContractInfo struct {
-	ID      int64  `json:"id"`
-	Name    string `json:"name"`
-	Status  int64  `json:"status"`
-	Content string `json:"content"`
+	ID        int64  `json:"id"`
+	Name      string `json:"name"`
+	Status    int64  `json:"status"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 type ContractListReq struct {
 	Page     int64  `json:"page"`

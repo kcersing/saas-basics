@@ -6,7 +6,7 @@ include "../base/data.thrift"
 //日志列表请求数据
 struct LogsListReq {
     1:  i64 page (api.raw = "page")
-    2:  i64 limit (api.raw = "limit")
+    2:  i64 pageSize (api.raw = "pageSize")
     3:  string type (api.raw = "type")
     4:  string method (api.raw = "method")
     5:  string api (api.raw = "api")

@@ -145,6 +145,10 @@ func (v Venue) List(req *do.VenueListReq) (list []*do.VenueInfo, total int, err 
 		err = errors.Wrap(err, "copy Venue info failed")
 		return list, 0, err
 	}
+	for i, v := range venueList {
+		list[i].CreatedAt = v.CreatedAt.Format(time.DateTime)
+	}
+
 	total, _ = v.db.Venue.Query().Where(predicates...).Count(v.ctx)
 	return
 }

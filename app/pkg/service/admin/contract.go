@@ -101,6 +101,10 @@ func (c Contract) List(req *do.ContractListReq) (list []*do.ContractInfo, total 
 		err = errors.Wrap(err, "copy Contract info failed")
 		return list, 0, err
 	}
+
+	for i, v := range all {
+		list[i].CreatedAt = v.CreatedAt.Format(time.DateTime)
+	}
 	total, _ = c.db.Contract.Query().Where(predicates...).Count(c.ctx)
 	return
 }

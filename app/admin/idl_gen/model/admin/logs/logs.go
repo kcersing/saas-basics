@@ -11,8 +11,8 @@ import (
 
 // 日志列表请求数据
 type LogsListReq struct {
-	Page      string `thrift:"page,1" form:"page" json:"page" query:"page"`
-	Limit     string `thrift:"limit,2" form:"limit" json:"limit" query:"limit"`
+	Page      int64  `thrift:"page,1" form:"page" json:"page" query:"page"`
+	PageSize  int64  `thrift:"pageSize,2" form:"pageSize" json:"pageSize" query:"pageSize"`
 	Type      string `thrift:"type,3" form:"type" json:"type" query:"type"`
 	Method    string `thrift:"method,4" form:"method" json:"method" query:"method"`
 	API       string `thrift:"api,5" form:"api" json:"api" query:"api"`
@@ -24,12 +24,12 @@ func NewLogsListReq() *LogsListReq {
 	return &LogsListReq{}
 }
 
-func (p *LogsListReq) GetPage() (v string) {
+func (p *LogsListReq) GetPage() (v int64) {
 	return p.Page
 }
 
-func (p *LogsListReq) GetLimit() (v string) {
-	return p.Limit
+func (p *LogsListReq) GetPageSize() (v int64) {
+	return p.PageSize
 }
 
 func (p *LogsListReq) GetType() (v string) {
@@ -54,7 +54,7 @@ func (p *LogsListReq) GetOperators() (v string) {
 
 var fieldIDToName_LogsListReq = map[int16]string{
 	1: "page",
-	2: "limit",
+	2: "pageSize",
 	3: "type",
 	4: "method",
 	5: "api",
@@ -82,7 +82,7 @@ func (p *LogsListReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -90,7 +90,7 @@ func (p *LogsListReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -168,7 +168,7 @@ ReadStructEndError:
 
 func (p *LogsListReq) ReadField1(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.Page = v
@@ -177,10 +177,10 @@ func (p *LogsListReq) ReadField1(iprot thrift.TProtocol) error {
 }
 func (p *LogsListReq) ReadField2(iprot thrift.TProtocol) error {
 
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Limit = v
+		p.PageSize = v
 	}
 	return nil
 }
@@ -283,10 +283,10 @@ WriteStructEndError:
 }
 
 func (p *LogsListReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Page); err != nil {
+	if err := oprot.WriteI64(p.Page); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -300,10 +300,10 @@ WriteFieldEndError:
 }
 
 func (p *LogsListReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("limit", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Limit); err != nil {
+	if err := oprot.WriteI64(p.PageSize); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

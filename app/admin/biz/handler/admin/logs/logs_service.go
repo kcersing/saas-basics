@@ -4,16 +4,14 @@ package logs
 
 import (
 	"context"
-	"saas/app/admin/pkg/errno"
-	"saas/app/admin/pkg/utils"
-	"saas/app/pkg/do"
-	"saas/app/pkg/service/admin"
-	"strconv"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	logs "saas/app/admin/idl_gen/model/admin/logs"
 	base "saas/app/admin/idl_gen/model/base"
+	"saas/app/admin/pkg/errno"
+	"saas/app/admin/pkg/utils"
+	"saas/app/pkg/do"
+	"saas/app/pkg/service/admin"
 )
 
 // GetLogsList .
@@ -27,11 +25,9 @@ func GetLogsList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	page, _ := strconv.Atoi(req.Page)
-	limit, _ := strconv.Atoi(req.Limit)
 	var logsListReq do.LogsListReq
-	logsListReq.Page = int64(page)
-	logsListReq.PageSize = int64(limit)
+	logsListReq.Page = req.Page
+	logsListReq.PageSize = req.PageSize
 	logsListReq.Type = req.Type
 	logsListReq.Api = req.API
 	logsListReq.Method = req.Method

@@ -153,8 +153,8 @@ func (m Member) List(req do.MemberListReq) (resp []*do.MemberInfo, total int, er
 		return resp, 0, err
 	}
 
-	for _, v := range resp {
-		v.Avatar = minio.URLconvert(m.ctx, m.c, v.Avatar)
+	for i, v := range lists {
+		resp[i], _ = m.Info(v.ID)
 	}
 
 	total, _ = m.db.Member.Query().Where(predicates...).Count(m.ctx)

@@ -192,13 +192,13 @@ func MemberPropertyList(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	var listReq do.MemberListReq
+	var listReq do.MemberPropertyListReq
 	err = copier.Copy(&listReq, &req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	userList, total, err := admin.NewMember(ctx, c).List(listReq)
+	userList, total, err := admin.NewMemberProduct(ctx, c).PropertyList(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
