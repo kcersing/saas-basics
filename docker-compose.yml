@@ -5,19 +5,24 @@ services:
   #golang 服务
   golang:
     hostname: golang
-    #image: golang:latest  # 父镜像名称
-    image: golang:1.21.4
+#    image: golang:latest  # 父镜像名称
+    image: golang:1.22.5
     volumes: # 挂载卷
-      - /D/docker/go-project:/go
-    ports: # 端口映射
-      - "9039:9039"
+      - /D/docker/src:/go
+#    ports: # 端口映射
+#      - "9039:9039"
     stdin_open: true
     tty: true
+    restart: always
+    privileged: true
     # command: 启动后运行的命令
+#    profiles:
+#      - dev
+#      - release
 
   minio:
     image: minio/minio
-    container_name: saas_minio
+    container_name: minio
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -30,6 +35,6 @@ services:
     command: server --console-address ':9001' /data
     privileged: true
     restart: always
-    profiles:
-      - dev
-      - release
+#    profiles:
+#      - dev
+#      - release
