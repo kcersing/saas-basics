@@ -35,8 +35,6 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 
 	parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
 
-	password, _ := encrypt.Crypt(req.Mobile)
-
 	var gender int64
 	if req.Gender == "女性" {
 		gender = 0
@@ -51,15 +49,20 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 		return errors.Wrap(err, "starting a transaction:")
 	}
 
-	noe, err := tx.Member.Create().
-		SetPassword(password).
+	mer := tx.Member.Create().
 		SetAvatar(req.Avatar).
 		SetMobile(req.Mobile).
 		SetNickname(req.Name).
 		SetStatus(req.Status).
 		SetName(req.Name).
-		SetCondition(0).
-		Save(m.ctx)
+		SetCondition(0)
+
+	if req.Password != "" {
+		password, _ := encrypt.Crypt(req.Mobile)
+		mer.SetPassword(password)
+	}
+	noe, err := mer.Save(m.ctx)
+
 	if err != nil {
 		err = rollback(tx, errors.Wrap(err, "create user failed"))
 		return err
@@ -95,18 +98,23 @@ func (m Member) Create(req do.CreateOrUpdateMemberReq) error {
 }
 
 func (m Member) Update(req do.CreateOrUpdateMemberReq) error {
-	password, _ := encrypt.Crypt(req.Password)
 
 	tx, err := m.db.Tx(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "starting a transaction:")
 	}
-	_, err = tx.Member.Update().
+	up := tx.Member.Update().
 		Where(member.IDEQ(req.ID)).
-		SetPassword(password).
+		SetAvatar(req.Avatar).
 		SetStatus(req.Status).
-		SetMobile(req.Mobile).
-		Save(m.ctx)
+		SetMobile(req.Mobile)
+
+	if req.Password != "" {
+		password, _ := encrypt.Crypt(req.Password)
+		up.SetPassword(password)
+	}
+
+	_, err = up.Save(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create user failed")
 		return err
