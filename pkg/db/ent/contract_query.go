@@ -21,6 +21,7 @@ type ContractQuery struct {
 	order      []contract.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Contract
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -342,6 +343,9 @@ func (cq *ContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Con
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
+	if len(cq.modifiers) > 0 {
+		_spec.Modifiers = cq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -356,6 +360,9 @@ func (cq *ContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Con
 
 func (cq *ContractQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
+	if len(cq.modifiers) > 0 {
+		_spec.Modifiers = cq.modifiers
+	}
 	_spec.Node.Columns = cq.ctx.Fields
 	if len(cq.ctx.Fields) > 0 {
 		_spec.Unique = cq.ctx.Unique != nil && *cq.ctx.Unique
@@ -418,6 +425,9 @@ func (cq *ContractQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if cq.ctx.Unique != nil && *cq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range cq.modifiers {
+		m(selector)
+	}
 	for _, p := range cq.predicates {
 		p(selector)
 	}
@@ -433,6 +443,12 @@ func (cq *ContractQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (cq *ContractQuery) Modify(modifiers ...func(s *sql.Selector)) *ContractSelect {
+	cq.modifiers = append(cq.modifiers, modifiers...)
+	return cq.Select()
 }
 
 // ContractGroupBy is the group-by builder for Contract entities.
@@ -523,4 +539,10 @@ func (cs *ContractSelect) sqlScan(ctx context.Context, root *ContractQuery, v an
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (cs *ContractSelect) Modify(modifiers ...func(s *sql.Selector)) *ContractSelect {
+	cs.modifiers = append(cs.modifiers, modifiers...)
+	return cs
 }

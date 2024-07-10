@@ -108,3 +108,13 @@ func _membercontractlistMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _memberproductsearchMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberpropertysearchMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

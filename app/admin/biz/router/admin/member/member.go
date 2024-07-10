@@ -33,6 +33,8 @@ func Register(r *server.Hertz) {
 				_member.POST("/property-list", append(_memberpropertylistMw(), member.MemberPropertyList)...)
 				_member.POST("/property-update", append(_memberpropertyupdateMw(), member.MemberPropertyUpdate)...)
 				_member.POST("/search", append(_membersearchMw(), member.MemberSearch)...)
+				_member.POST("/search-product", append(_memberproductsearchMw(), member.MemberProductSearch)...)
+				_member.POST("/search-property", append(_memberpropertysearchMw(), member.MemberPropertySearch)...)
 				_member.POST("/status", append(_updatememberstatusMw(), member.UpdateMemberStatus)...)
 				_member.POST("/update", append(_updatememberMw(), member.UpdateMember)...)
 			}

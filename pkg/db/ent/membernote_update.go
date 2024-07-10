@@ -19,8 +19,9 @@ import (
 // MemberNoteUpdate is the builder for updating MemberNote entities.
 type MemberNoteUpdate struct {
 	config
-	hooks    []Hook
-	mutation *MemberNoteMutation
+	hooks     []Hook
+	mutation  *MemberNoteMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the MemberNoteUpdate builder.
@@ -168,6 +169,12 @@ func (mnu *MemberNoteUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (mnu *MemberNoteUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberNoteUpdate {
+	mnu.modifiers = append(mnu.modifiers, modifiers...)
+	return mnu
+}
+
 func (mnu *MemberNoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(membernote.Table, membernote.Columns, sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64))
 	if ps := mnu.mutation.predicates; len(ps) > 0 {
@@ -224,6 +231,7 @@ func (mnu *MemberNoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(mnu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mnu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{membernote.Label}
@@ -239,9 +247,10 @@ func (mnu *MemberNoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // MemberNoteUpdateOne is the builder for updating a single MemberNote entity.
 type MemberNoteUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *MemberNoteMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *MemberNoteMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -396,6 +405,12 @@ func (mnuo *MemberNoteUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (mnuo *MemberNoteUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberNoteUpdateOne {
+	mnuo.modifiers = append(mnuo.modifiers, modifiers...)
+	return mnuo
+}
+
 func (mnuo *MemberNoteUpdateOne) sqlSave(ctx context.Context) (_node *MemberNote, err error) {
 	_spec := sqlgraph.NewUpdateSpec(membernote.Table, membernote.Columns, sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64))
 	id, ok := mnuo.mutation.ID()
@@ -469,6 +484,7 @@ func (mnuo *MemberNoteUpdateOne) sqlSave(ctx context.Context) (_node *MemberNote
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(mnuo.modifiers...)
 	_node = &MemberNote{config: mnuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

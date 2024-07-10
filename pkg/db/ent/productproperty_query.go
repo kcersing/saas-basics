@@ -26,6 +26,7 @@ type ProductPropertyQuery struct {
 	predicates  []predicate.ProductProperty
 	withProduct *ProductQuery
 	withVenues  *VenueQuery
+	modifiers   []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -420,6 +421,9 @@ func (ppq *ProductPropertyQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(ppq.modifiers) > 0 {
+		_spec.Modifiers = ppq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -571,6 +575,9 @@ func (ppq *ProductPropertyQuery) loadVenues(ctx context.Context, query *VenueQue
 
 func (ppq *ProductPropertyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := ppq.querySpec()
+	if len(ppq.modifiers) > 0 {
+		_spec.Modifiers = ppq.modifiers
+	}
 	_spec.Node.Columns = ppq.ctx.Fields
 	if len(ppq.ctx.Fields) > 0 {
 		_spec.Unique = ppq.ctx.Unique != nil && *ppq.ctx.Unique
@@ -633,6 +640,9 @@ func (ppq *ProductPropertyQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if ppq.ctx.Unique != nil && *ppq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range ppq.modifiers {
+		m(selector)
+	}
 	for _, p := range ppq.predicates {
 		p(selector)
 	}
@@ -648,6 +658,12 @@ func (ppq *ProductPropertyQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ppq *ProductPropertyQuery) Modify(modifiers ...func(s *sql.Selector)) *ProductPropertySelect {
+	ppq.modifiers = append(ppq.modifiers, modifiers...)
+	return ppq.Select()
 }
 
 // ProductPropertyGroupBy is the group-by builder for ProductProperty entities.
@@ -738,4 +754,10 @@ func (pps *ProductPropertySelect) sqlScan(ctx context.Context, root *ProductProp
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (pps *ProductPropertySelect) Modify(modifiers ...func(s *sql.Selector)) *ProductPropertySelect {
+	pps.modifiers = append(pps.modifiers, modifiers...)
+	return pps
 }

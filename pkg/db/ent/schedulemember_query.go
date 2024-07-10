@@ -23,6 +23,7 @@ type ScheduleMemberQuery struct {
 	inters       []Interceptor
 	predicates   []predicate.ScheduleMember
 	withSchedule *ScheduleQuery
+	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -382,6 +383,9 @@ func (smq *ScheduleMemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(smq.modifiers) > 0 {
+		_spec.Modifiers = smq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +436,9 @@ func (smq *ScheduleMemberQuery) loadSchedule(ctx context.Context, query *Schedul
 
 func (smq *ScheduleMemberQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := smq.querySpec()
+	if len(smq.modifiers) > 0 {
+		_spec.Modifiers = smq.modifiers
+	}
 	_spec.Node.Columns = smq.ctx.Fields
 	if len(smq.ctx.Fields) > 0 {
 		_spec.Unique = smq.ctx.Unique != nil && *smq.ctx.Unique
@@ -497,6 +504,9 @@ func (smq *ScheduleMemberQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if smq.ctx.Unique != nil && *smq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range smq.modifiers {
+		m(selector)
+	}
 	for _, p := range smq.predicates {
 		p(selector)
 	}
@@ -512,6 +522,12 @@ func (smq *ScheduleMemberQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (smq *ScheduleMemberQuery) Modify(modifiers ...func(s *sql.Selector)) *ScheduleMemberSelect {
+	smq.modifiers = append(smq.modifiers, modifiers...)
+	return smq.Select()
 }
 
 // ScheduleMemberGroupBy is the group-by builder for ScheduleMember entities.
@@ -602,4 +618,10 @@ func (sms *ScheduleMemberSelect) sqlScan(ctx context.Context, root *ScheduleMemb
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (sms *ScheduleMemberSelect) Modify(modifiers ...func(s *sql.Selector)) *ScheduleMemberSelect {
+	sms.modifiers = append(sms.modifiers, modifiers...)
+	return sms
 }

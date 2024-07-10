@@ -9,6 +9,9 @@ type Member interface {
 	ChangePassword(ID int64, oldPassword, newPassword string) error
 	UpdateStatus(ID int64, status int64) error
 	Search(option string, value string) (memberInfo *MemberInfo, err error)
+
+	ProductSearch(members []int64) (info *ProductInfo, err error)
+	PropertySearch(memberProducts []int64) (info *PropertyInfo, err error)
 }
 
 type CreateOrUpdateMemberReq struct {

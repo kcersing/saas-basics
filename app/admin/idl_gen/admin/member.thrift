@@ -56,7 +56,12 @@ struct MemberContractListReq{
     4:  optional i64 venueId (api.raw = "venue_id")
     5:  optional i64 contractId (api.raw = "contract_id")
 }
-
+struct MemberProductSearchReq{
+    1:  optional list<i64> members (api.raw = "members")
+}
+struct MemberPropertySearchReq{
+    1:  optional list<i64> memberProductIds (api.raw = "member_products")
+}
 
 service MemberService {
 
@@ -89,5 +94,11 @@ service MemberService {
   base.NilResponse MemberPropertyUpdate(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-update")
 
   base.NilResponse MemberContractList(1: MemberPropertyListReq req) (api.post = "/api/admin/member/contract-list")
+
+  base.NilResponse MemberProductSearch(1: MemberProductSearchReq req) (api.post = "/api/admin/member/search-product")
+
+  base.NilResponse MemberPropertySearch(1: MemberPropertySearchReq req) (api.post = "/api/admin/member/search-property")
+
+
 
 }

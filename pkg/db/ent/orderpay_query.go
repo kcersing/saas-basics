@@ -23,6 +23,7 @@ type OrderPayQuery struct {
 	inters     []Interceptor
 	predicates []predicate.OrderPay
 	withOrder  *OrderQuery
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -382,6 +383,9 @@ func (opq *OrderPayQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Or
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(opq.modifiers) > 0 {
+		_spec.Modifiers = opq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +436,9 @@ func (opq *OrderPayQuery) loadOrder(ctx context.Context, query *OrderQuery, node
 
 func (opq *OrderPayQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := opq.querySpec()
+	if len(opq.modifiers) > 0 {
+		_spec.Modifiers = opq.modifiers
+	}
 	_spec.Node.Columns = opq.ctx.Fields
 	if len(opq.ctx.Fields) > 0 {
 		_spec.Unique = opq.ctx.Unique != nil && *opq.ctx.Unique
@@ -497,6 +504,9 @@ func (opq *OrderPayQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if opq.ctx.Unique != nil && *opq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range opq.modifiers {
+		m(selector)
+	}
 	for _, p := range opq.predicates {
 		p(selector)
 	}
@@ -512,6 +522,12 @@ func (opq *OrderPayQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (opq *OrderPayQuery) Modify(modifiers ...func(s *sql.Selector)) *OrderPaySelect {
+	opq.modifiers = append(opq.modifiers, modifiers...)
+	return opq.Select()
 }
 
 // OrderPayGroupBy is the group-by builder for OrderPay entities.
@@ -602,4 +618,10 @@ func (ops *OrderPaySelect) sqlScan(ctx context.Context, root *OrderPayQuery, v a
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ops *OrderPaySelect) Modify(modifiers ...func(s *sql.Selector)) *OrderPaySelect {
+	ops.modifiers = append(ops.modifiers, modifiers...)
+	return ops
 }

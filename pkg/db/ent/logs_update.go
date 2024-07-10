@@ -18,8 +18,9 @@ import (
 // LogsUpdate is the builder for updating Logs entities.
 type LogsUpdate struct {
 	config
-	hooks    []Hook
-	mutation *LogsMutation
+	hooks     []Hook
+	mutation  *LogsMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the LogsUpdate builder.
@@ -258,6 +259,12 @@ func (lu *LogsUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (lu *LogsUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *LogsUpdate {
+	lu.modifiers = append(lu.modifiers, modifiers...)
+	return lu
+}
+
 func (lu *LogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(logs.Table, logs.Columns, sqlgraph.NewFieldSpec(logs.FieldID, field.TypeInt64))
 	if ps := lu.mutation.predicates; len(ps) > 0 {
@@ -321,6 +328,7 @@ func (lu *LogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if lu.mutation.TimeCleared() {
 		_spec.ClearField(logs.FieldTime, field.TypeInt)
 	}
+	_spec.AddModifiers(lu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{logs.Label}
@@ -336,9 +344,10 @@ func (lu *LogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // LogsUpdateOne is the builder for updating a single Logs entity.
 type LogsUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *LogsMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *LogsMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -584,6 +593,12 @@ func (luo *LogsUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (luo *LogsUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *LogsUpdateOne {
+	luo.modifiers = append(luo.modifiers, modifiers...)
+	return luo
+}
+
 func (luo *LogsUpdateOne) sqlSave(ctx context.Context) (_node *Logs, err error) {
 	_spec := sqlgraph.NewUpdateSpec(logs.Table, logs.Columns, sqlgraph.NewFieldSpec(logs.FieldID, field.TypeInt64))
 	id, ok := luo.mutation.ID()
@@ -664,6 +679,7 @@ func (luo *LogsUpdateOne) sqlSave(ctx context.Context) (_node *Logs, err error) 
 	if luo.mutation.TimeCleared() {
 		_spec.ClearField(logs.FieldTime, field.TypeInt)
 	}
+	_spec.AddModifiers(luo.modifiers...)
 	_node = &Logs{config: luo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

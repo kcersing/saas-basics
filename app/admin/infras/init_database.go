@@ -233,6 +233,8 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 		{Method: "POST", Path: "/api/admin/member/property-detail", Description: "member.MemberPropertyDetail", Title: "会员产品属性详情", Group: "member"},
 		{Method: "POST", Path: "/api/admin/member/property-list", Description: "member.MemberPropertyList", Title: "会员产品属性列表", Group: "member"},
 		{Method: "POST", Path: "/api/admin/member/property-update", Description: "member.MemberPropertyUpdate", Title: "更新会员产品属性", Group: "member"},
+		{Method: "POST", Path: "/api/admin/member/search-product", Description: "member.MemberProductSearch", Title: "搜索会员产品", Group: "member"},
+		{Method: "POST", Path: "/api/admin/member/search-property", Description: "member.MemberPropertySearch", Title: "搜索会员产品属性", Group: "member"},
 
 		{Method: "POST", Path: "/api/admin/order/create", Description: "order.CreateOrder", Title: "创建订单", Group: "order"},
 		{Method: "GET", Path: "/api/admin/order/info", Description: "order.GetOrderById", Title: "订单详情", Group: "order"},

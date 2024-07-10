@@ -23,6 +23,7 @@ type MemberContractContentQuery struct {
 	inters       []Interceptor
 	predicates   []predicate.MemberContractContent
 	withContract *MemberContractQuery
+	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -382,6 +383,9 @@ func (mccq *MemberContractContentQuery) sqlAll(ctx context.Context, hooks ...que
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(mccq.modifiers) > 0 {
+		_spec.Modifiers = mccq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +436,9 @@ func (mccq *MemberContractContentQuery) loadContract(ctx context.Context, query 
 
 func (mccq *MemberContractContentQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mccq.querySpec()
+	if len(mccq.modifiers) > 0 {
+		_spec.Modifiers = mccq.modifiers
+	}
 	_spec.Node.Columns = mccq.ctx.Fields
 	if len(mccq.ctx.Fields) > 0 {
 		_spec.Unique = mccq.ctx.Unique != nil && *mccq.ctx.Unique
@@ -497,6 +504,9 @@ func (mccq *MemberContractContentQuery) sqlQuery(ctx context.Context) *sql.Selec
 	if mccq.ctx.Unique != nil && *mccq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range mccq.modifiers {
+		m(selector)
+	}
 	for _, p := range mccq.predicates {
 		p(selector)
 	}
@@ -512,6 +522,12 @@ func (mccq *MemberContractContentQuery) sqlQuery(ctx context.Context) *sql.Selec
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (mccq *MemberContractContentQuery) Modify(modifiers ...func(s *sql.Selector)) *MemberContractContentSelect {
+	mccq.modifiers = append(mccq.modifiers, modifiers...)
+	return mccq.Select()
 }
 
 // MemberContractContentGroupBy is the group-by builder for MemberContractContent entities.
@@ -602,4 +618,10 @@ func (mccs *MemberContractContentSelect) sqlScan(ctx context.Context, root *Memb
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (mccs *MemberContractContentSelect) Modify(modifiers ...func(s *sql.Selector)) *MemberContractContentSelect {
+	mccs.modifiers = append(mccs.modifiers, modifiers...)
+	return mccs
 }

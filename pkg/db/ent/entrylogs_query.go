@@ -29,6 +29,7 @@ type EntryLogsQuery struct {
 	withMembers        *MemberQuery
 	withUsers          *UserQuery
 	withMemberProducts *MemberProductQuery
+	modifiers          []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -493,6 +494,9 @@ func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*E
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(elq.modifiers) > 0 {
+		_spec.Modifiers = elq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -648,6 +652,9 @@ func (elq *EntryLogsQuery) loadMemberProducts(ctx context.Context, query *Member
 
 func (elq *EntryLogsQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := elq.querySpec()
+	if len(elq.modifiers) > 0 {
+		_spec.Modifiers = elq.modifiers
+	}
 	_spec.Node.Columns = elq.ctx.Fields
 	if len(elq.ctx.Fields) > 0 {
 		_spec.Unique = elq.ctx.Unique != nil && *elq.ctx.Unique
@@ -722,6 +729,9 @@ func (elq *EntryLogsQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if elq.ctx.Unique != nil && *elq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range elq.modifiers {
+		m(selector)
+	}
 	for _, p := range elq.predicates {
 		p(selector)
 	}
@@ -737,6 +747,12 @@ func (elq *EntryLogsQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (elq *EntryLogsQuery) Modify(modifiers ...func(s *sql.Selector)) *EntryLogsSelect {
+	elq.modifiers = append(elq.modifiers, modifiers...)
+	return elq.Select()
 }
 
 // EntryLogsGroupBy is the group-by builder for EntryLogs entities.
@@ -827,4 +843,10 @@ func (els *EntryLogsSelect) sqlScan(ctx context.Context, root *EntryLogsQuery, v
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (els *EntryLogsSelect) Modify(modifiers ...func(s *sql.Selector)) *EntryLogsSelect {
+	els.modifiers = append(els.modifiers, modifiers...)
+	return els
 }

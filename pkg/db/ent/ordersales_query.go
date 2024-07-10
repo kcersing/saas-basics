@@ -23,6 +23,7 @@ type OrderSalesQuery struct {
 	inters     []Interceptor
 	predicates []predicate.OrderSales
 	withOrder  *OrderQuery
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -382,6 +383,9 @@ func (osq *OrderSalesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(osq.modifiers) > 0 {
+		_spec.Modifiers = osq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +436,9 @@ func (osq *OrderSalesQuery) loadOrder(ctx context.Context, query *OrderQuery, no
 
 func (osq *OrderSalesQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := osq.querySpec()
+	if len(osq.modifiers) > 0 {
+		_spec.Modifiers = osq.modifiers
+	}
 	_spec.Node.Columns = osq.ctx.Fields
 	if len(osq.ctx.Fields) > 0 {
 		_spec.Unique = osq.ctx.Unique != nil && *osq.ctx.Unique
@@ -497,6 +504,9 @@ func (osq *OrderSalesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if osq.ctx.Unique != nil && *osq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range osq.modifiers {
+		m(selector)
+	}
 	for _, p := range osq.predicates {
 		p(selector)
 	}
@@ -512,6 +522,12 @@ func (osq *OrderSalesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (osq *OrderSalesQuery) Modify(modifiers ...func(s *sql.Selector)) *OrderSalesSelect {
+	osq.modifiers = append(osq.modifiers, modifiers...)
+	return osq.Select()
 }
 
 // OrderSalesGroupBy is the group-by builder for OrderSales entities.
@@ -602,4 +618,10 @@ func (oss *OrderSalesSelect) sqlScan(ctx context.Context, root *OrderSalesQuery,
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (oss *OrderSalesSelect) Modify(modifiers ...func(s *sql.Selector)) *OrderSalesSelect {
+	oss.modifiers = append(oss.modifiers, modifiers...)
+	return oss
 }

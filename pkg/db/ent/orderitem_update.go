@@ -20,8 +20,9 @@ import (
 // OrderItemUpdate is the builder for updating OrderItem entities.
 type OrderItemUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OrderItemMutation
+	hooks     []Hook
+	mutation  *OrderItemMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OrderItemUpdate builder.
@@ -182,6 +183,12 @@ func (oiu *OrderItemUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (oiu *OrderItemUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderItemUpdate {
+	oiu.modifiers = append(oiu.modifiers, modifiers...)
+	return oiu
+}
+
 func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(orderitem.Table, orderitem.Columns, sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64))
 	if ps := oiu.mutation.predicates; len(ps) > 0 {
@@ -247,6 +254,7 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(oiu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, oiu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orderitem.Label}
@@ -262,9 +270,10 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // OrderItemUpdateOne is the builder for updating a single OrderItem entity.
 type OrderItemUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OrderItemMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OrderItemMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -432,6 +441,12 @@ func (oiuo *OrderItemUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (oiuo *OrderItemUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderItemUpdateOne {
+	oiuo.modifiers = append(oiuo.modifiers, modifiers...)
+	return oiuo
+}
+
 func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, err error) {
 	_spec := sqlgraph.NewUpdateSpec(orderitem.Table, orderitem.Columns, sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64))
 	id, ok := oiuo.mutation.ID()
@@ -514,6 +529,7 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(oiuo.modifiers...)
 	_node = &OrderItem{config: oiuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

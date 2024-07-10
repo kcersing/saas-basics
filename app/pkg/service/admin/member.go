@@ -2,9 +2,11 @@ package admin
 
 import (
 	"context"
+	"entgo.io/ent/dialect/sql"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
 	"saas/app/admin/config"
 	"saas/app/admin/infras"
 	"saas/app/admin/pkg/minio"
@@ -19,8 +21,6 @@ import (
 	"saas/pkg/encrypt"
 	"strconv"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type Member struct {
@@ -29,6 +29,28 @@ type Member struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+}
+
+func (m Member) ProductSearch(members []int64) (info *do.ProductInfo, err error) {
+	//m.db.MemberProduct.Query().Where(memberproduct.MemberIDIn(members...)).All(m.ctx)
+	m.db.Debug().MemberProduct.Query().
+		Modify(func(s *sql.Selector) {
+			s.GroupBy(memberproduct.FieldProductID)
+			s.Having(
+				sql.In(
+					memberproduct.FieldMemberID,
+					members,
+				),
+			)
+		}).
+		All(m.ctx)
+	return
+}
+
+func (m Member) PropertySearch(memberProducts []int64) (info *do.PropertyInfo, err error) {
+	m.db.MemberProductProperty.Query().Where(memberproductproperty.MemberProductIDIn(memberProducts...)).All(m.ctx)
+
+	return
 }
 
 func (m Member) Create(req do.CreateOrUpdateMemberReq) error {

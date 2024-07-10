@@ -25,8 +25,9 @@ import (
 // MemberUpdate is the builder for updating Member entities.
 type MemberUpdate struct {
 	config
-	hooks    []Hook
-	mutation *MemberMutation
+	hooks     []Hook
+	mutation  *MemberMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the MemberUpdate builder.
@@ -488,6 +489,12 @@ func (mu *MemberUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (mu *MemberUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberUpdate {
+	mu.modifiers = append(mu.modifiers, modifiers...)
+	return mu
+}
+
 func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(member.Table, member.Columns, sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64))
 	if ps := mu.mutation.predicates; len(ps) > 0 {
@@ -863,6 +870,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(mu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{member.Label}
@@ -878,9 +886,10 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // MemberUpdateOne is the builder for updating a single Member entity.
 type MemberUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *MemberMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *MemberMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1349,6 +1358,12 @@ func (muo *MemberUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (muo *MemberUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberUpdateOne {
+	muo.modifiers = append(muo.modifiers, modifiers...)
+	return muo
+}
+
 func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err error) {
 	_spec := sqlgraph.NewUpdateSpec(member.Table, member.Columns, sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64))
 	id, ok := muo.mutation.ID()
@@ -1741,6 +1756,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(muo.modifiers...)
 	_node = &Member{config: muo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

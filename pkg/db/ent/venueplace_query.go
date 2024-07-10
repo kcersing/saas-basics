@@ -23,6 +23,7 @@ type VenuePlaceQuery struct {
 	inters     []Interceptor
 	predicates []predicate.VenuePlace
 	withVenue  *VenueQuery
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -382,6 +383,9 @@ func (vpq *VenuePlaceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(vpq.modifiers) > 0 {
+		_spec.Modifiers = vpq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +436,9 @@ func (vpq *VenuePlaceQuery) loadVenue(ctx context.Context, query *VenueQuery, no
 
 func (vpq *VenuePlaceQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := vpq.querySpec()
+	if len(vpq.modifiers) > 0 {
+		_spec.Modifiers = vpq.modifiers
+	}
 	_spec.Node.Columns = vpq.ctx.Fields
 	if len(vpq.ctx.Fields) > 0 {
 		_spec.Unique = vpq.ctx.Unique != nil && *vpq.ctx.Unique
@@ -497,6 +504,9 @@ func (vpq *VenuePlaceQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if vpq.ctx.Unique != nil && *vpq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range vpq.modifiers {
+		m(selector)
+	}
 	for _, p := range vpq.predicates {
 		p(selector)
 	}
@@ -512,6 +522,12 @@ func (vpq *VenuePlaceQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (vpq *VenuePlaceQuery) Modify(modifiers ...func(s *sql.Selector)) *VenuePlaceSelect {
+	vpq.modifiers = append(vpq.modifiers, modifiers...)
+	return vpq.Select()
 }
 
 // VenuePlaceGroupBy is the group-by builder for VenuePlace entities.
@@ -602,4 +618,10 @@ func (vps *VenuePlaceSelect) sqlScan(ctx context.Context, root *VenuePlaceQuery,
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (vps *VenuePlaceSelect) Modify(modifiers ...func(s *sql.Selector)) *VenuePlaceSelect {
+	vps.modifiers = append(vps.modifiers, modifiers...)
+	return vps
 }

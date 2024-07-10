@@ -301,3 +301,45 @@ func MemberContractList(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, userList, int64(total), "")
 	return
 }
+
+// MemberProductSearch .
+// @router /api/admin/member/search-product [POST]
+func MemberProductSearch(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberProductSearchReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	info, err := admin.NewMember(ctx, c).ProductSearch(req.Members)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}
+
+// MemberPropertySearch .
+// @router /api/admin/member/search-property [POST]
+func MemberPropertySearch(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberPropertySearchReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	info, err := admin.NewMember(ctx, c).PropertySearch(req.MemberProductIds)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}

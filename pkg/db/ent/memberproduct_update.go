@@ -22,8 +22,9 @@ import (
 // MemberProductUpdate is the builder for updating MemberProduct entities.
 type MemberProductUpdate struct {
 	config
-	hooks    []Hook
-	mutation *MemberProductMutation
+	hooks     []Hook
+	mutation  *MemberProductMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the MemberProductUpdate builder.
@@ -407,6 +408,12 @@ func (mpu *MemberProductUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (mpu *MemberProductUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberProductUpdate {
+	mpu.modifiers = append(mpu.modifiers, modifiers...)
+	return mpu
+}
+
 func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(memberproduct.Table, memberproduct.Columns, sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64))
 	if ps := mpu.mutation.predicates; len(ps) > 0 {
@@ -640,6 +647,7 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(mpu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{memberproduct.Label}
@@ -655,9 +663,10 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 // MemberProductUpdateOne is the builder for updating a single MemberProduct entity.
 type MemberProductUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *MemberProductMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *MemberProductMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1048,6 +1057,12 @@ func (mpuo *MemberProductUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (mpuo *MemberProductUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberProductUpdateOne {
+	mpuo.modifiers = append(mpuo.modifiers, modifiers...)
+	return mpuo
+}
+
 func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberProduct, err error) {
 	_spec := sqlgraph.NewUpdateSpec(memberproduct.Table, memberproduct.Columns, sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64))
 	id, ok := mpuo.mutation.ID()
@@ -1298,6 +1313,7 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(mpuo.modifiers...)
 	_node = &MemberProduct{config: mpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

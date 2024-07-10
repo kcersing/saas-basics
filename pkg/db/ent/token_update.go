@@ -19,8 +19,9 @@ import (
 // TokenUpdate is the builder for updating Token entities.
 type TokenUpdate struct {
 	config
-	hooks    []Hook
-	mutation *TokenMutation
+	hooks     []Hook
+	mutation  *TokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the TokenUpdate builder.
@@ -164,6 +165,12 @@ func (tu *TokenUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (tu *TokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TokenUpdate {
+	tu.modifiers = append(tu.modifiers, modifiers...)
+	return tu
+}
+
 func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(token.Table, token.Columns, sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64))
 	if ps := tu.mutation.predicates; len(ps) > 0 {
@@ -220,6 +227,7 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(tu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{token.Label}
@@ -235,9 +243,10 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // TokenUpdateOne is the builder for updating a single Token entity.
 type TokenUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *TokenMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *TokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -388,6 +397,12 @@ func (tuo *TokenUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (tuo *TokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TokenUpdateOne {
+	tuo.modifiers = append(tuo.modifiers, modifiers...)
+	return tuo
+}
+
 func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error) {
 	_spec := sqlgraph.NewUpdateSpec(token.Table, token.Columns, sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64))
 	id, ok := tuo.mutation.ID()
@@ -461,6 +476,7 @@ func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(tuo.modifiers...)
 	_node = &Token{config: tuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
