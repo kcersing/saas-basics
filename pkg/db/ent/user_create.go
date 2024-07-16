@@ -210,6 +210,20 @@ func (uc *UserCreate) SetNillableOrganization(s *string) *UserCreate {
 	return uc
 }
 
+// SetDefaultVenueID sets the "default_venue_id" field.
+func (uc *UserCreate) SetDefaultVenueID(i int64) *UserCreate {
+	uc.mutation.SetDefaultVenueID(i)
+	return uc
+}
+
+// SetNillableDefaultVenueID sets the "default_venue_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableDefaultVenueID(i *int64) *UserCreate {
+	if i != nil {
+		uc.SetDefaultVenueID(*i)
+	}
+	return uc
+}
+
 // SetAvatar sets the "avatar" field.
 func (uc *UserCreate) SetAvatar(s string) *UserCreate {
 	uc.mutation.SetAvatar(s)
@@ -499,6 +513,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Organization(); ok {
 		_spec.SetField(user.FieldOrganization, field.TypeString, value)
 		_node.Organization = value
+	}
+	if value, ok := uc.mutation.DefaultVenueID(); ok {
+		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
+		_node.DefaultVenueID = value
 	}
 	if value, ok := uc.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)

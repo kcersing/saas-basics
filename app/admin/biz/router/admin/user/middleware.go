@@ -134,3 +134,8 @@ func _setuserroleMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _setdefaultvenueMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

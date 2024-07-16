@@ -29,18 +29,21 @@ struct ListScheduleReq {
     6:  optional i64 venueId (api.raw = "venueId")
     7:  optional list<i64> property (api.raw = "property")
     8:  optional string startTime  (api.raw = "startTime")
+    9:  optional string type  (api.raw = "type")
 }
 struct ScheduleMemberReq {
     1:  optional i64 page (api.raw = "page")
     2:  optional i64 pageSize (api.raw = "pageSize")
     3:  optional i64 member (api.raw = "member")
     4:  optional i64 schedule (api.raw = "schedule")
+    5:  optional string type  (api.raw = "type")
 }
 struct ScheduleCoachReq{
     1:  optional i64 page (api.raw = "page")
     2:  optional i64 pageSize (api.raw = "pageSize")
     3:  optional i64 member (api.raw = "coach")
     4:  optional i64 schedule (api.raw = "schedule")
+    5:  optional string type  (api.raw = "type")
 }
 
 struct SearchSubscribeByMemberReq{

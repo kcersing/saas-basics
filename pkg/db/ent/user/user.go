@@ -44,6 +44,8 @@ const (
 	FieldJob = "job"
 	// FieldOrganization holds the string denoting the organization field in the database.
 	FieldOrganization = "organization"
+	// FieldDefaultVenueID holds the string denoting the default_venue_id field in the database.
+	FieldDefaultVenueID = "default_venue_id"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
 	// FieldGender holds the string denoting the gender field in the database.
@@ -108,6 +110,7 @@ var Columns = []string{
 	FieldWecom,
 	FieldJob,
 	FieldOrganization,
+	FieldDefaultVenueID,
 	FieldAvatar,
 	FieldGender,
 	FieldBirthday,
@@ -225,6 +228,11 @@ func ByJob(opts ...sql.OrderTermOption) OrderOption {
 // ByOrganization orders the results by the organization field.
 func ByOrganization(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrganization, opts...).ToFunc()
+}
+
+// ByDefaultVenueID orders the results by the default_venue_id field.
+func ByDefaultVenueID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDefaultVenueID, opts...).ToFunc()
 }
 
 // ByAvatar orders the results by the avatar field.

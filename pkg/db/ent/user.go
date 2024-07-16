@@ -49,6 +49,8 @@ type User struct {
 	Job string `json:"job,omitempty"`
 	// 部门
 	Organization string `json:"organization,omitempty"`
+	// 登陆后默认场馆ID
+	DefaultVenueID int64 `json:"default_venue_id,omitempty"`
 	// avatar | 头像路径
 	Avatar string `json:"avatar,omitempty"`
 	// 性别 | [0:女性;1:男性;3:保密]
@@ -121,7 +123,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldStatus, user.FieldRoleID, user.FieldGender:
+		case user.FieldID, user.FieldStatus, user.FieldRoleID, user.FieldDefaultVenueID, user.FieldGender:
 			values[i] = new(sql.NullInt64)
 		case user.FieldUsername, user.FieldPassword, user.FieldNickname, user.FieldSideMode, user.FieldBaseColor, user.FieldActiveColor, user.FieldMobile, user.FieldEmail, user.FieldWecom, user.FieldJob, user.FieldOrganization, user.FieldAvatar:
 			values[i] = new(sql.NullString)
@@ -237,6 +239,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field organization", values[i])
 			} else if value.Valid {
 				u.Organization = value.String
+			}
+		case user.FieldDefaultVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field default_venue_id", values[i])
+			} else if value.Valid {
+				u.DefaultVenueID = value.Int64
 			}
 		case user.FieldAvatar:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -356,6 +364,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("organization=")
 	builder.WriteString(u.Organization)
+	builder.WriteString(", ")
+	builder.WriteString("default_venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", u.DefaultVenueID))
 	builder.WriteString(", ")
 	builder.WriteString("avatar=")
 	builder.WriteString(u.Avatar)

@@ -272,7 +272,6 @@ func GetScheduleCoachList(ctx context.Context, c *app.RequestContext) {
 	var listReq do.ScheduleCoachListReq
 	err = copier.Copy(&listReq, &req)
 
-	hlog.Info(listReq)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

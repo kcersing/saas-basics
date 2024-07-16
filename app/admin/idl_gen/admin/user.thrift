@@ -68,6 +68,10 @@ struct SetUserRole{
     2:  optional i64 role_id (api.raw = "role_id")
 }
 
+struct SetDefaultVenueReq{
+  1:  optional i64 venue_id (api.raw = "venue_id")
+}
+
 service UserService {
   // 注册
 //  base.NilResponse Login(1: LoginReq req) (api.post = "/api/login")
@@ -107,5 +111,9 @@ service UserService {
 
   // 设置用户角色
   base.NilResponse SetUserRole(1: SetUserRole req) (api.post = "/api/admin/user/set-role")
+
+
+  base.NilResponse SetDefaultVenue(1: SetDefaultVenueReq req) (api.post = "/api/admin/user/set-default-venue")
+
 
 }

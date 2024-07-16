@@ -98,7 +98,7 @@ type ScheduleMemberInfo struct {
 	PropertyId          int64  `json:"property_id"`
 	ScheduleId          int64  `json:"schedule_id"`
 	ScheduleName        string `json:"schedule_name"`
-	Type                int64  `json:"type"`
+	Type                string `json:"type"`
 	CreatedAt           string `json:"createdAt"`
 	UpdatedAt           string `json:"updatedAt"`
 	StartTime           string `json:"start_time"`
@@ -123,10 +123,11 @@ type ScheduleMemberCreate struct {
 	Remark                  string  `json:"remark"`
 }
 type ScheduleMemberListReq struct {
-	Page     int64 `json:"page"`
-	PageSize int64 `json:"pageSize"`
-	Member   int64 `json:"member"`
-	Schedule int64 `json:"schedule"`
+	Type     string `json:"type"`
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Member   int64  `json:"member"`
+	Schedule int64  `json:"schedule"`
 }
 
 type ScheduleCoachInfo struct {
@@ -136,7 +137,7 @@ type ScheduleCoachInfo struct {
 	PlaceID       int64  `json:"place_id"`
 	PropertyId    int64  `json:"property_id"`
 	ScheduleId    int64  `json:"schedule_id"`
-	Type          int64  `json:"type"`
+	Type          string `json:"type"`
 	CreatedAt     string `json:"createdAt"`
 	UpdatedAt     string `json:"updatedAt"`
 	Date          string `json:"date"`
@@ -163,10 +164,11 @@ type ScheduleCoachInfo struct {
 }
 
 type ScheduleCoachListReq struct {
-	Page     int64 `json:"page"`
-	PageSize int64 `json:"pageSize"`
-	Coach    int64 `json:"coach"`
-	Schedule int64 `json:"schedule"`
+	Type     string `json:"type"`
+	Page     int64  `json:"page"`
+	PageSize int64  `json:"pageSize"`
+	Coach    int64  `json:"coach"`
+	Schedule int64  `json:"schedule"`
 }
 
 type SubscribeByMember struct {
@@ -184,4 +186,5 @@ type SearchSubscribeByMemberReq struct {
 	PropertyId int64  `json:"propertyId"`
 	Mobile     string `json:"mobile"`
 	Venue      int64  `json:"venue"`
+	Type       string `json:"type"`
 }

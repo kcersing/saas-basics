@@ -26,6 +26,20 @@ type User struct {
 	cache *ristretto.Cache
 }
 
+func (u User) SetDefaultVenue(id, venueId int64) error {
+	_, err := u.db.User.Update().
+		Where(user.IDEQ(id)).
+		SetDefaultVenueID(venueId).
+		Save(u.ctx)
+
+	if err != nil {
+		err = errors.Wrap(err, "update DefaultVenue  ID   failed")
+		return err
+	}
+
+	return nil
+}
+
 func (u User) SetRole(id, roleID int64) error {
 	_, err := u.db.User.Update().
 		Where(user.IDEQ(id)).

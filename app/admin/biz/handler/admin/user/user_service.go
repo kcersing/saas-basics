@@ -248,7 +248,6 @@ func UserProfile(ctx context.Context, c *app.RequestContext) {
 	}
 	i, err := strconv.Atoi(v.(string))
 	if err != nil {
-
 		utils.SendResponse(c, errno.ConvertErr(errno.NewErrNo(401, "Unauthorized,"+err.Error())), nil, 0, "")
 		return
 	}
@@ -290,11 +289,59 @@ func SetUserRole(ctx context.Context, c *app.RequestContext) {
 	var req user.SetUserRole
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
 
-	resp := new(base.NilResponse)
+	v, exist := c.Get("user_id")
+	if !exist || v == nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	i, err := strconv.Atoi(v.(string))
+	if err != nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized,"+err.Error())
+		return
+	}
+	userID := uint64(i)
 
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewUser(ctx, c).SetRole(int64(userID), *req.RoleID)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
+
+// SetDefaultVenue .
+// @router /api/admin/user/set-default-venue [POST]
+func SetDefaultVenue(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req user.SetDefaultVenueReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	v, exist := c.Get("user_id")
+	if !exist || v == nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	i, err := strconv.Atoi(v.(string))
+	if err != nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized,"+err.Error())
+		return
+	}
+	userID := uint64(i)
+
+	err = admin.NewUser(ctx, c).SetDefaultVenue(int64(userID), *req.VenueID)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }

@@ -130,6 +130,11 @@ func Organization(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldOrganization, v))
 }
 
+// DefaultVenueID applies equality check predicate on the "default_venue_id" field. It's identical to DefaultVenueIDEQ.
+func DefaultVenueID(v int64) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldDefaultVenueID, v))
+}
+
 // Avatar applies equality check predicate on the "avatar" field. It's identical to AvatarEQ.
 func Avatar(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldAvatar, v))
@@ -1118,6 +1123,56 @@ func OrganizationEqualFold(v string) predicate.User {
 // OrganizationContainsFold applies the ContainsFold predicate on the "organization" field.
 func OrganizationContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldOrganization, v))
+}
+
+// DefaultVenueIDEQ applies the EQ predicate on the "default_venue_id" field.
+func DefaultVenueIDEQ(v int64) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldDefaultVenueID, v))
+}
+
+// DefaultVenueIDNEQ applies the NEQ predicate on the "default_venue_id" field.
+func DefaultVenueIDNEQ(v int64) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldDefaultVenueID, v))
+}
+
+// DefaultVenueIDIn applies the In predicate on the "default_venue_id" field.
+func DefaultVenueIDIn(vs ...int64) predicate.User {
+	return predicate.User(sql.FieldIn(FieldDefaultVenueID, vs...))
+}
+
+// DefaultVenueIDNotIn applies the NotIn predicate on the "default_venue_id" field.
+func DefaultVenueIDNotIn(vs ...int64) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldDefaultVenueID, vs...))
+}
+
+// DefaultVenueIDGT applies the GT predicate on the "default_venue_id" field.
+func DefaultVenueIDGT(v int64) predicate.User {
+	return predicate.User(sql.FieldGT(FieldDefaultVenueID, v))
+}
+
+// DefaultVenueIDGTE applies the GTE predicate on the "default_venue_id" field.
+func DefaultVenueIDGTE(v int64) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldDefaultVenueID, v))
+}
+
+// DefaultVenueIDLT applies the LT predicate on the "default_venue_id" field.
+func DefaultVenueIDLT(v int64) predicate.User {
+	return predicate.User(sql.FieldLT(FieldDefaultVenueID, v))
+}
+
+// DefaultVenueIDLTE applies the LTE predicate on the "default_venue_id" field.
+func DefaultVenueIDLTE(v int64) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldDefaultVenueID, v))
+}
+
+// DefaultVenueIDIsNil applies the IsNil predicate on the "default_venue_id" field.
+func DefaultVenueIDIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldDefaultVenueID))
+}
+
+// DefaultVenueIDNotNil applies the NotNil predicate on the "default_venue_id" field.
+func DefaultVenueIDNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldDefaultVenueID))
 }
 
 // AvatarEQ applies the EQ predicate on the "avatar" field.

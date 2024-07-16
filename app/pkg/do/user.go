@@ -14,6 +14,8 @@ type User interface {
 	DeleteUser(id int64) error
 	UpdateProfile(req UpdateUserProfileReq) error
 	SetRole(id, roleID int64) error
+
+	SetDefaultVenue(id, venueId int64) error
 }
 
 type CreateOrUpdateUserReq struct {
@@ -55,6 +57,7 @@ type UserInfo struct {
 	JobName          string    `json:"jobName"`
 	Organization     string    `json:"organization"`
 	OrganizationName string    `json:"organizationName"`
+	DefaultVenueId   int64     `json:"defaultVenueId"`
 }
 
 type UserListReq struct {

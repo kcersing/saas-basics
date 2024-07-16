@@ -31,6 +31,8 @@ func (User) Fields() []ent.Field {
 		field.String("job").Optional().Comment("职业"),
 		field.String("organization").Optional().Comment("部门"),
 
+		field.Int64("default_venue_id").Optional().Comment("登陆后默认场馆ID"),
+
 		field.String("avatar").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Optional().

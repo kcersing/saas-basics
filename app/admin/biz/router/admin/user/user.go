@@ -26,6 +26,7 @@ func Register(r *server.Hertz) {
 			_user := _admin.Group("/user", _userMw()...)
 			_user.GET("/profile", append(_userprofileMw(), user.UserProfile)...)
 			_user.POST("/profile-update", append(_updateprofileMw(), user.UpdateProfile)...)
+			_user.POST("/set-default-venue", append(_setdefaultvenueMw(), user.SetDefaultVenue)...)
 			_user.POST("/set-role", append(_setuserroleMw(), user.SetUserRole)...)
 			_user.POST("/status", append(_updateuserstatusMw(), user.UpdateUserStatus)...)
 			{

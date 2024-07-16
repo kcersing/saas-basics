@@ -295,6 +295,33 @@ func (uu *UserUpdate) ClearOrganization() *UserUpdate {
 	return uu
 }
 
+// SetDefaultVenueID sets the "default_venue_id" field.
+func (uu *UserUpdate) SetDefaultVenueID(i int64) *UserUpdate {
+	uu.mutation.ResetDefaultVenueID()
+	uu.mutation.SetDefaultVenueID(i)
+	return uu
+}
+
+// SetNillableDefaultVenueID sets the "default_venue_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableDefaultVenueID(i *int64) *UserUpdate {
+	if i != nil {
+		uu.SetDefaultVenueID(*i)
+	}
+	return uu
+}
+
+// AddDefaultVenueID adds i to the "default_venue_id" field.
+func (uu *UserUpdate) AddDefaultVenueID(i int64) *UserUpdate {
+	uu.mutation.AddDefaultVenueID(i)
+	return uu
+}
+
+// ClearDefaultVenueID clears the value of the "default_venue_id" field.
+func (uu *UserUpdate) ClearDefaultVenueID() *UserUpdate {
+	uu.mutation.ClearDefaultVenueID()
+	return uu
+}
+
 // SetAvatar sets the "avatar" field.
 func (uu *UserUpdate) SetAvatar(s string) *UserUpdate {
 	uu.mutation.SetAvatar(s)
@@ -628,6 +655,15 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.OrganizationCleared() {
 		_spec.ClearField(user.FieldOrganization, field.TypeString)
+	}
+	if value, ok := uu.mutation.DefaultVenueID(); ok {
+		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
+	}
+	if value, ok := uu.mutation.AddedDefaultVenueID(); ok {
+		_spec.AddField(user.FieldDefaultVenueID, field.TypeInt64, value)
+	}
+	if uu.mutation.DefaultVenueIDCleared() {
+		_spec.ClearField(user.FieldDefaultVenueID, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)
@@ -1098,6 +1134,33 @@ func (uuo *UserUpdateOne) ClearOrganization() *UserUpdateOne {
 	return uuo
 }
 
+// SetDefaultVenueID sets the "default_venue_id" field.
+func (uuo *UserUpdateOne) SetDefaultVenueID(i int64) *UserUpdateOne {
+	uuo.mutation.ResetDefaultVenueID()
+	uuo.mutation.SetDefaultVenueID(i)
+	return uuo
+}
+
+// SetNillableDefaultVenueID sets the "default_venue_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableDefaultVenueID(i *int64) *UserUpdateOne {
+	if i != nil {
+		uuo.SetDefaultVenueID(*i)
+	}
+	return uuo
+}
+
+// AddDefaultVenueID adds i to the "default_venue_id" field.
+func (uuo *UserUpdateOne) AddDefaultVenueID(i int64) *UserUpdateOne {
+	uuo.mutation.AddDefaultVenueID(i)
+	return uuo
+}
+
+// ClearDefaultVenueID clears the value of the "default_venue_id" field.
+func (uuo *UserUpdateOne) ClearDefaultVenueID() *UserUpdateOne {
+	uuo.mutation.ClearDefaultVenueID()
+	return uuo
+}
+
 // SetAvatar sets the "avatar" field.
 func (uuo *UserUpdateOne) SetAvatar(s string) *UserUpdateOne {
 	uuo.mutation.SetAvatar(s)
@@ -1461,6 +1524,15 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.OrganizationCleared() {
 		_spec.ClearField(user.FieldOrganization, field.TypeString)
+	}
+	if value, ok := uuo.mutation.DefaultVenueID(); ok {
+		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
+	}
+	if value, ok := uuo.mutation.AddedDefaultVenueID(); ok {
+		_spec.AddField(user.FieldDefaultVenueID, field.TypeInt64, value)
+	}
+	if uuo.mutation.DefaultVenueIDCleared() {
+		_spec.ClearField(user.FieldDefaultVenueID, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.Avatar(); ok {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)

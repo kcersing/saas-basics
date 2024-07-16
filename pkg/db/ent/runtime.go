@@ -770,7 +770,7 @@ func init() {
 	// user.DefaultRoleID holds the default value on creation for the role_id field.
 	user.DefaultRoleID = userDescRoleID.Default.(int64)
 	// userDescGender is the schema descriptor for gender field.
-	userDescGender := userFields[13].Descriptor()
+	userDescGender := userFields[14].Descriptor()
 	// user.DefaultGender holds the default value on creation for the gender field.
 	user.DefaultGender = userDescGender.Default.(int64)
 	venueMixin := schema.Venue{}.Mixin()

@@ -34,7 +34,9 @@ func (c Schedule) CoachList(req do.ScheduleCoachListReq) (resp []*do.ScheduleCoa
 	if req.Schedule > 0 {
 		predicates = append(predicates, schedulecoach.ScheduleID(req.Schedule))
 	}
-
+	if req.Type != "" {
+		predicates = append(predicates, schedulecoach.Type(req.Type))
+	}
 	lists, err := c.db.ScheduleCoach.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(c.ctx)

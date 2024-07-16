@@ -18,6 +18,22 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 
 	// 解析字符串到 time.Time 类型
 	startTime, _ := time.Parse(time.DateTime, req.StartTime)
+	tx, err := s.db.Tx(s.ctx)
+	if err != nil {
+		return fmt.Errorf("starting a transaction: %w", err)
+	}
+
+	if req.Type == "course" {
+		mpp, err := tx.MemberProductProperty.Query().
+			Where(memberproductproperty.ID(req.MemberProductPropertyId)).
+			First(s.ctx)
+		if err != nil {
+			err = errors.Wrap(err, "未查询到该会员产品属性")
+			return rollback(tx, err)
+		}
+		req.PropertyId = mpp.PropertyID
+	}
+
 	property, err := s.db.ProductProperty.Query().
 		Where(productproperty.ID(req.PropertyId)).
 		First(s.ctx)
@@ -43,12 +59,6 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 		if err == nil {
 			placeName = place.Name
 		}
-	}
-
-	tx, err := s.db.Tx(s.ctx)
-
-	if err != nil {
-		return fmt.Errorf("starting a transaction: %w", err)
 	}
 
 	one, err := tx.Schedule.Create().
@@ -125,7 +135,6 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 			err = errors.Wrap(err, "未查询到该会员产品属性")
 			return rollback(tx, err)
 		}
-
 		if (mpp.CountSurplus - 1) < 0 {
 			err = errors.Wrap(err, "该会员课程不足")
 			return rollback(tx, err)
@@ -150,17 +159,16 @@ func (s Schedule) ScheduleCreate(req do.CreateOrUpdateScheduleReq) error {
 			return rollback(tx, err)
 		}
 
-		if req.MemberProductPropertyId != 0 {
-			_, err = tx.MemberProductProperty.
-				Update().
-				Where(memberproductproperty.IDEQ(req.MemberProductPropertyId)).
-				AddCountSurplus(-1).
-				Save(s.ctx)
-			if err != nil {
-				err = errors.Wrap(err, "Member Product Item failed")
-				return rollback(tx, err)
-			}
+		_, err = tx.MemberProductProperty.
+			Update().
+			Where(memberproductproperty.IDEQ(req.MemberProductPropertyId)).
+			AddCountSurplus(-1).
+			Save(s.ctx)
+		if err != nil {
+			err = errors.Wrap(err, "Member Product Item failed")
+			return rollback(tx, err)
 		}
+
 	}
 	if err = tx.Commit(); err != nil {
 		return err

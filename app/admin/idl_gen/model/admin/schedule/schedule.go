@@ -824,6 +824,7 @@ type ListScheduleReq struct {
 	VenueId   *int64  `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
 	Property  []int64 `thrift:"property,7,optional" form:"property" json:"property" query:"property"`
 	StartTime *string `thrift:"startTime,8,optional" form:"startTime" json:"startTime" query:"startTime"`
+	Type      *string `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewListScheduleReq() *ListScheduleReq {
@@ -902,6 +903,15 @@ func (p *ListScheduleReq) GetStartTime() (v string) {
 	return *p.StartTime
 }
 
+var ListScheduleReq_Type_DEFAULT string
+
+func (p *ListScheduleReq) GetType() (v string) {
+	if !p.IsSetType() {
+		return ListScheduleReq_Type_DEFAULT
+	}
+	return *p.Type
+}
+
 var fieldIDToName_ListScheduleReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
@@ -911,6 +921,7 @@ var fieldIDToName_ListScheduleReq = map[int16]string{
 	6: "venueId",
 	7: "property",
 	8: "startTime",
+	9: "type",
 }
 
 func (p *ListScheduleReq) IsSetPage() bool {
@@ -943,6 +954,10 @@ func (p *ListScheduleReq) IsSetProperty() bool {
 
 func (p *ListScheduleReq) IsSetStartTime() bool {
 	return p.StartTime != nil
+}
+
+func (p *ListScheduleReq) IsSetType() bool {
+	return p.Type != nil
 }
 
 func (p *ListScheduleReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1023,6 +1038,14 @@ func (p *ListScheduleReq) Read(iprot thrift.TProtocol) (err error) {
 		case 8:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField9(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1168,6 +1191,15 @@ func (p *ListScheduleReq) ReadField8(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
+func (p *ListScheduleReq) ReadField9(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Type = &v
+	}
+	return nil
+}
 
 func (p *ListScheduleReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1205,6 +1237,10 @@ func (p *ListScheduleReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField8(oprot); err != nil {
 			fieldId = 8
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
 			goto WriteFieldError
 		}
 	}
@@ -1401,6 +1437,25 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
+func (p *ListScheduleReq) writeField9(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.STRING, 9); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
+}
+
 func (p *ListScheduleReq) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1410,10 +1465,11 @@ func (p *ListScheduleReq) String() string {
 }
 
 type ScheduleMemberReq struct {
-	Page     *int64 `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	PageSize *int64 `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
-	Member   *int64 `thrift:"member,3,optional" form:"member" json:"member" query:"member"`
-	Schedule *int64 `thrift:"schedule,4,optional" form:"schedule" json:"schedule" query:"schedule"`
+	Page     *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize *int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Member   *int64  `thrift:"member,3,optional" form:"member" json:"member" query:"member"`
+	Schedule *int64  `thrift:"schedule,4,optional" form:"schedule" json:"schedule" query:"schedule"`
+	Type     *string `thrift:"type,5,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewScheduleMemberReq() *ScheduleMemberReq {
@@ -1456,11 +1512,21 @@ func (p *ScheduleMemberReq) GetSchedule() (v int64) {
 	return *p.Schedule
 }
 
+var ScheduleMemberReq_Type_DEFAULT string
+
+func (p *ScheduleMemberReq) GetType() (v string) {
+	if !p.IsSetType() {
+		return ScheduleMemberReq_Type_DEFAULT
+	}
+	return *p.Type
+}
+
 var fieldIDToName_ScheduleMemberReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
 	3: "member",
 	4: "schedule",
+	5: "type",
 }
 
 func (p *ScheduleMemberReq) IsSetPage() bool {
@@ -1477,6 +1543,10 @@ func (p *ScheduleMemberReq) IsSetMember() bool {
 
 func (p *ScheduleMemberReq) IsSetSchedule() bool {
 	return p.Schedule != nil
+}
+
+func (p *ScheduleMemberReq) IsSetType() bool {
+	return p.Type != nil
 }
 
 func (p *ScheduleMemberReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1525,6 +1595,14 @@ func (p *ScheduleMemberReq) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1595,6 +1673,15 @@ func (p *ScheduleMemberReq) ReadField4(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
+func (p *ScheduleMemberReq) ReadField5(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Type = &v
+	}
+	return nil
+}
 
 func (p *ScheduleMemberReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1616,6 +1703,10 @@ func (p *ScheduleMemberReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -1712,6 +1803,25 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
+func (p *ScheduleMemberReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.STRING, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
 func (p *ScheduleMemberReq) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1721,10 +1831,11 @@ func (p *ScheduleMemberReq) String() string {
 }
 
 type ScheduleCoachReq struct {
-	Page     *int64 `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	PageSize *int64 `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
-	Member   *int64 `thrift:"member,3,optional" form:"member" json:"member" query:"member"`
-	Schedule *int64 `thrift:"schedule,4,optional" form:"schedule" json:"schedule" query:"schedule"`
+	Page     *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize *int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Member   *int64  `thrift:"member,3,optional" form:"member" json:"member" query:"member"`
+	Schedule *int64  `thrift:"schedule,4,optional" form:"schedule" json:"schedule" query:"schedule"`
+	Type     *string `thrift:"type,5,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewScheduleCoachReq() *ScheduleCoachReq {
@@ -1767,11 +1878,21 @@ func (p *ScheduleCoachReq) GetSchedule() (v int64) {
 	return *p.Schedule
 }
 
+var ScheduleCoachReq_Type_DEFAULT string
+
+func (p *ScheduleCoachReq) GetType() (v string) {
+	if !p.IsSetType() {
+		return ScheduleCoachReq_Type_DEFAULT
+	}
+	return *p.Type
+}
+
 var fieldIDToName_ScheduleCoachReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
 	3: "member",
 	4: "schedule",
+	5: "type",
 }
 
 func (p *ScheduleCoachReq) IsSetPage() bool {
@@ -1788,6 +1909,10 @@ func (p *ScheduleCoachReq) IsSetMember() bool {
 
 func (p *ScheduleCoachReq) IsSetSchedule() bool {
 	return p.Schedule != nil
+}
+
+func (p *ScheduleCoachReq) IsSetType() bool {
+	return p.Type != nil
 }
 
 func (p *ScheduleCoachReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1836,6 +1961,14 @@ func (p *ScheduleCoachReq) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1906,6 +2039,15 @@ func (p *ScheduleCoachReq) ReadField4(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
+func (p *ScheduleCoachReq) ReadField5(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Type = &v
+	}
+	return nil
+}
 
 func (p *ScheduleCoachReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1927,6 +2069,10 @@ func (p *ScheduleCoachReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -2021,6 +2167,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *ScheduleCoachReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.STRING, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *ScheduleCoachReq) String() string {

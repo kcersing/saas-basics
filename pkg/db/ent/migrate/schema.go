@@ -1061,6 +1061,7 @@ var (
 		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
 		{Name: "job", Type: field.TypeString, Nullable: true, Comment: "职业"},
 		{Name: "organization", Type: field.TypeString, Nullable: true, Comment: "部门"},
+		{Name: "default_venue_id", Type: field.TypeInt64, Nullable: true, Comment: "登陆后默认场馆ID"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [0:女性;1:男性;3:保密]", Default: 3},
 		{Name: "birthday", Type: field.TypeTime, Nullable: true, Comment: "出生日期"},
