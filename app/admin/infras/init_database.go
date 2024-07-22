@@ -226,7 +226,7 @@ func (I *InitDatabase) insertApiData(ctx context.Context) error {
 // init menu data
 func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	var menus []*ent.MenuCreate
-	menus = make([]*ent.MenuCreate, 25)
+	menus = make([]*ent.MenuCreate, 26)
 	menus[0] = I.DB.Menu.Create().
 		//SetMenuLevel(0).
 		//SetMenuType(0).
@@ -343,6 +343,10 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetParentID(9).
 		SetName("数据汇总").SetOrderNo(0)
 
+	menus[25] = I.DB.Menu.Create().
+		SetPath("members/details").
+		SetParentID(7).
+		SetName("会员详情").SetOrderNo(0)
 	//
 	//menus[2] = I.DB.Menu.Create().
 	//	SetMenuLevel(1).
