@@ -24,7 +24,7 @@ type MenuInfo struct {
 	Children []*MenuInfo `json:"children,omitempty"`
 	OrderNo  int32       `json:"orderNo,omitempty"`
 	Disabled int32       `json:"disabled,omitempty"`
-
+	Ignore   bool        `json:"ignore,omitempty"`
 	//Level     int32       `json:"level,omitempty"`
 	//Redirect  string      `json:"redirect,omitempty"`
 	//Component string      `json:"component,omitempty"`
@@ -58,6 +58,7 @@ type MenuInfoTree struct {
 	CreatedAt string          `json:"createdAt,omitempty"`
 	UpdatedAt string          `json:"updatedAt,omitempty"`
 	Children  []*MenuInfoTree `json:"children,omitempty"`
+	Ignore    bool            `json:"ignore,omitempty"`
 }
 
 // MenuParam is the menu parameter structure.data stored at the table `sys_menu_params`

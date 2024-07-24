@@ -90,6 +90,11 @@ func Disabled(v int32) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldDisabled, v))
 }
 
+// Ignore applies equality check predicate on the "ignore" field. It's identical to IgnoreEQ.
+func Ignore(v bool) predicate.Menu {
+	return predicate.Menu(sql.FieldEQ(FieldIgnore, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldCreatedAt, v))
@@ -428,6 +433,26 @@ func DisabledIsNil() predicate.Menu {
 // DisabledNotNil applies the NotNil predicate on the "disabled" field.
 func DisabledNotNil() predicate.Menu {
 	return predicate.Menu(sql.FieldNotNull(FieldDisabled))
+}
+
+// IgnoreEQ applies the EQ predicate on the "ignore" field.
+func IgnoreEQ(v bool) predicate.Menu {
+	return predicate.Menu(sql.FieldEQ(FieldIgnore, v))
+}
+
+// IgnoreNEQ applies the NEQ predicate on the "ignore" field.
+func IgnoreNEQ(v bool) predicate.Menu {
+	return predicate.Menu(sql.FieldNEQ(FieldIgnore, v))
+}
+
+// IgnoreIsNil applies the IsNil predicate on the "ignore" field.
+func IgnoreIsNil() predicate.Menu {
+	return predicate.Menu(sql.FieldIsNull(FieldIgnore))
+}
+
+// IgnoreNotNil applies the NotNil predicate on the "ignore" field.
+func IgnoreNotNil() predicate.Menu {
+	return predicate.Menu(sql.FieldNotNull(FieldIgnore))
 }
 
 // HasRoles applies the HasEdge predicate on the "roles" edge.

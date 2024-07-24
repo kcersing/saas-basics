@@ -16064,6 +16064,7 @@ type MenuMutation struct {
 	addorder_no     *int32
 	disabled        *int32
 	adddisabled     *int32
+	ignore          *bool
 	clearedFields   map[string]struct{}
 	roles           map[int64]struct{}
 	removedroles    map[int64]struct{}
@@ -16517,6 +16518,55 @@ func (m *MenuMutation) ResetDisabled() {
 	delete(m.clearedFields, menu.FieldDisabled)
 }
 
+// SetIgnore sets the "ignore" field.
+func (m *MenuMutation) SetIgnore(b bool) {
+	m.ignore = &b
+}
+
+// Ignore returns the value of the "ignore" field in the mutation.
+func (m *MenuMutation) Ignore() (r bool, exists bool) {
+	v := m.ignore
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIgnore returns the old "ignore" field's value of the Menu entity.
+// If the Menu object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MenuMutation) OldIgnore(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIgnore is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIgnore requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIgnore: %w", err)
+	}
+	return oldValue.Ignore, nil
+}
+
+// ClearIgnore clears the value of the "ignore" field.
+func (m *MenuMutation) ClearIgnore() {
+	m.ignore = nil
+	m.clearedFields[menu.FieldIgnore] = struct{}{}
+}
+
+// IgnoreCleared returns if the "ignore" field was cleared in this mutation.
+func (m *MenuMutation) IgnoreCleared() bool {
+	_, ok := m.clearedFields[menu.FieldIgnore]
+	return ok
+}
+
+// ResetIgnore resets all changes to the "ignore" field.
+func (m *MenuMutation) ResetIgnore() {
+	m.ignore = nil
+	delete(m.clearedFields, menu.FieldIgnore)
+}
+
 // AddRoleIDs adds the "roles" edge to the Role entity by ids.
 func (m *MenuMutation) AddRoleIDs(ids ...int64) {
 	if m.roles == nil {
@@ -16740,7 +16790,7 @@ func (m *MenuMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MenuMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, menu.FieldCreatedAt)
 	}
@@ -16761,6 +16811,9 @@ func (m *MenuMutation) Fields() []string {
 	}
 	if m.disabled != nil {
 		fields = append(fields, menu.FieldDisabled)
+	}
+	if m.ignore != nil {
+		fields = append(fields, menu.FieldIgnore)
 	}
 	return fields
 }
@@ -16784,6 +16837,8 @@ func (m *MenuMutation) Field(name string) (ent.Value, bool) {
 		return m.OrderNo()
 	case menu.FieldDisabled:
 		return m.Disabled()
+	case menu.FieldIgnore:
+		return m.Ignore()
 	}
 	return nil, false
 }
@@ -16807,6 +16862,8 @@ func (m *MenuMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldOrderNo(ctx)
 	case menu.FieldDisabled:
 		return m.OldDisabled(ctx)
+	case menu.FieldIgnore:
+		return m.OldIgnore(ctx)
 	}
 	return nil, fmt.Errorf("unknown Menu field %s", name)
 }
@@ -16864,6 +16921,13 @@ func (m *MenuMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisabled(v)
+		return nil
+	case menu.FieldIgnore:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIgnore(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Menu field %s", name)
@@ -16931,6 +16995,9 @@ func (m *MenuMutation) ClearedFields() []string {
 	if m.FieldCleared(menu.FieldDisabled) {
 		fields = append(fields, menu.FieldDisabled)
 	}
+	if m.FieldCleared(menu.FieldIgnore) {
+		fields = append(fields, menu.FieldIgnore)
+	}
 	return fields
 }
 
@@ -16953,6 +17020,9 @@ func (m *MenuMutation) ClearField(name string) error {
 		return nil
 	case menu.FieldDisabled:
 		m.ClearDisabled()
+		return nil
+	case menu.FieldIgnore:
+		m.ClearIgnore()
 		return nil
 	}
 	return fmt.Errorf("unknown Menu nullable field %s", name)
@@ -16982,6 +17052,9 @@ func (m *MenuMutation) ResetField(name string) error {
 		return nil
 	case menu.FieldDisabled:
 		m.ResetDisabled()
+		return nil
+	case menu.FieldIgnore:
+		m.ResetIgnore()
 		return nil
 	}
 	return fmt.Errorf("unknown Menu field %s", name)

@@ -32,6 +32,8 @@ type Menu struct {
 	OrderNo int32 `json:"order_no,omitempty"`
 	// disable status | 是否停用
 	Disabled int32 `json:"disabled,omitempty"`
+	// 当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问
+	Ignore bool `json:"ignore,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MenuQuery when eager-loading is set.
 	Edges        MenuEdges `json:"edges"`
@@ -98,6 +100,8 @@ func (*Menu) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case menu.FieldIgnore:
+			values[i] = new(sql.NullBool)
 		case menu.FieldID, menu.FieldParentID, menu.FieldOrderNo, menu.FieldDisabled:
 			values[i] = new(sql.NullInt64)
 		case menu.FieldPath, menu.FieldName:
@@ -166,6 +170,12 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field disabled", values[i])
 			} else if value.Valid {
 				m.Disabled = int32(value.Int64)
+			}
+		case menu.FieldIgnore:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field ignore", values[i])
+			} else if value.Valid {
+				m.Ignore = value.Bool
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -243,6 +253,9 @@ func (m *Menu) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("disabled=")
 	builder.WriteString(fmt.Sprintf("%v", m.Disabled))
+	builder.WriteString(", ")
+	builder.WriteString("ignore=")
+	builder.WriteString(fmt.Sprintf("%v", m.Ignore))
 	builder.WriteByte(')')
 	return builder.String()
 }

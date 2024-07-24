@@ -139,6 +139,26 @@ func (mu *MenuUpdate) ClearDisabled() *MenuUpdate {
 	return mu
 }
 
+// SetIgnore sets the "ignore" field.
+func (mu *MenuUpdate) SetIgnore(b bool) *MenuUpdate {
+	mu.mutation.SetIgnore(b)
+	return mu
+}
+
+// SetNillableIgnore sets the "ignore" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableIgnore(b *bool) *MenuUpdate {
+	if b != nil {
+		mu.SetIgnore(*b)
+	}
+	return mu
+}
+
+// ClearIgnore clears the value of the "ignore" field.
+func (mu *MenuUpdate) ClearIgnore() *MenuUpdate {
+	mu.mutation.ClearIgnore()
+	return mu
+}
+
 // AddRoleIDs adds the "roles" edge to the Role entity by IDs.
 func (mu *MenuUpdate) AddRoleIDs(ids ...int64) *MenuUpdate {
 	mu.mutation.AddRoleIDs(ids...)
@@ -340,6 +360,12 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.DisabledCleared() {
 		_spec.ClearField(menu.FieldDisabled, field.TypeInt32)
+	}
+	if value, ok := mu.mutation.Ignore(); ok {
+		_spec.SetField(menu.FieldIgnore, field.TypeBool, value)
+	}
+	if mu.mutation.IgnoreCleared() {
+		_spec.ClearField(menu.FieldIgnore, field.TypeBool)
 	}
 	if mu.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -635,6 +661,26 @@ func (muo *MenuUpdateOne) ClearDisabled() *MenuUpdateOne {
 	return muo
 }
 
+// SetIgnore sets the "ignore" field.
+func (muo *MenuUpdateOne) SetIgnore(b bool) *MenuUpdateOne {
+	muo.mutation.SetIgnore(b)
+	return muo
+}
+
+// SetNillableIgnore sets the "ignore" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableIgnore(b *bool) *MenuUpdateOne {
+	if b != nil {
+		muo.SetIgnore(*b)
+	}
+	return muo
+}
+
+// ClearIgnore clears the value of the "ignore" field.
+func (muo *MenuUpdateOne) ClearIgnore() *MenuUpdateOne {
+	muo.mutation.ClearIgnore()
+	return muo
+}
+
 // AddRoleIDs adds the "roles" edge to the Role entity by IDs.
 func (muo *MenuUpdateOne) AddRoleIDs(ids ...int64) *MenuUpdateOne {
 	muo.mutation.AddRoleIDs(ids...)
@@ -866,6 +912,12 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 	}
 	if muo.mutation.DisabledCleared() {
 		_spec.ClearField(menu.FieldDisabled, field.TypeInt32)
+	}
+	if value, ok := muo.mutation.Ignore(); ok {
+		_spec.SetField(menu.FieldIgnore, field.TypeBool, value)
+	}
+	if muo.mutation.IgnoreCleared() {
+		_spec.ClearField(menu.FieldIgnore, field.TypeBool)
 	}
 	if muo.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{

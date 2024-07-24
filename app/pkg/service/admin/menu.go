@@ -148,7 +148,7 @@ func (m Menu) Delete(id int64) error {
 }
 
 func (m Menu) ListByRole(roleID int64) (list []*do.MenuInfoTree, total int64, err error) {
-	//TODO implement me
+
 	menus, err := m.db.Role.
 		Query().
 		Where(role.IDEQ(roleID)).
@@ -305,7 +305,7 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*do.MenuInfoTree {
 			m.Name = v.Name
 			m.Key = v.Path
 			m.OrderNo = v.OrderNo
-
+			m.Ignore = v.Ignore
 			//m.CreatedAt = v.CreatedAt.Format(time.DateTime)
 			//m.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
 			//m.MenuType = v.MenuType

@@ -112,6 +112,20 @@ func (mc *MenuCreate) SetNillableDisabled(i *int32) *MenuCreate {
 	return mc
 }
 
+// SetIgnore sets the "ignore" field.
+func (mc *MenuCreate) SetIgnore(b bool) *MenuCreate {
+	mc.mutation.SetIgnore(b)
+	return mc
+}
+
+// SetNillableIgnore sets the "ignore" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableIgnore(b *bool) *MenuCreate {
+	if b != nil {
+		mc.SetIgnore(*b)
+	}
+	return mc
+}
+
 // SetID sets the "id" field.
 func (mc *MenuCreate) SetID(i int64) *MenuCreate {
 	mc.mutation.SetID(i)
@@ -223,6 +237,10 @@ func (mc *MenuCreate) defaults() {
 		v := menu.DefaultDisabled
 		mc.mutation.SetDisabled(v)
 	}
+	if _, ok := mc.mutation.Ignore(); !ok {
+		v := menu.DefaultIgnore
+		mc.mutation.SetIgnore(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -294,6 +312,10 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Disabled(); ok {
 		_spec.SetField(menu.FieldDisabled, field.TypeInt32, value)
 		_node.Disabled = value
+	}
+	if value, ok := mc.mutation.Ignore(); ok {
+		_spec.SetField(menu.FieldIgnore, field.TypeBool, value)
+		_node.Ignore = value
 	}
 	if nodes := mc.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

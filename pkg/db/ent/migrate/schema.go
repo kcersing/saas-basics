@@ -514,6 +514,7 @@ var (
 		{Name: "name", Type: field.TypeString, Comment: "index name | 菜单名称"},
 		{Name: "order_no", Type: field.TypeInt32, Comment: "sorting numbers | 排序编号", Default: 0},
 		{Name: "disabled", Type: field.TypeInt32, Nullable: true, Comment: "disable status | 是否停用", Default: 0},
+		{Name: "ignore", Type: field.TypeBool, Nullable: true, Comment: "当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问", Default: false},
 		{Name: "parent_id", Type: field.TypeInt64, Nullable: true, Comment: "parent menu ID | 父菜单ID"},
 	}
 	// SysMenusTable holds the schema information for the "sys_menus" table.
@@ -524,7 +525,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_menus_sys_menus_children",
-				Columns:    []*schema.Column{SysMenusColumns[7]},
+				Columns:    []*schema.Column{SysMenusColumns[8]},
 				RefColumns: []*schema.Column{SysMenusColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

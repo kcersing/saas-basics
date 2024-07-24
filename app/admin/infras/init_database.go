@@ -346,7 +346,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	menus[25] = I.DB.Menu.Create().
 		SetPath("members/details").
 		SetParentID(7).
-		SetName("会员详情").SetOrderNo(0)
+		SetName("会员详情").SetOrderNo(0).SetIgnore(true)
 	//
 	//menus[2] = I.DB.Menu.Create().
 	//	SetMenuLevel(1).

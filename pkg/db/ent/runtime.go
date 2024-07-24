@@ -408,6 +408,10 @@ func init() {
 	menuDescDisabled := menuFields[4].Descriptor()
 	// menu.DefaultDisabled holds the default value on creation for the disabled field.
 	menu.DefaultDisabled = menuDescDisabled.Default.(int32)
+	// menuDescIgnore is the schema descriptor for ignore field.
+	menuDescIgnore := menuFields[5].Descriptor()
+	// menu.DefaultIgnore holds the default value on creation for the ignore field.
+	menu.DefaultIgnore = menuDescIgnore.Default.(bool)
 	menuparamMixin := schema.MenuParam{}.Mixin()
 	menuparamMixinFields0 := menuparamMixin[0].Fields()
 	_ = menuparamMixinFields0

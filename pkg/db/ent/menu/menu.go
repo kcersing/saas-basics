@@ -28,6 +28,8 @@ const (
 	FieldOrderNo = "order_no"
 	// FieldDisabled holds the string denoting the disabled field in the database.
 	FieldDisabled = "disabled"
+	// FieldIgnore holds the string denoting the ignore field in the database.
+	FieldIgnore = "ignore"
 	// EdgeRoles holds the string denoting the roles edge name in mutations.
 	EdgeRoles = "roles"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -70,6 +72,7 @@ var Columns = []string{
 	FieldName,
 	FieldOrderNo,
 	FieldDisabled,
+	FieldIgnore,
 }
 
 var (
@@ -101,6 +104,8 @@ var (
 	DefaultOrderNo int32
 	// DefaultDisabled holds the default value on creation for the "disabled" field.
 	DefaultDisabled int32
+	// DefaultIgnore holds the default value on creation for the "ignore" field.
+	DefaultIgnore bool
 )
 
 // OrderOption defines the ordering options for the Menu queries.
@@ -144,6 +149,11 @@ func ByOrderNo(opts ...sql.OrderTermOption) OrderOption {
 // ByDisabled orders the results by the disabled field.
 func ByDisabled(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisabled, opts...).ToFunc()
+}
+
+// ByIgnore orders the results by the ignore field.
+func ByIgnore(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIgnore, opts...).ToFunc()
 }
 
 // ByRolesCount orders the results by roles count.
