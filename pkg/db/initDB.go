@@ -13,7 +13,25 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"saas/pkg/db/ent"
+	  _ "github.com/lib/pq"
 )
+
+func OpenMySql(mysqlConfig string, isProd bool){
+}
+
+
+func OpenPq()(databaseUrl string) *ent.Client {
+    db, err := sql.Open("pgx", databaseUrl)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Create an ent.Driver from `db`.
+    drv := entsql.OpenDB(dialect.Postgres, db)
+    return ent.NewClient(ent.Driver(drv))
+}
+
+
 
 // InitDB init DB
 func InitDB(mysqlConfig string, isProd bool) (DB *ent.Client) {
