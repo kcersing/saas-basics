@@ -19,9 +19,8 @@ import (
 // ScheduleCoachUpdate is the builder for updating ScheduleCoach entities.
 type ScheduleCoachUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *ScheduleCoachMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *ScheduleCoachMutation
 }
 
 // Where appends a list predicates to the ScheduleCoachUpdate builder.
@@ -329,12 +328,6 @@ func (scu *ScheduleCoachUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (scu *ScheduleCoachUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduleCoachUpdate {
-	scu.modifiers = append(scu.modifiers, modifiers...)
-	return scu
-}
-
 func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(schedulecoach.Table, schedulecoach.Columns, sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64))
 	if ps := scu.mutation.predicates; len(ps) > 0 {
@@ -445,7 +438,6 @@ func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(scu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, scu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{schedulecoach.Label}
@@ -461,10 +453,9 @@ func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) 
 // ScheduleCoachUpdateOne is the builder for updating a single ScheduleCoach entity.
 type ScheduleCoachUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *ScheduleCoachMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *ScheduleCoachMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -779,12 +770,6 @@ func (scuo *ScheduleCoachUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (scuo *ScheduleCoachUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduleCoachUpdateOne {
-	scuo.modifiers = append(scuo.modifiers, modifiers...)
-	return scuo
-}
-
 func (scuo *ScheduleCoachUpdateOne) sqlSave(ctx context.Context) (_node *ScheduleCoach, err error) {
 	_spec := sqlgraph.NewUpdateSpec(schedulecoach.Table, schedulecoach.Columns, sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64))
 	id, ok := scuo.mutation.ID()
@@ -912,7 +897,6 @@ func (scuo *ScheduleCoachUpdateOne) sqlSave(ctx context.Context) (_node *Schedul
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(scuo.modifiers...)
 	_node = &ScheduleCoach{config: scuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -87,7 +87,7 @@ func NewLogin(ctx context.Context, c *app.RequestContext) do.Login {
 	return &Login{
 		ctx:   ctx,
 		c:     c,
-		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
 		db:    infras.DB,
 		cache: infras.Cache,
 	}

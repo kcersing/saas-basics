@@ -25,7 +25,6 @@ type FaceQuery struct {
 	predicates      []predicate.Face
 	withMemberFaces *MemberQuery
 	withUserFaces   *UserQuery
-	modifiers       []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -420,9 +419,6 @@ func (fq *FaceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Face, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(fq.modifiers) > 0 {
-		_spec.Modifiers = fq.modifiers
-	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -508,9 +504,6 @@ func (fq *FaceQuery) loadUserFaces(ctx context.Context, query *UserQuery, nodes 
 
 func (fq *FaceQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := fq.querySpec()
-	if len(fq.modifiers) > 0 {
-		_spec.Modifiers = fq.modifiers
-	}
 	_spec.Node.Columns = fq.ctx.Fields
 	if len(fq.ctx.Fields) > 0 {
 		_spec.Unique = fq.ctx.Unique != nil && *fq.ctx.Unique
@@ -579,9 +572,6 @@ func (fq *FaceQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if fq.ctx.Unique != nil && *fq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range fq.modifiers {
-		m(selector)
-	}
 	for _, p := range fq.predicates {
 		p(selector)
 	}
@@ -597,12 +587,6 @@ func (fq *FaceQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (fq *FaceQuery) Modify(modifiers ...func(s *sql.Selector)) *FaceSelect {
-	fq.modifiers = append(fq.modifiers, modifiers...)
-	return fq.Select()
 }
 
 // FaceGroupBy is the group-by builder for Face entities.
@@ -693,10 +677,4 @@ func (fs *FaceSelect) sqlScan(ctx context.Context, root *FaceQuery, v any) error
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (fs *FaceSelect) Modify(modifiers ...func(s *sql.Selector)) *FaceSelect {
-	fs.modifiers = append(fs.modifiers, modifiers...)
-	return fs
 }

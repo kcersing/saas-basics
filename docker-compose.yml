@@ -6,7 +6,7 @@ services:
   golang:
     hostname: golang
 #    image: golang:latest  # 父镜像名称
-    image: golang:1.22.5
+    image: golang:latest
     volumes: # 挂载卷
       - /D/docker/src:/go
 #    ports: # 端口映射
@@ -35,6 +35,6 @@ services:
     command: server --console-address ':9001' /data
     privileged: true
     restart: always
-#    profiles:
-#      - dev
-#      - release
+    profiles:
+      - dev
+      - release

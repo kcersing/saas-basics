@@ -19,9 +19,8 @@ import (
 // OrderPayUpdate is the builder for updating OrderPay entities.
 type OrderPayUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrderPayMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrderPayMutation
 }
 
 // Where appends a list predicates to the OrderPayUpdate builder.
@@ -229,12 +228,6 @@ func (opu *OrderPayUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (opu *OrderPayUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderPayUpdate {
-	opu.modifiers = append(opu.modifiers, modifiers...)
-	return opu
-}
-
 func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(orderpay.Table, orderpay.Columns, sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64))
 	if ps := opu.mutation.predicates; len(ps) > 0 {
@@ -315,7 +308,6 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(opu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, opu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orderpay.Label}
@@ -331,10 +323,9 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // OrderPayUpdateOne is the builder for updating a single OrderPay entity.
 type OrderPayUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrderPayMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *OrderPayMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -549,12 +540,6 @@ func (opuo *OrderPayUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (opuo *OrderPayUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderPayUpdateOne {
-	opuo.modifiers = append(opuo.modifiers, modifiers...)
-	return opuo
-}
-
 func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, err error) {
 	_spec := sqlgraph.NewUpdateSpec(orderpay.Table, orderpay.Columns, sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64))
 	id, ok := opuo.mutation.ID()
@@ -652,7 +637,6 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(opuo.modifiers...)
 	_node = &OrderPay{config: opuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

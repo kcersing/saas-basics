@@ -20,9 +20,8 @@ import (
 // FaceUpdate is the builder for updating Face entities.
 type FaceUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *FaceMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *FaceMutation
 }
 
 // Where appends a list predicates to the FaceUpdate builder.
@@ -268,12 +267,6 @@ func (fu *FaceUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (fu *FaceUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FaceUpdate {
-	fu.modifiers = append(fu.modifiers, modifiers...)
-	return fu
-}
-
 func (fu *FaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(face.Table, face.Columns, sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64))
 	if ps := fu.mutation.predicates; len(ps) > 0 {
@@ -377,7 +370,6 @@ func (fu *FaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(fu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, fu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{face.Label}
@@ -393,10 +385,9 @@ func (fu *FaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // FaceUpdateOne is the builder for updating a single Face entity.
 type FaceUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *FaceMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *FaceMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -649,12 +640,6 @@ func (fuo *FaceUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (fuo *FaceUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FaceUpdateOne {
-	fuo.modifiers = append(fuo.modifiers, modifiers...)
-	return fuo
-}
-
 func (fuo *FaceUpdateOne) sqlSave(ctx context.Context) (_node *Face, err error) {
 	_spec := sqlgraph.NewUpdateSpec(face.Table, face.Columns, sqlgraph.NewFieldSpec(face.FieldID, field.TypeInt64))
 	id, ok := fuo.mutation.ID()
@@ -775,7 +760,6 @@ func (fuo *FaceUpdateOne) sqlSave(ctx context.Context) (_node *Face, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(fuo.modifiers...)
 	_node = &Face{config: fuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

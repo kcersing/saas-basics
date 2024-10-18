@@ -10,7 +10,6 @@ start:
 stop:
 	docker-compose down
 
-
 # run the user
 .PHONY: admin
 admin:
@@ -20,3 +19,11 @@ admin:
 .PHONY: api
 api:
 	go run ./app/api
+
+.PHONY: gen-user
+gen-user:
+	@cd ./app/admin && go hz update -idl idl_gen/admin/schedule.thrift -model_dir idl_gen/model/  --unset_omitempty
+
+.PHONY: gen-ent
+gen-ent:
+	go generate ./pkg/db/ent

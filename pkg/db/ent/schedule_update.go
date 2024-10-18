@@ -20,9 +20,8 @@ import (
 // ScheduleUpdate is the builder for updating Schedule entities.
 type ScheduleUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *ScheduleMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *ScheduleMutation
 }
 
 // Where appends a list predicates to the ScheduleUpdate builder.
@@ -526,12 +525,6 @@ func (su *ScheduleUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (su *ScheduleUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduleUpdate {
-	su.modifiers = append(su.modifiers, modifiers...)
-	return su
-}
-
 func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(schedule.Table, schedule.Columns, sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64))
 	if ps := su.mutation.predicates; len(ps) > 0 {
@@ -754,7 +747,6 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{schedule.Label}
@@ -770,10 +762,9 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // ScheduleUpdateOne is the builder for updating a single Schedule entity.
 type ScheduleUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *ScheduleMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *ScheduleMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1284,12 +1275,6 @@ func (suo *ScheduleUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (suo *ScheduleUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduleUpdateOne {
-	suo.modifiers = append(suo.modifiers, modifiers...)
-	return suo
-}
-
 func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err error) {
 	_spec := sqlgraph.NewUpdateSpec(schedule.Table, schedule.Columns, sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64))
 	id, ok := suo.mutation.ID()
@@ -1529,7 +1514,6 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(suo.modifiers...)
 	_node = &Schedule{config: suo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

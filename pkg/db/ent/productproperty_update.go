@@ -20,9 +20,8 @@ import (
 // ProductPropertyUpdate is the builder for updating ProductProperty entities.
 type ProductPropertyUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *ProductPropertyMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *ProductPropertyMutation
 }
 
 // Where appends a list predicates to the ProductPropertyUpdate builder.
@@ -372,12 +371,6 @@ func (ppu *ProductPropertyUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ppu *ProductPropertyUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProductPropertyUpdate {
-	ppu.modifiers = append(ppu.modifiers, modifiers...)
-	return ppu
-}
-
 func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(productproperty.Table, productproperty.Columns, sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64))
 	if ps := ppu.mutation.predicates; len(ps) > 0 {
@@ -552,7 +545,6 @@ func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(ppu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ppu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{productproperty.Label}
@@ -568,10 +560,9 @@ func (ppu *ProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error
 // ProductPropertyUpdateOne is the builder for updating a single ProductProperty entity.
 type ProductPropertyUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *ProductPropertyMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *ProductPropertyMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -928,12 +919,6 @@ func (ppuo *ProductPropertyUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ppuo *ProductPropertyUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProductPropertyUpdateOne {
-	ppuo.modifiers = append(ppuo.modifiers, modifiers...)
-	return ppuo
-}
-
 func (ppuo *ProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *ProductProperty, err error) {
 	_spec := sqlgraph.NewUpdateSpec(productproperty.Table, productproperty.Columns, sqlgraph.NewFieldSpec(productproperty.FieldID, field.TypeInt64))
 	id, ok := ppuo.mutation.ID()
@@ -1125,7 +1110,6 @@ func (ppuo *ProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *Produ
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(ppuo.modifiers...)
 	_node = &ProductProperty{config: ppuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

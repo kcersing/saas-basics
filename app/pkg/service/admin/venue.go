@@ -221,7 +221,7 @@ func NewVenue(ctx context.Context, c *app.RequestContext) do.Venue {
 	return &Venue{
 		ctx:   ctx,
 		c:     c,
-		salt:  config.GlobalServerConfig.MysqlInfo.Salt,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
 		db:    infras.DB,
 		cache: infras.Cache,
 	}

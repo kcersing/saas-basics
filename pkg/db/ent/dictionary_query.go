@@ -24,7 +24,6 @@ type DictionaryQuery struct {
 	inters                []Interceptor
 	predicates            []predicate.Dictionary
 	withDictionaryDetails *DictionaryDetailQuery
-	modifiers             []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -384,9 +383,6 @@ func (dq *DictionaryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*D
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(dq.modifiers) > 0 {
-		_spec.Modifiers = dq.modifiers
-	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -441,9 +437,6 @@ func (dq *DictionaryQuery) loadDictionaryDetails(ctx context.Context, query *Dic
 
 func (dq *DictionaryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := dq.querySpec()
-	if len(dq.modifiers) > 0 {
-		_spec.Modifiers = dq.modifiers
-	}
 	_spec.Node.Columns = dq.ctx.Fields
 	if len(dq.ctx.Fields) > 0 {
 		_spec.Unique = dq.ctx.Unique != nil && *dq.ctx.Unique
@@ -506,9 +499,6 @@ func (dq *DictionaryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if dq.ctx.Unique != nil && *dq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range dq.modifiers {
-		m(selector)
-	}
 	for _, p := range dq.predicates {
 		p(selector)
 	}
@@ -524,12 +514,6 @@ func (dq *DictionaryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (dq *DictionaryQuery) Modify(modifiers ...func(s *sql.Selector)) *DictionarySelect {
-	dq.modifiers = append(dq.modifiers, modifiers...)
-	return dq.Select()
 }
 
 // DictionaryGroupBy is the group-by builder for Dictionary entities.
@@ -620,10 +604,4 @@ func (ds *DictionarySelect) sqlScan(ctx context.Context, root *DictionaryQuery, 
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (ds *DictionarySelect) Modify(modifiers ...func(s *sql.Selector)) *DictionarySelect {
-	ds.modifiers = append(ds.modifiers, modifiers...)
-	return ds
 }

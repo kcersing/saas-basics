@@ -19,9 +19,8 @@ import (
 // MemberDetailsUpdate is the builder for updating MemberDetails entities.
 type MemberDetailsUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *MemberDetailsMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *MemberDetailsMutation
 }
 
 // Where appends a list predicates to the MemberDetailsUpdate builder.
@@ -558,12 +557,6 @@ func (mdu *MemberDetailsUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mdu *MemberDetailsUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberDetailsUpdate {
-	mdu.modifiers = append(mdu.modifiers, modifiers...)
-	return mdu
-}
-
 func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(memberdetails.Table, memberdetails.Columns, sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64))
 	if ps := mdu.mutation.predicates; len(ps) > 0 {
@@ -743,7 +736,6 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mdu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mdu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{memberdetails.Label}
@@ -759,10 +751,9 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 // MemberDetailsUpdateOne is the builder for updating a single MemberDetails entity.
 type MemberDetailsUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *MemberDetailsMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *MemberDetailsMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1306,12 +1297,6 @@ func (mduo *MemberDetailsUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mduo *MemberDetailsUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberDetailsUpdateOne {
-	mduo.modifiers = append(mduo.modifiers, modifiers...)
-	return mduo
-}
-
 func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberDetails, err error) {
 	_spec := sqlgraph.NewUpdateSpec(memberdetails.Table, memberdetails.Columns, sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64))
 	id, ok := mduo.mutation.ID()
@@ -1508,7 +1493,6 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mduo.modifiers...)
 	_node = &MemberDetails{config: mduo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

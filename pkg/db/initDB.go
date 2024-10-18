@@ -2,65 +2,64 @@ package db
 
 import (
 	"context"
-	"fmt"
-	"log"
-	migrate2 "saas/pkg/db/ent/migrate"
-	"time"
-
+	"database/sql"
 	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql"
+	entsql "entgo.io/ent/dialect/sql"
+	"fmt"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	_ "github.com/go-sql-driver/mysql"
-
+	_ "github.com/jackc/pgx/v5/stdlib"
+	_ "github.com/lib/pq"
+	"log"
 	"saas/pkg/db/ent"
-	  _ "github.com/lib/pq"
+	migrate2 "saas/pkg/db/ent/migrate"
+	"time"
 )
 
-func OpenMySql(mysqlConfig string, isProd bool){
+func OpenMySql(databaseUrl string) *entsql.Driver {
+	db, err := sql.Open("mysql", databaseUrl)
+	if err != nil {
+		log.Fatal(err)
+	}
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(100)
+	db.SetConnMaxLifetime(time.Hour)
+	// 从db变量中构造一个ent.Driver对象。
+	drv := entsql.OpenDB(dialect.MySQL, db)
+
+	return drv
 }
 
+func OpenPq(databaseUrl string) *entsql.Driver {
+	db, err := sql.Open("pgx", databaseUrl)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Create an ent.Driver from `db`.
+	drv := entsql.OpenDB(dialect.Postgres, db)
 
-func OpenPq()(databaseUrl string) *ent.Client {
-    db, err := sql.Open("pgx", databaseUrl)
-    if err != nil {
-        log.Fatal(err)
-    }
-
-    // Create an ent.Driver from `db`.
-    drv := entsql.OpenDB(dialect.Postgres, db)
-    return ent.NewClient(ent.Driver(drv))
+	return drv
 }
-
-
 
 // InitDB init DB
-func InitDB(mysqlConfig string, isProd bool) (DB *ent.Client) {
-	var err error
-	drvWd, err := sql.Open("mysql", mysqlConfig)
-	if err != nil {
-		panic(err)
-	}
-	db := drvWd.DB()
-	db.SetMaxIdleConns(100)
-	db.SetMaxOpenConns(1000)
-	db.SetConnMaxLifetime(time.Hour)
-	db.SetConnMaxIdleTime(time.Minute * 5)
+func InitDB(databaseUrl string, isProd bool) (DB *ent.Client) {
+	drv := OpenPq(databaseUrl)
 
+	// 生产环境使用默认mysql驱动，开发环境使用debug驱动
 	var drive dialect.Driver
 	if isProd {
 		hlog.Info("prod mode, use default mysql driver")
-		drive = drvWd
+		drive = drv
 	} else {
 		// Debug driver.
 		hlog.Info("dev mode, use debug mysql driver")
 		drive = &DebugTimeDriver{
-			Driver: drvWd,
+			Driver: drv,
 			log: func(ctx context.Context, info ...any) {
 				hlog.Info(info...)
 			},
 		}
 	}
-
 	DB = ent.NewClient(ent.Driver(drive))
 
 	ctx := context.Background()

@@ -26,7 +26,6 @@ type MemberProductPropertyQuery struct {
 	predicates []predicate.MemberProductProperty
 	withOwner  *MemberProductQuery
 	withVenues *VenueQuery
-	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -421,9 +420,6 @@ func (mppq *MemberProductPropertyQuery) sqlAll(ctx context.Context, hooks ...que
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(mppq.modifiers) > 0 {
-		_spec.Modifiers = mppq.modifiers
-	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -542,9 +538,6 @@ func (mppq *MemberProductPropertyQuery) loadVenues(ctx context.Context, query *V
 
 func (mppq *MemberProductPropertyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mppq.querySpec()
-	if len(mppq.modifiers) > 0 {
-		_spec.Modifiers = mppq.modifiers
-	}
 	_spec.Node.Columns = mppq.ctx.Fields
 	if len(mppq.ctx.Fields) > 0 {
 		_spec.Unique = mppq.ctx.Unique != nil && *mppq.ctx.Unique
@@ -610,9 +603,6 @@ func (mppq *MemberProductPropertyQuery) sqlQuery(ctx context.Context) *sql.Selec
 	if mppq.ctx.Unique != nil && *mppq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range mppq.modifiers {
-		m(selector)
-	}
 	for _, p := range mppq.predicates {
 		p(selector)
 	}
@@ -628,12 +618,6 @@ func (mppq *MemberProductPropertyQuery) sqlQuery(ctx context.Context) *sql.Selec
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (mppq *MemberProductPropertyQuery) Modify(modifiers ...func(s *sql.Selector)) *MemberProductPropertySelect {
-	mppq.modifiers = append(mppq.modifiers, modifiers...)
-	return mppq.Select()
 }
 
 // MemberProductPropertyGroupBy is the group-by builder for MemberProductProperty entities.
@@ -724,10 +708,4 @@ func (mpps *MemberProductPropertySelect) sqlScan(ctx context.Context, root *Memb
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (mpps *MemberProductPropertySelect) Modify(modifiers ...func(s *sql.Selector)) *MemberProductPropertySelect {
-	mpps.modifiers = append(mpps.modifiers, modifiers...)
-	return mpps
 }

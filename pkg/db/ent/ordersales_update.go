@@ -19,9 +19,8 @@ import (
 // OrderSalesUpdate is the builder for updating OrderSales entities.
 type OrderSalesUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrderSalesMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrderSalesMutation
 }
 
 // Where appends a list predicates to the OrderSalesUpdate builder.
@@ -216,12 +215,6 @@ func (osu *OrderSalesUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (osu *OrderSalesUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderSalesUpdate {
-	osu.modifiers = append(osu.modifiers, modifiers...)
-	return osu
-}
-
 func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(ordersales.Table, ordersales.Columns, sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64))
 	if ps := osu.mutation.predicates; len(ps) > 0 {
@@ -299,7 +292,6 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(osu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, osu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{ordersales.Label}
@@ -315,10 +307,9 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // OrderSalesUpdateOne is the builder for updating a single OrderSales entity.
 type OrderSalesUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrderSalesMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *OrderSalesMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -520,12 +511,6 @@ func (osuo *OrderSalesUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (osuo *OrderSalesUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderSalesUpdateOne {
-	osuo.modifiers = append(osuo.modifiers, modifiers...)
-	return osuo
-}
-
 func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales, err error) {
 	_spec := sqlgraph.NewUpdateSpec(ordersales.Table, ordersales.Columns, sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64))
 	id, ok := osuo.mutation.ID()
@@ -620,7 +605,6 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(osuo.modifiers...)
 	_node = &OrderSales{config: osuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -1,21 +1,26 @@
 package config
 
 type ServerConfig struct {
-	Name      string      `mapstructure:"Name" json:"Name"`
-	Host      string      `mapstructure:"Host" json:"Host"`
-	Port      int         `mapstructure:"Port" json:"Port"`
-	Timeout   int         `mapstructure:"Timeout" json:"Timeout"`
-	IsProd    bool        `mapstructure:"IsProd" json:"IsProd"`
-	MysqlInfo MysqlConfig `mapstructure:"MySql" json:"MySql"`
-	Captcha   Captcha     `mapstructure:"Captcha" json:"Captcha"`
-	Auth      Auth        `mapstructure:"Auth" json:"Auth"`
-	Redis     Redis       `mapstructure:"Redis" json:"Redis"`
-	Casbin    CasbinConf  `mapstructure:"Casbin" json:"Casbin"`
-	Payment   Payment     `mapstructure:"Payment" json:"Payment"`
-	Minio     Minio       `mapstructure:"Minio" json:"Minio"`
+	Name           string           `mapstructure:"Name" json:"Name"`
+	Host           string           `mapstructure:"Host" json:"Host"`
+	Port           int              `mapstructure:"Port" json:"Port"`
+	Timeout        int              `mapstructure:"Timeout" json:"Timeout"`
+	IsProd         bool             `mapstructure:"IsProd" json:"IsProd"`
+	MySQLInfo      MySQLConfig      `mapstructure:"MySQL" json:"MySQL"`
+	PostgreSQLInfo PostgreSQLConfig `mapstructure:"PostgreSQL" json:"PostgreSQL"`
+	Captcha        Captcha          `mapstructure:"Captcha" json:"Captcha"`
+	Auth           Auth             `mapstructure:"Auth" json:"Auth"`
+	Redis          Redis            `mapstructure:"Redis" json:"Redis"`
+	Casbin         CasbinConf       `mapstructure:"Casbin" json:"Casbin"`
+	Payment        Payment          `mapstructure:"Payment" json:"Payment"`
+	Minio          Minio            `mapstructure:"Minio" json:"Minio"`
 }
 
-type MysqlConfig struct {
+type MySQLConfig struct {
+	Host string `mapstructure:"Host" json:"Host"`
+	Salt string `mapstructure:"Salt" json:"Salt"`
+}
+type PostgreSQLConfig struct {
 	Host string `mapstructure:"Host" json:"Host"`
 	Salt string `mapstructure:"Salt" json:"Salt"`
 }

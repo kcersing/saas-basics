@@ -32,7 +32,6 @@ type VenueQuery struct {
 	withVenueEntry           *EntryLogsQuery
 	withMemberPropertyVenues *MemberProductPropertyQuery
 	withPropertyVenues       *ProductPropertyQuery
-	modifiers                []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -532,9 +531,6 @@ func (vq *VenueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Venue,
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(vq.modifiers) > 0 {
-		_spec.Modifiers = vq.modifiers
-	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -799,9 +795,6 @@ func (vq *VenueQuery) loadPropertyVenues(ctx context.Context, query *ProductProp
 
 func (vq *VenueQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := vq.querySpec()
-	if len(vq.modifiers) > 0 {
-		_spec.Modifiers = vq.modifiers
-	}
 	_spec.Node.Columns = vq.ctx.Fields
 	if len(vq.ctx.Fields) > 0 {
 		_spec.Unique = vq.ctx.Unique != nil && *vq.ctx.Unique
@@ -864,9 +857,6 @@ func (vq *VenueQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if vq.ctx.Unique != nil && *vq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range vq.modifiers {
-		m(selector)
-	}
 	for _, p := range vq.predicates {
 		p(selector)
 	}
@@ -882,12 +872,6 @@ func (vq *VenueQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (vq *VenueQuery) Modify(modifiers ...func(s *sql.Selector)) *VenueSelect {
-	vq.modifiers = append(vq.modifiers, modifiers...)
-	return vq.Select()
 }
 
 // VenueGroupBy is the group-by builder for Venue entities.
@@ -978,10 +962,4 @@ func (vs *VenueSelect) sqlScan(ctx context.Context, root *VenueQuery, v any) err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (vs *VenueSelect) Modify(modifiers ...func(s *sql.Selector)) *VenueSelect {
-	vs.modifiers = append(vs.modifiers, modifiers...)
-	return vs
 }

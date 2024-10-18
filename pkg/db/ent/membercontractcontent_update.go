@@ -19,9 +19,8 @@ import (
 // MemberContractContentUpdate is the builder for updating MemberContractContent entities.
 type MemberContractContentUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *MemberContractContentMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *MemberContractContentMutation
 }
 
 // Where appends a list predicates to the MemberContractContentUpdate builder.
@@ -162,12 +161,6 @@ func (mccu *MemberContractContentUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mccu *MemberContractContentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberContractContentUpdate {
-	mccu.modifiers = append(mccu.modifiers, modifiers...)
-	return mccu
-}
-
 func (mccu *MemberContractContentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(membercontractcontent.Table, membercontractcontent.Columns, sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64))
 	if ps := mccu.mutation.predicates; len(ps) > 0 {
@@ -221,7 +214,6 @@ func (mccu *MemberContractContentUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mccu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mccu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{membercontractcontent.Label}
@@ -237,10 +229,9 @@ func (mccu *MemberContractContentUpdate) sqlSave(ctx context.Context) (n int, er
 // MemberContractContentUpdateOne is the builder for updating a single MemberContractContent entity.
 type MemberContractContentUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *MemberContractContentMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *MemberContractContentMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -388,12 +379,6 @@ func (mccuo *MemberContractContentUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mccuo *MemberContractContentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberContractContentUpdateOne {
-	mccuo.modifiers = append(mccuo.modifiers, modifiers...)
-	return mccuo
-}
-
 func (mccuo *MemberContractContentUpdateOne) sqlSave(ctx context.Context) (_node *MemberContractContent, err error) {
 	_spec := sqlgraph.NewUpdateSpec(membercontractcontent.Table, membercontractcontent.Columns, sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64))
 	id, ok := mccuo.mutation.ID()
@@ -464,7 +449,6 @@ func (mccuo *MemberContractContentUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mccuo.modifiers...)
 	_node = &MemberContractContent{config: mccuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -18,9 +18,14 @@ Redis:
   Host: 127.0.0.1
   Port: 6379
   Type: node
-MySql:
+
+MySQL:
   #  Host: root:X3MeAGAmPSZp8A3H@tcp(121.40.98.240:3306)/saas?parseTime=True
   Host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
+  Salt: YOUR_SALT
+
+PostgreSQL:
+  Host: postgresql://postgres:root@127.0.0.1/postgres
   Salt: YOUR_SALT
 
 Casbin:

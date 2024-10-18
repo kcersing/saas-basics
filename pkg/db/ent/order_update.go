@@ -26,9 +26,8 @@ import (
 // OrderUpdate is the builder for updating Order entities.
 type OrderUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrderMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrderMutation
 }
 
 // Where appends a list predicates to the OrderUpdate builder.
@@ -560,12 +559,6 @@ func (ou *OrderUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ou *OrderUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderUpdate {
-	ou.modifiers = append(ou.modifiers, modifiers...)
-	return ou
-}
-
 func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(order.Table, order.Columns, sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64))
 	if ps := ou.mutation.predicates; len(ps) > 0 {
@@ -941,7 +934,6 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(ou.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ou.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{order.Label}
@@ -957,10 +949,9 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // OrderUpdateOne is the builder for updating a single Order entity.
 type OrderUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrderMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *OrderMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1499,12 +1490,6 @@ func (ouo *OrderUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ouo *OrderUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderUpdateOne {
-	ouo.modifiers = append(ouo.modifiers, modifiers...)
-	return ouo
-}
-
 func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error) {
 	_spec := sqlgraph.NewUpdateSpec(order.Table, order.Columns, sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64))
 	id, ok := ouo.mutation.ID()
@@ -1897,7 +1882,6 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(ouo.modifiers...)
 	_node = &Order{config: ouo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

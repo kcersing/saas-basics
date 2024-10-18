@@ -19,9 +19,8 @@ import (
 // MenuParamUpdate is the builder for updating MenuParam entities.
 type MenuParamUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *MenuParamMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *MenuParamMutation
 }
 
 // Where appends a list predicates to the MenuParamUpdate builder.
@@ -144,12 +143,6 @@ func (mpu *MenuParamUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mpu *MenuParamUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MenuParamUpdate {
-	mpu.modifiers = append(mpu.modifiers, modifiers...)
-	return mpu
-}
-
 func (mpu *MenuParamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(menuparam.Table, menuparam.Columns, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64))
 	if ps := mpu.mutation.predicates; len(ps) > 0 {
@@ -200,7 +193,6 @@ func (mpu *MenuParamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mpu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{menuparam.Label}
@@ -216,10 +208,9 @@ func (mpu *MenuParamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // MenuParamUpdateOne is the builder for updating a single MenuParam entity.
 type MenuParamUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *MenuParamMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *MenuParamMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -349,12 +340,6 @@ func (mpuo *MenuParamUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mpuo *MenuParamUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MenuParamUpdateOne {
-	mpuo.modifiers = append(mpuo.modifiers, modifiers...)
-	return mpuo
-}
-
 func (mpuo *MenuParamUpdateOne) sqlSave(ctx context.Context) (_node *MenuParam, err error) {
 	_spec := sqlgraph.NewUpdateSpec(menuparam.Table, menuparam.Columns, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64))
 	id, ok := mpuo.mutation.ID()
@@ -422,7 +407,6 @@ func (mpuo *MenuParamUpdateOne) sqlSave(ctx context.Context) (_node *MenuParam, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mpuo.modifiers...)
 	_node = &MenuParam{config: mpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

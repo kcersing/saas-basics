@@ -19,9 +19,8 @@ import (
 // OrderAmountUpdate is the builder for updating OrderAmount entities.
 type OrderAmountUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrderAmountMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrderAmountMutation
 }
 
 // Where appends a list predicates to the OrderAmountUpdate builder.
@@ -226,12 +225,6 @@ func (oau *OrderAmountUpdate) check() error {
 	return nil
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (oau *OrderAmountUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderAmountUpdate {
-	oau.modifiers = append(oau.modifiers, modifiers...)
-	return oau
-}
-
 func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := oau.check(); err != nil {
 		return n, err
@@ -312,7 +305,6 @@ func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(oau.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, oau.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orderamount.Label}
@@ -328,10 +320,9 @@ func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // OrderAmountUpdateOne is the builder for updating a single OrderAmount entity.
 type OrderAmountUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrderAmountMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *OrderAmountMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -543,12 +534,6 @@ func (oauo *OrderAmountUpdateOne) check() error {
 	return nil
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (oauo *OrderAmountUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderAmountUpdateOne {
-	oauo.modifiers = append(oauo.modifiers, modifiers...)
-	return oauo
-}
-
 func (oauo *OrderAmountUpdateOne) sqlSave(ctx context.Context) (_node *OrderAmount, err error) {
 	if err := oauo.check(); err != nil {
 		return _node, err
@@ -646,7 +631,6 @@ func (oauo *OrderAmountUpdateOne) sqlSave(ctx context.Context) (_node *OrderAmou
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(oauo.modifiers...)
 	_node = &OrderAmount{config: oauo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

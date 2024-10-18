@@ -20,9 +20,8 @@ import (
 // MemberProductPropertyUpdate is the builder for updating MemberProductProperty entities.
 type MemberProductPropertyUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *MemberProductPropertyMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *MemberProductPropertyMutation
 }
 
 // Where appends a list predicates to the MemberProductPropertyUpdate builder.
@@ -475,12 +474,6 @@ func (mppu *MemberProductPropertyUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mppu *MemberProductPropertyUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberProductPropertyUpdate {
-	mppu.modifiers = append(mppu.modifiers, modifiers...)
-	return mppu
-}
-
 func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(memberproductproperty.Table, memberproductproperty.Columns, sqlgraph.NewFieldSpec(memberproductproperty.FieldID, field.TypeInt64))
 	if ps := mppu.mutation.predicates; len(ps) > 0 {
@@ -669,7 +662,6 @@ func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mppu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mppu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{memberproductproperty.Label}
@@ -685,10 +677,9 @@ func (mppu *MemberProductPropertyUpdate) sqlSave(ctx context.Context) (n int, er
 // MemberProductPropertyUpdateOne is the builder for updating a single MemberProductProperty entity.
 type MemberProductPropertyUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *MemberProductPropertyMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *MemberProductPropertyMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1148,12 +1139,6 @@ func (mppuo *MemberProductPropertyUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mppuo *MemberProductPropertyUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberProductPropertyUpdateOne {
-	mppuo.modifiers = append(mppuo.modifiers, modifiers...)
-	return mppuo
-}
-
 func (mppuo *MemberProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node *MemberProductProperty, err error) {
 	_spec := sqlgraph.NewUpdateSpec(memberproductproperty.Table, memberproductproperty.Columns, sqlgraph.NewFieldSpec(memberproductproperty.FieldID, field.TypeInt64))
 	id, ok := mppuo.mutation.ID()
@@ -1359,7 +1344,6 @@ func (mppuo *MemberProductPropertyUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mppuo.modifiers...)
 	_node = &MemberProductProperty{config: mppuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
