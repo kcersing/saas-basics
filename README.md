@@ -12,7 +12,8 @@ export GOPROXY=https://mirrors.aliyun.com/goproxy/
 
 go install github.com/cloudwego/kitex/tool/cmd/kitex@latest
 go install github.com/cloudwego/hertz/cmd/hz@latest
-
+go install github.com/cloudwego/cwgo@latest
+GO111MODULE=on go install github.com/cloudwego/thriftgo@latest
 
 ## 技术栈
 
