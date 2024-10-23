@@ -22,7 +22,11 @@ api:
 
 .PHONY: gen-user
 gen-user:
-	@cd ./app/admin && go hz update -idl idl_gen/admin/schedule.thrift -model_dir idl_gen/model/  --unset_omitempty
+	@cd ./rpc_gen && cwgo client --type RPC --service order --module rpc_gen  -I ../idl  --idl ../idl/order.thrift
+	@cd ./app/admin && cwgo server --type RPC --module order --service order --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/order.thrift
+
+
+
 
 .PHONY: gen-ent
 gen-ent:

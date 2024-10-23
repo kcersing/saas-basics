@@ -51,3 +51,4 @@ GO111MODULE=on go install github.com/cloudwego/thriftgo@latest
 
 > 在浏览器上访问 `http://localhost:8428/`
 
+
