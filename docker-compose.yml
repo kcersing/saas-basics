@@ -1,25 +1,14 @@
 version: '3'
 
 services:
-
-  #golang 服务
-  golang:
-    hostname: golang
-#    image: golang:latest  # 父镜像名称
-    image: golang:latest
-    volumes: # 挂载卷
-      - /D/docker/src:/go
-#    ports: # 端口映射
-#      - "9039:9039"
-    stdin_open: true
-    tty: true
-    restart: always
-    privileged: true
-    # command: 启动后运行的命令
-#    profiles:
-#      - dev
-#      - release
-
+  redis:
+    image: 'redis:latest'
+    ports:
+      - 6379:6379
+  consul:
+    image: "hashicorp/consul:latest"
+    ports:
+      - "8500:8500"
   minio:
     image: minio/minio
     container_name: minio
@@ -38,3 +27,30 @@ services:
     profiles:
       - dev
       - release
+  # Jaeger
+  jaeger-all-in-one:
+    container_name: jaeger-all-in-one
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+
+#  #golang 服务
+#  golang:
+#    hostname: golang
+##    image: golang:latest  # 父镜像名称
+#    image: golang:latest
+#    volumes: # 挂载卷
+#      - /D/docker/src:/go
+##    ports: # 端口映射
+##      - "9039:9039"
+#    stdin_open: true
+#    tty: true
+#    restart: always
+#    privileged: true
+#    # command: 启动后运行的命令
+##    profiles:
+##      - dev
+##      - release
+
