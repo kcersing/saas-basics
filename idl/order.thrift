@@ -77,6 +77,4 @@ service OrderService {
 
     base.NilResponse QRPay(1: QRPayReq req) (api.post = "/api/admin/order/QRPay") // 订单详情
 
-}(
-      api.base_domain="http://127.0.0.1:9001";
-  )
+}
