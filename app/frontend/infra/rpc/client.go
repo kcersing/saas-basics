@@ -16,7 +16,7 @@ var (
 
 func InitClient() {
 	once.Do(func() {
-
+		initOrderClient()
 	})
 }
 

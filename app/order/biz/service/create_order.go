@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
-	order "rpc_gen/kitex_gen/orders/order"
+	order "rpc_gen/kitex_gen/order"
 )
 
 type CreateOrderService struct {

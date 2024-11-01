@@ -1,4 +1,4 @@
-namespace go orders.order
+namespace go order
 
 include "base/base.thrift"
 include "base/data.thrift"

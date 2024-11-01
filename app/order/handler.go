@@ -4,7 +4,7 @@ import (
 	"context"
 	"order/biz/service"
 	base "rpc_gen/kitex_gen/base"
-	order "rpc_gen/kitex_gen/orders/order"
+	order "rpc_gen/kitex_gen/order"
 )
 
 // OrderServiceImpl implements the last service interface defined in the IDL.
