@@ -30,7 +30,7 @@ gen-user:
 
 .PHONY: gen-frontend
 gen-frontend:
-	@cd app/frontend && cwgo server -I ../../idl --type HTTP --service frontend --module frontend --idl ../../idl/frontend/member.thrift
+	@cd app/frontend && cwgo server -I ../../idl --type HTTP --service facade --module facade --idl ../../idl/facade/member.thrift
 
 .PHONY: gen-ent
 gen-ent:
