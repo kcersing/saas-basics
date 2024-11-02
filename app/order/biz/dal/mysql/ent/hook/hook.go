@@ -5,7 +5,7 @@ package hook
 import (
 	"context"
 	"fmt"
-	"order/biz/ent"
+	"order/biz/dal/mysql/ent"
 )
 
 // The OrderFunc type is an adapter to allow the use of ordinary

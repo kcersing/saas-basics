@@ -5,16 +5,16 @@ import (
 	"context"
 	"database/sql"
 	"entgo.io/ent/dialect"
+	entsql "entgo.io/ent/dialect/sql"
 	"github.com/casbin/ent-adapter/ent"
 	"github.com/casbin/ent-adapter/ent/migrate"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
 	"log"
-	"order/conf"
 	"time"
 
-	entsql "entgo.io/ent/dialect/sql"
-	_ "github.com/go-sql-driver/mysql"
+	"order/conf"
 )
 
 var (

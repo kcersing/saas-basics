@@ -4,8 +4,8 @@ package ent
 
 import (
 	"fmt"
-	"order/biz/ent/order"
-	"order/biz/ent/orderamount"
+	"order/biz/dal/mysql/ent/order"
+	"order/biz/dal/mysql/ent/orderamount"
 	"strings"
 	"time"
 

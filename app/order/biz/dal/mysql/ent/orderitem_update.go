@@ -6,9 +6,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"order/biz/ent/order"
-	"order/biz/ent/orderitem"
-	"order/biz/ent/predicate"
+	"order/biz/dal/mysql/ent/order"
+	"order/biz/dal/mysql/ent/orderitem"
+	"order/biz/dal/mysql/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"

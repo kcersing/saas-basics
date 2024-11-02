@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"order/biz/ent/order"
-	"order/biz/ent/orderamount"
-	"order/biz/ent/orderitem"
-	"order/biz/ent/orderpay"
-	"order/biz/ent/ordersales"
-	"order/biz/ent/schema"
+	"order/biz/dal/mysql/ent/order"
+	"order/biz/dal/mysql/ent/orderamount"
+	"order/biz/dal/mysql/ent/orderitem"
+	"order/biz/dal/mysql/ent/orderpay"
+	"order/biz/dal/mysql/ent/ordersales"
+	"order/biz/dal/mysql/ent/schema"
 	"time"
 )
 

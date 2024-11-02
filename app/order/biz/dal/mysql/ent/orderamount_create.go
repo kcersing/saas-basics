@@ -6,8 +6,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"order/biz/ent/order"
-	"order/biz/ent/orderamount"
+	"order/biz/dal/mysql/ent/order"
+	"order/biz/dal/mysql/ent/orderamount"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"

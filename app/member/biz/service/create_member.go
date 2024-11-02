@@ -1,9 +1,15 @@
 package service
 
 import (
+	"admin/pkg/errno"
 	"context"
-	base "rpc_gen/kitex_gen/base"
-	member "rpc_gen/kitex_gen/member"
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/jinzhu/copier"
+	"member/biz/infra/do"
+	admin "member/biz/infra/service"
+
+	"rpc_gen/kitex_gen/base"
+	"rpc_gen/kitex_gen/member"
 )
 
 type CreateMemberService struct {
@@ -15,7 +21,15 @@ func NewCreateMemberService(ctx context.Context) *CreateMemberService {
 
 // Run create note info
 func (s *CreateMemberService) Run(req *member.CreateOrUpdateMemberReq) (resp *base.NilResponse, err error) {
-	// Finish your business logic.
 
+	var memberInfoReq do.CreateOrUpdateMemberReq
+	err = copier.Copy(&memberInfoReq, &req)
+	if err != nil {
+		klog.Error(errno.ConvertErr(err))
+	}
+	err = admin.NewMember(s.ctx).Create(memberInfoReq)
+	if err != nil {
+		klog.Error(errno.ConvertErr(err))
+	}
 	return
 }

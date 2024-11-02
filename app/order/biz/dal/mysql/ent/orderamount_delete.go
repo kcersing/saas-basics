@@ -4,8 +4,8 @@ package ent
 
 import (
 	"context"
-	"order/biz/ent/orderamount"
-	"order/biz/ent/predicate"
+	"order/biz/dal/mysql/ent/orderamount"
+	"order/biz/dal/mysql/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

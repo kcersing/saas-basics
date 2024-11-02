@@ -1,4 +1,4 @@
-package paseto
+package utils
 
 import (
 	"github.com/hertz-contrib/paseto"

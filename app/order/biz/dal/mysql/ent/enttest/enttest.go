@@ -5,11 +5,11 @@ package enttest
 import (
 	"context"
 
-	"order/biz/ent"
+	"order/biz/dal/mysql/ent"
 	// required by schema hooks.
-	_ "order/biz/ent/runtime"
+	_ "order/biz/dal/mysql/ent/runtime"
 
-	"order/biz/ent/migrate"
+	"order/biz/dal/mysql/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
 )

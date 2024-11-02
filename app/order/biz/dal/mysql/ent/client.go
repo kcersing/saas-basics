@@ -9,13 +9,13 @@ import (
 	"log"
 	"reflect"
 
-	"order/biz/ent/migrate"
+	"order/biz/dal/mysql/ent/migrate"
 
-	"order/biz/ent/order"
-	"order/biz/ent/orderamount"
-	"order/biz/ent/orderitem"
-	"order/biz/ent/orderpay"
-	"order/biz/ent/ordersales"
+	"order/biz/dal/mysql/ent/order"
+	"order/biz/dal/mysql/ent/orderamount"
+	"order/biz/dal/mysql/ent/orderitem"
+	"order/biz/dal/mysql/ent/orderpay"
+	"order/biz/dal/mysql/ent/ordersales"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -27,10 +27,6 @@ import (
 type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
-
-
-
-
 	Schema *migrate.Schema
 	// Order is the client for interacting with the Order builders.
 	Order *OrderClient

@@ -1,8 +1,8 @@
 package schema
 
 import (
+	"common/biz/dal/mysql/ent/schema/mixins"
 	"entgo.io/ent/schema/index"
-	"order/biz/ent/schema/mixins"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"

@@ -3,7 +3,7 @@
 package orderpay
 
 import (
-	"order/biz/ent/predicate"
+	"order/biz/dal/mysql/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
