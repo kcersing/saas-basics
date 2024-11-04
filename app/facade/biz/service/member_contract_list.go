@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
+	"facade/hertz_gen/facade/member"
 
 	base "facade/hertz_gen/base"
-	member "facade/member"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 

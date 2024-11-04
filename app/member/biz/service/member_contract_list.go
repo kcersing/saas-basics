@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
-	member "rpc_gen/kitex_gen/member"
+	"facade/hertz_gen/base"
+	"facade/hertz_gen/facade/member"
 )
 
 type MemberContractListService struct {

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"admin/pkg/errno"
+	"common/utils/errno"
 	"context"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/jinzhu/copier"

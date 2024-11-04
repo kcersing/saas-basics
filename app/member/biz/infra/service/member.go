@@ -1,13 +1,12 @@
 package admin
 
 import (
-	"admin/config"
-	"admin/infras"
 	"common/utils"
 	"context"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
+	"member/biz/dal/cache"
 	"member/biz/dal/mysql"
 	"member/biz/dal/mysql/ent"
 	"member/biz/dal/mysql/ent/member"
@@ -288,8 +287,8 @@ func (m Member) UpdateStatus(ID int64, status int64) error {
 func NewMember(ctx context.Context) do.Member {
 	return &Member{
 		ctx:   ctx,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		salt:  "",
 		db:    mysql.DB,
-		cache: infras.Cache,
+		cache: cache.Cache,
 	}
 }

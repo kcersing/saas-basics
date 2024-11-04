@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
+	"facade/hertz_gen/facade/member"
 
 	base "facade/hertz_gen/base"
-	member "facade/member"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -23,5 +23,6 @@ func (h *CreateMemberService) Run(req *member.CreateOrUpdateMemberReq) (resp *ba
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
+
 	return
 }

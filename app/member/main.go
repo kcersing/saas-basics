@@ -3,6 +3,7 @@ package main
 import (
 	consul "github.com/kitex-contrib/registry-consul"
 	"github.com/v2pro/plz/countlog/output/lumberjack"
+	"member/biz/dal"
 	"net"
 	"time"
 
@@ -17,6 +18,10 @@ import (
 )
 
 func main() {
+
+	klog.Info(conf.GetEnv())
+
+	dal.Init()
 	opts := kitexInit()
 
 	svr := memberservice.NewServer(new(MemberServiceImpl), opts...)

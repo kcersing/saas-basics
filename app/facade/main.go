@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"facade/infra/rpc"
 	"time"
 
 	"facade/biz/router"
@@ -26,6 +27,7 @@ import (
 func main() {
 	// init dal
 	// dal.Init()
+	rpc.InitClient()
 	address := conf.GetConf().Hertz.Address
 	h := server.New(server.WithHostPorts(address))
 

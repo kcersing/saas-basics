@@ -4,7 +4,7 @@ import (
 	"context"
 
 	base "facade/hertz_gen/base"
-	member "facade/member"
+	"facade/hertz_gen/facade/member"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 

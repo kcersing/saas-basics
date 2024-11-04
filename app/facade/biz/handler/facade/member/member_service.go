@@ -6,7 +6,7 @@ import (
 	"facade/biz/service"
 	"facade/biz/utils"
 	base "facade/hertz_gen/base"
-	member "facade/member"
+	"facade/hertz_gen/facade/member"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
