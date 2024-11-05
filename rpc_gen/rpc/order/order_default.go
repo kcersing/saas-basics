@@ -5,7 +5,7 @@ import (
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
 	base "rpc_gen/kitex_gen/base"
-	order "rpc_gen/kitex_gen/orders/order"
+	order "rpc_gen/kitex_gen/order"
 )
 
 func CreateOrder(ctx context.Context, req *order.CreateOrderReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {

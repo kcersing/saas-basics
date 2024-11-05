@@ -3,11 +3,11 @@ package order
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
-	order "rpc_gen/kitex_gen/orders/order"
+	order "rpc_gen/kitex_gen/order"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	"rpc_gen/kitex_gen/orders/order/orderservice"
+	"rpc_gen/kitex_gen/order/orderservice"
 )
 
 type RPCClient interface {
