@@ -5,76 +5,94 @@ import (
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
 	base "rpc_gen/kitex_gen/base"
-	dictionary "rpc_gen/kitex_gen/system/dictionary"
+	menu "rpc_gen/kitex_gen/system/menu"
 )
 
-func CreateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.CreateDictionary(ctx, req, callOptions...)
+func CreateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.CreateMenu(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "CreateDictionary call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "CreateMenu call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func UpdateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.UpdateDictionary(ctx, req, callOptions...)
+func UpdateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.UpdateMenu(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "UpdateDictionary call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "UpdateMenu call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func DeleteDictionary(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.DeleteDictionary(ctx, req, callOptions...)
+func DeleteMenu(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.DeleteMenu(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "DeleteDictionary call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "DeleteMenu call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func DictionaryList(ctx context.Context, req *dictionary.DictionaryPageReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.DictionaryList(ctx, req, callOptions...)
+func MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *menu.MenuInfoTree, err error) {
+	resp, err = defaultClient.MenuByRole(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "DictionaryList call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "MenuByRole call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func CreateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.CreateDictionaryDetail(ctx, req, callOptions...)
+func MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.MenuLists(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "CreateDictionaryDetail call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "MenuLists call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func UpdateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.UpdateDictionaryDetail(ctx, req, callOptions...)
+func MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.MenuTree(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "UpdateDictionaryDetail call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "MenuTree call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func DeleteDictionaryDetail(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.DeleteDictionaryDetail(ctx, req, callOptions...)
+func CreateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.CreateMenuParam(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "DeleteDictionaryDetail call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "CreateMenuParam call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func DetailByDictionaryList(ctx context.Context, req *dictionary.DictionaryDetailReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.DetailByDictionaryList(ctx, req, callOptions...)
+func UpdateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.UpdateMenuParam(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "DetailByDictionaryList call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "UpdateMenuParam call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func DeleteMenuParam(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.DeleteMenuParam(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "DeleteMenuParam call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func MenuParamListByMenuID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.MenuParamListByMenuID(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "MenuParamListByMenuID call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil

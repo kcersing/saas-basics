@@ -46,10 +46,25 @@ struct CreateOrUpdateMenuParamReq{
     5:  string value (api.raw = "value")
 }
 
+struct MenuInfoTree {
+    1: MenuInfo MenuInfo;
+    2: string CreatedAt;
+    3: string UpdatedAt;
+    4: list<MenuInfoTree> Children;
+    5: bool Ignore;
+}
 
-
-
-
+struct MenuInfo {
+	1: i64 ID
+	2: i64 ParentID
+	3: string Path
+	4: string Name
+	5: string Key
+	6: list<MenuInfo> Children
+	7: i64 OrderNo
+	8: i64 Disabled
+	9: bool Ignore
+}
 
 // menu service
 service MenuService {
@@ -64,12 +79,12 @@ service MenuService {
   base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/api/admin/menu")
 
   //获取角色菜单列表
-  base.NilResponse MenuByRole(1: base.Empty req) (api.post = "/api/admin/menu/role")
+  list<MenuInfoTree> MenuByRole(1: base.IDReq req) (api.post = "/api/admin/menu/role")
 
   //获取菜单列表
   base.NilResponse MenuLists(1: base.PageInfoReq req) (api.post = "/api/admin/menu/list")
 
-  base.NilResponse ApiTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
+  base.NilResponse MenuTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
 
   //创建菜单额外参数
   base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/create")

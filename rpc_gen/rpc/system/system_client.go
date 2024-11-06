@@ -3,28 +3,30 @@ package system
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
-	dictionary "rpc_gen/kitex_gen/system/dictionary"
+	menu "rpc_gen/kitex_gen/system/menu"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	"rpc_gen/kitex_gen/system/dictionary/dictionaryservice"
+	"rpc_gen/kitex_gen/system/menu/menuservice"
 )
 
 type RPCClient interface {
-	KitexClient() dictionaryservice.Client
+	KitexClient() menuservice.Client
 	Service() string
-	CreateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	DeleteDictionary(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	DictionaryList(ctx context.Context, req *dictionary.DictionaryPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	CreateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	DeleteDictionaryDetail(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	DetailByDictionaryList(ctx context.Context, req *dictionary.DictionaryDetailReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	CreateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	UpdateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	DeleteMenu(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *menu.MenuInfoTree, err error)
+	MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	CreateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	UpdateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	DeleteMenuParam(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	MenuParamListByMenuID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
-	kitexClient, err := dictionaryservice.NewClient(dstService, opts...)
+	kitexClient, err := menuservice.NewClient(dstService, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -38,45 +40,53 @@ func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
 
 type clientImpl struct {
 	service     string
-	kitexClient dictionaryservice.Client
+	kitexClient menuservice.Client
 }
 
 func (c *clientImpl) Service() string {
 	return c.service
 }
 
-func (c *clientImpl) KitexClient() dictionaryservice.Client {
+func (c *clientImpl) KitexClient() menuservice.Client {
 	return c.kitexClient
 }
 
-func (c *clientImpl) CreateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.CreateDictionary(ctx, req, callOptions...)
+func (c *clientImpl) CreateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.CreateMenu(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) UpdateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateDictionary(ctx, req, callOptions...)
+func (c *clientImpl) UpdateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.UpdateMenu(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) DeleteDictionary(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.DeleteDictionary(ctx, req, callOptions...)
+func (c *clientImpl) DeleteMenu(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.DeleteMenu(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) DictionaryList(ctx context.Context, req *dictionary.DictionaryPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.DictionaryList(ctx, req, callOptions...)
+func (c *clientImpl) MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *menu.MenuInfoTree, err error) {
+	return c.kitexClient.MenuByRole(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) CreateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.CreateDictionaryDetail(ctx, req, callOptions...)
+func (c *clientImpl) MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.MenuLists(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) UpdateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateDictionaryDetail(ctx, req, callOptions...)
+func (c *clientImpl) MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.MenuTree(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) DeleteDictionaryDetail(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.DeleteDictionaryDetail(ctx, req, callOptions...)
+func (c *clientImpl) CreateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.CreateMenuParam(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) DetailByDictionaryList(ctx context.Context, req *dictionary.DictionaryDetailReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.DetailByDictionaryList(ctx, req, callOptions...)
+func (c *clientImpl) UpdateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.UpdateMenuParam(ctx, req, callOptions...)
+}
+
+func (c *clientImpl) DeleteMenuParam(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.DeleteMenuParam(ctx, req, callOptions...)
+}
+
+func (c *clientImpl) MenuParamListByMenuID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.MenuParamListByMenuID(ctx, req, callOptions...)
 }

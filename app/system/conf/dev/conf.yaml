@@ -1,6 +1,6 @@
 kitex:
-  service: "member"
-  address: ":9004"
+  service: "system"
+  address: ":9001"
   log_level: info
   log_file_name: "log/kitex.log"
   log_max_size: 10
@@ -14,7 +14,7 @@ registry:
   password: ""
 
 mysql:
-  dsn: "root:root@tcp(127.0.0.1:3306)/saas_member?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "root:root@tcp(127.0.0.1:3306)/saas_system?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
   address: "127.0.0.1:6379"
