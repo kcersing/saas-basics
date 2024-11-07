@@ -15,9 +15,9 @@ type Client interface {
 	CreateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	DeleteMenu(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *menu.MenuInfoTree, err error)
+	MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*menu.MenuInfoTree, err error)
 	MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*menu.Tree, err error)
 	CreateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	DeleteMenuParam(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
@@ -68,7 +68,7 @@ func (p *kMenuServiceClient) DeleteMenu(ctx context.Context, req *base.IDReq, ca
 	return p.kClient.DeleteMenu(ctx, req)
 }
 
-func (p *kMenuServiceClient) MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *menu.MenuInfoTree, err error) {
+func (p *kMenuServiceClient) MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*menu.MenuInfoTree, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.MenuByRole(ctx, req)
 }
@@ -78,7 +78,7 @@ func (p *kMenuServiceClient) MenuLists(ctx context.Context, req *base.PageInfoRe
 	return p.kClient.MenuLists(ctx, req)
 }
 
-func (p *kMenuServiceClient) MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (p *kMenuServiceClient) MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*menu.Tree, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.MenuTree(ctx, req)
 }

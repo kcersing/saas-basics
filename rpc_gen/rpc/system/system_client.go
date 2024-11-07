@@ -3,30 +3,25 @@ package system
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
-	menu "rpc_gen/kitex_gen/system/menu"
+	role "rpc_gen/kitex_gen/system/role"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	"rpc_gen/kitex_gen/system/menu/menuservice"
+	"rpc_gen/kitex_gen/system/role/apisservice"
 )
 
 type RPCClient interface {
-	KitexClient() menuservice.Client
+	KitexClient() apisservice.Client
 	Service() string
-	CreateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	DeleteMenu(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *menu.MenuInfoTree, err error)
-	MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	CreateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	DeleteMenuParam(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	MenuParamListByMenuID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	CreateApi(ctx context.Context, req *role.ApiInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	UpdateApi(ctx context.Context, req *role.ApiInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	DeleteApi(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	ApiList(ctx context.Context, req *role.ApiPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	ApiTree(ctx context.Context, req *role.ApiPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
-	kitexClient, err := menuservice.NewClient(dstService, opts...)
+	kitexClient, err := apisservice.NewClient(dstService, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -40,53 +35,33 @@ func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
 
 type clientImpl struct {
 	service     string
-	kitexClient menuservice.Client
+	kitexClient apisservice.Client
 }
 
 func (c *clientImpl) Service() string {
 	return c.service
 }
 
-func (c *clientImpl) KitexClient() menuservice.Client {
+func (c *clientImpl) KitexClient() apisservice.Client {
 	return c.kitexClient
 }
 
-func (c *clientImpl) CreateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.CreateMenu(ctx, req, callOptions...)
+func (c *clientImpl) CreateApi(ctx context.Context, req *role.ApiInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.CreateApi(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) UpdateMenu(ctx context.Context, req *menu.CreateOrUpdateMenuReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateMenu(ctx, req, callOptions...)
+func (c *clientImpl) UpdateApi(ctx context.Context, req *role.ApiInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.UpdateApi(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) DeleteMenu(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.DeleteMenu(ctx, req, callOptions...)
+func (c *clientImpl) DeleteApi(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.DeleteApi(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *menu.MenuInfoTree, err error) {
-	return c.kitexClient.MenuByRole(ctx, req, callOptions...)
+func (c *clientImpl) ApiList(ctx context.Context, req *role.ApiPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.ApiList(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.MenuLists(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.MenuTree(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) CreateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.CreateMenuParam(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) UpdateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateMenuParam(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) DeleteMenuParam(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.DeleteMenuParam(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) MenuParamListByMenuID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.MenuParamListByMenuID(ctx, req, callOptions...)
+func (c *clientImpl) ApiTree(ctx context.Context, req *role.ApiPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.ApiTree(ctx, req, callOptions...)
 }

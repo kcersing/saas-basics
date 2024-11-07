@@ -1,6 +1,7 @@
 package main
 
 import (
+	consul "github.com/kitex-contrib/registry-consul"
 	"net"
 	"time"
 
@@ -40,6 +41,12 @@ func kitexInit() (opts []server.Option) {
 	}))
 	// thrift meta handler
 	opts = append(opts, server.WithMetaHandler(transmeta.ServerTTHeaderHandler))
+
+	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	if err != nil {
+		klog.Fatal(err)
+	}
+	opts = append(opts, server.WithRegistry(r))
 
 	// klog
 	logger := kitexlogrus.NewLogger()

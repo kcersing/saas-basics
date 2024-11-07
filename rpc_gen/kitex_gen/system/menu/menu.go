@@ -2830,6 +2830,431 @@ func (p *MenuInfo) Field9DeepEqual(src bool) bool {
 	return true
 }
 
+type Tree struct {
+	Title    string  `thrift:"Title,1" frugal:"1,default,string" json:"Title"`
+	Value    string  `thrift:"Value,2" frugal:"2,default,string" json:"Value"`
+	Key      string  `thrift:"Key,3" frugal:"3,default,string" json:"Key"`
+	Method   string  `thrift:"Method,4" frugal:"4,default,string" json:"Method"`
+	Children []*Tree `thrift:"Children,5" frugal:"5,default,list<Tree>" json:"Children"`
+}
+
+func NewTree() *Tree {
+	return &Tree{}
+}
+
+func (p *Tree) InitDefault() {
+}
+
+func (p *Tree) GetTitle() (v string) {
+	return p.Title
+}
+
+func (p *Tree) GetValue() (v string) {
+	return p.Value
+}
+
+func (p *Tree) GetKey() (v string) {
+	return p.Key
+}
+
+func (p *Tree) GetMethod() (v string) {
+	return p.Method
+}
+
+func (p *Tree) GetChildren() (v []*Tree) {
+	return p.Children
+}
+func (p *Tree) SetTitle(val string) {
+	p.Title = val
+}
+func (p *Tree) SetValue(val string) {
+	p.Value = val
+}
+func (p *Tree) SetKey(val string) {
+	p.Key = val
+}
+func (p *Tree) SetMethod(val string) {
+	p.Method = val
+}
+func (p *Tree) SetChildren(val []*Tree) {
+	p.Children = val
+}
+
+var fieldIDToName_Tree = map[int16]string{
+	1: "Title",
+	2: "Value",
+	3: "Key",
+	4: "Method",
+	5: "Children",
+}
+
+func (p *Tree) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Tree[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *Tree) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Title = _field
+	return nil
+}
+func (p *Tree) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Value = _field
+	return nil
+}
+func (p *Tree) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Key = _field
+	return nil
+}
+func (p *Tree) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Method = _field
+	return nil
+}
+func (p *Tree) ReadField5(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*Tree, 0, size)
+	values := make([]Tree, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.Children = _field
+	return nil
+}
+
+func (p *Tree) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("Tree"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *Tree) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("Title", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Title); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *Tree) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("Value", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Value); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *Tree) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("Key", thrift.STRING, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Key); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *Tree) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("Method", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Method); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *Tree) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("Children", thrift.LIST, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Children)); err != nil {
+		return err
+	}
+	for _, v := range p.Children {
+		if err := v.Write(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteListEnd(); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *Tree) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("Tree(%+v)", *p)
+
+}
+
+func (p *Tree) DeepEqual(ano *Tree) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Title) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Value) {
+		return false
+	}
+	if !p.Field3DeepEqual(ano.Key) {
+		return false
+	}
+	if !p.Field4DeepEqual(ano.Method) {
+		return false
+	}
+	if !p.Field5DeepEqual(ano.Children) {
+		return false
+	}
+	return true
+}
+
+func (p *Tree) Field1DeepEqual(src string) bool {
+
+	if strings.Compare(p.Title, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *Tree) Field2DeepEqual(src string) bool {
+
+	if strings.Compare(p.Value, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *Tree) Field3DeepEqual(src string) bool {
+
+	if strings.Compare(p.Key, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *Tree) Field4DeepEqual(src string) bool {
+
+	if strings.Compare(p.Method, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *Tree) Field5DeepEqual(src []*Tree) bool {
+
+	if len(p.Children) != len(src) {
+		return false
+	}
+	for i, v := range p.Children {
+		_src := src[i]
+		if !v.DeepEqual(_src) {
+			return false
+		}
+	}
+	return true
+}
+
 type MenuService interface {
 	CreateMenu(ctx context.Context, req *CreateOrUpdateMenuReq) (r *base.NilResponse, err error)
 
@@ -2837,11 +3262,11 @@ type MenuService interface {
 
 	DeleteMenu(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 
-	MenuByRole(ctx context.Context, req *base.IDReq) (r *MenuInfoTree, err error)
+	MenuByRole(ctx context.Context, req *base.IDReq) (r []*MenuInfoTree, err error)
 
 	MenuLists(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error)
 
-	MenuTree(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error)
+	MenuTree(ctx context.Context, req *base.PageInfoReq) (r []*Tree, err error)
 
 	CreateMenuParam(ctx context.Context, req *CreateOrUpdateMenuParamReq) (r *base.NilResponse, err error)
 
@@ -2905,7 +3330,7 @@ func (p *MenuServiceClient) DeleteMenu(ctx context.Context, req *base.IDReq) (r 
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *MenuServiceClient) MenuByRole(ctx context.Context, req *base.IDReq) (r *MenuInfoTree, err error) {
+func (p *MenuServiceClient) MenuByRole(ctx context.Context, req *base.IDReq) (r []*MenuInfoTree, err error) {
 	var _args MenuServiceMenuByRoleArgs
 	_args.Req = req
 	var _result MenuServiceMenuByRoleResult
@@ -2923,7 +3348,7 @@ func (p *MenuServiceClient) MenuLists(ctx context.Context, req *base.PageInfoReq
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *MenuServiceClient) MenuTree(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error) {
+func (p *MenuServiceClient) MenuTree(ctx context.Context, req *base.PageInfoReq) (r []*Tree, err error) {
 	var _args MenuServiceMenuTreeArgs
 	_args.Req = req
 	var _result MenuServiceMenuTreeResult
@@ -3182,7 +3607,7 @@ func (p *menuServiceProcessorMenuByRole) Process(ctx context.Context, seqId int3
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := MenuServiceMenuByRoleResult{}
-	var retval *MenuInfoTree
+	var retval []*MenuInfoTree
 	if retval, err2 = p.handler.MenuByRole(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MenuByRole: "+err2.Error())
 		oprot.WriteMessageBegin("MenuByRole", thrift.EXCEPTION, seqId)
@@ -3278,7 +3703,7 @@ func (p *menuServiceProcessorMenuTree) Process(ctx context.Context, seqId int32,
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := MenuServiceMenuTreeResult{}
-	var retval *base.NilResponse
+	var retval []*Tree
 	if retval, err2 = p.handler.MenuTree(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MenuTree: "+err2.Error())
 		oprot.WriteMessageBegin("MenuTree", thrift.EXCEPTION, seqId)
@@ -4689,7 +5114,7 @@ func (p *MenuServiceMenuByRoleArgs) Field1DeepEqual(src *base.IDReq) bool {
 }
 
 type MenuServiceMenuByRoleResult struct {
-	Success *MenuInfoTree `thrift:"success,0,optional" frugal:"0,optional,MenuInfoTree" json:"success,omitempty"`
+	Success []*MenuInfoTree `thrift:"success,0,optional" frugal:"0,optional,list<MenuInfoTree>" json:"success,omitempty"`
 }
 
 func NewMenuServiceMenuByRoleResult() *MenuServiceMenuByRoleResult {
@@ -4699,16 +5124,16 @@ func NewMenuServiceMenuByRoleResult() *MenuServiceMenuByRoleResult {
 func (p *MenuServiceMenuByRoleResult) InitDefault() {
 }
 
-var MenuServiceMenuByRoleResult_Success_DEFAULT *MenuInfoTree
+var MenuServiceMenuByRoleResult_Success_DEFAULT []*MenuInfoTree
 
-func (p *MenuServiceMenuByRoleResult) GetSuccess() (v *MenuInfoTree) {
+func (p *MenuServiceMenuByRoleResult) GetSuccess() (v []*MenuInfoTree) {
 	if !p.IsSetSuccess() {
 		return MenuServiceMenuByRoleResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *MenuServiceMenuByRoleResult) SetSuccess(x interface{}) {
-	p.Success = x.(*MenuInfoTree)
+	p.Success = x.([]*MenuInfoTree)
 }
 
 var fieldIDToName_MenuServiceMenuByRoleResult = map[int16]string{
@@ -4739,7 +5164,7 @@ func (p *MenuServiceMenuByRoleResult) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 0:
-			if fieldTypeId == thrift.STRUCT {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField0(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -4776,8 +5201,23 @@ ReadStructEndError:
 }
 
 func (p *MenuServiceMenuByRoleResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewMenuInfoTree()
-	if err := _field.Read(iprot); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*MenuInfoTree, 0, size)
+	values := make([]MenuInfoTree, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
 		return err
 	}
 	p.Success = _field
@@ -4814,10 +5254,18 @@ WriteStructEndError:
 
 func (p *MenuServiceMenuByRoleResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+		if err = oprot.WriteFieldBegin("success", thrift.LIST, 0); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := p.Success.Write(oprot); err != nil {
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Success)); err != nil {
+			return err
+		}
+		for _, v := range p.Success {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -4851,10 +5299,16 @@ func (p *MenuServiceMenuByRoleResult) DeepEqual(ano *MenuServiceMenuByRoleResult
 	return true
 }
 
-func (p *MenuServiceMenuByRoleResult) Field0DeepEqual(src *MenuInfoTree) bool {
+func (p *MenuServiceMenuByRoleResult) Field0DeepEqual(src []*MenuInfoTree) bool {
 
-	if !p.Success.DeepEqual(src) {
+	if len(p.Success) != len(src) {
 		return false
+	}
+	for i, v := range p.Success {
+		_src := src[i]
+		if !v.DeepEqual(_src) {
+			return false
+		}
 	}
 	return true
 }
@@ -5369,7 +5823,7 @@ func (p *MenuServiceMenuTreeArgs) Field1DeepEqual(src *base.PageInfoReq) bool {
 }
 
 type MenuServiceMenuTreeResult struct {
-	Success *base.NilResponse `thrift:"success,0,optional" frugal:"0,optional,base.NilResponse" json:"success,omitempty"`
+	Success []*Tree `thrift:"success,0,optional" frugal:"0,optional,list<Tree>" json:"success,omitempty"`
 }
 
 func NewMenuServiceMenuTreeResult() *MenuServiceMenuTreeResult {
@@ -5379,16 +5833,16 @@ func NewMenuServiceMenuTreeResult() *MenuServiceMenuTreeResult {
 func (p *MenuServiceMenuTreeResult) InitDefault() {
 }
 
-var MenuServiceMenuTreeResult_Success_DEFAULT *base.NilResponse
+var MenuServiceMenuTreeResult_Success_DEFAULT []*Tree
 
-func (p *MenuServiceMenuTreeResult) GetSuccess() (v *base.NilResponse) {
+func (p *MenuServiceMenuTreeResult) GetSuccess() (v []*Tree) {
 	if !p.IsSetSuccess() {
 		return MenuServiceMenuTreeResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *MenuServiceMenuTreeResult) SetSuccess(x interface{}) {
-	p.Success = x.(*base.NilResponse)
+	p.Success = x.([]*Tree)
 }
 
 var fieldIDToName_MenuServiceMenuTreeResult = map[int16]string{
@@ -5419,7 +5873,7 @@ func (p *MenuServiceMenuTreeResult) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 0:
-			if fieldTypeId == thrift.STRUCT {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField0(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -5456,8 +5910,23 @@ ReadStructEndError:
 }
 
 func (p *MenuServiceMenuTreeResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := base.NewNilResponse()
-	if err := _field.Read(iprot); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*Tree, 0, size)
+	values := make([]Tree, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
 		return err
 	}
 	p.Success = _field
@@ -5494,10 +5963,18 @@ WriteStructEndError:
 
 func (p *MenuServiceMenuTreeResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+		if err = oprot.WriteFieldBegin("success", thrift.LIST, 0); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := p.Success.Write(oprot); err != nil {
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Success)); err != nil {
+			return err
+		}
+		for _, v := range p.Success {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5531,10 +6008,16 @@ func (p *MenuServiceMenuTreeResult) DeepEqual(ano *MenuServiceMenuTreeResult) bo
 	return true
 }
 
-func (p *MenuServiceMenuTreeResult) Field0DeepEqual(src *base.NilResponse) bool {
+func (p *MenuServiceMenuTreeResult) Field0DeepEqual(src []*Tree) bool {
 
-	if !p.Success.DeepEqual(src) {
+	if len(p.Success) != len(src) {
 		return false
+	}
+	for i, v := range p.Success {
+		_src := src[i]
+		if !v.DeepEqual(_src) {
+			return false
+		}
 	}
 	return true
 }

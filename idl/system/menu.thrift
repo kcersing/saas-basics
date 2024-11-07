@@ -66,6 +66,15 @@ struct MenuInfo {
 	9: bool Ignore
 }
 
+struct Tree {
+	1:string Title
+    2:string Value
+	3:string Key
+	4:string Method
+	5:list<Tree> Children
+}
+
+
 // menu service
 service MenuService {
 
@@ -84,7 +93,7 @@ service MenuService {
   //获取菜单列表
   base.NilResponse MenuLists(1: base.PageInfoReq req) (api.post = "/api/admin/menu/list")
 
-  base.NilResponse MenuTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
+  list<Tree> MenuTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
 
   //创建菜单额外参数
   base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/create")

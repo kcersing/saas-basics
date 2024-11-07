@@ -2,7 +2,6 @@ namespace go system.role
 
 include "../base/base.thrift"
 
-
 //创建或更新角色信息参数
 struct RoleInfo {
     1:  i64 ID (api.raw = "ID")
@@ -14,6 +13,9 @@ struct RoleInfo {
     7:  i64 orderNo (api.raw = "orderNo")
     8:  string createdAt (api.raw = "createdAt")
     9:  string updatedAt (api.raw = "updatedAt")
+    10: list<i64> Menus (api.raw = "menus")
+    11: list<i64> Apis (api.raw = "apis")
+
 }
 
 // role service

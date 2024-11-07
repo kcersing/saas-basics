@@ -1,11 +1,13 @@
-package admin
+package service
 
 import (
 	"context"
 	"fmt"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"rpc_gen/kitex_gen/base"
 	menu2 "rpc_gen/kitex_gen/system/menu"
+	"strconv"
 	"system/biz/dal/cache"
 	"system/biz/dal/mysql"
 	"system/biz/dal/mysql/ent"
@@ -30,11 +32,11 @@ func NewMenu(ctx context.Context) do.Menu {
 		cache: cache.Cache,
 	}
 }
-func (m Menu) Create(menuReq *do.MenuInfo) error {
+func (m Menu) Create(menuReq *menu2.CreateOrUpdateMenuReq) error {
 	// get menu level
-	if menuReq.ParentID == 0 {
+	if menuReq.ParentId == 0 {
 		// it is a first level menu
-		menuReq.ParentID = 1
+		menuReq.ParentId = 1
 		//menuReq.Level = 1
 	}
 	//else {
@@ -50,11 +52,11 @@ func (m Menu) Create(menuReq *do.MenuInfo) error {
 
 	// create menu
 	err := m.db.Menu.Create().
-		SetParentID(menuReq.ParentID).
+		SetParentID(menuReq.ParentId).
 		SetPath(menuReq.Path).
 		SetName(menuReq.Name).
 		SetOrderNo(menuReq.OrderNo).
-		SetDisabled(menuReq.Disabled).
+		//SetDisabled(menuReq.Disabled).
 		//SetMenuLevel(menuReq.Level).
 		//SetMenuType(menuReq.MenuType).
 		//SetRedirect(menuReq.Redirect).
@@ -82,11 +84,11 @@ func (m Menu) Create(menuReq *do.MenuInfo) error {
 	return nil
 }
 
-func (m Menu) Update(menuReq *do.MenuInfo) error {
+func (m Menu) Update(menuReq *menu2.CreateOrUpdateMenuReq) error {
 	// get menu level
-	if menuReq.ParentID == 0 {
+	if menuReq.ParentId == 0 {
 		// it is a first level menu
-		menuReq.ParentID = 1
+		menuReq.ParentId = 1
 		//menuReq.Level = 1
 	}
 	//else {
@@ -101,8 +103,8 @@ func (m Menu) Update(menuReq *do.MenuInfo) error {
 	//}
 
 	// update menu
-	err := m.db.Menu.UpdateOneID(menuReq.ID).
-		SetParentID(menuReq.ParentID).
+	err := m.db.Menu.UpdateOneID(menuReq.Id).
+		SetParentID(menuReq.ParentId).
 		SetPath(menuReq.Path).
 		SetName(menuReq.Name).
 		SetOrderNo(menuReq.OrderNo).
@@ -111,7 +113,7 @@ func (m Menu) Update(menuReq *do.MenuInfo) error {
 		//SetMenuType(menuReq.MenuType).
 		//SetRedirect(menuReq.Redirect).
 		//SetComponent(menuReq.Component).
-		SetDisabled(menuReq.Disabled).
+		//SetDisabled(menuReq.Disabled).
 		// meta
 		//SetTitle(menuReq.Meta.Title).
 		//SetIcon(menuReq.Meta.Icon).
@@ -173,7 +175,7 @@ func (m Menu) MenuByRole(roleID int64) (list []*menu2.MenuInfoTree, err error) {
 	return
 }
 
-func (m Menu) List(req *do.MenuListReq) (list []*menu2.MenuInfoTree, total int, err error) {
+func (m Menu) List(req *base.PageInfoReq) (list []*menu2.MenuInfoTree, total int, err error) {
 	// query menu list
 	menus, err := m.db.Menu.Query().Order(ent.Asc(menu.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -185,24 +187,22 @@ func (m Menu) List(req *do.MenuListReq) (list []*menu2.MenuInfoTree, total int, 
 	total, _ = m.db.Menu.Query().Count(m.ctx)
 	return
 }
-func (m Menu) MenuTree(req *do.MenuListReq) (list []*do.Tree, total int, err error) {
+func (m Menu) MenuTree(req *base.PageInfoReq) (list []*menu2.Tree, err error) {
 
 	inter, exist := m.cache.Get("MenuTree")
 	if exist {
-		if v, ok := inter.([]*do.Tree); ok {
-			return v, len(v), nil
+		if v, ok := inter.([]*menu2.Tree); ok {
+			return v, nil
 		}
 	}
 	menus, err := m.db.Menu.Query().Order(ent.Asc(menu.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
-		return nil, 0, errors.Wrap(err, "query menu list failed")
+		return nil, errors.Wrap(err, "query menu list failed")
 	}
 
 	list = findMenuTreeChildren(menus, 1)
-
-	total, _ = m.db.Menu.Query().Count(m.ctx)
 
 	m.cache.SetWithTTL("MenuTree", &list, 1, 30*time.Hour)
 	return
@@ -335,17 +335,17 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*menu2.MenuInfoTree {
 	return result
 }
 
-func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*do.Tree {
+func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*menu2.Tree {
 	if data == nil {
 		return nil
 	}
-	var result []*do.Tree
+	var result []*menu2.Tree
 	for _, v := range data {
 		if v.ParentID == parentID && v.ID != parentID {
-			var m = new(do.Tree)
+			var m = new(menu2.Tree)
 			m.Title = v.Name
-			m.Value = v.ID
-			m.Key = v.ID
+			m.Value = strconv.FormatInt(v.ID, 10)
+			m.Key = strconv.FormatInt(v.ID, 10)
 			m.Children = findMenuTreeChildren(data, v.ID)
 			result = append(result, m)
 		}

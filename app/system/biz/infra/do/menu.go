@@ -1,15 +1,18 @@
 package do
 
-import "rpc_gen/kitex_gen/system/menu"
+import (
+	"rpc_gen/kitex_gen/base"
+	"rpc_gen/kitex_gen/system/menu"
+)
 
 type Menu interface {
-	Create(menuReq *MenuInfo) error
-	Update(menuReq *MenuInfo) error
+	Create(menuReq *menu.CreateOrUpdateMenuReq) error
+	Update(menuReq *menu.CreateOrUpdateMenuReq) error
 	Delete(id int64) error
 	MenuByRole(roleID int64) (list []*menu.MenuInfoTree, err error)
-	List(req *MenuListReq) (list []*menu.MenuInfoTree, total int, err error)
+	List(req *base.PageInfoReq) (list []*menu.MenuInfoTree, total int, err error)
 
-	MenuTree(req *MenuListReq) (list []*Tree, total int, err error)
+	MenuTree(req *base.PageInfoReq) (list []*menu.Tree, err error)
 
 	CreateMenuParam(req *MenuParam) error
 	UpdateMenuParam(req *MenuParam) error
@@ -70,11 +73,4 @@ type MenuParam struct {
 	Value     string `json:"value,omitempty"`
 	CreatedAt string `json:"createdAt,omitempty"`
 	UpdatedAt string `json:"updatedAt,omitempty"`
-}
-type Tree struct {
-	Title    string      `json:"title,omitempty"`
-	Value    interface{} `json:"value,omitempty"`
-	Key      interface{} `json:"key,omitempty"`
-	Method   interface{} `json:"method,omitempty"`
-	Children []*Tree     `json:"children"`
 }
