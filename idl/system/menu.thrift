@@ -107,4 +107,5 @@ service MenuService {
   //获取某个菜单的额外参数列表
   base.NilResponse MenuParamListByMenuID(1: base.IDReq req) (api.post = "/api/admin/menu/param/list")
 
+
 }

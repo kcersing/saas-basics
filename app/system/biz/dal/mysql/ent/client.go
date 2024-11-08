@@ -11,8 +11,13 @@ import (
 
 	"system/biz/dal/mysql/ent/migrate"
 
+	"system/biz/dal/mysql/ent/api"
+	"system/biz/dal/mysql/ent/dictionary"
+	"system/biz/dal/mysql/ent/dictionarydetail"
+	"system/biz/dal/mysql/ent/logs"
 	"system/biz/dal/mysql/ent/menu"
 	"system/biz/dal/mysql/ent/menuparam"
+	"system/biz/dal/mysql/ent/messages"
 	"system/biz/dal/mysql/ent/role"
 
 	"entgo.io/ent"
@@ -26,10 +31,20 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// API is the client for interacting with the API builders.
+	API *APIClient
+	// Dictionary is the client for interacting with the Dictionary builders.
+	Dictionary *DictionaryClient
+	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
+	DictionaryDetail *DictionaryDetailClient
+	// Logs is the client for interacting with the Logs builders.
+	Logs *LogsClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
 	MenuParam *MenuParamClient
+	// Messages is the client for interacting with the Messages builders.
+	Messages *MessagesClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 }
@@ -43,8 +58,13 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.API = NewAPIClient(c.config)
+	c.Dictionary = NewDictionaryClient(c.config)
+	c.DictionaryDetail = NewDictionaryDetailClient(c.config)
+	c.Logs = NewLogsClient(c.config)
 	c.Menu = NewMenuClient(c.config)
 	c.MenuParam = NewMenuParamClient(c.config)
+	c.Messages = NewMessagesClient(c.config)
 	c.Role = NewRoleClient(c.config)
 }
 
@@ -136,11 +156,16 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:       ctx,
-		config:    cfg,
-		Menu:      NewMenuClient(cfg),
-		MenuParam: NewMenuParamClient(cfg),
-		Role:      NewRoleClient(cfg),
+		ctx:              ctx,
+		config:           cfg,
+		API:              NewAPIClient(cfg),
+		Dictionary:       NewDictionaryClient(cfg),
+		DictionaryDetail: NewDictionaryDetailClient(cfg),
+		Logs:             NewLogsClient(cfg),
+		Menu:             NewMenuClient(cfg),
+		MenuParam:        NewMenuParamClient(cfg),
+		Messages:         NewMessagesClient(cfg),
+		Role:             NewRoleClient(cfg),
 	}, nil
 }
 
@@ -158,18 +183,23 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:       ctx,
-		config:    cfg,
-		Menu:      NewMenuClient(cfg),
-		MenuParam: NewMenuParamClient(cfg),
-		Role:      NewRoleClient(cfg),
+		ctx:              ctx,
+		config:           cfg,
+		API:              NewAPIClient(cfg),
+		Dictionary:       NewDictionaryClient(cfg),
+		DictionaryDetail: NewDictionaryDetailClient(cfg),
+		Logs:             NewLogsClient(cfg),
+		Menu:             NewMenuClient(cfg),
+		MenuParam:        NewMenuParamClient(cfg),
+		Messages:         NewMessagesClient(cfg),
+		Role:             NewRoleClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Menu.
+//		API.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -191,30 +221,610 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Menu.Use(hooks...)
-	c.MenuParam.Use(hooks...)
-	c.Role.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.API, c.Dictionary, c.DictionaryDetail, c.Logs, c.Menu, c.MenuParam,
+		c.Messages, c.Role,
+	} {
+		n.Use(hooks...)
+	}
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.Menu.Intercept(interceptors...)
-	c.MenuParam.Intercept(interceptors...)
-	c.Role.Intercept(interceptors...)
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.API, c.Dictionary, c.DictionaryDetail, c.Logs, c.Menu, c.MenuParam,
+		c.Messages, c.Role,
+	} {
+		n.Intercept(interceptors...)
+	}
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *APIMutation:
+		return c.API.mutate(ctx, m)
+	case *DictionaryMutation:
+		return c.Dictionary.mutate(ctx, m)
+	case *DictionaryDetailMutation:
+		return c.DictionaryDetail.mutate(ctx, m)
+	case *LogsMutation:
+		return c.Logs.mutate(ctx, m)
 	case *MenuMutation:
 		return c.Menu.mutate(ctx, m)
 	case *MenuParamMutation:
 		return c.MenuParam.mutate(ctx, m)
+	case *MessagesMutation:
+		return c.Messages.mutate(ctx, m)
 	case *RoleMutation:
 		return c.Role.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// APIClient is a client for the API schema.
+type APIClient struct {
+	config
+}
+
+// NewAPIClient returns a client for the API from the given config.
+func NewAPIClient(c config) *APIClient {
+	return &APIClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `api.Hooks(f(g(h())))`.
+func (c *APIClient) Use(hooks ...Hook) {
+	c.hooks.API = append(c.hooks.API, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `api.Intercept(f(g(h())))`.
+func (c *APIClient) Intercept(interceptors ...Interceptor) {
+	c.inters.API = append(c.inters.API, interceptors...)
+}
+
+// Create returns a builder for creating a API entity.
+func (c *APIClient) Create() *APICreate {
+	mutation := newAPIMutation(c.config, OpCreate)
+	return &APICreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of API entities.
+func (c *APIClient) CreateBulk(builders ...*APICreate) *APICreateBulk {
+	return &APICreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *APIClient) MapCreateBulk(slice any, setFunc func(*APICreate, int)) *APICreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &APICreateBulk{err: fmt.Errorf("calling to APIClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*APICreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &APICreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for API.
+func (c *APIClient) Update() *APIUpdate {
+	mutation := newAPIMutation(c.config, OpUpdate)
+	return &APIUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *APIClient) UpdateOne(a *API) *APIUpdateOne {
+	mutation := newAPIMutation(c.config, OpUpdateOne, withAPI(a))
+	return &APIUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *APIClient) UpdateOneID(id int64) *APIUpdateOne {
+	mutation := newAPIMutation(c.config, OpUpdateOne, withAPIID(id))
+	return &APIUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for API.
+func (c *APIClient) Delete() *APIDelete {
+	mutation := newAPIMutation(c.config, OpDelete)
+	return &APIDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *APIClient) DeleteOne(a *API) *APIDeleteOne {
+	return c.DeleteOneID(a.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *APIClient) DeleteOneID(id int64) *APIDeleteOne {
+	builder := c.Delete().Where(api.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &APIDeleteOne{builder}
+}
+
+// Query returns a query builder for API.
+func (c *APIClient) Query() *APIQuery {
+	return &APIQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAPI},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a API entity by its id.
+func (c *APIClient) Get(ctx context.Context, id int64) (*API, error) {
+	return c.Query().Where(api.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *APIClient) GetX(ctx context.Context, id int64) *API {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *APIClient) Hooks() []Hook {
+	return c.hooks.API
+}
+
+// Interceptors returns the client interceptors.
+func (c *APIClient) Interceptors() []Interceptor {
+	return c.inters.API
+}
+
+func (c *APIClient) mutate(ctx context.Context, m *APIMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&APICreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&APIUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&APIUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&APIDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown API mutation op: %q", m.Op())
+	}
+}
+
+// DictionaryClient is a client for the Dictionary schema.
+type DictionaryClient struct {
+	config
+}
+
+// NewDictionaryClient returns a client for the Dictionary from the given config.
+func NewDictionaryClient(c config) *DictionaryClient {
+	return &DictionaryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `dictionary.Hooks(f(g(h())))`.
+func (c *DictionaryClient) Use(hooks ...Hook) {
+	c.hooks.Dictionary = append(c.hooks.Dictionary, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `dictionary.Intercept(f(g(h())))`.
+func (c *DictionaryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Dictionary = append(c.inters.Dictionary, interceptors...)
+}
+
+// Create returns a builder for creating a Dictionary entity.
+func (c *DictionaryClient) Create() *DictionaryCreate {
+	mutation := newDictionaryMutation(c.config, OpCreate)
+	return &DictionaryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Dictionary entities.
+func (c *DictionaryClient) CreateBulk(builders ...*DictionaryCreate) *DictionaryCreateBulk {
+	return &DictionaryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DictionaryClient) MapCreateBulk(slice any, setFunc func(*DictionaryCreate, int)) *DictionaryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DictionaryCreateBulk{err: fmt.Errorf("calling to DictionaryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DictionaryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DictionaryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Dictionary.
+func (c *DictionaryClient) Update() *DictionaryUpdate {
+	mutation := newDictionaryMutation(c.config, OpUpdate)
+	return &DictionaryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DictionaryClient) UpdateOne(d *Dictionary) *DictionaryUpdateOne {
+	mutation := newDictionaryMutation(c.config, OpUpdateOne, withDictionary(d))
+	return &DictionaryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DictionaryClient) UpdateOneID(id int64) *DictionaryUpdateOne {
+	mutation := newDictionaryMutation(c.config, OpUpdateOne, withDictionaryID(id))
+	return &DictionaryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Dictionary.
+func (c *DictionaryClient) Delete() *DictionaryDelete {
+	mutation := newDictionaryMutation(c.config, OpDelete)
+	return &DictionaryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DictionaryClient) DeleteOne(d *Dictionary) *DictionaryDeleteOne {
+	return c.DeleteOneID(d.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DictionaryClient) DeleteOneID(id int64) *DictionaryDeleteOne {
+	builder := c.Delete().Where(dictionary.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DictionaryDeleteOne{builder}
+}
+
+// Query returns a query builder for Dictionary.
+func (c *DictionaryClient) Query() *DictionaryQuery {
+	return &DictionaryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDictionary},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Dictionary entity by its id.
+func (c *DictionaryClient) Get(ctx context.Context, id int64) (*Dictionary, error) {
+	return c.Query().Where(dictionary.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DictionaryClient) GetX(ctx context.Context, id int64) *Dictionary {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryDictionaryDetails queries the dictionary_details edge of a Dictionary.
+func (c *DictionaryClient) QueryDictionaryDetails(d *Dictionary) *DictionaryDetailQuery {
+	query := (&DictionaryDetailClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dictionary.Table, dictionary.FieldID, id),
+			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, dictionary.DictionaryDetailsTable, dictionary.DictionaryDetailsColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DictionaryClient) Hooks() []Hook {
+	return c.hooks.Dictionary
+}
+
+// Interceptors returns the client interceptors.
+func (c *DictionaryClient) Interceptors() []Interceptor {
+	return c.inters.Dictionary
+}
+
+func (c *DictionaryClient) mutate(ctx context.Context, m *DictionaryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DictionaryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DictionaryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DictionaryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DictionaryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Dictionary mutation op: %q", m.Op())
+	}
+}
+
+// DictionaryDetailClient is a client for the DictionaryDetail schema.
+type DictionaryDetailClient struct {
+	config
+}
+
+// NewDictionaryDetailClient returns a client for the DictionaryDetail from the given config.
+func NewDictionaryDetailClient(c config) *DictionaryDetailClient {
+	return &DictionaryDetailClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `dictionarydetail.Hooks(f(g(h())))`.
+func (c *DictionaryDetailClient) Use(hooks ...Hook) {
+	c.hooks.DictionaryDetail = append(c.hooks.DictionaryDetail, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `dictionarydetail.Intercept(f(g(h())))`.
+func (c *DictionaryDetailClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DictionaryDetail = append(c.inters.DictionaryDetail, interceptors...)
+}
+
+// Create returns a builder for creating a DictionaryDetail entity.
+func (c *DictionaryDetailClient) Create() *DictionaryDetailCreate {
+	mutation := newDictionaryDetailMutation(c.config, OpCreate)
+	return &DictionaryDetailCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DictionaryDetail entities.
+func (c *DictionaryDetailClient) CreateBulk(builders ...*DictionaryDetailCreate) *DictionaryDetailCreateBulk {
+	return &DictionaryDetailCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DictionaryDetailClient) MapCreateBulk(slice any, setFunc func(*DictionaryDetailCreate, int)) *DictionaryDetailCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DictionaryDetailCreateBulk{err: fmt.Errorf("calling to DictionaryDetailClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DictionaryDetailCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DictionaryDetailCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DictionaryDetail.
+func (c *DictionaryDetailClient) Update() *DictionaryDetailUpdate {
+	mutation := newDictionaryDetailMutation(c.config, OpUpdate)
+	return &DictionaryDetailUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DictionaryDetailClient) UpdateOne(dd *DictionaryDetail) *DictionaryDetailUpdateOne {
+	mutation := newDictionaryDetailMutation(c.config, OpUpdateOne, withDictionaryDetail(dd))
+	return &DictionaryDetailUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DictionaryDetailClient) UpdateOneID(id int64) *DictionaryDetailUpdateOne {
+	mutation := newDictionaryDetailMutation(c.config, OpUpdateOne, withDictionaryDetailID(id))
+	return &DictionaryDetailUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DictionaryDetail.
+func (c *DictionaryDetailClient) Delete() *DictionaryDetailDelete {
+	mutation := newDictionaryDetailMutation(c.config, OpDelete)
+	return &DictionaryDetailDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DictionaryDetailClient) DeleteOne(dd *DictionaryDetail) *DictionaryDetailDeleteOne {
+	return c.DeleteOneID(dd.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DictionaryDetailClient) DeleteOneID(id int64) *DictionaryDetailDeleteOne {
+	builder := c.Delete().Where(dictionarydetail.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DictionaryDetailDeleteOne{builder}
+}
+
+// Query returns a query builder for DictionaryDetail.
+func (c *DictionaryDetailClient) Query() *DictionaryDetailQuery {
+	return &DictionaryDetailQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDictionaryDetail},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DictionaryDetail entity by its id.
+func (c *DictionaryDetailClient) Get(ctx context.Context, id int64) (*DictionaryDetail, error) {
+	return c.Query().Where(dictionarydetail.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DictionaryDetailClient) GetX(ctx context.Context, id int64) *DictionaryDetail {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryDictionary queries the dictionary edge of a DictionaryDetail.
+func (c *DictionaryDetailClient) QueryDictionary(dd *DictionaryDetail) *DictionaryQuery {
+	query := (&DictionaryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := dd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, id),
+			sqlgraph.To(dictionary.Table, dictionary.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, dictionarydetail.DictionaryTable, dictionarydetail.DictionaryColumn),
+		)
+		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DictionaryDetailClient) Hooks() []Hook {
+	return c.hooks.DictionaryDetail
+}
+
+// Interceptors returns the client interceptors.
+func (c *DictionaryDetailClient) Interceptors() []Interceptor {
+	return c.inters.DictionaryDetail
+}
+
+func (c *DictionaryDetailClient) mutate(ctx context.Context, m *DictionaryDetailMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DictionaryDetailCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DictionaryDetailUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DictionaryDetailUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DictionaryDetailDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown DictionaryDetail mutation op: %q", m.Op())
+	}
+}
+
+// LogsClient is a client for the Logs schema.
+type LogsClient struct {
+	config
+}
+
+// NewLogsClient returns a client for the Logs from the given config.
+func NewLogsClient(c config) *LogsClient {
+	return &LogsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `logs.Hooks(f(g(h())))`.
+func (c *LogsClient) Use(hooks ...Hook) {
+	c.hooks.Logs = append(c.hooks.Logs, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `logs.Intercept(f(g(h())))`.
+func (c *LogsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Logs = append(c.inters.Logs, interceptors...)
+}
+
+// Create returns a builder for creating a Logs entity.
+func (c *LogsClient) Create() *LogsCreate {
+	mutation := newLogsMutation(c.config, OpCreate)
+	return &LogsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Logs entities.
+func (c *LogsClient) CreateBulk(builders ...*LogsCreate) *LogsCreateBulk {
+	return &LogsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LogsClient) MapCreateBulk(slice any, setFunc func(*LogsCreate, int)) *LogsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LogsCreateBulk{err: fmt.Errorf("calling to LogsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LogsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &LogsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Logs.
+func (c *LogsClient) Update() *LogsUpdate {
+	mutation := newLogsMutation(c.config, OpUpdate)
+	return &LogsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LogsClient) UpdateOne(l *Logs) *LogsUpdateOne {
+	mutation := newLogsMutation(c.config, OpUpdateOne, withLogs(l))
+	return &LogsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LogsClient) UpdateOneID(id int64) *LogsUpdateOne {
+	mutation := newLogsMutation(c.config, OpUpdateOne, withLogsID(id))
+	return &LogsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Logs.
+func (c *LogsClient) Delete() *LogsDelete {
+	mutation := newLogsMutation(c.config, OpDelete)
+	return &LogsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LogsClient) DeleteOne(l *Logs) *LogsDeleteOne {
+	return c.DeleteOneID(l.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LogsClient) DeleteOneID(id int64) *LogsDeleteOne {
+	builder := c.Delete().Where(logs.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LogsDeleteOne{builder}
+}
+
+// Query returns a query builder for Logs.
+func (c *LogsClient) Query() *LogsQuery {
+	return &LogsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLogs},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Logs entity by its id.
+func (c *LogsClient) Get(ctx context.Context, id int64) (*Logs, error) {
+	return c.Query().Where(logs.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LogsClient) GetX(ctx context.Context, id int64) *Logs {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *LogsClient) Hooks() []Hook {
+	return c.hooks.Logs
+}
+
+// Interceptors returns the client interceptors.
+func (c *LogsClient) Interceptors() []Interceptor {
+	return c.inters.Logs
+}
+
+func (c *LogsClient) mutate(ctx context.Context, m *LogsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LogsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LogsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LogsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LogsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Logs mutation op: %q", m.Op())
 	}
 }
 
@@ -564,6 +1174,139 @@ func (c *MenuParamClient) mutate(ctx context.Context, m *MenuParamMutation) (Val
 	}
 }
 
+// MessagesClient is a client for the Messages schema.
+type MessagesClient struct {
+	config
+}
+
+// NewMessagesClient returns a client for the Messages from the given config.
+func NewMessagesClient(c config) *MessagesClient {
+	return &MessagesClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `messages.Hooks(f(g(h())))`.
+func (c *MessagesClient) Use(hooks ...Hook) {
+	c.hooks.Messages = append(c.hooks.Messages, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `messages.Intercept(f(g(h())))`.
+func (c *MessagesClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Messages = append(c.inters.Messages, interceptors...)
+}
+
+// Create returns a builder for creating a Messages entity.
+func (c *MessagesClient) Create() *MessagesCreate {
+	mutation := newMessagesMutation(c.config, OpCreate)
+	return &MessagesCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Messages entities.
+func (c *MessagesClient) CreateBulk(builders ...*MessagesCreate) *MessagesCreateBulk {
+	return &MessagesCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MessagesClient) MapCreateBulk(slice any, setFunc func(*MessagesCreate, int)) *MessagesCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MessagesCreateBulk{err: fmt.Errorf("calling to MessagesClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MessagesCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MessagesCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Messages.
+func (c *MessagesClient) Update() *MessagesUpdate {
+	mutation := newMessagesMutation(c.config, OpUpdate)
+	return &MessagesUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MessagesClient) UpdateOne(m *Messages) *MessagesUpdateOne {
+	mutation := newMessagesMutation(c.config, OpUpdateOne, withMessages(m))
+	return &MessagesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MessagesClient) UpdateOneID(id int64) *MessagesUpdateOne {
+	mutation := newMessagesMutation(c.config, OpUpdateOne, withMessagesID(id))
+	return &MessagesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Messages.
+func (c *MessagesClient) Delete() *MessagesDelete {
+	mutation := newMessagesMutation(c.config, OpDelete)
+	return &MessagesDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MessagesClient) DeleteOne(m *Messages) *MessagesDeleteOne {
+	return c.DeleteOneID(m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MessagesClient) DeleteOneID(id int64) *MessagesDeleteOne {
+	builder := c.Delete().Where(messages.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MessagesDeleteOne{builder}
+}
+
+// Query returns a query builder for Messages.
+func (c *MessagesClient) Query() *MessagesQuery {
+	return &MessagesQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMessages},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Messages entity by its id.
+func (c *MessagesClient) Get(ctx context.Context, id int64) (*Messages, error) {
+	return c.Query().Where(messages.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MessagesClient) GetX(ctx context.Context, id int64) *Messages {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *MessagesClient) Hooks() []Hook {
+	return c.hooks.Messages
+}
+
+// Interceptors returns the client interceptors.
+func (c *MessagesClient) Interceptors() []Interceptor {
+	return c.inters.Messages
+}
+
+func (c *MessagesClient) mutate(ctx context.Context, m *MessagesMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MessagesCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MessagesUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MessagesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MessagesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Messages mutation op: %q", m.Op())
+	}
+}
+
 // RoleClient is a client for the Role schema.
 type RoleClient struct {
 	config
@@ -716,9 +1459,11 @@ func (c *RoleClient) mutate(ctx context.Context, m *RoleMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Menu, MenuParam, Role []ent.Hook
+		API, Dictionary, DictionaryDetail, Logs, Menu, MenuParam, Messages,
+		Role []ent.Hook
 	}
 	inters struct {
-		Menu, MenuParam, Role []ent.Interceptor
+		API, Dictionary, DictionaryDetail, Logs, Menu, MenuParam, Messages,
+		Role []ent.Interceptor
 	}
 )

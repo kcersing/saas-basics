@@ -5,8 +5,9 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"github.com/spf13/cast"
 	"rpc_gen/kitex_gen/base"
-	role2 "rpc_gen/kitex_gen/system/role"
+	"rpc_gen/kitex_gen/system/auth"
 	"strconv"
 	"system/biz/dal/cache"
 	"system/biz/dal/mysql"
@@ -32,7 +33,7 @@ func NewRole(ctx context.Context, c *app.RequestContext) do.Role {
 		cache: cache.Cache,
 	}
 }
-func (r Role) Create(req *role2.RoleInfo) error {
+func (r Role) Create(req *auth.RoleInfo) error {
 	roleEnt, err := r.db.Role.Create().
 		SetName(req.Name).
 		SetValue(req.Value).
@@ -51,7 +52,7 @@ func (r Role) Create(req *role2.RoleInfo) error {
 	return nil
 }
 
-func (r Role) Update(req *role2.RoleInfo) error {
+func (r Role) Update(req *auth.RoleInfo) error {
 	roleEnt, err := r.db.Role.UpdateOneID(req.ID).
 		SetName(req.Name).
 		SetValue(req.Value).
@@ -92,11 +93,11 @@ func (r Role) Delete(id int64) error {
 	return nil
 }
 
-func (r Role) RoleInfoByID(ID int64) (roleInfo *role2.RoleInfo, err error) {
+func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 	roleInterface, ok := r.cache.Get("roleData" + strconv.Itoa(int(ID)))
 	if ok {
 		if l, ok := roleInterface.(*ent.Role); ok {
-			return &role2.RoleInfo{
+			return &auth.RoleInfo{
 				ID:            l.ID,
 				Name:          l.Name,
 				Value:         l.Value,
@@ -118,7 +119,7 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *role2.RoleInfo, err error) {
 	// set role to cache
 	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(ID)), roleEnt, 1, 1*time.Hour)
 	// convert to RoleInfo
-	roleInfo = &role2.RoleInfo{
+	roleInfo = &auth.RoleInfo{
 		ID:            roleEnt.ID,
 		Name:          roleEnt.Name,
 		Value:         roleEnt.Value,
@@ -132,7 +133,7 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *role2.RoleInfo, err error) {
 	return
 }
 
-func (r Role) List(req *base.PageInfoReq) (roleInfoList []*role2.RoleInfo, total int, err error) {
+func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total int, err error) {
 
 	roleEntList, err := r.db.Role.Query().Order(ent.Asc(role.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -145,8 +146,17 @@ func (r Role) List(req *base.PageInfoReq) (roleInfoList []*role2.RoleInfo, total
 	// convert to List
 	for _, roleEnt := range roleEntList {
 		menuArr, _ := roleEnt.QueryMenus().GroupBy(menu.FieldID).Ints(r.ctx)
+		var mArr []int64
+		for v := range menuArr {
+			mArr = append(mArr, cast.ToInt64(v))
+		}
 
-		roleInfoList = append(roleInfoList, &role2.RoleInfo{
+		var rArr []int64
+		for v2 := range roleEnt.Apis {
+			rArr = append(rArr, cast.ToInt64(v2))
+		}
+
+		roleInfoList = append(roleInfoList, &auth.RoleInfo{
 			ID:            roleEnt.ID,
 			Name:          roleEnt.Name,
 			Value:         roleEnt.Value,
@@ -156,8 +166,8 @@ func (r Role) List(req *base.PageInfoReq) (roleInfoList []*role2.RoleInfo, total
 			OrderNo:       roleEnt.OrderNo,
 			CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
 			UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
-			Menus:         menuArr,
-			Apis:          roleEnt.Apis,
+			Menus:         mArr,
+			Apis:          rArr,
 		})
 	}
 	total, _ = r.db.Role.Query().Count(r.ctx)

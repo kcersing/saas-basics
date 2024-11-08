@@ -3,8 +3,13 @@
 package ent
 
 import (
+	"system/biz/dal/mysql/ent/api"
+	"system/biz/dal/mysql/ent/dictionary"
+	"system/biz/dal/mysql/ent/dictionarydetail"
+	"system/biz/dal/mysql/ent/logs"
 	"system/biz/dal/mysql/ent/menu"
 	"system/biz/dal/mysql/ent/menuparam"
+	"system/biz/dal/mysql/ent/messages"
 	"system/biz/dal/mysql/ent/role"
 	"system/biz/dal/mysql/ent/schema"
 	"time"
@@ -14,6 +19,82 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	apiMixin := schema.API{}.Mixin()
+	apiMixinFields0 := apiMixin[0].Fields()
+	_ = apiMixinFields0
+	apiFields := schema.API{}.Fields()
+	_ = apiFields
+	// apiDescCreatedAt is the schema descriptor for created_at field.
+	apiDescCreatedAt := apiMixinFields0[1].Descriptor()
+	// api.DefaultCreatedAt holds the default value on creation for the created_at field.
+	api.DefaultCreatedAt = apiDescCreatedAt.Default.(func() time.Time)
+	// apiDescUpdatedAt is the schema descriptor for updated_at field.
+	apiDescUpdatedAt := apiMixinFields0[2].Descriptor()
+	// api.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	api.DefaultUpdatedAt = apiDescUpdatedAt.Default.(func() time.Time)
+	// api.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	api.UpdateDefaultUpdatedAt = apiDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// apiDescMethod is the schema descriptor for method field.
+	apiDescMethod := apiFields[4].Descriptor()
+	// api.DefaultMethod holds the default value on creation for the method field.
+	api.DefaultMethod = apiDescMethod.Default.(string)
+	dictionaryMixin := schema.Dictionary{}.Mixin()
+	dictionaryMixinFields0 := dictionaryMixin[0].Fields()
+	_ = dictionaryMixinFields0
+	dictionaryMixinFields1 := dictionaryMixin[1].Fields()
+	_ = dictionaryMixinFields1
+	dictionaryFields := schema.Dictionary{}.Fields()
+	_ = dictionaryFields
+	// dictionaryDescCreatedAt is the schema descriptor for created_at field.
+	dictionaryDescCreatedAt := dictionaryMixinFields0[1].Descriptor()
+	// dictionary.DefaultCreatedAt holds the default value on creation for the created_at field.
+	dictionary.DefaultCreatedAt = dictionaryDescCreatedAt.Default.(func() time.Time)
+	// dictionaryDescUpdatedAt is the schema descriptor for updated_at field.
+	dictionaryDescUpdatedAt := dictionaryMixinFields0[2].Descriptor()
+	// dictionary.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	dictionary.DefaultUpdatedAt = dictionaryDescUpdatedAt.Default.(func() time.Time)
+	// dictionary.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	dictionary.UpdateDefaultUpdatedAt = dictionaryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// dictionaryDescStatus is the schema descriptor for status field.
+	dictionaryDescStatus := dictionaryMixinFields1[0].Descriptor()
+	// dictionary.DefaultStatus holds the default value on creation for the status field.
+	dictionary.DefaultStatus = dictionaryDescStatus.Default.(int64)
+	dictionarydetailMixin := schema.DictionaryDetail{}.Mixin()
+	dictionarydetailMixinFields0 := dictionarydetailMixin[0].Fields()
+	_ = dictionarydetailMixinFields0
+	dictionarydetailMixinFields1 := dictionarydetailMixin[1].Fields()
+	_ = dictionarydetailMixinFields1
+	dictionarydetailFields := schema.DictionaryDetail{}.Fields()
+	_ = dictionarydetailFields
+	// dictionarydetailDescCreatedAt is the schema descriptor for created_at field.
+	dictionarydetailDescCreatedAt := dictionarydetailMixinFields0[1].Descriptor()
+	// dictionarydetail.DefaultCreatedAt holds the default value on creation for the created_at field.
+	dictionarydetail.DefaultCreatedAt = dictionarydetailDescCreatedAt.Default.(func() time.Time)
+	// dictionarydetailDescUpdatedAt is the schema descriptor for updated_at field.
+	dictionarydetailDescUpdatedAt := dictionarydetailMixinFields0[2].Descriptor()
+	// dictionarydetail.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	dictionarydetail.DefaultUpdatedAt = dictionarydetailDescUpdatedAt.Default.(func() time.Time)
+	// dictionarydetail.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	dictionarydetail.UpdateDefaultUpdatedAt = dictionarydetailDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// dictionarydetailDescStatus is the schema descriptor for status field.
+	dictionarydetailDescStatus := dictionarydetailMixinFields1[0].Descriptor()
+	// dictionarydetail.DefaultStatus holds the default value on creation for the status field.
+	dictionarydetail.DefaultStatus = dictionarydetailDescStatus.Default.(int64)
+	logsMixin := schema.Logs{}.Mixin()
+	logsMixinFields0 := logsMixin[0].Fields()
+	_ = logsMixinFields0
+	logsFields := schema.Logs{}.Fields()
+	_ = logsFields
+	// logsDescCreatedAt is the schema descriptor for created_at field.
+	logsDescCreatedAt := logsMixinFields0[1].Descriptor()
+	// logs.DefaultCreatedAt holds the default value on creation for the created_at field.
+	logs.DefaultCreatedAt = logsDescCreatedAt.Default.(func() time.Time)
+	// logsDescUpdatedAt is the schema descriptor for updated_at field.
+	logsDescUpdatedAt := logsMixinFields0[2].Descriptor()
+	// logs.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	logs.DefaultUpdatedAt = logsDescUpdatedAt.Default.(func() time.Time)
+	// logs.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	logs.UpdateDefaultUpdatedAt = logsDescUpdatedAt.UpdateDefault.(func() time.Time)
 	menuMixin := schema.Menu{}.Mixin()
 	menuMixinFields0 := menuMixin[0].Fields()
 	_ = menuMixinFields0
@@ -60,6 +141,21 @@ func init() {
 	menuparam.DefaultUpdatedAt = menuparamDescUpdatedAt.Default.(func() time.Time)
 	// menuparam.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	menuparam.UpdateDefaultUpdatedAt = menuparamDescUpdatedAt.UpdateDefault.(func() time.Time)
+	messagesMixin := schema.Messages{}.Mixin()
+	messagesMixinFields0 := messagesMixin[0].Fields()
+	_ = messagesMixinFields0
+	messagesFields := schema.Messages{}.Fields()
+	_ = messagesFields
+	// messagesDescCreatedAt is the schema descriptor for created_at field.
+	messagesDescCreatedAt := messagesMixinFields0[1].Descriptor()
+	// messages.DefaultCreatedAt holds the default value on creation for the created_at field.
+	messages.DefaultCreatedAt = messagesDescCreatedAt.Default.(func() time.Time)
+	// messagesDescUpdatedAt is the schema descriptor for updated_at field.
+	messagesDescUpdatedAt := messagesMixinFields0[2].Descriptor()
+	// messages.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	messages.DefaultUpdatedAt = messagesDescUpdatedAt.Default.(func() time.Time)
+	// messages.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	messages.UpdateDefaultUpdatedAt = messagesDescUpdatedAt.UpdateDefault.(func() time.Time)
 	roleMixin := schema.Role{}.Mixin()
 	roleMixinFields0 := roleMixin[0].Fields()
 	_ = roleMixinFields0

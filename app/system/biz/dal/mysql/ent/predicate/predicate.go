@@ -6,11 +6,26 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// API is the predicate function for api builders.
+type API func(*sql.Selector)
+
+// Dictionary is the predicate function for dictionary builders.
+type Dictionary func(*sql.Selector)
+
+// DictionaryDetail is the predicate function for dictionarydetail builders.
+type DictionaryDetail func(*sql.Selector)
+
+// Logs is the predicate function for logs builders.
+type Logs func(*sql.Selector)
+
 // Menu is the predicate function for menu builders.
 type Menu func(*sql.Selector)
 
 // MenuParam is the predicate function for menuparam builders.
 type MenuParam func(*sql.Selector)
+
+// Messages is the predicate function for messages builders.
+type Messages func(*sql.Selector)
 
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)

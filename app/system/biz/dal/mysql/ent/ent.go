@@ -8,8 +8,13 @@ import (
 	"fmt"
 	"reflect"
 	"sync"
+	"system/biz/dal/mysql/ent/api"
+	"system/biz/dal/mysql/ent/dictionary"
+	"system/biz/dal/mysql/ent/dictionarydetail"
+	"system/biz/dal/mysql/ent/logs"
 	"system/biz/dal/mysql/ent/menu"
 	"system/biz/dal/mysql/ent/menuparam"
+	"system/biz/dal/mysql/ent/messages"
 	"system/biz/dal/mysql/ent/role"
 
 	"entgo.io/ent"
@@ -75,9 +80,14 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			menu.Table:      menu.ValidColumn,
-			menuparam.Table: menuparam.ValidColumn,
-			role.Table:      role.ValidColumn,
+			api.Table:              api.ValidColumn,
+			dictionary.Table:       dictionary.ValidColumn,
+			dictionarydetail.Table: dictionarydetail.ValidColumn,
+			logs.Table:             logs.ValidColumn,
+			menu.Table:             menu.ValidColumn,
+			menuparam.Table:        menuparam.ValidColumn,
+			messages.Table:         messages.ValidColumn,
+			role.Table:             role.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)
