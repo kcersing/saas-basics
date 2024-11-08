@@ -6,6 +6,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
+	_ "github.com/golang-module/carbon/v2"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"strconv"

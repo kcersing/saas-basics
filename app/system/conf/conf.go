@@ -19,10 +19,11 @@ var (
 
 type Config struct {
 	Env      string
-	Kitex    Kitex    `yaml:"kitex"`
-	MySQL    MySQL    `yaml:"mysql"`
-	Redis    Redis    `yaml:"redis"`
-	Registry Registry `yaml:"registry"`
+	Kitex    Kitex      `yaml:"kitex"`
+	MySQL    MySQL      `yaml:"mysql"`
+	Redis    Redis      `yaml:"redis"`
+	Registry Registry   `yaml:"registry"`
+	Casbin   CasbinConf `yaml:"casbin"`
 }
 
 type MySQL struct {
@@ -50,6 +51,9 @@ type Registry struct {
 	RegistryAddress []string `yaml:"registry_address"`
 	Username        string   `yaml:"username"`
 	Password        string   `yaml:"password"`
+}
+type CasbinConf struct {
+	ModelText string `yaml:"model_text" json:"model_text"`
 }
 
 // GetConf gets configuration instance
