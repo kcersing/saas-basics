@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"strconv"
 	"system/biz/dal/cache"
+	"system/biz/dal/casbin"
 	"system/biz/dal/mysql"
 	"system/biz/dal/mysql/ent"
 	"system/biz/dal/mysql/ent/api"
@@ -22,6 +23,7 @@ type Auth struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+	Cbs   *casbin.Enforcer
 }
 
 func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
@@ -30,6 +32,7 @@ func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
 		salt:  "",
 		db:    mysql.DB,
 		cache: cache.Cache,
+		Cbs:   casbin.CasbinEnforcer(),
 	}
 }
 
