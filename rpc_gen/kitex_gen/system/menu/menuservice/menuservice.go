@@ -390,7 +390,7 @@ func (p *kClient) MenuLists(ctx context.Context, req *base.PageInfoReq) (r *base
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) MenuTree(ctx context.Context, req *base.PageInfoReq) (r []*menu.Tree, err error) {
+func (p *kClient) MenuTree(ctx context.Context, req *base.PageInfoReq) (r []*base.Tree, err error) {
 	var _args menu.MenuServiceMenuTreeArgs
 	_args.Req = req
 	var _result menu.MenuServiceMenuTreeResult

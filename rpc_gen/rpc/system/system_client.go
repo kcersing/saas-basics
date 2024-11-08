@@ -16,8 +16,8 @@ type RPCClient interface {
 	CreateRole(ctx context.Context, req *auth.RoleInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateRole(ctx context.Context, req *auth.RoleInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	DeleteRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	RoleList(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *auth.RoleInfo, err error)
+	RoleList(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*auth.RoleInfo, err error)
 	UpdateRoleStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	CreateAuthority(ctx context.Context, req *auth.CreateOrUpdateApiAuthorityReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateApiAuthority(ctx context.Context, req *auth.CreateOrUpdateApiAuthorityReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
@@ -28,8 +28,8 @@ type RPCClient interface {
 	CreateApi(ctx context.Context, req *auth.ApiInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateApi(ctx context.Context, req *auth.ApiInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	DeleteApi(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	ApiList(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	ApiTree(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	ApiList(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (r []*auth.ApiInfo, err error)
+	ApiTree(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (r []*base.Tree, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -70,11 +70,11 @@ func (c *clientImpl) DeleteRole(ctx context.Context, req *base.IDReq, callOption
 	return c.kitexClient.DeleteRole(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (c *clientImpl) RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *auth.RoleInfo, err error) {
 	return c.kitexClient.RoleByID(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) RoleList(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (c *clientImpl) RoleList(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*auth.RoleInfo, err error) {
 	return c.kitexClient.RoleList(ctx, req, callOptions...)
 }
 
@@ -118,10 +118,10 @@ func (c *clientImpl) DeleteApi(ctx context.Context, req *base.IDReq, callOptions
 	return c.kitexClient.DeleteApi(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) ApiList(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (c *clientImpl) ApiList(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (r []*auth.ApiInfo, err error) {
 	return c.kitexClient.ApiList(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) ApiTree(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (c *clientImpl) ApiTree(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (r []*base.Tree, err error) {
 	return c.kitexClient.ApiTree(ctx, req, callOptions...)
 }

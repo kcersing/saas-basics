@@ -30,13 +30,14 @@ service RoleService {
   base.NilResponse DeleteRole(1: base.IDReq req) (api.post = "/api/admin/role/del")
 
   // Get role information | 获取角色信息
-  base.NilResponse RoleByID(1: base.IDReq req) (api.get = "/api/admin/role")
+  RoleInfo RoleByID(1: base.IDReq req) (api.get = "/api/admin/role")
 
   // Get role list | 获取角色列表
-  base.NilResponse RoleList(1: base.PageInfoReq req) (api.get = "/api/admin/role/list")
+  list<RoleInfo> RoleList(1: base.PageInfoReq req) (api.get = "/api/admin/role/list")
 
   // Set role status | 设置角色状态, 启用1/禁用0
   base.NilResponse UpdateRoleStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/role/status")
+
 
   // 创建API权限
   base.NilResponse CreateAuthority(1: CreateOrUpdateApiAuthorityReq req) (api.post = "/api/admin/authority/api/create")
@@ -55,6 +56,7 @@ service RoleService {
 
   // 获取角色菜单权限列表
   base.NilResponse MenuAuthority(1: base.IDReq req) (api.post = "/api/admin/authority/menu/role")
+
   // 创建或API
   base.NilResponse CreateApi(1: ApiInfo req) (api.post = "/api/admin/api/create")
 
@@ -65,9 +67,9 @@ service RoleService {
   base.NilResponse DeleteApi(1: base.IDReq req) (api.post = "/api/admin/api")
 
   // 获取API列表
-  base.NilResponse ApiList(1: ApiPageReq req) (api.post = "/api/admin/api/list")
+  list<ApiInfo> ApiList(1: ApiPageReq req) (api.post = "/api/admin/api/list")
 
-  base.NilResponse ApiTree(1: ApiPageReq req) (api.post = "/api/admin/api/tree")
+  list<base.Tree> ApiTree(1: ApiPageReq req) (api.post = "/api/admin/api/tree")
 
 }
 
@@ -102,10 +104,11 @@ struct ApiInfo {
     7:  string method (api.raw = "method")
 }
 
+
 // API列表请求数据
 struct ApiPageReq {
     1:  i64 page (api.raw = "page")
-    2:  i64 limit (api.raw = "limit")
+    2:  i64 pageSize (api.raw = "pageSize")
     3:  string path (api.raw = "path")
     4:  string description (api.raw = "description")
     5:  string method (api.raw = "method")

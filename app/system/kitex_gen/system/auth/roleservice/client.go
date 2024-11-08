@@ -6,8 +6,8 @@ import (
 	"context"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
-	base "rpc_gen/kitex_gen/base"
-	auth "rpc_gen/kitex_gen/system/auth"
+	base "system/kitex_gen/base"
+	auth "system/kitex_gen/system/auth"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.

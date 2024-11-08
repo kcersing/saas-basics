@@ -17,7 +17,7 @@ type Client interface {
 	DeleteMenu(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*menu.MenuInfoTree, err error)
 	MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*menu.Tree, err error)
+	MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*base.Tree, err error)
 	CreateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateMenuParam(ctx context.Context, req *menu.CreateOrUpdateMenuParamReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	DeleteMenuParam(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
@@ -78,7 +78,7 @@ func (p *kMenuServiceClient) MenuLists(ctx context.Context, req *base.PageInfoRe
 	return p.kClient.MenuLists(ctx, req)
 }
 
-func (p *kMenuServiceClient) MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*menu.Tree, err error) {
+func (p *kMenuServiceClient) MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*base.Tree, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.MenuTree(ctx, req)
 }

@@ -2,8 +2,7 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
-	auth "rpc_gen/kitex_gen/system/auth"
+	auth "system/kitex_gen/system/auth"
 )
 
 type ApiListService struct {
@@ -14,7 +13,7 @@ func NewApiListService(ctx context.Context) *ApiListService {
 }
 
 // Run create note info
-func (s *ApiListService) Run(req *auth.ApiPageReq) (resp *base.NilResponse, err error) {
+func (s *ApiListService) Run(req *auth.ApiPageReq) (resp []*auth.ApiInfo, err error) {
 	// Finish your business logic.
 
 	return

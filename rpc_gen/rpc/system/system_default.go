@@ -35,7 +35,7 @@ func DeleteRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Opt
 	return resp, nil
 }
 
-func RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+func RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *auth.RoleInfo, err error) {
 	resp, err = defaultClient.RoleByID(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "RoleByID call failed,err =%+v", err)
@@ -44,7 +44,7 @@ func RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Optio
 	return resp, nil
 }
 
-func RoleList(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+func RoleList(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (resp []*auth.RoleInfo, err error) {
 	resp, err = defaultClient.RoleList(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "RoleList call failed,err =%+v", err)
@@ -143,7 +143,7 @@ func DeleteApi(ctx context.Context, req *base.IDReq, callOptions ...callopt.Opti
 	return resp, nil
 }
 
-func ApiList(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+func ApiList(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (resp []*auth.ApiInfo, err error) {
 	resp, err = defaultClient.ApiList(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "ApiList call failed,err =%+v", err)
@@ -152,7 +152,7 @@ func ApiList(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.O
 	return resp, nil
 }
 
-func ApiTree(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+func ApiTree(ctx context.Context, req *auth.ApiPageReq, callOptions ...callopt.Option) (resp []*base.Tree, err error) {
 	resp, err = defaultClient.ApiTree(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "ApiTree call failed,err =%+v", err)

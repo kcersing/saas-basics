@@ -12,7 +12,7 @@ import (
 
 	"github.com/cloudwego/kitex/pkg/protocol/bthrift"
 
-	"rpc_gen/kitex_gen/base"
+	"system/kitex_gen/base"
 )
 
 // unused protection
@@ -1855,7 +1855,7 @@ func (p *ApiPageReq) FastReadField2(buf []byte) (int, error) {
 	} else {
 		offset += l
 
-		p.PageSize = v
+		p.Limit = v
 
 	}
 	return offset, nil
@@ -1965,8 +1965,8 @@ func (p *ApiPageReq) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWrit
 
 func (p *ApiPageReq) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "pageSize", thrift.I64, 2)
-	offset += bthrift.Binary.WriteI64(buf[offset:], p.PageSize)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "limit", thrift.I64, 2)
+	offset += bthrift.Binary.WriteI64(buf[offset:], p.Limit)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -2019,8 +2019,8 @@ func (p *ApiPageReq) field1Length() int {
 
 func (p *ApiPageReq) field2Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("pageSize", thrift.I64, 2)
-	l += bthrift.Binary.I64Length(p.PageSize)
+	l += bthrift.Binary.FieldBeginLength("limit", thrift.I64, 2)
+	l += bthrift.Binary.I64Length(p.Limit)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l

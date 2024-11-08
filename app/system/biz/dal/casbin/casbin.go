@@ -1,9 +1,10 @@
 package casbin
 
 import (
+	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	entAdapter "github.com/casbin/ent-adapter"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"system/conf"
 )
 
@@ -13,7 +14,7 @@ func Init() {
 	var err error
 	casbinEnforcer, err = newCasbin()
 	if err != nil {
-		hlog.Fatal(err)
+		klog.Fatal(err)
 	}
 }
 
@@ -27,7 +28,7 @@ func newCasbin() (enforcer *casbin.Enforcer, err error) {
 	adapter, err := entAdapter.NewAdapter("mysql", conf.GetConf().MySQL.DSN)
 
 	if err != nil {
-		hlog.Error(err)
+		klog.Error(err)
 		return
 	}
 
@@ -55,18 +56,18 @@ func newCasbin() (enforcer *casbin.Enforcer, err error) {
 
 	m, err := model.NewModelFromString(text)
 	if err != nil {
-		hlog.Error(err)
+		klog.Error(err)
 		return
 	}
 	enforcer, err = casbin.NewEnforcer(m, adapter)
 	if err != nil {
-		hlog.Error(err)
+		klog.Error(err)
 		return
 	}
 
 	err = enforcer.LoadPolicy()
 	if err != nil {
-		hlog.Error(err)
+		klog.Error(err)
 		return
 	}
 	return

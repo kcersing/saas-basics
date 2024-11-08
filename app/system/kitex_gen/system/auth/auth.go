@@ -6,8 +6,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
-	"rpc_gen/kitex_gen/base"
 	"strings"
+	"system/kitex_gen/base"
 )
 
 type RoleInfo struct {
@@ -2052,7 +2052,7 @@ func (p *ApiInfo) Field7DeepEqual(src string) bool {
 
 type ApiPageReq struct {
 	Page        int64  `thrift:"page,1" frugal:"1,default,i64" json:"page"`
-	PageSize    int64  `thrift:"pageSize,2" frugal:"2,default,i64" json:"pageSize"`
+	Limit       int64  `thrift:"limit,2" frugal:"2,default,i64" json:"limit"`
 	Path        string `thrift:"path,3" frugal:"3,default,string" json:"path"`
 	Description string `thrift:"description,4" frugal:"4,default,string" json:"description"`
 	Method      string `thrift:"method,5" frugal:"5,default,string" json:"method"`
@@ -2070,8 +2070,8 @@ func (p *ApiPageReq) GetPage() (v int64) {
 	return p.Page
 }
 
-func (p *ApiPageReq) GetPageSize() (v int64) {
-	return p.PageSize
+func (p *ApiPageReq) GetLimit() (v int64) {
+	return p.Limit
 }
 
 func (p *ApiPageReq) GetPath() (v string) {
@@ -2092,8 +2092,8 @@ func (p *ApiPageReq) GetGroup() (v string) {
 func (p *ApiPageReq) SetPage(val int64) {
 	p.Page = val
 }
-func (p *ApiPageReq) SetPageSize(val int64) {
-	p.PageSize = val
+func (p *ApiPageReq) SetLimit(val int64) {
+	p.Limit = val
 }
 func (p *ApiPageReq) SetPath(val string) {
 	p.Path = val
@@ -2110,7 +2110,7 @@ func (p *ApiPageReq) SetGroup(val string) {
 
 var fieldIDToName_ApiPageReq = map[int16]string{
 	1: "page",
-	2: "pageSize",
+	2: "limit",
 	3: "path",
 	4: "description",
 	5: "method",
@@ -2232,7 +2232,7 @@ func (p *ApiPageReq) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageSize = _field
+	p.Limit = _field
 	return nil
 }
 func (p *ApiPageReq) ReadField3(iprot thrift.TProtocol) error {
@@ -2346,10 +2346,10 @@ WriteFieldEndError:
 }
 
 func (p *ApiPageReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("limit", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
+	if err := oprot.WriteI64(p.Limit); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2447,7 +2447,7 @@ func (p *ApiPageReq) DeepEqual(ano *ApiPageReq) bool {
 	if !p.Field1DeepEqual(ano.Page) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.PageSize) {
+	if !p.Field2DeepEqual(ano.Limit) {
 		return false
 	}
 	if !p.Field3DeepEqual(ano.Path) {
@@ -2474,7 +2474,7 @@ func (p *ApiPageReq) Field1DeepEqual(src int64) bool {
 }
 func (p *ApiPageReq) Field2DeepEqual(src int64) bool {
 
-	if p.PageSize != src {
+	if p.Limit != src {
 		return false
 	}
 	return true

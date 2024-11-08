@@ -41,6 +41,14 @@ struct StatusCodeReq {
     2: i64 status,
 }
 
+struct Tree {
+	1:string Title
+    2:string Value
+	3:string Key
+	4:string Method
+	5:list<Tree> Children
+}
+
 enum Err {
     Success            = 0,
     NoRoute            = 1,

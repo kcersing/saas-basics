@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
-	auth "rpc_gen/kitex_gen/system/auth"
+	"rpc_gen/kitex_gen/base"
+	"rpc_gen/kitex_gen/system/menu"
 	"system/biz/service"
+	base "system/kitex_gen/base"
+	auth "system/kitex_gen/system/auth"
 )
 
 // RoleServiceImpl implements the last service interface defined in the IDL.
@@ -32,14 +34,14 @@ func (s *RoleServiceImpl) DeleteRole(ctx context.Context, req *base.IDReq) (resp
 }
 
 // RoleByID implements the RoleServiceImpl interface.
-func (s *RoleServiceImpl) RoleByID(ctx context.Context, req *base.IDReq) (resp *base.NilResponse, err error) {
+func (s *RoleServiceImpl) RoleByID(ctx context.Context, req *base.IDReq) (resp *auth.RoleInfo, err error) {
 	resp, err = service.NewRoleByIDService(ctx).Run(req)
 
 	return resp, err
 }
 
 // RoleList implements the RoleServiceImpl interface.
-func (s *RoleServiceImpl) RoleList(ctx context.Context, req *base.PageInfoReq) (resp *base.NilResponse, err error) {
+func (s *RoleServiceImpl) RoleList(ctx context.Context, req *base.PageInfoReq) (resp []*auth.RoleInfo, err error) {
 	resp, err = service.NewRoleListService(ctx).Run(req)
 
 	return resp, err
@@ -116,15 +118,36 @@ func (s *RoleServiceImpl) DeleteApi(ctx context.Context, req *base.IDReq) (resp 
 }
 
 // ApiList implements the RoleServiceImpl interface.
-func (s *RoleServiceImpl) ApiList(ctx context.Context, req *auth.ApiPageReq) (resp *base.NilResponse, err error) {
+func (s *RoleServiceImpl) ApiList(ctx context.Context, req *auth.ApiPageReq) (resp []*auth.ApiInfo, err error) {
 	resp, err = service.NewApiListService(ctx).Run(req)
 
 	return resp, err
 }
 
 // ApiTree implements the RoleServiceImpl interface.
-func (s *RoleServiceImpl) ApiTree(ctx context.Context, req *auth.ApiPageReq) (resp *base.NilResponse, err error) {
+func (s *RoleServiceImpl) ApiTree(ctx context.Context, req *auth.ApiPageReq) (resp []*base.Tree, err error) {
 	resp, err = service.NewApiTreeService(ctx).Run(req)
+
+	return resp, err
+}
+
+// MenuByRole implements the MenuServiceImpl interface.
+func (s *MenuServiceImpl) MenuByRole(ctx context.Context, req *base.IDReq) (resp []*menu.MenuInfoTree, err error) {
+	resp, err = service.NewMenuByRoleService(ctx).Run(req)
+
+	return resp, err
+}
+
+// MenuLists implements the MenuServiceImpl interface.
+func (s *MenuServiceImpl) MenuLists(ctx context.Context, req *base.PageInfoReq) (resp *base.NilResponse, err error) {
+	resp, err = service.NewMenuListsService(ctx).Run(req)
+
+	return resp, err
+}
+
+// MenuTree implements the MenuServiceImpl interface.
+func (s *MenuServiceImpl) MenuTree(ctx context.Context, req *base.PageInfoReq) (resp []*base.Tree, err error) {
+	resp, err = service.NewMenuTreeService(ctx).Run(req)
 
 	return resp, err
 }

@@ -6,9 +6,13 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
+	"rpc_gen/kitex_gen/base"
+	"rpc_gen/kitex_gen/system/auth"
 	"system/biz/dal/cache"
 	"system/biz/dal/mysql"
 	"system/biz/dal/mysql/ent"
+	"system/biz/dal/mysql/ent/api"
+	"system/biz/dal/mysql/ent/predicate"
 	"system/biz/infra/do"
 
 	"time"
@@ -30,11 +34,11 @@ func NewApi(ctx context.Context, c *app.RequestContext) do.Api {
 	}
 }
 
-func (a Api) ApiTree(req do.ListApiReq) (resp []*do.Tree, total int, err error) {
+func (a Api) ApiTree(req auth.ApiPageReq) (resp []*base.Tree, total int, err error) {
 
 	inter, exist := a.cache.Get("ApiTree")
 	if exist {
-		if v, ok := inter.([]*do.Tree); ok {
+		if v, ok := inter.([]*base.Tree); ok {
 			return v, len(v), nil
 		}
 	}
@@ -49,12 +53,12 @@ func (a Api) ApiTree(req do.ListApiReq) (resp []*do.Tree, total int, err error) 
 	apiGroups, err := a.db.API.Query().GroupBy(api.FieldAPIGroup).Strings(a.ctx)
 
 	for _, apiGroup := range apiGroups {
-		g := &do.Tree{
+		g := &base.Tree{
 			Title: apiGroup,
 		}
 		for _, v := range apis {
 			if v.APIGroup == g.Title {
-				g.Children = append(g.Children, &do.Tree{
+				g.Children = append(g.Children, &base.Tree{
 					Title: v.Title,
 					Value: map[string]string{"path": v.Path, "method": v.Method},
 					Key:   v.ID, // map[string]string{"path": v.Path, "method": v.Method},
@@ -71,7 +75,7 @@ func (a Api) ApiTree(req do.ListApiReq) (resp []*do.Tree, total int, err error) 
 	return
 }
 
-func (a Api) Create(req do.ApiInfo) error {
+func (a Api) Create(req auth.ApiInfo) error {
 	_, err := a.db.API.Create().
 		SetPath(req.Path).
 		SetDescription(req.Description).
@@ -85,8 +89,8 @@ func (a Api) Create(req do.ApiInfo) error {
 	return nil
 }
 
-func (a Api) Update(req do.ApiInfo) error {
-	_, err := a.db.API.UpdateOneID(req.ID).
+func (a Api) Update(req auth.ApiInfo) error {
+	_, err := a.db.API.UpdateOneID(req.Id).
 		SetPath(req.Path).
 		SetDescription(req.Description).
 		SetAPIGroup(req.Group).
@@ -104,7 +108,7 @@ func (a Api) Delete(id int64) error {
 	return err
 }
 
-func (a Api) List(req do.ListApiReq) (resp []*do.ApiInfo, total int, err error) {
+func (a Api) List(req auth.ApiPageReq) (resp []*auth.ApiInfo, total int, err error) {
 	var predicates []predicate.API
 	if req.Path != "" {
 		predicates = append(predicates, api.PathContains(req.Path))

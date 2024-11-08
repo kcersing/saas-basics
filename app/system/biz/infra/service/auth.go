@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"encoding/json"
+
+	"github.com/casbin/casbin/v2"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
@@ -11,7 +13,7 @@ import (
 	"github.com/pkg/errors"
 	"strconv"
 	"system/biz/dal/cache"
-	"system/biz/dal/casbin"
+	casbin2 "system/biz/dal/casbin"
 	"system/biz/dal/mysql"
 	"system/biz/dal/mysql/ent"
 	"system/biz/dal/mysql/ent/api"
@@ -33,7 +35,7 @@ func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
 		salt:  "",
 		db:    mysql.DB,
 		cache: cache.Cache,
-		Cbs:   casbin.CasbinEnforcer(),
+		Cbs:   casbin2.CasbinEnforcer(),
 	}
 }
 
@@ -64,7 +66,7 @@ func (a Auth) QueryApiAll(id []int64) (resp []*do.ApiAuthInfo, err error) {
 func (a Auth) UpdateApiAuth(roleIDStr string, apis []int64) error {
 	// clear old policies
 	var oldPolicies [][]string
-	oldPolicies = a.Cbs.GetFilteredPolicy(0, roleIDStr)
+	oldPolicies, _ = a.Cbs.GetFilteredPolicy(0, roleIDStr)
 	if len(oldPolicies) != 0 {
 		removeResult, err := a.Cbs.RemoveFilteredPolicy(0, roleIDStr)
 		if err != nil {
@@ -99,7 +101,7 @@ func (a Auth) UpdateApiAuth(roleIDStr string, apis []int64) error {
 
 func (a Auth) ApiAuth(roleIDStr string) (infos []*do.ApiAuthInfo, err error) {
 
-	policies := a.Cbs.GetFilteredPolicy(0, roleIDStr)
+	policies, _ := a.Cbs.GetFilteredPolicy(0, roleIDStr)
 	for _, v := range policies {
 		infos = append(infos, &do.ApiAuthInfo{
 			Path:   v[1],

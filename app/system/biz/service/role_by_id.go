@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
+	base "system/kitex_gen/base"
+	auth "system/kitex_gen/system/auth"
 )
 
 type RoleByIDService struct {
@@ -13,7 +14,7 @@ func NewRoleByIDService(ctx context.Context) *RoleByIDService {
 }
 
 // Run create note info
-func (s *RoleByIDService) Run(req *base.IDReq) (resp *base.NilResponse, err error) {
+func (s *RoleByIDService) Run(req *base.IDReq) (resp *auth.RoleInfo, err error) {
 	// Finish your business logic.
 
 	return

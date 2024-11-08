@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/kitex/pkg/kerrors"
-	base "rpc_gen/kitex_gen/base"
-	menu "rpc_gen/kitex_gen/system/menu"
-	admin "system/biz/infra/service"
+	"rpc_gen/kitex_gen/base"
+	"rpc_gen/kitex_gen/system/menu"
+	"system/biz/infra/service"
 )
 
 type MenuByRoleService struct {
@@ -18,7 +18,7 @@ func NewMenuByRoleService(ctx context.Context) *MenuByRoleService {
 // Run create note info
 func (s *MenuByRoleService) Run(req *base.IDReq) (resp []*menu.MenuInfoTree, err error) {
 	// Finish your business logic.
-	resp, err = admin.NewMenu(s.ctx).MenuByRole(req.Id)
+	resp, err = service.NewMenu(s.ctx).MenuByRole(req.Id)
 	if err != nil {
 		return resp, kerrors.NewBizStatusError(40001, err.Error())
 	}

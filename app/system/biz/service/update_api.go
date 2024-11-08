@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
-	auth "rpc_gen/kitex_gen/system/auth"
+	base "system/kitex_gen/base"
+	auth "system/kitex_gen/system/auth"
 )
 
 type UpdateApiService struct {

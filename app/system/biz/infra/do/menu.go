@@ -12,7 +12,7 @@ type Menu interface {
 	MenuByRole(roleID int64) (list []*menu.MenuInfoTree, err error)
 	List(req *base.PageInfoReq) (list []*menu.MenuInfoTree, total int, err error)
 
-	MenuTree(req *base.PageInfoReq) (list []*menu.Tree, err error)
+	MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error)
 
 	CreateMenuParam(req *MenuParam) error
 	UpdateMenuParam(req *MenuParam) error

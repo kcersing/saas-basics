@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
+	base "system/kitex_gen/base"
+	auth "system/kitex_gen/system/auth"
 )
 
 type RoleListService struct {
@@ -13,7 +14,7 @@ func NewRoleListService(ctx context.Context) *RoleListService {
 }
 
 // Run create note info
-func (s *RoleListService) Run(req *base.PageInfoReq) (resp *base.NilResponse, err error) {
+func (s *RoleListService) Run(req *base.PageInfoReq) (resp []*auth.RoleInfo, err error) {
 	// Finish your business logic.
 
 	return

@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
+	base "system/kitex_gen/base"
 )
 
 type MenuAuthorityService struct {

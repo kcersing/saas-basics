@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
-	auth "rpc_gen/kitex_gen/system/auth"
+	base "system/kitex_gen/base"
+	auth "system/kitex_gen/system/auth"
 )
 
 type ApiTreeService struct {
@@ -14,7 +14,7 @@ func NewApiTreeService(ctx context.Context) *ApiTreeService {
 }
 
 // Run create note info
-func (s *ApiTreeService) Run(req *auth.ApiPageReq) (resp *base.NilResponse, err error) {
+func (s *ApiTreeService) Run(req *auth.ApiPageReq) (resp []*base.Tree, err error) {
 	// Finish your business logic.
 
 	return

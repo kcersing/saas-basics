@@ -66,26 +66,17 @@ struct MenuInfo {
 	9: bool Ignore
 }
 
-struct Tree {
-	1:string Title
-    2:string Value
-	3:string Key
-	4:string Method
-	5:list<Tree> Children
-}
-
-
 // menu service
 service MenuService {
 
-  // 创建菜单
-  base.NilResponse CreateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/admin/menu/create")
-
-  //更新菜单
-  base.NilResponse UpdateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/admin/menu/update")
-
-  //删除菜单信息
-  base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/api/admin/menu")
+//  // 创建菜单
+//  base.NilResponse CreateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/admin/menu/create")
+//
+//  //更新菜单
+//  base.NilResponse UpdateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/admin/menu/update")
+//
+//  //删除菜单信息
+//  base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/api/admin/menu")
 
   //获取角色菜单列表
   list<MenuInfoTree> MenuByRole(1: base.IDReq req) (api.post = "/api/admin/menu/role")
@@ -93,19 +84,19 @@ service MenuService {
   //获取菜单列表
   base.NilResponse MenuLists(1: base.PageInfoReq req) (api.post = "/api/admin/menu/list")
 
-  list<Tree> MenuTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
+  list<base.Tree> MenuTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
 
-  //创建菜单额外参数
-  base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/create")
-
-  //更新菜单额外参数
-  base.NilResponse UpdateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/update")
-
-  //删除菜单额外参数
-  base.NilResponse DeleteMenuParam(1: base.IDReq req) (api.post = "/api/admin/menu/param")
-
-  //获取某个菜单的额外参数列表
-  base.NilResponse MenuParamListByMenuID(1: base.IDReq req) (api.post = "/api/admin/menu/param/list")
+//  //创建菜单额外参数
+//  base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/create")
+//
+//  //更新菜单额外参数
+//  base.NilResponse UpdateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/update")
+//
+//  //删除菜单额外参数
+//  base.NilResponse DeleteMenuParam(1: base.IDReq req) (api.post = "/api/admin/menu/param")
+//
+//  //获取某个菜单的额外参数列表
+//  base.NilResponse MenuParamListByMenuID(1: base.IDReq req) (api.post = "/api/admin/menu/param/list")
 
 
 }
