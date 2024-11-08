@@ -187,11 +187,11 @@ func (m Menu) List(req *base.PageInfoReq) (list []*menu2.MenuInfoTree, total int
 	total, _ = m.db.Menu.Query().Count(m.ctx)
 	return
 }
-func (m Menu) MenuTree(req *base.PageInfoReq) (list []*menu2.Tree, err error) {
+func (m Menu) MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error) {
 
 	inter, exist := m.cache.Get("MenuTree")
 	if exist {
-		if v, ok := inter.([]*menu2.Tree); ok {
+		if v, ok := inter.([]*base.Tree); ok {
 			return v, nil
 		}
 	}
@@ -335,14 +335,14 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*menu2.MenuInfoTree {
 	return result
 }
 
-func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*menu2.Tree {
+func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*base.Tree {
 	if data == nil {
 		return nil
 	}
-	var result []*menu2.Tree
+	var result []*base.Tree
 	for _, v := range data {
 		if v.ParentID == parentID && v.ID != parentID {
-			var m = new(menu2.Tree)
+			var m = new(base.Tree)
 			m.Title = v.Name
 			m.Value = strconv.FormatInt(v.ID, 10)
 			m.Key = strconv.FormatInt(v.ID, 10)

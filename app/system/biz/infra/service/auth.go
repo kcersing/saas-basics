@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"rpc_gen/kitex_gen/system/auth"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -39,7 +40,7 @@ func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
 	}
 }
 
-func (a Auth) QueryApiAll(id []int64) (resp []*do.ApiAuthInfo, err error) {
+func (a Auth) QueryApiAll(id []int64) (resp []*auth.ApiAuthorityInfo, err error) {
 
 	//ApiAuthInterface, exist := a.cache.Get("apiAll")
 	//if exist {
@@ -99,11 +100,11 @@ func (a Auth) UpdateApiAuth(roleIDStr string, apis []int64) error {
 	return nil
 }
 
-func (a Auth) ApiAuth(roleIDStr string) (infos []*do.ApiAuthInfo, err error) {
+func (a Auth) ApiAuth(roleIDStr string) (infos []*auth.ApiAuthorityInfo, err error) {
 
 	policies, _ := a.Cbs.GetFilteredPolicy(0, roleIDStr)
 	for _, v := range policies {
-		infos = append(infos, &do.ApiAuthInfo{
+		infos = append(infos, &auth.ApiAuthorityInfo{
 			Path:   v[1],
 			Method: v[2],
 		})

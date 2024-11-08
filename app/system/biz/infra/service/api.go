@@ -3,11 +3,13 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/json"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"rpc_gen/kitex_gen/base"
 	"rpc_gen/kitex_gen/system/auth"
+	"strconv"
 	"system/biz/dal/cache"
 	"system/biz/dal/mysql"
 	"system/biz/dal/mysql/ent"
@@ -58,10 +60,12 @@ func (a Api) ApiTree(req auth.ApiPageReq) (resp []*base.Tree, total int, err err
 		}
 		for _, v := range apis {
 			if v.APIGroup == g.Title {
+				dataType, _ := json.Marshal(map[string]string{"path": v.Path, "method": v.Method})
+				dataString := string(dataType)
 				g.Children = append(g.Children, &base.Tree{
 					Title: v.Title,
-					Value: map[string]string{"path": v.Path, "method": v.Method},
-					Key:   v.ID, // map[string]string{"path": v.Path, "method": v.Method},
+					Value: dataString,
+					Key:   strconv.FormatInt(v.ID, 10),
 				})
 			}
 		}
