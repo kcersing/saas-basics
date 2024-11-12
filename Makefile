@@ -20,8 +20,17 @@ admin:
 api:
 	go run ./app/api
 
+
+.PHONY: gen-rpc
+gen-rpc:
+	cwgo client --type RPC --service system --module rpc_gen  -I ../idl  --idl ../idl/system/menu.thrift
+	cwgo client --type RPC --service system --module rpc_gen  -I ../idl  --idl ../idl/system/auth.thrift
+
 .PHONY: gen-user
 gen-user:
+	cwgo server --type RPC --module system --service system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/menu.thrift
+	cwgo server --type RPC --module system --service system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/auth.thrift
+
 	@cd ./rpc_gen && cwgo client --type RPC --service order --module rpc_gen  -I ../idl  --idl ../idl/order/order.thrift
 	@cd ./app/admin && cwgo server --type RPC --module order --service order --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/order/order.thrift
 

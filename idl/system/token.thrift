@@ -24,7 +24,7 @@ struct TokenListReq {
     4:  i64 user_id (api.raw = "user_id")
 }
 
-service TokenService{
+service SystemService{
   // 更新Token
   base.NilResponse UpdateToken(1: TokenInfo req) (api.post = "/api/admin/token/update")
 

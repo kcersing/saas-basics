@@ -2,13 +2,12 @@ package service
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/json"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"rpc_gen/kitex_gen/base"
-	"rpc_gen/kitex_gen/system/auth"
+	"rpc_gen/kitex_gen/system/menu"
 	"strconv"
 	"system/biz/dal/cache"
 	"system/biz/dal/mysql"
@@ -27,7 +26,7 @@ type Api struct {
 	cache *ristretto.Cache
 }
 
-func NewApi(ctx context.Context, c *app.RequestContext) do.Api {
+func NewApi(ctx context.Context) do.Api {
 	return &Api{
 		ctx:   ctx,
 		salt:  "",
@@ -36,7 +35,7 @@ func NewApi(ctx context.Context, c *app.RequestContext) do.Api {
 	}
 }
 
-func (a Api) ApiTree(req auth.ApiPageReq) (resp []*base.Tree, total int, err error) {
+func (a Api) ApiTree(req menu.ApiPageReq) (resp []*base.Tree, total int64, err error) {
 
 	inter, exist := a.cache.Get("ApiTree")
 	if exist {
@@ -73,13 +72,13 @@ func (a Api) ApiTree(req auth.ApiPageReq) (resp []*base.Tree, total int, err err
 		resp = append(resp, g)
 	}
 
-	total, _ = a.db.API.Query().Where(predicates...).Count(a.ctx)
-
+	t, _ := a.db.API.Query().Where(predicates...).Count(a.ctx)
+	total = int64(t)
 	a.cache.SetWithTTL("ApiTree", &resp, 1, 30*time.Hour)
 	return
 }
 
-func (a Api) Create(req auth.ApiInfo) error {
+func (a Api) Create(req menu.ApiInfo) error {
 	_, err := a.db.API.Create().
 		SetPath(req.Path).
 		SetDescription(req.Description).
@@ -93,7 +92,7 @@ func (a Api) Create(req auth.ApiInfo) error {
 	return nil
 }
 
-func (a Api) Update(req auth.ApiInfo) error {
+func (a Api) Update(req menu.ApiInfo) error {
 	_, err := a.db.API.UpdateOneID(req.Id).
 		SetPath(req.Path).
 		SetDescription(req.Description).
@@ -112,7 +111,7 @@ func (a Api) Delete(id int64) error {
 	return err
 }
 
-func (a Api) List(req auth.ApiPageReq) (resp []*auth.ApiInfo, total int, err error) {
+func (a Api) List(req menu.ApiPageReq) (resp []*menu.ApiInfo, total int64, err error) {
 	var predicates []predicate.API
 	if req.Path != "" {
 		predicates = append(predicates, api.PathContains(req.Path))
@@ -147,5 +146,5 @@ func (a Api) List(req auth.ApiPageReq) (resp []*auth.ApiInfo, total int, err err
 	}
 
 	total, _ = a.db.API.Query().Where(predicates...).Count(a.ctx)
-	return resp, total, nil
+	return resp, int64(total), nil
 }

@@ -6,7 +6,6 @@ import (
 	"rpc_gen/kitex_gen/system/auth"
 
 	"github.com/casbin/casbin/v2"
-	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	_ "github.com/golang-module/carbon/v2"
@@ -30,7 +29,7 @@ type Auth struct {
 	Cbs   *casbin.Enforcer
 }
 
-func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
+func NewAuth(ctx context.Context) do.Auth {
 	return &Auth{
 		ctx:   ctx,
 		salt:  "",
@@ -40,7 +39,7 @@ func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
 	}
 }
 
-func (a Auth) QueryApiAll(id []int64) (resp []*auth.ApiAuthorityInfo, err error) {
+func (a Auth) QueryApiAll(id []int64) (resp []*auth.ApiAuthInfo, err error) {
 
 	//ApiAuthInterface, exist := a.cache.Get("apiAll")
 	//if exist {
@@ -100,11 +99,11 @@ func (a Auth) UpdateApiAuth(roleIDStr string, apis []int64) error {
 	return nil
 }
 
-func (a Auth) ApiAuth(roleIDStr string) (infos []*auth.ApiAuthorityInfo, err error) {
+func (a Auth) ApiAuth(roleIDStr string) (infos []*auth.ApiAuthInfo, err error) {
 
 	policies, _ := a.Cbs.GetFilteredPolicy(0, roleIDStr)
 	for _, v := range policies {
-		infos = append(infos, &auth.ApiAuthorityInfo{
+		infos = append(infos, &auth.ApiAuthInfo{
 			Path:   v[1],
 			Method: v[2],
 		})

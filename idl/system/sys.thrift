@@ -13,7 +13,7 @@ struct ListReq {
     6: optional i64 venue (api.raw = "venue" )
 }
 
-service SysService {
+service SystemService {
     // 商品列表
     base.NilResponse ProductList(1: ListReq req) (api.post = "/api/sys/product/list")
 

@@ -7,11 +7,14 @@ namespace go base
 //double: 64位浮点型，对应Java中的double
 //string: 字符串，对应Java中的String
 //binary: Blob 类型，对应Java中的byte[]
+//list<t1>:一系列的t1类型组成的有序表，元素可以重复
+//set<t1>:一系列的t1类型组成的无序集合，元素不可以重复
+//map<t1,t2>:以t1为key,t2为value的键值对，t1不可以重复
 
 struct BaseResp {
     1: string message = ""
     2: i32 code = 0
-    3: optional map<string, string> Extra
+    3: i64 total = 0
 }
 
 struct BaseResponse {

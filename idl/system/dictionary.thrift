@@ -38,7 +38,7 @@ struct DictionaryDetailReq{
 }
 
 // dictionary service
-service dictionaryService {
+service SystemService {
   // 创建字典信息
   base.NilResponse CreateDictionary(1: DictionaryInfo req) (api.post = "/api/admin/dict/create")
 
