@@ -17,9 +17,10 @@ func NewApiTreeService(ctx context.Context) *ApiTreeService {
 // Run create note info
 func (s *ApiTreeService) Run(req *menu.ApiPageReq) (resp []*base.Tree, err error) {
 	// Finish your business logic.
-	resp, err = service.NewAuth(s.ctx).ApiAuth(req.String())
+	resp, _, err = service.NewApi(s.ctx).ApiTree(*req)
 	if err != nil {
 		return nil, err
 	}
 	return
+
 }

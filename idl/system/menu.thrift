@@ -1,24 +1,22 @@
 namespace go system.menu
 
-include "base/base.thrift"
-
-
+include "../base/base.thrift"
 
 // system service
 service SystemService {
 
-
   // 获取角色菜单权限列表
-  base.NilResponse MenuAuth(1: base.IDReq req) (api.post = "/api/admin/auth/menu/role")
-
+ list<MenuInfoTree> MenuAuth(1: base.IDReq req) (api.post = "/api/admin/auth/menu/role")
+  //获取角色菜单列表
+ base.Ids MenuRole(1: base.IDReq req) (api.post = "/api/admin/menu/role")
   // 创建或API
-//  base.NilResponse CreateApi(1: ApiInfo req) (api.post = "/api/admin/api/create")
+ // base.NilResponse CreateApi(1: ApiInfo req) (api.post = "/api/admin/api/create")
 
   // 更新API
-//  base.NilResponse UpdateApi(1: ApiInfo req) (api.post = "/api/admin/api/update")
+ // base.NilResponse UpdateApi(1: ApiInfo req) (api.post = "/api/admin/api/update")
 
   // 删除API信息
-//  base.NilResponse DeleteApi(1: base.IDReq req) (api.post = "/api/admin/api")
+ // base.NilResponse DeleteApi(1: base.IDReq req) (api.post = "/api/admin/api")
 
   // 获取API列表
   ApiInfoResp ApiList(1: ApiPageReq req) (api.post = "/api/admin/api/list")
@@ -34,11 +32,9 @@ service SystemService {
 //  //删除菜单信息
 //  base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/api/admin/menu")
 
-  //获取角色菜单列表
-  list<MenuInfoTree> MenuByRole(1: base.IDReq req) (api.post = "/api/admin/menu/role")
 
   //获取菜单列表
-  base.NilResponse MenuLists(1: base.PageInfoReq req) (api.post = "/api/admin/menu/list")
+  MenuInfoResp MenuLists(1: base.PageInfoReq req) (api.post = "/api/admin/menu/list")
 
   list<base.Tree> MenuTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
 
@@ -58,7 +54,11 @@ service SystemService {
 struct ApiInfoResp{
     1: base.BaseResp resp
     2: optional list<ApiInfo> extra
+}
 
+struct MenuInfoResp{
+    1: base.BaseResp resp
+    2: optional list<MenuInfoTree> extra
 }
 
 // API信息

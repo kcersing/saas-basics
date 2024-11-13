@@ -12,11 +12,11 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	MenuAuth(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	MenuAuth(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*menu.MenuInfoTree, err error)
+	MenuRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.Ids, err error)
 	ApiList(ctx context.Context, req *menu.ApiPageReq, callOptions ...callopt.Option) (r *menu.ApiInfoResp, err error)
 	ApiTree(ctx context.Context, req *menu.ApiPageReq, callOptions ...callopt.Option) (r []*base.Tree, err error)
-	MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*menu.MenuInfoTree, err error)
-	MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *menu.MenuInfoResp, err error)
 	MenuTree(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r []*base.Tree, err error)
 }
 
@@ -49,9 +49,14 @@ type kSystemServiceClient struct {
 	*kClient
 }
 
-func (p *kSystemServiceClient) MenuAuth(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (p *kSystemServiceClient) MenuAuth(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*menu.MenuInfoTree, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.MenuAuth(ctx, req)
+}
+
+func (p *kSystemServiceClient) MenuRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.Ids, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.MenuRole(ctx, req)
 }
 
 func (p *kSystemServiceClient) ApiList(ctx context.Context, req *menu.ApiPageReq, callOptions ...callopt.Option) (r *menu.ApiInfoResp, err error) {
@@ -64,12 +69,7 @@ func (p *kSystemServiceClient) ApiTree(ctx context.Context, req *menu.ApiPageReq
 	return p.kClient.ApiTree(ctx, req)
 }
 
-func (p *kSystemServiceClient) MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*menu.MenuInfoTree, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.MenuByRole(ctx, req)
-}
-
-func (p *kSystemServiceClient) MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (p *kSystemServiceClient) MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *menu.MenuInfoResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.MenuLists(ctx, req)
 }

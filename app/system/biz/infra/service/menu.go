@@ -156,7 +156,7 @@ func (m Menu) Delete(id int64) error {
 	return nil
 }
 
-func (m Menu) MenuByRole(roleID int64) (list []*menu2.MenuInfoTree, err error) {
+func (m Menu) MenuRole(roleID int64) (list []*menu2.MenuInfoTree, err error) {
 
 	menus, err := m.db.Role.
 		Query().

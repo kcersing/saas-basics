@@ -8,10 +8,19 @@ import (
 	menu "rpc_gen/kitex_gen/system/menu"
 )
 
-func MenuAuth(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+func MenuAuth(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp []*menu.MenuInfoTree, err error) {
 	resp, err = defaultClient.MenuAuth(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "MenuAuth call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func MenuRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.Ids, err error) {
+	resp, err = defaultClient.MenuRole(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "MenuRole call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
@@ -35,16 +44,7 @@ func ApiTree(ctx context.Context, req *menu.ApiPageReq, callOptions ...callopt.O
 	return resp, nil
 }
 
-func MenuByRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp []*menu.MenuInfoTree, err error) {
-	resp, err = defaultClient.MenuByRole(ctx, req, callOptions...)
-	if err != nil {
-		klog.CtxErrorf(ctx, "MenuByRole call failed,err =%+v", err)
-		return nil, err
-	}
-	return resp, nil
-}
-
-func MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+func MenuLists(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (resp *menu.MenuInfoResp, err error) {
 	resp, err = defaultClient.MenuLists(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "MenuLists call failed,err =%+v", err)

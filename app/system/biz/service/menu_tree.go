@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
+	"system/biz/infra/service"
 )
 
 type MenuTreeService struct {
@@ -16,5 +17,9 @@ func NewMenuTreeService(ctx context.Context) *MenuTreeService {
 func (s *MenuTreeService) Run(req *base.PageInfoReq) (resp []*base.Tree, err error) {
 	// Finish your business logic.
 
+	resp, err = service.NewMenu(s.ctx).MenuTree(req)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

@@ -17,10 +17,9 @@ func NewApiListService(ctx context.Context) *ApiListService {
 func (s *ApiListService) Run(req *menu.ApiPageReq) (resp *menu.ApiInfoResp, err error) {
 	// Finish your business logic.
 
-	resp.Extra, resp.Resp.Total, err = service.NewApi(s.ctx).List(req)
+	resp.Extra, resp.Resp.Total, err = service.NewApi(s.ctx).List(*req)
 	if err != nil {
 		return nil, err
 	}
-	resp.Extra.
 	return
 }

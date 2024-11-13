@@ -21,6 +21,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"MenuRole": kitex.NewMethodInfo(
+		menuRoleHandler,
+		newSystemServiceMenuRoleArgs,
+		newSystemServiceMenuRoleResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 	"ApiList": kitex.NewMethodInfo(
 		apiListHandler,
 		newSystemServiceApiListArgs,
@@ -32,13 +39,6 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		apiTreeHandler,
 		newSystemServiceApiTreeArgs,
 		newSystemServiceApiTreeResult,
-		false,
-		kitex.WithStreamingMode(kitex.StreamingNone),
-	),
-	"MenuByRole": kitex.NewMethodInfo(
-		menuByRoleHandler,
-		newSystemServiceMenuByRoleArgs,
-		newSystemServiceMenuByRoleResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
@@ -140,6 +140,24 @@ func newSystemServiceMenuAuthResult() interface{} {
 	return menu.NewSystemServiceMenuAuthResult()
 }
 
+func menuRoleHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*menu.SystemServiceMenuRoleArgs)
+	realResult := result.(*menu.SystemServiceMenuRoleResult)
+	success, err := handler.(menu.SystemService).MenuRole(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newSystemServiceMenuRoleArgs() interface{} {
+	return menu.NewSystemServiceMenuRoleArgs()
+}
+
+func newSystemServiceMenuRoleResult() interface{} {
+	return menu.NewSystemServiceMenuRoleResult()
+}
+
 func apiListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*menu.SystemServiceApiListArgs)
 	realResult := result.(*menu.SystemServiceApiListResult)
@@ -174,24 +192,6 @@ func newSystemServiceApiTreeArgs() interface{} {
 
 func newSystemServiceApiTreeResult() interface{} {
 	return menu.NewSystemServiceApiTreeResult()
-}
-
-func menuByRoleHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*menu.SystemServiceMenuByRoleArgs)
-	realResult := result.(*menu.SystemServiceMenuByRoleResult)
-	success, err := handler.(menu.SystemService).MenuByRole(ctx, realArg.Req)
-	if err != nil {
-		return err
-	}
-	realResult.Success = success
-	return nil
-}
-func newSystemServiceMenuByRoleArgs() interface{} {
-	return menu.NewSystemServiceMenuByRoleArgs()
-}
-
-func newSystemServiceMenuByRoleResult() interface{} {
-	return menu.NewSystemServiceMenuByRoleResult()
 }
 
 func menuListsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -240,11 +240,21 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) MenuAuth(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
+func (p *kClient) MenuAuth(ctx context.Context, req *base.IDReq) (r []*menu.MenuInfoTree, err error) {
 	var _args menu.SystemServiceMenuAuthArgs
 	_args.Req = req
 	var _result menu.SystemServiceMenuAuthResult
 	if err = p.c.Call(ctx, "MenuAuth", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MenuRole(ctx context.Context, req *base.IDReq) (r *base.Ids, err error) {
+	var _args menu.SystemServiceMenuRoleArgs
+	_args.Req = req
+	var _result menu.SystemServiceMenuRoleResult
+	if err = p.c.Call(ctx, "MenuRole", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -270,17 +280,7 @@ func (p *kClient) ApiTree(ctx context.Context, req *menu.ApiPageReq) (r []*base.
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) MenuByRole(ctx context.Context, req *base.IDReq) (r []*menu.MenuInfoTree, err error) {
-	var _args menu.SystemServiceMenuByRoleArgs
-	_args.Req = req
-	var _result menu.SystemServiceMenuByRoleResult
-	if err = p.c.Call(ctx, "MenuByRole", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) MenuLists(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error) {
+func (p *kClient) MenuLists(ctx context.Context, req *base.PageInfoReq) (r *menu.MenuInfoResp, err error) {
 	var _args menu.SystemServiceMenuListsArgs
 	_args.Req = req
 	var _result menu.SystemServiceMenuListsResult

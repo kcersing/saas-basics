@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
+	menu "rpc_gen/kitex_gen/system/menu"
+	"system/biz/infra/service"
 )
 
 type MenuAuthService struct {
@@ -13,8 +15,11 @@ func NewMenuAuthService(ctx context.Context) *MenuAuthService {
 }
 
 // Run create note info
-func (s *MenuAuthService) Run(req *base.IDReq) (resp *base.NilResponse, err error) {
+func (s *MenuAuthService) Run(req *base.IDReq) (resp []*menu.MenuInfoTree, err error) {
 	// Finish your business logic.
-
+	resp, err = service.NewMenu(s.ctx).MenuRole(req.Id)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

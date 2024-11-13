@@ -6,12 +6,12 @@ import (
 	"testing"
 )
 
-func TestMenuLists_Run(t *testing.T) {
+func TestMenuRole_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewMenuListsService(ctx)
+	s := NewMenuRoleService(ctx)
 	// init req and assert value
 
-	req := &base.PageInfoReq{}
+	req := &base.IDReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

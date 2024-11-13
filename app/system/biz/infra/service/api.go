@@ -40,7 +40,7 @@ func (a Api) ApiTree(req menu.ApiPageReq) (resp []*base.Tree, total int64, err e
 	inter, exist := a.cache.Get("ApiTree")
 	if exist {
 		if v, ok := inter.([]*base.Tree); ok {
-			return v, len(v), nil
+			return v, int64(len(v)), nil
 		}
 	}
 
@@ -145,6 +145,7 @@ func (a Api) List(req menu.ApiPageReq) (resp []*menu.ApiInfo, total int64, err e
 
 	}
 
-	total, _ = a.db.API.Query().Where(predicates...).Count(a.ctx)
+	t, _ := a.db.API.Query().Where(predicates...).Count(a.ctx)
+	total = int64(t)
 	return resp, int64(total), nil
 }

@@ -51,3 +51,10 @@ func (s *SystemServiceImpl) MenuTree(ctx context.Context, req *base.PageInfoReq)
 
 	return resp, err
 }
+
+// MenuRole implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) MenuRole(ctx context.Context, req *base.IDReq) (resp []*menu.MenuInfoTree, err error) {
+	resp, err = service.NewMenuRoleService(ctx).Run(req)
+
+	return resp, err
+}

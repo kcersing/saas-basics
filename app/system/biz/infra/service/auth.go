@@ -3,8 +3,6 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"rpc_gen/kitex_gen/system/auth"
-
 	"github.com/casbin/casbin/v2"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
