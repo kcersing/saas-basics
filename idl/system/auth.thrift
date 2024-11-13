@@ -27,7 +27,7 @@ service SystemService {
 
 
   // Get role list | 获取角色列表
-  list<RoleInfo> RoleList(1: base.PageInfoReq req) (api.get = "/api/admin/role/list")
+  RoleListResp RoleList(1: base.PageInfoReq req) (api.get = "/api/admin/role/list")
 
   // Set role status | 设置角色状态, 启用1/禁用0
   base.NilResponse UpdateRoleStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/role/status")
@@ -42,16 +42,25 @@ service SystemService {
  list<ApiAuthInfo> ApiAuth(1: base.IDReq req) (api.post = "/api/admin/auth/api/role")
 
   // Get logs list | 获取日志列表
-  base.NilResponse GetLogsList(1: LogsListReq req) (api.post = "/api/admin/logs/list")
+  LogsListResp GetLogsList(1: LogsListReq req) (api.post = "/api/admin/logs/list")
 
   // Delete logs | 删除日志信息
-  base.NilResponse DeleteLogs(1: base.Empty req) (api.post = "/api/admin/logs/deleteAll")
+  base.NilResponse DeleteLogs(1: base.Ids req) (api.post = "/api/admin/logs/deleteAll")
 }
 // 菜单授权请求数据
 struct MenuAuthInfoReq {
     1: i64 role_id (api.raw = "role_id")
     2: list<i64> menu_ids (api.raw = "menu_ids")
 }
+struct RoleListResp {
+    1: base.BaseResp resp
+    2: optional list<RoleInfo> extra
+}
+struct LogsListResp {
+    1: base.BaseResp resp
+    2: optional list<LogsInfo> extra
+}
+
 
 //创建或更新角色信息参数
 struct RoleInfo {
@@ -94,4 +103,30 @@ struct CreateOrUpdateApiAuthReq {
 
 
 
+//bool: 布尔值，对应Java中的boolean，
+//byte: 有符号字节，对应Java中的byte，对应MySQL的tinyint
+//i16: 16位有符号整型，对应Java中的short，对应MySQL的smallint
+//i32: 32位有符号整型，对应Java中的int，对应MySQL的int
+//i64: 64位有符号整型，对应Java中的long，对应MySQL的bigint
+//double: 64位浮点型，对应Java中的double
+//string: 字符串，对应Java中的String
+//binary: Blob 类型，对应Java中的byte[]
+//list<t1>:一系列的t1类型组成的有序表，元素可以重复
+//set<t1>:一系列的t1类型组成的无序集合，元素不可以重复
+//map<t1,t2>:以t1为key,t2为value的键值对，t1不可以重复
+
+struct LogsInfo {
+	1: string Type
+	2: string Method
+	3: string Api
+	4: bool Success
+	5: string ReqContent
+	6: string RespContent
+	7: string Ip
+	8: string UserAgent
+	9: string Operator
+	10: i64 Time
+	11: string CreatedAt
+	12: string UpdatedAt
+}
 

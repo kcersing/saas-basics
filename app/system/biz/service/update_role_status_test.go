@@ -6,12 +6,12 @@ import (
 	"testing"
 )
 
-func TestMenuAuth_Run(t *testing.T) {
+func TestUpdateRoleStatus_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewMenuAuthService(ctx)
+	s := NewUpdateRoleStatusService(ctx)
 	// init req and assert value
 
-	req := &base.IDReq{}
+	req := &base.StatusCodeReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

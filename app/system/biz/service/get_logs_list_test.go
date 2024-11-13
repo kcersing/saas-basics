@@ -2,16 +2,16 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
+	auth "rpc_gen/kitex_gen/system/auth"
 	"testing"
 )
 
-func TestMenuAuth_Run(t *testing.T) {
+func TestGetLogsList_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewMenuAuthService(ctx)
+	s := NewGetLogsListService(ctx)
 	// init req and assert value
 
-	req := &base.IDReq{}
+	req := &auth.LogsListReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

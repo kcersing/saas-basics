@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"github.com/spf13/cast"
@@ -25,7 +24,7 @@ type Role struct {
 	cache *ristretto.Cache
 }
 
-func NewRole(ctx context.Context, c *app.RequestContext) do.Role {
+func NewRole(ctx context.Context) do.Role {
 	return &Role{
 		ctx:   ctx,
 		salt:  "",
@@ -133,7 +132,7 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 	return
 }
 
-func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total int, err error) {
+func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total int64, err error) {
 
 	roleEntList, err := r.db.Role.Query().Order(ent.Asc(role.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -170,7 +169,8 @@ func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total 
 			Apis:          rArr,
 		})
 	}
-	total, _ = r.db.Role.Query().Count(r.ctx)
+	t, _ := r.db.Role.Query().Count(r.ctx)
+	total = int64(t)
 	return
 }
 

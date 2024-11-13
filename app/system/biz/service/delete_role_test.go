@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-func TestMenuAuth_Run(t *testing.T) {
+func TestDeleteRole_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewMenuAuthService(ctx)
+	s := NewDeleteRoleService(ctx)
 	// init req and assert value
 
 	req := &base.IDReq{}

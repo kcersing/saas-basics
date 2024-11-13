@@ -6,12 +6,12 @@ import (
 	"testing"
 )
 
-func TestMenuAuth_Run(t *testing.T) {
+func TestDeleteLogs_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewMenuAuthService(ctx)
+	s := NewDeleteLogsService(ctx)
 	// init req and assert value
 
-	req := &base.IDReq{}
+	req := &base.Ids{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)
