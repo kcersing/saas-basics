@@ -2,16 +2,17 @@ package service
 
 import (
 	"context"
-	auth "rpc_gen/kitex_gen/system/auth"
+	base "rpc_gen/kitex_gen/base"
+	menu "rpc_gen/kitex_gen/system/menu"
 	"testing"
 )
 
-func TestUpdateMenuAuth_Run(t *testing.T) {
+func TestMenuLists_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewUpdateMenuAuthService(ctx)
+	s := NewMenuListsService(ctx)
 	// init req and assert value
 
-	req := &auth.MenuAuthInfoReq{}
+	req := &base.PageInfoReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

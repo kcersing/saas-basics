@@ -8,15 +8,15 @@ import (
 	"system/biz/infra/service"
 )
 
-type CreateAuthService struct {
+type UpdateAuthService struct {
 	ctx context.Context
-} // NewCreateAuthService new CreateAuthService
-func NewCreateAuthService(ctx context.Context) *CreateAuthService {
-	return &CreateAuthService{ctx: ctx}
+} // NewUpdateAuthService new UpdateAuthService
+func NewUpdateAuthService(ctx context.Context) *UpdateAuthService {
+	return &UpdateAuthService{ctx: ctx}
 }
 
 // Run create note info
-func (s *CreateAuthService) Run(req *auth.CreateOrUpdateApiAuthReq) (resp *base.NilResponse, err error) {
+func (s *UpdateAuthService) Run(req *auth.CreateOrUpdateApiAuthReq) (resp *base.NilResponse, err error) {
 	// Finish your business logic.
 
 	err = service.NewAuth(s.ctx).UpdateApiAuth(strconv.FormatInt(req.RoleId, 10), req.Apis)

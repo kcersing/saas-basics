@@ -150,3 +150,10 @@ func (s *SystemServiceImpl) DeleteLogs(ctx context.Context, req *base.Empty) (re
 
 	return resp, err
 }
+
+// UpdateAuth implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) UpdateAuth(ctx context.Context, req *auth.CreateOrUpdateApiAuthReq) (resp *base.NilResponse, err error) {
+	resp, err = service.NewUpdateAuthService(ctx).Run(req)
+
+	return resp, err
+}

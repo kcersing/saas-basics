@@ -9,6 +9,7 @@ import (
 	_ "github.com/golang-module/carbon/v2"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
+	"rpc_gen/kitex_gen/system/auth"
 	"strconv"
 	"system/biz/dal/cache"
 	casbin2 "system/biz/dal/casbin"

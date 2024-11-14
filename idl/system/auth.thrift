@@ -36,7 +36,7 @@ service SystemService {
   base.NilResponse CreateAuth(1: CreateOrUpdateApiAuthReq req) (api.post = "/api/admin/auth/api/create")
 
   // 更新API权限
-  base.NilResponse UpdateApiAuth(1: CreateOrUpdateApiAuthReq req) (api.post = "/api/admin/auth/api/update")
+  base.NilResponse UpdateAuth(1: CreateOrUpdateApiAuthReq req) (api.post = "/api/admin/auth/api/update")
 
   // 获取角色api权限列表
  list<ApiAuthInfo> ApiAuth(1: base.IDReq req) (api.post = "/api/admin/auth/api/role")

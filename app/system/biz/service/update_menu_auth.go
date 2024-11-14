@@ -4,6 +4,7 @@ import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
 	auth "rpc_gen/kitex_gen/system/auth"
+	"system/biz/infra/service"
 )
 
 type UpdateMenuAuthService struct {
@@ -17,5 +18,9 @@ func NewUpdateMenuAuthService(ctx context.Context) *UpdateMenuAuthService {
 func (s *UpdateMenuAuthService) Run(req *auth.MenuAuthInfoReq) (resp *base.NilResponse, err error) {
 	// Finish your business logic.
 
+	err = service.NewAuth(s.ctx).UpdateMenuAuth(req.RoleId, req.MenuIds)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

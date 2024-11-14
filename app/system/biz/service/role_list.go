@@ -15,9 +15,8 @@ func NewRoleListService(ctx context.Context) *RoleListService {
 }
 
 // Run create note info
-func (s *RoleListService) Run(req *base.PageInfoReq) (resp *auth.RoleListReq, err error) {
+func (s *RoleListService) Run(req *base.PageInfoReq) (resp *auth.RoleListResp, err error) {
 	// Finish your business logic.
-
 	resp.Extra, resp.Resp.Total, err = service.NewRole(s.ctx).List(req)
 	if err != nil {
 		return nil, err

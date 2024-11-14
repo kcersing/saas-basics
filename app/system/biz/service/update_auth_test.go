@@ -7,9 +7,9 @@ import (
 	"testing"
 )
 
-func TestUpdateApiAuth_Run(t *testing.T) {
+func TestUpdateAuth_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewUpdateApiAuthService(ctx)
+	s := NewUpdateAuthService(ctx)
 	// init req and assert value
 
 	req := &auth.CreateOrUpdateApiAuthReq{}
