@@ -4,6 +4,7 @@ import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
 	"rpc_gen/kitex_gen/system/auth"
+	"rpc_gen/kitex_gen/system/dictionary"
 	menu "rpc_gen/kitex_gen/system/menu"
 	"system/biz/service"
 )
@@ -154,6 +155,62 @@ func (s *SystemServiceImpl) DeleteLogs(ctx context.Context, req *base.Empty) (re
 // UpdateAuth implements the SystemServiceImpl interface.
 func (s *SystemServiceImpl) UpdateAuth(ctx context.Context, req *auth.CreateOrUpdateApiAuthReq) (resp *base.NilResponse, err error) {
 	resp, err = service.NewUpdateAuthService(ctx).Run(req)
+
+	return resp, err
+}
+
+// CreateDictionary implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) CreateDictionary(ctx context.Context, req *dictionary.DictionaryInfo) (resp *base.NilResponse, err error) {
+	resp, err = service.NewCreateDictionaryService(ctx).Run(req)
+
+	return resp, err
+}
+
+// UpdateDictionary implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) UpdateDictionary(ctx context.Context, req *dictionary.DictionaryInfo) (resp *base.NilResponse, err error) {
+	resp, err = service.NewUpdateDictionaryService(ctx).Run(req)
+
+	return resp, err
+}
+
+// DeleteDictionary implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) DeleteDictionary(ctx context.Context, req *base.IDReq) (resp *base.NilResponse, err error) {
+	resp, err = service.NewDeleteDictionaryService(ctx).Run(req)
+
+	return resp, err
+}
+
+// DictionaryList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) DictionaryList(ctx context.Context, req *dictionary.DictionaryPageReq) (resp *base.NilResponse, err error) {
+	resp, err = service.NewDictionaryListService(ctx).Run(req)
+
+	return resp, err
+}
+
+// CreateDictionaryDetail implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) CreateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail) (resp *base.NilResponse, err error) {
+	resp, err = service.NewCreateDictionaryDetailService(ctx).Run(req)
+
+	return resp, err
+}
+
+// UpdateDictionaryDetail implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) UpdateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail) (resp *base.NilResponse, err error) {
+	resp, err = service.NewUpdateDictionaryDetailService(ctx).Run(req)
+
+	return resp, err
+}
+
+// DeleteDictionaryDetail implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) DeleteDictionaryDetail(ctx context.Context, req *base.IDReq) (resp *base.NilResponse, err error) {
+	resp, err = service.NewDeleteDictionaryDetailService(ctx).Run(req)
+
+	return resp, err
+}
+
+// DetailByDictionaryList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) DetailByDictionaryList(ctx context.Context, req *dictionary.DictionaryDetailReq) (resp *base.NilResponse, err error) {
+	resp, err = service.NewDetailByDictionaryListService(ctx).Run(req)
 
 	return resp, err
 }

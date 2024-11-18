@@ -3,29 +3,24 @@ package system
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
-	auth "rpc_gen/kitex_gen/system/auth"
+	dictionary "rpc_gen/kitex_gen/system/dictionary"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	"rpc_gen/kitex_gen/system/auth/systemservice"
+	"rpc_gen/kitex_gen/system/dictionary/systemservice"
 )
 
 type RPCClient interface {
 	KitexClient() systemservice.Client
 	Service() string
-	CreateRole(ctx context.Context, req *auth.RoleInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateRole(ctx context.Context, req *auth.RoleInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	DeleteRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *auth.RoleInfo, err error)
-	CreateMenuAuth(ctx context.Context, req *auth.MenuAuthInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateMenuAuth(ctx context.Context, req *auth.MenuAuthInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	RoleList(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *auth.RoleListResp, err error)
-	UpdateRoleStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	CreateAuth(ctx context.Context, req *auth.CreateOrUpdateApiAuthReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateApiAuth(ctx context.Context, req *auth.CreateOrUpdateApiAuthReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	ApiAuth(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*auth.ApiAuthInfo, err error)
-	GetLogsList(ctx context.Context, req *auth.LogsListReq, callOptions ...callopt.Option) (r *auth.LogsListReq, err error)
-	DeleteLogs(ctx context.Context, req *base.Ids, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	CreateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	UpdateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	DeleteDictionary(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	DictionaryList(ctx context.Context, req *dictionary.DictListReq, callOptions ...callopt.Option) (r *dictionary.DictionaryListResp, err error)
+	CreateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	UpdateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	DeleteDictionaryDetail(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	DetailByDictionaryList(ctx context.Context, req *dictionary.DetailListReq, callOptions ...callopt.Option) (r *dictionary.DetailByDictionaryListResp, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -54,54 +49,34 @@ func (c *clientImpl) KitexClient() systemservice.Client {
 	return c.kitexClient
 }
 
-func (c *clientImpl) CreateRole(ctx context.Context, req *auth.RoleInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.CreateRole(ctx, req, callOptions...)
+func (c *clientImpl) CreateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.CreateDictionary(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) UpdateRole(ctx context.Context, req *auth.RoleInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateRole(ctx, req, callOptions...)
+func (c *clientImpl) UpdateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.UpdateDictionary(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) DeleteRole(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.DeleteRole(ctx, req, callOptions...)
+func (c *clientImpl) DeleteDictionary(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.DeleteDictionary(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) RoleByID(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *auth.RoleInfo, err error) {
-	return c.kitexClient.RoleByID(ctx, req, callOptions...)
+func (c *clientImpl) DictionaryList(ctx context.Context, req *dictionary.DictListReq, callOptions ...callopt.Option) (r *dictionary.DictionaryListResp, err error) {
+	return c.kitexClient.DictionaryList(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) CreateMenuAuth(ctx context.Context, req *auth.MenuAuthInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.CreateMenuAuth(ctx, req, callOptions...)
+func (c *clientImpl) CreateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.CreateDictionaryDetail(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) UpdateMenuAuth(ctx context.Context, req *auth.MenuAuthInfoReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateMenuAuth(ctx, req, callOptions...)
+func (c *clientImpl) UpdateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.UpdateDictionaryDetail(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) RoleList(ctx context.Context, req *base.PageInfoReq, callOptions ...callopt.Option) (r *auth.RoleListResp, err error) {
-	return c.kitexClient.RoleList(ctx, req, callOptions...)
+func (c *clientImpl) DeleteDictionaryDetail(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.DeleteDictionaryDetail(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) UpdateRoleStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateRoleStatus(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) CreateAuth(ctx context.Context, req *auth.CreateOrUpdateApiAuthReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.CreateAuth(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) UpdateApiAuth(ctx context.Context, req *auth.CreateOrUpdateApiAuthReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateApiAuth(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) ApiAuth(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r []*auth.ApiAuthInfo, err error) {
-	return c.kitexClient.ApiAuth(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) GetLogsList(ctx context.Context, req *auth.LogsListReq, callOptions ...callopt.Option) (r *auth.LogsListReq, err error) {
-	return c.kitexClient.GetLogsList(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) DeleteLogs(ctx context.Context, req *base.Ids, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.DeleteLogs(ctx, req, callOptions...)
+func (c *clientImpl) DetailByDictionaryList(ctx context.Context, req *dictionary.DetailListReq, callOptions ...callopt.Option) (r *dictionary.DetailByDictionaryListResp, err error) {
+	return c.kitexClient.DetailByDictionaryList(ctx, req, callOptions...)
 }
