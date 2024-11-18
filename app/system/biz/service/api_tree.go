@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
-	menu "rpc_gen/kitex_gen/system/menu"
+	"rpc_gen/kitex_gen/base"
+	"rpc_gen/kitex_gen/system/menu"
 	"system/biz/infra/service"
 )
 
@@ -17,6 +17,7 @@ func NewApiTreeService(ctx context.Context) *ApiTreeService {
 // Run create note info
 func (s *ApiTreeService) Run(req *menu.ApiPageReq) (resp []*base.Tree, err error) {
 	// Finish your business logic.
+
 	resp, _, err = service.NewApi(s.ctx).ApiTree(*req)
 	if err != nil {
 		return nil, err

@@ -1,36 +1,39 @@
-package admin
+package service
 
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
-	"saas/app/admin/config"
-	"saas/app/admin/infras"
-	"saas/app/pkg/do"
-	"saas/pkg/db/ent"
-	"saas/pkg/db/ent/contract"
-	"saas/pkg/db/ent/dictionary"
-	"saas/pkg/db/ent/dictionarydetail"
-	"saas/pkg/db/ent/member"
-	"saas/pkg/db/ent/predicate"
-	"saas/pkg/db/ent/product"
-	"saas/pkg/db/ent/productproperty"
-	"saas/pkg/db/ent/user"
-	venue2 "saas/pkg/db/ent/venue"
-	"saas/pkg/db/ent/venueplace"
+	"member/biz/dal/mysql/ent/member"
+	"rpc_gen/kitex_gen/system/sys"
 	"strconv"
+	"system/biz/dal/cache"
+	"system/biz/dal/mysql"
+	"system/biz/dal/mysql/ent"
+	"system/biz/dal/mysql/ent/dictionary"
+	"system/biz/dal/mysql/ent/dictionarydetail"
+	"system/biz/dal/mysql/ent/predicate"
+	"system/biz/infra/do"
 )
 
 type Sys struct {
 	ctx   context.Context
-	c     *app.RequestContext
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
 }
 
-func (s Sys) RoleList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func NewSys(ctx context.Context, c *app.RequestContext) do.Sys {
+	return &Sys{
+		ctx:   ctx,
+		salt:  "",
+		db:    mysql.DB,
+		cache: cache.Cache,
+	}
+}
+
+func (s Sys) RoleList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.Role
 
 	lists, err := s.db.Role.Query().Where(predicates...).All(s.ctx)
@@ -39,8 +42,8 @@ func (s Sys) RoleList(req do.SysListReq) (list []do.SysList, total int64, err er
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
+		list = append(list, sys.SysList{
+			Id:   v.ID,
 			Name: v.Remark,
 		})
 	}
@@ -49,7 +52,7 @@ func (s Sys) RoleList(req do.SysListReq) (list []do.SysList, total int64, err er
 	return
 }
 
-func (s Sys) PlaceList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) PlaceList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.VenuePlace
 
 	if req.Venue > 0 {
@@ -63,8 +66,8 @@ func (s Sys) PlaceList(req do.SysListReq) (list []do.SysList, total int64, err e
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
+		list = append(list, sys.SysList{
+			Id:   v.ID,
 			Name: v.Name,
 		})
 	}
@@ -73,7 +76,7 @@ func (s Sys) PlaceList(req do.SysListReq) (list []do.SysList, total int64, err e
 	return
 }
 
-func (s Sys) ProductList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) ProductList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.Product
 
 	if req.Name != "" {
@@ -86,8 +89,8 @@ func (s Sys) ProductList(req do.SysListReq) (list []do.SysList, total int64, err
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
+		list = append(list, sys.SysList{
+			Id:   v.ID,
 			Name: v.Name,
 		})
 	}
@@ -95,7 +98,7 @@ func (s Sys) ProductList(req do.SysListReq) (list []do.SysList, total int64, err
 	return
 }
 
-func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) PropertyList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.ProductProperty
 
 	if req.Name != "" {
@@ -119,7 +122,7 @@ func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, total int64, er
 	}
 	for _, v := range lists {
 		price := strconv.FormatFloat(v.Price, 'f', -1, 64)
-		list = append(list, do.SysList{
+		list = append(list, sys.SysList{
 			ID:   v.ID,
 			Name: v.Name,
 			Key:  price,
@@ -129,14 +132,14 @@ func (s Sys) PropertyList(req do.SysListReq) (list []do.SysList, total int64, er
 	return
 }
 
-func (s Sys) PropertyType(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) PropertyType(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.DictionaryDetail
 
-	if req.Name != "" {
-		predicates = append(predicates, dictionarydetail.ValueEQ(req.Name))
+	if *req.Name != "" {
+		predicates = append(predicates, dictionarydetail.ValueEQ(*req.Name))
 	}
-	if req.DictionaryId != 0 {
-		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary.IDEQ(req.DictionaryId)))
+	if *req.DictionaryId != 0 {
+		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary.IDEQ(*req.DictionaryId)))
 	}
 
 	lists, err := s.db.DictionaryDetail.Query().Where(predicates...).All(s.ctx)
@@ -146,8 +149,8 @@ func (s Sys) PropertyType(req do.SysListReq) (list []do.SysList, total int64, er
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
+		list = append(list, sys.SysList{
+			Id:   v.ID,
 			Name: v.Value,
 			Key:  v.Key,
 		})
@@ -156,7 +159,7 @@ func (s Sys) PropertyType(req do.SysListReq) (list []do.SysList, total int64, er
 	return
 }
 
-func (s Sys) VenueList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) VenueList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.Venue
 
 	if req.Name != "" {
@@ -170,8 +173,8 @@ func (s Sys) VenueList(req do.SysListReq) (list []do.SysList, total int64, err e
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
+		list = append(list, sys.SysList{
+			Id:   v.ID,
 			Name: v.Name,
 		})
 	}
@@ -180,7 +183,7 @@ func (s Sys) VenueList(req do.SysListReq) (list []do.SysList, total int64, err e
 	return
 }
 
-func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) MemberList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.Member
 
 	if req.Name != "" {
@@ -209,8 +212,8 @@ func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, total int64, err 
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
+		list = append(list, sys.SysList{
+			Id:   v.ID,
 			Name: v.Name,
 			Key:  v.Mobile,
 		})
@@ -219,10 +222,10 @@ func (s Sys) MemberList(req do.SysListReq) (list []do.SysList, total int64, err 
 	return
 }
 
-func (s Sys) ContractList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) ContractList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.Contract
 
-	if req.Name != "" {
+	if *req.Name != "" {
 		predicates = append(predicates, contract.Name(req.Name))
 	}
 
@@ -233,8 +236,8 @@ func (s Sys) ContractList(req do.SysListReq) (list []do.SysList, total int64, er
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
+		list = append(list, sys.SysList{
+			Id:   v.ID,
 			Name: v.Name,
 		})
 	}
@@ -242,10 +245,10 @@ func (s Sys) ContractList(req do.SysListReq) (list []do.SysList, total int64, er
 	return
 }
 
-func (s Sys) StaffList(req do.SysListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) StaffList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
 	var predicates []predicate.User
 
-	if req.Name != "" {
+	if *req.Name != "" {
 		predicates = append(predicates, user.Nickname(req.Name))
 	}
 
@@ -256,21 +259,11 @@ func (s Sys) StaffList(req do.SysListReq) (list []do.SysList, total int64, err e
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
+		list = append(list, sys.SysList{
+			Id:   v.ID,
 			Name: v.Nickname,
 		})
 	}
 	total = int64(len(list))
 	return
-}
-
-func NewSys(ctx context.Context, c *app.RequestContext) do.Sys {
-	return &Sys{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
-	}
 }

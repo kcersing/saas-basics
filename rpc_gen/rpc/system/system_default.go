@@ -4,77 +4,85 @@ import (
 	"context"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
-	base "rpc_gen/kitex_gen/base"
-	dictionary "rpc_gen/kitex_gen/system/dictionary"
+	sys "rpc_gen/kitex_gen/system/sys"
 )
 
-func CreateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.CreateDictionary(ctx, req, callOptions...)
+func ProductList(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.ProductList(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "CreateDictionary call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "ProductList call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func UpdateDictionary(ctx context.Context, req *dictionary.DictionaryInfo, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.UpdateDictionary(ctx, req, callOptions...)
+func PropertyList(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.PropertyList(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "UpdateDictionary call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "PropertyList call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func DeleteDictionary(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.DeleteDictionary(ctx, req, callOptions...)
+func PropertyType(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.PropertyType(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "DeleteDictionary call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "PropertyType call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func DictionaryList(ctx context.Context, req *dictionary.DictListReq, callOptions ...callopt.Option) (resp *dictionary.DictionaryListResp, err error) {
-	resp, err = defaultClient.DictionaryList(ctx, req, callOptions...)
+func VenueList(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.VenueList(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "DictionaryList call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "VenueList call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func CreateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.CreateDictionaryDetail(ctx, req, callOptions...)
+func MemberList(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.MemberList(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "CreateDictionaryDetail call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "MemberList call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func UpdateDictionaryDetail(ctx context.Context, req *dictionary.DictionaryDetail, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.UpdateDictionaryDetail(ctx, req, callOptions...)
+func ContractList(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.ContractList(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "UpdateDictionaryDetail call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "ContractList call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func DeleteDictionaryDetail(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.DeleteDictionaryDetail(ctx, req, callOptions...)
+func StaffList(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.StaffList(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "DeleteDictionaryDetail call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "StaffList call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func DetailByDictionaryList(ctx context.Context, req *dictionary.DetailListReq, callOptions ...callopt.Option) (resp *dictionary.DetailByDictionaryListResp, err error) {
-	resp, err = defaultClient.DetailByDictionaryList(ctx, req, callOptions...)
+func PlaceList(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.PlaceList(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "DetailByDictionaryList call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "PlaceList call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func RoleList(ctx context.Context, req *sys.ListReq, callOptions ...callopt.Option) (resp *sys.SysListResp, err error) {
+	resp, err = defaultClient.RoleList(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "RoleList call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil

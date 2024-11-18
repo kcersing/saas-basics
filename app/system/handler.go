@@ -6,6 +6,7 @@ import (
 	"rpc_gen/kitex_gen/system/auth"
 	"rpc_gen/kitex_gen/system/dictionary"
 	menu "rpc_gen/kitex_gen/system/menu"
+	"rpc_gen/kitex_gen/system/sys"
 	"system/biz/service"
 )
 
@@ -211,6 +212,62 @@ func (s *SystemServiceImpl) DeleteDictionaryDetail(ctx context.Context, req *bas
 // DetailByDictionaryList implements the SystemServiceImpl interface.
 func (s *SystemServiceImpl) DetailByDictionaryList(ctx context.Context, req *dictionary.DictionaryDetailReq) (resp *base.NilResponse, err error) {
 	resp, err = service.NewDetailByDictionaryListService(ctx).Run(req)
+
+	return resp, err
+}
+
+// ProductList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) ProductList(ctx context.Context, req *sys.ListReq) (resp *sys.SysListResp, err error) {
+	resp, err = service.NewProductListService(ctx).Run(req)
+
+	return resp, err
+}
+
+// PropertyList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) PropertyList(ctx context.Context, req *sys.ListReq) (resp *sys.SysListResp, err error) {
+	resp, err = service.NewPropertyListService(ctx).Run(req)
+
+	return resp, err
+}
+
+// PropertyType implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) PropertyType(ctx context.Context, req *sys.ListReq) (resp *sys.SysListResp, err error) {
+	resp, err = service.NewPropertyTypeService(ctx).Run(req)
+
+	return resp, err
+}
+
+// VenueList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) VenueList(ctx context.Context, req *sys.ListReq) (resp *sys.SysListResp, err error) {
+	resp, err = service.NewVenueListService(ctx).Run(req)
+
+	return resp, err
+}
+
+// MemberList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) MemberList(ctx context.Context, req *sys.ListReq) (resp *sys.SysListResp, err error) {
+	resp, err = service.NewMemberListService(ctx).Run(req)
+
+	return resp, err
+}
+
+// ContractList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) ContractList(ctx context.Context, req *sys.ListReq) (resp *sys.SysListResp, err error) {
+	resp, err = service.NewContractListService(ctx).Run(req)
+
+	return resp, err
+}
+
+// StaffList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) StaffList(ctx context.Context, req *sys.ListReq) (resp *sys.SysListResp, err error) {
+	resp, err = service.NewStaffListService(ctx).Run(req)
+
+	return resp, err
+}
+
+// PlaceList implements the SystemServiceImpl interface.
+func (s *SystemServiceImpl) PlaceList(ctx context.Context, req *sys.ListReq) (resp *sys.SysListResp, err error) {
+	resp, err = service.NewPlaceListService(ctx).Run(req)
 
 	return resp, err
 }

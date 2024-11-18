@@ -54,6 +54,24 @@ struct Tree {
 	5:list<Tree> Children
 }
 
+struct ListReq {
+    1: optional string name (api.raw = "name")
+    2: optional i64 dictionaryId (api.raw = "dictionaryId" )
+    3: optional string type (api.raw = "type" )
+    4: optional string mobile (api.raw = "mobile" )
+    5: optional i64 product (api.raw = "product" )
+    6: optional i64 venue (api.raw = "venue" )
+}
+struct SysList  {
+    i64	Id
+    string	Name
+    string	Key
+}
+struct SysListResp {
+    1: BaseResp resp
+    2: optional list<SysList> extra
+}
+
 enum Err {
     Success            = 0,
     NoRoute            = 1,

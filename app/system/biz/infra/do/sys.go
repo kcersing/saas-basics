@@ -1,26 +1,15 @@
 package do
 
+import "rpc_gen/kitex_gen/system/sys"
+
 type Sys interface {
-	ProductList(req SysListReq) (list []SysList, total int64, err error)
-	PropertyList(req SysListReq) (list []SysList, total int64, err error)
-	PropertyType(req SysListReq) (list []SysList, total int64, err error)
-	VenueList(req SysListReq) (list []SysList, total int64, err error)
-	MemberList(req SysListReq) (list []SysList, total int64, err error)
-	ContractList(req SysListReq) (list []SysList, total int64, err error)
-	StaffList(req SysListReq) (list []SysList, total int64, err error)
-	PlaceList(req SysListReq) (list []SysList, total int64, err error)
-	RoleList(req SysListReq) (list []SysList, total int64, err error)
-}
-type SysList struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-	Key  string `json:"key"`
-}
-type SysListReq struct {
-	DictionaryId int64  `json:"dictionaryId"`
-	Name         string `json:"name"`
-	Mobile       string `json:"mobile"`
-	Type         string `json:"type"`
-	Product      int64  `json:"product"`
-	Venue        int64  `json:"venue"`
+	ProductList(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	PropertyList(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	PropertyType(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	VenueList(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	MemberList(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	ContractList(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	StaffList(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	PlaceList(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	RoleList(req sys.ListReq) (list []sys.SysList, total int64, err error)
 }
