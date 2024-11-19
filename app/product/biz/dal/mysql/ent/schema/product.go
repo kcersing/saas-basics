@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"saas/pkg/db/ent/schema/mixins"
+	"common/biz/dal/mysql/ent/schema/mixins"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"

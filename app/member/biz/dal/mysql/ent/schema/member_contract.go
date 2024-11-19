@@ -1,13 +1,13 @@
 package schema
 
 import (
+	"common/biz/dal/mysql/ent/schema/mixins"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"saas/pkg/db/ent/schema/mixins"
 )
 
 type MemberContract struct {
@@ -38,9 +38,9 @@ func (MemberContract) Edges() []ent.Edge {
 
 		edge.To("content", MemberContractContent.Type),
 
-		edge.From("member", Member.Type).Ref("member_contents").Field("member_id").Unique(),
-		edge.From("order", Order.Type).Ref("order_contents").Field("order_id").Unique(),
-		edge.From("member_product", MemberProduct.Type).Ref("member_product_contents").Field("member_product_id").Unique(),
+		//edge.From("member", Member.Type).Ref("member_contents").Field("member_id").Unique(),
+		//edge.From("order", Order.Type).Ref("order_contents").Field("order_id").Unique(),
+		//edge.From("member_product", MemberProduct.Type).Ref("member_product_contents").Field("member_product_id").Unique(),
 	}
 }
 

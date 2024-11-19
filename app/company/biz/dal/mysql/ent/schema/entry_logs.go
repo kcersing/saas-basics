@@ -1,13 +1,13 @@
 package schema
 
 import (
+	"common/biz/dal/mysql/ent/schema/mixins"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"saas/pkg/db/ent/schema/mixins"
 )
 
 type EntryLogs struct {
@@ -41,9 +41,9 @@ func (EntryLogs) Mixin() []ent.Mixin {
 func (EntryLogs) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("venues", Venue.Type).Ref("venue_entry").Field("venue_id").Unique(),
-		edge.From("members", Member.Type).Ref("member_entry").Field("member_id").Unique(),
+		//edge.From("members", Member.Type).Ref("member_entry").Field("member_id").Unique(),
 		edge.From("users", User.Type).Ref("user_entry").Field("user_id").Unique(),
-		edge.From("member_products", MemberProduct.Type).Ref("member_product_entry").Field("member_product_id").Unique(),
+		//edge.From("member_products", MemberProduct.Type).Ref("member_product_entry").Field("member_product_id").Unique(),
 	}
 }
 

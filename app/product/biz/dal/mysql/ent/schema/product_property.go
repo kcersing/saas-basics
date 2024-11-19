@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"saas/pkg/db/ent/schema/mixins"
+	"common/biz/dal/mysql/ent/schema/mixins"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -37,8 +37,6 @@ func (ProductProperty) Mixin() []ent.Mixin {
 func (ProductProperty) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("product", Product.Type).Ref("propertys"),
-
-		edge.To("venues", Venue.Type),
 	}
 }
 

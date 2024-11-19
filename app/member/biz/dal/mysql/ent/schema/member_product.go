@@ -1,13 +1,13 @@
 package schema
 
 import (
+	"common/biz/dal/mysql/ent/schema/mixins"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"saas/pkg/db/ent/schema/mixins"
 )
 
 type MemberProduct struct {
@@ -40,7 +40,7 @@ func (MemberProduct) Edges() []ent.Edge {
 			Ref("member_products").
 			Field("member_id").Unique(),
 		edge.To("member_product_propertys", MemberProductProperty.Type),
-		edge.To("member_product_entry", EntryLogs.Type),
+		//edge.To("member_product_entry", EntryLogs.Type),
 		edge.To("member_product_contents", MemberContract.Type),
 	}
 }

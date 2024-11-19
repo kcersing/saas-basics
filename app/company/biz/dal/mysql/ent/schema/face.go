@@ -1,13 +1,13 @@
 package schema
 
 import (
+	"common/biz/dal/mysql/ent/schema/mixins"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"saas/pkg/db/ent/schema/mixins"
 	"time"
 )
 
@@ -59,10 +59,10 @@ func (Face) Mixin() []ent.Mixin {
 
 func (Face) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("member_faces", Member.Type).
-			Ref("member_face").
-			Field("member_id").
-			Unique(),
+		//edge.From("member_faces", Member.Type).
+		//	Ref("member_face").
+		//	Field("member_id").
+		//	Unique(),
 		edge.From("user_faces", User.Type).
 			Ref("user_face").
 			Field("user_id").Unique(),
