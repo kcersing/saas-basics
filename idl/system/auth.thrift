@@ -2,8 +2,6 @@ namespace go system.auth
 
 include "base/base.thrift"
 
-
-
 // system service
 service SystemService {
 

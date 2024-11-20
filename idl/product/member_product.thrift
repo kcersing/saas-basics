@@ -30,7 +30,7 @@ struct MemberPropertySearchReq{
     1:  optional list<i64> memberProductIds (api.raw = "memberProducts")
 }
 
-service MemberService {
+service ProductService {
 
   base.NilResponse MemberProductList(1: MemberProductListReq req) (api.post = "/service/member/product-list")
 
