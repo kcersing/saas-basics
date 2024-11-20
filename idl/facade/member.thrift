@@ -66,37 +66,37 @@ struct MemberPropertySearchReq{
 service MemberService {
 
   // 新增用户
-  base.NilResponse CreateMember(1: CreateOrUpdateMemberReq req) (api.post = "/api/admin/member/create")
+  base.NilResponse CreateMember(1: CreateOrUpdateMemberReq req) (api.post = "/service/member/create")
 
   // 更新用户
-  base.NilResponse UpdateMember(1: CreateOrUpdateMemberReq req) (api.post = "/api/admin/member/update")
+  base.NilResponse UpdateMember(1: CreateOrUpdateMemberReq req) (api.post = "/service/member/update")
 
   // 获取用户基本信息
-  base.NilResponse MemberInfo(1: base.IDReq req) (api.post = "/api/admin/member/info")
+  base.NilResponse MemberInfo(1: base.IDReq req) (api.post = "/service/member/info")
 
   // 获取用户列表
-  base.NilResponse MemberList(1: MemberListReq req) (api.post = "/api/admin/member/list")
+  base.NilResponse MemberList(1: MemberListReq req) (api.post = "/service/member/list")
 
   // 更新用户状态
-  base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/member/status")
+  base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/member/status")
 
   // 更新用户状态
-  base.NilResponse MemberSearch(1: MemberSearchReq req) (api.post = "/api/admin/member/search")
+  base.NilResponse MemberSearch(1: MemberSearchReq req) (api.post = "/service/member/search")
 
-  base.NilResponse MemberProductList(1: MemberProductListReq req) (api.post = "/api/admin/member/product-list")
+  base.NilResponse MemberProductList(1: MemberProductListReq req) (api.post = "/service/member/product-list")
 
-  base.NilResponse MemberPropertyList(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-list")
+  base.NilResponse MemberPropertyList(1: MemberPropertyListReq req) (api.post = "/service/member/property-list")
 
-  base.NilResponse MemberProductDetail(1: base.IDReq req) (api.post = "/api/admin/member/product-detail")
+  base.NilResponse MemberProductDetail(1: base.IDReq req) (api.post = "/service/member/product-detail")
 
-  base.NilResponse MemberPropertyDetail(1: base.IDReq req) (api.post = "/api/admin/member/property-detail")
+  base.NilResponse MemberPropertyDetail(1: base.IDReq req) (api.post = "/service/member/property-detail")
 
-  base.NilResponse MemberPropertyUpdate(1: MemberPropertyListReq req) (api.post = "/api/admin/member/property-update")
+  base.NilResponse MemberPropertyUpdate(1: MemberPropertyListReq req) (api.post = "/service/member/property-update")
 
-  base.NilResponse MemberContractList(1: MemberPropertyListReq req) (api.post = "/api/admin/member/contract-list")
+  base.NilResponse MemberContractList(1: MemberPropertyListReq req) (api.post = "/service/member/contract-list")
 
-  base.NilResponse MemberProductSearch(1: MemberProductSearchReq req) (api.post = "/api/admin/member/search-product")
+  base.NilResponse MemberProductSearch(1: MemberProductSearchReq req) (api.post = "/service/member/search-product")
 
-  base.NilResponse MemberPropertySearch(1: MemberPropertySearchReq req) (api.post = "/api/admin/member/search-property")
+  base.NilResponse MemberPropertySearch(1: MemberPropertySearchReq req) (api.post = "/service/member/search-property")
 
 }

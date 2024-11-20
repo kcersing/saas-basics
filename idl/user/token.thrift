@@ -24,12 +24,12 @@ struct TokenListReq {
 
 service UserService{
   // 更新Token
-  base.NilResponse UpdateToken(1: TokenInfo req) (api.post = "/api/admin/token/update");
+  base.NilResponse UpdateToken(1: TokenInfo req) (api.post = "/service/token/update");
 
   // 删除token信息
-  base.NilResponse DeleteToken(1: base.IDReq req) (api.post = "/api/admin/token");
+  base.NilResponse DeleteToken(1: base.IDReq req) (api.post = "/service/token");
 
   // 获取token列表
-  base.NilResponse TokenList(1: TokenListReq req) (api.post = "/api/admin/token/list");
+  base.NilResponse TokenList(1: TokenListReq req) (api.post = "/service/token/list");
 
 }

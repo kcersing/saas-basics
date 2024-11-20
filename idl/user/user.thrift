@@ -72,46 +72,46 @@ struct SetDefaultVenueReq{
 
 service UserService {
   // 注册
-//  base.NilResponse Login(1: LoginReq req) (api.post = "/api/login")
+//  base.NilResponse Login(1: LoginReq req) (api.post = "/service/login")
 
   // 注册
-  base.NilResponse Register(1: RegisterReq req) (api.post = "/api/register")
+  base.NilResponse Register(1: RegisterReq req) (api.post = "/service/register")
 
   // 获取用户权限码
-  base.NilResponse UserPermCode(1: base.Empty req) (api.post = "/api/admin/user/perm")
+  base.NilResponse UserPermCode(1: base.Empty req) (api.post = "/service/user/perm")
 
   // 修改密码
-  base.NilResponse ChangePassword(1: ChangePasswordReq req) (api.post = "/api/admin/user/change-password")
+  base.NilResponse ChangePassword(1: ChangePasswordReq req) (api.post = "/service/user/change-password")
 
   // 新增用户
-  base.NilResponse CreateUser(1: CreateOrUpdateUserReq req) (api.post = "/api/admin/user/create")
+  base.NilResponse CreateUser(1: CreateOrUpdateUserReq req) (api.post = "/service/user/create")
 
   // 更新用户
-  base.NilResponse UpdateUser(1: CreateOrUpdateUserReq req) (api.post = "/api/admin/user/update")
+  base.NilResponse UpdateUser(1: CreateOrUpdateUserReq req) (api.post = "/service/user/update")
 
   // 获取用户基本信息
-  base.NilResponse UserInfo(1: base.Empty req) (api.get = "/api/admin/user/info")
+  base.NilResponse UserInfo(1: base.Empty req) (api.get = "/service/user/info")
 
   // 获取用户列表
-  base.NilResponse UserList(1: UserListReq req) (api.post = "/api/admin/user/list")
+  base.NilResponse UserList(1: UserListReq req) (api.post = "/service/user/list")
 
   // 删除用户信息
-  base.NilResponse DeleteUser(1: base.IDReq req) (api.post = "/api/admin/user")
+  base.NilResponse DeleteUser(1: base.IDReq req) (api.post = "/service/user")
 
   // 更新用户个人信息
-  base.NilResponse UpdateProfile(1: ProfileReq req) (api.post = "/api/admin/user/profile-update")
+  base.NilResponse UpdateProfile(1: ProfileReq req) (api.post = "/service/user/profile-update")
 
   // 获取用户个人信息
-  base.NilResponse UserProfile(1: base.Empty req) (api.get = "/api/admin/user/profile")
+  base.NilResponse UserProfile(1: base.Empty req) (api.get = "/service/user/profile")
 
   // 更新用户状态
-  base.NilResponse UpdateUserStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/user/status")
+  base.NilResponse UpdateUserStatus(1: base.StatusCodeReq req) (api.post = "/service/user/status")
 
   // 设置用户角色
-  base.NilResponse SetUserRole(1: SetUserRole req) (api.post = "/api/admin/user/set-role")
+  base.NilResponse SetUserRole(1: SetUserRole req) (api.post = "/service/user/set-role")
 
 
-  base.NilResponse SetDefaultVenue(1: SetDefaultVenueReq req) (api.post = "/api/admin/user/set-default-venue")
+  base.NilResponse SetDefaultVenue(1: SetDefaultVenueReq req) (api.post = "/service/user/set-default-venue")
 
 
 }

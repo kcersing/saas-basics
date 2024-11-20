@@ -8,44 +8,44 @@ include "base/base.thrift"
 service SystemService {
 
   // Create role information | 创建角色
-  base.NilResponse CreateRole(1: RoleInfo req) (api.post = "/api/admin/role/create")
+  base.NilResponse CreateRole(1: RoleInfo req) (api.post = "/service/role/create")
 
   // Update role information | 更新角色
-  base.NilResponse UpdateRole(1: RoleInfo req) (api.post = "/api/admin/role/update")
+  base.NilResponse UpdateRole(1: RoleInfo req) (api.post = "/service/role/update")
 
   // Delete role information | 删除角色信息
-  base.NilResponse DeleteRole(1: base.IDReq req) (api.post = "/api/admin/role/del")
+  base.NilResponse DeleteRole(1: base.IDReq req) (api.post = "/service/role/del")
 
   // Get role information | 获取角色信息
-  RoleInfo RoleByID(1: base.IDReq req) (api.get = "/api/admin/role")
+  RoleInfo RoleByID(1: base.IDReq req) (api.get = "/service/role")
 
   // 创建菜单权限
-  base.NilResponse CreateMenuAuth(1: MenuAuthInfoReq req) (api.post = "/api/admin/auth/menu/create")
+  base.NilResponse CreateMenuAuth(1: MenuAuthInfoReq req) (api.post = "/service/auth/menu/create")
 
   // 更新菜单权限
-  base.NilResponse UpdateMenuAuth(1: MenuAuthInfoReq req) (api.post = "/api/admin/auth/menu/update")
+  base.NilResponse UpdateMenuAuth(1: MenuAuthInfoReq req) (api.post = "/service/auth/menu/update")
 
 
   // Get role list | 获取角色列表
-  RoleListResp RoleList(1: base.PageInfoReq req) (api.get = "/api/admin/role/list")
+  RoleListResp RoleList(1: base.PageInfoReq req) (api.get = "/service/role/list")
 
   // Set role status | 设置角色状态, 启用1/禁用0
-  base.NilResponse UpdateRoleStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/role/status")
+  base.NilResponse UpdateRoleStatus(1: base.StatusCodeReq req) (api.post = "/service/role/status")
 
   // 创建API权限
-  base.NilResponse CreateAuth(1: CreateOrUpdateApiAuthReq req) (api.post = "/api/admin/auth/api/create")
+  base.NilResponse CreateAuth(1: CreateOrUpdateApiAuthReq req) (api.post = "/service/auth/api/create")
 
   // 更新API权限
-  base.NilResponse UpdateAuth(1: CreateOrUpdateApiAuthReq req) (api.post = "/api/admin/auth/api/update")
+  base.NilResponse UpdateAuth(1: CreateOrUpdateApiAuthReq req) (api.post = "/service/auth/api/update")
 
   // 获取角色api权限列表
- list<ApiAuthInfo> ApiAuth(1: base.IDReq req) (api.post = "/api/admin/auth/api/role")
+ list<ApiAuthInfo> ApiAuth(1: base.IDReq req) (api.post = "/service/auth/api/role")
 
   // Get logs list | 获取日志列表
-  LogsListResp GetLogsList(1: LogsListReq req) (api.post = "/api/admin/logs/list")
+  LogsListResp GetLogsList(1: LogsListReq req) (api.post = "/service/logs/list")
 
   // Delete logs | 删除日志信息
-  base.NilResponse DeleteLogs(1: base.Ids req) (api.post = "/api/admin/logs/deleteAll")
+  base.NilResponse DeleteLogs(1: base.Ids req) (api.post = "/service/logs/deleteAll")
 }
 // 菜单授权请求数据
 struct MenuAuthInfoReq {

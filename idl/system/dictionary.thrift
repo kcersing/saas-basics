@@ -41,28 +41,28 @@ struct DetailListReq{
 // dictionary service
 service SystemService {
   // 创建字典信息
-  base.NilResponse CreateDictionary(1: DictionaryInfo req) (api.post = "/api/admin/dict/create")
+  base.NilResponse CreateDictionary(1: DictionaryInfo req) (api.post = "/service/dict/create")
 
   // 更新字典信息
-  base.NilResponse UpdateDictionary(1: DictionaryInfo req) (api.post = "/api/admin/dict/update")
+  base.NilResponse UpdateDictionary(1: DictionaryInfo req) (api.post = "/service/dict/update")
 
   // 删除字典信息
-  base.NilResponse DeleteDictionary(1: base.IDReq req) (api.post =  "/api/admin/dict")
+  base.NilResponse DeleteDictionary(1: base.IDReq req) (api.post =  "/service/dict")
 
   // 获取字典列表
-  DictionaryListResp DictionaryList(1: DictListReq req) (api.get = "/api/admin/dict/list")
+  DictionaryListResp DictionaryList(1: DictListReq req) (api.get = "/service/dict/list")
 
   // 创建字典键值信息
-  base.NilResponse CreateDictionaryDetail(1: DictionaryDetail req) (api.post = "/api/admin/dict/detail/create")
+  base.NilResponse CreateDictionaryDetail(1: DictionaryDetail req) (api.post = "/service/dict/detail/create")
 
   // 更新字典键值信息
-  base.NilResponse UpdateDictionaryDetail(1: DictionaryDetail req) (api.post = "/api/admin/dict/detail/update")
+  base.NilResponse UpdateDictionaryDetail(1: DictionaryDetail req) (api.post = "/service/dict/detail/update")
 
   // 删除字典键值信息
-  base.NilResponse DeleteDictionaryDetail(1: base.IDReq req) (api.get = "/api/admin/dict/detail")
+  base.NilResponse DeleteDictionaryDetail(1: base.IDReq req) (api.get = "/service/dict/detail")
 
   // 根据字典名获取字典键值列表
-  DetailByDictionaryListResp DetailByDictionaryList(1: DetailListReq req) (api.post = "/api/admin/dict/detail/list")
+  DetailByDictionaryListResp DetailByDictionaryList(1: DetailListReq req) (api.post = "/service/dict/detail/list")
 
 }
 struct DictionaryListResp {

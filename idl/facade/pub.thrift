@@ -8,5 +8,5 @@ struct UploadReq{
 }
 // pub service
 service SystemService {
-    base.NilResponse Upload(1: UploadReq req) (api.post = "/api/pub/upload/")
+    base.NilResponse Upload(1: UploadReq req) (api.post = "/service/pub/upload/")
 }

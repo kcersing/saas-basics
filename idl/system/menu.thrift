@@ -6,49 +6,49 @@ include "../base/base.thrift"
 service SystemService {
 
   // 获取角色菜单权限列表
- list<MenuInfoTree> MenuAuth(1: base.IDReq req) (api.post = "/api/admin/auth/menu/role")
+ list<MenuInfoTree> MenuAuth(1: base.IDReq req) (api.post = "/service/auth/menu/role")
   //获取角色菜单列表
- base.Ids MenuRole(1: base.IDReq req) (api.post = "/api/admin/menu/role")
+ base.Ids MenuRole(1: base.IDReq req) (api.post = "/service/menu/role")
   // 创建或API
- // base.NilResponse CreateApi(1: ApiInfo req) (api.post = "/api/admin/api/create")
+ // base.NilResponse CreateApi(1: ApiInfo req) (api.post = "/service/api/create")
 
   // 更新API
- // base.NilResponse UpdateApi(1: ApiInfo req) (api.post = "/api/admin/api/update")
+ // base.NilResponse UpdateApi(1: ApiInfo req) (api.post = "/service/api/update")
 
   // 删除API信息
- // base.NilResponse DeleteApi(1: base.IDReq req) (api.post = "/api/admin/api")
+ // base.NilResponse DeleteApi(1: base.IDReq req) (api.post = "/service/api")
 
   // 获取API列表
-  ApiInfoResp ApiList(1: ApiPageReq req) (api.post = "/api/admin/api/list")
+  ApiInfoResp ApiList(1: ApiPageReq req) (api.post = "/service/api/list")
 
-  list<base.Tree> ApiTree(1: ApiPageReq req) (api.post = "/api/admin/api/tree")
+  list<base.Tree> ApiTree(1: ApiPageReq req) (api.post = "/service/api/tree")
 
 //  // 创建菜单
-//  base.NilResponse CreateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/admin/menu/create")
+//  base.NilResponse CreateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/service/menu/create")
 //
 //  //更新菜单
-//  base.NilResponse UpdateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/admin/menu/update")
+//  base.NilResponse UpdateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/service/menu/update")
 //
 //  //删除菜单信息
-//  base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/api/admin/menu")
+//  base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/service/menu")
 
 
   //获取菜单列表
-  MenuInfoResp MenuLists(1: base.PageInfoReq req) (api.post = "/api/admin/menu/list")
+  MenuInfoResp MenuLists(1: base.PageInfoReq req) (api.post = "/service/menu/list")
 
-  list<base.Tree> MenuTree(1: base.PageInfoReq req) (api.post = "/api/admin/menu/tree")
+  list<base.Tree> MenuTree(1: base.PageInfoReq req) (api.post = "/service/menu/tree")
 
 //  //创建菜单额外参数
-//  base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/create")
+//  base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/service/menu/param/create")
 //
 //  //更新菜单额外参数
-//  base.NilResponse UpdateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/admin/menu/param/update")
+//  base.NilResponse UpdateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/service/menu/param/update")
 //
 //  //删除菜单额外参数
-//  base.NilResponse DeleteMenuParam(1: base.IDReq req) (api.post = "/api/admin/menu/param")
+//  base.NilResponse DeleteMenuParam(1: base.IDReq req) (api.post = "/service/menu/param")
 //
 //  //获取某个菜单的额外参数列表
-//  base.NilResponse MenuParamListByMenuID(1: base.IDReq req) (api.post = "/api/admin/menu/param/list")
+//  base.NilResponse MenuParamListByMenuID(1: base.IDReq req) (api.post = "/service/menu/param/list")
 
 }
 struct ApiInfoResp{
