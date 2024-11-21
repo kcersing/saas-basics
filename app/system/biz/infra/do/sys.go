@@ -1,15 +1,17 @@
 package do
 
-import "rpc_gen/kitex_gen/system/sys"
+import (
+	"rpc_gen/kitex_gen/base"
+)
 
 type Sys interface {
-	ProductList(req sys.ListReq) (list []sys.SysList, total int64, err error)
-	PropertyList(req sys.ListReq) (list []sys.SysList, total int64, err error)
-	PropertyType(req sys.ListReq) (list []sys.SysList, total int64, err error)
-	VenueList(req sys.ListReq) (list []sys.SysList, total int64, err error)
-	MemberList(req sys.ListReq) (list []sys.SysList, total int64, err error)
-	ContractList(req sys.ListReq) (list []sys.SysList, total int64, err error)
-	StaffList(req sys.ListReq) (list []sys.SysList, total int64, err error)
-	PlaceList(req sys.ListReq) (list []sys.SysList, total int64, err error)
-	RoleList(req sys.ListReq) (list []sys.SysList, total int64, err error)
+	ProductList(req base.ListReq) (list []base.SysList, total int64, err error)
+	PropertyList(req base.ListReq) (list []base.SysList, total int64, err error)
+	PropertyType(req base.ListReq) (list []base.SysList, total int64, err error)
+	VenueList(req base.ListReq) (list []base.SysList, total int64, err error)
+	MemberList(req base.ListReq) (list []base.SysList, total int64, err error)
+	ContractList(req base.ListReq) (list []base.SysList, total int64, err error)
+	StaffList(req base.ListReq) (list []base.SysList, total int64, err error)
+	PlaceList(req base.ListReq) (list []base.SysList, total int64, err error)
+	RoleList(req base.ListReq) (list []base.SysList, total int64, err error)
 }

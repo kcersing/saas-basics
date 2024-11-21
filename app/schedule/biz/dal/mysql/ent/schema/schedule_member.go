@@ -62,7 +62,7 @@ func (ScheduleMember) Indexes() []ent.Index {
 
 func (ScheduleMember) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "schedule_member", Options: "AUTO_INCREMENT = 100000"},
+		entsql.Annotation{Table: "s_schedule_member", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
 	}
 }

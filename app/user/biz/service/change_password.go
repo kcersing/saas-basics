@@ -4,6 +4,7 @@ import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
 	user "rpc_gen/kitex_gen/user"
+	"user/biz/infra/service"
 )
 
 type ChangePasswordService struct {
@@ -16,6 +17,9 @@ func NewChangePasswordService(ctx context.Context) *ChangePasswordService {
 // Run create note info
 func (s *ChangePasswordService) Run(req *user.ChangePasswordReq) (resp *base.NilResponse, err error) {
 	// Finish your business logic.
-
+	err = service.NewUser(s.ctx).ChangePassword(req.UserId, req.NewPassword_)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

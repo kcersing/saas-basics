@@ -8,19 +8,10 @@ import (
 	user "rpc_gen/kitex_gen/user"
 )
 
-func Register(ctx context.Context, req *user.RegisterReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.Register(ctx, req, callOptions...)
+func Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+	resp, err = defaultClient.Login(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "Register call failed,err =%+v", err)
-		return nil, err
-	}
-	return resp, nil
-}
-
-func UserPermCode(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.UserPermCode(ctx, req, callOptions...)
-	if err != nil {
-		klog.CtxErrorf(ctx, "UserPermCode call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "Login call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
@@ -53,7 +44,7 @@ func UpdateUser(ctx context.Context, req *user.CreateOrUpdateUserReq, callOption
 	return resp, nil
 }
 
-func UserInfo(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+func UserInfo(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (resp *user.UserInfo, err error) {
 	resp, err = defaultClient.UserInfo(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "UserInfo call failed,err =%+v", err)
@@ -62,7 +53,7 @@ func UserInfo(ctx context.Context, req *base.Empty, callOptions ...callopt.Optio
 	return resp, nil
 }
 
-func UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
+func UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (resp *user.UserListResp, err error) {
 	resp, err = defaultClient.UserList(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "UserList call failed,err =%+v", err)
@@ -75,24 +66,6 @@ func DeleteUser(ctx context.Context, req *base.IDReq, callOptions ...callopt.Opt
 	resp, err = defaultClient.DeleteUser(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "DeleteUser call failed,err =%+v", err)
-		return nil, err
-	}
-	return resp, nil
-}
-
-func UpdateProfile(ctx context.Context, req *user.ProfileReq, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.UpdateProfile(ctx, req, callOptions...)
-	if err != nil {
-		klog.CtxErrorf(ctx, "UpdateProfile call failed,err =%+v", err)
-		return nil, err
-	}
-	return resp, nil
-}
-
-func UserProfile(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (resp *base.NilResponse, err error) {
-	resp, err = defaultClient.UserProfile(ctx, req, callOptions...)
-	if err != nil {
-		klog.CtxErrorf(ctx, "UserProfile call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil

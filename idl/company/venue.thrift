@@ -47,19 +47,19 @@ service VenueService {
   // 获取用户列表
 
     // 添加
-    base.NilResponse CreatePlace(1: CreateOrUpdateVenuePlaceReq req) (api.post = "/api/admin/place/create")
+    base.NilResponse CreatePlace(1: CreateOrUpdateVenuePlaceReq req) (api.post = "/service/place/create")
     // 编辑
-    base.NilResponse UpdatePlace(1: CreateOrUpdateVenuePlaceReq req) (api.post = "/api/admin/place/update")
+    base.NilResponse UpdatePlace(1: CreateOrUpdateVenuePlaceReq req) (api.post = "/service/place/update")
     // 删除
-    base.NilResponse PlaceUpdateStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/place/status")
+    base.NilResponse PlaceUpdateStatus(1: base.StatusCodeReq req) (api.post = "/service/place/status")
     // 列表
-    base.NilResponse PlaceList(1: ListReq req) (api.post = "/api/admin/place/list")
+    base.NilResponse PlaceList(1: ListReq req) (api.post = "/service/place/list")
 
      // 添加
-     base.NilResponse Create(1: CreateOrUpdateVenueReq req) (api.post = "/api/admin/venue/create")
+     base.NilResponse Create(1: CreateOrUpdateVenueReq req) (api.post = "/service/venue/create")
      // 编辑
-     base.NilResponse Update(1: CreateOrUpdateVenueReq req) (api.post = "/api/admin/venue/update")
-     base.NilResponse UpdateStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/venue/status")
+     base.NilResponse Update(1: CreateOrUpdateVenueReq req) (api.post = "/service/venue/update")
+     base.NilResponse UpdateStatus(1: base.StatusCodeReq req) (api.post = "/service/venue/status")
      // 列表
-     base.NilResponse List(1: ListReq req) (api.post = "/api/admin/venue/list")
+     base.NilResponse List(1: ListReq req) (api.post = "/service/venue/list")
 }

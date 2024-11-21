@@ -17,20 +17,27 @@ gen-rpc:
 	@cd ./rpc_gen && cwgo client --type RPC --server_name system --module rpc_gen  -I ../idl  --idl ../idl/system/dictionary.thrift
 	@cd ./rpc_gen && cwgo client --type RPC --server_name system --module rpc_gen  -I ../idl  --idl ../idl/system/sys.thrift
 
-
-
 	@cd ./rpc_gen && cwgo client --type RPC --service user --module rpc_gen  -I ../idl  --idl ../idl/user/user.thrift
+	@cd ./app/user/ && cwgo client --type RPC --service user --module rpc_gen  -I ../idl  --idl ../idl/user/token.thrift
+
+	@cd ./app/schedule/ && cwgo client --type RPC --service schedule --module rpc_gen  -I ../idl  --idl ../idl/schedule/schedule.thrift
 
 .PHONY: gen-server
 gen-server:
-	@cd ./rpc_gen && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/menu.thrift
-	@cd ./rpc_gen && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/auth.thrift
-	@cd ./rpc_gen && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/dictionary.thrift
-	@cd ./rpc_gen && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/sys.thrift
+	@cd ./app/system/ && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/menu.thrift
+	@cd ./app/system/ && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/auth.thrift
+	@cd ./app/system/ && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/dictionary.thrift
+	@cd ./app/system/ && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/sys.thrift
 
 
 
-	@cd ./rpc_gen && cwgo server --type RPC --module user --server_name user --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/user/user.thrift
+	@cd ./app/user/ && cwgo server --type RPC --module user --server_name user --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/user/user.thrift
+	@cd ./app/user/ && cwgo server --type RPC --module user --server_name user --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/user/token.thrift
+
+	@cd ./app/schedule/ && cwgo server --type RPC --module schedule --server_name schedule --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/schedule/schedule.thrift
+
+
+
 
 .PHONY: gen-http
 gen-http:

@@ -4,6 +4,7 @@ import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
 	user "rpc_gen/kitex_gen/user"
+	"user/biz/infra/service"
 )
 
 type SetUserRoleService struct {
@@ -17,5 +18,9 @@ func NewSetUserRoleService(ctx context.Context) *SetUserRoleService {
 func (s *SetUserRoleService) Run(req *user.SetUserRole) (resp *base.NilResponse, err error) {
 	// Finish your business logic.
 
+	err = service.NewUser(s.ctx).SetRole(req.UserId, *req.RoleId)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

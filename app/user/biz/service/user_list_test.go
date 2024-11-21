@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
 	user "rpc_gen/kitex_gen/user"
 	"testing"
 )

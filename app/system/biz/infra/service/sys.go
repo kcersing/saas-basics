@@ -6,6 +6,7 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"member/biz/dal/mysql/ent/member"
+	"rpc_gen/kitex_gen/base"
 	"rpc_gen/kitex_gen/system/sys"
 	"strconv"
 	"system/biz/dal/cache"
@@ -15,6 +16,7 @@ import (
 	"system/biz/dal/mysql/ent/dictionarydetail"
 	"system/biz/dal/mysql/ent/predicate"
 	"system/biz/infra/do"
+	"user/biz/dal/mysql/ent/user"
 )
 
 type Sys struct {
@@ -33,7 +35,7 @@ func NewSys(ctx context.Context, c *app.RequestContext) do.Sys {
 	}
 }
 
-func (s Sys) RoleList(req sys.ListReq) (list []sys.SysList, total int64, err error) {
+func (s Sys) RoleList(req base.ListReq) (list []base.SysList, total int64, err error) {
 	var predicates []predicate.Role
 
 	lists, err := s.db.Role.Query().Where(predicates...).All(s.ctx)

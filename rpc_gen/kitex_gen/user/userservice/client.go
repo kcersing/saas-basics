@@ -12,16 +12,13 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	Register(ctx context.Context, req *user.RegisterReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UserPermCode(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	ChangePassword(ctx context.Context, req *user.ChangePasswordReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	CreateUser(ctx context.Context, req *user.CreateOrUpdateUserReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateUser(ctx context.Context, req *user.CreateOrUpdateUserReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UserInfo(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	UserInfo(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *user.UserInfo, err error)
+	UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (r *user.UserListResp, err error)
 	DeleteUser(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateProfile(ctx context.Context, req *user.ProfileReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UserProfile(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateUserStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	SetUserRole(ctx context.Context, req *user.SetUserRole, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	SetDefaultVenue(ctx context.Context, req *user.SetDefaultVenueReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
@@ -56,14 +53,9 @@ type kUserServiceClient struct {
 	*kClient
 }
 
-func (p *kUserServiceClient) Register(ctx context.Context, req *user.RegisterReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (p *kUserServiceClient) Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.Register(ctx, req)
-}
-
-func (p *kUserServiceClient) UserPermCode(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.UserPermCode(ctx, req)
+	return p.kClient.Login(ctx, req)
 }
 
 func (p *kUserServiceClient) ChangePassword(ctx context.Context, req *user.ChangePasswordReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
@@ -81,12 +73,12 @@ func (p *kUserServiceClient) UpdateUser(ctx context.Context, req *user.CreateOrU
 	return p.kClient.UpdateUser(ctx, req)
 }
 
-func (p *kUserServiceClient) UserInfo(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (p *kUserServiceClient) UserInfo(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *user.UserInfo, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.UserInfo(ctx, req)
 }
 
-func (p *kUserServiceClient) UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (p *kUserServiceClient) UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (r *user.UserListResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.UserList(ctx, req)
 }
@@ -94,16 +86,6 @@ func (p *kUserServiceClient) UserList(ctx context.Context, req *user.UserListReq
 func (p *kUserServiceClient) DeleteUser(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.DeleteUser(ctx, req)
-}
-
-func (p *kUserServiceClient) UpdateProfile(ctx context.Context, req *user.ProfileReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.UpdateProfile(ctx, req)
-}
-
-func (p *kUserServiceClient) UserProfile(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.UserProfile(ctx, req)
 }
 
 func (p *kUserServiceClient) UpdateUserStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {

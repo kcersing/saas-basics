@@ -45,7 +45,7 @@ func (Token) Indexes() []ent.Index {
 
 func (Token) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "user_tokens"},
+		entsql.Annotation{Table: "u_tokens"},
 		entsql.WithComments(true),
 	}
 }

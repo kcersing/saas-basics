@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
+	user "rpc_gen/kitex_gen/user"
 	"testing"
 )
 
@@ -11,7 +12,7 @@ func TestUserInfo_Run(t *testing.T) {
 	s := NewUserInfoService(ctx)
 	// init req and assert value
 
-	req := &base.Empty{}
+	req := &base.IDReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

@@ -6,12 +6,12 @@ import (
 	"testing"
 )
 
-func TestUserProfile_Run(t *testing.T) {
+func TestDeleteToken_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewUserProfileService(ctx)
+	s := NewDeleteTokenService(ctx)
 	// init req and assert value
 
-	req := &base.Empty{}
+	req := &base.IDReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

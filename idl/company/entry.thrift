@@ -18,5 +18,5 @@ struct EntryListReq{
 
 }
 service CompanyService {
-  base.NilResponse EntryList(1: EntryListReq req) (api.post = "/api/admin/entry/list")
+  base.NilResponse EntryList(1: EntryListReq req) (api.post = "/service/entry/list")
 }

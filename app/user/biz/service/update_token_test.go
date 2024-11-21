@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func TestUpdateProfile_Run(t *testing.T) {
+func TestUpdateToken_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewUpdateProfileService(ctx)
+	s := NewUpdateTokenService(ctx)
 	// init req and assert value
 
-	req := &user.ProfileReq{}
+	req := &user.TokenInfo{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

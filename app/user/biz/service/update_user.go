@@ -4,6 +4,7 @@ import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
 	user "rpc_gen/kitex_gen/user"
+	"user/biz/infra/service"
 )
 
 type UpdateUserService struct {
@@ -17,5 +18,9 @@ func NewUpdateUserService(ctx context.Context) *UpdateUserService {
 func (s *UpdateUserService) Run(req *user.CreateOrUpdateUserReq) (resp *base.NilResponse, err error) {
 	// Finish your business logic.
 
+	err = service.NewUser(s.ctx).Update(req)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

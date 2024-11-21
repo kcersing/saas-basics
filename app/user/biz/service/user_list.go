@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	base "rpc_gen/kitex_gen/base"
 	user "rpc_gen/kitex_gen/user"
+	"user/biz/infra/service"
 )
 
 type UserListService struct {
@@ -14,8 +14,12 @@ func NewUserListService(ctx context.Context) *UserListService {
 }
 
 // Run create note info
-func (s *UserListService) Run(req *user.UserListReq) (resp *base.NilResponse, err error) {
+func (s *UserListService) Run(req *user.UserListReq) (resp *user.UserListResp, err error) {
 	// Finish your business logic.
 
+	resp.Extra, resp.Resp.Total, err = service.NewUser(s.ctx).List(req)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

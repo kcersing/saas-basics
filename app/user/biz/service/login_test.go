@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func TestRegister_Run(t *testing.T) {
+func TestLogin_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewRegisterService(ctx)
+	s := NewLoginService(ctx)
 	// init req and assert value
 
-	req := &user.RegisterReq{}
+	req := &user.LoginReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

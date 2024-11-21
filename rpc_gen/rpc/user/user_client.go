@@ -13,16 +13,13 @@ import (
 type RPCClient interface {
 	KitexClient() userservice.Client
 	Service() string
-	Register(ctx context.Context, req *user.RegisterReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UserPermCode(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	ChangePassword(ctx context.Context, req *user.ChangePasswordReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	CreateUser(ctx context.Context, req *user.CreateOrUpdateUserReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateUser(ctx context.Context, req *user.CreateOrUpdateUserReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UserInfo(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
+	UserInfo(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *user.UserInfo, err error)
+	UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (r *user.UserListResp, err error)
 	DeleteUser(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UpdateProfile(ctx context.Context, req *user.ProfileReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	UserProfile(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateUserStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	SetUserRole(ctx context.Context, req *user.SetUserRole, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	SetDefaultVenue(ctx context.Context, req *user.SetDefaultVenueReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
@@ -54,12 +51,8 @@ func (c *clientImpl) KitexClient() userservice.Client {
 	return c.kitexClient
 }
 
-func (c *clientImpl) Register(ctx context.Context, req *user.RegisterReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.Register(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) UserPermCode(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UserPermCode(ctx, req, callOptions...)
+func (c *clientImpl) Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+	return c.kitexClient.Login(ctx, req, callOptions...)
 }
 
 func (c *clientImpl) ChangePassword(ctx context.Context, req *user.ChangePasswordReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
@@ -74,24 +67,16 @@ func (c *clientImpl) UpdateUser(ctx context.Context, req *user.CreateOrUpdateUse
 	return c.kitexClient.UpdateUser(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) UserInfo(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (c *clientImpl) UserInfo(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *user.UserInfo, err error) {
 	return c.kitexClient.UserInfo(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
+func (c *clientImpl) UserList(ctx context.Context, req *user.UserListReq, callOptions ...callopt.Option) (r *user.UserListResp, err error) {
 	return c.kitexClient.UserList(ctx, req, callOptions...)
 }
 
 func (c *clientImpl) DeleteUser(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
 	return c.kitexClient.DeleteUser(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) UpdateProfile(ctx context.Context, req *user.ProfileReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UpdateProfile(ctx, req, callOptions...)
-}
-
-func (c *clientImpl) UserProfile(ctx context.Context, req *base.Empty, callOptions ...callopt.Option) (r *base.NilResponse, err error) {
-	return c.kitexClient.UserProfile(ctx, req, callOptions...)
 }
 
 func (c *clientImpl) UpdateUserStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error) {

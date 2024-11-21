@@ -14,17 +14,10 @@ import (
 var errInvalidMessageType = errors.New("invalid message type for service method handler")
 
 var serviceMethods = map[string]kitex.MethodInfo{
-	"Register": kitex.NewMethodInfo(
-		registerHandler,
-		newUserServiceRegisterArgs,
-		newUserServiceRegisterResult,
-		false,
-		kitex.WithStreamingMode(kitex.StreamingNone),
-	),
-	"UserPermCode": kitex.NewMethodInfo(
-		userPermCodeHandler,
-		newUserServiceUserPermCodeArgs,
-		newUserServiceUserPermCodeResult,
+	"Login": kitex.NewMethodInfo(
+		loginHandler,
+		newUserServiceLoginArgs,
+		newUserServiceLoginResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
@@ -67,20 +60,6 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		deleteUserHandler,
 		newUserServiceDeleteUserArgs,
 		newUserServiceDeleteUserResult,
-		false,
-		kitex.WithStreamingMode(kitex.StreamingNone),
-	),
-	"UpdateProfile": kitex.NewMethodInfo(
-		updateProfileHandler,
-		newUserServiceUpdateProfileArgs,
-		newUserServiceUpdateProfileResult,
-		false,
-		kitex.WithStreamingMode(kitex.StreamingNone),
-	),
-	"UserProfile": kitex.NewMethodInfo(
-		userProfileHandler,
-		newUserServiceUserProfileArgs,
-		newUserServiceUserProfileResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
@@ -171,40 +150,22 @@ func newServiceInfo(hasStreaming bool, keepStreamingMethods bool, keepNonStreami
 	return svcInfo
 }
 
-func registerHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*user.UserServiceRegisterArgs)
-	realResult := result.(*user.UserServiceRegisterResult)
-	success, err := handler.(user.UserService).Register(ctx, realArg.Req)
+func loginHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServiceLoginArgs)
+	realResult := result.(*user.UserServiceLoginResult)
+	success, err := handler.(user.UserService).Login(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
 	realResult.Success = success
 	return nil
 }
-func newUserServiceRegisterArgs() interface{} {
-	return user.NewUserServiceRegisterArgs()
+func newUserServiceLoginArgs() interface{} {
+	return user.NewUserServiceLoginArgs()
 }
 
-func newUserServiceRegisterResult() interface{} {
-	return user.NewUserServiceRegisterResult()
-}
-
-func userPermCodeHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*user.UserServiceUserPermCodeArgs)
-	realResult := result.(*user.UserServiceUserPermCodeResult)
-	success, err := handler.(user.UserService).UserPermCode(ctx, realArg.Req)
-	if err != nil {
-		return err
-	}
-	realResult.Success = success
-	return nil
-}
-func newUserServiceUserPermCodeArgs() interface{} {
-	return user.NewUserServiceUserPermCodeArgs()
-}
-
-func newUserServiceUserPermCodeResult() interface{} {
-	return user.NewUserServiceUserPermCodeResult()
+func newUserServiceLoginResult() interface{} {
+	return user.NewUserServiceLoginResult()
 }
 
 func changePasswordHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -315,42 +276,6 @@ func newUserServiceDeleteUserResult() interface{} {
 	return user.NewUserServiceDeleteUserResult()
 }
 
-func updateProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*user.UserServiceUpdateProfileArgs)
-	realResult := result.(*user.UserServiceUpdateProfileResult)
-	success, err := handler.(user.UserService).UpdateProfile(ctx, realArg.Req)
-	if err != nil {
-		return err
-	}
-	realResult.Success = success
-	return nil
-}
-func newUserServiceUpdateProfileArgs() interface{} {
-	return user.NewUserServiceUpdateProfileArgs()
-}
-
-func newUserServiceUpdateProfileResult() interface{} {
-	return user.NewUserServiceUpdateProfileResult()
-}
-
-func userProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*user.UserServiceUserProfileArgs)
-	realResult := result.(*user.UserServiceUserProfileResult)
-	success, err := handler.(user.UserService).UserProfile(ctx, realArg.Req)
-	if err != nil {
-		return err
-	}
-	realResult.Success = success
-	return nil
-}
-func newUserServiceUserProfileArgs() interface{} {
-	return user.NewUserServiceUserProfileArgs()
-}
-
-func newUserServiceUserProfileResult() interface{} {
-	return user.NewUserServiceUserProfileResult()
-}
-
 func updateUserStatusHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*user.UserServiceUpdateUserStatusArgs)
 	realResult := result.(*user.UserServiceUpdateUserStatusResult)
@@ -415,21 +340,11 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) Register(ctx context.Context, req *user.RegisterReq) (r *base.NilResponse, err error) {
-	var _args user.UserServiceRegisterArgs
+func (p *kClient) Login(ctx context.Context, req *user.LoginReq) (r *base.NilResponse, err error) {
+	var _args user.UserServiceLoginArgs
 	_args.Req = req
-	var _result user.UserServiceRegisterResult
-	if err = p.c.Call(ctx, "Register", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) UserPermCode(ctx context.Context, req *base.Empty) (r *base.NilResponse, err error) {
-	var _args user.UserServiceUserPermCodeArgs
-	_args.Req = req
-	var _result user.UserServiceUserPermCodeResult
-	if err = p.c.Call(ctx, "UserPermCode", &_args, &_result); err != nil {
+	var _result user.UserServiceLoginResult
+	if err = p.c.Call(ctx, "Login", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -465,7 +380,7 @@ func (p *kClient) UpdateUser(ctx context.Context, req *user.CreateOrUpdateUserRe
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) UserInfo(ctx context.Context, req *base.Empty) (r *base.NilResponse, err error) {
+func (p *kClient) UserInfo(ctx context.Context, req *base.IDReq) (r *user.UserInfo, err error) {
 	var _args user.UserServiceUserInfoArgs
 	_args.Req = req
 	var _result user.UserServiceUserInfoResult
@@ -475,7 +390,7 @@ func (p *kClient) UserInfo(ctx context.Context, req *base.Empty) (r *base.NilRes
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) UserList(ctx context.Context, req *user.UserListReq) (r *base.NilResponse, err error) {
+func (p *kClient) UserList(ctx context.Context, req *user.UserListReq) (r *user.UserListResp, err error) {
 	var _args user.UserServiceUserListArgs
 	_args.Req = req
 	var _result user.UserServiceUserListResult
@@ -490,26 +405,6 @@ func (p *kClient) DeleteUser(ctx context.Context, req *base.IDReq) (r *base.NilR
 	_args.Req = req
 	var _result user.UserServiceDeleteUserResult
 	if err = p.c.Call(ctx, "DeleteUser", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) UpdateProfile(ctx context.Context, req *user.ProfileReq) (r *base.NilResponse, err error) {
-	var _args user.UserServiceUpdateProfileArgs
-	_args.Req = req
-	var _result user.UserServiceUpdateProfileResult
-	if err = p.c.Call(ctx, "UpdateProfile", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) UserProfile(ctx context.Context, req *base.Empty) (r *base.NilResponse, err error) {
-	var _args user.UserServiceUserProfileArgs
-	_args.Req = req
-	var _result user.UserServiceUserProfileResult
-	if err = p.c.Call(ctx, "UserProfile", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

@@ -11,14 +11,14 @@ import (
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"rpc_gen/kitex_gen/user/userservice"
-	"user/conf"
+	"rpc_gen/kitex_gen/admin/schedule/scheduleservice"
+	"schedule/conf"
 )
 
 func main() {
 	opts := kitexInit()
 
-	svr := userservice.NewServer(new(UserServiceImpl), opts...)
+	svr := scheduleservice.NewServer(new(ScheduleServiceImpl), opts...)
 
 	err := svr.Run()
 	if err != nil {
