@@ -48,3 +48,4 @@ gen-ent:
 	#go run -mod=readonly entgo.io/ent/cmd/ent new User
 	@cd app/system/biz/dal/mysql && go generate ./ent
 	@cd app/user/biz/dal/mysql && go generate ./ent
+	@cd app/schedule/biz/dal/mysql && go generate ./ent

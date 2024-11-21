@@ -11,7 +11,7 @@ import (
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"rpc_gen/kitex_gen/admin/schedule/scheduleservice"
+	"rpc_gen/kitex_gen/schedule/scheduleservice"
 	"schedule/conf"
 )
 

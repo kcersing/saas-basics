@@ -3,20 +3,22 @@ package service
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	"rpc_gen/kitex_gen/schedule"
+
 	"time"
 	"user/biz/dal/mysql/ent/user"
 )
 
-func (s Schedule) CreateSchedule(req do.CreateOrUpdateScheduleReq) error {
+func (s Schedule) CreateSchedule(req schedule.CreateOrUpdateScheduleReq) error {
 
 	// 解析字符串到 time.Time 类型
-	startTime, _ := time.Parse(time.DateTime, req.StartTime)
+	startTime, _ := time.Parse(time.DateTime, *req.StartTime)
 	tx, err := s.db.Tx(s.ctx)
 	if err != nil {
 		return fmt.Errorf("starting a transaction: %w", err)
 	}
 
-	if req.Type == "course" {
+	if *req.Type == "course" {
 		mpp, err := tx.MemberProductProperty.Query().
 			Where(memberproductproperty.ID(req.MemberProductPropertyId)).
 			First(s.ctx)

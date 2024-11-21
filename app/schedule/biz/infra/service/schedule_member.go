@@ -1,37 +1,32 @@
 package service
 
 import (
+	"common/utils/minio"
 	"fmt"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
-	"saas/app/admin/pkg/minio"
-	"saas/app/pkg/do"
-	"saas/pkg/db/ent/member"
-	"saas/pkg/db/ent/memberdetails"
-	"saas/pkg/db/ent/memberproduct"
-	"saas/pkg/db/ent/memberproductproperty"
-	"saas/pkg/db/ent/predicate"
-	"saas/pkg/db/ent/schedule"
-	"saas/pkg/db/ent/schedulemember"
-	"saas/pkg/db/ent/venue"
+	"rpc_gen/kitex_gen/schedule"
+	"schedule/biz/dal/mysql/ent/predicate"
+	schedule2 "schedule/biz/dal/mysql/ent/schedule"
+	"schedule/biz/dal/mysql/ent/schedulemember"
 	"time"
 )
 
-func (c Schedule) CreateMember(req do.ScheduleMemberCreate) error {
+func (c Schedule) CreateMember(req schedule.CreateMemberReq) error {
 
 	sc, err := c.db.Schedule.Query().
-		Where(schedule.ID(req.Schedule)).
+		Where(schedule2.ID(*req.Schedule)).
 		First(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "未查询到该课程")
 		return err
 	}
 
-	if (sc.NumSurplus - int64(len(req.MemberProductPropertyID))) < 0 {
-		err = errors.Wrap(errors.New("超出约课人数"+fmt.Sprintf("%+v", sc.NumSurplus-int64(len(req.MemberProductPropertyID)))), "未查询到该课程")
+	if (sc.NumSurplus - int64(len(req.MemberProductPropertyId))) < 0 {
+		err = errors.Wrap(errors.New("超出约课人数"+fmt.Sprintf("%+v", sc.NumSurplus-int64(len(req.MemberProductPropertyId)))), "未查询到该课程")
 		return err
 	}
-	for _, v := range req.MemberProductPropertyID {
+	for _, v := range req.MemberProductPropertyId {
 
 		mpp, err := c.db.MemberProductProperty.Query().
 			Where(memberproductproperty.ID(v)).
@@ -81,7 +76,7 @@ func (c Schedule) CreateMember(req do.ScheduleMemberCreate) error {
 
 }
 
-func (c Schedule) UpdateMember(req do.ScheduleMemberInfo) error {
+func (c Schedule) UpdateMember(req schedule.ScheduleMemberInfo) error {
 	//TODO implement me
 	panic("implement me")
 }
@@ -91,19 +86,19 @@ func (c Schedule) DeleteMember(id int64) error {
 	panic("implement me")
 }
 
-func (c Schedule) MemberList(req do.ScheduleMemberListReq) (resp []*do.ScheduleMemberInfo, total int, err error) {
+func (c Schedule) MemberList(req schedule.ScheduleMemberListReq) (resp []*schedule.ScheduleMemberInfo, total int, err error) {
 
 	var predicates []predicate.ScheduleMember
-	if req.Member > 0 {
-		predicates = append(predicates, schedulemember.MemberID(req.Member))
+	if *req.Member > 0 {
+		predicates = append(predicates, schedulemember.MemberID(*req.Member))
 	}
-	if req.Schedule > 0 {
-		predicates = append(predicates, schedulemember.ScheduleID(req.Schedule))
+	if *req.Schedule > 0 {
+		predicates = append(predicates, schedulemember.ScheduleID(*req.Schedule))
 	}
 
 	lists, err := c.db.Debug().ScheduleMember.Query().Where(predicates...).
-		Offset(int(req.Page-1) * int(req.PageSize)).
-		Limit(int(req.PageSize)).All(c.ctx)
+		Offset(int(*req.Page-1) * int(*req.PageSize)).
+		Limit(int(*req.PageSize)).All(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Schedule Member list failed")
 		return resp, total, err
@@ -156,7 +151,7 @@ func (c Schedule) UpdateMemberStatus(ID int64, status int64) error {
 	return err
 }
 
-func (c Schedule) MemberInfo(ID int64) (info *do.ScheduleMemberInfo, err error) {
+func (c Schedule) MemberInfo(ID int64) (info *schedule.ScheduleMemberInfo, err error) {
 
 	m, err := c.db.ScheduleMember.Query().Where(schedulemember.ID(ID)).First(c.ctx)
 
@@ -175,7 +170,7 @@ func (c Schedule) MemberInfo(ID int64) (info *do.ScheduleMemberInfo, err error) 
 
 }
 
-func (s Schedule) SearchSubscribeByMember(req do.SearchSubscribeByMemberReq) (list []do.SubscribeByMember, total int64, err error) {
+func (s Schedule) SearchSubscribeByMember(req schedule.SearchSubscribeByMemberReq) (list []schedule.SubscribeByMember, total int64, err error) {
 
 	m, err := s.db.Member.Query().Where(member.Mobile(req.Mobile)).First(s.ctx)
 
@@ -197,7 +192,7 @@ func (s Schedule) SearchSubscribeByMember(req do.SearchSubscribeByMemberReq) (li
 	}
 	for _, v := range mpp {
 		mp, _ := v.QueryOwner().First(s.ctx)
-		list = append(list, do.SubscribeByMember{
+		list = append(list, schedule.SubscribeByMember{
 			Avatar:                    minio.URLconvert(s.ctx, s.c, m.Avatar),
 			Mobile:                    m.Mobile,
 			MemberID:                  m.ID,

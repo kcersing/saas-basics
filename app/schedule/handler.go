@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	schedule "rpc_gen/kitex_gen/admin/schedule"
 	base "rpc_gen/kitex_gen/base"
+	schedule "rpc_gen/kitex_gen/schedule"
 	"schedule/biz/service"
 )
 
@@ -31,44 +31,37 @@ func (s *ScheduleServiceImpl) UpdateStatus(ctx context.Context, req *base.Status
 	return resp, err
 }
 
-// ListSchedule implements the ScheduleServiceImpl interface.
-func (s *ScheduleServiceImpl) ListSchedule(ctx context.Context, req *schedule.ListScheduleReq) (resp *base.NilResponse, err error) {
-	resp, err = service.NewListScheduleService(ctx).Run(req)
+// ScheduleListResp implements the ScheduleServiceImpl interface.
+func (s *ScheduleServiceImpl) ScheduleListResp(ctx context.Context, req *schedule.ScheduleListReq) (resp *schedule.ScheduleListResp, err error) {
+	resp, err = service.NewScheduleListRespService(ctx).Run(req)
 
 	return resp, err
 }
 
-// DateListSchedule implements the ScheduleServiceImpl interface.
-func (s *ScheduleServiceImpl) DateListSchedule(ctx context.Context, req *schedule.ListScheduleReq) (resp *base.NilResponse, err error) {
-	resp, err = service.NewDateListScheduleService(ctx).Run(req)
+// ScheduleDateList implements the ScheduleServiceImpl interface.
+func (s *ScheduleServiceImpl) ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq) (resp *schedule.ScheduleListResp, err error) {
+	resp, err = service.NewScheduleDateListService(ctx).Run(req)
 
 	return resp, err
 }
 
-// GetScheduleById implements the ScheduleServiceImpl interface.
-func (s *ScheduleServiceImpl) GetScheduleById(ctx context.Context, req *base.IDReq) (resp *base.NilResponse, err error) {
-	resp, err = service.NewGetScheduleByIdService(ctx).Run(req)
+// ScheduleInfo implements the ScheduleServiceImpl interface.
+func (s *ScheduleServiceImpl) ScheduleInfo(ctx context.Context, req *base.IDReq) (resp *schedule.ScheduleInfo, err error) {
+	resp, err = service.NewScheduleInfoService(ctx).Run(req)
 
 	return resp, err
 }
 
-// GetScheduleMemberList implements the ScheduleServiceImpl interface.
-func (s *ScheduleServiceImpl) GetScheduleMemberList(ctx context.Context, req *schedule.ScheduleMemberReq) (resp *base.NilResponse, err error) {
-	resp, err = service.NewGetScheduleMemberListService(ctx).Run(req)
+// MemberList implements the ScheduleServiceImpl interface.
+func (s *ScheduleServiceImpl) MemberList(ctx context.Context, req *schedule.ScheduleMemberListReq) (resp *schedule.ScheduleMemberListResp, err error) {
+	resp, err = service.NewMemberListService(ctx).Run(req)
 
 	return resp, err
 }
 
-// SearchSubscribeByMember implements the ScheduleServiceImpl interface.
-func (s *ScheduleServiceImpl) SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq) (resp *base.NilResponse, err error) {
-	resp, err = service.NewSearchSubscribeByMemberService(ctx).Run(req)
-
-	return resp, err
-}
-
-// MemberSubscribe implements the ScheduleServiceImpl interface.
-func (s *ScheduleServiceImpl) MemberSubscribe(ctx context.Context, req *schedule.MemberSubscribeReq) (resp *base.NilResponse, err error) {
-	resp, err = service.NewMemberSubscribeService(ctx).Run(req)
+// CreateMember implements the ScheduleServiceImpl interface.
+func (s *ScheduleServiceImpl) CreateMember(ctx context.Context, req *schedule.CreateMemberReq) (resp *schedule.ScheduleMemberListResp, err error) {
+	resp, err = service.NewCreateMemberService(ctx).Run(req)
 
 	return resp, err
 }
@@ -80,9 +73,16 @@ func (s *ScheduleServiceImpl) UpdateMemberStatus(ctx context.Context, req *base.
 	return resp, err
 }
 
-// GetScheduleCoachList implements the ScheduleServiceImpl interface.
-func (s *ScheduleServiceImpl) GetScheduleCoachList(ctx context.Context, req *schedule.ScheduleMemberReq) (resp *base.NilResponse, err error) {
-	resp, err = service.NewGetScheduleCoachListService(ctx).Run(req)
+// SearchSubscribeByMember implements the ScheduleServiceImpl interface.
+func (s *ScheduleServiceImpl) SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq) (resp *schedule.ScheduleMemberInfo, err error) {
+	resp, err = service.NewSearchSubscribeByMemberService(ctx).Run(req)
+
+	return resp, err
+}
+
+// CoachList implements the ScheduleServiceImpl interface.
+func (s *ScheduleServiceImpl) CoachList(ctx context.Context, req *schedule.ScheduleCoachListReq) (resp *schedule.ScheduleCoachListResp, err error) {
+	resp, err = service.NewCoachListService(ctx).Run(req)
 
 	return resp, err
 }

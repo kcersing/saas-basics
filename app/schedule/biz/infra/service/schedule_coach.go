@@ -3,16 +3,19 @@ package service
 import (
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
-	"schedule/biz/infra/do"
+	"rpc_gen/kitex_gen/schedule"
+	"schedule/biz/dal/mysql/ent/predicate"
+	schedule2 "schedule/biz/dal/mysql/ent/schedule"
+	"schedule/biz/dal/mysql/ent/schedulecoach"
 	"time"
 )
 
-func (c Schedule) CreateCoach(req do.ScheduleCoachInfo) error {
+func (c Schedule) CreateCoach(req schedule.ScheduleCoachInfo) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (c Schedule) UpdateCoach(req do.ScheduleCoachInfo) error {
+func (c Schedule) UpdateCoach(req schedule.ScheduleCoachInfo) error {
 	//TODO implement me
 	panic("implement me")
 }
@@ -22,21 +25,21 @@ func (c Schedule) DeleteCoach(id int64) error {
 	panic("implement me")
 }
 
-func (c Schedule) CoachList(req do.ScheduleCoachListReq) (resp []*do.ScheduleCoachInfo, total int, err error) {
+func (c Schedule) CoachList(req schedule.ScheduleCoachListReq) (resp []*schedule.ScheduleCoachInfo, total int, err error) {
 
 	var predicates []predicate.ScheduleCoach
-	if req.Coach > 0 {
-		predicates = append(predicates, schedulecoach.CoachIDEQ(req.Coach))
+	if *req.Coach > 0 {
+		predicates = append(predicates, schedulecoach.CoachIDEQ(*req.Coach))
 	}
-	if req.Schedule > 0 {
-		predicates = append(predicates, schedulecoach.ScheduleID(req.Schedule))
+	if *req.Schedule > 0 {
+		predicates = append(predicates, schedulecoach.ScheduleID(*req.Schedule))
 	}
-	if req.Type != "" {
-		predicates = append(predicates, schedulecoach.Type(req.Type))
+	if *req.Type != "" {
+		predicates = append(predicates, schedulecoach.Type(*req.Type))
 	}
 	lists, err := c.db.ScheduleCoach.Query().Where(predicates...).
-		Offset(int(req.Page-1) * int(req.PageSize)).
-		Limit(int(req.PageSize)).All(c.ctx)
+		Offset(int(*req.Page-1) * int(*req.PageSize)).
+		Limit(int(*req.PageSize)).All(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Schedule Coach list failed")
 		return resp, total, err
@@ -103,7 +106,7 @@ func (c Schedule) UpdateCoachStatus(ID int64, status int64) error {
 		err = errors.Wrap(err, "update Schedule Coach status failed")
 		return err
 	}
-	_, err = c.db.Schedule.Update().Where(schedule.ID(sc.ScheduleID)).SetStatus(status).Save(c.ctx)
+	_, err = c.db.Schedule.Update().Where(schedule2.ID(sc.ScheduleID)).SetStatus(status).Save(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "update Schedule status failed")
 		return err
@@ -112,7 +115,7 @@ func (c Schedule) UpdateCoachStatus(ID int64, status int64) error {
 	return nil
 }
 
-func (c Schedule) CoachInfo(ID int64) (roleInfo *do.ScheduleCoachInfo, err error) {
+func (c Schedule) CoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachInfo, err error) {
 	//TODO implement me
 	panic("implement me")
 }

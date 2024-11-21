@@ -1,28 +1,30 @@
 package do
 
-type Schedule interface {
-	CreateSchedule(req CreateOrUpdateScheduleReq) error
-	UpdateSchedule(req CreateOrUpdateScheduleReq) error
-	//ScheduleDelete(id int64) error
-	ScheduleList(req ScheduleListReq) (resp []*ScheduleInfo, total int, err error)
-	ScheduleDateList(req ScheduleListReq) (map[string][]*ScheduleInfo, int, error)
-	UpdateScheduleStatus(ID int64, status int64) error
-	ScheduleInfo(ID int64) (roleInfo *ScheduleInfo, err error)
+import "rpc_gen/kitex_gen/schedule"
 
-	CreateMember(req ScheduleMemberCreate) error
-	UpdateMember(req ScheduleMemberInfo) error
+type Schedule interface {
+	CreateSchedule(req schedule.CreateOrUpdateScheduleReq) error
+	UpdateSchedule(req schedule.CreateOrUpdateScheduleReq) error
+	//ScheduleDelete(id int64) error
+	ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.ScheduleInfo, total int, err error)
+	ScheduleDateList(req schedule.ScheduleListReq) (map[string][]*schedule.ScheduleInfo, int, error)
+	UpdateScheduleStatus(ID int64, status int64) error
+	ScheduleInfo(ID int64) (roleInfo *schedule.ScheduleInfo, err error)
+
+	CreateMember(req schedule.CreateMemberReq) error
+	UpdateMember(req schedule.ScheduleMemberInfo) error
 	DeleteMember(id int64) error
 
-	MemberList(req ScheduleMemberListReq) (resp []*ScheduleMemberInfo, total int, err error)
+	MemberList(req schedule.ScheduleMemberListReq) (resp []*schedule.ScheduleMemberInfo, total int, err error)
 	UpdateMemberStatus(ID int64, status int64) error
-	MemberInfo(ID int64) (roleInfo *ScheduleMemberInfo, err error)
-	SearchSubscribeByMember(req SearchSubscribeByMemberReq) (list []SubscribeByMember, total int64, err error)
+	MemberInfo(ID int64) (roleInfo *schedule.ScheduleMemberInfo, err error)
+	SearchSubscribeByMember(req schedule.SearchSubscribeByMemberReq) (list []schedule.SubscribeByMember, total int64, err error)
 
-	CreateCoach(req ScheduleCoachInfo) error
-	UpdateCoach(req ScheduleCoachInfo) error
+	CreateCoach(req schedule.ScheduleCoachInfo) error
+	UpdateCoach(req schedule.ScheduleCoachInfo) error
 	DeleteCoach(id int64) error
 
-	CoachList(req ScheduleCoachListReq) (resp []*ScheduleCoachInfo, total int, err error)
+	CoachList(req schedule.ScheduleCoachListReq) (resp []*schedule.ScheduleCoachInfo, total int, err error)
 	UpdateCoachStatus(ID int64, status int64) error
-	CoachInfo(ID int64) (roleInfo *ScheduleCoachInfo, err error)
+	CoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachInfo, err error)
 }

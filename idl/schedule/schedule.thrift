@@ -1,4 +1,4 @@
-namespace go admin.schedule
+namespace go schedule
 
 include "../base/base.thrift"
 
@@ -43,7 +43,7 @@ struct ScheduleMemberListReq {
 struct ScheduleCoachListReq{
     1:  optional i64 page (api.raw = "page")
     2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional i64 member (api.raw = "coach")
+    3:  optional i64 coach (api.raw = "coach")
     4:  optional i64 schedule (api.raw = "schedule")
     5:  optional string type  (api.raw = "type")
 }
@@ -55,7 +55,7 @@ struct SearchSubscribeByMemberReq{
     4:  optional string	Type        (api.raw = "type")
 }
 
-struct SubscribeMemberReq{
+struct CreateMemberReq{
     1:  optional list<i64> memberProductPropertyId (api.raw = "memberProductPropertyId")
     2:  optional i64 schedule (api.raw = "schedule")
     3:  optional string remark (api.raw = "remark")
@@ -69,7 +69,7 @@ struct ScheduleInfo  {
 	4:i64 VenueId      (api.raw = "venue_id")
 	5:i64 PlaceID      (api.raw = "place_id")
 
-	6:i64 Num                           (api.raw = "num")
+	6:i64 Num          (api.raw = "num")
 	7:i64 NumSurplus                    (api.raw = "num_surplus")
 	8:string Date                       (api.raw = "data")
 	9:string StartTime                  (api.raw = "start_time")
@@ -158,12 +158,6 @@ struct ScheduleCoachInfo  {
 	28:string MRemark                    (api.raw = "m_remark")
 }
 
-struct ScheduleMemberCreate  {
-	1:list<i64> MemberProductPropertyID (api.raw = "memberProductPropertyId")
-	2:i64 Schedule                   (api.raw = "schedule")
-	3:string Remark                    (api.raw = "remark")
-}
-
 struct SubscribeByMember  {
 	1:string Avatar                   (api.raw = "avatar")
 	2:string Mobile                   (api.raw = "mobile")
@@ -208,8 +202,7 @@ service ScheduleService {
 
     ScheduleMemberListResp MemberList(1: ScheduleMemberListReq req) (api.post = "/service/schedule/member-list")
 
-
-    ScheduleMemberListResp MemberSubscribe(1: SubscribeMemberReq req) (api.post = "/service/schedule/member-subscribe")
+    ScheduleMemberListResp CreateMember(1: CreateMemberReq req) (api.post = "/service/schedule/member-create")
 
     base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/schedule-member-status")
 
