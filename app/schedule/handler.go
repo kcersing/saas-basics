@@ -93,3 +93,10 @@ func (s *ScheduleServiceImpl) UpdateCoachStatus(ctx context.Context, req *base.S
 
 	return resp, err
 }
+
+// ScheduleList implements the ScheduleServiceImpl interface.
+func (s *ScheduleServiceImpl) ScheduleList(ctx context.Context, req *schedule.ScheduleListReq) (resp *schedule.ScheduleListResp, err error) {
+	resp, err = service.NewScheduleListService(ctx).Run(req)
+
+	return resp, err
+}

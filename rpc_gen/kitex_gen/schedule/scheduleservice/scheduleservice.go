@@ -35,10 +35,10 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
-	"ScheduleListResp": kitex.NewMethodInfo(
-		scheduleListRespHandler,
-		newScheduleServiceScheduleListRespArgs,
-		newScheduleServiceScheduleListRespResult,
+	"ScheduleList": kitex.NewMethodInfo(
+		scheduleListHandler,
+		newScheduleServiceScheduleListArgs,
+		newScheduleServiceScheduleListResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
@@ -218,22 +218,22 @@ func newScheduleServiceUpdateStatusResult() interface{} {
 	return schedule.NewScheduleServiceUpdateStatusResult()
 }
 
-func scheduleListRespHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*schedule.ScheduleServiceScheduleListRespArgs)
-	realResult := result.(*schedule.ScheduleServiceScheduleListRespResult)
-	success, err := handler.(schedule.ScheduleService).ScheduleListResp(ctx, realArg.Req)
+func scheduleListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*schedule.ScheduleServiceScheduleListArgs)
+	realResult := result.(*schedule.ScheduleServiceScheduleListResult)
+	success, err := handler.(schedule.ScheduleService).ScheduleList(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
 	realResult.Success = success
 	return nil
 }
-func newScheduleServiceScheduleListRespArgs() interface{} {
-	return schedule.NewScheduleServiceScheduleListRespArgs()
+func newScheduleServiceScheduleListArgs() interface{} {
+	return schedule.NewScheduleServiceScheduleListArgs()
 }
 
-func newScheduleServiceScheduleListRespResult() interface{} {
-	return schedule.NewScheduleServiceScheduleListRespResult()
+func newScheduleServiceScheduleListResult() interface{} {
+	return schedule.NewScheduleServiceScheduleListResult()
 }
 
 func scheduleDateListHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -420,17 +420,17 @@ func (p *kClient) UpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r 
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) ScheduleListResp(ctx context.Context, req *schedule.ScheduleListReq) (r *schedule.ScheduleListResp, err error) {
-	var _args schedule.ScheduleServiceScheduleListRespArgs
+func (p *kClient) ScheduleList(ctx context.Context, req *schedule.ScheduleListReq) (r *schedule.ScheduleListResp, err error) {
+	var _args schedule.ScheduleServiceScheduleListArgs
 	_args.Req = req
-	var _result schedule.ScheduleServiceScheduleListRespResult
-	if err = p.c.Call(ctx, "ScheduleListResp", &_args, &_result); err != nil {
+	var _result schedule.ScheduleServiceScheduleListResult
+	if err = p.c.Call(ctx, "ScheduleList", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq) (r *schedule.ScheduleListResp, err error) {
+func (p *kClient) ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq) (r *schedule.ScheduleDateListResp, err error) {
 	var _args schedule.ScheduleServiceScheduleDateListArgs
 	_args.Req = req
 	var _result schedule.ScheduleServiceScheduleDateListResult
@@ -480,7 +480,7 @@ func (p *kClient) UpdateMemberStatus(ctx context.Context, req *base.StatusCodeRe
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq) (r *schedule.ScheduleMemberInfo, err error) {
+func (p *kClient) SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq) (r *schedule.SearchSubscribeByMemberResp, err error) {
 	var _args schedule.ScheduleServiceSearchSubscribeByMemberArgs
 	_args.Req = req
 	var _result schedule.ScheduleServiceSearchSubscribeByMemberResult

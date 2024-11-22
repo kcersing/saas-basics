@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-func TestScheduleListResp_Run(t *testing.T) {
+func TestScheduleList_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewScheduleListRespService(ctx)
+	s := NewScheduleListService(ctx)
 	// init req and assert value
 
 	req := &schedule.ScheduleListReq{}

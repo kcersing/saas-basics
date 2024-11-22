@@ -183,8 +183,14 @@ struct ScheduleCoachListResp {
     1: base.BaseResp resp
     2: optional list<ScheduleCoachInfo> extra
 }
-
-
+struct ScheduleDateListResp {
+  1: base.BaseResp resp
+  2: optional map<string,list<ScheduleInfo>> extra
+}
+struct SearchSubscribeByMemberResp {
+    1: base.BaseResp resp
+    2: optional list<SubscribeByMember> extra
+}
 service ScheduleService {
     base.NilResponse CreateSchedule(1: CreateOrUpdateScheduleReq req)  (api.post = "/service/schedule/create")
 
@@ -192,9 +198,9 @@ service ScheduleService {
 
     base.NilResponse UpdateStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/status")
 
-    ScheduleListResp ScheduleListResp(1: ScheduleListReq req )(api.post = "/service/schedule/list")
+    ScheduleListResp ScheduleList(1: ScheduleListReq req )(api.post = "/service/schedule/list")
 
-    ScheduleListResp ScheduleDateList(1: ScheduleListReq req )(api.post = "/service/schedule/date-list")
+    ScheduleDateListResp ScheduleDateList(1: ScheduleListReq req )(api.post = "/service/schedule/date-list")
 
     ScheduleInfo ScheduleInfo(1: base.IDReq req) (api.post = "/service/schedule/info")
 
@@ -206,7 +212,7 @@ service ScheduleService {
 
     base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/schedule-member-status")
 
-    ScheduleMemberInfo SearchSubscribeByMember(1: SearchSubscribeByMemberReq req) (api.post = "/service/schedule/search-subscribe-by-member")
+    SearchSubscribeByMemberResp SearchSubscribeByMember(1: SearchSubscribeByMemberReq req) (api.post = "/service/schedule/search-subscribe-by-member")
 
     ScheduleCoachListResp CoachList(1: ScheduleCoachListReq req) (api.post = "/service/schedule/coach-list")
 

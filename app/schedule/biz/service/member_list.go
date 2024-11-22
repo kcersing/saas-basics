@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	schedule "rpc_gen/kitex_gen/schedule"
+	"schedule/biz/infra/service"
 )
 
 type MemberListService struct {
@@ -16,5 +17,9 @@ func NewMemberListService(ctx context.Context) *MemberListService {
 func (s *MemberListService) Run(req *schedule.ScheduleMemberListReq) (resp *schedule.ScheduleMemberListResp, err error) {
 	// Finish your business logic.
 
+	resp.Extra, resp.Resp.Total, err = service.NewSchedule(s.ctx).MemberList(*req)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

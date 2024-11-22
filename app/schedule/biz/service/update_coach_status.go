@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	base "rpc_gen/kitex_gen/base"
+	"schedule/biz/infra/service"
 )
 
 type UpdateCoachStatusService struct {
@@ -16,5 +17,9 @@ func NewUpdateCoachStatusService(ctx context.Context) *UpdateCoachStatusService 
 func (s *UpdateCoachStatusService) Run(req *base.StatusCodeReq) (resp *base.NilResponse, err error) {
 	// Finish your business logic.
 
+	err = service.NewSchedule(s.ctx).UpdateCoachStatus(req.Id, req.Status)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

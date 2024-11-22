@@ -10307,6 +10307,571 @@ func (p *ScheduleCoachListResp) Field2DeepEqual(src []*ScheduleCoachInfo) bool {
 	return true
 }
 
+type ScheduleDateListResp struct {
+	Resp  *base.BaseResp             `thrift:"resp,1" frugal:"1,default,base.BaseResp" json:"resp"`
+	Extra map[string][]*ScheduleInfo `thrift:"extra,2,optional" frugal:"2,optional,map<string:list<ScheduleInfo>>" json:"extra,omitempty"`
+}
+
+func NewScheduleDateListResp() *ScheduleDateListResp {
+	return &ScheduleDateListResp{}
+}
+
+func (p *ScheduleDateListResp) InitDefault() {
+}
+
+var ScheduleDateListResp_Resp_DEFAULT *base.BaseResp
+
+func (p *ScheduleDateListResp) GetResp() (v *base.BaseResp) {
+	if !p.IsSetResp() {
+		return ScheduleDateListResp_Resp_DEFAULT
+	}
+	return p.Resp
+}
+
+var ScheduleDateListResp_Extra_DEFAULT map[string][]*ScheduleInfo
+
+func (p *ScheduleDateListResp) GetExtra() (v map[string][]*ScheduleInfo) {
+	if !p.IsSetExtra() {
+		return ScheduleDateListResp_Extra_DEFAULT
+	}
+	return p.Extra
+}
+func (p *ScheduleDateListResp) SetResp(val *base.BaseResp) {
+	p.Resp = val
+}
+func (p *ScheduleDateListResp) SetExtra(val map[string][]*ScheduleInfo) {
+	p.Extra = val
+}
+
+var fieldIDToName_ScheduleDateListResp = map[int16]string{
+	1: "resp",
+	2: "extra",
+}
+
+func (p *ScheduleDateListResp) IsSetResp() bool {
+	return p.Resp != nil
+}
+
+func (p *ScheduleDateListResp) IsSetExtra() bool {
+	return p.Extra != nil
+}
+
+func (p *ScheduleDateListResp) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.MAP {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleDateListResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ScheduleDateListResp) ReadField1(iprot thrift.TProtocol) error {
+	_field := base.NewBaseResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Resp = _field
+	return nil
+}
+func (p *ScheduleDateListResp) ReadField2(iprot thrift.TProtocol) error {
+	_, _, size, err := iprot.ReadMapBegin()
+	if err != nil {
+		return err
+	}
+	_field := make(map[string][]*ScheduleInfo, size)
+	for i := 0; i < size; i++ {
+		var _key string
+		if v, err := iprot.ReadString(); err != nil {
+			return err
+		} else {
+			_key = v
+		}
+		_, size, err := iprot.ReadListBegin()
+		if err != nil {
+			return err
+		}
+		_val := make([]*ScheduleInfo, 0, size)
+		values := make([]ScheduleInfo, size)
+		for i := 0; i < size; i++ {
+			_elem := &values[i]
+			_elem.InitDefault()
+
+			if err := _elem.Read(iprot); err != nil {
+				return err
+			}
+
+			_val = append(_val, _elem)
+		}
+		if err := iprot.ReadListEnd(); err != nil {
+			return err
+		}
+
+		_field[_key] = _val
+	}
+	if err := iprot.ReadMapEnd(); err != nil {
+		return err
+	}
+	p.Extra = _field
+	return nil
+}
+
+func (p *ScheduleDateListResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ScheduleDateListResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ScheduleDateListResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Resp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ScheduleDateListResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetExtra() {
+		if err = oprot.WriteFieldBegin("extra", thrift.MAP, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteMapBegin(thrift.STRING, thrift.LIST, len(p.Extra)); err != nil {
+			return err
+		}
+		for k, v := range p.Extra {
+			if err := oprot.WriteString(k); err != nil {
+				return err
+			}
+			if err := oprot.WriteListBegin(thrift.STRUCT, len(v)); err != nil {
+				return err
+			}
+			for _, v := range v {
+				if err := v.Write(oprot); err != nil {
+					return err
+				}
+			}
+			if err := oprot.WriteListEnd(); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteMapEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ScheduleDateListResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ScheduleDateListResp(%+v)", *p)
+
+}
+
+func (p *ScheduleDateListResp) DeepEqual(ano *ScheduleDateListResp) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Resp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Extra) {
+		return false
+	}
+	return true
+}
+
+func (p *ScheduleDateListResp) Field1DeepEqual(src *base.BaseResp) bool {
+
+	if !p.Resp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *ScheduleDateListResp) Field2DeepEqual(src map[string][]*ScheduleInfo) bool {
+
+	if len(p.Extra) != len(src) {
+		return false
+	}
+	for k, v := range p.Extra {
+		_src := src[k]
+		if len(v) != len(_src) {
+			return false
+		}
+		for i, v := range v {
+			_src1 := _src[i]
+			if !v.DeepEqual(_src1) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+type SearchSubscribeByMemberResp struct {
+	Resp  *base.BaseResp       `thrift:"resp,1" frugal:"1,default,base.BaseResp" json:"resp"`
+	Extra []*SubscribeByMember `thrift:"extra,2,optional" frugal:"2,optional,list<SubscribeByMember>" json:"extra,omitempty"`
+}
+
+func NewSearchSubscribeByMemberResp() *SearchSubscribeByMemberResp {
+	return &SearchSubscribeByMemberResp{}
+}
+
+func (p *SearchSubscribeByMemberResp) InitDefault() {
+}
+
+var SearchSubscribeByMemberResp_Resp_DEFAULT *base.BaseResp
+
+func (p *SearchSubscribeByMemberResp) GetResp() (v *base.BaseResp) {
+	if !p.IsSetResp() {
+		return SearchSubscribeByMemberResp_Resp_DEFAULT
+	}
+	return p.Resp
+}
+
+var SearchSubscribeByMemberResp_Extra_DEFAULT []*SubscribeByMember
+
+func (p *SearchSubscribeByMemberResp) GetExtra() (v []*SubscribeByMember) {
+	if !p.IsSetExtra() {
+		return SearchSubscribeByMemberResp_Extra_DEFAULT
+	}
+	return p.Extra
+}
+func (p *SearchSubscribeByMemberResp) SetResp(val *base.BaseResp) {
+	p.Resp = val
+}
+func (p *SearchSubscribeByMemberResp) SetExtra(val []*SubscribeByMember) {
+	p.Extra = val
+}
+
+var fieldIDToName_SearchSubscribeByMemberResp = map[int16]string{
+	1: "resp",
+	2: "extra",
+}
+
+func (p *SearchSubscribeByMemberResp) IsSetResp() bool {
+	return p.Resp != nil
+}
+
+func (p *SearchSubscribeByMemberResp) IsSetExtra() bool {
+	return p.Extra != nil
+}
+
+func (p *SearchSubscribeByMemberResp) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SearchSubscribeByMemberResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SearchSubscribeByMemberResp) ReadField1(iprot thrift.TProtocol) error {
+	_field := base.NewBaseResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Resp = _field
+	return nil
+}
+func (p *SearchSubscribeByMemberResp) ReadField2(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*SubscribeByMember, 0, size)
+	values := make([]SubscribeByMember, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.Extra = _field
+	return nil
+}
+
+func (p *SearchSubscribeByMemberResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("SearchSubscribeByMemberResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *SearchSubscribeByMemberResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Resp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *SearchSubscribeByMemberResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetExtra() {
+		if err = oprot.WriteFieldBegin("extra", thrift.LIST, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Extra)); err != nil {
+			return err
+		}
+		for _, v := range p.Extra {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *SearchSubscribeByMemberResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SearchSubscribeByMemberResp(%+v)", *p)
+
+}
+
+func (p *SearchSubscribeByMemberResp) DeepEqual(ano *SearchSubscribeByMemberResp) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Resp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Extra) {
+		return false
+	}
+	return true
+}
+
+func (p *SearchSubscribeByMemberResp) Field1DeepEqual(src *base.BaseResp) bool {
+
+	if !p.Resp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *SearchSubscribeByMemberResp) Field2DeepEqual(src []*SubscribeByMember) bool {
+
+	if len(p.Extra) != len(src) {
+		return false
+	}
+	for i, v := range p.Extra {
+		_src := src[i]
+		if !v.DeepEqual(_src) {
+			return false
+		}
+	}
+	return true
+}
+
 type ScheduleService interface {
 	CreateSchedule(ctx context.Context, req *CreateOrUpdateScheduleReq) (r *base.NilResponse, err error)
 
@@ -10314,9 +10879,9 @@ type ScheduleService interface {
 
 	UpdateStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
 
-	ScheduleListResp(ctx context.Context, req *ScheduleListReq) (r *ScheduleListResp, err error)
+	ScheduleList(ctx context.Context, req *ScheduleListReq) (r *ScheduleListResp, err error)
 
-	ScheduleDateList(ctx context.Context, req *ScheduleListReq) (r *ScheduleListResp, err error)
+	ScheduleDateList(ctx context.Context, req *ScheduleListReq) (r *ScheduleDateListResp, err error)
 
 	ScheduleInfo(ctx context.Context, req *base.IDReq) (r *ScheduleInfo, err error)
 
@@ -10326,7 +10891,7 @@ type ScheduleService interface {
 
 	UpdateMemberStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
 
-	SearchSubscribeByMember(ctx context.Context, req *SearchSubscribeByMemberReq) (r *ScheduleMemberInfo, err error)
+	SearchSubscribeByMember(ctx context.Context, req *SearchSubscribeByMemberReq) (r *SearchSubscribeByMemberResp, err error)
 
 	CoachList(ctx context.Context, req *ScheduleCoachListReq) (r *ScheduleCoachListResp, err error)
 
@@ -10386,16 +10951,16 @@ func (p *ScheduleServiceClient) UpdateStatus(ctx context.Context, req *base.Stat
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ScheduleServiceClient) ScheduleListResp(ctx context.Context, req *ScheduleListReq) (r *ScheduleListResp, err error) {
-	var _args ScheduleServiceScheduleListRespArgs
+func (p *ScheduleServiceClient) ScheduleList(ctx context.Context, req *ScheduleListReq) (r *ScheduleListResp, err error) {
+	var _args ScheduleServiceScheduleListArgs
 	_args.Req = req
-	var _result ScheduleServiceScheduleListRespResult
-	if err = p.Client_().Call(ctx, "ScheduleListResp", &_args, &_result); err != nil {
+	var _result ScheduleServiceScheduleListResult
+	if err = p.Client_().Call(ctx, "ScheduleList", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ScheduleServiceClient) ScheduleDateList(ctx context.Context, req *ScheduleListReq) (r *ScheduleListResp, err error) {
+func (p *ScheduleServiceClient) ScheduleDateList(ctx context.Context, req *ScheduleListReq) (r *ScheduleDateListResp, err error) {
 	var _args ScheduleServiceScheduleDateListArgs
 	_args.Req = req
 	var _result ScheduleServiceScheduleDateListResult
@@ -10440,7 +11005,7 @@ func (p *ScheduleServiceClient) UpdateMemberStatus(ctx context.Context, req *bas
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ScheduleServiceClient) SearchSubscribeByMember(ctx context.Context, req *SearchSubscribeByMemberReq) (r *ScheduleMemberInfo, err error) {
+func (p *ScheduleServiceClient) SearchSubscribeByMember(ctx context.Context, req *SearchSubscribeByMemberReq) (r *SearchSubscribeByMemberResp, err error) {
 	var _args ScheduleServiceSearchSubscribeByMemberArgs
 	_args.Req = req
 	var _result ScheduleServiceSearchSubscribeByMemberResult
@@ -10491,7 +11056,7 @@ func NewScheduleServiceProcessor(handler ScheduleService) *ScheduleServiceProces
 	self.AddToProcessorMap("CreateSchedule", &scheduleServiceProcessorCreateSchedule{handler: handler})
 	self.AddToProcessorMap("UpdateSchedule", &scheduleServiceProcessorUpdateSchedule{handler: handler})
 	self.AddToProcessorMap("UpdateStatus", &scheduleServiceProcessorUpdateStatus{handler: handler})
-	self.AddToProcessorMap("ScheduleListResp", &scheduleServiceProcessorScheduleListResp{handler: handler})
+	self.AddToProcessorMap("ScheduleList", &scheduleServiceProcessorScheduleList{handler: handler})
 	self.AddToProcessorMap("ScheduleDateList", &scheduleServiceProcessorScheduleDateList{handler: handler})
 	self.AddToProcessorMap("ScheduleInfo", &scheduleServiceProcessorScheduleInfo{handler: handler})
 	self.AddToProcessorMap("MemberList", &scheduleServiceProcessorMemberList{handler: handler})
@@ -10664,16 +11229,16 @@ func (p *scheduleServiceProcessorUpdateStatus) Process(ctx context.Context, seqI
 	return true, err
 }
 
-type scheduleServiceProcessorScheduleListResp struct {
+type scheduleServiceProcessorScheduleList struct {
 	handler ScheduleService
 }
 
-func (p *scheduleServiceProcessorScheduleListResp) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := ScheduleServiceScheduleListRespArgs{}
+func (p *scheduleServiceProcessorScheduleList) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ScheduleServiceScheduleListArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("ScheduleListResp", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("ScheduleList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -10682,11 +11247,11 @@ func (p *scheduleServiceProcessorScheduleListResp) Process(ctx context.Context, 
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := ScheduleServiceScheduleListRespResult{}
+	result := ScheduleServiceScheduleListResult{}
 	var retval *ScheduleListResp
-	if retval, err2 = p.handler.ScheduleListResp(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ScheduleListResp: "+err2.Error())
-		oprot.WriteMessageBegin("ScheduleListResp", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.ScheduleList(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ScheduleList: "+err2.Error())
+		oprot.WriteMessageBegin("ScheduleList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -10694,7 +11259,7 @@ func (p *scheduleServiceProcessorScheduleListResp) Process(ctx context.Context, 
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("ScheduleListResp", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("ScheduleList", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -10731,7 +11296,7 @@ func (p *scheduleServiceProcessorScheduleDateList) Process(ctx context.Context, 
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := ScheduleServiceScheduleDateListResult{}
-	var retval *ScheduleListResp
+	var retval *ScheduleDateListResp
 	if retval, err2 = p.handler.ScheduleDateList(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ScheduleDateList: "+err2.Error())
 		oprot.WriteMessageBegin("ScheduleDateList", thrift.EXCEPTION, seqId)
@@ -10971,7 +11536,7 @@ func (p *scheduleServiceProcessorSearchSubscribeByMember) Process(ctx context.Co
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := ScheduleServiceSearchSubscribeByMemberResult{}
-	var retval *ScheduleMemberInfo
+	var retval *SearchSubscribeByMemberResp
 	if retval, err2 = p.handler.SearchSubscribeByMember(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing SearchSubscribeByMember: "+err2.Error())
 		oprot.WriteMessageBegin("SearchSubscribeByMember", thrift.EXCEPTION, seqId)
@@ -12116,38 +12681,38 @@ func (p *ScheduleServiceUpdateStatusResult) Field0DeepEqual(src *base.NilRespons
 	return true
 }
 
-type ScheduleServiceScheduleListRespArgs struct {
+type ScheduleServiceScheduleListArgs struct {
 	Req *ScheduleListReq `thrift:"req,1" frugal:"1,default,ScheduleListReq" json:"req"`
 }
 
-func NewScheduleServiceScheduleListRespArgs() *ScheduleServiceScheduleListRespArgs {
-	return &ScheduleServiceScheduleListRespArgs{}
+func NewScheduleServiceScheduleListArgs() *ScheduleServiceScheduleListArgs {
+	return &ScheduleServiceScheduleListArgs{}
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) InitDefault() {
+func (p *ScheduleServiceScheduleListArgs) InitDefault() {
 }
 
-var ScheduleServiceScheduleListRespArgs_Req_DEFAULT *ScheduleListReq
+var ScheduleServiceScheduleListArgs_Req_DEFAULT *ScheduleListReq
 
-func (p *ScheduleServiceScheduleListRespArgs) GetReq() (v *ScheduleListReq) {
+func (p *ScheduleServiceScheduleListArgs) GetReq() (v *ScheduleListReq) {
 	if !p.IsSetReq() {
-		return ScheduleServiceScheduleListRespArgs_Req_DEFAULT
+		return ScheduleServiceScheduleListArgs_Req_DEFAULT
 	}
 	return p.Req
 }
-func (p *ScheduleServiceScheduleListRespArgs) SetReq(val *ScheduleListReq) {
+func (p *ScheduleServiceScheduleListArgs) SetReq(val *ScheduleListReq) {
 	p.Req = val
 }
 
-var fieldIDToName_ScheduleServiceScheduleListRespArgs = map[int16]string{
+var fieldIDToName_ScheduleServiceScheduleListArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) IsSetReq() bool {
+func (p *ScheduleServiceScheduleListArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *ScheduleServiceScheduleListArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -12193,7 +12758,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleListRespArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleListArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -12203,7 +12768,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *ScheduleServiceScheduleListArgs) ReadField1(iprot thrift.TProtocol) error {
 	_field := NewScheduleListReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
@@ -12212,9 +12777,9 @@ func (p *ScheduleServiceScheduleListRespArgs) ReadField1(iprot thrift.TProtocol)
 	return nil
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *ScheduleServiceScheduleListArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ScheduleListResp_args"); err != nil {
+	if err = oprot.WriteStructBegin("ScheduleList_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -12240,7 +12805,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ScheduleServiceScheduleListArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -12257,15 +12822,15 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) String() string {
+func (p *ScheduleServiceScheduleListArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ScheduleServiceScheduleListRespArgs(%+v)", *p)
+	return fmt.Sprintf("ScheduleServiceScheduleListArgs(%+v)", *p)
 
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) DeepEqual(ano *ScheduleServiceScheduleListRespArgs) bool {
+func (p *ScheduleServiceScheduleListArgs) DeepEqual(ano *ScheduleServiceScheduleListArgs) bool {
 	if p == ano {
 		return true
 	} else if p == nil || ano == nil {
@@ -12277,7 +12842,7 @@ func (p *ScheduleServiceScheduleListRespArgs) DeepEqual(ano *ScheduleServiceSche
 	return true
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) Field1DeepEqual(src *ScheduleListReq) bool {
+func (p *ScheduleServiceScheduleListArgs) Field1DeepEqual(src *ScheduleListReq) bool {
 
 	if !p.Req.DeepEqual(src) {
 		return false
@@ -12285,38 +12850,38 @@ func (p *ScheduleServiceScheduleListRespArgs) Field1DeepEqual(src *ScheduleListR
 	return true
 }
 
-type ScheduleServiceScheduleListRespResult struct {
+type ScheduleServiceScheduleListResult struct {
 	Success *ScheduleListResp `thrift:"success,0,optional" frugal:"0,optional,ScheduleListResp" json:"success,omitempty"`
 }
 
-func NewScheduleServiceScheduleListRespResult() *ScheduleServiceScheduleListRespResult {
-	return &ScheduleServiceScheduleListRespResult{}
+func NewScheduleServiceScheduleListResult() *ScheduleServiceScheduleListResult {
+	return &ScheduleServiceScheduleListResult{}
 }
 
-func (p *ScheduleServiceScheduleListRespResult) InitDefault() {
+func (p *ScheduleServiceScheduleListResult) InitDefault() {
 }
 
-var ScheduleServiceScheduleListRespResult_Success_DEFAULT *ScheduleListResp
+var ScheduleServiceScheduleListResult_Success_DEFAULT *ScheduleListResp
 
-func (p *ScheduleServiceScheduleListRespResult) GetSuccess() (v *ScheduleListResp) {
+func (p *ScheduleServiceScheduleListResult) GetSuccess() (v *ScheduleListResp) {
 	if !p.IsSetSuccess() {
-		return ScheduleServiceScheduleListRespResult_Success_DEFAULT
+		return ScheduleServiceScheduleListResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *ScheduleServiceScheduleListRespResult) SetSuccess(x interface{}) {
+func (p *ScheduleServiceScheduleListResult) SetSuccess(x interface{}) {
 	p.Success = x.(*ScheduleListResp)
 }
 
-var fieldIDToName_ScheduleServiceScheduleListRespResult = map[int16]string{
+var fieldIDToName_ScheduleServiceScheduleListResult = map[int16]string{
 	0: "success",
 }
 
-func (p *ScheduleServiceScheduleListRespResult) IsSetSuccess() bool {
+func (p *ScheduleServiceScheduleListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *ScheduleServiceScheduleListRespResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *ScheduleServiceScheduleListResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -12362,7 +12927,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleListRespResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleListResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -12372,7 +12937,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ScheduleServiceScheduleListRespResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *ScheduleServiceScheduleListResult) ReadField0(iprot thrift.TProtocol) error {
 	_field := NewScheduleListResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
@@ -12381,9 +12946,9 @@ func (p *ScheduleServiceScheduleListRespResult) ReadField0(iprot thrift.TProtoco
 	return nil
 }
 
-func (p *ScheduleServiceScheduleListRespResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *ScheduleServiceScheduleListResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ScheduleListResp_result"); err != nil {
+	if err = oprot.WriteStructBegin("ScheduleList_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -12409,7 +12974,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ScheduleServiceScheduleListRespResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *ScheduleServiceScheduleListResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -12428,15 +12993,15 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *ScheduleServiceScheduleListRespResult) String() string {
+func (p *ScheduleServiceScheduleListResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ScheduleServiceScheduleListRespResult(%+v)", *p)
+	return fmt.Sprintf("ScheduleServiceScheduleListResult(%+v)", *p)
 
 }
 
-func (p *ScheduleServiceScheduleListRespResult) DeepEqual(ano *ScheduleServiceScheduleListRespResult) bool {
+func (p *ScheduleServiceScheduleListResult) DeepEqual(ano *ScheduleServiceScheduleListResult) bool {
 	if p == ano {
 		return true
 	} else if p == nil || ano == nil {
@@ -12448,7 +13013,7 @@ func (p *ScheduleServiceScheduleListRespResult) DeepEqual(ano *ScheduleServiceSc
 	return true
 }
 
-func (p *ScheduleServiceScheduleListRespResult) Field0DeepEqual(src *ScheduleListResp) bool {
+func (p *ScheduleServiceScheduleListResult) Field0DeepEqual(src *ScheduleListResp) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
@@ -12626,7 +13191,7 @@ func (p *ScheduleServiceScheduleDateListArgs) Field1DeepEqual(src *ScheduleListR
 }
 
 type ScheduleServiceScheduleDateListResult struct {
-	Success *ScheduleListResp `thrift:"success,0,optional" frugal:"0,optional,ScheduleListResp" json:"success,omitempty"`
+	Success *ScheduleDateListResp `thrift:"success,0,optional" frugal:"0,optional,ScheduleDateListResp" json:"success,omitempty"`
 }
 
 func NewScheduleServiceScheduleDateListResult() *ScheduleServiceScheduleDateListResult {
@@ -12636,16 +13201,16 @@ func NewScheduleServiceScheduleDateListResult() *ScheduleServiceScheduleDateList
 func (p *ScheduleServiceScheduleDateListResult) InitDefault() {
 }
 
-var ScheduleServiceScheduleDateListResult_Success_DEFAULT *ScheduleListResp
+var ScheduleServiceScheduleDateListResult_Success_DEFAULT *ScheduleDateListResp
 
-func (p *ScheduleServiceScheduleDateListResult) GetSuccess() (v *ScheduleListResp) {
+func (p *ScheduleServiceScheduleDateListResult) GetSuccess() (v *ScheduleDateListResp) {
 	if !p.IsSetSuccess() {
 		return ScheduleServiceScheduleDateListResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *ScheduleServiceScheduleDateListResult) SetSuccess(x interface{}) {
-	p.Success = x.(*ScheduleListResp)
+	p.Success = x.(*ScheduleDateListResp)
 }
 
 var fieldIDToName_ScheduleServiceScheduleDateListResult = map[int16]string{
@@ -12713,7 +13278,7 @@ ReadStructEndError:
 }
 
 func (p *ScheduleServiceScheduleDateListResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewScheduleListResp()
+	_field := NewScheduleDateListResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -12788,7 +13353,7 @@ func (p *ScheduleServiceScheduleDateListResult) DeepEqual(ano *ScheduleServiceSc
 	return true
 }
 
-func (p *ScheduleServiceScheduleDateListResult) Field0DeepEqual(src *ScheduleListResp) bool {
+func (p *ScheduleServiceScheduleDateListResult) Field0DeepEqual(src *ScheduleDateListResp) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
@@ -14326,7 +14891,7 @@ func (p *ScheduleServiceSearchSubscribeByMemberArgs) Field1DeepEqual(src *Search
 }
 
 type ScheduleServiceSearchSubscribeByMemberResult struct {
-	Success *ScheduleMemberInfo `thrift:"success,0,optional" frugal:"0,optional,ScheduleMemberInfo" json:"success,omitempty"`
+	Success *SearchSubscribeByMemberResp `thrift:"success,0,optional" frugal:"0,optional,SearchSubscribeByMemberResp" json:"success,omitempty"`
 }
 
 func NewScheduleServiceSearchSubscribeByMemberResult() *ScheduleServiceSearchSubscribeByMemberResult {
@@ -14336,16 +14901,16 @@ func NewScheduleServiceSearchSubscribeByMemberResult() *ScheduleServiceSearchSub
 func (p *ScheduleServiceSearchSubscribeByMemberResult) InitDefault() {
 }
 
-var ScheduleServiceSearchSubscribeByMemberResult_Success_DEFAULT *ScheduleMemberInfo
+var ScheduleServiceSearchSubscribeByMemberResult_Success_DEFAULT *SearchSubscribeByMemberResp
 
-func (p *ScheduleServiceSearchSubscribeByMemberResult) GetSuccess() (v *ScheduleMemberInfo) {
+func (p *ScheduleServiceSearchSubscribeByMemberResult) GetSuccess() (v *SearchSubscribeByMemberResp) {
 	if !p.IsSetSuccess() {
 		return ScheduleServiceSearchSubscribeByMemberResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *ScheduleServiceSearchSubscribeByMemberResult) SetSuccess(x interface{}) {
-	p.Success = x.(*ScheduleMemberInfo)
+	p.Success = x.(*SearchSubscribeByMemberResp)
 }
 
 var fieldIDToName_ScheduleServiceSearchSubscribeByMemberResult = map[int16]string{
@@ -14413,7 +14978,7 @@ ReadStructEndError:
 }
 
 func (p *ScheduleServiceSearchSubscribeByMemberResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewScheduleMemberInfo()
+	_field := NewSearchSubscribeByMemberResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -14488,7 +15053,7 @@ func (p *ScheduleServiceSearchSubscribeByMemberResult) DeepEqual(ano *ScheduleSe
 	return true
 }
 
-func (p *ScheduleServiceSearchSubscribeByMemberResult) Field0DeepEqual(src *ScheduleMemberInfo) bool {
+func (p *ScheduleServiceSearchSubscribeByMemberResult) Field0DeepEqual(src *SearchSubscribeByMemberResp) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false

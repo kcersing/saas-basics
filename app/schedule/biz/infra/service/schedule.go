@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
@@ -23,7 +22,7 @@ type Schedule struct {
 	cache *ristretto.Cache
 }
 
-func NewSchedule(ctx context.Context, c *app.RequestContext) do.Schedule {
+func NewSchedule(ctx context.Context) do.Schedule {
 	return &Schedule{
 		ctx:   ctx,
 		salt:  "",

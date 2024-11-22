@@ -35,16 +35,16 @@ func UpdateStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...c
 	return resp, nil
 }
 
-func ScheduleListResp(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (resp *schedule.ScheduleListResp, err error) {
-	resp, err = defaultClient.ScheduleListResp(ctx, req, callOptions...)
+func ScheduleList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (resp *schedule.ScheduleListResp, err error) {
+	resp, err = defaultClient.ScheduleList(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "ScheduleListResp call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "ScheduleList call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil
 }
 
-func ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (resp *schedule.ScheduleListResp, err error) {
+func ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (resp *schedule.ScheduleDateListResp, err error) {
 	resp, err = defaultClient.ScheduleDateList(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "ScheduleDateList call failed,err =%+v", err)
@@ -89,7 +89,7 @@ func UpdateMemberStatus(ctx context.Context, req *base.StatusCodeReq, callOption
 	return resp, nil
 }
 
-func SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq, callOptions ...callopt.Option) (resp *schedule.ScheduleMemberInfo, err error) {
+func SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq, callOptions ...callopt.Option) (resp *schedule.SearchSubscribeByMemberResp, err error) {
 	resp, err = defaultClient.SearchSubscribeByMember(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "SearchSubscribeByMember call failed,err =%+v", err)

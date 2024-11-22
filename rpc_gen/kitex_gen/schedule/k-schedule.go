@@ -7969,6 +7969,453 @@ func (p *ScheduleCoachListResp) field2Length() int {
 	return l
 }
 
+func (p *ScheduleDateListResp) FastRead(buf []byte) (int, error) {
+	var err error
+	var offset int
+	var l int
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	_, l, err = bthrift.Binary.ReadStructBegin(buf)
+	offset += l
+	if err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, l, err = bthrift.Binary.ReadFieldBegin(buf[offset:])
+		offset += l
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				l, err = p.FastReadField1(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.MAP {
+				l, err = p.FastReadField2(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+			offset += l
+			if err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		l, err = bthrift.Binary.ReadFieldEnd(buf[offset:])
+		offset += l
+		if err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	l, err = bthrift.Binary.ReadStructEnd(buf[offset:])
+	offset += l
+	if err != nil {
+		goto ReadStructEndError
+	}
+
+	return offset, nil
+ReadStructBeginError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleDateListResp[fieldId]), err)
+SkipFieldError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+ReadFieldEndError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ScheduleDateListResp) FastReadField1(buf []byte) (int, error) {
+	offset := 0
+
+	tmp := base.NewBaseResp()
+	if l, err := tmp.FastRead(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+	}
+	p.Resp = tmp
+	return offset, nil
+}
+
+func (p *ScheduleDateListResp) FastReadField2(buf []byte) (int, error) {
+	offset := 0
+
+	_, _, size, l, err := bthrift.Binary.ReadMapBegin(buf[offset:])
+	offset += l
+	if err != nil {
+		return offset, err
+	}
+	p.Extra = make(map[string][]*ScheduleInfo, size)
+	for i := 0; i < size; i++ {
+		var _key string
+		if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
+			return offset, err
+		} else {
+			offset += l
+
+			_key = v
+
+		}
+
+		_, size, l, err := bthrift.Binary.ReadListBegin(buf[offset:])
+		offset += l
+		if err != nil {
+			return offset, err
+		}
+		_val := make([]*ScheduleInfo, 0, size)
+		for i := 0; i < size; i++ {
+			_elem := NewScheduleInfo()
+			if l, err := _elem.FastRead(buf[offset:]); err != nil {
+				return offset, err
+			} else {
+				offset += l
+			}
+
+			_val = append(_val, _elem)
+		}
+		if l, err := bthrift.Binary.ReadListEnd(buf[offset:]); err != nil {
+			return offset, err
+		} else {
+			offset += l
+		}
+
+		p.Extra[_key] = _val
+	}
+	if l, err := bthrift.Binary.ReadMapEnd(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+	}
+	return offset, nil
+}
+
+// for compatibility
+func (p *ScheduleDateListResp) FastWrite(buf []byte) int {
+	return 0
+}
+
+func (p *ScheduleDateListResp) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "ScheduleDateListResp")
+	if p != nil {
+		offset += p.fastWriteField1(buf[offset:], binaryWriter)
+		offset += p.fastWriteField2(buf[offset:], binaryWriter)
+	}
+	offset += bthrift.Binary.WriteFieldStop(buf[offset:])
+	offset += bthrift.Binary.WriteStructEnd(buf[offset:])
+	return offset
+}
+
+func (p *ScheduleDateListResp) BLength() int {
+	l := 0
+	l += bthrift.Binary.StructBeginLength("ScheduleDateListResp")
+	if p != nil {
+		l += p.field1Length()
+		l += p.field2Length()
+	}
+	l += bthrift.Binary.FieldStopLength()
+	l += bthrift.Binary.StructEndLength()
+	return l
+}
+
+func (p *ScheduleDateListResp) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "resp", thrift.STRUCT, 1)
+	offset += p.Resp.FastWriteNocopy(buf[offset:], binaryWriter)
+	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	return offset
+}
+
+func (p *ScheduleDateListResp) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	if p.IsSetExtra() {
+		offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "extra", thrift.MAP, 2)
+		mapBeginOffset := offset
+		offset += bthrift.Binary.MapBeginLength(thrift.STRING, thrift.LIST, 0)
+		var length int
+		for k, v := range p.Extra {
+			length++
+
+			offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, k)
+
+			listBeginOffset := offset
+			offset += bthrift.Binary.ListBeginLength(thrift.STRUCT, 0)
+			var length int
+			for _, v := range v {
+				length++
+				offset += v.FastWriteNocopy(buf[offset:], binaryWriter)
+			}
+			bthrift.Binary.WriteListBegin(buf[listBeginOffset:], thrift.STRUCT, length)
+			offset += bthrift.Binary.WriteListEnd(buf[offset:])
+		}
+		bthrift.Binary.WriteMapBegin(buf[mapBeginOffset:], thrift.STRING, thrift.LIST, length)
+		offset += bthrift.Binary.WriteMapEnd(buf[offset:])
+		offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	}
+	return offset
+}
+
+func (p *ScheduleDateListResp) field1Length() int {
+	l := 0
+	l += bthrift.Binary.FieldBeginLength("resp", thrift.STRUCT, 1)
+	l += p.Resp.BLength()
+	l += bthrift.Binary.FieldEndLength()
+	return l
+}
+
+func (p *ScheduleDateListResp) field2Length() int {
+	l := 0
+	if p.IsSetExtra() {
+		l += bthrift.Binary.FieldBeginLength("extra", thrift.MAP, 2)
+		l += bthrift.Binary.MapBeginLength(thrift.STRING, thrift.LIST, len(p.Extra))
+		for k, v := range p.Extra {
+
+			l += bthrift.Binary.StringLengthNocopy(k)
+
+			l += bthrift.Binary.ListBeginLength(thrift.STRUCT, len(v))
+			for _, v := range v {
+				l += v.BLength()
+			}
+			l += bthrift.Binary.ListEndLength()
+		}
+		l += bthrift.Binary.MapEndLength()
+		l += bthrift.Binary.FieldEndLength()
+	}
+	return l
+}
+
+func (p *SearchSubscribeByMemberResp) FastRead(buf []byte) (int, error) {
+	var err error
+	var offset int
+	var l int
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	_, l, err = bthrift.Binary.ReadStructBegin(buf)
+	offset += l
+	if err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, l, err = bthrift.Binary.ReadFieldBegin(buf[offset:])
+		offset += l
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				l, err = p.FastReadField1(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.LIST {
+				l, err = p.FastReadField2(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+			offset += l
+			if err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		l, err = bthrift.Binary.ReadFieldEnd(buf[offset:])
+		offset += l
+		if err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	l, err = bthrift.Binary.ReadStructEnd(buf[offset:])
+	offset += l
+	if err != nil {
+		goto ReadStructEndError
+	}
+
+	return offset, nil
+ReadStructBeginError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SearchSubscribeByMemberResp[fieldId]), err)
+SkipFieldError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+ReadFieldEndError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SearchSubscribeByMemberResp) FastReadField1(buf []byte) (int, error) {
+	offset := 0
+
+	tmp := base.NewBaseResp()
+	if l, err := tmp.FastRead(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+	}
+	p.Resp = tmp
+	return offset, nil
+}
+
+func (p *SearchSubscribeByMemberResp) FastReadField2(buf []byte) (int, error) {
+	offset := 0
+
+	_, size, l, err := bthrift.Binary.ReadListBegin(buf[offset:])
+	offset += l
+	if err != nil {
+		return offset, err
+	}
+	p.Extra = make([]*SubscribeByMember, 0, size)
+	for i := 0; i < size; i++ {
+		_elem := NewSubscribeByMember()
+		if l, err := _elem.FastRead(buf[offset:]); err != nil {
+			return offset, err
+		} else {
+			offset += l
+		}
+
+		p.Extra = append(p.Extra, _elem)
+	}
+	if l, err := bthrift.Binary.ReadListEnd(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+	}
+	return offset, nil
+}
+
+// for compatibility
+func (p *SearchSubscribeByMemberResp) FastWrite(buf []byte) int {
+	return 0
+}
+
+func (p *SearchSubscribeByMemberResp) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "SearchSubscribeByMemberResp")
+	if p != nil {
+		offset += p.fastWriteField1(buf[offset:], binaryWriter)
+		offset += p.fastWriteField2(buf[offset:], binaryWriter)
+	}
+	offset += bthrift.Binary.WriteFieldStop(buf[offset:])
+	offset += bthrift.Binary.WriteStructEnd(buf[offset:])
+	return offset
+}
+
+func (p *SearchSubscribeByMemberResp) BLength() int {
+	l := 0
+	l += bthrift.Binary.StructBeginLength("SearchSubscribeByMemberResp")
+	if p != nil {
+		l += p.field1Length()
+		l += p.field2Length()
+	}
+	l += bthrift.Binary.FieldStopLength()
+	l += bthrift.Binary.StructEndLength()
+	return l
+}
+
+func (p *SearchSubscribeByMemberResp) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "resp", thrift.STRUCT, 1)
+	offset += p.Resp.FastWriteNocopy(buf[offset:], binaryWriter)
+	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	return offset
+}
+
+func (p *SearchSubscribeByMemberResp) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	if p.IsSetExtra() {
+		offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "extra", thrift.LIST, 2)
+		listBeginOffset := offset
+		offset += bthrift.Binary.ListBeginLength(thrift.STRUCT, 0)
+		var length int
+		for _, v := range p.Extra {
+			length++
+			offset += v.FastWriteNocopy(buf[offset:], binaryWriter)
+		}
+		bthrift.Binary.WriteListBegin(buf[listBeginOffset:], thrift.STRUCT, length)
+		offset += bthrift.Binary.WriteListEnd(buf[offset:])
+		offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	}
+	return offset
+}
+
+func (p *SearchSubscribeByMemberResp) field1Length() int {
+	l := 0
+	l += bthrift.Binary.FieldBeginLength("resp", thrift.STRUCT, 1)
+	l += p.Resp.BLength()
+	l += bthrift.Binary.FieldEndLength()
+	return l
+}
+
+func (p *SearchSubscribeByMemberResp) field2Length() int {
+	l := 0
+	if p.IsSetExtra() {
+		l += bthrift.Binary.FieldBeginLength("extra", thrift.LIST, 2)
+		l += bthrift.Binary.ListBeginLength(thrift.STRUCT, len(p.Extra))
+		for _, v := range p.Extra {
+			l += v.BLength()
+		}
+		l += bthrift.Binary.ListEndLength()
+		l += bthrift.Binary.FieldEndLength()
+	}
+	return l
+}
+
 func (p *ScheduleServiceCreateScheduleArgs) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
@@ -8743,7 +9190,7 @@ func (p *ScheduleServiceUpdateStatusResult) field0Length() int {
 	return l
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) FastRead(buf []byte) (int, error) {
+func (p *ScheduleServiceScheduleListArgs) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -8805,7 +9252,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleListRespArgs[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleListArgs[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -8814,7 +9261,7 @@ ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) FastReadField1(buf []byte) (int, error) {
+func (p *ScheduleServiceScheduleListArgs) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
 	tmp := NewScheduleListReq()
@@ -8828,13 +9275,13 @@ func (p *ScheduleServiceScheduleListRespArgs) FastReadField1(buf []byte) (int, e
 }
 
 // for compatibility
-func (p *ScheduleServiceScheduleListRespArgs) FastWrite(buf []byte) int {
+func (p *ScheduleServiceScheduleListArgs) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *ScheduleServiceScheduleListArgs) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "ScheduleListResp_args")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "ScheduleList_args")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 	}
@@ -8843,9 +9290,9 @@ func (p *ScheduleServiceScheduleListRespArgs) FastWriteNocopy(buf []byte, binary
 	return offset
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) BLength() int {
+func (p *ScheduleServiceScheduleListArgs) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("ScheduleListResp_args")
+	l += bthrift.Binary.StructBeginLength("ScheduleList_args")
 	if p != nil {
 		l += p.field1Length()
 	}
@@ -8854,7 +9301,7 @@ func (p *ScheduleServiceScheduleListRespArgs) BLength() int {
 	return l
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *ScheduleServiceScheduleListArgs) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "req", thrift.STRUCT, 1)
 	offset += p.Req.FastWriteNocopy(buf[offset:], binaryWriter)
@@ -8862,7 +9309,7 @@ func (p *ScheduleServiceScheduleListRespArgs) fastWriteField1(buf []byte, binary
 	return offset
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) field1Length() int {
+func (p *ScheduleServiceScheduleListArgs) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("req", thrift.STRUCT, 1)
 	l += p.Req.BLength()
@@ -8870,7 +9317,7 @@ func (p *ScheduleServiceScheduleListRespArgs) field1Length() int {
 	return l
 }
 
-func (p *ScheduleServiceScheduleListRespResult) FastRead(buf []byte) (int, error) {
+func (p *ScheduleServiceScheduleListResult) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -8932,7 +9379,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleListRespResult[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleListResult[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -8941,7 +9388,7 @@ ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ScheduleServiceScheduleListRespResult) FastReadField0(buf []byte) (int, error) {
+func (p *ScheduleServiceScheduleListResult) FastReadField0(buf []byte) (int, error) {
 	offset := 0
 
 	tmp := NewScheduleListResp()
@@ -8955,13 +9402,13 @@ func (p *ScheduleServiceScheduleListRespResult) FastReadField0(buf []byte) (int,
 }
 
 // for compatibility
-func (p *ScheduleServiceScheduleListRespResult) FastWrite(buf []byte) int {
+func (p *ScheduleServiceScheduleListResult) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *ScheduleServiceScheduleListRespResult) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *ScheduleServiceScheduleListResult) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "ScheduleListResp_result")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "ScheduleList_result")
 	if p != nil {
 		offset += p.fastWriteField0(buf[offset:], binaryWriter)
 	}
@@ -8970,9 +9417,9 @@ func (p *ScheduleServiceScheduleListRespResult) FastWriteNocopy(buf []byte, bina
 	return offset
 }
 
-func (p *ScheduleServiceScheduleListRespResult) BLength() int {
+func (p *ScheduleServiceScheduleListResult) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("ScheduleListResp_result")
+	l += bthrift.Binary.StructBeginLength("ScheduleList_result")
 	if p != nil {
 		l += p.field0Length()
 	}
@@ -8981,7 +9428,7 @@ func (p *ScheduleServiceScheduleListRespResult) BLength() int {
 	return l
 }
 
-func (p *ScheduleServiceScheduleListRespResult) fastWriteField0(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *ScheduleServiceScheduleListResult) fastWriteField0(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	if p.IsSetSuccess() {
 		offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "success", thrift.STRUCT, 0)
@@ -8991,7 +9438,7 @@ func (p *ScheduleServiceScheduleListRespResult) fastWriteField0(buf []byte, bina
 	return offset
 }
 
-func (p *ScheduleServiceScheduleListRespResult) field0Length() int {
+func (p *ScheduleServiceScheduleListResult) field0Length() int {
 	l := 0
 	if p.IsSetSuccess() {
 		l += bthrift.Binary.FieldBeginLength("success", thrift.STRUCT, 0)
@@ -9202,7 +9649,7 @@ ReadStructEndError:
 func (p *ScheduleServiceScheduleDateListResult) FastReadField0(buf []byte) (int, error) {
 	offset := 0
 
-	tmp := NewScheduleListResp()
+	tmp := NewScheduleDateListResp()
 	if l, err := tmp.FastRead(buf[offset:]); err != nil {
 		return offset, err
 	} else {
@@ -10492,7 +10939,7 @@ ReadStructEndError:
 func (p *ScheduleServiceSearchSubscribeByMemberResult) FastReadField0(buf []byte) (int, error) {
 	offset := 0
 
-	tmp := NewScheduleMemberInfo()
+	tmp := NewSearchSubscribeByMemberResp()
 	if l, err := tmp.FastRead(buf[offset:]); err != nil {
 		return offset, err
 	} else {
@@ -11089,11 +11536,11 @@ func (p *ScheduleServiceUpdateStatusResult) GetResult() interface{} {
 	return p.Success
 }
 
-func (p *ScheduleServiceScheduleListRespArgs) GetFirstArgument() interface{} {
+func (p *ScheduleServiceScheduleListArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-func (p *ScheduleServiceScheduleListRespResult) GetResult() interface{} {
+func (p *ScheduleServiceScheduleListResult) GetResult() interface{} {
 	return p.Success
 }
 

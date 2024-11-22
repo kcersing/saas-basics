@@ -16,13 +16,13 @@ type RPCClient interface {
 	CreateSchedule(ctx context.Context, req *schedule.CreateOrUpdateScheduleReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateSchedule(ctx context.Context, req *schedule.CreateOrUpdateScheduleReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 	UpdateStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	ScheduleListResp(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (r *schedule.ScheduleListResp, err error)
-	ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (r *schedule.ScheduleListResp, err error)
+	ScheduleList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (r *schedule.ScheduleListResp, err error)
+	ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (r *schedule.ScheduleDateListResp, err error)
 	ScheduleInfo(ctx context.Context, req *base.IDReq, callOptions ...callopt.Option) (r *schedule.ScheduleInfo, err error)
 	MemberList(ctx context.Context, req *schedule.ScheduleMemberListReq, callOptions ...callopt.Option) (r *schedule.ScheduleMemberListResp, err error)
 	CreateMember(ctx context.Context, req *schedule.CreateMemberReq, callOptions ...callopt.Option) (r *schedule.ScheduleMemberListResp, err error)
 	UpdateMemberStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
-	SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq, callOptions ...callopt.Option) (r *schedule.ScheduleMemberInfo, err error)
+	SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq, callOptions ...callopt.Option) (r *schedule.SearchSubscribeByMemberResp, err error)
 	CoachList(ctx context.Context, req *schedule.ScheduleCoachListReq, callOptions ...callopt.Option) (r *schedule.ScheduleCoachListResp, err error)
 	UpdateCoachStatus(ctx context.Context, req *base.StatusCodeReq, callOptions ...callopt.Option) (r *base.NilResponse, err error)
 }
@@ -65,11 +65,11 @@ func (c *clientImpl) UpdateStatus(ctx context.Context, req *base.StatusCodeReq, 
 	return c.kitexClient.UpdateStatus(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) ScheduleListResp(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (r *schedule.ScheduleListResp, err error) {
-	return c.kitexClient.ScheduleListResp(ctx, req, callOptions...)
+func (c *clientImpl) ScheduleList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (r *schedule.ScheduleListResp, err error) {
+	return c.kitexClient.ScheduleList(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (r *schedule.ScheduleListResp, err error) {
+func (c *clientImpl) ScheduleDateList(ctx context.Context, req *schedule.ScheduleListReq, callOptions ...callopt.Option) (r *schedule.ScheduleDateListResp, err error) {
 	return c.kitexClient.ScheduleDateList(ctx, req, callOptions...)
 }
 
@@ -89,7 +89,7 @@ func (c *clientImpl) UpdateMemberStatus(ctx context.Context, req *base.StatusCod
 	return c.kitexClient.UpdateMemberStatus(ctx, req, callOptions...)
 }
 
-func (c *clientImpl) SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq, callOptions ...callopt.Option) (r *schedule.ScheduleMemberInfo, err error) {
+func (c *clientImpl) SearchSubscribeByMember(ctx context.Context, req *schedule.SearchSubscribeByMemberReq, callOptions ...callopt.Option) (r *schedule.SearchSubscribeByMemberResp, err error) {
 	return c.kitexClient.SearchSubscribeByMember(ctx, req, callOptions...)
 }
 

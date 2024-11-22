@@ -38,7 +38,6 @@ gen-server:
 
 
 
-
 .PHONY: gen-http
 gen-http:
 	@cd app/frontend && cwgo server -I ../../idl --type HTTP --service facade --module facade --idl ../../idl/facade/member.thrift
