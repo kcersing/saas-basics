@@ -25,7 +25,7 @@ func (c Schedule) DeleteCoach(id int64) error {
 	panic("implement me")
 }
 
-func (c Schedule) CoachList(req schedule.ScheduleCoachListReq) (resp []*schedule.ScheduleCoachInfo, total int, err error) {
+func (c Schedule) CoachList(req schedule.ScheduleCoachListReq) (resp []*schedule.ScheduleCoachInfo, total int64, err error) {
 
 	var predicates []predicate.ScheduleCoach
 	if *req.Coach > 0 {

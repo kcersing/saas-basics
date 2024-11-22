@@ -36,7 +36,7 @@ func (s Schedule) UpdateSchedule(req schedule.CreateOrUpdateScheduleReq) error {
 	return nil
 }
 
-func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.ScheduleInfo, total int, err error) {
+func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.ScheduleInfo, total int64, err error) {
 	var predicates []predicate.Schedule
 
 	if *req.StartTime != "" {
@@ -84,7 +84,7 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 	return
 }
 
-func (s Schedule) ScheduleDateList(req schedule.ScheduleListReq) (map[string][]*schedule.ScheduleInfo, int, error) {
+func (s Schedule) ScheduleDateList(req schedule.ScheduleListReq) (map[string][]*schedule.ScheduleInfo, int64, error) {
 	*req.Page = 1
 	*req.PageSize = 1000
 	lists, total, err := s.ScheduleList(req)

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/cloudwego/kitex/pkg/kerrors"
 	base "rpc_gen/kitex_gen/base"
 	"schedule/biz/infra/service"
 )
@@ -19,7 +20,7 @@ func (s *UpdateStatusService) Run(req *base.StatusCodeReq) (resp *base.NilRespon
 
 	err = service.NewSchedule(s.ctx).UpdateScheduleStatus(req.Id, req.Status)
 	if err != nil {
-		return nil, err
+		return nil, kerrors.NewBizStatusError(50001, "修改失败")
 	}
 	return
 }

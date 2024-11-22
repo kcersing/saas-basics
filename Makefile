@@ -44,7 +44,10 @@ gen-http:
 
 .PHONY: gen-ent
 gen-ent:
-	#go run -mod=readonly entgo.io/ent/cmd/ent new User
-	@cd app/system/biz/dal/mysql && go generate ./ent
-	@cd app/user/biz/dal/mysql && go generate ./ent
-	@cd app/schedule/biz/dal/mysql && go generate ./ent
+	@cd app/company/biz/dal/mysql && go generate ./ent --feature sql/schemaconfig
+	@cd app/system/biz/dal/mysql && go generate ./ent --feature sql/schemaconfig
+	@cd app/user/biz/dal/mysql && go generate ./ent --feature sql/schemaconfig
+	@cd app/schedule/biz/dal/mysql && go generate ./ent --feature sql/schemaconfig
+
+
+

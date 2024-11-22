@@ -25,6 +25,7 @@ var (
 func Init() {
 
 	db, err := sql.Open("mysql", conf.GetConf().MySQL.DSN)
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,7 +50,16 @@ func Init() {
 		},
 	}
 	//}
-	DB = ent.NewClient(ent.Driver(drive))
+
+	options := ent.AlternateSchema(ent.SchemaConfig{
+		User:      "saas_user",
+		Member:    "saas_member",
+		EntryLogs: "saas_company",
+	})
+
+	DB = ent.NewClient(options, ent.Driver(drive))
+
+	//DB = ent.NewClient(ent.Driver(drive))
 
 	ctx := context.Background()
 	if err := DB.Schema.Create(

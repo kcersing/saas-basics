@@ -86,7 +86,7 @@ func (c Schedule) DeleteMember(id int64) error {
 	panic("implement me")
 }
 
-func (c Schedule) MemberList(req schedule.ScheduleMemberListReq) (resp []*schedule.ScheduleMemberInfo, total int, err error) {
+func (c Schedule) MemberList(req schedule.ScheduleMemberListReq) (resp []*schedule.ScheduleMemberInfo, total int64, err error) {
 
 	var predicates []predicate.ScheduleMember
 	if *req.Member > 0 {
@@ -170,7 +170,7 @@ func (c Schedule) MemberInfo(ID int64) (info *schedule.ScheduleMemberInfo, err e
 
 }
 
-func (s Schedule) SearchSubscribeByMember(req schedule.SearchSubscribeByMemberReq) (list []schedule.SubscribeByMember, total int64, err error) {
+func (s Schedule) SearchSubscribeByMember(req schedule.SearchSubscribeByMemberReq) (list []*schedule.SubscribeByMember, total int64, err error) {
 
 	m, err := s.db.Member.Query().Where(member.Mobile(req.Mobile)).First(s.ctx)
 
@@ -192,7 +192,7 @@ func (s Schedule) SearchSubscribeByMember(req schedule.SearchSubscribeByMemberRe
 	}
 	for _, v := range mpp {
 		mp, _ := v.QueryOwner().First(s.ctx)
-		list = append(list, schedule.SubscribeByMember{
+		list = append(list, &schedule.SubscribeByMember{
 			Avatar:                    minio.URLconvert(s.ctx, s.c, m.Avatar),
 			Mobile:                    m.Mobile,
 			MemberID:                  m.ID,
