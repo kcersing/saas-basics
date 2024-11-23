@@ -22,6 +22,11 @@ gen-rpc:
 
 	@cd ./app/schedule/ && cwgo client --type RPC --service schedule --module rpc_gen  -I ../idl  --idl ../idl/schedule/schedule.thrift
 
+	@cd ./app/company/ && cwgo client --type RPC --service company --module rpc_gen  -I ../idl  --idl ../idl/company/contract.thrift
+	@cd ./app/company/ && cwgo client --type RPC --service company --module rpc_gen  -I ../idl  --idl ../idl/company/entry.thrift
+	@cd ./app/company/ && cwgo client --type RPC --service company --module rpc_gen  -I ../idl  --idl ../idl/company/venue.thrift
+
+
 .PHONY: gen-server
 gen-server:
 	@cd ./app/system/ && cwgo server --type RPC --module system --server_name system --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/system/menu.thrift
@@ -36,6 +41,9 @@ gen-server:
 
 	@cd ./app/schedule/ && cwgo server --type RPC --module schedule --server_name schedule --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/schedule/schedule.thrift
 
+	@cd ./app/company/ && cwgo server --type RPC --module company --server_name company --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/company/contract.thrift
+	@cd ./app/company/ && cwgo server --type RPC --module company --server_name company --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/company/entry.thrift
+	@cd ./app/company/ && cwgo server --type RPC --module company --server_name company --pass "-use rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/company/venue.thrift
 
 
 .PHONY: gen-http

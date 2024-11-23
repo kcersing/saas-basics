@@ -52,9 +52,11 @@ func Init() {
 	//}
 
 	options := ent.AlternateSchema(ent.SchemaConfig{
-		User:      "saas_user",
-		Member:    "saas_member",
-		EntryLogs: "saas_company",
+		User:       "saas_user",
+		Member:     "saas_member",
+		EntryLogs:  "saas_company",
+		Venue:      "saas_company",
+		VenuePlace: "saas_company",
 	})
 
 	DB = ent.NewClient(options, ent.Driver(drive))

@@ -1,4 +1,4 @@
-namespace go member
+namespace go company
 
 include "../base/base.thrift"
 

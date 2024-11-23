@@ -1,8 +1,8 @@
 package service
 
 import (
+	"company/biz/dal/mysql/ent"
 	"fmt"
-	"user/biz/dal/mysql/ent"
 )
 
 // Rollback calls to tx.Rollback and wraps the given error

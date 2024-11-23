@@ -1,13 +1,10 @@
-package admin
+package service
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
-	"saas/app/admin/config"
-	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/membercontract"
@@ -19,7 +16,6 @@ import (
 
 type MemberProduct struct {
 	ctx   context.Context
-	c     *app.RequestContext
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
@@ -231,12 +227,11 @@ func (m MemberProduct) InfoByID(ID int64) (roleInfo *do.MemberProductInfo, err e
 	panic("implement me")
 }
 
-func NewMemberProduct(ctx context.Context, c *app.RequestContext) do.MemberProduct {
+func NewMemberProduct(ctx context.Context) do.MemberProduct {
 	return &MemberProduct{
 		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
+		salt:  "",
+		db:    mysql.DB,
+		cache: cache.Cache,
 	}
 }

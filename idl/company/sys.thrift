@@ -1,4 +1,4 @@
-namespace go system.sys
+namespace go company.sys
 
 include "../base/base.thrift"
 
