@@ -6,12 +6,15 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
-	"saas/app/admin/config"
-	infras "saas/app/idl/infras"
-	"saas/app/pkg/do"
+	"saas/biz/infras/do"
+	"saas/config"
+	"saas/idl_gen/model/base"
+	"saas/idl_gen/model/menu"
+	"saas/init"
 	"saas/pkg/db/ent"
 	menu2 "saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/role"
+	"strconv"
 	"time"
 )
 
@@ -23,7 +26,16 @@ type Menu struct {
 	cache *ristretto.Cache
 }
 
-func (m Menu) Create(menuReq *do.MenuInfo) error {
+func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
+	return &Menu{
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		db:    init.DB,
+		cache: init.Cache,
+	}
+}
+func (m Menu) Create(menuReq *menu.MenuInfo) error {
 	// get menu level
 	if menuReq.ParentID == 0 {
 		// it is a first level menu
@@ -75,7 +87,7 @@ func (m Menu) Create(menuReq *do.MenuInfo) error {
 	return nil
 }
 
-func (m Menu) Update(menuReq *do.MenuInfo) error {
+func (m Menu) Update(menuReq *menu.MenuInfo) error {
 	// get menu level
 	if menuReq.ParentID == 0 {
 		// it is a first level menu
@@ -147,7 +159,7 @@ func (m Menu) Delete(id int64) error {
 	return nil
 }
 
-func (m Menu) ListByRole(roleID int64) (list []*do.MenuInfoTree, total int64, err error) {
+func (m Menu) ListByRole(roleID int64) (list []*menu.MenuInfoTree, total int64, err error) {
 
 	menus, err := m.db.Role.
 		Query().
@@ -167,7 +179,7 @@ func (m Menu) ListByRole(roleID int64) (list []*do.MenuInfoTree, total int64, er
 	return
 }
 
-func (m Menu) List(req *do.MenuListReq) (list []*do.MenuInfoTree, total int, err error) {
+func (m Menu) List(req *base.PageInfoReq) (list []*menu.MenuInfoTree, total int, err error) {
 	// query menu list
 	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -179,24 +191,22 @@ func (m Menu) List(req *do.MenuListReq) (list []*do.MenuInfoTree, total int, err
 	total, _ = m.db.Menu.Query().Count(m.ctx)
 	return
 }
-func (m Menu) MenuTree(req *do.MenuListReq) (list []*do.Tree, total int, err error) {
+func (m Menu) MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error) {
 
 	inter, exist := m.cache.Get("MenuTree")
 	if exist {
-		if v, ok := inter.([]*do.Tree); ok {
-			return v, len(v), nil
+		if v, ok := inter.([]*base.Tree); ok {
+			return v, nil
 		}
 	}
 	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
-		return nil, 0, errors.Wrap(err, "query menu list failed")
+		return nil, errors.Wrap(err, "query menu list failed")
 	}
 
 	list = findMenuTreeChildren(menus, 1)
-
-	total, _ = m.db.Menu.Query().Count(m.ctx)
 
 	m.cache.SetWithTTL("MenuTree", &list, 1, 30*time.Hour)
 	return
@@ -281,30 +291,20 @@ func (m Menu) MenuParamListByMenuID(menuID int64) (list []do.MenuParam, total in
 	return
 }
 
-func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
-	return &Menu{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
-	}
-}
-
-func findMenuChildren(data []*ent.Menu, parentID int64) []*do.MenuInfoTree {
+func findMenuChildren(data []*ent.Menu, parentID int64) []*menu.MenuInfoTree {
 	if data == nil {
 		return nil
 	}
-	var result []*do.MenuInfoTree
+	var result []*menu.MenuInfoTree
 	for _, v := range data {
 		// discard the parent menu, only find the children menu
 
 		if v.ParentID == parentID && v.ID != parentID {
-			var m = new(do.MenuInfoTree)
-			m.ID = v.ID
-			m.Name = v.Name
-			m.Key = v.Path
-			m.OrderNo = v.OrderNo
+			var m = new(menu.MenuInfoTree)
+			m.MenuInfo.ID = v.ID
+			m.MenuInfo.Name = v.Name
+			m.MenuInfo.Key = v.Path
+			m.MenuInfo.OrderNo = v.OrderNo
 			m.Ignore = v.Ignore
 			//m.CreatedAt = v.CreatedAt.Format(time.DateTime)
 			//m.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
@@ -339,17 +339,17 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*do.MenuInfoTree {
 	return result
 }
 
-func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*do.Tree {
+func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*base.Tree {
 	if data == nil {
 		return nil
 	}
-	var result []*do.Tree
+	var result []*base.Tree
 	for _, v := range data {
 		if v.ParentID == parentID && v.ID != parentID {
-			var m = new(do.Tree)
+			var m = new(base.Tree)
 			m.Title = v.Name
-			m.Value = v.ID
-			m.Key = v.ID
+			m.Value = strconv.FormatInt(v.ID, 10)
+			m.Key = strconv.FormatInt(v.ID, 10)
 			m.Children = findMenuTreeChildren(data, v.ID)
 			result = append(result, m)
 		}
