@@ -120,14 +120,14 @@ func (ru *RoleUpdate) SetNillableRemark(s *string) *RoleUpdate {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (ru *RoleUpdate) SetOrderNo(i int32) *RoleUpdate {
+func (ru *RoleUpdate) SetOrderNo(i int64) *RoleUpdate {
 	ru.mutation.ResetOrderNo()
 	ru.mutation.SetOrderNo(i)
 	return ru
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (ru *RoleUpdate) SetNillableOrderNo(i *int32) *RoleUpdate {
+func (ru *RoleUpdate) SetNillableOrderNo(i *int64) *RoleUpdate {
 	if i != nil {
 		ru.SetOrderNo(*i)
 	}
@@ -135,7 +135,7 @@ func (ru *RoleUpdate) SetNillableOrderNo(i *int32) *RoleUpdate {
 }
 
 // AddOrderNo adds i to the "order_no" field.
-func (ru *RoleUpdate) AddOrderNo(i int32) *RoleUpdate {
+func (ru *RoleUpdate) AddOrderNo(i int64) *RoleUpdate {
 	ru.mutation.AddOrderNo(i)
 	return ru
 }
@@ -263,10 +263,10 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(role.FieldRemark, field.TypeString, value)
 	}
 	if value, ok := ru.mutation.OrderNo(); ok {
-		_spec.SetField(role.FieldOrderNo, field.TypeInt32, value)
+		_spec.SetField(role.FieldOrderNo, field.TypeInt64, value)
 	}
 	if value, ok := ru.mutation.AddedOrderNo(); ok {
-		_spec.AddField(role.FieldOrderNo, field.TypeInt32, value)
+		_spec.AddField(role.FieldOrderNo, field.TypeInt64, value)
 	}
 	if value, ok := ru.mutation.Apis(); ok {
 		_spec.SetField(role.FieldApis, field.TypeJSON, value)
@@ -431,14 +431,14 @@ func (ruo *RoleUpdateOne) SetNillableRemark(s *string) *RoleUpdateOne {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (ruo *RoleUpdateOne) SetOrderNo(i int32) *RoleUpdateOne {
+func (ruo *RoleUpdateOne) SetOrderNo(i int64) *RoleUpdateOne {
 	ruo.mutation.ResetOrderNo()
 	ruo.mutation.SetOrderNo(i)
 	return ruo
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (ruo *RoleUpdateOne) SetNillableOrderNo(i *int32) *RoleUpdateOne {
+func (ruo *RoleUpdateOne) SetNillableOrderNo(i *int64) *RoleUpdateOne {
 	if i != nil {
 		ruo.SetOrderNo(*i)
 	}
@@ -446,7 +446,7 @@ func (ruo *RoleUpdateOne) SetNillableOrderNo(i *int32) *RoleUpdateOne {
 }
 
 // AddOrderNo adds i to the "order_no" field.
-func (ruo *RoleUpdateOne) AddOrderNo(i int32) *RoleUpdateOne {
+func (ruo *RoleUpdateOne) AddOrderNo(i int64) *RoleUpdateOne {
 	ruo.mutation.AddOrderNo(i)
 	return ruo
 }
@@ -604,10 +604,10 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 		_spec.SetField(role.FieldRemark, field.TypeString, value)
 	}
 	if value, ok := ruo.mutation.OrderNo(); ok {
-		_spec.SetField(role.FieldOrderNo, field.TypeInt32, value)
+		_spec.SetField(role.FieldOrderNo, field.TypeInt64, value)
 	}
 	if value, ok := ruo.mutation.AddedOrderNo(); ok {
-		_spec.AddField(role.FieldOrderNo, field.TypeInt32, value)
+		_spec.AddField(role.FieldOrderNo, field.TypeInt64, value)
 	}
 	if value, ok := ruo.mutation.Apis(); ok {
 		_spec.SetField(role.FieldApis, field.TypeJSON, value)

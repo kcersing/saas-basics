@@ -101,9 +101,9 @@ var (
 	// DefaultPath holds the default value on creation for the "path" field.
 	DefaultPath string
 	// DefaultOrderNo holds the default value on creation for the "order_no" field.
-	DefaultOrderNo int32
+	DefaultOrderNo int64
 	// DefaultDisabled holds the default value on creation for the "disabled" field.
-	DefaultDisabled int32
+	DefaultDisabled int64
 	// DefaultIgnore holds the default value on creation for the "ignore" field.
 	DefaultIgnore bool
 )

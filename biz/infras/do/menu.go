@@ -1,13 +1,18 @@
 package do
 
-type Menu interface {
-	Create(menuReq *MenuInfo) error
-	Update(menuReq *MenuInfo) error
-	Delete(id int64) error
-	ListByRole(roleID int64) (list []*MenuInfoTree, total int64, err error)
-	List(req *MenuListReq) (list []*MenuInfoTree, total int, err error)
+import (
+	"saas/idl_gen/model/base"
+	"saas/idl_gen/model/menu"
+)
 
-	MenuTree(req *MenuListReq) (list []*Tree, total int, err error)
+type Menu interface {
+	Create(menuReq *menu.CreateOrUpdateMenuReq) error
+	Update(menuReq *menu.CreateOrUpdateMenuReq) error
+	Delete(id int64) error
+	MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error)
+	List(req *base.PageInfoReq) (list []*menu.MenuInfoTree, total int, err error)
+
+	MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error)
 
 	CreateMenuParam(req *MenuParam) error
 	UpdateMenuParam(req *MenuParam) error
@@ -15,6 +20,13 @@ type Menu interface {
 	MenuParamListByMenuID(menuID int64) (list []MenuParam, total int64, err error)
 }
 
+type MenuInfoTree struct {
+	MenuInfo  `json:"menu_info"`
+	CreatedAt string          `json:"createdAt,omitempty"`
+	UpdatedAt string          `json:"updatedAt,omitempty"`
+	Children  []*MenuInfoTree `json:"children,omitempty"`
+	Ignore    bool            `json:"ignore,omitempty"`
+}
 type MenuInfo struct {
 	ID       int64       `json:"id,omitempty"`
 	ParentID int64       `json:"parentId,omitempty"`
@@ -51,14 +63,6 @@ type MenuMeta struct {
 type MenuListReq struct {
 	Page     int64 `json:"page,omitempty"`
 	PageSize int64 `json:"pageSize,omitempty"`
-}
-
-type MenuInfoTree struct {
-	MenuInfo  `json:"menu_info"`
-	CreatedAt string          `json:"createdAt,omitempty"`
-	UpdatedAt string          `json:"updatedAt,omitempty"`
-	Children  []*MenuInfoTree `json:"children,omitempty"`
-	Ignore    bool            `json:"ignore,omitempty"`
 }
 
 // MenuParam is the menu parameter structure.data stored at the table `sys_menu_params`

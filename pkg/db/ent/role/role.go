@@ -87,7 +87,7 @@ var (
 	// DefaultRemark holds the default value on creation for the "remark" field.
 	DefaultRemark string
 	// DefaultOrderNo holds the default value on creation for the "order_no" field.
-	DefaultOrderNo int32
+	DefaultOrderNo int64
 	// DefaultApis holds the default value on creation for the "apis" field.
 	DefaultApis []int
 )

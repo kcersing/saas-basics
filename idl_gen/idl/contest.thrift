@@ -1,8 +1,9 @@
+
 namespace go contest
 
 include "../base/base.thrift"
 
-service  ContestService {
+service ContestService {
 
   base.NilResponse CreateContest(1: ContestInfo req) (api.post = "/api/admin/contest/create")
 

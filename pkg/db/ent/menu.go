@@ -29,9 +29,9 @@ type Menu struct {
 	// index name | 菜单名称
 	Name string `json:"name,omitempty"`
 	// sorting numbers | 排序编号
-	OrderNo int32 `json:"order_no,omitempty"`
+	OrderNo int64 `json:"order_no,omitempty"`
 	// disable status | 是否停用
-	Disabled int32 `json:"disabled,omitempty"`
+	Disabled int64 `json:"disabled,omitempty"`
 	// 当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问
 	Ignore bool `json:"ignore,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -163,13 +163,13 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field order_no", values[i])
 			} else if value.Valid {
-				m.OrderNo = int32(value.Int64)
+				m.OrderNo = value.Int64
 			}
 		case menu.FieldDisabled:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field disabled", values[i])
 			} else if value.Valid {
-				m.Disabled = int32(value.Int64)
+				m.Disabled = value.Int64
 			}
 		case menu.FieldIgnore:
 			if value, ok := values[i].(*sql.NullBool); !ok {

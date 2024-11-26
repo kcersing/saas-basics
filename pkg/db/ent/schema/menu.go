@@ -18,8 +18,8 @@ func (Menu) Fields() []ent.Field {
 		field.Int64("parent_id").Optional().Comment("parent menu ID | 父菜单ID"),
 		field.String("path").Optional().Default("").Comment("index path | 菜单路由路径"),
 		field.String("name").Comment("index name | 菜单名称"),
-		field.Int32("order_no").Default(0).Comment("sorting numbers | 排序编号"),
-		field.Int32("disabled").Optional().Default(0).Comment("disable status | 是否停用"),
+		field.Int64("order_no").Default(0).Comment("sorting numbers | 排序编号"),
+		field.Int64("disabled").Optional().Default(0).Comment("disable status | 是否停用"),
 		field.Bool("ignore").Optional().Default(false).Comment("当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问"),
 
 		//field.Int32("menu_level").Comment("menu level | 菜单层级"),

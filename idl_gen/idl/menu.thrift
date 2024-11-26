@@ -1,8 +1,77 @@
 namespace go menu
 
 include "../base/base.thrift"
-include "../base/data.thrift"
 
+// menu service
+service MenuService {
+
+  // 获取角色菜单权限列表
+ base.NilResponse MenuAuth(1: base.IDReq req) (api.post = "/service/auth/menu/role")
+  //获取角色菜单列表
+ base.NilResponse MenuRole(1: base.IDReq req) (api.post = "/service/menu/role")
+  // 创建或API
+ // base.NilResponse CreateApi(1: ApiInfo req) (api.post = "/service/api/create")
+
+  // 更新API
+ // base.NilResponse UpdateApi(1: ApiInfo req) (api.post = "/service/api/update")
+
+  // 删除API信息
+ // base.NilResponse DeleteApi(1: base.IDReq req) (api.post = "/service/api")
+
+  // 获取API列表
+  base.NilResponse ApiList(1: ApiPageReq req) (api.post = "/service/api/list")
+
+  base.NilResponse ApiTree(1: ApiPageReq req) (api.post = "/service/api/tree")
+
+//  // 创建菜单
+//  base.NilResponse CreateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/service/menu/create")
+//
+//  //更新菜单
+//  base.NilResponse UpdateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/service/menu/update")
+//
+//  //删除菜单信息
+//  base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/service/menu")
+
+
+  //获取菜单列表
+  base.NilResponse MenuLists(1: base.PageInfoReq req) (api.post = "/service/menu/list")
+
+  base.NilResponse MenuTree(1: base.PageInfoReq req) (api.post = "/service/menu/tree")
+
+//  //创建菜单额外参数
+//  base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/service/menu/param/create")
+//
+//  //更新菜单额外参数
+//  base.NilResponse UpdateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/service/menu/param/update")
+//
+//  //删除菜单额外参数
+//  base.NilResponse DeleteMenuParam(1: base.IDReq req) (api.post = "/service/menu/param")
+//
+//  //获取某个菜单的额外参数列表
+//  base.NilResponse MenuParamListByMenuID(1: base.IDReq req) (api.post = "/service/menu/param/list")
+
+}
+
+// API信息
+struct ApiInfo {
+    1:  i64 id (api.raw = "id")
+    2:  string createdAt (api.raw = "createdAt")
+    3:  string updatedAt (api.raw = "updatedAt")
+    4:  string path (api.raw = "path")
+    5:  string description (api.raw = "description")
+    6:  string group (api.raw = "group")
+    7:  string method (api.raw = "method")
+}
+
+// API列表请求数据
+struct ApiPageReq {
+    1:  i64 page (api.raw = "page")
+    2:  i64 pageSize (api.raw = "pageSize")
+    3:  string path (api.raw = "path")
+    4:  string description (api.raw = "description")
+    5:  string method (api.raw = "method")
+    6:  string group (api.raw = "group")
+}
 
 //菜单的meta数据
 struct Meta {
@@ -20,7 +89,6 @@ struct Meta {
     12:  string dynamicLevel (api.raw = "dynamicLevel" )
     13:  string realPath (api.raw = "realPath" )
 }
-
 
 // 创建或更新菜单信息参数
 struct CreateOrUpdateMenuReq {
@@ -46,41 +114,22 @@ struct CreateOrUpdateMenuParamReq{
     5:  string value (api.raw = "value")
 }
 
+struct MenuInfoTree {
+    1: MenuInfo MenuInfo;
+    2: string CreatedAt;
+    3: string UpdatedAt;
+    4: list<MenuInfoTree> Children;
+    5: bool Ignore;
+}
 
-
-
-
-
-// menu service
-service MenuService {
-
-  // 创建菜单
-  base.NilResponse CreateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/idl/menu/create")
-
-  //更新菜单
-  base.NilResponse UpdateMenu(1: CreateOrUpdateMenuReq req) (api.post = "/api/idl/menu/update")
-
-  //删除菜单信息
-  base.NilResponse DeleteMenu(1: base.IDReq req) (api.post = "/api/idl/menu")
-
-  //获取角色菜单列表
-  base.NilResponse MenuByRole(1: base.Empty req) (api.post = "/api/idl/menu/role")
-
-  //获取菜单列表
-  base.NilResponse MenuLists(1: base.PageInfoReq req) (api.post = "/api/idl/menu/list")
-
-  base.NilResponse ApiTree(1: base.PageInfoReq req) (api.post = "/api/idl/menu/tree")
-
-  //创建菜单额外参数
-  base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/idl/menu/param/create")
-
-  //更新菜单额外参数
-  base.NilResponse UpdateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/api/idl/menu/param/update")
-
-  //删除菜单额外参数
-  base.NilResponse DeleteMenuParam(1: base.IDReq req) (api.post = "/api/idl/menu/param")
-
-  //获取某个菜单的额外参数列表
-  base.NilResponse MenuParamListByMenuID(1: base.IDReq req) (api.post = "/api/idl/menu/param/list")
-
+struct MenuInfo {
+	1: i64 ID
+	2: i64 ParentID
+	3: string Path
+	4: string Name
+	5: string Key
+	6: list<MenuInfo> Children
+	7: i64 OrderNo
+	8: i64 Disabled
+	9: bool Ignore
 }

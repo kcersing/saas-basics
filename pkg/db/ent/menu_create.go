@@ -85,13 +85,13 @@ func (mc *MenuCreate) SetName(s string) *MenuCreate {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (mc *MenuCreate) SetOrderNo(i int32) *MenuCreate {
+func (mc *MenuCreate) SetOrderNo(i int64) *MenuCreate {
 	mc.mutation.SetOrderNo(i)
 	return mc
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (mc *MenuCreate) SetNillableOrderNo(i *int32) *MenuCreate {
+func (mc *MenuCreate) SetNillableOrderNo(i *int64) *MenuCreate {
 	if i != nil {
 		mc.SetOrderNo(*i)
 	}
@@ -99,13 +99,13 @@ func (mc *MenuCreate) SetNillableOrderNo(i *int32) *MenuCreate {
 }
 
 // SetDisabled sets the "disabled" field.
-func (mc *MenuCreate) SetDisabled(i int32) *MenuCreate {
+func (mc *MenuCreate) SetDisabled(i int64) *MenuCreate {
 	mc.mutation.SetDisabled(i)
 	return mc
 }
 
 // SetNillableDisabled sets the "disabled" field if the given value is not nil.
-func (mc *MenuCreate) SetNillableDisabled(i *int32) *MenuCreate {
+func (mc *MenuCreate) SetNillableDisabled(i *int64) *MenuCreate {
 	if i != nil {
 		mc.SetDisabled(*i)
 	}
@@ -306,11 +306,11 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 		_node.Name = value
 	}
 	if value, ok := mc.mutation.OrderNo(); ok {
-		_spec.SetField(menu.FieldOrderNo, field.TypeInt32, value)
+		_spec.SetField(menu.FieldOrderNo, field.TypeInt64, value)
 		_node.OrderNo = value
 	}
 	if value, ok := mc.mutation.Disabled(); ok {
-		_spec.SetField(menu.FieldDisabled, field.TypeInt32, value)
+		_spec.SetField(menu.FieldDisabled, field.TypeInt64, value)
 		_node.Disabled = value
 	}
 	if value, ok := mc.mutation.Ignore(); ok {

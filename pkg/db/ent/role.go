@@ -34,7 +34,7 @@ type Role struct {
 	// remark | 备注
 	Remark string `json:"remark,omitempty"`
 	// order number | 排序编号
-	OrderNo int32 `json:"order_no,omitempty"`
+	OrderNo int64 `json:"order_no,omitempty"`
 	// apis
 	Apis []int `json:"apis,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -141,7 +141,7 @@ func (r *Role) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field order_no", values[i])
 			} else if value.Valid {
-				r.OrderNo = int32(value.Int64)
+				r.OrderNo = value.Int64
 			}
 		case role.FieldApis:
 			if value, ok := values[i].(*[]byte); !ok {

@@ -91,14 +91,14 @@ func (mu *MenuUpdate) SetNillableName(s *string) *MenuUpdate {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (mu *MenuUpdate) SetOrderNo(i int32) *MenuUpdate {
+func (mu *MenuUpdate) SetOrderNo(i int64) *MenuUpdate {
 	mu.mutation.ResetOrderNo()
 	mu.mutation.SetOrderNo(i)
 	return mu
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableOrderNo(i *int32) *MenuUpdate {
+func (mu *MenuUpdate) SetNillableOrderNo(i *int64) *MenuUpdate {
 	if i != nil {
 		mu.SetOrderNo(*i)
 	}
@@ -106,20 +106,20 @@ func (mu *MenuUpdate) SetNillableOrderNo(i *int32) *MenuUpdate {
 }
 
 // AddOrderNo adds i to the "order_no" field.
-func (mu *MenuUpdate) AddOrderNo(i int32) *MenuUpdate {
+func (mu *MenuUpdate) AddOrderNo(i int64) *MenuUpdate {
 	mu.mutation.AddOrderNo(i)
 	return mu
 }
 
 // SetDisabled sets the "disabled" field.
-func (mu *MenuUpdate) SetDisabled(i int32) *MenuUpdate {
+func (mu *MenuUpdate) SetDisabled(i int64) *MenuUpdate {
 	mu.mutation.ResetDisabled()
 	mu.mutation.SetDisabled(i)
 	return mu
 }
 
 // SetNillableDisabled sets the "disabled" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableDisabled(i *int32) *MenuUpdate {
+func (mu *MenuUpdate) SetNillableDisabled(i *int64) *MenuUpdate {
 	if i != nil {
 		mu.SetDisabled(*i)
 	}
@@ -127,7 +127,7 @@ func (mu *MenuUpdate) SetNillableDisabled(i *int32) *MenuUpdate {
 }
 
 // AddDisabled adds i to the "disabled" field.
-func (mu *MenuUpdate) AddDisabled(i int32) *MenuUpdate {
+func (mu *MenuUpdate) AddDisabled(i int64) *MenuUpdate {
 	mu.mutation.AddDisabled(i)
 	return mu
 }
@@ -340,19 +340,19 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(menu.FieldName, field.TypeString, value)
 	}
 	if value, ok := mu.mutation.OrderNo(); ok {
-		_spec.SetField(menu.FieldOrderNo, field.TypeInt32, value)
+		_spec.SetField(menu.FieldOrderNo, field.TypeInt64, value)
 	}
 	if value, ok := mu.mutation.AddedOrderNo(); ok {
-		_spec.AddField(menu.FieldOrderNo, field.TypeInt32, value)
+		_spec.AddField(menu.FieldOrderNo, field.TypeInt64, value)
 	}
 	if value, ok := mu.mutation.Disabled(); ok {
-		_spec.SetField(menu.FieldDisabled, field.TypeInt32, value)
+		_spec.SetField(menu.FieldDisabled, field.TypeInt64, value)
 	}
 	if value, ok := mu.mutation.AddedDisabled(); ok {
-		_spec.AddField(menu.FieldDisabled, field.TypeInt32, value)
+		_spec.AddField(menu.FieldDisabled, field.TypeInt64, value)
 	}
 	if mu.mutation.DisabledCleared() {
-		_spec.ClearField(menu.FieldDisabled, field.TypeInt32)
+		_spec.ClearField(menu.FieldDisabled, field.TypeInt64)
 	}
 	if value, ok := mu.mutation.Ignore(); ok {
 		_spec.SetField(menu.FieldIgnore, field.TypeBool, value)
@@ -605,14 +605,14 @@ func (muo *MenuUpdateOne) SetNillableName(s *string) *MenuUpdateOne {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (muo *MenuUpdateOne) SetOrderNo(i int32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) SetOrderNo(i int64) *MenuUpdateOne {
 	muo.mutation.ResetOrderNo()
 	muo.mutation.SetOrderNo(i)
 	return muo
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableOrderNo(i *int32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) SetNillableOrderNo(i *int64) *MenuUpdateOne {
 	if i != nil {
 		muo.SetOrderNo(*i)
 	}
@@ -620,20 +620,20 @@ func (muo *MenuUpdateOne) SetNillableOrderNo(i *int32) *MenuUpdateOne {
 }
 
 // AddOrderNo adds i to the "order_no" field.
-func (muo *MenuUpdateOne) AddOrderNo(i int32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) AddOrderNo(i int64) *MenuUpdateOne {
 	muo.mutation.AddOrderNo(i)
 	return muo
 }
 
 // SetDisabled sets the "disabled" field.
-func (muo *MenuUpdateOne) SetDisabled(i int32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) SetDisabled(i int64) *MenuUpdateOne {
 	muo.mutation.ResetDisabled()
 	muo.mutation.SetDisabled(i)
 	return muo
 }
 
 // SetNillableDisabled sets the "disabled" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableDisabled(i *int32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) SetNillableDisabled(i *int64) *MenuUpdateOne {
 	if i != nil {
 		muo.SetDisabled(*i)
 	}
@@ -641,7 +641,7 @@ func (muo *MenuUpdateOne) SetNillableDisabled(i *int32) *MenuUpdateOne {
 }
 
 // AddDisabled adds i to the "disabled" field.
-func (muo *MenuUpdateOne) AddDisabled(i int32) *MenuUpdateOne {
+func (muo *MenuUpdateOne) AddDisabled(i int64) *MenuUpdateOne {
 	muo.mutation.AddDisabled(i)
 	return muo
 }
@@ -884,19 +884,19 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 		_spec.SetField(menu.FieldName, field.TypeString, value)
 	}
 	if value, ok := muo.mutation.OrderNo(); ok {
-		_spec.SetField(menu.FieldOrderNo, field.TypeInt32, value)
+		_spec.SetField(menu.FieldOrderNo, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.AddedOrderNo(); ok {
-		_spec.AddField(menu.FieldOrderNo, field.TypeInt32, value)
+		_spec.AddField(menu.FieldOrderNo, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.Disabled(); ok {
-		_spec.SetField(menu.FieldDisabled, field.TypeInt32, value)
+		_spec.SetField(menu.FieldDisabled, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.AddedDisabled(); ok {
-		_spec.AddField(menu.FieldDisabled, field.TypeInt32, value)
+		_spec.AddField(menu.FieldDisabled, field.TypeInt64, value)
 	}
 	if muo.mutation.DisabledCleared() {
-		_spec.ClearField(menu.FieldDisabled, field.TypeInt32)
+		_spec.ClearField(menu.FieldDisabled, field.TypeInt64)
 	}
 	if value, ok := muo.mutation.Ignore(); ok {
 		_spec.SetField(menu.FieldIgnore, field.TypeBool, value)

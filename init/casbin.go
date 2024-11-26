@@ -5,7 +5,7 @@ import (
 	"github.com/casbin/casbin/v2/model"
 	entAdapter "github.com/casbin/ent-adapter"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"saas/app/admin/config"
+	"saas/config"
 )
 
 var casbinEnforcer *casbin.Enforcer

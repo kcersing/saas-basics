@@ -81,12 +81,12 @@ func Name(v string) predicate.Menu {
 }
 
 // OrderNo applies equality check predicate on the "order_no" field. It's identical to OrderNoEQ.
-func OrderNo(v int32) predicate.Menu {
+func OrderNo(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldOrderNo, v))
 }
 
 // Disabled applies equality check predicate on the "disabled" field. It's identical to DisabledEQ.
-func Disabled(v int32) predicate.Menu {
+func Disabled(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldDisabled, v))
 }
 
@@ -346,82 +346,82 @@ func NameContainsFold(v string) predicate.Menu {
 }
 
 // OrderNoEQ applies the EQ predicate on the "order_no" field.
-func OrderNoEQ(v int32) predicate.Menu {
+func OrderNoEQ(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldOrderNo, v))
 }
 
 // OrderNoNEQ applies the NEQ predicate on the "order_no" field.
-func OrderNoNEQ(v int32) predicate.Menu {
+func OrderNoNEQ(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldNEQ(FieldOrderNo, v))
 }
 
 // OrderNoIn applies the In predicate on the "order_no" field.
-func OrderNoIn(vs ...int32) predicate.Menu {
+func OrderNoIn(vs ...int64) predicate.Menu {
 	return predicate.Menu(sql.FieldIn(FieldOrderNo, vs...))
 }
 
 // OrderNoNotIn applies the NotIn predicate on the "order_no" field.
-func OrderNoNotIn(vs ...int32) predicate.Menu {
+func OrderNoNotIn(vs ...int64) predicate.Menu {
 	return predicate.Menu(sql.FieldNotIn(FieldOrderNo, vs...))
 }
 
 // OrderNoGT applies the GT predicate on the "order_no" field.
-func OrderNoGT(v int32) predicate.Menu {
+func OrderNoGT(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldGT(FieldOrderNo, v))
 }
 
 // OrderNoGTE applies the GTE predicate on the "order_no" field.
-func OrderNoGTE(v int32) predicate.Menu {
+func OrderNoGTE(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldGTE(FieldOrderNo, v))
 }
 
 // OrderNoLT applies the LT predicate on the "order_no" field.
-func OrderNoLT(v int32) predicate.Menu {
+func OrderNoLT(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldLT(FieldOrderNo, v))
 }
 
 // OrderNoLTE applies the LTE predicate on the "order_no" field.
-func OrderNoLTE(v int32) predicate.Menu {
+func OrderNoLTE(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldLTE(FieldOrderNo, v))
 }
 
 // DisabledEQ applies the EQ predicate on the "disabled" field.
-func DisabledEQ(v int32) predicate.Menu {
+func DisabledEQ(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldDisabled, v))
 }
 
 // DisabledNEQ applies the NEQ predicate on the "disabled" field.
-func DisabledNEQ(v int32) predicate.Menu {
+func DisabledNEQ(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldNEQ(FieldDisabled, v))
 }
 
 // DisabledIn applies the In predicate on the "disabled" field.
-func DisabledIn(vs ...int32) predicate.Menu {
+func DisabledIn(vs ...int64) predicate.Menu {
 	return predicate.Menu(sql.FieldIn(FieldDisabled, vs...))
 }
 
 // DisabledNotIn applies the NotIn predicate on the "disabled" field.
-func DisabledNotIn(vs ...int32) predicate.Menu {
+func DisabledNotIn(vs ...int64) predicate.Menu {
 	return predicate.Menu(sql.FieldNotIn(FieldDisabled, vs...))
 }
 
 // DisabledGT applies the GT predicate on the "disabled" field.
-func DisabledGT(v int32) predicate.Menu {
+func DisabledGT(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldGT(FieldDisabled, v))
 }
 
 // DisabledGTE applies the GTE predicate on the "disabled" field.
-func DisabledGTE(v int32) predicate.Menu {
+func DisabledGTE(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldGTE(FieldDisabled, v))
 }
 
 // DisabledLT applies the LT predicate on the "disabled" field.
-func DisabledLT(v int32) predicate.Menu {
+func DisabledLT(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldLT(FieldDisabled, v))
 }
 
 // DisabledLTE applies the LTE predicate on the "disabled" field.
-func DisabledLTE(v int32) predicate.Menu {
+func DisabledLTE(v int64) predicate.Menu {
 	return predicate.Menu(sql.FieldLTE(FieldDisabled, v))
 }
 

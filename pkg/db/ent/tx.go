@@ -14,68 +14,22 @@ type Tx struct {
 	config
 	// API is the client for interacting with the API builders.
 	API *APIClient
-	// Contract is the client for interacting with the Contract builders.
-	Contract *ContractClient
+	// Contest is the client for interacting with the Contest builders.
+	Contest *ContestClient
+	// ContestParticipant is the client for interacting with the ContestParticipant builders.
+	ContestParticipant *ContestParticipantClient
 	// Dictionary is the client for interacting with the Dictionary builders.
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
 	DictionaryDetail *DictionaryDetailClient
-	// EntryLogs is the client for interacting with the EntryLogs builders.
-	EntryLogs *EntryLogsClient
-	// Face is the client for interacting with the Face builders.
-	Face *FaceClient
 	// Logs is the client for interacting with the Logs builders.
 	Logs *LogsClient
-	// Member is the client for interacting with the Member builders.
-	Member *MemberClient
-	// MemberContract is the client for interacting with the MemberContract builders.
-	MemberContract *MemberContractClient
-	// MemberContractContent is the client for interacting with the MemberContractContent builders.
-	MemberContractContent *MemberContractContentClient
-	// MemberDetails is the client for interacting with the MemberDetails builders.
-	MemberDetails *MemberDetailsClient
-	// MemberNote is the client for interacting with the MemberNote builders.
-	MemberNote *MemberNoteClient
-	// MemberProduct is the client for interacting with the MemberProduct builders.
-	MemberProduct *MemberProductClient
-	// MemberProductProperty is the client for interacting with the MemberProductProperty builders.
-	MemberProductProperty *MemberProductPropertyClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
 	MenuParam *MenuParamClient
-	// Messages is the client for interacting with the Messages builders.
-	Messages *MessagesClient
-	// Order is the client for interacting with the Order builders.
-	Order *OrderClient
-	// OrderAmount is the client for interacting with the OrderAmount builders.
-	OrderAmount *OrderAmountClient
-	// OrderItem is the client for interacting with the OrderItem builders.
-	OrderItem *OrderItemClient
-	// OrderPay is the client for interacting with the OrderPay builders.
-	OrderPay *OrderPayClient
-	// OrderSales is the client for interacting with the OrderSales builders.
-	OrderSales *OrderSalesClient
-	// Product is the client for interacting with the Product builders.
-	Product *ProductClient
-	// ProductProperty is the client for interacting with the ProductProperty builders.
-	ProductProperty *ProductPropertyClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
-	// Schedule is the client for interacting with the Schedule builders.
-	Schedule *ScheduleClient
-	// ScheduleCoach is the client for interacting with the ScheduleCoach builders.
-	ScheduleCoach *ScheduleCoachClient
-	// ScheduleMember is the client for interacting with the ScheduleMember builders.
-	ScheduleMember *ScheduleMemberClient
-	// Token is the client for interacting with the Token builders.
-	Token *TokenClient
-	// User is the client for interacting with the User builders.
-	User *UserClient
-	// Venue is the client for interacting with the Venue builders.
-	Venue *VenueClient
-	// VenuePlace is the client for interacting with the VenuePlace builders.
-	VenuePlace *VenuePlaceClient
 
 	// lazily loaded.
 	client     *Client
@@ -208,37 +162,14 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.API = NewAPIClient(tx.config)
-	tx.Contract = NewContractClient(tx.config)
+	tx.Contest = NewContestClient(tx.config)
+	tx.ContestParticipant = NewContestParticipantClient(tx.config)
 	tx.Dictionary = NewDictionaryClient(tx.config)
 	tx.DictionaryDetail = NewDictionaryDetailClient(tx.config)
-	tx.EntryLogs = NewEntryLogsClient(tx.config)
-	tx.Face = NewFaceClient(tx.config)
 	tx.Logs = NewLogsClient(tx.config)
-	tx.Member = NewMemberClient(tx.config)
-	tx.MemberContract = NewMemberContractClient(tx.config)
-	tx.MemberContractContent = NewMemberContractContentClient(tx.config)
-	tx.MemberDetails = NewMemberDetailsClient(tx.config)
-	tx.MemberNote = NewMemberNoteClient(tx.config)
-	tx.MemberProduct = NewMemberProductClient(tx.config)
-	tx.MemberProductProperty = NewMemberProductPropertyClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
-	tx.Messages = NewMessagesClient(tx.config)
-	tx.Order = NewOrderClient(tx.config)
-	tx.OrderAmount = NewOrderAmountClient(tx.config)
-	tx.OrderItem = NewOrderItemClient(tx.config)
-	tx.OrderPay = NewOrderPayClient(tx.config)
-	tx.OrderSales = NewOrderSalesClient(tx.config)
-	tx.Product = NewProductClient(tx.config)
-	tx.ProductProperty = NewProductPropertyClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
-	tx.Schedule = NewScheduleClient(tx.config)
-	tx.ScheduleCoach = NewScheduleCoachClient(tx.config)
-	tx.ScheduleMember = NewScheduleMemberClient(tx.config)
-	tx.Token = NewTokenClient(tx.config)
-	tx.User = NewUserClient(tx.config)
-	tx.Venue = NewVenueClient(tx.config)
-	tx.VenuePlace = NewVenuePlaceClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

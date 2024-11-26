@@ -104,13 +104,13 @@ func (rc *RoleCreate) SetNillableRemark(s *string) *RoleCreate {
 }
 
 // SetOrderNo sets the "order_no" field.
-func (rc *RoleCreate) SetOrderNo(i int32) *RoleCreate {
+func (rc *RoleCreate) SetOrderNo(i int64) *RoleCreate {
 	rc.mutation.SetOrderNo(i)
 	return rc
 }
 
 // SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (rc *RoleCreate) SetNillableOrderNo(i *int32) *RoleCreate {
+func (rc *RoleCreate) SetNillableOrderNo(i *int64) *RoleCreate {
 	if i != nil {
 		rc.SetOrderNo(*i)
 	}
@@ -296,7 +296,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_node.Remark = value
 	}
 	if value, ok := rc.mutation.OrderNo(); ok {
-		_spec.SetField(role.FieldOrderNo, field.TypeInt32, value)
+		_spec.SetField(role.FieldOrderNo, field.TypeInt64, value)
 		_node.OrderNo = value
 	}
 	if value, ok := rc.mutation.Apis(); ok {

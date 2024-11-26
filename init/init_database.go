@@ -8,6 +8,7 @@ package init
 
 import (
 	"context"
+	infrasData "saas/init/data"
 	"saas/pkg/db/ent"
 	"saas/pkg/encrypt"
 

@@ -91,7 +91,7 @@ func Remark(v string) predicate.Role {
 }
 
 // OrderNo applies equality check predicate on the "order_no" field. It's identical to OrderNoEQ.
-func OrderNo(v int32) predicate.Role {
+func OrderNo(v int64) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldOrderNo, v))
 }
 
@@ -486,42 +486,42 @@ func RemarkContainsFold(v string) predicate.Role {
 }
 
 // OrderNoEQ applies the EQ predicate on the "order_no" field.
-func OrderNoEQ(v int32) predicate.Role {
+func OrderNoEQ(v int64) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldOrderNo, v))
 }
 
 // OrderNoNEQ applies the NEQ predicate on the "order_no" field.
-func OrderNoNEQ(v int32) predicate.Role {
+func OrderNoNEQ(v int64) predicate.Role {
 	return predicate.Role(sql.FieldNEQ(FieldOrderNo, v))
 }
 
 // OrderNoIn applies the In predicate on the "order_no" field.
-func OrderNoIn(vs ...int32) predicate.Role {
+func OrderNoIn(vs ...int64) predicate.Role {
 	return predicate.Role(sql.FieldIn(FieldOrderNo, vs...))
 }
 
 // OrderNoNotIn applies the NotIn predicate on the "order_no" field.
-func OrderNoNotIn(vs ...int32) predicate.Role {
+func OrderNoNotIn(vs ...int64) predicate.Role {
 	return predicate.Role(sql.FieldNotIn(FieldOrderNo, vs...))
 }
 
 // OrderNoGT applies the GT predicate on the "order_no" field.
-func OrderNoGT(v int32) predicate.Role {
+func OrderNoGT(v int64) predicate.Role {
 	return predicate.Role(sql.FieldGT(FieldOrderNo, v))
 }
 
 // OrderNoGTE applies the GTE predicate on the "order_no" field.
-func OrderNoGTE(v int32) predicate.Role {
+func OrderNoGTE(v int64) predicate.Role {
 	return predicate.Role(sql.FieldGTE(FieldOrderNo, v))
 }
 
 // OrderNoLT applies the LT predicate on the "order_no" field.
-func OrderNoLT(v int32) predicate.Role {
+func OrderNoLT(v int64) predicate.Role {
 	return predicate.Role(sql.FieldLT(FieldOrderNo, v))
 }
 
 // OrderNoLTE applies the LTE predicate on the "order_no" field.
-func OrderNoLTE(v int32) predicate.Role {
+func OrderNoLTE(v int64) predicate.Role {
 	return predicate.Role(sql.FieldLTE(FieldOrderNo, v))
 }
 
