@@ -45,10 +45,11 @@ service SystemService {
   // Delete logs | 删除日志信息
   base.NilResponse DeleteLogs(1: base.Ids req) (api.post = "/service/logs/deleteAll")
 }
+
 // 菜单授权请求数据
 struct MenuAuthInfoReq {
-    1: i64 role_id (api.raw = "role_id")
-    2: list<i64> menu_ids (api.raw = "menu_ids")
+  1: i64 role_id (api.raw = "roleId")
+    2: list<i64> menu_ids (api.raw = "menuIds")
 }
 struct RoleListResp {
     1: base.BaseResp resp
@@ -62,7 +63,7 @@ struct LogsListResp {
 
 //创建或更新角色信息参数
 struct RoleInfo {
-    1:  i64 ID (api.raw = "ID")
+    1:  i64 ID (api.raw = "Id")
     2:  string name (api.raw = "name")
     3:  string value (api.raw = "value")
     4:  string defaultRouter (api.raw = "defaultRouter")
@@ -94,7 +95,7 @@ struct ApiAuthInfo {
 
 // 创建或更新API授权信息
 struct CreateOrUpdateApiAuthReq {
-    1:  i64 role_id (api.raw = "role_id")
+    1:  i64 role_id (api.raw = "roleId")
 //    2:  ApiAuthInfo data (api.raw = "api_auth_info")
     2:  list<i64> apis (api.raw = "apis")
 }

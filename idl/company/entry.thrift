@@ -7,13 +7,13 @@ service CompanyService {
   EntryListResp EntryList(1: EntryListReq req) (api.post = "/service/entry/list")
 }
 struct CreateEntry  {
-    1:i64 MemberProductId  (api.raw = "member_product_id")
-	2:i64 MemberPropertyId (api.raw = "member_property_id")
-	3:i64 EntryTime        (api.raw = "entry_time")
-	4:i64 LeavingTime      (api.raw = "leaving_time")
-	5:i64 MemberId         (api.raw = "member_id")
-	6:i64 UserId           (api.raw = "user_id")
-	7:i64 VenueId          (api.raw = "venue_id")
+    1:i64 MemberProductId  (api.raw = "memberProductId")
+	2:i64 MemberPropertyId (api.raw = "memberPropertyId")
+	3:i64 EntryTime        (api.raw = "entryTime")
+	4:i64 LeavingTime      (api.raw = "leavingTime")
+	5:i64 MemberId         (api.raw = "memberId")
+	6:i64 UserId           (api.raw = "userId")
+	7:i64 VenueId          (api.raw = "venueId")
 }
 struct EntryListResp {
     1: base.BaseResp resp
@@ -42,14 +42,11 @@ struct EntryInfo  {
 struct EntryListReq{
     1:  optional i64 page (api.raw = "page")
     2:  optional i64 pageSize (api.raw = "pageSize")
-
-    3:  optional i64 memberId (api.raw = "member_id")
-    4:  optional i64 venueId (api.raw = "venue_id")
-
-    5:  optional i64 memberProductId (api.raw = "member_product_id")
-    6:  optional i64 memberPropertyId (api.raw = "member_property_id")
-    7:  optional i64 userId (api.raw = "user_id")
-    8:  optional string entryTime (api.raw = "entry_time")
-    9:  optional string leavingTime (api.raw = "leaving_time")
-
+    3:  optional i64 memberId (api.raw = "memberId")
+    4:  optional i64 venueId (api.raw = "venueId")
+    5:  optional i64 memberProductId (api.raw = "memberProductId")
+    6:  optional i64 memberPropertyId (api.raw = "memberPropertyId")
+    7:  optional i64 userId (api.raw = "userId")
+    8:  optional string entryTime (api.raw = "entryTime")
+    9:  optional string leavingTime (api.raw = "leavingTime")
 }

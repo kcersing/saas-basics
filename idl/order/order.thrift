@@ -2,39 +2,38 @@ namespace go order
 
 include "../base/base.thrift"
 
-
 struct OrderItem {
-    1: i64 orderId
-    2: i64 userId
-    3: string userName
-    4: string address
-    5: i64 productId
-    6: i64 stockNum
-    7: string productSnapshot
+    1: i64 orderId (api.raw = "orderId")
+    2: i64 userId (api.raw = "userId")
+    3: string userName (api.raw = "userName")
+    4: string address (api.raw = "address")
+    5: i64 productId (api.raw = "productId")
+    6: i64 stockNum (api.raw = "stockNum")
+    7: string productSnapshot (api.raw = "productSnapshot")
 }
 
 struct CreateOrderReq {
-    1: optional string assign_at
-    2: optional list<propertyItem> cardProperty
-    3: optional list<propertyItem> courseProperty
-    4: optional list<propertyItem> classProperty
-    5: optional i64 memberId
-    6: optional i64 natureType
-    7: optional i64 productId
-    8: optional double total
-    9: optional i64 venueId
-    10: optional list<staffItem> staffs
-    11:optional string signImg
-    12:optional list<i64> contract
+    1: optional string assignAt (api.raw = "assignAt")
+    2: optional list<propertyItem> cardProperty (api.raw = "cardProperty")
+    3: optional list<propertyItem> courseProperty (api.raw = "courseProperty")
+    4: optional list<propertyItem> classProperty (api.raw = "classProperty")
+    5: optional i64 memberId (api.raw = "memberId")
+    6: optional i64 natureType (api.raw = "natureType")
+    7: optional i64 productId (api.raw = "productId")
+    8: optional double total (api.raw = "total")
+    9: optional i64 venueId (api.raw = "venueId")
+    10: optional list<staffItem> staffs (api.raw = "staffs")
+    11:optional string signImg (api.raw = "signImg")
+    12:optional list<i64> contract (api.raw = "contract")
 }
 
 struct propertyItem{
-    1:optional i64 property
-    2:optional i64 quantity
+    1:optional i64 property (api.raw = "property")
+    2:optional i64 quantity (api.raw = "quantity")
 }
 struct staffItem{
-    1:optional i64 id
-    2:optional i64 ratio
+    1:optional i64 id (api.raw = "id")
+    2:optional i64 ratio (api.raw = "ratio")
 }
 
 struct ListOrderReq {

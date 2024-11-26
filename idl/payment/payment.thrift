@@ -12,24 +12,24 @@ service PaymentService {
 }
 
 struct ChargeReq {
-   1: i64 amount;
-   2: string order_id;
-   3: i64 user_id;
-   4: i64 member_id;
+   1: i64 amount  (api.raw = "amount")
+   2: string orderId (api.raw = "orderId")
+   3: i64 userId (api.raw = "userId")
+   4: i64 memberId (api.raw = "memberId")
 }
 
 struct ChargeResp {
-  string transaction_id = 1;
+  1: string transactionId  (api.raw = "transactionId")
 }
 
 struct UnifyPayReq {
-    1: string orderSn,
-    2: double payment,
-    3: double remission,
-    4: string note,
+    1: string orderSn (api.raw = "orderSn")
+    2: double payment (api.raw = "payment")
+    3: double remission (api.raw = "remission")
+    4: string note (api.raw = "note")
 }
 
 struct QRPayReq {
-    1: string orderSn,
-    2: string payType,
+    1: string orderSn (api.raw = "orderSn")
+    2: string payType (api.raw = "payType")
 }

@@ -19,6 +19,7 @@ type Menu interface {
 	DeleteMenuParam(menuParamID int64) error
 	MenuParamListByMenuID(menuID int64) (list []MenuParam, total int64, err error)
 }
+
 type MenuInfoTree struct {
 	MenuInfo  `json:"menu_info"`
 	CreatedAt string          `json:"createdAt,omitempty"`

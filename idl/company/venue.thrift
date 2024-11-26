@@ -47,8 +47,6 @@ struct VenuePlaceListResp {
     2: optional list<VenuePlaceInfo> extra
 }
 service VenueService {
-  // 获取用户列表
-
     // 添加
     base.NilResponse CreateVenuePlace(1: VenuePlaceInfo req) (api.post = "/service/place/create")
     // 编辑

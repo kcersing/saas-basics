@@ -40,17 +40,17 @@ struct MemberInfo {
 
 struct MemberPrivacy{
 	//身份证号
- 1: string	IdentityCard (api.raw = "identity_card")
+ 1: string	IdentityCard (api.raw = "identityCard")
 	//正面
- 2: string	FaceIdentityCard (api.raw = "face_identity_card")
+ 2: string	FaceIdentityCard (api.raw = "faceIdentityCard")
 	//反面
- 3: string BackIdentityCard (api.raw = "back_identity_card")
+ 3: string BackIdentityCard (api.raw = "backIdentityCard")
 	//人脸照片
- 4: string FacePic (api.raw = "face_pic")
+ 4: string FacePic (api.raw = "facePic")
 	//特征值
- 5: string FaceEigenvalue (api.raw = "face_eigenvalue")
+ 5: string FaceEigenvalue (api.raw = "faceEigenvalue")
 	//人脸更新时间
- 6: string FaceUpdateTime (api.raw = "face_update_time")
+ 6: string FaceUpdateTime (api.raw = "faceUpdateTime")
 }
 
 

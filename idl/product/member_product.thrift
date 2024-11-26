@@ -22,7 +22,6 @@ struct MemberPropertyListReq{
     8:  optional i64 memberProductId (api.raw = "memberProductId")
 }
 
-
 struct MemberProductSearchReq{
     1:  optional list<i64> members (api.raw = "members")
 }

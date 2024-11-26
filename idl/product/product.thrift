@@ -3,26 +3,26 @@ namespace go admin.product
 include "../base/base.thrift"
 
 struct Property {
-    1: i64 product_id
-    2: string name // 名称
-    3: double price // 定价
-    4: i64 duration // 时长
-    5: i64 length // 单次时长
-    6: i64 count // 次数
-    7: string type // 次数
-    8: string data
-    9: i64 id
+    1: i64 productId (api.raw = "productId")
+    2: string name (api.raw = "name")// 名称
+    3: double price (api.raw = "price")// 定价
+    4: i64 duration (api.raw = "duration")// 时长
+    5: i64 length (api.raw = "length")// 单次时长
+    6: i64 count (api.raw = "count")// 次数
+    7: string type (api.raw = "type")// 次数
+    8: string data (api.raw = "data")
+    9: i64 id (api.raw = "id")
 }
 
 struct Product {
-    1: string name // 商品名
-    2: string pic // 主图
-    3: string description // 详情
-    4: list <Property> property // 属性
-    5: double price // 价格
-    6: i64 stock // 库存
-    7: i64 status // 商品状态
-    8: i64 id
+    1: string name (api.raw = "name")// 商品名
+    2: string pic (api.raw = "pic")// 主图
+    3: string description (api.raw = "description")// 详情
+    4: list <Property> property (api.raw = "property")// 属性
+    5: double price (api.raw = "price")// 价格
+    6: i64 stock (api.raw = "stock")// 库存
+    7: i64 status (api.raw = "status")// 商品状态
+    8: i64 id (api.raw = "id")
 }
 
 struct CreateOrUpdatePropertyReq {
