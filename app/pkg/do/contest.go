@@ -14,7 +14,7 @@ type Contest interface {
 
 type ParticipantInfo struct {
 	ContestId int64  `json:"contestId"`
-	Name      string `json:"Name"`
+	Name      string `json:"name"`
 	Mobile    string `json:"mobile"`
 	Fields    string `json:"fields"`
 }
@@ -22,7 +22,7 @@ type ParticipantListReq struct {
 }
 type ContestInfo struct {
 	Id          int64   `json:"id"`
-	Name        string  `json:"Name"`
+	Name        string  `json:"name"`
 	SignNumber  int64   `json:"signNumber"`
 	SignStartAt string  `json:"signStartAt"`
 	SignEndAt   string  `json:"signEndAt"`
