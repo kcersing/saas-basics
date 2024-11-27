@@ -1,17 +1,17 @@
-package admin
+package service
 
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
-	"saas/app/admin/config"
-	"saas/app/admin/infras"
-	"saas/app/pkg/do"
+	"saas/biz/infras/do"
+	"saas/config"
+
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/role"
-	"saas/pkg/db/ent/user"
+
 	"strconv"
 	"time"
 )

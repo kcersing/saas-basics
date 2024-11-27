@@ -468,6 +468,29 @@ func HasDictionaryWith(preds ...predicate.Dictionary) predicate.DictionaryDetail
 	})
 }
 
+// HasUsers applies the HasEdge predicate on the "users" edge.
+func HasUsers() predicate.DictionaryDetail {
+	return predicate.DictionaryDetail(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, UsersTable, UsersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUsersWith applies the HasEdge predicate on the "users" edge with a given conditions (other predicates).
+func HasUsersWith(preds ...predicate.User) predicate.DictionaryDetail {
+	return predicate.DictionaryDetail(func(s *sql.Selector) {
+		step := newUsersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.DictionaryDetail) predicate.DictionaryDetail {
 	return predicate.DictionaryDetail(sql.AndPredicates(predicates...))

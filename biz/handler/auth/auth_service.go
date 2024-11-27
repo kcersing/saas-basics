@@ -11,6 +11,7 @@ import (
 	base "saas/idl_gen/model/base"
 	"saas/pkg/errno"
 	"saas/pkg/utils"
+	"strconv"
 )
 
 // CreateRole .
@@ -24,14 +25,7 @@ func CreateRole(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	err = service.NewRole(ctx, c).Create(do.RoleInfo{
-		Name:          req.Name,
-		Value:         req.Value,
-		DefaultRouter: req.DefaultRouter,
-		Status:        req.Status,
-		Remark:        req.Remark,
-		OrderNo:       int32(req.OrderNo),
-	})
+	err = service.NewRole(ctx, c).Create(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -52,9 +46,13 @@ func UpdateRole(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewRole(ctx, c).Update(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DeleteRole .
@@ -68,9 +66,12 @@ func DeleteRole(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = service.NewRole(ctx, c).Delete(int64(req.ID))
+	if err != nil {
 
-	c.JSON(consts.StatusOK, resp)
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // RoleByID .
@@ -84,9 +85,14 @@ func RoleByID(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	roleInfo, err := service.NewRole(ctx, c).RoleInfoByID(int64(req.ID))
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, roleInfo, 0, "")
+	return
 }
 
 // CreateMenuAuth .
@@ -100,9 +106,12 @@ func CreateMenuAuth(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = service.NewAuth(ctx, c).UpdateMenuAuth(req.RoleID, req.MenuIds)
+	if err != nil {
 
-	c.JSON(consts.StatusOK, resp)
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateMenuAuth .
@@ -115,10 +124,14 @@ func UpdateMenuAuth(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	err = service.NewAuth(ctx, c).UpdateMenuAuth(req.RoleID, req.MenuIds)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // RoleList .
@@ -132,9 +145,14 @@ func RoleList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	list, total, err := service.NewRole(ctx, c).List(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // UpdateRoleStatus .
@@ -148,9 +166,13 @@ func UpdateRoleStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewRole(ctx, c).UpdateStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // CreateAuth .
@@ -164,9 +186,14 @@ func CreateAuth(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = service.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), req.Apis)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateAuth .
@@ -179,10 +206,14 @@ func UpdateAuth(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	err = service.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), req.Apis)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ApiAuth .
@@ -196,9 +227,20 @@ func ApiAuth(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	roleId := strconv.FormatInt(req.ID, 10)
+	if roleId == "0" {
+		c.String(consts.StatusBadRequest, "roleId 不应为0")
+		return
+	}
+	policies, err := service.NewAuth(ctx, c).ApiAuth(roleId)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	total := uint64(len(policies))
+	utils.SendResponse(c, errno.Success, policies, int64(total), "")
+	return
 }
 
 // GetLogsList .
@@ -212,9 +254,14 @@ func GetLogsList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	logsList, total, err := service.NewLogs(ctx, c).List(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, logsList, int64(total), "")
+	return
 }
 
 // DeleteLogs .
@@ -228,7 +275,12 @@ func DeleteLogs(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = service.NewLogs(ctx, c).DeleteAll(req.Ids)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }

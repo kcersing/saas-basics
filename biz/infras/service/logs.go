@@ -5,9 +5,11 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
-	"saas/app/admin/config"
-	"saas/app/admin/infras"
-	"saas/app/pkg/do"
+	"saas/biz/infras/do"
+	"saas/config"
+	"saas/idl_gen/model/auth"
+	"saas/init"
+
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/predicate"
@@ -27,12 +29,12 @@ func NewLogs(ctx context.Context, c *app.RequestContext) do.Logs {
 		ctx:   ctx,
 		c:     c,
 		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
+		db:    init.DB,
+		cache: init.Cache,
 	}
 }
 
-func (l Logs) Create(logsReq *do.LogsInfo) error {
+func (l Logs) Create(logsReq *auth.LogsInfo) error {
 	err := l.db.Logs.Create().
 		SetType(logsReq.Type).
 		SetMethod(logsReq.Method).
@@ -52,7 +54,7 @@ func (l Logs) Create(logsReq *do.LogsInfo) error {
 	return nil
 }
 
-func (l Logs) List(req *do.LogsListReq) (list []*do.LogsInfo, total int, err error) {
+func (l Logs) List(req *auth.LogsListReq) (list []*auth.LogsInfo, total int64, err error) {
 	var predicates []predicate.Logs
 	if req.Type != "" {
 		predicates = append(predicates, logs.TypeEQ(req.Type))
@@ -60,15 +62,15 @@ func (l Logs) List(req *do.LogsListReq) (list []*do.LogsInfo, total int, err err
 	if req.Method != "" {
 		predicates = append(predicates, logs.MethodEQ(req.Method))
 	}
-	if req.Api != "" {
-		predicates = append(predicates, logs.APIContains(req.Api))
+	if req.API != "" {
+		predicates = append(predicates, logs.APIContains(req.API))
 	}
-	if req.Operator != "" {
-		predicates = append(predicates, logs.OperatorContains(req.Operator))
+	if req.Operators != "" {
+		predicates = append(predicates, logs.OperatorContains(req.Operators))
 	}
-	if req.Success != nil {
-		predicates = append(predicates, logs.SuccessEQ(*req.Success))
-	}
+	//if req.Success != nil {
+	//	predicates = append(predicates, logs.SuccessEQ(req.Success))
+	//}
 	logsData, err := l.db.Logs.Query().Where(predicates...).
 		Offset(int((req.Page - 1) * req.PageSize)).
 		Limit(int(req.PageSize)).
@@ -77,7 +79,7 @@ func (l Logs) List(req *do.LogsListReq) (list []*do.LogsInfo, total int, err err
 		return nil, 0, errors.Wrap(err, "query logsData list failed")
 	}
 	for _, v := range logsData {
-		list = append(list, &do.LogsInfo{
+		list = append(list, &auth.LogsInfo{
 			Type:        v.Type,
 			Method:      v.Method,
 			Api:         v.API,
@@ -92,14 +94,15 @@ func (l Logs) List(req *do.LogsListReq) (list []*do.LogsInfo, total int, err err
 			UpdatedAt:   v.UpdatedAt.Format(time.DateTime),
 		})
 	}
-	total, err = l.db.Logs.Query().Where(predicates...).Count(l.ctx)
+	t, err := l.db.Logs.Query().Where(predicates...).Count(l.ctx)
+	total = int64(t)
 	if err != nil {
 		return nil, 0, errors.Wrap(err, "query logsData count failed")
 	}
 	return
 }
 
-func (l Logs) DeleteAll() error {
+func (l Logs) DeleteAll(ids []int64) error {
 	_, err := l.db.Logs.Delete().Exec(l.ctx)
 	if err != nil {
 		return errors.Wrap(err, "delete logsData failed")

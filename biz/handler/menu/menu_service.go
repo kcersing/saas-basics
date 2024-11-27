@@ -4,11 +4,17 @@ package menu
 
 import (
 	"context"
-
+	"errors"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/jinzhu/copier"
+	"saas/biz/infras/do"
+	"saas/biz/infras/service"
 	base "saas/idl_gen/model/base"
 	menu "saas/idl_gen/model/menu"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
+	"strconv"
 )
 
 // MenuAuth .
@@ -21,10 +27,17 @@ func MenuAuth(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	menuIDs, err := service.NewAuth(ctx, c).MenuAuth(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	m := map[string]interface{}{
+		"roleID":  req.ID,
+		"menuIDs": menuIDs,
+	}
+	utils.SendResponse(c, errno.Success, m, 0, "")
+	return
 }
 
 // MenuRole .
@@ -38,9 +51,30 @@ func MenuRole(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	roleIdInterface, exist := c.Get("role_id")
+	if !exist || roleIdInterface == nil {
+		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
+		return
+	}
+	roleId, err := strconv.Atoi(roleIdInterface.(string))
+	if err != nil {
+		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
+		return
+	}
+	menuTree, err := service.NewMenu(ctx, c).MenuRole(int64(roleId))
+	if err != nil {
+		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
+		return
+	}
+	var menuInfos []*do.MenuInfo
+	err = copier.Copy(&menuInfos, &menuTree)
+	if err != nil {
+		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, menuInfos, 0, "")
+	return
 }
 
 // ApiList .
@@ -54,9 +88,13 @@ func ApiList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewApi(ctx, c).List(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // ApiTree .
@@ -70,9 +108,13 @@ func ApiTree(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewApi(ctx, c).ApiTree(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // MenuLists .
@@ -86,9 +128,19 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	menuTree, total, err := service.NewMenu(ctx, c).List(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	var menuInfos []*do.MenuInfo
+	err = copier.Copy(&menuInfos, &menuTree)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, menuInfos, int64(total), "")
+	return
 }
 
 // MenuTree .

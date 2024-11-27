@@ -4,6 +4,9 @@ package dictionary
 
 import (
 	"context"
+	admin "saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -22,9 +25,13 @@ func CreateDictionary(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewDictionary(ctx, c).Create(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateDictionary .
@@ -38,9 +45,13 @@ func UpdateDictionary(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewDictionary(ctx, c).Update(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DeleteDictionary .
@@ -54,9 +65,13 @@ func DeleteDictionary(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewDictionary(ctx, c).DeleteDetail(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DictionaryList .
@@ -70,9 +85,15 @@ func DictionaryList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	// get dict list
+	dictList, total, err := admin.NewDictionary(ctx, c).List(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, dictList, int64(total), "")
+	return
 }
 
 // CreateDictionaryDetail .
@@ -86,9 +107,14 @@ func CreateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = admin.NewDictionary(ctx, c).CreateDetail(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateDictionaryDetail .
@@ -102,9 +128,13 @@ func UpdateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewDictionary(ctx, c).UpdateDetail(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DeleteDictionaryDetail .
@@ -118,9 +148,13 @@ func DeleteDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = admin.NewDictionary(ctx, c).DeleteDetail(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DetailByDictionaryList .
@@ -134,7 +168,12 @@ func DetailByDictionaryList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	dictDetailList, total, err := admin.NewDictionary(ctx, c).DetailListByDict(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, dictDetailList, total, "")
+	return
 }

@@ -7,6 +7,8 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"path"
 	"saas/config"
+	base "saas/idl_gen/model/base"
+	pub "saas/idl_gen/model/pub"
 	"saas/pkg/errno"
 	"saas/pkg/minio"
 	"saas/pkg/utils"

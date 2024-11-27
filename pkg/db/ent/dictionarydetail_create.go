@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
+	"saas/pkg/db/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -104,6 +105,21 @@ func (ddc *DictionaryDetailCreate) SetID(i int64) *DictionaryDetailCreate {
 // SetDictionary sets the "dictionary" edge to the Dictionary entity.
 func (ddc *DictionaryDetailCreate) SetDictionary(d *Dictionary) *DictionaryDetailCreate {
 	return ddc.SetDictionaryID(d.ID)
+}
+
+// AddUserIDs adds the "users" edge to the User entity by IDs.
+func (ddc *DictionaryDetailCreate) AddUserIDs(ids ...int64) *DictionaryDetailCreate {
+	ddc.mutation.AddUserIDs(ids...)
+	return ddc
+}
+
+// AddUsers adds the "users" edges to the User entity.
+func (ddc *DictionaryDetailCreate) AddUsers(u ...*User) *DictionaryDetailCreate {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return ddc.AddUserIDs(ids...)
 }
 
 // Mutation returns the DictionaryDetailMutation object of the builder.
@@ -243,6 +259,22 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DictionaryID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ddc.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   dictionarydetail.UsersTable,
+			Columns: []string{dictionarydetail.UsersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

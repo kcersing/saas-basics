@@ -6,13 +6,15 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
-	"saas/app/admin/config"
-	"saas/app/admin/infras"
-	"saas/app/pkg/do"
+	"saas/biz/infras/do"
+	"saas/config"
+	"saas/idl_gen/model/dictionary"
+	"saas/init"
 	"saas/pkg/db/ent"
-	"saas/pkg/db/ent/dictionary"
+	dictionary2 "saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/predicate"
+
 	"time"
 )
 
@@ -24,9 +26,19 @@ type Dictionary struct {
 	cache *ristretto.Cache
 }
 
-func (d Dictionary) Create(req *do.DictionaryInfo) error {
+func NewDictionary(ctx context.Context, c *app.RequestContext) do.Dictionary {
+	return &Dictionary{
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		db:    init.DB,
+		cache: init.Cache,
+	}
+}
+
+func (d Dictionary) Create(req *dictionary.DictionaryInfo) error {
 	// whether dictionary name exists
-	dictionaryExist, _ := d.db.Dictionary.Query().Where(dictionary.Name(req.Name)).Exist(d.ctx)
+	dictionaryExist, _ := d.db.Dictionary.Query().Where(dictionary2.Name(req.Name)).Exist(d.ctx)
 	if dictionaryExist {
 		return errors.New("dictionary name already exists")
 	}
@@ -43,9 +55,9 @@ func (d Dictionary) Create(req *do.DictionaryInfo) error {
 	return nil
 }
 
-func (d Dictionary) Update(req *do.DictionaryInfo) error {
+func (d Dictionary) Update(req *dictionary.DictionaryInfo) error {
 	// whether dictionary is exists
-	dictionaryExist, _ := d.db.Dictionary.Query().Where(dictionary.ID(req.ID)).Exist(d.ctx)
+	dictionaryExist, _ := d.db.Dictionary.Query().Where(dictionary2.ID(req.ID)).Exist(d.ctx)
 	if !dictionaryExist {
 		return errors.New("The dictionary try to update is not exists")
 	}
@@ -64,7 +76,7 @@ func (d Dictionary) Update(req *do.DictionaryInfo) error {
 
 func (d Dictionary) Delete(id int64) error {
 	// whether dictionary is exists
-	dict, err := d.db.Dictionary.Query().Where(dictionary.ID(id)).Only(d.ctx)
+	dict, err := d.db.Dictionary.Query().Where(dictionary2.ID(id)).Only(d.ctx)
 	if err != nil {
 		return errors.Wrap(err, "query Dictionary failed")
 	}
@@ -74,7 +86,7 @@ func (d Dictionary) Delete(id int64) error {
 	// whether dictionary has detail
 	// query dictionary detail
 	details, err := d.db.DictionaryDetail.Query().
-		Where(dictionarydetail.HasDictionaryWith(dictionary.NameEQ(dict.Name))).
+		Where(dictionarydetail.HasDictionaryWith(dictionary2.NameEQ(dict.Name))).
 		// union query to get the fields of the associated table
 		WithDictionary(func(q *ent.DictionaryQuery) {
 			// get all fields default, or use q.Select() to get some fields
@@ -93,14 +105,14 @@ func (d Dictionary) Delete(id int64) error {
 	return nil
 }
 
-func (d Dictionary) List(req *do.DictListReq) (list []*do.DictionaryInfo, total int, err error) {
+func (d Dictionary) List(req *dictionary.DictListReq) (list []*dictionary.DictionaryInfo, total int64, err error) {
 	// query dictionary
 	var predicates []predicate.Dictionary
-	if req.Title != "" {
-		predicates = append(predicates, dictionary.TitleContains(req.Title))
+	if *req.Title != "" {
+		predicates = append(predicates, dictionary2.TitleContains(*req.Title))
 	}
-	if req.Name != "" {
-		predicates = append(predicates, dictionary.NameContains(req.Name))
+	if *req.Name != "" {
+		predicates = append(predicates, dictionary2.NameContains(*req.Name))
 	}
 	dictionaries, err := d.db.Dictionary.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -111,7 +123,7 @@ func (d Dictionary) List(req *do.DictListReq) (list []*do.DictionaryInfo, total 
 
 	// format result
 	for _, dict := range dictionaries {
-		list = append(list, &do.DictionaryInfo{
+		list = append(list, &dictionary.DictionaryInfo{
 			ID:          dict.ID,
 			Title:       dict.Title,
 			Name:        dict.Name,
@@ -121,16 +133,17 @@ func (d Dictionary) List(req *do.DictListReq) (list []*do.DictionaryInfo, total 
 			UpdatedAt:   dict.UpdatedAt.Format(time.DateTime),
 		})
 	}
-	total, _ = d.db.Dictionary.Query().Where(predicates...).Count(d.ctx)
+	t, _ := d.db.Dictionary.Query().Where(predicates...).Count(d.ctx)
+	total = int64(t)
 	return
 }
 
-func (d Dictionary) CreateDetail(req *do.DictionaryDetail) error {
+func (d Dictionary) CreateDetail(req *dictionary.DictionaryDetail) error {
 	// whether dictionary detail is exists
 	exist, err := d.db.DictionaryDetail.Query().
 		Where(dictionarydetail.Key(req.Key)).
 		Where(dictionarydetail.Value(req.Value)).
-		Where(dictionarydetail.HasDictionaryWith(dictionary.ID(req.ParentID))).
+		Where(dictionarydetail.HasDictionaryWith(dictionary2.ID(req.ParentID))).
 		Exist(d.ctx)
 	if err != nil {
 		return errors.Wrap(err, "query DictionaryDetail exist failed")
@@ -140,7 +153,7 @@ func (d Dictionary) CreateDetail(req *do.DictionaryDetail) error {
 	}
 
 	// find dictionary by id
-	dict, err := d.db.Dictionary.Query().Where(dictionary.ID(req.ParentID)).Only(d.ctx)
+	dict, err := d.db.Dictionary.Query().Where(dictionary2.ID(req.ParentID)).Only(d.ctx)
 	if err != nil {
 		return errors.Wrap(err, "query Dictionary failed")
 	}
@@ -162,7 +175,7 @@ func (d Dictionary) CreateDetail(req *do.DictionaryDetail) error {
 	return nil
 }
 
-func (d Dictionary) UpdateDetail(req *do.DictionaryDetail) error {
+func (d Dictionary) UpdateDetail(req *dictionary.DictionaryDetail) error {
 	// query dictionary detail
 	detail, err := d.db.DictionaryDetail.Query().
 		Where(dictionarydetail.ID(req.ID)).
@@ -211,15 +224,15 @@ func (d Dictionary) DeleteDetail(id int64) error {
 	return nil
 }
 
-func (d Dictionary) DetailListByDict(req *do.DetailListReq) (list []*do.DictionaryDetail, total int64, err error) {
+func (d Dictionary) DetailListByDict(req *dictionary.DetailListReq) (list []*dictionary.DictionaryDetail, total int64, err error) {
 
 	var predicates []predicate.DictionaryDetail
-	if req.Name != "" {
-		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary.NameEQ(req.Name)))
+	if *req.Name != "" {
+		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary2.NameEQ(*req.Name)))
 	}
 
-	if req.DictionaryId != 0 {
-		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary.IDEQ(req.DictionaryId)))
+	if *req.DictionaryId != 0 {
+		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary2.IDEQ(*req.DictionaryId)))
 	}
 
 	// query dictionary detail
@@ -236,7 +249,7 @@ func (d Dictionary) DetailListByDict(req *do.DetailListReq) (list []*do.Dictiona
 
 	// format result
 	for _, detail := range details {
-		list = append(list, &do.DictionaryDetail{
+		list = append(list, &dictionary.DictionaryDetail{
 			ID:        detail.ID,
 			Title:     detail.Title,
 			Key:       detail.Key,
@@ -251,22 +264,22 @@ func (d Dictionary) DetailListByDict(req *do.DetailListReq) (list []*do.Dictiona
 	return
 }
 
-func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *do.DictionaryDetail, err error) {
+func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *dictionary.DictionaryDetail, err error) {
 	// query dictionary detail from cache
 	v, found := d.cache.Get(fmt.Sprintf("Dictionary%s-key%s", dictName, key))
 	if found {
-		return v.(*do.DictionaryDetail), nil
+		return v.(*dictionary.DictionaryDetail), nil
 	}
 	// query dictionary detail from database
 	dictDetail, err := d.db.DictionaryDetail.Query().
-		Where(dictionarydetail.HasDictionaryWith(dictionary.NameEQ(dictName))).
+		Where(dictionarydetail.HasDictionaryWith(dictionary2.NameEQ(dictName))).
 		Where(dictionarydetail.Key(key)).First(d.ctx)
 	if err != nil {
 		return nil, errors.Wrap(err, "query DictionaryDetail list failed")
 	}
 
 	// format result
-	detail = new(do.DictionaryDetail)
+	detail = new(dictionary.DictionaryDetail)
 	detail.ID = dictDetail.ID
 	detail.Title = dictDetail.Title
 	detail.Key = dictDetail.Key
@@ -278,14 +291,4 @@ func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *do.Dic
 	// set cache
 	d.cache.SetWithTTL(fmt.Sprintf("Dictionary%s-key%s", dictName, key), detail, 1, 1*time.Hour)
 	return detail, nil
-}
-
-func NewDictionary(ctx context.Context, c *app.RequestContext) do.Dictionary {
-	return &Dictionary{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
-	}
 }

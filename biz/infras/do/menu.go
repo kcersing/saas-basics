@@ -9,7 +9,7 @@ type Menu interface {
 	Create(menuReq *menu.MenuInfo) error
 	Update(menuReq *menu.MenuInfo) error
 	Delete(id int64) error
-	//MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error)
+	MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error)
 	List(req *base.PageInfoReq) (list []*menu.MenuInfoTree, total int, err error)
 
 	MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error)

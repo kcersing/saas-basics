@@ -6,12 +6,15 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
-	"saas/app/admin/config"
-	"saas/app/admin/infras"
-	"saas/app/pkg/do"
+	"saas/biz/infras/do"
+	"saas/config"
+	"saas/idl_gen/model/base"
+	"saas/idl_gen/model/menu"
+	"saas/init"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/predicate"
+	"strconv"
 	"time"
 )
 
@@ -23,12 +26,22 @@ type Api struct {
 	cache *ristretto.Cache
 }
 
-func (a Api) ApiTree(req do.ListApiReq) (resp []*do.Tree, total int, err error) {
+func NewApi(ctx context.Context, c *app.RequestContext) do.Api {
+	return &Api{
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		db:    init.DB,
+		cache: init.Cache,
+	}
+}
+
+func (a Api) ApiTree(req menu.ApiPageReq) (resp []*base.Tree, total int64, err error) {
 
 	inter, exist := a.cache.Get("ApiTree")
 	if exist {
-		if v, ok := inter.([]*do.Tree); ok {
-			return v, len(v), nil
+		if v, ok := inter.([]*base.Tree); ok {
+			return v, int64(len(v)), nil
 		}
 	}
 
@@ -42,15 +55,15 @@ func (a Api) ApiTree(req do.ListApiReq) (resp []*do.Tree, total int, err error) 
 	apiGroups, err := a.db.API.Query().GroupBy(api.FieldAPIGroup).Strings(a.ctx)
 
 	for _, apiGroup := range apiGroups {
-		g := &do.Tree{
+		g := &base.Tree{
 			Title: apiGroup,
 		}
 		for _, v := range apis {
 			if v.APIGroup == g.Title {
-				g.Children = append(g.Children, &do.Tree{
+				g.Children = append(g.Children, &base.Tree{
 					Title: v.Title,
-					Value: map[string]string{"path": v.Path, "method": v.Method},
-					Key:   v.ID, // map[string]string{"path": v.Path, "method": v.Method},
+					Value: "{\"path\": " + v.Path + ", \"method\": " + v.Method + "}",
+					Key:   strconv.FormatInt(v.ID, 10), // map[string]string{"path": v.Path, "method": v.Method},
 				})
 			}
 		}
@@ -58,13 +71,13 @@ func (a Api) ApiTree(req do.ListApiReq) (resp []*do.Tree, total int, err error) 
 		resp = append(resp, g)
 	}
 
-	total, _ = a.db.API.Query().Where(predicates...).Count(a.ctx)
-
+	t, _ := a.db.API.Query().Where(predicates...).Count(a.ctx)
+	total = int64(t)
 	a.cache.SetWithTTL("ApiTree", &resp, 1, 30*time.Hour)
 	return
 }
 
-func (a Api) Create(req do.ApiInfo) error {
+func (a Api) Create(req menu.ApiInfo) error {
 	_, err := a.db.API.Create().
 		SetPath(req.Path).
 		SetDescription(req.Description).
@@ -78,7 +91,7 @@ func (a Api) Create(req do.ApiInfo) error {
 	return nil
 }
 
-func (a Api) Update(req do.ApiInfo) error {
+func (a Api) Update(req menu.ApiInfo) error {
 	_, err := a.db.API.UpdateOneID(req.ID).
 		SetPath(req.Path).
 		SetDescription(req.Description).
@@ -97,7 +110,7 @@ func (a Api) Delete(id int64) error {
 	return err
 }
 
-func (a Api) List(req do.ListApiReq) (resp []*do.ApiInfo, total int, err error) {
+func (a Api) List(req menu.ApiPageReq) (resp []*menu.ApiInfo, total int64, err error) {
 	var predicates []predicate.API
 	if req.Path != "" {
 		predicates = append(predicates, api.PathContains(req.Path))
@@ -131,16 +144,7 @@ func (a Api) List(req do.ListApiReq) (resp []*do.ApiInfo, total int, err error) 
 
 	}
 
-	total, _ = a.db.API.Query().Where(predicates...).Count(a.ctx)
+	t, _ := a.db.API.Query().Where(predicates...).Count(a.ctx)
+	total = int64(t)
 	return resp, total, nil
-}
-
-func NewApi(ctx context.Context, c *app.RequestContext) do.Api {
-	return &Api{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
-	}
 }

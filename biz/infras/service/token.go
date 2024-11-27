@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"saas/init"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/user"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"saas/app/admin/config"
-	"saas/app/admin/infras"
 	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/token"
@@ -23,6 +23,16 @@ type Token struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+}
+
+func NewToken(ctx context.Context, c *app.RequestContext) do.Token {
+	return &Token{
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		db:    init.DB,
+		cache: init.Cache,
+	}
 }
 
 func (t Token) Create(req *do.TokenInfo) error {
@@ -136,14 +146,4 @@ func (t Token) List(req *do.TokenListReq) (res []*do.TokenInfo, total int, err e
 	}
 	total, _ = t.db.User.Query().Where(userPredicates...).Count(t.ctx)
 	return
-}
-
-func NewToken(ctx context.Context, c *app.RequestContext) do.Token {
-	return &Token{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
-	}
 }

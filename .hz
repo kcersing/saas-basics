@@ -2,5 +2,5 @@
 
 hz version: v0.9.1
 handlerDir: ""
-modelDir: ""
+modelDir: idl_gen/model/
 routerDir: ""

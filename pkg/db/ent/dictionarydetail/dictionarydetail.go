@@ -30,6 +30,8 @@ const (
 	FieldDictionaryID = "dictionary_id"
 	// EdgeDictionary holds the string denoting the dictionary edge name in mutations.
 	EdgeDictionary = "dictionary"
+	// EdgeUsers holds the string denoting the users edge name in mutations.
+	EdgeUsers = "users"
 	// Table holds the table name of the dictionarydetail in the database.
 	Table = "sys_dictionary_details"
 	// DictionaryTable is the table that holds the dictionary relation/edge.
@@ -39,6 +41,13 @@ const (
 	DictionaryInverseTable = "sys_dictionaries"
 	// DictionaryColumn is the table column denoting the dictionary relation/edge.
 	DictionaryColumn = "dictionary_id"
+	// UsersTable is the table that holds the users relation/edge.
+	UsersTable = "sys_users"
+	// UsersInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UsersInverseTable = "sys_users"
+	// UsersColumn is the table column denoting the users relation/edge.
+	UsersColumn = "user_tags"
 )
 
 // Columns holds all SQL columns for dictionarydetail fields.
@@ -123,10 +132,31 @@ func ByDictionaryField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newDictionaryStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByUsersCount orders the results by users count.
+func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUsersStep(), opts...)
+	}
+}
+
+// ByUsers orders the results by users terms.
+func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newDictionaryStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DictionaryInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, DictionaryTable, DictionaryColumn),
+	)
+}
+func newUsersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UsersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, UsersTable, UsersColumn),
 	)
 }

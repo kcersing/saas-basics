@@ -30,5 +30,32 @@ type Menu func(*sql.Selector)
 // MenuParam is the predicate function for menuparam builders.
 type MenuParam func(*sql.Selector)
 
+// Order is the predicate function for order builders.
+type Order func(*sql.Selector)
+
+// OrderAmount is the predicate function for orderamount builders.
+type OrderAmount func(*sql.Selector)
+
+// OrderItem is the predicate function for orderitem builders.
+type OrderItem func(*sql.Selector)
+
+// OrderPay is the predicate function for orderpay builders.
+type OrderPay func(*sql.Selector)
+
+// OrderSales is the predicate function for ordersales builders.
+type OrderSales func(*sql.Selector)
+
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)
+
+// Token is the predicate function for token builders.
+type Token func(*sql.Selector)
+
+// User is the predicate function for user builders.
+type User func(*sql.Selector)
+
+// Venue is the predicate function for venue builders.
+type Venue func(*sql.Selector)
+
+// VenuePlace is the predicate function for venueplace builders.
+type VenuePlace func(*sql.Selector)

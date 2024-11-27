@@ -15,7 +15,16 @@ import (
 	"saas/pkg/db/ent/logs"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
+	"saas/pkg/db/ent/order"
+	"saas/pkg/db/ent/orderamount"
+	"saas/pkg/db/ent/orderitem"
+	"saas/pkg/db/ent/orderpay"
+	"saas/pkg/db/ent/ordersales"
 	"saas/pkg/db/ent/role"
+	"saas/pkg/db/ent/token"
+	"saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
+	"saas/pkg/db/ent/venueplace"
 	"sync"
 
 	"entgo.io/ent"
@@ -89,7 +98,16 @@ func checkColumn(table, column string) error {
 			logs.Table:               logs.ValidColumn,
 			menu.Table:               menu.ValidColumn,
 			menuparam.Table:          menuparam.ValidColumn,
+			order.Table:              order.ValidColumn,
+			orderamount.Table:        orderamount.ValidColumn,
+			orderitem.Table:          orderitem.ValidColumn,
+			orderpay.Table:           orderpay.ValidColumn,
+			ordersales.Table:         ordersales.ValidColumn,
 			role.Table:               role.ValidColumn,
+			token.Table:              token.ValidColumn,
+			user.Table:               user.ValidColumn,
+			venue.Table:              venue.ValidColumn,
+			venueplace.Table:         venueplace.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

@@ -159,7 +159,7 @@ func (m Menu) Delete(id int64) error {
 	return nil
 }
 
-func (m Menu) ListByRole(roleID int64) (list []*menu.MenuInfoTree, total int64, err error) {
+func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error) {
 
 	menus, err := m.db.Role.
 		Query().
@@ -171,11 +171,11 @@ func (m Menu) ListByRole(roleID int64) (list []*menu.MenuInfoTree, total int64, 
 		All(m.ctx)
 
 	if err != nil {
-		return nil, 0, errors.Wrap(err, "query m by role failed")
+		return nil, errors.Wrap(err, "query m by role failed")
 	}
 
 	list = findMenuChildren(menus, 1)
-	total = int64(len(list))
+
 	return
 }
 

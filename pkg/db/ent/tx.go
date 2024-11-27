@@ -28,8 +28,26 @@ type Tx struct {
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
 	MenuParam *MenuParamClient
+	// Order is the client for interacting with the Order builders.
+	Order *OrderClient
+	// OrderAmount is the client for interacting with the OrderAmount builders.
+	OrderAmount *OrderAmountClient
+	// OrderItem is the client for interacting with the OrderItem builders.
+	OrderItem *OrderItemClient
+	// OrderPay is the client for interacting with the OrderPay builders.
+	OrderPay *OrderPayClient
+	// OrderSales is the client for interacting with the OrderSales builders.
+	OrderSales *OrderSalesClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
+	// Token is the client for interacting with the Token builders.
+	Token *TokenClient
+	// User is the client for interacting with the User builders.
+	User *UserClient
+	// Venue is the client for interacting with the Venue builders.
+	Venue *VenueClient
+	// VenuePlace is the client for interacting with the VenuePlace builders.
+	VenuePlace *VenuePlaceClient
 
 	// lazily loaded.
 	client     *Client
@@ -169,7 +187,16 @@ func (tx *Tx) init() {
 	tx.Logs = NewLogsClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
+	tx.Order = NewOrderClient(tx.config)
+	tx.OrderAmount = NewOrderAmountClient(tx.config)
+	tx.OrderItem = NewOrderItemClient(tx.config)
+	tx.OrderPay = NewOrderPayClient(tx.config)
+	tx.OrderSales = NewOrderSalesClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
+	tx.Token = NewTokenClient(tx.config)
+	tx.User = NewUserClient(tx.config)
+	tx.Venue = NewVenueClient(tx.config)
+	tx.VenuePlace = NewVenuePlaceClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

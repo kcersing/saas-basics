@@ -23,8 +23,8 @@ gen-user:
 	hz update -idl idl_gen/idl/dictionary.thrift -model_dir idl_gen/model/  --unset_omitempty
 	hz update -idl idl_gen/idl/menu.thrift -model_dir idl_gen/model/  --unset_omitempty
 	hz update -idl idl_gen/idl/pub.thrift -model_dir idl_gen/model/  --unset_omitempty
-
-
+	hz update -idl idl_gen/idl/user.thrift -model_dir idl_gen/model/  --unset_omitempty
+	hz update -idl idl_gen/idl/token.thrift -model_dir idl_gen/model/  --unset_omitempty
 
 .PHONY: gen-ent
 gen-ent:
