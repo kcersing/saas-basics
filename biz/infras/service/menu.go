@@ -6,11 +6,12 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"saas/biz/dal/cache"
+	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/base"
 	"saas/idl_gen/model/menu"
-	"saas/init"
 	"saas/pkg/db/ent"
 	menu2 "saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/role"
@@ -31,8 +32,8 @@ func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
 		ctx:   ctx,
 		c:     c,
 		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    init.DB,
-		cache: init.Cache,
+		db:    db.DB,
+		cache: cache.Cache,
 	}
 }
 func (m Menu) Create(menuReq *menu.MenuInfo) error {

@@ -38,7 +38,7 @@ type User struct {
 	Password string `json:"password,omitempty"`
 	// functions | 职能
 	Functions string `json:"functions,omitempty"`
-	// job time | [0:全职;1:兼职;]
+	// job time | [1:全职;2:兼职;]
 	JobTime int64 `json:"job_time,omitempty"`
 	// role id | 角色ID
 	RoleID int64 `json:"role_id,omitempty"`
@@ -61,9 +61,13 @@ type UserEdges struct {
 	Token *Token `json:"token,omitempty"`
 	// Tags holds the value of the tags edge.
 	Tags *DictionaryDetail `json:"tags,omitempty"`
+	// CreatedOrders holds the value of the created_orders edge.
+	CreatedOrders []*Order `json:"created_orders,omitempty"`
+	// UserEntry holds the value of the user_entry edge.
+	UserEntry []*EntryLogs `json:"user_entry,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 }
 
 // TokenOrErr returns the Token value or an error if the edge
@@ -90,6 +94,24 @@ func (e UserEdges) TagsOrErr() (*DictionaryDetail, error) {
 		return e.Tags, nil
 	}
 	return nil, &NotLoadedError{edge: "tags"}
+}
+
+// CreatedOrdersOrErr returns the CreatedOrders value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) CreatedOrdersOrErr() ([]*Order, error) {
+	if e.loadedTypes[2] {
+		return e.CreatedOrders, nil
+	}
+	return nil, &NotLoadedError{edge: "created_orders"}
+}
+
+// UserEntryOrErr returns the UserEntry value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) UserEntryOrErr() ([]*EntryLogs, error) {
+	if e.loadedTypes[3] {
+		return e.UserEntry, nil
+	}
+	return nil, &NotLoadedError{edge: "user_entry"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -238,6 +260,16 @@ func (u *User) QueryToken() *TokenQuery {
 // QueryTags queries the "tags" edge of the User entity.
 func (u *User) QueryTags() *DictionaryDetailQuery {
 	return NewUserClient(u.config).QueryTags(u)
+}
+
+// QueryCreatedOrders queries the "created_orders" edge of the User entity.
+func (u *User) QueryCreatedOrders() *OrderQuery {
+	return NewUserClient(u.config).QueryCreatedOrders(u)
+}
+
+// QueryUserEntry queries the "user_entry" edge of the User entity.
+func (u *User) QueryUserEntry() *EntryLogsQuery {
+	return NewUserClient(u.config).QueryUserEntry(u)
 }
 
 // Update returns a builder for updating this User.

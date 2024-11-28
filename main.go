@@ -3,11 +3,45 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/hertz-contrib/logger/accesslog"
+	"github.com/hertz-contrib/reverseproxy"
+	"github.com/hertz-contrib/swagger"
+	swaggerFiles "github.com/swaggo/files"
+	"saas/biz/dal"
+	"saas/config"
+	_ "saas/docs"
+	"time"
 )
 
+func minioReverseProxy(c context.Context, ctx *app.RequestContext) {
+	proxy, _ := reverseproxy.NewSingleHostReverseProxy(config.GlobalServerConfig.Minio.Url)
+	ctx.URI().SetPath(ctx.Param("name"))
+	hlog.CtxInfof(c, string(ctx.Request.URI().Path()))
+	proxy.ServeHTTP(c, ctx)
+}
 func main() {
-	h := server.Default()
+	dal.Init()
+
+	h := server.Default(
+		server.WithStreamBody(true),
+		server.WithHostPorts(fmt.Sprintf("%s:%d", config.GlobalServerConfig.Host, config.GlobalServerConfig.Port)),
+	)
+
+	h.Use(accesslog.New(
+		accesslog.WithFormat("[${time}] | ${status} | ${latency} | ${method} | ${path} | ${queryParams}"),
+		accesslog.WithTimeFormat(time.DateTime),
+	))
+
+	h.NoHijackConnPool = true
+	h.GET("/src/*name", minioReverseProxy)
+
+	url := swagger.URL("http://localhost:9039/swagger/doc.json") // The url pointing to API definition
+	h.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler, url))
 
 	register(h)
 	h.Spin()

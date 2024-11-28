@@ -31,6 +31,13 @@ struct LoginReq {
     3:  string captchaId (api.raw = "captchaId")
     4:  string captcha (api.raw = "captcha")
 }
+struct LoginResp{
+    1:  i64 userId (api.raw = "userId")
+    2:  string username (api.raw = "username")
+    3:  string roleName (api.raw = "roleName")
+    4:  string roleValue (api.raw = "roleValue")
+    5:  i64 roleId (api.raw = "roleId")
+}
 
 // register request | 注册参数
 struct RegisterReq {
@@ -88,7 +95,7 @@ struct SetDefaultVenueReq{
 
 service UserService {
   // 登录
-//  base.NilResponse Login(1: LoginReq req) (api.post = "/service/login")
+  base.NilResponse Login(1: LoginReq req) (api.post = "/service/login")
 
   // 注册
   //base.NilResponse Register(1: RegisterReq req) (api.post = "/service/register")

@@ -25,7 +25,7 @@ func (VenuePlace) Fields() []ent.Field {
 			Comment("pic | 照片"),
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("number").Comment("可容纳人数").Optional(),
-		field.String("detail").Comment("详情").Optional(),
+		field.String("information").Comment("详情").Optional(),
 	}
 }
 

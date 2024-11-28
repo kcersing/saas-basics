@@ -34,6 +34,9 @@ entgo.io/ent/schema/edge
 entgo.io/ent/schema/field
 entgo.io/ent/schema/index
 entgo.io/ent/schema/mixin
+# github.com/KyleBanks/depth v1.2.1
+## explicit
+github.com/KyleBanks/depth
 # github.com/agext/levenshtein v1.2.1
 ## explicit
 github.com/agext/levenshtein
@@ -234,6 +237,19 @@ github.com/getsentry/sentry-go/internal/ratelimit
 # github.com/go-openapi/inflect v0.19.0
 ## explicit
 github.com/go-openapi/inflect
+# github.com/go-openapi/jsonpointer v0.20.0
+## explicit; go 1.18
+github.com/go-openapi/jsonpointer
+# github.com/go-openapi/jsonreference v0.20.2
+## explicit; go 1.13
+github.com/go-openapi/jsonreference
+github.com/go-openapi/jsonreference/internal
+# github.com/go-openapi/spec v0.20.9
+## explicit; go 1.13
+github.com/go-openapi/spec
+# github.com/go-openapi/swag v0.22.4
+## explicit; go 1.18
+github.com/go-openapi/swag
 # github.com/go-sql-driver/mysql v1.7.1
 ## explicit; go 1.13
 github.com/go-sql-driver/mysql
@@ -303,7 +319,7 @@ github.com/henrylee2cn/goutil/errors
 # github.com/hertz-contrib/jwt v1.0.2
 ## explicit; go 1.18
 github.com/hertz-contrib/jwt
-# github.com/hertz-contrib/logger/accesslog v0.0.0-20240128134225-6b18af47a115
+# github.com/hertz-contrib/logger/accesslog v0.0.0-20241107070745-e4ce8c54dd97
 ## explicit; go 1.16
 github.com/hertz-contrib/logger/accesslog
 # github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
@@ -312,10 +328,13 @@ github.com/hertz-contrib/obs-opentelemetry/logging/logrus
 # github.com/hertz-contrib/paseto v0.0.0-20230508023022-71af6635a26c
 ## explicit; go 1.18
 github.com/hertz-contrib/paseto
-# github.com/hertz-contrib/reverseproxy v1.0.5
+# github.com/hertz-contrib/reverseproxy v1.0.6
 ## explicit; go 1.16
 github.com/hertz-contrib/reverseproxy
-# github.com/hertz-contrib/websocket v0.1.0
+# github.com/hertz-contrib/swagger v0.1.0
+## explicit; go 1.18
+github.com/hertz-contrib/swagger
+# github.com/hertz-contrib/websocket v0.0.1
 ## explicit; go 1.16
 github.com/hertz-contrib/websocket
 # github.com/jackc/chunkreader/v2 v2.0.1
@@ -458,8 +477,8 @@ github.com/pelletier/go-toml/v2/unstable
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
-# github.com/rogpeppe/go-internal v1.9.0
-## explicit; go 1.17
+# github.com/rogpeppe/go-internal v1.11.0
+## explicit; go 1.19
 github.com/rogpeppe/go-internal/fmtsort
 # github.com/rs/xid v1.5.0
 ## explicit; go 1.12
@@ -470,6 +489,9 @@ github.com/sagikazarmark/locafero
 # github.com/sagikazarmark/slog-shim v0.1.0
 ## explicit; go 1.20
 github.com/sagikazarmark/slog-shim
+# github.com/savsgio/gotils v0.0.0-20220530130905-52f3993e8d6d
+## explicit; go 1.13
+github.com/savsgio/gotils/strconv
 # github.com/sirupsen/logrus v1.9.0
 ## explicit; go 1.13
 github.com/sirupsen/logrus
@@ -505,6 +527,12 @@ github.com/spf13/viper/internal/features
 # github.com/subosito/gotenv v1.6.0
 ## explicit; go 1.18
 github.com/subosito/gotenv
+# github.com/swaggo/files v1.0.1
+## explicit; go 1.16
+github.com/swaggo/files
+# github.com/swaggo/swag v1.16.4
+## explicit; go 1.18
+github.com/swaggo/swag
 # github.com/tidwall/gjson v1.14.4
 ## explicit; go 1.12
 github.com/tidwall/gjson
@@ -585,13 +613,15 @@ golang.org/x/image/math/fixed
 # golang.org/x/mod v0.17.0
 ## explicit; go 1.18
 golang.org/x/mod/semver
-# golang.org/x/net v0.21.0
+# golang.org/x/net v0.25.0
 ## explicit; go 1.18
 golang.org/x/net/http/httpguts
 golang.org/x/net/idna
 golang.org/x/net/internal/socks
 golang.org/x/net/proxy
 golang.org/x/net/publicsuffix
+golang.org/x/net/webdav
+golang.org/x/net/webdav/internal/xml
 # golang.org/x/sync v0.8.0
 ## explicit; go 1.18
 golang.org/x/sync/semaphore
@@ -621,6 +651,13 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
+# golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d
+## explicit; go 1.19
+golang.org/x/tools/go/ast/astutil
+golang.org/x/tools/go/buildutil
+golang.org/x/tools/go/internal/cgo
+golang.org/x/tools/go/loader
+golang.org/x/tools/internal/versions
 # google.golang.org/protobuf v1.31.0
 ## explicit; go 1.11
 google.golang.org/protobuf/encoding/prototext

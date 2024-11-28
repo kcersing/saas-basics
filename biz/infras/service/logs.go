@@ -5,10 +5,11 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"saas/biz/dal/cache"
+	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/auth"
-	"saas/init"
 
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/logs"
@@ -29,8 +30,8 @@ func NewLogs(ctx context.Context, c *app.RequestContext) do.Logs {
 		ctx:   ctx,
 		c:     c,
 		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    init.DB,
-		cache: init.Cache,
+		db:    db.DB,
+		cache: cache.Cache,
 	}
 }
 
@@ -89,7 +90,7 @@ func (l Logs) List(req *auth.LogsListReq) (list []*auth.LogsInfo, total int64, e
 			Ip:          v.IP,
 			UserAgent:   v.UserAgent,
 			Operator:    v.Operator,
-			Time:        int32(v.Time),
+			Time:        int64(v.Time),
 			CreatedAt:   v.CreatedAt.Format(time.DateTime),
 			UpdatedAt:   v.UpdatedAt.Format(time.DateTime),
 		})

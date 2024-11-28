@@ -18,22 +18,22 @@ func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
 	{
-		_api := root.Group("/api", _apiMw()...)
+		_service := root.Group("/service", _serviceMw()...)
 		{
-			_admin := _api.Group("/admin", _adminMw()...)
-			{
-				_contest := _admin.Group("/contest", _contestMw()...)
-				_contest.POST("/create", append(_createcontestMw(), contest.CreateContest)...)
-				_contest.POST("/create", append(_createparticipantMw(), contest.CreateParticipant)...)
-				_contest.POST("/info", append(_contestinfoMw(), contest.ContestInfo)...)
-				_contest.POST("/info", append(_contestparticipantinfoMw(), contest.ContestParticipantInfo)...)
-				_contest.POST("/list", append(_contestlistMw(), contest.ContestList)...)
-				_contest.POST("/list", append(_participantlistlistMw(), contest.ParticipantListList)...)
-				_contest.POST("/status", append(_updatememberstatusMw(), contest.UpdateMemberStatus)...)
-				_contest.POST("/status", append(_updateparticipantstatusMw(), contest.UpdateParticipantStatus)...)
-				_contest.POST("/update", append(_updatecontestMw(), contest.UpdateContest)...)
-				_contest.POST("/update", append(_updateparticipantMw(), contest.UpdateParticipant)...)
-			}
+			_contest := _service.Group("/contest", _contestMw()...)
+			_contest.POST("/create", append(_createcontestMw(), contest.CreateContest)...)
+			_contest.POST("/info", append(_contestinfoMw(), contest.ContestInfo)...)
+			_contest.POST("/list", append(_contestlistMw(), contest.ContestList)...)
+			_contest.POST("/status", append(_updatememberstatusMw(), contest.UpdateMemberStatus)...)
+			_contest.POST("/update", append(_updatecontestMw(), contest.UpdateContest)...)
+		}
+		{
+			_participant := _service.Group("/participant", _participantMw()...)
+			_participant.POST("/create", append(_createparticipantMw(), contest.CreateParticipant)...)
+			_participant.POST("/info", append(_contestparticipantinfoMw(), contest.ContestParticipantInfo)...)
+			_participant.POST("/list", append(_participantlistlistMw(), contest.ParticipantListList)...)
+			_participant.POST("/status", append(_updateparticipantstatusMw(), contest.UpdateParticipantStatus)...)
+			_participant.POST("/update", append(_updateparticipantMw(), contest.UpdateParticipant)...)
 		}
 	}
 }

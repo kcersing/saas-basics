@@ -2,8 +2,8 @@ package utils
 
 import (
 	"github.com/pkg/errors"
-	"saas/app/admin/idl_gen/model/base"
-	"saas/app/admin/pkg/errno"
+	"saas/idl_gen/model/base"
+	"saas/pkg/errno"
 )
 
 func BuildBaseResp(err error) *base.BaseResponse {

@@ -34,7 +34,7 @@ type VenuePlace struct {
 	// 可容纳人数
 	Number int64 `json:"number,omitempty"`
 	// 详情
-	Detail string `json:"detail,omitempty"`
+	Information string `json:"information,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VenuePlaceQuery when eager-loading is set.
 	Edges        VenuePlaceEdges `json:"edges"`
@@ -70,7 +70,7 @@ func (*VenuePlace) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case venueplace.FieldID, venueplace.FieldStatus, venueplace.FieldVenueID, venueplace.FieldNumber:
 			values[i] = new(sql.NullInt64)
-		case venueplace.FieldName, venueplace.FieldPic, venueplace.FieldDetail:
+		case venueplace.FieldName, venueplace.FieldPic, venueplace.FieldInformation:
 			values[i] = new(sql.NullString)
 		case venueplace.FieldCreatedAt, venueplace.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -137,11 +137,11 @@ func (vp *VenuePlace) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				vp.Number = value.Int64
 			}
-		case venueplace.FieldDetail:
+		case venueplace.FieldInformation:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field detail", values[i])
+				return fmt.Errorf("unexpected type %T for field information", values[i])
 			} else if value.Valid {
-				vp.Detail = value.String
+				vp.Information = value.String
 			}
 		default:
 			vp.selectValues.Set(columns[i], values[i])
@@ -205,8 +205,8 @@ func (vp *VenuePlace) String() string {
 	builder.WriteString("number=")
 	builder.WriteString(fmt.Sprintf("%v", vp.Number))
 	builder.WriteString(", ")
-	builder.WriteString("detail=")
-	builder.WriteString(vp.Detail)
+	builder.WriteString("information=")
+	builder.WriteString(vp.Information)
 	builder.WriteByte(')')
 	return builder.String()
 }

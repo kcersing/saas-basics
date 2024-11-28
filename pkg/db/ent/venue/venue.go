@@ -42,6 +42,8 @@ const (
 	EdgePlaces = "places"
 	// EdgeVenueOrders holds the string denoting the venue_orders edge name in mutations.
 	EdgeVenueOrders = "venue_orders"
+	// EdgeVenueEntry holds the string denoting the venue_entry edge name in mutations.
+	EdgeVenueEntry = "venue_entry"
 	// Table holds the table name of the venue in the database.
 	Table = "venue"
 	// PlacesTable is the table that holds the places relation/edge.
@@ -58,6 +60,13 @@ const (
 	VenueOrdersInverseTable = "order"
 	// VenueOrdersColumn is the table column denoting the venue_orders relation/edge.
 	VenueOrdersColumn = "venue_id"
+	// VenueEntryTable is the table that holds the venue_entry relation/edge.
+	VenueEntryTable = "entry_logs"
+	// VenueEntryInverseTable is the table name for the EntryLogs entity.
+	// It exists in this package in order to avoid circular dependency with the "entrylogs" package.
+	VenueEntryInverseTable = "entry_logs"
+	// VenueEntryColumn is the table column denoting the venue_entry relation/edge.
+	VenueEntryColumn = "venue_id"
 )
 
 // Columns holds all SQL columns for venue fields.
@@ -193,6 +202,20 @@ func ByVenueOrders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newVenueOrdersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByVenueEntryCount orders the results by venue_entry count.
+func ByVenueEntryCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVenueEntryStep(), opts...)
+	}
+}
+
+// ByVenueEntry orders the results by venue_entry terms.
+func ByVenueEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVenueEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newPlacesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -205,5 +228,12 @@ func newVenueOrdersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VenueOrdersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, VenueOrdersTable, VenueOrdersColumn),
+	)
+}
+func newVenueEntryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VenueEntryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VenueEntryTable, VenueEntryColumn),
 	)
 }

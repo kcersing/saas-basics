@@ -1,51 +1,18 @@
 package do
 
+import "saas/idl_gen/model/venue"
+
 type Venue interface {
-	Create(req *VenueInfo) error
-	Update(req *VenueInfo) error
-	List(req *VenueListReq) (list []*VenueInfo, total int, err error)
+	Create(req *venue.VenueInfo) error
+	Update(req *venue.VenueInfo) error
+	List(req *venue.VenueListReq) (list []*venue.VenueInfo, total int, err error)
 	UpdateVenueStatus(id int64, status int64) error
 
-	CreatePlace(req *VenuePlaceInfo) error
-	UpdatePlace(req *VenuePlaceInfo) error
-	PlaceList(req *VenuePlaceListReq) (list []*VenuePlaceInfo, total int, err error)
+	CreatePlace(req *venue.VenuePlaceInfo) error
+	UpdatePlace(req *venue.VenuePlaceInfo) error
+	PlaceList(req *venue.VenuePlaceListReq) (list []*venue.VenuePlaceInfo, total int, err error)
 	UpdatePlaceStatus(id int64, status int64) error
 
-	VenueInfo(id int64) (info *VenueInfo, err error)
-	PlaceInfo(id int64) (info *VenuePlaceInfo, err error)
-}
-
-type VenueListReq struct {
-	PageSize int64  `json:"page_size"`
-	Page     int64  `json:"page"`
-	Name     string `json:"name"`
-}
-type VenueInfo struct {
-	ID            int64  `json:"id"`
-	Name          string `json:"name"`
-	Address       string `json:"address"`
-	AddressDetail string `json:"address_detail"`
-	Latitude      string `json:"latitude"`
-	Longitude     string `json:"longitude"`
-	Mobile        string `json:"mobile"`
-	Pic           string `json:"pic"`
-	Information   string `json:"information"`
-	Status        int64  `json:"status"`
-	CreatedAt     string `json:"created_at"`
-	UpdatedAt     string `json:"updated_at"`
-}
-
-type VenuePlaceListReq struct {
-	PageSize int64  `json:"page_size"`
-	Page     int64  `json:"page"`
-	Name     string `json:"name"`
-}
-type VenuePlaceInfo struct {
-	ID        int64  `json:"id"`
-	Name      string `json:"name"`
-	Pic       string `json:"pic"`
-	VenueId   int64  `json:"venue_id"`
-	Status    int64  `json:"status"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
+	VenueInfo(id int64) (info *venue.VenueInfo, err error)
+	PlaceInfo(id int64) (info *venue.VenuePlaceInfo, err error)
 }

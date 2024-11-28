@@ -6,10 +6,11 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"github.com/spf13/cast"
+	"saas/biz/dal/cache"
+	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/base"
-	"saas/init"
 
 	"saas/idl_gen/model/auth"
 	"saas/pkg/db/ent"
@@ -33,8 +34,8 @@ func NewRole(ctx context.Context, c *app.RequestContext) do.Role {
 		ctx:   ctx,
 		c:     c,
 		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    init.DB,
-		cache: init.Cache,
+		db:    db.DB,
+		cache: cache.Cache,
 	}
 }
 
@@ -129,7 +130,7 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 		Name:          roleEnt.Name,
 		Value:         roleEnt.Value,
 		DefaultRouter: roleEnt.DefaultRouter,
-		Status:        int64(roleEnt.Status),
+		Status:        roleEnt.Status,
 		Remark:        roleEnt.Remark,
 		OrderNo:       roleEnt.OrderNo,
 		CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
@@ -173,7 +174,8 @@ func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total 
 			Apis:          rArr,
 		})
 	}
-	total, _ = r.db.Role.Query().Count(r.ctx)
+	t, _ := r.db.Role.Query().Count(r.ctx)
+	total = int64(t)
 	return
 }
 

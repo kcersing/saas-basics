@@ -46,6 +46,10 @@ const (
 	EdgeToken = "token"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
+	// EdgeCreatedOrders holds the string denoting the created_orders edge name in mutations.
+	EdgeCreatedOrders = "created_orders"
+	// EdgeUserEntry holds the string denoting the user_entry edge name in mutations.
+	EdgeUserEntry = "user_entry"
 	// Table holds the table name of the user in the database.
 	Table = "sys_users"
 	// TokenTable is the table that holds the token relation/edge.
@@ -62,6 +66,20 @@ const (
 	TagsInverseTable = "sys_dictionary_details"
 	// TagsColumn is the table column denoting the tags relation/edge.
 	TagsColumn = "user_tags"
+	// CreatedOrdersTable is the table that holds the created_orders relation/edge.
+	CreatedOrdersTable = "order"
+	// CreatedOrdersInverseTable is the table name for the Order entity.
+	// It exists in this package in order to avoid circular dependency with the "order" package.
+	CreatedOrdersInverseTable = "order"
+	// CreatedOrdersColumn is the table column denoting the created_orders relation/edge.
+	CreatedOrdersColumn = "create_id"
+	// UserEntryTable is the table that holds the user_entry relation/edge.
+	UserEntryTable = "entry_logs"
+	// UserEntryInverseTable is the table name for the EntryLogs entity.
+	// It exists in this package in order to avoid circular dependency with the "entrylogs" package.
+	UserEntryInverseTable = "entry_logs"
+	// UserEntryColumn is the table column denoting the user_entry relation/edge.
+	UserEntryColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -212,6 +230,34 @@ func ByTagsField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTagsStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByCreatedOrdersCount orders the results by created_orders count.
+func ByCreatedOrdersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCreatedOrdersStep(), opts...)
+	}
+}
+
+// ByCreatedOrders orders the results by created_orders terms.
+func ByCreatedOrders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCreatedOrdersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByUserEntryCount orders the results by user_entry count.
+func ByUserEntryCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUserEntryStep(), opts...)
+	}
+}
+
+// ByUserEntry orders the results by user_entry terms.
+func ByUserEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTokenStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -224,5 +270,19 @@ func newTagsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TagsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, TagsTable, TagsColumn),
+	)
+}
+func newCreatedOrdersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CreatedOrdersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CreatedOrdersTable, CreatedOrdersColumn),
+	)
+}
+func newUserEntryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserEntryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, UserEntryTable, UserEntryColumn),
 	)
 }

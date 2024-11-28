@@ -15,6 +15,8 @@ import (
 )
 
 // CreateRole .
+// @Param request body auth.RoleInfo true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/role/create [POST]
 func CreateRole(ctx context.Context, c *app.RequestContext) {
 	var err error

@@ -90,9 +90,9 @@ func Number(v int64) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldNumber, v))
 }
 
-// Detail applies equality check predicate on the "detail" field. It's identical to DetailEQ.
-func Detail(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldEQ(FieldDetail, v))
+// Information applies equality check predicate on the "information" field. It's identical to InformationEQ.
+func Information(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldInformation, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -455,79 +455,79 @@ func NumberNotNil() predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldNotNull(FieldNumber))
 }
 
-// DetailEQ applies the EQ predicate on the "detail" field.
-func DetailEQ(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldEQ(FieldDetail, v))
+// InformationEQ applies the EQ predicate on the "information" field.
+func InformationEQ(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldInformation, v))
 }
 
-// DetailNEQ applies the NEQ predicate on the "detail" field.
-func DetailNEQ(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldNEQ(FieldDetail, v))
+// InformationNEQ applies the NEQ predicate on the "information" field.
+func InformationNEQ(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNEQ(FieldInformation, v))
 }
 
-// DetailIn applies the In predicate on the "detail" field.
-func DetailIn(vs ...string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldIn(FieldDetail, vs...))
+// InformationIn applies the In predicate on the "information" field.
+func InformationIn(vs ...string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIn(FieldInformation, vs...))
 }
 
-// DetailNotIn applies the NotIn predicate on the "detail" field.
-func DetailNotIn(vs ...string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldNotIn(FieldDetail, vs...))
+// InformationNotIn applies the NotIn predicate on the "information" field.
+func InformationNotIn(vs ...string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotIn(FieldInformation, vs...))
 }
 
-// DetailGT applies the GT predicate on the "detail" field.
-func DetailGT(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldGT(FieldDetail, v))
+// InformationGT applies the GT predicate on the "information" field.
+func InformationGT(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGT(FieldInformation, v))
 }
 
-// DetailGTE applies the GTE predicate on the "detail" field.
-func DetailGTE(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldGTE(FieldDetail, v))
+// InformationGTE applies the GTE predicate on the "information" field.
+func InformationGTE(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGTE(FieldInformation, v))
 }
 
-// DetailLT applies the LT predicate on the "detail" field.
-func DetailLT(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldLT(FieldDetail, v))
+// InformationLT applies the LT predicate on the "information" field.
+func InformationLT(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLT(FieldInformation, v))
 }
 
-// DetailLTE applies the LTE predicate on the "detail" field.
-func DetailLTE(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldLTE(FieldDetail, v))
+// InformationLTE applies the LTE predicate on the "information" field.
+func InformationLTE(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLTE(FieldInformation, v))
 }
 
-// DetailContains applies the Contains predicate on the "detail" field.
-func DetailContains(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldContains(FieldDetail, v))
+// InformationContains applies the Contains predicate on the "information" field.
+func InformationContains(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldContains(FieldInformation, v))
 }
 
-// DetailHasPrefix applies the HasPrefix predicate on the "detail" field.
-func DetailHasPrefix(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldHasPrefix(FieldDetail, v))
+// InformationHasPrefix applies the HasPrefix predicate on the "information" field.
+func InformationHasPrefix(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldHasPrefix(FieldInformation, v))
 }
 
-// DetailHasSuffix applies the HasSuffix predicate on the "detail" field.
-func DetailHasSuffix(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldHasSuffix(FieldDetail, v))
+// InformationHasSuffix applies the HasSuffix predicate on the "information" field.
+func InformationHasSuffix(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldHasSuffix(FieldInformation, v))
 }
 
-// DetailIsNil applies the IsNil predicate on the "detail" field.
-func DetailIsNil() predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldIsNull(FieldDetail))
+// InformationIsNil applies the IsNil predicate on the "information" field.
+func InformationIsNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIsNull(FieldInformation))
 }
 
-// DetailNotNil applies the NotNil predicate on the "detail" field.
-func DetailNotNil() predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldNotNull(FieldDetail))
+// InformationNotNil applies the NotNil predicate on the "information" field.
+func InformationNotNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotNull(FieldInformation))
 }
 
-// DetailEqualFold applies the EqualFold predicate on the "detail" field.
-func DetailEqualFold(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldEqualFold(FieldDetail, v))
+// InformationEqualFold applies the EqualFold predicate on the "information" field.
+func InformationEqualFold(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEqualFold(FieldInformation, v))
 }
 
-// DetailContainsFold applies the ContainsFold predicate on the "detail" field.
-func DetailContainsFold(v string) predicate.VenuePlace {
-	return predicate.VenuePlace(sql.FieldContainsFold(FieldDetail, v))
+// InformationContainsFold applies the ContainsFold predicate on the "information" field.
+func InformationContainsFold(v string) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldContainsFold(FieldInformation, v))
 }
 
 // HasVenue applies the HasEdge predicate on the "venue" edge.

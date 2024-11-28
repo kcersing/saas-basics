@@ -119,16 +119,16 @@ func (vpc *VenuePlaceCreate) SetNillableNumber(i *int64) *VenuePlaceCreate {
 	return vpc
 }
 
-// SetDetail sets the "detail" field.
-func (vpc *VenuePlaceCreate) SetDetail(s string) *VenuePlaceCreate {
-	vpc.mutation.SetDetail(s)
+// SetInformation sets the "information" field.
+func (vpc *VenuePlaceCreate) SetInformation(s string) *VenuePlaceCreate {
+	vpc.mutation.SetInformation(s)
 	return vpc
 }
 
-// SetNillableDetail sets the "detail" field if the given value is not nil.
-func (vpc *VenuePlaceCreate) SetNillableDetail(s *string) *VenuePlaceCreate {
+// SetNillableInformation sets the "information" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableInformation(s *string) *VenuePlaceCreate {
 	if s != nil {
-		vpc.SetDetail(*s)
+		vpc.SetInformation(*s)
 	}
 	return vpc
 }
@@ -257,9 +257,9 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 		_spec.SetField(venueplace.FieldNumber, field.TypeInt64, value)
 		_node.Number = value
 	}
-	if value, ok := vpc.mutation.Detail(); ok {
-		_spec.SetField(venueplace.FieldDetail, field.TypeString, value)
-		_node.Detail = value
+	if value, ok := vpc.mutation.Information(); ok {
+		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)
+		_node.Information = value
 	}
 	if nodes := vpc.mutation.VenueIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

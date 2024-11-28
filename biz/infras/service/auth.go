@@ -9,8 +9,12 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
+	"saas/biz/dal/cache"
+	casbin2 "saas/biz/dal/casbin"
+	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
+	"saas/idl_gen/model/auth"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/role"
@@ -26,7 +30,17 @@ type Auth struct {
 	cache *ristretto.Cache
 }
 
-func (a Auth) QueryApiAll(id []int64) (resp []*do.ApiAuthInfo, err error) {
+func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
+	return &Auth{
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		db:    db.DB,
+		Cbs:   casbin2.CasbinEnforcer(),
+		cache: cache.Cache,
+	}
+}
+func (a Auth) QueryApiAll(id []int64) (resp []*auth.ApiAuthInfo, err error) {
 
 	//ApiAuthInterface, exist := a.cache.Get("apiAll")
 	//if exist {
@@ -86,11 +100,11 @@ func (a Auth) UpdateApiAuth(roleIDStr string, apis []int64) error {
 	return nil
 }
 
-func (a Auth) ApiAuth(roleIDStr string) (infos []*do.ApiAuthInfo, err error) {
+func (a Auth) ApiAuth(roleIDStr string) (infos []*auth.ApiAuthInfo, err error) {
 
 	policies := a.Cbs.GetFilteredPolicy(0, roleIDStr)
 	for _, v := range policies {
-		infos = append(infos, &do.ApiAuthInfo{
+		infos = append(infos, &auth.ApiAuthInfo{
 			Path:   v[1],
 			Method: v[2],
 		})
@@ -134,15 +148,4 @@ func (a Auth) MenuAuth(roleID int64) (menuIDs []int64, err error) {
 		}
 	}
 	return
-}
-
-func NewAuth(ctx context.Context, c *app.RequestContext) do.Auth {
-	return &Auth{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
-		Cbs:   infras.CasbinEnforcer(),
-	}
 }

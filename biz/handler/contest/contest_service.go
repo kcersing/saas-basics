@@ -12,7 +12,7 @@ import (
 )
 
 // CreateContest .
-// @router /api/admin/contest/create [POST]
+// @router /service/contest/create [POST]
 func CreateContest(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contest.ContestInfo
@@ -28,7 +28,7 @@ func CreateContest(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateContest .
-// @router /api/admin/contest/update [POST]
+// @router /service/contest/update [POST]
 func UpdateContest(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contest.ContestInfo
@@ -44,7 +44,7 @@ func UpdateContest(ctx context.Context, c *app.RequestContext) {
 }
 
 // ContestInfo .
-// @router /api/admin/contest/info [POST]
+// @router /service/contest/info [POST]
 func ContestInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -60,7 +60,7 @@ func ContestInfo(ctx context.Context, c *app.RequestContext) {
 }
 
 // ContestList .
-// @router /api/admin/contest/list [POST]
+// @router /service/contest/list [POST]
 func ContestList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contest.ContestListReq
@@ -76,7 +76,7 @@ func ContestList(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMemberStatus .
-// @router /api/admin/contest/status [POST]
+// @router /service/contest/status [POST]
 func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.StatusCodeReq
@@ -92,7 +92,7 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateParticipant .
-// @router /api/admin/contest/create [POST]
+// @router /service/contest/create [POST]
 func CreateParticipant(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contest.ParticipantInfo
@@ -108,7 +108,7 @@ func CreateParticipant(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateParticipant .
-// @router /api/admin/contest/update [POST]
+// @router /service/contest/update [POST]
 func UpdateParticipant(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contest.ParticipantInfo
@@ -124,7 +124,7 @@ func UpdateParticipant(ctx context.Context, c *app.RequestContext) {
 }
 
 // ContestParticipantInfo .
-// @router /api/admin/contest/info [POST]
+// @router /service/contest/info [POST]
 func ContestParticipantInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -140,7 +140,7 @@ func ContestParticipantInfo(ctx context.Context, c *app.RequestContext) {
 }
 
 // ParticipantListList .
-// @router /api/admin/contest/list [POST]
+// @router /service/contest/list [POST]
 func ParticipantListList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contest.ParticipantListReq
@@ -156,7 +156,7 @@ func ParticipantListList(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateParticipantStatus .
-// @router /api/admin/contest/status [POST]
+// @router /service/contest/status [POST]
 func UpdateParticipantStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.StatusCodeReq

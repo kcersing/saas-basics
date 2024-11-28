@@ -10,11 +10,19 @@ import (
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
+	"saas/pkg/db/ent/contract"
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/logs"
+	"saas/pkg/db/ent/member"
+	"saas/pkg/db/ent/membercontract"
+	"saas/pkg/db/ent/membercontractcontent"
+	"saas/pkg/db/ent/memberdetails"
+	"saas/pkg/db/ent/membernote"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
+	"saas/pkg/db/ent/messages"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
 	"saas/pkg/db/ent/orderitem"
@@ -90,24 +98,32 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			api.Table:                api.ValidColumn,
-			contest.Table:            contest.ValidColumn,
-			contestparticipant.Table: contestparticipant.ValidColumn,
-			dictionary.Table:         dictionary.ValidColumn,
-			dictionarydetail.Table:   dictionarydetail.ValidColumn,
-			logs.Table:               logs.ValidColumn,
-			menu.Table:               menu.ValidColumn,
-			menuparam.Table:          menuparam.ValidColumn,
-			order.Table:              order.ValidColumn,
-			orderamount.Table:        orderamount.ValidColumn,
-			orderitem.Table:          orderitem.ValidColumn,
-			orderpay.Table:           orderpay.ValidColumn,
-			ordersales.Table:         ordersales.ValidColumn,
-			role.Table:               role.ValidColumn,
-			token.Table:              token.ValidColumn,
-			user.Table:               user.ValidColumn,
-			venue.Table:              venue.ValidColumn,
-			venueplace.Table:         venueplace.ValidColumn,
+			api.Table:                   api.ValidColumn,
+			contest.Table:               contest.ValidColumn,
+			contestparticipant.Table:    contestparticipant.ValidColumn,
+			contract.Table:              contract.ValidColumn,
+			dictionary.Table:            dictionary.ValidColumn,
+			dictionarydetail.Table:      dictionarydetail.ValidColumn,
+			entrylogs.Table:             entrylogs.ValidColumn,
+			logs.Table:                  logs.ValidColumn,
+			member.Table:                member.ValidColumn,
+			membercontract.Table:        membercontract.ValidColumn,
+			membercontractcontent.Table: membercontractcontent.ValidColumn,
+			memberdetails.Table:         memberdetails.ValidColumn,
+			membernote.Table:            membernote.ValidColumn,
+			menu.Table:                  menu.ValidColumn,
+			menuparam.Table:             menuparam.ValidColumn,
+			messages.Table:              messages.ValidColumn,
+			order.Table:                 order.ValidColumn,
+			orderamount.Table:           orderamount.ValidColumn,
+			orderitem.Table:             orderitem.ValidColumn,
+			orderpay.Table:              orderpay.ValidColumn,
+			ordersales.Table:            ordersales.ValidColumn,
+			role.Table:                  role.ValidColumn,
+			token.Table:                 token.ValidColumn,
+			user.Table:                  user.ValidColumn,
+			venue.Table:                 venue.ValidColumn,
+			venueplace.Table:            venueplace.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

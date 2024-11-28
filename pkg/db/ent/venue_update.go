@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/venue"
@@ -273,6 +274,21 @@ func (vu *VenueUpdate) AddVenueOrders(o ...*Order) *VenueUpdate {
 	return vu.AddVenueOrderIDs(ids...)
 }
 
+// AddVenueEntryIDs adds the "venue_entry" edge to the EntryLogs entity by IDs.
+func (vu *VenueUpdate) AddVenueEntryIDs(ids ...int64) *VenueUpdate {
+	vu.mutation.AddVenueEntryIDs(ids...)
+	return vu
+}
+
+// AddVenueEntry adds the "venue_entry" edges to the EntryLogs entity.
+func (vu *VenueUpdate) AddVenueEntry(e ...*EntryLogs) *VenueUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return vu.AddVenueEntryIDs(ids...)
+}
+
 // Mutation returns the VenueMutation object of the builder.
 func (vu *VenueUpdate) Mutation() *VenueMutation {
 	return vu.mutation
@@ -318,6 +334,27 @@ func (vu *VenueUpdate) RemoveVenueOrders(o ...*Order) *VenueUpdate {
 		ids[i] = o[i].ID
 	}
 	return vu.RemoveVenueOrderIDs(ids...)
+}
+
+// ClearVenueEntry clears all "venue_entry" edges to the EntryLogs entity.
+func (vu *VenueUpdate) ClearVenueEntry() *VenueUpdate {
+	vu.mutation.ClearVenueEntry()
+	return vu
+}
+
+// RemoveVenueEntryIDs removes the "venue_entry" edge to EntryLogs entities by IDs.
+func (vu *VenueUpdate) RemoveVenueEntryIDs(ids ...int64) *VenueUpdate {
+	vu.mutation.RemoveVenueEntryIDs(ids...)
+	return vu
+}
+
+// RemoveVenueEntry removes "venue_entry" edges to EntryLogs entities.
+func (vu *VenueUpdate) RemoveVenueEntry(e ...*EntryLogs) *VenueUpdate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return vu.RemoveVenueEntryIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -514,6 +551,51 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vu.mutation.VenueEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.VenueEntryTable,
+			Columns: []string{venue.VenueEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.RemovedVenueEntryIDs(); len(nodes) > 0 && !vu.mutation.VenueEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.VenueEntryTable,
+			Columns: []string{venue.VenueEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.VenueEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.VenueEntryTable,
+			Columns: []string{venue.VenueEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -784,6 +866,21 @@ func (vuo *VenueUpdateOne) AddVenueOrders(o ...*Order) *VenueUpdateOne {
 	return vuo.AddVenueOrderIDs(ids...)
 }
 
+// AddVenueEntryIDs adds the "venue_entry" edge to the EntryLogs entity by IDs.
+func (vuo *VenueUpdateOne) AddVenueEntryIDs(ids ...int64) *VenueUpdateOne {
+	vuo.mutation.AddVenueEntryIDs(ids...)
+	return vuo
+}
+
+// AddVenueEntry adds the "venue_entry" edges to the EntryLogs entity.
+func (vuo *VenueUpdateOne) AddVenueEntry(e ...*EntryLogs) *VenueUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return vuo.AddVenueEntryIDs(ids...)
+}
+
 // Mutation returns the VenueMutation object of the builder.
 func (vuo *VenueUpdateOne) Mutation() *VenueMutation {
 	return vuo.mutation
@@ -829,6 +926,27 @@ func (vuo *VenueUpdateOne) RemoveVenueOrders(o ...*Order) *VenueUpdateOne {
 		ids[i] = o[i].ID
 	}
 	return vuo.RemoveVenueOrderIDs(ids...)
+}
+
+// ClearVenueEntry clears all "venue_entry" edges to the EntryLogs entity.
+func (vuo *VenueUpdateOne) ClearVenueEntry() *VenueUpdateOne {
+	vuo.mutation.ClearVenueEntry()
+	return vuo
+}
+
+// RemoveVenueEntryIDs removes the "venue_entry" edge to EntryLogs entities by IDs.
+func (vuo *VenueUpdateOne) RemoveVenueEntryIDs(ids ...int64) *VenueUpdateOne {
+	vuo.mutation.RemoveVenueEntryIDs(ids...)
+	return vuo
+}
+
+// RemoveVenueEntry removes "venue_entry" edges to EntryLogs entities.
+func (vuo *VenueUpdateOne) RemoveVenueEntry(e ...*EntryLogs) *VenueUpdateOne {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return vuo.RemoveVenueEntryIDs(ids...)
 }
 
 // Where appends a list predicates to the VenueUpdate builder.
@@ -1055,6 +1173,51 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vuo.mutation.VenueEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.VenueEntryTable,
+			Columns: []string{venue.VenueEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.RemovedVenueEntryIDs(); len(nodes) > 0 && !vuo.mutation.VenueEntryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.VenueEntryTable,
+			Columns: []string{venue.VenueEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.VenueEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.VenueEntryTable,
+			Columns: []string{venue.VenueEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

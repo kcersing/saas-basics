@@ -75,3 +75,13 @@ func _updateparticipantMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _serviceMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _participantMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

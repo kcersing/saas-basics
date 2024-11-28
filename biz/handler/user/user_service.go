@@ -112,3 +112,19 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
+
+// Login .
+// @router /service/login [POST]
+func Login(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req user.LoginReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

@@ -44,10 +44,16 @@ const (
 	EdgeItem = "item"
 	// EdgePay holds the string denoting the pay edge name in mutations.
 	EdgePay = "pay"
+	// EdgeOrderContents holds the string denoting the order_contents edge name in mutations.
+	EdgeOrderContents = "order_contents"
 	// EdgeSales holds the string denoting the sales edge name in mutations.
 	EdgeSales = "sales"
 	// EdgeOrderVenues holds the string denoting the order_venues edge name in mutations.
 	EdgeOrderVenues = "order_venues"
+	// EdgeOrderMembers holds the string denoting the order_members edge name in mutations.
+	EdgeOrderMembers = "order_members"
+	// EdgeOrderCreates holds the string denoting the order_creates edge name in mutations.
+	EdgeOrderCreates = "order_creates"
 	// Table holds the table name of the order in the database.
 	Table = "order"
 	// AmountTable is the table that holds the amount relation/edge.
@@ -71,6 +77,13 @@ const (
 	PayInverseTable = "order_pay"
 	// PayColumn is the table column denoting the pay relation/edge.
 	PayColumn = "order_id"
+	// OrderContentsTable is the table that holds the order_contents relation/edge.
+	OrderContentsTable = "member_contract"
+	// OrderContentsInverseTable is the table name for the MemberContract entity.
+	// It exists in this package in order to avoid circular dependency with the "membercontract" package.
+	OrderContentsInverseTable = "member_contract"
+	// OrderContentsColumn is the table column denoting the order_contents relation/edge.
+	OrderContentsColumn = "order_id"
 	// SalesTable is the table that holds the sales relation/edge.
 	SalesTable = "order_sales"
 	// SalesInverseTable is the table name for the OrderSales entity.
@@ -85,6 +98,20 @@ const (
 	OrderVenuesInverseTable = "venue"
 	// OrderVenuesColumn is the table column denoting the order_venues relation/edge.
 	OrderVenuesColumn = "venue_id"
+	// OrderMembersTable is the table that holds the order_members relation/edge.
+	OrderMembersTable = "order"
+	// OrderMembersInverseTable is the table name for the Member entity.
+	// It exists in this package in order to avoid circular dependency with the "member" package.
+	OrderMembersInverseTable = "member"
+	// OrderMembersColumn is the table column denoting the order_members relation/edge.
+	OrderMembersColumn = "member_id"
+	// OrderCreatesTable is the table that holds the order_creates relation/edge.
+	OrderCreatesTable = "order"
+	// OrderCreatesInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	OrderCreatesInverseTable = "sys_users"
+	// OrderCreatesColumn is the table column denoting the order_creates relation/edge.
+	OrderCreatesColumn = "create_id"
 )
 
 // Columns holds all SQL columns for order fields.
@@ -239,6 +266,20 @@ func ByPay(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByOrderContentsCount orders the results by order_contents count.
+func ByOrderContentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrderContentsStep(), opts...)
+	}
+}
+
+// ByOrderContents orders the results by order_contents terms.
+func ByOrderContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrderContentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // BySalesCount orders the results by sales count.
 func BySalesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -257,6 +298,20 @@ func BySales(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 func ByOrderVenuesField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOrderVenuesStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByOrderMembersField orders the results by order_members field.
+func ByOrderMembersField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrderMembersStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByOrderCreatesField orders the results by order_creates field.
+func ByOrderCreatesField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrderCreatesStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newAmountStep() *sqlgraph.Step {
@@ -280,6 +335,13 @@ func newPayStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, PayTable, PayColumn),
 	)
 }
+func newOrderContentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrderContentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrderContentsTable, OrderContentsColumn),
+	)
+}
 func newSalesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -292,5 +354,19 @@ func newOrderVenuesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OrderVenuesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OrderVenuesTable, OrderVenuesColumn),
+	)
+}
+func newOrderMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrderMembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OrderMembersTable, OrderMembersColumn),
+	)
+}
+func newOrderCreatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrderCreatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OrderCreatesTable, OrderCreatesColumn),
 	)
 }

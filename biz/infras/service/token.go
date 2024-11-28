@@ -5,15 +5,17 @@ import (
 	"fmt"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
-	"saas/init"
+	"saas/biz/dal/db"
+	"saas/biz/infras/do"
+	"saas/config"
+	"saas/idl_gen/model/token"
+	"saas/biz/dal/cache"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/user"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"saas/app/admin/config"
-	"saas/app/pkg/do"
 	"saas/pkg/db/ent"
-	"saas/pkg/db/ent/token"
+	token2 "saas/pkg/db/ent/token"
 	"time"
 )
 
@@ -30,17 +32,17 @@ func NewToken(ctx context.Context, c *app.RequestContext) do.Token {
 		ctx:   ctx,
 		c:     c,
 		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    init.DB,
-		cache: init.Cache,
+		db:    db.DB,
+		cache: cache.Cache,
 	}
 }
 
-func (t Token) Create(req *do.TokenInfo) error {
+func (t Token) Create(req *token.TokenInfo) error {
 	expiredAt, _ := time.ParseInLocation(time.DateTime, req.ExpiredAt, time.Local)
 	if expiredAt.Sub(time.Now()).Seconds() < 5 {
 		return errors.New("expired time must be greater than now, more than 5s")
 	}
-	tokenExist, err := t.db.Token.Query().Where(token.UserID(req.UserID)).Only(t.ctx)
+	tokenExist, err := t.db.Token.Query().Where(token2.UserID(req.UserID)).Only(t.ctx)
 	if err != nil {
 		if !ent.IsNotFound(err) {
 			return errors.Wrap(err, "create Token failed")
@@ -70,7 +72,7 @@ func (t Token) Create(req *do.TokenInfo) error {
 	return nil
 }
 
-func (t Token) Update(req *do.TokenInfo) error {
+func (t Token) Update(req *token.TokenInfo) error {
 	//TODO implement me
 	expiredAt, _ := time.ParseInLocation(time.DateTime, req.ExpiredAt, time.Local)
 	if expiredAt.Sub(time.Now()).Seconds() < 5 {
@@ -96,12 +98,12 @@ func (t Token) IsExistByUserID(userID int64) bool {
 	if exist {
 		return true
 	}
-	exist, _ = t.db.Token.Query().Where(token.UserID(userID)).Exist(t.ctx)
+	exist, _ = t.db.Token.Query().Where(token2.UserID(userID)).Exist(t.ctx)
 	return exist
 }
 
 func (t Token) Delete(userID int64) error {
-	_, err := t.db.Token.Delete().Where(token.UserID(userID)).Exec(t.ctx)
+	_, err := t.db.Token.Delete().Where(token2.UserID(userID)).Exec(t.ctx)
 	if err != nil {
 		return errors.Wrap(err, "delete Token failed")
 	}
@@ -109,14 +111,14 @@ func (t Token) Delete(userID int64) error {
 	return nil
 }
 
-func (t Token) List(req *do.TokenListReq) (res []*do.TokenInfo, total int, err error) {
+func (t Token) List(req *token.TokenListReq) (res []*token.TokenInfo, total int, err error) {
 	// list token with user info
 	var userPredicates = []predicate.User{user.HasToken()}
 	if req.Username != "" {
 		userPredicates = append(userPredicates, user.UsernameContainsFold(req.Username))
 	}
-	if req.UserID != 0 {
-		userPredicates = append(userPredicates, user.IDEQ(req.UserID))
+	if req.UserId != 0 {
+		userPredicates = append(userPredicates, user.IDEQ(req.UserId))
 	}
 	UserTokens, err := t.db.User.Query().Where(userPredicates...).
 		WithToken(func(q *ent.TokenQuery) {
@@ -128,10 +130,10 @@ func (t Token) List(req *do.TokenListReq) (res []*do.TokenInfo, total int, err e
 	}
 
 	for _, userEnt := range UserTokens {
-		res = append(res, &do.TokenInfo{
+		res = append(res, &token.TokenInfo{
 			ID:        userEnt.Edges.Token.ID,
 			UserID:    userEnt.ID,
-			UserName:  userEnt.Username,
+			Username:  userEnt.Username,
 			Token:     userEnt.Edges.Token.Token,
 			Source:    userEnt.Edges.Token.Source,
 			CreatedAt: userEnt.CreatedAt.Format(time.DateTime),

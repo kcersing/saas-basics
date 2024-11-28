@@ -6,11 +6,12 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
+	"saas/biz/dal/cache"
+	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/base"
 	"saas/idl_gen/model/menu"
-	"saas/init"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/predicate"
@@ -31,8 +32,8 @@ func NewApi(ctx context.Context, c *app.RequestContext) do.Api {
 		ctx:   ctx,
 		c:     c,
 		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    init.DB,
-		cache: init.Cache,
+		db:    db.DB,
+		cache: cache.Cache,
 	}
 }
 

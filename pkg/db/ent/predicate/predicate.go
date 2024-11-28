@@ -15,20 +15,44 @@ type Contest func(*sql.Selector)
 // ContestParticipant is the predicate function for contestparticipant builders.
 type ContestParticipant func(*sql.Selector)
 
+// Contract is the predicate function for contract builders.
+type Contract func(*sql.Selector)
+
 // Dictionary is the predicate function for dictionary builders.
 type Dictionary func(*sql.Selector)
 
 // DictionaryDetail is the predicate function for dictionarydetail builders.
 type DictionaryDetail func(*sql.Selector)
 
+// EntryLogs is the predicate function for entrylogs builders.
+type EntryLogs func(*sql.Selector)
+
 // Logs is the predicate function for logs builders.
 type Logs func(*sql.Selector)
+
+// Member is the predicate function for member builders.
+type Member func(*sql.Selector)
+
+// MemberContract is the predicate function for membercontract builders.
+type MemberContract func(*sql.Selector)
+
+// MemberContractContent is the predicate function for membercontractcontent builders.
+type MemberContractContent func(*sql.Selector)
+
+// MemberDetails is the predicate function for memberdetails builders.
+type MemberDetails func(*sql.Selector)
+
+// MemberNote is the predicate function for membernote builders.
+type MemberNote func(*sql.Selector)
 
 // Menu is the predicate function for menu builders.
 type Menu func(*sql.Selector)
 
 // MenuParam is the predicate function for menuparam builders.
 type MenuParam func(*sql.Selector)
+
+// Messages is the predicate function for messages builders.
+type Messages func(*sql.Selector)
 
 // Order is the predicate function for order builders.
 type Order func(*sql.Selector)

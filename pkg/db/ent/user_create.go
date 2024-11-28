@@ -7,6 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/dictionarydetail"
+	"saas/pkg/db/ent/entrylogs"
+	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/token"
 	"saas/pkg/db/ent/user"
 	"time"
@@ -230,6 +232,36 @@ func (uc *UserCreate) SetTags(d *DictionaryDetail) *UserCreate {
 	return uc.SetTagsID(d.ID)
 }
 
+// AddCreatedOrderIDs adds the "created_orders" edge to the Order entity by IDs.
+func (uc *UserCreate) AddCreatedOrderIDs(ids ...int64) *UserCreate {
+	uc.mutation.AddCreatedOrderIDs(ids...)
+	return uc
+}
+
+// AddCreatedOrders adds the "created_orders" edges to the Order entity.
+func (uc *UserCreate) AddCreatedOrders(o ...*Order) *UserCreate {
+	ids := make([]int64, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uc.AddCreatedOrderIDs(ids...)
+}
+
+// AddUserEntryIDs adds the "user_entry" edge to the EntryLogs entity by IDs.
+func (uc *UserCreate) AddUserEntryIDs(ids ...int64) *UserCreate {
+	uc.mutation.AddUserEntryIDs(ids...)
+	return uc
+}
+
+// AddUserEntry adds the "user_entry" edges to the EntryLogs entity.
+func (uc *UserCreate) AddUserEntry(e ...*EntryLogs) *UserCreate {
+	ids := make([]int64, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return uc.AddUserEntryIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uc *UserCreate) Mutation() *UserMutation {
 	return uc.mutation
@@ -430,6 +462,38 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.user_tags = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.CreatedOrdersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.UserEntryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

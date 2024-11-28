@@ -14,7 +14,7 @@ import (
 )
 
 // HealthCheck .
-// @router /api/health [GET]
+// @router /service/health [GET]
 func HealthCheck(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.Empty
@@ -24,11 +24,18 @@ func HealthCheck(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	utils.SendResponse(c, errno.Success, nil, 0, "")
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
 }
 
 // Captcha .
-// @router /api/captcha [POST]
+// PingHandler 获取验证码 handler
+// @Summary 获取验证码 Summary
+// @Description 获取验证码 Description
+// @Accept application/json
+// @Produce application/json
+// @Router /service/captcha [POST]
 func Captcha(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.Empty

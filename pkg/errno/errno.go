@@ -3,7 +3,7 @@ package errno
 import (
 	"errors"
 	"fmt"
-	"saas/app/admin/idl_gen/model/errno"
+	"saas/idl_gen/model/base"
 )
 
 type ErrNo struct {
@@ -29,18 +29,18 @@ func (e ErrNo) WithMessage(msg string) ErrNo {
 }
 
 var (
-	Success      = NewErrNo(int64(errno.Err_Success), "success")
+	Success      = NewErrNo(int64(base.Err_Success), "success")
 	Unauthorized = NewErrNo(int64(401), "Unauthorized")
 	ServiceErr   = NewErrNo(int64(501), "service error")
 
-	NoRoute            = NewErrNo(int64(errno.Err_NoRoute), "no route")
-	NoMethod           = NewErrNo(int64(errno.Err_NoMethod), "no method")
-	BadRequest         = NewErrNo(int64(errno.Err_BadRequest), "bad request")
-	ParamsErr          = NewErrNo(int64(errno.Err_ParamsErr), "params error")
-	AuthorizeFail      = NewErrNo(int64(errno.Err_AuthorizeFail), "authorize failed")
-	RecordNotFound     = NewErrNo(int64(errno.Err_RecordNotFound), "record not found")
-	RecordAlreadyExist = NewErrNo(int64(errno.Err_RecordAlreadyExist), "record already exist")
-	DirtyData          = NewErrNo(int64(errno.Err_DirtyData), "dirty data")
+	NoRoute            = NewErrNo(int64(base.Err_NoRoute), "no route")
+	NoMethod           = NewErrNo(int64(base.Err_NoMethod), "no method")
+	BadRequest         = NewErrNo(int64(base.Err_BadRequest), "bad request")
+	ParamsErr          = NewErrNo(int64(base.Err_ParamsErr), "params error")
+	AuthorizeFail      = NewErrNo(int64(base.Err_AuthorizeFail), "authorize failed")
+	RecordNotFound     = NewErrNo(int64(base.Err_RecordNotFound), "record not found")
+	RecordAlreadyExist = NewErrNo(int64(base.Err_RecordAlreadyExist), "record already exist")
+	DirtyData          = NewErrNo(int64(base.Err_DirtyData), "dirty data")
 )
 
 // ConvertErr convert error to Errno

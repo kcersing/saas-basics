@@ -5,26 +5,26 @@ include "../base/base.thrift"
 
 service ContestService {
 
-  base.NilResponse CreateContest(1: ContestInfo req) (api.post = "/api/admin/contest/create")
+  base.NilResponse CreateContest(1: ContestInfo req) (api.post = "/service/contest/create")
 
-  base.NilResponse UpdateContest(1: ContestInfo req) (api.post = "/api/admin/contest/update")
+  base.NilResponse UpdateContest(1: ContestInfo req) (api.post = "/service/contest/update")
 
-  base.NilResponse ContestInfo(1: base.IDReq req) (api.post = "/api/admin/contest/info")
+  base.NilResponse ContestInfo(1: base.IDReq req) (api.post = "/service/contest/info")
 
-  base.NilResponse ContestList(1: ContestListReq req) (api.post = "/api/admin/contest/list")
+  base.NilResponse ContestList(1: ContestListReq req) (api.post = "/service/contest/list")
 
-  base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/contest/status")
+  base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/contest/status")
 
 
-  base.NilResponse CreateParticipant(1: ParticipantInfo req) (api.post = "/api/admin/contest/create")
+  base.NilResponse CreateParticipant(1: ParticipantInfo req) (api.post = "/service/participant/create")
 
-  base.NilResponse UpdateParticipant(1: ParticipantInfo req) (api.post = "/api/admin/contest/update")
+  base.NilResponse UpdateParticipant(1: ParticipantInfo req) (api.post = "/service/participant/update")
 
-  base.NilResponse ContestParticipantInfo(1: base.IDReq req) (api.post = "/api/admin/contest/info")
+  base.NilResponse ContestParticipantInfo(1: base.IDReq req) (api.post = "/service/participant/info")
 
-  base.NilResponse ParticipantListList(1: ParticipantListReq req) (api.post = "/api/admin/contest/list")
+  base.NilResponse ParticipantListList(1: ParticipantListReq req) (api.post = "/service/participant/list")
 
-  base.NilResponse UpdateParticipantStatus(1: base.StatusCodeReq req) (api.post = "/api/admin/contest/status")
+  base.NilResponse UpdateParticipantStatus(1: base.StatusCodeReq req) (api.post = "/service/participant/status")
 
 }
 struct ContestListReq{

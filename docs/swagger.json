@@ -1,0 +1,441 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/pub/upload/": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/api/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/api/tree": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/auth/api/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/auth/api/role": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/auth/api/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/auth/menu/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/auth/menu/role": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/auth/menu/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/captcha": {
+            "post": {
+                "description": "获取验证码 Description",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取验证码 Summary",
+                "responses": {}
+            }
+        },
+        "/service/contest/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/contest/info": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/contest/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/contest/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/contest/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/dict": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/dict/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/dict/detail": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/service/dict/detail/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/dict/detail/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/dict/detail/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/dict/list": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/service/dict/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/health": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/service/login": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/logs/deleteAll": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/logs/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/contract-list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/info": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/node": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/privacy": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/product-detail": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/product-list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/property-detail": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/property-list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/property-update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/search": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/search-product": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/search-property": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/menu/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/menu/role": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/menu/tree": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/place/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/place/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/place/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/place/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/role": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/service/role/create": {
+            "post": {
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.RoleInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/role/del": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/role/list": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/service/role/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/role/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/token": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/token/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/token/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/user": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/user/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/user/info": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/service/user/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/user/update": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/venue/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/venue/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/venue/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/venue/update": {
+            "post": {
+                "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "auth.RoleInfo": {
+            "type": "object",
+            "properties": {
+                "Apis": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "Menus": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "defaultRouter": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "orderNo": {
+                    "type": "integer"
+                },
+                "remark": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "utils.Response": {
+            "type": "object",
+            "properties": {
+                "cacheTime": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

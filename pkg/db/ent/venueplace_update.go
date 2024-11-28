@@ -149,23 +149,23 @@ func (vpu *VenuePlaceUpdate) ClearNumber() *VenuePlaceUpdate {
 	return vpu
 }
 
-// SetDetail sets the "detail" field.
-func (vpu *VenuePlaceUpdate) SetDetail(s string) *VenuePlaceUpdate {
-	vpu.mutation.SetDetail(s)
+// SetInformation sets the "information" field.
+func (vpu *VenuePlaceUpdate) SetInformation(s string) *VenuePlaceUpdate {
+	vpu.mutation.SetInformation(s)
 	return vpu
 }
 
-// SetNillableDetail sets the "detail" field if the given value is not nil.
-func (vpu *VenuePlaceUpdate) SetNillableDetail(s *string) *VenuePlaceUpdate {
+// SetNillableInformation sets the "information" field if the given value is not nil.
+func (vpu *VenuePlaceUpdate) SetNillableInformation(s *string) *VenuePlaceUpdate {
 	if s != nil {
-		vpu.SetDetail(*s)
+		vpu.SetInformation(*s)
 	}
 	return vpu
 }
 
-// ClearDetail clears the value of the "detail" field.
-func (vpu *VenuePlaceUpdate) ClearDetail() *VenuePlaceUpdate {
-	vpu.mutation.ClearDetail()
+// ClearInformation clears the value of the "information" field.
+func (vpu *VenuePlaceUpdate) ClearInformation() *VenuePlaceUpdate {
+	vpu.mutation.ClearInformation()
 	return vpu
 }
 
@@ -263,11 +263,11 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if vpu.mutation.NumberCleared() {
 		_spec.ClearField(venueplace.FieldNumber, field.TypeInt64)
 	}
-	if value, ok := vpu.mutation.Detail(); ok {
-		_spec.SetField(venueplace.FieldDetail, field.TypeString, value)
+	if value, ok := vpu.mutation.Information(); ok {
+		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)
 	}
-	if vpu.mutation.DetailCleared() {
-		_spec.ClearField(venueplace.FieldDetail, field.TypeString)
+	if vpu.mutation.InformationCleared() {
+		_spec.ClearField(venueplace.FieldInformation, field.TypeString)
 	}
 	if vpu.mutation.VenueCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -438,23 +438,23 @@ func (vpuo *VenuePlaceUpdateOne) ClearNumber() *VenuePlaceUpdateOne {
 	return vpuo
 }
 
-// SetDetail sets the "detail" field.
-func (vpuo *VenuePlaceUpdateOne) SetDetail(s string) *VenuePlaceUpdateOne {
-	vpuo.mutation.SetDetail(s)
+// SetInformation sets the "information" field.
+func (vpuo *VenuePlaceUpdateOne) SetInformation(s string) *VenuePlaceUpdateOne {
+	vpuo.mutation.SetInformation(s)
 	return vpuo
 }
 
-// SetNillableDetail sets the "detail" field if the given value is not nil.
-func (vpuo *VenuePlaceUpdateOne) SetNillableDetail(s *string) *VenuePlaceUpdateOne {
+// SetNillableInformation sets the "information" field if the given value is not nil.
+func (vpuo *VenuePlaceUpdateOne) SetNillableInformation(s *string) *VenuePlaceUpdateOne {
 	if s != nil {
-		vpuo.SetDetail(*s)
+		vpuo.SetInformation(*s)
 	}
 	return vpuo
 }
 
-// ClearDetail clears the value of the "detail" field.
-func (vpuo *VenuePlaceUpdateOne) ClearDetail() *VenuePlaceUpdateOne {
-	vpuo.mutation.ClearDetail()
+// ClearInformation clears the value of the "information" field.
+func (vpuo *VenuePlaceUpdateOne) ClearInformation() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearInformation()
 	return vpuo
 }
 
@@ -582,11 +582,11 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 	if vpuo.mutation.NumberCleared() {
 		_spec.ClearField(venueplace.FieldNumber, field.TypeInt64)
 	}
-	if value, ok := vpuo.mutation.Detail(); ok {
-		_spec.SetField(venueplace.FieldDetail, field.TypeString, value)
+	if value, ok := vpuo.mutation.Information(); ok {
+		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)
 	}
-	if vpuo.mutation.DetailCleared() {
-		_spec.ClearField(venueplace.FieldDetail, field.TypeString)
+	if vpuo.mutation.InformationCleared() {
+		_spec.ClearField(venueplace.FieldInformation, field.TypeString)
 	}
 	if vpuo.mutation.VenueCleared() {
 		edge := &sqlgraph.EdgeSpec{

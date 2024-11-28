@@ -4,7 +4,8 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"net/http"
-	"saas/app/admin/pkg/errno"
+	"saas/pkg/errno"
+
 	"time"
 )
 

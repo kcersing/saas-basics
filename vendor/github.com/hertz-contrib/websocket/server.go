@@ -17,6 +17,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/network"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/savsgio/gotils/strconv"
 )
 
 const badHandshake = "websocket: the client is not using the websocket protocol: "
@@ -110,7 +111,7 @@ func (u *HertzUpgrader) selectSubprotocol(ctx *app.RequestContext) []byte {
 
 		for _, serverProtocol := range u.Subprotocols {
 			for _, clientProtocol := range clientProtocols {
-				if b2s(clientProtocol) == serverProtocol {
+				if strconv.B2S(clientProtocol) == serverProtocol {
 					return clientProtocol
 				}
 			}
@@ -150,15 +151,15 @@ func (u *HertzUpgrader) Upgrade(ctx *app.RequestContext, handler HertzHandler) e
 		return u.returnError(ctx, consts.StatusMethodNotAllowed, fmt.Sprintf("%s request method is not GET", badHandshake))
 	}
 
-	if !tokenContainsValue(b2s(ctx.Request.Header.Peek("Connection")), "Upgrade") {
+	if !tokenContainsValue(strconv.B2S(ctx.Request.Header.Peek("Connection")), "Upgrade") {
 		return u.returnError(ctx, consts.StatusBadRequest, fmt.Sprintf("%s 'upgrade' token not found in 'Connection' header", badHandshake))
 	}
 
-	if !tokenContainsValue(b2s(ctx.Request.Header.Peek("Upgrade")), "Websocket") {
+	if !tokenContainsValue(strconv.B2S(ctx.Request.Header.Peek("Upgrade")), "Websocket") {
 		return u.returnError(ctx, consts.StatusBadRequest, fmt.Sprintf("%s 'websocket' token not found in 'Upgrade' header", badHandshake))
 	}
 
-	if !tokenContainsValue(b2s(ctx.Request.Header.Peek("Sec-Websocket-Version")), "13") {
+	if !tokenContainsValue(strconv.B2S(ctx.Request.Header.Peek("Sec-Websocket-Version")), "13") {
 		return u.returnError(ctx, consts.StatusBadRequest, "websocket: unsupported version: 13 not found in 'Sec-Websocket-Version' header")
 	}
 
@@ -197,7 +198,7 @@ func (u *HertzUpgrader) Upgrade(ctx *app.RequestContext, handler HertzHandler) e
 		writeBuf := poolWriteBuffer.Get().([]byte)
 		c := newConn(netConn, true, u.ReadBufferSize, u.WriteBufferSize, u.WriteBufferPool, nil, writeBuf)
 		if subprotocol != nil {
-			c.subprotocol = b2s(subprotocol)
+			c.subprotocol = strconv.B2S(subprotocol)
 		}
 
 		if compress {
@@ -223,9 +224,9 @@ func fastHTTPCheckSameOrigin(ctx *app.RequestContext) bool {
 	if len(origin) == 0 {
 		return true
 	}
-	u, err := url.Parse(b2s(origin))
+	u, err := url.Parse(strconv.B2S(origin))
 	if err != nil {
 		return false
 	}
-	return equalASCIIFold(u.Host, b2s(ctx.Host()))
+	return equalASCIIFold(u.Host, strconv.B2S(ctx.Host()))
 }

@@ -45,3 +45,8 @@ func _updateuserMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _loginMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

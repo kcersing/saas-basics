@@ -6,10 +6,13 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"saas/biz/dal/cache"
+	"saas/biz/dal/db"
+	"saas/biz/infras/do"
 	"saas/config"
-	"saas/infras/do"
+	"saas/idl_gen/model/user"
 	"saas/pkg/db/ent"
-	"saas/pkg/db/ent/user"
+	user2 "saas/pkg/db/ent/user"
 	"strconv"
 	"time"
 )
@@ -22,12 +25,22 @@ type Login struct {
 	cache *ristretto.Cache
 }
 
-func (l *Login) Login(username, password string) (res *do.LoginResp, err error) {
+func NewLogin(ctx context.Context, c *app.RequestContext) do.Login {
+	return &Login{
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		db:    db.DB,
+		cache: cache.Cache,
+	}
+}
+
+func (l *Login) Login(username, password string) (res *user.LoginResp, err error) {
 	//TODO implement me
 	only, err := l.db.User.Query().
 		Where(
-			user.UsernameEQ(username),
-			user.Status(1),
+			user2.UsernameEQ(username),
+			user2.Status(1),
 		).Only(l.ctx)
 	if err != nil {
 		return nil, err
@@ -42,10 +55,10 @@ func (l *Login) Login(username, password string) (res *do.LoginResp, err error) 
 	//	return nil, err
 	//}
 
-	res = new(do.LoginResp)
+	res = new(user.LoginResp)
 	res.Username = username
-	res.UserID = only.ID
-	res.RoleID = only.RoleID
+	res.UserId = only.ID
+	res.RoleId = only.RoleID
 	res.RoleName, res.RoleValue, err = l.getRoleInfo(only.RoleID)
 
 	return res, err
@@ -80,14 +93,4 @@ func (l *Login) getRoleInfo(roleID int64) (roleName, roleValue string, err error
 	}
 	return roleName, roleValue, err
 
-}
-
-func NewLogin(ctx context.Context, c *app.RequestContext) do.Login {
-	return &Login{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    infras.DB,
-		cache: infras.Cache,
-	}
 }

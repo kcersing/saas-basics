@@ -18,16 +18,32 @@ type Tx struct {
 	Contest *ContestClient
 	// ContestParticipant is the client for interacting with the ContestParticipant builders.
 	ContestParticipant *ContestParticipantClient
+	// Contract is the client for interacting with the Contract builders.
+	Contract *ContractClient
 	// Dictionary is the client for interacting with the Dictionary builders.
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
 	DictionaryDetail *DictionaryDetailClient
+	// EntryLogs is the client for interacting with the EntryLogs builders.
+	EntryLogs *EntryLogsClient
 	// Logs is the client for interacting with the Logs builders.
 	Logs *LogsClient
+	// Member is the client for interacting with the Member builders.
+	Member *MemberClient
+	// MemberContract is the client for interacting with the MemberContract builders.
+	MemberContract *MemberContractClient
+	// MemberContractContent is the client for interacting with the MemberContractContent builders.
+	MemberContractContent *MemberContractContentClient
+	// MemberDetails is the client for interacting with the MemberDetails builders.
+	MemberDetails *MemberDetailsClient
+	// MemberNote is the client for interacting with the MemberNote builders.
+	MemberNote *MemberNoteClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
 	MenuParam *MenuParamClient
+	// Messages is the client for interacting with the Messages builders.
+	Messages *MessagesClient
 	// Order is the client for interacting with the Order builders.
 	Order *OrderClient
 	// OrderAmount is the client for interacting with the OrderAmount builders.
@@ -182,11 +198,19 @@ func (tx *Tx) init() {
 	tx.API = NewAPIClient(tx.config)
 	tx.Contest = NewContestClient(tx.config)
 	tx.ContestParticipant = NewContestParticipantClient(tx.config)
+	tx.Contract = NewContractClient(tx.config)
 	tx.Dictionary = NewDictionaryClient(tx.config)
 	tx.DictionaryDetail = NewDictionaryDetailClient(tx.config)
+	tx.EntryLogs = NewEntryLogsClient(tx.config)
 	tx.Logs = NewLogsClient(tx.config)
+	tx.Member = NewMemberClient(tx.config)
+	tx.MemberContract = NewMemberContractClient(tx.config)
+	tx.MemberContractContent = NewMemberContractContentClient(tx.config)
+	tx.MemberDetails = NewMemberDetailsClient(tx.config)
+	tx.MemberNote = NewMemberNoteClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
+	tx.Messages = NewMessagesClient(tx.config)
 	tx.Order = NewOrderClient(tx.config)
 	tx.OrderAmount = NewOrderAmountClient(tx.config)
 	tx.OrderItem = NewOrderItemClient(tx.config)

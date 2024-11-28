@@ -28,8 +28,8 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldNumber holds the string denoting the number field in the database.
 	FieldNumber = "number"
-	// FieldDetail holds the string denoting the detail field in the database.
-	FieldDetail = "detail"
+	// FieldInformation holds the string denoting the information field in the database.
+	FieldInformation = "information"
 	// EdgeVenue holds the string denoting the venue edge name in mutations.
 	EdgeVenue = "venue"
 	// Table holds the table name of the venueplace in the database.
@@ -53,7 +53,7 @@ var Columns = []string{
 	FieldPic,
 	FieldVenueID,
 	FieldNumber,
-	FieldDetail,
+	FieldInformation,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -120,9 +120,9 @@ func ByNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNumber, opts...).ToFunc()
 }
 
-// ByDetail orders the results by the detail field.
-func ByDetail(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDetail, opts...).ToFunc()
+// ByInformation orders the results by the information field.
+func ByInformation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInformation, opts...).ToFunc()
 }
 
 // ByVenueField orders the results by venue field.

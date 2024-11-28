@@ -7,9 +7,10 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/jwt"
 	"github.com/spf13/cast"
-	"saas/biz/infras/do"
-	"saas/biz/infras/service/admin"
+	admin "saas/biz/infras/service"
 	"saas/config"
+	"saas/idl_gen/model/token"
+	"saas/idl_gen/model/user"
 	"strconv"
 	"time"
 )
@@ -67,7 +68,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 		},
 		// Authenticator is used to validate the login data.
 		Authenticator: func(ctx context.Context, c *app.RequestContext) (interface{}, error) {
-			res := new(do.LoginResp)
+			res := new(user.LoginResp)
 
 			var loginVal jwtLogin
 			if err := c.BindAndValidate(&loginVal); err != nil {
@@ -84,9 +85,9 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				return nil, err
 			}
 			//jwt
-			var tokenInfo do.TokenInfo
-			tokenInfo.UserID = res.UserID
-			tokenInfo.UserName = res.Username
+			var tokenInfo token.TokenInfo
+			tokenInfo.UserID = res.UserId
+			tokenInfo.Username = res.Username
 			tokenInfo.ExpiredAt = time.Now().Add(time.Duration(config.GlobalServerConfig.Auth.AccessExpire) * time.Second).Format(time.DateTime)
 
 			err = admin.NewToken(ctx, c).Create(&tokenInfo)
@@ -96,8 +97,8 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			}
 
 			payLoadMap := make(map[string]interface{})
-			payLoadMap["role_id"] = strconv.Itoa(int(res.RoleID))
-			payLoadMap["user_id"] = strconv.Itoa(int(res.UserID))
+			payLoadMap["role_id"] = strconv.Itoa(int(res.RoleId))
+			payLoadMap["user_id"] = strconv.Itoa(int(res.UserId))
 			return payLoadMap, nil
 		},
 		// Authorizator is used to validate the authentication of the current request.

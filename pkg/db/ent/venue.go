@@ -54,9 +54,11 @@ type VenueEdges struct {
 	Places []*VenuePlace `json:"places,omitempty"`
 	// VenueOrders holds the value of the venue_orders edge.
 	VenueOrders []*Order `json:"venue_orders,omitempty"`
+	// VenueEntry holds the value of the venue_entry edge.
+	VenueEntry []*EntryLogs `json:"venue_entry,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // PlacesOrErr returns the Places value or an error if the edge
@@ -75,6 +77,15 @@ func (e VenueEdges) VenueOrdersOrErr() ([]*Order, error) {
 		return e.VenueOrders, nil
 	}
 	return nil, &NotLoadedError{edge: "venue_orders"}
+}
+
+// VenueEntryOrErr returns the VenueEntry value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) VenueEntryOrErr() ([]*EntryLogs, error) {
+	if e.loadedTypes[2] {
+		return e.VenueEntry, nil
+	}
+	return nil, &NotLoadedError{edge: "venue_entry"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -202,6 +213,11 @@ func (v *Venue) QueryPlaces() *VenuePlaceQuery {
 // QueryVenueOrders queries the "venue_orders" edge of the Venue entity.
 func (v *Venue) QueryVenueOrders() *OrderQuery {
 	return NewVenueClient(v.config).QueryVenueOrders(v)
+}
+
+// QueryVenueEntry queries the "venue_entry" edge of the Venue entity.
+func (v *Venue) QueryVenueEntry() *EntryLogsQuery {
+	return NewVenueClient(v.config).QueryVenueEntry(v)
 }
 
 // Update returns a builder for updating this Venue.

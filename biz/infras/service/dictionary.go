@@ -6,10 +6,11 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"saas/biz/dal/cache"
+	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/dictionary"
-	"saas/init"
 	"saas/pkg/db/ent"
 	dictionary2 "saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
@@ -31,8 +32,8 @@ func NewDictionary(ctx context.Context, c *app.RequestContext) do.Dictionary {
 		ctx:   ctx,
 		c:     c,
 		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    init.DB,
-		cache: init.Cache,
+		db:    db.DB,
+		cache: cache.Cache,
 	}
 }
 
