@@ -18,6 +18,10 @@ import (
 )
 
 // MenuAuth .
+// @Summary  获取角色菜单权限 Summary
+// @Description 获取角色菜单权限 Description
+// @Param request body base.IDReq true "id是取得roleId"
+// @Success      200  {object}  utils.Response
 // @router /service/auth/menu/role [POST]
 func MenuAuth(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -40,44 +44,11 @@ func MenuAuth(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// MenuRole .
-// @router /service/menu/role [POST]
-func MenuRole(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	roleIdInterface, exist := c.Get("role_id")
-	if !exist || roleIdInterface == nil {
-		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
-		return
-	}
-	roleId, err := strconv.Atoi(roleIdInterface.(string))
-	if err != nil {
-		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
-		return
-	}
-	menuTree, err := service.NewMenu(ctx, c).MenuRole(int64(roleId))
-	if err != nil {
-		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
-		return
-	}
-	var menuInfos []*do.MenuInfo
-	err = copier.Copy(&menuInfos, &menuTree)
-	if err != nil {
-		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
-		return
-	}
-
-	utils.SendResponse(c, errno.Success, menuInfos, 0, "")
-	return
-}
-
 // ApiList .
+// @Summary  获取api列表 Summary
+// @Description 获取api列表 Description
+// @Param request body menu.ApiPageReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/api/list [POST]
 func ApiList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -98,6 +69,10 @@ func ApiList(ctx context.Context, c *app.RequestContext) {
 }
 
 // ApiTree .
+// @Summary  获取api树 Summary
+// @Description 获取api树 Description
+// @Param request body menu.ApiPageReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/api/tree [POST]
 func ApiTree(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -118,6 +93,10 @@ func ApiTree(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuLists .
+// @Summary  获取菜单列表 Summary
+// @Description 获取菜单列表 Description
+// @Param request body menu.ApiPageReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/menu/list [POST]
 func MenuLists(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -144,6 +123,10 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuTree .
+// @Summary  获取菜单树 Summary
+// @Description 获取菜单树 Description
+// @Param request body menu.ApiPageReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/menu/tree [POST]
 func MenuTree(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -157,4 +140,37 @@ func MenuTree(ctx context.Context, c *app.RequestContext) {
 	resp := new(base.NilResponse)
 
 	c.JSON(consts.StatusOK, resp)
+}
+
+// MenuRole .
+// @Summary  获取角色菜单权限 Summary
+// @Description 获取角色菜单权限 （和 /service/auth/menu/role 重复 但是这个是通过token获取 无传值） Description
+// @Success      200  {object}  utils.Response
+// @router /service/menu/role [POST]
+func MenuRole(ctx context.Context, c *app.RequestContext) {
+
+	roleIdInterface, exist := c.Get("role_id")
+	if !exist || roleIdInterface == nil {
+		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
+		return
+	}
+	roleId, err := strconv.Atoi(roleIdInterface.(string))
+	if err != nil {
+		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
+		return
+	}
+	menuTree, err := service.NewMenu(ctx, c).MenuRole(int64(roleId))
+	if err != nil {
+		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
+		return
+	}
+	var menuInfos []*do.MenuInfo
+	err = copier.Copy(&menuInfos, &menuTree)
+	if err != nil {
+		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, menuInfos, 0, "")
+	return
 }

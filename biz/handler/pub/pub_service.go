@@ -17,6 +17,10 @@ import (
 )
 
 // Upload .
+// @Summary 上传文件 Summary
+// @Description 上传文件 Description
+// @Param   string  query    string     true  "files"
+// @Success      200  {object}  utils.Response
 // @router /api/pub/upload/ [POST]
 func Upload(ctx context.Context, c *app.RequestContext) {
 	file, err := c.FormFile("files")

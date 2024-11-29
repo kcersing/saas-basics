@@ -14,6 +14,7 @@ type ServerConfig struct {
 	Casbin         CasbinConf       `mapstructure:"Casbin" json:"Casbin"`
 	Payment        Payment          `mapstructure:"Payment" json:"Payment"`
 	Minio          Minio            `mapstructure:"Minio" json:"Minio"`
+	Swagger        Swagger          `mapstructure:"Swagger" json:"Swagger"`
 }
 
 type MySQLConfig struct {
@@ -77,5 +78,8 @@ type Minio struct {
 	VideoBucketName string `mapstructure:"VideoBucketName" yaml:"VideoBucketName"`
 	ImgBucketName   string `mapstructure:"ImgBucketName" yaml:"ImgBucketName"`
 
+	Url string `mapstructure:"Url" yaml:"Url"`
+}
+type Swagger struct {
 	Url string `mapstructure:"Url" yaml:"Url"`
 }

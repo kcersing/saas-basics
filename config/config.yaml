@@ -66,3 +66,5 @@ Minio:
   VideoBucketName : videobucket
   ImgBucketName : imagebucket
   Url : http://localhost:9000
+Swagger:
+  url : http://localhost:9039/swagger/doc

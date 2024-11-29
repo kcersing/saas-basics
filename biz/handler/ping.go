@@ -11,6 +11,10 @@ import (
 )
 
 // Ping .
+// @Summary  ping Summary
+// @Description ping Description
+// @Success      200  {object}  utils.Response
+// @router /ping [GET]
 func Ping(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, utils.H{
 		"message": "pong",

@@ -16,6 +16,7 @@ func InitCasbin() {
 	if err != nil {
 		hlog.Fatal(err)
 	}
+
 }
 
 func CasbinEnforcer() *casbin.Enforcer {
@@ -23,9 +24,9 @@ func CasbinEnforcer() *casbin.Enforcer {
 }
 
 func newCasbin() (enforcer *casbin.Enforcer, err error) {
-	//adapter, err := entAdapter.NewAdapter("mysql", config.GlobalServerConfig.MySQLInfo.Host)
+	adapter, err := entAdapter.NewAdapter("mysql", config.GlobalServerConfig.MySQLInfo.Host)
 
-	adapter, err := entAdapter.NewAdapter("pgx", config.GlobalServerConfig.PostgreSQLInfo.Host)
+	//adapter, err := entAdapter.NewAdapter("pgx", config.GlobalServerConfig.PostgreSQLInfo.Host)
 
 	if err != nil {
 		hlog.Error(err)

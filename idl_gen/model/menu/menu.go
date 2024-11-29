@@ -3072,7 +3072,7 @@ type MenuService interface {
 	// 获取角色菜单权限列表
 	MenuAuth(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	//获取角色菜单列表
-	MenuRole(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
+	MenuRole(ctx context.Context) (r *base.NilResponse, err error)
 	// 创建或API
 	// base.NilResponse CreateApi(1: ApiInfo req) (api.post = "/service/api/create")
 	// 更新API
@@ -3132,9 +3132,8 @@ func (p *MenuServiceClient) MenuAuth(ctx context.Context, req *base.IDReq) (r *b
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *MenuServiceClient) MenuRole(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
+func (p *MenuServiceClient) MenuRole(ctx context.Context) (r *base.NilResponse, err error) {
 	var _args MenuServiceMenuRoleArgs
-	_args.Req = req
 	var _result MenuServiceMenuRoleResult
 	if err = p.Client_().Call(ctx, "MenuRole", &_args, &_result); err != nil {
 		return
@@ -3292,7 +3291,7 @@ func (p *menuServiceProcessorMenuRole) Process(ctx context.Context, seqId int32,
 	var err2 error
 	result := MenuServiceMenuRoleResult{}
 	var retval *base.NilResponse
-	if retval, err2 = p.handler.MenuRole(ctx, args.Req); err2 != nil {
+	if retval, err2 = p.handler.MenuRole(ctx); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MenuRole: "+err2.Error())
 		oprot.WriteMessageBegin("MenuRole", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -3807,7 +3806,6 @@ func (p *MenuServiceMenuAuthResult) String() string {
 }
 
 type MenuServiceMenuRoleArgs struct {
-	Req *base.IDReq `thrift:"req,1"`
 }
 
 func NewMenuServiceMenuRoleArgs() *MenuServiceMenuRoleArgs {
@@ -3817,22 +3815,7 @@ func NewMenuServiceMenuRoleArgs() *MenuServiceMenuRoleArgs {
 func (p *MenuServiceMenuRoleArgs) InitDefault() {
 }
 
-var MenuServiceMenuRoleArgs_Req_DEFAULT *base.IDReq
-
-func (p *MenuServiceMenuRoleArgs) GetReq() (v *base.IDReq) {
-	if !p.IsSetReq() {
-		return MenuServiceMenuRoleArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-var fieldIDToName_MenuServiceMenuRoleArgs = map[int16]string{
-	1: "req",
-}
-
-func (p *MenuServiceMenuRoleArgs) IsSetReq() bool {
-	return p.Req != nil
-}
+var fieldIDToName_MenuServiceMenuRoleArgs = map[int16]string{}
 
 func (p *MenuServiceMenuRoleArgs) Read(iprot thrift.TProtocol) (err error) {
 
@@ -3851,20 +3834,8 @@ func (p *MenuServiceMenuRoleArgs) Read(iprot thrift.TProtocol) (err error) {
 		if fieldTypeId == thrift.STOP {
 			break
 		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
+		if err = iprot.Skip(fieldTypeId); err != nil {
+			goto SkipFieldTypeError
 		}
 		if err = iprot.ReadFieldEnd(); err != nil {
 			goto ReadFieldEndError
@@ -3879,10 +3850,8 @@ ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MenuServiceMenuRoleArgs[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+SkipFieldTypeError:
+	return thrift.PrependError(fmt.Sprintf("%T skip field type %d error", p, fieldTypeId), err)
 
 ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
@@ -3890,25 +3859,11 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *MenuServiceMenuRoleArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := base.NewIDReq()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Req = _field
-	return nil
-}
-
 func (p *MenuServiceMenuRoleArgs) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
 	if err = oprot.WriteStructBegin("MenuRole_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -3919,29 +3874,10 @@ func (p *MenuServiceMenuRoleArgs) Write(oprot thrift.TProtocol) (err error) {
 	return nil
 WriteStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
 WriteFieldStopError:
 	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
 WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *MenuServiceMenuRoleArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Req.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
 func (p *MenuServiceMenuRoleArgs) String() string {

@@ -1,4 +1,40 @@
 definitions:
+  auth.CreateOrUpdateApiAuthReq:
+    properties:
+      apis:
+        description: '2:  ApiAuthInfo data (api.raw = "api_auth_info")'
+        items:
+          type: integer
+        type: array
+      role_id:
+        type: integer
+    type: object
+  auth.LogsListReq:
+    properties:
+      api:
+        type: string
+      method:
+        type: string
+      operators:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      success:
+        type: string
+      type:
+        type: string
+    type: object
+  auth.MenuAuthInfoReq:
+    properties:
+      menu_ids:
+        items:
+          type: integer
+        type: array
+      role_id:
+        type: integer
+    type: object
   auth.RoleInfo:
     properties:
       Apis:
@@ -28,6 +64,350 @@ definitions:
       value:
         type: string
     type: object
+  base.IDReq:
+    properties:
+      id:
+        type: integer
+    type: object
+  base.Ids:
+    properties:
+      ids:
+        items:
+          type: integer
+        type: array
+    type: object
+  base.PageInfoReq:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    type: object
+  base.StatusCodeReq:
+    properties:
+      id:
+        type: integer
+      status:
+        type: integer
+    type: object
+  contract.ContractListReq:
+    properties:
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        type: string
+    type: object
+  contract.CreateOrUpdateContractReq:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: integer
+    type: object
+  dictionary.DetailListReq:
+    properties:
+      dictionaryId:
+        type: integer
+      name:
+        type: string
+    type: object
+  dictionary.DictListReq:
+    properties:
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      title:
+        type: string
+    type: object
+  dictionary.DictionaryDetail:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      key:
+        type: string
+      parentID:
+        type: integer
+      status:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+      value:
+        type: string
+    type: object
+  dictionary.DictionaryInfo:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  entry.CreateEntry:
+    properties:
+      EntryTime:
+        type: integer
+      LeavingTime:
+        type: integer
+      MemberId:
+        type: integer
+      MemberProductId:
+        type: integer
+      MemberPropertyId:
+        type: integer
+      UserId:
+        type: integer
+      VenueId:
+        type: integer
+    type: object
+  entry.EntryListReq:
+    properties:
+      entryTime:
+        type: string
+      leavingTime:
+        type: string
+      memberId:
+        type: integer
+      memberProductId:
+        type: integer
+      memberPropertyId:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      userId:
+        type: integer
+      venueId:
+        type: integer
+    type: object
+  member.CreateOrUpdateMemberReq:
+    properties:
+      Password:
+        type: string
+      avatar:
+        type: string
+      birthday:
+        type: string
+      createId:
+        type: integer
+      email:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      status:
+        type: integer
+      wecom:
+        type: string
+    type: object
+  member.MemberContractListReq:
+    properties:
+      contractId:
+        type: integer
+      memberId:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      venueId:
+        type: integer
+    type: object
+  member.MemberListReq:
+    properties:
+      mobile:
+        type: string
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    type: object
+  member.MemberProductListReq:
+    properties:
+      memberId:
+        type: integer
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        type: integer
+      venueId:
+        type: integer
+    type: object
+  member.MemberProductSearchReq:
+    properties:
+      members:
+        items:
+          type: integer
+        type: array
+    type: object
+  member.MemberPropertyListReq:
+    properties:
+      memberId:
+        type: integer
+      memberProductId:
+        type: integer
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        type: integer
+      type:
+        type: string
+      venueId:
+        type: integer
+    type: object
+  member.MemberPropertySearchReq:
+    properties:
+      memberProductIds:
+        items:
+          type: integer
+        type: array
+    type: object
+  member.MemberSearchReq:
+    properties:
+      option:
+        type: string
+      value:
+        type: string
+    type: object
+  menu.ApiPageReq:
+    properties:
+      description:
+        type: string
+      group:
+        type: string
+      method:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      path:
+        type: string
+    type: object
+  token.TokenInfo:
+    properties:
+      createdAt:
+        type: string
+      expiredAt:
+        type: string
+      id:
+        type: integer
+      source:
+        type: string
+      token:
+        type: string
+      updatedAt:
+        type: string
+      user_id:
+        type: integer
+      username:
+        type: string
+    type: object
+  token.TokenListReq:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      userId:
+        type: integer
+      username:
+        type: string
+    type: object
+  user.CreateOrUpdateUserReq:
+    properties:
+      avatar:
+        type: string
+      createId:
+        type: integer
+      detail:
+        type: string
+      functions:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      jobTime:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      roleId:
+        type: integer
+      status:
+        type: integer
+      username:
+        type: string
+    type: object
+  user.LoginReq:
+    properties:
+      captcha:
+        type: string
+      captchaId:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.UserListReq:
+    properties:
+      jobTime:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      roleId:
+        type: integer
+    type: object
   utils.Response:
     properties:
       cacheTime:
@@ -42,43 +422,236 @@ definitions:
       total:
         type: integer
     type: object
+  venue.VenueInfo:
+    properties:
+      CreatedAt:
+        type: string
+      UpdatedAt:
+        type: string
+      address:
+        type: string
+      addressDetail:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      information:
+        type: string
+      latitude:
+        type: string
+      longitude:
+        type: string
+      mobile:
+        type: string
+      name:
+        type: string
+      pic:
+        type: string
+      status:
+        type: integer
+    type: object
+  venue.VenueListReq:
+    properties:
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        type: integer
+    type: object
+  venue.VenuePlaceInfo:
+    properties:
+      CreatedAt:
+        type: string
+      UpdatedAt:
+        type: string
+      id:
+        type: integer
+      information:
+        type: string
+      name:
+        type: string
+      number:
+        type: integer
+      pic:
+        type: string
+      status:
+        type: integer
+      venueId:
+        type: integer
+    type: object
+  venue.VenuePlaceListReq:
+    properties:
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        type: integer
+    type: object
 info:
   contact: {}
 paths:
   /api/pub/upload/:
     post:
-      responses: {}
+      description: 上传文件 Description
+      parameters:
+      - description: files
+        in: query
+        name: string
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 上传文件 Summary
+  /ping:
+    get:
+      description: ping Description
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: ping Summary
   /service/api/list:
     post:
-      responses: {}
+      description: 获取api列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.ApiPageReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取api列表 Summary
   /service/api/tree:
     post:
-      responses: {}
+      description: 获取api树 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.ApiPageReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取api树 Summary
   /service/auth/api/create:
     post:
-      responses: {}
+      description: 创建角色接口权限 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.CreateOrUpdateApiAuthReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建角色接口权限 Summary
   /service/auth/api/role:
     post:
-      responses: {}
+      description: 获取角色接口权限 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取角色接口权限 Summary
   /service/auth/api/update:
     post:
-      responses: {}
+      description: 修改角色接口权限 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.CreateOrUpdateApiAuthReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 修改角色接口权限 Summary
   /service/auth/menu/create:
     post:
-      responses: {}
+      description: 创建角色菜单权限 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.MenuAuthInfoReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建角色菜单权限 Summary
   /service/auth/menu/role:
     post:
-      responses: {}
+      description: 获取角色菜单权限 Description
+      parameters:
+      - description: id是取得roleId
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取角色菜单权限 Summary
   /service/auth/menu/update:
     post:
-      responses: {}
+      description: 修改角色菜单权限 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.MenuAuthInfoReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 修改角色菜单权限 Summary
   /service/captcha:
     post:
-      consumes:
-      - application/json
       description: 获取验证码 Description
-      produces:
-      - application/json
       responses: {}
       summary: 获取验证码 Summary
   /service/contest/create:
@@ -96,116 +669,661 @@ paths:
   /service/contest/update:
     post:
       responses: {}
+  /service/contract:
+    post:
+      description: 获取合同信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取合同信息 Summary
+  /service/contract/create:
+    post:
+      description: 创建合同 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.CreateOrUpdateContractReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建合同 Summary
+  /service/contract/list:
+    post:
+      description: 合同列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ContractListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 合同列表 Summary
+  /service/contract/status:
+    post:
+      description: 更新合同状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新合同状态 Summary
+  /service/contract/update:
+    post:
+      description: 更新合同 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.CreateOrUpdateContractReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新合同 Summary
   /service/dict:
     post:
-      responses: {}
+      description: 删除字典 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除字典 Summary
   /service/dict/create:
     post:
-      responses: {}
+      description: 创建字典 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dictionary.DictionaryInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建字典 Summary
   /service/dict/detail:
     get:
-      responses: {}
+      description: 删除字典字段 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除字典字段 Summary
   /service/dict/detail/create:
     post:
-      responses: {}
+      description: 创建字典字段 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dictionary.DictionaryDetail'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建字典字段 Summary
   /service/dict/detail/list:
     post:
-      responses: {}
+      description: 字典字段列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dictionary.DetailListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 字典字段列表 Summary
   /service/dict/detail/update:
     post:
-      responses: {}
+      description: 更新字典字段 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dictionary.DictionaryDetail'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新字典字段 Summary
   /service/dict/list:
     get:
-      responses: {}
+      description: 字典列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dictionary.DictListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 字典列表 Summary
   /service/dict/update:
     post:
-      responses: {}
+      description: 更新字典 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dictionary.DictionaryInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新字典 Summary
+  /service/entry/list:
+    post:
+      description: 进场记录列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entry.EntryListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 进场记录列表 Summary
   /service/health:
     get:
       responses: {}
   /service/login:
     post:
-      responses: {}
+      description: 登录 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 登录 Summary
   /service/logs/deleteAll:
     post:
-      responses: {}
+      description: 删除操作日志 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.Ids'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除操作日志 Summary
   /service/logs/list:
     post:
-      responses: {}
+      description: 获取操作日志列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LogsListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取操作日志列表 Summary
   /service/member/contract-list:
     post:
-      responses: {}
+      description: 会员合同列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberContractListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员合同列表 Summary
   /service/member/create:
     post:
-      responses: {}
+      description: 创建会员 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.CreateOrUpdateMemberReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建会员 Summary
   /service/member/info:
     post:
-      responses: {}
+      description: 会员详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员详情 Summary
   /service/member/list:
     post:
-      responses: {}
+      description: 会员列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员列表 Summary
   /service/member/node:
     post:
-      responses: {}
+      description: 会员节点 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员节点 Summary
   /service/member/privacy:
     post:
-      responses: {}
+      description: 会员隐私 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员隐私 Summary
   /service/member/product-detail:
     post:
-      responses: {}
+      description: 会员产品详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品详情 Summary
   /service/member/product-list:
     post:
-      responses: {}
+      description: 会员产品列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberProductListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品列表 Summary
   /service/member/property-detail:
     post:
-      responses: {}
+      description: 会员产品属性详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品属性详情 Summary
   /service/member/property-list:
     post:
-      responses: {}
+      description: 会员产品属性列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberPropertyListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品属性列表 Summary
   /service/member/property-update:
     post:
-      responses: {}
+      description: 会员产品属性更新 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberPropertyListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品属性更新 Summary
   /service/member/search:
     post:
-      responses: {}
+      description: 会员搜索 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberSearchReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员搜索 Summary
   /service/member/search-product:
     post:
-      responses: {}
+      description: 会员产品搜索 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberProductSearchReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品搜索 Summary
   /service/member/search-property:
     post:
-      responses: {}
+      description: 会员产品属性搜索 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberPropertySearchReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品属性搜索 Summary
   /service/member/status:
     post:
-      responses: {}
+      description: 更新会员状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新会员状态 Summary
   /service/member/update:
     post:
-      responses: {}
+      description: 更新会员 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.CreateOrUpdateMemberReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新会员 Summary
   /service/menu/list:
     post:
-      responses: {}
+      description: 获取菜单列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.ApiPageReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取菜单列表 Summary
   /service/menu/role:
     post:
-      responses: {}
+      description: 获取角色菜单权限 （和 /service/auth/menu/role 重复 但是这个是通过token获取 无传值） Description
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取角色菜单权限 Summary
   /service/menu/tree:
     post:
-      responses: {}
+      description: 获取菜单树 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.ApiPageReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取菜单树 Summary
   /service/place/create:
     post:
-      responses: {}
+      description: 创建场地 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/venue.VenuePlaceInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建场地 Summary
   /service/place/list:
     post:
-      responses: {}
+      description: 场地列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/venue.VenuePlaceListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场地列表 Summary
   /service/place/status:
     post:
-      responses: {}
+      description: 更新场地状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新场地状态 Summary
   /service/place/update:
     post:
-      responses: {}
+      description: 更新场地 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/venue.VenuePlaceInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新场地 Summary
   /service/role:
     get:
-      responses: {}
+      description: 获取角色信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取角色信息 Summary
   /service/role/create:
     post:
+      description: 创建角色 Description
       parameters:
       - description: query params
         in: body
@@ -218,52 +1336,263 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
+      summary: 创建角色 Summary
   /service/role/del:
     post:
-      responses: {}
+      description: 删除角色 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除角色 Summary
   /service/role/list:
     get:
-      responses: {}
+      description: 获取角色列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.PageInfoReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取角色列表 Summary
   /service/role/status:
     post:
-      responses: {}
+      description: 修改角色状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 修改角色状态 Summary
   /service/role/update:
     post:
-      responses: {}
+      description: 更新角色 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RoleInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新角色 Summary
   /service/token:
     post:
-      responses: {}
+      description: 删除token Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除token Summary
   /service/token/list:
     post:
-      responses: {}
+      description: token列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/token.TokenListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: token列表 Summary
   /service/token/update:
     post:
-      responses: {}
+      description: 更新token Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/token.TokenInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新token Summary
   /service/user:
     post:
-      responses: {}
+      description: 删除员工 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除员工 Summary
   /service/user/create:
     post:
-      responses: {}
+      description: 创建员工 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateOrUpdateUserReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建员工 Summary
   /service/user/info:
     get:
-      responses: {}
+      description: |-
+        获取员工信息 Description
+        创建员工 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建员工 Summary
   /service/user/list:
     post:
-      responses: {}
+      description: 获取员工列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取员工列表 Summary
   /service/user/update:
     post:
-      responses: {}
+      description: 更新员工 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateOrUpdateUserReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新员工 Summary
   /service/venue/create:
     post:
-      responses: {}
+      description: 创建场馆 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/venue.VenueInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建场馆 Summary
   /service/venue/list:
     post:
-      responses: {}
+      description: 场馆列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/venue.VenueListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场馆列表 Summary
   /service/venue/status:
     post:
-      responses: {}
+      description: 更新场馆状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新场馆状态 Summary
   /service/venue/update:
     post:
-      responses: {}
+      description: 更新场馆 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/venue.VenueInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新场馆 Summary
 swagger: "2.0"

@@ -8,7 +8,7 @@ service MenuService {
   // 获取角色菜单权限列表
  base.NilResponse MenuAuth(1: base.IDReq req) (api.post = "/service/auth/menu/role")
   //获取角色菜单列表
- base.NilResponse MenuRole(1: base.IDReq req) (api.post = "/service/menu/role")
+ base.NilResponse MenuRole() (api.post = "/service/menu/role")
   // 创建或API
  // base.NilResponse CreateApi(1: ApiInfo req) (api.post = "/service/api/create")
 

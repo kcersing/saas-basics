@@ -40,7 +40,7 @@ func main() {
 	h.NoHijackConnPool = true
 	h.GET("/src/*name", minioReverseProxy)
 
-	url := swagger.URL("http://localhost:9039/swagger/doc.json") // The url pointing to API definition
+	url := swagger.URL(config.GlobalServerConfig.Swagger.Url) // The url pointing to API definition
 	h.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler, url))
 
 	register(h)

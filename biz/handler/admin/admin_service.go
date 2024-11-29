@@ -30,11 +30,8 @@ func HealthCheck(ctx context.Context, c *app.RequestContext) {
 }
 
 // Captcha .
-// PingHandler 获取验证码 handler
 // @Summary 获取验证码 Summary
 // @Description 获取验证码 Description
-// @Accept application/json
-// @Produce application/json
 // @Router /service/captcha [POST]
 func Captcha(ctx context.Context, c *app.RequestContext) {
 	var err error
