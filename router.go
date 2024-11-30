@@ -4,7 +4,9 @@ package main
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"saas/biz/dal/casbin"
 	handler "saas/biz/handler"
+	"saas/biz/handler/mw"
 )
 
 // customizeRegister registers customize routers.
@@ -12,4 +14,14 @@ func customizedRegister(r *server.Hertz) {
 	r.GET("/ping", handler.Ping)
 
 	// your code ...
+
+	// Login .
+	// @Summary  登录 Summary
+	// @Description 登录 Description
+	// @Param request body user.LoginReq true "query params"
+	// @Success      200  {object}  utils.Response
+	// @router /service/login [POST]
+	r.POST("/service/login", mw.GetJWTMw(casbin.CasbinEnforcer()).LoginHandler)
+	r.POST("/service/logout", mw.GetJWTMw(casbin.CasbinEnforcer()).LogoutHandler)
+	r.POST("/service/refresh_token", mw.GetJWTMw(casbin.CasbinEnforcer()).RefreshHandler)
 }

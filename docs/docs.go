@@ -639,31 +639,6 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/service/login": {
-            "post": {
-                "description": "登录 Description",
-                "summary": "登录 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user.LoginReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/service/logs/deleteAll": {
             "post": {
                 "description": "删除操作日志 Description",
@@ -2312,23 +2287,6 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.LoginReq": {
-            "type": "object",
-            "properties": {
-                "captcha": {
-                    "type": "string"
-                },
-                "captchaId": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
                 },
                 "username": {
                     "type": "string"

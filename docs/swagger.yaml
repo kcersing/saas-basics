@@ -382,17 +382,6 @@ definitions:
       username:
         type: string
     type: object
-  user.LoginReq:
-    properties:
-      captcha:
-        type: string
-      captchaId:
-        type: string
-      password:
-        type: string
-      username:
-        type: string
-    type: object
   user.UserListReq:
     properties:
       jobTime:
@@ -896,22 +885,6 @@ paths:
   /service/health:
     get:
       responses: {}
-  /service/login:
-    post:
-      description: 登录 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/user.LoginReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 登录 Summary
   /service/logs/deleteAll:
     post:
       description: 删除操作日志 Description

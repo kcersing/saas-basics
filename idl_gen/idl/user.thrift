@@ -95,7 +95,7 @@ struct SetDefaultVenueReq{
 
 service UserService {
   // 登录
-  base.NilResponse Login(1: LoginReq req) (api.post = "/service/login")
+//  base.NilResponse Login(1: LoginReq req) (api.post = "/service/login")
 
   // 注册
   //base.NilResponse Register(1: RegisterReq req) (api.post = "/service/register")

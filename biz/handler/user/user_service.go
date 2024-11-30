@@ -134,27 +134,3 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
-
-// Login .
-// @Summary  登录 Summary
-// @Description 登录 Description
-// @Param request body user.LoginReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/login [POST]
-func Login(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req user.LoginReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	l, err := service.NewLogin(ctx, c).Login(req.Username, req.Password)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, l, 0, "")
-	return
-}
