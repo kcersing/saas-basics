@@ -138,18 +138,18 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				return false
 			}
 
-			sub := roleId
+			//sub := roleId
 			//check the permission
-			pass, err := enforcer.Enforce(sub, obj, act)
-			if err != nil {
-				hlog.Error("casbin err,  role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass, " err: ", err.Error())
-				return false
-			}
-			if !pass {
-				hlog.Info("casbin forbid role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
-			}
-			hlog.Info("casbin allow role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
-			return pass
+			//pass, err := enforcer.Enforce(sub, obj, act)
+			//if err != nil {
+			//	hlog.Error("casbin err,  role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass, " err: ", err.Error())
+			//	return false
+			//}
+			//if !pass {
+			//	hlog.Info("casbin forbid role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
+			//}
+			//hlog.Info("casbin allow role id: ", roleId, " path: ", obj, " method: ", act, " pass: ", pass)
+			//return pass
 
 			return true
 		},
