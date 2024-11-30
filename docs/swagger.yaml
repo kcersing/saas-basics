@@ -308,6 +308,23 @@ definitions:
       value:
         type: string
     type: object
+  menu.ApiInfo:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      group:
+        type: string
+      id:
+        type: integer
+      method:
+        type: string
+      path:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   menu.ApiPageReq:
     properties:
       description:
@@ -321,6 +338,44 @@ definitions:
       pageSize:
         type: integer
       path:
+        type: string
+    type: object
+  menu.CreateOrUpdateMenuReq:
+    properties:
+      activeMenu:
+        type: string
+      affix:
+        type: boolean
+      component:
+        type: string
+      hidden:
+        type: boolean
+      icon:
+        type: string
+      id:
+        type: integer
+      level:
+        type: integer
+      menuType:
+        type: integer
+      name:
+        type: string
+      noCache:
+        type: boolean
+      parentId:
+        type: integer
+      path:
+        type: string
+      redirect:
+        type: string
+      sort:
+        type: integer
+      status:
+        type: integer
+      title:
+        description: meta
+        type: string
+      url:
         type: string
     type: object
   token.TokenInfo:
@@ -515,7 +570,20 @@ paths:
       responses: {}
   /service/api/create:
     post:
-      responses: {}
+      description: 创建IPA Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.ApiInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建IPA Summary
   /service/api/list:
     post:
       description: 获取api列表 Description
@@ -550,7 +618,20 @@ paths:
       summary: 获取api树 Summary
   /service/api/update:
     post:
-      responses: {}
+      description: 更新IPA Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.ApiInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新IPA Summary
   /service/auth/api/create:
     post:
       description: 创建角色接口权限 Description
@@ -1184,10 +1265,36 @@ paths:
       summary: 更新会员 Summary
   /service/menu:
     post:
-      responses: {}
+      description: 删除菜单 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.CreateOrUpdateMenuReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除菜单 Summary
   /service/menu/create:
     post:
-      responses: {}
+      description: 创建菜单 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.CreateOrUpdateMenuReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建菜单 Summary
   /service/menu/list:
     post:
       description: 获取菜单列表 Description
@@ -1231,7 +1338,20 @@ paths:
       summary: 获取菜单树 Summary
   /service/menu/update:
     post:
-      responses: {}
+      description: 更新菜单 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/menu.CreateOrUpdateMenuReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新菜单 Summary
   /service/place/create:
     post:
       description: 创建场地 Description

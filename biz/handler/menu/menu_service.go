@@ -176,6 +176,10 @@ func MenuRole(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateApi .
+// @Summary  创建IPA Summary
+// @Description 创建IPA Description
+// @Param request body menu.ApiInfo true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/api/create [POST]
 func CreateApi(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -192,6 +196,10 @@ func CreateApi(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateApi .
+// @Summary  更新IPA Summary
+// @Description 更新IPA Description
+// @Param request body menu.ApiInfo true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/api/update [POST]
 func UpdateApi(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -224,6 +232,10 @@ func DeleteApi(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateMenu .
+// @Summary  创建菜单 Summary
+// @Description 创建菜单 Description
+// @Param request body menu.CreateOrUpdateMenuReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/menu/create [POST]
 func CreateMenu(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -240,6 +252,10 @@ func CreateMenu(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMenu .
+// @Summary  更新菜单 Summary
+// @Description 更新菜单 Description
+// @Param request body menu.CreateOrUpdateMenuReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/menu/update [POST]
 func UpdateMenu(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -256,6 +272,10 @@ func UpdateMenu(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteMenu .
+// @Summary  删除菜单 Summary
+// @Description 删除菜单 Description
+// @Param request body menu.CreateOrUpdateMenuReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/menu [POST]
 func DeleteMenu(ctx context.Context, c *app.RequestContext) {
 	var err error

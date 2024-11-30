@@ -59,7 +59,27 @@ const docTemplate = `{
         },
         "/service/api/create": {
             "post": {
-                "responses": {}
+                "description": "创建IPA Description",
+                "summary": "创建IPA Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/menu.ApiInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/api/list": {
@@ -114,7 +134,27 @@ const docTemplate = `{
         },
         "/service/api/update": {
             "post": {
-                "responses": {}
+                "description": "更新IPA Description",
+                "summary": "更新IPA Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/menu.ApiInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/auth/api/create": {
@@ -1106,12 +1146,52 @@ const docTemplate = `{
         },
         "/service/menu": {
             "post": {
-                "responses": {}
+                "description": "删除菜单 Description",
+                "summary": "删除菜单 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/menu.CreateOrUpdateMenuReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/menu/create": {
             "post": {
-                "responses": {}
+                "description": "创建菜单 Description",
+                "summary": "创建菜单 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/menu.CreateOrUpdateMenuReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/menu/list": {
@@ -1180,7 +1260,27 @@ const docTemplate = `{
         },
         "/service/menu/update": {
             "post": {
-                "responses": {}
+                "description": "更新菜单 Description",
+                "summary": "更新菜单 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/menu.CreateOrUpdateMenuReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/place/create": {
@@ -2185,6 +2285,32 @@ const docTemplate = `{
                 }
             }
         },
+        "menu.ApiInfo": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "menu.ApiPageReq": {
             "type": "object",
             "properties": {
@@ -2204,6 +2330,63 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "menu.CreateOrUpdateMenuReq": {
+            "type": "object",
+            "properties": {
+                "activeMenu": {
+                    "type": "string"
+                },
+                "affix": {
+                    "type": "boolean"
+                },
+                "component": {
+                    "type": "string"
+                },
+                "hidden": {
+                    "type": "boolean"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "menuType": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "noCache": {
+                    "type": "boolean"
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "redirect": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "meta",
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 }
             }
