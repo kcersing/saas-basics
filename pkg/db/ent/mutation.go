@@ -14171,9 +14171,22 @@ func (m *MenuMutation) OldName(ctx context.Context) (v string, err error) {
 	return oldValue.Name, nil
 }
 
+// ClearName clears the value of the "name" field.
+func (m *MenuMutation) ClearName() {
+	m.name = nil
+	m.clearedFields[menu.FieldName] = struct{}{}
+}
+
+// NameCleared returns if the "name" field was cleared in this mutation.
+func (m *MenuMutation) NameCleared() bool {
+	_, ok := m.clearedFields[menu.FieldName]
+	return ok
+}
+
 // ResetName resets all changes to the "name" field.
 func (m *MenuMutation) ResetName() {
 	m.name = nil
+	delete(m.clearedFields, menu.FieldName)
 }
 
 // SetSort sets the "sort" field.
@@ -14226,10 +14239,24 @@ func (m *MenuMutation) AddedSort() (r int64, exists bool) {
 	return *v, true
 }
 
+// ClearSort clears the value of the "sort" field.
+func (m *MenuMutation) ClearSort() {
+	m.sort = nil
+	m.addsort = nil
+	m.clearedFields[menu.FieldSort] = struct{}{}
+}
+
+// SortCleared returns if the "sort" field was cleared in this mutation.
+func (m *MenuMutation) SortCleared() bool {
+	_, ok := m.clearedFields[menu.FieldSort]
+	return ok
+}
+
 // ResetSort resets all changes to the "sort" field.
 func (m *MenuMutation) ResetSort() {
 	m.sort = nil
 	m.addsort = nil
+	delete(m.clearedFields, menu.FieldSort)
 }
 
 // SetDisabled sets the "disabled" field.
@@ -14401,10 +14428,24 @@ func (m *MenuMutation) AddedLevel() (r int64, exists bool) {
 	return *v, true
 }
 
+// ClearLevel clears the value of the "level" field.
+func (m *MenuMutation) ClearLevel() {
+	m.level = nil
+	m.addlevel = nil
+	m.clearedFields[menu.FieldLevel] = struct{}{}
+}
+
+// LevelCleared returns if the "level" field was cleared in this mutation.
+func (m *MenuMutation) LevelCleared() bool {
+	_, ok := m.clearedFields[menu.FieldLevel]
+	return ok
+}
+
 // ResetLevel resets all changes to the "level" field.
 func (m *MenuMutation) ResetLevel() {
 	m.level = nil
 	m.addlevel = nil
+	delete(m.clearedFields, menu.FieldLevel)
 }
 
 // SetMenuType sets the "menu_type" field.
@@ -14457,10 +14498,24 @@ func (m *MenuMutation) AddedMenuType() (r int64, exists bool) {
 	return *v, true
 }
 
+// ClearMenuType clears the value of the "menu_type" field.
+func (m *MenuMutation) ClearMenuType() {
+	m.menu_type = nil
+	m.addmenu_type = nil
+	m.clearedFields[menu.FieldMenuType] = struct{}{}
+}
+
+// MenuTypeCleared returns if the "menu_type" field was cleared in this mutation.
+func (m *MenuMutation) MenuTypeCleared() bool {
+	_, ok := m.clearedFields[menu.FieldMenuType]
+	return ok
+}
+
 // ResetMenuType resets all changes to the "menu_type" field.
 func (m *MenuMutation) ResetMenuType() {
 	m.menu_type = nil
 	m.addmenu_type = nil
+	delete(m.clearedFields, menu.FieldMenuType)
 }
 
 // SetRedirect sets the "redirect" field.
@@ -14690,9 +14745,22 @@ func (m *MenuMutation) OldTitle(ctx context.Context) (v string, err error) {
 	return oldValue.Title, nil
 }
 
+// ClearTitle clears the value of the "title" field.
+func (m *MenuMutation) ClearTitle() {
+	m.title = nil
+	m.clearedFields[menu.FieldTitle] = struct{}{}
+}
+
+// TitleCleared returns if the "title" field was cleared in this mutation.
+func (m *MenuMutation) TitleCleared() bool {
+	_, ok := m.clearedFields[menu.FieldTitle]
+	return ok
+}
+
 // ResetTitle resets all changes to the "title" field.
 func (m *MenuMutation) ResetTitle() {
 	m.title = nil
+	delete(m.clearedFields, menu.FieldTitle)
 }
 
 // SetIcon sets the "icon" field.
@@ -14726,9 +14794,22 @@ func (m *MenuMutation) OldIcon(ctx context.Context) (v string, err error) {
 	return oldValue.Icon, nil
 }
 
+// ClearIcon clears the value of the "icon" field.
+func (m *MenuMutation) ClearIcon() {
+	m.icon = nil
+	m.clearedFields[menu.FieldIcon] = struct{}{}
+}
+
+// IconCleared returns if the "icon" field was cleared in this mutation.
+func (m *MenuMutation) IconCleared() bool {
+	_, ok := m.clearedFields[menu.FieldIcon]
+	return ok
+}
+
 // ResetIcon resets all changes to the "icon" field.
 func (m *MenuMutation) ResetIcon() {
 	m.icon = nil
+	delete(m.clearedFields, menu.FieldIcon)
 }
 
 // SetActiveMenu sets the "active_menu" field.
@@ -15510,11 +15591,23 @@ func (m *MenuMutation) ClearedFields() []string {
 	if m.FieldCleared(menu.FieldPath) {
 		fields = append(fields, menu.FieldPath)
 	}
+	if m.FieldCleared(menu.FieldName) {
+		fields = append(fields, menu.FieldName)
+	}
+	if m.FieldCleared(menu.FieldSort) {
+		fields = append(fields, menu.FieldSort)
+	}
 	if m.FieldCleared(menu.FieldDisabled) {
 		fields = append(fields, menu.FieldDisabled)
 	}
 	if m.FieldCleared(menu.FieldIgnore) {
 		fields = append(fields, menu.FieldIgnore)
+	}
+	if m.FieldCleared(menu.FieldLevel) {
+		fields = append(fields, menu.FieldLevel)
+	}
+	if m.FieldCleared(menu.FieldMenuType) {
+		fields = append(fields, menu.FieldMenuType)
 	}
 	if m.FieldCleared(menu.FieldRedirect) {
 		fields = append(fields, menu.FieldRedirect)
@@ -15527,6 +15620,12 @@ func (m *MenuMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(menu.FieldHidden) {
 		fields = append(fields, menu.FieldHidden)
+	}
+	if m.FieldCleared(menu.FieldTitle) {
+		fields = append(fields, menu.FieldTitle)
+	}
+	if m.FieldCleared(menu.FieldIcon) {
+		fields = append(fields, menu.FieldIcon)
 	}
 	if m.FieldCleared(menu.FieldActiveMenu) {
 		fields = append(fields, menu.FieldActiveMenu)
@@ -15560,11 +15659,23 @@ func (m *MenuMutation) ClearField(name string) error {
 	case menu.FieldPath:
 		m.ClearPath()
 		return nil
+	case menu.FieldName:
+		m.ClearName()
+		return nil
+	case menu.FieldSort:
+		m.ClearSort()
+		return nil
 	case menu.FieldDisabled:
 		m.ClearDisabled()
 		return nil
 	case menu.FieldIgnore:
 		m.ClearIgnore()
+		return nil
+	case menu.FieldLevel:
+		m.ClearLevel()
+		return nil
+	case menu.FieldMenuType:
+		m.ClearMenuType()
 		return nil
 	case menu.FieldRedirect:
 		m.ClearRedirect()
@@ -15577,6 +15688,12 @@ func (m *MenuMutation) ClearField(name string) error {
 		return nil
 	case menu.FieldHidden:
 		m.ClearHidden()
+		return nil
+	case menu.FieldTitle:
+		m.ClearTitle()
+		return nil
+	case menu.FieldIcon:
+		m.ClearIcon()
 		return nil
 	case menu.FieldActiveMenu:
 		m.ClearActiveMenu()

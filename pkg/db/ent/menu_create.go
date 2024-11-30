@@ -98,6 +98,14 @@ func (mc *MenuCreate) SetName(s string) *MenuCreate {
 	return mc
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableName(s *string) *MenuCreate {
+	if s != nil {
+		mc.SetName(*s)
+	}
+	return mc
+}
+
 // SetSort sets the "sort" field.
 func (mc *MenuCreate) SetSort(i int64) *MenuCreate {
 	mc.mutation.SetSort(i)
@@ -146,9 +154,25 @@ func (mc *MenuCreate) SetLevel(i int64) *MenuCreate {
 	return mc
 }
 
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableLevel(i *int64) *MenuCreate {
+	if i != nil {
+		mc.SetLevel(*i)
+	}
+	return mc
+}
+
 // SetMenuType sets the "menu_type" field.
 func (mc *MenuCreate) SetMenuType(i int64) *MenuCreate {
 	mc.mutation.SetMenuType(i)
+	return mc
+}
+
+// SetNillableMenuType sets the "menu_type" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableMenuType(i *int64) *MenuCreate {
+	if i != nil {
+		mc.SetMenuType(*i)
+	}
 	return mc
 }
 
@@ -214,9 +238,25 @@ func (mc *MenuCreate) SetTitle(s string) *MenuCreate {
 	return mc
 }
 
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableTitle(s *string) *MenuCreate {
+	if s != nil {
+		mc.SetTitle(*s)
+	}
+	return mc
+}
+
 // SetIcon sets the "icon" field.
 func (mc *MenuCreate) SetIcon(s string) *MenuCreate {
 	mc.mutation.SetIcon(s)
+	return mc
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableIcon(s *string) *MenuCreate {
+	if s != nil {
+		mc.SetIcon(*s)
+	}
 	return mc
 }
 
@@ -418,24 +458,6 @@ func (mc *MenuCreate) check() error {
 	}
 	if _, ok := mc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Menu.updated_at"`)}
-	}
-	if _, ok := mc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Menu.name"`)}
-	}
-	if _, ok := mc.mutation.Sort(); !ok {
-		return &ValidationError{Name: "sort", err: errors.New(`ent: missing required field "Menu.sort"`)}
-	}
-	if _, ok := mc.mutation.Level(); !ok {
-		return &ValidationError{Name: "level", err: errors.New(`ent: missing required field "Menu.level"`)}
-	}
-	if _, ok := mc.mutation.MenuType(); !ok {
-		return &ValidationError{Name: "menu_type", err: errors.New(`ent: missing required field "Menu.menu_type"`)}
-	}
-	if _, ok := mc.mutation.Title(); !ok {
-		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Menu.title"`)}
-	}
-	if _, ok := mc.mutation.Icon(); !ok {
-		return &ValidationError{Name: "icon", err: errors.New(`ent: missing required field "Menu.icon"`)}
 	}
 	return nil
 }

@@ -117,6 +117,12 @@ func (mu *MenuUpdate) SetNillableName(s *string) *MenuUpdate {
 	return mu
 }
 
+// ClearName clears the value of the "name" field.
+func (mu *MenuUpdate) ClearName() *MenuUpdate {
+	mu.mutation.ClearName()
+	return mu
+}
+
 // SetSort sets the "sort" field.
 func (mu *MenuUpdate) SetSort(i int64) *MenuUpdate {
 	mu.mutation.ResetSort()
@@ -135,6 +141,12 @@ func (mu *MenuUpdate) SetNillableSort(i *int64) *MenuUpdate {
 // AddSort adds i to the "sort" field.
 func (mu *MenuUpdate) AddSort(i int64) *MenuUpdate {
 	mu.mutation.AddSort(i)
+	return mu
+}
+
+// ClearSort clears the value of the "sort" field.
+func (mu *MenuUpdate) ClearSort() *MenuUpdate {
+	mu.mutation.ClearSort()
 	return mu
 }
 
@@ -206,6 +218,12 @@ func (mu *MenuUpdate) AddLevel(i int64) *MenuUpdate {
 	return mu
 }
 
+// ClearLevel clears the value of the "level" field.
+func (mu *MenuUpdate) ClearLevel() *MenuUpdate {
+	mu.mutation.ClearLevel()
+	return mu
+}
+
 // SetMenuType sets the "menu_type" field.
 func (mu *MenuUpdate) SetMenuType(i int64) *MenuUpdate {
 	mu.mutation.ResetMenuType()
@@ -224,6 +242,12 @@ func (mu *MenuUpdate) SetNillableMenuType(i *int64) *MenuUpdate {
 // AddMenuType adds i to the "menu_type" field.
 func (mu *MenuUpdate) AddMenuType(i int64) *MenuUpdate {
 	mu.mutation.AddMenuType(i)
+	return mu
+}
+
+// ClearMenuType clears the value of the "menu_type" field.
+func (mu *MenuUpdate) ClearMenuType() *MenuUpdate {
+	mu.mutation.ClearMenuType()
 	return mu
 }
 
@@ -321,6 +345,12 @@ func (mu *MenuUpdate) SetNillableTitle(s *string) *MenuUpdate {
 	return mu
 }
 
+// ClearTitle clears the value of the "title" field.
+func (mu *MenuUpdate) ClearTitle() *MenuUpdate {
+	mu.mutation.ClearTitle()
+	return mu
+}
+
 // SetIcon sets the "icon" field.
 func (mu *MenuUpdate) SetIcon(s string) *MenuUpdate {
 	mu.mutation.SetIcon(s)
@@ -332,6 +362,12 @@ func (mu *MenuUpdate) SetNillableIcon(s *string) *MenuUpdate {
 	if s != nil {
 		mu.SetIcon(*s)
 	}
+	return mu
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (mu *MenuUpdate) ClearIcon() *MenuUpdate {
+	mu.mutation.ClearIcon()
 	return mu
 }
 
@@ -585,11 +621,17 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.Name(); ok {
 		_spec.SetField(menu.FieldName, field.TypeString, value)
 	}
+	if mu.mutation.NameCleared() {
+		_spec.ClearField(menu.FieldName, field.TypeString)
+	}
 	if value, ok := mu.mutation.Sort(); ok {
 		_spec.SetField(menu.FieldSort, field.TypeInt64, value)
 	}
 	if value, ok := mu.mutation.AddedSort(); ok {
 		_spec.AddField(menu.FieldSort, field.TypeInt64, value)
+	}
+	if mu.mutation.SortCleared() {
+		_spec.ClearField(menu.FieldSort, field.TypeInt64)
 	}
 	if value, ok := mu.mutation.Disabled(); ok {
 		_spec.SetField(menu.FieldDisabled, field.TypeInt64, value)
@@ -612,11 +654,17 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.AddedLevel(); ok {
 		_spec.AddField(menu.FieldLevel, field.TypeInt64, value)
 	}
+	if mu.mutation.LevelCleared() {
+		_spec.ClearField(menu.FieldLevel, field.TypeInt64)
+	}
 	if value, ok := mu.mutation.MenuType(); ok {
 		_spec.SetField(menu.FieldMenuType, field.TypeInt64, value)
 	}
 	if value, ok := mu.mutation.AddedMenuType(); ok {
 		_spec.AddField(menu.FieldMenuType, field.TypeInt64, value)
+	}
+	if mu.mutation.MenuTypeCleared() {
+		_spec.ClearField(menu.FieldMenuType, field.TypeInt64)
 	}
 	if value, ok := mu.mutation.Redirect(); ok {
 		_spec.SetField(menu.FieldRedirect, field.TypeString, value)
@@ -645,8 +693,14 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.Title(); ok {
 		_spec.SetField(menu.FieldTitle, field.TypeString, value)
 	}
+	if mu.mutation.TitleCleared() {
+		_spec.ClearField(menu.FieldTitle, field.TypeString)
+	}
 	if value, ok := mu.mutation.Icon(); ok {
 		_spec.SetField(menu.FieldIcon, field.TypeString, value)
+	}
+	if mu.mutation.IconCleared() {
+		_spec.ClearField(menu.FieldIcon, field.TypeString)
 	}
 	if value, ok := mu.mutation.ActiveMenu(); ok {
 		_spec.SetField(menu.FieldActiveMenu, field.TypeString, value)
@@ -937,6 +991,12 @@ func (muo *MenuUpdateOne) SetNillableName(s *string) *MenuUpdateOne {
 	return muo
 }
 
+// ClearName clears the value of the "name" field.
+func (muo *MenuUpdateOne) ClearName() *MenuUpdateOne {
+	muo.mutation.ClearName()
+	return muo
+}
+
 // SetSort sets the "sort" field.
 func (muo *MenuUpdateOne) SetSort(i int64) *MenuUpdateOne {
 	muo.mutation.ResetSort()
@@ -955,6 +1015,12 @@ func (muo *MenuUpdateOne) SetNillableSort(i *int64) *MenuUpdateOne {
 // AddSort adds i to the "sort" field.
 func (muo *MenuUpdateOne) AddSort(i int64) *MenuUpdateOne {
 	muo.mutation.AddSort(i)
+	return muo
+}
+
+// ClearSort clears the value of the "sort" field.
+func (muo *MenuUpdateOne) ClearSort() *MenuUpdateOne {
+	muo.mutation.ClearSort()
 	return muo
 }
 
@@ -1026,6 +1092,12 @@ func (muo *MenuUpdateOne) AddLevel(i int64) *MenuUpdateOne {
 	return muo
 }
 
+// ClearLevel clears the value of the "level" field.
+func (muo *MenuUpdateOne) ClearLevel() *MenuUpdateOne {
+	muo.mutation.ClearLevel()
+	return muo
+}
+
 // SetMenuType sets the "menu_type" field.
 func (muo *MenuUpdateOne) SetMenuType(i int64) *MenuUpdateOne {
 	muo.mutation.ResetMenuType()
@@ -1044,6 +1116,12 @@ func (muo *MenuUpdateOne) SetNillableMenuType(i *int64) *MenuUpdateOne {
 // AddMenuType adds i to the "menu_type" field.
 func (muo *MenuUpdateOne) AddMenuType(i int64) *MenuUpdateOne {
 	muo.mutation.AddMenuType(i)
+	return muo
+}
+
+// ClearMenuType clears the value of the "menu_type" field.
+func (muo *MenuUpdateOne) ClearMenuType() *MenuUpdateOne {
+	muo.mutation.ClearMenuType()
 	return muo
 }
 
@@ -1141,6 +1219,12 @@ func (muo *MenuUpdateOne) SetNillableTitle(s *string) *MenuUpdateOne {
 	return muo
 }
 
+// ClearTitle clears the value of the "title" field.
+func (muo *MenuUpdateOne) ClearTitle() *MenuUpdateOne {
+	muo.mutation.ClearTitle()
+	return muo
+}
+
 // SetIcon sets the "icon" field.
 func (muo *MenuUpdateOne) SetIcon(s string) *MenuUpdateOne {
 	muo.mutation.SetIcon(s)
@@ -1152,6 +1236,12 @@ func (muo *MenuUpdateOne) SetNillableIcon(s *string) *MenuUpdateOne {
 	if s != nil {
 		muo.SetIcon(*s)
 	}
+	return muo
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (muo *MenuUpdateOne) ClearIcon() *MenuUpdateOne {
+	muo.mutation.ClearIcon()
 	return muo
 }
 
@@ -1435,11 +1525,17 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 	if value, ok := muo.mutation.Name(); ok {
 		_spec.SetField(menu.FieldName, field.TypeString, value)
 	}
+	if muo.mutation.NameCleared() {
+		_spec.ClearField(menu.FieldName, field.TypeString)
+	}
 	if value, ok := muo.mutation.Sort(); ok {
 		_spec.SetField(menu.FieldSort, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.AddedSort(); ok {
 		_spec.AddField(menu.FieldSort, field.TypeInt64, value)
+	}
+	if muo.mutation.SortCleared() {
+		_spec.ClearField(menu.FieldSort, field.TypeInt64)
 	}
 	if value, ok := muo.mutation.Disabled(); ok {
 		_spec.SetField(menu.FieldDisabled, field.TypeInt64, value)
@@ -1462,11 +1558,17 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 	if value, ok := muo.mutation.AddedLevel(); ok {
 		_spec.AddField(menu.FieldLevel, field.TypeInt64, value)
 	}
+	if muo.mutation.LevelCleared() {
+		_spec.ClearField(menu.FieldLevel, field.TypeInt64)
+	}
 	if value, ok := muo.mutation.MenuType(); ok {
 		_spec.SetField(menu.FieldMenuType, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.AddedMenuType(); ok {
 		_spec.AddField(menu.FieldMenuType, field.TypeInt64, value)
+	}
+	if muo.mutation.MenuTypeCleared() {
+		_spec.ClearField(menu.FieldMenuType, field.TypeInt64)
 	}
 	if value, ok := muo.mutation.Redirect(); ok {
 		_spec.SetField(menu.FieldRedirect, field.TypeString, value)
@@ -1495,8 +1597,14 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 	if value, ok := muo.mutation.Title(); ok {
 		_spec.SetField(menu.FieldTitle, field.TypeString, value)
 	}
+	if muo.mutation.TitleCleared() {
+		_spec.ClearField(menu.FieldTitle, field.TypeString)
+	}
 	if value, ok := muo.mutation.Icon(); ok {
 		_spec.SetField(menu.FieldIcon, field.TypeString, value)
+	}
+	if muo.mutation.IconCleared() {
+		_spec.ClearField(menu.FieldIcon, field.TypeString)
 	}
 	if value, ok := muo.mutation.ActiveMenu(); ok {
 		_spec.SetField(menu.FieldActiveMenu, field.TypeString, value)
