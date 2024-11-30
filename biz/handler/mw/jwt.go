@@ -7,7 +7,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/jwt"
 	"github.com/spf13/cast"
-	admin "saas/biz/infras/service"
+	"saas/biz/infras/service"
 	"saas/config"
 	"saas/idl_gen/model/token"
 	"saas/idl_gen/model/user"
@@ -78,7 +78,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 
 			username := loginVal.Username
 			password := loginVal.Password
-			res, err = admin.NewLogin(ctx, c).Login(username, password)
+			res, err = service.NewLogin(ctx, c).Login(username, password)
 
 			if err != nil {
 				hlog.Error(err, "jwtLogin error")
@@ -90,7 +90,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			tokenInfo.Username = res.Username
 			tokenInfo.ExpiredAt = time.Now().Add(time.Duration(config.GlobalServerConfig.Auth.AccessExpire) * time.Second).Format(time.DateTime)
 
-			err = admin.NewToken(ctx, c).Create(&tokenInfo)
+			err = service.NewToken(ctx, c).Create(&tokenInfo)
 			if err != nil {
 				hlog.Error(err, "jwtLogin error, store token error")
 				return nil, err
@@ -122,12 +122,12 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				hlog.Error("get payloadMap error:", err)
 				return false
 			}
-			existToken := admin.NewToken(ctx, c).IsExistByUserID(int64(userIdInt))
+			existToken := service.NewToken(ctx, c).IsExistByUserID(int64(userIdInt))
 			if !existToken {
 				return false
 			}
 			// check the role status
-			roleInfo, err := admin.NewRole(ctx, c).RoleInfoByID(cast.ToInt64(roleId))
+			roleInfo, err := service.NewRole(ctx, c).RoleInfoByID(cast.ToInt64(roleId))
 			// if the role is not exist or the role is not active, return false
 			if err != nil {
 				hlog.Error(err, "role is not exist")

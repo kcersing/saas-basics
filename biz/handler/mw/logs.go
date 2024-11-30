@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"saas/biz/infras/do"
-	"saas/biz/infras/service/admin"
+	"saas/biz/infras/service"
+	"saas/idl_gen/model/auth"
 	"strconv"
 	"time"
 )
@@ -14,7 +14,7 @@ func LogMw() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		start := time.Now()
 		c.Next(ctx)
-		var logs do.LogsInfo
+		var logs auth.LogsInfo
 		logs.Type = "Interface"
 		logs.Method = string(c.Request.Method())
 		logs.Api = string(c.Request.Path())
@@ -37,7 +37,7 @@ func LogMw() app.HandlerFunc {
 		}
 
 		costTime := time.Since(start).Milliseconds()
-		logs.Time = int32(costTime)
+		logs.Time = int64(int32(costTime))
 
 		v, exist := c.Get("user_id")
 		if exist || v == nil {
@@ -55,15 +55,15 @@ func LogMw() app.HandlerFunc {
 
 		userID, _ := strconv.Atoi(userIDStr)
 
-		userInfo, _ := admin.NewUser(ctx, c).Info(int64(userID))
+		userInfo, _ := service.NewUser(ctx, c).Info(int64(userID))
 
 		if userInfo != nil {
-			username = userInfo.Nickname
+			username = userInfo.Name
 		}
 
 		logs.Operator = username
 
-		err := admin.NewLogs(ctx, c).Create(&logs)
+		err := service.NewLogs(ctx, c).Create(&logs)
 
 		if err != nil {
 			hlog.Error(err)
