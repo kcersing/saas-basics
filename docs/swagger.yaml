@@ -510,6 +510,12 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: ping Summary
+  /service/api:
+    post:
+      responses: {}
+  /service/api/create:
+    post:
+      responses: {}
   /service/api/list:
     post:
       description: 获取api列表 Description
@@ -542,6 +548,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 获取api树 Summary
+  /service/api/update:
+    post:
+      responses: {}
   /service/auth/api/create:
     post:
       description: 创建角色接口权限 Description
@@ -1173,6 +1182,12 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新会员 Summary
+  /service/menu:
+    post:
+      responses: {}
+  /service/menu/create:
+    post:
+      responses: {}
   /service/menu/list:
     post:
       description: 获取菜单列表 Description
@@ -1214,6 +1229,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 获取菜单树 Summary
+  /service/menu/update:
+    post:
+      responses: {}
   /service/place/create:
     post:
       description: 创建场地 Description

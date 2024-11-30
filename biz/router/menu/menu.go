@@ -19,23 +19,31 @@ func Register(r *server.Hertz) {
 	root := r.Group("/", rootMw()...)
 	{
 		_service := root.Group("/service", _serviceMw()...)
+		_service.POST("/api", append(_deleteapiMw(), menu.DeleteApi)...)
+		_api := _service.Group("/api", _apiMw()...)
+		_api.POST("/list", append(_apilistMw(), menu.ApiList)...)
+		_api.POST("/tree", append(_apitreeMw(), menu.ApiTree)...)
+		_service.POST("/menu", append(_deletemenuMw(), menu.DeleteMenu)...)
+		_menu := _service.Group("/menu", _menuMw()...)
+		_menu.POST("/list", append(_menulistsMw(), menu.MenuLists)...)
+		_menu.POST("/tree", append(_menutreeMw(), menu.MenuTree)...)
 		{
-			_api := _service.Group("/api", _apiMw()...)
-			_api.POST("/list", append(_apilistMw(), menu.ApiList)...)
-			_api.POST("/tree", append(_apitreeMw(), menu.ApiTree)...)
+			_api0 := _service.Group("/api", _api0Mw()...)
+			_api0.POST("/create", append(_createapiMw(), menu.CreateApi)...)
+			_api0.POST("/update", append(_updateapiMw(), menu.UpdateApi)...)
 		}
 		{
 			_auth := _service.Group("/auth", _authMw()...)
 			{
-				_menu := _auth.Group("/menu", _menuMw()...)
-				_menu.POST("/role", append(_menuauthMw(), menu.MenuAuth)...)
+				_menu0 := _auth.Group("/menu", _menu0Mw()...)
+				_menu0.POST("/role", append(_menuauthMw(), menu.MenuAuth)...)
 			}
 		}
 		{
-			_menu0 := _service.Group("/menu", _menu0Mw()...)
-			_menu0.POST("/list", append(_menulistsMw(), menu.MenuLists)...)
-			_menu0.POST("/role", append(_menuroleMw(), menu.MenuRole)...)
-			_menu0.POST("/tree", append(_menutreeMw(), menu.MenuTree)...)
+			_menu1 := _service.Group("/menu", _menu1Mw()...)
+			_menu1.POST("/create", append(_createmenuMw(), menu.CreateMenu)...)
+			_menu1.POST("/role", append(_menuroleMw(), menu.MenuRole)...)
+			_menu1.POST("/update", append(_updatemenuMw(), menu.UpdateMenu)...)
 		}
 	}
 }

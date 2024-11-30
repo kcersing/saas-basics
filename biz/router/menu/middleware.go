@@ -65,3 +65,43 @@ func _menutreeMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _deleteapiMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deletemenuMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _api0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createapiMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updateapiMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _menu1Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createmenuMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatemenuMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

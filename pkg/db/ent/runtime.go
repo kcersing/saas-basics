@@ -331,6 +331,8 @@ func init() {
 	menuMixin := schema.Menu{}.Mixin()
 	menuMixinFields0 := menuMixin[0].Fields()
 	_ = menuMixinFields0
+	menuMixinFields1 := menuMixin[1].Fields()
+	_ = menuMixinFields1
 	menuFields := schema.Menu{}.Fields()
 	_ = menuFields
 	// menuDescCreatedAt is the schema descriptor for created_at field.
@@ -343,14 +345,18 @@ func init() {
 	menu.DefaultUpdatedAt = menuDescUpdatedAt.Default.(func() time.Time)
 	// menu.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	menu.UpdateDefaultUpdatedAt = menuDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// menuDescStatus is the schema descriptor for status field.
+	menuDescStatus := menuMixinFields1[0].Descriptor()
+	// menu.DefaultStatus holds the default value on creation for the status field.
+	menu.DefaultStatus = menuDescStatus.Default.(int64)
 	// menuDescPath is the schema descriptor for path field.
 	menuDescPath := menuFields[1].Descriptor()
 	// menu.DefaultPath holds the default value on creation for the path field.
 	menu.DefaultPath = menuDescPath.Default.(string)
-	// menuDescOrderNo is the schema descriptor for order_no field.
-	menuDescOrderNo := menuFields[3].Descriptor()
-	// menu.DefaultOrderNo holds the default value on creation for the order_no field.
-	menu.DefaultOrderNo = menuDescOrderNo.Default.(int64)
+	// menuDescSort is the schema descriptor for sort field.
+	menuDescSort := menuFields[3].Descriptor()
+	// menu.DefaultSort holds the default value on creation for the sort field.
+	menu.DefaultSort = menuDescSort.Default.(int64)
 	// menuDescDisabled is the schema descriptor for disabled field.
 	menuDescDisabled := menuFields[4].Descriptor()
 	// menu.DefaultDisabled holds the default value on creation for the disabled field.
@@ -359,6 +365,34 @@ func init() {
 	menuDescIgnore := menuFields[5].Descriptor()
 	// menu.DefaultIgnore holds the default value on creation for the ignore field.
 	menu.DefaultIgnore = menuDescIgnore.Default.(bool)
+	// menuDescRedirect is the schema descriptor for redirect field.
+	menuDescRedirect := menuFields[8].Descriptor()
+	// menu.DefaultRedirect holds the default value on creation for the redirect field.
+	menu.DefaultRedirect = menuDescRedirect.Default.(string)
+	// menuDescComponent is the schema descriptor for component field.
+	menuDescComponent := menuFields[9].Descriptor()
+	// menu.DefaultComponent holds the default value on creation for the component field.
+	menu.DefaultComponent = menuDescComponent.Default.(string)
+	// menuDescURL is the schema descriptor for url field.
+	menuDescURL := menuFields[10].Descriptor()
+	// menu.DefaultURL holds the default value on creation for the url field.
+	menu.DefaultURL = menuDescURL.Default.(string)
+	// menuDescHidden is the schema descriptor for hidden field.
+	menuDescHidden := menuFields[11].Descriptor()
+	// menu.DefaultHidden holds the default value on creation for the hidden field.
+	menu.DefaultHidden = menuDescHidden.Default.(bool)
+	// menuDescActiveMenu is the schema descriptor for active_menu field.
+	menuDescActiveMenu := menuFields[14].Descriptor()
+	// menu.DefaultActiveMenu holds the default value on creation for the active_menu field.
+	menu.DefaultActiveMenu = menuDescActiveMenu.Default.(string)
+	// menuDescAffix is the schema descriptor for affix field.
+	menuDescAffix := menuFields[15].Descriptor()
+	// menu.DefaultAffix holds the default value on creation for the affix field.
+	menu.DefaultAffix = menuDescAffix.Default.(bool)
+	// menuDescNoCache is the schema descriptor for no_cache field.
+	menuDescNoCache := menuFields[16].Descriptor()
+	// menu.DefaultNoCache holds the default value on creation for the no_cache field.
+	menu.DefaultNoCache = menuDescNoCache.Default.(bool)
 	menuparamMixin := schema.MenuParam{}.Mixin()
 	menuparamMixinFields0 := menuparamMixin[0].Fields()
 	_ = menuparamMixinFields0

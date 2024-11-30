@@ -409,11 +409,23 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "path", Type: field.TypeString, Nullable: true, Comment: "index path | 菜单路由路径", Default: ""},
 		{Name: "name", Type: field.TypeString, Comment: "index name | 菜单名称"},
-		{Name: "order_no", Type: field.TypeInt64, Comment: "sorting numbers | 排序编号", Default: 0},
+		{Name: "sort", Type: field.TypeInt64, Comment: "sort | 排序编号", Default: 0},
 		{Name: "disabled", Type: field.TypeInt64, Nullable: true, Comment: "disable status | 是否停用", Default: 0},
 		{Name: "ignore", Type: field.TypeBool, Nullable: true, Comment: "当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问", Default: false},
+		{Name: "level", Type: field.TypeInt64, Comment: "menu level | 菜单层级"},
+		{Name: "menu_type", Type: field.TypeInt64, Comment: "menu type | 菜单类型 0 目录 1 菜单 2 按钮"},
+		{Name: "redirect", Type: field.TypeString, Nullable: true, Comment: "redirect path | 跳转路径 （外链）", Default: ""},
+		{Name: "component", Type: field.TypeString, Nullable: true, Comment: "the path of vue file | 组件路径", Default: ""},
+		{Name: "url", Type: field.TypeString, Nullable: true, Comment: "url | ", Default: ""},
+		{Name: "hidden", Type: field.TypeBool, Nullable: true, Comment: "hidden | 是否隐藏菜单", Default: true},
+		{Name: "title", Type: field.TypeString, Comment: "menu name | 菜单显示标题"},
+		{Name: "icon", Type: field.TypeString, Comment: "menu icon | 菜单图标"},
+		{Name: "active_menu", Type: field.TypeString, Nullable: true, Comment: "set the active menu | 激活菜单", Default: ""},
+		{Name: "affix", Type: field.TypeBool, Nullable: true, Comment: "affix tab | Tab 固定", Default: false},
+		{Name: "no_cache", Type: field.TypeBool, Nullable: true, Comment: "do not keep alive the tab | 取消页面缓存", Default: false},
 		{Name: "parent_id", Type: field.TypeInt64, Nullable: true, Comment: "parent menu ID | 父菜单ID"},
 	}
 	// SysMenusTable holds the schema information for the "sys_menus" table.
@@ -424,7 +436,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_menus_sys_menus_children",
-				Columns:    []*schema.Column{SysMenusColumns[8]},
+				Columns:    []*schema.Column{SysMenusColumns[20]},
 				RefColumns: []*schema.Column{SysMenusColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

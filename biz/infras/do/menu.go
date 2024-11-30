@@ -6,8 +6,8 @@ import (
 )
 
 type Menu interface {
-	Create(menuReq *menu.MenuInfo) error
-	Update(menuReq *menu.MenuInfo) error
+	Create(menuReq *menu.CreateOrUpdateMenuReq) error
+	Update(menuReq *menu.CreateOrUpdateMenuReq) error
 	Delete(id int64) error
 	MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error)
 	List(req *base.PageInfoReq) (list []*menu.MenuInfoTree, total int, err error)

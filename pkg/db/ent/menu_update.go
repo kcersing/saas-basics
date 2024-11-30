@@ -36,6 +36,33 @@ func (mu *MenuUpdate) SetUpdatedAt(t time.Time) *MenuUpdate {
 	return mu
 }
 
+// SetStatus sets the "status" field.
+func (mu *MenuUpdate) SetStatus(i int64) *MenuUpdate {
+	mu.mutation.ResetStatus()
+	mu.mutation.SetStatus(i)
+	return mu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableStatus(i *int64) *MenuUpdate {
+	if i != nil {
+		mu.SetStatus(*i)
+	}
+	return mu
+}
+
+// AddStatus adds i to the "status" field.
+func (mu *MenuUpdate) AddStatus(i int64) *MenuUpdate {
+	mu.mutation.AddStatus(i)
+	return mu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (mu *MenuUpdate) ClearStatus() *MenuUpdate {
+	mu.mutation.ClearStatus()
+	return mu
+}
+
 // SetParentID sets the "parent_id" field.
 func (mu *MenuUpdate) SetParentID(i int64) *MenuUpdate {
 	mu.mutation.SetParentID(i)
@@ -90,24 +117,24 @@ func (mu *MenuUpdate) SetNillableName(s *string) *MenuUpdate {
 	return mu
 }
 
-// SetOrderNo sets the "order_no" field.
-func (mu *MenuUpdate) SetOrderNo(i int64) *MenuUpdate {
-	mu.mutation.ResetOrderNo()
-	mu.mutation.SetOrderNo(i)
+// SetSort sets the "sort" field.
+func (mu *MenuUpdate) SetSort(i int64) *MenuUpdate {
+	mu.mutation.ResetSort()
+	mu.mutation.SetSort(i)
 	return mu
 }
 
-// SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableOrderNo(i *int64) *MenuUpdate {
+// SetNillableSort sets the "sort" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableSort(i *int64) *MenuUpdate {
 	if i != nil {
-		mu.SetOrderNo(*i)
+		mu.SetSort(*i)
 	}
 	return mu
 }
 
-// AddOrderNo adds i to the "order_no" field.
-func (mu *MenuUpdate) AddOrderNo(i int64) *MenuUpdate {
-	mu.mutation.AddOrderNo(i)
+// AddSort adds i to the "sort" field.
+func (mu *MenuUpdate) AddSort(i int64) *MenuUpdate {
+	mu.mutation.AddSort(i)
 	return mu
 }
 
@@ -155,6 +182,216 @@ func (mu *MenuUpdate) SetNillableIgnore(b *bool) *MenuUpdate {
 // ClearIgnore clears the value of the "ignore" field.
 func (mu *MenuUpdate) ClearIgnore() *MenuUpdate {
 	mu.mutation.ClearIgnore()
+	return mu
+}
+
+// SetLevel sets the "level" field.
+func (mu *MenuUpdate) SetLevel(i int64) *MenuUpdate {
+	mu.mutation.ResetLevel()
+	mu.mutation.SetLevel(i)
+	return mu
+}
+
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableLevel(i *int64) *MenuUpdate {
+	if i != nil {
+		mu.SetLevel(*i)
+	}
+	return mu
+}
+
+// AddLevel adds i to the "level" field.
+func (mu *MenuUpdate) AddLevel(i int64) *MenuUpdate {
+	mu.mutation.AddLevel(i)
+	return mu
+}
+
+// SetMenuType sets the "menu_type" field.
+func (mu *MenuUpdate) SetMenuType(i int64) *MenuUpdate {
+	mu.mutation.ResetMenuType()
+	mu.mutation.SetMenuType(i)
+	return mu
+}
+
+// SetNillableMenuType sets the "menu_type" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableMenuType(i *int64) *MenuUpdate {
+	if i != nil {
+		mu.SetMenuType(*i)
+	}
+	return mu
+}
+
+// AddMenuType adds i to the "menu_type" field.
+func (mu *MenuUpdate) AddMenuType(i int64) *MenuUpdate {
+	mu.mutation.AddMenuType(i)
+	return mu
+}
+
+// SetRedirect sets the "redirect" field.
+func (mu *MenuUpdate) SetRedirect(s string) *MenuUpdate {
+	mu.mutation.SetRedirect(s)
+	return mu
+}
+
+// SetNillableRedirect sets the "redirect" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableRedirect(s *string) *MenuUpdate {
+	if s != nil {
+		mu.SetRedirect(*s)
+	}
+	return mu
+}
+
+// ClearRedirect clears the value of the "redirect" field.
+func (mu *MenuUpdate) ClearRedirect() *MenuUpdate {
+	mu.mutation.ClearRedirect()
+	return mu
+}
+
+// SetComponent sets the "component" field.
+func (mu *MenuUpdate) SetComponent(s string) *MenuUpdate {
+	mu.mutation.SetComponent(s)
+	return mu
+}
+
+// SetNillableComponent sets the "component" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableComponent(s *string) *MenuUpdate {
+	if s != nil {
+		mu.SetComponent(*s)
+	}
+	return mu
+}
+
+// ClearComponent clears the value of the "component" field.
+func (mu *MenuUpdate) ClearComponent() *MenuUpdate {
+	mu.mutation.ClearComponent()
+	return mu
+}
+
+// SetURL sets the "url" field.
+func (mu *MenuUpdate) SetURL(s string) *MenuUpdate {
+	mu.mutation.SetURL(s)
+	return mu
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableURL(s *string) *MenuUpdate {
+	if s != nil {
+		mu.SetURL(*s)
+	}
+	return mu
+}
+
+// ClearURL clears the value of the "url" field.
+func (mu *MenuUpdate) ClearURL() *MenuUpdate {
+	mu.mutation.ClearURL()
+	return mu
+}
+
+// SetHidden sets the "hidden" field.
+func (mu *MenuUpdate) SetHidden(b bool) *MenuUpdate {
+	mu.mutation.SetHidden(b)
+	return mu
+}
+
+// SetNillableHidden sets the "hidden" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableHidden(b *bool) *MenuUpdate {
+	if b != nil {
+		mu.SetHidden(*b)
+	}
+	return mu
+}
+
+// ClearHidden clears the value of the "hidden" field.
+func (mu *MenuUpdate) ClearHidden() *MenuUpdate {
+	mu.mutation.ClearHidden()
+	return mu
+}
+
+// SetTitle sets the "title" field.
+func (mu *MenuUpdate) SetTitle(s string) *MenuUpdate {
+	mu.mutation.SetTitle(s)
+	return mu
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableTitle(s *string) *MenuUpdate {
+	if s != nil {
+		mu.SetTitle(*s)
+	}
+	return mu
+}
+
+// SetIcon sets the "icon" field.
+func (mu *MenuUpdate) SetIcon(s string) *MenuUpdate {
+	mu.mutation.SetIcon(s)
+	return mu
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableIcon(s *string) *MenuUpdate {
+	if s != nil {
+		mu.SetIcon(*s)
+	}
+	return mu
+}
+
+// SetActiveMenu sets the "active_menu" field.
+func (mu *MenuUpdate) SetActiveMenu(s string) *MenuUpdate {
+	mu.mutation.SetActiveMenu(s)
+	return mu
+}
+
+// SetNillableActiveMenu sets the "active_menu" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableActiveMenu(s *string) *MenuUpdate {
+	if s != nil {
+		mu.SetActiveMenu(*s)
+	}
+	return mu
+}
+
+// ClearActiveMenu clears the value of the "active_menu" field.
+func (mu *MenuUpdate) ClearActiveMenu() *MenuUpdate {
+	mu.mutation.ClearActiveMenu()
+	return mu
+}
+
+// SetAffix sets the "affix" field.
+func (mu *MenuUpdate) SetAffix(b bool) *MenuUpdate {
+	mu.mutation.SetAffix(b)
+	return mu
+}
+
+// SetNillableAffix sets the "affix" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableAffix(b *bool) *MenuUpdate {
+	if b != nil {
+		mu.SetAffix(*b)
+	}
+	return mu
+}
+
+// ClearAffix clears the value of the "affix" field.
+func (mu *MenuUpdate) ClearAffix() *MenuUpdate {
+	mu.mutation.ClearAffix()
+	return mu
+}
+
+// SetNoCache sets the "no_cache" field.
+func (mu *MenuUpdate) SetNoCache(b bool) *MenuUpdate {
+	mu.mutation.SetNoCache(b)
+	return mu
+}
+
+// SetNillableNoCache sets the "no_cache" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableNoCache(b *bool) *MenuUpdate {
+	if b != nil {
+		mu.SetNoCache(*b)
+	}
+	return mu
+}
+
+// ClearNoCache clears the value of the "no_cache" field.
+func (mu *MenuUpdate) ClearNoCache() *MenuUpdate {
+	mu.mutation.ClearNoCache()
 	return mu
 }
 
@@ -330,6 +567,15 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.UpdatedAt(); ok {
 		_spec.SetField(menu.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := mu.mutation.Status(); ok {
+		_spec.SetField(menu.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.AddedStatus(); ok {
+		_spec.AddField(menu.FieldStatus, field.TypeInt64, value)
+	}
+	if mu.mutation.StatusCleared() {
+		_spec.ClearField(menu.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := mu.mutation.Path(); ok {
 		_spec.SetField(menu.FieldPath, field.TypeString, value)
 	}
@@ -339,11 +585,11 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.Name(); ok {
 		_spec.SetField(menu.FieldName, field.TypeString, value)
 	}
-	if value, ok := mu.mutation.OrderNo(); ok {
-		_spec.SetField(menu.FieldOrderNo, field.TypeInt64, value)
+	if value, ok := mu.mutation.Sort(); ok {
+		_spec.SetField(menu.FieldSort, field.TypeInt64, value)
 	}
-	if value, ok := mu.mutation.AddedOrderNo(); ok {
-		_spec.AddField(menu.FieldOrderNo, field.TypeInt64, value)
+	if value, ok := mu.mutation.AddedSort(); ok {
+		_spec.AddField(menu.FieldSort, field.TypeInt64, value)
 	}
 	if value, ok := mu.mutation.Disabled(); ok {
 		_spec.SetField(menu.FieldDisabled, field.TypeInt64, value)
@@ -359,6 +605,66 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.IgnoreCleared() {
 		_spec.ClearField(menu.FieldIgnore, field.TypeBool)
+	}
+	if value, ok := mu.mutation.Level(); ok {
+		_spec.SetField(menu.FieldLevel, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.AddedLevel(); ok {
+		_spec.AddField(menu.FieldLevel, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.MenuType(); ok {
+		_spec.SetField(menu.FieldMenuType, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.AddedMenuType(); ok {
+		_spec.AddField(menu.FieldMenuType, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.Redirect(); ok {
+		_spec.SetField(menu.FieldRedirect, field.TypeString, value)
+	}
+	if mu.mutation.RedirectCleared() {
+		_spec.ClearField(menu.FieldRedirect, field.TypeString)
+	}
+	if value, ok := mu.mutation.Component(); ok {
+		_spec.SetField(menu.FieldComponent, field.TypeString, value)
+	}
+	if mu.mutation.ComponentCleared() {
+		_spec.ClearField(menu.FieldComponent, field.TypeString)
+	}
+	if value, ok := mu.mutation.URL(); ok {
+		_spec.SetField(menu.FieldURL, field.TypeString, value)
+	}
+	if mu.mutation.URLCleared() {
+		_spec.ClearField(menu.FieldURL, field.TypeString)
+	}
+	if value, ok := mu.mutation.Hidden(); ok {
+		_spec.SetField(menu.FieldHidden, field.TypeBool, value)
+	}
+	if mu.mutation.HiddenCleared() {
+		_spec.ClearField(menu.FieldHidden, field.TypeBool)
+	}
+	if value, ok := mu.mutation.Title(); ok {
+		_spec.SetField(menu.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := mu.mutation.Icon(); ok {
+		_spec.SetField(menu.FieldIcon, field.TypeString, value)
+	}
+	if value, ok := mu.mutation.ActiveMenu(); ok {
+		_spec.SetField(menu.FieldActiveMenu, field.TypeString, value)
+	}
+	if mu.mutation.ActiveMenuCleared() {
+		_spec.ClearField(menu.FieldActiveMenu, field.TypeString)
+	}
+	if value, ok := mu.mutation.Affix(); ok {
+		_spec.SetField(menu.FieldAffix, field.TypeBool, value)
+	}
+	if mu.mutation.AffixCleared() {
+		_spec.ClearField(menu.FieldAffix, field.TypeBool)
+	}
+	if value, ok := mu.mutation.NoCache(); ok {
+		_spec.SetField(menu.FieldNoCache, field.TypeBool, value)
+	}
+	if mu.mutation.NoCacheCleared() {
+		_spec.ClearField(menu.FieldNoCache, field.TypeBool)
 	}
 	if mu.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -550,6 +856,33 @@ func (muo *MenuUpdateOne) SetUpdatedAt(t time.Time) *MenuUpdateOne {
 	return muo
 }
 
+// SetStatus sets the "status" field.
+func (muo *MenuUpdateOne) SetStatus(i int64) *MenuUpdateOne {
+	muo.mutation.ResetStatus()
+	muo.mutation.SetStatus(i)
+	return muo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableStatus(i *int64) *MenuUpdateOne {
+	if i != nil {
+		muo.SetStatus(*i)
+	}
+	return muo
+}
+
+// AddStatus adds i to the "status" field.
+func (muo *MenuUpdateOne) AddStatus(i int64) *MenuUpdateOne {
+	muo.mutation.AddStatus(i)
+	return muo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (muo *MenuUpdateOne) ClearStatus() *MenuUpdateOne {
+	muo.mutation.ClearStatus()
+	return muo
+}
+
 // SetParentID sets the "parent_id" field.
 func (muo *MenuUpdateOne) SetParentID(i int64) *MenuUpdateOne {
 	muo.mutation.SetParentID(i)
@@ -604,24 +937,24 @@ func (muo *MenuUpdateOne) SetNillableName(s *string) *MenuUpdateOne {
 	return muo
 }
 
-// SetOrderNo sets the "order_no" field.
-func (muo *MenuUpdateOne) SetOrderNo(i int64) *MenuUpdateOne {
-	muo.mutation.ResetOrderNo()
-	muo.mutation.SetOrderNo(i)
+// SetSort sets the "sort" field.
+func (muo *MenuUpdateOne) SetSort(i int64) *MenuUpdateOne {
+	muo.mutation.ResetSort()
+	muo.mutation.SetSort(i)
 	return muo
 }
 
-// SetNillableOrderNo sets the "order_no" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableOrderNo(i *int64) *MenuUpdateOne {
+// SetNillableSort sets the "sort" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableSort(i *int64) *MenuUpdateOne {
 	if i != nil {
-		muo.SetOrderNo(*i)
+		muo.SetSort(*i)
 	}
 	return muo
 }
 
-// AddOrderNo adds i to the "order_no" field.
-func (muo *MenuUpdateOne) AddOrderNo(i int64) *MenuUpdateOne {
-	muo.mutation.AddOrderNo(i)
+// AddSort adds i to the "sort" field.
+func (muo *MenuUpdateOne) AddSort(i int64) *MenuUpdateOne {
+	muo.mutation.AddSort(i)
 	return muo
 }
 
@@ -669,6 +1002,216 @@ func (muo *MenuUpdateOne) SetNillableIgnore(b *bool) *MenuUpdateOne {
 // ClearIgnore clears the value of the "ignore" field.
 func (muo *MenuUpdateOne) ClearIgnore() *MenuUpdateOne {
 	muo.mutation.ClearIgnore()
+	return muo
+}
+
+// SetLevel sets the "level" field.
+func (muo *MenuUpdateOne) SetLevel(i int64) *MenuUpdateOne {
+	muo.mutation.ResetLevel()
+	muo.mutation.SetLevel(i)
+	return muo
+}
+
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableLevel(i *int64) *MenuUpdateOne {
+	if i != nil {
+		muo.SetLevel(*i)
+	}
+	return muo
+}
+
+// AddLevel adds i to the "level" field.
+func (muo *MenuUpdateOne) AddLevel(i int64) *MenuUpdateOne {
+	muo.mutation.AddLevel(i)
+	return muo
+}
+
+// SetMenuType sets the "menu_type" field.
+func (muo *MenuUpdateOne) SetMenuType(i int64) *MenuUpdateOne {
+	muo.mutation.ResetMenuType()
+	muo.mutation.SetMenuType(i)
+	return muo
+}
+
+// SetNillableMenuType sets the "menu_type" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableMenuType(i *int64) *MenuUpdateOne {
+	if i != nil {
+		muo.SetMenuType(*i)
+	}
+	return muo
+}
+
+// AddMenuType adds i to the "menu_type" field.
+func (muo *MenuUpdateOne) AddMenuType(i int64) *MenuUpdateOne {
+	muo.mutation.AddMenuType(i)
+	return muo
+}
+
+// SetRedirect sets the "redirect" field.
+func (muo *MenuUpdateOne) SetRedirect(s string) *MenuUpdateOne {
+	muo.mutation.SetRedirect(s)
+	return muo
+}
+
+// SetNillableRedirect sets the "redirect" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableRedirect(s *string) *MenuUpdateOne {
+	if s != nil {
+		muo.SetRedirect(*s)
+	}
+	return muo
+}
+
+// ClearRedirect clears the value of the "redirect" field.
+func (muo *MenuUpdateOne) ClearRedirect() *MenuUpdateOne {
+	muo.mutation.ClearRedirect()
+	return muo
+}
+
+// SetComponent sets the "component" field.
+func (muo *MenuUpdateOne) SetComponent(s string) *MenuUpdateOne {
+	muo.mutation.SetComponent(s)
+	return muo
+}
+
+// SetNillableComponent sets the "component" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableComponent(s *string) *MenuUpdateOne {
+	if s != nil {
+		muo.SetComponent(*s)
+	}
+	return muo
+}
+
+// ClearComponent clears the value of the "component" field.
+func (muo *MenuUpdateOne) ClearComponent() *MenuUpdateOne {
+	muo.mutation.ClearComponent()
+	return muo
+}
+
+// SetURL sets the "url" field.
+func (muo *MenuUpdateOne) SetURL(s string) *MenuUpdateOne {
+	muo.mutation.SetURL(s)
+	return muo
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableURL(s *string) *MenuUpdateOne {
+	if s != nil {
+		muo.SetURL(*s)
+	}
+	return muo
+}
+
+// ClearURL clears the value of the "url" field.
+func (muo *MenuUpdateOne) ClearURL() *MenuUpdateOne {
+	muo.mutation.ClearURL()
+	return muo
+}
+
+// SetHidden sets the "hidden" field.
+func (muo *MenuUpdateOne) SetHidden(b bool) *MenuUpdateOne {
+	muo.mutation.SetHidden(b)
+	return muo
+}
+
+// SetNillableHidden sets the "hidden" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableHidden(b *bool) *MenuUpdateOne {
+	if b != nil {
+		muo.SetHidden(*b)
+	}
+	return muo
+}
+
+// ClearHidden clears the value of the "hidden" field.
+func (muo *MenuUpdateOne) ClearHidden() *MenuUpdateOne {
+	muo.mutation.ClearHidden()
+	return muo
+}
+
+// SetTitle sets the "title" field.
+func (muo *MenuUpdateOne) SetTitle(s string) *MenuUpdateOne {
+	muo.mutation.SetTitle(s)
+	return muo
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableTitle(s *string) *MenuUpdateOne {
+	if s != nil {
+		muo.SetTitle(*s)
+	}
+	return muo
+}
+
+// SetIcon sets the "icon" field.
+func (muo *MenuUpdateOne) SetIcon(s string) *MenuUpdateOne {
+	muo.mutation.SetIcon(s)
+	return muo
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableIcon(s *string) *MenuUpdateOne {
+	if s != nil {
+		muo.SetIcon(*s)
+	}
+	return muo
+}
+
+// SetActiveMenu sets the "active_menu" field.
+func (muo *MenuUpdateOne) SetActiveMenu(s string) *MenuUpdateOne {
+	muo.mutation.SetActiveMenu(s)
+	return muo
+}
+
+// SetNillableActiveMenu sets the "active_menu" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableActiveMenu(s *string) *MenuUpdateOne {
+	if s != nil {
+		muo.SetActiveMenu(*s)
+	}
+	return muo
+}
+
+// ClearActiveMenu clears the value of the "active_menu" field.
+func (muo *MenuUpdateOne) ClearActiveMenu() *MenuUpdateOne {
+	muo.mutation.ClearActiveMenu()
+	return muo
+}
+
+// SetAffix sets the "affix" field.
+func (muo *MenuUpdateOne) SetAffix(b bool) *MenuUpdateOne {
+	muo.mutation.SetAffix(b)
+	return muo
+}
+
+// SetNillableAffix sets the "affix" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableAffix(b *bool) *MenuUpdateOne {
+	if b != nil {
+		muo.SetAffix(*b)
+	}
+	return muo
+}
+
+// ClearAffix clears the value of the "affix" field.
+func (muo *MenuUpdateOne) ClearAffix() *MenuUpdateOne {
+	muo.mutation.ClearAffix()
+	return muo
+}
+
+// SetNoCache sets the "no_cache" field.
+func (muo *MenuUpdateOne) SetNoCache(b bool) *MenuUpdateOne {
+	muo.mutation.SetNoCache(b)
+	return muo
+}
+
+// SetNillableNoCache sets the "no_cache" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableNoCache(b *bool) *MenuUpdateOne {
+	if b != nil {
+		muo.SetNoCache(*b)
+	}
+	return muo
+}
+
+// ClearNoCache clears the value of the "no_cache" field.
+func (muo *MenuUpdateOne) ClearNoCache() *MenuUpdateOne {
+	muo.mutation.ClearNoCache()
 	return muo
 }
 
@@ -874,6 +1417,15 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 	if value, ok := muo.mutation.UpdatedAt(); ok {
 		_spec.SetField(menu.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := muo.mutation.Status(); ok {
+		_spec.SetField(menu.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.AddedStatus(); ok {
+		_spec.AddField(menu.FieldStatus, field.TypeInt64, value)
+	}
+	if muo.mutation.StatusCleared() {
+		_spec.ClearField(menu.FieldStatus, field.TypeInt64)
+	}
 	if value, ok := muo.mutation.Path(); ok {
 		_spec.SetField(menu.FieldPath, field.TypeString, value)
 	}
@@ -883,11 +1435,11 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 	if value, ok := muo.mutation.Name(); ok {
 		_spec.SetField(menu.FieldName, field.TypeString, value)
 	}
-	if value, ok := muo.mutation.OrderNo(); ok {
-		_spec.SetField(menu.FieldOrderNo, field.TypeInt64, value)
+	if value, ok := muo.mutation.Sort(); ok {
+		_spec.SetField(menu.FieldSort, field.TypeInt64, value)
 	}
-	if value, ok := muo.mutation.AddedOrderNo(); ok {
-		_spec.AddField(menu.FieldOrderNo, field.TypeInt64, value)
+	if value, ok := muo.mutation.AddedSort(); ok {
+		_spec.AddField(menu.FieldSort, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.Disabled(); ok {
 		_spec.SetField(menu.FieldDisabled, field.TypeInt64, value)
@@ -903,6 +1455,66 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 	}
 	if muo.mutation.IgnoreCleared() {
 		_spec.ClearField(menu.FieldIgnore, field.TypeBool)
+	}
+	if value, ok := muo.mutation.Level(); ok {
+		_spec.SetField(menu.FieldLevel, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.AddedLevel(); ok {
+		_spec.AddField(menu.FieldLevel, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.MenuType(); ok {
+		_spec.SetField(menu.FieldMenuType, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.AddedMenuType(); ok {
+		_spec.AddField(menu.FieldMenuType, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.Redirect(); ok {
+		_spec.SetField(menu.FieldRedirect, field.TypeString, value)
+	}
+	if muo.mutation.RedirectCleared() {
+		_spec.ClearField(menu.FieldRedirect, field.TypeString)
+	}
+	if value, ok := muo.mutation.Component(); ok {
+		_spec.SetField(menu.FieldComponent, field.TypeString, value)
+	}
+	if muo.mutation.ComponentCleared() {
+		_spec.ClearField(menu.FieldComponent, field.TypeString)
+	}
+	if value, ok := muo.mutation.URL(); ok {
+		_spec.SetField(menu.FieldURL, field.TypeString, value)
+	}
+	if muo.mutation.URLCleared() {
+		_spec.ClearField(menu.FieldURL, field.TypeString)
+	}
+	if value, ok := muo.mutation.Hidden(); ok {
+		_spec.SetField(menu.FieldHidden, field.TypeBool, value)
+	}
+	if muo.mutation.HiddenCleared() {
+		_spec.ClearField(menu.FieldHidden, field.TypeBool)
+	}
+	if value, ok := muo.mutation.Title(); ok {
+		_spec.SetField(menu.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := muo.mutation.Icon(); ok {
+		_spec.SetField(menu.FieldIcon, field.TypeString, value)
+	}
+	if value, ok := muo.mutation.ActiveMenu(); ok {
+		_spec.SetField(menu.FieldActiveMenu, field.TypeString, value)
+	}
+	if muo.mutation.ActiveMenuCleared() {
+		_spec.ClearField(menu.FieldActiveMenu, field.TypeString)
+	}
+	if value, ok := muo.mutation.Affix(); ok {
+		_spec.SetField(menu.FieldAffix, field.TypeBool, value)
+	}
+	if muo.mutation.AffixCleared() {
+		_spec.ClearField(menu.FieldAffix, field.TypeBool)
+	}
+	if value, ok := muo.mutation.NoCache(); ok {
+		_spec.SetField(menu.FieldNoCache, field.TypeBool, value)
+	}
+	if muo.mutation.NoCacheCleared() {
+		_spec.ClearField(menu.FieldNoCache, field.TypeBool)
 	}
 	if muo.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{

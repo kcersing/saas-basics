@@ -52,6 +52,16 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/api": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/api/create": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/api/list": {
             "post": {
                 "description": "获取api列表 Description",
@@ -100,6 +110,11 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/service/api/update": {
+            "post": {
+                "responses": {}
             }
         },
         "/service/auth/api/create": {
@@ -1089,6 +1104,16 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/menu": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/menu/create": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/menu/list": {
             "post": {
                 "description": "获取菜单列表 Description",
@@ -1151,6 +1176,11 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/service/menu/update": {
+            "post": {
+                "responses": {}
             }
         },
         "/service/place/create": {

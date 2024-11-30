@@ -36,12 +36,12 @@ func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
 		cache: cache.Cache,
 	}
 }
-func (m Menu) Create(menuReq *menu.MenuInfo) error {
+func (m Menu) Create(menuReq *menu.CreateOrUpdateMenuReq) error {
 	// get menu level
-	if menuReq.ParentID == 0 {
+	if menuReq.ParentId == 0 {
 		// it is a first level menu
-		menuReq.ParentID = 1
-		//menuReq.Level = 1
+		menuReq.ParentId = 1
+		menuReq.Level = 1
 	}
 	//else {
 	//// it is a children level menu
@@ -56,30 +56,23 @@ func (m Menu) Create(menuReq *menu.MenuInfo) error {
 
 	// create menu
 	err := m.db.Menu.Create().
-		SetParentID(menuReq.ParentID).
+		SetParentID(menuReq.ParentId).
 		SetPath(menuReq.Path).
 		SetName(menuReq.Name).
-		SetOrderNo(menuReq.OrderNo).
-		SetDisabled(menuReq.Disabled).
-
-		//SetMenuLevel(menuReq.Level).
-		//SetMenuType(menuReq.MenuType).
-		//SetRedirect(menuReq.Redirect).
-		//SetComponent(menuReq.Component).
+		SetLevel(menuReq.Level).
+		SetMenuType(menuReq.MenuType).
+		SetRedirect(menuReq.Redirect).
+		SetComponent(menuReq.Component).
+		SetHidden(menuReq.Hidden).
+		SetURL(menuReq.URL).
+		SetStatus(menuReq.Status).
+		SetSort(menuReq.Sort).
 		// meta
-		//SetTitle(menuReq.Meta.Title).
-		//SetIcon(menuReq.Meta.Icon).
-		//SetHideMenu(menuReq.Meta.HideMenu).
-		//SetHideBreadcrumb(menuReq.Meta.HideBreadcrumb).
-		//SetCurrentActiveMenu(menuReq.Meta.CurrentActiveMenu).
-		//SetIgnoreKeepAlive(menuReq.Meta.IgnoreKeepAlive).
-		//SetHideTab(menuReq.Meta.HideTab).
-		//SetFrameSrc(menuReq.Meta.FrameSrc).
-		//SetCarryParam(menuReq.Meta.CarryParam).
-		//SetHideChildrenInMenu(menuReq.Meta.HideChildrenInMenu).
-		//SetAffix(menuReq.Meta.Affix).
-		//SetDynamicLevel(menuReq.Meta.DynamicLevel).
-		//SetRealPath(menuReq.Meta.RealPath).
+		SetTitle(menuReq.Title).
+		SetIcon(menuReq.Icon).
+		SetActiveMenu(menuReq.ActiveMenu).
+		SetAffix(menuReq.Affix).
+		SetNoCache(menuReq.NoCache).
 		Exec(m.ctx)
 
 	if err != nil {
@@ -88,12 +81,12 @@ func (m Menu) Create(menuReq *menu.MenuInfo) error {
 	return nil
 }
 
-func (m Menu) Update(menuReq *menu.MenuInfo) error {
+func (m Menu) Update(menuReq *menu.CreateOrUpdateMenuReq) error {
 	// get menu level
-	if menuReq.ParentID == 0 {
+	if menuReq.ParentId == 0 {
 		// it is a first level menu
-		menuReq.ParentID = 1
-		//menuReq.Level = 1
+		menuReq.ParentId = 1
+		menuReq.Level = 1
 	}
 	//else {
 	//// it is a children level menu
@@ -108,30 +101,22 @@ func (m Menu) Update(menuReq *menu.MenuInfo) error {
 
 	// update menu
 	err := m.db.Menu.UpdateOneID(menuReq.ID).
-		SetParentID(menuReq.ParentID).
+		SetParentID(menuReq.ParentId).
 		SetPath(menuReq.Path).
 		SetName(menuReq.Name).
-		SetOrderNo(menuReq.OrderNo).
-
-		//SetMenuLevel(menuReq.Level).
-		//SetMenuType(menuReq.MenuType).
-		//SetRedirect(menuReq.Redirect).
-		//SetComponent(menuReq.Component).
-		SetDisabled(menuReq.Disabled).
+		SetLevel(menuReq.Level).
+		SetMenuType(menuReq.MenuType).
+		SetRedirect(menuReq.Redirect).
+		SetComponent(menuReq.Component).
+		SetHidden(menuReq.Hidden).
+		SetURL(menuReq.URL).
+		SetStatus(menuReq.Status).
 		// meta
-		//SetTitle(menuReq.Meta.Title).
-		//SetIcon(menuReq.Meta.Icon).
-		//SetHideMenu(menuReq.Meta.HideMenu).
-		//SetHideBreadcrumb(menuReq.Meta.HideBreadcrumb).
-		//SetCurrentActiveMenu(menuReq.Meta.CurrentActiveMenu).
-		//SetIgnoreKeepAlive(menuReq.Meta.IgnoreKeepAlive).
-		//SetHideTab(menuReq.Meta.HideTab).
-		//SetFrameSrc(menuReq.Meta.FrameSrc).
-		//SetCarryParam(menuReq.Meta.CarryParam).
-		//SetHideChildrenInMenu(menuReq.Meta.HideChildrenInMenu).
-		//SetAffix(menuReq.Meta.Affix).
-		//SetDynamicLevel(menuReq.Meta.DynamicLevel).
-		//SetRealPath(menuReq.Meta.RealPath).
+		SetTitle(menuReq.Title).
+		SetIcon(menuReq.Icon).
+		SetActiveMenu(menuReq.ActiveMenu).
+		SetAffix(menuReq.Affix).
+		SetNoCache(menuReq.NoCache).
 		Exec(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "update menu failed")
@@ -168,7 +153,7 @@ func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error) {
 		QueryMenus().
 		Where(menu2.DisabledEQ(0)).
 		//WithChildren().
-		Order(ent.Asc(menu2.FieldOrderNo)).
+		Order(ent.Asc(menu2.FieldSort)).
 		All(m.ctx)
 
 	if err != nil {
@@ -182,7 +167,7 @@ func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error) {
 
 func (m Menu) List(req *base.PageInfoReq) (list []*menu.MenuInfoTree, total int, err error) {
 	// query menu list
-	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldOrderNo)).
+	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
@@ -200,7 +185,7 @@ func (m Menu) MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error) {
 			return v, nil
 		}
 	}
-	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldOrderNo)).
+	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
@@ -302,36 +287,31 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*menu.MenuInfoTree {
 
 		if v.ParentID == parentID && v.ID != parentID {
 			var m = new(menu.MenuInfoTree)
+			m.MenuInfo.ParentId = v.ParentID
+			m.MenuInfo.Path = v.Path
 			m.MenuInfo.ID = v.ID
 			m.MenuInfo.Name = v.Name
-			m.MenuInfo.Key = v.Path
-			m.MenuInfo.OrderNo = v.OrderNo
+			m.MenuInfo.Level = v.Level
+			m.MenuInfo.MenuType = v.MenuType
+			m.MenuInfo.Redirect = v.Redirect
+
+			m.MenuInfo.Component = v.Component
+			m.MenuInfo.Hidden = v.Hidden
+			m.MenuInfo.URL = v.URL
+			m.MenuInfo.Status = v.Status
+			m.MenuInfo.Sort = v.Sort
 			m.Ignore = v.Ignore
-			//m.CreatedAt = v.CreatedAt.Format(time.DateTime)
-			//m.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
-			//m.MenuType = v.MenuType
-			//m.Level = v.MenuLevel
 
-			//	Title:              v.Name,
-			//m.ParentID = v.ParentID
-			//m.Path = v.Path
-			//m.Redirect = v.Redirect
-			//m.Component = v.Component
+			m.CreatedAt = v.CreatedAt.Format(time.DateTime)
+			m.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
 
-			//m.Meta = &do.MenuMeta{
-			//	Icon:               v.Icon,
-			//	HideMenu:           v.HideMenu,
-			//	HideBreadcrumb:     v.HideBreadcrumb,
-			//	CurrentActiveMenu:  v.CurrentActiveMenu,
-			//	IgnoreKeepAlive:    v.IgnoreKeepAlive,
-			//	HideTab:            v.HideTab,
-			//	FrameSrc:           v.FrameSrc,
-			//	CarryParam:         v.CarryParam,
-			//	HideChildrenInMenu: v.HideChildrenInMenu,
-			//	Affix:              v.Affix,
-			//	DynamicLevel:       v.DynamicLevel,
-			//	RealPath:           v.RealPath,
-			//}
+			m.MenuInfo.Meta = &menu.Meta{
+				Icon:       v.Icon,
+				Title:      v.Title,
+				ActiveMenu: v.ActiveMenu,
+				NoCache:    v.NoCache,
+				Affix:      v.Affix,
+			}
 
 			m.Children = findMenuChildren(data, v.ID)
 			result = append(result, m)

@@ -174,3 +174,99 @@ func MenuRole(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, menuInfos, 0, "")
 	return
 }
+
+// CreateApi .
+// @router /service/api/create [POST]
+func CreateApi(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req menu.ApiInfo
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// UpdateApi .
+// @router /service/api/update [POST]
+func UpdateApi(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req menu.ApiInfo
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// DeleteApi .
+// @router /service/api [POST]
+func DeleteApi(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// CreateMenu .
+// @router /service/menu/create [POST]
+func CreateMenu(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req menu.CreateOrUpdateMenuReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// UpdateMenu .
+// @router /service/menu/update [POST]
+func UpdateMenu(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req menu.CreateOrUpdateMenuReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// DeleteMenu .
+// @router /service/menu [POST]
+func DeleteMenu(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
