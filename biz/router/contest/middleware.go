@@ -4,6 +4,8 @@ package contest
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"saas/biz/dal/casbin"
+	"saas/biz/handler/mw"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -78,7 +80,10 @@ func _updateparticipantMw() []app.HandlerFunc {
 
 func _serviceMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.GetJWTMw(casbin.CasbinEnforcer()).MiddlewareFunc(),
+		mw.LogMw(),
+	}
 }
 
 func _participantMw() []app.HandlerFunc {

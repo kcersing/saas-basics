@@ -4,11 +4,16 @@ package dictionary
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"saas/biz/dal/casbin"
+	"saas/biz/handler/mw"
 )
 
 func rootMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.GetJWTMw(casbin.CasbinEnforcer()).MiddlewareFunc(),
+		mw.LogMw(),
+	}
 }
 
 func _serviceMw() []app.HandlerFunc {
