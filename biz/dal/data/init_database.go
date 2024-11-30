@@ -171,7 +171,7 @@ func (I *InitDatabase) insertUserData(ctx context.Context) error {
 		SetMobile("12345678901").
 		SetFunctions("{}").
 		SetRoleID(1),
-	//SetWecom("idl"),
+		//SetWecom("idl"),
 	)
 
 	err := I.DB.User.CreateBulk(users...).Exec(ctx)
@@ -237,7 +237,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 		SetPath("").
 		SetName("root")
 	//SetComponent("").
-	//SetOrderNo(0).
+	//SetSort(0).
 	//SetTitle("").
 	//SetIcon("").
 	//SetHideMenu(false)
@@ -245,110 +245,110 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	menus[1] = I.DB.Menu.Create().
 		SetPath("dashboard").
 		SetParentID(1).
-		SetName("仪表盘").SetOrderNo(0)
+		SetName("仪表盘").SetSort(0)
 	menus[2] = I.DB.Menu.Create().
 		SetPath("sys").
 		SetParentID(1).
-		SetName("系统管理").SetOrderNo(7)
+		SetName("系统管理").SetSort(7)
 	menus[3] = I.DB.Menu.Create().
 		SetPath("devops").
 		SetParentID(1).
-		SetName("运维管理").SetOrderNo(8)
+		SetName("运维管理").SetSort(8)
 	menus[4] = I.DB.Menu.Create().
 		SetPath("orders").
 		SetParentID(1).
-		SetName("订单管理").SetOrderNo(3)
+		SetName("订单管理").SetSort(3)
 	menus[5] = I.DB.Menu.Create().
 		SetPath("products").
 		SetParentID(1).
-		SetName("产品管理").SetOrderNo(2)
+		SetName("产品管理").SetSort(2)
 	menus[6] = I.DB.Menu.Create().
 		SetPath("members").
 		SetParentID(1).
-		SetName("会员管理").SetOrderNo(1)
+		SetName("会员管理").SetSort(1)
 	menus[7] = I.DB.Menu.Create().
 		SetPath("schedules").
 		SetParentID(1).
-		SetName("预约排期").SetOrderNo(4)
+		SetName("预约排期").SetSort(4)
 	menus[8] = I.DB.Menu.Create().
 		SetPath("statisticals").
 		SetParentID(1).
-		SetName("数据分析").SetOrderNo(6)
+		SetName("数据分析").SetSort(6)
 
 	menus[9] = I.DB.Menu.Create().
 		SetPath("dashboard/workplace").
 		SetParentID(2).
-		SetName("控制台").SetOrderNo(0)
+		SetName("控制台").SetSort(0)
 
 	menus[10] = I.DB.Menu.Create().
 		SetPath("sys/role").
 		SetParentID(3).
-		SetName("角色管理").SetOrderNo(1)
+		SetName("角色管理").SetSort(1)
 	menus[11] = I.DB.Menu.Create().
 		SetPath("sys/user").
 		SetParentID(3).
-		SetName("用户管理").SetOrderNo(2)
+		SetName("用户管理").SetSort(2)
 	menus[12] = I.DB.Menu.Create().
 		SetPath("sys/dictionary").
 		SetParentID(3).
-		SetName("字典管理").SetOrderNo(3)
+		SetName("字典管理").SetSort(3)
 	menus[13] = I.DB.Menu.Create().
 		SetPath("sys/venue").
 		SetParentID(3).
-		SetName("场馆管理").SetOrderNo(4)
+		SetName("场馆管理").SetSort(4)
 	menus[14] = I.DB.Menu.Create().
 		SetPath("sys/place").
 		SetParentID(3).
-		SetName("场地管理").SetOrderNo(5)
+		SetName("场地管理").SetSort(5)
 	menus[15] = I.DB.Menu.Create().
 		SetPath("sys/contract").
 		SetParentID(3).
-		SetName("合同管理").SetOrderNo(6)
+		SetName("合同管理").SetSort(6)
 
 	menus[16] = I.DB.Menu.Create().
 		SetPath("devops/logs").
 		SetParentID(4).
-		SetName("日志管理").SetOrderNo(0)
+		SetName("日志管理").SetSort(0)
 
 	menus[17] = I.DB.Menu.Create().
 		SetPath("orders/add").
 		SetParentID(5).
-		SetName("创建订单").SetOrderNo(0)
+		SetName("创建订单").SetSort(0)
 	menus[18] = I.DB.Menu.Create().
 		SetPath("orders/list").
 		SetParentID(5).
-		SetName("订单列表").SetOrderNo(1)
+		SetName("订单列表").SetSort(1)
 
 	menus[19] = I.DB.Menu.Create().
 		SetPath("products/product").
 		SetParentID(6).
-		SetName("产品列表").SetOrderNo(0)
+		SetName("产品列表").SetSort(0)
 	menus[20] = I.DB.Menu.Create().
 		SetPath("products/property").
 		SetParentID(6).
-		SetName("属性列表").SetOrderNo(1)
+		SetName("属性列表").SetSort(1)
 
 	menus[21] = I.DB.Menu.Create().
 		SetPath("members/list").
 		SetParentID(7).
-		SetName("会员列表").SetOrderNo(0)
+		SetName("会员列表").SetSort(0)
 	menus[22] = I.DB.Menu.Create().
 		SetPath("schedules/schedule").
 		SetParentID(8).
-		SetName("团课课程").SetOrderNo(0)
+		SetName("团课课程").SetSort(0)
 	menus[23] = I.DB.Menu.Create().
 		SetPath("schedules/course").
 		SetParentID(8).
-		SetName("私教课程").SetOrderNo(0)
+		SetName("私教课程").SetSort(0)
 	menus[24] = I.DB.Menu.Create().
 		SetPath("statisticals/all").
 		SetParentID(9).
-		SetName("数据汇总").SetOrderNo(0)
+		SetName("数据汇总").SetSort(0)
 
 	menus[25] = I.DB.Menu.Create().
 		SetPath("members/details").
 		SetParentID(7).
-		SetName("会员详情").SetOrderNo(0).SetIgnore(true)
+		SetName("会员详情").SetSort(0).SetIgnore(true)
 	//
 	//menus[2] = I.DB.Menu.Create().
 	//	SetMenuLevel(1).
@@ -357,7 +357,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/").
 	//	SetName("SystemManagement").
 	//	SetComponent("LAYOUT").
-	//	SetOrderNo(19).
+	//	SetSort(19).
 	//	SetTitle("系统管理").
 	//	SetIcon("ant-design:tool-outlined").
 	//	SetHideMenu(false)
@@ -369,7 +369,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/").
 	//	SetName("Maintenance").
 	//	SetComponent("LAYOUT").
-	//	SetOrderNo(21).
+	//	SetSort(21).
 	//	SetTitle("运维管理").
 	//	SetIcon("ant-design:bar-chart-outlined").
 	//	SetHideMenu(false)
@@ -381,7 +381,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/menu").
 	//	SetName("MenuManagement").
 	//	SetComponent("sys/menu/index").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("菜单管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -393,7 +393,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/role").
 	//	SetName("RoleManagement").
 	//	SetComponent("sys/role/index").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("角色管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -405,7 +405,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/api").
 	//	SetName("APIManagement").
 	//	SetComponent("sys/api/index").
-	//	SetOrderNo(3).
+	//	SetSort(3).
 	//	SetTitle("API管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -417,7 +417,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/user").
 	//	SetName("UserManagement").
 	//	SetComponent("sys/user/index").
-	//	SetOrderNo(2).
+	//	SetSort(2).
 	//	SetTitle("用户管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -429,7 +429,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/dictionary").
 	//	SetName("DictionaryManagement").
 	//	SetComponent("sys/dictionary/index").
-	//	SetOrderNo(3).
+	//	SetSort(3).
 	//	SetTitle("字典管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -441,7 +441,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/dictionary/detail").
 	//	SetName("DictionaryDetail").
 	//	SetComponent("sys/dictionary/detail").
-	//	SetOrderNo(4).
+	//	SetSort(4).
 	//	SetTitle("字典明细").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -453,7 +453,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/order").
 	//	SetName("Order").
 	//	SetComponent("LAYOUT").
-	//	SetOrderNo(4).
+	//	SetSort(4).
 	//	SetTitle("订单管理").
 	//	SetIcon("ant-design:property-safety-outlined").
 	//	SetHideMenu(false)
@@ -465,7 +465,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/logs").
 	//	SetName("LogsManagement").
 	//	SetComponent("sys/logs/index").
-	//	SetOrderNo(9).
+	//	SetSort(9).
 	//	SetTitle("日志管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -477,7 +477,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/").
 	//	SetName("OtherPages").
 	//	SetComponent("LAYOUT").
-	//	SetOrderNo(2).
+	//	SetSort(2).
 	//	SetTitle("其他页面").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -489,7 +489,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/oauth/callback").
 	//	SetName("OauthCallbackPage").
 	//	SetComponent("sys/oauth/callback").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("回调页面").
 	//	SetIcon("").
 	//	SetHideMenu(true)
@@ -501,7 +501,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/profile").
 	//	SetName("Profile").
 	//	SetComponent("sys/profile/index").
-	//	SetOrderNo(2).
+	//	SetSort(2).
 	//	SetTitle("用户信息").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -513,7 +513,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/product").
 	//	SetName("Product").
 	//	SetComponent("LAYOUT").
-	//	SetOrderNo(3).
+	//	SetSort(3).
 	//	SetTitle("产品管理").
 	//	SetIcon("ant-design:inbox-outlined").
 	//	SetHideMenu(false)
@@ -525,7 +525,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/product").
 	//	SetName("ProductList").
 	//	SetComponent("sys/product/index").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("产品列表").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -537,7 +537,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/property").
 	//	SetName("PropertyList").
 	//	SetComponent("sys/property/index").
-	//	SetOrderNo(2).
+	//	SetSort(2).
 	//	SetTitle("属性列表").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -549,7 +549,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/order").
 	//	SetName("OrderList").
 	//	SetComponent("sys/order/index").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("订单列表").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -561,7 +561,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("/").
 	//	SetName("Member").
 	//	SetComponent("LAYOUT").
-	//	SetOrderNo(3).
+	//	SetSort(3).
 	//	SetTitle("会员管理").
 	//	SetIcon("ant-design:team-outlined").
 	//	SetHideMenu(false)
@@ -573,7 +573,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/member").
 	//	SetName("MemberList").
 	//	SetComponent("sys/member/index").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("会员列表").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -585,7 +585,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("/").
 	//	SetName("Schedule").
 	//	SetComponent("LAYOUT").
-	//	SetOrderNo(3).
+	//	SetSort(3).
 	//	SetTitle("预约排期").
 	//	SetIcon("ant-design:schedule-outlined").
 	//	SetHideMenu(false)
@@ -597,7 +597,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/schedule").
 	//	SetName("ScheduleReservation").
 	//	SetComponent("sys/schedule/index").
-	//	SetOrderNo(8).
+	//	SetSort(8).
 	//	SetTitle("课程预约").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -609,7 +609,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("/").
 	//	SetName("Statistical").
 	//	SetComponent("LAYOUT").
-	//	SetOrderNo(18).
+	//	SetSort(18).
 	//	SetTitle("数据分析").
 	//	SetIcon("ant-design:bar-chart-outlined").
 	//	SetHideMenu(false)
@@ -621,7 +621,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/statistical").
 	//	SetName("StatisticalAll").
 	//	SetComponent("sys/statistical/index").
-	//	SetOrderNo(8).
+	//	SetSort(8).
 	//	SetTitle("数据汇总").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -633,7 +633,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/token").
 	//	SetName("TokenManagement").
 	//	SetComponent("sys/token/index").
-	//	SetOrderNo(8).
+	//	SetSort(8).
 	//	SetTitle("Token管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -645,7 +645,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/venue").
 	//	SetName("Venue").
 	//	SetComponent("sys/venue/index").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("场馆管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -657,7 +657,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/venue/place").
 	//	SetName("VenuePlace").
 	//	SetComponent("sys/venue/place").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("场地管理").
 	//	SetIcon("").
 	//	SetHideMenu(true)
@@ -669,7 +669,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/contract").
 	//	SetName("Contract").
 	//	SetComponent("sys/contract/index").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("合同管理").
 	//	SetIcon("").
 	//	SetHideMenu(false)
@@ -681,7 +681,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("sys/order/add").
 	//	SetName("AddOrder").
 	//	SetComponent("sys/order/add").
-	//	SetOrderNo(1).
+	//	SetSort(1).
 	//	SetTitle("添加订单").
 	//	SetIcon("").
 	//	SetHideMenu(true)
@@ -693,7 +693,7 @@ func (I *InitDatabase) insertMenuData(ctx context.Context) error {
 	//	SetPath("dashboard/workplace").
 	//	SetName("Dashboard").
 	//	SetComponent("dashboard/workplace/index").
-	//	SetOrderNo(0).
+	//	SetSort(0).
 	//	SetTitle("控制台").
 	//	SetIcon("ant-design:home-outlined").
 	//	SetHideMenu(false)
