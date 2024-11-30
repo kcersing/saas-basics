@@ -125,9 +125,9 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	v, exist := c.Get("user_id")
+	v, exist := c.Get("userId")
 	if !exist || v == nil {
-		c.JSON(consts.StatusUnauthorized, "Unauthorized")
+		c.JSON(consts.StatusUnauthorized, "Unauthorized not userId")
 		return
 	}
 	i, err := strconv.Atoi(v.(string))

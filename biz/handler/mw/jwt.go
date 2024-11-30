@@ -62,8 +62,8 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			}
 			hlog.Info("IdentityHandler")
 			hlog.Info(payloadMap)
-			c.Set("role_id", payloadMap["role_id"])
-			c.Set("user_id", payloadMap["user_id"])
+			c.Set("roleId", payloadMap["roleId"])
+			c.Set("userId", payloadMap["userId"])
 			return payloadMap
 		},
 		// Authenticator is used to validate the login data.
@@ -97,8 +97,8 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			}
 
 			payLoadMap := make(map[string]interface{})
-			payLoadMap["role_id"] = strconv.Itoa(int(res.RoleId))
-			payLoadMap["user_id"] = strconv.Itoa(int(res.UserId))
+			payLoadMap["roleId"] = strconv.Itoa(int(res.RoleId))
+			payLoadMap["userId"] = strconv.Itoa(int(res.UserId))
 			return payLoadMap, nil
 		},
 		// Authorizator is used to validate the authentication of the current request.
@@ -110,8 +110,8 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				hlog.Error("get payloadMap error:", " claims data:", data)
 				return false
 			}
-			roleId := payloadMap["role_id"].(string)
-			userId := payloadMap["user_id"].(string)
+			roleId := payloadMap["roleId"].(string)
+			userId := payloadMap["userId"].(string)
 
 			hlog.Info("Authorizator")
 			hlog.Info(payloadMap)

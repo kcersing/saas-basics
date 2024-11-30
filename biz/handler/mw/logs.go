@@ -39,7 +39,7 @@ func LogMw() app.HandlerFunc {
 		costTime := time.Since(start).Milliseconds()
 		logs.Time = int64(int32(costTime))
 
-		v, exist := c.Get("user_id")
+		v, exist := c.Get("userId")
 		if exist || v == nil {
 			v = "0"
 		}
