@@ -150,7 +150,11 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	l, err := service.NewLogin(ctx, c).Login(req.Username, req.Password)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, l, 0, "")
+	return
 }

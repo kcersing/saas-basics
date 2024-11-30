@@ -16,4 +16,9 @@ func Init() {
 	data.NewInitDatabase()
 	casbin.InitCasbin()
 	logger.InitLogger()
+
+	data.NewInitDatabase().InitDatabaseUser()
+	data.NewInitDatabase().InitDatabaseDict()
+	data.NewInitDatabase().InsertDatabaseMenuData()
+	data.NewInitDatabase().InitDatabaseApi()
 }
