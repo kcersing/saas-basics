@@ -4,14 +4,14 @@ package user
 
 import (
 	"context"
-	"saas/biz/infras/service"
-	"saas/pkg/errno"
-	"saas/pkg/utils"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"saas/biz/infras/service"
 	base "saas/idl_gen/model/base"
 	user "saas/idl_gen/model/user"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
+	"strconv"
 )
 
 // CreateUser .
@@ -62,31 +62,6 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// UserInfo .
-// @Summary  获取员工信息 Summary
-// @Description 获取员工信息 Description
-// @Summary  创建员工 Summary
-// @Description 创建员工 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/user/info [GET]
-func UserInfo(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-	info, err := service.NewUser(ctx, c).Info(req.ID)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, info, 0, "")
-	return
-}
-
 // UserList .
 // @Summary  获取员工列表 Summary
 // @Description 获取员工列表 Description
@@ -132,5 +107,41 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
+
+// UserInfo .
+// @Summary  获取员工信息 Summary
+// @Description 获取员工信息 Description
+// @Success      200  {object}  utils.Response
+// @router /service/user/info [GET]
+
+func UserInfo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.Empty
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	v, exist := c.Get("user_id")
+	if !exist || v == nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	i, err := strconv.Atoi(v.(string))
+	if err != nil {
+		c.JSON(consts.StatusUnauthorized, "Unauthorized,"+err.Error())
+		return
+	}
+	userID := uint64(i)
+
+	info, err := service.NewUser(ctx, c).Info(int64(userID))
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
 	return
 }

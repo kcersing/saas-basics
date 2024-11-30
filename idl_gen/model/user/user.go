@@ -3747,7 +3747,7 @@ type UserService interface {
 	// 更新用户
 	UpdateUser(ctx context.Context, req *CreateOrUpdateUserReq) (r *base.NilResponse, err error)
 	// 获取用户基本信息
-	UserInfo(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
+	UserInfo(ctx context.Context, req *base.Empty) (r *base.NilResponse, err error)
 	// 获取用户列表
 	UserList(ctx context.Context, req *UserListReq) (r *base.NilResponse, err error)
 	// 删除用户信息
@@ -3798,7 +3798,7 @@ func (p *UserServiceClient) UpdateUser(ctx context.Context, req *CreateOrUpdateU
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *UserServiceClient) UserInfo(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
+func (p *UserServiceClient) UserInfo(ctx context.Context, req *base.Empty) (r *base.NilResponse, err error) {
 	var _args UserServiceUserInfoArgs
 	_args.Req = req
 	var _result UserServiceUserInfoResult
@@ -4700,7 +4700,7 @@ func (p *UserServiceUpdateUserResult) String() string {
 }
 
 type UserServiceUserInfoArgs struct {
-	Req *base.IDReq `thrift:"req,1"`
+	Req *base.Empty `thrift:"req,1"`
 }
 
 func NewUserServiceUserInfoArgs() *UserServiceUserInfoArgs {
@@ -4710,9 +4710,9 @@ func NewUserServiceUserInfoArgs() *UserServiceUserInfoArgs {
 func (p *UserServiceUserInfoArgs) InitDefault() {
 }
 
-var UserServiceUserInfoArgs_Req_DEFAULT *base.IDReq
+var UserServiceUserInfoArgs_Req_DEFAULT *base.Empty
 
-func (p *UserServiceUserInfoArgs) GetReq() (v *base.IDReq) {
+func (p *UserServiceUserInfoArgs) GetReq() (v *base.Empty) {
 	if !p.IsSetReq() {
 		return UserServiceUserInfoArgs_Req_DEFAULT
 	}
@@ -4784,7 +4784,7 @@ ReadStructEndError:
 }
 
 func (p *UserServiceUserInfoArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := base.NewIDReq()
+	_field := base.NewEmpty()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}

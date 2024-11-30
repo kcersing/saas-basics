@@ -1454,24 +1454,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 创建员工 Summary
-  /service/user/info:
-    get:
-      description: |-
-        获取员工信息 Description
-        创建员工 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 创建员工 Summary
   /service/user/list:
     post:
       description: 获取员工列表 Description

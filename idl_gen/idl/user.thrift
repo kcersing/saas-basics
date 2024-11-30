@@ -110,7 +110,7 @@ service UserService {
   base.NilResponse UpdateUser(1: CreateOrUpdateUserReq req) (api.post = "/service/user/update")
 
   // 获取用户基本信息
-  base.NilResponse UserInfo(1: base.IDReq req) (api.get = "/service/user/info")
+  base.NilResponse UserInfo(1: base.Empty req) (api.get = "/service/user/info")
 
   // 获取用户列表
   base.NilResponse UserList(1: UserListReq req) (api.post = "/service/user/list")

@@ -1517,31 +1517,6 @@
                 }
             }
         },
-        "/service/user/info": {
-            "get": {
-                "description": "获取员工信息 Description\n创建员工 Description",
-                "summary": "创建员工 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/service/user/list": {
             "post": {
                 "description": "获取员工列表 Description",
