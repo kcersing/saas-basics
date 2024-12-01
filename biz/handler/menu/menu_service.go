@@ -132,9 +132,15 @@ func MenuTree(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	menuTree, err := service.NewMenu(ctx, c).MenuTree(&req)
+	hlog.Info(menuTree)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, menuTree, 0, "")
+	return
 }
 
 // MenuRole .
