@@ -146,7 +146,7 @@ func MenuTree(ctx context.Context, c *app.RequestContext) {
 // @router /service/menu/role [POST]
 func MenuRole(ctx context.Context, c *app.RequestContext) {
 
-	roleIdInterface, exist := c.Get("role_id")
+	roleIdInterface, exist := c.Get("roleId")
 	if !exist || roleIdInterface == nil {
 		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
 		return
