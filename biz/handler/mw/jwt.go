@@ -11,6 +11,8 @@ import (
 	"saas/config"
 	"saas/idl_gen/model/token"
 	"saas/idl_gen/model/user"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 	"strconv"
 	"time"
 )
@@ -158,6 +160,13 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				"code":    code,
 				"message": message,
 			})
+		},
+		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, token string, expire time.Time) {
+			utils.SendResponse(c, errno.Success,
+				map[string]interface{}{
+					"token":  token,
+					"expire": expire.Format(time.RFC3339),
+				}, 0, "")
 		},
 	})
 

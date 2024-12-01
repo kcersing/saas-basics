@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/jinzhu/copier"
 	"saas/biz/infras/do"
@@ -108,6 +109,7 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 	}
 
 	menuTree, total, err := service.NewMenu(ctx, c).List(&req)
+	hlog.Info(menuTree)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

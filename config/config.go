@@ -81,5 +81,5 @@ type Minio struct {
 	Url string `mapstructure:"Url" yaml:"Url"`
 }
 type Swagger struct {
-	Url string `mapstructure:"Url" yaml:"Url"`
+	Url string `mapstructure:"url" yaml:"url"`
 }

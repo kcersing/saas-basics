@@ -287,6 +287,10 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*menu.MenuInfoTree {
 
 		if v.ParentID == parentID && v.ID != parentID {
 			var m = new(menu.MenuInfoTree)
+			var info = new(menu.MenuInfo)
+			var meta = new(menu.Meta)
+			m.MenuInfo = info
+			m.MenuInfo.Meta = meta
 			m.MenuInfo.ParentId = v.ParentID
 			m.MenuInfo.Path = v.Path
 			m.MenuInfo.ID = v.ID
@@ -294,17 +298,14 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*menu.MenuInfoTree {
 			m.MenuInfo.Level = v.Level
 			m.MenuInfo.MenuType = v.MenuType
 			m.MenuInfo.Redirect = v.Redirect
-
 			m.MenuInfo.Component = v.Component
 			m.MenuInfo.Hidden = v.Hidden
 			m.MenuInfo.URL = v.URL
 			m.MenuInfo.Status = v.Status
 			m.MenuInfo.Sort = v.Sort
 			m.Ignore = v.Ignore
-
 			m.CreatedAt = v.CreatedAt.Format(time.DateTime)
 			m.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
-
 			m.MenuInfo.Meta = &menu.Meta{
 				Icon:       v.Icon,
 				Title:      v.Title,
