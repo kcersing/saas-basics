@@ -8,8 +8,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	"github.com/jinzhu/copier"
-	"saas/biz/infras/do"
 	"saas/biz/infras/service"
 	base "saas/idl_gen/model/base"
 	menu "saas/idl_gen/model/menu"
@@ -161,14 +159,8 @@ func MenuRole(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
 		return
 	}
-	var menuInfos []*do.MenuInfo
-	err = copier.Copy(&menuInfos, &menuTree)
-	if err != nil {
-		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
-		return
-	}
 
-	utils.SendResponse(c, errno.Success, menuInfos, 0, "")
+	utils.SendResponse(c, errno.Success, menuTree, 0, "")
 	return
 }
 
