@@ -112,13 +112,8 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	var menuInfos []*do.MenuInfo
-	err = copier.Copy(&menuInfos, &menuTree)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, menuInfos, int64(total), "")
+
+	utils.SendResponse(c, errno.Success, menuTree, int64(total), "")
 	return
 }
 
