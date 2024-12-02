@@ -29,40 +29,13 @@ type Menu struct {
 
 func (m Menu) MenuInfo(id int64) (info *menu.MenuInfo, err error) {
 	//TODO implement me
-	info = new(menu.MenuInfo)
 
 	menuEnt, err := m.db.Menu.Query().Where(menu2.IDEQ(id)).First(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get member failed")
 		return info, err
 	}
-
-	var meta = new(menu.Meta)
-
-	info.Meta = meta
-	info.ParentId = menuEnt.ParentID
-	info.Path = menuEnt.Path
-	info.ID = menuEnt.ID
-	info.Name = menuEnt.Name
-	info.Level = menuEnt.Level
-	info.MenuType = menuEnt.MenuType
-	info.Redirect = menuEnt.Redirect
-	info.Component = menuEnt.Component
-	info.Hidden = menuEnt.Hidden
-	info.URL = menuEnt.URL
-	info.Status = menuEnt.Status
-	info.Sort = menuEnt.Sort
-
-	info.CreatedAt = menuEnt.CreatedAt.Format(time.DateTime)
-	info.UpdatedAt = menuEnt.UpdatedAt.Format(time.DateTime)
-	info.Meta = &menu.Meta{
-		Icon:       menuEnt.Icon,
-		Title:      menuEnt.Title,
-		ActiveMenu: menuEnt.ActiveMenu,
-		NoCache:    menuEnt.NoCache,
-		Affix:      menuEnt.Affix,
-	}
-
+	info = entMenuInfo(*menuEnt)
 	return
 
 }
@@ -186,6 +159,35 @@ func (m Menu) Delete(id int64) error {
 	return nil
 }
 
+func entMenuInfo(menuEnt ent.Menu) *menu.MenuInfo {
+	var m = new(menu.MenuInfo)
+	var meta = new(menu.Meta)
+
+	m.Meta = meta
+	m.ParentId = menuEnt.ParentID
+	m.Path = menuEnt.Path
+	m.ID = menuEnt.ID
+	m.Name = menuEnt.Name
+	m.Level = menuEnt.Level
+	m.MenuType = menuEnt.MenuType
+	m.Redirect = menuEnt.Redirect
+	m.Component = menuEnt.Component
+	m.Hidden = menuEnt.Hidden
+	m.URL = menuEnt.URL
+	m.Status = menuEnt.Status
+	m.Sort = menuEnt.Sort
+
+	m.CreatedAt = menuEnt.CreatedAt.Format(time.DateTime)
+	m.UpdatedAt = menuEnt.UpdatedAt.Format(time.DateTime)
+	m.Meta = &menu.Meta{
+		Icon:       menuEnt.Icon,
+		Title:      menuEnt.Title,
+		ActiveMenu: menuEnt.ActiveMenu,
+		NoCache:    menuEnt.NoCache,
+		Affix:      menuEnt.Affix,
+	}
+	return m
+}
 func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfo, err error) {
 
 	menus, err := m.db.Role.
@@ -327,33 +329,7 @@ func findMenuChildren(data []*ent.Menu, parentID int64) []*menu.MenuInfo {
 		// discard the parent menu, only find the children menu
 
 		if v.ParentID == parentID && v.ID != parentID {
-			var m = new(menu.MenuInfo)
-			var meta = new(menu.Meta)
-
-			m.Meta = meta
-			m.ParentId = v.ParentID
-			m.Path = v.Path
-			m.ID = v.ID
-			m.Name = v.Name
-			m.Level = v.Level
-			m.MenuType = v.MenuType
-			m.Redirect = v.Redirect
-			m.Component = v.Component
-			m.Hidden = v.Hidden
-			m.URL = v.URL
-			m.Status = v.Status
-			m.Sort = v.Sort
-
-			m.CreatedAt = v.CreatedAt.Format(time.DateTime)
-			m.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
-			m.Meta = &menu.Meta{
-				Icon:       v.Icon,
-				Title:      v.Title,
-				ActiveMenu: v.ActiveMenu,
-				NoCache:    v.NoCache,
-				Affix:      v.Affix,
-			}
-
+			m := entMenuInfo(*v)
 			m.Children = findMenuChildren(data, v.ID)
 			result = append(result, m)
 		}
