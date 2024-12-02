@@ -151,6 +151,7 @@ func (m Menu) Update(menuReq *menu.CreateOrUpdateMenuReq) error {
 		SetHidden(menuReq.Hidden).
 		SetURL(menuReq.URL).
 		SetStatus(menuReq.Status).
+		SetSort(menuReq.Sort).
 		// meta
 		SetTitle(menuReq.Title).
 		SetIcon(menuReq.Icon).
