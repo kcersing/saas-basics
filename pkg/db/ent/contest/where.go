@@ -70,7 +70,7 @@ func Name(v string) predicate.Contest {
 }
 
 // SignNumber applies equality check predicate on the "sign_number" field. It's identical to SignNumberEQ.
-func SignNumber(v time.Time) predicate.Contest {
+func SignNumber(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldSignNumber, v))
 }
 
@@ -85,7 +85,7 @@ func SignEndAt(v time.Time) predicate.Contest {
 }
 
 // Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
-func Number(v time.Time) predicate.Contest {
+func Number(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldNumber, v))
 }
 
@@ -132,6 +132,11 @@ func Detail(v string) predicate.Contest {
 // SignFields applies equality check predicate on the "sign_fields" field. It's identical to SignFieldsEQ.
 func SignFields(v string) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldSignFields, v))
+}
+
+// Condition applies equality check predicate on the "condition" field. It's identical to ConditionEQ.
+func Condition(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldCondition, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -290,42 +295,42 @@ func NameContainsFold(v string) predicate.Contest {
 }
 
 // SignNumberEQ applies the EQ predicate on the "sign_number" field.
-func SignNumberEQ(v time.Time) predicate.Contest {
+func SignNumberEQ(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldSignNumber, v))
 }
 
 // SignNumberNEQ applies the NEQ predicate on the "sign_number" field.
-func SignNumberNEQ(v time.Time) predicate.Contest {
+func SignNumberNEQ(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldNEQ(FieldSignNumber, v))
 }
 
 // SignNumberIn applies the In predicate on the "sign_number" field.
-func SignNumberIn(vs ...time.Time) predicate.Contest {
+func SignNumberIn(vs ...int64) predicate.Contest {
 	return predicate.Contest(sql.FieldIn(FieldSignNumber, vs...))
 }
 
 // SignNumberNotIn applies the NotIn predicate on the "sign_number" field.
-func SignNumberNotIn(vs ...time.Time) predicate.Contest {
+func SignNumberNotIn(vs ...int64) predicate.Contest {
 	return predicate.Contest(sql.FieldNotIn(FieldSignNumber, vs...))
 }
 
 // SignNumberGT applies the GT predicate on the "sign_number" field.
-func SignNumberGT(v time.Time) predicate.Contest {
+func SignNumberGT(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldGT(FieldSignNumber, v))
 }
 
 // SignNumberGTE applies the GTE predicate on the "sign_number" field.
-func SignNumberGTE(v time.Time) predicate.Contest {
+func SignNumberGTE(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldGTE(FieldSignNumber, v))
 }
 
 // SignNumberLT applies the LT predicate on the "sign_number" field.
-func SignNumberLT(v time.Time) predicate.Contest {
+func SignNumberLT(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldLT(FieldSignNumber, v))
 }
 
 // SignNumberLTE applies the LTE predicate on the "sign_number" field.
-func SignNumberLTE(v time.Time) predicate.Contest {
+func SignNumberLTE(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldLTE(FieldSignNumber, v))
 }
 
@@ -440,42 +445,42 @@ func SignEndAtNotNil() predicate.Contest {
 }
 
 // NumberEQ applies the EQ predicate on the "number" field.
-func NumberEQ(v time.Time) predicate.Contest {
+func NumberEQ(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldNumber, v))
 }
 
 // NumberNEQ applies the NEQ predicate on the "number" field.
-func NumberNEQ(v time.Time) predicate.Contest {
+func NumberNEQ(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldNEQ(FieldNumber, v))
 }
 
 // NumberIn applies the In predicate on the "number" field.
-func NumberIn(vs ...time.Time) predicate.Contest {
+func NumberIn(vs ...int64) predicate.Contest {
 	return predicate.Contest(sql.FieldIn(FieldNumber, vs...))
 }
 
 // NumberNotIn applies the NotIn predicate on the "number" field.
-func NumberNotIn(vs ...time.Time) predicate.Contest {
+func NumberNotIn(vs ...int64) predicate.Contest {
 	return predicate.Contest(sql.FieldNotIn(FieldNumber, vs...))
 }
 
 // NumberGT applies the GT predicate on the "number" field.
-func NumberGT(v time.Time) predicate.Contest {
+func NumberGT(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldGT(FieldNumber, v))
 }
 
 // NumberGTE applies the GTE predicate on the "number" field.
-func NumberGTE(v time.Time) predicate.Contest {
+func NumberGTE(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldGTE(FieldNumber, v))
 }
 
 // NumberLT applies the LT predicate on the "number" field.
-func NumberLT(v time.Time) predicate.Contest {
+func NumberLT(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldLT(FieldNumber, v))
 }
 
 // NumberLTE applies the LTE predicate on the "number" field.
-func NumberLTE(v time.Time) predicate.Contest {
+func NumberLTE(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldLTE(FieldNumber, v))
 }
 
@@ -1037,6 +1042,56 @@ func SignFieldsEqualFold(v string) predicate.Contest {
 // SignFieldsContainsFold applies the ContainsFold predicate on the "sign_fields" field.
 func SignFieldsContainsFold(v string) predicate.Contest {
 	return predicate.Contest(sql.FieldContainsFold(FieldSignFields, v))
+}
+
+// ConditionEQ applies the EQ predicate on the "condition" field.
+func ConditionEQ(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldCondition, v))
+}
+
+// ConditionNEQ applies the NEQ predicate on the "condition" field.
+func ConditionNEQ(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldNEQ(FieldCondition, v))
+}
+
+// ConditionIn applies the In predicate on the "condition" field.
+func ConditionIn(vs ...int64) predicate.Contest {
+	return predicate.Contest(sql.FieldIn(FieldCondition, vs...))
+}
+
+// ConditionNotIn applies the NotIn predicate on the "condition" field.
+func ConditionNotIn(vs ...int64) predicate.Contest {
+	return predicate.Contest(sql.FieldNotIn(FieldCondition, vs...))
+}
+
+// ConditionGT applies the GT predicate on the "condition" field.
+func ConditionGT(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldGT(FieldCondition, v))
+}
+
+// ConditionGTE applies the GTE predicate on the "condition" field.
+func ConditionGTE(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldGTE(FieldCondition, v))
+}
+
+// ConditionLT applies the LT predicate on the "condition" field.
+func ConditionLT(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldLT(FieldCondition, v))
+}
+
+// ConditionLTE applies the LTE predicate on the "condition" field.
+func ConditionLTE(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldLTE(FieldCondition, v))
+}
+
+// ConditionIsNil applies the IsNil predicate on the "condition" field.
+func ConditionIsNil() predicate.Contest {
+	return predicate.Contest(sql.FieldIsNull(FieldCondition))
+}
+
+// ConditionNotNil applies the NotNil predicate on the "condition" field.
+func ConditionNotNil() predicate.Contest {
+	return predicate.Contest(sql.FieldNotNull(FieldCondition))
 }
 
 // And groups predicates with the AND operator between them.

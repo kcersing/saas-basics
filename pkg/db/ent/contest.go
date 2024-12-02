@@ -25,13 +25,13 @@ type Contest struct {
 	// 比赛名称
 	Name string `json:"name,omitempty"`
 	// 报名人数
-	SignNumber time.Time `json:"sign_number,omitempty"`
+	SignNumber int64 `json:"sign_number,omitempty"`
 	// 报名开始时间
 	SignStartAt time.Time `json:"sign_start_at,omitempty"`
 	// 报名结束时间
 	SignEndAt time.Time `json:"sign_end_at,omitempty"`
 	// 参赛人数
-	Number time.Time `json:"number,omitempty"`
+	Number int64 `json:"number,omitempty"`
 	// 比赛开始时间
 	StartAt time.Time `json:"start_at,omitempty"`
 	// 比赛结束时间
@@ -49,7 +49,9 @@ type Contest struct {
 	// 详情
 	Detail string `json:"detail,omitempty"`
 	// 报名信息
-	SignFields   string `json:"sign_fields,omitempty"`
+	SignFields string `json:"sign_fields,omitempty"`
+	// 状态[0:未报名;1:报名中;3:未比赛;4:比赛中;5:比赛结束]
+	Condition    int64 `json:"condition,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -60,11 +62,11 @@ func (*Contest) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case contest.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case contest.FieldID, contest.FieldIsCancel, contest.FieldCancelTime:
+		case contest.FieldID, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
 			values[i] = new(sql.NullInt64)
 		case contest.FieldName, contest.FieldPic, contest.FieldSponsor, contest.FieldDetail, contest.FieldSignFields:
 			values[i] = new(sql.NullString)
-		case contest.FieldCreatedAt, contest.FieldUpdatedAt, contest.FieldSignNumber, contest.FieldSignStartAt, contest.FieldSignEndAt, contest.FieldNumber, contest.FieldStartAt, contest.FieldEndAt:
+		case contest.FieldCreatedAt, contest.FieldUpdatedAt, contest.FieldSignStartAt, contest.FieldSignEndAt, contest.FieldStartAt, contest.FieldEndAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -106,10 +108,10 @@ func (c *Contest) assignValues(columns []string, values []any) error {
 				c.Name = value.String
 			}
 		case contest.FieldSignNumber:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field sign_number", values[i])
 			} else if value.Valid {
-				c.SignNumber = value.Time
+				c.SignNumber = value.Int64
 			}
 		case contest.FieldSignStartAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -124,10 +126,10 @@ func (c *Contest) assignValues(columns []string, values []any) error {
 				c.SignEndAt = value.Time
 			}
 		case contest.FieldNumber:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field number", values[i])
 			} else if value.Valid {
-				c.Number = value.Time
+				c.Number = value.Int64
 			}
 		case contest.FieldStartAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -183,6 +185,12 @@ func (c *Contest) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.SignFields = value.String
 			}
+		case contest.FieldCondition:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field condition", values[i])
+			} else if value.Valid {
+				c.Condition = value.Int64
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -229,7 +237,7 @@ func (c *Contest) String() string {
 	builder.WriteString(c.Name)
 	builder.WriteString(", ")
 	builder.WriteString("sign_number=")
-	builder.WriteString(c.SignNumber.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", c.SignNumber))
 	builder.WriteString(", ")
 	builder.WriteString("sign_start_at=")
 	builder.WriteString(c.SignStartAt.Format(time.ANSIC))
@@ -238,7 +246,7 @@ func (c *Contest) String() string {
 	builder.WriteString(c.SignEndAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("number=")
-	builder.WriteString(c.Number.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", c.Number))
 	builder.WriteString(", ")
 	builder.WriteString("start_at=")
 	builder.WriteString(c.StartAt.Format(time.ANSIC))
@@ -266,6 +274,9 @@ func (c *Contest) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sign_fields=")
 	builder.WriteString(c.SignFields)
+	builder.WriteString(", ")
+	builder.WriteString("condition=")
+	builder.WriteString(fmt.Sprintf("%v", c.Condition))
 	builder.WriteByte(')')
 	return builder.String()
 }

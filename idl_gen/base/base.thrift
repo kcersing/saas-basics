@@ -73,8 +73,8 @@ struct SysListResp {
 }
 
 enum Err {
-    Success            = 0,
-    NoRoute            = 1,
+    Success            = 1,
+    NoRoute            = 0,
     NoMethod           = 2,
     BadRequest         = 10000,
     ParamsErr          = 10001,

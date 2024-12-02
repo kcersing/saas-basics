@@ -45,6 +45,8 @@ const (
 	FieldDetail = "detail"
 	// FieldSignFields holds the string denoting the sign_fields field in the database.
 	FieldSignFields = "sign_fields"
+	// FieldCondition holds the string denoting the condition field in the database.
+	FieldCondition = "condition"
 	// Table holds the table name of the contest in the database.
 	Table = "contest"
 )
@@ -68,6 +70,7 @@ var Columns = []string{
 	FieldCancelTime,
 	FieldDetail,
 	FieldSignFields,
+	FieldCondition,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -91,6 +94,8 @@ var (
 	DefaultIsCancel int64
 	// DefaultCancelTime holds the default value on creation for the "cancel_time" field.
 	DefaultCancelTime int64
+	// DefaultCondition holds the default value on creation for the "condition" field.
+	DefaultCondition int64
 )
 
 // OrderOption defines the ordering options for the Contest queries.
@@ -179,4 +184,9 @@ func ByDetail(opts ...sql.OrderTermOption) OrderOption {
 // BySignFields orders the results by the sign_fields field.
 func BySignFields(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSignFields, opts...).ToFunc()
+}
+
+// ByCondition orders the results by the condition field.
+func ByCondition(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCondition, opts...).ToFunc()
 }

@@ -63,15 +63,15 @@ func (cc *ContestCreate) SetNillableName(s *string) *ContestCreate {
 }
 
 // SetSignNumber sets the "sign_number" field.
-func (cc *ContestCreate) SetSignNumber(t time.Time) *ContestCreate {
-	cc.mutation.SetSignNumber(t)
+func (cc *ContestCreate) SetSignNumber(i int64) *ContestCreate {
+	cc.mutation.SetSignNumber(i)
 	return cc
 }
 
 // SetNillableSignNumber sets the "sign_number" field if the given value is not nil.
-func (cc *ContestCreate) SetNillableSignNumber(t *time.Time) *ContestCreate {
-	if t != nil {
-		cc.SetSignNumber(*t)
+func (cc *ContestCreate) SetNillableSignNumber(i *int64) *ContestCreate {
+	if i != nil {
+		cc.SetSignNumber(*i)
 	}
 	return cc
 }
@@ -105,15 +105,15 @@ func (cc *ContestCreate) SetNillableSignEndAt(t *time.Time) *ContestCreate {
 }
 
 // SetNumber sets the "number" field.
-func (cc *ContestCreate) SetNumber(t time.Time) *ContestCreate {
-	cc.mutation.SetNumber(t)
+func (cc *ContestCreate) SetNumber(i int64) *ContestCreate {
+	cc.mutation.SetNumber(i)
 	return cc
 }
 
 // SetNillableNumber sets the "number" field if the given value is not nil.
-func (cc *ContestCreate) SetNillableNumber(t *time.Time) *ContestCreate {
-	if t != nil {
-		cc.SetNumber(*t)
+func (cc *ContestCreate) SetNillableNumber(i *int64) *ContestCreate {
+	if i != nil {
+		cc.SetNumber(*i)
 	}
 	return cc
 }
@@ -244,6 +244,20 @@ func (cc *ContestCreate) SetNillableSignFields(s *string) *ContestCreate {
 	return cc
 }
 
+// SetCondition sets the "condition" field.
+func (cc *ContestCreate) SetCondition(i int64) *ContestCreate {
+	cc.mutation.SetCondition(i)
+	return cc
+}
+
+// SetNillableCondition sets the "condition" field if the given value is not nil.
+func (cc *ContestCreate) SetNillableCondition(i *int64) *ContestCreate {
+	if i != nil {
+		cc.SetCondition(*i)
+	}
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *ContestCreate) SetID(i int64) *ContestCreate {
 	cc.mutation.SetID(i)
@@ -301,6 +315,10 @@ func (cc *ContestCreate) defaults() {
 		v := contest.DefaultCancelTime
 		cc.mutation.SetCancelTime(v)
 	}
+	if _, ok := cc.mutation.Condition(); !ok {
+		v := contest.DefaultCondition
+		cc.mutation.SetCondition(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -356,7 +374,7 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 		_node.Name = value
 	}
 	if value, ok := cc.mutation.SignNumber(); ok {
-		_spec.SetField(contest.FieldSignNumber, field.TypeTime, value)
+		_spec.SetField(contest.FieldSignNumber, field.TypeInt64, value)
 		_node.SignNumber = value
 	}
 	if value, ok := cc.mutation.SignStartAt(); ok {
@@ -368,7 +386,7 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 		_node.SignEndAt = value
 	}
 	if value, ok := cc.mutation.Number(); ok {
-		_spec.SetField(contest.FieldNumber, field.TypeTime, value)
+		_spec.SetField(contest.FieldNumber, field.TypeInt64, value)
 		_node.Number = value
 	}
 	if value, ok := cc.mutation.StartAt(); ok {
@@ -406,6 +424,10 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.SignFields(); ok {
 		_spec.SetField(contest.FieldSignFields, field.TypeString, value)
 		_node.SignFields = value
+	}
+	if value, ok := cc.mutation.Condition(); ok {
+		_spec.SetField(contest.FieldCondition, field.TypeInt64, value)
+		_node.Condition = value
 	}
 	return _node, _spec
 }

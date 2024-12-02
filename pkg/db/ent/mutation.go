@@ -742,10 +742,12 @@ type ContestMutation struct {
 	created_at     *time.Time
 	updated_at     *time.Time
 	name           *string
-	sign_number    *time.Time
+	sign_number    *int64
+	addsign_number *int64
 	sign_start_at  *time.Time
 	sign_end_at    *time.Time
-	number         *time.Time
+	number         *int64
+	addnumber      *int64
 	start_at       *time.Time
 	end_at         *time.Time
 	pic            *string
@@ -758,6 +760,8 @@ type ContestMutation struct {
 	addcancel_time *int64
 	detail         *string
 	sign_fields    *string
+	condition      *int64
+	addcondition   *int64
 	clearedFields  map[string]struct{}
 	done           bool
 	oldValue       func(context.Context) (*Contest, error)
@@ -990,12 +994,13 @@ func (m *ContestMutation) ResetName() {
 }
 
 // SetSignNumber sets the "sign_number" field.
-func (m *ContestMutation) SetSignNumber(t time.Time) {
-	m.sign_number = &t
+func (m *ContestMutation) SetSignNumber(i int64) {
+	m.sign_number = &i
+	m.addsign_number = nil
 }
 
 // SignNumber returns the value of the "sign_number" field in the mutation.
-func (m *ContestMutation) SignNumber() (r time.Time, exists bool) {
+func (m *ContestMutation) SignNumber() (r int64, exists bool) {
 	v := m.sign_number
 	if v == nil {
 		return
@@ -1006,7 +1011,7 @@ func (m *ContestMutation) SignNumber() (r time.Time, exists bool) {
 // OldSignNumber returns the old "sign_number" field's value of the Contest entity.
 // If the Contest object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContestMutation) OldSignNumber(ctx context.Context) (v time.Time, err error) {
+func (m *ContestMutation) OldSignNumber(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldSignNumber is only allowed on UpdateOne operations")
 	}
@@ -1020,9 +1025,28 @@ func (m *ContestMutation) OldSignNumber(ctx context.Context) (v time.Time, err e
 	return oldValue.SignNumber, nil
 }
 
+// AddSignNumber adds i to the "sign_number" field.
+func (m *ContestMutation) AddSignNumber(i int64) {
+	if m.addsign_number != nil {
+		*m.addsign_number += i
+	} else {
+		m.addsign_number = &i
+	}
+}
+
+// AddedSignNumber returns the value that was added to the "sign_number" field in this mutation.
+func (m *ContestMutation) AddedSignNumber() (r int64, exists bool) {
+	v := m.addsign_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ClearSignNumber clears the value of the "sign_number" field.
 func (m *ContestMutation) ClearSignNumber() {
 	m.sign_number = nil
+	m.addsign_number = nil
 	m.clearedFields[contest.FieldSignNumber] = struct{}{}
 }
 
@@ -1035,6 +1059,7 @@ func (m *ContestMutation) SignNumberCleared() bool {
 // ResetSignNumber resets all changes to the "sign_number" field.
 func (m *ContestMutation) ResetSignNumber() {
 	m.sign_number = nil
+	m.addsign_number = nil
 	delete(m.clearedFields, contest.FieldSignNumber)
 }
 
@@ -1137,12 +1162,13 @@ func (m *ContestMutation) ResetSignEndAt() {
 }
 
 // SetNumber sets the "number" field.
-func (m *ContestMutation) SetNumber(t time.Time) {
-	m.number = &t
+func (m *ContestMutation) SetNumber(i int64) {
+	m.number = &i
+	m.addnumber = nil
 }
 
 // Number returns the value of the "number" field in the mutation.
-func (m *ContestMutation) Number() (r time.Time, exists bool) {
+func (m *ContestMutation) Number() (r int64, exists bool) {
 	v := m.number
 	if v == nil {
 		return
@@ -1153,7 +1179,7 @@ func (m *ContestMutation) Number() (r time.Time, exists bool) {
 // OldNumber returns the old "number" field's value of the Contest entity.
 // If the Contest object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContestMutation) OldNumber(ctx context.Context) (v time.Time, err error) {
+func (m *ContestMutation) OldNumber(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
 	}
@@ -1167,9 +1193,28 @@ func (m *ContestMutation) OldNumber(ctx context.Context) (v time.Time, err error
 	return oldValue.Number, nil
 }
 
+// AddNumber adds i to the "number" field.
+func (m *ContestMutation) AddNumber(i int64) {
+	if m.addnumber != nil {
+		*m.addnumber += i
+	} else {
+		m.addnumber = &i
+	}
+}
+
+// AddedNumber returns the value that was added to the "number" field in this mutation.
+func (m *ContestMutation) AddedNumber() (r int64, exists bool) {
+	v := m.addnumber
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ClearNumber clears the value of the "number" field.
 func (m *ContestMutation) ClearNumber() {
 	m.number = nil
+	m.addnumber = nil
 	m.clearedFields[contest.FieldNumber] = struct{}{}
 }
 
@@ -1182,6 +1227,7 @@ func (m *ContestMutation) NumberCleared() bool {
 // ResetNumber resets all changes to the "number" field.
 func (m *ContestMutation) ResetNumber() {
 	m.number = nil
+	m.addnumber = nil
 	delete(m.clearedFields, contest.FieldNumber)
 }
 
@@ -1689,6 +1735,76 @@ func (m *ContestMutation) ResetSignFields() {
 	delete(m.clearedFields, contest.FieldSignFields)
 }
 
+// SetCondition sets the "condition" field.
+func (m *ContestMutation) SetCondition(i int64) {
+	m.condition = &i
+	m.addcondition = nil
+}
+
+// Condition returns the value of the "condition" field in the mutation.
+func (m *ContestMutation) Condition() (r int64, exists bool) {
+	v := m.condition
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCondition returns the old "condition" field's value of the Contest entity.
+// If the Contest object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContestMutation) OldCondition(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCondition is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCondition requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCondition: %w", err)
+	}
+	return oldValue.Condition, nil
+}
+
+// AddCondition adds i to the "condition" field.
+func (m *ContestMutation) AddCondition(i int64) {
+	if m.addcondition != nil {
+		*m.addcondition += i
+	} else {
+		m.addcondition = &i
+	}
+}
+
+// AddedCondition returns the value that was added to the "condition" field in this mutation.
+func (m *ContestMutation) AddedCondition() (r int64, exists bool) {
+	v := m.addcondition
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearCondition clears the value of the "condition" field.
+func (m *ContestMutation) ClearCondition() {
+	m.condition = nil
+	m.addcondition = nil
+	m.clearedFields[contest.FieldCondition] = struct{}{}
+}
+
+// ConditionCleared returns if the "condition" field was cleared in this mutation.
+func (m *ContestMutation) ConditionCleared() bool {
+	_, ok := m.clearedFields[contest.FieldCondition]
+	return ok
+}
+
+// ResetCondition resets all changes to the "condition" field.
+func (m *ContestMutation) ResetCondition() {
+	m.condition = nil
+	m.addcondition = nil
+	delete(m.clearedFields, contest.FieldCondition)
+}
+
 // Where appends a list predicates to the ContestMutation builder.
 func (m *ContestMutation) Where(ps ...predicate.Contest) {
 	m.predicates = append(m.predicates, ps...)
@@ -1723,7 +1839,7 @@ func (m *ContestMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ContestMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, contest.FieldCreatedAt)
 	}
@@ -1772,6 +1888,9 @@ func (m *ContestMutation) Fields() []string {
 	if m.sign_fields != nil {
 		fields = append(fields, contest.FieldSignFields)
 	}
+	if m.condition != nil {
+		fields = append(fields, contest.FieldCondition)
+	}
 	return fields
 }
 
@@ -1812,6 +1931,8 @@ func (m *ContestMutation) Field(name string) (ent.Value, bool) {
 		return m.Detail()
 	case contest.FieldSignFields:
 		return m.SignFields()
+	case contest.FieldCondition:
+		return m.Condition()
 	}
 	return nil, false
 }
@@ -1853,6 +1974,8 @@ func (m *ContestMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDetail(ctx)
 	case contest.FieldSignFields:
 		return m.OldSignFields(ctx)
+	case contest.FieldCondition:
+		return m.OldCondition(ctx)
 	}
 	return nil, fmt.Errorf("unknown Contest field %s", name)
 }
@@ -1884,7 +2007,7 @@ func (m *ContestMutation) SetField(name string, value ent.Value) error {
 		m.SetName(v)
 		return nil
 	case contest.FieldSignNumber:
-		v, ok := value.(time.Time)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1905,7 +2028,7 @@ func (m *ContestMutation) SetField(name string, value ent.Value) error {
 		m.SetSignEndAt(v)
 		return nil
 	case contest.FieldNumber:
-		v, ok := value.(time.Time)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1974,6 +2097,13 @@ func (m *ContestMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSignFields(v)
 		return nil
+	case contest.FieldCondition:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCondition(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Contest field %s", name)
 }
@@ -1982,6 +2112,12 @@ func (m *ContestMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ContestMutation) AddedFields() []string {
 	var fields []string
+	if m.addsign_number != nil {
+		fields = append(fields, contest.FieldSignNumber)
+	}
+	if m.addnumber != nil {
+		fields = append(fields, contest.FieldNumber)
+	}
 	if m.addfee != nil {
 		fields = append(fields, contest.FieldFee)
 	}
@@ -1991,6 +2127,9 @@ func (m *ContestMutation) AddedFields() []string {
 	if m.addcancel_time != nil {
 		fields = append(fields, contest.FieldCancelTime)
 	}
+	if m.addcondition != nil {
+		fields = append(fields, contest.FieldCondition)
+	}
 	return fields
 }
 
@@ -1999,12 +2138,18 @@ func (m *ContestMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ContestMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case contest.FieldSignNumber:
+		return m.AddedSignNumber()
+	case contest.FieldNumber:
+		return m.AddedNumber()
 	case contest.FieldFee:
 		return m.AddedFee()
 	case contest.FieldIsCancel:
 		return m.AddedIsCancel()
 	case contest.FieldCancelTime:
 		return m.AddedCancelTime()
+	case contest.FieldCondition:
+		return m.AddedCondition()
 	}
 	return nil, false
 }
@@ -2014,6 +2159,20 @@ func (m *ContestMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ContestMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case contest.FieldSignNumber:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddSignNumber(v)
+		return nil
+	case contest.FieldNumber:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddNumber(v)
+		return nil
 	case contest.FieldFee:
 		v, ok := value.(float64)
 		if !ok {
@@ -2034,6 +2193,13 @@ func (m *ContestMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCancelTime(v)
+		return nil
+	case contest.FieldCondition:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCondition(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Contest numeric field %s", name)
@@ -2084,6 +2250,9 @@ func (m *ContestMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(contest.FieldSignFields) {
 		fields = append(fields, contest.FieldSignFields)
+	}
+	if m.FieldCleared(contest.FieldCondition) {
+		fields = append(fields, contest.FieldCondition)
 	}
 	return fields
 }
@@ -2141,6 +2310,9 @@ func (m *ContestMutation) ClearField(name string) error {
 	case contest.FieldSignFields:
 		m.ClearSignFields()
 		return nil
+	case contest.FieldCondition:
+		m.ClearCondition()
+		return nil
 	}
 	return fmt.Errorf("unknown Contest nullable field %s", name)
 }
@@ -2196,6 +2368,9 @@ func (m *ContestMutation) ResetField(name string) error {
 		return nil
 	case contest.FieldSignFields:
 		m.ResetSignFields()
+		return nil
+	case contest.FieldCondition:
+		m.ResetCondition()
 		return nil
 	}
 	return fmt.Errorf("unknown Contest field %s", name)

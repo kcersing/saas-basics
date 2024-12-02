@@ -12,8 +12,8 @@ import (
 type Err int64
 
 const (
-	Err_Success            Err = 0
-	Err_NoRoute            Err = 1
+	Err_Success            Err = 1
+	Err_NoRoute            Err = 0
 	Err_NoMethod           Err = 2
 	Err_BadRequest         Err = 10000
 	Err_ParamsErr          Err = 10001

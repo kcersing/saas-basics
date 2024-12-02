@@ -17,6 +17,7 @@ type ContestListReq struct {
 	SignEndAt   *string `thrift:"signEndAt,5,optional" form:"signEndAt" json:"signEndAt" query:"signEndAt"`
 	StartAt     *string `thrift:"startAt,6,optional" form:"startAt" json:"startAt" query:"startAt"`
 	EndAt       *string `thrift:"endAt,7,optional" form:"endAt" json:"endAt" query:"endAt"`
+	Condition   *int64  `thrift:"condition,8,optional" form:"condition" json:"condition" query:"condition"`
 }
 
 func NewContestListReq() *ContestListReq {
@@ -89,6 +90,15 @@ func (p *ContestListReq) GetEndAt() (v string) {
 	return *p.EndAt
 }
 
+var ContestListReq_Condition_DEFAULT int64
+
+func (p *ContestListReq) GetCondition() (v int64) {
+	if !p.IsSetCondition() {
+		return ContestListReq_Condition_DEFAULT
+	}
+	return *p.Condition
+}
+
 var fieldIDToName_ContestListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
@@ -97,6 +107,7 @@ var fieldIDToName_ContestListReq = map[int16]string{
 	5: "signEndAt",
 	6: "startAt",
 	7: "endAt",
+	8: "condition",
 }
 
 func (p *ContestListReq) IsSetPage() bool {
@@ -125,6 +136,10 @@ func (p *ContestListReq) IsSetStartAt() bool {
 
 func (p *ContestListReq) IsSetEndAt() bool {
 	return p.EndAt != nil
+}
+
+func (p *ContestListReq) IsSetCondition() bool {
+	return p.Condition != nil
 }
 
 func (p *ContestListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -197,6 +212,14 @@ func (p *ContestListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 7:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -308,6 +331,17 @@ func (p *ContestListReq) ReadField7(iprot thrift.TProtocol) error {
 	p.EndAt = _field
 	return nil
 }
+func (p *ContestListReq) ReadField8(iprot thrift.TProtocol) error {
+
+	var _field *int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.Condition = _field
+	return nil
+}
 
 func (p *ContestListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -341,6 +375,10 @@ func (p *ContestListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField7(oprot); err != nil {
 			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
 			goto WriteFieldError
 		}
 	}
@@ -492,6 +530,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *ContestListReq) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCondition() {
+		if err = oprot.WriteFieldBegin("condition", thrift.I64, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.Condition); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
 func (p *ContestListReq) String() string {
@@ -1204,23 +1261,24 @@ func (p *ParticipantInfo) String() string {
 }
 
 type ContestInfo struct {
-	Id          *int64   `thrift:"Id,1,optional" form:"Id" json:"Id" query:"Id"`
-	Name        *string  `thrift:"Name,2,optional" form:"Name" json:"Name" query:"Name"`
-	SignNumber  *int64   `thrift:"SignNumber,3,optional" form:"SignNumber" json:"SignNumber" query:"SignNumber"`
-	SignStartAt *string  `thrift:"SignStartAt,4,optional" form:"SignStartAt" json:"SignStartAt" query:"SignStartAt"`
-	SignEndAt   *string  `thrift:"SignEndAt,5,optional" form:"SignEndAt" json:"SignEndAt" query:"SignEndAt"`
-	Number      *int64   `thrift:"Number,6,optional" form:"Number" json:"Number" query:"Number"`
-	StartAt     *string  `thrift:"StartAt,7,optional" form:"StartAt" json:"StartAt" query:"StartAt"`
-	EndAt       *string  `thrift:"EndAt,8,optional" form:"EndAt" json:"EndAt" query:"EndAt"`
-	Pic         *string  `thrift:"Pic,9,optional" form:"Pic" json:"Pic" query:"Pic"`
-	Sponsor     *string  `thrift:"Sponsor,10,optional" form:"Sponsor" json:"Sponsor" query:"Sponsor"`
-	Fee         *float64 `thrift:"Fee,11,optional" form:"Fee" json:"Fee" query:"Fee"`
-	IsCancel    *int64   `thrift:"IsCancel,12,optional" form:"IsCancel" json:"IsCancel" query:"IsCancel"`
-	CancelTime  *int64   `thrift:"CancelTime,13,optional" form:"CancelTime" json:"CancelTime" query:"CancelTime"`
-	Detail      *string  `thrift:"Detail,14,optional" form:"Detail" json:"Detail" query:"Detail"`
-	SignFields  *string  `thrift:"SignFields,15,optional" form:"SignFields" json:"SignFields" query:"SignFields"`
-	CreatedAt   *string  `thrift:"CreatedAt,16,optional" form:"CreatedAt" json:"CreatedAt" query:"CreatedAt"`
-	UpdatedAt   *string  `thrift:"UpdatedAt,17,optional" form:"UpdatedAt" json:"UpdatedAt" query:"UpdatedAt"`
+	ID          *int64   `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	Name        *string  `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	SignNumber  *int64   `thrift:"signNumber,3,optional" form:"signNumber" json:"signNumber" query:"signNumber"`
+	SignStartAt *string  `thrift:"signStartAt,4,optional" form:"signStartAt" json:"signStartAt" query:"signStartAt"`
+	SignEndAt   *string  `thrift:"signEndAt,5,optional" form:"signEndAt" json:"signEndAt" query:"signEndAt"`
+	Number      *int64   `thrift:"number,6,optional" form:"number" json:"number" query:"number"`
+	StartAt     *string  `thrift:"startAt,7,optional" form:"startAt" json:"startAt" query:"startAt"`
+	EndAt       *string  `thrift:"endAt,8,optional" form:"endAt" json:"endAt" query:"endAt"`
+	Pic         *string  `thrift:"pic,9,optional" form:"pic" json:"pic" query:"pic"`
+	Sponsor     *string  `thrift:"sponsor,10,optional" form:"sponsor" json:"sponsor" query:"sponsor"`
+	Fee         *float64 `thrift:"fee,11,optional" form:"fee" json:"fee" query:"fee"`
+	IsCancel    *int64   `thrift:"isCancel,12,optional" form:"isCancel" json:"isCancel" query:"isCancel"`
+	CancelTime  *int64   `thrift:"cancelTime,13,optional" form:"cancelTime" json:"cancelTime" query:"cancelTime"`
+	Detail      *string  `thrift:"detail,14,optional" form:"detail" json:"detail" query:"detail"`
+	SignFields  *string  `thrift:"signFields,15,optional" form:"signFields" json:"signFields" query:"signFields"`
+	CreatedAt   *string  `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt   *string  `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	Condition   *string  `thrift:"condition,18,optional" form:"condition" json:"condition" query:"condition"`
 }
 
 func NewContestInfo() *ContestInfo {
@@ -1230,13 +1288,13 @@ func NewContestInfo() *ContestInfo {
 func (p *ContestInfo) InitDefault() {
 }
 
-var ContestInfo_Id_DEFAULT int64
+var ContestInfo_ID_DEFAULT int64
 
-func (p *ContestInfo) GetId() (v int64) {
-	if !p.IsSetId() {
-		return ContestInfo_Id_DEFAULT
+func (p *ContestInfo) GetID() (v int64) {
+	if !p.IsSetID() {
+		return ContestInfo_ID_DEFAULT
 	}
-	return *p.Id
+	return *p.ID
 }
 
 var ContestInfo_Name_DEFAULT string
@@ -1383,28 +1441,38 @@ func (p *ContestInfo) GetUpdatedAt() (v string) {
 	return *p.UpdatedAt
 }
 
-var fieldIDToName_ContestInfo = map[int16]string{
-	1:  "Id",
-	2:  "Name",
-	3:  "SignNumber",
-	4:  "SignStartAt",
-	5:  "SignEndAt",
-	6:  "Number",
-	7:  "StartAt",
-	8:  "EndAt",
-	9:  "Pic",
-	10: "Sponsor",
-	11: "Fee",
-	12: "IsCancel",
-	13: "CancelTime",
-	14: "Detail",
-	15: "SignFields",
-	16: "CreatedAt",
-	17: "UpdatedAt",
+var ContestInfo_Condition_DEFAULT string
+
+func (p *ContestInfo) GetCondition() (v string) {
+	if !p.IsSetCondition() {
+		return ContestInfo_Condition_DEFAULT
+	}
+	return *p.Condition
 }
 
-func (p *ContestInfo) IsSetId() bool {
-	return p.Id != nil
+var fieldIDToName_ContestInfo = map[int16]string{
+	1:  "id",
+	2:  "name",
+	3:  "signNumber",
+	4:  "signStartAt",
+	5:  "signEndAt",
+	6:  "number",
+	7:  "startAt",
+	8:  "endAt",
+	9:  "pic",
+	10: "sponsor",
+	11: "fee",
+	12: "isCancel",
+	13: "cancelTime",
+	14: "detail",
+	15: "signFields",
+	16: "createdAt",
+	17: "updatedAt",
+	18: "condition",
+}
+
+func (p *ContestInfo) IsSetID() bool {
+	return p.ID != nil
 }
 
 func (p *ContestInfo) IsSetName() bool {
@@ -1469,6 +1537,10 @@ func (p *ContestInfo) IsSetCreatedAt() bool {
 
 func (p *ContestInfo) IsSetUpdatedAt() bool {
 	return p.UpdatedAt != nil
+}
+
+func (p *ContestInfo) IsSetCondition() bool {
+	return p.Condition != nil
 }
 
 func (p *ContestInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -1626,6 +1698,14 @@ func (p *ContestInfo) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
+		case 18:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField18(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -1663,7 +1743,7 @@ func (p *ContestInfo) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = &v
 	}
-	p.Id = _field
+	p.ID = _field
 	return nil
 }
 func (p *ContestInfo) ReadField2(iprot thrift.TProtocol) error {
@@ -1842,6 +1922,17 @@ func (p *ContestInfo) ReadField17(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
+func (p *ContestInfo) ReadField18(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.Condition = _field
+	return nil
+}
 
 func (p *ContestInfo) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1917,6 +2008,10 @@ func (p *ContestInfo) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 17
 			goto WriteFieldError
 		}
+		if err = p.writeField18(oprot); err != nil {
+			fieldId = 18
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -1936,11 +2031,11 @@ WriteStructEndError:
 }
 
 func (p *ContestInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.IsSetId() {
-		if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
+	if p.IsSetID() {
+		if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Id); err != nil {
+		if err := oprot.WriteI64(*p.ID); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1956,7 +2051,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField2(oprot thrift.TProtocol) (err error) {
 	if p.IsSetName() {
-		if err = oprot.WriteFieldBegin("Name", thrift.STRING, 2); err != nil {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.Name); err != nil {
@@ -1975,7 +2070,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField3(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSignNumber() {
-		if err = oprot.WriteFieldBegin("SignNumber", thrift.I64, 3); err != nil {
+		if err = oprot.WriteFieldBegin("signNumber", thrift.I64, 3); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(*p.SignNumber); err != nil {
@@ -1994,7 +2089,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField4(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSignStartAt() {
-		if err = oprot.WriteFieldBegin("SignStartAt", thrift.STRING, 4); err != nil {
+		if err = oprot.WriteFieldBegin("signStartAt", thrift.STRING, 4); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.SignStartAt); err != nil {
@@ -2013,7 +2108,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField5(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSignEndAt() {
-		if err = oprot.WriteFieldBegin("SignEndAt", thrift.STRING, 5); err != nil {
+		if err = oprot.WriteFieldBegin("signEndAt", thrift.STRING, 5); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.SignEndAt); err != nil {
@@ -2032,7 +2127,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField6(oprot thrift.TProtocol) (err error) {
 	if p.IsSetNumber() {
-		if err = oprot.WriteFieldBegin("Number", thrift.I64, 6); err != nil {
+		if err = oprot.WriteFieldBegin("number", thrift.I64, 6); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(*p.Number); err != nil {
@@ -2051,7 +2146,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField7(oprot thrift.TProtocol) (err error) {
 	if p.IsSetStartAt() {
-		if err = oprot.WriteFieldBegin("StartAt", thrift.STRING, 7); err != nil {
+		if err = oprot.WriteFieldBegin("startAt", thrift.STRING, 7); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.StartAt); err != nil {
@@ -2070,7 +2165,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField8(oprot thrift.TProtocol) (err error) {
 	if p.IsSetEndAt() {
-		if err = oprot.WriteFieldBegin("EndAt", thrift.STRING, 8); err != nil {
+		if err = oprot.WriteFieldBegin("endAt", thrift.STRING, 8); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.EndAt); err != nil {
@@ -2089,7 +2184,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField9(oprot thrift.TProtocol) (err error) {
 	if p.IsSetPic() {
-		if err = oprot.WriteFieldBegin("Pic", thrift.STRING, 9); err != nil {
+		if err = oprot.WriteFieldBegin("pic", thrift.STRING, 9); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.Pic); err != nil {
@@ -2108,7 +2203,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField10(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSponsor() {
-		if err = oprot.WriteFieldBegin("Sponsor", thrift.STRING, 10); err != nil {
+		if err = oprot.WriteFieldBegin("sponsor", thrift.STRING, 10); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.Sponsor); err != nil {
@@ -2127,7 +2222,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField11(oprot thrift.TProtocol) (err error) {
 	if p.IsSetFee() {
-		if err = oprot.WriteFieldBegin("Fee", thrift.DOUBLE, 11); err != nil {
+		if err = oprot.WriteFieldBegin("fee", thrift.DOUBLE, 11); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteDouble(*p.Fee); err != nil {
@@ -2146,7 +2241,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField12(oprot thrift.TProtocol) (err error) {
 	if p.IsSetIsCancel() {
-		if err = oprot.WriteFieldBegin("IsCancel", thrift.I64, 12); err != nil {
+		if err = oprot.WriteFieldBegin("isCancel", thrift.I64, 12); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(*p.IsCancel); err != nil {
@@ -2165,7 +2260,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField13(oprot thrift.TProtocol) (err error) {
 	if p.IsSetCancelTime() {
-		if err = oprot.WriteFieldBegin("CancelTime", thrift.I64, 13); err != nil {
+		if err = oprot.WriteFieldBegin("cancelTime", thrift.I64, 13); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(*p.CancelTime); err != nil {
@@ -2184,7 +2279,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField14(oprot thrift.TProtocol) (err error) {
 	if p.IsSetDetail() {
-		if err = oprot.WriteFieldBegin("Detail", thrift.STRING, 14); err != nil {
+		if err = oprot.WriteFieldBegin("detail", thrift.STRING, 14); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.Detail); err != nil {
@@ -2203,7 +2298,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField15(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSignFields() {
-		if err = oprot.WriteFieldBegin("SignFields", thrift.STRING, 15); err != nil {
+		if err = oprot.WriteFieldBegin("signFields", thrift.STRING, 15); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.SignFields); err != nil {
@@ -2222,7 +2317,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField16(oprot thrift.TProtocol) (err error) {
 	if p.IsSetCreatedAt() {
-		if err = oprot.WriteFieldBegin("CreatedAt", thrift.STRING, 16); err != nil {
+		if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 16); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.CreatedAt); err != nil {
@@ -2241,7 +2336,7 @@ WriteFieldEndError:
 
 func (p *ContestInfo) writeField17(oprot thrift.TProtocol) (err error) {
 	if p.IsSetUpdatedAt() {
-		if err = oprot.WriteFieldBegin("UpdatedAt", thrift.STRING, 17); err != nil {
+		if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 17); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.UpdatedAt); err != nil {
@@ -2256,6 +2351,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
+}
+
+func (p *ContestInfo) writeField18(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCondition() {
+		if err = oprot.WriteFieldBegin("condition", thrift.STRING, 18); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Condition); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
 }
 
 func (p *ContestInfo) String() string {

@@ -39,10 +39,10 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "比赛名称"},
-		{Name: "sign_number", Type: field.TypeTime, Nullable: true, Comment: "报名人数"},
+		{Name: "sign_number", Type: field.TypeInt64, Nullable: true, Comment: "报名人数"},
 		{Name: "sign_start_at", Type: field.TypeTime, Nullable: true, Comment: "报名开始时间"},
 		{Name: "sign_end_at", Type: field.TypeTime, Nullable: true, Comment: "报名结束时间"},
-		{Name: "number", Type: field.TypeTime, Nullable: true, Comment: "参赛人数"},
+		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "参赛人数"},
 		{Name: "start_at", Type: field.TypeTime, Nullable: true, Comment: "比赛开始时间"},
 		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "比赛结束时间"},
 		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "比赛图片"},
@@ -52,6 +52,7 @@ var (
 		{Name: "cancel_time", Type: field.TypeInt64, Nullable: true, Comment: "取消时间", Default: 0},
 		{Name: "detail", Type: field.TypeString, Nullable: true, Comment: "详情"},
 		{Name: "sign_fields", Type: field.TypeString, Nullable: true, Comment: "报名信息"},
+		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:未报名;1:报名中;3:未比赛;4:比赛中;5:比赛结束]", Default: 0},
 	}
 	// ContestTable holds the schema information for the "contest" table.
 	ContestTable = &schema.Table{

@@ -79,6 +79,10 @@ func init() {
 	contestDescCancelTime := contestFields[11].Descriptor()
 	// contest.DefaultCancelTime holds the default value on creation for the cancel_time field.
 	contest.DefaultCancelTime = contestDescCancelTime.Default.(int64)
+	// contestDescCondition is the schema descriptor for condition field.
+	contestDescCondition := contestFields[14].Descriptor()
+	// contest.DefaultCondition holds the default value on creation for the condition field.
+	contest.DefaultCondition = contestDescCondition.Default.(int64)
 	contestparticipantMixin := schema.ContestParticipant{}.Mixin()
 	contestparticipantMixinFields0 := contestparticipantMixin[0].Fields()
 	_ = contestparticipantMixinFields0

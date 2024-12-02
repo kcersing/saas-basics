@@ -55,16 +55,23 @@ func (cu *ContestUpdate) ClearName() *ContestUpdate {
 }
 
 // SetSignNumber sets the "sign_number" field.
-func (cu *ContestUpdate) SetSignNumber(t time.Time) *ContestUpdate {
-	cu.mutation.SetSignNumber(t)
+func (cu *ContestUpdate) SetSignNumber(i int64) *ContestUpdate {
+	cu.mutation.ResetSignNumber()
+	cu.mutation.SetSignNumber(i)
 	return cu
 }
 
 // SetNillableSignNumber sets the "sign_number" field if the given value is not nil.
-func (cu *ContestUpdate) SetNillableSignNumber(t *time.Time) *ContestUpdate {
-	if t != nil {
-		cu.SetSignNumber(*t)
+func (cu *ContestUpdate) SetNillableSignNumber(i *int64) *ContestUpdate {
+	if i != nil {
+		cu.SetSignNumber(*i)
 	}
+	return cu
+}
+
+// AddSignNumber adds i to the "sign_number" field.
+func (cu *ContestUpdate) AddSignNumber(i int64) *ContestUpdate {
+	cu.mutation.AddSignNumber(i)
 	return cu
 }
 
@@ -115,16 +122,23 @@ func (cu *ContestUpdate) ClearSignEndAt() *ContestUpdate {
 }
 
 // SetNumber sets the "number" field.
-func (cu *ContestUpdate) SetNumber(t time.Time) *ContestUpdate {
-	cu.mutation.SetNumber(t)
+func (cu *ContestUpdate) SetNumber(i int64) *ContestUpdate {
+	cu.mutation.ResetNumber()
+	cu.mutation.SetNumber(i)
 	return cu
 }
 
 // SetNillableNumber sets the "number" field if the given value is not nil.
-func (cu *ContestUpdate) SetNillableNumber(t *time.Time) *ContestUpdate {
-	if t != nil {
-		cu.SetNumber(*t)
+func (cu *ContestUpdate) SetNillableNumber(i *int64) *ContestUpdate {
+	if i != nil {
+		cu.SetNumber(*i)
 	}
+	return cu
+}
+
+// AddNumber adds i to the "number" field.
+func (cu *ContestUpdate) AddNumber(i int64) *ContestUpdate {
+	cu.mutation.AddNumber(i)
 	return cu
 }
 
@@ -335,6 +349,33 @@ func (cu *ContestUpdate) ClearSignFields() *ContestUpdate {
 	return cu
 }
 
+// SetCondition sets the "condition" field.
+func (cu *ContestUpdate) SetCondition(i int64) *ContestUpdate {
+	cu.mutation.ResetCondition()
+	cu.mutation.SetCondition(i)
+	return cu
+}
+
+// SetNillableCondition sets the "condition" field if the given value is not nil.
+func (cu *ContestUpdate) SetNillableCondition(i *int64) *ContestUpdate {
+	if i != nil {
+		cu.SetCondition(*i)
+	}
+	return cu
+}
+
+// AddCondition adds i to the "condition" field.
+func (cu *ContestUpdate) AddCondition(i int64) *ContestUpdate {
+	cu.mutation.AddCondition(i)
+	return cu
+}
+
+// ClearCondition clears the value of the "condition" field.
+func (cu *ContestUpdate) ClearCondition() *ContestUpdate {
+	cu.mutation.ClearCondition()
+	return cu
+}
+
 // Mutation returns the ContestMutation object of the builder.
 func (cu *ContestUpdate) Mutation() *ContestMutation {
 	return cu.mutation
@@ -395,10 +436,13 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(contest.FieldName, field.TypeString)
 	}
 	if value, ok := cu.mutation.SignNumber(); ok {
-		_spec.SetField(contest.FieldSignNumber, field.TypeTime, value)
+		_spec.SetField(contest.FieldSignNumber, field.TypeInt64, value)
+	}
+	if value, ok := cu.mutation.AddedSignNumber(); ok {
+		_spec.AddField(contest.FieldSignNumber, field.TypeInt64, value)
 	}
 	if cu.mutation.SignNumberCleared() {
-		_spec.ClearField(contest.FieldSignNumber, field.TypeTime)
+		_spec.ClearField(contest.FieldSignNumber, field.TypeInt64)
 	}
 	if value, ok := cu.mutation.SignStartAt(); ok {
 		_spec.SetField(contest.FieldSignStartAt, field.TypeTime, value)
@@ -413,10 +457,13 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(contest.FieldSignEndAt, field.TypeTime)
 	}
 	if value, ok := cu.mutation.Number(); ok {
-		_spec.SetField(contest.FieldNumber, field.TypeTime, value)
+		_spec.SetField(contest.FieldNumber, field.TypeInt64, value)
+	}
+	if value, ok := cu.mutation.AddedNumber(); ok {
+		_spec.AddField(contest.FieldNumber, field.TypeInt64, value)
 	}
 	if cu.mutation.NumberCleared() {
-		_spec.ClearField(contest.FieldNumber, field.TypeTime)
+		_spec.ClearField(contest.FieldNumber, field.TypeInt64)
 	}
 	if value, ok := cu.mutation.StartAt(); ok {
 		_spec.SetField(contest.FieldStartAt, field.TypeTime, value)
@@ -481,6 +528,15 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.SignFieldsCleared() {
 		_spec.ClearField(contest.FieldSignFields, field.TypeString)
 	}
+	if value, ok := cu.mutation.Condition(); ok {
+		_spec.SetField(contest.FieldCondition, field.TypeInt64, value)
+	}
+	if value, ok := cu.mutation.AddedCondition(); ok {
+		_spec.AddField(contest.FieldCondition, field.TypeInt64, value)
+	}
+	if cu.mutation.ConditionCleared() {
+		_spec.ClearField(contest.FieldCondition, field.TypeInt64)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{contest.Label}
@@ -528,16 +584,23 @@ func (cuo *ContestUpdateOne) ClearName() *ContestUpdateOne {
 }
 
 // SetSignNumber sets the "sign_number" field.
-func (cuo *ContestUpdateOne) SetSignNumber(t time.Time) *ContestUpdateOne {
-	cuo.mutation.SetSignNumber(t)
+func (cuo *ContestUpdateOne) SetSignNumber(i int64) *ContestUpdateOne {
+	cuo.mutation.ResetSignNumber()
+	cuo.mutation.SetSignNumber(i)
 	return cuo
 }
 
 // SetNillableSignNumber sets the "sign_number" field if the given value is not nil.
-func (cuo *ContestUpdateOne) SetNillableSignNumber(t *time.Time) *ContestUpdateOne {
-	if t != nil {
-		cuo.SetSignNumber(*t)
+func (cuo *ContestUpdateOne) SetNillableSignNumber(i *int64) *ContestUpdateOne {
+	if i != nil {
+		cuo.SetSignNumber(*i)
 	}
+	return cuo
+}
+
+// AddSignNumber adds i to the "sign_number" field.
+func (cuo *ContestUpdateOne) AddSignNumber(i int64) *ContestUpdateOne {
+	cuo.mutation.AddSignNumber(i)
 	return cuo
 }
 
@@ -588,16 +651,23 @@ func (cuo *ContestUpdateOne) ClearSignEndAt() *ContestUpdateOne {
 }
 
 // SetNumber sets the "number" field.
-func (cuo *ContestUpdateOne) SetNumber(t time.Time) *ContestUpdateOne {
-	cuo.mutation.SetNumber(t)
+func (cuo *ContestUpdateOne) SetNumber(i int64) *ContestUpdateOne {
+	cuo.mutation.ResetNumber()
+	cuo.mutation.SetNumber(i)
 	return cuo
 }
 
 // SetNillableNumber sets the "number" field if the given value is not nil.
-func (cuo *ContestUpdateOne) SetNillableNumber(t *time.Time) *ContestUpdateOne {
-	if t != nil {
-		cuo.SetNumber(*t)
+func (cuo *ContestUpdateOne) SetNillableNumber(i *int64) *ContestUpdateOne {
+	if i != nil {
+		cuo.SetNumber(*i)
 	}
+	return cuo
+}
+
+// AddNumber adds i to the "number" field.
+func (cuo *ContestUpdateOne) AddNumber(i int64) *ContestUpdateOne {
+	cuo.mutation.AddNumber(i)
 	return cuo
 }
 
@@ -808,6 +878,33 @@ func (cuo *ContestUpdateOne) ClearSignFields() *ContestUpdateOne {
 	return cuo
 }
 
+// SetCondition sets the "condition" field.
+func (cuo *ContestUpdateOne) SetCondition(i int64) *ContestUpdateOne {
+	cuo.mutation.ResetCondition()
+	cuo.mutation.SetCondition(i)
+	return cuo
+}
+
+// SetNillableCondition sets the "condition" field if the given value is not nil.
+func (cuo *ContestUpdateOne) SetNillableCondition(i *int64) *ContestUpdateOne {
+	if i != nil {
+		cuo.SetCondition(*i)
+	}
+	return cuo
+}
+
+// AddCondition adds i to the "condition" field.
+func (cuo *ContestUpdateOne) AddCondition(i int64) *ContestUpdateOne {
+	cuo.mutation.AddCondition(i)
+	return cuo
+}
+
+// ClearCondition clears the value of the "condition" field.
+func (cuo *ContestUpdateOne) ClearCondition() *ContestUpdateOne {
+	cuo.mutation.ClearCondition()
+	return cuo
+}
+
 // Mutation returns the ContestMutation object of the builder.
 func (cuo *ContestUpdateOne) Mutation() *ContestMutation {
 	return cuo.mutation
@@ -898,10 +995,13 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 		_spec.ClearField(contest.FieldName, field.TypeString)
 	}
 	if value, ok := cuo.mutation.SignNumber(); ok {
-		_spec.SetField(contest.FieldSignNumber, field.TypeTime, value)
+		_spec.SetField(contest.FieldSignNumber, field.TypeInt64, value)
+	}
+	if value, ok := cuo.mutation.AddedSignNumber(); ok {
+		_spec.AddField(contest.FieldSignNumber, field.TypeInt64, value)
 	}
 	if cuo.mutation.SignNumberCleared() {
-		_spec.ClearField(contest.FieldSignNumber, field.TypeTime)
+		_spec.ClearField(contest.FieldSignNumber, field.TypeInt64)
 	}
 	if value, ok := cuo.mutation.SignStartAt(); ok {
 		_spec.SetField(contest.FieldSignStartAt, field.TypeTime, value)
@@ -916,10 +1016,13 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 		_spec.ClearField(contest.FieldSignEndAt, field.TypeTime)
 	}
 	if value, ok := cuo.mutation.Number(); ok {
-		_spec.SetField(contest.FieldNumber, field.TypeTime, value)
+		_spec.SetField(contest.FieldNumber, field.TypeInt64, value)
+	}
+	if value, ok := cuo.mutation.AddedNumber(); ok {
+		_spec.AddField(contest.FieldNumber, field.TypeInt64, value)
 	}
 	if cuo.mutation.NumberCleared() {
-		_spec.ClearField(contest.FieldNumber, field.TypeTime)
+		_spec.ClearField(contest.FieldNumber, field.TypeInt64)
 	}
 	if value, ok := cuo.mutation.StartAt(); ok {
 		_spec.SetField(contest.FieldStartAt, field.TypeTime, value)
@@ -983,6 +1086,15 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 	}
 	if cuo.mutation.SignFieldsCleared() {
 		_spec.ClearField(contest.FieldSignFields, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Condition(); ok {
+		_spec.SetField(contest.FieldCondition, field.TypeInt64, value)
+	}
+	if value, ok := cuo.mutation.AddedCondition(); ok {
+		_spec.AddField(contest.FieldCondition, field.TypeInt64, value)
+	}
+	if cuo.mutation.ConditionCleared() {
+		_spec.ClearField(contest.FieldCondition, field.TypeInt64)
 	}
 	_node = &Contest{config: cuo.config}
 	_spec.Assign = _node.assignValues

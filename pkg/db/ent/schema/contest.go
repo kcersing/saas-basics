@@ -17,10 +17,10 @@ func (Contest) Fields() []ent.Field {
 	return []ent.Field{
 
 		field.String("name").Comment("比赛名称").Optional(),
-		field.Time("sign_number").Comment("报名人数").Optional(),
+		field.Int64("sign_number").Comment("报名人数").Optional(),
 		field.Time("sign_start_at").Comment("报名开始时间").Optional(),
 		field.Time("sign_end_at").Comment("报名结束时间").Optional(),
-		field.Time("number").Comment("参赛人数").Optional(),
+		field.Int64("number").Comment("参赛人数").Optional(),
 		field.Time("start_at").Comment("比赛开始时间").Optional(),
 		field.Time("end_at").Comment("比赛结束时间").Optional(),
 		field.String("pic").Comment("比赛图片").Optional(),
@@ -30,6 +30,11 @@ func (Contest) Fields() []ent.Field {
 		field.Int64("cancel_time").Comment("取消时间").Default(0).Optional(),
 		field.String("detail").Comment("详情").Optional(),
 		field.String("sign_fields").Comment("报名信息").Optional(),
+
+		field.Int64("condition").
+			Default(1).
+			Optional().
+			Comment("状态[1:未报名;2:报名中;3:未比赛;4:比赛中;5:比赛结束]"),
 	}
 }
 
