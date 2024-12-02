@@ -109,7 +109,7 @@ struct CreateOrUpdateMenuReq {
 
 //更新菜单额外参数
 struct CreateOrUpdateMenuParamReq{
-    1:  string ID (api.raw = "ID")
+    1:  string id (api.raw = "ID")
     2:  string menuID (api.raw = "menuID")
     3:  string type (api.raw = "type")
     4:  string key (api.raw = "key")
@@ -138,8 +138,19 @@ struct MenuInfo {
         11:  Meta meta (api.raw = "meta")
         12:  i64 status (api.raw = "status")
         13:  string url (api.raw = "url")
-	    14: list<MenuInfo> Children  (api.raw = "children")
-	    15: string CreatedAt (api.raw = "CreatedAt")
-        16: string UpdatedAt (api.raw = "UpdatedAt")
+	    14: list<MenuInfo> children  (api.raw = "children")
+	    15: string createdAt (api.raw = "createdAt")
+        16: string updatedAt (api.raw = "updatedAt")
 
+}
+
+// MenuParam is the menu parameter structure.data stored at the table `sys_menu_params`
+struct MenuParam  {
+	1:  i64 id       (api.raw = "id")
+	2: i64 menuId    (api.raw = "menuId")
+    3:  string	type   (api.raw = "type")
+    4:  string	key    (api.raw = "key")
+    5:  string	value   (api.raw = "value")
+    6:  string	createdAt (api.raw = "createdAt")
+    7:  string	updatedAt (api.raw = "updatedAt")
 }

@@ -198,19 +198,19 @@ func (m Menu) MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error) {
 	return
 }
 
-func (m Menu) CreateMenuParam(req *do.MenuParam) error {
+func (m Menu) CreateMenuParam(req *menu.MenuParam) error {
 	// check menu whether exist
-	exist, err := m.db.Menu.Query().Where(menu2.IDEQ(req.MenuID)).Exist(m.ctx)
+	exist, err := m.db.Menu.Query().Where(menu2.IDEQ(req.MenuId)).Exist(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "query menu failed")
 	}
 	if !exist {
-		return errors.New(fmt.Sprintf("menu not exist, menu id: %d", req.MenuID))
+		return errors.New(fmt.Sprintf("menu not exist, menu id: %d", req.MenuId))
 	}
 
 	// create menu param
 	err = m.db.MenuParam.Create().
-		SetMenusID(req.MenuID).
+		SetMenusID(req.MenuId).
 		SetType(req.Type).
 		SetKey(req.Key).
 		SetValue(req.Value).
@@ -222,19 +222,19 @@ func (m Menu) CreateMenuParam(req *do.MenuParam) error {
 
 }
 
-func (m Menu) UpdateMenuParam(req *do.MenuParam) error {
+func (m Menu) UpdateMenuParam(req *menu.MenuParam) error {
 	// check menu whether exist
-	exist, err := m.db.Menu.Query().Where(menu2.IDEQ(req.MenuID)).Exist(m.ctx)
+	exist, err := m.db.Menu.Query().Where(menu2.IDEQ(req.MenuId)).Exist(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "query menu failed")
 	}
 	if !exist {
-		return errors.New(fmt.Sprintf("menu not exist, menu id: %d", req.MenuID))
+		return errors.New(fmt.Sprintf("menu not exist, menu id: %d", req.MenuId))
 	}
 
 	// update menu param
 	err = m.db.MenuParam.UpdateOneID(req.ID).
-		SetMenusID(req.MenuID).
+		SetMenusID(req.MenuId).
 		SetType(req.Type).
 		SetKey(req.Key).
 		SetValue(req.Value).
@@ -254,7 +254,7 @@ func (m Menu) DeleteMenuParam(menuParamID int64) error {
 	return nil
 }
 
-func (m Menu) MenuParamListByMenuID(menuID int64) (list []do.MenuParam, total int64, err error) {
+func (m Menu) MenuParamListByMenuID(menuID int64) (list []menu.MenuParam, total int64, err error) {
 	// query menu param list
 	params, err := m.db.Menu.Query().Where(menu2.IDEQ(menuID)).QueryParams().All(m.ctx)
 	if err != nil {
@@ -263,7 +263,7 @@ func (m Menu) MenuParamListByMenuID(menuID int64) (list []do.MenuParam, total in
 
 	// convert to MenuParam
 	for _, v := range params {
-		var p do.MenuParam
+		var p menu.MenuParam
 		p.ID = v.ID
 		p.Type = v.Type
 		p.Key = v.Key
