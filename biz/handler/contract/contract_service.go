@@ -4,6 +4,9 @@ package contract
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -26,9 +29,13 @@ func ContractList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewContract(ctx, c).List(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // ContractCreate .
@@ -46,9 +53,13 @@ func ContractCreate(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContract(ctx, c).Create(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ContractUpdate .
@@ -66,9 +77,13 @@ func ContractUpdate(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContract(ctx, c).Update(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ContractUpdateStatus .
@@ -86,9 +101,13 @@ func ContractUpdateStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContract(ctx, c).UpdateStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ContractByID .
@@ -106,7 +125,11 @@ func ContractByID(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewContract(ctx, c).Info(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }

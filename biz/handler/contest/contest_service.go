@@ -4,6 +4,9 @@ package contest
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -12,6 +15,10 @@ import (
 )
 
 // CreateContest .
+// @Summary  创建比赛 Summary
+// @Description 创建比赛 Description
+// @Param request body contest.ContestInfo true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/create [POST]
 func CreateContest(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -22,12 +29,20 @@ func CreateContest(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContest(ctx, c).CreateContest(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateContest .
+// @Summary  更新比赛 Summary
+// @Description 更新比赛 Description
+// @Param request body contest.ContestInfo true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/update [POST]
 func UpdateContest(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -38,12 +53,20 @@ func UpdateContest(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContest(ctx, c).UpdateContest(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ContestInfo .
+// @Summary  比赛信息 Summary
+// @Description 比赛信息 Description
+// @Param request body base.IDReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/info [POST]
 func ContestInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -54,12 +77,20 @@ func ContestInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewContest(ctx, c).ContestInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }
 
 // ContestList .
+// @Summary  比赛列表 Summary
+// @Description 比赛列表 Description
+// @Param request body contest.ContestListReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/list [POST]
 func ContestList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -70,12 +101,20 @@ func ContestList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewContest(ctx, c).ContestList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // UpdateMemberStatus .
+// @Summary  更新比赛状态 Summary
+// @Description 更新比赛状态 Description
+// @Param request body base.StatusCodeReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/status [POST]
 func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -86,12 +125,20 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContest(ctx, c).UpdateParticipantStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // CreateParticipant .
+// @Summary  创建比赛 Summary
+// @Description 创建比赛 Description
+// @Param request body contest.ParticipantInfo true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/create [POST]
 func CreateParticipant(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -102,12 +149,20 @@ func CreateParticipant(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContest(ctx, c).CreateParticipant(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateParticipant .
+// @Summary  更新比赛 Summary
+// @Description 更新比赛 Description
+// @Param request body contest.ParticipantInfo true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/update [POST]
 func UpdateParticipant(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -118,12 +173,20 @@ func UpdateParticipant(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContest(ctx, c).UpdateParticipant(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ContestParticipantInfo .
+// @Summary  比赛信息 Summary
+// @Description 比赛信息 Description
+// @Param request body base.IDReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/info [POST]
 func ContestParticipantInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -134,12 +197,20 @@ func ContestParticipantInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewContest(ctx, c).ParticipantInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }
 
 // ParticipantListList .
+// @Summary  比赛列表 Summary
+// @Description 比赛列表 Description
+// @Param request body contest.ParticipantListReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/list [POST]
 func ParticipantListList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -150,12 +221,20 @@ func ParticipantListList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewContest(ctx, c).ParticipantList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // UpdateParticipantStatus .
+// @Summary  更新比赛状态 Summary
+// @Description 更新比赛状态 Description
+// @Param request body base.StatusCodeReq true "query params"
+// @Success      200  {object}  utils.Response
 // @router /service/contest/status [POST]
 func UpdateParticipantStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -165,8 +244,11 @@ func UpdateParticipantStatus(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContest(ctx, c).UpdateParticipantStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }

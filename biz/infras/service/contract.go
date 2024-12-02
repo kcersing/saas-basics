@@ -59,10 +59,10 @@ func (c Contract) Info(id int64) (info *contract.ContractInfo, err error) {
 	return
 }
 
-func (c Contract) Create(req *contract.ContractInfo) error {
+func (c Contract) Create(req *contract.CreateOrUpdateContractReq) error {
 	_, err := c.db.Contract.Create().
-		SetName(req.Name).
-		SetContent(req.Content).
+		SetName(*req.Name).
+		SetContent(*req.Content).
 		Save(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create Contract failed")
@@ -71,11 +71,11 @@ func (c Contract) Create(req *contract.ContractInfo) error {
 	return nil
 }
 
-func (c Contract) Update(req *contract.ContractInfo) error {
+func (c Contract) Update(req *contract.CreateOrUpdateContractReq) error {
 	_, err := c.db.Contract.Update().
-		Where(contract2.IDEQ(req.Id)).
-		SetName(req.Name).
-		SetContent(req.Content).
+		Where(contract2.IDEQ(*req.ID)).
+		SetName(*req.Name).
+		SetContent(*req.Content).
 		Save(c.ctx)
 
 	if err != nil {

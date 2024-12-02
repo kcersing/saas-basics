@@ -316,27 +316,127 @@ const docTemplate = `{
         },
         "/service/contest/create": {
             "post": {
-                "responses": {}
+                "description": "创建比赛 Description",
+                "summary": "创建比赛 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contest.ParticipantInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/contest/info": {
             "post": {
-                "responses": {}
+                "description": "比赛信息 Description",
+                "summary": "比赛信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/contest/list": {
             "post": {
-                "responses": {}
+                "description": "比赛列表 Description",
+                "summary": "比赛列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contest.ParticipantListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/contest/status": {
             "post": {
-                "responses": {}
+                "description": "更新比赛状态 Description",
+                "summary": "更新比赛状态 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/contest/update": {
             "post": {
-                "responses": {}
+                "description": "更新比赛 Description",
+                "summary": "更新比赛 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contest.ParticipantInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/contract": {
@@ -1947,6 +2047,125 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "contest.ContestInfo": {
+            "type": "object",
+            "properties": {
+                "CancelTime": {
+                    "type": "integer"
+                },
+                "CreatedAt": {
+                    "type": "string"
+                },
+                "Detail": {
+                    "type": "string"
+                },
+                "EndAt": {
+                    "type": "string"
+                },
+                "Fee": {
+                    "type": "number"
+                },
+                "Id": {
+                    "type": "integer"
+                },
+                "IsCancel": {
+                    "type": "integer"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Number": {
+                    "type": "integer"
+                },
+                "Pic": {
+                    "type": "string"
+                },
+                "SignEndAt": {
+                    "type": "string"
+                },
+                "SignFields": {
+                    "type": "string"
+                },
+                "SignNumber": {
+                    "type": "integer"
+                },
+                "SignStartAt": {
+                    "type": "string"
+                },
+                "Sponsor": {
+                    "type": "string"
+                },
+                "StartAt": {
+                    "type": "string"
+                },
+                "UpdatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "contest.ContestListReq": {
+            "type": "object",
+            "properties": {
+                "endAt": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "signEndAt": {
+                    "type": "string"
+                },
+                "signStartAt": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "contest.ParticipantInfo": {
+            "type": "object",
+            "properties": {
+                "contestId": {
+                    "type": "integer"
+                },
+                "fields": {
+                    "type": "integer"
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "contest.ParticipantListReq": {
+            "type": "object",
+            "properties": {
+                "mobile": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "sn": {
+                    "type": "string"
                 }
             }
         },

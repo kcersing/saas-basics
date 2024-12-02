@@ -98,6 +98,22 @@ struct MemberContractListReq{
     4:  optional i64 venueId (api.raw = "venueId")
     5:  optional i64 contractId (api.raw = "contractId")
 }
+
+struct MemberContractInfo{
+    1:  optional string	name (api.raw = "name")
+    2:  optional i64 memberId (api.raw = "memberId")
+    3:  optional string	memberName (api.raw = "memberName")
+    4:  optional i64 venueId (api.raw = "venueId")
+    5:  optional string	venueName (api.raw = "venueName")
+    6:  optional i64 memberProductId (api.raw = "memberProductId")
+    7:  optional string	memberProductName (api.raw = "memberProductName")
+    8:  optional i64 contractId (api.raw = "contractId")
+    9:  optional i64 contractName (api.raw = "contractName")
+    10:  optional string sign (api.raw = "contractId")
+    11:  optional string signImg (api.raw = "contractId")
+    12:  optional string content (api.raw = "contractId")
+}
+
 struct MemberProductListReq {
     1:  optional i64 page (api.raw = "page")
     2:  optional i64 pageSize (api.raw = "pageSize")

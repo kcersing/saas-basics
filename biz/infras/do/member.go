@@ -17,10 +17,9 @@ type Member interface {
 
 	//ProductSearch(members []int64) (info *ProductInfo, err error)
 	//PropertySearch(memberProducts []int64) (info *PropertyInfo, err error)
+	ContractList(req member.MemberContractListReq) (resp []*member.MemberContractInfo, total int, err error)
 }
 
-//base.NilResponse MemberContractList(1: MemberContractListReq req) (api.post = "/service/member/contract-list")
-//
 //base.NilResponse MemberProductList(1: MemberProductListReq req) (api.post = "/service/member/product-list")
 //
 //base.NilResponse MemberPropertyList(1: MemberPropertyListReq req) (api.post = "/service/member/property-list")
