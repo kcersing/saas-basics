@@ -38,6 +38,10 @@ service MenuService {
 
   base.NilResponse MenuTree(1: base.PageInfoReq req) (api.post = "/service/menu/tree")
 
+
+  // 获取用户基本信息
+  base.NilResponse MenuInfo(1: base.IDReq req) (api.post = "/service/menu/info")
+
 //  //创建菜单额外参数
 //  base.NilResponse CreateMenuParam(1: CreateOrUpdateMenuParamReq req) (api.post = "/service/menu/param/create")
 //

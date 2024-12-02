@@ -25,6 +25,7 @@ func Register(r *server.Hertz) {
 		_api.POST("/tree", append(_apitreeMw(), menu.ApiTree)...)
 		_service.POST("/menu", append(_deletemenuMw(), menu.DeleteMenu)...)
 		_menu := _service.Group("/menu", _menuMw()...)
+		_menu.POST("/info", append(_menuinfoMw(), menu.MenuInfo)...)
 		_menu.POST("/list", append(_menulistsMw(), menu.MenuLists)...)
 		_menu.POST("/tree", append(_menutreeMw(), menu.MenuTree)...)
 		{

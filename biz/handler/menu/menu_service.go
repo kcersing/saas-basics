@@ -308,3 +308,23 @@ func DeleteMenu(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
+
+// MenuInfo .
+// @router /service/menu/info [POST]
+func MenuInfo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	info, err := service.NewMenu(ctx, c).MenuInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}

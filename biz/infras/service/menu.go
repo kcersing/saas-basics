@@ -27,6 +27,52 @@ type Menu struct {
 	cache *ristretto.Cache
 }
 
+func (m Menu) MenuInfo(id int64) (info *menu.MenuInfo, err error) {
+	//TODO implement me
+	info = new(menu.MenuInfo)
+
+	inter, exist := m.cache.Get("menuInfo" + strconv.Itoa(int(id)))
+	if exist {
+		if u, ok := inter.(*menu.MenuInfo); ok {
+			return u, nil
+		}
+	}
+	menuEnt, err := m.db.Menu.Query().Where(menu2.IDEQ(id)).First(m.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get member failed")
+		return info, err
+	}
+
+	var meta = new(menu.Meta)
+
+	info.Meta = meta
+	info.ParentId = menuEnt.ParentID
+	info.Path = menuEnt.Path
+	info.ID = menuEnt.ID
+	info.Name = menuEnt.Name
+	info.Level = menuEnt.Level
+	info.MenuType = menuEnt.MenuType
+	info.Redirect = menuEnt.Redirect
+	info.Component = menuEnt.Component
+	info.Hidden = menuEnt.Hidden
+	info.URL = menuEnt.URL
+	info.Status = menuEnt.Status
+	info.Sort = menuEnt.Sort
+
+	info.CreatedAt = menuEnt.CreatedAt.Format(time.DateTime)
+	info.UpdatedAt = menuEnt.UpdatedAt.Format(time.DateTime)
+	info.Meta = &menu.Meta{
+		Icon:       menuEnt.Icon,
+		Title:      menuEnt.Title,
+		ActiveMenu: menuEnt.ActiveMenu,
+		NoCache:    menuEnt.NoCache,
+		Affix:      menuEnt.Affix,
+	}
+	m.cache.SetWithTTL("menuInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
+	return
+
+}
+
 func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
 	return &Menu{
 		ctx:   ctx,
