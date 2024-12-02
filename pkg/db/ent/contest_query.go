@@ -4,9 +4,11 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 	"saas/pkg/db/ent/contest"
+	"saas/pkg/db/ent/contestparticipant"
 	"saas/pkg/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -17,10 +19,11 @@ import (
 // ContestQuery is the builder for querying Contest entities.
 type ContestQuery struct {
 	config
-	ctx        *QueryContext
-	order      []contest.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Contest
+	ctx                     *QueryContext
+	order                   []contest.OrderOption
+	inters                  []Interceptor
+	predicates              []predicate.Contest
+	withContestParticipants *ContestParticipantQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +58,28 @@ func (cq *ContestQuery) Unique(unique bool) *ContestQuery {
 func (cq *ContestQuery) Order(o ...contest.OrderOption) *ContestQuery {
 	cq.order = append(cq.order, o...)
 	return cq
+}
+
+// QueryContestParticipants chains the current query on the "contest_participants" edge.
+func (cq *ContestQuery) QueryContestParticipants() *ContestParticipantQuery {
+	query := (&ContestParticipantClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contest.Table, contest.FieldID, selector),
+			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contest.ContestParticipantsTable, contest.ContestParticipantsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Contest entity from the query.
@@ -244,15 +269,27 @@ func (cq *ContestQuery) Clone() *ContestQuery {
 		return nil
 	}
 	return &ContestQuery{
-		config:     cq.config,
-		ctx:        cq.ctx.Clone(),
-		order:      append([]contest.OrderOption{}, cq.order...),
-		inters:     append([]Interceptor{}, cq.inters...),
-		predicates: append([]predicate.Contest{}, cq.predicates...),
+		config:                  cq.config,
+		ctx:                     cq.ctx.Clone(),
+		order:                   append([]contest.OrderOption{}, cq.order...),
+		inters:                  append([]Interceptor{}, cq.inters...),
+		predicates:              append([]predicate.Contest{}, cq.predicates...),
+		withContestParticipants: cq.withContestParticipants.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
 	}
+}
+
+// WithContestParticipants tells the query-builder to eager-load the nodes that are connected to
+// the "contest_participants" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ContestQuery) WithContestParticipants(opts ...func(*ContestParticipantQuery)) *ContestQuery {
+	query := (&ContestParticipantClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withContestParticipants = query
+	return cq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,8 +368,11 @@ func (cq *ContestQuery) prepareQuery(ctx context.Context) error {
 
 func (cq *ContestQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Contest, error) {
 	var (
-		nodes = []*Contest{}
-		_spec = cq.querySpec()
+		nodes       = []*Contest{}
+		_spec       = cq.querySpec()
+		loadedTypes = [1]bool{
+			cq.withContestParticipants != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Contest).scanValues(nil, columns)
@@ -340,6 +380,7 @@ func (cq *ContestQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Contest{config: cq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +392,47 @@ func (cq *ContestQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := cq.withContestParticipants; query != nil {
+		if err := cq.loadContestParticipants(ctx, query, nodes,
+			func(n *Contest) { n.Edges.ContestParticipants = []*ContestParticipant{} },
+			func(n *Contest, e *ContestParticipant) {
+				n.Edges.ContestParticipants = append(n.Edges.ContestParticipants, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (cq *ContestQuery) loadContestParticipants(ctx context.Context, query *ContestParticipantQuery, nodes []*Contest, init func(*Contest), assign func(*Contest, *ContestParticipant)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Contest)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(contestparticipant.FieldContestID)
+	}
+	query.Where(predicate.ContestParticipant(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(contest.ContestParticipantsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ContestID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "contest_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (cq *ContestQuery) sqlCount(ctx context.Context) (int, error) {

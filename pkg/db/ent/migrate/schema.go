@@ -38,6 +38,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "比赛名称"},
 		{Name: "sign_number", Type: field.TypeInt64, Nullable: true, Comment: "报名人数"},
 		{Name: "sign_start_at", Type: field.TypeTime, Nullable: true, Comment: "报名开始时间"},
@@ -52,7 +53,7 @@ var (
 		{Name: "cancel_time", Type: field.TypeInt64, Nullable: true, Comment: "取消时间", Default: 0},
 		{Name: "detail", Type: field.TypeString, Nullable: true, Comment: "详情"},
 		{Name: "sign_fields", Type: field.TypeString, Nullable: true, Comment: "报名信息"},
-		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:未报名;1:报名中;3:未比赛;4:比赛中;5:比赛结束]", Default: 0},
+		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:未报名;2:报名中;3:未比赛;4:比赛中;5:比赛结束]", Default: 1},
 	}
 	// ContestTable holds the schema information for the "contest" table.
 	ContestTable = &schema.Table{
@@ -63,7 +64,7 @@ var (
 			{
 				Name:    "contest_name_sign_start_at_sign_end_at_start_at_end_at",
 				Unique:  true,
-				Columns: []*schema.Column{ContestColumns[3], ContestColumns[5], ContestColumns[6], ContestColumns[8], ContestColumns[9]},
+				Columns: []*schema.Column{ContestColumns[4], ContestColumns[6], ContestColumns[7], ContestColumns[9], ContestColumns[10]},
 			},
 		},
 	}
@@ -72,16 +73,25 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "contest_id", Type: field.TypeInt64, Nullable: true, Comment: "赛事id"},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:禁用;1:正常]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "手机号"},
 		{Name: "fields", Type: field.TypeString, Nullable: true, Comment: "更多"},
+		{Name: "contest_id", Type: field.TypeInt64, Nullable: true, Comment: "赛事id"},
 	}
 	// ContestParticipantTable holds the schema information for the "contest_participant" table.
 	ContestParticipantTable = &schema.Table{
 		Name:       "contest_participant",
 		Columns:    ContestParticipantColumns,
 		PrimaryKey: []*schema.Column{ContestParticipantColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "contest_participant_contest_contest_participants",
+				Columns:    []*schema.Column{ContestParticipantColumns[7]},
+				RefColumns: []*schema.Column{ContestColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "contestparticipant_name_mobile",
@@ -916,6 +926,7 @@ func init() {
 	ContestTable.Annotation = &entsql.Annotation{
 		Table: "contest",
 	}
+	ContestParticipantTable.ForeignKeys[0].RefTable = ContestTable
 	ContestParticipantTable.Annotation = &entsql.Annotation{
 		Table: "contest_participant",
 	}

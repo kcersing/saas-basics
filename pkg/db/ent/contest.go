@@ -22,6 +22,8 @@ type Contest struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 状态[0:禁用;1:正常]
+	Status int64 `json:"status,omitempty"`
 	// 比赛名称
 	Name string `json:"name,omitempty"`
 	// 报名人数
@@ -50,9 +52,30 @@ type Contest struct {
 	Detail string `json:"detail,omitempty"`
 	// 报名信息
 	SignFields string `json:"sign_fields,omitempty"`
-	// 状态[0:未报名;1:报名中;3:未比赛;4:比赛中;5:比赛结束]
-	Condition    int64 `json:"condition,omitempty"`
+	// 状态[1:未报名;2:报名中;3:未比赛;4:比赛中;5:比赛结束]
+	Condition int64 `json:"condition,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ContestQuery when eager-loading is set.
+	Edges        ContestEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// ContestEdges holds the relations/edges for other nodes in the graph.
+type ContestEdges struct {
+	// ContestParticipants holds the value of the contest_participants edge.
+	ContestParticipants []*ContestParticipant `json:"contest_participants,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ContestParticipantsOrErr returns the ContestParticipants value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContestEdges) ContestParticipantsOrErr() ([]*ContestParticipant, error) {
+	if e.loadedTypes[0] {
+		return e.ContestParticipants, nil
+	}
+	return nil, &NotLoadedError{edge: "contest_participants"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -62,7 +85,7 @@ func (*Contest) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case contest.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case contest.FieldID, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
+		case contest.FieldID, contest.FieldStatus, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
 			values[i] = new(sql.NullInt64)
 		case contest.FieldName, contest.FieldPic, contest.FieldSponsor, contest.FieldDetail, contest.FieldSignFields:
 			values[i] = new(sql.NullString)
@@ -100,6 +123,12 @@ func (c *Contest) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				c.UpdatedAt = value.Time
+			}
+		case contest.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				c.Status = value.Int64
 			}
 		case contest.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -204,6 +233,11 @@ func (c *Contest) Value(name string) (ent.Value, error) {
 	return c.selectValues.Get(name)
 }
 
+// QueryContestParticipants queries the "contest_participants" edge of the Contest entity.
+func (c *Contest) QueryContestParticipants() *ContestParticipantQuery {
+	return NewContestClient(c.config).QueryContestParticipants(c)
+}
+
 // Update returns a builder for updating this Contest.
 // Note that you need to call Contest.Unwrap() before calling this method if this Contest
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -232,6 +266,9 @@ func (c *Contest) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", c.Status))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(c.Name)

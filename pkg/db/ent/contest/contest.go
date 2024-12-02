@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -17,6 +18,8 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldSignNumber holds the string denoting the sign_number field in the database.
@@ -47,8 +50,17 @@ const (
 	FieldSignFields = "sign_fields"
 	// FieldCondition holds the string denoting the condition field in the database.
 	FieldCondition = "condition"
+	// EdgeContestParticipants holds the string denoting the contest_participants edge name in mutations.
+	EdgeContestParticipants = "contest_participants"
 	// Table holds the table name of the contest in the database.
 	Table = "contest"
+	// ContestParticipantsTable is the table that holds the contest_participants relation/edge.
+	ContestParticipantsTable = "contest_participant"
+	// ContestParticipantsInverseTable is the table name for the ContestParticipant entity.
+	// It exists in this package in order to avoid circular dependency with the "contestparticipant" package.
+	ContestParticipantsInverseTable = "contest_participant"
+	// ContestParticipantsColumn is the table column denoting the contest_participants relation/edge.
+	ContestParticipantsColumn = "contest_id"
 )
 
 // Columns holds all SQL columns for contest fields.
@@ -56,6 +68,7 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldStatus,
 	FieldName,
 	FieldSignNumber,
 	FieldSignStartAt,
@@ -90,6 +103,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus int64
 	// DefaultIsCancel holds the default value on creation for the "is_cancel" field.
 	DefaultIsCancel int64
 	// DefaultCancelTime holds the default value on creation for the "cancel_time" field.
@@ -114,6 +129,11 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -189,4 +209,25 @@ func BySignFields(opts ...sql.OrderTermOption) OrderOption {
 // ByCondition orders the results by the condition field.
 func ByCondition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCondition, opts...).ToFunc()
+}
+
+// ByContestParticipantsCount orders the results by contest_participants count.
+func ByContestParticipantsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newContestParticipantsStep(), opts...)
+	}
+}
+
+// ByContestParticipants orders the results by contest_participants terms.
+func ByContestParticipants(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContestParticipantsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newContestParticipantsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ContestParticipantsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ContestParticipantsTable, ContestParticipantsColumn),
+	)
 }

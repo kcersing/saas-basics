@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
 	"time"
 
@@ -44,6 +45,20 @@ func (cpc *ContestParticipantCreate) SetUpdatedAt(t time.Time) *ContestParticipa
 func (cpc *ContestParticipantCreate) SetNillableUpdatedAt(t *time.Time) *ContestParticipantCreate {
 	if t != nil {
 		cpc.SetUpdatedAt(*t)
+	}
+	return cpc
+}
+
+// SetStatus sets the "status" field.
+func (cpc *ContestParticipantCreate) SetStatus(i int64) *ContestParticipantCreate {
+	cpc.mutation.SetStatus(i)
+	return cpc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (cpc *ContestParticipantCreate) SetNillableStatus(i *int64) *ContestParticipantCreate {
+	if i != nil {
+		cpc.SetStatus(*i)
 	}
 	return cpc
 }
@@ -110,6 +125,11 @@ func (cpc *ContestParticipantCreate) SetID(i int64) *ContestParticipantCreate {
 	return cpc
 }
 
+// SetContest sets the "contest" edge to the Contest entity.
+func (cpc *ContestParticipantCreate) SetContest(c *Contest) *ContestParticipantCreate {
+	return cpc.SetContestID(c.ID)
+}
+
 // Mutation returns the ContestParticipantMutation object of the builder.
 func (cpc *ContestParticipantCreate) Mutation() *ContestParticipantMutation {
 	return cpc.mutation
@@ -152,6 +172,10 @@ func (cpc *ContestParticipantCreate) defaults() {
 	if _, ok := cpc.mutation.UpdatedAt(); !ok {
 		v := contestparticipant.DefaultUpdatedAt()
 		cpc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := cpc.mutation.Status(); !ok {
+		v := contestparticipant.DefaultStatus
+		cpc.mutation.SetStatus(v)
 	}
 }
 
@@ -203,9 +227,9 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cpc.mutation.ContestID(); ok {
-		_spec.SetField(contestparticipant.FieldContestID, field.TypeInt64, value)
-		_node.ContestID = value
+	if value, ok := cpc.mutation.Status(); ok {
+		_spec.SetField(contestparticipant.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
 	}
 	if value, ok := cpc.mutation.Name(); ok {
 		_spec.SetField(contestparticipant.FieldName, field.TypeString, value)
@@ -218,6 +242,23 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 	if value, ok := cpc.mutation.GetFields(); ok {
 		_spec.SetField(contestparticipant.FieldFields, field.TypeString, value)
 		_node.Fields = value
+	}
+	if nodes := cpc.mutation.ContestIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   contestparticipant.ContestTable,
+			Columns: []string{contestparticipant.ContestColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contest.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ContestID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

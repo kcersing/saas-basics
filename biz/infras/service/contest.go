@@ -13,6 +13,7 @@ import (
 	"saas/idl_gen/model/contest"
 	"saas/pkg/db/ent"
 	contest2 "saas/pkg/db/ent/contest"
+	"saas/pkg/db/ent/contestparticipant"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/minio"
 	"strconv"
@@ -196,18 +197,46 @@ func (c Contest) ContestInfo(id int64) (resp *contest.ContestInfo, err error) {
 }
 
 func (c Contest) UpdateContestStatus(ID int64, status int64) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := c.db.Contest.Update().Where(contest2.IDEQ(ID)).SetStatus(status).Save(c.ctx)
+	return err
 }
 
 func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
-	//TODO implement me
-	panic("implement me")
+
+	tx, err := c.db.Tx(c.ctx)
+	if err != nil {
+		return errors.Wrap(err, "starting a transaction:")
+	}
+
+	cont := tx.ContestParticipant.Create().
+		SetName(*req.Name).
+		SetContestID(*req.ContestId).
+		SetMobile(*req.Mobile).
+		SetFields(*req.Fields)
+	_, err = cont.Save(c.ctx)
+	if err = tx.Commit(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c Contest) UpdateParticipant(req contest.ParticipantInfo) error {
-	//TODO implement me
-	panic("implement me")
+	tx, err := c.db.Tx(c.ctx)
+	if err != nil {
+		return errors.Wrap(err, "starting a transaction:")
+	}
+
+	cont := tx.ContestParticipant.Update().
+		Where(contestparticipant.IDEQ(*req.ID)).
+		SetContestID(*req.ContestId).
+		SetName(*req.Name).
+		SetMobile(*req.Mobile).
+		SetFields(*req.Fields)
+	_, err = cont.Save(c.ctx)
+	if err = tx.Commit(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c Contest) DeleteParticipant(id int64) error {
@@ -216,18 +245,63 @@ func (c Contest) DeleteParticipant(id int64) error {
 }
 
 func (c Contest) ParticipantInfo(id int64) (resp *contest.ParticipantInfo, err error) {
-	//TODO implement me
-	panic("implement me")
+	resp = new(contest.ParticipantInfo)
+
+	inter, exist := c.cache.Get("participantInfo" + strconv.Itoa(int(id)))
+	if exist {
+		if u, ok := inter.(*contest.ParticipantInfo); ok {
+			return u, nil
+		}
+	}
+	participantEnt, err := c.db.ContestParticipant.Query().Where(contestparticipant.IDEQ(id)).First(c.ctx)
+
+	resp.ID = &participantEnt.ID
+	resp.Name = &participantEnt.Name
+	resp.Mobile = &participantEnt.Mobile
+	resp.Fields = &participantEnt.Fields
+	resp.ContestId = &participantEnt.ContestID
+
+	c.cache.SetWithTTL("participantInfo"+strconv.Itoa(int(*resp.ID)), &resp, 1, 1*time.Hour)
+	return
 }
 
 func (c Contest) ParticipantList(req contest.ParticipantListReq) (resp []*contest.ParticipantInfo, total int, err error) {
-	//TODO implement me
-	panic("implement me")
+	var predicates []predicate.ContestParticipant
+	if *req.Name != "" {
+		predicates = append(predicates, contestparticipant.NameEQ(*req.Name))
+	}
+	if *req.Mobile != "" {
+		predicates = append(predicates, contestparticipant.Mobile(*req.Mobile))
+	}
+
+	predicates = append(predicates, contestparticipant.ContestID(*req.ContestId))
+
+	lists, err := c.db.ContestParticipant.Query().Where(predicates...).
+		Order(ent.Desc(contestparticipant.FieldID)).
+		Offset(int(*req.Page-1) * int(*req.PageSize)).
+		Limit(int(*req.PageSize)).All(c.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get contest participant list failed")
+		return resp, total, err
+	}
+
+	for _, v := range lists {
+		resp = append(resp, &contest.ParticipantInfo{
+			ID:        &v.ID,
+			Name:      &v.Name,
+			Mobile:    &v.Mobile,
+			Fields:    &v.Fields,
+			ContestId: &v.ContestID,
+		})
+	}
+
+	total, _ = c.db.ContestParticipant.Query().Where(predicates...).Count(c.ctx)
+	return
 }
 
 func (c Contest) UpdateParticipantStatus(ID int64, status int64) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := c.db.ContestParticipant.Update().Where(contestparticipant.IDEQ(ID)).SetStatus(status).Save(c.ctx)
+	return err
 }
 
 func NewContest(ctx context.Context, c *app.RequestContext) do.Contest {

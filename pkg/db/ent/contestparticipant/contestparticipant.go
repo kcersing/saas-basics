@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -17,6 +18,8 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldContestID holds the string denoting the contest_id field in the database.
 	FieldContestID = "contest_id"
 	// FieldName holds the string denoting the name field in the database.
@@ -25,8 +28,17 @@ const (
 	FieldMobile = "mobile"
 	// FieldFields holds the string denoting the fields field in the database.
 	FieldFields = "fields"
+	// EdgeContest holds the string denoting the contest edge name in mutations.
+	EdgeContest = "contest"
 	// Table holds the table name of the contestparticipant in the database.
 	Table = "contest_participant"
+	// ContestTable is the table that holds the contest relation/edge.
+	ContestTable = "contest_participant"
+	// ContestInverseTable is the table name for the Contest entity.
+	// It exists in this package in order to avoid circular dependency with the "contest" package.
+	ContestInverseTable = "contest"
+	// ContestColumn is the table column denoting the contest relation/edge.
+	ContestColumn = "contest_id"
 )
 
 // Columns holds all SQL columns for contestparticipant fields.
@@ -34,6 +46,7 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldStatus,
 	FieldContestID,
 	FieldName,
 	FieldMobile,
@@ -57,6 +70,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus int64
 )
 
 // OrderOption defines the ordering options for the ContestParticipant queries.
@@ -77,6 +92,11 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 // ByContestID orders the results by the contest_id field.
 func ByContestID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContestID, opts...).ToFunc()
@@ -95,4 +115,18 @@ func ByMobile(opts ...sql.OrderTermOption) OrderOption {
 // ByFields orders the results by the fields field.
 func ByFields(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFields, opts...).ToFunc()
+}
+
+// ByContestField orders the results by contest field.
+func ByContestField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContestStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newContestStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ContestInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ContestTable, ContestColumn),
+	)
 }

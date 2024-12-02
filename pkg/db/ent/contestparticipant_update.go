@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
 	"saas/pkg/db/ent/predicate"
 	"time"
@@ -34,9 +35,35 @@ func (cpu *ContestParticipantUpdate) SetUpdatedAt(t time.Time) *ContestParticipa
 	return cpu
 }
 
+// SetStatus sets the "status" field.
+func (cpu *ContestParticipantUpdate) SetStatus(i int64) *ContestParticipantUpdate {
+	cpu.mutation.ResetStatus()
+	cpu.mutation.SetStatus(i)
+	return cpu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (cpu *ContestParticipantUpdate) SetNillableStatus(i *int64) *ContestParticipantUpdate {
+	if i != nil {
+		cpu.SetStatus(*i)
+	}
+	return cpu
+}
+
+// AddStatus adds i to the "status" field.
+func (cpu *ContestParticipantUpdate) AddStatus(i int64) *ContestParticipantUpdate {
+	cpu.mutation.AddStatus(i)
+	return cpu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (cpu *ContestParticipantUpdate) ClearStatus() *ContestParticipantUpdate {
+	cpu.mutation.ClearStatus()
+	return cpu
+}
+
 // SetContestID sets the "contest_id" field.
 func (cpu *ContestParticipantUpdate) SetContestID(i int64) *ContestParticipantUpdate {
-	cpu.mutation.ResetContestID()
 	cpu.mutation.SetContestID(i)
 	return cpu
 }
@@ -46,12 +73,6 @@ func (cpu *ContestParticipantUpdate) SetNillableContestID(i *int64) *ContestPart
 	if i != nil {
 		cpu.SetContestID(*i)
 	}
-	return cpu
-}
-
-// AddContestID adds i to the "contest_id" field.
-func (cpu *ContestParticipantUpdate) AddContestID(i int64) *ContestParticipantUpdate {
-	cpu.mutation.AddContestID(i)
 	return cpu
 }
 
@@ -121,9 +142,20 @@ func (cpu *ContestParticipantUpdate) ClearFields() *ContestParticipantUpdate {
 	return cpu
 }
 
+// SetContest sets the "contest" edge to the Contest entity.
+func (cpu *ContestParticipantUpdate) SetContest(c *Contest) *ContestParticipantUpdate {
+	return cpu.SetContestID(c.ID)
+}
+
 // Mutation returns the ContestParticipantMutation object of the builder.
 func (cpu *ContestParticipantUpdate) Mutation() *ContestParticipantMutation {
 	return cpu.mutation
+}
+
+// ClearContest clears the "contest" edge to the Contest entity.
+func (cpu *ContestParticipantUpdate) ClearContest() *ContestParticipantUpdate {
+	cpu.mutation.ClearContest()
+	return cpu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -174,14 +206,14 @@ func (cpu *ContestParticipantUpdate) sqlSave(ctx context.Context) (n int, err er
 	if value, ok := cpu.mutation.UpdatedAt(); ok {
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := cpu.mutation.ContestID(); ok {
-		_spec.SetField(contestparticipant.FieldContestID, field.TypeInt64, value)
+	if value, ok := cpu.mutation.Status(); ok {
+		_spec.SetField(contestparticipant.FieldStatus, field.TypeInt64, value)
 	}
-	if value, ok := cpu.mutation.AddedContestID(); ok {
-		_spec.AddField(contestparticipant.FieldContestID, field.TypeInt64, value)
+	if value, ok := cpu.mutation.AddedStatus(); ok {
+		_spec.AddField(contestparticipant.FieldStatus, field.TypeInt64, value)
 	}
-	if cpu.mutation.ContestIDCleared() {
-		_spec.ClearField(contestparticipant.FieldContestID, field.TypeInt64)
+	if cpu.mutation.StatusCleared() {
+		_spec.ClearField(contestparticipant.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := cpu.mutation.Name(); ok {
 		_spec.SetField(contestparticipant.FieldName, field.TypeString, value)
@@ -200,6 +232,35 @@ func (cpu *ContestParticipantUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if cpu.mutation.FieldsCleared() {
 		_spec.ClearField(contestparticipant.FieldFields, field.TypeString)
+	}
+	if cpu.mutation.ContestCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   contestparticipant.ContestTable,
+			Columns: []string{contestparticipant.ContestColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contest.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cpu.mutation.ContestIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   contestparticipant.ContestTable,
+			Columns: []string{contestparticipant.ContestColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contest.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -227,9 +288,35 @@ func (cpuo *ContestParticipantUpdateOne) SetUpdatedAt(t time.Time) *ContestParti
 	return cpuo
 }
 
+// SetStatus sets the "status" field.
+func (cpuo *ContestParticipantUpdateOne) SetStatus(i int64) *ContestParticipantUpdateOne {
+	cpuo.mutation.ResetStatus()
+	cpuo.mutation.SetStatus(i)
+	return cpuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (cpuo *ContestParticipantUpdateOne) SetNillableStatus(i *int64) *ContestParticipantUpdateOne {
+	if i != nil {
+		cpuo.SetStatus(*i)
+	}
+	return cpuo
+}
+
+// AddStatus adds i to the "status" field.
+func (cpuo *ContestParticipantUpdateOne) AddStatus(i int64) *ContestParticipantUpdateOne {
+	cpuo.mutation.AddStatus(i)
+	return cpuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (cpuo *ContestParticipantUpdateOne) ClearStatus() *ContestParticipantUpdateOne {
+	cpuo.mutation.ClearStatus()
+	return cpuo
+}
+
 // SetContestID sets the "contest_id" field.
 func (cpuo *ContestParticipantUpdateOne) SetContestID(i int64) *ContestParticipantUpdateOne {
-	cpuo.mutation.ResetContestID()
 	cpuo.mutation.SetContestID(i)
 	return cpuo
 }
@@ -239,12 +326,6 @@ func (cpuo *ContestParticipantUpdateOne) SetNillableContestID(i *int64) *Contest
 	if i != nil {
 		cpuo.SetContestID(*i)
 	}
-	return cpuo
-}
-
-// AddContestID adds i to the "contest_id" field.
-func (cpuo *ContestParticipantUpdateOne) AddContestID(i int64) *ContestParticipantUpdateOne {
-	cpuo.mutation.AddContestID(i)
 	return cpuo
 }
 
@@ -314,9 +395,20 @@ func (cpuo *ContestParticipantUpdateOne) ClearFields() *ContestParticipantUpdate
 	return cpuo
 }
 
+// SetContest sets the "contest" edge to the Contest entity.
+func (cpuo *ContestParticipantUpdateOne) SetContest(c *Contest) *ContestParticipantUpdateOne {
+	return cpuo.SetContestID(c.ID)
+}
+
 // Mutation returns the ContestParticipantMutation object of the builder.
 func (cpuo *ContestParticipantUpdateOne) Mutation() *ContestParticipantMutation {
 	return cpuo.mutation
+}
+
+// ClearContest clears the "contest" edge to the Contest entity.
+func (cpuo *ContestParticipantUpdateOne) ClearContest() *ContestParticipantUpdateOne {
+	cpuo.mutation.ClearContest()
+	return cpuo
 }
 
 // Where appends a list predicates to the ContestParticipantUpdate builder.
@@ -397,14 +489,14 @@ func (cpuo *ContestParticipantUpdateOne) sqlSave(ctx context.Context) (_node *Co
 	if value, ok := cpuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := cpuo.mutation.ContestID(); ok {
-		_spec.SetField(contestparticipant.FieldContestID, field.TypeInt64, value)
+	if value, ok := cpuo.mutation.Status(); ok {
+		_spec.SetField(contestparticipant.FieldStatus, field.TypeInt64, value)
 	}
-	if value, ok := cpuo.mutation.AddedContestID(); ok {
-		_spec.AddField(contestparticipant.FieldContestID, field.TypeInt64, value)
+	if value, ok := cpuo.mutation.AddedStatus(); ok {
+		_spec.AddField(contestparticipant.FieldStatus, field.TypeInt64, value)
 	}
-	if cpuo.mutation.ContestIDCleared() {
-		_spec.ClearField(contestparticipant.FieldContestID, field.TypeInt64)
+	if cpuo.mutation.StatusCleared() {
+		_spec.ClearField(contestparticipant.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := cpuo.mutation.Name(); ok {
 		_spec.SetField(contestparticipant.FieldName, field.TypeString, value)
@@ -423,6 +515,35 @@ func (cpuo *ContestParticipantUpdateOne) sqlSave(ctx context.Context) (_node *Co
 	}
 	if cpuo.mutation.FieldsCleared() {
 		_spec.ClearField(contestparticipant.FieldFields, field.TypeString)
+	}
+	if cpuo.mutation.ContestCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   contestparticipant.ContestTable,
+			Columns: []string{contestparticipant.ContestColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contest.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cpuo.mutation.ContestIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   contestparticipant.ContestTable,
+			Columns: []string{contestparticipant.ContestColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contest.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ContestParticipant{config: cpuo.config}
 	_spec.Assign = _node.assignValues

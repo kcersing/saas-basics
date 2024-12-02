@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
 	"saas/pkg/db/ent/predicate"
 
@@ -17,10 +18,11 @@ import (
 // ContestParticipantQuery is the builder for querying ContestParticipant entities.
 type ContestParticipantQuery struct {
 	config
-	ctx        *QueryContext
-	order      []contestparticipant.OrderOption
-	inters     []Interceptor
-	predicates []predicate.ContestParticipant
+	ctx         *QueryContext
+	order       []contestparticipant.OrderOption
+	inters      []Interceptor
+	predicates  []predicate.ContestParticipant
+	withContest *ContestQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +57,28 @@ func (cpq *ContestParticipantQuery) Unique(unique bool) *ContestParticipantQuery
 func (cpq *ContestParticipantQuery) Order(o ...contestparticipant.OrderOption) *ContestParticipantQuery {
 	cpq.order = append(cpq.order, o...)
 	return cpq
+}
+
+// QueryContest chains the current query on the "contest" edge.
+func (cpq *ContestParticipantQuery) QueryContest() *ContestQuery {
+	query := (&ContestClient{config: cpq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cpq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cpq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contestparticipant.Table, contestparticipant.FieldID, selector),
+			sqlgraph.To(contest.Table, contest.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, contestparticipant.ContestTable, contestparticipant.ContestColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cpq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first ContestParticipant entity from the query.
@@ -244,15 +268,27 @@ func (cpq *ContestParticipantQuery) Clone() *ContestParticipantQuery {
 		return nil
 	}
 	return &ContestParticipantQuery{
-		config:     cpq.config,
-		ctx:        cpq.ctx.Clone(),
-		order:      append([]contestparticipant.OrderOption{}, cpq.order...),
-		inters:     append([]Interceptor{}, cpq.inters...),
-		predicates: append([]predicate.ContestParticipant{}, cpq.predicates...),
+		config:      cpq.config,
+		ctx:         cpq.ctx.Clone(),
+		order:       append([]contestparticipant.OrderOption{}, cpq.order...),
+		inters:      append([]Interceptor{}, cpq.inters...),
+		predicates:  append([]predicate.ContestParticipant{}, cpq.predicates...),
+		withContest: cpq.withContest.Clone(),
 		// clone intermediate query.
 		sql:  cpq.sql.Clone(),
 		path: cpq.path,
 	}
+}
+
+// WithContest tells the query-builder to eager-load the nodes that are connected to
+// the "contest" edge. The optional arguments are used to configure the query builder of the edge.
+func (cpq *ContestParticipantQuery) WithContest(opts ...func(*ContestQuery)) *ContestParticipantQuery {
+	query := (&ContestClient{config: cpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cpq.withContest = query
+	return cpq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,8 +367,11 @@ func (cpq *ContestParticipantQuery) prepareQuery(ctx context.Context) error {
 
 func (cpq *ContestParticipantQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ContestParticipant, error) {
 	var (
-		nodes = []*ContestParticipant{}
-		_spec = cpq.querySpec()
+		nodes       = []*ContestParticipant{}
+		_spec       = cpq.querySpec()
+		loadedTypes = [1]bool{
+			cpq.withContest != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ContestParticipant).scanValues(nil, columns)
@@ -340,6 +379,7 @@ func (cpq *ContestParticipantQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &ContestParticipant{config: cpq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +391,43 @@ func (cpq *ContestParticipantQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := cpq.withContest; query != nil {
+		if err := cpq.loadContest(ctx, query, nodes, nil,
+			func(n *ContestParticipant, e *Contest) { n.Edges.Contest = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (cpq *ContestParticipantQuery) loadContest(ctx context.Context, query *ContestQuery, nodes []*ContestParticipant, init func(*ContestParticipant), assign func(*ContestParticipant, *Contest)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*ContestParticipant)
+	for i := range nodes {
+		fk := nodes[i].ContestID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(contest.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "contest_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (cpq *ContestParticipantQuery) sqlCount(ctx context.Context) (int, error) {
@@ -378,6 +454,9 @@ func (cpq *ContestParticipantQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != contestparticipant.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if cpq.withContest != nil {
+			_spec.Node.AddColumnOnce(contestparticipant.FieldContestID)
 		}
 	}
 	if ps := cpq.predicates; len(ps) > 0 {

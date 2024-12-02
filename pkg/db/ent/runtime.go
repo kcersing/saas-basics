@@ -59,6 +59,8 @@ func init() {
 	contestMixin := schema.Contest{}.Mixin()
 	contestMixinFields0 := contestMixin[0].Fields()
 	_ = contestMixinFields0
+	contestMixinFields1 := contestMixin[1].Fields()
+	_ = contestMixinFields1
 	contestFields := schema.Contest{}.Fields()
 	_ = contestFields
 	// contestDescCreatedAt is the schema descriptor for created_at field.
@@ -71,6 +73,10 @@ func init() {
 	contest.DefaultUpdatedAt = contestDescUpdatedAt.Default.(func() time.Time)
 	// contest.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	contest.UpdateDefaultUpdatedAt = contestDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// contestDescStatus is the schema descriptor for status field.
+	contestDescStatus := contestMixinFields1[0].Descriptor()
+	// contest.DefaultStatus holds the default value on creation for the status field.
+	contest.DefaultStatus = contestDescStatus.Default.(int64)
 	// contestDescIsCancel is the schema descriptor for is_cancel field.
 	contestDescIsCancel := contestFields[10].Descriptor()
 	// contest.DefaultIsCancel holds the default value on creation for the is_cancel field.
@@ -86,6 +92,8 @@ func init() {
 	contestparticipantMixin := schema.ContestParticipant{}.Mixin()
 	contestparticipantMixinFields0 := contestparticipantMixin[0].Fields()
 	_ = contestparticipantMixinFields0
+	contestparticipantMixinFields1 := contestparticipantMixin[1].Fields()
+	_ = contestparticipantMixinFields1
 	contestparticipantFields := schema.ContestParticipant{}.Fields()
 	_ = contestparticipantFields
 	// contestparticipantDescCreatedAt is the schema descriptor for created_at field.
@@ -98,6 +106,10 @@ func init() {
 	contestparticipant.DefaultUpdatedAt = contestparticipantDescUpdatedAt.Default.(func() time.Time)
 	// contestparticipant.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	contestparticipant.UpdateDefaultUpdatedAt = contestparticipantDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// contestparticipantDescStatus is the schema descriptor for status field.
+	contestparticipantDescStatus := contestparticipantMixinFields1[0].Descriptor()
+	// contestparticipant.DefaultStatus holds the default value on creation for the status field.
+	contestparticipant.DefaultStatus = contestparticipantDescStatus.Default.(int64)
 	contractMixin := schema.Contract{}.Mixin()
 	contractMixinFields0 := contractMixin[0].Fields()
 	_ = contractMixinFields0

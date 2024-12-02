@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/contest"
+	"saas/pkg/db/ent/contestparticipant"
 	"saas/pkg/db/ent/predicate"
 	"time"
 
@@ -31,6 +32,33 @@ func (cu *ContestUpdate) Where(ps ...predicate.Contest) *ContestUpdate {
 // SetUpdatedAt sets the "updated_at" field.
 func (cu *ContestUpdate) SetUpdatedAt(t time.Time) *ContestUpdate {
 	cu.mutation.SetUpdatedAt(t)
+	return cu
+}
+
+// SetStatus sets the "status" field.
+func (cu *ContestUpdate) SetStatus(i int64) *ContestUpdate {
+	cu.mutation.ResetStatus()
+	cu.mutation.SetStatus(i)
+	return cu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (cu *ContestUpdate) SetNillableStatus(i *int64) *ContestUpdate {
+	if i != nil {
+		cu.SetStatus(*i)
+	}
+	return cu
+}
+
+// AddStatus adds i to the "status" field.
+func (cu *ContestUpdate) AddStatus(i int64) *ContestUpdate {
+	cu.mutation.AddStatus(i)
+	return cu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (cu *ContestUpdate) ClearStatus() *ContestUpdate {
+	cu.mutation.ClearStatus()
 	return cu
 }
 
@@ -376,9 +404,45 @@ func (cu *ContestUpdate) ClearCondition() *ContestUpdate {
 	return cu
 }
 
+// AddContestParticipantIDs adds the "contest_participants" edge to the ContestParticipant entity by IDs.
+func (cu *ContestUpdate) AddContestParticipantIDs(ids ...int64) *ContestUpdate {
+	cu.mutation.AddContestParticipantIDs(ids...)
+	return cu
+}
+
+// AddContestParticipants adds the "contest_participants" edges to the ContestParticipant entity.
+func (cu *ContestUpdate) AddContestParticipants(c ...*ContestParticipant) *ContestUpdate {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cu.AddContestParticipantIDs(ids...)
+}
+
 // Mutation returns the ContestMutation object of the builder.
 func (cu *ContestUpdate) Mutation() *ContestMutation {
 	return cu.mutation
+}
+
+// ClearContestParticipants clears all "contest_participants" edges to the ContestParticipant entity.
+func (cu *ContestUpdate) ClearContestParticipants() *ContestUpdate {
+	cu.mutation.ClearContestParticipants()
+	return cu
+}
+
+// RemoveContestParticipantIDs removes the "contest_participants" edge to ContestParticipant entities by IDs.
+func (cu *ContestUpdate) RemoveContestParticipantIDs(ids ...int64) *ContestUpdate {
+	cu.mutation.RemoveContestParticipantIDs(ids...)
+	return cu
+}
+
+// RemoveContestParticipants removes "contest_participants" edges to ContestParticipant entities.
+func (cu *ContestUpdate) RemoveContestParticipants(c ...*ContestParticipant) *ContestUpdate {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cu.RemoveContestParticipantIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -428,6 +492,15 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := cu.mutation.UpdatedAt(); ok {
 		_spec.SetField(contest.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := cu.mutation.Status(); ok {
+		_spec.SetField(contest.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := cu.mutation.AddedStatus(); ok {
+		_spec.AddField(contest.FieldStatus, field.TypeInt64, value)
+	}
+	if cu.mutation.StatusCleared() {
+		_spec.ClearField(contest.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := cu.mutation.Name(); ok {
 		_spec.SetField(contest.FieldName, field.TypeString, value)
@@ -537,6 +610,51 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.ConditionCleared() {
 		_spec.ClearField(contest.FieldCondition, field.TypeInt64)
 	}
+	if cu.mutation.ContestParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contest.ContestParticipantsTable,
+			Columns: []string{contest.ContestParticipantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedContestParticipantsIDs(); len(nodes) > 0 && !cu.mutation.ContestParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contest.ContestParticipantsTable,
+			Columns: []string{contest.ContestParticipantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ContestParticipantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contest.ContestParticipantsTable,
+			Columns: []string{contest.ContestParticipantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{contest.Label}
@@ -560,6 +678,33 @@ type ContestUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (cuo *ContestUpdateOne) SetUpdatedAt(t time.Time) *ContestUpdateOne {
 	cuo.mutation.SetUpdatedAt(t)
+	return cuo
+}
+
+// SetStatus sets the "status" field.
+func (cuo *ContestUpdateOne) SetStatus(i int64) *ContestUpdateOne {
+	cuo.mutation.ResetStatus()
+	cuo.mutation.SetStatus(i)
+	return cuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (cuo *ContestUpdateOne) SetNillableStatus(i *int64) *ContestUpdateOne {
+	if i != nil {
+		cuo.SetStatus(*i)
+	}
+	return cuo
+}
+
+// AddStatus adds i to the "status" field.
+func (cuo *ContestUpdateOne) AddStatus(i int64) *ContestUpdateOne {
+	cuo.mutation.AddStatus(i)
+	return cuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (cuo *ContestUpdateOne) ClearStatus() *ContestUpdateOne {
+	cuo.mutation.ClearStatus()
 	return cuo
 }
 
@@ -905,9 +1050,45 @@ func (cuo *ContestUpdateOne) ClearCondition() *ContestUpdateOne {
 	return cuo
 }
 
+// AddContestParticipantIDs adds the "contest_participants" edge to the ContestParticipant entity by IDs.
+func (cuo *ContestUpdateOne) AddContestParticipantIDs(ids ...int64) *ContestUpdateOne {
+	cuo.mutation.AddContestParticipantIDs(ids...)
+	return cuo
+}
+
+// AddContestParticipants adds the "contest_participants" edges to the ContestParticipant entity.
+func (cuo *ContestUpdateOne) AddContestParticipants(c ...*ContestParticipant) *ContestUpdateOne {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cuo.AddContestParticipantIDs(ids...)
+}
+
 // Mutation returns the ContestMutation object of the builder.
 func (cuo *ContestUpdateOne) Mutation() *ContestMutation {
 	return cuo.mutation
+}
+
+// ClearContestParticipants clears all "contest_participants" edges to the ContestParticipant entity.
+func (cuo *ContestUpdateOne) ClearContestParticipants() *ContestUpdateOne {
+	cuo.mutation.ClearContestParticipants()
+	return cuo
+}
+
+// RemoveContestParticipantIDs removes the "contest_participants" edge to ContestParticipant entities by IDs.
+func (cuo *ContestUpdateOne) RemoveContestParticipantIDs(ids ...int64) *ContestUpdateOne {
+	cuo.mutation.RemoveContestParticipantIDs(ids...)
+	return cuo
+}
+
+// RemoveContestParticipants removes "contest_participants" edges to ContestParticipant entities.
+func (cuo *ContestUpdateOne) RemoveContestParticipants(c ...*ContestParticipant) *ContestUpdateOne {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cuo.RemoveContestParticipantIDs(ids...)
 }
 
 // Where appends a list predicates to the ContestUpdate builder.
@@ -987,6 +1168,15 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 	}
 	if value, ok := cuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(contest.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := cuo.mutation.Status(); ok {
+		_spec.SetField(contest.FieldStatus, field.TypeInt64, value)
+	}
+	if value, ok := cuo.mutation.AddedStatus(); ok {
+		_spec.AddField(contest.FieldStatus, field.TypeInt64, value)
+	}
+	if cuo.mutation.StatusCleared() {
+		_spec.ClearField(contest.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := cuo.mutation.Name(); ok {
 		_spec.SetField(contest.FieldName, field.TypeString, value)
@@ -1095,6 +1285,51 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 	}
 	if cuo.mutation.ConditionCleared() {
 		_spec.ClearField(contest.FieldCondition, field.TypeInt64)
+	}
+	if cuo.mutation.ContestParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contest.ContestParticipantsTable,
+			Columns: []string{contest.ContestParticipantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedContestParticipantsIDs(); len(nodes) > 0 && !cuo.mutation.ContestParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contest.ContestParticipantsTable,
+			Columns: []string{contest.ContestParticipantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ContestParticipantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contest.ContestParticipantsTable,
+			Columns: []string{contest.ContestParticipantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Contest{config: cuo.config}
 	_spec.Assign = _node.assignValues

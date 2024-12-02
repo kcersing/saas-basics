@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"saas/pkg/db/ent/schema/mixins"
@@ -26,12 +27,13 @@ func (ContestParticipant) Fields() []ent.Field {
 func (ContestParticipant) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
+		mixins.StatusMixin{},
 	}
 }
 
 func (ContestParticipant) Edges() []ent.Edge {
 	return []ent.Edge{
-		//edge.From("contest", Contest.Type).Ref("contest_participants").Field("contest_id").Unique(),
+		edge.From("contest", Contest.Type).Ref("contest_participants").Field("contest_id").Unique(),
 	}
 }
 

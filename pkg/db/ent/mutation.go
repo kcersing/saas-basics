@@ -736,36 +736,41 @@ func (m *APIMutation) ResetEdge(name string) error {
 // ContestMutation represents an operation that mutates the Contest nodes in the graph.
 type ContestMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int64
-	created_at     *time.Time
-	updated_at     *time.Time
-	name           *string
-	sign_number    *int64
-	addsign_number *int64
-	sign_start_at  *time.Time
-	sign_end_at    *time.Time
-	number         *int64
-	addnumber      *int64
-	start_at       *time.Time
-	end_at         *time.Time
-	pic            *string
-	sponsor        *string
-	fee            *float64
-	addfee         *float64
-	is_cancel      *int64
-	addis_cancel   *int64
-	cancel_time    *int64
-	addcancel_time *int64
-	detail         *string
-	sign_fields    *string
-	condition      *int64
-	addcondition   *int64
-	clearedFields  map[string]struct{}
-	done           bool
-	oldValue       func(context.Context) (*Contest, error)
-	predicates     []predicate.Contest
+	op                          Op
+	typ                         string
+	id                          *int64
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	status                      *int64
+	addstatus                   *int64
+	name                        *string
+	sign_number                 *int64
+	addsign_number              *int64
+	sign_start_at               *time.Time
+	sign_end_at                 *time.Time
+	number                      *int64
+	addnumber                   *int64
+	start_at                    *time.Time
+	end_at                      *time.Time
+	pic                         *string
+	sponsor                     *string
+	fee                         *float64
+	addfee                      *float64
+	is_cancel                   *int64
+	addis_cancel                *int64
+	cancel_time                 *int64
+	addcancel_time              *int64
+	detail                      *string
+	sign_fields                 *string
+	condition                   *int64
+	addcondition                *int64
+	clearedFields               map[string]struct{}
+	contest_participants        map[int64]struct{}
+	removedcontest_participants map[int64]struct{}
+	clearedcontest_participants bool
+	done                        bool
+	oldValue                    func(context.Context) (*Contest, error)
+	predicates                  []predicate.Contest
 }
 
 var _ ent.Mutation = (*ContestMutation)(nil)
@@ -942,6 +947,76 @@ func (m *ContestMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err er
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *ContestMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *ContestMutation) SetStatus(i int64) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ContestMutation) Status() (r int64, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Contest entity.
+// If the Contest object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContestMutation) OldStatus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *ContestMutation) AddStatus(i int64) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *ContestMutation) AddedStatus() (r int64, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *ContestMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[contest.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *ContestMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[contest.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ContestMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, contest.FieldStatus)
 }
 
 // SetName sets the "name" field.
@@ -1805,6 +1880,60 @@ func (m *ContestMutation) ResetCondition() {
 	delete(m.clearedFields, contest.FieldCondition)
 }
 
+// AddContestParticipantIDs adds the "contest_participants" edge to the ContestParticipant entity by ids.
+func (m *ContestMutation) AddContestParticipantIDs(ids ...int64) {
+	if m.contest_participants == nil {
+		m.contest_participants = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.contest_participants[ids[i]] = struct{}{}
+	}
+}
+
+// ClearContestParticipants clears the "contest_participants" edge to the ContestParticipant entity.
+func (m *ContestMutation) ClearContestParticipants() {
+	m.clearedcontest_participants = true
+}
+
+// ContestParticipantsCleared reports if the "contest_participants" edge to the ContestParticipant entity was cleared.
+func (m *ContestMutation) ContestParticipantsCleared() bool {
+	return m.clearedcontest_participants
+}
+
+// RemoveContestParticipantIDs removes the "contest_participants" edge to the ContestParticipant entity by IDs.
+func (m *ContestMutation) RemoveContestParticipantIDs(ids ...int64) {
+	if m.removedcontest_participants == nil {
+		m.removedcontest_participants = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.contest_participants, ids[i])
+		m.removedcontest_participants[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedContestParticipants returns the removed IDs of the "contest_participants" edge to the ContestParticipant entity.
+func (m *ContestMutation) RemovedContestParticipantsIDs() (ids []int64) {
+	for id := range m.removedcontest_participants {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ContestParticipantsIDs returns the "contest_participants" edge IDs in the mutation.
+func (m *ContestMutation) ContestParticipantsIDs() (ids []int64) {
+	for id := range m.contest_participants {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetContestParticipants resets all changes to the "contest_participants" edge.
+func (m *ContestMutation) ResetContestParticipants() {
+	m.contest_participants = nil
+	m.clearedcontest_participants = false
+	m.removedcontest_participants = nil
+}
+
 // Where appends a list predicates to the ContestMutation builder.
 func (m *ContestMutation) Where(ps ...predicate.Contest) {
 	m.predicates = append(m.predicates, ps...)
@@ -1839,12 +1968,15 @@ func (m *ContestMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ContestMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, contest.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
 		fields = append(fields, contest.FieldUpdatedAt)
+	}
+	if m.status != nil {
+		fields = append(fields, contest.FieldStatus)
 	}
 	if m.name != nil {
 		fields = append(fields, contest.FieldName)
@@ -1903,6 +2035,8 @@ func (m *ContestMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case contest.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case contest.FieldStatus:
+		return m.Status()
 	case contest.FieldName:
 		return m.Name()
 	case contest.FieldSignNumber:
@@ -1946,6 +2080,8 @@ func (m *ContestMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldCreatedAt(ctx)
 	case contest.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case contest.FieldStatus:
+		return m.OldStatus(ctx)
 	case contest.FieldName:
 		return m.OldName(ctx)
 	case contest.FieldSignNumber:
@@ -1998,6 +2134,13 @@ func (m *ContestMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case contest.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
 		return nil
 	case contest.FieldName:
 		v, ok := value.(string)
@@ -2112,6 +2255,9 @@ func (m *ContestMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ContestMutation) AddedFields() []string {
 	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, contest.FieldStatus)
+	}
 	if m.addsign_number != nil {
 		fields = append(fields, contest.FieldSignNumber)
 	}
@@ -2138,6 +2284,8 @@ func (m *ContestMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ContestMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case contest.FieldStatus:
+		return m.AddedStatus()
 	case contest.FieldSignNumber:
 		return m.AddedSignNumber()
 	case contest.FieldNumber:
@@ -2159,6 +2307,13 @@ func (m *ContestMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ContestMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case contest.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
 	case contest.FieldSignNumber:
 		v, ok := value.(int64)
 		if !ok {
@@ -2209,6 +2364,9 @@ func (m *ContestMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ContestMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(contest.FieldStatus) {
+		fields = append(fields, contest.FieldStatus)
+	}
 	if m.FieldCleared(contest.FieldName) {
 		fields = append(fields, contest.FieldName)
 	}
@@ -2268,6 +2426,9 @@ func (m *ContestMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ContestMutation) ClearField(name string) error {
 	switch name {
+	case contest.FieldStatus:
+		m.ClearStatus()
+		return nil
 	case contest.FieldName:
 		m.ClearName()
 		return nil
@@ -2327,6 +2488,9 @@ func (m *ContestMutation) ResetField(name string) error {
 	case contest.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
+	case contest.FieldStatus:
+		m.ResetStatus()
+		return nil
 	case contest.FieldName:
 		m.ResetName()
 		return nil
@@ -2378,69 +2542,107 @@ func (m *ContestMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ContestMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.contest_participants != nil {
+		edges = append(edges, contest.EdgeContestParticipants)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ContestMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case contest.EdgeContestParticipants:
+		ids := make([]ent.Value, 0, len(m.contest_participants))
+		for id := range m.contest_participants {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ContestMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removedcontest_participants != nil {
+		edges = append(edges, contest.EdgeContestParticipants)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ContestMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case contest.EdgeContestParticipants:
+		ids := make([]ent.Value, 0, len(m.removedcontest_participants))
+		for id := range m.removedcontest_participants {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ContestMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedcontest_participants {
+		edges = append(edges, contest.EdgeContestParticipants)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ContestMutation) EdgeCleared(name string) bool {
+	switch name {
+	case contest.EdgeContestParticipants:
+		return m.clearedcontest_participants
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ContestMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Contest unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ContestMutation) ResetEdge(name string) error {
+	switch name {
+	case contest.EdgeContestParticipants:
+		m.ResetContestParticipants()
+		return nil
+	}
 	return fmt.Errorf("unknown Contest edge %s", name)
 }
 
 // ContestParticipantMutation represents an operation that mutates the ContestParticipant nodes in the graph.
 type ContestParticipantMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int64
-	created_at    *time.Time
-	updated_at    *time.Time
-	contest_id    *int64
-	addcontest_id *int64
-	name          *string
-	mobile        *string
-	fields        *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*ContestParticipant, error)
-	predicates    []predicate.ContestParticipant
+	op             Op
+	typ            string
+	id             *int64
+	created_at     *time.Time
+	updated_at     *time.Time
+	status         *int64
+	addstatus      *int64
+	name           *string
+	mobile         *string
+	fields         *string
+	clearedFields  map[string]struct{}
+	contest        *int64
+	clearedcontest bool
+	done           bool
+	oldValue       func(context.Context) (*ContestParticipant, error)
+	predicates     []predicate.ContestParticipant
 }
 
 var _ ent.Mutation = (*ContestParticipantMutation)(nil)
@@ -2619,15 +2821,84 @@ func (m *ContestParticipantMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
+// SetStatus sets the "status" field.
+func (m *ContestParticipantMutation) SetStatus(i int64) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ContestParticipantMutation) Status() (r int64, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the ContestParticipant entity.
+// If the ContestParticipant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContestParticipantMutation) OldStatus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *ContestParticipantMutation) AddStatus(i int64) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *ContestParticipantMutation) AddedStatus() (r int64, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *ContestParticipantMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[contestparticipant.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *ContestParticipantMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[contestparticipant.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ContestParticipantMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, contestparticipant.FieldStatus)
+}
+
 // SetContestID sets the "contest_id" field.
 func (m *ContestParticipantMutation) SetContestID(i int64) {
-	m.contest_id = &i
-	m.addcontest_id = nil
+	m.contest = &i
 }
 
 // ContestID returns the value of the "contest_id" field in the mutation.
 func (m *ContestParticipantMutation) ContestID() (r int64, exists bool) {
-	v := m.contest_id
+	v := m.contest
 	if v == nil {
 		return
 	}
@@ -2651,28 +2922,9 @@ func (m *ContestParticipantMutation) OldContestID(ctx context.Context) (v int64,
 	return oldValue.ContestID, nil
 }
 
-// AddContestID adds i to the "contest_id" field.
-func (m *ContestParticipantMutation) AddContestID(i int64) {
-	if m.addcontest_id != nil {
-		*m.addcontest_id += i
-	} else {
-		m.addcontest_id = &i
-	}
-}
-
-// AddedContestID returns the value that was added to the "contest_id" field in this mutation.
-func (m *ContestParticipantMutation) AddedContestID() (r int64, exists bool) {
-	v := m.addcontest_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearContestID clears the value of the "contest_id" field.
 func (m *ContestParticipantMutation) ClearContestID() {
-	m.contest_id = nil
-	m.addcontest_id = nil
+	m.contest = nil
 	m.clearedFields[contestparticipant.FieldContestID] = struct{}{}
 }
 
@@ -2684,8 +2936,7 @@ func (m *ContestParticipantMutation) ContestIDCleared() bool {
 
 // ResetContestID resets all changes to the "contest_id" field.
 func (m *ContestParticipantMutation) ResetContestID() {
-	m.contest_id = nil
-	m.addcontest_id = nil
+	m.contest = nil
 	delete(m.clearedFields, contestparticipant.FieldContestID)
 }
 
@@ -2836,6 +3087,33 @@ func (m *ContestParticipantMutation) ResetFields() {
 	delete(m.clearedFields, contestparticipant.FieldFields)
 }
 
+// ClearContest clears the "contest" edge to the Contest entity.
+func (m *ContestParticipantMutation) ClearContest() {
+	m.clearedcontest = true
+	m.clearedFields[contestparticipant.FieldContestID] = struct{}{}
+}
+
+// ContestCleared reports if the "contest" edge to the Contest entity was cleared.
+func (m *ContestParticipantMutation) ContestCleared() bool {
+	return m.ContestIDCleared() || m.clearedcontest
+}
+
+// ContestIDs returns the "contest" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ContestID instead. It exists only for internal usage by the builders.
+func (m *ContestParticipantMutation) ContestIDs() (ids []int64) {
+	if id := m.contest; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetContest resets all changes to the "contest" edge.
+func (m *ContestParticipantMutation) ResetContest() {
+	m.contest = nil
+	m.clearedcontest = false
+}
+
 // Where appends a list predicates to the ContestParticipantMutation builder.
 func (m *ContestParticipantMutation) Where(ps ...predicate.ContestParticipant) {
 	m.predicates = append(m.predicates, ps...)
@@ -2870,14 +3148,17 @@ func (m *ContestParticipantMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ContestParticipantMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.created_at != nil {
 		fields = append(fields, contestparticipant.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
 		fields = append(fields, contestparticipant.FieldUpdatedAt)
 	}
-	if m.contest_id != nil {
+	if m.status != nil {
+		fields = append(fields, contestparticipant.FieldStatus)
+	}
+	if m.contest != nil {
 		fields = append(fields, contestparticipant.FieldContestID)
 	}
 	if m.name != nil {
@@ -2901,6 +3182,8 @@ func (m *ContestParticipantMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case contestparticipant.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case contestparticipant.FieldStatus:
+		return m.Status()
 	case contestparticipant.FieldContestID:
 		return m.ContestID()
 	case contestparticipant.FieldName:
@@ -2922,6 +3205,8 @@ func (m *ContestParticipantMutation) OldField(ctx context.Context, name string) 
 		return m.OldCreatedAt(ctx)
 	case contestparticipant.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case contestparticipant.FieldStatus:
+		return m.OldStatus(ctx)
 	case contestparticipant.FieldContestID:
 		return m.OldContestID(ctx)
 	case contestparticipant.FieldName:
@@ -2952,6 +3237,13 @@ func (m *ContestParticipantMutation) SetField(name string, value ent.Value) erro
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case contestparticipant.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
 		return nil
 	case contestparticipant.FieldContestID:
 		v, ok := value.(int64)
@@ -2989,8 +3281,8 @@ func (m *ContestParticipantMutation) SetField(name string, value ent.Value) erro
 // this mutation.
 func (m *ContestParticipantMutation) AddedFields() []string {
 	var fields []string
-	if m.addcontest_id != nil {
-		fields = append(fields, contestparticipant.FieldContestID)
+	if m.addstatus != nil {
+		fields = append(fields, contestparticipant.FieldStatus)
 	}
 	return fields
 }
@@ -3000,8 +3292,8 @@ func (m *ContestParticipantMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ContestParticipantMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case contestparticipant.FieldContestID:
-		return m.AddedContestID()
+	case contestparticipant.FieldStatus:
+		return m.AddedStatus()
 	}
 	return nil, false
 }
@@ -3011,12 +3303,12 @@ func (m *ContestParticipantMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ContestParticipantMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case contestparticipant.FieldContestID:
+	case contestparticipant.FieldStatus:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddContestID(v)
+		m.AddStatus(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ContestParticipant numeric field %s", name)
@@ -3026,6 +3318,9 @@ func (m *ContestParticipantMutation) AddField(name string, value ent.Value) erro
 // mutation.
 func (m *ContestParticipantMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(contestparticipant.FieldStatus) {
+		fields = append(fields, contestparticipant.FieldStatus)
+	}
 	if m.FieldCleared(contestparticipant.FieldContestID) {
 		fields = append(fields, contestparticipant.FieldContestID)
 	}
@@ -3052,6 +3347,9 @@ func (m *ContestParticipantMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ContestParticipantMutation) ClearField(name string) error {
 	switch name {
+	case contestparticipant.FieldStatus:
+		m.ClearStatus()
+		return nil
 	case contestparticipant.FieldContestID:
 		m.ClearContestID()
 		return nil
@@ -3078,6 +3376,9 @@ func (m *ContestParticipantMutation) ResetField(name string) error {
 	case contestparticipant.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
+	case contestparticipant.FieldStatus:
+		m.ResetStatus()
+		return nil
 	case contestparticipant.FieldContestID:
 		m.ResetContestID()
 		return nil
@@ -3096,19 +3397,28 @@ func (m *ContestParticipantMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ContestParticipantMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.contest != nil {
+		edges = append(edges, contestparticipant.EdgeContest)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ContestParticipantMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case contestparticipant.EdgeContest:
+		if id := m.contest; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ContestParticipantMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -3120,25 +3430,42 @@ func (m *ContestParticipantMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ContestParticipantMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedcontest {
+		edges = append(edges, contestparticipant.EdgeContest)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ContestParticipantMutation) EdgeCleared(name string) bool {
+	switch name {
+	case contestparticipant.EdgeContest:
+		return m.clearedcontest
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ContestParticipantMutation) ClearEdge(name string) error {
+	switch name {
+	case contestparticipant.EdgeContest:
+		m.ClearContest()
+		return nil
+	}
 	return fmt.Errorf("unknown ContestParticipant unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ContestParticipantMutation) ResetEdge(name string) error {
+	switch name {
+	case contestparticipant.EdgeContest:
+		m.ResetContest()
+		return nil
+	}
 	return fmt.Errorf("unknown ContestParticipant edge %s", name)
 }
 

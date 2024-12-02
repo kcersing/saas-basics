@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -62,6 +63,11 @@ func CreatedAt(v time.Time) predicate.ContestParticipant {
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
 func UpdatedAt(v time.Time) predicate.ContestParticipant {
 	return predicate.ContestParticipant(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldEQ(FieldStatus, v))
 }
 
 // ContestID applies equality check predicate on the "contest_id" field. It's identical to ContestIDEQ.
@@ -164,6 +170,56 @@ func UpdatedAtLTE(v time.Time) predicate.ContestParticipant {
 	return predicate.ContestParticipant(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldNotNull(FieldStatus))
+}
+
 // ContestIDEQ applies the EQ predicate on the "contest_id" field.
 func ContestIDEQ(v int64) predicate.ContestParticipant {
 	return predicate.ContestParticipant(sql.FieldEQ(FieldContestID, v))
@@ -182,26 +238,6 @@ func ContestIDIn(vs ...int64) predicate.ContestParticipant {
 // ContestIDNotIn applies the NotIn predicate on the "contest_id" field.
 func ContestIDNotIn(vs ...int64) predicate.ContestParticipant {
 	return predicate.ContestParticipant(sql.FieldNotIn(FieldContestID, vs...))
-}
-
-// ContestIDGT applies the GT predicate on the "contest_id" field.
-func ContestIDGT(v int64) predicate.ContestParticipant {
-	return predicate.ContestParticipant(sql.FieldGT(FieldContestID, v))
-}
-
-// ContestIDGTE applies the GTE predicate on the "contest_id" field.
-func ContestIDGTE(v int64) predicate.ContestParticipant {
-	return predicate.ContestParticipant(sql.FieldGTE(FieldContestID, v))
-}
-
-// ContestIDLT applies the LT predicate on the "contest_id" field.
-func ContestIDLT(v int64) predicate.ContestParticipant {
-	return predicate.ContestParticipant(sql.FieldLT(FieldContestID, v))
-}
-
-// ContestIDLTE applies the LTE predicate on the "contest_id" field.
-func ContestIDLTE(v int64) predicate.ContestParticipant {
-	return predicate.ContestParticipant(sql.FieldLTE(FieldContestID, v))
 }
 
 // ContestIDIsNil applies the IsNil predicate on the "contest_id" field.
@@ -437,6 +473,29 @@ func FieldsEqualFold(v string) predicate.ContestParticipant {
 // FieldsContainsFold applies the ContainsFold predicate on the "fields" field.
 func FieldsContainsFold(v string) predicate.ContestParticipant {
 	return predicate.ContestParticipant(sql.FieldContainsFold(FieldFields, v))
+}
+
+// HasContest applies the HasEdge predicate on the "contest" edge.
+func HasContest() predicate.ContestParticipant {
+	return predicate.ContestParticipant(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ContestTable, ContestColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasContestWith applies the HasEdge predicate on the "contest" edge with a given conditions (other predicates).
+func HasContestWith(preds ...predicate.Contest) predicate.ContestParticipant {
+	return predicate.ContestParticipant(func(s *sql.Selector) {
+		step := newContestStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/contest"
+	"saas/pkg/db/ent/contestparticipant"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -44,6 +45,20 @@ func (cc *ContestCreate) SetUpdatedAt(t time.Time) *ContestCreate {
 func (cc *ContestCreate) SetNillableUpdatedAt(t *time.Time) *ContestCreate {
 	if t != nil {
 		cc.SetUpdatedAt(*t)
+	}
+	return cc
+}
+
+// SetStatus sets the "status" field.
+func (cc *ContestCreate) SetStatus(i int64) *ContestCreate {
+	cc.mutation.SetStatus(i)
+	return cc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (cc *ContestCreate) SetNillableStatus(i *int64) *ContestCreate {
+	if i != nil {
+		cc.SetStatus(*i)
 	}
 	return cc
 }
@@ -264,6 +279,21 @@ func (cc *ContestCreate) SetID(i int64) *ContestCreate {
 	return cc
 }
 
+// AddContestParticipantIDs adds the "contest_participants" edge to the ContestParticipant entity by IDs.
+func (cc *ContestCreate) AddContestParticipantIDs(ids ...int64) *ContestCreate {
+	cc.mutation.AddContestParticipantIDs(ids...)
+	return cc
+}
+
+// AddContestParticipants adds the "contest_participants" edges to the ContestParticipant entity.
+func (cc *ContestCreate) AddContestParticipants(c ...*ContestParticipant) *ContestCreate {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cc.AddContestParticipantIDs(ids...)
+}
+
 // Mutation returns the ContestMutation object of the builder.
 func (cc *ContestCreate) Mutation() *ContestMutation {
 	return cc.mutation
@@ -306,6 +336,10 @@ func (cc *ContestCreate) defaults() {
 	if _, ok := cc.mutation.UpdatedAt(); !ok {
 		v := contest.DefaultUpdatedAt()
 		cc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := cc.mutation.Status(); !ok {
+		v := contest.DefaultStatus
+		cc.mutation.SetStatus(v)
 	}
 	if _, ok := cc.mutation.IsCancel(); !ok {
 		v := contest.DefaultIsCancel
@@ -369,6 +403,10 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 		_spec.SetField(contest.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := cc.mutation.Status(); ok {
+		_spec.SetField(contest.FieldStatus, field.TypeInt64, value)
+		_node.Status = value
+	}
 	if value, ok := cc.mutation.Name(); ok {
 		_spec.SetField(contest.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -428,6 +466,22 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Condition(); ok {
 		_spec.SetField(contest.FieldCondition, field.TypeInt64, value)
 		_node.Condition = value
+	}
+	if nodes := cc.mutation.ContestParticipantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contest.ContestParticipantsTable,
+			Columns: []string{contest.ContestParticipantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

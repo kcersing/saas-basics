@@ -560,11 +560,12 @@ func (p *ContestListReq) String() string {
 }
 
 type ParticipantListReq struct {
-	Page     *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	PageSize *int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
-	Name     *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	Mobile   *string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
-	Sn       *string `thrift:"sn,5,optional" form:"sn" json:"sn" query:"sn"`
+	Page      *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize  *int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Name      *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
+	Mobile    *string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Sn        *string `thrift:"sn,5,optional" form:"sn" json:"sn" query:"sn"`
+	ContestId *int64  `thrift:"contestId,6,optional" form:"contestId" json:"contestId" query:"contestId"`
 }
 
 func NewParticipantListReq() *ParticipantListReq {
@@ -619,12 +620,22 @@ func (p *ParticipantListReq) GetSn() (v string) {
 	return *p.Sn
 }
 
+var ParticipantListReq_ContestId_DEFAULT int64
+
+func (p *ParticipantListReq) GetContestId() (v int64) {
+	if !p.IsSetContestId() {
+		return ParticipantListReq_ContestId_DEFAULT
+	}
+	return *p.ContestId
+}
+
 var fieldIDToName_ParticipantListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
 	3: "name",
 	4: "mobile",
 	5: "sn",
+	6: "contestId",
 }
 
 func (p *ParticipantListReq) IsSetPage() bool {
@@ -645,6 +656,10 @@ func (p *ParticipantListReq) IsSetMobile() bool {
 
 func (p *ParticipantListReq) IsSetSn() bool {
 	return p.Sn != nil
+}
+
+func (p *ParticipantListReq) IsSetContestId() bool {
+	return p.ContestId != nil
 }
 
 func (p *ParticipantListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -701,6 +716,14 @@ func (p *ParticipantListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 5:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -790,6 +813,17 @@ func (p *ParticipantListReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Sn = _field
 	return nil
 }
+func (p *ParticipantListReq) ReadField6(iprot thrift.TProtocol) error {
+
+	var _field *int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.ContestId = _field
+	return nil
+}
 
 func (p *ParticipantListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -815,6 +849,10 @@ func (p *ParticipantListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
 			goto WriteFieldError
 		}
 	}
@@ -930,6 +968,25 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
+func (p *ParticipantListReq) writeField6(oprot thrift.TProtocol) (err error) {
+	if p.IsSetContestId() {
+		if err = oprot.WriteFieldBegin("contestId", thrift.I64, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.ContestId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+}
+
 func (p *ParticipantListReq) String() string {
 	if p == nil {
 		return "<nil>"
@@ -939,10 +996,11 @@ func (p *ParticipantListReq) String() string {
 }
 
 type ParticipantInfo struct {
-	ContestId *int64  `thrift:"contestId,1,optional" form:"contestId" json:"contestId" query:"contestId"`
-	Fields    *int64  `thrift:"fields,2,optional" form:"fields" json:"fields" query:"fields"`
-	Name      *string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	Mobile    *string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
+	ID        *int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	ContestId *int64  `thrift:"contestId,2,optional" form:"contestId" json:"contestId" query:"contestId"`
+	Fields    *string `thrift:"fields,3,optional" form:"fields" json:"fields" query:"fields"`
+	Name      *string `thrift:"name,4,optional" form:"name" json:"name" query:"name"`
+	Mobile    *string `thrift:"mobile,5,optional" form:"mobile" json:"mobile" query:"mobile"`
 }
 
 func NewParticipantInfo() *ParticipantInfo {
@@ -950,6 +1008,15 @@ func NewParticipantInfo() *ParticipantInfo {
 }
 
 func (p *ParticipantInfo) InitDefault() {
+}
+
+var ParticipantInfo_ID_DEFAULT int64
+
+func (p *ParticipantInfo) GetID() (v int64) {
+	if !p.IsSetID() {
+		return ParticipantInfo_ID_DEFAULT
+	}
+	return *p.ID
 }
 
 var ParticipantInfo_ContestId_DEFAULT int64
@@ -961,9 +1028,9 @@ func (p *ParticipantInfo) GetContestId() (v int64) {
 	return *p.ContestId
 }
 
-var ParticipantInfo_Fields_DEFAULT int64
+var ParticipantInfo_Fields_DEFAULT string
 
-func (p *ParticipantInfo) GetFields() (v int64) {
+func (p *ParticipantInfo) GetFields() (v string) {
 	if !p.IsSetFields() {
 		return ParticipantInfo_Fields_DEFAULT
 	}
@@ -989,10 +1056,15 @@ func (p *ParticipantInfo) GetMobile() (v string) {
 }
 
 var fieldIDToName_ParticipantInfo = map[int16]string{
-	1: "contestId",
-	2: "fields",
-	3: "name",
-	4: "mobile",
+	1: "id",
+	2: "contestId",
+	3: "fields",
+	4: "name",
+	5: "mobile",
+}
+
+func (p *ParticipantInfo) IsSetID() bool {
+	return p.ID != nil
 }
 
 func (p *ParticipantInfo) IsSetContestId() bool {
@@ -1062,6 +1134,14 @@ func (p *ParticipantInfo) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
+		case 5:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -1099,7 +1179,7 @@ func (p *ParticipantInfo) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = &v
 	}
-	p.ContestId = _field
+	p.ID = _field
 	return nil
 }
 func (p *ParticipantInfo) ReadField2(iprot thrift.TProtocol) error {
@@ -1110,7 +1190,7 @@ func (p *ParticipantInfo) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = &v
 	}
-	p.Fields = _field
+	p.ContestId = _field
 	return nil
 }
 func (p *ParticipantInfo) ReadField3(iprot thrift.TProtocol) error {
@@ -1121,10 +1201,21 @@ func (p *ParticipantInfo) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = &v
 	}
-	p.Name = _field
+	p.Fields = _field
 	return nil
 }
 func (p *ParticipantInfo) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.Name = _field
+	return nil
+}
+func (p *ParticipantInfo) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
@@ -1158,6 +1249,10 @@ func (p *ParticipantInfo) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 4
 			goto WriteFieldError
 		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -1177,11 +1272,11 @@ WriteStructEndError:
 }
 
 func (p *ParticipantInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.IsSetContestId() {
-		if err = oprot.WriteFieldBegin("contestId", thrift.I64, 1); err != nil {
+	if p.IsSetID() {
+		if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.ContestId); err != nil {
+		if err := oprot.WriteI64(*p.ID); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1196,11 +1291,11 @@ WriteFieldEndError:
 }
 
 func (p *ParticipantInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetFields() {
-		if err = oprot.WriteFieldBegin("fields", thrift.I64, 2); err != nil {
+	if p.IsSetContestId() {
+		if err = oprot.WriteFieldBegin("contestId", thrift.I64, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Fields); err != nil {
+		if err := oprot.WriteI64(*p.ContestId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1215,11 +1310,11 @@ WriteFieldEndError:
 }
 
 func (p *ParticipantInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if p.IsSetName() {
-		if err = oprot.WriteFieldBegin("name", thrift.STRING, 3); err != nil {
+	if p.IsSetFields() {
+		if err = oprot.WriteFieldBegin("fields", thrift.STRING, 3); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Name); err != nil {
+		if err := oprot.WriteString(*p.Fields); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1234,11 +1329,11 @@ WriteFieldEndError:
 }
 
 func (p *ParticipantInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetMobile() {
-		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 4); err != nil {
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 4); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Mobile); err != nil {
+		if err := oprot.WriteString(*p.Name); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1250,6 +1345,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *ParticipantInfo) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMobile() {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.Mobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *ParticipantInfo) String() string {
