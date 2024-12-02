@@ -139,5 +139,7 @@ struct MenuInfo {
         12:  i64 status (api.raw = "status")
         13:  string url (api.raw = "url")
 	    14: list<MenuInfo> Children  (api.raw = "children")
+	    15: string CreatedAt (api.raw = "CreatedAt")
+        16: string UpdatedAt (api.raw = "UpdatedAt")
 
 }

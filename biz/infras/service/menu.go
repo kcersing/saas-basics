@@ -145,7 +145,7 @@ func (m Menu) Delete(id int64) error {
 	return nil
 }
 
-func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error) {
+func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfo, err error) {
 
 	menus, err := m.db.Role.
 		Query().
@@ -165,7 +165,7 @@ func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfoTree, err error) {
 	return
 }
 
-func (m Menu) List(req *base.PageInfoReq) (list []*menu.MenuInfoTree, total int, err error) {
+func (m Menu) List(req *base.PageInfoReq) (list []*menu.MenuInfo, total int, err error) {
 	// query menu list
 	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -277,36 +277,35 @@ func (m Menu) MenuParamListByMenuID(menuID int64) (list []do.MenuParam, total in
 	return
 }
 
-func findMenuChildren(data []*ent.Menu, parentID int64) []*menu.MenuInfoTree {
+func findMenuChildren(data []*ent.Menu, parentID int64) []*menu.MenuInfo {
 	if data == nil {
 		return nil
 	}
-	var result []*menu.MenuInfoTree
+	var result []*menu.MenuInfo
 	for _, v := range data {
 		// discard the parent menu, only find the children menu
 
 		if v.ParentID == parentID && v.ID != parentID {
-			var m = new(menu.MenuInfoTree)
-			var info = new(menu.MenuInfo)
+			var m = new(menu.MenuInfo)
 			var meta = new(menu.Meta)
-			m.MenuInfo = info
-			m.MenuInfo.Meta = meta
-			m.MenuInfo.ParentId = v.ParentID
-			m.MenuInfo.Path = v.Path
-			m.MenuInfo.ID = v.ID
-			m.MenuInfo.Name = v.Name
-			m.MenuInfo.Level = v.Level
-			m.MenuInfo.MenuType = v.MenuType
-			m.MenuInfo.Redirect = v.Redirect
-			m.MenuInfo.Component = v.Component
-			m.MenuInfo.Hidden = v.Hidden
-			m.MenuInfo.URL = v.URL
-			m.MenuInfo.Status = v.Status
-			m.MenuInfo.Sort = v.Sort
-			m.Ignore = v.Ignore
+
+			m.Meta = meta
+			m.ParentId = v.ParentID
+			m.Path = v.Path
+			m.ID = v.ID
+			m.Name = v.Name
+			m.Level = v.Level
+			m.MenuType = v.MenuType
+			m.Redirect = v.Redirect
+			m.Component = v.Component
+			m.Hidden = v.Hidden
+			m.URL = v.URL
+			m.Status = v.Status
+			m.Sort = v.Sort
+
 			m.CreatedAt = v.CreatedAt.Format(time.DateTime)
 			m.UpdatedAt = v.UpdatedAt.Format(time.DateTime)
-			m.MenuInfo.Meta = &menu.Meta{
+			m.Meta = &menu.Meta{
 				Icon:       v.Icon,
 				Title:      v.Title,
 				ActiveMenu: v.ActiveMenu,
