@@ -328,7 +328,7 @@ func findMenuTreeChildren(data []*ent.Menu, parentID int64) []*base.Tree {
 	for _, v := range data {
 		if v.ParentID == parentID && v.ID != parentID {
 			var m = new(base.Tree)
-			m.Title = v.Name
+			m.Title = v.Title
 			m.Value = strconv.FormatInt(v.ID, 10)
 			m.Key = strconv.FormatInt(v.ID, 10)
 			m.Children = findMenuTreeChildren(data, v.ID)
