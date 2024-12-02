@@ -15,6 +15,9 @@ type User struct {
 	ent.Schema
 }
 
+type functions struct {
+}
+
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("mobile").Unique().Comment("mobile number | 手机号"),
@@ -25,6 +28,9 @@ func (User) Fields() []ent.Field {
 		field.String("password").Comment("password | 密码"),
 
 		field.String("functions").Comment("functions | 职能"),
+
+		field.JSON("functions", functions{}).Comment("functions | 职能"),
+
 		field.Int64("job_time").Default(0).Comment("job time | [1:全职;2:兼职;]").Optional(),
 
 		field.Int64("role_id").Optional().Default(2).Comment("role id | 角色ID"),
