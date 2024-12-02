@@ -40,6 +40,16 @@ func (c Contest) ContestList(req contest.ContestListReq) (resp []*contest.Contes
 	panic("implement me")
 }
 
+func (c Contest) ContestInfo(id int64) (resp *contest.ContestInfo, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c Contest) UpdateContestStatus(ID int64, status int64) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 	//TODO implement me
 	panic("implement me")
@@ -55,7 +65,17 @@ func (c Contest) DeleteParticipant(id int64) error {
 	panic("implement me")
 }
 
+func (c Contest) ParticipantInfo(id int64) (resp *contest.ParticipantInfo, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (c Contest) ParticipantList(req contest.ParticipantListReq) (resp []*contest.ParticipantInfo, total int, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c Contest) UpdateParticipantStatus(ID int64, status int64) error {
 	//TODO implement me
 	panic("implement me")
 }
