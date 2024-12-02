@@ -92,43 +92,47 @@ definitions:
     type: object
   contest.ContestInfo:
     properties:
-      CancelTime:
+      cancelTime:
         type: integer
-      CreatedAt:
+      condition:
         type: string
-      Detail:
+      createdAt:
         type: string
-      EndAt:
+      detail:
         type: string
-      Fee:
+      endAt:
+        type: string
+      fee:
         type: number
-      Id:
+      id:
         type: integer
-      IsCancel:
+      isCancel:
         type: integer
-      Name:
+      name:
         type: string
-      Number:
+      number:
         type: integer
-      Pic:
+      pic:
         type: string
-      SignEndAt:
+      signEndAt:
         type: string
-      SignFields:
+      signFields:
         type: string
-      SignNumber:
+      signNumber:
         type: integer
-      SignStartAt:
+      signStartAt:
         type: string
-      Sponsor:
+      sponsor:
         type: string
-      StartAt:
+      startAt:
         type: string
-      UpdatedAt:
+      updatedAt:
         type: string
     type: object
   contest.ContestListReq:
     properties:
+      condition:
+        type: integer
       endAt:
         type: string
       name:
@@ -149,6 +153,8 @@ definitions:
       contestId:
         type: integer
       fields:
+        type: string
+      id:
         type: integer
       mobile:
         type: string
@@ -157,6 +163,8 @@ definitions:
     type: object
   contest.ParticipantListReq:
     properties:
+      contestId:
+        type: integer
       mobile:
         type: string
       name:
@@ -1438,6 +1446,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 创建菜单 Summary
+  /service/menu/info:
+    post:
+      responses: {}
   /service/menu/list:
     post:
       description: 获取菜单列表 Description

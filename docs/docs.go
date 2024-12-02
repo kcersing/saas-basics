@@ -1294,6 +1294,11 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/menu/info": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/menu/list": {
             "post": {
                 "description": "获取菜单列表 Description",
@@ -2053,55 +2058,58 @@ const docTemplate = `{
         "contest.ContestInfo": {
             "type": "object",
             "properties": {
-                "CancelTime": {
+                "cancelTime": {
                     "type": "integer"
                 },
-                "CreatedAt": {
+                "condition": {
                     "type": "string"
                 },
-                "Detail": {
+                "createdAt": {
                     "type": "string"
                 },
-                "EndAt": {
+                "detail": {
                     "type": "string"
                 },
-                "Fee": {
+                "endAt": {
+                    "type": "string"
+                },
+                "fee": {
                     "type": "number"
                 },
-                "Id": {
+                "id": {
                     "type": "integer"
                 },
-                "IsCancel": {
+                "isCancel": {
                     "type": "integer"
                 },
-                "Name": {
+                "name": {
                     "type": "string"
                 },
-                "Number": {
+                "number": {
                     "type": "integer"
                 },
-                "Pic": {
+                "pic": {
                     "type": "string"
                 },
-                "SignEndAt": {
+                "signEndAt": {
                     "type": "string"
                 },
-                "SignFields": {
+                "signFields": {
                     "type": "string"
                 },
-                "SignNumber": {
+                "signNumber": {
                     "type": "integer"
                 },
-                "SignStartAt": {
+                "signStartAt": {
                     "type": "string"
                 },
-                "Sponsor": {
+                "sponsor": {
                     "type": "string"
                 },
-                "StartAt": {
+                "startAt": {
                     "type": "string"
                 },
-                "UpdatedAt": {
+                "updatedAt": {
                     "type": "string"
                 }
             }
@@ -2109,6 +2117,9 @@ const docTemplate = `{
         "contest.ContestListReq": {
             "type": "object",
             "properties": {
+                "condition": {
+                    "type": "integer"
+                },
                 "endAt": {
                     "type": "string"
                 },
@@ -2139,6 +2150,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "fields": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "integer"
                 },
                 "mobile": {
@@ -2152,6 +2166,9 @@ const docTemplate = `{
         "contest.ParticipantListReq": {
             "type": "object",
             "properties": {
+                "contestId": {
+                    "type": "integer"
+                },
                 "mobile": {
                     "type": "string"
                 },

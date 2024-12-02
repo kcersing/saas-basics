@@ -31,12 +31,6 @@ func (m Menu) MenuInfo(id int64) (info *menu.MenuInfo, err error) {
 	//TODO implement me
 	info = new(menu.MenuInfo)
 
-	inter, exist := m.cache.Get("menuInfo" + strconv.Itoa(int(id)))
-	if exist {
-		if u, ok := inter.(*menu.MenuInfo); ok {
-			return u, nil
-		}
-	}
 	menuEnt, err := m.db.Menu.Query().Where(menu2.IDEQ(id)).First(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get member failed")
@@ -68,7 +62,7 @@ func (m Menu) MenuInfo(id int64) (info *menu.MenuInfo, err error) {
 		NoCache:    menuEnt.NoCache,
 		Affix:      menuEnt.Affix,
 	}
-	m.cache.SetWithTTL("menuInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
+
 	return
 
 }
