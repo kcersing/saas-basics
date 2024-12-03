@@ -3,10 +3,10 @@ namespace go contract
 include "../base/base.thrift"
 
 struct ContractListReq {
-    1: optional i64 page (api.raw = "page")
-    2: optional i64 pageSize (api.raw = "pageSize")
-    3: optional string name (api.raw = "name")
-    4: optional string status (api.raw = "status")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3: optional string name = "" (api.raw = "name")
+    4: optional string status = ""(api.raw = "status")
 }
 struct CreateOrUpdateContractReq {
     1:  optional i64 id (api.raw = "id")

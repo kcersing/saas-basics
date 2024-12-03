@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
@@ -14,8 +15,6 @@ import (
 	"saas/pkg/db/ent/predicate"
 	user2 "saas/pkg/db/ent/user"
 	"saas/pkg/encrypt"
-	"saas/pkg/minio"
-	"strconv"
 	"time"
 )
 
@@ -68,12 +67,12 @@ func (u User) SetRole(id, roleID int64) error {
 
 func (u User) Info(id int64) (info *user.UserInfo, err error) {
 	info = new(user.UserInfo)
-	userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
-	if exist {
-		if u, ok := userInterface.(*user.UserInfo); ok {
-			return u, nil
-		}
-	}
+	//userInterface, exist := u.cache.Get("userInfo" + strconv.Itoa(int(id)))
+	//if exist {
+	//	if u, ok := userInterface.(*user.UserInfo); ok {
+	//		return u, nil
+	//	}
+	//}
 	userEnt, err := u.db.User.Query().Where(user2.IDEQ(id)).First(u.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get user failed")
@@ -84,7 +83,7 @@ func (u User) Info(id int64) (info *user.UserInfo, err error) {
 	//	info.Age = int64(time.Now().Sub(userEnt.Birthday).Hours() / 24 / 365)
 	//}
 	//info.Birthday = userEnt.Birthday.Format(time.DateOnly)
-	u.cache.SetWithTTL("userInfo"+strconv.Itoa(int(info.Id)), &info, 1, 1*time.Hour)
+	//u.cache.SetWithTTL("userInfo"+strconv.Itoa(int(info.Id)), &info, 1, 1*time.Hour)
 	return
 }
 
@@ -193,31 +192,26 @@ func (u User) ChangePassword(userID int64, newPassword string) error {
 
 func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, err error) {
 	var predicates []predicate.User
-	if *req.Mobile != "" {
-		predicates = append(predicates, user2.MobileEQ(*req.Mobile))
+	if req.Mobile != "" {
+		predicates = append(predicates, user2.MobileEQ(req.Mobile))
 	}
-	//	Name     *string `thrift:"name,4,optional" form:"name" json:"name" query:"name"`
-	//	JobTime  *int64  `thrift:"jobTime,5,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
-	//	Mobile   *string `thrift:"mobile,6,optional" form:"mobile" json:"mobile" query:"mobile"`
-	//	RoleId   *int64  `thrift:"roleId,7,optional" form:"roleId" json:"roleId" query:"roleId"`
-	if *req.JobTime != 0 {
-		predicates = append(predicates, user2.JobTime(*req.JobTime))
+	hlog.Info(100000)
+	if req.JobTime != 0 {
+		predicates = append(predicates, user2.JobTime(req.JobTime))
 	}
-	if *req.Mobile != "" {
-		predicates = append(predicates, user2.Mobile(*req.Mobile))
+	if req.Mobile != "" {
+		predicates = append(predicates, user2.Mobile(req.Mobile))
 	}
-
-	if *req.Name != "" {
-		predicates = append(predicates, user2.NameContains(*req.Name))
+	if req.Name != "" {
+		predicates = append(predicates, user2.NameContains(req.Name))
 	}
 
-	if *req.RoleId != 0 {
-		predicates = append(predicates, user2.RoleIDEQ(*req.RoleId))
+	if req.RoleId != 0 {
+		predicates = append(predicates, user2.RoleIDEQ(req.RoleId))
 	}
-
 	users, err := u.db.User.Query().Where(predicates...).
-		Offset(int(*req.Page-1) * int(*req.PageSize)).
-		Limit(int(*req.PageSize)).All(u.ctx)
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(u.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get user list failed")
 		return userList, total, err
@@ -245,14 +239,14 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	info.CreatedAt = userEnt.CreatedAt.Format(time.DateTime)
 	info.UpdatedAt = userEnt.UpdatedAt.Format(time.DateTime)
 
-	roleInterface, exist := u.cache.Get("roleData" + strconv.Itoa(int(info.RoleId)))
-	if exist {
-		if role, ok := roleInterface.(*ent.Role); ok {
-			info.RoleName = role.Name
-			info.RoleValue = role.Value
-		}
-	}
-	info.Avatar = minio.URLconvert(u.ctx, u.c, info.Avatar)
+	//roleInterface, exist := u.cache.Get("roleData" + strconv.Itoa(int(info.RoleId)))
+	//if exist {
+	//	if role, ok := roleInterface.(*ent.Role); ok {
+	//		info.RoleName = role.Name
+	//		info.RoleValue = role.Value
+	//	}
+	//}
+	//info.Avatar = minio.URLconvert(u.ctx, u.c, info.Avatar)
 	if userEnt.Gender == 0 {
 		info.Gender = "女性"
 	} else if userEnt.Gender == 1 {

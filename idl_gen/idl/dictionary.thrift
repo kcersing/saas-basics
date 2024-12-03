@@ -26,10 +26,10 @@ struct DictionaryDetail {
 }
 // 字典列表请求数据
 struct DictListReq {
-    1:  optional string title (api.raw = "title" )
-    2:  optional string name (api.raw = "name" )
-    3:  i64 page (api.raw = "page" )
-    4:  i64 pageSize (api.raw = "pageSize" )
+    1:  optional string title  = ""(api.raw = "title" )
+    2:  optional string name = "" (api.raw = "name" )
+    3:  optional i64 page=1 (api.raw = "page")
+    4:  optional i64 pageSize=100 (api.raw = "pageSize")
 }
 
 //字典名获取字典键值请求数据

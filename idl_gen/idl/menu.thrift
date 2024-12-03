@@ -69,12 +69,12 @@ struct ApiInfo {
 
 // API列表请求数据
 struct ApiPageReq {
-    1:  i64 page (api.raw = "page")
-    2:  i64 pageSize (api.raw = "pageSize")
-    3:  string path (api.raw = "path")
-    4:  string description (api.raw = "description")
-    5:  string method (api.raw = "method")
-    6:  string group (api.raw = "group")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  string path = "" (api.raw = "path")
+    4:  string description = "" (api.raw = "description")
+    5:  string method  = ""(api.raw = "method")
+    6:  string group  = ""(api.raw = "group")
 }
 
 //菜单的meta数据

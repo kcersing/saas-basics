@@ -74,12 +74,12 @@ struct CreateOrUpdateUserReq {
 
 // Get user list request | 获取用户列表请求参数
 struct UserListReq {
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    4:  optional string name (api.raw = "name")
-    5:  optional i64 jobTime (api.raw = "jobTime")
-    6:  optional string mobile (api.raw = "mobile")
-    7:  optional i64 roleId (api.raw = "roleId")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    4:  optional string name="" (api.raw = "name")
+    5:  optional i64 jobTime=0 (api.raw = "jobTime")
+    6:  optional string mobile="" (api.raw = "mobile")
+    7:  optional i64 roleId=0 (api.raw = "roleId")
 
 }
 

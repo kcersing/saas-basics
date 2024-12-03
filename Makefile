@@ -20,6 +20,7 @@ gen-user:
 	hz update -idl idl_gen/idl/admin.thrift -model_dir idl_gen/model/  --unset_omitempty
 	hz update -idl idl_gen/idl/auth.thrift -model_dir idl_gen/model/  --unset_omitempty
 	hz update -idl idl_gen/idl/contest.thrift -model_dir idl_gen/model/  --unset_omitempty
+	hz update -idl idl_gen/idl/contract.thrift -model_dir idl_gen/model/  --unset_omitempty
 	hz update -idl idl_gen/idl/dictionary.thrift -model_dir idl_gen/model/  --unset_omitempty
 	hz update -idl idl_gen/idl/menu.thrift -model_dir idl_gen/model/  --unset_omitempty
 	hz update -idl idl_gen/idl/pub.thrift -model_dir idl_gen/model/  --unset_omitempty

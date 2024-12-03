@@ -2912,73 +2912,87 @@ func (p *CreateOrUpdateUserReq) String() string {
 
 // Get user list request | 获取用户列表请求参数
 type UserListReq struct {
-	Page     *int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	PageSize *int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
-	Name     *string `thrift:"name,4,optional" form:"name" json:"name" query:"name"`
-	JobTime  *int64  `thrift:"jobTime,5,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
-	Mobile   *string `thrift:"mobile,6,optional" form:"mobile" json:"mobile" query:"mobile"`
-	RoleId   *int64  `thrift:"roleId,7,optional" form:"roleId" json:"roleId" query:"roleId"`
+	Page     int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Name     string `thrift:"name,4,optional" form:"name" json:"name" query:"name"`
+	JobTime  int64  `thrift:"jobTime,5,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
+	Mobile   string `thrift:"mobile,6,optional" form:"mobile" json:"mobile" query:"mobile"`
+	RoleId   int64  `thrift:"roleId,7,optional" form:"roleId" json:"roleId" query:"roleId"`
 }
 
 func NewUserListReq() *UserListReq {
-	return &UserListReq{}
+	return &UserListReq{
+
+		Page:     1,
+		PageSize: 10,
+		Name:     "",
+		JobTime:  0,
+		Mobile:   "",
+		RoleId:   0,
+	}
 }
 
 func (p *UserListReq) InitDefault() {
+	p.Page = 1
+	p.PageSize = 10
+	p.Name = ""
+	p.JobTime = 0
+	p.Mobile = ""
+	p.RoleId = 0
 }
 
-var UserListReq_Page_DEFAULT int64
+var UserListReq_Page_DEFAULT int64 = 1
 
 func (p *UserListReq) GetPage() (v int64) {
 	if !p.IsSetPage() {
 		return UserListReq_Page_DEFAULT
 	}
-	return *p.Page
+	return p.Page
 }
 
-var UserListReq_PageSize_DEFAULT int64
+var UserListReq_PageSize_DEFAULT int64 = 10
 
 func (p *UserListReq) GetPageSize() (v int64) {
 	if !p.IsSetPageSize() {
 		return UserListReq_PageSize_DEFAULT
 	}
-	return *p.PageSize
+	return p.PageSize
 }
 
-var UserListReq_Name_DEFAULT string
+var UserListReq_Name_DEFAULT string = ""
 
 func (p *UserListReq) GetName() (v string) {
 	if !p.IsSetName() {
 		return UserListReq_Name_DEFAULT
 	}
-	return *p.Name
+	return p.Name
 }
 
-var UserListReq_JobTime_DEFAULT int64
+var UserListReq_JobTime_DEFAULT int64 = 0
 
 func (p *UserListReq) GetJobTime() (v int64) {
 	if !p.IsSetJobTime() {
 		return UserListReq_JobTime_DEFAULT
 	}
-	return *p.JobTime
+	return p.JobTime
 }
 
-var UserListReq_Mobile_DEFAULT string
+var UserListReq_Mobile_DEFAULT string = ""
 
 func (p *UserListReq) GetMobile() (v string) {
 	if !p.IsSetMobile() {
 		return UserListReq_Mobile_DEFAULT
 	}
-	return *p.Mobile
+	return p.Mobile
 }
 
-var UserListReq_RoleId_DEFAULT int64
+var UserListReq_RoleId_DEFAULT int64 = 0
 
 func (p *UserListReq) GetRoleId() (v int64) {
 	if !p.IsSetRoleId() {
 		return UserListReq_RoleId_DEFAULT
 	}
-	return *p.RoleId
+	return p.RoleId
 }
 
 var fieldIDToName_UserListReq = map[int16]string{
@@ -2991,27 +3005,27 @@ var fieldIDToName_UserListReq = map[int16]string{
 }
 
 func (p *UserListReq) IsSetPage() bool {
-	return p.Page != nil
+	return p.Page != UserListReq_Page_DEFAULT
 }
 
 func (p *UserListReq) IsSetPageSize() bool {
-	return p.PageSize != nil
+	return p.PageSize != UserListReq_PageSize_DEFAULT
 }
 
 func (p *UserListReq) IsSetName() bool {
-	return p.Name != nil
+	return p.Name != UserListReq_Name_DEFAULT
 }
 
 func (p *UserListReq) IsSetJobTime() bool {
-	return p.JobTime != nil
+	return p.JobTime != UserListReq_JobTime_DEFAULT
 }
 
 func (p *UserListReq) IsSetMobile() bool {
-	return p.Mobile != nil
+	return p.Mobile != UserListReq_Mobile_DEFAULT
 }
 
 func (p *UserListReq) IsSetRoleId() bool {
-	return p.RoleId != nil
+	return p.RoleId != UserListReq_RoleId_DEFAULT
 }
 
 func (p *UserListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -3112,66 +3126,66 @@ ReadStructEndError:
 
 func (p *UserListReq) ReadField1(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Page = _field
 	return nil
 }
 func (p *UserListReq) ReadField2(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.PageSize = _field
 	return nil
 }
 func (p *UserListReq) ReadField4(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Name = _field
 	return nil
 }
 func (p *UserListReq) ReadField5(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.JobTime = _field
 	return nil
 }
 func (p *UserListReq) ReadField6(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Mobile = _field
 	return nil
 }
 func (p *UserListReq) ReadField7(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.RoleId = _field
 	return nil
@@ -3231,7 +3245,7 @@ func (p *UserListReq) writeField1(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Page); err != nil {
+		if err := oprot.WriteI64(p.Page); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -3250,7 +3264,7 @@ func (p *UserListReq) writeField2(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.PageSize); err != nil {
+		if err := oprot.WriteI64(p.PageSize); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -3269,7 +3283,7 @@ func (p *UserListReq) writeField4(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("name", thrift.STRING, 4); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Name); err != nil {
+		if err := oprot.WriteString(p.Name); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -3288,7 +3302,7 @@ func (p *UserListReq) writeField5(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("jobTime", thrift.I64, 5); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.JobTime); err != nil {
+		if err := oprot.WriteI64(p.JobTime); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -3307,7 +3321,7 @@ func (p *UserListReq) writeField6(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 6); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Mobile); err != nil {
+		if err := oprot.WriteString(p.Mobile); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -3326,7 +3340,7 @@ func (p *UserListReq) writeField7(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("roleId", thrift.I64, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.RoleId); err != nil {
+		if err := oprot.WriteI64(p.RoleId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

@@ -2,16 +2,16 @@ namespace go venue
 
 include "../base/base.thrift"
 struct VenuePlaceListReq {
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string name (api.raw = "name")
-    11:  optional i64 status (api.raw = "status")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional string name = "" (api.raw = "name")
+    11:  optional i64 status = 0 (api.raw = "status")
 }
 struct VenueListReq {
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string name (api.raw = "name")
-    11:  optional i64 status (api.raw = "status")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional string name="" (api.raw = "name")
+    11:  optional i64 status=0 (api.raw = "status")
 }
 struct VenueInfo {
     1:  optional i64 id (api.raw = "id")

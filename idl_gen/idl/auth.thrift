@@ -70,13 +70,13 @@ struct RoleInfo {
 }
 //日志列表请求数据
 struct LogsListReq {
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string type (api.raw = "type")
-    4:  optional string method (api.raw = "method")
-    5:  optional string api (api.raw = "api")
-    6:  optional string success (api.raw = "success")
-    7:  optional string operators (api.raw = "operators")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional string type = ""(api.raw = "type")
+    4:  optional string method = "" (api.raw = "method")
+    5:  optional string api = "" (api.raw = "api")
+    6:  optional string success = "" (api.raw = "success")
+    7:  optional string operators = "" (api.raw = "operators")
 }
 
 // authorization message

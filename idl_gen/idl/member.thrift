@@ -53,10 +53,10 @@ struct MemberPrivacy{
 
 // Get user list request | 获取用户列表请求参数
 struct MemberListReq {
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string name (api.raw = "name")
-    4:  optional string mobile (api.raw = "mobile")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional string name = "" (api.raw = "name")
+    4:  optional string mobile "" (api.raw = "mobile")
 }
 
 struct MemberSearchReq {
@@ -92,11 +92,11 @@ struct MemberNode {
 }
 
 struct MemberContractListReq{
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional i64 memberId (api.raw = "memberId")
-    4:  optional i64 venueId (api.raw = "venueId")
-    5:  optional i64 contractId (api.raw = "contractId")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional i64 memberId=0 (api.raw = "memberId")
+    4:  optional i64 venueId =0 (api.raw = "venueId")
+    5:  optional i64 contractId =0 (api.raw = "contractId")
 }
 
 struct MemberContractInfo{
@@ -115,23 +115,23 @@ struct MemberContractInfo{
 }
 
 struct MemberProductListReq {
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional i64 memberId (api.raw = "memberId")
-    4:  optional string name (api.raw = "name")
-    5:  optional i64 venueId (api.raw = "venueId")
-    6:  optional i64 status (api.raw = "status")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional i64 memberId =0 (api.raw = "memberId")
+    4:  optional string name = ""(api.raw = "name")
+    5:  optional i64 venueId=0 (api.raw = "venueId")
+    6:  optional i64 status =0 (api.raw = "status")
 
 }
 struct MemberPropertyListReq{
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional i64 memberId (api.raw = "memberId")
-    4:  optional string type (api.raw = "type")
-    5:  optional string name (api.raw = "name")
-    6:  optional i64 venueId (api.raw = "venueId")
-    7:  optional i64 status (api.raw = "status")
-    8:  optional i64 memberProductId (api.raw = "memberProductId")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional i64 memberId =0(api.raw = "memberId")
+    4:  optional string type = "" (api.raw = "type")
+    5:  optional string name = ""(api.raw = "name")
+    6:  optional i64 venueId =0(api.raw = "venueId")
+    7:  optional i64 status =0(api.raw = "status")
+    8:  optional i64 memberProductId=0 (api.raw = "memberProductId")
 }
 
 struct MemberProductSearchReq{

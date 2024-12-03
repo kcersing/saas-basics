@@ -28,23 +28,23 @@ service ContestService {
 
 }
 struct ContestListReq{
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string name (api.raw = "name")
-    4:  optional string signStartAt (api.raw = "signStartAt")
-    5:  optional string signEndAt (api.raw = "signEndAt")
-    6:  optional string startAt (api.raw = "startAt")
-    7:  optional string endAt (api.raw = "endAt")
-    8:  optional i64 condition (api.raw = "condition")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional string name = "" (api.raw = "name")
+    4:  optional string signStartAt = "" (api.raw = "signStartAt")
+    5:  optional string signEndAt = "" (api.raw = "signEndAt")
+    6:  optional string startAt  = ""(api.raw = "startAt")
+    7:  optional string endAt  = ""(api.raw = "endAt")
+    8:  optional i64 condition=0 (api.raw = "condition")
 
 }
 struct ParticipantListReq{
-    1:  optional i64 page (api.raw = "page")
-    2:  optional i64 pageSize (api.raw = "pageSize")
-    3:  optional string name (api.raw = "name")
-    4:  optional string mobile (api.raw = "mobile")
-    5:  optional string sn (api.raw = "sn")
-    6:  optional i64 contestId (api.raw = "contestId")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional string name  = ""(api.raw = "name")
+    4:  optional string mobile  = ""(api.raw = "mobile")
+    5:  optional string sn = "" (api.raw = "sn")
+    6:  optional i64 contestId=0 (api.raw = "contestId")
 }
 struct ParticipantInfo{
     1:  optional i64 id (api.raw = "id")

@@ -15,10 +15,10 @@ struct TokenInfo {
 }
 // token列表请求参数
 struct TokenListReq {
-    1:  i64 page (api.raw = "page")
-    2:  i64 pageSize (api.raw = "pageSize")
-    3:  string username (api.raw = "username")
-    4:  i64 userId (api.raw = "userID")
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  string username="" (api.raw = "username")
+    4:  i64 userId=0 (api.raw = "userID")
 }
 
 service TokenService{
