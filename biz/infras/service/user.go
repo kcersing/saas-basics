@@ -29,6 +29,7 @@ type User struct {
 }
 
 func NewUser(ctx context.Context, c *app.RequestContext) do.User {
+
 	return &User{
 		ctx:   ctx,
 		c:     c,
@@ -132,7 +133,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		SetUsername(*req.Username).
 		SetPassword(password).
 		SetName(*req.Name).
-		SetFunctions(*req.Functions).
+		//SetFunctions(*req.Functions).
 		SetGender(gender).
 		SetRoleID(*req.RoleId).
 		SetDetail(*req.Detail).
@@ -179,7 +180,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		SetUsername(*req.Username).
 		SetPassword(password).
 		SetName(*req.Name).
-		SetFunctions(*req.Functions).
+		//SetFunctions(*req.Functions).
 		SetGender(gender).
 		SetRoleID(*req.RoleId).
 		SetDetail(*req.Detail).

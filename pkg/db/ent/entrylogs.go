@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 	"strings"
 	"time"
@@ -90,7 +90,7 @@ func (e EntryLogsEdges) UsersOrErr() (*User, error) {
 	if e.loadedTypes[2] {
 		if e.Users == nil {
 			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: user.Label}
+			return nil, &NotFoundError{label: entuser.Label}
 		}
 		return e.Users, nil
 	}

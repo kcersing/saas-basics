@@ -23,6 +23,7 @@ func Register(r *server.Hertz) {
 		_role := _service.Group("/role", _roleMw()...)
 		_role.GET("/list", append(_rolelistMw(), auth.RoleList)...)
 		_role.POST("/status", append(_updaterolestatusMw(), auth.UpdateRoleStatus)...)
+		_role.GET("/tree", append(_roletreeMw(), auth.RoleTree)...)
 		{
 			_auth := _service.Group("/auth", _authMw()...)
 			{

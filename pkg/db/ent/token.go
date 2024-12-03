@@ -5,7 +5,7 @@ package ent
 import (
 	"fmt"
 	"saas/pkg/db/ent/token"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"strings"
 	"time"
 
@@ -52,7 +52,7 @@ func (e TokenEdges) OwnerOrErr() (*User, error) {
 	if e.loadedTypes[0] {
 		if e.Owner == nil {
 			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: user.Label}
+			return nil, &NotFoundError{label: entuser.Label}
 		}
 		return e.Owner, nil
 	}

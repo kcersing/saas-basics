@@ -75,7 +75,7 @@ type Role func(*sql.Selector)
 // Token is the predicate function for token builders.
 type Token func(*sql.Selector)
 
-// User is the predicate function for user builders.
+// User is the predicate function for entuser builders.
 type User func(*sql.Selector)
 
 // Venue is the predicate function for venue builders.

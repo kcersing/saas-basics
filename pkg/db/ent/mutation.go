@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/idl_gen/model/user"
 	"saas/pkg/db/ent/api"
 	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
@@ -30,7 +31,7 @@ import (
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/token"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 	"saas/pkg/db/ent/venueplace"
 	"sync"
@@ -24774,7 +24775,7 @@ type UserMutation struct {
 	addgender             *int64
 	username              *string
 	password              *string
-	functions             *string
+	functions             *user.Functions
 	job_time              *int64
 	addjob_time           *int64
 	role_id               *int64
@@ -25029,12 +25030,12 @@ func (m *UserMutation) AddedStatus() (r int64, exists bool) {
 func (m *UserMutation) ClearStatus() {
 	m.status = nil
 	m.addstatus = nil
-	m.clearedFields[user.FieldStatus] = struct{}{}
+	m.clearedFields[entuser.FieldStatus] = struct{}{}
 }
 
 // StatusCleared returns if the "status" field was cleared in this mutation.
 func (m *UserMutation) StatusCleared() bool {
-	_, ok := m.clearedFields[user.FieldStatus]
+	_, ok := m.clearedFields[entuser.FieldStatus]
 	return ok
 }
 
@@ -25042,7 +25043,7 @@ func (m *UserMutation) StatusCleared() bool {
 func (m *UserMutation) ResetStatus() {
 	m.status = nil
 	m.addstatus = nil
-	delete(m.clearedFields, user.FieldStatus)
+	delete(m.clearedFields, entuser.FieldStatus)
 }
 
 // SetMobile sets the "mobile" field.
@@ -25115,19 +25116,19 @@ func (m *UserMutation) OldName(ctx context.Context) (v string, err error) {
 // ClearName clears the value of the "name" field.
 func (m *UserMutation) ClearName() {
 	m.name = nil
-	m.clearedFields[user.FieldName] = struct{}{}
+	m.clearedFields[entuser.FieldName] = struct{}{}
 }
 
 // NameCleared returns if the "name" field was cleared in this mutation.
 func (m *UserMutation) NameCleared() bool {
-	_, ok := m.clearedFields[user.FieldName]
+	_, ok := m.clearedFields[entuser.FieldName]
 	return ok
 }
 
 // ResetName resets all changes to the "name" field.
 func (m *UserMutation) ResetName() {
 	m.name = nil
-	delete(m.clearedFields, user.FieldName)
+	delete(m.clearedFields, entuser.FieldName)
 }
 
 // SetGender sets the "gender" field.
@@ -25184,12 +25185,12 @@ func (m *UserMutation) AddedGender() (r int64, exists bool) {
 func (m *UserMutation) ClearGender() {
 	m.gender = nil
 	m.addgender = nil
-	m.clearedFields[user.FieldGender] = struct{}{}
+	m.clearedFields[entuser.FieldGender] = struct{}{}
 }
 
 // GenderCleared returns if the "gender" field was cleared in this mutation.
 func (m *UserMutation) GenderCleared() bool {
-	_, ok := m.clearedFields[user.FieldGender]
+	_, ok := m.clearedFields[entuser.FieldGender]
 	return ok
 }
 
@@ -25197,7 +25198,7 @@ func (m *UserMutation) GenderCleared() bool {
 func (m *UserMutation) ResetGender() {
 	m.gender = nil
 	m.addgender = nil
-	delete(m.clearedFields, user.FieldGender)
+	delete(m.clearedFields, entuser.FieldGender)
 }
 
 // SetUsername sets the "username" field.
@@ -25273,12 +25274,12 @@ func (m *UserMutation) ResetPassword() {
 }
 
 // SetFunctions sets the "functions" field.
-func (m *UserMutation) SetFunctions(s string) {
-	m.functions = &s
+func (m *UserMutation) SetFunctions(u user.Functions) {
+	m.functions = &u
 }
 
 // Functions returns the value of the "functions" field in the mutation.
-func (m *UserMutation) Functions() (r string, exists bool) {
+func (m *UserMutation) Functions() (r user.Functions, exists bool) {
 	v := m.functions
 	if v == nil {
 		return
@@ -25289,7 +25290,7 @@ func (m *UserMutation) Functions() (r string, exists bool) {
 // OldFunctions returns the old "functions" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldFunctions(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldFunctions(ctx context.Context) (v user.Functions, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldFunctions is only allowed on UpdateOne operations")
 	}
@@ -25362,12 +25363,12 @@ func (m *UserMutation) AddedJobTime() (r int64, exists bool) {
 func (m *UserMutation) ClearJobTime() {
 	m.job_time = nil
 	m.addjob_time = nil
-	m.clearedFields[user.FieldJobTime] = struct{}{}
+	m.clearedFields[entuser.FieldJobTime] = struct{}{}
 }
 
 // JobTimeCleared returns if the "job_time" field was cleared in this mutation.
 func (m *UserMutation) JobTimeCleared() bool {
-	_, ok := m.clearedFields[user.FieldJobTime]
+	_, ok := m.clearedFields[entuser.FieldJobTime]
 	return ok
 }
 
@@ -25375,7 +25376,7 @@ func (m *UserMutation) JobTimeCleared() bool {
 func (m *UserMutation) ResetJobTime() {
 	m.job_time = nil
 	m.addjob_time = nil
-	delete(m.clearedFields, user.FieldJobTime)
+	delete(m.clearedFields, entuser.FieldJobTime)
 }
 
 // SetRoleID sets the "role_id" field.
@@ -25432,12 +25433,12 @@ func (m *UserMutation) AddedRoleID() (r int64, exists bool) {
 func (m *UserMutation) ClearRoleID() {
 	m.role_id = nil
 	m.addrole_id = nil
-	m.clearedFields[user.FieldRoleID] = struct{}{}
+	m.clearedFields[entuser.FieldRoleID] = struct{}{}
 }
 
 // RoleIDCleared returns if the "role_id" field was cleared in this mutation.
 func (m *UserMutation) RoleIDCleared() bool {
-	_, ok := m.clearedFields[user.FieldRoleID]
+	_, ok := m.clearedFields[entuser.FieldRoleID]
 	return ok
 }
 
@@ -25445,7 +25446,7 @@ func (m *UserMutation) RoleIDCleared() bool {
 func (m *UserMutation) ResetRoleID() {
 	m.role_id = nil
 	m.addrole_id = nil
-	delete(m.clearedFields, user.FieldRoleID)
+	delete(m.clearedFields, entuser.FieldRoleID)
 }
 
 // SetDefaultVenueID sets the "default_venue_id" field.
@@ -25502,12 +25503,12 @@ func (m *UserMutation) AddedDefaultVenueID() (r int64, exists bool) {
 func (m *UserMutation) ClearDefaultVenueID() {
 	m.default_venue_id = nil
 	m.adddefault_venue_id = nil
-	m.clearedFields[user.FieldDefaultVenueID] = struct{}{}
+	m.clearedFields[entuser.FieldDefaultVenueID] = struct{}{}
 }
 
 // DefaultVenueIDCleared returns if the "default_venue_id" field was cleared in this mutation.
 func (m *UserMutation) DefaultVenueIDCleared() bool {
-	_, ok := m.clearedFields[user.FieldDefaultVenueID]
+	_, ok := m.clearedFields[entuser.FieldDefaultVenueID]
 	return ok
 }
 
@@ -25515,7 +25516,7 @@ func (m *UserMutation) DefaultVenueIDCleared() bool {
 func (m *UserMutation) ResetDefaultVenueID() {
 	m.default_venue_id = nil
 	m.adddefault_venue_id = nil
-	delete(m.clearedFields, user.FieldDefaultVenueID)
+	delete(m.clearedFields, entuser.FieldDefaultVenueID)
 }
 
 // SetAvatar sets the "avatar" field.
@@ -25552,19 +25553,19 @@ func (m *UserMutation) OldAvatar(ctx context.Context) (v string, err error) {
 // ClearAvatar clears the value of the "avatar" field.
 func (m *UserMutation) ClearAvatar() {
 	m.avatar = nil
-	m.clearedFields[user.FieldAvatar] = struct{}{}
+	m.clearedFields[entuser.FieldAvatar] = struct{}{}
 }
 
 // AvatarCleared returns if the "avatar" field was cleared in this mutation.
 func (m *UserMutation) AvatarCleared() bool {
-	_, ok := m.clearedFields[user.FieldAvatar]
+	_, ok := m.clearedFields[entuser.FieldAvatar]
 	return ok
 }
 
 // ResetAvatar resets all changes to the "avatar" field.
 func (m *UserMutation) ResetAvatar() {
 	m.avatar = nil
-	delete(m.clearedFields, user.FieldAvatar)
+	delete(m.clearedFields, entuser.FieldAvatar)
 }
 
 // SetDetail sets the "detail" field.
@@ -25601,19 +25602,19 @@ func (m *UserMutation) OldDetail(ctx context.Context) (v string, err error) {
 // ClearDetail clears the value of the "detail" field.
 func (m *UserMutation) ClearDetail() {
 	m.detail = nil
-	m.clearedFields[user.FieldDetail] = struct{}{}
+	m.clearedFields[entuser.FieldDetail] = struct{}{}
 }
 
 // DetailCleared returns if the "detail" field was cleared in this mutation.
 func (m *UserMutation) DetailCleared() bool {
-	_, ok := m.clearedFields[user.FieldDetail]
+	_, ok := m.clearedFields[entuser.FieldDetail]
 	return ok
 }
 
 // ResetDetail resets all changes to the "detail" field.
 func (m *UserMutation) ResetDetail() {
 	m.detail = nil
-	delete(m.clearedFields, user.FieldDetail)
+	delete(m.clearedFields, entuser.FieldDetail)
 }
 
 // SetTokenID sets the "token" edge to the Token entity by id.
@@ -25838,46 +25839,46 @@ func (m *UserMutation) Type() string {
 func (m *UserMutation) Fields() []string {
 	fields := make([]string, 0, 14)
 	if m.created_at != nil {
-		fields = append(fields, user.FieldCreatedAt)
+		fields = append(fields, entuser.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
-		fields = append(fields, user.FieldUpdatedAt)
+		fields = append(fields, entuser.FieldUpdatedAt)
 	}
 	if m.status != nil {
-		fields = append(fields, user.FieldStatus)
+		fields = append(fields, entuser.FieldStatus)
 	}
 	if m.mobile != nil {
-		fields = append(fields, user.FieldMobile)
+		fields = append(fields, entuser.FieldMobile)
 	}
 	if m.name != nil {
-		fields = append(fields, user.FieldName)
+		fields = append(fields, entuser.FieldName)
 	}
 	if m.gender != nil {
-		fields = append(fields, user.FieldGender)
+		fields = append(fields, entuser.FieldGender)
 	}
 	if m.username != nil {
-		fields = append(fields, user.FieldUsername)
+		fields = append(fields, entuser.FieldUsername)
 	}
 	if m.password != nil {
-		fields = append(fields, user.FieldPassword)
+		fields = append(fields, entuser.FieldPassword)
 	}
 	if m.functions != nil {
-		fields = append(fields, user.FieldFunctions)
+		fields = append(fields, entuser.FieldFunctions)
 	}
 	if m.job_time != nil {
-		fields = append(fields, user.FieldJobTime)
+		fields = append(fields, entuser.FieldJobTime)
 	}
 	if m.role_id != nil {
-		fields = append(fields, user.FieldRoleID)
+		fields = append(fields, entuser.FieldRoleID)
 	}
 	if m.default_venue_id != nil {
-		fields = append(fields, user.FieldDefaultVenueID)
+		fields = append(fields, entuser.FieldDefaultVenueID)
 	}
 	if m.avatar != nil {
-		fields = append(fields, user.FieldAvatar)
+		fields = append(fields, entuser.FieldAvatar)
 	}
 	if m.detail != nil {
-		fields = append(fields, user.FieldDetail)
+		fields = append(fields, entuser.FieldDetail)
 	}
 	return fields
 }
@@ -25887,33 +25888,33 @@ func (m *UserMutation) Fields() []string {
 // schema.
 func (m *UserMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case user.FieldCreatedAt:
+	case entuser.FieldCreatedAt:
 		return m.CreatedAt()
-	case user.FieldUpdatedAt:
+	case entuser.FieldUpdatedAt:
 		return m.UpdatedAt()
-	case user.FieldStatus:
+	case entuser.FieldStatus:
 		return m.Status()
-	case user.FieldMobile:
+	case entuser.FieldMobile:
 		return m.Mobile()
-	case user.FieldName:
+	case entuser.FieldName:
 		return m.Name()
-	case user.FieldGender:
+	case entuser.FieldGender:
 		return m.Gender()
-	case user.FieldUsername:
+	case entuser.FieldUsername:
 		return m.Username()
-	case user.FieldPassword:
+	case entuser.FieldPassword:
 		return m.Password()
-	case user.FieldFunctions:
+	case entuser.FieldFunctions:
 		return m.Functions()
-	case user.FieldJobTime:
+	case entuser.FieldJobTime:
 		return m.JobTime()
-	case user.FieldRoleID:
+	case entuser.FieldRoleID:
 		return m.RoleID()
-	case user.FieldDefaultVenueID:
+	case entuser.FieldDefaultVenueID:
 		return m.DefaultVenueID()
-	case user.FieldAvatar:
+	case entuser.FieldAvatar:
 		return m.Avatar()
-	case user.FieldDetail:
+	case entuser.FieldDetail:
 		return m.Detail()
 	}
 	return nil, false
@@ -25924,33 +25925,33 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case user.FieldCreatedAt:
+	case entuser.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
-	case user.FieldUpdatedAt:
+	case entuser.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
-	case user.FieldStatus:
+	case entuser.FieldStatus:
 		return m.OldStatus(ctx)
-	case user.FieldMobile:
+	case entuser.FieldMobile:
 		return m.OldMobile(ctx)
-	case user.FieldName:
+	case entuser.FieldName:
 		return m.OldName(ctx)
-	case user.FieldGender:
+	case entuser.FieldGender:
 		return m.OldGender(ctx)
-	case user.FieldUsername:
+	case entuser.FieldUsername:
 		return m.OldUsername(ctx)
-	case user.FieldPassword:
+	case entuser.FieldPassword:
 		return m.OldPassword(ctx)
-	case user.FieldFunctions:
+	case entuser.FieldFunctions:
 		return m.OldFunctions(ctx)
-	case user.FieldJobTime:
+	case entuser.FieldJobTime:
 		return m.OldJobTime(ctx)
-	case user.FieldRoleID:
+	case entuser.FieldRoleID:
 		return m.OldRoleID(ctx)
-	case user.FieldDefaultVenueID:
+	case entuser.FieldDefaultVenueID:
 		return m.OldDefaultVenueID(ctx)
-	case user.FieldAvatar:
+	case entuser.FieldAvatar:
 		return m.OldAvatar(ctx)
-	case user.FieldDetail:
+	case entuser.FieldDetail:
 		return m.OldDetail(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
@@ -25961,98 +25962,98 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *UserMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case user.FieldCreatedAt:
+	case entuser.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreatedAt(v)
 		return nil
-	case user.FieldUpdatedAt:
+	case entuser.FieldUpdatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
 		return nil
-	case user.FieldStatus:
+	case entuser.FieldStatus:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
 		return nil
-	case user.FieldMobile:
+	case entuser.FieldMobile:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMobile(v)
 		return nil
-	case user.FieldName:
+	case entuser.FieldName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
 		return nil
-	case user.FieldGender:
+	case entuser.FieldGender:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetGender(v)
 		return nil
-	case user.FieldUsername:
+	case entuser.FieldUsername:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUsername(v)
 		return nil
-	case user.FieldPassword:
+	case entuser.FieldPassword:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPassword(v)
 		return nil
-	case user.FieldFunctions:
-		v, ok := value.(string)
+	case entuser.FieldFunctions:
+		v, ok := value.(user.Functions)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFunctions(v)
 		return nil
-	case user.FieldJobTime:
+	case entuser.FieldJobTime:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetJobTime(v)
 		return nil
-	case user.FieldRoleID:
+	case entuser.FieldRoleID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRoleID(v)
 		return nil
-	case user.FieldDefaultVenueID:
+	case entuser.FieldDefaultVenueID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDefaultVenueID(v)
 		return nil
-	case user.FieldAvatar:
+	case entuser.FieldAvatar:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAvatar(v)
 		return nil
-	case user.FieldDetail:
+	case entuser.FieldDetail:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -26068,19 +26069,19 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 func (m *UserMutation) AddedFields() []string {
 	var fields []string
 	if m.addstatus != nil {
-		fields = append(fields, user.FieldStatus)
+		fields = append(fields, entuser.FieldStatus)
 	}
 	if m.addgender != nil {
-		fields = append(fields, user.FieldGender)
+		fields = append(fields, entuser.FieldGender)
 	}
 	if m.addjob_time != nil {
-		fields = append(fields, user.FieldJobTime)
+		fields = append(fields, entuser.FieldJobTime)
 	}
 	if m.addrole_id != nil {
-		fields = append(fields, user.FieldRoleID)
+		fields = append(fields, entuser.FieldRoleID)
 	}
 	if m.adddefault_venue_id != nil {
-		fields = append(fields, user.FieldDefaultVenueID)
+		fields = append(fields, entuser.FieldDefaultVenueID)
 	}
 	return fields
 }
@@ -26090,15 +26091,15 @@ func (m *UserMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case user.FieldStatus:
+	case entuser.FieldStatus:
 		return m.AddedStatus()
-	case user.FieldGender:
+	case entuser.FieldGender:
 		return m.AddedGender()
-	case user.FieldJobTime:
+	case entuser.FieldJobTime:
 		return m.AddedJobTime()
-	case user.FieldRoleID:
+	case entuser.FieldRoleID:
 		return m.AddedRoleID()
-	case user.FieldDefaultVenueID:
+	case entuser.FieldDefaultVenueID:
 		return m.AddedDefaultVenueID()
 	}
 	return nil, false
@@ -26109,35 +26110,35 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *UserMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case user.FieldStatus:
+	case entuser.FieldStatus:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
 		return nil
-	case user.FieldGender:
+	case entuser.FieldGender:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddGender(v)
 		return nil
-	case user.FieldJobTime:
+	case entuser.FieldJobTime:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddJobTime(v)
 		return nil
-	case user.FieldRoleID:
+	case entuser.FieldRoleID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddRoleID(v)
 		return nil
-	case user.FieldDefaultVenueID:
+	case entuser.FieldDefaultVenueID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -26152,29 +26153,29 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *UserMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(user.FieldStatus) {
-		fields = append(fields, user.FieldStatus)
+	if m.FieldCleared(entuser.FieldStatus) {
+		fields = append(fields, entuser.FieldStatus)
 	}
-	if m.FieldCleared(user.FieldName) {
-		fields = append(fields, user.FieldName)
+	if m.FieldCleared(entuser.FieldName) {
+		fields = append(fields, entuser.FieldName)
 	}
-	if m.FieldCleared(user.FieldGender) {
-		fields = append(fields, user.FieldGender)
+	if m.FieldCleared(entuser.FieldGender) {
+		fields = append(fields, entuser.FieldGender)
 	}
-	if m.FieldCleared(user.FieldJobTime) {
-		fields = append(fields, user.FieldJobTime)
+	if m.FieldCleared(entuser.FieldJobTime) {
+		fields = append(fields, entuser.FieldJobTime)
 	}
-	if m.FieldCleared(user.FieldRoleID) {
-		fields = append(fields, user.FieldRoleID)
+	if m.FieldCleared(entuser.FieldRoleID) {
+		fields = append(fields, entuser.FieldRoleID)
 	}
-	if m.FieldCleared(user.FieldDefaultVenueID) {
-		fields = append(fields, user.FieldDefaultVenueID)
+	if m.FieldCleared(entuser.FieldDefaultVenueID) {
+		fields = append(fields, entuser.FieldDefaultVenueID)
 	}
-	if m.FieldCleared(user.FieldAvatar) {
-		fields = append(fields, user.FieldAvatar)
+	if m.FieldCleared(entuser.FieldAvatar) {
+		fields = append(fields, entuser.FieldAvatar)
 	}
-	if m.FieldCleared(user.FieldDetail) {
-		fields = append(fields, user.FieldDetail)
+	if m.FieldCleared(entuser.FieldDetail) {
+		fields = append(fields, entuser.FieldDetail)
 	}
 	return fields
 }
@@ -26190,28 +26191,28 @@ func (m *UserMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *UserMutation) ClearField(name string) error {
 	switch name {
-	case user.FieldStatus:
+	case entuser.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case user.FieldName:
+	case entuser.FieldName:
 		m.ClearName()
 		return nil
-	case user.FieldGender:
+	case entuser.FieldGender:
 		m.ClearGender()
 		return nil
-	case user.FieldJobTime:
+	case entuser.FieldJobTime:
 		m.ClearJobTime()
 		return nil
-	case user.FieldRoleID:
+	case entuser.FieldRoleID:
 		m.ClearRoleID()
 		return nil
-	case user.FieldDefaultVenueID:
+	case entuser.FieldDefaultVenueID:
 		m.ClearDefaultVenueID()
 		return nil
-	case user.FieldAvatar:
+	case entuser.FieldAvatar:
 		m.ClearAvatar()
 		return nil
-	case user.FieldDetail:
+	case entuser.FieldDetail:
 		m.ClearDetail()
 		return nil
 	}
@@ -26222,46 +26223,46 @@ func (m *UserMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *UserMutation) ResetField(name string) error {
 	switch name {
-	case user.FieldCreatedAt:
+	case entuser.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
-	case user.FieldUpdatedAt:
+	case entuser.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
-	case user.FieldStatus:
+	case entuser.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case user.FieldMobile:
+	case entuser.FieldMobile:
 		m.ResetMobile()
 		return nil
-	case user.FieldName:
+	case entuser.FieldName:
 		m.ResetName()
 		return nil
-	case user.FieldGender:
+	case entuser.FieldGender:
 		m.ResetGender()
 		return nil
-	case user.FieldUsername:
+	case entuser.FieldUsername:
 		m.ResetUsername()
 		return nil
-	case user.FieldPassword:
+	case entuser.FieldPassword:
 		m.ResetPassword()
 		return nil
-	case user.FieldFunctions:
+	case entuser.FieldFunctions:
 		m.ResetFunctions()
 		return nil
-	case user.FieldJobTime:
+	case entuser.FieldJobTime:
 		m.ResetJobTime()
 		return nil
-	case user.FieldRoleID:
+	case entuser.FieldRoleID:
 		m.ResetRoleID()
 		return nil
-	case user.FieldDefaultVenueID:
+	case entuser.FieldDefaultVenueID:
 		m.ResetDefaultVenueID()
 		return nil
-	case user.FieldAvatar:
+	case entuser.FieldAvatar:
 		m.ResetAvatar()
 		return nil
-	case user.FieldDetail:
+	case entuser.FieldDetail:
 		m.ResetDetail()
 		return nil
 	}
@@ -26272,16 +26273,16 @@ func (m *UserMutation) ResetField(name string) error {
 func (m *UserMutation) AddedEdges() []string {
 	edges := make([]string, 0, 4)
 	if m.token != nil {
-		edges = append(edges, user.EdgeToken)
+		edges = append(edges, entuser.EdgeToken)
 	}
 	if m.tags != nil {
-		edges = append(edges, user.EdgeTags)
+		edges = append(edges, entuser.EdgeTags)
 	}
 	if m.created_orders != nil {
-		edges = append(edges, user.EdgeCreatedOrders)
+		edges = append(edges, entuser.EdgeCreatedOrders)
 	}
 	if m.user_entry != nil {
-		edges = append(edges, user.EdgeUserEntry)
+		edges = append(edges, entuser.EdgeUserEntry)
 	}
 	return edges
 }
@@ -26290,21 +26291,21 @@ func (m *UserMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *UserMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case user.EdgeToken:
+	case entuser.EdgeToken:
 		if id := m.token; id != nil {
 			return []ent.Value{*id}
 		}
-	case user.EdgeTags:
+	case entuser.EdgeTags:
 		if id := m.tags; id != nil {
 			return []ent.Value{*id}
 		}
-	case user.EdgeCreatedOrders:
+	case entuser.EdgeCreatedOrders:
 		ids := make([]ent.Value, 0, len(m.created_orders))
 		for id := range m.created_orders {
 			ids = append(ids, id)
 		}
 		return ids
-	case user.EdgeUserEntry:
+	case entuser.EdgeUserEntry:
 		ids := make([]ent.Value, 0, len(m.user_entry))
 		for id := range m.user_entry {
 			ids = append(ids, id)
@@ -26318,10 +26319,10 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 func (m *UserMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 4)
 	if m.removedcreated_orders != nil {
-		edges = append(edges, user.EdgeCreatedOrders)
+		edges = append(edges, entuser.EdgeCreatedOrders)
 	}
 	if m.removeduser_entry != nil {
-		edges = append(edges, user.EdgeUserEntry)
+		edges = append(edges, entuser.EdgeUserEntry)
 	}
 	return edges
 }
@@ -26330,13 +26331,13 @@ func (m *UserMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case user.EdgeCreatedOrders:
+	case entuser.EdgeCreatedOrders:
 		ids := make([]ent.Value, 0, len(m.removedcreated_orders))
 		for id := range m.removedcreated_orders {
 			ids = append(ids, id)
 		}
 		return ids
-	case user.EdgeUserEntry:
+	case entuser.EdgeUserEntry:
 		ids := make([]ent.Value, 0, len(m.removeduser_entry))
 		for id := range m.removeduser_entry {
 			ids = append(ids, id)
@@ -26350,16 +26351,16 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 func (m *UserMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 4)
 	if m.clearedtoken {
-		edges = append(edges, user.EdgeToken)
+		edges = append(edges, entuser.EdgeToken)
 	}
 	if m.clearedtags {
-		edges = append(edges, user.EdgeTags)
+		edges = append(edges, entuser.EdgeTags)
 	}
 	if m.clearedcreated_orders {
-		edges = append(edges, user.EdgeCreatedOrders)
+		edges = append(edges, entuser.EdgeCreatedOrders)
 	}
 	if m.cleareduser_entry {
-		edges = append(edges, user.EdgeUserEntry)
+		edges = append(edges, entuser.EdgeUserEntry)
 	}
 	return edges
 }
@@ -26368,13 +26369,13 @@ func (m *UserMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *UserMutation) EdgeCleared(name string) bool {
 	switch name {
-	case user.EdgeToken:
+	case entuser.EdgeToken:
 		return m.clearedtoken
-	case user.EdgeTags:
+	case entuser.EdgeTags:
 		return m.clearedtags
-	case user.EdgeCreatedOrders:
+	case entuser.EdgeCreatedOrders:
 		return m.clearedcreated_orders
-	case user.EdgeUserEntry:
+	case entuser.EdgeUserEntry:
 		return m.cleareduser_entry
 	}
 	return false
@@ -26384,10 +26385,10 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *UserMutation) ClearEdge(name string) error {
 	switch name {
-	case user.EdgeToken:
+	case entuser.EdgeToken:
 		m.ClearToken()
 		return nil
-	case user.EdgeTags:
+	case entuser.EdgeTags:
 		m.ClearTags()
 		return nil
 	}
@@ -26398,16 +26399,16 @@ func (m *UserMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *UserMutation) ResetEdge(name string) error {
 	switch name {
-	case user.EdgeToken:
+	case entuser.EdgeToken:
 		m.ResetToken()
 		return nil
-	case user.EdgeTags:
+	case entuser.EdgeTags:
 		m.ResetTags()
 		return nil
-	case user.EdgeCreatedOrders:
+	case entuser.EdgeCreatedOrders:
 		m.ResetCreatedOrders()
 		return nil
-	case user.EdgeUserEntry:
+	case entuser.EdgeUserEntry:
 		m.ResetUserEntry()
 		return nil
 	}

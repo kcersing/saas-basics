@@ -8,14 +8,12 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	idlUser "saas/idl_gen/model/user"
 	"saas/pkg/db/ent/schema/mixins"
 )
 
 type User struct {
 	ent.Schema
-}
-
-type functions struct {
 }
 
 func (User) Fields() []ent.Field {
@@ -27,9 +25,7 @@ func (User) Fields() []ent.Field {
 		field.String("username").Unique().Comment("user's login name | 登录名"),
 		field.String("password").Comment("password | 密码"),
 
-		field.String("functions").Comment("functions | 职能"),
-
-		field.JSON("functions", functions{}).Comment("functions | 职能"),
+		field.JSON("functions", idlUser.Functions{}).Comment("functions | 职能"),
 
 		field.Int64("job_time").Default(0).Comment("job time | [1:全职;2:兼职;]").Optional(),
 

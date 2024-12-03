@@ -8,7 +8,7 @@ import (
 	"math"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/token"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -73,7 +73,7 @@ func (tq *TokenQuery) QueryOwner() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(token.Table, token.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(entuser.Table, entuser.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, token.OwnerTable, token.OwnerColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
@@ -424,7 +424,7 @@ func (tq *TokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(entuser.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

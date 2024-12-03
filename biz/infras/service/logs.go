@@ -57,24 +57,24 @@ func (l Logs) Create(logsReq *auth.LogsInfo) error {
 
 func (l Logs) List(req *auth.LogsListReq) (list []*auth.LogsInfo, total int64, err error) {
 	var predicates []predicate.Logs
-	if req.Type != "" {
-		predicates = append(predicates, logs.TypeEQ(req.Type))
+	if *req.Type != "" {
+		predicates = append(predicates, logs.TypeEQ(*req.Type))
 	}
-	if req.Method != "" {
-		predicates = append(predicates, logs.MethodEQ(req.Method))
+	if *req.Method != "" {
+		predicates = append(predicates, logs.MethodEQ(*req.Method))
 	}
-	if req.API != "" {
-		predicates = append(predicates, logs.APIContains(req.API))
+	if *req.API != "" {
+		predicates = append(predicates, logs.APIContains(*req.API))
 	}
-	if req.Operators != "" {
-		predicates = append(predicates, logs.OperatorContains(req.Operators))
+	if *req.Operators != "" {
+		predicates = append(predicates, logs.OperatorContains(*req.Operators))
 	}
 	//if req.Success != nil {
 	//	predicates = append(predicates, logs.SuccessEQ(req.Success))
 	//}
 	logsData, err := l.db.Logs.Query().Where(predicates...).
-		Offset(int((req.Page - 1) * req.PageSize)).
-		Limit(int(req.PageSize)).
+		Offset(int((*req.Page - 1) * *req.PageSize)).
+		Limit(int(*req.PageSize)).
 		Order(ent.Desc(logs.FieldCreatedAt)).All(l.ctx)
 	if err != nil {
 		return nil, 0, errors.Wrap(err, "query logsData list failed")

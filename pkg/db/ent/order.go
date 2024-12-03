@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/order"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 	"strings"
 	"time"
@@ -151,7 +151,7 @@ func (e OrderEdges) OrderCreatesOrErr() (*User, error) {
 	if e.loadedTypes[7] {
 		if e.OrderCreates == nil {
 			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: user.Label}
+			return nil, &NotFoundError{label: entuser.Label}
 		}
 		return e.OrderCreates, nil
 	}

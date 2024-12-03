@@ -35,7 +35,7 @@ type Role struct {
 	Remark string `json:"remark,omitempty"`
 	// order number | 排序编号
 	OrderNo int64 `json:"order_no,omitempty"`
-	// apis
+	// 接口权限列表 | 接口权限列表
 	Apis []int `json:"apis,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RoleQuery when eager-loading is set.

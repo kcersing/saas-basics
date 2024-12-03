@@ -6,11 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/idl_gen/model/user"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/token"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -113,8 +114,8 @@ func (uc *UserCreate) SetPassword(s string) *UserCreate {
 }
 
 // SetFunctions sets the "functions" field.
-func (uc *UserCreate) SetFunctions(s string) *UserCreate {
-	uc.mutation.SetFunctions(s)
+func (uc *UserCreate) SetFunctions(u user.Functions) *UserCreate {
+	uc.mutation.SetFunctions(u)
 	return uc
 }
 
@@ -298,27 +299,27 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.CreatedAt(); !ok {
-		v := user.DefaultCreatedAt()
+		v := entuser.DefaultCreatedAt()
 		uc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := uc.mutation.UpdatedAt(); !ok {
-		v := user.DefaultUpdatedAt()
+		v := entuser.DefaultUpdatedAt()
 		uc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := uc.mutation.Status(); !ok {
-		v := user.DefaultStatus
+		v := entuser.DefaultStatus
 		uc.mutation.SetStatus(v)
 	}
 	if _, ok := uc.mutation.Gender(); !ok {
-		v := user.DefaultGender
+		v := entuser.DefaultGender
 		uc.mutation.SetGender(v)
 	}
 	if _, ok := uc.mutation.JobTime(); !ok {
-		v := user.DefaultJobTime
+		v := entuser.DefaultJobTime
 		uc.mutation.SetJobTime(v)
 	}
 	if _, ok := uc.mutation.RoleID(); !ok {
-		v := user.DefaultRoleID
+		v := entuser.DefaultRoleID
 		uc.mutation.SetRoleID(v)
 	}
 }
@@ -369,74 +370,74 @@ func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	var (
 		_node = &User{config: uc.config}
-		_spec = sqlgraph.NewCreateSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
+		_spec = sqlgraph.NewCreateSpec(entuser.Table, sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64))
 	)
 	if id, ok := uc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
 	if value, ok := uc.mutation.CreatedAt(); ok {
-		_spec.SetField(user.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(entuser.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
 	if value, ok := uc.mutation.UpdatedAt(); ok {
-		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(entuser.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
 	if value, ok := uc.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeInt64, value)
+		_spec.SetField(entuser.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
 	if value, ok := uc.mutation.Mobile(); ok {
-		_spec.SetField(user.FieldMobile, field.TypeString, value)
+		_spec.SetField(entuser.FieldMobile, field.TypeString, value)
 		_node.Mobile = value
 	}
 	if value, ok := uc.mutation.Name(); ok {
-		_spec.SetField(user.FieldName, field.TypeString, value)
+		_spec.SetField(entuser.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := uc.mutation.Gender(); ok {
-		_spec.SetField(user.FieldGender, field.TypeInt64, value)
+		_spec.SetField(entuser.FieldGender, field.TypeInt64, value)
 		_node.Gender = value
 	}
 	if value, ok := uc.mutation.Username(); ok {
-		_spec.SetField(user.FieldUsername, field.TypeString, value)
+		_spec.SetField(entuser.FieldUsername, field.TypeString, value)
 		_node.Username = value
 	}
 	if value, ok := uc.mutation.Password(); ok {
-		_spec.SetField(user.FieldPassword, field.TypeString, value)
+		_spec.SetField(entuser.FieldPassword, field.TypeString, value)
 		_node.Password = value
 	}
 	if value, ok := uc.mutation.Functions(); ok {
-		_spec.SetField(user.FieldFunctions, field.TypeString, value)
+		_spec.SetField(entuser.FieldFunctions, field.TypeJSON, value)
 		_node.Functions = value
 	}
 	if value, ok := uc.mutation.JobTime(); ok {
-		_spec.SetField(user.FieldJobTime, field.TypeInt64, value)
+		_spec.SetField(entuser.FieldJobTime, field.TypeInt64, value)
 		_node.JobTime = value
 	}
 	if value, ok := uc.mutation.RoleID(); ok {
-		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
+		_spec.SetField(entuser.FieldRoleID, field.TypeInt64, value)
 		_node.RoleID = value
 	}
 	if value, ok := uc.mutation.DefaultVenueID(); ok {
-		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
+		_spec.SetField(entuser.FieldDefaultVenueID, field.TypeInt64, value)
 		_node.DefaultVenueID = value
 	}
 	if value, ok := uc.mutation.Avatar(); ok {
-		_spec.SetField(user.FieldAvatar, field.TypeString, value)
+		_spec.SetField(entuser.FieldAvatar, field.TypeString, value)
 		_node.Avatar = value
 	}
 	if value, ok := uc.mutation.Detail(); ok {
-		_spec.SetField(user.FieldDetail, field.TypeString, value)
+		_spec.SetField(entuser.FieldDetail, field.TypeString, value)
 		_node.Detail = value
 	}
 	if nodes := uc.mutation.TokenIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   user.TokenTable,
-			Columns: []string{user.TokenColumn},
+			Table:   entuser.TokenTable,
+			Columns: []string{entuser.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
@@ -451,8 +452,8 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   user.TagsTable,
-			Columns: []string{user.TagsColumn},
+			Table:   entuser.TagsTable,
+			Columns: []string{entuser.TagsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -468,8 +469,8 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.CreatedOrdersTable,
-			Columns: []string{user.CreatedOrdersColumn},
+			Table:   entuser.CreatedOrdersTable,
+			Columns: []string{entuser.CreatedOrdersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -484,8 +485,8 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.UserEntryTable,
-			Columns: []string{user.UserEntryColumn},
+			Table:   entuser.UserEntryTable,
+			Columns: []string{entuser.UserEntryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),

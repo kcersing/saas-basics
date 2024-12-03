@@ -30,14 +30,15 @@ import (
 	"saas/pkg/db/ent/ordersales"
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/token"
-	"saas/pkg/db/ent/user"
-	"saas/pkg/db/ent/venue"
-	"saas/pkg/db/ent/venueplace"
 	"sync"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+
+	entuser "saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/venue"
+	"saas/pkg/db/ent/venueplace"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -121,7 +122,7 @@ func checkColumn(table, column string) error {
 			ordersales.Table:            ordersales.ValidColumn,
 			role.Table:                  role.ValidColumn,
 			token.Table:                 token.ValidColumn,
-			user.Table:                  user.ValidColumn,
+			entuser.Table:               entuser.ValidColumn,
 			venue.Table:                 venue.ValidColumn,
 			venueplace.Table:            venueplace.ValidColumn,
 		})

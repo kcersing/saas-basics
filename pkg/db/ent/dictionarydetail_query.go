@@ -10,7 +10,7 @@ import (
 	"saas/pkg/db/ent/dictionary"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/predicate"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -97,7 +97,7 @@ func (ddq *DictionaryDetailQuery) QueryUsers() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(entuser.Table, entuser.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, dictionarydetail.UsersTable, dictionarydetail.UsersColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)

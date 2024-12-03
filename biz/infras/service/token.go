@@ -3,19 +3,18 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/token"
-	"saas/biz/dal/cache"
-	"saas/pkg/db/ent/predicate"
-	"saas/pkg/db/ent/user"
-
-	"github.com/cloudwego/hertz/pkg/app"
 	"saas/pkg/db/ent"
+	"saas/pkg/db/ent/predicate"
 	token2 "saas/pkg/db/ent/token"
+	entuser "saas/pkg/db/ent/user"
 	"time"
 )
 
@@ -53,7 +52,7 @@ func (t Token) Create(req *token.TokenInfo) error {
 		return t.Update(req)
 	}
 
-	userInfo, err := t.db.User.Query().Where(user.IDEQ(req.UserID)).Only(t.ctx)
+	userInfo, err := t.db.User.Query().Where(entuser.IDEQ(req.UserID)).Only(t.ctx)
 	if err != nil {
 		return errors.Wrap(err, "get userinfo failed")
 	}
@@ -113,12 +112,12 @@ func (t Token) Delete(userID int64) error {
 
 func (t Token) List(req *token.TokenListReq) (res []*token.TokenInfo, total int, err error) {
 	// list token with user info
-	var userPredicates = []predicate.User{user.HasToken()}
+	var userPredicates = []predicate.User{entuser.HasToken()}
 	if req.Username != "" {
-		userPredicates = append(userPredicates, user.UsernameContainsFold(req.Username))
+		userPredicates = append(userPredicates, entuser.UsernameContainsFold(req.Username))
 	}
 	if req.UserId != 0 {
-		userPredicates = append(userPredicates, user.IDEQ(req.UserId))
+		userPredicates = append(userPredicates, entuser.IDEQ(req.UserId))
 	}
 	UserTokens, err := t.db.User.Query().Where(userPredicates...).
 		WithToken(func(q *ent.TokenQuery) {

@@ -169,9 +169,9 @@ func (I *InitDatabase) insertUserData(ctx context.Context) error {
 		SetPassword(password).
 		//SetEmail("idl@gmail.com").
 		SetMobile("12345678901").
-		SetFunctions("{}").
+		//SetFunctions("{}").
 		SetRoleID(1),
-		//SetWecom("idl"),
+	//SetWecom("idl"),
 	)
 
 	err := I.DB.User.CreateBulk(users...).Exec(ctx)

@@ -26,6 +26,8 @@ service AuthService {
   // Get role list | 获取角色列表
   base.NilResponse RoleList(1: base.PageInfoReq req) (api.get = "/service/role/list")
 
+  base.NilResponse RoleTree(1: base.PageInfoReq req) (api.get = "/service/role/tree")
+
   // Set role status | 设置角色状态, 启用1/禁用0
   base.NilResponse UpdateRoleStatus(1: base.StatusCodeReq req) (api.post = "/service/role/status")
 
@@ -54,27 +56,27 @@ struct MenuAuthInfoReq {
 
 //创建或更新角色信息参数
 struct RoleInfo {
-    1:  i64 ID (api.raw = "Id")
-    2:  string name (api.raw = "name")
-    3:  string value (api.raw = "value")
-    4:  string defaultRouter (api.raw = "defaultRouter")
-    5:  i64 status (api.raw = "status")
-    6:  string remark  (api.raw = "remark")
-    7:  i64 orderNo (api.raw = "orderNo")
-    8:  string createdAt (api.raw = "createdAt")
-    9:  string updatedAt (api.raw = "updatedAt")
-    10: list<i64> Menus (api.raw = "menus")
-    11: list<i64> Apis (api.raw = "apis")
+    1:  optional i64 ID (api.raw = "Id")
+    2:  optional string name (api.raw = "name")
+    3:  optional string value (api.raw = "value")
+    4:  optional string defaultRouter (api.raw = "defaultRouter")
+    5:  optional i64 status (api.raw = "status")
+    6:  optional string remark  (api.raw = "remark")
+    7:  optional i64 orderNo (api.raw = "orderNo")
+    8:  optional string createdAt (api.raw = "createdAt")
+    9:  optional string updatedAt (api.raw = "updatedAt")
+    10: optional list<i64> Menus (api.raw = "menus")
+    11: optional list<i64> Apis (api.raw = "apis")
 }
 //日志列表请求数据
 struct LogsListReq {
-    1:  i64 page (api.raw = "page")
-    2:  i64 pageSize (api.raw = "pageSize")
-    3:  string type (api.raw = "type")
-    4:  string method (api.raw = "method")
-    5:  string api (api.raw = "api")
-    6:  string success (api.raw = "success")
-    7:  string operators (api.raw = "operators")
+    1:  optional i64 page (api.raw = "page")
+    2:  optional i64 pageSize (api.raw = "pageSize")
+    3:  optional string type (api.raw = "type")
+    4:  optional string method (api.raw = "method")
+    5:  optional string api (api.raw = "api")
+    6:  optional string success (api.raw = "success")
+    7:  optional string operators (api.raw = "operators")
 }
 
 // authorization message

@@ -12,7 +12,7 @@ import (
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/token"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -23,7 +23,7 @@ import (
 type UserQuery struct {
 	config
 	ctx               *QueryContext
-	order             []user.OrderOption
+	order             []entuser.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.User
 	withToken         *TokenQuery
@@ -62,7 +62,7 @@ func (uq *UserQuery) Unique(unique bool) *UserQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (uq *UserQuery) Order(o ...user.OrderOption) *UserQuery {
+func (uq *UserQuery) Order(o ...entuser.OrderOption) *UserQuery {
 	uq.order = append(uq.order, o...)
 	return uq
 }
@@ -79,9 +79,9 @@ func (uq *UserQuery) QueryToken() *TokenQuery {
 			return nil, err
 		}
 		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.From(entuser.Table, entuser.FieldID, selector),
 			sqlgraph.To(token.Table, token.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, user.TokenTable, user.TokenColumn),
+			sqlgraph.Edge(sqlgraph.O2O, false, entuser.TokenTable, entuser.TokenColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -101,9 +101,9 @@ func (uq *UserQuery) QueryTags() *DictionaryDetailQuery {
 			return nil, err
 		}
 		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.From(entuser.Table, entuser.FieldID, selector),
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, user.TagsTable, user.TagsColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, entuser.TagsTable, entuser.TagsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -123,9 +123,9 @@ func (uq *UserQuery) QueryCreatedOrders() *OrderQuery {
 			return nil, err
 		}
 		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.From(entuser.Table, entuser.FieldID, selector),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.CreatedOrdersTable, user.CreatedOrdersColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, entuser.CreatedOrdersTable, entuser.CreatedOrdersColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -145,9 +145,9 @@ func (uq *UserQuery) QueryUserEntry() *EntryLogsQuery {
 			return nil, err
 		}
 		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.From(entuser.Table, entuser.FieldID, selector),
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.UserEntryTable, user.UserEntryColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, entuser.UserEntryTable, entuser.UserEntryColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -163,7 +163,7 @@ func (uq *UserQuery) First(ctx context.Context) (*User, error) {
 		return nil, err
 	}
 	if len(nodes) == 0 {
-		return nil, &NotFoundError{user.Label}
+		return nil, &NotFoundError{entuser.Label}
 	}
 	return nodes[0], nil
 }
@@ -185,7 +185,7 @@ func (uq *UserQuery) FirstID(ctx context.Context) (id int64, err error) {
 		return
 	}
 	if len(ids) == 0 {
-		err = &NotFoundError{user.Label}
+		err = &NotFoundError{entuser.Label}
 		return
 	}
 	return ids[0], nil
@@ -212,9 +212,9 @@ func (uq *UserQuery) Only(ctx context.Context) (*User, error) {
 	case 1:
 		return nodes[0], nil
 	case 0:
-		return nil, &NotFoundError{user.Label}
+		return nil, &NotFoundError{entuser.Label}
 	default:
-		return nil, &NotSingularError{user.Label}
+		return nil, &NotSingularError{entuser.Label}
 	}
 }
 
@@ -239,9 +239,9 @@ func (uq *UserQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	case 1:
 		id = ids[0]
 	case 0:
-		err = &NotFoundError{user.Label}
+		err = &NotFoundError{entuser.Label}
 	default:
-		err = &NotSingularError{user.Label}
+		err = &NotSingularError{entuser.Label}
 	}
 	return
 }
@@ -280,7 +280,7 @@ func (uq *UserQuery) IDs(ctx context.Context) (ids []int64, err error) {
 		uq.Unique(true)
 	}
 	ctx = setContextOp(ctx, uq.ctx, "IDs")
-	if err = uq.Select(user.FieldID).Scan(ctx, &ids); err != nil {
+	if err = uq.Select(entuser.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
@@ -344,7 +344,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 	return &UserQuery{
 		config:            uq.config,
 		ctx:               uq.ctx.Clone(),
-		order:             append([]user.OrderOption{}, uq.order...),
+		order:             append([]entuser.OrderOption{}, uq.order...),
 		inters:            append([]Interceptor{}, uq.inters...),
 		predicates:        append([]predicate.User{}, uq.predicates...),
 		withToken:         uq.withToken.Clone(),
@@ -412,14 +412,14 @@ func (uq *UserQuery) WithUserEntry(opts ...func(*EntryLogsQuery)) *UserQuery {
 //	}
 //
 //	client.User.Query().
-//		GroupBy(user.FieldCreatedAt).
+//		GroupBy(entuser.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (uq *UserQuery) GroupBy(field string, fields ...string) *UserGroupBy {
 	uq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &UserGroupBy{build: uq}
 	grbuild.flds = &uq.ctx.Fields
-	grbuild.label = user.Label
+	grbuild.label = entuser.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
 }
@@ -434,12 +434,12 @@ func (uq *UserQuery) GroupBy(field string, fields ...string) *UserGroupBy {
 //	}
 //
 //	client.User.Query().
-//		Select(user.FieldCreatedAt).
+//		Select(entuser.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (uq *UserQuery) Select(fields ...string) *UserSelect {
 	uq.ctx.Fields = append(uq.ctx.Fields, fields...)
 	sbuild := &UserSelect{UserQuery: uq}
-	sbuild.label = user.Label
+	sbuild.label = entuser.Label
 	sbuild.flds, sbuild.scan = &uq.ctx.Fields, sbuild.Scan
 	return sbuild
 }
@@ -461,7 +461,7 @@ func (uq *UserQuery) prepareQuery(ctx context.Context) error {
 		}
 	}
 	for _, f := range uq.ctx.Fields {
-		if !user.ValidColumn(f) {
+		if !entuser.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
@@ -491,7 +491,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		withFKs = true
 	}
 	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, user.ForeignKeys...)
+		_spec.Node.Columns = append(_spec.Node.Columns, entuser.ForeignKeys...)
 	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*User).scanValues(nil, columns)
@@ -549,7 +549,7 @@ func (uq *UserQuery) loadToken(ctx context.Context, query *TokenQuery, nodes []*
 	}
 	query.withFKs = true
 	query.Where(predicate.Token(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.TokenColumn), fks...))
+		s.Where(sql.InValues(s.C(entuser.TokenColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -614,7 +614,7 @@ func (uq *UserQuery) loadCreatedOrders(ctx context.Context, query *OrderQuery, n
 		query.ctx.AppendFieldOnce(order.FieldCreateID)
 	}
 	query.Where(predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.CreatedOrdersColumn), fks...))
+		s.Where(sql.InValues(s.C(entuser.CreatedOrdersColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -644,7 +644,7 @@ func (uq *UserQuery) loadUserEntry(ctx context.Context, query *EntryLogsQuery, n
 		query.ctx.AppendFieldOnce(entrylogs.FieldUserID)
 	}
 	query.Where(predicate.EntryLogs(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(user.UserEntryColumn), fks...))
+		s.Where(sql.InValues(s.C(entuser.UserEntryColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -671,7 +671,7 @@ func (uq *UserQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (uq *UserQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewQuerySpec(entuser.Table, entuser.Columns, sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64))
 	_spec.From = uq.sql
 	if unique := uq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
@@ -680,9 +680,9 @@ func (uq *UserQuery) querySpec() *sqlgraph.QuerySpec {
 	}
 	if fields := uq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
-		_spec.Node.Columns = append(_spec.Node.Columns, user.FieldID)
+		_spec.Node.Columns = append(_spec.Node.Columns, entuser.FieldID)
 		for i := range fields {
-			if fields[i] != user.FieldID {
+			if fields[i] != entuser.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
@@ -712,10 +712,10 @@ func (uq *UserQuery) querySpec() *sqlgraph.QuerySpec {
 
 func (uq *UserQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(uq.driver.Dialect())
-	t1 := builder.Table(user.Table)
+	t1 := builder.Table(entuser.Table)
 	columns := uq.ctx.Fields
 	if len(columns) == 0 {
-		columns = user.Columns
+		columns = entuser.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
 	if uq.sql != nil {

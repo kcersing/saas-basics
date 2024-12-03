@@ -92,7 +92,13 @@ struct SetDefaultVenueReq{
     1: i64 userId (api.raw = "userId")
     2: optional i64 venueId (api.raw = "venueId")
 }
-
+struct Functions{
+    1: optional i64 a (api.raw = "a")
+    2: optional i64 b (api.raw = "b")
+    3: optional i64 c (api.raw = "c")
+    4: optional i64 d (api.raw = "d")
+    5: optional i64 e (api.raw = "e")
+}
 service UserService {
   // 登录
 //  base.NilResponse Login(1: LoginReq req) (api.post = "/service/login")

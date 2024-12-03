@@ -15,7 +15,7 @@ import (
 	"saas/pkg/db/ent/orderpay"
 	"saas/pkg/db/ent/ordersales"
 	"saas/pkg/db/ent/predicate"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 
 	"entgo.io/ent/dialect/sql"
@@ -241,7 +241,7 @@ func (oq *OrderQuery) QueryOrderCreates() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(order.Table, order.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(entuser.Table, entuser.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderCreatesTable, order.OrderCreatesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
@@ -928,7 +928,7 @@ func (oq *OrderQuery) loadOrderCreates(ctx context.Context, query *UserQuery, no
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(entuser.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

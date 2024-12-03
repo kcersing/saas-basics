@@ -34,7 +34,7 @@ import (
 	"saas/pkg/db/ent/ordersales"
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/token"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 	"saas/pkg/db/ent/venueplace"
 
@@ -1258,7 +1258,7 @@ func (c *DictionaryDetailClient) QueryUsers(dd *DictionaryDetail) *UserQuery {
 		id := dd.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(entuser.Table, entuser.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, dictionarydetail.UsersTable, dictionarydetail.UsersColumn),
 		)
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
@@ -1439,7 +1439,7 @@ func (c *EntryLogsClient) QueryUsers(el *EntryLogs) *UserQuery {
 		id := el.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(entuser.Table, entuser.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.UsersTable, entrylogs.UsersColumn),
 		)
 		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
@@ -3153,7 +3153,7 @@ func (c *OrderClient) QueryOrderCreates(o *Order) *UserQuery {
 		id := o.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(order.Table, order.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(entuser.Table, entuser.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderCreatesTable, order.OrderCreatesColumn),
 		)
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
@@ -4047,7 +4047,7 @@ func (c *TokenClient) QueryOwner(t *Token) *UserQuery {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(token.Table, token.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(entuser.Table, entuser.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, token.OwnerTable, token.OwnerColumn),
 		)
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
@@ -4092,13 +4092,13 @@ func NewUserClient(c config) *UserClient {
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `user.Hooks(f(g(h())))`.
+// A call to `Use(f, g, h)` equals to `entuser.Hooks(f(g(h())))`.
 func (c *UserClient) Use(hooks ...Hook) {
 	c.hooks.User = append(c.hooks.User, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `user.Intercept(f(g(h())))`.
+// A call to `Intercept(f, g, h)` equals to `entuser.Intercept(f(g(h())))`.
 func (c *UserClient) Intercept(interceptors ...Interceptor) {
 	c.inters.User = append(c.inters.User, interceptors...)
 }
@@ -4160,7 +4160,7 @@ func (c *UserClient) DeleteOne(u *User) *UserDeleteOne {
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *UserClient) DeleteOneID(id int64) *UserDeleteOne {
-	builder := c.Delete().Where(user.ID(id))
+	builder := c.Delete().Where(entuser.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
 	return &UserDeleteOne{builder}
@@ -4177,7 +4177,7 @@ func (c *UserClient) Query() *UserQuery {
 
 // Get returns a User entity by its id.
 func (c *UserClient) Get(ctx context.Context, id int64) (*User, error) {
-	return c.Query().Where(user.ID(id)).Only(ctx)
+	return c.Query().Where(entuser.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
@@ -4195,9 +4195,9 @@ func (c *UserClient) QueryToken(u *User) *TokenQuery {
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.From(entuser.Table, entuser.FieldID, id),
 			sqlgraph.To(token.Table, token.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, user.TokenTable, user.TokenColumn),
+			sqlgraph.Edge(sqlgraph.O2O, false, entuser.TokenTable, entuser.TokenColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
@@ -4211,9 +4211,9 @@ func (c *UserClient) QueryTags(u *User) *DictionaryDetailQuery {
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.From(entuser.Table, entuser.FieldID, id),
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, user.TagsTable, user.TagsColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, entuser.TagsTable, entuser.TagsColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
@@ -4227,9 +4227,9 @@ func (c *UserClient) QueryCreatedOrders(u *User) *OrderQuery {
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.From(entuser.Table, entuser.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.CreatedOrdersTable, user.CreatedOrdersColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, entuser.CreatedOrdersTable, entuser.CreatedOrdersColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
@@ -4243,9 +4243,9 @@ func (c *UserClient) QueryUserEntry(u *User) *EntryLogsQuery {
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.From(entuser.Table, entuser.FieldID, id),
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.UserEntryTable, user.UserEntryColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, entuser.UserEntryTable, entuser.UserEntryColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil

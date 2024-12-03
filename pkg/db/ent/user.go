@@ -3,10 +3,12 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
+	"saas/idl_gen/model/user"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/token"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"strings"
 	"time"
 
@@ -37,7 +39,7 @@ type User struct {
 	// password | 密码
 	Password string `json:"password,omitempty"`
 	// functions | 职能
-	Functions string `json:"functions,omitempty"`
+	Functions user.Functions `json:"functions,omitempty"`
 	// job time | [1:全职;2:兼职;]
 	JobTime int64 `json:"job_time,omitempty"`
 	// role id | 角色ID
@@ -119,13 +121,15 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldStatus, user.FieldGender, user.FieldJobTime, user.FieldRoleID, user.FieldDefaultVenueID:
+		case entuser.FieldFunctions:
+			values[i] = new([]byte)
+		case entuser.FieldID, entuser.FieldStatus, entuser.FieldGender, entuser.FieldJobTime, entuser.FieldRoleID, entuser.FieldDefaultVenueID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldMobile, user.FieldName, user.FieldUsername, user.FieldPassword, user.FieldFunctions, user.FieldAvatar, user.FieldDetail:
+		case entuser.FieldMobile, entuser.FieldName, entuser.FieldUsername, entuser.FieldPassword, entuser.FieldAvatar, entuser.FieldDetail:
 			values[i] = new(sql.NullString)
-		case user.FieldCreatedAt, user.FieldUpdatedAt:
+		case entuser.FieldCreatedAt, entuser.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case user.ForeignKeys[0]: // user_tags
+		case entuser.ForeignKeys[0]: // user_tags
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -142,97 +146,99 @@ func (u *User) assignValues(columns []string, values []any) error {
 	}
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID:
+		case entuser.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			u.ID = int64(value.Int64)
-		case user.FieldCreatedAt:
+		case entuser.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
 				u.CreatedAt = value.Time
 			}
-		case user.FieldUpdatedAt:
+		case entuser.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				u.UpdatedAt = value.Time
 			}
-		case user.FieldStatus:
+		case entuser.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				u.Status = value.Int64
 			}
-		case user.FieldMobile:
+		case entuser.FieldMobile:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mobile", values[i])
 			} else if value.Valid {
 				u.Mobile = value.String
 			}
-		case user.FieldName:
+		case entuser.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				u.Name = value.String
 			}
-		case user.FieldGender:
+		case entuser.FieldGender:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field gender", values[i])
 			} else if value.Valid {
 				u.Gender = value.Int64
 			}
-		case user.FieldUsername:
+		case entuser.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field username", values[i])
 			} else if value.Valid {
 				u.Username = value.String
 			}
-		case user.FieldPassword:
+		case entuser.FieldPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field password", values[i])
 			} else if value.Valid {
 				u.Password = value.String
 			}
-		case user.FieldFunctions:
-			if value, ok := values[i].(*sql.NullString); !ok {
+		case entuser.FieldFunctions:
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field functions", values[i])
-			} else if value.Valid {
-				u.Functions = value.String
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &u.Functions); err != nil {
+					return fmt.Errorf("unmarshal field functions: %w", err)
+				}
 			}
-		case user.FieldJobTime:
+		case entuser.FieldJobTime:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field job_time", values[i])
 			} else if value.Valid {
 				u.JobTime = value.Int64
 			}
-		case user.FieldRoleID:
+		case entuser.FieldRoleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field role_id", values[i])
 			} else if value.Valid {
 				u.RoleID = value.Int64
 			}
-		case user.FieldDefaultVenueID:
+		case entuser.FieldDefaultVenueID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field default_venue_id", values[i])
 			} else if value.Valid {
 				u.DefaultVenueID = value.Int64
 			}
-		case user.FieldAvatar:
+		case entuser.FieldAvatar:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar", values[i])
 			} else if value.Valid {
 				u.Avatar = value.String
 			}
-		case user.FieldDetail:
+		case entuser.FieldDetail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field detail", values[i])
 			} else if value.Valid {
 				u.Detail = value.String
 			}
-		case user.ForeignKeys[0]:
+		case entuser.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field user_tags", value)
 			} else if value.Valid {
@@ -320,7 +326,7 @@ func (u *User) String() string {
 	builder.WriteString(u.Password)
 	builder.WriteString(", ")
 	builder.WriteString("functions=")
-	builder.WriteString(u.Functions)
+	builder.WriteString(fmt.Sprintf("%v", u.Functions))
 	builder.WriteString(", ")
 	builder.WriteString("job_time=")
 	builder.WriteString(fmt.Sprintf("%v", u.JobTime))

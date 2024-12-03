@@ -16,7 +16,7 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/role"
-	"saas/pkg/db/ent/user"
+	entuser "saas/pkg/db/ent/user"
 	"strconv"
 	"time"
 )
@@ -41,12 +41,12 @@ func NewRole(ctx context.Context, c *app.RequestContext) do.Role {
 
 func (r Role) Create(req *auth.RoleInfo) error {
 	roleEnt, err := r.db.Role.Create().
-		SetName(req.Name).
-		SetValue(req.Value).
-		SetDefaultRouter(req.DefaultRouter).
-		SetStatus(req.Status).
-		SetRemark(req.Remark).
-		SetOrderNo(req.OrderNo).
+		SetName(*req.Name).
+		SetValue(*req.Value).
+		SetDefaultRouter(*req.DefaultRouter).
+		SetStatus(*req.Status).
+		SetRemark(*req.Remark).
+		SetOrderNo(*req.OrderNo).
 		Save(r.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create Role failed")
@@ -59,13 +59,13 @@ func (r Role) Create(req *auth.RoleInfo) error {
 }
 
 func (r Role) Update(req *auth.RoleInfo) error {
-	roleEnt, err := r.db.Role.UpdateOneID(req.ID).
-		SetName(req.Name).
-		SetValue(req.Value).
-		SetDefaultRouter(req.DefaultRouter).
-		SetStatus(req.Status).
-		SetRemark(req.Remark).
-		SetOrderNo(req.OrderNo).
+	roleEnt, err := r.db.Role.UpdateOneID(*req.ID).
+		SetName(*req.Name).
+		SetValue(*req.Value).
+		SetDefaultRouter(*req.DefaultRouter).
+		SetStatus(*req.Status).
+		SetRemark(*req.Remark).
+		SetOrderNo(*req.OrderNo).
 		SetUpdatedAt(time.Now()).
 		Save(r.ctx)
 	if err != nil {
@@ -80,7 +80,7 @@ func (r Role) Update(req *auth.RoleInfo) error {
 
 func (r Role) Delete(id int64) error {
 	// whether role is used by user
-	exist, err := r.db.User.Query().Where(user.RoleIDEQ(id)).Exist(r.ctx)
+	exist, err := r.db.User.Query().Where(entuser.RoleIDEQ(id)).Exist(r.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "query user - role failed")
 		return err
@@ -98,22 +98,41 @@ func (r Role) Delete(id int64) error {
 	r.cache.Del("roleData" + strconv.Itoa(int(id)))
 	return nil
 }
-
+func entRoleInfo(entRole ent.Role) *auth.RoleInfo {
+	createdAt := entRole.CreatedAt.Format(time.DateTime)
+	updatedAt := entRole.UpdatedAt.Format(time.DateTime)
+	return &auth.RoleInfo{
+		ID:            &entRole.ID,
+		Name:          &entRole.Name,
+		Value:         &entRole.Value,
+		DefaultRouter: &entRole.DefaultRouter,
+		Status:        &entRole.Status,
+		Remark:        &entRole.Remark,
+		OrderNo:       &entRole.OrderNo,
+		CreatedAt:     &createdAt,
+		UpdatedAt:     &updatedAt,
+	}
+}
 func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 	roleInterface, ok := r.cache.Get("roleData" + strconv.Itoa(int(ID)))
 	if ok {
 		if l, ok := roleInterface.(*ent.Role); ok {
-			return &auth.RoleInfo{
-				ID:            l.ID,
-				Name:          l.Name,
-				Value:         l.Value,
-				DefaultRouter: l.DefaultRouter,
-				Status:        l.Status,
-				Remark:        l.Remark,
-				OrderNo:       l.OrderNo,
-				CreatedAt:     l.CreatedAt.Format(time.DateTime),
-				UpdatedAt:     l.UpdatedAt.Format(time.DateTime),
-			}, nil
+
+			return entRoleInfo(*l), nil
+			//createdAt := l.CreatedAt.Format(time.DateTime)
+			//updatedAt := l.UpdatedAt.Format(time.DateTime)
+			//
+			//return &auth.RoleInfo{
+			//	ID:            &l.ID,
+			//	Name:          &l.Name,
+			//	Value:         &l.Value,
+			//	DefaultRouter: &l.DefaultRouter,
+			//	Status:        &l.Status,
+			//	Remark:        &l.Remark,
+			//	OrderNo:       &l.OrderNo,
+			//	CreatedAt:     &createdAt,
+			//	UpdatedAt:     &updatedAt,
+			//}, nil
 		}
 	}
 	// get role from db
@@ -125,18 +144,19 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 	// set role to cache
 	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(ID)), roleEnt, 1, 1*time.Hour)
 	// convert to RoleInfo
-	roleInfo = &auth.RoleInfo{
-		ID:            roleEnt.ID,
-		Name:          roleEnt.Name,
-		Value:         roleEnt.Value,
-		DefaultRouter: roleEnt.DefaultRouter,
-		Status:        roleEnt.Status,
-		Remark:        roleEnt.Remark,
-		OrderNo:       roleEnt.OrderNo,
-		CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
-		UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
-	}
-	return
+	return entRoleInfo(*roleEnt), nil
+	//roleInfo = &auth.RoleInfo{
+	//	ID:            roleEnt.ID,
+	//	Name:          roleEnt.Name,
+	//	Value:         roleEnt.Value,
+	//	DefaultRouter: roleEnt.DefaultRouter,
+	//	Status:        roleEnt.Status,
+	//	Remark:        roleEnt.Remark,
+	//	OrderNo:       roleEnt.OrderNo,
+	//	CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
+	//	UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
+	//}
+	//return
 }
 
 func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total int64, err error) {
@@ -160,19 +180,10 @@ func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total 
 		for v2 := range roleEnt.Apis {
 			rArr = append(rArr, cast.ToInt64(v2))
 		}
-		roleInfoList = append(roleInfoList, &auth.RoleInfo{
-			ID:            roleEnt.ID,
-			Name:          roleEnt.Name,
-			Value:         roleEnt.Value,
-			DefaultRouter: roleEnt.DefaultRouter,
-			Status:        roleEnt.Status,
-			Remark:        roleEnt.Remark,
-			OrderNo:       roleEnt.OrderNo,
-			CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
-			UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
-			Menus:         mArr,
-			Apis:          rArr,
-		})
+		re := entRoleInfo(*roleEnt)
+		re.Menus = mArr
+		re.Apis = rArr
+		roleInfoList = append(roleInfoList, re)
 	}
 	t, _ := r.db.Role.Query().Count(r.ctx)
 	total = int64(t)
