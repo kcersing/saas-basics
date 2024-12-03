@@ -429,8 +429,8 @@ func (p *ApiInfo) String() string {
 
 // API列表请求数据
 type ApiPageReq struct {
-	Page        int64  `thrift:"page,1" form:"page" json:"page" query:"page"`
-	PageSize    int64  `thrift:"pageSize,2" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Page        int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize    int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
 	Path        string `thrift:"path,3" form:"path" json:"path" query:"path"`
 	Description string `thrift:"description,4" form:"description" json:"description" query:"description"`
 	Method      string `thrift:"method,5" form:"method" json:"method" query:"method"`
@@ -438,17 +438,41 @@ type ApiPageReq struct {
 }
 
 func NewApiPageReq() *ApiPageReq {
-	return &ApiPageReq{}
+	return &ApiPageReq{
+
+		Page:        1,
+		PageSize:    100,
+		Path:        "",
+		Description: "",
+		Method:      "",
+		Group:       "",
+	}
 }
 
 func (p *ApiPageReq) InitDefault() {
+	p.Page = 1
+	p.PageSize = 100
+	p.Path = ""
+	p.Description = ""
+	p.Method = ""
+	p.Group = ""
 }
 
+var ApiPageReq_Page_DEFAULT int64 = 1
+
 func (p *ApiPageReq) GetPage() (v int64) {
+	if !p.IsSetPage() {
+		return ApiPageReq_Page_DEFAULT
+	}
 	return p.Page
 }
 
+var ApiPageReq_PageSize_DEFAULT int64 = 100
+
 func (p *ApiPageReq) GetPageSize() (v int64) {
+	if !p.IsSetPageSize() {
+		return ApiPageReq_PageSize_DEFAULT
+	}
 	return p.PageSize
 }
 
@@ -475,6 +499,14 @@ var fieldIDToName_ApiPageReq = map[int16]string{
 	4: "description",
 	5: "method",
 	6: "group",
+}
+
+func (p *ApiPageReq) IsSetPage() bool {
+	return p.Page != ApiPageReq_Page_DEFAULT
+}
+
+func (p *ApiPageReq) IsSetPageSize() bool {
+	return p.PageSize != ApiPageReq_PageSize_DEFAULT
 }
 
 func (p *ApiPageReq) Read(iprot thrift.TProtocol) (err error) {
@@ -690,14 +722,16 @@ WriteStructEndError:
 }
 
 func (p *ApiPageReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Page); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPage() {
+		if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Page); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -707,14 +741,16 @@ WriteFieldEndError:
 }
 
 func (p *ApiPageReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPageSize() {
+		if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.PageSize); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:

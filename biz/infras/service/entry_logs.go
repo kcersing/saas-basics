@@ -42,21 +42,21 @@ func (e EntryLogs) Create(logsReq *entry.EntryInfo) error {
 func (e EntryLogs) List(req *entry.EntryListReq) (list []*entry.EntryInfo, total int, err error) {
 	var predicates []predicate.EntryLogs
 
-	if *req.VenueId > 0 {
-		predicates = append(predicates, entrylogs.VenueID(*req.VenueId))
+	if req.VenueId > 0 {
+		predicates = append(predicates, entrylogs.VenueID(req.VenueId))
 	}
-	if *req.MemberId > 0 {
-		predicates = append(predicates, entrylogs.MemberID(*req.MemberId))
+	if req.MemberId > 0 {
+		predicates = append(predicates, entrylogs.MemberID(req.MemberId))
 	}
-	if *req.MemberProductId > 0 {
-		predicates = append(predicates, entrylogs.MemberProductID(*req.MemberProductId))
+	if req.MemberProductId > 0 {
+		predicates = append(predicates, entrylogs.MemberProductID(req.MemberProductId))
 	}
-	if *req.MemberPropertyId > 0 {
-		predicates = append(predicates, entrylogs.MemberPropertyID(*req.MemberPropertyId))
+	if req.MemberPropertyId > 0 {
+		predicates = append(predicates, entrylogs.MemberPropertyID(req.MemberPropertyId))
 	}
 
-	if *req.UserId > 0 {
-		predicates = append(predicates, entrylogs.UserID(*req.UserId))
+	if req.UserId > 0 {
+		predicates = append(predicates, entrylogs.UserID(req.UserId))
 	}
 
 	//if *req.EntryTime != "" {
@@ -67,8 +67,8 @@ func (e EntryLogs) List(req *entry.EntryListReq) (list []*entry.EntryInfo, total
 	//}
 
 	lists, err := e.db.EntryLogs.Query().Where(predicates...).
-		Offset(int(*req.Page-1) * int(*req.PageSize)).
-		Limit(int(*req.PageSize)).All(e.ctx)
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(e.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Entry list failed")
 		return list, total, err

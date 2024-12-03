@@ -94,15 +94,15 @@ func (c Contract) UpdateStatus(ID int64, status int64) error {
 func (c Contract) List(req *contract.ContractListReq) (list []*contract.ContractInfo, total int, err error) {
 	var predicates []predicate.Contract
 
-	if *req.Name != "" {
-		predicates = append(predicates, contract2.NameEQ(*req.Name))
+	if req.Name != "" {
+		predicates = append(predicates, contract2.NameEQ(req.Name))
 	}
 
 	all, err := c.db.Contract.
 		Query().
 		Where(predicates...).
-		Offset(int(*req.Page-1) * int(*req.PageSize)).
-		Limit(int(*req.PageSize)).All(c.ctx)
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Contract list failed")
 		return list, total, err

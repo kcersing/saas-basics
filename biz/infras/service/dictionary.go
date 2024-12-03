@@ -109,11 +109,11 @@ func (d Dictionary) Delete(id int64) error {
 func (d Dictionary) List(req *dictionary.DictListReq) (list []*dictionary.DictionaryInfo, total int64, err error) {
 	// query dictionary
 	var predicates []predicate.Dictionary
-	if *req.Title != "" {
-		predicates = append(predicates, dictionary2.TitleContains(*req.Title))
+	if req.Title != "" {
+		predicates = append(predicates, dictionary2.TitleContains(req.Title))
 	}
-	if *req.Name != "" {
-		predicates = append(predicates, dictionary2.NameContains(*req.Name))
+	if req.Name != "" {
+		predicates = append(predicates, dictionary2.NameContains(req.Name))
 	}
 	dictionaries, err := d.db.Dictionary.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).

@@ -2924,7 +2924,7 @@ func NewUserListReq() *UserListReq {
 	return &UserListReq{
 
 		Page:     1,
-		PageSize: 10,
+		PageSize: 100,
 		Name:     "",
 		JobTime:  0,
 		Mobile:   "",
@@ -2934,7 +2934,7 @@ func NewUserListReq() *UserListReq {
 
 func (p *UserListReq) InitDefault() {
 	p.Page = 1
-	p.PageSize = 10
+	p.PageSize = 100
 	p.Name = ""
 	p.JobTime = 0
 	p.Mobile = ""
@@ -2950,7 +2950,7 @@ func (p *UserListReq) GetPage() (v int64) {
 	return p.Page
 }
 
-var UserListReq_PageSize_DEFAULT int64 = 10
+var UserListReq_PageSize_DEFAULT int64 = 100
 
 func (p *UserListReq) GetPageSize() (v int64) {
 	if !p.IsSetPageSize() {

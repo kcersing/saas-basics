@@ -145,13 +145,13 @@ func (v Venue) Update(req *venue.VenueInfo) error {
 func (v Venue) List(req *venue.VenueListReq) (list []*venue.VenueInfo, total int, err error) {
 	var predicates []predicate.Venue
 
-	if *req.Name != "" {
-		predicates = append(predicates, venue2.NameEQ(*req.Name))
+	if req.Name != "" {
+		predicates = append(predicates, venue2.NameEQ(req.Name))
 	}
 
 	venueList, err := v.db.Venue.Query().Where(predicates...).
-		Offset(int(*req.Page-1) * int(*req.PageSize)).
-		Limit(int(*req.PageSize)).All(v.ctx)
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(v.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Venue list failed")
 		return list, total, err
@@ -215,13 +215,13 @@ func (v Venue) UpdatePlace(req *venue.VenuePlaceInfo) error {
 func (v Venue) PlaceList(req *venue.VenuePlaceListReq) (list []*venue.VenuePlaceInfo, total int, err error) {
 	var predicates []predicate.VenuePlace
 
-	if *req.Name != "" {
-		predicates = append(predicates, venueplace.NameEQ(*req.Name))
+	if req.Name != "" {
+		predicates = append(predicates, venueplace.NameEQ(req.Name))
 	}
 
 	l, err := v.db.VenuePlace.Query().Where(predicates...).
-		Offset(int(*req.Page-1) * int(*req.PageSize)).
-		Limit(int(*req.PageSize)).All(v.ctx)
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(v.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Venue Place list failed")
 		return list, total, err

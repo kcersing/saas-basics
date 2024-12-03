@@ -112,23 +112,23 @@ func (c Contest) DeleteContest(id int64) error {
 
 func (c Contest) ContestList(req contest.ContestListReq) (resp []*contest.ContestInfo, total int, err error) {
 	var predicates []predicate.Contest
-	if *req.Name != "" {
-		predicates = append(predicates, contest2.NameEQ(*req.Name))
+	if req.Name != "" {
+		predicates = append(predicates, contest2.NameEQ(req.Name))
 	}
-	if *req.Condition != 0 {
-		predicates = append(predicates, contest2.Condition(*req.Condition))
+	if req.Condition != 0 {
+		predicates = append(predicates, contest2.Condition(req.Condition))
 	}
 
-	if *req.SignStartAt != "" && *req.SignEndAt != "" {
-		signStartAt, _ := time.Parse(time.DateOnly, *req.SignStartAt)
-		signEndAt, _ := time.Parse(time.DateOnly, *req.SignEndAt)
+	if req.SignStartAt != "" && req.SignEndAt != "" {
+		signStartAt, _ := time.Parse(time.DateOnly, req.SignStartAt)
+		signEndAt, _ := time.Parse(time.DateOnly, req.SignEndAt)
 
 		predicates = append(predicates, contest2.SignStartAtGT(signStartAt))
 		predicates = append(predicates, contest2.SignEndAtEQ(signEndAt))
 	}
-	if *req.StartAt != "" && *req.EndAt != "" {
-		startAt, _ := time.Parse(time.DateOnly, *req.StartAt)
-		endAt, _ := time.Parse(time.DateOnly, *req.EndAt)
+	if req.StartAt != "" && req.EndAt != "" {
+		startAt, _ := time.Parse(time.DateOnly, req.StartAt)
+		endAt, _ := time.Parse(time.DateOnly, req.EndAt)
 
 		predicates = append(predicates, contest2.StartAtGT(startAt))
 		predicates = append(predicates, contest2.EndAtEQ(endAt))
@@ -136,8 +136,8 @@ func (c Contest) ContestList(req contest.ContestListReq) (resp []*contest.Contes
 
 	lists, err := c.db.Contest.Query().Where(predicates...).
 		Order(ent.Desc(contest2.FieldID)).
-		Offset(int(*req.Page-1) * int(*req.PageSize)).
-		Limit(int(*req.PageSize)).All(c.ctx)
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Member list failed")
 		return resp, total, err
@@ -267,19 +267,19 @@ func (c Contest) ParticipantInfo(id int64) (resp *contest.ParticipantInfo, err e
 
 func (c Contest) ParticipantList(req contest.ParticipantListReq) (resp []*contest.ParticipantInfo, total int, err error) {
 	var predicates []predicate.ContestParticipant
-	if *req.Name != "" {
-		predicates = append(predicates, contestparticipant.NameEQ(*req.Name))
+	if req.Name != "" {
+		predicates = append(predicates, contestparticipant.NameEQ(req.Name))
 	}
-	if *req.Mobile != "" {
-		predicates = append(predicates, contestparticipant.Mobile(*req.Mobile))
+	if req.Mobile != "" {
+		predicates = append(predicates, contestparticipant.Mobile(req.Mobile))
 	}
 
-	predicates = append(predicates, contestparticipant.ContestID(*req.ContestId))
+	predicates = append(predicates, contestparticipant.ContestID(req.ContestId))
 
 	lists, err := c.db.ContestParticipant.Query().Where(predicates...).
 		Order(ent.Desc(contestparticipant.FieldID)).
-		Offset(int(*req.Page-1) * int(*req.PageSize)).
-		Limit(int(*req.PageSize)).All(c.ctx)
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get contest participant list failed")
 		return resp, total, err
