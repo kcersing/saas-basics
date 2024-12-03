@@ -2698,6 +2698,7 @@ type MenuInfo struct {
 	Children  []*MenuInfo `thrift:"children,14" form:"children" json:"children" query:"children"`
 	CreatedAt string      `thrift:"createdAt,15" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt string      `thrift:"updatedAt,16" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	Title     string      `thrift:"title,17" form:"title" json:"title" query:"title"`
 }
 
 func NewMenuInfo() *MenuInfo {
@@ -2776,6 +2777,10 @@ func (p *MenuInfo) GetUpdatedAt() (v string) {
 	return p.UpdatedAt
 }
 
+func (p *MenuInfo) GetTitle() (v string) {
+	return p.Title
+}
+
 var fieldIDToName_MenuInfo = map[int16]string{
 	1:  "id",
 	2:  "name",
@@ -2793,6 +2798,7 @@ var fieldIDToName_MenuInfo = map[int16]string{
 	14: "children",
 	15: "createdAt",
 	16: "updatedAt",
+	17: "title",
 }
 
 func (p *MenuInfo) IsSetMeta() bool {
@@ -2941,6 +2947,14 @@ func (p *MenuInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 16:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField16(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 17:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField17(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3160,6 +3174,17 @@ func (p *MenuInfo) ReadField16(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
+func (p *MenuInfo) ReadField17(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Title = _field
+	return nil
+}
 
 func (p *MenuInfo) Write(oprot thrift.TProtocol) (err error) {
 
@@ -3230,6 +3255,10 @@ func (p *MenuInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField16(oprot); err != nil {
 			fieldId = 16
+			goto WriteFieldError
+		}
+		if err = p.writeField17(oprot); err != nil {
+			fieldId = 17
 			goto WriteFieldError
 		}
 	}
@@ -3528,6 +3557,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 16 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 16 end error: ", p), err)
+}
+
+func (p *MenuInfo) writeField17(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("title", thrift.STRING, 17); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Title); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 17 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
 }
 
 func (p *MenuInfo) String() string {

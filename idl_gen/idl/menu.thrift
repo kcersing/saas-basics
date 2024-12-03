@@ -145,6 +145,7 @@ struct MenuInfo {
 	    14: list<MenuInfo> children  (api.raw = "children")
 	    15: string createdAt (api.raw = "createdAt")
         16: string updatedAt (api.raw = "updatedAt")
+        17:  string title (api.raw = "title" )
 
 }
 

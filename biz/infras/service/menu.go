@@ -176,7 +176,7 @@ func entMenuInfo(menuEnt ent.Menu) *menu.MenuInfo {
 	m.URL = menuEnt.URL
 	m.Status = menuEnt.Status
 	m.Sort = menuEnt.Sort
-
+	m.Title = menuEnt.Title
 	m.CreatedAt = menuEnt.CreatedAt.Format(time.DateTime)
 	m.UpdatedAt = menuEnt.UpdatedAt.Format(time.DateTime)
 	m.Meta = &menu.Meta{
@@ -188,6 +188,7 @@ func entMenuInfo(menuEnt ent.Menu) *menu.MenuInfo {
 	}
 	return m
 }
+
 func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfo, err error) {
 
 	menus, err := m.db.Role.

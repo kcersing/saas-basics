@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
@@ -80,27 +79,7 @@ func (u User) Info(id int64) (info *user.UserInfo, err error) {
 		err = errors.Wrap(err, "get user failed")
 		return info, err
 	}
-	err = copier.Copy(&info, &userEnt)
-	if err != nil {
-		err = errors.Wrap(err, "copy user info failed")
-		return info, err
-	}
-
-	roleInterface, exist := u.cache.Get("roleData" + strconv.Itoa(int(info.RoleId)))
-	if exist {
-		if role, ok := roleInterface.(*ent.Role); ok {
-			info.RoleName = role.Name
-			info.RoleValue = role.Value
-		}
-	}
-	info.Avatar = minio.URLconvert(u.ctx, u.c, info.Avatar)
-	if userEnt.Gender == 0 {
-		info.Gender = "女性"
-	} else if userEnt.Gender == 1 {
-		info.Gender = "男性"
-	} else {
-		info.Gender = "保密"
-	}
+	info = u.entUserInfo(*userEnt)
 	//if !userEnt.Birthday.IsZero() {
 	//	info.Age = int64(time.Now().Sub(userEnt.Birthday).Hours() / 24 / 365)
 	//}
@@ -147,10 +126,10 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 	//	SetUserFaces(noe).
 	//	Save(u.ctx)
 
-	if err != nil {
-		err = rollback(tx, errors.Wrap(err, "create Face failed"))
-		return err
-	}
+	//if err != nil {
+	//	err = rollback(tx, errors.Wrap(err, "create Face failed"))
+	//	return err
+	//}
 
 	if err = tx.Commit(); err != nil {
 		return err
@@ -244,17 +223,61 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 		return userList, total, err
 	}
 	// copy to UserInfo struct
-	err = copier.Copy(&userList, &users)
-	if err != nil {
-		err = errors.Wrap(err, "copy user info failed")
-		return userList, 0, err
-	}
-
-	for _, v := range userList {
-		v.Avatar = minio.URLconvert(u.ctx, u.c, v.Avatar)
+	//copier.Copy(
+	for _, v := range users {
+		mr := u.entUserInfo(*v)
+		userList = append(userList, mr)
 	}
 	total, _ = u.db.User.Query().Where(predicates...).Count(u.ctx)
 	return
+}
+
+func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
+	info = new(user.UserInfo)
+
+	info.Id = userEnt.ID
+	info.Status = userEnt.Status
+	info.Username = userEnt.Username
+
+	info.Name = userEnt.Name
+	info.RoleId = userEnt.RoleID
+	info.Mobile = userEnt.Mobile
+	info.CreatedAt = userEnt.CreatedAt.Format(time.DateTime)
+	info.UpdatedAt = userEnt.UpdatedAt.Format(time.DateTime)
+
+	roleInterface, exist := u.cache.Get("roleData" + strconv.Itoa(int(info.RoleId)))
+	if exist {
+		if role, ok := roleInterface.(*ent.Role); ok {
+			info.RoleName = role.Name
+			info.RoleValue = role.Value
+		}
+	}
+	info.Avatar = minio.URLconvert(u.ctx, u.c, info.Avatar)
+	if userEnt.Gender == 0 {
+		info.Gender = "女性"
+	} else if userEnt.Gender == 1 {
+		info.Gender = "男性"
+	} else {
+		info.Gender = "保密"
+	}
+
+	info.Functions = userEnt.Functions.String()
+
+	var gender string
+	if userEnt.Gender == 0 {
+		gender = "女性"
+	} else if userEnt.Gender == 1 {
+		gender = "男性"
+	} else {
+		gender = "未知"
+	}
+
+	info.Gender = gender
+	info.Detail = userEnt.Detail
+	info.JobTime = &userEnt.JobTime
+	info.DefaultVenueId = userEnt.DefaultVenueID
+
+	return info
 }
 
 func (u User) UpdateUserStatus(id int64, status int64) error {
