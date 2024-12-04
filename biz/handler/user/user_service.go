@@ -112,12 +112,12 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 // UserInfo .
 // @Summary  获取员工信息 Summary
 // @Description 获取员工信息 Description
+// @Param request query base.IDReq true "query params"
 // @Success      200  {object}  utils.Response
 // @router /service/user/info [GET]
-
 func UserInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req base.Empty
+	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -134,9 +134,13 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusUnauthorized, "Unauthorized,"+err.Error())
 		return
 	}
-	userID := uint64(i)
-
-	info, err := service.NewUser(ctx, c).Info(int64(userID))
+	var userID int64
+	if req.ID > 0 {
+		userID = req.ID
+	} else {
+		userID = int64(uint64(i))
+	}
+	info, err := service.NewUser(ctx, c).Info(userID)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

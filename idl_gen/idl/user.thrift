@@ -15,7 +15,7 @@ struct UserInfo {
 	10:string UpdatedAt  (api.raw = "updatedAt")
 	11:string RoleName (api.raw = "roleName")
 	14:string RoleValue (api.raw = "roleValue")
-	12:string Functions (api.raw = "functions")
+	12: list<string> functions (api.raw = "functions")
 	13:string Gender (api.raw = "gender")
 //	14:i64 Age (api.raw = "age")
 //	15:string Birthday (api.raw = "birthday")
@@ -66,7 +66,7 @@ struct CreateOrUpdateUserReq {
     10: optional i64 createId (api.raw = "createId")
     12: optional string password (api.raw = "password")
     13:  optional string username (api.raw = "username")
-    14:  optional string functions (api.raw = "functions")
+    14:  optional list<string> functions (api.raw = "functions")
     15:  optional string detail (api.raw = "detail")
     16:  optional i64 jobTime (api.raw = "jobTime")
 }
@@ -92,13 +92,7 @@ struct SetDefaultVenueReq{
     1: i64 userId (api.raw = "userId")
     2: optional i64 venueId (api.raw = "venueId")
 }
-struct Functions{
-    1: optional i64 a (api.raw = "a")
-    2: optional i64 b (api.raw = "b")
-    3: optional i64 c (api.raw = "c")
-    4: optional i64 d (api.raw = "d")
-    5: optional i64 e (api.raw = "e")
-}
+
 service UserService {
   // 登录
 //  base.NilResponse Login(1: LoginReq req) (api.post = "/service/login")
@@ -116,7 +110,7 @@ service UserService {
   base.NilResponse UpdateUser(1: CreateOrUpdateUserReq req) (api.post = "/service/user/update")
 
   // 获取用户基本信息
-  base.NilResponse UserInfo(1: base.Empty req) (api.get = "/service/user/info")
+  base.NilResponse UserInfo(1: base.IDReq req)  (api.get = "/service/user/info")
 
   // 获取用户列表
   base.NilResponse UserList(1: UserListReq req) (api.post = "/service/user/list")

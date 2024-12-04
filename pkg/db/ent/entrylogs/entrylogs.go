@@ -57,7 +57,7 @@ const (
 	// UsersTable is the table that holds the users relation/edge.
 	UsersTable = "entry_logs"
 	// UsersInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "entuser" package.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "sys_users"
 	// UsersColumn is the table column denoting the users relation/edge.
 	UsersColumn = "user_id"

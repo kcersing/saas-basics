@@ -33,7 +33,7 @@ const (
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "sys_tokens"
 	// OwnerInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "entuser" package.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
 	OwnerInverseTable = "sys_users"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "user_token"

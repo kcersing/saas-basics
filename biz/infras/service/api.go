@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
@@ -134,18 +133,25 @@ func (a Api) List(req menu.ApiPageReq) (resp []*menu.ApiInfo, total int64, err e
 		return resp, total, err
 	}
 
-	err = copier.Copy(&resp, &apis)
-	if err != nil {
-		err = errors.Wrap(err, "copy Api failed")
-		return resp, 0, err
-	}
-	for i, v := range apis {
-		resp[i].CreatedAt = v.CreatedAt.Format(time.DateTime)
-		resp[i].UpdatedAt = v.UpdatedAt.Format(time.DateTime)
-
+	for _, v := range apis {
+		apiinfo := entApiInfo(*v)
+		resp = append(resp, apiinfo)
 	}
 
 	t, _ := a.db.API.Query().Where(predicates...).Count(a.ctx)
 	total = int64(t)
 	return resp, total, nil
+}
+
+func entApiInfo(entApi ent.API) (resp *menu.ApiInfo) {
+	resp = &menu.ApiInfo{
+		ID:          entApi.ID,
+		Path:        entApi.Path,
+		Description: entApi.Description,
+		Group:       entApi.APIGroup,
+		Method:      entApi.Method,
+		CreatedAt:   entApi.CreatedAt.Format(time.DateTime),
+		UpdatedAt:   entApi.UpdatedAt.Format(time.DateTime),
+	}
+	return
 }

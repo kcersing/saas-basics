@@ -108,7 +108,7 @@ const (
 	// OrderCreatesTable is the table that holds the order_creates relation/edge.
 	OrderCreatesTable = "order"
 	// OrderCreatesInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "entuser" package.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
 	OrderCreatesInverseTable = "sys_users"
 	// OrderCreatesColumn is the table column denoting the order_creates relation/edge.
 	OrderCreatesColumn = "create_id"

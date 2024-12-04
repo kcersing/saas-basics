@@ -9,7 +9,7 @@ import (
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/predicate"
-	entuser "saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 	"time"
 
@@ -415,7 +415,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{entrylogs.UsersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -428,7 +428,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{entrylogs.UsersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -870,7 +870,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 			Columns: []string{entrylogs.UsersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -883,7 +883,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 			Columns: []string{entrylogs.UsersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

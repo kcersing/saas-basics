@@ -1613,6 +1613,11 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/role/tree": {
+            "get": {
+                "responses": {}
+            }
+        },
         "/service/role/update": {
             "post": {
                 "description": "更新角色 Description",
@@ -1751,6 +1756,27 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/user.CreateOrUpdateUserReq"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/user/info": {
+            "get": {
+                "description": "获取员工信息 Description",
+                "summary": "获取员工信息 Summary",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2686,7 +2712,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "functions": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "gender": {
                     "type": "string"

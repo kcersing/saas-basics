@@ -27,7 +27,7 @@ import (
 	"saas/pkg/db/ent/role"
 	"saas/pkg/db/ent/schema"
 	"saas/pkg/db/ent/token"
-	entuser "saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 	"saas/pkg/db/ent/venueplace"
 	"time"
@@ -592,39 +592,39 @@ func init() {
 	token.DefaultUpdatedAt = tokenDescUpdatedAt.Default.(func() time.Time)
 	// token.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	token.UpdateDefaultUpdatedAt = tokenDescUpdatedAt.UpdateDefault.(func() time.Time)
-	entuserMixin := schema.User{}.Mixin()
-	entuserMixinFields0 := entuserMixin[0].Fields()
-	_ = entuserMixinFields0
-	entuserMixinFields1 := entuserMixin[1].Fields()
-	_ = entuserMixinFields1
-	entuserFields := schema.User{}.Fields()
-	_ = entuserFields
-	// entuserDescCreatedAt is the schema descriptor for created_at field.
-	entuserDescCreatedAt := entuserMixinFields0[1].Descriptor()
-	// entuser.DefaultCreatedAt holds the default value on creation for the created_at field.
-	entuser.DefaultCreatedAt = entuserDescCreatedAt.Default.(func() time.Time)
-	// entuserDescUpdatedAt is the schema descriptor for updated_at field.
-	entuserDescUpdatedAt := entuserMixinFields0[2].Descriptor()
-	// entuser.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	entuser.DefaultUpdatedAt = entuserDescUpdatedAt.Default.(func() time.Time)
-	// entuser.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	entuser.UpdateDefaultUpdatedAt = entuserDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// entuserDescStatus is the schema descriptor for status field.
-	entuserDescStatus := entuserMixinFields1[0].Descriptor()
-	// entuser.DefaultStatus holds the default value on creation for the status field.
-	entuser.DefaultStatus = entuserDescStatus.Default.(int64)
-	// entuserDescGender is the schema descriptor for gender field.
-	entuserDescGender := entuserFields[2].Descriptor()
-	// entuser.DefaultGender holds the default value on creation for the gender field.
-	entuser.DefaultGender = entuserDescGender.Default.(int64)
-	// entuserDescJobTime is the schema descriptor for job_time field.
-	entuserDescJobTime := entuserFields[6].Descriptor()
-	// entuser.DefaultJobTime holds the default value on creation for the job_time field.
-	entuser.DefaultJobTime = entuserDescJobTime.Default.(int64)
-	// entuserDescRoleID is the schema descriptor for role_id field.
-	entuserDescRoleID := entuserFields[7].Descriptor()
-	// entuser.DefaultRoleID holds the default value on creation for the role_id field.
-	entuser.DefaultRoleID = entuserDescRoleID.Default.(int64)
+	userMixin := schema.User{}.Mixin()
+	userMixinFields0 := userMixin[0].Fields()
+	_ = userMixinFields0
+	userMixinFields1 := userMixin[1].Fields()
+	_ = userMixinFields1
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescCreatedAt is the schema descriptor for created_at field.
+	userDescCreatedAt := userMixinFields0[1].Descriptor()
+	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
+	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
+	// userDescUpdatedAt is the schema descriptor for updated_at field.
+	userDescUpdatedAt := userMixinFields0[2].Descriptor()
+	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
+	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userDescStatus is the schema descriptor for status field.
+	userDescStatus := userMixinFields1[0].Descriptor()
+	// user.DefaultStatus holds the default value on creation for the status field.
+	user.DefaultStatus = userDescStatus.Default.(int64)
+	// userDescGender is the schema descriptor for gender field.
+	userDescGender := userFields[2].Descriptor()
+	// user.DefaultGender holds the default value on creation for the gender field.
+	user.DefaultGender = userDescGender.Default.(int64)
+	// userDescJobTime is the schema descriptor for job_time field.
+	userDescJobTime := userFields[6].Descriptor()
+	// user.DefaultJobTime holds the default value on creation for the job_time field.
+	user.DefaultJobTime = userDescJobTime.Default.(int64)
+	// userDescRoleID is the schema descriptor for role_id field.
+	userDescRoleID := userFields[7].Descriptor()
+	// user.DefaultRoleID holds the default value on creation for the role_id field.
+	user.DefaultRoleID = userDescRoleID.Default.(int64)
 	venueMixin := schema.Venue{}.Mixin()
 	venueMixinFields0 := venueMixin[0].Fields()
 	_ = venueMixinFields0

@@ -5,12 +5,11 @@ package ent
 import (
 	"context"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	entuser "saas/pkg/db/ent/user"
 )
 
 // UserDelete is the builder for deleting a User entity.
@@ -41,7 +40,7 @@ func (ud *UserDelete) ExecX(ctx context.Context) int {
 }
 
 func (ud *UserDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(entuser.Table, sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewDeleteSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	if ps := ud.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -75,7 +74,7 @@ func (udo *UserDeleteOne) Exec(ctx context.Context) error {
 	case err != nil:
 		return err
 	case n == 0:
-		return &NotFoundError{entuser.Label}
+		return &NotFoundError{user.Label}
 	default:
 		return nil
 	}

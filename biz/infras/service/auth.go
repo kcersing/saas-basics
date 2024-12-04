@@ -7,7 +7,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	casbin2 "saas/biz/dal/casbin"
@@ -53,15 +52,21 @@ func (a Auth) QueryApiAll(id []int64) (resp []*auth.ApiAuthInfo, err error) {
 		return resp, err
 	}
 
-	err = copier.Copy(&resp, &all)
-	if err != nil {
-		err = errors.Wrap(err, "copy api all failed")
-		return resp, err
+	for _, v := range all {
+		re := entApiAuthInfo(*v)
+		resp = append(resp, re)
 	}
 
 	//a.cache.SetWithTTL("apiAll", &resp, 1, 30*time.Hour)
 	return
 
+}
+func entApiAuthInfo(entApi ent.API) (resp *auth.ApiAuthInfo) {
+	resp = &auth.ApiAuthInfo{
+		Path:   entApi.Path,
+		Method: entApi.Method,
+	}
+	return
 }
 
 func (a Auth) UpdateApiAuth(roleIDStr string, apis []int64) error {

@@ -6,13 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"saas/idl_gen/model/user"
 	"saas/pkg/db/ent/dictionarydetail"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/predicate"
 	"saas/pkg/db/ent/token"
-	entuser "saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -156,15 +155,15 @@ func (uu *UserUpdate) SetNillablePassword(s *string) *UserUpdate {
 }
 
 // SetFunctions sets the "functions" field.
-func (uu *UserUpdate) SetFunctions(u user.Functions) *UserUpdate {
-	uu.mutation.SetFunctions(u)
+func (uu *UserUpdate) SetFunctions(s string) *UserUpdate {
+	uu.mutation.SetFunctions(s)
 	return uu
 }
 
 // SetNillableFunctions sets the "functions" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableFunctions(u *user.Functions) *UserUpdate {
-	if u != nil {
-		uu.SetFunctions(*u)
+func (uu *UserUpdate) SetNillableFunctions(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetFunctions(*s)
 	}
 	return uu
 }
@@ -448,13 +447,13 @@ func (uu *UserUpdate) ExecX(ctx context.Context) {
 // defaults sets the default values of the builder before save.
 func (uu *UserUpdate) defaults() {
 	if _, ok := uu.mutation.UpdatedAt(); !ok {
-		v := entuser.UpdateDefaultUpdatedAt()
+		v := user.UpdateDefaultUpdatedAt()
 		uu.mutation.SetUpdatedAt(v)
 	}
 }
 
 func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(entuser.Table, entuser.Columns, sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	if ps := uu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -463,89 +462,89 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := uu.mutation.UpdatedAt(); ok {
-		_spec.SetField(entuser.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := uu.mutation.Status(); ok {
-		_spec.SetField(entuser.FieldStatus, field.TypeInt64, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt64, value)
 	}
 	if value, ok := uu.mutation.AddedStatus(); ok {
-		_spec.AddField(entuser.FieldStatus, field.TypeInt64, value)
+		_spec.AddField(user.FieldStatus, field.TypeInt64, value)
 	}
 	if uu.mutation.StatusCleared() {
-		_spec.ClearField(entuser.FieldStatus, field.TypeInt64)
+		_spec.ClearField(user.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.Mobile(); ok {
-		_spec.SetField(entuser.FieldMobile, field.TypeString, value)
+		_spec.SetField(user.FieldMobile, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Name(); ok {
-		_spec.SetField(entuser.FieldName, field.TypeString, value)
+		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
 	if uu.mutation.NameCleared() {
-		_spec.ClearField(entuser.FieldName, field.TypeString)
+		_spec.ClearField(user.FieldName, field.TypeString)
 	}
 	if value, ok := uu.mutation.Gender(); ok {
-		_spec.SetField(entuser.FieldGender, field.TypeInt64, value)
+		_spec.SetField(user.FieldGender, field.TypeInt64, value)
 	}
 	if value, ok := uu.mutation.AddedGender(); ok {
-		_spec.AddField(entuser.FieldGender, field.TypeInt64, value)
+		_spec.AddField(user.FieldGender, field.TypeInt64, value)
 	}
 	if uu.mutation.GenderCleared() {
-		_spec.ClearField(entuser.FieldGender, field.TypeInt64)
+		_spec.ClearField(user.FieldGender, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.Username(); ok {
-		_spec.SetField(entuser.FieldUsername, field.TypeString, value)
+		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Password(); ok {
-		_spec.SetField(entuser.FieldPassword, field.TypeString, value)
+		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Functions(); ok {
-		_spec.SetField(entuser.FieldFunctions, field.TypeJSON, value)
+		_spec.SetField(user.FieldFunctions, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.JobTime(); ok {
-		_spec.SetField(entuser.FieldJobTime, field.TypeInt64, value)
+		_spec.SetField(user.FieldJobTime, field.TypeInt64, value)
 	}
 	if value, ok := uu.mutation.AddedJobTime(); ok {
-		_spec.AddField(entuser.FieldJobTime, field.TypeInt64, value)
+		_spec.AddField(user.FieldJobTime, field.TypeInt64, value)
 	}
 	if uu.mutation.JobTimeCleared() {
-		_spec.ClearField(entuser.FieldJobTime, field.TypeInt64)
+		_spec.ClearField(user.FieldJobTime, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.RoleID(); ok {
-		_spec.SetField(entuser.FieldRoleID, field.TypeInt64, value)
+		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
 	}
 	if value, ok := uu.mutation.AddedRoleID(); ok {
-		_spec.AddField(entuser.FieldRoleID, field.TypeInt64, value)
+		_spec.AddField(user.FieldRoleID, field.TypeInt64, value)
 	}
 	if uu.mutation.RoleIDCleared() {
-		_spec.ClearField(entuser.FieldRoleID, field.TypeInt64)
+		_spec.ClearField(user.FieldRoleID, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.DefaultVenueID(); ok {
-		_spec.SetField(entuser.FieldDefaultVenueID, field.TypeInt64, value)
+		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
 	}
 	if value, ok := uu.mutation.AddedDefaultVenueID(); ok {
-		_spec.AddField(entuser.FieldDefaultVenueID, field.TypeInt64, value)
+		_spec.AddField(user.FieldDefaultVenueID, field.TypeInt64, value)
 	}
 	if uu.mutation.DefaultVenueIDCleared() {
-		_spec.ClearField(entuser.FieldDefaultVenueID, field.TypeInt64)
+		_spec.ClearField(user.FieldDefaultVenueID, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.Avatar(); ok {
-		_spec.SetField(entuser.FieldAvatar, field.TypeString, value)
+		_spec.SetField(user.FieldAvatar, field.TypeString, value)
 	}
 	if uu.mutation.AvatarCleared() {
-		_spec.ClearField(entuser.FieldAvatar, field.TypeString)
+		_spec.ClearField(user.FieldAvatar, field.TypeString)
 	}
 	if value, ok := uu.mutation.Detail(); ok {
-		_spec.SetField(entuser.FieldDetail, field.TypeString, value)
+		_spec.SetField(user.FieldDetail, field.TypeString, value)
 	}
 	if uu.mutation.DetailCleared() {
-		_spec.ClearField(entuser.FieldDetail, field.TypeString)
+		_spec.ClearField(user.FieldDetail, field.TypeString)
 	}
 	if uu.mutation.TokenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   entuser.TokenTable,
-			Columns: []string{entuser.TokenColumn},
+			Table:   user.TokenTable,
+			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
@@ -557,8 +556,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   entuser.TokenTable,
-			Columns: []string{entuser.TokenColumn},
+			Table:   user.TokenTable,
+			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
@@ -573,8 +572,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entuser.TagsTable,
-			Columns: []string{entuser.TagsColumn},
+			Table:   user.TagsTable,
+			Columns: []string{user.TagsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -586,8 +585,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entuser.TagsTable,
-			Columns: []string{entuser.TagsColumn},
+			Table:   user.TagsTable,
+			Columns: []string{user.TagsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -602,8 +601,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.CreatedOrdersTable,
-			Columns: []string{entuser.CreatedOrdersColumn},
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -615,8 +614,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.CreatedOrdersTable,
-			Columns: []string{entuser.CreatedOrdersColumn},
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -631,8 +630,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.CreatedOrdersTable,
-			Columns: []string{entuser.CreatedOrdersColumn},
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -647,8 +646,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.UserEntryTable,
-			Columns: []string{entuser.UserEntryColumn},
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
@@ -660,8 +659,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.UserEntryTable,
-			Columns: []string{entuser.UserEntryColumn},
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
@@ -676,8 +675,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.UserEntryTable,
-			Columns: []string{entuser.UserEntryColumn},
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
@@ -690,7 +689,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
-			err = &NotFoundError{entuser.Label}
+			err = &NotFoundError{user.Label}
 		} else if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -831,15 +830,15 @@ func (uuo *UserUpdateOne) SetNillablePassword(s *string) *UserUpdateOne {
 }
 
 // SetFunctions sets the "functions" field.
-func (uuo *UserUpdateOne) SetFunctions(u user.Functions) *UserUpdateOne {
-	uuo.mutation.SetFunctions(u)
+func (uuo *UserUpdateOne) SetFunctions(s string) *UserUpdateOne {
+	uuo.mutation.SetFunctions(s)
 	return uuo
 }
 
 // SetNillableFunctions sets the "functions" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableFunctions(u *user.Functions) *UserUpdateOne {
-	if u != nil {
-		uuo.SetFunctions(*u)
+func (uuo *UserUpdateOne) SetNillableFunctions(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetFunctions(*s)
 	}
 	return uuo
 }
@@ -1136,13 +1135,13 @@ func (uuo *UserUpdateOne) ExecX(ctx context.Context) {
 // defaults sets the default values of the builder before save.
 func (uuo *UserUpdateOne) defaults() {
 	if _, ok := uuo.mutation.UpdatedAt(); !ok {
-		v := entuser.UpdateDefaultUpdatedAt()
+		v := user.UpdateDefaultUpdatedAt()
 		uuo.mutation.SetUpdatedAt(v)
 	}
 }
 
 func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
-	_spec := sqlgraph.NewUpdateSpec(entuser.Table, entuser.Columns, sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	id, ok := uuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "User.id" for update`)}
@@ -1150,12 +1149,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	_spec.Node.ID.Value = id
 	if fields := uuo.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
-		_spec.Node.Columns = append(_spec.Node.Columns, entuser.FieldID)
+		_spec.Node.Columns = append(_spec.Node.Columns, user.FieldID)
 		for _, f := range fields {
-			if !entuser.ValidColumn(f) {
+			if !user.ValidColumn(f) {
 				return nil, &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 			}
-			if f != entuser.FieldID {
+			if f != user.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, f)
 			}
 		}
@@ -1168,89 +1167,89 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 	}
 	if value, ok := uuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(entuser.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := uuo.mutation.Status(); ok {
-		_spec.SetField(entuser.FieldStatus, field.TypeInt64, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt64, value)
 	}
 	if value, ok := uuo.mutation.AddedStatus(); ok {
-		_spec.AddField(entuser.FieldStatus, field.TypeInt64, value)
+		_spec.AddField(user.FieldStatus, field.TypeInt64, value)
 	}
 	if uuo.mutation.StatusCleared() {
-		_spec.ClearField(entuser.FieldStatus, field.TypeInt64)
+		_spec.ClearField(user.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.Mobile(); ok {
-		_spec.SetField(entuser.FieldMobile, field.TypeString, value)
+		_spec.SetField(user.FieldMobile, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Name(); ok {
-		_spec.SetField(entuser.FieldName, field.TypeString, value)
+		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
 	if uuo.mutation.NameCleared() {
-		_spec.ClearField(entuser.FieldName, field.TypeString)
+		_spec.ClearField(user.FieldName, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Gender(); ok {
-		_spec.SetField(entuser.FieldGender, field.TypeInt64, value)
+		_spec.SetField(user.FieldGender, field.TypeInt64, value)
 	}
 	if value, ok := uuo.mutation.AddedGender(); ok {
-		_spec.AddField(entuser.FieldGender, field.TypeInt64, value)
+		_spec.AddField(user.FieldGender, field.TypeInt64, value)
 	}
 	if uuo.mutation.GenderCleared() {
-		_spec.ClearField(entuser.FieldGender, field.TypeInt64)
+		_spec.ClearField(user.FieldGender, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.Username(); ok {
-		_spec.SetField(entuser.FieldUsername, field.TypeString, value)
+		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Password(); ok {
-		_spec.SetField(entuser.FieldPassword, field.TypeString, value)
+		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Functions(); ok {
-		_spec.SetField(entuser.FieldFunctions, field.TypeJSON, value)
+		_spec.SetField(user.FieldFunctions, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.JobTime(); ok {
-		_spec.SetField(entuser.FieldJobTime, field.TypeInt64, value)
+		_spec.SetField(user.FieldJobTime, field.TypeInt64, value)
 	}
 	if value, ok := uuo.mutation.AddedJobTime(); ok {
-		_spec.AddField(entuser.FieldJobTime, field.TypeInt64, value)
+		_spec.AddField(user.FieldJobTime, field.TypeInt64, value)
 	}
 	if uuo.mutation.JobTimeCleared() {
-		_spec.ClearField(entuser.FieldJobTime, field.TypeInt64)
+		_spec.ClearField(user.FieldJobTime, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.RoleID(); ok {
-		_spec.SetField(entuser.FieldRoleID, field.TypeInt64, value)
+		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
 	}
 	if value, ok := uuo.mutation.AddedRoleID(); ok {
-		_spec.AddField(entuser.FieldRoleID, field.TypeInt64, value)
+		_spec.AddField(user.FieldRoleID, field.TypeInt64, value)
 	}
 	if uuo.mutation.RoleIDCleared() {
-		_spec.ClearField(entuser.FieldRoleID, field.TypeInt64)
+		_spec.ClearField(user.FieldRoleID, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.DefaultVenueID(); ok {
-		_spec.SetField(entuser.FieldDefaultVenueID, field.TypeInt64, value)
+		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
 	}
 	if value, ok := uuo.mutation.AddedDefaultVenueID(); ok {
-		_spec.AddField(entuser.FieldDefaultVenueID, field.TypeInt64, value)
+		_spec.AddField(user.FieldDefaultVenueID, field.TypeInt64, value)
 	}
 	if uuo.mutation.DefaultVenueIDCleared() {
-		_spec.ClearField(entuser.FieldDefaultVenueID, field.TypeInt64)
+		_spec.ClearField(user.FieldDefaultVenueID, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.Avatar(); ok {
-		_spec.SetField(entuser.FieldAvatar, field.TypeString, value)
+		_spec.SetField(user.FieldAvatar, field.TypeString, value)
 	}
 	if uuo.mutation.AvatarCleared() {
-		_spec.ClearField(entuser.FieldAvatar, field.TypeString)
+		_spec.ClearField(user.FieldAvatar, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Detail(); ok {
-		_spec.SetField(entuser.FieldDetail, field.TypeString, value)
+		_spec.SetField(user.FieldDetail, field.TypeString, value)
 	}
 	if uuo.mutation.DetailCleared() {
-		_spec.ClearField(entuser.FieldDetail, field.TypeString)
+		_spec.ClearField(user.FieldDetail, field.TypeString)
 	}
 	if uuo.mutation.TokenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   entuser.TokenTable,
-			Columns: []string{entuser.TokenColumn},
+			Table:   user.TokenTable,
+			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
@@ -1262,8 +1261,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
-			Table:   entuser.TokenTable,
-			Columns: []string{entuser.TokenColumn},
+			Table:   user.TokenTable,
+			Columns: []string{user.TokenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
@@ -1278,8 +1277,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entuser.TagsTable,
-			Columns: []string{entuser.TagsColumn},
+			Table:   user.TagsTable,
+			Columns: []string{user.TagsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -1291,8 +1290,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entuser.TagsTable,
-			Columns: []string{entuser.TagsColumn},
+			Table:   user.TagsTable,
+			Columns: []string{user.TagsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -1307,8 +1306,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.CreatedOrdersTable,
-			Columns: []string{entuser.CreatedOrdersColumn},
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -1320,8 +1319,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.CreatedOrdersTable,
-			Columns: []string{entuser.CreatedOrdersColumn},
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -1336,8 +1335,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.CreatedOrdersTable,
-			Columns: []string{entuser.CreatedOrdersColumn},
+			Table:   user.CreatedOrdersTable,
+			Columns: []string{user.CreatedOrdersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
@@ -1352,8 +1351,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.UserEntryTable,
-			Columns: []string{entuser.UserEntryColumn},
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
@@ -1365,8 +1364,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.UserEntryTable,
-			Columns: []string{entuser.UserEntryColumn},
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
@@ -1381,8 +1380,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entuser.UserEntryTable,
-			Columns: []string{entuser.UserEntryColumn},
+			Table:   user.UserEntryTable,
+			Columns: []string{user.UserEntryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
@@ -1398,7 +1397,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	_spec.ScanValues = _node.scanValues
 	if err = sqlgraph.UpdateNode(ctx, uuo.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
-			err = &NotFoundError{entuser.Label}
+			err = &NotFoundError{user.Label}
 		} else if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}

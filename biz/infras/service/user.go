@@ -15,6 +15,7 @@ import (
 	"saas/pkg/db/ent/predicate"
 	user2 "saas/pkg/db/ent/user"
 	"saas/pkg/encrypt"
+	"strings"
 	"time"
 )
 
@@ -255,7 +256,7 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 		info.Gender = "保密"
 	}
 
-	info.Functions = userEnt.Functions.String()
+	info.Functions = strings.Split(userEnt.Functions, ",")
 
 	var gender string
 	if userEnt.Gender == 0 {

@@ -9,7 +9,7 @@ import (
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/predicate"
-	entuser "saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 
 	"entgo.io/ent/dialect/sql"
@@ -120,7 +120,7 @@ func (elq *EntryLogsQuery) QueryUsers() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, selector),
-			sqlgraph.To(entuser.Table, entuser.FieldID),
+			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.UsersTable, entrylogs.UsersColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
@@ -557,7 +557,7 @@ func (elq *EntryLogsQuery) loadUsers(ctx context.Context, query *UserQuery, node
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(entuser.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

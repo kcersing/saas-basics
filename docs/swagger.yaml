@@ -503,7 +503,9 @@ definitions:
       detail:
         type: string
       functions:
-        type: string
+        items:
+          type: string
+        type: array
       gender:
         type: string
       id:
@@ -1650,6 +1652,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 修改角色状态 Summary
+  /service/role/tree:
+    get:
+      responses: {}
   /service/role/update:
     post:
       description: 更新角色 Description
@@ -1746,6 +1751,19 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 创建员工 Summary
+  /service/user/info:
+    get:
+      description: 获取员工信息 Description
+      parameters:
+      - in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取员工信息 Summary
   /service/user/list:
     post:
       description: 获取员工列表 Description

@@ -13,7 +13,7 @@ import (
 	"saas/pkg/db/ent/orderitem"
 	"saas/pkg/db/ent/orderpay"
 	"saas/pkg/db/ent/ordersales"
-	entuser "saas/pkg/db/ent/user"
+	"saas/pkg/db/ent/user"
 	"saas/pkg/db/ent/venue"
 	"time"
 
@@ -589,7 +589,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 			Columns: []string{order.OrderCreatesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entuser.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

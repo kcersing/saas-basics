@@ -34,8 +34,8 @@ struct DictListReq {
 
 //字典名获取字典键值请求数据
 struct DetailListReq{
-    1:  optional string name (api.raw = "name" )
-    2:  optional i64 dictionaryId (api.raw = "dictionaryId" )
+    1:  optional string name = "" (api.raw = "name" )
+    2:  optional i64  dictionaryId= 0 (api.raw = "dictionaryId" )
 }
 
 

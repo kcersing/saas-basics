@@ -228,12 +228,12 @@ func (d Dictionary) DeleteDetail(id int64) error {
 func (d Dictionary) DetailListByDict(req *dictionary.DetailListReq) (list []*dictionary.DictionaryDetail, total int64, err error) {
 
 	var predicates []predicate.DictionaryDetail
-	if *req.Name != "" {
-		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary2.NameEQ(*req.Name)))
+	if req.Name != "" {
+		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary2.NameEQ(req.Name)))
 	}
 
-	if *req.DictionaryId != 0 {
-		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary2.IDEQ(*req.DictionaryId)))
+	if req.DictionaryId != 0 {
+		predicates = append(predicates, dictionarydetail.HasDictionaryWith(dictionary2.IDEQ(req.DictionaryId)))
 	}
 
 	// query dictionary detail
