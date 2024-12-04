@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
@@ -143,10 +142,8 @@ func (c Contest) ContestList(req contest.ContestListReq) (resp []*contest.Contes
 		return resp, total, err
 	}
 
-	err = copier.Copy(&resp, &lists)
-	if err != nil {
-		err = errors.Wrap(err, "copy Member info failed")
-		return resp, 0, err
+	for _, v := range lists {
+		resp = append(resp, c.entContestInfo(v))
 	}
 
 	total, _ = c.db.Contest.Query().Where(predicates...).Count(c.ctx)
@@ -168,32 +165,36 @@ func (c Contest) ContestInfo(id int64) (resp *contest.ContestInfo, err error) {
 		err = errors.Wrap(err, "get contest failed")
 		return resp, err
 	}
-	signStartAt := contestEnt.SignStartAt.Format(time.DateTime)
-	startAt := contestEnt.SignStartAt.Format(time.DateTime)
-	signEndAt := contestEnt.SignStartAt.Format(time.DateTime)
-	endAt := contestEnt.SignStartAt.Format(time.DateTime)
-
-	pic := minio.URLconvert(c.ctx, c.c, contestEnt.Pic)
-	resp.Pic = &pic
-	resp.ID = &contestEnt.ID
-	resp.Name = &contestEnt.Name
-	resp.Detail = &contestEnt.Detail
-	resp.SignNumber = &contestEnt.SignNumber
-	resp.SignStartAt = &signStartAt
-	resp.SignEndAt = &signEndAt
-	resp.Number = &contestEnt.Number
-	resp.StartAt = &startAt
-	resp.EndAt = &endAt
-	resp.Sponsor = &contestEnt.Sponsor
-	resp.Fee = &contestEnt.Fee
-	resp.IsCancel = &contestEnt.IsCancel
-	resp.CancelTime = &contestEnt.CancelTime
-	resp.SignFields = &contestEnt.SignFields
-
+	resp = c.entContestInfo(contestEnt)
 	c.cache.SetWithTTL("contestInfo"+strconv.Itoa(int(*resp.ID)), &resp, 1, 1*time.Hour)
 
 	return
 
+}
+
+func (c Contest) entContestInfo(v *ent.Contest) *contest.ContestInfo {
+	signStartAt := v.SignStartAt.Format(time.DateTime)
+	startAt := v.SignStartAt.Format(time.DateTime)
+	signEndAt := v.SignStartAt.Format(time.DateTime)
+	endAt := v.SignStartAt.Format(time.DateTime)
+	pic := minio.URLconvert(c.ctx, c.c, v.Pic)
+	return &contest.ContestInfo{
+		Pic:         &pic,
+		ID:          &v.ID,
+		Name:        &v.Name,
+		Detail:      &v.Detail,
+		SignNumber:  &v.SignNumber,
+		SignStartAt: &signStartAt,
+		SignEndAt:   &signEndAt,
+		Number:      &v.Number,
+		StartAt:     &startAt,
+		EndAt:       &endAt,
+		Sponsor:     &v.Sponsor,
+		Fee:         &v.Fee,
+		IsCancel:    &v.IsCancel,
+		CancelTime:  &v.CancelTime,
+		SignFields:  &v.SignFields,
+	}
 }
 
 func (c Contest) UpdateContestStatus(ID int64, status int64) error {

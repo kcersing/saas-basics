@@ -56,7 +56,7 @@ struct MemberListReq {
     1:  optional i64 page=1 (api.raw = "page")
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3:  optional string name = "" (api.raw = "name")
-    4:  optional string mobile "" (api.raw = "mobile")
+    4:  optional string mobile = "" (api.raw = "mobile")
 }
 
 struct MemberSearchReq {
@@ -108,10 +108,9 @@ struct MemberContractInfo{
     6:  optional i64 memberProductId (api.raw = "memberProductId")
     7:  optional string	memberProductName (api.raw = "memberProductName")
     8:  optional i64 contractId (api.raw = "contractId")
-    9:  optional i64 contractName (api.raw = "contractName")
-    10:  optional string sign (api.raw = "contractId")
-    11:  optional string signImg (api.raw = "contractId")
-    12:  optional string content (api.raw = "contractId")
+    10:  optional string sign (api.raw = "sign")
+    11:  optional string signImg (api.raw = "signImg")
+    12:  optional string content (api.raw = "content")
 }
 
 struct MemberProductListReq {

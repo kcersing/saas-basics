@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
@@ -48,12 +47,7 @@ func (c Contract) Info(id int64) (info *contract.ContractInfo, err error) {
 		err = errors.Wrap(err, "get contract failed")
 		return info, err
 	}
-
-	err = copier.Copy(&info, &one)
-	if err != nil {
-		err = errors.Wrap(err, "copy contract info failed")
-		return info, err
-	}
+	info = entContractInfo(one)
 
 	c.cache.SetWithTTL("contractInfo"+strconv.Itoa(int(info.Id)), &info, 1, 1*time.Hour)
 	return
@@ -108,15 +102,20 @@ func (c Contract) List(req *contract.ContractListReq) (list []*contract.Contract
 		return list, total, err
 	}
 
-	err = copier.Copy(&list, &all)
-	if err != nil {
-		err = errors.Wrap(err, "copy Contract info failed")
-		return list, 0, err
-	}
-
-	for i, v := range all {
-		list[i].CreatedAt = v.CreatedAt.Format(time.DateTime)
+	for _, v := range all {
+		list = append(list, entContractInfo(v))
 	}
 	total, _ = c.db.Contract.Query().Where(predicates...).Count(c.ctx)
 	return
+}
+
+func entContractInfo(v *ent.Contract) *contract.ContractInfo {
+
+	return &contract.ContractInfo{
+		Id:        v.ID,
+		Name:      v.Name,
+		Content:   v.Content,
+		Status:    v.Status,
+		CreatedAt: v.CreatedAt.Format(time.DateTime),
+	}
 }

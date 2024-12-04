@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/db"
 	"saas/biz/infras/do"
@@ -50,20 +49,8 @@ func (v Venue) VenueInfo(id int64) (info *venue.VenueInfo, err error) {
 		err = errors.Wrap(err, "get venue failed")
 		return info, err
 	}
-	createdAt := one.CreatedAt.Format(time.DateTime)
-	updatedAt := one.UpdatedAt.Format(time.DateTime)
-	info = &venue.VenueInfo{
-		ID:        &one.ID,
-		Name:      &one.Name,
-		Address:   &one.Address,
-		Pic:       &one.Pic,
-		Mobile:    &one.Mobile,
-		Latitude:  &one.Latitude,
-		Longitude: &one.Longitude,
-		Status:    &one.Status,
-		CreatedAt: &createdAt,
-		UpdatedAt: &updatedAt,
-	}
+
+	info = entVenueInfo(one)
 	//err = copier.CopyWithOption(info, one, copier.Option{IgnoreEmpty: true, DeepCopy: true})
 	//hlog.Info("err :", err)
 	//if err != nil {
@@ -88,11 +75,7 @@ func (v Venue) PlaceInfo(id int64) (info *venue.VenuePlaceInfo, err error) {
 		return info, err
 	}
 
-	err = copier.Copy(&info, &one)
-	if err != nil {
-		err = errors.Wrap(err, "copy venue place info failed")
-		return info, err
-	}
+	info = entVenuePlaceInfo(one)
 
 	v.cache.SetWithTTL("placeInfo"+strconv.Itoa(int(*info.ID)), &info, 1, 1*time.Hour)
 	return
@@ -157,14 +140,8 @@ func (v Venue) List(req *venue.VenueListReq) (list []*venue.VenueInfo, total int
 		return list, total, err
 	}
 
-	err = copier.Copy(&list, &venueList)
-	if err != nil {
-		err = errors.Wrap(err, "copy Venue info failed")
-		return list, 0, err
-	}
-	for i, v := range venueList {
-		createdAt := v.CreatedAt.Format(time.DateTime)
-		list[i].CreatedAt = &createdAt
+	for _, ve := range venueList {
+		list = append(list, entVenueInfo(ve))
 	}
 
 	total, _ = v.db.Venue.Query().Where(predicates...).Count(v.ctx)
@@ -227,13 +204,48 @@ func (v Venue) PlaceList(req *venue.VenuePlaceListReq) (list []*venue.VenuePlace
 		return list, total, err
 	}
 
-	err = copier.Copy(&list, &l)
-	if err != nil {
-		err = errors.Wrap(err, "copy Venue Place info failed")
-		return list, 0, err
+	for _, p := range l {
+		lt := entVenuePlaceInfo(p)
+		list = append(list, lt)
 	}
+
 	total, _ = v.db.VenuePlace.Query().Where(predicates...).Count(v.ctx)
 	return
+}
+
+func entVenueInfo(v *ent.Venue) *venue.VenueInfo {
+	createdAt := v.CreatedAt.Format(time.DateTime)
+	updatedAt := v.UpdatedAt.Format(time.DateTime)
+	return &venue.VenueInfo{
+		ID:        &v.ID,
+		Name:      &v.Name,
+		Address:   &v.Address,
+		Pic:       &v.Pic,
+		Mobile:    &v.Mobile,
+		Latitude:  &v.Latitude,
+		Longitude: &v.Longitude,
+		Status:    &v.Status,
+		CreatedAt: &createdAt,
+		UpdatedAt: &updatedAt,
+	}
+
+}
+
+func entVenuePlaceInfo(v *ent.VenuePlace) *venue.VenuePlaceInfo {
+
+	createdAt := v.CreatedAt.Format(time.DateTime)
+	updatedAt := v.UpdatedAt.Format(time.DateTime)
+	return &venue.VenuePlaceInfo{
+		ID:          &v.ID,
+		Name:        &v.Name,
+		Pic:         &v.Pic,
+		VenueId:     &v.VenueID,
+		Number:      &v.Number,
+		Status:      &v.Status,
+		Information: &v.Information,
+		CreatedAt:   &createdAt,
+		UpdatedAt:   &updatedAt,
+	}
 }
 
 func (v Venue) UpdatePlaceStatus(id int64, status int64) error {

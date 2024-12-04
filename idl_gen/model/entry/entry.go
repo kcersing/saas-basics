@@ -10,13 +10,13 @@ import (
 )
 
 type CreateEntry struct {
-	MemberProductId  int64 `thrift:"MemberProductId,1" form:"MemberProductId" json:"MemberProductId" query:"MemberProductId"`
-	MemberPropertyId int64 `thrift:"MemberPropertyId,2" form:"MemberPropertyId" json:"MemberPropertyId" query:"MemberPropertyId"`
-	EntryTime        int64 `thrift:"EntryTime,3" form:"EntryTime" json:"EntryTime" query:"EntryTime"`
-	LeavingTime      int64 `thrift:"LeavingTime,4" form:"LeavingTime" json:"LeavingTime" query:"LeavingTime"`
-	MemberId         int64 `thrift:"MemberId,5" form:"MemberId" json:"MemberId" query:"MemberId"`
-	UserId           int64 `thrift:"UserId,6" form:"UserId" json:"UserId" query:"UserId"`
-	VenueId          int64 `thrift:"VenueId,7" form:"VenueId" json:"VenueId" query:"VenueId"`
+	MemberProductId  int64  `thrift:"MemberProductId,1" form:"MemberProductId" json:"MemberProductId" query:"MemberProductId"`
+	MemberPropertyId int64  `thrift:"MemberPropertyId,2" form:"MemberPropertyId" json:"MemberPropertyId" query:"MemberPropertyId"`
+	EntryTime        string `thrift:"EntryTime,3" form:"EntryTime" json:"EntryTime" query:"EntryTime"`
+	LeavingTime      string `thrift:"LeavingTime,4" form:"LeavingTime" json:"LeavingTime" query:"LeavingTime"`
+	MemberId         int64  `thrift:"MemberId,5" form:"MemberId" json:"MemberId" query:"MemberId"`
+	UserId           int64  `thrift:"UserId,6" form:"UserId" json:"UserId" query:"UserId"`
+	VenueId          int64  `thrift:"VenueId,7" form:"VenueId" json:"VenueId" query:"VenueId"`
 }
 
 func NewCreateEntry() *CreateEntry {
@@ -34,11 +34,11 @@ func (p *CreateEntry) GetMemberPropertyId() (v int64) {
 	return p.MemberPropertyId
 }
 
-func (p *CreateEntry) GetEntryTime() (v int64) {
+func (p *CreateEntry) GetEntryTime() (v string) {
 	return p.EntryTime
 }
 
-func (p *CreateEntry) GetLeavingTime() (v int64) {
+func (p *CreateEntry) GetLeavingTime() (v string) {
 	return p.LeavingTime
 }
 
@@ -100,7 +100,7 @@ func (p *CreateEntry) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 3:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -108,7 +108,7 @@ func (p *CreateEntry) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -192,8 +192,8 @@ func (p *CreateEntry) ReadField2(iprot thrift.TProtocol) error {
 }
 func (p *CreateEntry) ReadField3(iprot thrift.TProtocol) error {
 
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -203,8 +203,8 @@ func (p *CreateEntry) ReadField3(iprot thrift.TProtocol) error {
 }
 func (p *CreateEntry) ReadField4(iprot thrift.TProtocol) error {
 
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -334,10 +334,10 @@ WriteFieldEndError:
 }
 
 func (p *CreateEntry) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("EntryTime", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("EntryTime", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.EntryTime); err != nil {
+	if err := oprot.WriteString(p.EntryTime); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -351,10 +351,10 @@ WriteFieldEndError:
 }
 
 func (p *CreateEntry) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("LeavingTime", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("LeavingTime", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.LeavingTime); err != nil {
+	if err := oprot.WriteString(p.LeavingTime); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -430,8 +430,8 @@ type EntryInfo struct {
 	Id                 int64  `thrift:"Id,1" form:"Id" json:"Id" query:"Id"`
 	MemberProductId    int64  `thrift:"MemberProductId,2" form:"MemberProductId" json:"MemberProductId" query:"MemberProductId"`
 	MemberPropertyId   int64  `thrift:"MemberPropertyId,3" form:"MemberPropertyId" json:"MemberPropertyId" query:"MemberPropertyId"`
-	EntryTime          int64  `thrift:"EntryTime,4" form:"EntryTime" json:"EntryTime" query:"EntryTime"`
-	LeavingTime        int64  `thrift:"LeavingTime,5" form:"LeavingTime" json:"LeavingTime" query:"LeavingTime"`
+	EntryTime          string `thrift:"EntryTime,4" form:"EntryTime" json:"EntryTime" query:"EntryTime"`
+	LeavingTime        string `thrift:"LeavingTime,5" form:"LeavingTime" json:"LeavingTime" query:"LeavingTime"`
 	MemberId           int64  `thrift:"MemberId,6" form:"MemberId" json:"MemberId" query:"MemberId"`
 	UserId             int64  `thrift:"UserId,7" form:"UserId" json:"UserId" query:"UserId"`
 	VenueId            int64  `thrift:"VenueId,8" form:"VenueId" json:"VenueId" query:"VenueId"`
@@ -463,11 +463,11 @@ func (p *EntryInfo) GetMemberPropertyId() (v int64) {
 	return p.MemberPropertyId
 }
 
-func (p *EntryInfo) GetEntryTime() (v int64) {
+func (p *EntryInfo) GetEntryTime() (v string) {
 	return p.EntryTime
 }
 
-func (p *EntryInfo) GetLeavingTime() (v int64) {
+func (p *EntryInfo) GetLeavingTime() (v string) {
 	return p.LeavingTime
 }
 
@@ -573,7 +573,7 @@ func (p *EntryInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -581,7 +581,7 @@ func (p *EntryInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 5:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -732,8 +732,8 @@ func (p *EntryInfo) ReadField3(iprot thrift.TProtocol) error {
 }
 func (p *EntryInfo) ReadField4(iprot thrift.TProtocol) error {
 
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -743,8 +743,8 @@ func (p *EntryInfo) ReadField4(iprot thrift.TProtocol) error {
 }
 func (p *EntryInfo) ReadField5(iprot thrift.TProtocol) error {
 
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -1000,10 +1000,10 @@ WriteFieldEndError:
 }
 
 func (p *EntryInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("EntryTime", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("EntryTime", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.EntryTime); err != nil {
+	if err := oprot.WriteString(p.EntryTime); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1017,10 +1017,10 @@ WriteFieldEndError:
 }
 
 func (p *EntryInfo) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("LeavingTime", thrift.I64, 5); err != nil {
+	if err = oprot.WriteFieldBegin("LeavingTime", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.LeavingTime); err != nil {
+	if err := oprot.WriteString(p.LeavingTime); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

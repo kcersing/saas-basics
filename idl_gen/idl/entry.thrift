@@ -9,8 +9,8 @@ service EntryService {
 struct CreateEntry  {
     1:i64 MemberProductId  (api.raw = "memberProductId")
 	2:i64 MemberPropertyId (api.raw = "memberPropertyId")
-	3:i64 EntryTime        (api.raw = "entryTime")
-	4:i64 LeavingTime      (api.raw = "leavingTime")
+	3:string EntryTime        (api.raw = "entryTime")
+	4:string LeavingTime      (api.raw = "leavingTime")
 	5:i64 MemberId         (api.raw = "memberId")
 	6:i64 UserId           (api.raw = "userId")
 	7:i64 VenueId          (api.raw = "venueId")
@@ -20,8 +20,8 @@ struct EntryInfo  {
 	1:i64 Id
 	2:i64 MemberProductId
 	3:i64 MemberPropertyId
-	4:i64 EntryTime
-	5:i64 LeavingTime
+	4:string EntryTime
+	5:string LeavingTime
 	6:i64 MemberId
 	7:i64 UserId
 	8:i64 VenueId

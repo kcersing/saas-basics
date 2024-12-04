@@ -218,7 +218,7 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 		return userList, total, err
 	}
 	// copy to UserInfo struct
-	//copier.Copy(
+
 	for _, v := range users {
 		mr := u.entUserInfo(*v)
 		userList = append(userList, mr)

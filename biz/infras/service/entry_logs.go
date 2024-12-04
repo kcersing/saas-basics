@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
@@ -14,6 +13,7 @@ import (
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/predicate"
+	"time"
 )
 
 type EntryLogs struct {
@@ -74,12 +74,26 @@ func (e EntryLogs) List(req *entry.EntryListReq) (list []*entry.EntryInfo, total
 		return list, total, err
 	}
 
-	err = copier.Copy(&list, &lists)
-	if err != nil {
-		err = errors.Wrap(err, "copy Entry info failed")
-		return list, 0, err
-	}
+	for _, v := range lists {
+		l := entEntryInfo(v)
+		list = append(list, l)
 
+	}
 	total, _ = e.db.EntryLogs.Query().Where(predicates...).Count(e.ctx)
 	return
+}
+
+func entEntryInfo(v *ent.EntryLogs) *entry.EntryInfo {
+	entryTime := v.EntryTime.Format(time.DateTime)
+	leavingTime := v.LeavingTime.Format(time.DateTime)
+	return &entry.EntryInfo{
+		Id:               v.ID,
+		EntryTime:        entryTime,
+		LeavingTime:      leavingTime,
+		MemberId:         v.MemberID,
+		MemberProductId:  v.MemberProductID,
+		MemberPropertyId: v.MemberPropertyID,
+		UserId:           v.UserID,
+		VenueId:          v.VenueID,
+	}
 }
