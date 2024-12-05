@@ -24,6 +24,8 @@ func Register(r *server.Hertz) {
 			_contest.POST("/create", append(_createcontestMw(), contest.CreateContest)...)
 			_contest.POST("/info", append(_contestinfoMw(), contest.ContestInfo)...)
 			_contest.POST("/list", append(_contestlistMw(), contest.ContestList)...)
+			_contest.POST("/promotional-links", append(_promotionallinksMw(), contest.PromotionalLinks)...)
+			_contest.POST("/results-upload", append(_resultsuploadMw(), contest.ResultsUpload)...)
 			_contest.POST("/status", append(_updatememberstatusMw(), contest.UpdateMemberStatus)...)
 			_contest.POST("/update", append(_updatecontestMw(), contest.UpdateContest)...)
 		}

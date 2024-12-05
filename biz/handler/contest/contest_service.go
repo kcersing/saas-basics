@@ -262,3 +262,43 @@ func UpdateParticipantStatus(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
+
+// ResultsUpload .
+// @Summary		上传比赛成绩 Summary
+// @Description	上传比赛成绩 Description
+// @Param			request	body		contest.ResultsUploadReq	true	"query params"
+// @Success		200		{object}	utils.Response
+// @router /service/contest/results-upload [POST]
+func ResultsUpload(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req contest.ResultsUploadReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// PromotionalLinks .
+// @Summary		获取推广链接 Summary
+// @Description	获取推广链接 Description
+// @Param			request	body		base.IDReq	true	"query params"
+// @Success		200		{object}	utils.Response
+// @router /service/contest/promotional-links [POST]
+func PromotionalLinks(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

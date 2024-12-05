@@ -90,3 +90,13 @@ func _participantMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _promotionallinksMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _resultsuploadMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

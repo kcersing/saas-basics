@@ -389,6 +389,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/contest/promotional-links": {
+            "post": {
+                "description": "获取推广链接 Description",
+                "summary": "获取推广链接 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/contest/results-upload": {
+            "post": {
+                "description": "上传比赛成绩 Description",
+                "summary": "上传比赛成绩 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contest.ResultsUploadReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/contest/status": {
             "post": {
                 "description": "更新比赛状态 Description",
@@ -2233,6 +2283,9 @@ const docTemplate = `{
                 "isCancel": {
                     "type": "integer"
                 },
+                "isFee": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -2333,6 +2386,14 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "sn": {
+                    "type": "string"
+                }
+            }
+        },
+        "contest.ResultsUploadReq": {
+            "type": "object",
+            "properties": {
+                "pic": {
                     "type": "string"
                 }
             }
@@ -2866,6 +2927,12 @@ const docTemplate = `{
                 "status": {
                     "type": "integer"
                 },
+                "userTags": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "username": {
                     "type": "string"
                 }
@@ -2890,6 +2957,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "roleId": {
+                    "type": "integer"
+                },
+                "status": {
                     "type": "integer"
                 }
             }

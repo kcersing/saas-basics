@@ -108,6 +108,8 @@ definitions:
         type: integer
       isCancel:
         type: integer
+      isFee:
+        type: integer
       name:
         type: string
       number:
@@ -174,6 +176,11 @@ definitions:
       pageSize:
         type: integer
       sn:
+        type: string
+    type: object
+  contest.ResultsUploadReq:
+    properties:
+      pic:
         type: string
     type: object
   contract.ContractListReq:
@@ -522,6 +529,10 @@ definitions:
         type: integer
       status:
         type: integer
+      userTags:
+        items:
+          type: integer
+        type: array
       username:
         type: string
     type: object
@@ -538,6 +549,8 @@ definitions:
       pageSize:
         type: integer
       roleId:
+        type: integer
+      status:
         type: integer
     type: object
   utils.Response:
@@ -869,6 +882,38 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 比赛列表 Summary
+  /service/contest/promotional-links:
+    post:
+      description: 获取推广链接 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取推广链接 Summary
+  /service/contest/results-upload:
+    post:
+      description: 上传比赛成绩 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contest.ResultsUploadReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 上传比赛成绩 Summary
   /service/contest/status:
     post:
       description: 更新比赛状态 Description

@@ -26,6 +26,14 @@ service ContestService {
 
   base.NilResponse UpdateParticipantStatus(1: base.StatusCodeReq req) (api.post = "/service/participant/status")
 
+
+  base.NilResponse ResultsUpload(1: ResultsUploadReq req) (api.post = "/service/contest/results-upload")
+
+  base.NilResponse PromotionalLinks(1: base.IDReq req) (api.post = "/service/contest/promotional-links")
+
+}
+struct ResultsUploadReq{
+    1:  optional string pic="" (api.raw = "pic")
 }
 struct ContestListReq{
     1:  optional i64 page=1 (api.raw = "page")
