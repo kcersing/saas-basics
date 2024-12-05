@@ -35,6 +35,6 @@ services:
     command: server --console-address ':9001' /data
     privileged: true
     restart: always
-    profiles:
-      - dev
-      - release
+#    profiles:
+#      - dev
+#      - release
