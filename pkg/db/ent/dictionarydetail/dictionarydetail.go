@@ -41,13 +41,11 @@ const (
 	DictionaryInverseTable = "sys_dictionaries"
 	// DictionaryColumn is the table column denoting the dictionary relation/edge.
 	DictionaryColumn = "dictionary_id"
-	// UsersTable is the table that holds the users relation/edge.
-	UsersTable = "sys_users"
+	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
+	UsersTable = "user_tag"
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "sys_users"
-	// UsersColumn is the table column denoting the users relation/edge.
-	UsersColumn = "user_tags"
 )
 
 // Columns holds all SQL columns for dictionarydetail fields.
@@ -61,6 +59,12 @@ var Columns = []string{
 	FieldValue,
 	FieldDictionaryID,
 }
+
+var (
+	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
+	// primary key for the users relation (M2M).
+	UsersPrimaryKey = []string{"user_id", "dictionary_detail_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -157,6 +161,6 @@ func newUsersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UsersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, UsersTable, UsersColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 	)
 }

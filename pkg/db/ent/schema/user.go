@@ -51,7 +51,7 @@ func (User) Mixin() []ent.Mixin {
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("token", Token.Type).Unique(),
-		edge.To("tags", DictionaryDetail.Type).Unique().StructTag(""),
+		edge.To("tag", DictionaryDetail.Type),
 		edge.To("created_orders", Order.Type),
 		edge.To("user_entry", EntryLogs.Type),
 		//edge.To("user_face", Face.Type),

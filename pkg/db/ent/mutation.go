@@ -756,6 +756,8 @@ type ContestMutation struct {
 	sponsor                     *string
 	fee                         *float64
 	addfee                      *float64
+	is_fee                      *int64
+	addis_fee                   *int64
 	is_cancel                   *int64
 	addis_cancel                *int64
 	cancel_time                 *int64
@@ -1572,6 +1574,76 @@ func (m *ContestMutation) ResetFee() {
 	delete(m.clearedFields, contest.FieldFee)
 }
 
+// SetIsFee sets the "is_fee" field.
+func (m *ContestMutation) SetIsFee(i int64) {
+	m.is_fee = &i
+	m.addis_fee = nil
+}
+
+// IsFee returns the value of the "is_fee" field in the mutation.
+func (m *ContestMutation) IsFee() (r int64, exists bool) {
+	v := m.is_fee
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsFee returns the old "is_fee" field's value of the Contest entity.
+// If the Contest object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContestMutation) OldIsFee(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsFee is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsFee requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsFee: %w", err)
+	}
+	return oldValue.IsFee, nil
+}
+
+// AddIsFee adds i to the "is_fee" field.
+func (m *ContestMutation) AddIsFee(i int64) {
+	if m.addis_fee != nil {
+		*m.addis_fee += i
+	} else {
+		m.addis_fee = &i
+	}
+}
+
+// AddedIsFee returns the value that was added to the "is_fee" field in this mutation.
+func (m *ContestMutation) AddedIsFee() (r int64, exists bool) {
+	v := m.addis_fee
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsFee clears the value of the "is_fee" field.
+func (m *ContestMutation) ClearIsFee() {
+	m.is_fee = nil
+	m.addis_fee = nil
+	m.clearedFields[contest.FieldIsFee] = struct{}{}
+}
+
+// IsFeeCleared returns if the "is_fee" field was cleared in this mutation.
+func (m *ContestMutation) IsFeeCleared() bool {
+	_, ok := m.clearedFields[contest.FieldIsFee]
+	return ok
+}
+
+// ResetIsFee resets all changes to the "is_fee" field.
+func (m *ContestMutation) ResetIsFee() {
+	m.is_fee = nil
+	m.addis_fee = nil
+	delete(m.clearedFields, contest.FieldIsFee)
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (m *ContestMutation) SetIsCancel(i int64) {
 	m.is_cancel = &i
@@ -1968,7 +2040,7 @@ func (m *ContestMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ContestMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.created_at != nil {
 		fields = append(fields, contest.FieldCreatedAt)
 	}
@@ -2007,6 +2079,9 @@ func (m *ContestMutation) Fields() []string {
 	}
 	if m.fee != nil {
 		fields = append(fields, contest.FieldFee)
+	}
+	if m.is_fee != nil {
+		fields = append(fields, contest.FieldIsFee)
 	}
 	if m.is_cancel != nil {
 		fields = append(fields, contest.FieldIsCancel)
@@ -2057,6 +2132,8 @@ func (m *ContestMutation) Field(name string) (ent.Value, bool) {
 		return m.Sponsor()
 	case contest.FieldFee:
 		return m.Fee()
+	case contest.FieldIsFee:
+		return m.IsFee()
 	case contest.FieldIsCancel:
 		return m.IsCancel()
 	case contest.FieldCancelTime:
@@ -2102,6 +2179,8 @@ func (m *ContestMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldSponsor(ctx)
 	case contest.FieldFee:
 		return m.OldFee(ctx)
+	case contest.FieldIsFee:
+		return m.OldIsFee(ctx)
 	case contest.FieldIsCancel:
 		return m.OldIsCancel(ctx)
 	case contest.FieldCancelTime:
@@ -2212,6 +2291,13 @@ func (m *ContestMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetFee(v)
 		return nil
+	case contest.FieldIsFee:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsFee(v)
+		return nil
 	case contest.FieldIsCancel:
 		v, ok := value.(int64)
 		if !ok {
@@ -2267,6 +2353,9 @@ func (m *ContestMutation) AddedFields() []string {
 	if m.addfee != nil {
 		fields = append(fields, contest.FieldFee)
 	}
+	if m.addis_fee != nil {
+		fields = append(fields, contest.FieldIsFee)
+	}
 	if m.addis_cancel != nil {
 		fields = append(fields, contest.FieldIsCancel)
 	}
@@ -2292,6 +2381,8 @@ func (m *ContestMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedNumber()
 	case contest.FieldFee:
 		return m.AddedFee()
+	case contest.FieldIsFee:
+		return m.AddedIsFee()
 	case contest.FieldIsCancel:
 		return m.AddedIsCancel()
 	case contest.FieldCancelTime:
@@ -2334,6 +2425,13 @@ func (m *ContestMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddFee(v)
+		return nil
+	case contest.FieldIsFee:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsFee(v)
 		return nil
 	case contest.FieldIsCancel:
 		v, ok := value.(int64)
@@ -2397,6 +2495,9 @@ func (m *ContestMutation) ClearedFields() []string {
 	if m.FieldCleared(contest.FieldFee) {
 		fields = append(fields, contest.FieldFee)
 	}
+	if m.FieldCleared(contest.FieldIsFee) {
+		fields = append(fields, contest.FieldIsFee)
+	}
 	if m.FieldCleared(contest.FieldIsCancel) {
 		fields = append(fields, contest.FieldIsCancel)
 	}
@@ -2459,6 +2560,9 @@ func (m *ContestMutation) ClearField(name string) error {
 	case contest.FieldFee:
 		m.ClearFee()
 		return nil
+	case contest.FieldIsFee:
+		m.ClearIsFee()
+		return nil
 	case contest.FieldIsCancel:
 		m.ClearIsCancel()
 		return nil
@@ -2520,6 +2624,9 @@ func (m *ContestMutation) ResetField(name string) error {
 		return nil
 	case contest.FieldFee:
 		m.ResetFee()
+		return nil
+	case contest.FieldIsFee:
+		m.ResetIsFee()
 		return nil
 	case contest.FieldIsCancel:
 		m.ResetIsCancel()
@@ -24786,8 +24893,9 @@ type UserMutation struct {
 	clearedFields         map[string]struct{}
 	token                 *int64
 	clearedtoken          bool
-	tags                  *int64
-	clearedtags           bool
+	tag                   map[int64]struct{}
+	removedtag            map[int64]struct{}
+	clearedtag            bool
 	created_orders        map[int64]struct{}
 	removedcreated_orders map[int64]struct{}
 	clearedcreated_orders bool
@@ -25655,43 +25763,58 @@ func (m *UserMutation) ResetToken() {
 	m.clearedtoken = false
 }
 
-// SetTagsID sets the "tags" edge to the DictionaryDetail entity by id.
-func (m *UserMutation) SetTagsID(id int64) {
-	m.tags = &id
+// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by ids.
+func (m *UserMutation) AddTagIDs(ids ...int64) {
+	if m.tag == nil {
+		m.tag = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.tag[ids[i]] = struct{}{}
+	}
 }
 
-// ClearTags clears the "tags" edge to the DictionaryDetail entity.
-func (m *UserMutation) ClearTags() {
-	m.clearedtags = true
+// ClearTag clears the "tag" edge to the DictionaryDetail entity.
+func (m *UserMutation) ClearTag() {
+	m.clearedtag = true
 }
 
-// TagsCleared reports if the "tags" edge to the DictionaryDetail entity was cleared.
-func (m *UserMutation) TagsCleared() bool {
-	return m.clearedtags
+// TagCleared reports if the "tag" edge to the DictionaryDetail entity was cleared.
+func (m *UserMutation) TagCleared() bool {
+	return m.clearedtag
 }
 
-// TagsID returns the "tags" edge ID in the mutation.
-func (m *UserMutation) TagsID() (id int64, exists bool) {
-	if m.tags != nil {
-		return *m.tags, true
+// RemoveTagIDs removes the "tag" edge to the DictionaryDetail entity by IDs.
+func (m *UserMutation) RemoveTagIDs(ids ...int64) {
+	if m.removedtag == nil {
+		m.removedtag = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.tag, ids[i])
+		m.removedtag[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTag returns the removed IDs of the "tag" edge to the DictionaryDetail entity.
+func (m *UserMutation) RemovedTagIDs() (ids []int64) {
+	for id := range m.removedtag {
+		ids = append(ids, id)
 	}
 	return
 }
 
-// TagsIDs returns the "tags" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// TagsID instead. It exists only for internal usage by the builders.
-func (m *UserMutation) TagsIDs() (ids []int64) {
-	if id := m.tags; id != nil {
-		ids = append(ids, *id)
+// TagIDs returns the "tag" edge IDs in the mutation.
+func (m *UserMutation) TagIDs() (ids []int64) {
+	for id := range m.tag {
+		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetTags resets all changes to the "tags" edge.
-func (m *UserMutation) ResetTags() {
-	m.tags = nil
-	m.clearedtags = false
+// ResetTag resets all changes to the "tag" edge.
+func (m *UserMutation) ResetTag() {
+	m.tag = nil
+	m.clearedtag = false
+	m.removedtag = nil
 }
 
 // AddCreatedOrderIDs adds the "created_orders" edge to the Order entity by ids.
@@ -26274,8 +26397,8 @@ func (m *UserMutation) AddedEdges() []string {
 	if m.token != nil {
 		edges = append(edges, user.EdgeToken)
 	}
-	if m.tags != nil {
-		edges = append(edges, user.EdgeTags)
+	if m.tag != nil {
+		edges = append(edges, user.EdgeTag)
 	}
 	if m.created_orders != nil {
 		edges = append(edges, user.EdgeCreatedOrders)
@@ -26294,10 +26417,12 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 		if id := m.token; id != nil {
 			return []ent.Value{*id}
 		}
-	case user.EdgeTags:
-		if id := m.tags; id != nil {
-			return []ent.Value{*id}
+	case user.EdgeTag:
+		ids := make([]ent.Value, 0, len(m.tag))
+		for id := range m.tag {
+			ids = append(ids, id)
 		}
+		return ids
 	case user.EdgeCreatedOrders:
 		ids := make([]ent.Value, 0, len(m.created_orders))
 		for id := range m.created_orders {
@@ -26317,6 +26442,9 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 4)
+	if m.removedtag != nil {
+		edges = append(edges, user.EdgeTag)
+	}
 	if m.removedcreated_orders != nil {
 		edges = append(edges, user.EdgeCreatedOrders)
 	}
@@ -26330,6 +26458,12 @@ func (m *UserMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case user.EdgeTag:
+		ids := make([]ent.Value, 0, len(m.removedtag))
+		for id := range m.removedtag {
+			ids = append(ids, id)
+		}
+		return ids
 	case user.EdgeCreatedOrders:
 		ids := make([]ent.Value, 0, len(m.removedcreated_orders))
 		for id := range m.removedcreated_orders {
@@ -26352,8 +26486,8 @@ func (m *UserMutation) ClearedEdges() []string {
 	if m.clearedtoken {
 		edges = append(edges, user.EdgeToken)
 	}
-	if m.clearedtags {
-		edges = append(edges, user.EdgeTags)
+	if m.clearedtag {
+		edges = append(edges, user.EdgeTag)
 	}
 	if m.clearedcreated_orders {
 		edges = append(edges, user.EdgeCreatedOrders)
@@ -26370,8 +26504,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 	switch name {
 	case user.EdgeToken:
 		return m.clearedtoken
-	case user.EdgeTags:
-		return m.clearedtags
+	case user.EdgeTag:
+		return m.clearedtag
 	case user.EdgeCreatedOrders:
 		return m.clearedcreated_orders
 	case user.EdgeUserEntry:
@@ -26387,9 +26521,6 @@ func (m *UserMutation) ClearEdge(name string) error {
 	case user.EdgeToken:
 		m.ClearToken()
 		return nil
-	case user.EdgeTags:
-		m.ClearTags()
-		return nil
 	}
 	return fmt.Errorf("unknown User unique edge %s", name)
 }
@@ -26401,8 +26532,8 @@ func (m *UserMutation) ResetEdge(name string) error {
 	case user.EdgeToken:
 		m.ResetToken()
 		return nil
-	case user.EdgeTags:
-		m.ResetTags()
+	case user.EdgeTag:
+		m.ResetTag()
 		return nil
 	case user.EdgeCreatedOrders:
 		m.ResetCreatedOrders()

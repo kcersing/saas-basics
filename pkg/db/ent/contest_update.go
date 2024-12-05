@@ -283,6 +283,33 @@ func (cu *ContestUpdate) ClearFee() *ContestUpdate {
 	return cu
 }
 
+// SetIsFee sets the "is_fee" field.
+func (cu *ContestUpdate) SetIsFee(i int64) *ContestUpdate {
+	cu.mutation.ResetIsFee()
+	cu.mutation.SetIsFee(i)
+	return cu
+}
+
+// SetNillableIsFee sets the "is_fee" field if the given value is not nil.
+func (cu *ContestUpdate) SetNillableIsFee(i *int64) *ContestUpdate {
+	if i != nil {
+		cu.SetIsFee(*i)
+	}
+	return cu
+}
+
+// AddIsFee adds i to the "is_fee" field.
+func (cu *ContestUpdate) AddIsFee(i int64) *ContestUpdate {
+	cu.mutation.AddIsFee(i)
+	return cu
+}
+
+// ClearIsFee clears the value of the "is_fee" field.
+func (cu *ContestUpdate) ClearIsFee() *ContestUpdate {
+	cu.mutation.ClearIsFee()
+	return cu
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (cu *ContestUpdate) SetIsCancel(i int64) *ContestUpdate {
 	cu.mutation.ResetIsCancel()
@@ -570,6 +597,15 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.FeeCleared() {
 		_spec.ClearField(contest.FieldFee, field.TypeFloat64)
+	}
+	if value, ok := cu.mutation.IsFee(); ok {
+		_spec.SetField(contest.FieldIsFee, field.TypeInt64, value)
+	}
+	if value, ok := cu.mutation.AddedIsFee(); ok {
+		_spec.AddField(contest.FieldIsFee, field.TypeInt64, value)
+	}
+	if cu.mutation.IsFeeCleared() {
+		_spec.ClearField(contest.FieldIsFee, field.TypeInt64)
 	}
 	if value, ok := cu.mutation.IsCancel(); ok {
 		_spec.SetField(contest.FieldIsCancel, field.TypeInt64, value)
@@ -929,6 +965,33 @@ func (cuo *ContestUpdateOne) ClearFee() *ContestUpdateOne {
 	return cuo
 }
 
+// SetIsFee sets the "is_fee" field.
+func (cuo *ContestUpdateOne) SetIsFee(i int64) *ContestUpdateOne {
+	cuo.mutation.ResetIsFee()
+	cuo.mutation.SetIsFee(i)
+	return cuo
+}
+
+// SetNillableIsFee sets the "is_fee" field if the given value is not nil.
+func (cuo *ContestUpdateOne) SetNillableIsFee(i *int64) *ContestUpdateOne {
+	if i != nil {
+		cuo.SetIsFee(*i)
+	}
+	return cuo
+}
+
+// AddIsFee adds i to the "is_fee" field.
+func (cuo *ContestUpdateOne) AddIsFee(i int64) *ContestUpdateOne {
+	cuo.mutation.AddIsFee(i)
+	return cuo
+}
+
+// ClearIsFee clears the value of the "is_fee" field.
+func (cuo *ContestUpdateOne) ClearIsFee() *ContestUpdateOne {
+	cuo.mutation.ClearIsFee()
+	return cuo
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (cuo *ContestUpdateOne) SetIsCancel(i int64) *ContestUpdateOne {
 	cuo.mutation.ResetIsCancel()
@@ -1246,6 +1309,15 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 	}
 	if cuo.mutation.FeeCleared() {
 		_spec.ClearField(contest.FieldFee, field.TypeFloat64)
+	}
+	if value, ok := cuo.mutation.IsFee(); ok {
+		_spec.SetField(contest.FieldIsFee, field.TypeInt64, value)
+	}
+	if value, ok := cuo.mutation.AddedIsFee(); ok {
+		_spec.AddField(contest.FieldIsFee, field.TypeInt64, value)
+	}
+	if cuo.mutation.IsFeeCleared() {
+		_spec.ClearField(contest.FieldIsFee, field.TypeInt64)
 	}
 	if value, ok := cuo.mutation.IsCancel(); ok {
 		_spec.SetField(contest.FieldIsCancel, field.TypeInt64, value)

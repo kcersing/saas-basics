@@ -15,6 +15,7 @@ import (
 )
 
 // CreateUser .
+//
 //	@Summary		创建员工 Summary
 //	@Description	创建员工 Description
 //	@Param			request	body		user.CreateOrUpdateUserReq	true	"query params"
@@ -39,6 +40,7 @@ func CreateUser(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateUser .
+//
 //	@Summary		更新员工 Summary
 //	@Description	更新员工 Description
 //	@Param			request	body		user.CreateOrUpdateUserReq	true	"query params"
@@ -63,6 +65,7 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 }
 
 // UserList .
+//
 //	@Summary		获取员工列表 Summary
 //	@Description	获取员工列表 Description
 //	@Param			request	body		user.UserListReq	true	"query params"
@@ -86,6 +89,7 @@ func UserList(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteUser .
+//
 //	@Summary		删除员工 Summary
 //	@Description	删除员工 Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -110,6 +114,7 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 }
 
 // UserInfo .
+//
 //	@Summary		获取员工信息 Summary
 //	@Description	获取员工信息 Description
 //	@Param			request	query		base.IDReq	true	"query params"

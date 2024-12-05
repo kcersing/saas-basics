@@ -77,16 +77,20 @@ func init() {
 	contestDescStatus := contestMixinFields1[0].Descriptor()
 	// contest.DefaultStatus holds the default value on creation for the status field.
 	contest.DefaultStatus = contestDescStatus.Default.(int64)
+	// contestDescIsFee is the schema descriptor for is_fee field.
+	contestDescIsFee := contestFields[10].Descriptor()
+	// contest.DefaultIsFee holds the default value on creation for the is_fee field.
+	contest.DefaultIsFee = contestDescIsFee.Default.(int64)
 	// contestDescIsCancel is the schema descriptor for is_cancel field.
-	contestDescIsCancel := contestFields[10].Descriptor()
+	contestDescIsCancel := contestFields[11].Descriptor()
 	// contest.DefaultIsCancel holds the default value on creation for the is_cancel field.
 	contest.DefaultIsCancel = contestDescIsCancel.Default.(int64)
 	// contestDescCancelTime is the schema descriptor for cancel_time field.
-	contestDescCancelTime := contestFields[11].Descriptor()
+	contestDescCancelTime := contestFields[12].Descriptor()
 	// contest.DefaultCancelTime holds the default value on creation for the cancel_time field.
 	contest.DefaultCancelTime = contestDescCancelTime.Default.(int64)
 	// contestDescCondition is the schema descriptor for condition field.
-	contestDescCondition := contestFields[14].Descriptor()
+	contestDescCondition := contestFields[15].Descriptor()
 	// contest.DefaultCondition holds the default value on creation for the condition field.
 	contest.DefaultCondition = contestDescCondition.Default.(int64)
 	contestparticipantMixin := schema.ContestParticipant{}.Mixin()

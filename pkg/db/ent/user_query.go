@@ -27,10 +27,9 @@ type UserQuery struct {
 	inters            []Interceptor
 	predicates        []predicate.User
 	withToken         *TokenQuery
-	withTags          *DictionaryDetailQuery
+	withTag           *DictionaryDetailQuery
 	withCreatedOrders *OrderQuery
 	withUserEntry     *EntryLogsQuery
-	withFKs           bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -89,8 +88,8 @@ func (uq *UserQuery) QueryToken() *TokenQuery {
 	return query
 }
 
-// QueryTags chains the current query on the "tags" edge.
-func (uq *UserQuery) QueryTags() *DictionaryDetailQuery {
+// QueryTag chains the current query on the "tag" edge.
+func (uq *UserQuery) QueryTag() *DictionaryDetailQuery {
 	query := (&DictionaryDetailClient{config: uq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := uq.prepareQuery(ctx); err != nil {
@@ -103,7 +102,7 @@ func (uq *UserQuery) QueryTags() *DictionaryDetailQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, user.TagsTable, user.TagsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.TagTable, user.TagPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -348,7 +347,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		inters:            append([]Interceptor{}, uq.inters...),
 		predicates:        append([]predicate.User{}, uq.predicates...),
 		withToken:         uq.withToken.Clone(),
-		withTags:          uq.withTags.Clone(),
+		withTag:           uq.withTag.Clone(),
 		withCreatedOrders: uq.withCreatedOrders.Clone(),
 		withUserEntry:     uq.withUserEntry.Clone(),
 		// clone intermediate query.
@@ -368,14 +367,14 @@ func (uq *UserQuery) WithToken(opts ...func(*TokenQuery)) *UserQuery {
 	return uq
 }
 
-// WithTags tells the query-builder to eager-load the nodes that are connected to
-// the "tags" edge. The optional arguments are used to configure the query builder of the edge.
-func (uq *UserQuery) WithTags(opts ...func(*DictionaryDetailQuery)) *UserQuery {
+// WithTag tells the query-builder to eager-load the nodes that are connected to
+// the "tag" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithTag(opts ...func(*DictionaryDetailQuery)) *UserQuery {
 	query := (&DictionaryDetailClient{config: uq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	uq.withTags = query
+	uq.withTag = query
 	return uq
 }
 
@@ -478,21 +477,14 @@ func (uq *UserQuery) prepareQuery(ctx context.Context) error {
 func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, error) {
 	var (
 		nodes       = []*User{}
-		withFKs     = uq.withFKs
 		_spec       = uq.querySpec()
 		loadedTypes = [4]bool{
 			uq.withToken != nil,
-			uq.withTags != nil,
+			uq.withTag != nil,
 			uq.withCreatedOrders != nil,
 			uq.withUserEntry != nil,
 		}
 	)
-	if uq.withTags != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, user.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*User).scanValues(nil, columns)
 	}
@@ -517,9 +509,10 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
-	if query := uq.withTags; query != nil {
-		if err := uq.loadTags(ctx, query, nodes, nil,
-			func(n *User, e *DictionaryDetail) { n.Edges.Tags = e }); err != nil {
+	if query := uq.withTag; query != nil {
+		if err := uq.loadTag(ctx, query, nodes,
+			func(n *User) { n.Edges.Tag = []*DictionaryDetail{} },
+			func(n *User, e *DictionaryDetail) { n.Edges.Tag = append(n.Edges.Tag, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -568,34 +561,63 @@ func (uq *UserQuery) loadToken(ctx context.Context, query *TokenQuery, nodes []*
 	}
 	return nil
 }
-func (uq *UserQuery) loadTags(ctx context.Context, query *DictionaryDetailQuery, nodes []*User, init func(*User), assign func(*User, *DictionaryDetail)) error {
-	ids := make([]int64, 0, len(nodes))
-	nodeids := make(map[int64][]*User)
-	for i := range nodes {
-		if nodes[i].user_tags == nil {
-			continue
+func (uq *UserQuery) loadTag(ctx context.Context, query *DictionaryDetailQuery, nodes []*User, init func(*User), assign func(*User, *DictionaryDetail)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int64]*User)
+	nids := make(map[int64]map[*User]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].user_tags
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(user.TagTable)
+		s.Join(joinT).On(s.C(dictionarydetail.FieldID), joinT.C(user.TagPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(user.TagPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(user.TagPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(dictionarydetail.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullInt64).Int64
+				inValue := values[1].(*sql.NullInt64).Int64
+				if nids[inValue] == nil {
+					nids[inValue] = map[*User]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*DictionaryDetail](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "user_tags" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "tag" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil

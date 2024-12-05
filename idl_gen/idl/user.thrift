@@ -1,7 +1,7 @@
 namespace go user
 
 include "../base/base.thrift"
-
+include "dictionary.thrift"
 struct UserInfo {
 	1:i64 Id (api.raw = "id")
 	2:i64 Status (api.raw = "status")
@@ -21,7 +21,9 @@ struct UserInfo {
 //	15:string Birthday (api.raw = "birthday")
     16:string Detail (api.raw = "detail")
     17:optional i64 jobTime (api.raw = "jobTime")
+    18: list<dictionary.DictionaryDetail> userTags (api.raw = "userTags")
 	254:i64 DefaultVenueId (api.raw = "defaultVenueId")
+
 }
 
 // login request | 登录参数
@@ -69,6 +71,7 @@ struct CreateOrUpdateUserReq {
     14:  optional list<string> functions (api.raw = "functions")
     15:  optional string detail (api.raw = "detail")
     16:  optional i64 jobTime (api.raw = "jobTime")
+    18: optional list<i64> userTags (api.raw = "userTags")
 }
 
 

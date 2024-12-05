@@ -10,9 +10,11 @@ import (
 	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
+	"saas/idl_gen/model/dictionary"
 	"saas/idl_gen/model/user"
 	"saas/pkg/db/ent"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/role"
 	user2 "saas/pkg/db/ent/user"
 	"saas/pkg/encrypt"
 	"strings"
@@ -89,6 +91,16 @@ func (u User) Info(id int64) (info *user.UserInfo, err error) {
 }
 
 func (u User) Create(req user.CreateOrUpdateUserReq) error {
+
+	ok, _ := u.db.User.Query().Where(user2.Username(*req.Username)).Exist(u.ctx)
+	if ok {
+		return errors.New("账号重复！")
+	}
+	ok, _ = u.db.User.Query().Where(user2.Mobile(*req.Mobile)).Exist(u.ctx)
+	if ok {
+		return errors.New("手机号重复！")
+	}
+
 	password, _ := encrypt.Crypt(*req.Password)
 	var gender int64
 	if *req.Gender == "女性" {
@@ -105,7 +117,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 	if err != nil {
 		return errors.Wrap(err, "starting a transaction:")
 	}
-	_, err = tx.User.Create().
+	one, err := tx.User.Create().
 		SetAvatar(*req.Avatar).
 		SetMobile(*req.Mobile).
 		SetJobTime(*req.JobTime).
@@ -117,12 +129,15 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		SetGender(gender).
 		SetRoleID(*req.RoleId).
 		SetDetail(*req.Detail).
+		//SetTags().
 		Save(u.ctx)
 
 	if err != nil {
 		err = rollback(tx, errors.Wrap(err, "create user failed"))
 		return err
 	}
+	//	err = tx.Role.UpdateOneID(roleID).AddMenuIDs(menuIDs...).Exec(a.ctx)
+	tx.User.UpdateOneID(one.ID).AddTagIDs(req.UserTags...).Exec(u.ctx)
 	//_, err = tx.Face.Create().
 	//	SetUserFaces(noe).
 	//	Save(u.ctx)
@@ -153,7 +168,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 	//password, _ := encrypt.Crypt(*req.Password)
 
 	functions := strings.Join(req.Functions, ",")
-
+	//*req.UserTags...
 	_, err := u.db.User.Update().
 		Where(user2.IDEQ(*req.ID)).
 		SetAvatar(*req.Avatar).
@@ -161,19 +176,20 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		SetJobTime(*req.JobTime).
 		SetStatus(*req.Status).
 		SetUsername(*req.Username).
-		//SetPassword(password).
 		SetName(*req.Name).
 		SetFunctions(functions).
 		SetGender(gender).
 		SetRoleID(*req.RoleId).
 		SetDetail(*req.Detail).
+
+		//SetTags().
 		Save(u.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "update user failed")
 		return err
 	}
-
+	u.db.User.UpdateOneID(*req.ID).AddTagIDs(req.UserTags...).Exec(u.ctx)
 	return nil
 }
 
@@ -244,14 +260,12 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	info.CreatedAt = userEnt.CreatedAt.Format(time.DateTime)
 	info.UpdatedAt = userEnt.UpdatedAt.Format(time.DateTime)
 
-	//roleInterface, exist := u.cache.Get("roleData" + strconv.Itoa(int(info.RoleId)))
-	//if exist {
-	//	if role, ok := roleInterface.(*ent.Role); ok {
-	//		info.RoleName = role.Name
-	//		info.RoleValue = role.Value
-	//	}
-	//}
-	//info.Avatar = minio.URLconvert(u.ctx, u.c, info.Avatar)
+	roleInfo, _ := u.db.Role.Query().Where(role.IDEQ(info.RoleId)).First(u.ctx)
+	if roleInfo != nil {
+		info.RoleName = roleInfo.Name
+		info.RoleValue = roleInfo.Value
+	}
+
 	if userEnt.Gender == 0 {
 		info.Gender = "女性"
 	} else if userEnt.Gender == 1 {
@@ -275,6 +289,20 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	info.Detail = userEnt.Detail
 	info.JobTime = &userEnt.JobTime
 	info.DefaultVenueId = userEnt.DefaultVenueID
+
+	Tags, _ := userEnt.QueryTag().All(u.ctx)
+	if len(Tags) > 0 {
+		for _, d := range Tags {
+			dd := dictionary.DictionaryDetail{
+				ID:     d.ID,
+				Title:  d.Title,
+				Key:    d.Key,
+				Value:  d.Value,
+				Status: d.Status,
+			}
+			info.UserTags = append(info.UserTags, &dd)
+		}
+	}
 
 	return info
 }

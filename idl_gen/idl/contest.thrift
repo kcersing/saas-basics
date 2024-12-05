@@ -74,5 +74,6 @@ struct ContestInfo{
     17:  optional string updatedAt (api.raw = "updatedAt")
     
     18:  optional string condition (api.raw = "condition")
+    19:  optional i64 isFee (api.raw = "isFee")
 
 }

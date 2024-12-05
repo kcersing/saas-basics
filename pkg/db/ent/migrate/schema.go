@@ -49,6 +49,7 @@ var (
 		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "比赛图片"},
 		{Name: "sponsor", Type: field.TypeString, Nullable: true, Comment: "主办方"},
 		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "费用"},
+		{Name: "is_fee", Type: field.TypeInt64, Nullable: true, Comment: "是否有费用 1 无 2 有", Default: 1},
 		{Name: "is_cancel", Type: field.TypeInt64, Nullable: true, Comment: "是否支持取消报名 0支持 1不支持", Default: 0},
 		{Name: "cancel_time", Type: field.TypeInt64, Nullable: true, Comment: "取消时间", Default: 0},
 		{Name: "detail", Type: field.TypeString, Nullable: true, Comment: "详情"},
@@ -784,21 +785,12 @@ var (
 		{Name: "default_venue_id", Type: field.TypeInt64, Nullable: true, Comment: "登陆后默认场馆ID"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "detail", Type: field.TypeString, Nullable: true, Comment: "详情"},
-		{Name: "user_tags", Type: field.TypeInt64, Nullable: true},
 	}
 	// SysUsersTable holds the schema information for the "sys_users" table.
 	SysUsersTable = &schema.Table{
 		Name:       "sys_users",
 		Columns:    SysUsersColumns,
 		PrimaryKey: []*schema.Column{SysUsersColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "sys_users_sys_dictionary_details_tags",
-				Columns:    []*schema.Column{SysUsersColumns[15]},
-				RefColumns: []*schema.Column{SysDictionaryDetailsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "user_username_mobile",
@@ -887,6 +879,31 @@ var (
 			},
 		},
 	}
+	// UserTagColumns holds the columns for the "user_tag" table.
+	UserTagColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeInt64},
+		{Name: "dictionary_detail_id", Type: field.TypeInt64},
+	}
+	// UserTagTable holds the schema information for the "user_tag" table.
+	UserTagTable = &schema.Table{
+		Name:       "user_tag",
+		Columns:    UserTagColumns,
+		PrimaryKey: []*schema.Column{UserTagColumns[0], UserTagColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_tag_user_id",
+				Columns:    []*schema.Column{UserTagColumns[0]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_tag_dictionary_detail_id",
+				Columns:    []*schema.Column{UserTagColumns[1]},
+				RefColumns: []*schema.Column{SysDictionaryDetailsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
@@ -916,6 +933,7 @@ var (
 		VenueTable,
 		VenuePlaceTable,
 		RoleMenusTable,
+		UserTagTable,
 	}
 )
 
@@ -1021,7 +1039,6 @@ func init() {
 	SysTokensTable.Annotation = &entsql.Annotation{
 		Table: "sys_tokens",
 	}
-	SysUsersTable.ForeignKeys[0].RefTable = SysDictionaryDetailsTable
 	SysUsersTable.Annotation = &entsql.Annotation{
 		Table:   "sys_users",
 		Options: "AUTO_INCREMENT = 100000",
@@ -1037,4 +1054,6 @@ func init() {
 	}
 	RoleMenusTable.ForeignKeys[0].RefTable = SysRolesTable
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
+	UserTagTable.ForeignKeys[0].RefTable = SysUsersTable
+	UserTagTable.ForeignKeys[1].RefTable = SysDictionaryDetailsTable
 }

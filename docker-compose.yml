@@ -2,23 +2,23 @@ version: '3'
 
 services:
 
-  #golang 服务
-  golang:
-    hostname: golang
-#    image: golang:latest  # 父镜像名称
-    image: golang:latest
-    volumes: # 挂载卷
-      - /D/docker/src:/go
-#    ports: # 端口映射
-#      - "9039:9039"
-    stdin_open: true
-    tty: true
-    restart: always
-    privileged: true
-    # command: 启动后运行的命令
-#    profiles:
-#      - dev
-#      - release
+#  #golang 服务
+#  golang:
+#    hostname: golang
+##    image: golang:latest  # 父镜像名称
+#    image: golang:latest
+#    volumes: # 挂载卷
+#      - /D/docker/src:/go
+##    ports: # 端口映射
+##      - "9039:9039"
+#    stdin_open: true
+#    tty: true
+#    restart: always
+#    privileged: true
+#    # command: 启动后运行的命令
+##    profiles:
+##      - dev
+##      - release
 
   minio:
     image: minio/minio
@@ -27,11 +27,11 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ACCESS_KEY: douyin
-      MINIO_SECRET_KEY: douyin123
+      MINIO_ACCESS_KEY: Yj123987
+      MINIO_SECRET_KEY: Yj987123
     volumes:
-      - /D/docker/src/my-saas-basics/files/minio/:/data
-      - /D/docker/src/my-saas-basics/files/minio/:/root/.minio
+      - /xingfufit/go/minio/:/data
+      - /xingfufit/go/minio/:/root/.minio
     command: server --console-address ':9001' /data
     privileged: true
     restart: always

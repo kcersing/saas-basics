@@ -1259,7 +1259,7 @@ func (c *DictionaryDetailClient) QueryUsers(dd *DictionaryDetail) *UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, dictionarydetail.UsersTable, dictionarydetail.UsersColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.UsersTable, dictionarydetail.UsersPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
 		return fromV, nil
@@ -4205,15 +4205,15 @@ func (c *UserClient) QueryToken(u *User) *TokenQuery {
 	return query
 }
 
-// QueryTags queries the tags edge of a User.
-func (c *UserClient) QueryTags(u *User) *DictionaryDetailQuery {
+// QueryTag queries the tag edge of a User.
+func (c *UserClient) QueryTag(u *User) *DictionaryDetailQuery {
 	query := (&DictionaryDetailClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, user.TagsTable, user.TagsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.TagTable, user.TagPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil

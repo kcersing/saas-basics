@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
 	"saas/idl_gen/model/base"
+	"saas/idl_gen/model/dictionary"
 )
 
 type UserInfo struct {
@@ -26,9 +27,10 @@ type UserInfo struct {
 	Gender    string   `thrift:"Gender,13" form:"Gender" json:"Gender" query:"Gender"`
 	//	14:i64 Age (api.raw = "age")
 	//	15:string Birthday (api.raw = "birthday")
-	Detail         string `thrift:"Detail,16" form:"Detail" json:"Detail" query:"Detail"`
-	JobTime        *int64 `thrift:"jobTime,17,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
-	DefaultVenueId int64  `thrift:"DefaultVenueId,254" form:"DefaultVenueId" json:"DefaultVenueId" query:"DefaultVenueId"`
+	Detail         string                         `thrift:"Detail,16" form:"Detail" json:"Detail" query:"Detail"`
+	JobTime        *int64                         `thrift:"jobTime,17,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
+	UserTags       []*dictionary.DictionaryDetail `thrift:"userTags,18" form:"userTags" json:"userTags" query:"userTags"`
+	DefaultVenueId int64                          `thrift:"DefaultVenueId,254" form:"DefaultVenueId" json:"DefaultVenueId" query:"DefaultVenueId"`
 }
 
 func NewUserInfo() *UserInfo {
@@ -107,6 +109,10 @@ func (p *UserInfo) GetJobTime() (v int64) {
 	return *p.JobTime
 }
 
+func (p *UserInfo) GetUserTags() (v []*dictionary.DictionaryDetail) {
+	return p.UserTags
+}
+
 func (p *UserInfo) GetDefaultVenueId() (v int64) {
 	return p.DefaultVenueId
 }
@@ -128,6 +134,7 @@ var fieldIDToName_UserInfo = map[int16]string{
 	13:  "Gender",
 	16:  "Detail",
 	17:  "jobTime",
+	18:  "userTags",
 	254: "DefaultVenueId",
 }
 
@@ -277,6 +284,14 @@ func (p *UserInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 17:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField17(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 18:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField18(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -507,6 +522,29 @@ func (p *UserInfo) ReadField17(iprot thrift.TProtocol) error {
 	p.JobTime = _field
 	return nil
 }
+func (p *UserInfo) ReadField18(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*dictionary.DictionaryDetail, 0, size)
+	values := make([]dictionary.DictionaryDetail, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.UserTags = _field
+	return nil
+}
 func (p *UserInfo) ReadField254(iprot thrift.TProtocol) error {
 
 	var _field int64
@@ -587,6 +625,10 @@ func (p *UserInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField17(oprot); err != nil {
 			fieldId = 17
+			goto WriteFieldError
+		}
+		if err = p.writeField18(oprot); err != nil {
+			fieldId = 18
 			goto WriteFieldError
 		}
 		if err = p.writeField254(oprot); err != nil {
@@ -891,6 +933,31 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
+}
+
+func (p *UserInfo) writeField18(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("userTags", thrift.LIST, 18); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.UserTags)); err != nil {
+		return err
+	}
+	for _, v := range p.UserTags {
+		if err := v.Write(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteListEnd(); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
 }
 
 func (p *UserInfo) writeField254(oprot thrift.TProtocol) (err error) {
@@ -2103,6 +2170,7 @@ type CreateOrUpdateUserReq struct {
 	Functions []string `thrift:"functions,14,optional" form:"functions" json:"functions" query:"functions"`
 	Detail    *string  `thrift:"detail,15,optional" form:"detail" json:"detail" query:"detail"`
 	JobTime   *int64   `thrift:"jobTime,16,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
+	UserTags  []int64  `thrift:"userTags,18,optional" form:"userTags" json:"userTags" query:"userTags"`
 }
 
 func NewCreateOrUpdateUserReq() *CreateOrUpdateUserReq {
@@ -2229,6 +2297,15 @@ func (p *CreateOrUpdateUserReq) GetJobTime() (v int64) {
 	return *p.JobTime
 }
 
+var CreateOrUpdateUserReq_UserTags_DEFAULT []int64
+
+func (p *CreateOrUpdateUserReq) GetUserTags() (v []int64) {
+	if !p.IsSetUserTags() {
+		return CreateOrUpdateUserReq_UserTags_DEFAULT
+	}
+	return p.UserTags
+}
+
 var fieldIDToName_CreateOrUpdateUserReq = map[int16]string{
 	1:  "id",
 	2:  "avatar",
@@ -2243,6 +2320,7 @@ var fieldIDToName_CreateOrUpdateUserReq = map[int16]string{
 	14: "functions",
 	15: "detail",
 	16: "jobTime",
+	18: "userTags",
 }
 
 func (p *CreateOrUpdateUserReq) IsSetID() bool {
@@ -2295,6 +2373,10 @@ func (p *CreateOrUpdateUserReq) IsSetDetail() bool {
 
 func (p *CreateOrUpdateUserReq) IsSetJobTime() bool {
 	return p.JobTime != nil
+}
+
+func (p *CreateOrUpdateUserReq) IsSetUserTags() bool {
+	return p.UserTags != nil
 }
 
 func (p *CreateOrUpdateUserReq) Read(iprot thrift.TProtocol) (err error) {
@@ -2415,6 +2497,14 @@ func (p *CreateOrUpdateUserReq) Read(iprot thrift.TProtocol) (err error) {
 		case 16:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField16(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 18:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField18(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2604,6 +2694,29 @@ func (p *CreateOrUpdateUserReq) ReadField16(iprot thrift.TProtocol) error {
 	p.JobTime = _field
 	return nil
 }
+func (p *CreateOrUpdateUserReq) ReadField18(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]int64, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem int64
+		if v, err := iprot.ReadI64(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.UserTags = _field
+	return nil
+}
 
 func (p *CreateOrUpdateUserReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -2661,6 +2774,10 @@ func (p *CreateOrUpdateUserReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField16(oprot); err != nil {
 			fieldId = 16
+			goto WriteFieldError
+		}
+		if err = p.writeField18(oprot); err != nil {
+			fieldId = 18
 			goto WriteFieldError
 		}
 	}
@@ -2934,6 +3051,33 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 16 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 16 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateUserReq) writeField18(oprot thrift.TProtocol) (err error) {
+	if p.IsSetUserTags() {
+		if err = oprot.WriteFieldBegin("userTags", thrift.LIST, 18); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.I64, len(p.UserTags)); err != nil {
+			return err
+		}
+		for _, v := range p.UserTags {
+			if err := oprot.WriteI64(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
 }
 
 func (p *CreateOrUpdateUserReq) String() string {

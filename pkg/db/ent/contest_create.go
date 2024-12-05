@@ -203,6 +203,20 @@ func (cc *ContestCreate) SetNillableFee(f *float64) *ContestCreate {
 	return cc
 }
 
+// SetIsFee sets the "is_fee" field.
+func (cc *ContestCreate) SetIsFee(i int64) *ContestCreate {
+	cc.mutation.SetIsFee(i)
+	return cc
+}
+
+// SetNillableIsFee sets the "is_fee" field if the given value is not nil.
+func (cc *ContestCreate) SetNillableIsFee(i *int64) *ContestCreate {
+	if i != nil {
+		cc.SetIsFee(*i)
+	}
+	return cc
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (cc *ContestCreate) SetIsCancel(i int64) *ContestCreate {
 	cc.mutation.SetIsCancel(i)
@@ -341,6 +355,10 @@ func (cc *ContestCreate) defaults() {
 		v := contest.DefaultStatus
 		cc.mutation.SetStatus(v)
 	}
+	if _, ok := cc.mutation.IsFee(); !ok {
+		v := contest.DefaultIsFee
+		cc.mutation.SetIsFee(v)
+	}
 	if _, ok := cc.mutation.IsCancel(); !ok {
 		v := contest.DefaultIsCancel
 		cc.mutation.SetIsCancel(v)
@@ -446,6 +464,10 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Fee(); ok {
 		_spec.SetField(contest.FieldFee, field.TypeFloat64, value)
 		_node.Fee = value
+	}
+	if value, ok := cc.mutation.IsFee(); ok {
+		_spec.SetField(contest.FieldIsFee, field.TypeInt64, value)
+		_node.IsFee = value
 	}
 	if value, ok := cc.mutation.IsCancel(); ok {
 		_spec.SetField(contest.FieldIsCancel, field.TypeInt64, value)

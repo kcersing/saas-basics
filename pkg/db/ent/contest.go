@@ -44,6 +44,8 @@ type Contest struct {
 	Sponsor string `json:"sponsor,omitempty"`
 	// 费用
 	Fee float64 `json:"fee,omitempty"`
+	// 是否有费用 1 无 2 有
+	IsFee int64 `json:"is_fee,omitempty"`
 	// 是否支持取消报名 0支持 1不支持
 	IsCancel int64 `json:"is_cancel,omitempty"`
 	// 取消时间
@@ -85,7 +87,7 @@ func (*Contest) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case contest.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case contest.FieldID, contest.FieldStatus, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
+		case contest.FieldID, contest.FieldStatus, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsFee, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
 			values[i] = new(sql.NullInt64)
 		case contest.FieldName, contest.FieldPic, contest.FieldSponsor, contest.FieldDetail, contest.FieldSignFields:
 			values[i] = new(sql.NullString)
@@ -189,6 +191,12 @@ func (c *Contest) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field fee", values[i])
 			} else if value.Valid {
 				c.Fee = value.Float64
+			}
+		case contest.FieldIsFee:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_fee", values[i])
+			} else if value.Valid {
+				c.IsFee = value.Int64
 			}
 		case contest.FieldIsCancel:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -299,6 +307,9 @@ func (c *Contest) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("fee=")
 	builder.WriteString(fmt.Sprintf("%v", c.Fee))
+	builder.WriteString(", ")
+	builder.WriteString("is_fee=")
+	builder.WriteString(fmt.Sprintf("%v", c.IsFee))
 	builder.WriteString(", ")
 	builder.WriteString("is_cancel=")
 	builder.WriteString(fmt.Sprintf("%v", c.IsCancel))

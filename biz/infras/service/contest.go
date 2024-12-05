@@ -53,7 +53,8 @@ func (c Contest) CreateContest(req contest.ContestInfo) error {
 		SetFee(*req.Fee).
 		SetIsCancel(*req.IsCancel).
 		SetCancelTime(*req.CancelTime).
-		SetSignFields(*req.SignFields)
+		SetSignFields(*req.SignFields).
+		SetIsFee(*req.IsFee)
 
 	_, err = cont.Save(c.ctx)
 
@@ -90,6 +91,7 @@ func (c Contest) UpdateContest(req contest.ContestInfo) error {
 		SetIsCancel(*req.IsCancel).
 		SetCancelTime(*req.CancelTime).
 		SetSignFields(*req.SignFields).
+		SetIsFee(*req.IsFee).
 		Save(c.ctx)
 
 	if err != nil {
@@ -194,6 +196,7 @@ func (c Contest) entContestInfo(v *ent.Contest) *contest.ContestInfo {
 		IsCancel:    &v.IsCancel,
 		CancelTime:  &v.CancelTime,
 		SignFields:  &v.SignFields,
+		IsFee:       &v.IsFee,
 	}
 }
 

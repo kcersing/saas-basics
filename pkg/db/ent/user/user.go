@@ -44,8 +44,8 @@ const (
 	FieldDetail = "detail"
 	// EdgeToken holds the string denoting the token edge name in mutations.
 	EdgeToken = "token"
-	// EdgeTags holds the string denoting the tags edge name in mutations.
-	EdgeTags = "tags"
+	// EdgeTag holds the string denoting the tag edge name in mutations.
+	EdgeTag = "tag"
 	// EdgeCreatedOrders holds the string denoting the created_orders edge name in mutations.
 	EdgeCreatedOrders = "created_orders"
 	// EdgeUserEntry holds the string denoting the user_entry edge name in mutations.
@@ -59,13 +59,11 @@ const (
 	TokenInverseTable = "sys_tokens"
 	// TokenColumn is the table column denoting the token relation/edge.
 	TokenColumn = "user_token"
-	// TagsTable is the table that holds the tags relation/edge.
-	TagsTable = "sys_users"
-	// TagsInverseTable is the table name for the DictionaryDetail entity.
+	// TagTable is the table that holds the tag relation/edge. The primary key declared below.
+	TagTable = "user_tag"
+	// TagInverseTable is the table name for the DictionaryDetail entity.
 	// It exists in this package in order to avoid circular dependency with the "dictionarydetail" package.
-	TagsInverseTable = "sys_dictionary_details"
-	// TagsColumn is the table column denoting the tags relation/edge.
-	TagsColumn = "user_tags"
+	TagInverseTable = "sys_dictionary_details"
 	// CreatedOrdersTable is the table that holds the created_orders relation/edge.
 	CreatedOrdersTable = "order"
 	// CreatedOrdersInverseTable is the table name for the Order entity.
@@ -101,21 +99,16 @@ var Columns = []string{
 	FieldDetail,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "sys_users"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"user_tags",
-}
+var (
+	// TagPrimaryKey and TagColumn2 are the table columns denoting the
+	// primary key for the tag relation (M2M).
+	TagPrimaryKey = []string{"user_id", "dictionary_detail_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -224,10 +217,17 @@ func ByTokenField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByTagsField orders the results by tags field.
-func ByTagsField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByTagCount orders the results by tag count.
+func ByTagCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTagsStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newTagStep(), opts...)
+	}
+}
+
+// ByTag orders the results by tag terms.
+func ByTag(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTagStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -265,11 +265,11 @@ func newTokenStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2O, false, TokenTable, TokenColumn),
 	)
 }
-func newTagsStep() *sqlgraph.Step {
+func newTagStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TagsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, TagsTable, TagsColumn),
+		sqlgraph.To(TagInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, TagTable, TagPrimaryKey...),
 	)
 }
 func newCreatedOrdersStep() *sqlgraph.Step {

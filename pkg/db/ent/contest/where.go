@@ -120,6 +120,11 @@ func Fee(v float64) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldFee, v))
 }
 
+// IsFee applies equality check predicate on the "is_fee" field. It's identical to IsFeeEQ.
+func IsFee(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldIsFee, v))
+}
+
 // IsCancel applies equality check predicate on the "is_cancel" field. It's identical to IsCancelEQ.
 func IsCancel(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldIsCancel, v))
@@ -848,6 +853,56 @@ func FeeIsNil() predicate.Contest {
 // FeeNotNil applies the NotNil predicate on the "fee" field.
 func FeeNotNil() predicate.Contest {
 	return predicate.Contest(sql.FieldNotNull(FieldFee))
+}
+
+// IsFeeEQ applies the EQ predicate on the "is_fee" field.
+func IsFeeEQ(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldIsFee, v))
+}
+
+// IsFeeNEQ applies the NEQ predicate on the "is_fee" field.
+func IsFeeNEQ(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldNEQ(FieldIsFee, v))
+}
+
+// IsFeeIn applies the In predicate on the "is_fee" field.
+func IsFeeIn(vs ...int64) predicate.Contest {
+	return predicate.Contest(sql.FieldIn(FieldIsFee, vs...))
+}
+
+// IsFeeNotIn applies the NotIn predicate on the "is_fee" field.
+func IsFeeNotIn(vs ...int64) predicate.Contest {
+	return predicate.Contest(sql.FieldNotIn(FieldIsFee, vs...))
+}
+
+// IsFeeGT applies the GT predicate on the "is_fee" field.
+func IsFeeGT(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldGT(FieldIsFee, v))
+}
+
+// IsFeeGTE applies the GTE predicate on the "is_fee" field.
+func IsFeeGTE(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldGTE(FieldIsFee, v))
+}
+
+// IsFeeLT applies the LT predicate on the "is_fee" field.
+func IsFeeLT(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldLT(FieldIsFee, v))
+}
+
+// IsFeeLTE applies the LTE predicate on the "is_fee" field.
+func IsFeeLTE(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldLTE(FieldIsFee, v))
+}
+
+// IsFeeIsNil applies the IsNil predicate on the "is_fee" field.
+func IsFeeIsNil() predicate.Contest {
+	return predicate.Contest(sql.FieldIsNull(FieldIsFee))
+}
+
+// IsFeeNotNil applies the NotNil predicate on the "is_fee" field.
+func IsFeeNotNil() predicate.Contest {
+	return predicate.Contest(sql.FieldNotNull(FieldIsFee))
 }
 
 // IsCancelEQ applies the EQ predicate on the "is_cancel" field.
