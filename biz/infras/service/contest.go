@@ -29,10 +29,10 @@ type Contest struct {
 
 func (c Contest) CreateContest(req contest.ContestInfo) error {
 
-	signStartAt, _ := time.Parse(time.DateOnly, *req.SignStartAt)
-	signEndAt, _ := time.Parse(time.DateOnly, *req.SignEndAt)
-	startAt, _ := time.Parse(time.DateOnly, *req.StartAt)
-	endAt, _ := time.Parse(time.DateOnly, *req.EndAt)
+	signStartAt, _ := time.Parse(time.DateOnly, req.SignStartAt)
+	signEndAt, _ := time.Parse(time.DateOnly, req.SignEndAt)
+	startAt, _ := time.Parse(time.DateOnly, req.StartAt)
+	endAt, _ := time.Parse(time.DateOnly, req.EndAt)
 
 	tx, err := c.db.Tx(c.ctx)
 	if err != nil {
@@ -40,21 +40,21 @@ func (c Contest) CreateContest(req contest.ContestInfo) error {
 	}
 
 	cont := tx.Contest.Create().
-		SetName(*req.Name).
-		SetDetail(*req.Detail).
-		SetSignNumber(*req.SignNumber).
+		SetName(req.Name).
+		SetDetail(req.Detail).
+		SetSignNumber(req.SignNumber).
 		SetSignStartAt(signStartAt).
 		SetSignEndAt(signEndAt).
-		SetNumber(*req.Number).
+		SetNumber(req.Number).
 		SetStartAt(startAt).
 		SetEndAt(endAt).
-		SetPic(*req.Pic).
-		SetSponsor(*req.Sponsor).
-		SetFee(*req.Fee).
-		SetIsCancel(*req.IsCancel).
-		SetCancelTime(*req.CancelTime).
-		SetSignFields(*req.SignFields).
-		SetIsFee(*req.IsFee)
+		SetPic(req.Pic).
+		SetSponsor(req.Sponsor).
+		SetFee(req.Fee).
+		SetIsCancel(req.IsCancel).
+		SetCancelTime(req.CancelTime).
+		SetSignFields(req.SignFields).
+		SetIsFee(req.IsFee)
 
 	_, err = cont.Save(c.ctx)
 
@@ -65,10 +65,10 @@ func (c Contest) CreateContest(req contest.ContestInfo) error {
 }
 
 func (c Contest) UpdateContest(req contest.ContestInfo) error {
-	signStartAt, _ := time.Parse(time.DateOnly, *req.SignStartAt)
-	signEndAt, _ := time.Parse(time.DateOnly, *req.SignEndAt)
-	startAt, _ := time.Parse(time.DateOnly, *req.StartAt)
-	endAt, _ := time.Parse(time.DateOnly, *req.EndAt)
+	signStartAt, _ := time.Parse(time.DateOnly, req.SignStartAt)
+	signEndAt, _ := time.Parse(time.DateOnly, req.SignEndAt)
+	startAt, _ := time.Parse(time.DateOnly, req.StartAt)
+	endAt, _ := time.Parse(time.DateOnly, req.EndAt)
 
 	tx, err := c.db.Tx(c.ctx)
 	if err != nil {
@@ -76,22 +76,22 @@ func (c Contest) UpdateContest(req contest.ContestInfo) error {
 	}
 
 	_, err = tx.Contest.Update().
-		Where(contest2.IDEQ(*req.ID)).
-		SetName(*req.Name).
-		SetDetail(*req.Detail).
-		SetSignNumber(*req.SignNumber).
+		Where(contest2.IDEQ(req.ID)).
+		SetName(req.Name).
+		SetDetail(req.Detail).
+		SetSignNumber(req.SignNumber).
 		SetSignStartAt(signStartAt).
 		SetSignEndAt(signEndAt).
-		SetNumber(*req.Number).
+		SetNumber(req.Number).
 		SetStartAt(startAt).
 		SetEndAt(endAt).
-		SetPic(*req.Pic).
-		SetSponsor(*req.Sponsor).
-		SetFee(*req.Fee).
-		SetIsCancel(*req.IsCancel).
-		SetCancelTime(*req.CancelTime).
-		SetSignFields(*req.SignFields).
-		SetIsFee(*req.IsFee).
+		SetPic(req.Pic).
+		SetSponsor(req.Sponsor).
+		SetFee(req.Fee).
+		SetIsCancel(req.IsCancel).
+		SetCancelTime(req.CancelTime).
+		SetSignFields(req.SignFields).
+		SetIsFee(req.IsFee).
 		Save(c.ctx)
 
 	if err != nil {
@@ -168,7 +168,7 @@ func (c Contest) ContestInfo(id int64) (resp *contest.ContestInfo, err error) {
 		return resp, err
 	}
 	resp = c.entContestInfo(contestEnt)
-	c.cache.SetWithTTL("contestInfo"+strconv.Itoa(int(*resp.ID)), &resp, 1, 1*time.Hour)
+	c.cache.SetWithTTL("contestInfo"+strconv.Itoa(int(resp.ID)), &resp, 1, 1*time.Hour)
 
 	return
 
@@ -181,22 +181,22 @@ func (c Contest) entContestInfo(v *ent.Contest) *contest.ContestInfo {
 	endAt := v.SignStartAt.Format(time.DateTime)
 	pic := minio.URLconvert(c.ctx, c.c, v.Pic)
 	return &contest.ContestInfo{
-		Pic:         &pic,
-		ID:          &v.ID,
-		Name:        &v.Name,
-		Detail:      &v.Detail,
-		SignNumber:  &v.SignNumber,
-		SignStartAt: &signStartAt,
-		SignEndAt:   &signEndAt,
-		Number:      &v.Number,
-		StartAt:     &startAt,
-		EndAt:       &endAt,
-		Sponsor:     &v.Sponsor,
-		Fee:         &v.Fee,
-		IsCancel:    &v.IsCancel,
-		CancelTime:  &v.CancelTime,
-		SignFields:  &v.SignFields,
-		IsFee:       &v.IsFee,
+		Pic:         pic,
+		ID:          v.ID,
+		Name:        v.Name,
+		Detail:      v.Detail,
+		SignNumber:  v.SignNumber,
+		SignStartAt: signStartAt,
+		SignEndAt:   signEndAt,
+		Number:      v.Number,
+		StartAt:     startAt,
+		EndAt:       endAt,
+		Sponsor:     v.Sponsor,
+		Fee:         v.Fee,
+		IsCancel:    v.IsCancel,
+		CancelTime:  v.CancelTime,
+		SignFields:  v.SignFields,
+		IsFee:       v.IsFee,
 	}
 }
 
