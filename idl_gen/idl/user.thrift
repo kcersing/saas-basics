@@ -83,6 +83,7 @@ struct UserListReq {
     5:  optional i64 jobTime=0 (api.raw = "jobTime")
     6:  optional string mobile="" (api.raw = "mobile")
     7:  optional i64 roleId=0 (api.raw = "roleId")
+    8:  optional i64 status=0 (api.raw = "status")
 
 }
 

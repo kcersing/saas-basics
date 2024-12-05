@@ -3096,6 +3096,7 @@ type UserListReq struct {
 	JobTime  int64  `thrift:"jobTime,5,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
 	Mobile   string `thrift:"mobile,6,optional" form:"mobile" json:"mobile" query:"mobile"`
 	RoleId   int64  `thrift:"roleId,7,optional" form:"roleId" json:"roleId" query:"roleId"`
+	Status   int64  `thrift:"status,8,optional" form:"status" json:"status" query:"status"`
 }
 
 func NewUserListReq() *UserListReq {
@@ -3107,6 +3108,7 @@ func NewUserListReq() *UserListReq {
 		JobTime:  0,
 		Mobile:   "",
 		RoleId:   0,
+		Status:   0,
 	}
 }
 
@@ -3117,6 +3119,7 @@ func (p *UserListReq) InitDefault() {
 	p.JobTime = 0
 	p.Mobile = ""
 	p.RoleId = 0
+	p.Status = 0
 }
 
 var UserListReq_Page_DEFAULT int64 = 1
@@ -3173,6 +3176,15 @@ func (p *UserListReq) GetRoleId() (v int64) {
 	return p.RoleId
 }
 
+var UserListReq_Status_DEFAULT int64 = 0
+
+func (p *UserListReq) GetStatus() (v int64) {
+	if !p.IsSetStatus() {
+		return UserListReq_Status_DEFAULT
+	}
+	return p.Status
+}
+
 var fieldIDToName_UserListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
@@ -3180,6 +3192,7 @@ var fieldIDToName_UserListReq = map[int16]string{
 	5: "jobTime",
 	6: "mobile",
 	7: "roleId",
+	8: "status",
 }
 
 func (p *UserListReq) IsSetPage() bool {
@@ -3204,6 +3217,10 @@ func (p *UserListReq) IsSetMobile() bool {
 
 func (p *UserListReq) IsSetRoleId() bool {
 	return p.RoleId != UserListReq_RoleId_DEFAULT
+}
+
+func (p *UserListReq) IsSetStatus() bool {
+	return p.Status != UserListReq_Status_DEFAULT
 }
 
 func (p *UserListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -3268,6 +3285,14 @@ func (p *UserListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 7:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3368,6 +3393,17 @@ func (p *UserListReq) ReadField7(iprot thrift.TProtocol) error {
 	p.RoleId = _field
 	return nil
 }
+func (p *UserListReq) ReadField8(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Status = _field
+	return nil
+}
 
 func (p *UserListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -3397,6 +3433,10 @@ func (p *UserListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField7(oprot); err != nil {
 			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
 			goto WriteFieldError
 		}
 	}
@@ -3529,6 +3569,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *UserListReq) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetStatus() {
+		if err = oprot.WriteFieldBegin("status", thrift.I64, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Status); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
 func (p *UserListReq) String() string {

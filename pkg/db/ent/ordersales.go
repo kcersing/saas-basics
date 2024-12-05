@@ -23,7 +23,7 @@ type OrderSales struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// 状态[0:禁用;1:正常]
+	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// 订单id
 	OrderID int64 `json:"order_id,omitempty"`

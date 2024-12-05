@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
@@ -216,7 +215,7 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 	if req.Mobile != "" {
 		predicates = append(predicates, user2.MobileEQ(req.Mobile))
 	}
-	hlog.Info(100000)
+
 	if req.JobTime != 0 {
 		predicates = append(predicates, user2.JobTime(req.JobTime))
 	}
@@ -225,6 +224,9 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 	}
 	if req.Name != "" {
 		predicates = append(predicates, user2.NameContains(req.Name))
+	}
+	if req.Status != 0 {
+		predicates = append(predicates, user2.Status(req.Status))
 	}
 
 	if req.RoleId != 0 {

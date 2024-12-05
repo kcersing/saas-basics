@@ -22,7 +22,7 @@ type Member struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// 状态[0:禁用;1:正常]
+	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// password | 密码
 	Password string `json:"password,omitempty"`
