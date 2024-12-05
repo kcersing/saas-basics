@@ -99,6 +99,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		gender = 2
 	}
 	//parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
+	functions := strings.Join(req.Functions, ",")
 
 	tx, err := u.db.Tx(u.ctx)
 	if err != nil {
@@ -112,7 +113,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		SetUsername(*req.Username).
 		SetPassword(password).
 		SetName(*req.Name).
-		//SetFunctions(*req.Functions).
+		SetFunctions(functions).
 		SetGender(gender).
 		SetRoleID(*req.RoleId).
 		SetDetail(*req.Detail).
@@ -149,7 +150,10 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 	}
 	//parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
 
-	password, _ := encrypt.Crypt(*req.Password)
+	//password, _ := encrypt.Crypt(*req.Password)
+
+	functions := strings.Join(req.Functions, ",")
+
 	_, err := u.db.User.Update().
 		Where(user2.IDEQ(*req.ID)).
 		SetAvatar(*req.Avatar).
@@ -157,9 +161,9 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		SetJobTime(*req.JobTime).
 		SetStatus(*req.Status).
 		SetUsername(*req.Username).
-		SetPassword(password).
+		//SetPassword(password).
 		SetName(*req.Name).
-		//SetFunctions(*req.Functions).
+		SetFunctions(functions).
 		SetGender(gender).
 		SetRoleID(*req.RoleId).
 		SetDetail(*req.Detail).
