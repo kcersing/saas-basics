@@ -117,22 +117,7 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 	roleInterface, ok := r.cache.Get("roleData" + strconv.Itoa(int(ID)))
 	if ok {
 		if l, ok := roleInterface.(*ent.Role); ok {
-
 			return entRoleInfo(*l), nil
-			//createdAt := l.CreatedAt.Format(time.DateTime)
-			//updatedAt := l.UpdatedAt.Format(time.DateTime)
-			//
-			//return &auth.RoleInfo{
-			//	ID:            &l.ID,
-			//	Name:          &l.Name,
-			//	Value:         &l.Value,
-			//	DefaultRouter: &l.DefaultRouter,
-			//	Status:        &l.Status,
-			//	Remark:        &l.Remark,
-			//	OrderNo:       &l.OrderNo,
-			//	CreatedAt:     &createdAt,
-			//	UpdatedAt:     &updatedAt,
-			//}, nil
 		}
 	}
 	// get role from db
@@ -145,18 +130,6 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 	r.cache.SetWithTTL("roleData"+strconv.Itoa(int(ID)), roleEnt, 1, 1*time.Hour)
 	// convert to RoleInfo
 	return entRoleInfo(*roleEnt), nil
-	//roleInfo = &auth.RoleInfo{
-	//	ID:            roleEnt.ID,
-	//	Name:          roleEnt.Name,
-	//	Value:         roleEnt.Value,
-	//	DefaultRouter: roleEnt.DefaultRouter,
-	//	Status:        roleEnt.Status,
-	//	Remark:        roleEnt.Remark,
-	//	OrderNo:       roleEnt.OrderNo,
-	//	CreatedAt:     roleEnt.CreatedAt.Format(time.DateTime),
-	//	UpdatedAt:     roleEnt.UpdatedAt.Format(time.DateTime),
-	//}
-	//return
 }
 
 func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total int64, err error) {

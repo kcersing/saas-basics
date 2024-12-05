@@ -124,15 +124,7 @@ func (d Dictionary) List(req *dictionary.DictListReq) (list []*dictionary.Dictio
 
 	// format result
 	for _, dict := range dictionaries {
-		list = append(list, &dictionary.DictionaryInfo{
-			ID:          dict.ID,
-			Title:       dict.Title,
-			Name:        dict.Name,
-			Status:      dict.Status,
-			Description: dict.Description,
-			CreatedAt:   dict.CreatedAt.Format(time.DateTime),
-			UpdatedAt:   dict.UpdatedAt.Format(time.DateTime),
-		})
+		list = append(list, entDictionaryInfo(dict))
 	}
 	t, _ := d.db.Dictionary.Query().Where(predicates...).Count(d.ctx)
 	total = int64(t)
@@ -250,16 +242,7 @@ func (d Dictionary) DetailListByDict(req *dictionary.DetailListReq) (list []*dic
 
 	// format result
 	for _, detail := range details {
-		list = append(list, &dictionary.DictionaryDetail{
-			ID:        detail.ID,
-			Title:     detail.Title,
-			Key:       detail.Key,
-			Value:     detail.Value,
-			Status:    detail.Status,
-			CreatedAt: detail.CreatedAt.Format(time.DateTime),
-			UpdatedAt: detail.UpdatedAt.Format(time.DateTime),
-			ParentID:  detail.Edges.Dictionary.ID,
-		})
+		list = append(list, entDictionaryDetail(detail))
 	}
 	total = int64(len(list))
 	return
@@ -280,16 +263,33 @@ func (d Dictionary) DetailByDictNameAndKey(dictName, key string) (detail *dictio
 	}
 
 	// format result
-	detail = new(dictionary.DictionaryDetail)
-	detail.ID = dictDetail.ID
-	detail.Title = dictDetail.Title
-	detail.Key = dictDetail.Key
-	detail.Value = dictDetail.Value
-	detail.Status = dictDetail.Status
-	detail.CreatedAt = dictDetail.CreatedAt.Format(time.DateTime)
-	detail.UpdatedAt = dictDetail.UpdatedAt.Format(time.DateTime)
+	detail = entDictionaryDetail(dictDetail)
 
 	// set cache
 	d.cache.SetWithTTL(fmt.Sprintf("Dictionary%s-key%s", dictName, key), detail, 1, 1*time.Hour)
 	return detail, nil
+}
+func entDictionaryInfo(v *ent.Dictionary) *dictionary.DictionaryInfo {
+	return &dictionary.DictionaryInfo{
+		ID:          v.ID,
+		Title:       v.Title,
+		Name:        v.Name,
+		Status:      v.Status,
+		Description: v.Description,
+		CreatedAt:   v.CreatedAt.Format(time.DateTime),
+		UpdatedAt:   v.UpdatedAt.Format(time.DateTime),
+	}
+}
+
+func entDictionaryDetail(v *ent.DictionaryDetail) *dictionary.DictionaryDetail {
+	return &dictionary.DictionaryDetail{
+		ID:        v.ID,
+		Title:     v.Title,
+		Key:       v.Key,
+		Value:     v.Value,
+		Status:    v.Status,
+		CreatedAt: v.CreatedAt.Format(time.DateTime),
+		UpdatedAt: v.UpdatedAt.Format(time.DateTime),
+		ParentID:  v.Edges.Dictionary.ID,
+	}
 }

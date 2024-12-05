@@ -2333,10 +2333,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "EntryTime": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "LeavingTime": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "MemberId": {
                     "type": "integer"
