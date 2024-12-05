@@ -175,10 +175,10 @@ func (c Contest) ContestInfo(id int64) (resp *contest.ContestInfo, err error) {
 }
 
 func (c Contest) entContestInfo(v *ent.Contest) *contest.ContestInfo {
-	signStartAt := v.SignStartAt.Format(time.DateTime)
-	startAt := v.SignStartAt.Format(time.DateTime)
-	signEndAt := v.SignStartAt.Format(time.DateTime)
-	endAt := v.SignStartAt.Format(time.DateTime)
+	signStartAt := v.SignStartAt.Unix()
+	startAt := v.SignStartAt.Unix()
+	signEndAt := v.SignStartAt.Unix()
+	endAt := v.SignStartAt.Unix()
 	pic := minio.URLconvert(c.ctx, c.c, v.Pic)
 	return &contest.ContestInfo{
 		Pic:         pic,
@@ -186,11 +186,11 @@ func (c Contest) entContestInfo(v *ent.Contest) *contest.ContestInfo {
 		Name:        v.Name,
 		Detail:      v.Detail,
 		SignNumber:  v.SignNumber,
-		SignStartAt: signStartAt,
-		SignEndAt:   signEndAt,
+		SignStartAt: strconv.FormatInt(signStartAt, 10),
+		SignEndAt:   strconv.FormatInt(signEndAt, 10),
 		Number:      v.Number,
-		StartAt:     startAt,
-		EndAt:       endAt,
+		StartAt:     strconv.FormatInt(startAt, 10),
+		EndAt:       strconv.FormatInt(endAt, 10),
 		Sponsor:     v.Sponsor,
 		Fee:         v.Fee,
 		IsCancel:    v.IsCancel,
