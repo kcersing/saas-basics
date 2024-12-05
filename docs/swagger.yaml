@@ -823,7 +823,7 @@ paths:
       summary: 获取验证码 Summary
   /service/contest/create:
     post:
-      description: 创建比赛 Description
+      description: 添加参赛人 Description
       parameters:
       - description: query params
         in: body
@@ -836,10 +836,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 创建比赛 Summary
+      summary: 添加参赛人 Summary
   /service/contest/info:
     post:
-      description: 比赛信息 Description
+      description: 参赛人信息 Description
       parameters:
       - description: query params
         in: body
@@ -852,10 +852,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 比赛信息 Summary
+      summary: 参赛人信息 Summary
   /service/contest/list:
     post:
-      description: 比赛列表 Description
+      description: 参赛人列表 Description
       parameters:
       - description: query params
         in: body
@@ -868,10 +868,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 比赛列表 Summary
+      summary: 参赛人列表 Summary
   /service/contest/status:
     post:
-      description: 更新比赛状态 Description
+      description: 更新参赛人状态 Description
       parameters:
       - description: query params
         in: body
@@ -884,10 +884,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 更新比赛状态 Summary
+      summary: 更新参赛人状态 Summary
   /service/contest/update:
     post:
-      description: 更新比赛 Description
+      description: 更新参赛人 Description
       parameters:
       - description: query params
         in: body
@@ -900,7 +900,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 更新比赛 Summary
+      summary: 更新参赛人 Summary
   /service/contract:
     post:
       description: 获取合同信息 Description

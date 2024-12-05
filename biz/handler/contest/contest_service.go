@@ -135,8 +135,8 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateParticipant .
-// @Summary  创建比赛 Summary
-// @Description 创建比赛 Description
+// @Summary  添加参赛人 Summary
+// @Description 添加参赛人 Description
 // @Param request body contest.ParticipantInfo true "query params"
 // @Success      200  {object}  utils.Response
 // @router /service/contest/create [POST]
@@ -159,8 +159,8 @@ func CreateParticipant(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateParticipant .
-// @Summary  更新比赛 Summary
-// @Description 更新比赛 Description
+// @Summary  更新参赛人 Summary
+// @Description 更新参赛人 Description
 // @Param request body contest.ParticipantInfo true "query params"
 // @Success      200  {object}  utils.Response
 // @router /service/contest/update [POST]
@@ -183,8 +183,8 @@ func UpdateParticipant(ctx context.Context, c *app.RequestContext) {
 }
 
 // ContestParticipantInfo .
-// @Summary  比赛信息 Summary
-// @Description 比赛信息 Description
+// @Summary  参赛人信息 Summary
+// @Description 参赛人信息 Description
 // @Param request body base.IDReq true "query params"
 // @Success      200  {object}  utils.Response
 // @router /service/contest/info [POST]
@@ -207,8 +207,8 @@ func ContestParticipantInfo(ctx context.Context, c *app.RequestContext) {
 }
 
 // ParticipantListList .
-// @Summary  比赛列表 Summary
-// @Description 比赛列表 Description
+// @Summary  参赛人列表 Summary
+// @Description 参赛人列表 Description
 // @Param request body contest.ParticipantListReq true "query params"
 // @Success      200  {object}  utils.Response
 // @router /service/contest/list [POST]
@@ -231,8 +231,8 @@ func ParticipantListList(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateParticipantStatus .
-// @Summary  更新比赛状态 Summary
-// @Description 更新比赛状态 Description
+// @Summary  更新参赛人状态 Summary
+// @Description 更新参赛人状态 Description
 // @Param request body base.StatusCodeReq true "query params"
 // @Success      200  {object}  utils.Response
 // @router /service/contest/status [POST]

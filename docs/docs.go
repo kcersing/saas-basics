@@ -316,8 +316,8 @@ const docTemplate = `{
         },
         "/service/contest/create": {
             "post": {
-                "description": "创建比赛 Description",
-                "summary": "创建比赛 Summary",
+                "description": "添加参赛人 Description",
+                "summary": "添加参赛人 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -341,8 +341,8 @@ const docTemplate = `{
         },
         "/service/contest/info": {
             "post": {
-                "description": "比赛信息 Description",
-                "summary": "比赛信息 Summary",
+                "description": "参赛人信息 Description",
+                "summary": "参赛人信息 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -366,8 +366,8 @@ const docTemplate = `{
         },
         "/service/contest/list": {
             "post": {
-                "description": "比赛列表 Description",
-                "summary": "比赛列表 Summary",
+                "description": "参赛人列表 Description",
+                "summary": "参赛人列表 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -391,8 +391,8 @@ const docTemplate = `{
         },
         "/service/contest/status": {
             "post": {
-                "description": "更新比赛状态 Description",
-                "summary": "更新比赛状态 Summary",
+                "description": "更新参赛人状态 Description",
+                "summary": "更新参赛人状态 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -416,8 +416,8 @@ const docTemplate = `{
         },
         "/service/contest/update": {
             "post": {
-                "description": "更新比赛 Description",
-                "summary": "更新比赛 Summary",
+                "description": "更新参赛人 Description",
+                "summary": "更新参赛人 Summary",
                 "parameters": [
                     {
                         "description": "query params",
