@@ -91,20 +91,20 @@ func (u User) Info(id int64) (info *user.UserInfo, err error) {
 
 func (u User) Create(req user.CreateOrUpdateUserReq) error {
 
-	ok, _ := u.db.User.Query().Where(user2.Username(*req.Username)).Exist(u.ctx)
+	ok, _ := u.db.User.Query().Where(user2.Username(req.Username)).Exist(u.ctx)
 	if ok {
 		return errors.New("账号重复！")
 	}
-	ok, _ = u.db.User.Query().Where(user2.Mobile(*req.Mobile)).Exist(u.ctx)
+	ok, _ = u.db.User.Query().Where(user2.Mobile(req.Mobile)).Exist(u.ctx)
 	if ok {
 		return errors.New("手机号重复！")
 	}
 
-	password, _ := encrypt.Crypt(*req.Password)
+	password, _ := encrypt.Crypt(req.Password)
 	var gender int64
-	if *req.Gender == "女性" {
+	if req.Gender == "女性" {
 		gender = 0
-	} else if *req.Gender == "男性" {
+	} else if req.Gender == "男性" {
 		gender = 1
 	} else {
 		gender = 2
@@ -117,17 +117,17 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		return errors.Wrap(err, "starting a transaction:")
 	}
 	one, err := tx.User.Create().
-		SetAvatar(*req.Avatar).
-		SetMobile(*req.Mobile).
-		SetJobTime(*req.JobTime).
-		SetStatus(*req.Status).
-		SetUsername(*req.Username).
+		SetAvatar(req.Avatar).
+		SetMobile(req.Mobile).
+		SetJobTime(req.JobTime).
+		SetStatus(req.Status).
+		SetUsername(req.Username).
 		SetPassword(password).
-		SetName(*req.Name).
+		SetName(req.Name).
 		SetFunctions(functions).
 		SetGender(gender).
-		SetRoleID(*req.RoleId).
-		SetDetail(*req.Detail).
+		SetRoleID(req.RoleId).
+		SetDetail(req.Detail).
 		//SetTags().
 		Save(u.ctx)
 
@@ -155,31 +155,31 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 func (u User) Update(req user.CreateOrUpdateUserReq) error {
 
 	var gender int64
-	if *req.Gender == "女性" {
+	if req.Gender == "女性" {
 		gender = 0
-	} else if *req.Gender == "男性" {
+	} else if req.Gender == "男性" {
 		gender = 1
 	} else {
 		gender = 2
 	}
 	//parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
 
-	//password, _ := encrypt.Crypt(*req.Password)
+	//password, _ := encrypt.Crypt(req.Password)
 
 	functions := strings.Join(req.Functions, ",")
 	//*req.UserTags...
 	_, err := u.db.User.Update().
-		Where(user2.IDEQ(*req.ID)).
-		SetAvatar(*req.Avatar).
-		SetMobile(*req.Mobile).
-		SetJobTime(*req.JobTime).
-		SetStatus(*req.Status).
-		SetUsername(*req.Username).
-		SetName(*req.Name).
+		Where(user2.IDEQ(req.ID)).
+		SetAvatar(req.Avatar).
+		SetMobile(req.Mobile).
+		SetJobTime(req.JobTime).
+		SetStatus(req.Status).
+		SetUsername(req.Username).
+		SetName(req.Name).
 		SetFunctions(functions).
 		SetGender(gender).
-		SetRoleID(*req.RoleId).
-		SetDetail(*req.Detail).
+		SetRoleID(req.RoleId).
+		SetDetail(req.Detail).
 
 		//SetTags().
 		Save(u.ctx)
@@ -188,7 +188,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		err = errors.Wrap(err, "update user failed")
 		return err
 	}
-	u.db.User.UpdateOneID(*req.ID).AddTagIDs(req.UserTags...).Exec(u.ctx)
+	u.db.User.UpdateOneID(req.ID).AddTagIDs(req.UserTags...).Exec(u.ctx)
 	return nil
 }
 

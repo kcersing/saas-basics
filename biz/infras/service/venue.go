@@ -58,7 +58,7 @@ func (v Venue) VenueInfo(id int64) (info *venue.VenueInfo, err error) {
 	//	return info, err
 	//}
 
-	v.cache.SetWithTTL("venueInfo"+strconv.Itoa(int(*info.ID)), &info, 1, 1*time.Hour)
+	v.cache.SetWithTTL("venueInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
 	return
 }
 
@@ -77,21 +77,21 @@ func (v Venue) PlaceInfo(id int64) (info *venue.VenuePlaceInfo, err error) {
 
 	info = entVenuePlaceInfo(one)
 
-	v.cache.SetWithTTL("placeInfo"+strconv.Itoa(int(*info.ID)), &info, 1, 1*time.Hour)
+	v.cache.SetWithTTL("placeInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
 	return
 }
 
 func (v Venue) Create(req *venue.VenueInfo) error {
 	_, err := v.db.Venue.Create().
-		SetName(*req.Name).
-		SetAddress(*req.Address).
-		SetAddressDetail(*req.AddressDetail).
-		SetLatitude(*req.Latitude).
-		SetLongitude(*req.Longitude).
-		SetMobile(*req.Mobile).
-		SetPic(*req.Pic).
-		SetEmail(*req.Email).
-		SetInformation(*req.Information).
+		SetName(req.Name).
+		SetAddress(req.Address).
+		SetAddressDetail(req.AddressDetail).
+		SetLatitude(req.Latitude).
+		SetLongitude(req.Longitude).
+		SetMobile(req.Mobile).
+		SetPic(req.Pic).
+		SetEmail(req.Email).
+		SetInformation(req.Information).
 		Save(v.ctx)
 
 	if err != nil {
@@ -104,17 +104,17 @@ func (v Venue) Create(req *venue.VenueInfo) error {
 
 func (v Venue) Update(req *venue.VenueInfo) error {
 	_, err := v.db.Venue.Update().
-		Where(venue2.IDEQ(*req.ID)).
-		SetName(*req.Name).
-		SetAddress(*req.Address).
-		SetAddressDetail(*req.AddressDetail).
-		SetLatitude(*req.Latitude).
-		SetLongitude(*req.Longitude).
-		SetMobile(*req.Mobile).
-		SetPic(*req.Pic).
-		SetEmail(*req.Email).
-		SetInformation(*req.Information).
-		SetStatus(*req.Status).
+		Where(venue2.IDEQ(req.ID)).
+		SetName(req.Name).
+		SetAddress(req.Address).
+		SetAddressDetail(req.AddressDetail).
+		SetLatitude(req.Latitude).
+		SetLongitude(req.Longitude).
+		SetMobile(req.Mobile).
+		SetPic(req.Pic).
+		SetEmail(req.Email).
+		SetInformation(req.Information).
+		SetStatus(req.Status).
 		Save(v.ctx)
 
 	if err != nil {
@@ -154,12 +154,12 @@ func (v Venue) UpdateVenueStatus(id int64, status int64) error {
 }
 func (v Venue) CreatePlace(req *venue.VenuePlaceInfo) error {
 	_, err := v.db.VenuePlace.Create().
-		SetName(*req.Name).
-		SetPic(*req.Pic).
-		SetVenueID(*req.VenueId).
-		SetStatus(*req.Status).
-		SetNumber(*req.Number).
-		SetInformation(*req.Information).
+		SetName(req.Name).
+		SetPic(req.Pic).
+		SetVenueID(req.VenueId).
+		SetStatus(req.Status).
+		SetNumber(req.Number).
+		SetInformation(req.Information).
 		Save(v.ctx)
 
 	if err != nil {
@@ -172,13 +172,13 @@ func (v Venue) CreatePlace(req *venue.VenuePlaceInfo) error {
 
 func (v Venue) UpdatePlace(req *venue.VenuePlaceInfo) error {
 	_, err := v.db.VenuePlace.Update().
-		Where(venueplace.IDEQ(*req.ID)).
-		SetName(*req.Name).
-		SetPic(*req.Pic).
-		SetVenueID(*req.VenueId).
-		SetStatus(*req.Status).
-		SetNumber(*req.Number).
-		SetInformation(*req.Information).
+		Where(venueplace.IDEQ(req.ID)).
+		SetName(req.Name).
+		SetPic(req.Pic).
+		SetVenueID(req.VenueId).
+		SetStatus(req.Status).
+		SetNumber(req.Number).
+		SetInformation(req.Information).
 		Save(v.ctx)
 
 	if err != nil {
@@ -217,16 +217,16 @@ func entVenueInfo(v *ent.Venue) *venue.VenueInfo {
 	createdAt := v.CreatedAt.Format(time.DateTime)
 	updatedAt := v.UpdatedAt.Format(time.DateTime)
 	return &venue.VenueInfo{
-		ID:        &v.ID,
-		Name:      &v.Name,
-		Address:   &v.Address,
-		Pic:       &v.Pic,
-		Mobile:    &v.Mobile,
-		Latitude:  &v.Latitude,
-		Longitude: &v.Longitude,
-		Status:    &v.Status,
-		CreatedAt: &createdAt,
-		UpdatedAt: &updatedAt,
+		ID:        v.ID,
+		Name:      v.Name,
+		Address:   v.Address,
+		Pic:       v.Pic,
+		Mobile:    v.Mobile,
+		Latitude:  v.Latitude,
+		Longitude: v.Longitude,
+		Status:    v.Status,
+		CreatedAt: createdAt,
+		UpdatedAt: updatedAt,
 	}
 
 }
@@ -236,15 +236,15 @@ func entVenuePlaceInfo(v *ent.VenuePlace) *venue.VenuePlaceInfo {
 	createdAt := v.CreatedAt.Format(time.DateTime)
 	updatedAt := v.UpdatedAt.Format(time.DateTime)
 	return &venue.VenuePlaceInfo{
-		ID:          &v.ID,
-		Name:        &v.Name,
-		Pic:         &v.Pic,
-		VenueId:     &v.VenueID,
-		Number:      &v.Number,
-		Status:      &v.Status,
-		Information: &v.Information,
-		CreatedAt:   &createdAt,
-		UpdatedAt:   &updatedAt,
+		ID:          v.ID,
+		Name:        v.Name,
+		Pic:         v.Pic,
+		VenueId:     v.VenueID,
+		Number:      v.Number,
+		Status:      v.Status,
+		Information: v.Information,
+		CreatedAt:   createdAt,
+		UpdatedAt:   updatedAt,
 	}
 }
 

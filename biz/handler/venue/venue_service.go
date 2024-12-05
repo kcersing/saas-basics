@@ -15,6 +15,7 @@ import (
 )
 
 // CreateVenuePlace .
+//
 //	@Summary		创建场地 Summary
 //	@Description	创建场地 Description
 //	@Param			request	body		venue.VenuePlaceInfo	true	"query params"
@@ -39,6 +40,7 @@ func CreateVenuePlace(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateVenuePlace .
+//
 //	@Summary		更新场地 Summary
 //	@Description	更新场地 Description
 //	@Param			request	body		venue.VenuePlaceInfo	true	"query params"
@@ -63,6 +65,7 @@ func UpdateVenuePlace(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateVenuePlaceStatus .
+//
 //	@Summary		更新场地状态 Summary
 //	@Description	更新场地状态 Description
 //	@Param			request	body		base.StatusCodeReq	true	"query params"
@@ -87,6 +90,7 @@ func UpdateVenuePlaceStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // VenuePlaceList .
+//
 //	@Summary		场地列表 Summary
 //	@Description	场地列表 Description
 //	@Param			request	body		venue.VenuePlaceListReq	true	"query params"
@@ -111,6 +115,7 @@ func VenuePlaceList(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateVenue .
+//
 //	@Summary		创建场馆 Summary
 //	@Description	创建场馆 Description
 //	@Param			request	body		venue.VenueInfo	true	"query params"
@@ -135,6 +140,7 @@ func CreateVenue(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateVenue .
+//
 //	@Summary		更新场馆 Summary
 //	@Description	更新场馆 Description
 //	@Param			request	body		venue.VenueInfo	true	"query params"
@@ -159,6 +165,7 @@ func UpdateVenue(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateVenueStatus .
+//
 //	@Summary		更新场馆状态 Summary
 //	@Description	更新场馆状态 Description
 //	@Param			request	body		base.StatusCodeReq	true	"query params"
@@ -183,6 +190,7 @@ func UpdateVenueStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // VenueList .
+//
 //	@Summary		场馆列表 Summary
 //	@Description	场馆列表 Description
 //	@Param			request	body		venue.VenueListReq	true	"query params"

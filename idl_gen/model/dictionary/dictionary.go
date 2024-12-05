@@ -21,10 +21,26 @@ type DictionaryInfo struct {
 }
 
 func NewDictionaryInfo() *DictionaryInfo {
-	return &DictionaryInfo{}
+	return &DictionaryInfo{
+
+		ID:          0,
+		Title:       "",
+		Name:        "",
+		Status:      1,
+		Description: "",
+		CreatedAt:   "",
+		UpdatedAt:   "",
+	}
 }
 
 func (p *DictionaryInfo) InitDefault() {
+	p.ID = 0
+	p.Title = ""
+	p.Name = ""
+	p.Status = 1
+	p.Description = ""
+	p.CreatedAt = ""
+	p.UpdatedAt = ""
 }
 
 func (p *DictionaryInfo) GetID() (v int64) {
@@ -439,10 +455,26 @@ type DictionaryDetail struct {
 }
 
 func NewDictionaryDetail() *DictionaryDetail {
-	return &DictionaryDetail{}
+	return &DictionaryDetail{
+
+		ID:        0,
+		Title:     "",
+		Key:       "",
+		Value:     "",
+		Status:    1,
+		CreatedAt: "",
+		UpdatedAt: "",
+	}
 }
 
 func (p *DictionaryDetail) InitDefault() {
+	p.ID = 0
+	p.Title = ""
+	p.Key = ""
+	p.Value = ""
+	p.Status = 1
+	p.CreatedAt = ""
+	p.UpdatedAt = ""
 }
 
 func (p *DictionaryDetail) GetID() (v int64) {

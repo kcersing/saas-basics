@@ -15,6 +15,7 @@ import (
 )
 
 // CreateMember .
+//
 //	@Summary		创建会员 Summary
 //	@Description	创建会员 Description
 //	@Param			request	body		member.CreateOrUpdateMemberReq	true	"query params"
@@ -39,6 +40,7 @@ func CreateMember(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMember .
+//
 //	@Summary		更新会员 Summary
 //	@Description	更新会员 Description
 //	@Param			request	body		member.CreateOrUpdateMemberReq	true	"query params"
@@ -63,6 +65,7 @@ func UpdateMember(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberInfo .
+//
 //	@Summary		会员详情 Summary
 //	@Description	会员详情 Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -87,6 +90,7 @@ func MemberInfo(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPrivacy .
+//
 //	@Summary		会员隐私 Summary
 //	@Description	会员隐私 Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -111,6 +115,7 @@ func MemberPrivacy(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberList .
+//
 //	@Summary		会员列表 Summary
 //	@Description	会员列表 Description
 //	@Param			request	body		member.MemberListReq	true	"query params"
@@ -135,6 +140,7 @@ func MemberList(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMemberStatus .
+//
 //	@Summary		更新会员状态 Summary
 //	@Description	更新会员状态 Description
 //	@Param			request	body		base.StatusCodeReq	true	"query params"
@@ -159,6 +165,7 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberSearch .
+//
 //	@Summary		会员搜索 Summary
 //	@Description	会员搜索 Description
 //	@Param			request	body		member.MemberSearchReq	true	"query params"
@@ -183,6 +190,7 @@ func MemberSearch(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberNode .
+//
 //	@Summary		会员节点 Summary
 //	@Description	会员节点 Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -207,6 +215,7 @@ func MemberNode(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberContractList .
+//
 //	@Summary		会员合同列表 Summary
 //	@Description	会员合同列表 Description
 //	@Param			request	body		member.MemberContractListReq	true	"query params"
@@ -231,6 +240,7 @@ func MemberContractList(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberProductList .
+//
 //	@Summary		会员产品列表 Summary
 //	@Description	会员产品列表 Description
 //	@Param			request	body		member.MemberProductListReq	true	"query params"
@@ -251,6 +261,7 @@ func MemberProductList(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPropertyList .
+//
 //	@Summary		会员产品属性列表 Summary
 //	@Description	会员产品属性列表 Description
 //	@Param			request	body		member.MemberPropertyListReq	true	"query params"
@@ -271,6 +282,7 @@ func MemberPropertyList(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberProductDetail .
+//
 //	@Summary		会员产品详情 Summary
 //	@Description	会员产品详情 Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -291,6 +303,7 @@ func MemberProductDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPropertyDetail .
+//
 //	@Summary		会员产品属性详情 Summary
 //	@Description	会员产品属性详情 Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -311,6 +324,7 @@ func MemberPropertyDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPropertyUpdate .
+//
 //	@Summary		会员产品属性更新 Summary
 //	@Description	会员产品属性更新 Description
 //	@Param			request	body		member.MemberPropertyListReq	true	"query params"
@@ -331,6 +345,7 @@ func MemberPropertyUpdate(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberProductSearch .
+//
 //	@Summary		会员产品搜索 Summary
 //	@Description	会员产品搜索 Description
 //	@Param			request	body		member.MemberProductSearchReq	true	"query params"
@@ -351,6 +366,7 @@ func MemberProductSearch(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPropertySearch .
+//
 //	@Summary		会员产品属性搜索 Summary
 //	@Description	会员产品属性搜索 Description
 //	@Param			request	body		member.MemberPropertySearchReq	true	"query params"

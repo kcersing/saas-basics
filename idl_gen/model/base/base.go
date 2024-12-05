@@ -1057,10 +1057,16 @@ type PageInfoReq struct {
 }
 
 func NewPageInfoReq() *PageInfoReq {
-	return &PageInfoReq{}
+	return &PageInfoReq{
+
+		Page:     1,
+		PageSize: 100,
+	}
 }
 
 func (p *PageInfoReq) InitDefault() {
+	p.Page = 1
+	p.PageSize = 100
 }
 
 func (p *PageInfoReq) GetPage() (v int64) {

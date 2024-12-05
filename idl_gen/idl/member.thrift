@@ -4,17 +4,17 @@ include "../base/base.thrift"
 
 // Create or update user information request | 创建或更新用户信息
 struct CreateOrUpdateMemberReq {
-    1:  optional i64 id (api.raw = "id")
-    2:  optional string avatar (api.raw = "avatar")
-    4:  optional string mobile (api.raw = "mobile")
-    5:  optional string email (api.raw = "email")
-    6:  optional i64 status (api.raw = "status")
-    7:  optional string name (api.raw = "name")
-    8:  optional string gender (api.raw = "gender")
-    9:  optional string wecom (api.raw = "wecom")
-    10: optional i64 createId (api.raw = "createId")
-    11: optional string birthday (api.raw = "birthday")
-    12: optional string	Password (api.raw = "password")
+    1:  optional i64 id=0 (api.raw = "id")
+    2:  optional string avatar="" (api.raw = "avatar")
+    4:  optional string mobile="" (api.raw = "mobile")
+    5:  optional string email="" (api.raw = "email")
+    6:  optional i64 status=1 (api.raw = "status")
+    7:  optional string name="" (api.raw = "name")
+    8:  optional string gender="" (api.raw = "gender")
+    9:  optional string wecom="" (api.raw = "wecom")
+    10: optional i64 createId=0 (api.raw = "createId")
+    11: optional string birthday="" (api.raw = "birthday")
+    12: optional string	Password="" (api.raw = "password")
 }
 
 struct MemberInfo {
@@ -60,8 +60,8 @@ struct MemberListReq {
 }
 
 struct MemberSearchReq {
-    1:  string value (api.raw = "value")
-    2:  string option (api.raw = "option")
+    1:  string value="" (api.raw = "value")
+    2:  string option="" (api.raw = "option")
 }
 struct MemberNode {
 	//消费总金额

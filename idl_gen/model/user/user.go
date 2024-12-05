@@ -2157,117 +2157,143 @@ func (p *ChangePasswordReq) String() string {
 
 // Create or update user information request | 创建或更新用户信息
 type CreateOrUpdateUserReq struct {
-	ID        *int64   `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	Avatar    *string  `thrift:"avatar,2,optional" form:"avatar" json:"avatar" query:"avatar"`
-	Mobile    *string  `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
-	Status    *int64   `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
-	Name      *string  `thrift:"name,7,optional" form:"name" json:"name" query:"name"`
-	Gender    *string  `thrift:"gender,8,optional" form:"gender" json:"gender" query:"gender"`
-	RoleId    *int64   `thrift:"roleId,9,optional" form:"roleId" json:"roleId" query:"roleId"`
-	CreateId  *int64   `thrift:"createId,10,optional" form:"createId" json:"createId" query:"createId"`
-	Password  *string  `thrift:"password,12,optional" form:"password" json:"password" query:"password"`
-	Username  *string  `thrift:"username,13,optional" form:"username" json:"username" query:"username"`
+	ID        int64    `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	Avatar    string   `thrift:"avatar,2,optional" form:"avatar" json:"avatar" query:"avatar"`
+	Mobile    string   `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Status    int64    `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
+	Name      string   `thrift:"name,7,optional" form:"name" json:"name" query:"name"`
+	Gender    string   `thrift:"gender,8,optional" form:"gender" json:"gender" query:"gender"`
+	RoleId    int64    `thrift:"roleId,9,optional" form:"roleId" json:"roleId" query:"roleId"`
+	CreateId  int64    `thrift:"createId,10,optional" form:"createId" json:"createId" query:"createId"`
+	Password  string   `thrift:"password,12,optional" form:"password" json:"password" query:"password"`
+	Username  string   `thrift:"username,13,optional" form:"username" json:"username" query:"username"`
 	Functions []string `thrift:"functions,14,optional" form:"functions" json:"functions" query:"functions"`
-	Detail    *string  `thrift:"detail,15,optional" form:"detail" json:"detail" query:"detail"`
-	JobTime   *int64   `thrift:"jobTime,16,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
+	Detail    string   `thrift:"detail,15,optional" form:"detail" json:"detail" query:"detail"`
+	JobTime   int64    `thrift:"jobTime,16,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
 	UserTags  []int64  `thrift:"userTags,18,optional" form:"userTags" json:"userTags" query:"userTags"`
 }
 
 func NewCreateOrUpdateUserReq() *CreateOrUpdateUserReq {
-	return &CreateOrUpdateUserReq{}
+	return &CreateOrUpdateUserReq{
+
+		ID:       0,
+		Avatar:   "",
+		Mobile:   "",
+		Status:   1,
+		Name:     "",
+		Gender:   "",
+		RoleId:   0,
+		CreateId: 0,
+		Password: "",
+		Username: "",
+		Detail:   "",
+		JobTime:  0,
+	}
 }
 
 func (p *CreateOrUpdateUserReq) InitDefault() {
+	p.ID = 0
+	p.Avatar = ""
+	p.Mobile = ""
+	p.Status = 1
+	p.Name = ""
+	p.Gender = ""
+	p.RoleId = 0
+	p.CreateId = 0
+	p.Password = ""
+	p.Username = ""
+	p.Detail = ""
+	p.JobTime = 0
 }
 
-var CreateOrUpdateUserReq_ID_DEFAULT int64
+var CreateOrUpdateUserReq_ID_DEFAULT int64 = 0
 
 func (p *CreateOrUpdateUserReq) GetID() (v int64) {
 	if !p.IsSetID() {
 		return CreateOrUpdateUserReq_ID_DEFAULT
 	}
-	return *p.ID
+	return p.ID
 }
 
-var CreateOrUpdateUserReq_Avatar_DEFAULT string
+var CreateOrUpdateUserReq_Avatar_DEFAULT string = ""
 
 func (p *CreateOrUpdateUserReq) GetAvatar() (v string) {
 	if !p.IsSetAvatar() {
 		return CreateOrUpdateUserReq_Avatar_DEFAULT
 	}
-	return *p.Avatar
+	return p.Avatar
 }
 
-var CreateOrUpdateUserReq_Mobile_DEFAULT string
+var CreateOrUpdateUserReq_Mobile_DEFAULT string = ""
 
 func (p *CreateOrUpdateUserReq) GetMobile() (v string) {
 	if !p.IsSetMobile() {
 		return CreateOrUpdateUserReq_Mobile_DEFAULT
 	}
-	return *p.Mobile
+	return p.Mobile
 }
 
-var CreateOrUpdateUserReq_Status_DEFAULT int64
+var CreateOrUpdateUserReq_Status_DEFAULT int64 = 1
 
 func (p *CreateOrUpdateUserReq) GetStatus() (v int64) {
 	if !p.IsSetStatus() {
 		return CreateOrUpdateUserReq_Status_DEFAULT
 	}
-	return *p.Status
+	return p.Status
 }
 
-var CreateOrUpdateUserReq_Name_DEFAULT string
+var CreateOrUpdateUserReq_Name_DEFAULT string = ""
 
 func (p *CreateOrUpdateUserReq) GetName() (v string) {
 	if !p.IsSetName() {
 		return CreateOrUpdateUserReq_Name_DEFAULT
 	}
-	return *p.Name
+	return p.Name
 }
 
-var CreateOrUpdateUserReq_Gender_DEFAULT string
+var CreateOrUpdateUserReq_Gender_DEFAULT string = ""
 
 func (p *CreateOrUpdateUserReq) GetGender() (v string) {
 	if !p.IsSetGender() {
 		return CreateOrUpdateUserReq_Gender_DEFAULT
 	}
-	return *p.Gender
+	return p.Gender
 }
 
-var CreateOrUpdateUserReq_RoleId_DEFAULT int64
+var CreateOrUpdateUserReq_RoleId_DEFAULT int64 = 0
 
 func (p *CreateOrUpdateUserReq) GetRoleId() (v int64) {
 	if !p.IsSetRoleId() {
 		return CreateOrUpdateUserReq_RoleId_DEFAULT
 	}
-	return *p.RoleId
+	return p.RoleId
 }
 
-var CreateOrUpdateUserReq_CreateId_DEFAULT int64
+var CreateOrUpdateUserReq_CreateId_DEFAULT int64 = 0
 
 func (p *CreateOrUpdateUserReq) GetCreateId() (v int64) {
 	if !p.IsSetCreateId() {
 		return CreateOrUpdateUserReq_CreateId_DEFAULT
 	}
-	return *p.CreateId
+	return p.CreateId
 }
 
-var CreateOrUpdateUserReq_Password_DEFAULT string
+var CreateOrUpdateUserReq_Password_DEFAULT string = ""
 
 func (p *CreateOrUpdateUserReq) GetPassword() (v string) {
 	if !p.IsSetPassword() {
 		return CreateOrUpdateUserReq_Password_DEFAULT
 	}
-	return *p.Password
+	return p.Password
 }
 
-var CreateOrUpdateUserReq_Username_DEFAULT string
+var CreateOrUpdateUserReq_Username_DEFAULT string = ""
 
 func (p *CreateOrUpdateUserReq) GetUsername() (v string) {
 	if !p.IsSetUsername() {
 		return CreateOrUpdateUserReq_Username_DEFAULT
 	}
-	return *p.Username
+	return p.Username
 }
 
 var CreateOrUpdateUserReq_Functions_DEFAULT []string
@@ -2279,22 +2305,22 @@ func (p *CreateOrUpdateUserReq) GetFunctions() (v []string) {
 	return p.Functions
 }
 
-var CreateOrUpdateUserReq_Detail_DEFAULT string
+var CreateOrUpdateUserReq_Detail_DEFAULT string = ""
 
 func (p *CreateOrUpdateUserReq) GetDetail() (v string) {
 	if !p.IsSetDetail() {
 		return CreateOrUpdateUserReq_Detail_DEFAULT
 	}
-	return *p.Detail
+	return p.Detail
 }
 
-var CreateOrUpdateUserReq_JobTime_DEFAULT int64
+var CreateOrUpdateUserReq_JobTime_DEFAULT int64 = 0
 
 func (p *CreateOrUpdateUserReq) GetJobTime() (v int64) {
 	if !p.IsSetJobTime() {
 		return CreateOrUpdateUserReq_JobTime_DEFAULT
 	}
-	return *p.JobTime
+	return p.JobTime
 }
 
 var CreateOrUpdateUserReq_UserTags_DEFAULT []int64
@@ -2324,43 +2350,43 @@ var fieldIDToName_CreateOrUpdateUserReq = map[int16]string{
 }
 
 func (p *CreateOrUpdateUserReq) IsSetID() bool {
-	return p.ID != nil
+	return p.ID != CreateOrUpdateUserReq_ID_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetAvatar() bool {
-	return p.Avatar != nil
+	return p.Avatar != CreateOrUpdateUserReq_Avatar_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetMobile() bool {
-	return p.Mobile != nil
+	return p.Mobile != CreateOrUpdateUserReq_Mobile_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetStatus() bool {
-	return p.Status != nil
+	return p.Status != CreateOrUpdateUserReq_Status_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetName() bool {
-	return p.Name != nil
+	return p.Name != CreateOrUpdateUserReq_Name_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetGender() bool {
-	return p.Gender != nil
+	return p.Gender != CreateOrUpdateUserReq_Gender_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetRoleId() bool {
-	return p.RoleId != nil
+	return p.RoleId != CreateOrUpdateUserReq_RoleId_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetCreateId() bool {
-	return p.CreateId != nil
+	return p.CreateId != CreateOrUpdateUserReq_CreateId_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetPassword() bool {
-	return p.Password != nil
+	return p.Password != CreateOrUpdateUserReq_Password_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetUsername() bool {
-	return p.Username != nil
+	return p.Username != CreateOrUpdateUserReq_Username_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetFunctions() bool {
@@ -2368,11 +2394,11 @@ func (p *CreateOrUpdateUserReq) IsSetFunctions() bool {
 }
 
 func (p *CreateOrUpdateUserReq) IsSetDetail() bool {
-	return p.Detail != nil
+	return p.Detail != CreateOrUpdateUserReq_Detail_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetJobTime() bool {
-	return p.JobTime != nil
+	return p.JobTime != CreateOrUpdateUserReq_JobTime_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) IsSetUserTags() bool {
@@ -2541,110 +2567,110 @@ ReadStructEndError:
 
 func (p *CreateOrUpdateUserReq) ReadField1(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.ID = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField2(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Avatar = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField4(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Mobile = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField6(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Status = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField7(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Name = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField8(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Gender = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField9(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.RoleId = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField10(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.CreateId = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField12(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Password = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField13(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Username = _field
 	return nil
@@ -2674,22 +2700,22 @@ func (p *CreateOrUpdateUserReq) ReadField14(iprot thrift.TProtocol) error {
 }
 func (p *CreateOrUpdateUserReq) ReadField15(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Detail = _field
 	return nil
 }
 func (p *CreateOrUpdateUserReq) ReadField16(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.JobTime = _field
 	return nil
@@ -2803,7 +2829,7 @@ func (p *CreateOrUpdateUserReq) writeField1(oprot thrift.TProtocol) (err error) 
 		if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.ID); err != nil {
+		if err := oprot.WriteI64(p.ID); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2822,7 +2848,7 @@ func (p *CreateOrUpdateUserReq) writeField2(oprot thrift.TProtocol) (err error) 
 		if err = oprot.WriteFieldBegin("avatar", thrift.STRING, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Avatar); err != nil {
+		if err := oprot.WriteString(p.Avatar); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2841,7 +2867,7 @@ func (p *CreateOrUpdateUserReq) writeField4(oprot thrift.TProtocol) (err error) 
 		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 4); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Mobile); err != nil {
+		if err := oprot.WriteString(p.Mobile); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2860,7 +2886,7 @@ func (p *CreateOrUpdateUserReq) writeField6(oprot thrift.TProtocol) (err error) 
 		if err = oprot.WriteFieldBegin("status", thrift.I64, 6); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Status); err != nil {
+		if err := oprot.WriteI64(p.Status); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2879,7 +2905,7 @@ func (p *CreateOrUpdateUserReq) writeField7(oprot thrift.TProtocol) (err error) 
 		if err = oprot.WriteFieldBegin("name", thrift.STRING, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Name); err != nil {
+		if err := oprot.WriteString(p.Name); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2898,7 +2924,7 @@ func (p *CreateOrUpdateUserReq) writeField8(oprot thrift.TProtocol) (err error) 
 		if err = oprot.WriteFieldBegin("gender", thrift.STRING, 8); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Gender); err != nil {
+		if err := oprot.WriteString(p.Gender); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2917,7 +2943,7 @@ func (p *CreateOrUpdateUserReq) writeField9(oprot thrift.TProtocol) (err error) 
 		if err = oprot.WriteFieldBegin("roleId", thrift.I64, 9); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.RoleId); err != nil {
+		if err := oprot.WriteI64(p.RoleId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2936,7 +2962,7 @@ func (p *CreateOrUpdateUserReq) writeField10(oprot thrift.TProtocol) (err error)
 		if err = oprot.WriteFieldBegin("createId", thrift.I64, 10); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.CreateId); err != nil {
+		if err := oprot.WriteI64(p.CreateId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2955,7 +2981,7 @@ func (p *CreateOrUpdateUserReq) writeField12(oprot thrift.TProtocol) (err error)
 		if err = oprot.WriteFieldBegin("password", thrift.STRING, 12); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Password); err != nil {
+		if err := oprot.WriteString(p.Password); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -2974,7 +3000,7 @@ func (p *CreateOrUpdateUserReq) writeField13(oprot thrift.TProtocol) (err error)
 		if err = oprot.WriteFieldBegin("username", thrift.STRING, 13); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Username); err != nil {
+		if err := oprot.WriteString(p.Username); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -3020,7 +3046,7 @@ func (p *CreateOrUpdateUserReq) writeField15(oprot thrift.TProtocol) (err error)
 		if err = oprot.WriteFieldBegin("detail", thrift.STRING, 15); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Detail); err != nil {
+		if err := oprot.WriteString(p.Detail); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -3039,7 +3065,7 @@ func (p *CreateOrUpdateUserReq) writeField16(oprot thrift.TProtocol) (err error)
 		if err = oprot.WriteFieldBegin("jobTime", thrift.I64, 16); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.JobTime); err != nil {
+		if err := oprot.WriteI64(p.JobTime); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

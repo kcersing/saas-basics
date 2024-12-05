@@ -15,6 +15,7 @@ import (
 )
 
 // CreateDictionary .
+//
 //	@Summary		创建字典 Summary
 //	@Description	创建字典 Description
 //	@Param			request	body		dictionary.DictionaryInfo	true	"query params"
@@ -39,6 +40,7 @@ func CreateDictionary(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateDictionary .
+//
 //	@Summary		更新字典 Summary
 //	@Description	更新字典 Description
 //	@Param			request	body		dictionary.DictionaryInfo	true	"query params"
@@ -63,6 +65,7 @@ func UpdateDictionary(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteDictionary .
+//
 //	@Summary		删除字典 Summary
 //	@Description	删除字典 Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -87,6 +90,7 @@ func DeleteDictionary(ctx context.Context, c *app.RequestContext) {
 }
 
 // DictionaryList .
+//
 //	@Summary		字典列表 Summary
 //	@Description	字典列表 Description
 //	@Param			request	body		dictionary.DictListReq	true	"query params"
@@ -113,6 +117,7 @@ func DictionaryList(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateDictionaryDetail .
+//
 //	@Summary		创建字典字段 Summary
 //	@Description	创建字典字段 Description
 //	@Param			request	body		dictionary.DictionaryDetail	true	"query params"
@@ -138,6 +143,7 @@ func CreateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateDictionaryDetail .
+//
 //	@Summary		更新字典字段 Summary
 //	@Description	更新字典字段 Description
 //	@Param			request	body		dictionary.DictionaryDetail	true	"query params"
@@ -162,6 +168,7 @@ func UpdateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteDictionaryDetail .
+//
 //	@Summary		删除字典字段 Summary
 //	@Description	删除字典字段 Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -186,6 +193,7 @@ func DeleteDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // DetailByDictionaryList .
+//
 //	@Summary		字典字段列表 Summary
 //	@Description	字典字段列表 Description
 //	@Param			request	body		dictionary.DetailListReq	true	"query params"

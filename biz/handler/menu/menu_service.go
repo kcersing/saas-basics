@@ -17,6 +17,7 @@ import (
 )
 
 // MenuAuth .
+//
 //	@Summary		获取角色菜单权限 Summary
 //	@Description	获取角色菜单权限 Description
 //	@Param			request	body		base.IDReq	true	"id是取得roleId"
@@ -44,6 +45,7 @@ func MenuAuth(ctx context.Context, c *app.RequestContext) {
 }
 
 // ApiList .
+//
 //	@Summary		获取api列表 Summary
 //	@Description	获取api列表 Description
 //	@Param			request	body		menu.ApiPageReq	true	"query params"
@@ -68,6 +70,7 @@ func ApiList(ctx context.Context, c *app.RequestContext) {
 }
 
 // ApiTree .
+//
 //	@Summary		获取api树 Summary
 //	@Description	获取api树 Description
 //	@Param			request	body		menu.ApiPageReq	true	"query params"
@@ -92,6 +95,7 @@ func ApiTree(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuLists .
+//
 //	@Summary		获取菜单列表 Summary
 //	@Description	获取菜单列表 Description
 //	@Param			request	body		menu.ApiPageReq	true	"query params"
@@ -118,6 +122,7 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuTree .
+//
 //	@Summary		获取菜单树 Summary
 //	@Description	获取菜单树 Description
 //	@Param			request	body		menu.ApiPageReq	true	"query params"
@@ -144,6 +149,7 @@ func MenuTree(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuRole .
+//
 //	@Summary		获取角色菜单权限 Summary
 //	@Description	获取角色菜单权限 （和 /service/auth/menu/role 重复 但是这个是通过token获取 无传值） Description
 //	@Success		200	{object}	utils.Response
@@ -171,6 +177,7 @@ func MenuRole(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateApi .
+//
 //	@Summary		创建IPA Summary
 //	@Description	创建IPA Description
 //	@Param			request	body		menu.ApiInfo	true	"query params"
@@ -194,6 +201,7 @@ func CreateApi(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateApi .
+//
 //	@Summary		更新IPA Summary
 //	@Description	更新IPA Description
 //	@Param			request	body		menu.ApiInfo	true	"query params"
@@ -218,6 +226,7 @@ func UpdateApi(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteApi .
+//
 //	@router	/service/api [POST]
 func DeleteApi(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -238,6 +247,7 @@ func DeleteApi(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateMenu .
+//
 //	@Summary		创建菜单 Summary
 //	@Description	创建菜单 Description
 //	@Param			request	body		menu.CreateOrUpdateMenuReq	true	"query params"
@@ -262,6 +272,7 @@ func CreateMenu(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMenu .
+//
 //	@Summary		更新菜单 Summary
 //	@Description	更新菜单 Description
 //	@Param			request	body		menu.CreateOrUpdateMenuReq	true	"query params"
@@ -286,6 +297,7 @@ func UpdateMenu(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteMenu .
+//
 //	@Summary		删除菜单 Summary
 //	@Description	删除菜单 Description
 //	@Param			request	body		menu.CreateOrUpdateMenuReq	true	"query params"
@@ -310,6 +322,7 @@ func DeleteMenu(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuInfo .
+//
 //	@router	/service/menu/info [POST]
 func MenuInfo(ctx context.Context, c *app.RequestContext) {
 	var err error

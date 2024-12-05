@@ -37,8 +37,8 @@ struct Ids{
     1: list<i64> ids,
 }
 struct PageInfoReq{
-    1: i64 page,
-    2: i64 pageSize,
+    1: i64 page=1,
+    2: i64 pageSize=100,
 }
 
 struct StatusCodeReq {

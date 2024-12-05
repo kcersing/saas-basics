@@ -68,7 +68,7 @@ func (m Member) entMemberContractInfo(v ent.MemberContract) *member.MemberContra
 		MemberId:   &v.MemberID,
 		MemberName: &mInfo.Name,
 		VenueId:    &v.VenueID,
-		VenueName:  vInfo.Name,
+		VenueName:  &vInfo.Name,
 		//MemberProductId:   &v.MemberProductID,
 		//MemberProductName: nil,
 		ContractId: &v.ContractID,
@@ -112,12 +112,12 @@ func NewMember(ctx context.Context, c *app.RequestContext) do.Member {
 
 func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 
-	parsedTime, _ := time.Parse(time.DateOnly, *req.Birthday)
+	parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
 
 	var gender int64
-	if *req.Gender == "女性" {
+	if req.Gender == "女性" {
 		gender = 0
-	} else if *req.Gender == "男性" {
+	} else if req.Gender == "男性" {
 		gender = 1
 	} else {
 		gender = 2
@@ -129,15 +129,15 @@ func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 	}
 
 	mer := tx.Member.Create().
-		SetAvatar(*req.Avatar).
-		SetMobile(*req.Mobile).
-		SetNickname(*req.Name).
-		SetStatus(*req.Status).
-		SetName(*req.Name).
+		SetAvatar(req.Avatar).
+		SetMobile(req.Mobile).
+		SetNickname(req.Name).
+		SetStatus(req.Status).
+		SetName(req.Name).
 		SetCondition(0)
 
-	if *req.Password != "" {
-		password, _ := encrypt.Crypt(*req.Mobile)
+	if req.Password != "" {
+		password, _ := encrypt.Crypt(req.Mobile)
 		mer.SetPassword(password)
 	}
 	noe, err := mer.Save(m.ctx)
@@ -148,9 +148,9 @@ func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 	}
 
 	_, err = tx.MemberDetails.Create().
-		SetEmail(*req.Email).
-		SetWecom(*req.Wecom).
-		SetCreateID(*req.CreateId).
+		SetEmail(req.Email).
+		SetWecom(req.Wecom).
+		SetCreateID(req.CreateId).
 		SetGender(gender).
 		SetBirthday(parsedTime).
 		SetInfo(noe).
@@ -183,13 +183,13 @@ func (m Member) UpdateMember(req member.CreateOrUpdateMemberReq) error {
 		return errors.Wrap(err, "starting a transaction:")
 	}
 	up := tx.Member.Update().
-		Where(member2.IDEQ(*req.ID)).
-		SetAvatar(*req.Avatar).
-		SetStatus(*req.Status).
-		SetMobile(*req.Mobile)
+		Where(member2.IDEQ(req.ID)).
+		SetAvatar(req.Avatar).
+		SetStatus(req.Status).
+		SetMobile(req.Mobile)
 
-	if *req.Password != "" {
-		password, _ := encrypt.Crypt(*req.Password)
+	if req.Password != "" {
+		password, _ := encrypt.Crypt(req.Password)
 		up.SetPassword(password)
 	}
 
@@ -200,8 +200,8 @@ func (m Member) UpdateMember(req member.CreateOrUpdateMemberReq) error {
 	}
 
 	_, err = tx.MemberDetails.Update().
-		Where(memberdetails.MemberIDEQ(*req.ID)).
-		SetEmail(*req.Email).
+		Where(memberdetails.MemberIDEQ(req.ID)).
+		SetEmail(req.Email).
 		Save(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create user failed")

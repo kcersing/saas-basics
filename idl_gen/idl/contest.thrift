@@ -47,11 +47,11 @@ struct ParticipantListReq{
     6:  optional i64 contestId=0 (api.raw = "contestId")
 }
 struct ParticipantInfo{
-    1:  optional i64 id (api.raw = "id")
-    2:  optional i64 contestId (api.raw = "contestId")
-    3:  optional string fields (api.raw = "fields")
-    4:  optional string name (api.raw = "name")
-    5:  optional string mobile (api.raw = "mobile")
+    1:  optional i64 id=0 (api.raw = "id")
+    2:  optional i64 contestId=0 (api.raw = "contestId")
+    3:  optional string fields="" (api.raw = "fields")
+    4:  optional string name="" (api.raw = "name")
+    5:  optional string mobile="" (api.raw = "mobile")
 }
 struct ContestInfo{
     1:  optional i64 id=0 (api.raw = "id")

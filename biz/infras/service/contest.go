@@ -213,10 +213,10 @@ func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 	}
 
 	cont := tx.ContestParticipant.Create().
-		SetName(*req.Name).
-		SetContestID(*req.ContestId).
-		SetMobile(*req.Mobile).
-		SetFields(*req.Fields)
+		SetName(req.Name).
+		SetContestID(req.ContestId).
+		SetMobile(req.Mobile).
+		SetFields(req.Fields)
 	_, err = cont.Save(c.ctx)
 	if err = tx.Commit(); err != nil {
 		return err
@@ -231,11 +231,11 @@ func (c Contest) UpdateParticipant(req contest.ParticipantInfo) error {
 	}
 
 	cont := tx.ContestParticipant.Update().
-		Where(contestparticipant.IDEQ(*req.ID)).
-		SetContestID(*req.ContestId).
-		SetName(*req.Name).
-		SetMobile(*req.Mobile).
-		SetFields(*req.Fields)
+		Where(contestparticipant.IDEQ(req.ID)).
+		SetContestID(req.ContestId).
+		SetName(req.Name).
+		SetMobile(req.Mobile).
+		SetFields(req.Fields)
 	_, err = cont.Save(c.ctx)
 	if err = tx.Commit(); err != nil {
 		return err
@@ -259,13 +259,13 @@ func (c Contest) ParticipantInfo(id int64) (resp *contest.ParticipantInfo, err e
 	}
 	participantEnt, err := c.db.ContestParticipant.Query().Where(contestparticipant.IDEQ(id)).First(c.ctx)
 
-	resp.ID = &participantEnt.ID
-	resp.Name = &participantEnt.Name
-	resp.Mobile = &participantEnt.Mobile
-	resp.Fields = &participantEnt.Fields
-	resp.ContestId = &participantEnt.ContestID
+	resp.ID = participantEnt.ID
+	resp.Name = participantEnt.Name
+	resp.Mobile = participantEnt.Mobile
+	resp.Fields = participantEnt.Fields
+	resp.ContestId = participantEnt.ContestID
 
-	c.cache.SetWithTTL("participantInfo"+strconv.Itoa(int(*resp.ID)), &resp, 1, 1*time.Hour)
+	c.cache.SetWithTTL("participantInfo"+strconv.Itoa(int(resp.ID)), &resp, 1, 1*time.Hour)
 	return
 }
 
@@ -291,11 +291,11 @@ func (c Contest) ParticipantList(req contest.ParticipantListReq) (resp []*contes
 
 	for _, v := range lists {
 		resp = append(resp, &contest.ParticipantInfo{
-			ID:        &v.ID,
-			Name:      &v.Name,
-			Mobile:    &v.Mobile,
-			Fields:    &v.Fields,
-			ContestId: &v.ContestID,
+			ID:        v.ID,
+			Name:      v.Name,
+			Mobile:    v.Mobile,
+			Fields:    v.Fields,
+			ContestId: v.ContestID,
 		})
 	}
 

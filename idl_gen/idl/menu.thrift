@@ -88,25 +88,25 @@ struct Meta {
 
 // 创建或更新菜单信息参数
 struct CreateOrUpdateMenuReq {
-    1:  i64 id (api.raw = "id" )
-    2:  string name (api.raw = "name" api.vd = "len($) > 0 && len($) < 33>")
-    3:  i64 parentId (api.raw = "parentId")
-    4:  i64 level (api.raw = "level")
-    5:  string path (api.raw = "path")
-    6:  string redirect (api.raw = "redirect")
-    7:  string component (api.raw = "component")
-    8:  i64 menuType (api.raw = "menuType")
-    9:  bool hidden (api.raw = "hidden")
-    10:  i64 sort (api.raw = "sort")
-    12:  i64 status (api.raw = "status")
-    13:  string url (api.raw = "url")
+    1:  i64 id =0(api.raw = "id" )
+    2:  string name="" (api.raw = "name" api.vd = "len($) > 0 && len($) < 33>")
+    3:  i64 parentId=0 (api.raw = "parentId")
+    4:  i64 level=0 (api.raw = "level")
+    5:  string path="" (api.raw = "path")
+    6:  string redirect="" (api.raw = "redirect")
+    7:  string component="" (api.raw = "component")
+    8:  i64 menuType=0 (api.raw = "menuType")
+    9:  bool hidden=true (api.raw = "hidden")
+    10:  i64 sort=0 (api.raw = "sort")
+    12:  i64 status=1 (api.raw = "status")
+    13:  string url="" (api.raw = "url")
 
     //meta
-       14:  string title (api.raw = "title" )
-       15:  string icon (api.raw = "icon" )
-       16:  string activeMenu (api.raw = "activeMenu" )
-       17:  bool affix (api.raw = "affix" )
-       18:  bool noCache (api.raw = "noCache" )
+       14:  string title="" (api.raw = "title" )
+       15:  string icon="" (api.raw = "icon" )
+       16:  string activeMenu="" (api.raw = "activeMenu" )
+       17:  bool affix=true (api.raw = "affix" )
+       18:  bool noCache=true (api.raw = "noCache" )
 
 
 }

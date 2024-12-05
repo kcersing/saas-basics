@@ -4,24 +4,24 @@ include "../base/base.thrift"
 
 // 字典信息
 struct DictionaryInfo {
-    1:  i64 id (api.raw = "id" )
-    2:  string title (api.raw = "title" )
-    3:  string name (api.raw = "name" )
-    5:  i64 status (api.raw = "status" )
-    6:  string description (api.raw = "description" )
-    7:  string createdAt (api.raw = "createdAt" )
-    8:  string updatedAt (api.raw = "updatedAt" )
+    1:  i64 id=0 (api.raw = "id" )
+    2:  string title="" (api.raw = "title" )
+    3:  string name="" (api.raw = "name" )
+    5:  i64 status=1 (api.raw = "status" )
+    6:  string description="" (api.raw = "description" )
+    7:  string createdAt="" (api.raw = "createdAt" )
+    8:  string updatedAt="" (api.raw = "updatedAt" )
 }
 
 // 字典键值信息
 struct DictionaryDetail {
-    1:  i64 id (api.raw = "id" )
-    2:  string title (api.raw = "title" )
-    3:  string key (api.raw = "key" )
-    4:  string value (api.raw = "value" )
-    5:  i64 status (api.raw = "status" )
-    6:  string createdAt (api.raw = "createdAt" )
-    7:  string updatedAt (api.raw = "updatedAt" )
+    1:  i64 id=0 (api.raw = "id" )
+    2:  string title="" (api.raw = "title" )
+    3:  string key="" (api.raw = "key" )
+    4:  string value="" (api.raw = "value" )
+    5:  i64 status=1 (api.raw = "status" )
+    6:  string createdAt="" (api.raw = "createdAt" )
+    7:  string updatedAt="" (api.raw = "updatedAt" )
     8:  i64 parentID (api.raw = "parentID" )
 }
 // 字典列表请求数据

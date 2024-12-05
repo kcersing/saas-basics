@@ -58,19 +58,19 @@ struct ChangePasswordReq {
 
 // Create or update user information request | 创建或更新用户信息
 struct CreateOrUpdateUserReq {
-    1:  optional i64 id (api.raw = "id")
-    2:  optional string avatar (api.raw = "avatar")
-    4:  optional string mobile (api.raw = "mobile")
-    6:  optional i64 status (api.raw = "status")
-    7:  optional string name (api.raw = "name")
-    8:  optional string gender (api.raw = "gender")
-    9:  optional i64 roleId (api.raw = "roleId")
-    10: optional i64 createId (api.raw = "createId")
-    12: optional string password (api.raw = "password")
-    13:  optional string username (api.raw = "username")
+    1:  optional i64 id=0 (api.raw = "id")
+    2:  optional string avatar="" (api.raw = "avatar")
+    4:  optional string mobile="" (api.raw = "mobile")
+    6:  optional i64 status=1 (api.raw = "status")
+    7:  optional string name="" (api.raw = "name")
+    8:  optional string gender="" (api.raw = "gender")
+    9:  optional i64 roleId=0 (api.raw = "roleId")
+    10: optional i64 createId=0 (api.raw = "createId")
+    12: optional string password="" (api.raw = "password")
+    13:  optional string username="" (api.raw = "username")
     14:  optional list<string> functions (api.raw = "functions")
-    15:  optional string detail (api.raw = "detail")
-    16:  optional i64 jobTime (api.raw = "jobTime")
+    15:  optional string detail="" (api.raw = "detail")
+    16:  optional i64 jobTime=0 (api.raw = "jobTime")
     18: optional list<i64> userTags (api.raw = "userTags")
 }
 

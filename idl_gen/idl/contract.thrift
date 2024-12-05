@@ -9,10 +9,10 @@ struct ContractListReq {
     4: optional string status = ""(api.raw = "status")
 }
 struct CreateOrUpdateContractReq {
-    1:  optional i64 id (api.raw = "id")
-    2:  optional string name (api.raw = "name")
-    3:  optional i64 status (api.raw = "status")
-    4:  optional string content (api.raw = "content")
+    1:  optional i64 id=0 (api.raw = "id")
+    2:  optional string name="" (api.raw = "name")
+    3:  optional i64 status=1 (api.raw = "status")
+    4:  optional string content="" (api.raw = "content")
 }
 
 struct ContractInfo{

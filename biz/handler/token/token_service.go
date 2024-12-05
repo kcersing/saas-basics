@@ -15,6 +15,7 @@ import (
 )
 
 // UpdateToken .
+//
 //	@Summary		更新token Summary
 //	@Description	更新token Description
 //	@Param			request	body		token.TokenInfo	true	"query params"
@@ -39,6 +40,7 @@ func UpdateToken(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteToken .
+//
 //	@Summary		删除token Summary
 //	@Description	删除token Description
 //	@Param			request	body		base.IDReq	true	"query params"
@@ -62,6 +64,7 @@ func DeleteToken(ctx context.Context, c *app.RequestContext) {
 }
 
 // TokenList .
+//
 //	@Summary		token列表 Summary
 //	@Description	token列表 Description
 //	@Param			request	body		token.TokenListReq	true	"query params"

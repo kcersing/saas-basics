@@ -15,6 +15,7 @@ import (
 )
 
 // CreateEntry .
+//
 //	@Summary		创建进场记录 Summary
 //	@Description	创建进场记录 Description
 //	@Param			request	body		entry.CreateEntry	true	"query params"
@@ -35,6 +36,7 @@ func CreateEntry(ctx context.Context, c *app.RequestContext) {
 }
 
 // EntryList .
+//
 //	@Summary		进场记录列表 Summary
 //	@Description	进场记录列表 Description
 //	@Param			request	body		entry.EntryListReq	true	"query params"
