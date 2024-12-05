@@ -15,11 +15,11 @@ import (
 )
 
 // ContractList .
-// @Summary  合同列表 Summary
-// @Description 合同列表 Description
-// @Param request body contract.ContractListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/contract/list [POST]
+//	@Summary		合同列表 Summary
+//	@Description	合同列表 Description
+//	@Param			request	body		contract.ContractListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/contract/list [POST]
 func ContractList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contract.ContractListReq
@@ -39,11 +39,11 @@ func ContractList(ctx context.Context, c *app.RequestContext) {
 }
 
 // ContractCreate .
-// @Summary  创建合同 Summary
-// @Description 创建合同 Description
-// @Param request body contract.CreateOrUpdateContractReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/contract/create [POST]
+//	@Summary		创建合同 Summary
+//	@Description	创建合同 Description
+//	@Param			request	body		contract.CreateOrUpdateContractReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/contract/create [POST]
 func ContractCreate(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contract.CreateOrUpdateContractReq
@@ -63,11 +63,11 @@ func ContractCreate(ctx context.Context, c *app.RequestContext) {
 }
 
 // ContractUpdate .
-// @Summary  更新合同 Summary
-// @Description 更新合同 Description
-// @Param request body contract.CreateOrUpdateContractReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/contract/update [POST]
+//	@Summary		更新合同 Summary
+//	@Description	更新合同 Description
+//	@Param			request	body		contract.CreateOrUpdateContractReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/contract/update [POST]
 func ContractUpdate(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contract.CreateOrUpdateContractReq
@@ -87,11 +87,11 @@ func ContractUpdate(ctx context.Context, c *app.RequestContext) {
 }
 
 // ContractUpdateStatus .
-// @Summary  更新合同状态 Summary
-// @Description 更新合同状态 Description
-// @Param request body base.StatusCodeReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/contract/status [POST]
+//	@Summary		更新合同状态 Summary
+//	@Description	更新合同状态 Description
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/contract/status [POST]
 func ContractUpdateStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.StatusCodeReq
@@ -111,11 +111,11 @@ func ContractUpdateStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // ContractByID .
-// @Summary  获取合同信息 Summary
-// @Description 获取合同信息 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/contract [POST]
+//	@Summary		获取合同信息 Summary
+//	@Description	获取合同信息 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/contract [POST]
 func ContractByID(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq

@@ -823,23 +823,23 @@ paths:
       summary: 获取验证码 Summary
   /service/contest/create:
     post:
-      description: 添加参赛人 Description
+      description: 创建比赛 Description
       parameters:
       - description: query params
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/contest.ParticipantInfo'
+          $ref: '#/definitions/contest.ContestInfo'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 添加参赛人 Summary
+      summary: 创建比赛 Summary
   /service/contest/info:
     post:
-      description: 参赛人信息 Description
+      description: 比赛信息 Description
       parameters:
       - description: query params
         in: body
@@ -852,26 +852,26 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 参赛人信息 Summary
+      summary: 比赛信息 Summary
   /service/contest/list:
     post:
-      description: 参赛人列表 Description
+      description: 比赛列表 Description
       parameters:
       - description: query params
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/contest.ParticipantListReq'
+          $ref: '#/definitions/contest.ContestListReq'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 参赛人列表 Summary
+      summary: 比赛列表 Summary
   /service/contest/status:
     post:
-      description: 更新参赛人状态 Description
+      description: 更新比赛状态 Description
       parameters:
       - description: query params
         in: body
@@ -884,23 +884,23 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 更新参赛人状态 Summary
+      summary: 更新比赛状态 Summary
   /service/contest/update:
     post:
-      description: 更新参赛人 Description
+      description: 更新比赛 Description
       parameters:
       - description: query params
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/contest.ParticipantInfo'
+          $ref: '#/definitions/contest.ContestInfo'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 更新参赛人 Summary
+      summary: 更新比赛 Summary
   /service/contract:
     post:
       description: 获取合同信息 Description
@@ -1508,6 +1508,86 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新菜单 Summary
+  /service/participant/create:
+    post:
+      description: 添加参赛人 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contest.ParticipantInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 添加参赛人 Summary
+  /service/participant/info:
+    post:
+      description: 参赛人信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 参赛人信息 Summary
+  /service/participant/list:
+    post:
+      description: 参赛人列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contest.ParticipantListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 参赛人列表 Summary
+  /service/participant/status:
+    post:
+      description: 更新参赛人状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新参赛人状态 Summary
+  /service/participant/update:
+    post:
+      description: 更新参赛人 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contest.ParticipantInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新参赛人 Summary
   /service/place/create:
     post:
       description: 创建场地 Description

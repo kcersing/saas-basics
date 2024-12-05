@@ -17,11 +17,11 @@ import (
 )
 
 // MenuAuth .
-// @Summary  获取角色菜单权限 Summary
-// @Description 获取角色菜单权限 Description
-// @Param request body base.IDReq true "id是取得roleId"
-// @Success      200  {object}  utils.Response
-// @router /service/auth/menu/role [POST]
+//	@Summary		获取角色菜单权限 Summary
+//	@Description	获取角色菜单权限 Description
+//	@Param			request	body		base.IDReq	true	"id是取得roleId"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/auth/menu/role [POST]
 func MenuAuth(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -44,11 +44,11 @@ func MenuAuth(ctx context.Context, c *app.RequestContext) {
 }
 
 // ApiList .
-// @Summary  获取api列表 Summary
-// @Description 获取api列表 Description
-// @Param request body menu.ApiPageReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/api/list [POST]
+//	@Summary		获取api列表 Summary
+//	@Description	获取api列表 Description
+//	@Param			request	body		menu.ApiPageReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/api/list [POST]
 func ApiList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req menu.ApiPageReq
@@ -68,11 +68,11 @@ func ApiList(ctx context.Context, c *app.RequestContext) {
 }
 
 // ApiTree .
-// @Summary  获取api树 Summary
-// @Description 获取api树 Description
-// @Param request body menu.ApiPageReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/api/tree [POST]
+//	@Summary		获取api树 Summary
+//	@Description	获取api树 Description
+//	@Param			request	body		menu.ApiPageReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/api/tree [POST]
 func ApiTree(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req menu.ApiPageReq
@@ -92,11 +92,11 @@ func ApiTree(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuLists .
-// @Summary  获取菜单列表 Summary
-// @Description 获取菜单列表 Description
-// @Param request body menu.ApiPageReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/menu/list [POST]
+//	@Summary		获取菜单列表 Summary
+//	@Description	获取菜单列表 Description
+//	@Param			request	body		menu.ApiPageReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/menu/list [POST]
 func MenuLists(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.PageInfoReq
@@ -118,11 +118,11 @@ func MenuLists(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuTree .
-// @Summary  获取菜单树 Summary
-// @Description 获取菜单树 Description
-// @Param request body menu.ApiPageReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/menu/tree [POST]
+//	@Summary		获取菜单树 Summary
+//	@Description	获取菜单树 Description
+//	@Param			request	body		menu.ApiPageReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/menu/tree [POST]
 func MenuTree(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.PageInfoReq
@@ -144,10 +144,10 @@ func MenuTree(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuRole .
-// @Summary  获取角色菜单权限 Summary
-// @Description 获取角色菜单权限 （和 /service/auth/menu/role 重复 但是这个是通过token获取 无传值） Description
-// @Success      200  {object}  utils.Response
-// @router /service/menu/role [POST]
+//	@Summary		获取角色菜单权限 Summary
+//	@Description	获取角色菜单权限 （和 /service/auth/menu/role 重复 但是这个是通过token获取 无传值） Description
+//	@Success		200	{object}	utils.Response
+//	@router			/service/menu/role [POST]
 func MenuRole(ctx context.Context, c *app.RequestContext) {
 
 	roleIdInterface, exist := c.Get("roleId")
@@ -171,11 +171,11 @@ func MenuRole(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateApi .
-// @Summary  创建IPA Summary
-// @Description 创建IPA Description
-// @Param request body menu.ApiInfo true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/api/create [POST]
+//	@Summary		创建IPA Summary
+//	@Description	创建IPA Description
+//	@Param			request	body		menu.ApiInfo	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/api/create [POST]
 func CreateApi(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req menu.ApiInfo
@@ -194,11 +194,11 @@ func CreateApi(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateApi .
-// @Summary  更新IPA Summary
-// @Description 更新IPA Description
-// @Param request body menu.ApiInfo true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/api/update [POST]
+//	@Summary		更新IPA Summary
+//	@Description	更新IPA Description
+//	@Param			request	body		menu.ApiInfo	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/api/update [POST]
 func UpdateApi(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req menu.ApiInfo
@@ -218,7 +218,7 @@ func UpdateApi(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteApi .
-// @router /service/api [POST]
+//	@router	/service/api [POST]
 func DeleteApi(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -238,11 +238,11 @@ func DeleteApi(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateMenu .
-// @Summary  创建菜单 Summary
-// @Description 创建菜单 Description
-// @Param request body menu.CreateOrUpdateMenuReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/menu/create [POST]
+//	@Summary		创建菜单 Summary
+//	@Description	创建菜单 Description
+//	@Param			request	body		menu.CreateOrUpdateMenuReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/menu/create [POST]
 func CreateMenu(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req menu.CreateOrUpdateMenuReq
@@ -262,11 +262,11 @@ func CreateMenu(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMenu .
-// @Summary  更新菜单 Summary
-// @Description 更新菜单 Description
-// @Param request body menu.CreateOrUpdateMenuReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/menu/update [POST]
+//	@Summary		更新菜单 Summary
+//	@Description	更新菜单 Description
+//	@Param			request	body		menu.CreateOrUpdateMenuReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/menu/update [POST]
 func UpdateMenu(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req menu.CreateOrUpdateMenuReq
@@ -286,11 +286,11 @@ func UpdateMenu(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteMenu .
-// @Summary  删除菜单 Summary
-// @Description 删除菜单 Description
-// @Param request body menu.CreateOrUpdateMenuReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/menu [POST]
+//	@Summary		删除菜单 Summary
+//	@Description	删除菜单 Description
+//	@Param			request	body		menu.CreateOrUpdateMenuReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/menu [POST]
 func DeleteMenu(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -310,7 +310,7 @@ func DeleteMenu(ctx context.Context, c *app.RequestContext) {
 }
 
 // MenuInfo .
-// @router /service/menu/info [POST]
+//	@router	/service/menu/info [POST]
 func MenuInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq

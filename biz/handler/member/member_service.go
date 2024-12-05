@@ -15,11 +15,11 @@ import (
 )
 
 // CreateMember .
-// @Summary  创建会员 Summary
-// @Description 创建会员 Description
-// @Param request body member.CreateOrUpdateMemberReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/create [POST]
+//	@Summary		创建会员 Summary
+//	@Description	创建会员 Description
+//	@Param			request	body		member.CreateOrUpdateMemberReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/create [POST]
 func CreateMember(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.CreateOrUpdateMemberReq
@@ -39,11 +39,11 @@ func CreateMember(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMember .
-// @Summary  更新会员 Summary
-// @Description 更新会员 Description
-// @Param request body member.CreateOrUpdateMemberReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/update [POST]
+//	@Summary		更新会员 Summary
+//	@Description	更新会员 Description
+//	@Param			request	body		member.CreateOrUpdateMemberReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/update [POST]
 func UpdateMember(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.CreateOrUpdateMemberReq
@@ -63,11 +63,11 @@ func UpdateMember(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberInfo .
-// @Summary  会员详情 Summary
-// @Description 会员详情 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/info [POST]
+//	@Summary		会员详情 Summary
+//	@Description	会员详情 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/info [POST]
 func MemberInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -87,11 +87,11 @@ func MemberInfo(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPrivacy .
-// @Summary  会员隐私 Summary
-// @Description 会员隐私 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/privacy [POST]
+//	@Summary		会员隐私 Summary
+//	@Description	会员隐私 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/privacy [POST]
 func MemberPrivacy(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -111,11 +111,11 @@ func MemberPrivacy(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberList .
-// @Summary  会员列表 Summary
-// @Description 会员列表 Description
-// @Param request body member.MemberListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/list [POST]
+//	@Summary		会员列表 Summary
+//	@Description	会员列表 Description
+//	@Param			request	body		member.MemberListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/list [POST]
 func MemberList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberListReq
@@ -135,11 +135,11 @@ func MemberList(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMemberStatus .
-// @Summary  更新会员状态 Summary
-// @Description 更新会员状态 Description
-// @Param request body base.StatusCodeReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/status [POST]
+//	@Summary		更新会员状态 Summary
+//	@Description	更新会员状态 Description
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/status [POST]
 func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.StatusCodeReq
@@ -159,11 +159,11 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberSearch .
-// @Summary  会员搜索 Summary
-// @Description 会员搜索 Description
-// @Param request body member.MemberSearchReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/search [POST]
+//	@Summary		会员搜索 Summary
+//	@Description	会员搜索 Description
+//	@Param			request	body		member.MemberSearchReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/search [POST]
 func MemberSearch(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberSearchReq
@@ -183,11 +183,11 @@ func MemberSearch(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberNode .
-// @Summary  会员节点 Summary
-// @Description 会员节点 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/node [POST]
+//	@Summary		会员节点 Summary
+//	@Description	会员节点 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/node [POST]
 func MemberNode(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -207,11 +207,11 @@ func MemberNode(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberContractList .
-// @Summary  会员合同列表 Summary
-// @Description 会员合同列表 Description
-// @Param request body member.MemberContractListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/contract-list [POST]
+//	@Summary		会员合同列表 Summary
+//	@Description	会员合同列表 Description
+//	@Param			request	body		member.MemberContractListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/contract-list [POST]
 func MemberContractList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberContractListReq
@@ -231,11 +231,11 @@ func MemberContractList(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberProductList .
-// @Summary  会员产品列表 Summary
-// @Description 会员产品列表 Description
-// @Param request body member.MemberProductListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/product-list [POST]
+//	@Summary		会员产品列表 Summary
+//	@Description	会员产品列表 Description
+//	@Param			request	body		member.MemberProductListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/product-list [POST]
 func MemberProductList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberProductListReq
@@ -251,11 +251,11 @@ func MemberProductList(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPropertyList .
-// @Summary  会员产品属性列表 Summary
-// @Description 会员产品属性列表 Description
-// @Param request body member.MemberPropertyListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/property-list [POST]
+//	@Summary		会员产品属性列表 Summary
+//	@Description	会员产品属性列表 Description
+//	@Param			request	body		member.MemberPropertyListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/property-list [POST]
 func MemberPropertyList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberPropertyListReq
@@ -271,11 +271,11 @@ func MemberPropertyList(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberProductDetail .
-// @Summary  会员产品详情 Summary
-// @Description 会员产品详情 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/product-detail [POST]
+//	@Summary		会员产品详情 Summary
+//	@Description	会员产品详情 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/product-detail [POST]
 func MemberProductDetail(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -291,11 +291,11 @@ func MemberProductDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPropertyDetail .
-// @Summary  会员产品属性详情 Summary
-// @Description 会员产品属性详情 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/property-detail [POST]
+//	@Summary		会员产品属性详情 Summary
+//	@Description	会员产品属性详情 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/property-detail [POST]
 func MemberPropertyDetail(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -311,11 +311,11 @@ func MemberPropertyDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPropertyUpdate .
-// @Summary  会员产品属性更新 Summary
-// @Description 会员产品属性更新 Description
-// @Param request body member.MemberPropertyListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/property-update [POST]
+//	@Summary		会员产品属性更新 Summary
+//	@Description	会员产品属性更新 Description
+//	@Param			request	body		member.MemberPropertyListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/property-update [POST]
 func MemberPropertyUpdate(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberPropertyListReq
@@ -331,11 +331,11 @@ func MemberPropertyUpdate(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberProductSearch .
-// @Summary  会员产品搜索 Summary
-// @Description 会员产品搜索 Description
-// @Param request body member.MemberProductSearchReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/search-product [POST]
+//	@Summary		会员产品搜索 Summary
+//	@Description	会员产品搜索 Description
+//	@Param			request	body		member.MemberProductSearchReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/search-product [POST]
 func MemberProductSearch(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberProductSearchReq
@@ -351,11 +351,11 @@ func MemberProductSearch(ctx context.Context, c *app.RequestContext) {
 }
 
 // MemberPropertySearch .
-// @Summary  会员产品属性搜索 Summary
-// @Description 会员产品属性搜索 Description
-// @Param request body member.MemberPropertySearchReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/member/search-property [POST]
+//	@Summary		会员产品属性搜索 Summary
+//	@Description	会员产品属性搜索 Description
+//	@Param			request	body		member.MemberPropertySearchReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/member/search-property [POST]
 func MemberPropertySearch(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberPropertySearchReq

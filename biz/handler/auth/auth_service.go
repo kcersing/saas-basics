@@ -15,11 +15,11 @@ import (
 )
 
 // CreateRole .
-// @Summary 创建角色 Summary
-// @Description 创建角色 Description
-// @Param request body auth.RoleInfo true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/role/create [POST]
+//	@Summary		创建角色 Summary
+//	@Description	创建角色 Description
+//	@Param			request	body		auth.RoleInfo	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/role/create [POST]
 func CreateRole(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req auth.RoleInfo
@@ -40,11 +40,11 @@ func CreateRole(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateRole .
-// @Summary 更新角色 Summary
-// @Description 更新角色 Description
-// @Param request body auth.RoleInfo true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/role/update [POST]
+//	@Summary		更新角色 Summary
+//	@Description	更新角色 Description
+//	@Param			request	body		auth.RoleInfo	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/role/update [POST]
 func UpdateRole(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req auth.RoleInfo
@@ -64,11 +64,11 @@ func UpdateRole(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteRole .
-// @Summary  删除角色 Summary
-// @Description 删除角色 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/role/del [POST]
+//	@Summary		删除角色 Summary
+//	@Description	删除角色 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/role/del [POST]
 func DeleteRole(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -87,11 +87,11 @@ func DeleteRole(ctx context.Context, c *app.RequestContext) {
 }
 
 // RoleByID .
-// @Summary  获取角色信息 Summary
-// @Description 获取角色信息 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/role [GET]
+//	@Summary		获取角色信息 Summary
+//	@Description	获取角色信息 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/role [GET]
 func RoleByID(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -112,11 +112,11 @@ func RoleByID(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateMenuAuth .
-// @Summary  创建角色菜单权限 Summary
-// @Description 创建角色菜单权限 Description
-// @Param request body auth.MenuAuthInfoReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/auth/menu/create [POST]
+//	@Summary		创建角色菜单权限 Summary
+//	@Description	创建角色菜单权限 Description
+//	@Param			request	body		auth.MenuAuthInfoReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/auth/menu/create [POST]
 func CreateMenuAuth(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req auth.MenuAuthInfoReq
@@ -135,11 +135,11 @@ func CreateMenuAuth(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateMenuAuth .
-// @Summary  修改角色菜单权限 Summary
-// @Description 修改角色菜单权限 Description
-// @Param request body auth.MenuAuthInfoReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/auth/menu/update [POST]
+//	@Summary		修改角色菜单权限 Summary
+//	@Description	修改角色菜单权限 Description
+//	@Param			request	body		auth.MenuAuthInfoReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/auth/menu/update [POST]
 func UpdateMenuAuth(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req auth.MenuAuthInfoReq
@@ -159,11 +159,11 @@ func UpdateMenuAuth(ctx context.Context, c *app.RequestContext) {
 }
 
 // RoleList .
-// @Summary  获取角色列表 Summary
-// @Description 获取角色列表 Description
-// @Param request body base.PageInfoReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/role/list [GET]
+//	@Summary		获取角色列表 Summary
+//	@Description	获取角色列表 Description
+//	@Param			request	body		base.PageInfoReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/role/list [GET]
 func RoleList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.PageInfoReq
@@ -184,11 +184,11 @@ func RoleList(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateRoleStatus .
-// @Summary  修改角色状态 Summary
-// @Description 修改角色状态 Description
-// @Param request body base.StatusCodeReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/role/status [POST]
+//	@Summary		修改角色状态 Summary
+//	@Description	修改角色状态 Description
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/role/status [POST]
 func UpdateRoleStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.StatusCodeReq
@@ -208,11 +208,11 @@ func UpdateRoleStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateAuth .
-// @Summary  创建角色接口权限 Summary
-// @Description 创建角色接口权限 Description
-// @Param request body auth.CreateOrUpdateApiAuthReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/auth/api/create [POST]
+//	@Summary		创建角色接口权限 Summary
+//	@Description	创建角色接口权限 Description
+//	@Param			request	body		auth.CreateOrUpdateApiAuthReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/auth/api/create [POST]
 func CreateAuth(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req auth.CreateOrUpdateApiAuthReq
@@ -233,11 +233,11 @@ func CreateAuth(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateAuth .
-// @Summary  修改角色接口权限 Summary
-// @Description 修改角色接口权限 Description
-// @Param request body auth.CreateOrUpdateApiAuthReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/auth/api/update [POST]
+//	@Summary		修改角色接口权限 Summary
+//	@Description	修改角色接口权限 Description
+//	@Param			request	body		auth.CreateOrUpdateApiAuthReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/auth/api/update [POST]
 func UpdateAuth(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req auth.CreateOrUpdateApiAuthReq
@@ -257,11 +257,11 @@ func UpdateAuth(ctx context.Context, c *app.RequestContext) {
 }
 
 // ApiAuth .
-// @Summary  获取角色接口权限 Summary
-// @Description 获取角色接口权限 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/auth/api/role [POST]
+//	@Summary		获取角色接口权限 Summary
+//	@Description	获取角色接口权限 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/auth/api/role [POST]
 func ApiAuth(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -288,11 +288,11 @@ func ApiAuth(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetLogsList .
-// @Summary  获取操作日志列表 Summary
-// @Description 获取操作日志列表 Description
-// @Param request body auth.LogsListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/logs/list [POST]
+//	@Summary		获取操作日志列表 Summary
+//	@Description	获取操作日志列表 Description
+//	@Param			request	body		auth.LogsListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/logs/list [POST]
 func GetLogsList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req auth.LogsListReq
@@ -313,11 +313,11 @@ func GetLogsList(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteLogs .
-// @Summary  删除操作日志 Summary
-// @Description 删除操作日志 Description
-// @Param request body base.Ids true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/logs/deleteAll [POST]
+//	@Summary		删除操作日志 Summary
+//	@Description	删除操作日志 Description
+//	@Param			request	body		base.Ids	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/logs/deleteAll [POST]
 func DeleteLogs(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.Ids
@@ -338,7 +338,7 @@ func DeleteLogs(ctx context.Context, c *app.RequestContext) {
 }
 
 // RoleTree .
-// @router /service/role/tree [GET]
+//	@router	/service/role/tree [GET]
 func RoleTree(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.PageInfoReq

@@ -15,11 +15,11 @@ import (
 )
 
 // CreateDictionary .
-// @Summary  创建字典 Summary
-// @Description 创建字典 Description
-// @Param request body dictionary.DictionaryInfo true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/dict/create [POST]
+//	@Summary		创建字典 Summary
+//	@Description	创建字典 Description
+//	@Param			request	body		dictionary.DictionaryInfo	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/dict/create [POST]
 func CreateDictionary(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req dictionary.DictionaryInfo
@@ -39,11 +39,11 @@ func CreateDictionary(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateDictionary .
-// @Summary  更新字典 Summary
-// @Description 更新字典 Description
-// @Param request body dictionary.DictionaryInfo true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/dict/update [POST]
+//	@Summary		更新字典 Summary
+//	@Description	更新字典 Description
+//	@Param			request	body		dictionary.DictionaryInfo	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/dict/update [POST]
 func UpdateDictionary(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req dictionary.DictionaryInfo
@@ -63,11 +63,11 @@ func UpdateDictionary(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteDictionary .
-// @Summary  删除字典 Summary
-// @Description 删除字典 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/dict [POST]
+//	@Summary		删除字典 Summary
+//	@Description	删除字典 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/dict [POST]
 func DeleteDictionary(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -87,11 +87,11 @@ func DeleteDictionary(ctx context.Context, c *app.RequestContext) {
 }
 
 // DictionaryList .
-// @Summary  字典列表 Summary
-// @Description 字典列表 Description
-// @Param request body dictionary.DictListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/dict/list [GET]
+//	@Summary		字典列表 Summary
+//	@Description	字典列表 Description
+//	@Param			request	body		dictionary.DictListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/dict/list [GET]
 func DictionaryList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req dictionary.DictListReq
@@ -113,11 +113,11 @@ func DictionaryList(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateDictionaryDetail .
-// @Summary  创建字典字段 Summary
-// @Description 创建字典字段 Description
-// @Param request body dictionary.DictionaryDetail true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/dict/detail/create [POST]
+//	@Summary		创建字典字段 Summary
+//	@Description	创建字典字段 Description
+//	@Param			request	body		dictionary.DictionaryDetail	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/dict/detail/create [POST]
 func CreateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req dictionary.DictionaryDetail
@@ -138,11 +138,11 @@ func CreateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateDictionaryDetail .
-// @Summary  更新字典字段 Summary
-// @Description 更新字典字段 Description
-// @Param request body dictionary.DictionaryDetail true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/dict/detail/update [POST]
+//	@Summary		更新字典字段 Summary
+//	@Description	更新字典字段 Description
+//	@Param			request	body		dictionary.DictionaryDetail	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/dict/detail/update [POST]
 func UpdateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req dictionary.DictionaryDetail
@@ -162,11 +162,11 @@ func UpdateDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteDictionaryDetail .
-// @Summary  删除字典字段 Summary
-// @Description 删除字典字段 Description
-// @Param request body base.IDReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/dict/detail [GET]
+//	@Summary		删除字典字段 Summary
+//	@Description	删除字典字段 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/dict/detail [GET]
 func DeleteDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -186,11 +186,11 @@ func DeleteDictionaryDetail(ctx context.Context, c *app.RequestContext) {
 }
 
 // DetailByDictionaryList .
-// @Summary  字典字段列表 Summary
-// @Description 字典字段列表 Description
-// @Param request body dictionary.DetailListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/dict/detail/list [POST]
+//	@Summary		字典字段列表 Summary
+//	@Description	字典字段列表 Description
+//	@Param			request	body		dictionary.DetailListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/dict/detail/list [POST]
 func DetailByDictionaryList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req dictionary.DetailListReq

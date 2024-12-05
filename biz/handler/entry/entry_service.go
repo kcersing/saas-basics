@@ -15,11 +15,11 @@ import (
 )
 
 // CreateEntry .
-// @Summary 创建进场记录 Summary
-// @Description 创建进场记录 Description
-// @Param request body entry.CreateEntry true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/entry/list [POST]
+//	@Summary		创建进场记录 Summary
+//	@Description	创建进场记录 Description
+//	@Param			request	body		entry.CreateEntry	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/entry/list [POST]
 func CreateEntry(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req entry.CreateEntry
@@ -35,11 +35,11 @@ func CreateEntry(ctx context.Context, c *app.RequestContext) {
 }
 
 // EntryList .
-// @Summary  进场记录列表 Summary
-// @Description 进场记录列表 Description
-// @Param request body entry.EntryListReq true "query params"
-// @Success      200  {object}  utils.Response
-// @router /service/entry/list [POST]
+//	@Summary		进场记录列表 Summary
+//	@Description	进场记录列表 Description
+//	@Param			request	body		entry.EntryListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/entry/list [POST]
 func EntryList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req entry.EntryListReq
