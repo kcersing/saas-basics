@@ -32,7 +32,7 @@ func (Bootcamp) Fields() []ent.Field {
 		field.Int64("is_cancel").Comment("是否支持取消报名 0支持 1不支持").Default(0).Optional(),
 		field.Int64("cancel_time").Comment("取消时间").Default(0).Optional(),
 		field.String("detail").Comment("详情").Optional(),
-		field.String("sign_fields").Comment("报名信息").Optional(),
+		field.Text("sign_fields").Comment("报名信息").Optional(),
 
 		field.Int64("condition").
 			Default(1).

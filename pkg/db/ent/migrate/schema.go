@@ -76,7 +76,7 @@ var (
 		{Name: "is_cancel", Type: field.TypeInt64, Nullable: true, Comment: "是否支持取消报名 0支持 1不支持", Default: 0},
 		{Name: "cancel_time", Type: field.TypeInt64, Nullable: true, Comment: "取消时间", Default: 0},
 		{Name: "detail", Type: field.TypeString, Nullable: true, Comment: "详情"},
-		{Name: "sign_fields", Type: field.TypeString, Nullable: true, Comment: "报名信息"},
+		{Name: "sign_fields", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "报名信息"},
 		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:未报名;2:报名中;3:未开始;4:进行中;5:结束]", Default: 1},
 	}
 	// BootcampTable holds the schema information for the "bootcamp" table.
@@ -102,7 +102,7 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "手机号"},
-		{Name: "fields", Type: field.TypeString, Nullable: true, Comment: "更多"},
+		{Name: "fields", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "更多"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单ID", Default: 0},
 		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号", Default: ""},
 		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "费用"},
