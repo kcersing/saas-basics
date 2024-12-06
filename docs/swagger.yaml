@@ -171,6 +171,10 @@ definitions:
     properties:
       contestId:
         type: integer
+      createdAt:
+        type: string
+      fee:
+        type: number
       fields:
         type: string
       id:
@@ -179,6 +183,10 @@ definitions:
         type: string
       name:
         type: string
+      orderSn:
+        type: string
+      status:
+        type: integer
     type: object
   contest.ParticipantListReq:
     properties:
@@ -1698,6 +1706,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 添加参赛人 Summary
+  /service/participant/export:
+    post:
+      description: 导出比赛信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contest.ParticipantListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 导出比赛信息 Summary
   /service/participant/info:
     post:
       description: 参赛人信息 Description
