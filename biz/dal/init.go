@@ -17,9 +17,11 @@ func Init() {
 	data.NewInitDatabase()
 	casbin.InitCasbin()
 	logger.InitLogger()
-	minio.Init()
+
 	data.NewInitDatabase().InitDatabaseUser()
 	data.NewInitDatabase().InitDatabaseDict()
 	data.NewInitDatabase().InsertDatabaseMenuData()
 	data.NewInitDatabase().InitDatabaseApi()
+
+	minio.Init()
 }

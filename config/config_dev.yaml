@@ -1,5 +1,5 @@
 Name: Kcersing Admin
-IsProd: false
+IsProd: true
 Host: 0.0.0.0
 Port: 9039
 Timeout: 30000
@@ -19,15 +19,15 @@ Redis:
   Port: 6379
   Type: node
 
-
 MySQL:
-#  Host: root:X3MeAGAmPSZp8A3H@tcp(121.40.98.240:3306)/saas?parseTime=True
-  Host: root:root@tcp(127.0.0.1:3306)/saas?parseTime=True
+  #  Host: root:X3MeAGAmPSZp8A3H@tcp(121.40.98.240:3306)/saas?parseTime=True
+  Host: master:2IPVvzUR*dsdrw57uzp40LUkUacK@tcp(xingfufit-polardb.rwlb.rds.aliyuncs.com:3306)/saas_y?parseTime=True
   Salt: YOUR_SALT
 
 PostgreSQL:
   Host: postgresql://postgres:root@127.0.0.1/postgres
   Salt: YOUR_SALT
+
 Casbin:
   ModelText: |
     [request_definition]
@@ -42,26 +42,29 @@ Casbin:
     m = r.sub == p.sub && keyMatch2(r.obj,p.obj) && r.act == p.act
 
 # 支付平台信息配置
-Wechat:
-  appid: wx1234567890
-  mch_id:
-  api_key:
-  api_v3_key:
-  cert_file_content:
-  key_file_content:
-  pkcs12_file_content:
-Alipay: # 以下配置文件为新沙箱环境配置
-  appid: ali1234567890
-  private_key:
-  app_public_cert_content:
-  alipay_root_cert_content:
-  alipay_public_cert_content:
+Payment:
+  Wechat:
+    appid: wx1234567890
+    mch_id:
+    api_key:
+    api_v3_key:
+    cert_file_content:
+    key_file_content:
+    pkcs12_file_content:
+  Alipay: # 以下配置文件为新沙箱环境配置
+    appid:
+    private_key:
+    app_public_cert_content:
+    alipay_root_cert_content:
+    alipay_public_cert_content:
 
 Minio:
-  EndPoint : localhost:9000
-  AccessKeyID : douyin
-  SecretAccessKey : douyin123
+  EndPoint : 39.107.73.87:9000
+  AccessKeyID : Yj123987
+  SecretAccessKey : Yj987123
   UseSSL : false
   VideoBucketName : videobucket
   ImgBucketName : imagebucket
-  Url : http://localhost:9000
+  Url : http://39.107.73.87:9000
+Swagger:
+  url : http://39.107.73.87:9039/swagger/doc.json
