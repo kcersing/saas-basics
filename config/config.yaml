@@ -60,11 +60,11 @@ Payment:
 
 Minio:
   EndPoint : localhost:9000
-  AccessKeyID : douyin
-  SecretAccessKey : douyin123
+  AccessKeyID : Yj123987
+  SecretAccessKey : Yj987123
   UseSSL : false
   VideoBucketName : videobucket
   ImgBucketName : imagebucket
   Url : http://39.107.73.87:9000
 Swagger:
-  url : http://127.0.0.1:9039/swagger/doc.json
+  url : http://39.107.73.87:9039/swagger/doc.json
