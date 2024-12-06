@@ -10,6 +10,7 @@ type Contest interface {
 	ContestInfo(id int64) (resp *contest.ContestInfo, err error)
 	UpdateContestStatus(ID int64, status int64) error
 	UpdateContestShow(ID int64, status int64) error
+	DelContest(ID int64) error
 
 	CreateParticipant(req contest.ParticipantInfo) error
 	UpdateParticipant(req contest.ParticipantInfo) error

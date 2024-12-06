@@ -2993,6 +2993,8 @@ type ContestService interface {
 	ResultsUpload(ctx context.Context, req *ResultsUploadReq) (r *base.NilResponse, err error)
 
 	PromotionalLinks(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
+
+	DelContest(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 }
 
 type ContestServiceClient struct {
@@ -3138,6 +3140,15 @@ func (p *ContestServiceClient) PromotionalLinks(ctx context.Context, req *base.I
 	}
 	return _result.GetSuccess(), nil
 }
+func (p *ContestServiceClient) DelContest(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
+	var _args ContestServiceDelContestArgs
+	_args.Req = req
+	var _result ContestServiceDelContestResult
+	if err = p.Client_().Call(ctx, "DelContest", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
 
 type ContestServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
@@ -3172,6 +3183,7 @@ func NewContestServiceProcessor(handler ContestService) *ContestServiceProcessor
 	self.AddToProcessorMap("UpdateParticipantStatus", &contestServiceProcessorUpdateParticipantStatus{handler: handler})
 	self.AddToProcessorMap("ResultsUpload", &contestServiceProcessorResultsUpload{handler: handler})
 	self.AddToProcessorMap("PromotionalLinks", &contestServiceProcessorPromotionalLinks{handler: handler})
+	self.AddToProcessorMap("DelContest", &contestServiceProcessorDelContest{handler: handler})
 	return self
 }
 func (p *ContestServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -3799,6 +3811,54 @@ func (p *contestServiceProcessorPromotionalLinks) Process(ctx context.Context, s
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("PromotionalLinks", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type contestServiceProcessorDelContest struct {
+	handler ContestService
+}
+
+func (p *contestServiceProcessorDelContest) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ContestServiceDelContestArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("DelContest", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := ContestServiceDelContestResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.DelContest(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing DelContest: "+err2.Error())
+		oprot.WriteMessageBegin("DelContest", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("DelContest", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -7635,5 +7695,299 @@ func (p *ContestServicePromotionalLinksResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ContestServicePromotionalLinksResult(%+v)", *p)
+
+}
+
+type ContestServiceDelContestArgs struct {
+	Req *base.IDReq `thrift:"req,1"`
+}
+
+func NewContestServiceDelContestArgs() *ContestServiceDelContestArgs {
+	return &ContestServiceDelContestArgs{}
+}
+
+func (p *ContestServiceDelContestArgs) InitDefault() {
+}
+
+var ContestServiceDelContestArgs_Req_DEFAULT *base.IDReq
+
+func (p *ContestServiceDelContestArgs) GetReq() (v *base.IDReq) {
+	if !p.IsSetReq() {
+		return ContestServiceDelContestArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_ContestServiceDelContestArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *ContestServiceDelContestArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ContestServiceDelContestArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ContestServiceDelContestArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ContestServiceDelContestArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := base.NewIDReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *ContestServiceDelContestArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("DelContest_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ContestServiceDelContestArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ContestServiceDelContestArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ContestServiceDelContestArgs(%+v)", *p)
+
+}
+
+type ContestServiceDelContestResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewContestServiceDelContestResult() *ContestServiceDelContestResult {
+	return &ContestServiceDelContestResult{}
+}
+
+func (p *ContestServiceDelContestResult) InitDefault() {
+}
+
+var ContestServiceDelContestResult_Success_DEFAULT *base.NilResponse
+
+func (p *ContestServiceDelContestResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return ContestServiceDelContestResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_ContestServiceDelContestResult = map[int16]string{
+	0: "success",
+}
+
+func (p *ContestServiceDelContestResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ContestServiceDelContestResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ContestServiceDelContestResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ContestServiceDelContestResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *ContestServiceDelContestResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("DelContest_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ContestServiceDelContestResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *ContestServiceDelContestResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ContestServiceDelContestResult(%+v)", *p)
 
 }

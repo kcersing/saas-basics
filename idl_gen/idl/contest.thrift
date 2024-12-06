@@ -32,6 +32,8 @@ service ContestService {
 
   base.NilResponse PromotionalLinks(1: base.IDReq req) (api.post = "/service/contest/promotional-links")
 
+  base.NilResponse DelContest(1: base.IDReq req) (api.post = "/service/contest/del")
+
 }
 struct ResultsUploadReq{
     1:  optional string pic="" (api.raw = "pic")

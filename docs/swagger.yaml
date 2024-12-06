@@ -856,6 +856,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 创建比赛 Summary
+  /service/contest/del:
+    post:
+      description: 删除比赛 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除比赛 Summary
   /service/contest/info:
     post:
       description: 比赛信息 Description
@@ -922,10 +938,7 @@ paths:
       summary: 上传比赛成绩 Summary
   /service/contest/show:
     post:
-      responses: {}
-  /service/contest/status:
-    post:
-      description: 更新比赛状态 Description
+      description: 更新比赛显示状态 Description
       parameters:
       - description: query params
         in: body
@@ -938,7 +951,23 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 更新比赛状态 Summary
+      summary: 更新比赛显示状态 Summary
+  /service/contest/status:
+    post:
+      description: 更新比赛显示状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新比赛显示状态 Summary
   /service/contest/update:
     post:
       description: 更新比赛 Description

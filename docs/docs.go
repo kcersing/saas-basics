@@ -339,6 +339,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/contest/del": {
+            "post": {
+                "description": "删除比赛 Description",
+                "summary": "删除比赛 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/contest/info": {
             "post": {
                 "description": "比赛信息 Description",
@@ -441,13 +466,33 @@ const docTemplate = `{
         },
         "/service/contest/show": {
             "post": {
-                "responses": {}
+                "description": "更新比赛显示状态 Description",
+                "summary": "更新比赛显示状态 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/contest/status": {
             "post": {
-                "description": "更新比赛状态 Description",
-                "summary": "更新比赛状态 Summary",
+                "description": "更新比赛显示状态 Description",
+                "summary": "更新比赛显示状态 Summary",
                 "parameters": [
                     {
                         "description": "query params",
