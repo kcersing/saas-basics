@@ -232,6 +232,7 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 	if req.RoleId != 0 {
 		predicates = append(predicates, user2.RoleIDEQ(req.RoleId))
 	}
+	predicates = append(predicates, user2.Delete(0))
 	users, err := u.db.User.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(u.ctx)

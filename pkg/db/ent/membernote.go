@@ -23,8 +23,8 @@ type MemberNote struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete time
-	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// last delete
+	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
@@ -66,11 +66,11 @@ func (*MemberNote) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case membernote.FieldID, membernote.FieldCreatedID, membernote.FieldStatus, membernote.FieldMemberID:
+		case membernote.FieldID, membernote.FieldDelete, membernote.FieldCreatedID, membernote.FieldStatus, membernote.FieldMemberID:
 			values[i] = new(sql.NullInt64)
 		case membernote.FieldNote:
 			values[i] = new(sql.NullString)
-		case membernote.FieldCreatedAt, membernote.FieldUpdatedAt, membernote.FieldDeleteAt:
+		case membernote.FieldCreatedAt, membernote.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -105,11 +105,11 @@ func (mn *MemberNote) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mn.UpdatedAt = value.Time
 			}
-		case membernote.FieldDeleteAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+		case membernote.FieldDelete:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field delete", values[i])
 			} else if value.Valid {
-				mn.DeleteAt = value.Time
+				mn.Delete = value.Int64
 			}
 		case membernote.FieldCreatedID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -182,8 +182,8 @@ func (mn *MemberNote) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(mn.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("delete_at=")
-	builder.WriteString(mn.DeleteAt.Format(time.ANSIC))
+	builder.WriteString("delete=")
+	builder.WriteString(fmt.Sprintf("%v", mn.Delete))
 	builder.WriteString(", ")
 	builder.WriteString("created_id=")
 	builder.WriteString(fmt.Sprintf("%v", mn.CreatedID))

@@ -12,10 +12,10 @@ var (
 	// SysApisColumns holds the columns for the "sys_apis" table.
 	SysApisColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "path", Type: field.TypeString, Comment: "API path | API 路径"},
 		{Name: "title", Type: field.TypeString, Comment: "API title | API 名称"},
 		{Name: "description", Type: field.TypeString, Comment: "API description | API 描述"},
@@ -38,10 +38,10 @@ var (
 	// BannerColumns holds the columns for the "banner" table.
 	BannerColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "名称"},
 		{Name: "pic", Type: field.TypeString, Comment: "图片"},
@@ -57,10 +57,10 @@ var (
 	// BootcampColumns holds the columns for the "bootcamp" table.
 	BootcampColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "训练营名称"},
 		{Name: "sign_number", Type: field.TypeInt64, Nullable: true, Comment: "报名人数"},
@@ -95,10 +95,10 @@ var (
 	// BootcampParticipantColumns holds the columns for the "bootcamp_participant" table.
 	BootcampParticipantColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "手机号"},
@@ -132,10 +132,10 @@ var (
 	// ContestColumns holds the columns for the "contest" table.
 	ContestColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "比赛名称"},
 		{Name: "sign_number", Type: field.TypeInt64, Nullable: true, Comment: "报名人数"},
@@ -171,10 +171,10 @@ var (
 	// ContestParticipantColumns holds the columns for the "contest_participant" table.
 	ContestParticipantColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "手机号"},
@@ -208,10 +208,10 @@ var (
 	// ContractsColumns holds the columns for the "contracts" table.
 	ContractsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 名称"},
 		{Name: "content", Type: field.TypeString, Nullable: true, Comment: "content | 内容"},
@@ -225,10 +225,10 @@ var (
 	// SysDictionariesColumns holds the columns for the "sys_dictionaries" table.
 	SysDictionariesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "title", Type: field.TypeString, Comment: "the title shown in the ui | 展示名称 （建议配合i18n）"},
 		{Name: "name", Type: field.TypeString, Unique: true, Comment: "the name of dictionary for search | 字典搜索名称"},
@@ -243,10 +243,10 @@ var (
 	// SysDictionaryDetailsColumns holds the columns for the "sys_dictionary_details" table.
 	SysDictionaryDetailsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "title", Type: field.TypeString, Comment: "the title shown in the ui | 展示名称 （建议配合i18n）"},
 		{Name: "key", Type: field.TypeString, Comment: "key | 键"},
@@ -277,10 +277,10 @@ var (
 	// EntryLogsColumns holds the columns for the "entry_logs" table.
 	EntryLogsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "用户产品id"},
 		{Name: "member_property_id", Type: field.TypeInt64, Nullable: true, Comment: "属性id"},
 		{Name: "entry_time", Type: field.TypeTime, Nullable: true, Comment: "进场时间"},
@@ -325,10 +325,10 @@ var (
 	// SysLogsColumns holds the columns for the "sys_logs" table.
 	SysLogsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "type", Type: field.TypeString, Comment: "type of log | 日志类型"},
 		{Name: "method", Type: field.TypeString, Comment: "method of log | 日志请求方法"},
 		{Name: "api", Type: field.TypeString, Comment: "api of log | 日志请求api"},
@@ -356,10 +356,10 @@ var (
 	// MemberColumns holds the columns for the "member" table.
 	MemberColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "password", Type: field.TypeString, Nullable: true, Comment: "password | 密码"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 账号"},
@@ -377,10 +377,10 @@ var (
 	// MemberContractColumns holds the columns for the "member_contract" table.
 	MemberContractColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "contract_id", Type: field.TypeInt64, Nullable: true, Comment: "原始合同id"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
@@ -430,10 +430,10 @@ var (
 	// MemberContractContentColumns holds the columns for the "member_contract_content" table.
 	MemberContractContentColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "content", Type: field.TypeString, Nullable: true, Comment: "content | 内容"},
 		{Name: "sign_img", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "sign_img | 会员签字b64 预处理"},
 		{Name: "member_contract_id", Type: field.TypeInt64, Nullable: true, Comment: "合同ID"},
@@ -462,10 +462,10 @@ var (
 	// MemberDetailsColumns holds the columns for the "member_details" table.
 	MemberDetailsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "email | 邮箱号"},
 		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
 		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [0:女性;1:男性;3:保密]", Default: 3},
@@ -511,10 +511,10 @@ var (
 	// MemberNoteColumns holds the columns for the "member_note" table.
 	MemberNoteColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "note", Type: field.TypeString, Nullable: true, Comment: "内部备注", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
@@ -543,10 +543,10 @@ var (
 	// SysMenusColumns holds the columns for the "sys_menus" table.
 	SysMenusColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "path", Type: field.TypeString, Nullable: true, Comment: "index path | 菜单路由路径", Default: ""},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "index name | 菜单名称"},
@@ -583,10 +583,10 @@ var (
 	// SysMenuParamsColumns holds the columns for the "sys_menu_params" table.
 	SysMenuParamsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "type", Type: field.TypeString, Comment: "pass parameters via params or query | 参数类型"},
 		{Name: "key", Type: field.TypeString, Comment: "the key of parameters | 参数键"},
 		{Name: "value", Type: field.TypeString, Comment: "the value of parameters | 参数值"},
@@ -609,10 +609,10 @@ var (
 	// MessagesColumns holds the columns for the "messages" table.
 	MessagesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "type", Type: field.TypeString, Comment: "类型[1:用户user;2:会员member]"},
 		{Name: "to_user_id", Type: field.TypeString, Comment: "该消息接受者ID"},
 		{Name: "from_user_id", Type: field.TypeString, Comment: "该消息发送者ID"},
@@ -634,10 +634,10 @@ var (
 	// OrderColumns holds the columns for the "order" table.
 	OrderColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号"},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员产品id"},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态 | [0:正常;1:禁用]", Default: 0},
@@ -705,10 +705,10 @@ var (
 	// OrderAmountColumns holds the columns for the "order_amount" table.
 	OrderAmountColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "total", Type: field.TypeFloat64, Nullable: true, Comment: "总金额"},
 		{Name: "actual", Type: field.TypeFloat64, Nullable: true, Comment: "实际已付款"},
 		{Name: "residue", Type: field.TypeFloat64, Nullable: true, Comment: "未支付金额"},
@@ -739,10 +739,10 @@ var (
 	// OrderItemColumns holds the columns for the "order_item" table.
 	OrderItemColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品id"},
 		{Name: "related_user_product_id", Type: field.TypeInt64, Nullable: true, Comment: "关联会员产品id", Default: 0},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
@@ -776,10 +776,10 @@ var (
 	// OrderPayColumns holds the columns for the "order_pay" table.
 	OrderPayColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "remission", Type: field.TypeFloat64, Nullable: true, Comment: "减免"},
 		{Name: "pay", Type: field.TypeFloat64, Nullable: true, Comment: "实际付款"},
 		{Name: "note", Type: field.TypeString, Nullable: true, Comment: "备注"},
@@ -811,10 +811,10 @@ var (
 	// OrderSalesColumns holds the columns for the "order_sales" table.
 	OrderSalesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "sales_id", Type: field.TypeInt64, Nullable: true, Comment: "销售id"},
@@ -855,10 +855,10 @@ var (
 	// SysRolesColumns holds the columns for the "sys_roles" table.
 	SysRolesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "role name | 角色名"},
 		{Name: "value", Type: field.TypeString, Unique: true, Comment: "role value for permission control in front end | 角色值，用于前端权限控制"},
@@ -876,10 +876,10 @@ var (
 	// SysTokensColumns holds the columns for the "sys_tokens" table.
 	SysTokensColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "user_id", Type: field.TypeInt64, Unique: true, Comment: " User's ID | 用户的ID"},
 		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
 		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
@@ -915,10 +915,10 @@ var (
 	// SysUsersColumns holds the columns for the "sys_users" table.
 	SysUsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "mobile", Type: field.TypeString, Unique: true, Comment: "mobile number | 手机号"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 姓名"},
@@ -948,10 +948,10 @@ var (
 	// VenueColumns holds the columns for the "venue" table.
 	VenueColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "address", Type: field.TypeString, Nullable: true, Comment: "地址 省/市/区"},
@@ -972,10 +972,10 @@ var (
 	// VenuePlaceColumns holds the columns for the "venue_place" table.
 	VenuePlaceColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
-		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
-		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete ", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "pic | 照片", SchemaType: map[string]string{"mysql": "varchar(512)"}},

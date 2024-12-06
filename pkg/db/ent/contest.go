@@ -22,8 +22,8 @@ type Contest struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete time
-	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// last delete
+	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
@@ -93,11 +93,11 @@ func (*Contest) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case contest.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case contest.FieldID, contest.FieldCreatedID, contest.FieldStatus, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsFee, contest.FieldIsShow, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
+		case contest.FieldID, contest.FieldDelete, contest.FieldCreatedID, contest.FieldStatus, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsFee, contest.FieldIsShow, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
 			values[i] = new(sql.NullInt64)
 		case contest.FieldName, contest.FieldPic, contest.FieldSponsor, contest.FieldDetail, contest.FieldSignFields:
 			values[i] = new(sql.NullString)
-		case contest.FieldCreatedAt, contest.FieldUpdatedAt, contest.FieldDeleteAt, contest.FieldSignStartAt, contest.FieldSignEndAt, contest.FieldStartAt, contest.FieldEndAt:
+		case contest.FieldCreatedAt, contest.FieldUpdatedAt, contest.FieldSignStartAt, contest.FieldSignEndAt, contest.FieldStartAt, contest.FieldEndAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -132,11 +132,11 @@ func (c *Contest) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.UpdatedAt = value.Time
 			}
-		case contest.FieldDeleteAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+		case contest.FieldDelete:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field delete", values[i])
 			} else if value.Valid {
-				c.DeleteAt = value.Time
+				c.Delete = value.Int64
 			}
 		case contest.FieldCreatedID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -299,8 +299,8 @@ func (c *Contest) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("delete_at=")
-	builder.WriteString(c.DeleteAt.Format(time.ANSIC))
+	builder.WriteString("delete=")
+	builder.WriteString(fmt.Sprintf("%v", c.Delete))
 	builder.WriteString(", ")
 	builder.WriteString("created_id=")
 	builder.WriteString(fmt.Sprintf("%v", c.CreatedID))

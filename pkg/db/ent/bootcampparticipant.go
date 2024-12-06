@@ -23,8 +23,8 @@ type BootcampParticipant struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete time
-	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// last delete
+	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
@@ -78,11 +78,11 @@ func (*BootcampParticipant) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case bootcampparticipant.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case bootcampparticipant.FieldID, bootcampparticipant.FieldCreatedID, bootcampparticipant.FieldStatus, bootcampparticipant.FieldBootcampID, bootcampparticipant.FieldOrderID:
+		case bootcampparticipant.FieldID, bootcampparticipant.FieldDelete, bootcampparticipant.FieldCreatedID, bootcampparticipant.FieldStatus, bootcampparticipant.FieldBootcampID, bootcampparticipant.FieldOrderID:
 			values[i] = new(sql.NullInt64)
 		case bootcampparticipant.FieldName, bootcampparticipant.FieldMobile, bootcampparticipant.FieldFields, bootcampparticipant.FieldOrderSn:
 			values[i] = new(sql.NullString)
-		case bootcampparticipant.FieldCreatedAt, bootcampparticipant.FieldUpdatedAt, bootcampparticipant.FieldDeleteAt:
+		case bootcampparticipant.FieldCreatedAt, bootcampparticipant.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -117,11 +117,11 @@ func (bp *BootcampParticipant) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				bp.UpdatedAt = value.Time
 			}
-		case bootcampparticipant.FieldDeleteAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+		case bootcampparticipant.FieldDelete:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field delete", values[i])
 			} else if value.Valid {
-				bp.DeleteAt = value.Time
+				bp.Delete = value.Int64
 			}
 		case bootcampparticipant.FieldCreatedID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -224,8 +224,8 @@ func (bp *BootcampParticipant) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(bp.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("delete_at=")
-	builder.WriteString(bp.DeleteAt.Format(time.ANSIC))
+	builder.WriteString("delete=")
+	builder.WriteString(fmt.Sprintf("%v", bp.Delete))
 	builder.WriteString(", ")
 	builder.WriteString("created_id=")
 	builder.WriteString(fmt.Sprintf("%v", bp.CreatedID))

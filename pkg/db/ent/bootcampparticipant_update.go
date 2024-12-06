@@ -35,17 +35,36 @@ func (bpu *BootcampParticipantUpdate) SetUpdatedAt(t time.Time) *BootcampPartici
 	return bpu
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (bpu *BootcampParticipantUpdate) SetDeleteAt(t time.Time) *BootcampParticipantUpdate {
-	bpu.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (bpu *BootcampParticipantUpdate) ClearUpdatedAt() *BootcampParticipantUpdate {
+	bpu.mutation.ClearUpdatedAt()
 	return bpu
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (bpu *BootcampParticipantUpdate) SetNillableDeleteAt(t *time.Time) *BootcampParticipantUpdate {
-	if t != nil {
-		bpu.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (bpu *BootcampParticipantUpdate) SetDelete(i int64) *BootcampParticipantUpdate {
+	bpu.mutation.ResetDelete()
+	bpu.mutation.SetDelete(i)
+	return bpu
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (bpu *BootcampParticipantUpdate) SetNillableDelete(i *int64) *BootcampParticipantUpdate {
+	if i != nil {
+		bpu.SetDelete(*i)
 	}
+	return bpu
+}
+
+// AddDelete adds i to the "delete" field.
+func (bpu *BootcampParticipantUpdate) AddDelete(i int64) *BootcampParticipantUpdate {
+	bpu.mutation.AddDelete(i)
+	return bpu
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (bpu *BootcampParticipantUpdate) ClearDelete() *BootcampParticipantUpdate {
+	bpu.mutation.ClearDelete()
 	return bpu
 }
 
@@ -67,6 +86,12 @@ func (bpu *BootcampParticipantUpdate) SetNillableCreatedID(i *int64) *BootcampPa
 // AddCreatedID adds i to the "created_id" field.
 func (bpu *BootcampParticipantUpdate) AddCreatedID(i int64) *BootcampParticipantUpdate {
 	bpu.mutation.AddCreatedID(i)
+	return bpu
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (bpu *BootcampParticipantUpdate) ClearCreatedID() *BootcampParticipantUpdate {
+	bpu.mutation.ClearCreatedID()
 	return bpu
 }
 
@@ -297,7 +322,7 @@ func (bpu *BootcampParticipantUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (bpu *BootcampParticipantUpdate) defaults() {
-	if _, ok := bpu.mutation.UpdatedAt(); !ok {
+	if _, ok := bpu.mutation.UpdatedAt(); !ok && !bpu.mutation.UpdatedAtCleared() {
 		v := bootcampparticipant.UpdateDefaultUpdatedAt()
 		bpu.mutation.SetUpdatedAt(v)
 	}
@@ -312,17 +337,32 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 			}
 		}
 	}
+	if bpu.mutation.CreatedAtCleared() {
+		_spec.ClearField(bootcampparticipant.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := bpu.mutation.UpdatedAt(); ok {
 		_spec.SetField(bootcampparticipant.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := bpu.mutation.DeleteAt(); ok {
-		_spec.SetField(bootcampparticipant.FieldDeleteAt, field.TypeTime, value)
+	if bpu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(bootcampparticipant.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := bpu.mutation.Delete(); ok {
+		_spec.SetField(bootcampparticipant.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := bpu.mutation.AddedDelete(); ok {
+		_spec.AddField(bootcampparticipant.FieldDelete, field.TypeInt64, value)
+	}
+	if bpu.mutation.DeleteCleared() {
+		_spec.ClearField(bootcampparticipant.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := bpu.mutation.CreatedID(); ok {
 		_spec.SetField(bootcampparticipant.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := bpu.mutation.AddedCreatedID(); ok {
 		_spec.AddField(bootcampparticipant.FieldCreatedID, field.TypeInt64, value)
+	}
+	if bpu.mutation.CreatedIDCleared() {
+		_spec.ClearField(bootcampparticipant.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := bpu.mutation.Status(); ok {
 		_spec.SetField(bootcampparticipant.FieldStatus, field.TypeInt64, value)
@@ -430,17 +470,36 @@ func (bpuo *BootcampParticipantUpdateOne) SetUpdatedAt(t time.Time) *BootcampPar
 	return bpuo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (bpuo *BootcampParticipantUpdateOne) SetDeleteAt(t time.Time) *BootcampParticipantUpdateOne {
-	bpuo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (bpuo *BootcampParticipantUpdateOne) ClearUpdatedAt() *BootcampParticipantUpdateOne {
+	bpuo.mutation.ClearUpdatedAt()
 	return bpuo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (bpuo *BootcampParticipantUpdateOne) SetNillableDeleteAt(t *time.Time) *BootcampParticipantUpdateOne {
-	if t != nil {
-		bpuo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (bpuo *BootcampParticipantUpdateOne) SetDelete(i int64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.ResetDelete()
+	bpuo.mutation.SetDelete(i)
+	return bpuo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (bpuo *BootcampParticipantUpdateOne) SetNillableDelete(i *int64) *BootcampParticipantUpdateOne {
+	if i != nil {
+		bpuo.SetDelete(*i)
 	}
+	return bpuo
+}
+
+// AddDelete adds i to the "delete" field.
+func (bpuo *BootcampParticipantUpdateOne) AddDelete(i int64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.AddDelete(i)
+	return bpuo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (bpuo *BootcampParticipantUpdateOne) ClearDelete() *BootcampParticipantUpdateOne {
+	bpuo.mutation.ClearDelete()
 	return bpuo
 }
 
@@ -462,6 +521,12 @@ func (bpuo *BootcampParticipantUpdateOne) SetNillableCreatedID(i *int64) *Bootca
 // AddCreatedID adds i to the "created_id" field.
 func (bpuo *BootcampParticipantUpdateOne) AddCreatedID(i int64) *BootcampParticipantUpdateOne {
 	bpuo.mutation.AddCreatedID(i)
+	return bpuo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (bpuo *BootcampParticipantUpdateOne) ClearCreatedID() *BootcampParticipantUpdateOne {
+	bpuo.mutation.ClearCreatedID()
 	return bpuo
 }
 
@@ -705,7 +770,7 @@ func (bpuo *BootcampParticipantUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (bpuo *BootcampParticipantUpdateOne) defaults() {
-	if _, ok := bpuo.mutation.UpdatedAt(); !ok {
+	if _, ok := bpuo.mutation.UpdatedAt(); !ok && !bpuo.mutation.UpdatedAtCleared() {
 		v := bootcampparticipant.UpdateDefaultUpdatedAt()
 		bpuo.mutation.SetUpdatedAt(v)
 	}
@@ -737,17 +802,32 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 			}
 		}
 	}
+	if bpuo.mutation.CreatedAtCleared() {
+		_spec.ClearField(bootcampparticipant.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := bpuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(bootcampparticipant.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := bpuo.mutation.DeleteAt(); ok {
-		_spec.SetField(bootcampparticipant.FieldDeleteAt, field.TypeTime, value)
+	if bpuo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(bootcampparticipant.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := bpuo.mutation.Delete(); ok {
+		_spec.SetField(bootcampparticipant.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := bpuo.mutation.AddedDelete(); ok {
+		_spec.AddField(bootcampparticipant.FieldDelete, field.TypeInt64, value)
+	}
+	if bpuo.mutation.DeleteCleared() {
+		_spec.ClearField(bootcampparticipant.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := bpuo.mutation.CreatedID(); ok {
 		_spec.SetField(bootcampparticipant.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := bpuo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(bootcampparticipant.FieldCreatedID, field.TypeInt64, value)
+	}
+	if bpuo.mutation.CreatedIDCleared() {
+		_spec.ClearField(bootcampparticipant.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := bpuo.mutation.Status(); ok {
 		_spec.SetField(bootcampparticipant.FieldStatus, field.TypeInt64, value)

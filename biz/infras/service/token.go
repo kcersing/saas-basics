@@ -119,6 +119,7 @@ func (t Token) List(req *token.TokenListReq) (res []*token.TokenInfo, total int,
 	if req.UserId != 0 {
 		userPredicates = append(userPredicates, entuser.IDEQ(req.UserId))
 	}
+	userPredicates = append(userPredicates, entuser.Delete(0))
 	UserTokens, err := t.db.User.Query().Where(userPredicates...).
 		WithToken(func(q *ent.TokenQuery) {
 			// get token all fields default, or use q.Select() to get some fields

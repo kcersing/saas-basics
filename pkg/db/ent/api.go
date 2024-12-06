@@ -22,8 +22,8 @@ type API struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete time
-	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// last delete
+	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
 	// API path | API 路径
@@ -44,11 +44,11 @@ func (*API) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case api.FieldID, api.FieldCreatedID:
+		case api.FieldID, api.FieldDelete, api.FieldCreatedID:
 			values[i] = new(sql.NullInt64)
 		case api.FieldPath, api.FieldTitle, api.FieldDescription, api.FieldAPIGroup, api.FieldMethod:
 			values[i] = new(sql.NullString)
-		case api.FieldCreatedAt, api.FieldUpdatedAt, api.FieldDeleteAt:
+		case api.FieldCreatedAt, api.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -83,11 +83,11 @@ func (a *API) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.UpdatedAt = value.Time
 			}
-		case api.FieldDeleteAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+		case api.FieldDelete:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field delete", values[i])
 			} else if value.Valid {
-				a.DeleteAt = value.Time
+				a.Delete = value.Int64
 			}
 		case api.FieldCreatedID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -167,8 +167,8 @@ func (a *API) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(a.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("delete_at=")
-	builder.WriteString(a.DeleteAt.Format(time.ANSIC))
+	builder.WriteString("delete=")
+	builder.WriteString(fmt.Sprintf("%v", a.Delete))
 	builder.WriteString(", ")
 	builder.WriteString("created_id=")
 	builder.WriteString(fmt.Sprintf("%v", a.CreatedID))

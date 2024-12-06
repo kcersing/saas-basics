@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
@@ -51,9 +50,17 @@ func (elc *EntryLogsCreate) SetNillableUpdatedAt(t *time.Time) *EntryLogsCreate 
 	return elc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (elc *EntryLogsCreate) SetDeleteAt(t time.Time) *EntryLogsCreate {
-	elc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (elc *EntryLogsCreate) SetDelete(i int64) *EntryLogsCreate {
+	elc.mutation.SetDelete(i)
+	return elc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (elc *EntryLogsCreate) SetNillableDelete(i *int64) *EntryLogsCreate {
+	if i != nil {
+		elc.SetDelete(*i)
+	}
 	return elc
 }
 
@@ -275,6 +282,10 @@ func (elc *EntryLogsCreate) defaults() {
 		v := entrylogs.DefaultUpdatedAt()
 		elc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := elc.mutation.Delete(); !ok {
+		v := entrylogs.DefaultDelete
+		elc.mutation.SetDelete(v)
+	}
 	if _, ok := elc.mutation.CreatedID(); !ok {
 		v := entrylogs.DefaultCreatedID
 		elc.mutation.SetCreatedID(v)
@@ -291,18 +302,6 @@ func (elc *EntryLogsCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (elc *EntryLogsCreate) check() error {
-	if _, ok := elc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "EntryLogs.created_at"`)}
-	}
-	if _, ok := elc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "EntryLogs.updated_at"`)}
-	}
-	if _, ok := elc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "EntryLogs.delete_at"`)}
-	}
-	if _, ok := elc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "EntryLogs.created_id"`)}
-	}
 	return nil
 }
 
@@ -343,9 +342,9 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := elc.mutation.DeleteAt(); ok {
-		_spec.SetField(entrylogs.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := elc.mutation.Delete(); ok {
+		_spec.SetField(entrylogs.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := elc.mutation.CreatedID(); ok {
 		_spec.SetField(entrylogs.FieldCreatedID, field.TypeInt64, value)

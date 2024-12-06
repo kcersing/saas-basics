@@ -211,7 +211,9 @@ func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfo, err error) {
 
 func (m Menu) List(req *base.PageInfoReq) (list []*menu.MenuInfo, total int, err error) {
 	// query menu list
-	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldSort)).
+	menus, err := m.db.Menu.Query().
+		Where(menu2.Delete(0)).
+		Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
@@ -229,7 +231,10 @@ func (m Menu) MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error) {
 			return v, nil
 		}
 	}
-	menus, err := m.db.Menu.Query().Order(ent.Asc(menu2.FieldSort)).
+
+	menus, err := m.db.Menu.Query().
+		Where(menu2.Delete(0)).
+		Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {

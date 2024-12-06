@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/bootcamp"
 	"saas/pkg/db/ent/bootcampparticipant"
@@ -49,9 +48,17 @@ func (bpc *BootcampParticipantCreate) SetNillableUpdatedAt(t *time.Time) *Bootca
 	return bpc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (bpc *BootcampParticipantCreate) SetDeleteAt(t time.Time) *BootcampParticipantCreate {
-	bpc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (bpc *BootcampParticipantCreate) SetDelete(i int64) *BootcampParticipantCreate {
+	bpc.mutation.SetDelete(i)
+	return bpc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (bpc *BootcampParticipantCreate) SetNillableDelete(i *int64) *BootcampParticipantCreate {
+	if i != nil {
+		bpc.SetDelete(*i)
+	}
 	return bpc
 }
 
@@ -235,6 +242,10 @@ func (bpc *BootcampParticipantCreate) defaults() {
 		v := bootcampparticipant.DefaultUpdatedAt()
 		bpc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := bpc.mutation.Delete(); !ok {
+		v := bootcampparticipant.DefaultDelete
+		bpc.mutation.SetDelete(v)
+	}
 	if _, ok := bpc.mutation.CreatedID(); !ok {
 		v := bootcampparticipant.DefaultCreatedID
 		bpc.mutation.SetCreatedID(v)
@@ -255,18 +266,6 @@ func (bpc *BootcampParticipantCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (bpc *BootcampParticipantCreate) check() error {
-	if _, ok := bpc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "BootcampParticipant.created_at"`)}
-	}
-	if _, ok := bpc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "BootcampParticipant.updated_at"`)}
-	}
-	if _, ok := bpc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "BootcampParticipant.delete_at"`)}
-	}
-	if _, ok := bpc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "BootcampParticipant.created_id"`)}
-	}
 	return nil
 }
 
@@ -307,9 +306,9 @@ func (bpc *BootcampParticipantCreate) createSpec() (*BootcampParticipant, *sqlgr
 		_spec.SetField(bootcampparticipant.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := bpc.mutation.DeleteAt(); ok {
-		_spec.SetField(bootcampparticipant.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := bpc.mutation.Delete(); ok {
+		_spec.SetField(bootcampparticipant.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := bpc.mutation.CreatedID(); ok {
 		_spec.SetField(bootcampparticipant.FieldCreatedID, field.TypeInt64, value)

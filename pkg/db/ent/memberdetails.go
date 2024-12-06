@@ -23,8 +23,8 @@ type MemberDetails struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete time
-	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// last delete
+	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 会员id
@@ -102,11 +102,11 @@ func (*MemberDetails) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberdetails.FieldMoneySum:
 			values[i] = new(sql.NullFloat64)
-		case memberdetails.FieldID, memberdetails.FieldCreatedID, memberdetails.FieldMemberID, memberdetails.FieldGender, memberdetails.FieldProductID, memberdetails.FieldProductVenue, memberdetails.FieldEntrySum, memberdetails.FieldRelationUID, memberdetails.FieldRelationMid, memberdetails.FieldCreateID:
+		case memberdetails.FieldID, memberdetails.FieldDelete, memberdetails.FieldCreatedID, memberdetails.FieldMemberID, memberdetails.FieldGender, memberdetails.FieldProductID, memberdetails.FieldProductVenue, memberdetails.FieldEntrySum, memberdetails.FieldRelationUID, memberdetails.FieldRelationMid, memberdetails.FieldCreateID:
 			values[i] = new(sql.NullInt64)
 		case memberdetails.FieldEmail, memberdetails.FieldWecom, memberdetails.FieldProductName, memberdetails.FieldProductVenueName, memberdetails.FieldRelationUname, memberdetails.FieldRelationMame, memberdetails.FieldCreateName:
 			values[i] = new(sql.NullString)
-		case memberdetails.FieldCreatedAt, memberdetails.FieldUpdatedAt, memberdetails.FieldDeleteAt, memberdetails.FieldBirthday, memberdetails.FieldEntryLastTime, memberdetails.FieldEntryDeadlineTime, memberdetails.FieldClassLastTime:
+		case memberdetails.FieldCreatedAt, memberdetails.FieldUpdatedAt, memberdetails.FieldBirthday, memberdetails.FieldEntryLastTime, memberdetails.FieldEntryDeadlineTime, memberdetails.FieldClassLastTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -141,11 +141,11 @@ func (md *MemberDetails) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				md.UpdatedAt = value.Time
 			}
-		case memberdetails.FieldDeleteAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+		case memberdetails.FieldDelete:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field delete", values[i])
 			} else if value.Valid {
-				md.DeleteAt = value.Time
+				md.Delete = value.Int64
 			}
 		case memberdetails.FieldCreatedID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -320,8 +320,8 @@ func (md *MemberDetails) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(md.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("delete_at=")
-	builder.WriteString(md.DeleteAt.Format(time.ANSIC))
+	builder.WriteString("delete=")
+	builder.WriteString(fmt.Sprintf("%v", md.Delete))
 	builder.WriteString(", ")
 	builder.WriteString("created_id=")
 	builder.WriteString(fmt.Sprintf("%v", md.CreatedID))

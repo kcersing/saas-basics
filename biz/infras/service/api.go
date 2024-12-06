@@ -124,7 +124,7 @@ func (a Api) List(req menu.ApiPageReq) (resp []*menu.ApiInfo, total int64, err e
 	if req.Group != "" {
 		predicates = append(predicates, api.APIGroupContains(req.Group))
 	}
-
+	predicates = append(predicates, api.Delete(0))
 	apis, err := a.db.API.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(a.ctx)

@@ -22,8 +22,8 @@ type Token struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete time
-	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// last delete
+	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
 	//  User's ID | 用户的ID
@@ -68,11 +68,11 @@ func (*Token) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case token.FieldID, token.FieldCreatedID, token.FieldUserID:
+		case token.FieldID, token.FieldDelete, token.FieldCreatedID, token.FieldUserID:
 			values[i] = new(sql.NullInt64)
 		case token.FieldToken, token.FieldSource:
 			values[i] = new(sql.NullString)
-		case token.FieldCreatedAt, token.FieldUpdatedAt, token.FieldDeleteAt, token.FieldExpiredAt:
+		case token.FieldCreatedAt, token.FieldUpdatedAt, token.FieldExpiredAt:
 			values[i] = new(sql.NullTime)
 		case token.ForeignKeys[0]: // user_token
 			values[i] = new(sql.NullInt64)
@@ -109,11 +109,11 @@ func (t *Token) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.UpdatedAt = value.Time
 			}
-		case token.FieldDeleteAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+		case token.FieldDelete:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field delete", values[i])
 			} else if value.Valid {
-				t.DeleteAt = value.Time
+				t.Delete = value.Int64
 			}
 		case token.FieldCreatedID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -199,8 +199,8 @@ func (t *Token) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("delete_at=")
-	builder.WriteString(t.DeleteAt.Format(time.ANSIC))
+	builder.WriteString("delete=")
+	builder.WriteString(fmt.Sprintf("%v", t.Delete))
 	builder.WriteString(", ")
 	builder.WriteString("created_id=")
 	builder.WriteString(fmt.Sprintf("%v", t.CreatedID))

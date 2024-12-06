@@ -23,14 +23,18 @@ func (BaseMixin) Fields() []ent.Field {
 		field.Time("created_at").
 			Immutable().
 			Default(time.Now).
-			Comment("created time"),
+			Comment("created time").
+			Optional(),
 		field.Time("updated_at").
 			Default(time.Now).
 			UpdateDefault(time.Now).
-			Comment("last update time"),
-		field.Time("delete_at").
-			Default(nil).
-			Comment("last delete time"),
-		field.Int64("created_id").Default(0).Comment("created "),
+			Comment("last update time").
+			Optional(),
+		field.Int64("delete").
+			Default(0).
+			Comment("last delete ").
+			Optional(),
+		field.Int64("created_id").Default(0).Comment("created").
+			Optional(),
 	}
 }

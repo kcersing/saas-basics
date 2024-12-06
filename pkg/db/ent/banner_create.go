@@ -48,9 +48,17 @@ func (bc *BannerCreate) SetNillableUpdatedAt(t *time.Time) *BannerCreate {
 	return bc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (bc *BannerCreate) SetDeleteAt(t time.Time) *BannerCreate {
-	bc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (bc *BannerCreate) SetDelete(i int64) *BannerCreate {
+	bc.mutation.SetDelete(i)
+	return bc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (bc *BannerCreate) SetNillableDelete(i *int64) *BannerCreate {
+	if i != nil {
+		bc.SetDelete(*i)
+	}
 	return bc
 }
 
@@ -163,6 +171,10 @@ func (bc *BannerCreate) defaults() {
 		v := banner.DefaultUpdatedAt()
 		bc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := bc.mutation.Delete(); !ok {
+		v := banner.DefaultDelete
+		bc.mutation.SetDelete(v)
+	}
 	if _, ok := bc.mutation.CreatedID(); !ok {
 		v := banner.DefaultCreatedID
 		bc.mutation.SetCreatedID(v)
@@ -179,18 +191,6 @@ func (bc *BannerCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (bc *BannerCreate) check() error {
-	if _, ok := bc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Banner.created_at"`)}
-	}
-	if _, ok := bc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Banner.updated_at"`)}
-	}
-	if _, ok := bc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Banner.delete_at"`)}
-	}
-	if _, ok := bc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Banner.created_id"`)}
-	}
 	if _, ok := bc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Banner.name"`)}
 	}
@@ -240,9 +240,9 @@ func (bc *BannerCreate) createSpec() (*Banner, *sqlgraph.CreateSpec) {
 		_spec.SetField(banner.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := bc.mutation.DeleteAt(); ok {
-		_spec.SetField(banner.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := bc.mutation.Delete(); ok {
+		_spec.SetField(banner.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := bc.mutation.CreatedID(); ok {
 		_spec.SetField(banner.FieldCreatedID, field.TypeInt64, value)

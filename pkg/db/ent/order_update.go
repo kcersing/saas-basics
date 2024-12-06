@@ -42,17 +42,36 @@ func (ou *OrderUpdate) SetUpdatedAt(t time.Time) *OrderUpdate {
 	return ou
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (ou *OrderUpdate) SetDeleteAt(t time.Time) *OrderUpdate {
-	ou.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (ou *OrderUpdate) ClearUpdatedAt() *OrderUpdate {
+	ou.mutation.ClearUpdatedAt()
 	return ou
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (ou *OrderUpdate) SetNillableDeleteAt(t *time.Time) *OrderUpdate {
-	if t != nil {
-		ou.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (ou *OrderUpdate) SetDelete(i int64) *OrderUpdate {
+	ou.mutation.ResetDelete()
+	ou.mutation.SetDelete(i)
+	return ou
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (ou *OrderUpdate) SetNillableDelete(i *int64) *OrderUpdate {
+	if i != nil {
+		ou.SetDelete(*i)
 	}
+	return ou
+}
+
+// AddDelete adds i to the "delete" field.
+func (ou *OrderUpdate) AddDelete(i int64) *OrderUpdate {
+	ou.mutation.AddDelete(i)
+	return ou
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (ou *OrderUpdate) ClearDelete() *OrderUpdate {
+	ou.mutation.ClearDelete()
 	return ou
 }
 
@@ -74,6 +93,12 @@ func (ou *OrderUpdate) SetNillableCreatedID(i *int64) *OrderUpdate {
 // AddCreatedID adds i to the "created_id" field.
 func (ou *OrderUpdate) AddCreatedID(i int64) *OrderUpdate {
 	ou.mutation.AddCreatedID(i)
+	return ou
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (ou *OrderUpdate) ClearCreatedID() *OrderUpdate {
+	ou.mutation.ClearCreatedID()
 	return ou
 }
 
@@ -588,7 +613,7 @@ func (ou *OrderUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ou *OrderUpdate) defaults() {
-	if _, ok := ou.mutation.UpdatedAt(); !ok {
+	if _, ok := ou.mutation.UpdatedAt(); !ok && !ou.mutation.UpdatedAtCleared() {
 		v := order.UpdateDefaultUpdatedAt()
 		ou.mutation.SetUpdatedAt(v)
 	}
@@ -603,17 +628,32 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if ou.mutation.CreatedAtCleared() {
+		_spec.ClearField(order.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := ou.mutation.UpdatedAt(); ok {
 		_spec.SetField(order.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := ou.mutation.DeleteAt(); ok {
-		_spec.SetField(order.FieldDeleteAt, field.TypeTime, value)
+	if ou.mutation.UpdatedAtCleared() {
+		_spec.ClearField(order.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := ou.mutation.Delete(); ok {
+		_spec.SetField(order.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := ou.mutation.AddedDelete(); ok {
+		_spec.AddField(order.FieldDelete, field.TypeInt64, value)
+	}
+	if ou.mutation.DeleteCleared() {
+		_spec.ClearField(order.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := ou.mutation.CreatedID(); ok {
 		_spec.SetField(order.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := ou.mutation.AddedCreatedID(); ok {
 		_spec.AddField(order.FieldCreatedID, field.TypeInt64, value)
+	}
+	if ou.mutation.CreatedIDCleared() {
+		_spec.ClearField(order.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := ou.mutation.OrderSn(); ok {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)
@@ -1004,17 +1044,36 @@ func (ouo *OrderUpdateOne) SetUpdatedAt(t time.Time) *OrderUpdateOne {
 	return ouo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (ouo *OrderUpdateOne) SetDeleteAt(t time.Time) *OrderUpdateOne {
-	ouo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (ouo *OrderUpdateOne) ClearUpdatedAt() *OrderUpdateOne {
+	ouo.mutation.ClearUpdatedAt()
 	return ouo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (ouo *OrderUpdateOne) SetNillableDeleteAt(t *time.Time) *OrderUpdateOne {
-	if t != nil {
-		ouo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (ouo *OrderUpdateOne) SetDelete(i int64) *OrderUpdateOne {
+	ouo.mutation.ResetDelete()
+	ouo.mutation.SetDelete(i)
+	return ouo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableDelete(i *int64) *OrderUpdateOne {
+	if i != nil {
+		ouo.SetDelete(*i)
 	}
+	return ouo
+}
+
+// AddDelete adds i to the "delete" field.
+func (ouo *OrderUpdateOne) AddDelete(i int64) *OrderUpdateOne {
+	ouo.mutation.AddDelete(i)
+	return ouo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (ouo *OrderUpdateOne) ClearDelete() *OrderUpdateOne {
+	ouo.mutation.ClearDelete()
 	return ouo
 }
 
@@ -1036,6 +1095,12 @@ func (ouo *OrderUpdateOne) SetNillableCreatedID(i *int64) *OrderUpdateOne {
 // AddCreatedID adds i to the "created_id" field.
 func (ouo *OrderUpdateOne) AddCreatedID(i int64) *OrderUpdateOne {
 	ouo.mutation.AddCreatedID(i)
+	return ouo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (ouo *OrderUpdateOne) ClearCreatedID() *OrderUpdateOne {
+	ouo.mutation.ClearCreatedID()
 	return ouo
 }
 
@@ -1563,7 +1628,7 @@ func (ouo *OrderUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ouo *OrderUpdateOne) defaults() {
-	if _, ok := ouo.mutation.UpdatedAt(); !ok {
+	if _, ok := ouo.mutation.UpdatedAt(); !ok && !ouo.mutation.UpdatedAtCleared() {
 		v := order.UpdateDefaultUpdatedAt()
 		ouo.mutation.SetUpdatedAt(v)
 	}
@@ -1595,17 +1660,32 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 			}
 		}
 	}
+	if ouo.mutation.CreatedAtCleared() {
+		_spec.ClearField(order.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := ouo.mutation.UpdatedAt(); ok {
 		_spec.SetField(order.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := ouo.mutation.DeleteAt(); ok {
-		_spec.SetField(order.FieldDeleteAt, field.TypeTime, value)
+	if ouo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(order.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := ouo.mutation.Delete(); ok {
+		_spec.SetField(order.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := ouo.mutation.AddedDelete(); ok {
+		_spec.AddField(order.FieldDelete, field.TypeInt64, value)
+	}
+	if ouo.mutation.DeleteCleared() {
+		_spec.ClearField(order.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := ouo.mutation.CreatedID(); ok {
 		_spec.SetField(order.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := ouo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(order.FieldCreatedID, field.TypeInt64, value)
+	}
+	if ouo.mutation.CreatedIDCleared() {
+		_spec.ClearField(order.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := ouo.mutation.OrderSn(); ok {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)

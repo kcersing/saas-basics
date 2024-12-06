@@ -36,17 +36,36 @@ func (ru *RoleUpdate) SetUpdatedAt(t time.Time) *RoleUpdate {
 	return ru
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (ru *RoleUpdate) SetDeleteAt(t time.Time) *RoleUpdate {
-	ru.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (ru *RoleUpdate) ClearUpdatedAt() *RoleUpdate {
+	ru.mutation.ClearUpdatedAt()
 	return ru
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (ru *RoleUpdate) SetNillableDeleteAt(t *time.Time) *RoleUpdate {
-	if t != nil {
-		ru.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (ru *RoleUpdate) SetDelete(i int64) *RoleUpdate {
+	ru.mutation.ResetDelete()
+	ru.mutation.SetDelete(i)
+	return ru
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (ru *RoleUpdate) SetNillableDelete(i *int64) *RoleUpdate {
+	if i != nil {
+		ru.SetDelete(*i)
 	}
+	return ru
+}
+
+// AddDelete adds i to the "delete" field.
+func (ru *RoleUpdate) AddDelete(i int64) *RoleUpdate {
+	ru.mutation.AddDelete(i)
+	return ru
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (ru *RoleUpdate) ClearDelete() *RoleUpdate {
+	ru.mutation.ClearDelete()
 	return ru
 }
 
@@ -68,6 +87,12 @@ func (ru *RoleUpdate) SetNillableCreatedID(i *int64) *RoleUpdate {
 // AddCreatedID adds i to the "created_id" field.
 func (ru *RoleUpdate) AddCreatedID(i int64) *RoleUpdate {
 	ru.mutation.AddCreatedID(i)
+	return ru
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (ru *RoleUpdate) ClearCreatedID() *RoleUpdate {
+	ru.mutation.ClearCreatedID()
 	return ru
 }
 
@@ -258,7 +283,7 @@ func (ru *RoleUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ru *RoleUpdate) defaults() {
-	if _, ok := ru.mutation.UpdatedAt(); !ok {
+	if _, ok := ru.mutation.UpdatedAt(); !ok && !ru.mutation.UpdatedAtCleared() {
 		v := role.UpdateDefaultUpdatedAt()
 		ru.mutation.SetUpdatedAt(v)
 	}
@@ -273,17 +298,32 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if ru.mutation.CreatedAtCleared() {
+		_spec.ClearField(role.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := ru.mutation.UpdatedAt(); ok {
 		_spec.SetField(role.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := ru.mutation.DeleteAt(); ok {
-		_spec.SetField(role.FieldDeleteAt, field.TypeTime, value)
+	if ru.mutation.UpdatedAtCleared() {
+		_spec.ClearField(role.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := ru.mutation.Delete(); ok {
+		_spec.SetField(role.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := ru.mutation.AddedDelete(); ok {
+		_spec.AddField(role.FieldDelete, field.TypeInt64, value)
+	}
+	if ru.mutation.DeleteCleared() {
+		_spec.ClearField(role.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := ru.mutation.CreatedID(); ok {
 		_spec.SetField(role.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := ru.mutation.AddedCreatedID(); ok {
 		_spec.AddField(role.FieldCreatedID, field.TypeInt64, value)
+	}
+	if ru.mutation.CreatedIDCleared() {
+		_spec.ClearField(role.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := ru.mutation.Status(); ok {
 		_spec.SetField(role.FieldStatus, field.TypeInt64, value)
@@ -391,17 +431,36 @@ func (ruo *RoleUpdateOne) SetUpdatedAt(t time.Time) *RoleUpdateOne {
 	return ruo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (ruo *RoleUpdateOne) SetDeleteAt(t time.Time) *RoleUpdateOne {
-	ruo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (ruo *RoleUpdateOne) ClearUpdatedAt() *RoleUpdateOne {
+	ruo.mutation.ClearUpdatedAt()
 	return ruo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (ruo *RoleUpdateOne) SetNillableDeleteAt(t *time.Time) *RoleUpdateOne {
-	if t != nil {
-		ruo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (ruo *RoleUpdateOne) SetDelete(i int64) *RoleUpdateOne {
+	ruo.mutation.ResetDelete()
+	ruo.mutation.SetDelete(i)
+	return ruo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (ruo *RoleUpdateOne) SetNillableDelete(i *int64) *RoleUpdateOne {
+	if i != nil {
+		ruo.SetDelete(*i)
 	}
+	return ruo
+}
+
+// AddDelete adds i to the "delete" field.
+func (ruo *RoleUpdateOne) AddDelete(i int64) *RoleUpdateOne {
+	ruo.mutation.AddDelete(i)
+	return ruo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (ruo *RoleUpdateOne) ClearDelete() *RoleUpdateOne {
+	ruo.mutation.ClearDelete()
 	return ruo
 }
 
@@ -423,6 +482,12 @@ func (ruo *RoleUpdateOne) SetNillableCreatedID(i *int64) *RoleUpdateOne {
 // AddCreatedID adds i to the "created_id" field.
 func (ruo *RoleUpdateOne) AddCreatedID(i int64) *RoleUpdateOne {
 	ruo.mutation.AddCreatedID(i)
+	return ruo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (ruo *RoleUpdateOne) ClearCreatedID() *RoleUpdateOne {
+	ruo.mutation.ClearCreatedID()
 	return ruo
 }
 
@@ -626,7 +691,7 @@ func (ruo *RoleUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ruo *RoleUpdateOne) defaults() {
-	if _, ok := ruo.mutation.UpdatedAt(); !ok {
+	if _, ok := ruo.mutation.UpdatedAt(); !ok && !ruo.mutation.UpdatedAtCleared() {
 		v := role.UpdateDefaultUpdatedAt()
 		ruo.mutation.SetUpdatedAt(v)
 	}
@@ -658,17 +723,32 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			}
 		}
 	}
+	if ruo.mutation.CreatedAtCleared() {
+		_spec.ClearField(role.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := ruo.mutation.UpdatedAt(); ok {
 		_spec.SetField(role.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := ruo.mutation.DeleteAt(); ok {
-		_spec.SetField(role.FieldDeleteAt, field.TypeTime, value)
+	if ruo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(role.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := ruo.mutation.Delete(); ok {
+		_spec.SetField(role.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := ruo.mutation.AddedDelete(); ok {
+		_spec.AddField(role.FieldDelete, field.TypeInt64, value)
+	}
+	if ruo.mutation.DeleteCleared() {
+		_spec.ClearField(role.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := ruo.mutation.CreatedID(); ok {
 		_spec.SetField(role.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := ruo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(role.FieldCreatedID, field.TypeInt64, value)
+	}
+	if ruo.mutation.CreatedIDCleared() {
+		_spec.ClearField(role.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := ruo.mutation.Status(); ok {
 		_spec.SetField(role.FieldStatus, field.TypeInt64, value)

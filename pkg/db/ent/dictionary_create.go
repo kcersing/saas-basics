@@ -49,9 +49,17 @@ func (dc *DictionaryCreate) SetNillableUpdatedAt(t *time.Time) *DictionaryCreate
 	return dc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (dc *DictionaryCreate) SetDeleteAt(t time.Time) *DictionaryCreate {
-	dc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (dc *DictionaryCreate) SetDelete(i int64) *DictionaryCreate {
+	dc.mutation.SetDelete(i)
+	return dc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (dc *DictionaryCreate) SetNillableDelete(i *int64) *DictionaryCreate {
+	if i != nil {
+		dc.SetDelete(*i)
+	}
 	return dc
 }
 
@@ -165,6 +173,10 @@ func (dc *DictionaryCreate) defaults() {
 		v := dictionary.DefaultUpdatedAt()
 		dc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := dc.mutation.Delete(); !ok {
+		v := dictionary.DefaultDelete
+		dc.mutation.SetDelete(v)
+	}
 	if _, ok := dc.mutation.CreatedID(); !ok {
 		v := dictionary.DefaultCreatedID
 		dc.mutation.SetCreatedID(v)
@@ -177,18 +189,6 @@ func (dc *DictionaryCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (dc *DictionaryCreate) check() error {
-	if _, ok := dc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Dictionary.created_at"`)}
-	}
-	if _, ok := dc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Dictionary.updated_at"`)}
-	}
-	if _, ok := dc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Dictionary.delete_at"`)}
-	}
-	if _, ok := dc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Dictionary.created_id"`)}
-	}
 	if _, ok := dc.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Dictionary.title"`)}
 	}
@@ -238,9 +238,9 @@ func (dc *DictionaryCreate) createSpec() (*Dictionary, *sqlgraph.CreateSpec) {
 		_spec.SetField(dictionary.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := dc.mutation.DeleteAt(); ok {
-		_spec.SetField(dictionary.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := dc.mutation.Delete(); ok {
+		_spec.SetField(dictionary.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := dc.mutation.CreatedID(); ok {
 		_spec.SetField(dictionary.FieldCreatedID, field.TypeInt64, value)

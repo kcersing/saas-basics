@@ -115,6 +115,7 @@ func (d Dictionary) List(req *dictionary.DictListReq) (list []*dictionary.Dictio
 	if req.Name != "" {
 		predicates = append(predicates, dictionary2.NameContains(req.Name))
 	}
+	predicates = append(predicates, dictionary2.Delete(0))
 	dictionaries, err := d.db.Dictionary.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(d.ctx)

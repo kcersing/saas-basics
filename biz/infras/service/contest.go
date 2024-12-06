@@ -41,12 +41,7 @@ func (c Contest) CreateContest(req contest.ContestInfo) error {
 		createdId = userId.(int64)
 	}
 
-	tx, err := c.db.Tx(c.ctx)
-	if err != nil {
-		return errors.Wrap(err, "starting a transaction:")
-	}
-
-	cont := tx.Contest.Create().
+	_, err := c.db.Contest.Create().
 		SetName(req.Name).
 		SetDetail(req.Detail).
 		SetSignNumber(req.SignNumber).
@@ -63,13 +58,13 @@ func (c Contest) CreateContest(req contest.ContestInfo) error {
 		SetSignFields(req.SignFields).
 		SetIsFee(req.IsFee).
 		SetIsShow(req.IsShow).
-		SetCreatedID(createdId)
-
-	_, err = cont.Save(c.ctx)
-
-	if err = tx.Commit(); err != nil {
+		SetCreatedID(createdId).
+		Save(c.ctx)
+	if err != nil {
+		err = errors.Wrap(err, err.Error())
 		return err
 	}
+
 	return nil
 }
 
@@ -79,12 +74,7 @@ func (c Contest) UpdateContest(req contest.ContestInfo) error {
 	startAt, _ := time.Parse(time.DateTime, req.StartAt)
 	endAt, _ := time.Parse(time.DateTime, req.EndAt)
 
-	tx, err := c.db.Tx(c.ctx)
-	if err != nil {
-		return errors.Wrap(err, "starting a transaction:")
-	}
-
-	_, err = tx.Contest.Update().
+	_, err := c.db.Contest.Update().
 		Where(contest2.IDEQ(req.ID)).
 		SetName(req.Name).
 		SetDetail(req.Detail).
@@ -108,16 +98,12 @@ func (c Contest) UpdateContest(req contest.ContestInfo) error {
 		return err
 	}
 
-	if err = tx.Commit(); err != nil {
-		return err
-	}
-
 	return nil
 }
 
 func (c Contest) DeleteContest(id int64) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := c.db.Contest.Update().Where(contest2.IDEQ(id)).SetDelete(1).Save(c.ctx)
+	return err
 }
 
 func (c Contest) ContestList(req contest.ContestListReq) (resp []*contest.ContestInfo, total int, err error) {
@@ -143,7 +129,7 @@ func (c Contest) ContestList(req contest.ContestListReq) (resp []*contest.Contes
 		predicates = append(predicates, contest2.StartAtGT(startAt))
 		predicates = append(predicates, contest2.EndAtEQ(endAt))
 	}
-
+	predicates = append(predicates, contest2.Delete(0))
 	lists, err := c.db.Contest.Query().Where(predicates...).
 		Order(ent.Desc(contest2.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -231,8 +217,8 @@ func (c Contest) UpdateContestShow(ID int64, status int64) error {
 }
 func (c Contest) DelContest(ID int64) error {
 	_, err := c.db.Contest.Update().
-		Where(contest2.IDEQ(ID)).SetDeleteAt(time.Now()).
-		Save(c.ctx)
+		Where(contest2.IDEQ(ID)).SetDelete(1).Save(c.ctx)
+
 	return err
 }
 func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
@@ -323,7 +309,7 @@ func (c Contest) ParticipantList(req contest.ParticipantListReq) (resp []*contes
 		//predicates = append(predicates, contestparticipant.Mobile(req.Sn))
 	}
 	predicates = append(predicates, contestparticipant.ContestID(req.ContestId))
-
+	predicates = append(predicates, contestparticipant.Delete(0))
 	lists, err := c.db.ContestParticipant.Query().Where(predicates...).
 		Order(ent.Desc(contestparticipant.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).

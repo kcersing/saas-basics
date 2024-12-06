@@ -35,17 +35,36 @@ func (cpu *ContestParticipantUpdate) SetUpdatedAt(t time.Time) *ContestParticipa
 	return cpu
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cpu *ContestParticipantUpdate) SetDeleteAt(t time.Time) *ContestParticipantUpdate {
-	cpu.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (cpu *ContestParticipantUpdate) ClearUpdatedAt() *ContestParticipantUpdate {
+	cpu.mutation.ClearUpdatedAt()
 	return cpu
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (cpu *ContestParticipantUpdate) SetNillableDeleteAt(t *time.Time) *ContestParticipantUpdate {
-	if t != nil {
-		cpu.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (cpu *ContestParticipantUpdate) SetDelete(i int64) *ContestParticipantUpdate {
+	cpu.mutation.ResetDelete()
+	cpu.mutation.SetDelete(i)
+	return cpu
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cpu *ContestParticipantUpdate) SetNillableDelete(i *int64) *ContestParticipantUpdate {
+	if i != nil {
+		cpu.SetDelete(*i)
 	}
+	return cpu
+}
+
+// AddDelete adds i to the "delete" field.
+func (cpu *ContestParticipantUpdate) AddDelete(i int64) *ContestParticipantUpdate {
+	cpu.mutation.AddDelete(i)
+	return cpu
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (cpu *ContestParticipantUpdate) ClearDelete() *ContestParticipantUpdate {
+	cpu.mutation.ClearDelete()
 	return cpu
 }
 
@@ -67,6 +86,12 @@ func (cpu *ContestParticipantUpdate) SetNillableCreatedID(i *int64) *ContestPart
 // AddCreatedID adds i to the "created_id" field.
 func (cpu *ContestParticipantUpdate) AddCreatedID(i int64) *ContestParticipantUpdate {
 	cpu.mutation.AddCreatedID(i)
+	return cpu
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (cpu *ContestParticipantUpdate) ClearCreatedID() *ContestParticipantUpdate {
+	cpu.mutation.ClearCreatedID()
 	return cpu
 }
 
@@ -297,7 +322,7 @@ func (cpu *ContestParticipantUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cpu *ContestParticipantUpdate) defaults() {
-	if _, ok := cpu.mutation.UpdatedAt(); !ok {
+	if _, ok := cpu.mutation.UpdatedAt(); !ok && !cpu.mutation.UpdatedAtCleared() {
 		v := contestparticipant.UpdateDefaultUpdatedAt()
 		cpu.mutation.SetUpdatedAt(v)
 	}
@@ -312,17 +337,32 @@ func (cpu *ContestParticipantUpdate) sqlSave(ctx context.Context) (n int, err er
 			}
 		}
 	}
+	if cpu.mutation.CreatedAtCleared() {
+		_spec.ClearField(contestparticipant.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := cpu.mutation.UpdatedAt(); ok {
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := cpu.mutation.DeleteAt(); ok {
-		_spec.SetField(contestparticipant.FieldDeleteAt, field.TypeTime, value)
+	if cpu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(contestparticipant.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := cpu.mutation.Delete(); ok {
+		_spec.SetField(contestparticipant.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := cpu.mutation.AddedDelete(); ok {
+		_spec.AddField(contestparticipant.FieldDelete, field.TypeInt64, value)
+	}
+	if cpu.mutation.DeleteCleared() {
+		_spec.ClearField(contestparticipant.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := cpu.mutation.CreatedID(); ok {
 		_spec.SetField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := cpu.mutation.AddedCreatedID(); ok {
 		_spec.AddField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
+	}
+	if cpu.mutation.CreatedIDCleared() {
+		_spec.ClearField(contestparticipant.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := cpu.mutation.Status(); ok {
 		_spec.SetField(contestparticipant.FieldStatus, field.TypeInt64, value)
@@ -430,17 +470,36 @@ func (cpuo *ContestParticipantUpdateOne) SetUpdatedAt(t time.Time) *ContestParti
 	return cpuo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cpuo *ContestParticipantUpdateOne) SetDeleteAt(t time.Time) *ContestParticipantUpdateOne {
-	cpuo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (cpuo *ContestParticipantUpdateOne) ClearUpdatedAt() *ContestParticipantUpdateOne {
+	cpuo.mutation.ClearUpdatedAt()
 	return cpuo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (cpuo *ContestParticipantUpdateOne) SetNillableDeleteAt(t *time.Time) *ContestParticipantUpdateOne {
-	if t != nil {
-		cpuo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (cpuo *ContestParticipantUpdateOne) SetDelete(i int64) *ContestParticipantUpdateOne {
+	cpuo.mutation.ResetDelete()
+	cpuo.mutation.SetDelete(i)
+	return cpuo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cpuo *ContestParticipantUpdateOne) SetNillableDelete(i *int64) *ContestParticipantUpdateOne {
+	if i != nil {
+		cpuo.SetDelete(*i)
 	}
+	return cpuo
+}
+
+// AddDelete adds i to the "delete" field.
+func (cpuo *ContestParticipantUpdateOne) AddDelete(i int64) *ContestParticipantUpdateOne {
+	cpuo.mutation.AddDelete(i)
+	return cpuo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (cpuo *ContestParticipantUpdateOne) ClearDelete() *ContestParticipantUpdateOne {
+	cpuo.mutation.ClearDelete()
 	return cpuo
 }
 
@@ -462,6 +521,12 @@ func (cpuo *ContestParticipantUpdateOne) SetNillableCreatedID(i *int64) *Contest
 // AddCreatedID adds i to the "created_id" field.
 func (cpuo *ContestParticipantUpdateOne) AddCreatedID(i int64) *ContestParticipantUpdateOne {
 	cpuo.mutation.AddCreatedID(i)
+	return cpuo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (cpuo *ContestParticipantUpdateOne) ClearCreatedID() *ContestParticipantUpdateOne {
+	cpuo.mutation.ClearCreatedID()
 	return cpuo
 }
 
@@ -705,7 +770,7 @@ func (cpuo *ContestParticipantUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cpuo *ContestParticipantUpdateOne) defaults() {
-	if _, ok := cpuo.mutation.UpdatedAt(); !ok {
+	if _, ok := cpuo.mutation.UpdatedAt(); !ok && !cpuo.mutation.UpdatedAtCleared() {
 		v := contestparticipant.UpdateDefaultUpdatedAt()
 		cpuo.mutation.SetUpdatedAt(v)
 	}
@@ -737,17 +802,32 @@ func (cpuo *ContestParticipantUpdateOne) sqlSave(ctx context.Context) (_node *Co
 			}
 		}
 	}
+	if cpuo.mutation.CreatedAtCleared() {
+		_spec.ClearField(contestparticipant.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := cpuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := cpuo.mutation.DeleteAt(); ok {
-		_spec.SetField(contestparticipant.FieldDeleteAt, field.TypeTime, value)
+	if cpuo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(contestparticipant.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := cpuo.mutation.Delete(); ok {
+		_spec.SetField(contestparticipant.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := cpuo.mutation.AddedDelete(); ok {
+		_spec.AddField(contestparticipant.FieldDelete, field.TypeInt64, value)
+	}
+	if cpuo.mutation.DeleteCleared() {
+		_spec.ClearField(contestparticipant.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := cpuo.mutation.CreatedID(); ok {
 		_spec.SetField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := cpuo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
+	}
+	if cpuo.mutation.CreatedIDCleared() {
+		_spec.ClearField(contestparticipant.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := cpuo.mutation.Status(); ok {
 		_spec.SetField(contestparticipant.FieldStatus, field.TypeInt64, value)

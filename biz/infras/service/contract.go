@@ -91,10 +91,8 @@ func (c Contract) List(req *contract.ContractListReq) (list []*contract.Contract
 	if req.Name != "" {
 		predicates = append(predicates, contract2.NameEQ(req.Name))
 	}
-
-	all, err := c.db.Contract.
-		Query().
-		Where(predicates...).
+	predicates = append(predicates, contract2.Delete(0))
+	all, err := c.db.Contract.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(c.ctx)
 	if err != nil {

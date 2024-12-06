@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderitem"
@@ -49,9 +48,17 @@ func (oic *OrderItemCreate) SetNillableUpdatedAt(t *time.Time) *OrderItemCreate 
 	return oic
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (oic *OrderItemCreate) SetDeleteAt(t time.Time) *OrderItemCreate {
-	oic.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (oic *OrderItemCreate) SetDelete(i int64) *OrderItemCreate {
+	oic.mutation.SetDelete(i)
+	return oic
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (oic *OrderItemCreate) SetNillableDelete(i *int64) *OrderItemCreate {
+	if i != nil {
+		oic.SetDelete(*i)
+	}
 	return oic
 }
 
@@ -165,6 +172,10 @@ func (oic *OrderItemCreate) defaults() {
 		v := orderitem.DefaultUpdatedAt()
 		oic.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := oic.mutation.Delete(); !ok {
+		v := orderitem.DefaultDelete
+		oic.mutation.SetDelete(v)
+	}
 	if _, ok := oic.mutation.CreatedID(); !ok {
 		v := orderitem.DefaultCreatedID
 		oic.mutation.SetCreatedID(v)
@@ -177,18 +188,6 @@ func (oic *OrderItemCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (oic *OrderItemCreate) check() error {
-	if _, ok := oic.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "OrderItem.created_at"`)}
-	}
-	if _, ok := oic.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OrderItem.updated_at"`)}
-	}
-	if _, ok := oic.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "OrderItem.delete_at"`)}
-	}
-	if _, ok := oic.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "OrderItem.created_id"`)}
-	}
 	return nil
 }
 
@@ -229,9 +228,9 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 		_spec.SetField(orderitem.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := oic.mutation.DeleteAt(); ok {
-		_spec.SetField(orderitem.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := oic.mutation.Delete(); ok {
+		_spec.SetField(orderitem.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := oic.mutation.CreatedID(); ok {
 		_spec.SetField(orderitem.FieldCreatedID, field.TypeInt64, value)

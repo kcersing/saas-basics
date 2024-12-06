@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/entrylogs"
 	"saas/pkg/db/ent/member"
@@ -53,9 +52,17 @@ func (mc *MemberCreate) SetNillableUpdatedAt(t *time.Time) *MemberCreate {
 	return mc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mc *MemberCreate) SetDeleteAt(t time.Time) *MemberCreate {
-	mc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (mc *MemberCreate) SetDelete(i int64) *MemberCreate {
+	mc.mutation.SetDelete(i)
+	return mc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableDelete(i *int64) *MemberCreate {
+	if i != nil {
+		mc.SetDelete(*i)
+	}
 	return mc
 }
 
@@ -295,6 +302,10 @@ func (mc *MemberCreate) defaults() {
 		v := member.DefaultUpdatedAt()
 		mc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mc.mutation.Delete(); !ok {
+		v := member.DefaultDelete
+		mc.mutation.SetDelete(v)
+	}
 	if _, ok := mc.mutation.CreatedID(); !ok {
 		v := member.DefaultCreatedID
 		mc.mutation.SetCreatedID(v)
@@ -315,18 +326,6 @@ func (mc *MemberCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (mc *MemberCreate) check() error {
-	if _, ok := mc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Member.created_at"`)}
-	}
-	if _, ok := mc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Member.updated_at"`)}
-	}
-	if _, ok := mc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Member.delete_at"`)}
-	}
-	if _, ok := mc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Member.created_id"`)}
-	}
 	return nil
 }
 
@@ -367,9 +366,9 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		_spec.SetField(member.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mc.mutation.DeleteAt(); ok {
-		_spec.SetField(member.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := mc.mutation.Delete(); ok {
+		_spec.SetField(member.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := mc.mutation.CreatedID(); ok {
 		_spec.SetField(member.FieldCreatedID, field.TypeInt64, value)

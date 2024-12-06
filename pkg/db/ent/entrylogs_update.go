@@ -37,17 +37,36 @@ func (elu *EntryLogsUpdate) SetUpdatedAt(t time.Time) *EntryLogsUpdate {
 	return elu
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (elu *EntryLogsUpdate) SetDeleteAt(t time.Time) *EntryLogsUpdate {
-	elu.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (elu *EntryLogsUpdate) ClearUpdatedAt() *EntryLogsUpdate {
+	elu.mutation.ClearUpdatedAt()
 	return elu
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (elu *EntryLogsUpdate) SetNillableDeleteAt(t *time.Time) *EntryLogsUpdate {
-	if t != nil {
-		elu.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (elu *EntryLogsUpdate) SetDelete(i int64) *EntryLogsUpdate {
+	elu.mutation.ResetDelete()
+	elu.mutation.SetDelete(i)
+	return elu
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableDelete(i *int64) *EntryLogsUpdate {
+	if i != nil {
+		elu.SetDelete(*i)
 	}
+	return elu
+}
+
+// AddDelete adds i to the "delete" field.
+func (elu *EntryLogsUpdate) AddDelete(i int64) *EntryLogsUpdate {
+	elu.mutation.AddDelete(i)
+	return elu
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (elu *EntryLogsUpdate) ClearDelete() *EntryLogsUpdate {
+	elu.mutation.ClearDelete()
 	return elu
 }
 
@@ -69,6 +88,12 @@ func (elu *EntryLogsUpdate) SetNillableCreatedID(i *int64) *EntryLogsUpdate {
 // AddCreatedID adds i to the "created_id" field.
 func (elu *EntryLogsUpdate) AddCreatedID(i int64) *EntryLogsUpdate {
 	elu.mutation.AddCreatedID(i)
+	return elu
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (elu *EntryLogsUpdate) ClearCreatedID() *EntryLogsUpdate {
+	elu.mutation.ClearCreatedID()
 	return elu
 }
 
@@ -336,7 +361,7 @@ func (elu *EntryLogsUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (elu *EntryLogsUpdate) defaults() {
-	if _, ok := elu.mutation.UpdatedAt(); !ok {
+	if _, ok := elu.mutation.UpdatedAt(); !ok && !elu.mutation.UpdatedAtCleared() {
 		v := entrylogs.UpdateDefaultUpdatedAt()
 		elu.mutation.SetUpdatedAt(v)
 	}
@@ -351,17 +376,32 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if elu.mutation.CreatedAtCleared() {
+		_spec.ClearField(entrylogs.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := elu.mutation.UpdatedAt(); ok {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := elu.mutation.DeleteAt(); ok {
-		_spec.SetField(entrylogs.FieldDeleteAt, field.TypeTime, value)
+	if elu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(entrylogs.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := elu.mutation.Delete(); ok {
+		_spec.SetField(entrylogs.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := elu.mutation.AddedDelete(); ok {
+		_spec.AddField(entrylogs.FieldDelete, field.TypeInt64, value)
+	}
+	if elu.mutation.DeleteCleared() {
+		_spec.ClearField(entrylogs.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := elu.mutation.CreatedID(); ok {
 		_spec.SetField(entrylogs.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := elu.mutation.AddedCreatedID(); ok {
 		_spec.AddField(entrylogs.FieldCreatedID, field.TypeInt64, value)
+	}
+	if elu.mutation.CreatedIDCleared() {
+		_spec.ClearField(entrylogs.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := elu.mutation.MemberProductID(); ok {
 		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
@@ -506,17 +546,36 @@ func (eluo *EntryLogsUpdateOne) SetUpdatedAt(t time.Time) *EntryLogsUpdateOne {
 	return eluo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (eluo *EntryLogsUpdateOne) SetDeleteAt(t time.Time) *EntryLogsUpdateOne {
-	eluo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (eluo *EntryLogsUpdateOne) ClearUpdatedAt() *EntryLogsUpdateOne {
+	eluo.mutation.ClearUpdatedAt()
 	return eluo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (eluo *EntryLogsUpdateOne) SetNillableDeleteAt(t *time.Time) *EntryLogsUpdateOne {
-	if t != nil {
-		eluo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (eluo *EntryLogsUpdateOne) SetDelete(i int64) *EntryLogsUpdateOne {
+	eluo.mutation.ResetDelete()
+	eluo.mutation.SetDelete(i)
+	return eluo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableDelete(i *int64) *EntryLogsUpdateOne {
+	if i != nil {
+		eluo.SetDelete(*i)
 	}
+	return eluo
+}
+
+// AddDelete adds i to the "delete" field.
+func (eluo *EntryLogsUpdateOne) AddDelete(i int64) *EntryLogsUpdateOne {
+	eluo.mutation.AddDelete(i)
+	return eluo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (eluo *EntryLogsUpdateOne) ClearDelete() *EntryLogsUpdateOne {
+	eluo.mutation.ClearDelete()
 	return eluo
 }
 
@@ -538,6 +597,12 @@ func (eluo *EntryLogsUpdateOne) SetNillableCreatedID(i *int64) *EntryLogsUpdateO
 // AddCreatedID adds i to the "created_id" field.
 func (eluo *EntryLogsUpdateOne) AddCreatedID(i int64) *EntryLogsUpdateOne {
 	eluo.mutation.AddCreatedID(i)
+	return eluo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (eluo *EntryLogsUpdateOne) ClearCreatedID() *EntryLogsUpdateOne {
+	eluo.mutation.ClearCreatedID()
 	return eluo
 }
 
@@ -818,7 +883,7 @@ func (eluo *EntryLogsUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (eluo *EntryLogsUpdateOne) defaults() {
-	if _, ok := eluo.mutation.UpdatedAt(); !ok {
+	if _, ok := eluo.mutation.UpdatedAt(); !ok && !eluo.mutation.UpdatedAtCleared() {
 		v := entrylogs.UpdateDefaultUpdatedAt()
 		eluo.mutation.SetUpdatedAt(v)
 	}
@@ -850,17 +915,32 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 			}
 		}
 	}
+	if eluo.mutation.CreatedAtCleared() {
+		_spec.ClearField(entrylogs.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := eluo.mutation.UpdatedAt(); ok {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := eluo.mutation.DeleteAt(); ok {
-		_spec.SetField(entrylogs.FieldDeleteAt, field.TypeTime, value)
+	if eluo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(entrylogs.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := eluo.mutation.Delete(); ok {
+		_spec.SetField(entrylogs.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := eluo.mutation.AddedDelete(); ok {
+		_spec.AddField(entrylogs.FieldDelete, field.TypeInt64, value)
+	}
+	if eluo.mutation.DeleteCleared() {
+		_spec.ClearField(entrylogs.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := eluo.mutation.CreatedID(); ok {
 		_spec.SetField(entrylogs.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := eluo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(entrylogs.FieldCreatedID, field.TypeInt64, value)
+	}
+	if eluo.mutation.CreatedIDCleared() {
+		_spec.ClearField(entrylogs.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := eluo.mutation.MemberProductID(); ok {
 		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)

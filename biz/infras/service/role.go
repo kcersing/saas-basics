@@ -134,7 +134,9 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 
 func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total int64, err error) {
 
-	roleEntList, err := r.db.Role.Query().Order(ent.Asc(role.FieldOrderNo)).
+	roleEntList, err := r.db.Role.Query().
+		Where(role.Delete(0)).
+		Order(ent.Asc(role.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(r.ctx)
 	if err != nil {

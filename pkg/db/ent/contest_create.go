@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
@@ -49,9 +48,17 @@ func (cc *ContestCreate) SetNillableUpdatedAt(t *time.Time) *ContestCreate {
 	return cc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cc *ContestCreate) SetDeleteAt(t time.Time) *ContestCreate {
-	cc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (cc *ContestCreate) SetDelete(i int64) *ContestCreate {
+	cc.mutation.SetDelete(i)
+	return cc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cc *ContestCreate) SetNillableDelete(i *int64) *ContestCreate {
+	if i != nil {
+		cc.SetDelete(*i)
+	}
 	return cc
 }
 
@@ -385,6 +392,10 @@ func (cc *ContestCreate) defaults() {
 		v := contest.DefaultUpdatedAt()
 		cc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := cc.mutation.Delete(); !ok {
+		v := contest.DefaultDelete
+		cc.mutation.SetDelete(v)
+	}
 	if _, ok := cc.mutation.CreatedID(); !ok {
 		v := contest.DefaultCreatedID
 		cc.mutation.SetCreatedID(v)
@@ -417,18 +428,6 @@ func (cc *ContestCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *ContestCreate) check() error {
-	if _, ok := cc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Contest.created_at"`)}
-	}
-	if _, ok := cc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Contest.updated_at"`)}
-	}
-	if _, ok := cc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Contest.delete_at"`)}
-	}
-	if _, ok := cc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Contest.created_id"`)}
-	}
 	return nil
 }
 
@@ -469,9 +468,9 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 		_spec.SetField(contest.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cc.mutation.DeleteAt(); ok {
-		_spec.SetField(contest.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := cc.mutation.Delete(); ok {
+		_spec.SetField(contest.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := cc.mutation.CreatedID(); ok {
 		_spec.SetField(contest.FieldCreatedID, field.TypeInt64, value)

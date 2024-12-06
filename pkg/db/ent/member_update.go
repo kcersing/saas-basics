@@ -39,17 +39,36 @@ func (mu *MemberUpdate) SetUpdatedAt(t time.Time) *MemberUpdate {
 	return mu
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mu *MemberUpdate) SetDeleteAt(t time.Time) *MemberUpdate {
-	mu.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (mu *MemberUpdate) ClearUpdatedAt() *MemberUpdate {
+	mu.mutation.ClearUpdatedAt()
 	return mu
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (mu *MemberUpdate) SetNillableDeleteAt(t *time.Time) *MemberUpdate {
-	if t != nil {
-		mu.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (mu *MemberUpdate) SetDelete(i int64) *MemberUpdate {
+	mu.mutation.ResetDelete()
+	mu.mutation.SetDelete(i)
+	return mu
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillableDelete(i *int64) *MemberUpdate {
+	if i != nil {
+		mu.SetDelete(*i)
 	}
+	return mu
+}
+
+// AddDelete adds i to the "delete" field.
+func (mu *MemberUpdate) AddDelete(i int64) *MemberUpdate {
+	mu.mutation.AddDelete(i)
+	return mu
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (mu *MemberUpdate) ClearDelete() *MemberUpdate {
+	mu.mutation.ClearDelete()
 	return mu
 }
 
@@ -71,6 +90,12 @@ func (mu *MemberUpdate) SetNillableCreatedID(i *int64) *MemberUpdate {
 // AddCreatedID adds i to the "created_id" field.
 func (mu *MemberUpdate) AddCreatedID(i int64) *MemberUpdate {
 	mu.mutation.AddCreatedID(i)
+	return mu
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (mu *MemberUpdate) ClearCreatedID() *MemberUpdate {
+	mu.mutation.ClearCreatedID()
 	return mu
 }
 
@@ -443,7 +468,7 @@ func (mu *MemberUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (mu *MemberUpdate) defaults() {
-	if _, ok := mu.mutation.UpdatedAt(); !ok {
+	if _, ok := mu.mutation.UpdatedAt(); !ok && !mu.mutation.UpdatedAtCleared() {
 		v := member.UpdateDefaultUpdatedAt()
 		mu.mutation.SetUpdatedAt(v)
 	}
@@ -458,17 +483,32 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if mu.mutation.CreatedAtCleared() {
+		_spec.ClearField(member.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := mu.mutation.UpdatedAt(); ok {
 		_spec.SetField(member.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := mu.mutation.DeleteAt(); ok {
-		_spec.SetField(member.FieldDeleteAt, field.TypeTime, value)
+	if mu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(member.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := mu.mutation.Delete(); ok {
+		_spec.SetField(member.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.AddedDelete(); ok {
+		_spec.AddField(member.FieldDelete, field.TypeInt64, value)
+	}
+	if mu.mutation.DeleteCleared() {
+		_spec.ClearField(member.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := mu.mutation.CreatedID(); ok {
 		_spec.SetField(member.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := mu.mutation.AddedCreatedID(); ok {
 		_spec.AddField(member.FieldCreatedID, field.TypeInt64, value)
+	}
+	if mu.mutation.CreatedIDCleared() {
+		_spec.ClearField(member.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := mu.mutation.Status(); ok {
 		_spec.SetField(member.FieldStatus, field.TypeInt64, value)
@@ -769,17 +809,36 @@ func (muo *MemberUpdateOne) SetUpdatedAt(t time.Time) *MemberUpdateOne {
 	return muo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (muo *MemberUpdateOne) SetDeleteAt(t time.Time) *MemberUpdateOne {
-	muo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (muo *MemberUpdateOne) ClearUpdatedAt() *MemberUpdateOne {
+	muo.mutation.ClearUpdatedAt()
 	return muo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (muo *MemberUpdateOne) SetNillableDeleteAt(t *time.Time) *MemberUpdateOne {
-	if t != nil {
-		muo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (muo *MemberUpdateOne) SetDelete(i int64) *MemberUpdateOne {
+	muo.mutation.ResetDelete()
+	muo.mutation.SetDelete(i)
+	return muo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableDelete(i *int64) *MemberUpdateOne {
+	if i != nil {
+		muo.SetDelete(*i)
 	}
+	return muo
+}
+
+// AddDelete adds i to the "delete" field.
+func (muo *MemberUpdateOne) AddDelete(i int64) *MemberUpdateOne {
+	muo.mutation.AddDelete(i)
+	return muo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (muo *MemberUpdateOne) ClearDelete() *MemberUpdateOne {
+	muo.mutation.ClearDelete()
 	return muo
 }
 
@@ -801,6 +860,12 @@ func (muo *MemberUpdateOne) SetNillableCreatedID(i *int64) *MemberUpdateOne {
 // AddCreatedID adds i to the "created_id" field.
 func (muo *MemberUpdateOne) AddCreatedID(i int64) *MemberUpdateOne {
 	muo.mutation.AddCreatedID(i)
+	return muo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (muo *MemberUpdateOne) ClearCreatedID() *MemberUpdateOne {
+	muo.mutation.ClearCreatedID()
 	return muo
 }
 
@@ -1186,7 +1251,7 @@ func (muo *MemberUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (muo *MemberUpdateOne) defaults() {
-	if _, ok := muo.mutation.UpdatedAt(); !ok {
+	if _, ok := muo.mutation.UpdatedAt(); !ok && !muo.mutation.UpdatedAtCleared() {
 		v := member.UpdateDefaultUpdatedAt()
 		muo.mutation.SetUpdatedAt(v)
 	}
@@ -1218,17 +1283,32 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 			}
 		}
 	}
+	if muo.mutation.CreatedAtCleared() {
+		_spec.ClearField(member.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := muo.mutation.UpdatedAt(); ok {
 		_spec.SetField(member.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := muo.mutation.DeleteAt(); ok {
-		_spec.SetField(member.FieldDeleteAt, field.TypeTime, value)
+	if muo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(member.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := muo.mutation.Delete(); ok {
+		_spec.SetField(member.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.AddedDelete(); ok {
+		_spec.AddField(member.FieldDelete, field.TypeInt64, value)
+	}
+	if muo.mutation.DeleteCleared() {
+		_spec.ClearField(member.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := muo.mutation.CreatedID(); ok {
 		_spec.SetField(member.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(member.FieldCreatedID, field.TypeInt64, value)
+	}
+	if muo.mutation.CreatedIDCleared() {
+		_spec.ClearField(member.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := muo.mutation.Status(); ok {
 		_spec.SetField(member.FieldStatus, field.TypeInt64, value)

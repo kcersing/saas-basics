@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/membercontract"
@@ -51,9 +50,17 @@ func (mcc *MemberContractCreate) SetNillableUpdatedAt(t *time.Time) *MemberContr
 	return mcc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mcc *MemberContractCreate) SetDeleteAt(t time.Time) *MemberContractCreate {
-	mcc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (mcc *MemberContractCreate) SetDelete(i int64) *MemberContractCreate {
+	mcc.mutation.SetDelete(i)
+	return mcc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mcc *MemberContractCreate) SetNillableDelete(i *int64) *MemberContractCreate {
+	if i != nil {
+		mcc.SetDelete(*i)
+	}
 	return mcc
 }
 
@@ -257,6 +264,10 @@ func (mcc *MemberContractCreate) defaults() {
 		v := membercontract.DefaultUpdatedAt()
 		mcc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mcc.mutation.Delete(); !ok {
+		v := membercontract.DefaultDelete
+		mcc.mutation.SetDelete(v)
+	}
 	if _, ok := mcc.mutation.CreatedID(); !ok {
 		v := membercontract.DefaultCreatedID
 		mcc.mutation.SetCreatedID(v)
@@ -269,18 +280,6 @@ func (mcc *MemberContractCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (mcc *MemberContractCreate) check() error {
-	if _, ok := mcc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "MemberContract.created_at"`)}
-	}
-	if _, ok := mcc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "MemberContract.updated_at"`)}
-	}
-	if _, ok := mcc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "MemberContract.delete_at"`)}
-	}
-	if _, ok := mcc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "MemberContract.created_id"`)}
-	}
 	return nil
 }
 
@@ -321,9 +320,9 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 		_spec.SetField(membercontract.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mcc.mutation.DeleteAt(); ok {
-		_spec.SetField(membercontract.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := mcc.mutation.Delete(); ok {
+		_spec.SetField(membercontract.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := mcc.mutation.CreatedID(); ok {
 		_spec.SetField(membercontract.FieldCreatedID, field.TypeInt64, value)

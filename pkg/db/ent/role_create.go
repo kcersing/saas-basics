@@ -49,9 +49,17 @@ func (rc *RoleCreate) SetNillableUpdatedAt(t *time.Time) *RoleCreate {
 	return rc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (rc *RoleCreate) SetDeleteAt(t time.Time) *RoleCreate {
-	rc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (rc *RoleCreate) SetDelete(i int64) *RoleCreate {
+	rc.mutation.SetDelete(i)
+	return rc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (rc *RoleCreate) SetNillableDelete(i *int64) *RoleCreate {
+	if i != nil {
+		rc.SetDelete(*i)
+	}
 	return rc
 }
 
@@ -207,6 +215,10 @@ func (rc *RoleCreate) defaults() {
 		v := role.DefaultUpdatedAt()
 		rc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := rc.mutation.Delete(); !ok {
+		v := role.DefaultDelete
+		rc.mutation.SetDelete(v)
+	}
 	if _, ok := rc.mutation.CreatedID(); !ok {
 		v := role.DefaultCreatedID
 		rc.mutation.SetCreatedID(v)
@@ -235,18 +247,6 @@ func (rc *RoleCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *RoleCreate) check() error {
-	if _, ok := rc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Role.created_at"`)}
-	}
-	if _, ok := rc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Role.updated_at"`)}
-	}
-	if _, ok := rc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Role.delete_at"`)}
-	}
-	if _, ok := rc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Role.created_id"`)}
-	}
 	if _, ok := rc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Role.name"`)}
 	}
@@ -305,9 +305,9 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_spec.SetField(role.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := rc.mutation.DeleteAt(); ok {
-		_spec.SetField(role.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := rc.mutation.Delete(); ok {
+		_spec.SetField(role.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := rc.mutation.CreatedID(); ok {
 		_spec.SetField(role.FieldCreatedID, field.TypeInt64, value)

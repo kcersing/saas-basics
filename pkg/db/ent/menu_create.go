@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/menu"
 	"saas/pkg/db/ent/menuparam"
@@ -50,9 +49,17 @@ func (mc *MenuCreate) SetNillableUpdatedAt(t *time.Time) *MenuCreate {
 	return mc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mc *MenuCreate) SetDeleteAt(t time.Time) *MenuCreate {
-	mc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (mc *MenuCreate) SetDelete(i int64) *MenuCreate {
+	mc.mutation.SetDelete(i)
+	return mc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableDelete(i *int64) *MenuCreate {
+	if i != nil {
+		mc.SetDelete(*i)
+	}
 	return mc
 }
 
@@ -421,6 +428,10 @@ func (mc *MenuCreate) defaults() {
 		v := menu.DefaultUpdatedAt()
 		mc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mc.mutation.Delete(); !ok {
+		v := menu.DefaultDelete
+		mc.mutation.SetDelete(v)
+	}
 	if _, ok := mc.mutation.CreatedID(); !ok {
 		v := menu.DefaultCreatedID
 		mc.mutation.SetCreatedID(v)
@@ -477,18 +488,6 @@ func (mc *MenuCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (mc *MenuCreate) check() error {
-	if _, ok := mc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Menu.created_at"`)}
-	}
-	if _, ok := mc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Menu.updated_at"`)}
-	}
-	if _, ok := mc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Menu.delete_at"`)}
-	}
-	if _, ok := mc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Menu.created_id"`)}
-	}
 	return nil
 }
 
@@ -529,9 +528,9 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 		_spec.SetField(menu.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mc.mutation.DeleteAt(); ok {
-		_spec.SetField(menu.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := mc.mutation.Delete(); ok {
+		_spec.SetField(menu.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := mc.mutation.CreatedID(); ok {
 		_spec.SetField(menu.FieldCreatedID, field.TypeInt64, value)

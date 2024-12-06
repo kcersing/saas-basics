@@ -34,17 +34,36 @@ func (cu *ContractUpdate) SetUpdatedAt(t time.Time) *ContractUpdate {
 	return cu
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cu *ContractUpdate) SetDeleteAt(t time.Time) *ContractUpdate {
-	cu.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (cu *ContractUpdate) ClearUpdatedAt() *ContractUpdate {
+	cu.mutation.ClearUpdatedAt()
 	return cu
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (cu *ContractUpdate) SetNillableDeleteAt(t *time.Time) *ContractUpdate {
-	if t != nil {
-		cu.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (cu *ContractUpdate) SetDelete(i int64) *ContractUpdate {
+	cu.mutation.ResetDelete()
+	cu.mutation.SetDelete(i)
+	return cu
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cu *ContractUpdate) SetNillableDelete(i *int64) *ContractUpdate {
+	if i != nil {
+		cu.SetDelete(*i)
 	}
+	return cu
+}
+
+// AddDelete adds i to the "delete" field.
+func (cu *ContractUpdate) AddDelete(i int64) *ContractUpdate {
+	cu.mutation.AddDelete(i)
+	return cu
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (cu *ContractUpdate) ClearDelete() *ContractUpdate {
+	cu.mutation.ClearDelete()
 	return cu
 }
 
@@ -66,6 +85,12 @@ func (cu *ContractUpdate) SetNillableCreatedID(i *int64) *ContractUpdate {
 // AddCreatedID adds i to the "created_id" field.
 func (cu *ContractUpdate) AddCreatedID(i int64) *ContractUpdate {
 	cu.mutation.AddCreatedID(i)
+	return cu
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (cu *ContractUpdate) ClearCreatedID() *ContractUpdate {
+	cu.mutation.ClearCreatedID()
 	return cu
 }
 
@@ -171,7 +196,7 @@ func (cu *ContractUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cu *ContractUpdate) defaults() {
-	if _, ok := cu.mutation.UpdatedAt(); !ok {
+	if _, ok := cu.mutation.UpdatedAt(); !ok && !cu.mutation.UpdatedAtCleared() {
 		v := contract.UpdateDefaultUpdatedAt()
 		cu.mutation.SetUpdatedAt(v)
 	}
@@ -186,17 +211,32 @@ func (cu *ContractUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if cu.mutation.CreatedAtCleared() {
+		_spec.ClearField(contract.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := cu.mutation.UpdatedAt(); ok {
 		_spec.SetField(contract.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := cu.mutation.DeleteAt(); ok {
-		_spec.SetField(contract.FieldDeleteAt, field.TypeTime, value)
+	if cu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(contract.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := cu.mutation.Delete(); ok {
+		_spec.SetField(contract.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := cu.mutation.AddedDelete(); ok {
+		_spec.AddField(contract.FieldDelete, field.TypeInt64, value)
+	}
+	if cu.mutation.DeleteCleared() {
+		_spec.ClearField(contract.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := cu.mutation.CreatedID(); ok {
 		_spec.SetField(contract.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := cu.mutation.AddedCreatedID(); ok {
 		_spec.AddField(contract.FieldCreatedID, field.TypeInt64, value)
+	}
+	if cu.mutation.CreatedIDCleared() {
+		_spec.ClearField(contract.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := cu.mutation.Status(); ok {
 		_spec.SetField(contract.FieldStatus, field.TypeInt64, value)
@@ -245,17 +285,36 @@ func (cuo *ContractUpdateOne) SetUpdatedAt(t time.Time) *ContractUpdateOne {
 	return cuo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cuo *ContractUpdateOne) SetDeleteAt(t time.Time) *ContractUpdateOne {
-	cuo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (cuo *ContractUpdateOne) ClearUpdatedAt() *ContractUpdateOne {
+	cuo.mutation.ClearUpdatedAt()
 	return cuo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (cuo *ContractUpdateOne) SetNillableDeleteAt(t *time.Time) *ContractUpdateOne {
-	if t != nil {
-		cuo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (cuo *ContractUpdateOne) SetDelete(i int64) *ContractUpdateOne {
+	cuo.mutation.ResetDelete()
+	cuo.mutation.SetDelete(i)
+	return cuo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cuo *ContractUpdateOne) SetNillableDelete(i *int64) *ContractUpdateOne {
+	if i != nil {
+		cuo.SetDelete(*i)
 	}
+	return cuo
+}
+
+// AddDelete adds i to the "delete" field.
+func (cuo *ContractUpdateOne) AddDelete(i int64) *ContractUpdateOne {
+	cuo.mutation.AddDelete(i)
+	return cuo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (cuo *ContractUpdateOne) ClearDelete() *ContractUpdateOne {
+	cuo.mutation.ClearDelete()
 	return cuo
 }
 
@@ -277,6 +336,12 @@ func (cuo *ContractUpdateOne) SetNillableCreatedID(i *int64) *ContractUpdateOne 
 // AddCreatedID adds i to the "created_id" field.
 func (cuo *ContractUpdateOne) AddCreatedID(i int64) *ContractUpdateOne {
 	cuo.mutation.AddCreatedID(i)
+	return cuo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (cuo *ContractUpdateOne) ClearCreatedID() *ContractUpdateOne {
+	cuo.mutation.ClearCreatedID()
 	return cuo
 }
 
@@ -395,7 +460,7 @@ func (cuo *ContractUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cuo *ContractUpdateOne) defaults() {
-	if _, ok := cuo.mutation.UpdatedAt(); !ok {
+	if _, ok := cuo.mutation.UpdatedAt(); !ok && !cuo.mutation.UpdatedAtCleared() {
 		v := contract.UpdateDefaultUpdatedAt()
 		cuo.mutation.SetUpdatedAt(v)
 	}
@@ -427,17 +492,32 @@ func (cuo *ContractUpdateOne) sqlSave(ctx context.Context) (_node *Contract, err
 			}
 		}
 	}
+	if cuo.mutation.CreatedAtCleared() {
+		_spec.ClearField(contract.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := cuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(contract.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := cuo.mutation.DeleteAt(); ok {
-		_spec.SetField(contract.FieldDeleteAt, field.TypeTime, value)
+	if cuo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(contract.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := cuo.mutation.Delete(); ok {
+		_spec.SetField(contract.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := cuo.mutation.AddedDelete(); ok {
+		_spec.AddField(contract.FieldDelete, field.TypeInt64, value)
+	}
+	if cuo.mutation.DeleteCleared() {
+		_spec.ClearField(contract.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := cuo.mutation.CreatedID(); ok {
 		_spec.SetField(contract.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := cuo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(contract.FieldCreatedID, field.TypeInt64, value)
+	}
+	if cuo.mutation.CreatedIDCleared() {
+		_spec.ClearField(contract.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := cuo.mutation.Status(); ok {
 		_spec.SetField(contract.FieldStatus, field.TypeInt64, value)

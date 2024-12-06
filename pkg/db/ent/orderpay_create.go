@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderpay"
@@ -49,9 +48,17 @@ func (opc *OrderPayCreate) SetNillableUpdatedAt(t *time.Time) *OrderPayCreate {
 	return opc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (opc *OrderPayCreate) SetDeleteAt(t time.Time) *OrderPayCreate {
-	opc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (opc *OrderPayCreate) SetDelete(i int64) *OrderPayCreate {
+	opc.mutation.SetDelete(i)
+	return opc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (opc *OrderPayCreate) SetNillableDelete(i *int64) *OrderPayCreate {
+	if i != nil {
+		opc.SetDelete(*i)
+	}
 	return opc
 }
 
@@ -207,6 +214,10 @@ func (opc *OrderPayCreate) defaults() {
 		v := orderpay.DefaultUpdatedAt()
 		opc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := opc.mutation.Delete(); !ok {
+		v := orderpay.DefaultDelete
+		opc.mutation.SetDelete(v)
+	}
 	if _, ok := opc.mutation.CreatedID(); !ok {
 		v := orderpay.DefaultCreatedID
 		opc.mutation.SetCreatedID(v)
@@ -215,18 +226,6 @@ func (opc *OrderPayCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (opc *OrderPayCreate) check() error {
-	if _, ok := opc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "OrderPay.created_at"`)}
-	}
-	if _, ok := opc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OrderPay.updated_at"`)}
-	}
-	if _, ok := opc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "OrderPay.delete_at"`)}
-	}
-	if _, ok := opc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "OrderPay.created_id"`)}
-	}
 	return nil
 }
 
@@ -267,9 +266,9 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 		_spec.SetField(orderpay.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := opc.mutation.DeleteAt(); ok {
-		_spec.SetField(orderpay.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := opc.mutation.Delete(); ok {
+		_spec.SetField(orderpay.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := opc.mutation.CreatedID(); ok {
 		_spec.SetField(orderpay.FieldCreatedID, field.TypeInt64, value)

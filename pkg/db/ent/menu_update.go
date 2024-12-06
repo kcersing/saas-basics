@@ -36,17 +36,36 @@ func (mu *MenuUpdate) SetUpdatedAt(t time.Time) *MenuUpdate {
 	return mu
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mu *MenuUpdate) SetDeleteAt(t time.Time) *MenuUpdate {
-	mu.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (mu *MenuUpdate) ClearUpdatedAt() *MenuUpdate {
+	mu.mutation.ClearUpdatedAt()
 	return mu
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (mu *MenuUpdate) SetNillableDeleteAt(t *time.Time) *MenuUpdate {
-	if t != nil {
-		mu.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (mu *MenuUpdate) SetDelete(i int64) *MenuUpdate {
+	mu.mutation.ResetDelete()
+	mu.mutation.SetDelete(i)
+	return mu
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableDelete(i *int64) *MenuUpdate {
+	if i != nil {
+		mu.SetDelete(*i)
 	}
+	return mu
+}
+
+// AddDelete adds i to the "delete" field.
+func (mu *MenuUpdate) AddDelete(i int64) *MenuUpdate {
+	mu.mutation.AddDelete(i)
+	return mu
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (mu *MenuUpdate) ClearDelete() *MenuUpdate {
+	mu.mutation.ClearDelete()
 	return mu
 }
 
@@ -68,6 +87,12 @@ func (mu *MenuUpdate) SetNillableCreatedID(i *int64) *MenuUpdate {
 // AddCreatedID adds i to the "created_id" field.
 func (mu *MenuUpdate) AddCreatedID(i int64) *MenuUpdate {
 	mu.mutation.AddCreatedID(i)
+	return mu
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (mu *MenuUpdate) ClearCreatedID() *MenuUpdate {
+	mu.mutation.ClearCreatedID()
 	return mu
 }
 
@@ -620,7 +645,7 @@ func (mu *MenuUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (mu *MenuUpdate) defaults() {
-	if _, ok := mu.mutation.UpdatedAt(); !ok {
+	if _, ok := mu.mutation.UpdatedAt(); !ok && !mu.mutation.UpdatedAtCleared() {
 		v := menu.UpdateDefaultUpdatedAt()
 		mu.mutation.SetUpdatedAt(v)
 	}
@@ -635,17 +660,32 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if mu.mutation.CreatedAtCleared() {
+		_spec.ClearField(menu.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := mu.mutation.UpdatedAt(); ok {
 		_spec.SetField(menu.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := mu.mutation.DeleteAt(); ok {
-		_spec.SetField(menu.FieldDeleteAt, field.TypeTime, value)
+	if mu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(menu.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := mu.mutation.Delete(); ok {
+		_spec.SetField(menu.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.AddedDelete(); ok {
+		_spec.AddField(menu.FieldDelete, field.TypeInt64, value)
+	}
+	if mu.mutation.DeleteCleared() {
+		_spec.ClearField(menu.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := mu.mutation.CreatedID(); ok {
 		_spec.SetField(menu.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := mu.mutation.AddedCreatedID(); ok {
 		_spec.AddField(menu.FieldCreatedID, field.TypeInt64, value)
+	}
+	if mu.mutation.CreatedIDCleared() {
+		_spec.ClearField(menu.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := mu.mutation.Status(); ok {
 		_spec.SetField(menu.FieldStatus, field.TypeInt64, value)
@@ -954,17 +994,36 @@ func (muo *MenuUpdateOne) SetUpdatedAt(t time.Time) *MenuUpdateOne {
 	return muo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (muo *MenuUpdateOne) SetDeleteAt(t time.Time) *MenuUpdateOne {
-	muo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (muo *MenuUpdateOne) ClearUpdatedAt() *MenuUpdateOne {
+	muo.mutation.ClearUpdatedAt()
 	return muo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (muo *MenuUpdateOne) SetNillableDeleteAt(t *time.Time) *MenuUpdateOne {
-	if t != nil {
-		muo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (muo *MenuUpdateOne) SetDelete(i int64) *MenuUpdateOne {
+	muo.mutation.ResetDelete()
+	muo.mutation.SetDelete(i)
+	return muo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableDelete(i *int64) *MenuUpdateOne {
+	if i != nil {
+		muo.SetDelete(*i)
 	}
+	return muo
+}
+
+// AddDelete adds i to the "delete" field.
+func (muo *MenuUpdateOne) AddDelete(i int64) *MenuUpdateOne {
+	muo.mutation.AddDelete(i)
+	return muo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (muo *MenuUpdateOne) ClearDelete() *MenuUpdateOne {
+	muo.mutation.ClearDelete()
 	return muo
 }
 
@@ -986,6 +1045,12 @@ func (muo *MenuUpdateOne) SetNillableCreatedID(i *int64) *MenuUpdateOne {
 // AddCreatedID adds i to the "created_id" field.
 func (muo *MenuUpdateOne) AddCreatedID(i int64) *MenuUpdateOne {
 	muo.mutation.AddCreatedID(i)
+	return muo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (muo *MenuUpdateOne) ClearCreatedID() *MenuUpdateOne {
+	muo.mutation.ClearCreatedID()
 	return muo
 }
 
@@ -1551,7 +1616,7 @@ func (muo *MenuUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (muo *MenuUpdateOne) defaults() {
-	if _, ok := muo.mutation.UpdatedAt(); !ok {
+	if _, ok := muo.mutation.UpdatedAt(); !ok && !muo.mutation.UpdatedAtCleared() {
 		v := menu.UpdateDefaultUpdatedAt()
 		muo.mutation.SetUpdatedAt(v)
 	}
@@ -1583,17 +1648,32 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 			}
 		}
 	}
+	if muo.mutation.CreatedAtCleared() {
+		_spec.ClearField(menu.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := muo.mutation.UpdatedAt(); ok {
 		_spec.SetField(menu.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := muo.mutation.DeleteAt(); ok {
-		_spec.SetField(menu.FieldDeleteAt, field.TypeTime, value)
+	if muo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(menu.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := muo.mutation.Delete(); ok {
+		_spec.SetField(menu.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.AddedDelete(); ok {
+		_spec.AddField(menu.FieldDelete, field.TypeInt64, value)
+	}
+	if muo.mutation.DeleteCleared() {
+		_spec.ClearField(menu.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := muo.mutation.CreatedID(); ok {
 		_spec.SetField(menu.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(menu.FieldCreatedID, field.TypeInt64, value)
+	}
+	if muo.mutation.CreatedIDCleared() {
+		_spec.ClearField(menu.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := muo.mutation.Status(); ok {
 		_spec.SetField(menu.FieldStatus, field.TypeInt64, value)

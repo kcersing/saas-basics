@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/order"
 	"saas/pkg/db/ent/orderamount"
@@ -49,9 +48,17 @@ func (oac *OrderAmountCreate) SetNillableUpdatedAt(t *time.Time) *OrderAmountCre
 	return oac
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (oac *OrderAmountCreate) SetDeleteAt(t time.Time) *OrderAmountCreate {
-	oac.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (oac *OrderAmountCreate) SetDelete(i int64) *OrderAmountCreate {
+	oac.mutation.SetDelete(i)
+	return oac
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (oac *OrderAmountCreate) SetNillableDelete(i *int64) *OrderAmountCreate {
+	if i != nil {
+		oac.SetDelete(*i)
+	}
 	return oac
 }
 
@@ -193,6 +200,10 @@ func (oac *OrderAmountCreate) defaults() {
 		v := orderamount.DefaultUpdatedAt()
 		oac.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := oac.mutation.Delete(); !ok {
+		v := orderamount.DefaultDelete
+		oac.mutation.SetDelete(v)
+	}
 	if _, ok := oac.mutation.CreatedID(); !ok {
 		v := orderamount.DefaultCreatedID
 		oac.mutation.SetCreatedID(v)
@@ -201,18 +212,6 @@ func (oac *OrderAmountCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (oac *OrderAmountCreate) check() error {
-	if _, ok := oac.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "OrderAmount.created_at"`)}
-	}
-	if _, ok := oac.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OrderAmount.updated_at"`)}
-	}
-	if _, ok := oac.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "OrderAmount.delete_at"`)}
-	}
-	if _, ok := oac.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "OrderAmount.created_id"`)}
-	}
 	if v, ok := oac.mutation.OrderID(); ok {
 		if err := orderamount.OrderIDValidator(v); err != nil {
 			return &ValidationError{Name: "order_id", err: fmt.Errorf(`ent: validator failed for field "OrderAmount.order_id": %w`, err)}
@@ -258,9 +257,9 @@ func (oac *OrderAmountCreate) createSpec() (*OrderAmount, *sqlgraph.CreateSpec) 
 		_spec.SetField(orderamount.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := oac.mutation.DeleteAt(); ok {
-		_spec.SetField(orderamount.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := oac.mutation.Delete(); ok {
+		_spec.SetField(orderamount.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := oac.mutation.CreatedID(); ok {
 		_spec.SetField(orderamount.FieldCreatedID, field.TypeInt64, value)

@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/memberdetails"
@@ -49,9 +48,17 @@ func (mdc *MemberDetailsCreate) SetNillableUpdatedAt(t *time.Time) *MemberDetail
 	return mdc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mdc *MemberDetailsCreate) SetDeleteAt(t time.Time) *MemberDetailsCreate {
-	mdc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (mdc *MemberDetailsCreate) SetDelete(i int64) *MemberDetailsCreate {
+	mdc.mutation.SetDelete(i)
+	return mdc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableDelete(i *int64) *MemberDetailsCreate {
+	if i != nil {
+		mdc.SetDelete(*i)
+	}
 	return mdc
 }
 
@@ -417,6 +424,10 @@ func (mdc *MemberDetailsCreate) defaults() {
 		v := memberdetails.DefaultUpdatedAt()
 		mdc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mdc.mutation.Delete(); !ok {
+		v := memberdetails.DefaultDelete
+		mdc.mutation.SetDelete(v)
+	}
 	if _, ok := mdc.mutation.CreatedID(); !ok {
 		v := memberdetails.DefaultCreatedID
 		mdc.mutation.SetCreatedID(v)
@@ -453,18 +464,6 @@ func (mdc *MemberDetailsCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (mdc *MemberDetailsCreate) check() error {
-	if _, ok := mdc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "MemberDetails.created_at"`)}
-	}
-	if _, ok := mdc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "MemberDetails.updated_at"`)}
-	}
-	if _, ok := mdc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "MemberDetails.delete_at"`)}
-	}
-	if _, ok := mdc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "MemberDetails.created_id"`)}
-	}
 	return nil
 }
 
@@ -505,9 +504,9 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 		_spec.SetField(memberdetails.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mdc.mutation.DeleteAt(); ok {
-		_spec.SetField(memberdetails.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := mdc.mutation.Delete(); ok {
+		_spec.SetField(memberdetails.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := mdc.mutation.CreatedID(); ok {
 		_spec.SetField(memberdetails.FieldCreatedID, field.TypeInt64, value)

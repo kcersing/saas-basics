@@ -42,7 +42,7 @@ func (m Member) ContractList(req member.MemberContractListReq) (resp []*member.M
 	if req.ContractId > 0 {
 		predicates = append(predicates, membercontract.ContractID(req.ContractId))
 	}
-
+	predicates = append(predicates, membercontract.Delete(0))
 	lists, err := m.db.MemberContract.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
@@ -225,6 +225,7 @@ func (m Member) MemberList(req member.MemberListReq) (resp []*member.MemberInfo,
 	if req.Name != "" {
 		predicates = append(predicates, member2.NameEQ(req.Name))
 	}
+	predicates = append(predicates, member2.Delete(0))
 	lists, err := m.db.Member.Query().Where(predicates...).
 		Order(ent.Desc(member2.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).

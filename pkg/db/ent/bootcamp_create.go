@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/bootcamp"
 	"saas/pkg/db/ent/bootcampparticipant"
@@ -49,9 +48,17 @@ func (bc *BootcampCreate) SetNillableUpdatedAt(t *time.Time) *BootcampCreate {
 	return bc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (bc *BootcampCreate) SetDeleteAt(t time.Time) *BootcampCreate {
-	bc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (bc *BootcampCreate) SetDelete(i int64) *BootcampCreate {
+	bc.mutation.SetDelete(i)
+	return bc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (bc *BootcampCreate) SetNillableDelete(i *int64) *BootcampCreate {
+	if i != nil {
+		bc.SetDelete(*i)
+	}
 	return bc
 }
 
@@ -371,6 +378,10 @@ func (bc *BootcampCreate) defaults() {
 		v := bootcamp.DefaultUpdatedAt()
 		bc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := bc.mutation.Delete(); !ok {
+		v := bootcamp.DefaultDelete
+		bc.mutation.SetDelete(v)
+	}
 	if _, ok := bc.mutation.CreatedID(); !ok {
 		v := bootcamp.DefaultCreatedID
 		bc.mutation.SetCreatedID(v)
@@ -399,18 +410,6 @@ func (bc *BootcampCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (bc *BootcampCreate) check() error {
-	if _, ok := bc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Bootcamp.created_at"`)}
-	}
-	if _, ok := bc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Bootcamp.updated_at"`)}
-	}
-	if _, ok := bc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Bootcamp.delete_at"`)}
-	}
-	if _, ok := bc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Bootcamp.created_id"`)}
-	}
 	return nil
 }
 
@@ -451,9 +450,9 @@ func (bc *BootcampCreate) createSpec() (*Bootcamp, *sqlgraph.CreateSpec) {
 		_spec.SetField(bootcamp.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := bc.mutation.DeleteAt(); ok {
-		_spec.SetField(bootcamp.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := bc.mutation.Delete(); ok {
+		_spec.SetField(bootcamp.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := bc.mutation.CreatedID(); ok {
 		_spec.SetField(bootcamp.FieldCreatedID, field.TypeInt64, value)

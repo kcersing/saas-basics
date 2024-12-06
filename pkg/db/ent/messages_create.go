@@ -48,9 +48,17 @@ func (mc *MessagesCreate) SetNillableUpdatedAt(t *time.Time) *MessagesCreate {
 	return mc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mc *MessagesCreate) SetDeleteAt(t time.Time) *MessagesCreate {
-	mc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (mc *MessagesCreate) SetDelete(i int64) *MessagesCreate {
+	mc.mutation.SetDelete(i)
+	return mc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mc *MessagesCreate) SetNillableDelete(i *int64) *MessagesCreate {
+	if i != nil {
+		mc.SetDelete(*i)
+	}
 	return mc
 }
 
@@ -141,6 +149,10 @@ func (mc *MessagesCreate) defaults() {
 		v := messages.DefaultUpdatedAt()
 		mc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mc.mutation.Delete(); !ok {
+		v := messages.DefaultDelete
+		mc.mutation.SetDelete(v)
+	}
 	if _, ok := mc.mutation.CreatedID(); !ok {
 		v := messages.DefaultCreatedID
 		mc.mutation.SetCreatedID(v)
@@ -149,18 +161,6 @@ func (mc *MessagesCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (mc *MessagesCreate) check() error {
-	if _, ok := mc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Messages.created_at"`)}
-	}
-	if _, ok := mc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Messages.updated_at"`)}
-	}
-	if _, ok := mc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Messages.delete_at"`)}
-	}
-	if _, ok := mc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Messages.created_id"`)}
-	}
 	if _, ok := mc.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Messages.type"`)}
 	}
@@ -213,9 +213,9 @@ func (mc *MessagesCreate) createSpec() (*Messages, *sqlgraph.CreateSpec) {
 		_spec.SetField(messages.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mc.mutation.DeleteAt(); ok {
-		_spec.SetField(messages.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := mc.mutation.Delete(); ok {
+		_spec.SetField(messages.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := mc.mutation.CreatedID(); ok {
 		_spec.SetField(messages.FieldCreatedID, field.TypeInt64, value)

@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
@@ -49,9 +48,17 @@ func (cpc *ContestParticipantCreate) SetNillableUpdatedAt(t *time.Time) *Contest
 	return cpc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cpc *ContestParticipantCreate) SetDeleteAt(t time.Time) *ContestParticipantCreate {
-	cpc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (cpc *ContestParticipantCreate) SetDelete(i int64) *ContestParticipantCreate {
+	cpc.mutation.SetDelete(i)
+	return cpc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cpc *ContestParticipantCreate) SetNillableDelete(i *int64) *ContestParticipantCreate {
+	if i != nil {
+		cpc.SetDelete(*i)
+	}
 	return cpc
 }
 
@@ -235,6 +242,10 @@ func (cpc *ContestParticipantCreate) defaults() {
 		v := contestparticipant.DefaultUpdatedAt()
 		cpc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := cpc.mutation.Delete(); !ok {
+		v := contestparticipant.DefaultDelete
+		cpc.mutation.SetDelete(v)
+	}
 	if _, ok := cpc.mutation.CreatedID(); !ok {
 		v := contestparticipant.DefaultCreatedID
 		cpc.mutation.SetCreatedID(v)
@@ -255,18 +266,6 @@ func (cpc *ContestParticipantCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cpc *ContestParticipantCreate) check() error {
-	if _, ok := cpc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ContestParticipant.created_at"`)}
-	}
-	if _, ok := cpc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ContestParticipant.updated_at"`)}
-	}
-	if _, ok := cpc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "ContestParticipant.delete_at"`)}
-	}
-	if _, ok := cpc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "ContestParticipant.created_id"`)}
-	}
 	return nil
 }
 
@@ -307,9 +306,9 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cpc.mutation.DeleteAt(); ok {
-		_spec.SetField(contestparticipant.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := cpc.mutation.Delete(); ok {
+		_spec.SetField(contestparticipant.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := cpc.mutation.CreatedID(); ok {
 		_spec.SetField(contestparticipant.FieldCreatedID, field.TypeInt64, value)

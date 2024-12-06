@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/venue"
 	"saas/pkg/db/ent/venueplace"
@@ -49,9 +48,17 @@ func (vpc *VenuePlaceCreate) SetNillableUpdatedAt(t *time.Time) *VenuePlaceCreat
 	return vpc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (vpc *VenuePlaceCreate) SetDeleteAt(t time.Time) *VenuePlaceCreate {
-	vpc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (vpc *VenuePlaceCreate) SetDelete(i int64) *VenuePlaceCreate {
+	vpc.mutation.SetDelete(i)
+	return vpc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableDelete(i *int64) *VenuePlaceCreate {
+	if i != nil {
+		vpc.SetDelete(*i)
+	}
 	return vpc
 }
 
@@ -207,6 +214,10 @@ func (vpc *VenuePlaceCreate) defaults() {
 		v := venueplace.DefaultUpdatedAt()
 		vpc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := vpc.mutation.Delete(); !ok {
+		v := venueplace.DefaultDelete
+		vpc.mutation.SetDelete(v)
+	}
 	if _, ok := vpc.mutation.CreatedID(); !ok {
 		v := venueplace.DefaultCreatedID
 		vpc.mutation.SetCreatedID(v)
@@ -219,18 +230,6 @@ func (vpc *VenuePlaceCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (vpc *VenuePlaceCreate) check() error {
-	if _, ok := vpc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "VenuePlace.created_at"`)}
-	}
-	if _, ok := vpc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "VenuePlace.updated_at"`)}
-	}
-	if _, ok := vpc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "VenuePlace.delete_at"`)}
-	}
-	if _, ok := vpc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "VenuePlace.created_id"`)}
-	}
 	return nil
 }
 
@@ -271,9 +270,9 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 		_spec.SetField(venueplace.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := vpc.mutation.DeleteAt(); ok {
-		_spec.SetField(venueplace.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := vpc.mutation.Delete(); ok {
+		_spec.SetField(venueplace.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := vpc.mutation.CreatedID(); ok {
 		_spec.SetField(venueplace.FieldCreatedID, field.TypeInt64, value)

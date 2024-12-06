@@ -35,17 +35,36 @@ func (cu *ContestUpdate) SetUpdatedAt(t time.Time) *ContestUpdate {
 	return cu
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cu *ContestUpdate) SetDeleteAt(t time.Time) *ContestUpdate {
-	cu.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (cu *ContestUpdate) ClearUpdatedAt() *ContestUpdate {
+	cu.mutation.ClearUpdatedAt()
 	return cu
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (cu *ContestUpdate) SetNillableDeleteAt(t *time.Time) *ContestUpdate {
-	if t != nil {
-		cu.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (cu *ContestUpdate) SetDelete(i int64) *ContestUpdate {
+	cu.mutation.ResetDelete()
+	cu.mutation.SetDelete(i)
+	return cu
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cu *ContestUpdate) SetNillableDelete(i *int64) *ContestUpdate {
+	if i != nil {
+		cu.SetDelete(*i)
 	}
+	return cu
+}
+
+// AddDelete adds i to the "delete" field.
+func (cu *ContestUpdate) AddDelete(i int64) *ContestUpdate {
+	cu.mutation.AddDelete(i)
+	return cu
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (cu *ContestUpdate) ClearDelete() *ContestUpdate {
+	cu.mutation.ClearDelete()
 	return cu
 }
 
@@ -67,6 +86,12 @@ func (cu *ContestUpdate) SetNillableCreatedID(i *int64) *ContestUpdate {
 // AddCreatedID adds i to the "created_id" field.
 func (cu *ContestUpdate) AddCreatedID(i int64) *ContestUpdate {
 	cu.mutation.AddCreatedID(i)
+	return cu
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (cu *ContestUpdate) ClearCreatedID() *ContestUpdate {
+	cu.mutation.ClearCreatedID()
 	return cu
 }
 
@@ -564,7 +589,7 @@ func (cu *ContestUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cu *ContestUpdate) defaults() {
-	if _, ok := cu.mutation.UpdatedAt(); !ok {
+	if _, ok := cu.mutation.UpdatedAt(); !ok && !cu.mutation.UpdatedAtCleared() {
 		v := contest.UpdateDefaultUpdatedAt()
 		cu.mutation.SetUpdatedAt(v)
 	}
@@ -579,17 +604,32 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if cu.mutation.CreatedAtCleared() {
+		_spec.ClearField(contest.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := cu.mutation.UpdatedAt(); ok {
 		_spec.SetField(contest.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := cu.mutation.DeleteAt(); ok {
-		_spec.SetField(contest.FieldDeleteAt, field.TypeTime, value)
+	if cu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(contest.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := cu.mutation.Delete(); ok {
+		_spec.SetField(contest.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := cu.mutation.AddedDelete(); ok {
+		_spec.AddField(contest.FieldDelete, field.TypeInt64, value)
+	}
+	if cu.mutation.DeleteCleared() {
+		_spec.ClearField(contest.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := cu.mutation.CreatedID(); ok {
 		_spec.SetField(contest.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := cu.mutation.AddedCreatedID(); ok {
 		_spec.AddField(contest.FieldCreatedID, field.TypeInt64, value)
+	}
+	if cu.mutation.CreatedIDCleared() {
+		_spec.ClearField(contest.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := cu.mutation.Status(); ok {
 		_spec.SetField(contest.FieldStatus, field.TypeInt64, value)
@@ -797,17 +837,36 @@ func (cuo *ContestUpdateOne) SetUpdatedAt(t time.Time) *ContestUpdateOne {
 	return cuo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cuo *ContestUpdateOne) SetDeleteAt(t time.Time) *ContestUpdateOne {
-	cuo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (cuo *ContestUpdateOne) ClearUpdatedAt() *ContestUpdateOne {
+	cuo.mutation.ClearUpdatedAt()
 	return cuo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (cuo *ContestUpdateOne) SetNillableDeleteAt(t *time.Time) *ContestUpdateOne {
-	if t != nil {
-		cuo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (cuo *ContestUpdateOne) SetDelete(i int64) *ContestUpdateOne {
+	cuo.mutation.ResetDelete()
+	cuo.mutation.SetDelete(i)
+	return cuo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cuo *ContestUpdateOne) SetNillableDelete(i *int64) *ContestUpdateOne {
+	if i != nil {
+		cuo.SetDelete(*i)
 	}
+	return cuo
+}
+
+// AddDelete adds i to the "delete" field.
+func (cuo *ContestUpdateOne) AddDelete(i int64) *ContestUpdateOne {
+	cuo.mutation.AddDelete(i)
+	return cuo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (cuo *ContestUpdateOne) ClearDelete() *ContestUpdateOne {
+	cuo.mutation.ClearDelete()
 	return cuo
 }
 
@@ -829,6 +888,12 @@ func (cuo *ContestUpdateOne) SetNillableCreatedID(i *int64) *ContestUpdateOne {
 // AddCreatedID adds i to the "created_id" field.
 func (cuo *ContestUpdateOne) AddCreatedID(i int64) *ContestUpdateOne {
 	cuo.mutation.AddCreatedID(i)
+	return cuo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (cuo *ContestUpdateOne) ClearCreatedID() *ContestUpdateOne {
+	cuo.mutation.ClearCreatedID()
 	return cuo
 }
 
@@ -1339,7 +1404,7 @@ func (cuo *ContestUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cuo *ContestUpdateOne) defaults() {
-	if _, ok := cuo.mutation.UpdatedAt(); !ok {
+	if _, ok := cuo.mutation.UpdatedAt(); !ok && !cuo.mutation.UpdatedAtCleared() {
 		v := contest.UpdateDefaultUpdatedAt()
 		cuo.mutation.SetUpdatedAt(v)
 	}
@@ -1371,17 +1436,32 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 			}
 		}
 	}
+	if cuo.mutation.CreatedAtCleared() {
+		_spec.ClearField(contest.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := cuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(contest.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := cuo.mutation.DeleteAt(); ok {
-		_spec.SetField(contest.FieldDeleteAt, field.TypeTime, value)
+	if cuo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(contest.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := cuo.mutation.Delete(); ok {
+		_spec.SetField(contest.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := cuo.mutation.AddedDelete(); ok {
+		_spec.AddField(contest.FieldDelete, field.TypeInt64, value)
+	}
+	if cuo.mutation.DeleteCleared() {
+		_spec.ClearField(contest.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := cuo.mutation.CreatedID(); ok {
 		_spec.SetField(contest.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := cuo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(contest.FieldCreatedID, field.TypeInt64, value)
+	}
+	if cuo.mutation.CreatedIDCleared() {
+		_spec.ClearField(contest.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := cuo.mutation.Status(); ok {
 		_spec.SetField(contest.FieldStatus, field.TypeInt64, value)

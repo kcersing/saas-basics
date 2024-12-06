@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/member"
 	"saas/pkg/db/ent/membernote"
@@ -49,9 +48,17 @@ func (mnc *MemberNoteCreate) SetNillableUpdatedAt(t *time.Time) *MemberNoteCreat
 	return mnc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mnc *MemberNoteCreate) SetDeleteAt(t time.Time) *MemberNoteCreate {
-	mnc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (mnc *MemberNoteCreate) SetDelete(i int64) *MemberNoteCreate {
+	mnc.mutation.SetDelete(i)
+	return mnc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mnc *MemberNoteCreate) SetNillableDelete(i *int64) *MemberNoteCreate {
+	if i != nil {
+		mnc.SetDelete(*i)
+	}
 	return mnc
 }
 
@@ -179,6 +186,10 @@ func (mnc *MemberNoteCreate) defaults() {
 		v := membernote.DefaultUpdatedAt()
 		mnc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mnc.mutation.Delete(); !ok {
+		v := membernote.DefaultDelete
+		mnc.mutation.SetDelete(v)
+	}
 	if _, ok := mnc.mutation.CreatedID(); !ok {
 		v := membernote.DefaultCreatedID
 		mnc.mutation.SetCreatedID(v)
@@ -195,18 +206,6 @@ func (mnc *MemberNoteCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (mnc *MemberNoteCreate) check() error {
-	if _, ok := mnc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "MemberNote.created_at"`)}
-	}
-	if _, ok := mnc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "MemberNote.updated_at"`)}
-	}
-	if _, ok := mnc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "MemberNote.delete_at"`)}
-	}
-	if _, ok := mnc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "MemberNote.created_id"`)}
-	}
 	return nil
 }
 
@@ -247,9 +246,9 @@ func (mnc *MemberNoteCreate) createSpec() (*MemberNote, *sqlgraph.CreateSpec) {
 		_spec.SetField(membernote.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mnc.mutation.DeleteAt(); ok {
-		_spec.SetField(membernote.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := mnc.mutation.Delete(); ok {
+		_spec.SetField(membernote.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := mnc.mutation.CreatedID(); ok {
 		_spec.SetField(membernote.FieldCreatedID, field.TypeInt64, value)

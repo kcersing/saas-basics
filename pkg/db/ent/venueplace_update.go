@@ -35,17 +35,36 @@ func (vpu *VenuePlaceUpdate) SetUpdatedAt(t time.Time) *VenuePlaceUpdate {
 	return vpu
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (vpu *VenuePlaceUpdate) SetDeleteAt(t time.Time) *VenuePlaceUpdate {
-	vpu.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (vpu *VenuePlaceUpdate) ClearUpdatedAt() *VenuePlaceUpdate {
+	vpu.mutation.ClearUpdatedAt()
 	return vpu
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (vpu *VenuePlaceUpdate) SetNillableDeleteAt(t *time.Time) *VenuePlaceUpdate {
-	if t != nil {
-		vpu.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (vpu *VenuePlaceUpdate) SetDelete(i int64) *VenuePlaceUpdate {
+	vpu.mutation.ResetDelete()
+	vpu.mutation.SetDelete(i)
+	return vpu
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (vpu *VenuePlaceUpdate) SetNillableDelete(i *int64) *VenuePlaceUpdate {
+	if i != nil {
+		vpu.SetDelete(*i)
 	}
+	return vpu
+}
+
+// AddDelete adds i to the "delete" field.
+func (vpu *VenuePlaceUpdate) AddDelete(i int64) *VenuePlaceUpdate {
+	vpu.mutation.AddDelete(i)
+	return vpu
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (vpu *VenuePlaceUpdate) ClearDelete() *VenuePlaceUpdate {
+	vpu.mutation.ClearDelete()
 	return vpu
 }
 
@@ -67,6 +86,12 @@ func (vpu *VenuePlaceUpdate) SetNillableCreatedID(i *int64) *VenuePlaceUpdate {
 // AddCreatedID adds i to the "created_id" field.
 func (vpu *VenuePlaceUpdate) AddCreatedID(i int64) *VenuePlaceUpdate {
 	vpu.mutation.AddCreatedID(i)
+	return vpu
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (vpu *VenuePlaceUpdate) ClearCreatedID() *VenuePlaceUpdate {
+	vpu.mutation.ClearCreatedID()
 	return vpu
 }
 
@@ -250,7 +275,7 @@ func (vpu *VenuePlaceUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (vpu *VenuePlaceUpdate) defaults() {
-	if _, ok := vpu.mutation.UpdatedAt(); !ok {
+	if _, ok := vpu.mutation.UpdatedAt(); !ok && !vpu.mutation.UpdatedAtCleared() {
 		v := venueplace.UpdateDefaultUpdatedAt()
 		vpu.mutation.SetUpdatedAt(v)
 	}
@@ -265,17 +290,32 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if vpu.mutation.CreatedAtCleared() {
+		_spec.ClearField(venueplace.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := vpu.mutation.UpdatedAt(); ok {
 		_spec.SetField(venueplace.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := vpu.mutation.DeleteAt(); ok {
-		_spec.SetField(venueplace.FieldDeleteAt, field.TypeTime, value)
+	if vpu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(venueplace.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := vpu.mutation.Delete(); ok {
+		_spec.SetField(venueplace.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := vpu.mutation.AddedDelete(); ok {
+		_spec.AddField(venueplace.FieldDelete, field.TypeInt64, value)
+	}
+	if vpu.mutation.DeleteCleared() {
+		_spec.ClearField(venueplace.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := vpu.mutation.CreatedID(); ok {
 		_spec.SetField(venueplace.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := vpu.mutation.AddedCreatedID(); ok {
 		_spec.AddField(venueplace.FieldCreatedID, field.TypeInt64, value)
+	}
+	if vpu.mutation.CreatedIDCleared() {
+		_spec.ClearField(venueplace.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := vpu.mutation.Status(); ok {
 		_spec.SetField(venueplace.FieldStatus, field.TypeInt64, value)
@@ -368,17 +408,36 @@ func (vpuo *VenuePlaceUpdateOne) SetUpdatedAt(t time.Time) *VenuePlaceUpdateOne 
 	return vpuo
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (vpuo *VenuePlaceUpdateOne) SetDeleteAt(t time.Time) *VenuePlaceUpdateOne {
-	vpuo.mutation.SetDeleteAt(t)
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (vpuo *VenuePlaceUpdateOne) ClearUpdatedAt() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearUpdatedAt()
 	return vpuo
 }
 
-// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (vpuo *VenuePlaceUpdateOne) SetNillableDeleteAt(t *time.Time) *VenuePlaceUpdateOne {
-	if t != nil {
-		vpuo.SetDeleteAt(*t)
+// SetDelete sets the "delete" field.
+func (vpuo *VenuePlaceUpdateOne) SetDelete(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.ResetDelete()
+	vpuo.mutation.SetDelete(i)
+	return vpuo
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (vpuo *VenuePlaceUpdateOne) SetNillableDelete(i *int64) *VenuePlaceUpdateOne {
+	if i != nil {
+		vpuo.SetDelete(*i)
 	}
+	return vpuo
+}
+
+// AddDelete adds i to the "delete" field.
+func (vpuo *VenuePlaceUpdateOne) AddDelete(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.AddDelete(i)
+	return vpuo
+}
+
+// ClearDelete clears the value of the "delete" field.
+func (vpuo *VenuePlaceUpdateOne) ClearDelete() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearDelete()
 	return vpuo
 }
 
@@ -400,6 +459,12 @@ func (vpuo *VenuePlaceUpdateOne) SetNillableCreatedID(i *int64) *VenuePlaceUpdat
 // AddCreatedID adds i to the "created_id" field.
 func (vpuo *VenuePlaceUpdateOne) AddCreatedID(i int64) *VenuePlaceUpdateOne {
 	vpuo.mutation.AddCreatedID(i)
+	return vpuo
+}
+
+// ClearCreatedID clears the value of the "created_id" field.
+func (vpuo *VenuePlaceUpdateOne) ClearCreatedID() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearCreatedID()
 	return vpuo
 }
 
@@ -596,7 +661,7 @@ func (vpuo *VenuePlaceUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (vpuo *VenuePlaceUpdateOne) defaults() {
-	if _, ok := vpuo.mutation.UpdatedAt(); !ok {
+	if _, ok := vpuo.mutation.UpdatedAt(); !ok && !vpuo.mutation.UpdatedAtCleared() {
 		v := venueplace.UpdateDefaultUpdatedAt()
 		vpuo.mutation.SetUpdatedAt(v)
 	}
@@ -628,17 +693,32 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 			}
 		}
 	}
+	if vpuo.mutation.CreatedAtCleared() {
+		_spec.ClearField(venueplace.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := vpuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(venueplace.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := vpuo.mutation.DeleteAt(); ok {
-		_spec.SetField(venueplace.FieldDeleteAt, field.TypeTime, value)
+	if vpuo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(venueplace.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := vpuo.mutation.Delete(); ok {
+		_spec.SetField(venueplace.FieldDelete, field.TypeInt64, value)
+	}
+	if value, ok := vpuo.mutation.AddedDelete(); ok {
+		_spec.AddField(venueplace.FieldDelete, field.TypeInt64, value)
+	}
+	if vpuo.mutation.DeleteCleared() {
+		_spec.ClearField(venueplace.FieldDelete, field.TypeInt64)
 	}
 	if value, ok := vpuo.mutation.CreatedID(); ok {
 		_spec.SetField(venueplace.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := vpuo.mutation.AddedCreatedID(); ok {
 		_spec.AddField(venueplace.FieldCreatedID, field.TypeInt64, value)
+	}
+	if vpuo.mutation.CreatedIDCleared() {
+		_spec.ClearField(venueplace.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := vpuo.mutation.Status(); ok {
 		_spec.SetField(venueplace.FieldStatus, field.TypeInt64, value)

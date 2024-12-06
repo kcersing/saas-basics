@@ -49,9 +49,17 @@ func (mpc *MenuParamCreate) SetNillableUpdatedAt(t *time.Time) *MenuParamCreate 
 	return mpc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (mpc *MenuParamCreate) SetDeleteAt(t time.Time) *MenuParamCreate {
-	mpc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (mpc *MenuParamCreate) SetDelete(i int64) *MenuParamCreate {
+	mpc.mutation.SetDelete(i)
+	return mpc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (mpc *MenuParamCreate) SetNillableDelete(i *int64) *MenuParamCreate {
+	if i != nil {
+		mpc.SetDelete(*i)
+	}
 	return mpc
 }
 
@@ -155,6 +163,10 @@ func (mpc *MenuParamCreate) defaults() {
 		v := menuparam.DefaultUpdatedAt()
 		mpc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mpc.mutation.Delete(); !ok {
+		v := menuparam.DefaultDelete
+		mpc.mutation.SetDelete(v)
+	}
 	if _, ok := mpc.mutation.CreatedID(); !ok {
 		v := menuparam.DefaultCreatedID
 		mpc.mutation.SetCreatedID(v)
@@ -163,18 +175,6 @@ func (mpc *MenuParamCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (mpc *MenuParamCreate) check() error {
-	if _, ok := mpc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "MenuParam.created_at"`)}
-	}
-	if _, ok := mpc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "MenuParam.updated_at"`)}
-	}
-	if _, ok := mpc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "MenuParam.delete_at"`)}
-	}
-	if _, ok := mpc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "MenuParam.created_id"`)}
-	}
 	if _, ok := mpc.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "MenuParam.type"`)}
 	}
@@ -224,9 +224,9 @@ func (mpc *MenuParamCreate) createSpec() (*MenuParam, *sqlgraph.CreateSpec) {
 		_spec.SetField(menuparam.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mpc.mutation.DeleteAt(); ok {
-		_spec.SetField(menuparam.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := mpc.mutation.Delete(); ok {
+		_spec.SetField(menuparam.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := mpc.mutation.CreatedID(); ok {
 		_spec.SetField(menuparam.FieldCreatedID, field.TypeInt64, value)

@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"saas/pkg/db/ent/contract"
 	"time"
@@ -48,9 +47,17 @@ func (cc *ContractCreate) SetNillableUpdatedAt(t *time.Time) *ContractCreate {
 	return cc
 }
 
-// SetDeleteAt sets the "delete_at" field.
-func (cc *ContractCreate) SetDeleteAt(t time.Time) *ContractCreate {
-	cc.mutation.SetDeleteAt(t)
+// SetDelete sets the "delete" field.
+func (cc *ContractCreate) SetDelete(i int64) *ContractCreate {
+	cc.mutation.SetDelete(i)
+	return cc
+}
+
+// SetNillableDelete sets the "delete" field if the given value is not nil.
+func (cc *ContractCreate) SetNillableDelete(i *int64) *ContractCreate {
+	if i != nil {
+		cc.SetDelete(*i)
+	}
 	return cc
 }
 
@@ -159,6 +166,10 @@ func (cc *ContractCreate) defaults() {
 		v := contract.DefaultUpdatedAt()
 		cc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := cc.mutation.Delete(); !ok {
+		v := contract.DefaultDelete
+		cc.mutation.SetDelete(v)
+	}
 	if _, ok := cc.mutation.CreatedID(); !ok {
 		v := contract.DefaultCreatedID
 		cc.mutation.SetCreatedID(v)
@@ -171,18 +182,6 @@ func (cc *ContractCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *ContractCreate) check() error {
-	if _, ok := cc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Contract.created_at"`)}
-	}
-	if _, ok := cc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Contract.updated_at"`)}
-	}
-	if _, ok := cc.mutation.DeleteAt(); !ok {
-		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Contract.delete_at"`)}
-	}
-	if _, ok := cc.mutation.CreatedID(); !ok {
-		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Contract.created_id"`)}
-	}
 	return nil
 }
 
@@ -223,9 +222,9 @@ func (cc *ContractCreate) createSpec() (*Contract, *sqlgraph.CreateSpec) {
 		_spec.SetField(contract.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cc.mutation.DeleteAt(); ok {
-		_spec.SetField(contract.FieldDeleteAt, field.TypeTime, value)
-		_node.DeleteAt = value
+	if value, ok := cc.mutation.Delete(); ok {
+		_spec.SetField(contract.FieldDelete, field.TypeInt64, value)
+		_node.Delete = value
 	}
 	if value, ok := cc.mutation.CreatedID(); ok {
 		_spec.SetField(contract.FieldCreatedID, field.TypeInt64, value)

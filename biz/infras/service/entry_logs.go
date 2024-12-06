@@ -65,7 +65,7 @@ func (e EntryLogs) List(req *entry.EntryListReq) (list []*entry.EntryInfo, total
 	//if *req.LeavingTime != "" {
 	//	predicates = append(predicates, entrylogs.LeavingTimeGT(req.LeavingTime))
 	//}
-
+	predicates = append(predicates, entrylogs.Delete(0))
 	lists, err := e.db.EntryLogs.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(e.ctx)
