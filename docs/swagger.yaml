@@ -41,7 +41,7 @@ definitions:
         items:
           type: integer
         type: array
-      ID:
+      Id:
         type: integer
       Menus:
         items:
@@ -62,6 +62,17 @@ definitions:
       updatedAt:
         type: string
       value:
+        type: string
+    type: object
+  banner.BannerInfo:
+    properties:
+      isShow:
+        type: integer
+      link:
+        type: string
+      name:
+        type: string
+      pic:
         type: string
     type: object
   base.IDReq:
@@ -835,6 +846,86 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 修改角色菜单权限 Summary
+  /service/banner/create:
+    post:
+      description: 创建Banner Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/banner.BannerInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建Banner Summary
+  /service/banner/del:
+    post:
+      description: 删除Banner Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除Banner Summary
+  /service/banner/list:
+    post:
+      description: Banner列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.PageInfoReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Banner列表 Summary
+  /service/banner/show:
+    post:
+      description: 更新Banner显示状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新Banner显示状态 Summary
+  /service/banner/update:
+    post:
+      description: 更新Banner Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/banner.BannerInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新Banner Summary
   /service/captcha:
     post:
       description: 获取验证码 Description

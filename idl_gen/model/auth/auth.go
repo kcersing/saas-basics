@@ -218,7 +218,7 @@ func (p *MenuAuthInfoReq) String() string {
 
 // 创建或更新角色信息参数
 type RoleInfo struct {
-	ID            *int64  `thrift:"ID,1,optional" form:"ID" json:"ID" query:"ID"`
+	Id            *int64  `thrift:"Id,1,optional" form:"Id" json:"Id" query:"Id"`
 	Name          *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
 	Value         *string `thrift:"value,3,optional" form:"value" json:"value" query:"value"`
 	DefaultRouter *string `thrift:"defaultRouter,4,optional" form:"defaultRouter" json:"defaultRouter" query:"defaultRouter"`
@@ -238,13 +238,13 @@ func NewRoleInfo() *RoleInfo {
 func (p *RoleInfo) InitDefault() {
 }
 
-var RoleInfo_ID_DEFAULT int64
+var RoleInfo_Id_DEFAULT int64
 
-func (p *RoleInfo) GetID() (v int64) {
-	if !p.IsSetID() {
-		return RoleInfo_ID_DEFAULT
+func (p *RoleInfo) GetId() (v int64) {
+	if !p.IsSetId() {
+		return RoleInfo_Id_DEFAULT
 	}
-	return *p.ID
+	return *p.Id
 }
 
 var RoleInfo_Name_DEFAULT string
@@ -338,7 +338,7 @@ func (p *RoleInfo) GetApis() (v []int64) {
 }
 
 var fieldIDToName_RoleInfo = map[int16]string{
-	1:  "ID",
+	1:  "Id",
 	2:  "name",
 	3:  "value",
 	4:  "defaultRouter",
@@ -351,8 +351,8 @@ var fieldIDToName_RoleInfo = map[int16]string{
 	11: "Apis",
 }
 
-func (p *RoleInfo) IsSetID() bool {
-	return p.ID != nil
+func (p *RoleInfo) IsSetId() bool {
+	return p.Id != nil
 }
 
 func (p *RoleInfo) IsSetName() bool {
@@ -539,7 +539,7 @@ func (p *RoleInfo) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = &v
 	}
-	p.ID = _field
+	p.Id = _field
 	return nil
 }
 func (p *RoleInfo) ReadField2(iprot thrift.TProtocol) error {
@@ -746,11 +746,11 @@ WriteStructEndError:
 }
 
 func (p *RoleInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.IsSetID() {
-		if err = oprot.WriteFieldBegin("ID", thrift.I64, 1); err != nil {
+	if p.IsSetId() {
+		if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.ID); err != nil {
+		if err := oprot.WriteI64(*p.Id); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

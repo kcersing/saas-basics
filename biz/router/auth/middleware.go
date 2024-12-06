@@ -120,3 +120,28 @@ func _roletreeMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _bannerMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createbannerMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _bannerlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatebannershowMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatebannerMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

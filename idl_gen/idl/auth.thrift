@@ -56,7 +56,7 @@ struct MenuAuthInfoReq {
 
 //创建或更新角色信息参数
 struct RoleInfo {
-    1:  optional i64 ID (api.raw = "Id")
+    1:  optional i64 Id (api.raw = "id")
     2:  optional string name (api.raw = "name")
     3:  optional string value (api.raw = "value")
     4:  optional string defaultRouter (api.raw = "defaultRouter")
