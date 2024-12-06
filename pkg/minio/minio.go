@@ -52,7 +52,7 @@ func MakeBucket(ctx context.Context, bucketName string) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Printf("Successfully created mybucket %v\n", bucketName)
+		fmt.Printf("已成功创建 %v\n", bucketName)
 	}
 }
 
