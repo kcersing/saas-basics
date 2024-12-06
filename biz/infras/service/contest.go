@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"github.com/xuri/excelize/v2"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/infras/do"
@@ -28,6 +30,15 @@ type Contest struct {
 	cache *ristretto.Cache
 }
 
+func NewContest(ctx context.Context, c *app.RequestContext) do.Contest {
+	return &Contest{
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		db:    db.DB,
+		cache: cache.Cache,
+	}
+}
 func (c Contest) CreateContest(req contest.ContestInfo) error {
 
 	signStartAt, _ := time.Parse(time.DateTime, req.SignStartAt)
@@ -211,16 +222,19 @@ func (c Contest) UpdateContestStatus(ID int64, status int64) error {
 	_, err := c.db.Contest.Update().Where(contest2.IDEQ(ID)).SetStatus(status).Save(c.ctx)
 	return err
 }
+
 func (c Contest) UpdateContestShow(ID int64, status int64) error {
 	_, err := c.db.Contest.Update().Where(contest2.IDEQ(ID)).SetIsShow(status).Save(c.ctx)
 	return err
 }
+
 func (c Contest) DelContest(ID int64) error {
 	_, err := c.db.Contest.Update().
 		Where(contest2.IDEQ(ID)).SetDelete(1).Save(c.ctx)
 
 	return err
 }
+
 func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 
 	tx, err := c.db.Tx(c.ctx)
@@ -332,12 +346,50 @@ func (c Contest) UpdateParticipantStatus(ID int64, status int64) error {
 	return err
 }
 
-func NewContest(ctx context.Context, c *app.RequestContext) do.Contest {
-	return &Contest{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    db.DB,
-		cache: cache.Cache,
+func (c Contest) ParticipantListListExport(req contest.ParticipantListReq) {
+
+	resp, total, _ := c.ParticipantList(req)
+
+	if total == 0 {
+		return
 	}
+
+	f := excelize.NewFile()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	cell, err := excelize.CoordinatesToCellName(1, 1)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	tale := []interface{}{"名称", "手机号", "费用", "状态", "报名时间"}
+	//row = []interface{}{resp[idx].Name, resp[idx].Mobile, resp[idx].Fee, resp[idx].Status, resp[idx].CreatedAt}
+	err = f.SetSheetRow("Sheet1", cell, &tale)
+	if err != nil {
+		return
+	}
+
+	for idx, row := range resp {
+		cell, err := excelize.CoordinatesToCellName(1, idx+2)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		r := []interface{}{row.Name, row.Mobile, row.Fee, row.Status, row.CreatedAt}
+		err = f.SetSheetRow("Sheet1", cell, &r)
+		if err != nil {
+			return
+		}
+	}
+
+	// Save spreadsheet by the given path.
+	//if err := f.SaveAs("Book1.xlsx"); err != nil {
+	//	fmt.Println(err)
+	//}
+
+	panic("implement me")
 }

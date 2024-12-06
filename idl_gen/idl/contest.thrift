@@ -27,6 +27,7 @@ service ContestService {
 
   base.NilResponse UpdateParticipantStatus(1: base.StatusCodeReq req) (api.post = "/service/participant/status")
 
+  base.NilResponse ParticipantListListExport(1: ParticipantListReq req) (api.post = "/service/participant/export")
 
   base.NilResponse ResultsUpload(1: ResultsUploadReq req) (api.post = "/service/contest/results-upload")
 
@@ -90,7 +91,7 @@ struct ContestInfo{
     15:  optional string signFields="" (api.raw = "signFields")
     16:  optional string createdAt="" (api.raw = "createdAt")
     17:  optional string updatedAt="" (api.raw = "updatedAt")
-    
+
     18:  optional i64 condition=0 (api.raw = "condition")
     19:  optional i64 isFee=0 (api.raw = "isFee")
 

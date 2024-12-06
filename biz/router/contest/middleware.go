@@ -115,3 +115,8 @@ func _delcontestMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _participantlistlistexportMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

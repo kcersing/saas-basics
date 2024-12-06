@@ -362,3 +362,24 @@ func DelContest(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
+
+// ParticipantListListExport .
+//
+//	@Summary		导出比赛信息 Summary
+//	@Description	导出比赛信息 Description
+//	@Param			request	body		contest.ParticipantListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/participant/export [POST]
+func ParticipantListListExport(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req contest.ParticipantListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	service.NewContest(ctx, c).ParticipantListListExport(req)
+
+}
