@@ -59,7 +59,7 @@ func (r Role) Create(req *auth.RoleInfo) error {
 }
 
 func (r Role) Update(req *auth.RoleInfo) error {
-	roleEnt, err := r.db.Role.UpdateOneID(*req.ID).
+	roleEnt, err := r.db.Role.UpdateOneID(*req.Id).
 		SetName(*req.Name).
 		SetValue(*req.Value).
 		SetDefaultRouter(*req.DefaultRouter).
@@ -102,7 +102,7 @@ func entRoleInfo(entRole ent.Role) *auth.RoleInfo {
 	createdAt := entRole.CreatedAt.Format(time.DateTime)
 	updatedAt := entRole.UpdatedAt.Format(time.DateTime)
 	return &auth.RoleInfo{
-		ID:            &entRole.ID,
+		Id:            &entRole.ID,
 		Name:          &entRole.Name,
 		Value:         &entRole.Value,
 		DefaultRouter: &entRole.DefaultRouter,
