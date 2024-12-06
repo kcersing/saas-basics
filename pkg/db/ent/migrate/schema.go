@@ -35,6 +35,25 @@ var (
 			},
 		},
 	}
+	// BannerColumns holds the columns for the "banner" table.
+	BannerColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "last update time"},
+		{Name: "delete_at", Type: field.TypeTime, Comment: "last delete time"},
+		{Name: "created_id", Type: field.TypeInt64, Comment: "created ", Default: 0},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
+		{Name: "name", Type: field.TypeString, Comment: "名称"},
+		{Name: "pic", Type: field.TypeString, Comment: "图片"},
+		{Name: "link", Type: field.TypeString, Comment: "跳转链接"},
+		{Name: "is_show", Type: field.TypeInt64, Nullable: true, Comment: "是否展示 1 展示 2 不展示", Default: 1},
+	}
+	// BannerTable holds the schema information for the "banner" table.
+	BannerTable = &schema.Table{
+		Name:       "banner",
+		Columns:    BannerColumns,
+		PrimaryKey: []*schema.Column{BannerColumns[0]},
+	}
 	// BootcampColumns holds the columns for the "bootcamp" table.
 	BootcampColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -84,6 +103,9 @@ var (
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "手机号"},
 		{Name: "fields", Type: field.TypeString, Nullable: true, Comment: "更多"},
+		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单ID", Default: 0},
+		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号", Default: ""},
+		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "费用"},
 		{Name: "bootcamp_id", Type: field.TypeInt64, Nullable: true, Comment: "赛事id"},
 	}
 	// BootcampParticipantTable holds the schema information for the "bootcamp_participant" table.
@@ -94,7 +116,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "bootcamp_participant_bootcamp_bootcamp_participants",
-				Columns:    []*schema.Column{BootcampParticipantColumns[9]},
+				Columns:    []*schema.Column{BootcampParticipantColumns[12]},
 				RefColumns: []*schema.Column{BootcampColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -157,6 +179,9 @@ var (
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "手机号"},
 		{Name: "fields", Type: field.TypeString, Nullable: true, Comment: "更多"},
+		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单ID", Default: 0},
+		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号", Default: ""},
+		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "费用"},
 		{Name: "contest_id", Type: field.TypeInt64, Nullable: true, Comment: "赛事id"},
 	}
 	// ContestParticipantTable holds the schema information for the "contest_participant" table.
@@ -167,7 +192,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "contest_participant_contest_contest_participants",
-				Columns:    []*schema.Column{ContestParticipantColumns[9]},
+				Columns:    []*schema.Column{ContestParticipantColumns[12]},
 				RefColumns: []*schema.Column{ContestColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1032,6 +1057,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
+		BannerTable,
 		BootcampTable,
 		BootcampParticipantTable,
 		ContestTable,
@@ -1067,6 +1093,9 @@ var (
 func init() {
 	SysApisTable.Annotation = &entsql.Annotation{
 		Table: "sys_apis",
+	}
+	BannerTable.Annotation = &entsql.Annotation{
+		Table: "banner",
 	}
 	BootcampTable.Annotation = &entsql.Annotation{
 		Table: "bootcamp",

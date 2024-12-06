@@ -37,6 +37,12 @@ type ContestParticipant struct {
 	Mobile string `json:"mobile,omitempty"`
 	// 更多
 	Fields string `json:"fields,omitempty"`
+	// 订单ID
+	OrderID int64 `json:"order_id,omitempty"`
+	// 订单编号
+	OrderSn string `json:"order_sn,omitempty"`
+	// 费用
+	Fee float64 `json:"fee,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ContestParticipantQuery when eager-loading is set.
 	Edges        ContestParticipantEdges `json:"edges"`
@@ -70,9 +76,11 @@ func (*ContestParticipant) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case contestparticipant.FieldID, contestparticipant.FieldCreatedID, contestparticipant.FieldStatus, contestparticipant.FieldContestID:
+		case contestparticipant.FieldFee:
+			values[i] = new(sql.NullFloat64)
+		case contestparticipant.FieldID, contestparticipant.FieldCreatedID, contestparticipant.FieldStatus, contestparticipant.FieldContestID, contestparticipant.FieldOrderID:
 			values[i] = new(sql.NullInt64)
-		case contestparticipant.FieldName, contestparticipant.FieldMobile, contestparticipant.FieldFields:
+		case contestparticipant.FieldName, contestparticipant.FieldMobile, contestparticipant.FieldFields, contestparticipant.FieldOrderSn:
 			values[i] = new(sql.NullString)
 		case contestparticipant.FieldCreatedAt, contestparticipant.FieldUpdatedAt, contestparticipant.FieldDeleteAt:
 			values[i] = new(sql.NullTime)
@@ -151,6 +159,24 @@ func (cp *ContestParticipant) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				cp.Fields = value.String
 			}
+		case contestparticipant.FieldOrderID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field order_id", values[i])
+			} else if value.Valid {
+				cp.OrderID = value.Int64
+			}
+		case contestparticipant.FieldOrderSn:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field order_sn", values[i])
+			} else if value.Valid {
+				cp.OrderSn = value.String
+			}
+		case contestparticipant.FieldFee:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field fee", values[i])
+			} else if value.Valid {
+				cp.Fee = value.Float64
+			}
 		default:
 			cp.selectValues.Set(columns[i], values[i])
 		}
@@ -218,6 +244,15 @@ func (cp *ContestParticipant) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("fields=")
 	builder.WriteString(cp.Fields)
+	builder.WriteString(", ")
+	builder.WriteString("order_id=")
+	builder.WriteString(fmt.Sprintf("%v", cp.OrderID))
+	builder.WriteString(", ")
+	builder.WriteString("order_sn=")
+	builder.WriteString(cp.OrderSn)
+	builder.WriteString(", ")
+	builder.WriteString("fee=")
+	builder.WriteString(fmt.Sprintf("%v", cp.Fee))
 	builder.WriteByte(')')
 	return builder.String()
 }

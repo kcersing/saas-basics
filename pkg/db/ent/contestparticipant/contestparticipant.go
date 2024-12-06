@@ -32,6 +32,12 @@ const (
 	FieldMobile = "mobile"
 	// FieldFields holds the string denoting the fields field in the database.
 	FieldFields = "fields"
+	// FieldOrderID holds the string denoting the order_id field in the database.
+	FieldOrderID = "order_id"
+	// FieldOrderSn holds the string denoting the order_sn field in the database.
+	FieldOrderSn = "order_sn"
+	// FieldFee holds the string denoting the fee field in the database.
+	FieldFee = "fee"
 	// EdgeContest holds the string denoting the contest edge name in mutations.
 	EdgeContest = "contest"
 	// Table holds the table name of the contestparticipant in the database.
@@ -57,6 +63,9 @@ var Columns = []string{
 	FieldName,
 	FieldMobile,
 	FieldFields,
+	FieldOrderID,
+	FieldOrderSn,
+	FieldFee,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -80,6 +89,10 @@ var (
 	DefaultCreatedID int64
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int64
+	// DefaultOrderID holds the default value on creation for the "order_id" field.
+	DefaultOrderID int64
+	// DefaultOrderSn holds the default value on creation for the "order_sn" field.
+	DefaultOrderSn string
 )
 
 // OrderOption defines the ordering options for the ContestParticipant queries.
@@ -133,6 +146,21 @@ func ByMobile(opts ...sql.OrderTermOption) OrderOption {
 // ByFields orders the results by the fields field.
 func ByFields(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFields, opts...).ToFunc()
+}
+
+// ByOrderID orders the results by the order_id field.
+func ByOrderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderID, opts...).ToFunc()
+}
+
+// ByOrderSn orders the results by the order_sn field.
+func ByOrderSn(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderSn, opts...).ToFunc()
+}
+
+// ByFee orders the results by the fee field.
+func ByFee(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFee, opts...).ToFunc()
 }
 
 // ByContestField orders the results by contest field.

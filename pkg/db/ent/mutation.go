@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/banner"
 	"saas/pkg/db/ent/bootcamp"
 	"saas/pkg/db/ent/bootcampparticipant"
 	"saas/pkg/db/ent/contest"
@@ -52,6 +53,7 @@ const (
 
 	// Node types.
 	TypeAPI                   = "API"
+	TypeBanner                = "Banner"
 	TypeBootcamp              = "Bootcamp"
 	TypeBootcampParticipant   = "BootcampParticipant"
 	TypeContest               = "Contest"
@@ -879,6 +881,915 @@ func (m *APIMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *APIMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown API edge %s", name)
+}
+
+// BannerMutation represents an operation that mutates the Banner nodes in the graph.
+type BannerMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int64
+	created_at    *time.Time
+	updated_at    *time.Time
+	delete_at     *time.Time
+	created_id    *int64
+	addcreated_id *int64
+	status        *int64
+	addstatus     *int64
+	name          *string
+	pic           *string
+	link          *string
+	is_show       *int64
+	addis_show    *int64
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Banner, error)
+	predicates    []predicate.Banner
+}
+
+var _ ent.Mutation = (*BannerMutation)(nil)
+
+// bannerOption allows management of the mutation configuration using functional options.
+type bannerOption func(*BannerMutation)
+
+// newBannerMutation creates new mutation for the Banner entity.
+func newBannerMutation(c config, op Op, opts ...bannerOption) *BannerMutation {
+	m := &BannerMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeBanner,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withBannerID sets the ID field of the mutation.
+func withBannerID(id int64) bannerOption {
+	return func(m *BannerMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Banner
+		)
+		m.oldValue = func(ctx context.Context) (*Banner, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Banner.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withBanner sets the old Banner of the mutation.
+func withBanner(node *Banner) bannerOption {
+	return func(m *BannerMutation) {
+		m.oldValue = func(context.Context) (*Banner, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m BannerMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m BannerMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Banner entities.
+func (m *BannerMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *BannerMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *BannerMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Banner.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *BannerMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *BannerMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *BannerMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *BannerMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *BannerMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *BannerMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *BannerMutation) SetDeleteAt(t time.Time) {
+	m.delete_at = &t
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *BannerMutation) DeleteAt() (r time.Time, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldDeleteAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *BannerMutation) ResetDeleteAt() {
+	m.delete_at = nil
+}
+
+// SetCreatedID sets the "created_id" field.
+func (m *BannerMutation) SetCreatedID(i int64) {
+	m.created_id = &i
+	m.addcreated_id = nil
+}
+
+// CreatedID returns the value of the "created_id" field in the mutation.
+func (m *BannerMutation) CreatedID() (r int64, exists bool) {
+	v := m.created_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedID returns the old "created_id" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldCreatedID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedID: %w", err)
+	}
+	return oldValue.CreatedID, nil
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (m *BannerMutation) AddCreatedID(i int64) {
+	if m.addcreated_id != nil {
+		*m.addcreated_id += i
+	} else {
+		m.addcreated_id = &i
+	}
+}
+
+// AddedCreatedID returns the value that was added to the "created_id" field in this mutation.
+func (m *BannerMutation) AddedCreatedID() (r int64, exists bool) {
+	v := m.addcreated_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedID resets all changes to the "created_id" field.
+func (m *BannerMutation) ResetCreatedID() {
+	m.created_id = nil
+	m.addcreated_id = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *BannerMutation) SetStatus(i int64) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *BannerMutation) Status() (r int64, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldStatus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *BannerMutation) AddStatus(i int64) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *BannerMutation) AddedStatus() (r int64, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *BannerMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[banner.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *BannerMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[banner.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *BannerMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, banner.FieldStatus)
+}
+
+// SetName sets the "name" field.
+func (m *BannerMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *BannerMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *BannerMutation) ResetName() {
+	m.name = nil
+}
+
+// SetPic sets the "pic" field.
+func (m *BannerMutation) SetPic(s string) {
+	m.pic = &s
+}
+
+// Pic returns the value of the "pic" field in the mutation.
+func (m *BannerMutation) Pic() (r string, exists bool) {
+	v := m.pic
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPic returns the old "pic" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldPic(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPic is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPic requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPic: %w", err)
+	}
+	return oldValue.Pic, nil
+}
+
+// ResetPic resets all changes to the "pic" field.
+func (m *BannerMutation) ResetPic() {
+	m.pic = nil
+}
+
+// SetLink sets the "link" field.
+func (m *BannerMutation) SetLink(s string) {
+	m.link = &s
+}
+
+// Link returns the value of the "link" field in the mutation.
+func (m *BannerMutation) Link() (r string, exists bool) {
+	v := m.link
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLink returns the old "link" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldLink(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLink is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLink requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLink: %w", err)
+	}
+	return oldValue.Link, nil
+}
+
+// ResetLink resets all changes to the "link" field.
+func (m *BannerMutation) ResetLink() {
+	m.link = nil
+}
+
+// SetIsShow sets the "is_show" field.
+func (m *BannerMutation) SetIsShow(i int64) {
+	m.is_show = &i
+	m.addis_show = nil
+}
+
+// IsShow returns the value of the "is_show" field in the mutation.
+func (m *BannerMutation) IsShow() (r int64, exists bool) {
+	v := m.is_show
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsShow returns the old "is_show" field's value of the Banner entity.
+// If the Banner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BannerMutation) OldIsShow(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsShow is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsShow requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsShow: %w", err)
+	}
+	return oldValue.IsShow, nil
+}
+
+// AddIsShow adds i to the "is_show" field.
+func (m *BannerMutation) AddIsShow(i int64) {
+	if m.addis_show != nil {
+		*m.addis_show += i
+	} else {
+		m.addis_show = &i
+	}
+}
+
+// AddedIsShow returns the value that was added to the "is_show" field in this mutation.
+func (m *BannerMutation) AddedIsShow() (r int64, exists bool) {
+	v := m.addis_show
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsShow clears the value of the "is_show" field.
+func (m *BannerMutation) ClearIsShow() {
+	m.is_show = nil
+	m.addis_show = nil
+	m.clearedFields[banner.FieldIsShow] = struct{}{}
+}
+
+// IsShowCleared returns if the "is_show" field was cleared in this mutation.
+func (m *BannerMutation) IsShowCleared() bool {
+	_, ok := m.clearedFields[banner.FieldIsShow]
+	return ok
+}
+
+// ResetIsShow resets all changes to the "is_show" field.
+func (m *BannerMutation) ResetIsShow() {
+	m.is_show = nil
+	m.addis_show = nil
+	delete(m.clearedFields, banner.FieldIsShow)
+}
+
+// Where appends a list predicates to the BannerMutation builder.
+func (m *BannerMutation) Where(ps ...predicate.Banner) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the BannerMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *BannerMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Banner, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *BannerMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *BannerMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Banner).
+func (m *BannerMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *BannerMutation) Fields() []string {
+	fields := make([]string, 0, 9)
+	if m.created_at != nil {
+		fields = append(fields, banner.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, banner.FieldUpdatedAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, banner.FieldDeleteAt)
+	}
+	if m.created_id != nil {
+		fields = append(fields, banner.FieldCreatedID)
+	}
+	if m.status != nil {
+		fields = append(fields, banner.FieldStatus)
+	}
+	if m.name != nil {
+		fields = append(fields, banner.FieldName)
+	}
+	if m.pic != nil {
+		fields = append(fields, banner.FieldPic)
+	}
+	if m.link != nil {
+		fields = append(fields, banner.FieldLink)
+	}
+	if m.is_show != nil {
+		fields = append(fields, banner.FieldIsShow)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *BannerMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case banner.FieldCreatedAt:
+		return m.CreatedAt()
+	case banner.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case banner.FieldDeleteAt:
+		return m.DeleteAt()
+	case banner.FieldCreatedID:
+		return m.CreatedID()
+	case banner.FieldStatus:
+		return m.Status()
+	case banner.FieldName:
+		return m.Name()
+	case banner.FieldPic:
+		return m.Pic()
+	case banner.FieldLink:
+		return m.Link()
+	case banner.FieldIsShow:
+		return m.IsShow()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *BannerMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case banner.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case banner.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case banner.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	case banner.FieldCreatedID:
+		return m.OldCreatedID(ctx)
+	case banner.FieldStatus:
+		return m.OldStatus(ctx)
+	case banner.FieldName:
+		return m.OldName(ctx)
+	case banner.FieldPic:
+		return m.OldPic(ctx)
+	case banner.FieldLink:
+		return m.OldLink(ctx)
+	case banner.FieldIsShow:
+		return m.OldIsShow(ctx)
+	}
+	return nil, fmt.Errorf("unknown Banner field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *BannerMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case banner.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case banner.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case banner.FieldDeleteAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
+	case banner.FieldCreatedID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedID(v)
+		return nil
+	case banner.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case banner.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case banner.FieldPic:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPic(v)
+		return nil
+	case banner.FieldLink:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLink(v)
+		return nil
+	case banner.FieldIsShow:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsShow(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Banner field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *BannerMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreated_id != nil {
+		fields = append(fields, banner.FieldCreatedID)
+	}
+	if m.addstatus != nil {
+		fields = append(fields, banner.FieldStatus)
+	}
+	if m.addis_show != nil {
+		fields = append(fields, banner.FieldIsShow)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *BannerMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case banner.FieldCreatedID:
+		return m.AddedCreatedID()
+	case banner.FieldStatus:
+		return m.AddedStatus()
+	case banner.FieldIsShow:
+		return m.AddedIsShow()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *BannerMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case banner.FieldCreatedID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedID(v)
+		return nil
+	case banner.FieldStatus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	case banner.FieldIsShow:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsShow(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Banner numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *BannerMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(banner.FieldStatus) {
+		fields = append(fields, banner.FieldStatus)
+	}
+	if m.FieldCleared(banner.FieldIsShow) {
+		fields = append(fields, banner.FieldIsShow)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *BannerMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *BannerMutation) ClearField(name string) error {
+	switch name {
+	case banner.FieldStatus:
+		m.ClearStatus()
+		return nil
+	case banner.FieldIsShow:
+		m.ClearIsShow()
+		return nil
+	}
+	return fmt.Errorf("unknown Banner nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *BannerMutation) ResetField(name string) error {
+	switch name {
+	case banner.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case banner.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case banner.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	case banner.FieldCreatedID:
+		m.ResetCreatedID()
+		return nil
+	case banner.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case banner.FieldName:
+		m.ResetName()
+		return nil
+	case banner.FieldPic:
+		m.ResetPic()
+		return nil
+	case banner.FieldLink:
+		m.ResetLink()
+		return nil
+	case banner.FieldIsShow:
+		m.ResetIsShow()
+		return nil
+	}
+	return fmt.Errorf("unknown Banner field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *BannerMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *BannerMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *BannerMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *BannerMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *BannerMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *BannerMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *BannerMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Banner unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *BannerMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Banner edge %s", name)
 }
 
 // BootcampMutation represents an operation that mutates the Bootcamp nodes in the graph.
@@ -3036,6 +3947,11 @@ type BootcampParticipantMutation struct {
 	name            *string
 	mobile          *string
 	fields          *string
+	order_id        *int64
+	addorder_id     *int64
+	order_sn        *string
+	fee             *float64
+	addfee          *float64
 	clearedFields   map[string]struct{}
 	bootcamp        *int64
 	clearedbootcamp bool
@@ -3578,6 +4494,195 @@ func (m *BootcampParticipantMutation) ResetFields() {
 	delete(m.clearedFields, bootcampparticipant.FieldFields)
 }
 
+// SetOrderID sets the "order_id" field.
+func (m *BootcampParticipantMutation) SetOrderID(i int64) {
+	m.order_id = &i
+	m.addorder_id = nil
+}
+
+// OrderID returns the value of the "order_id" field in the mutation.
+func (m *BootcampParticipantMutation) OrderID() (r int64, exists bool) {
+	v := m.order_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrderID returns the old "order_id" field's value of the BootcampParticipant entity.
+// If the BootcampParticipant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BootcampParticipantMutation) OldOrderID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrderID: %w", err)
+	}
+	return oldValue.OrderID, nil
+}
+
+// AddOrderID adds i to the "order_id" field.
+func (m *BootcampParticipantMutation) AddOrderID(i int64) {
+	if m.addorder_id != nil {
+		*m.addorder_id += i
+	} else {
+		m.addorder_id = &i
+	}
+}
+
+// AddedOrderID returns the value that was added to the "order_id" field in this mutation.
+func (m *BootcampParticipantMutation) AddedOrderID() (r int64, exists bool) {
+	v := m.addorder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (m *BootcampParticipantMutation) ClearOrderID() {
+	m.order_id = nil
+	m.addorder_id = nil
+	m.clearedFields[bootcampparticipant.FieldOrderID] = struct{}{}
+}
+
+// OrderIDCleared returns if the "order_id" field was cleared in this mutation.
+func (m *BootcampParticipantMutation) OrderIDCleared() bool {
+	_, ok := m.clearedFields[bootcampparticipant.FieldOrderID]
+	return ok
+}
+
+// ResetOrderID resets all changes to the "order_id" field.
+func (m *BootcampParticipantMutation) ResetOrderID() {
+	m.order_id = nil
+	m.addorder_id = nil
+	delete(m.clearedFields, bootcampparticipant.FieldOrderID)
+}
+
+// SetOrderSn sets the "order_sn" field.
+func (m *BootcampParticipantMutation) SetOrderSn(s string) {
+	m.order_sn = &s
+}
+
+// OrderSn returns the value of the "order_sn" field in the mutation.
+func (m *BootcampParticipantMutation) OrderSn() (r string, exists bool) {
+	v := m.order_sn
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrderSn returns the old "order_sn" field's value of the BootcampParticipant entity.
+// If the BootcampParticipant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BootcampParticipantMutation) OldOrderSn(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrderSn is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrderSn requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrderSn: %w", err)
+	}
+	return oldValue.OrderSn, nil
+}
+
+// ClearOrderSn clears the value of the "order_sn" field.
+func (m *BootcampParticipantMutation) ClearOrderSn() {
+	m.order_sn = nil
+	m.clearedFields[bootcampparticipant.FieldOrderSn] = struct{}{}
+}
+
+// OrderSnCleared returns if the "order_sn" field was cleared in this mutation.
+func (m *BootcampParticipantMutation) OrderSnCleared() bool {
+	_, ok := m.clearedFields[bootcampparticipant.FieldOrderSn]
+	return ok
+}
+
+// ResetOrderSn resets all changes to the "order_sn" field.
+func (m *BootcampParticipantMutation) ResetOrderSn() {
+	m.order_sn = nil
+	delete(m.clearedFields, bootcampparticipant.FieldOrderSn)
+}
+
+// SetFee sets the "fee" field.
+func (m *BootcampParticipantMutation) SetFee(f float64) {
+	m.fee = &f
+	m.addfee = nil
+}
+
+// Fee returns the value of the "fee" field in the mutation.
+func (m *BootcampParticipantMutation) Fee() (r float64, exists bool) {
+	v := m.fee
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFee returns the old "fee" field's value of the BootcampParticipant entity.
+// If the BootcampParticipant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BootcampParticipantMutation) OldFee(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFee is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFee requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFee: %w", err)
+	}
+	return oldValue.Fee, nil
+}
+
+// AddFee adds f to the "fee" field.
+func (m *BootcampParticipantMutation) AddFee(f float64) {
+	if m.addfee != nil {
+		*m.addfee += f
+	} else {
+		m.addfee = &f
+	}
+}
+
+// AddedFee returns the value that was added to the "fee" field in this mutation.
+func (m *BootcampParticipantMutation) AddedFee() (r float64, exists bool) {
+	v := m.addfee
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearFee clears the value of the "fee" field.
+func (m *BootcampParticipantMutation) ClearFee() {
+	m.fee = nil
+	m.addfee = nil
+	m.clearedFields[bootcampparticipant.FieldFee] = struct{}{}
+}
+
+// FeeCleared returns if the "fee" field was cleared in this mutation.
+func (m *BootcampParticipantMutation) FeeCleared() bool {
+	_, ok := m.clearedFields[bootcampparticipant.FieldFee]
+	return ok
+}
+
+// ResetFee resets all changes to the "fee" field.
+func (m *BootcampParticipantMutation) ResetFee() {
+	m.fee = nil
+	m.addfee = nil
+	delete(m.clearedFields, bootcampparticipant.FieldFee)
+}
+
 // ClearBootcamp clears the "bootcamp" edge to the Bootcamp entity.
 func (m *BootcampParticipantMutation) ClearBootcamp() {
 	m.clearedbootcamp = true
@@ -3639,7 +4744,7 @@ func (m *BootcampParticipantMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BootcampParticipantMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, bootcampparticipant.FieldCreatedAt)
 	}
@@ -3667,6 +4772,15 @@ func (m *BootcampParticipantMutation) Fields() []string {
 	if m.fields != nil {
 		fields = append(fields, bootcampparticipant.FieldFields)
 	}
+	if m.order_id != nil {
+		fields = append(fields, bootcampparticipant.FieldOrderID)
+	}
+	if m.order_sn != nil {
+		fields = append(fields, bootcampparticipant.FieldOrderSn)
+	}
+	if m.fee != nil {
+		fields = append(fields, bootcampparticipant.FieldFee)
+	}
 	return fields
 }
 
@@ -3693,6 +4807,12 @@ func (m *BootcampParticipantMutation) Field(name string) (ent.Value, bool) {
 		return m.Mobile()
 	case bootcampparticipant.FieldFields:
 		return m.GetFields()
+	case bootcampparticipant.FieldOrderID:
+		return m.OrderID()
+	case bootcampparticipant.FieldOrderSn:
+		return m.OrderSn()
+	case bootcampparticipant.FieldFee:
+		return m.Fee()
 	}
 	return nil, false
 }
@@ -3720,6 +4840,12 @@ func (m *BootcampParticipantMutation) OldField(ctx context.Context, name string)
 		return m.OldMobile(ctx)
 	case bootcampparticipant.FieldFields:
 		return m.OldFields(ctx)
+	case bootcampparticipant.FieldOrderID:
+		return m.OldOrderID(ctx)
+	case bootcampparticipant.FieldOrderSn:
+		return m.OldOrderSn(ctx)
+	case bootcampparticipant.FieldFee:
+		return m.OldFee(ctx)
 	}
 	return nil, fmt.Errorf("unknown BootcampParticipant field %s", name)
 }
@@ -3792,6 +4918,27 @@ func (m *BootcampParticipantMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetFields(v)
 		return nil
+	case bootcampparticipant.FieldOrderID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrderID(v)
+		return nil
+	case bootcampparticipant.FieldOrderSn:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrderSn(v)
+		return nil
+	case bootcampparticipant.FieldFee:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFee(v)
+		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant field %s", name)
 }
@@ -3806,6 +4953,12 @@ func (m *BootcampParticipantMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, bootcampparticipant.FieldStatus)
 	}
+	if m.addorder_id != nil {
+		fields = append(fields, bootcampparticipant.FieldOrderID)
+	}
+	if m.addfee != nil {
+		fields = append(fields, bootcampparticipant.FieldFee)
+	}
 	return fields
 }
 
@@ -3818,6 +4971,10 @@ func (m *BootcampParticipantMutation) AddedField(name string) (ent.Value, bool) 
 		return m.AddedCreatedID()
 	case bootcampparticipant.FieldStatus:
 		return m.AddedStatus()
+	case bootcampparticipant.FieldOrderID:
+		return m.AddedOrderID()
+	case bootcampparticipant.FieldFee:
+		return m.AddedFee()
 	}
 	return nil, false
 }
@@ -3841,6 +4998,20 @@ func (m *BootcampParticipantMutation) AddField(name string, value ent.Value) err
 		}
 		m.AddStatus(v)
 		return nil
+	case bootcampparticipant.FieldOrderID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOrderID(v)
+		return nil
+	case bootcampparticipant.FieldFee:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFee(v)
+		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant numeric field %s", name)
 }
@@ -3863,6 +5034,15 @@ func (m *BootcampParticipantMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(bootcampparticipant.FieldFields) {
 		fields = append(fields, bootcampparticipant.FieldFields)
+	}
+	if m.FieldCleared(bootcampparticipant.FieldOrderID) {
+		fields = append(fields, bootcampparticipant.FieldOrderID)
+	}
+	if m.FieldCleared(bootcampparticipant.FieldOrderSn) {
+		fields = append(fields, bootcampparticipant.FieldOrderSn)
+	}
+	if m.FieldCleared(bootcampparticipant.FieldFee) {
+		fields = append(fields, bootcampparticipant.FieldFee)
 	}
 	return fields
 }
@@ -3892,6 +5072,15 @@ func (m *BootcampParticipantMutation) ClearField(name string) error {
 		return nil
 	case bootcampparticipant.FieldFields:
 		m.ClearFields()
+		return nil
+	case bootcampparticipant.FieldOrderID:
+		m.ClearOrderID()
+		return nil
+	case bootcampparticipant.FieldOrderSn:
+		m.ClearOrderSn()
+		return nil
+	case bootcampparticipant.FieldFee:
+		m.ClearFee()
 		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant nullable field %s", name)
@@ -3927,6 +5116,15 @@ func (m *BootcampParticipantMutation) ResetField(name string) error {
 		return nil
 	case bootcampparticipant.FieldFields:
 		m.ResetFields()
+		return nil
+	case bootcampparticipant.FieldOrderID:
+		m.ResetOrderID()
+		return nil
+	case bootcampparticipant.FieldOrderSn:
+		m.ResetOrderSn()
+		return nil
+	case bootcampparticipant.FieldFee:
+		m.ResetFee()
 		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant field %s", name)
@@ -6268,6 +7466,11 @@ type ContestParticipantMutation struct {
 	name           *string
 	mobile         *string
 	fields         *string
+	order_id       *int64
+	addorder_id    *int64
+	order_sn       *string
+	fee            *float64
+	addfee         *float64
 	clearedFields  map[string]struct{}
 	contest        *int64
 	clearedcontest bool
@@ -6810,6 +8013,195 @@ func (m *ContestParticipantMutation) ResetFields() {
 	delete(m.clearedFields, contestparticipant.FieldFields)
 }
 
+// SetOrderID sets the "order_id" field.
+func (m *ContestParticipantMutation) SetOrderID(i int64) {
+	m.order_id = &i
+	m.addorder_id = nil
+}
+
+// OrderID returns the value of the "order_id" field in the mutation.
+func (m *ContestParticipantMutation) OrderID() (r int64, exists bool) {
+	v := m.order_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrderID returns the old "order_id" field's value of the ContestParticipant entity.
+// If the ContestParticipant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContestParticipantMutation) OldOrderID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrderID: %w", err)
+	}
+	return oldValue.OrderID, nil
+}
+
+// AddOrderID adds i to the "order_id" field.
+func (m *ContestParticipantMutation) AddOrderID(i int64) {
+	if m.addorder_id != nil {
+		*m.addorder_id += i
+	} else {
+		m.addorder_id = &i
+	}
+}
+
+// AddedOrderID returns the value that was added to the "order_id" field in this mutation.
+func (m *ContestParticipantMutation) AddedOrderID() (r int64, exists bool) {
+	v := m.addorder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (m *ContestParticipantMutation) ClearOrderID() {
+	m.order_id = nil
+	m.addorder_id = nil
+	m.clearedFields[contestparticipant.FieldOrderID] = struct{}{}
+}
+
+// OrderIDCleared returns if the "order_id" field was cleared in this mutation.
+func (m *ContestParticipantMutation) OrderIDCleared() bool {
+	_, ok := m.clearedFields[contestparticipant.FieldOrderID]
+	return ok
+}
+
+// ResetOrderID resets all changes to the "order_id" field.
+func (m *ContestParticipantMutation) ResetOrderID() {
+	m.order_id = nil
+	m.addorder_id = nil
+	delete(m.clearedFields, contestparticipant.FieldOrderID)
+}
+
+// SetOrderSn sets the "order_sn" field.
+func (m *ContestParticipantMutation) SetOrderSn(s string) {
+	m.order_sn = &s
+}
+
+// OrderSn returns the value of the "order_sn" field in the mutation.
+func (m *ContestParticipantMutation) OrderSn() (r string, exists bool) {
+	v := m.order_sn
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrderSn returns the old "order_sn" field's value of the ContestParticipant entity.
+// If the ContestParticipant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContestParticipantMutation) OldOrderSn(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrderSn is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrderSn requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrderSn: %w", err)
+	}
+	return oldValue.OrderSn, nil
+}
+
+// ClearOrderSn clears the value of the "order_sn" field.
+func (m *ContestParticipantMutation) ClearOrderSn() {
+	m.order_sn = nil
+	m.clearedFields[contestparticipant.FieldOrderSn] = struct{}{}
+}
+
+// OrderSnCleared returns if the "order_sn" field was cleared in this mutation.
+func (m *ContestParticipantMutation) OrderSnCleared() bool {
+	_, ok := m.clearedFields[contestparticipant.FieldOrderSn]
+	return ok
+}
+
+// ResetOrderSn resets all changes to the "order_sn" field.
+func (m *ContestParticipantMutation) ResetOrderSn() {
+	m.order_sn = nil
+	delete(m.clearedFields, contestparticipant.FieldOrderSn)
+}
+
+// SetFee sets the "fee" field.
+func (m *ContestParticipantMutation) SetFee(f float64) {
+	m.fee = &f
+	m.addfee = nil
+}
+
+// Fee returns the value of the "fee" field in the mutation.
+func (m *ContestParticipantMutation) Fee() (r float64, exists bool) {
+	v := m.fee
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFee returns the old "fee" field's value of the ContestParticipant entity.
+// If the ContestParticipant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContestParticipantMutation) OldFee(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFee is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFee requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFee: %w", err)
+	}
+	return oldValue.Fee, nil
+}
+
+// AddFee adds f to the "fee" field.
+func (m *ContestParticipantMutation) AddFee(f float64) {
+	if m.addfee != nil {
+		*m.addfee += f
+	} else {
+		m.addfee = &f
+	}
+}
+
+// AddedFee returns the value that was added to the "fee" field in this mutation.
+func (m *ContestParticipantMutation) AddedFee() (r float64, exists bool) {
+	v := m.addfee
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearFee clears the value of the "fee" field.
+func (m *ContestParticipantMutation) ClearFee() {
+	m.fee = nil
+	m.addfee = nil
+	m.clearedFields[contestparticipant.FieldFee] = struct{}{}
+}
+
+// FeeCleared returns if the "fee" field was cleared in this mutation.
+func (m *ContestParticipantMutation) FeeCleared() bool {
+	_, ok := m.clearedFields[contestparticipant.FieldFee]
+	return ok
+}
+
+// ResetFee resets all changes to the "fee" field.
+func (m *ContestParticipantMutation) ResetFee() {
+	m.fee = nil
+	m.addfee = nil
+	delete(m.clearedFields, contestparticipant.FieldFee)
+}
+
 // ClearContest clears the "contest" edge to the Contest entity.
 func (m *ContestParticipantMutation) ClearContest() {
 	m.clearedcontest = true
@@ -6871,7 +8263,7 @@ func (m *ContestParticipantMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ContestParticipantMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, contestparticipant.FieldCreatedAt)
 	}
@@ -6899,6 +8291,15 @@ func (m *ContestParticipantMutation) Fields() []string {
 	if m.fields != nil {
 		fields = append(fields, contestparticipant.FieldFields)
 	}
+	if m.order_id != nil {
+		fields = append(fields, contestparticipant.FieldOrderID)
+	}
+	if m.order_sn != nil {
+		fields = append(fields, contestparticipant.FieldOrderSn)
+	}
+	if m.fee != nil {
+		fields = append(fields, contestparticipant.FieldFee)
+	}
 	return fields
 }
 
@@ -6925,6 +8326,12 @@ func (m *ContestParticipantMutation) Field(name string) (ent.Value, bool) {
 		return m.Mobile()
 	case contestparticipant.FieldFields:
 		return m.GetFields()
+	case contestparticipant.FieldOrderID:
+		return m.OrderID()
+	case contestparticipant.FieldOrderSn:
+		return m.OrderSn()
+	case contestparticipant.FieldFee:
+		return m.Fee()
 	}
 	return nil, false
 }
@@ -6952,6 +8359,12 @@ func (m *ContestParticipantMutation) OldField(ctx context.Context, name string) 
 		return m.OldMobile(ctx)
 	case contestparticipant.FieldFields:
 		return m.OldFields(ctx)
+	case contestparticipant.FieldOrderID:
+		return m.OldOrderID(ctx)
+	case contestparticipant.FieldOrderSn:
+		return m.OldOrderSn(ctx)
+	case contestparticipant.FieldFee:
+		return m.OldFee(ctx)
 	}
 	return nil, fmt.Errorf("unknown ContestParticipant field %s", name)
 }
@@ -7024,6 +8437,27 @@ func (m *ContestParticipantMutation) SetField(name string, value ent.Value) erro
 		}
 		m.SetFields(v)
 		return nil
+	case contestparticipant.FieldOrderID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrderID(v)
+		return nil
+	case contestparticipant.FieldOrderSn:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrderSn(v)
+		return nil
+	case contestparticipant.FieldFee:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFee(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ContestParticipant field %s", name)
 }
@@ -7038,6 +8472,12 @@ func (m *ContestParticipantMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, contestparticipant.FieldStatus)
 	}
+	if m.addorder_id != nil {
+		fields = append(fields, contestparticipant.FieldOrderID)
+	}
+	if m.addfee != nil {
+		fields = append(fields, contestparticipant.FieldFee)
+	}
 	return fields
 }
 
@@ -7050,6 +8490,10 @@ func (m *ContestParticipantMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedCreatedID()
 	case contestparticipant.FieldStatus:
 		return m.AddedStatus()
+	case contestparticipant.FieldOrderID:
+		return m.AddedOrderID()
+	case contestparticipant.FieldFee:
+		return m.AddedFee()
 	}
 	return nil, false
 }
@@ -7073,6 +8517,20 @@ func (m *ContestParticipantMutation) AddField(name string, value ent.Value) erro
 		}
 		m.AddStatus(v)
 		return nil
+	case contestparticipant.FieldOrderID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOrderID(v)
+		return nil
+	case contestparticipant.FieldFee:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFee(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ContestParticipant numeric field %s", name)
 }
@@ -7095,6 +8553,15 @@ func (m *ContestParticipantMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(contestparticipant.FieldFields) {
 		fields = append(fields, contestparticipant.FieldFields)
+	}
+	if m.FieldCleared(contestparticipant.FieldOrderID) {
+		fields = append(fields, contestparticipant.FieldOrderID)
+	}
+	if m.FieldCleared(contestparticipant.FieldOrderSn) {
+		fields = append(fields, contestparticipant.FieldOrderSn)
+	}
+	if m.FieldCleared(contestparticipant.FieldFee) {
+		fields = append(fields, contestparticipant.FieldFee)
 	}
 	return fields
 }
@@ -7124,6 +8591,15 @@ func (m *ContestParticipantMutation) ClearField(name string) error {
 		return nil
 	case contestparticipant.FieldFields:
 		m.ClearFields()
+		return nil
+	case contestparticipant.FieldOrderID:
+		m.ClearOrderID()
+		return nil
+	case contestparticipant.FieldOrderSn:
+		m.ClearOrderSn()
+		return nil
+	case contestparticipant.FieldFee:
+		m.ClearFee()
 		return nil
 	}
 	return fmt.Errorf("unknown ContestParticipant nullable field %s", name)
@@ -7159,6 +8635,15 @@ func (m *ContestParticipantMutation) ResetField(name string) error {
 		return nil
 	case contestparticipant.FieldFields:
 		m.ResetFields()
+		return nil
+	case contestparticipant.FieldOrderID:
+		m.ResetOrderID()
+		return nil
+	case contestparticipant.FieldOrderSn:
+		m.ResetOrderSn()
+		return nil
+	case contestparticipant.FieldFee:
+		m.ResetFee()
 		return nil
 	}
 	return fmt.Errorf("unknown ContestParticipant field %s", name)

@@ -63,7 +63,14 @@ struct ParticipantInfo{
     3:  optional string fields="" (api.raw = "fields")
     4:  optional string name="" (api.raw = "name")
     5:  optional string mobile="" (api.raw = "mobile")
+    6:  optional string createdAt="" (api.raw = "createdAt")
+
+    8:  optional string orderSn="" (api.raw = "orderSn")
+    9:  optional double fee=0 (api.raw = "fee")
+    10:  optional i64 status=1 (api.raw = "status")
+
 }
+
 struct ContestInfo{
     1:  optional i64 id=0 (api.raw = "id")
     2:  optional string name="" (api.raw = "name")

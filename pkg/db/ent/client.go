@@ -12,6 +12,7 @@ import (
 	"saas/pkg/db/ent/migrate"
 
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/banner"
 	"saas/pkg/db/ent/bootcamp"
 	"saas/pkg/db/ent/bootcampparticipant"
 	"saas/pkg/db/ent/contest"
@@ -53,6 +54,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// API is the client for interacting with the API builders.
 	API *APIClient
+	// Banner is the client for interacting with the Banner builders.
+	Banner *BannerClient
 	// Bootcamp is the client for interacting with the Bootcamp builders.
 	Bootcamp *BootcampClient
 	// BootcampParticipant is the client for interacting with the BootcampParticipant builders.
@@ -119,6 +122,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.API = NewAPIClient(c.config)
+	c.Banner = NewBannerClient(c.config)
 	c.Bootcamp = NewBootcampClient(c.config)
 	c.BootcampParticipant = NewBootcampParticipantClient(c.config)
 	c.Contest = NewContestClient(c.config)
@@ -239,6 +243,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                   ctx,
 		config:                cfg,
 		API:                   NewAPIClient(cfg),
+		Banner:                NewBannerClient(cfg),
 		Bootcamp:              NewBootcampClient(cfg),
 		BootcampParticipant:   NewBootcampParticipantClient(cfg),
 		Contest:               NewContestClient(cfg),
@@ -286,6 +291,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                   ctx,
 		config:                cfg,
 		API:                   NewAPIClient(cfg),
+		Banner:                NewBannerClient(cfg),
 		Bootcamp:              NewBootcampClient(cfg),
 		BootcampParticipant:   NewBootcampParticipantClient(cfg),
 		Contest:               NewContestClient(cfg),
@@ -342,11 +348,12 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.API, c.Bootcamp, c.BootcampParticipant, c.Contest, c.ContestParticipant,
-		c.Contract, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
-		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
-		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
-		c.OrderPay, c.OrderSales, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
+		c.API, c.Banner, c.Bootcamp, c.BootcampParticipant, c.Contest,
+		c.ContestParticipant, c.Contract, c.Dictionary, c.DictionaryDetail,
+		c.EntryLogs, c.Logs, c.Member, c.MemberContract, c.MemberContractContent,
+		c.MemberDetails, c.MemberNote, c.Menu, c.MenuParam, c.Messages, c.Order,
+		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Role, c.Token, c.User,
+		c.Venue, c.VenuePlace,
 	} {
 		n.Use(hooks...)
 	}
@@ -356,11 +363,12 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.API, c.Bootcamp, c.BootcampParticipant, c.Contest, c.ContestParticipant,
-		c.Contract, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
-		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
-		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
-		c.OrderPay, c.OrderSales, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
+		c.API, c.Banner, c.Bootcamp, c.BootcampParticipant, c.Contest,
+		c.ContestParticipant, c.Contract, c.Dictionary, c.DictionaryDetail,
+		c.EntryLogs, c.Logs, c.Member, c.MemberContract, c.MemberContractContent,
+		c.MemberDetails, c.MemberNote, c.Menu, c.MenuParam, c.Messages, c.Order,
+		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Role, c.Token, c.User,
+		c.Venue, c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -371,6 +379,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *APIMutation:
 		return c.API.mutate(ctx, m)
+	case *BannerMutation:
+		return c.Banner.mutate(ctx, m)
 	case *BootcampMutation:
 		return c.Bootcamp.mutate(ctx, m)
 	case *BootcampParticipantMutation:
@@ -560,6 +570,139 @@ func (c *APIClient) mutate(ctx context.Context, m *APIMutation) (Value, error) {
 		return (&APIDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown API mutation op: %q", m.Op())
+	}
+}
+
+// BannerClient is a client for the Banner schema.
+type BannerClient struct {
+	config
+}
+
+// NewBannerClient returns a client for the Banner from the given config.
+func NewBannerClient(c config) *BannerClient {
+	return &BannerClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `banner.Hooks(f(g(h())))`.
+func (c *BannerClient) Use(hooks ...Hook) {
+	c.hooks.Banner = append(c.hooks.Banner, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `banner.Intercept(f(g(h())))`.
+func (c *BannerClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Banner = append(c.inters.Banner, interceptors...)
+}
+
+// Create returns a builder for creating a Banner entity.
+func (c *BannerClient) Create() *BannerCreate {
+	mutation := newBannerMutation(c.config, OpCreate)
+	return &BannerCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Banner entities.
+func (c *BannerClient) CreateBulk(builders ...*BannerCreate) *BannerCreateBulk {
+	return &BannerCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *BannerClient) MapCreateBulk(slice any, setFunc func(*BannerCreate, int)) *BannerCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &BannerCreateBulk{err: fmt.Errorf("calling to BannerClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*BannerCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &BannerCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Banner.
+func (c *BannerClient) Update() *BannerUpdate {
+	mutation := newBannerMutation(c.config, OpUpdate)
+	return &BannerUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BannerClient) UpdateOne(b *Banner) *BannerUpdateOne {
+	mutation := newBannerMutation(c.config, OpUpdateOne, withBanner(b))
+	return &BannerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BannerClient) UpdateOneID(id int64) *BannerUpdateOne {
+	mutation := newBannerMutation(c.config, OpUpdateOne, withBannerID(id))
+	return &BannerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Banner.
+func (c *BannerClient) Delete() *BannerDelete {
+	mutation := newBannerMutation(c.config, OpDelete)
+	return &BannerDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *BannerClient) DeleteOne(b *Banner) *BannerDeleteOne {
+	return c.DeleteOneID(b.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *BannerClient) DeleteOneID(id int64) *BannerDeleteOne {
+	builder := c.Delete().Where(banner.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &BannerDeleteOne{builder}
+}
+
+// Query returns a query builder for Banner.
+func (c *BannerClient) Query() *BannerQuery {
+	return &BannerQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeBanner},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Banner entity by its id.
+func (c *BannerClient) Get(ctx context.Context, id int64) (*Banner, error) {
+	return c.Query().Where(banner.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BannerClient) GetX(ctx context.Context, id int64) *Banner {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *BannerClient) Hooks() []Hook {
+	return c.hooks.Banner
+}
+
+// Interceptors returns the client interceptors.
+func (c *BannerClient) Interceptors() []Interceptor {
+	return c.inters.Banner
+}
+
+func (c *BannerClient) mutate(ctx context.Context, m *BannerMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BannerCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BannerUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BannerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BannerDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Banner mutation op: %q", m.Op())
 	}
 }
 
@@ -4925,17 +5068,17 @@ func (c *VenuePlaceClient) mutate(ctx context.Context, m *VenuePlaceMutation) (V
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		API, Bootcamp, BootcampParticipant, Contest, ContestParticipant, Contract,
-		Dictionary, DictionaryDetail, EntryLogs, Logs, Member, MemberContract,
-		MemberContractContent, MemberDetails, MemberNote, Menu, MenuParam, Messages,
-		Order, OrderAmount, OrderItem, OrderPay, OrderSales, Role, Token, User, Venue,
-		VenuePlace []ent.Hook
+		API, Banner, Bootcamp, BootcampParticipant, Contest, ContestParticipant,
+		Contract, Dictionary, DictionaryDetail, EntryLogs, Logs, Member,
+		MemberContract, MemberContractContent, MemberDetails, MemberNote, Menu,
+		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales, Role,
+		Token, User, Venue, VenuePlace []ent.Hook
 	}
 	inters struct {
-		API, Bootcamp, BootcampParticipant, Contest, ContestParticipant, Contract,
-		Dictionary, DictionaryDetail, EntryLogs, Logs, Member, MemberContract,
-		MemberContractContent, MemberDetails, MemberNote, Menu, MenuParam, Messages,
-		Order, OrderAmount, OrderItem, OrderPay, OrderSales, Role, Token, User, Venue,
-		VenuePlace []ent.Interceptor
+		API, Banner, Bootcamp, BootcampParticipant, Contest, ContestParticipant,
+		Contract, Dictionary, DictionaryDetail, EntryLogs, Logs, Member,
+		MemberContract, MemberContractContent, MemberDetails, MemberNote, Menu,
+		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales, Role,
+		Token, User, Venue, VenuePlace []ent.Interceptor
 	}
 )

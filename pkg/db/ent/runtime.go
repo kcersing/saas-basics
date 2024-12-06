@@ -4,6 +4,7 @@ package ent
 
 import (
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/banner"
 	"saas/pkg/db/ent/bootcamp"
 	"saas/pkg/db/ent/bootcampparticipant"
 	"saas/pkg/db/ent/contest"
@@ -62,6 +63,35 @@ func init() {
 	apiDescMethod := apiFields[4].Descriptor()
 	// api.DefaultMethod holds the default value on creation for the method field.
 	api.DefaultMethod = apiDescMethod.Default.(string)
+	bannerMixin := schema.Banner{}.Mixin()
+	bannerMixinFields0 := bannerMixin[0].Fields()
+	_ = bannerMixinFields0
+	bannerMixinFields1 := bannerMixin[1].Fields()
+	_ = bannerMixinFields1
+	bannerFields := schema.Banner{}.Fields()
+	_ = bannerFields
+	// bannerDescCreatedAt is the schema descriptor for created_at field.
+	bannerDescCreatedAt := bannerMixinFields0[1].Descriptor()
+	// banner.DefaultCreatedAt holds the default value on creation for the created_at field.
+	banner.DefaultCreatedAt = bannerDescCreatedAt.Default.(func() time.Time)
+	// bannerDescUpdatedAt is the schema descriptor for updated_at field.
+	bannerDescUpdatedAt := bannerMixinFields0[2].Descriptor()
+	// banner.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	banner.DefaultUpdatedAt = bannerDescUpdatedAt.Default.(func() time.Time)
+	// banner.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	banner.UpdateDefaultUpdatedAt = bannerDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// bannerDescCreatedID is the schema descriptor for created_id field.
+	bannerDescCreatedID := bannerMixinFields0[4].Descriptor()
+	// banner.DefaultCreatedID holds the default value on creation for the created_id field.
+	banner.DefaultCreatedID = bannerDescCreatedID.Default.(int64)
+	// bannerDescStatus is the schema descriptor for status field.
+	bannerDescStatus := bannerMixinFields1[0].Descriptor()
+	// banner.DefaultStatus holds the default value on creation for the status field.
+	banner.DefaultStatus = bannerDescStatus.Default.(int64)
+	// bannerDescIsShow is the schema descriptor for is_show field.
+	bannerDescIsShow := bannerFields[3].Descriptor()
+	// banner.DefaultIsShow holds the default value on creation for the is_show field.
+	banner.DefaultIsShow = bannerDescIsShow.Default.(int64)
 	bootcampMixin := schema.Bootcamp{}.Mixin()
 	bootcampMixinFields0 := bootcampMixin[0].Fields()
 	_ = bootcampMixinFields0
@@ -128,6 +158,14 @@ func init() {
 	bootcampparticipantDescStatus := bootcampparticipantMixinFields1[0].Descriptor()
 	// bootcampparticipant.DefaultStatus holds the default value on creation for the status field.
 	bootcampparticipant.DefaultStatus = bootcampparticipantDescStatus.Default.(int64)
+	// bootcampparticipantDescOrderID is the schema descriptor for order_id field.
+	bootcampparticipantDescOrderID := bootcampparticipantFields[4].Descriptor()
+	// bootcampparticipant.DefaultOrderID holds the default value on creation for the order_id field.
+	bootcampparticipant.DefaultOrderID = bootcampparticipantDescOrderID.Default.(int64)
+	// bootcampparticipantDescOrderSn is the schema descriptor for order_sn field.
+	bootcampparticipantDescOrderSn := bootcampparticipantFields[5].Descriptor()
+	// bootcampparticipant.DefaultOrderSn holds the default value on creation for the order_sn field.
+	bootcampparticipant.DefaultOrderSn = bootcampparticipantDescOrderSn.Default.(string)
 	contestMixin := schema.Contest{}.Mixin()
 	contestMixinFields0 := contestMixin[0].Fields()
 	_ = contestMixinFields0
@@ -198,6 +236,14 @@ func init() {
 	contestparticipantDescStatus := contestparticipantMixinFields1[0].Descriptor()
 	// contestparticipant.DefaultStatus holds the default value on creation for the status field.
 	contestparticipant.DefaultStatus = contestparticipantDescStatus.Default.(int64)
+	// contestparticipantDescOrderID is the schema descriptor for order_id field.
+	contestparticipantDescOrderID := contestparticipantFields[4].Descriptor()
+	// contestparticipant.DefaultOrderID holds the default value on creation for the order_id field.
+	contestparticipant.DefaultOrderID = contestparticipantDescOrderID.Default.(int64)
+	// contestparticipantDescOrderSn is the schema descriptor for order_sn field.
+	contestparticipantDescOrderSn := contestparticipantFields[5].Descriptor()
+	// contestparticipant.DefaultOrderSn holds the default value on creation for the order_sn field.
+	contestparticipant.DefaultOrderSn = contestparticipantDescOrderSn.Default.(string)
 	contractMixin := schema.Contract{}.Mixin()
 	contractMixinFields0 := contractMixin[0].Fields()
 	_ = contractMixinFields0

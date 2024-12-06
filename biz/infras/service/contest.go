@@ -287,16 +287,28 @@ func (c Contest) ParticipantInfo(id int64) (resp *contest.ParticipantInfo, err e
 			return u, nil
 		}
 	}
-	participantEnt, err := c.db.ContestParticipant.Query().Where(contestparticipant.IDEQ(id)).First(c.ctx)
+	participantEnt, _ := c.db.ContestParticipant.Query().Where(contestparticipant.IDEQ(id)).First(c.ctx)
 
-	resp.ID = participantEnt.ID
-	resp.Name = participantEnt.Name
-	resp.Mobile = participantEnt.Mobile
-	resp.Fields = participantEnt.Fields
-	resp.ContestId = participantEnt.ContestID
+	resp = c.entParticipantInfo(participantEnt)
 
 	c.cache.SetWithTTL("participantInfo"+strconv.Itoa(int(resp.ID)), &resp, 1, 1*time.Hour)
 	return
+}
+
+func (c Contest) entParticipantInfo(v *ent.ContestParticipant) *contest.ParticipantInfo {
+
+	createdAt := v.CreatedAt.Unix()
+	return &contest.ParticipantInfo{
+		ID:        v.ID,
+		Name:      v.Name,
+		Mobile:    v.Mobile,
+		Fields:    v.Fields,
+		ContestId: v.ContestID,
+		CreatedAt: strconv.FormatInt(createdAt, 10),
+		OrderSn:   v.OrderSn,
+		Fee:       v.Fee,
+		Status:    v.Status,
+	}
 }
 
 func (c Contest) ParticipantList(req contest.ParticipantListReq) (resp []*contest.ParticipantInfo, total int, err error) {
@@ -307,7 +319,9 @@ func (c Contest) ParticipantList(req contest.ParticipantListReq) (resp []*contes
 	if req.Mobile != "" {
 		predicates = append(predicates, contestparticipant.Mobile(req.Mobile))
 	}
-
+	if req.Sn != "" {
+		//predicates = append(predicates, contestparticipant.Mobile(req.Sn))
+	}
 	predicates = append(predicates, contestparticipant.ContestID(req.ContestId))
 
 	lists, err := c.db.ContestParticipant.Query().Where(predicates...).
@@ -320,13 +334,7 @@ func (c Contest) ParticipantList(req contest.ParticipantListReq) (resp []*contes
 	}
 
 	for _, v := range lists {
-		resp = append(resp, &contest.ParticipantInfo{
-			ID:        v.ID,
-			Name:      v.Name,
-			Mobile:    v.Mobile,
-			Fields:    v.Fields,
-			ContestId: v.ContestID,
-		})
+		resp = append(resp, c.entParticipantInfo(v))
 	}
 
 	total, _ = c.db.ContestParticipant.Query().Where(predicates...).Count(c.ctx)

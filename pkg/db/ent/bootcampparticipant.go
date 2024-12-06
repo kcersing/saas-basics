@@ -37,6 +37,12 @@ type BootcampParticipant struct {
 	Mobile string `json:"mobile,omitempty"`
 	// 更多
 	Fields string `json:"fields,omitempty"`
+	// 订单ID
+	OrderID int64 `json:"order_id,omitempty"`
+	// 订单编号
+	OrderSn string `json:"order_sn,omitempty"`
+	// 费用
+	Fee float64 `json:"fee,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BootcampParticipantQuery when eager-loading is set.
 	Edges        BootcampParticipantEdges `json:"edges"`
@@ -70,9 +76,11 @@ func (*BootcampParticipant) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case bootcampparticipant.FieldID, bootcampparticipant.FieldCreatedID, bootcampparticipant.FieldStatus, bootcampparticipant.FieldBootcampID:
+		case bootcampparticipant.FieldFee:
+			values[i] = new(sql.NullFloat64)
+		case bootcampparticipant.FieldID, bootcampparticipant.FieldCreatedID, bootcampparticipant.FieldStatus, bootcampparticipant.FieldBootcampID, bootcampparticipant.FieldOrderID:
 			values[i] = new(sql.NullInt64)
-		case bootcampparticipant.FieldName, bootcampparticipant.FieldMobile, bootcampparticipant.FieldFields:
+		case bootcampparticipant.FieldName, bootcampparticipant.FieldMobile, bootcampparticipant.FieldFields, bootcampparticipant.FieldOrderSn:
 			values[i] = new(sql.NullString)
 		case bootcampparticipant.FieldCreatedAt, bootcampparticipant.FieldUpdatedAt, bootcampparticipant.FieldDeleteAt:
 			values[i] = new(sql.NullTime)
@@ -151,6 +159,24 @@ func (bp *BootcampParticipant) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				bp.Fields = value.String
 			}
+		case bootcampparticipant.FieldOrderID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field order_id", values[i])
+			} else if value.Valid {
+				bp.OrderID = value.Int64
+			}
+		case bootcampparticipant.FieldOrderSn:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field order_sn", values[i])
+			} else if value.Valid {
+				bp.OrderSn = value.String
+			}
+		case bootcampparticipant.FieldFee:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field fee", values[i])
+			} else if value.Valid {
+				bp.Fee = value.Float64
+			}
 		default:
 			bp.selectValues.Set(columns[i], values[i])
 		}
@@ -218,6 +244,15 @@ func (bp *BootcampParticipant) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("fields=")
 	builder.WriteString(bp.Fields)
+	builder.WriteString(", ")
+	builder.WriteString("order_id=")
+	builder.WriteString(fmt.Sprintf("%v", bp.OrderID))
+	builder.WriteString(", ")
+	builder.WriteString("order_sn=")
+	builder.WriteString(bp.OrderSn)
+	builder.WriteString(", ")
+	builder.WriteString("fee=")
+	builder.WriteString(fmt.Sprintf("%v", bp.Fee))
 	builder.WriteByte(')')
 	return builder.String()
 }

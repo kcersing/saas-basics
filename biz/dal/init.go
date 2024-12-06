@@ -7,6 +7,7 @@ import (
 	"saas/biz/dal/data"
 	"saas/biz/dal/db"
 	"saas/biz/dal/logger"
+	"saas/pkg/minio"
 )
 
 func Init() {
@@ -16,7 +17,7 @@ func Init() {
 	data.NewInitDatabase()
 	casbin.InitCasbin()
 	logger.InitLogger()
-
+	minio.Init()
 	data.NewInitDatabase().InitDatabaseUser()
 	data.NewInitDatabase().InitDatabaseDict()
 	data.NewInitDatabase().InsertDatabaseMenuData()

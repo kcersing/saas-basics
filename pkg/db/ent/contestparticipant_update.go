@@ -177,6 +177,80 @@ func (cpu *ContestParticipantUpdate) ClearFields() *ContestParticipantUpdate {
 	return cpu
 }
 
+// SetOrderID sets the "order_id" field.
+func (cpu *ContestParticipantUpdate) SetOrderID(i int64) *ContestParticipantUpdate {
+	cpu.mutation.ResetOrderID()
+	cpu.mutation.SetOrderID(i)
+	return cpu
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (cpu *ContestParticipantUpdate) SetNillableOrderID(i *int64) *ContestParticipantUpdate {
+	if i != nil {
+		cpu.SetOrderID(*i)
+	}
+	return cpu
+}
+
+// AddOrderID adds i to the "order_id" field.
+func (cpu *ContestParticipantUpdate) AddOrderID(i int64) *ContestParticipantUpdate {
+	cpu.mutation.AddOrderID(i)
+	return cpu
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (cpu *ContestParticipantUpdate) ClearOrderID() *ContestParticipantUpdate {
+	cpu.mutation.ClearOrderID()
+	return cpu
+}
+
+// SetOrderSn sets the "order_sn" field.
+func (cpu *ContestParticipantUpdate) SetOrderSn(s string) *ContestParticipantUpdate {
+	cpu.mutation.SetOrderSn(s)
+	return cpu
+}
+
+// SetNillableOrderSn sets the "order_sn" field if the given value is not nil.
+func (cpu *ContestParticipantUpdate) SetNillableOrderSn(s *string) *ContestParticipantUpdate {
+	if s != nil {
+		cpu.SetOrderSn(*s)
+	}
+	return cpu
+}
+
+// ClearOrderSn clears the value of the "order_sn" field.
+func (cpu *ContestParticipantUpdate) ClearOrderSn() *ContestParticipantUpdate {
+	cpu.mutation.ClearOrderSn()
+	return cpu
+}
+
+// SetFee sets the "fee" field.
+func (cpu *ContestParticipantUpdate) SetFee(f float64) *ContestParticipantUpdate {
+	cpu.mutation.ResetFee()
+	cpu.mutation.SetFee(f)
+	return cpu
+}
+
+// SetNillableFee sets the "fee" field if the given value is not nil.
+func (cpu *ContestParticipantUpdate) SetNillableFee(f *float64) *ContestParticipantUpdate {
+	if f != nil {
+		cpu.SetFee(*f)
+	}
+	return cpu
+}
+
+// AddFee adds f to the "fee" field.
+func (cpu *ContestParticipantUpdate) AddFee(f float64) *ContestParticipantUpdate {
+	cpu.mutation.AddFee(f)
+	return cpu
+}
+
+// ClearFee clears the value of the "fee" field.
+func (cpu *ContestParticipantUpdate) ClearFee() *ContestParticipantUpdate {
+	cpu.mutation.ClearFee()
+	return cpu
+}
+
 // SetContest sets the "contest" edge to the Contest entity.
 func (cpu *ContestParticipantUpdate) SetContest(c *Contest) *ContestParticipantUpdate {
 	return cpu.SetContestID(c.ID)
@@ -276,6 +350,30 @@ func (cpu *ContestParticipantUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if cpu.mutation.FieldsCleared() {
 		_spec.ClearField(contestparticipant.FieldFields, field.TypeString)
+	}
+	if value, ok := cpu.mutation.OrderID(); ok {
+		_spec.SetField(contestparticipant.FieldOrderID, field.TypeInt64, value)
+	}
+	if value, ok := cpu.mutation.AddedOrderID(); ok {
+		_spec.AddField(contestparticipant.FieldOrderID, field.TypeInt64, value)
+	}
+	if cpu.mutation.OrderIDCleared() {
+		_spec.ClearField(contestparticipant.FieldOrderID, field.TypeInt64)
+	}
+	if value, ok := cpu.mutation.OrderSn(); ok {
+		_spec.SetField(contestparticipant.FieldOrderSn, field.TypeString, value)
+	}
+	if cpu.mutation.OrderSnCleared() {
+		_spec.ClearField(contestparticipant.FieldOrderSn, field.TypeString)
+	}
+	if value, ok := cpu.mutation.Fee(); ok {
+		_spec.SetField(contestparticipant.FieldFee, field.TypeFloat64, value)
+	}
+	if value, ok := cpu.mutation.AddedFee(); ok {
+		_spec.AddField(contestparticipant.FieldFee, field.TypeFloat64, value)
+	}
+	if cpu.mutation.FeeCleared() {
+		_spec.ClearField(contestparticipant.FieldFee, field.TypeFloat64)
 	}
 	if cpu.mutation.ContestCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -474,6 +572,80 @@ func (cpuo *ContestParticipantUpdateOne) ClearFields() *ContestParticipantUpdate
 	return cpuo
 }
 
+// SetOrderID sets the "order_id" field.
+func (cpuo *ContestParticipantUpdateOne) SetOrderID(i int64) *ContestParticipantUpdateOne {
+	cpuo.mutation.ResetOrderID()
+	cpuo.mutation.SetOrderID(i)
+	return cpuo
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (cpuo *ContestParticipantUpdateOne) SetNillableOrderID(i *int64) *ContestParticipantUpdateOne {
+	if i != nil {
+		cpuo.SetOrderID(*i)
+	}
+	return cpuo
+}
+
+// AddOrderID adds i to the "order_id" field.
+func (cpuo *ContestParticipantUpdateOne) AddOrderID(i int64) *ContestParticipantUpdateOne {
+	cpuo.mutation.AddOrderID(i)
+	return cpuo
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (cpuo *ContestParticipantUpdateOne) ClearOrderID() *ContestParticipantUpdateOne {
+	cpuo.mutation.ClearOrderID()
+	return cpuo
+}
+
+// SetOrderSn sets the "order_sn" field.
+func (cpuo *ContestParticipantUpdateOne) SetOrderSn(s string) *ContestParticipantUpdateOne {
+	cpuo.mutation.SetOrderSn(s)
+	return cpuo
+}
+
+// SetNillableOrderSn sets the "order_sn" field if the given value is not nil.
+func (cpuo *ContestParticipantUpdateOne) SetNillableOrderSn(s *string) *ContestParticipantUpdateOne {
+	if s != nil {
+		cpuo.SetOrderSn(*s)
+	}
+	return cpuo
+}
+
+// ClearOrderSn clears the value of the "order_sn" field.
+func (cpuo *ContestParticipantUpdateOne) ClearOrderSn() *ContestParticipantUpdateOne {
+	cpuo.mutation.ClearOrderSn()
+	return cpuo
+}
+
+// SetFee sets the "fee" field.
+func (cpuo *ContestParticipantUpdateOne) SetFee(f float64) *ContestParticipantUpdateOne {
+	cpuo.mutation.ResetFee()
+	cpuo.mutation.SetFee(f)
+	return cpuo
+}
+
+// SetNillableFee sets the "fee" field if the given value is not nil.
+func (cpuo *ContestParticipantUpdateOne) SetNillableFee(f *float64) *ContestParticipantUpdateOne {
+	if f != nil {
+		cpuo.SetFee(*f)
+	}
+	return cpuo
+}
+
+// AddFee adds f to the "fee" field.
+func (cpuo *ContestParticipantUpdateOne) AddFee(f float64) *ContestParticipantUpdateOne {
+	cpuo.mutation.AddFee(f)
+	return cpuo
+}
+
+// ClearFee clears the value of the "fee" field.
+func (cpuo *ContestParticipantUpdateOne) ClearFee() *ContestParticipantUpdateOne {
+	cpuo.mutation.ClearFee()
+	return cpuo
+}
+
 // SetContest sets the "contest" edge to the Contest entity.
 func (cpuo *ContestParticipantUpdateOne) SetContest(c *Contest) *ContestParticipantUpdateOne {
 	return cpuo.SetContestID(c.ID)
@@ -603,6 +775,30 @@ func (cpuo *ContestParticipantUpdateOne) sqlSave(ctx context.Context) (_node *Co
 	}
 	if cpuo.mutation.FieldsCleared() {
 		_spec.ClearField(contestparticipant.FieldFields, field.TypeString)
+	}
+	if value, ok := cpuo.mutation.OrderID(); ok {
+		_spec.SetField(contestparticipant.FieldOrderID, field.TypeInt64, value)
+	}
+	if value, ok := cpuo.mutation.AddedOrderID(); ok {
+		_spec.AddField(contestparticipant.FieldOrderID, field.TypeInt64, value)
+	}
+	if cpuo.mutation.OrderIDCleared() {
+		_spec.ClearField(contestparticipant.FieldOrderID, field.TypeInt64)
+	}
+	if value, ok := cpuo.mutation.OrderSn(); ok {
+		_spec.SetField(contestparticipant.FieldOrderSn, field.TypeString, value)
+	}
+	if cpuo.mutation.OrderSnCleared() {
+		_spec.ClearField(contestparticipant.FieldOrderSn, field.TypeString)
+	}
+	if value, ok := cpuo.mutation.Fee(); ok {
+		_spec.SetField(contestparticipant.FieldFee, field.TypeFloat64, value)
+	}
+	if value, ok := cpuo.mutation.AddedFee(); ok {
+		_spec.AddField(contestparticipant.FieldFee, field.TypeFloat64, value)
+	}
+	if cpuo.mutation.FeeCleared() {
+		_spec.ClearField(contestparticipant.FieldFee, field.TypeFloat64)
 	}
 	if cpuo.mutation.ContestCleared() {
 		edge := &sqlgraph.EdgeSpec{

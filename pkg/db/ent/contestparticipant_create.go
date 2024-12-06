@@ -139,6 +139,48 @@ func (cpc *ContestParticipantCreate) SetNillableFields(s *string) *ContestPartic
 	return cpc
 }
 
+// SetOrderID sets the "order_id" field.
+func (cpc *ContestParticipantCreate) SetOrderID(i int64) *ContestParticipantCreate {
+	cpc.mutation.SetOrderID(i)
+	return cpc
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (cpc *ContestParticipantCreate) SetNillableOrderID(i *int64) *ContestParticipantCreate {
+	if i != nil {
+		cpc.SetOrderID(*i)
+	}
+	return cpc
+}
+
+// SetOrderSn sets the "order_sn" field.
+func (cpc *ContestParticipantCreate) SetOrderSn(s string) *ContestParticipantCreate {
+	cpc.mutation.SetOrderSn(s)
+	return cpc
+}
+
+// SetNillableOrderSn sets the "order_sn" field if the given value is not nil.
+func (cpc *ContestParticipantCreate) SetNillableOrderSn(s *string) *ContestParticipantCreate {
+	if s != nil {
+		cpc.SetOrderSn(*s)
+	}
+	return cpc
+}
+
+// SetFee sets the "fee" field.
+func (cpc *ContestParticipantCreate) SetFee(f float64) *ContestParticipantCreate {
+	cpc.mutation.SetFee(f)
+	return cpc
+}
+
+// SetNillableFee sets the "fee" field if the given value is not nil.
+func (cpc *ContestParticipantCreate) SetNillableFee(f *float64) *ContestParticipantCreate {
+	if f != nil {
+		cpc.SetFee(*f)
+	}
+	return cpc
+}
+
 // SetID sets the "id" field.
 func (cpc *ContestParticipantCreate) SetID(i int64) *ContestParticipantCreate {
 	cpc.mutation.SetID(i)
@@ -200,6 +242,14 @@ func (cpc *ContestParticipantCreate) defaults() {
 	if _, ok := cpc.mutation.Status(); !ok {
 		v := contestparticipant.DefaultStatus
 		cpc.mutation.SetStatus(v)
+	}
+	if _, ok := cpc.mutation.OrderID(); !ok {
+		v := contestparticipant.DefaultOrderID
+		cpc.mutation.SetOrderID(v)
+	}
+	if _, ok := cpc.mutation.OrderSn(); !ok {
+		v := contestparticipant.DefaultOrderSn
+		cpc.mutation.SetOrderSn(v)
 	}
 }
 
@@ -280,6 +330,18 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 	if value, ok := cpc.mutation.GetFields(); ok {
 		_spec.SetField(contestparticipant.FieldFields, field.TypeString, value)
 		_node.Fields = value
+	}
+	if value, ok := cpc.mutation.OrderID(); ok {
+		_spec.SetField(contestparticipant.FieldOrderID, field.TypeInt64, value)
+		_node.OrderID = value
+	}
+	if value, ok := cpc.mutation.OrderSn(); ok {
+		_spec.SetField(contestparticipant.FieldOrderSn, field.TypeString, value)
+		_node.OrderSn = value
+	}
+	if value, ok := cpc.mutation.Fee(); ok {
+		_spec.SetField(contestparticipant.FieldFee, field.TypeFloat64, value)
+		_node.Fee = value
 	}
 	if nodes := cpc.mutation.ContestIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

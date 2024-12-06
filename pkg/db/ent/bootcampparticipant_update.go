@@ -177,6 +177,80 @@ func (bpu *BootcampParticipantUpdate) ClearFields() *BootcampParticipantUpdate {
 	return bpu
 }
 
+// SetOrderID sets the "order_id" field.
+func (bpu *BootcampParticipantUpdate) SetOrderID(i int64) *BootcampParticipantUpdate {
+	bpu.mutation.ResetOrderID()
+	bpu.mutation.SetOrderID(i)
+	return bpu
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (bpu *BootcampParticipantUpdate) SetNillableOrderID(i *int64) *BootcampParticipantUpdate {
+	if i != nil {
+		bpu.SetOrderID(*i)
+	}
+	return bpu
+}
+
+// AddOrderID adds i to the "order_id" field.
+func (bpu *BootcampParticipantUpdate) AddOrderID(i int64) *BootcampParticipantUpdate {
+	bpu.mutation.AddOrderID(i)
+	return bpu
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (bpu *BootcampParticipantUpdate) ClearOrderID() *BootcampParticipantUpdate {
+	bpu.mutation.ClearOrderID()
+	return bpu
+}
+
+// SetOrderSn sets the "order_sn" field.
+func (bpu *BootcampParticipantUpdate) SetOrderSn(s string) *BootcampParticipantUpdate {
+	bpu.mutation.SetOrderSn(s)
+	return bpu
+}
+
+// SetNillableOrderSn sets the "order_sn" field if the given value is not nil.
+func (bpu *BootcampParticipantUpdate) SetNillableOrderSn(s *string) *BootcampParticipantUpdate {
+	if s != nil {
+		bpu.SetOrderSn(*s)
+	}
+	return bpu
+}
+
+// ClearOrderSn clears the value of the "order_sn" field.
+func (bpu *BootcampParticipantUpdate) ClearOrderSn() *BootcampParticipantUpdate {
+	bpu.mutation.ClearOrderSn()
+	return bpu
+}
+
+// SetFee sets the "fee" field.
+func (bpu *BootcampParticipantUpdate) SetFee(f float64) *BootcampParticipantUpdate {
+	bpu.mutation.ResetFee()
+	bpu.mutation.SetFee(f)
+	return bpu
+}
+
+// SetNillableFee sets the "fee" field if the given value is not nil.
+func (bpu *BootcampParticipantUpdate) SetNillableFee(f *float64) *BootcampParticipantUpdate {
+	if f != nil {
+		bpu.SetFee(*f)
+	}
+	return bpu
+}
+
+// AddFee adds f to the "fee" field.
+func (bpu *BootcampParticipantUpdate) AddFee(f float64) *BootcampParticipantUpdate {
+	bpu.mutation.AddFee(f)
+	return bpu
+}
+
+// ClearFee clears the value of the "fee" field.
+func (bpu *BootcampParticipantUpdate) ClearFee() *BootcampParticipantUpdate {
+	bpu.mutation.ClearFee()
+	return bpu
+}
+
 // SetBootcamp sets the "bootcamp" edge to the Bootcamp entity.
 func (bpu *BootcampParticipantUpdate) SetBootcamp(b *Bootcamp) *BootcampParticipantUpdate {
 	return bpu.SetBootcampID(b.ID)
@@ -276,6 +350,30 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if bpu.mutation.FieldsCleared() {
 		_spec.ClearField(bootcampparticipant.FieldFields, field.TypeString)
+	}
+	if value, ok := bpu.mutation.OrderID(); ok {
+		_spec.SetField(bootcampparticipant.FieldOrderID, field.TypeInt64, value)
+	}
+	if value, ok := bpu.mutation.AddedOrderID(); ok {
+		_spec.AddField(bootcampparticipant.FieldOrderID, field.TypeInt64, value)
+	}
+	if bpu.mutation.OrderIDCleared() {
+		_spec.ClearField(bootcampparticipant.FieldOrderID, field.TypeInt64)
+	}
+	if value, ok := bpu.mutation.OrderSn(); ok {
+		_spec.SetField(bootcampparticipant.FieldOrderSn, field.TypeString, value)
+	}
+	if bpu.mutation.OrderSnCleared() {
+		_spec.ClearField(bootcampparticipant.FieldOrderSn, field.TypeString)
+	}
+	if value, ok := bpu.mutation.Fee(); ok {
+		_spec.SetField(bootcampparticipant.FieldFee, field.TypeFloat64, value)
+	}
+	if value, ok := bpu.mutation.AddedFee(); ok {
+		_spec.AddField(bootcampparticipant.FieldFee, field.TypeFloat64, value)
+	}
+	if bpu.mutation.FeeCleared() {
+		_spec.ClearField(bootcampparticipant.FieldFee, field.TypeFloat64)
 	}
 	if bpu.mutation.BootcampCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -474,6 +572,80 @@ func (bpuo *BootcampParticipantUpdateOne) ClearFields() *BootcampParticipantUpda
 	return bpuo
 }
 
+// SetOrderID sets the "order_id" field.
+func (bpuo *BootcampParticipantUpdateOne) SetOrderID(i int64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.ResetOrderID()
+	bpuo.mutation.SetOrderID(i)
+	return bpuo
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (bpuo *BootcampParticipantUpdateOne) SetNillableOrderID(i *int64) *BootcampParticipantUpdateOne {
+	if i != nil {
+		bpuo.SetOrderID(*i)
+	}
+	return bpuo
+}
+
+// AddOrderID adds i to the "order_id" field.
+func (bpuo *BootcampParticipantUpdateOne) AddOrderID(i int64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.AddOrderID(i)
+	return bpuo
+}
+
+// ClearOrderID clears the value of the "order_id" field.
+func (bpuo *BootcampParticipantUpdateOne) ClearOrderID() *BootcampParticipantUpdateOne {
+	bpuo.mutation.ClearOrderID()
+	return bpuo
+}
+
+// SetOrderSn sets the "order_sn" field.
+func (bpuo *BootcampParticipantUpdateOne) SetOrderSn(s string) *BootcampParticipantUpdateOne {
+	bpuo.mutation.SetOrderSn(s)
+	return bpuo
+}
+
+// SetNillableOrderSn sets the "order_sn" field if the given value is not nil.
+func (bpuo *BootcampParticipantUpdateOne) SetNillableOrderSn(s *string) *BootcampParticipantUpdateOne {
+	if s != nil {
+		bpuo.SetOrderSn(*s)
+	}
+	return bpuo
+}
+
+// ClearOrderSn clears the value of the "order_sn" field.
+func (bpuo *BootcampParticipantUpdateOne) ClearOrderSn() *BootcampParticipantUpdateOne {
+	bpuo.mutation.ClearOrderSn()
+	return bpuo
+}
+
+// SetFee sets the "fee" field.
+func (bpuo *BootcampParticipantUpdateOne) SetFee(f float64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.ResetFee()
+	bpuo.mutation.SetFee(f)
+	return bpuo
+}
+
+// SetNillableFee sets the "fee" field if the given value is not nil.
+func (bpuo *BootcampParticipantUpdateOne) SetNillableFee(f *float64) *BootcampParticipantUpdateOne {
+	if f != nil {
+		bpuo.SetFee(*f)
+	}
+	return bpuo
+}
+
+// AddFee adds f to the "fee" field.
+func (bpuo *BootcampParticipantUpdateOne) AddFee(f float64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.AddFee(f)
+	return bpuo
+}
+
+// ClearFee clears the value of the "fee" field.
+func (bpuo *BootcampParticipantUpdateOne) ClearFee() *BootcampParticipantUpdateOne {
+	bpuo.mutation.ClearFee()
+	return bpuo
+}
+
 // SetBootcamp sets the "bootcamp" edge to the Bootcamp entity.
 func (bpuo *BootcampParticipantUpdateOne) SetBootcamp(b *Bootcamp) *BootcampParticipantUpdateOne {
 	return bpuo.SetBootcampID(b.ID)
@@ -603,6 +775,30 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 	}
 	if bpuo.mutation.FieldsCleared() {
 		_spec.ClearField(bootcampparticipant.FieldFields, field.TypeString)
+	}
+	if value, ok := bpuo.mutation.OrderID(); ok {
+		_spec.SetField(bootcampparticipant.FieldOrderID, field.TypeInt64, value)
+	}
+	if value, ok := bpuo.mutation.AddedOrderID(); ok {
+		_spec.AddField(bootcampparticipant.FieldOrderID, field.TypeInt64, value)
+	}
+	if bpuo.mutation.OrderIDCleared() {
+		_spec.ClearField(bootcampparticipant.FieldOrderID, field.TypeInt64)
+	}
+	if value, ok := bpuo.mutation.OrderSn(); ok {
+		_spec.SetField(bootcampparticipant.FieldOrderSn, field.TypeString, value)
+	}
+	if bpuo.mutation.OrderSnCleared() {
+		_spec.ClearField(bootcampparticipant.FieldOrderSn, field.TypeString)
+	}
+	if value, ok := bpuo.mutation.Fee(); ok {
+		_spec.SetField(bootcampparticipant.FieldFee, field.TypeFloat64, value)
+	}
+	if value, ok := bpuo.mutation.AddedFee(); ok {
+		_spec.AddField(bootcampparticipant.FieldFee, field.TypeFloat64, value)
+	}
+	if bpuo.mutation.FeeCleared() {
+		_spec.ClearField(bootcampparticipant.FieldFee, field.TypeFloat64)
 	}
 	if bpuo.mutation.BootcampCleared() {
 		edge := &sqlgraph.EdgeSpec{

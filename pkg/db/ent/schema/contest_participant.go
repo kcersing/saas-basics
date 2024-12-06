@@ -19,8 +19,10 @@ func (ContestParticipant) Fields() []ent.Field {
 		field.Int64("contest_id").Comment("赛事id").Optional(),
 		field.String("name").Comment("名称").Optional(),
 		field.String("mobile").Comment("手机号").Optional(),
-
 		field.String("fields").Comment("更多").Optional(),
+		field.Int64("order_id").Default(0).Comment("订单ID").Optional(),
+		field.String("order_sn").Default("").Comment("订单编号").Optional(),
+		field.Float("fee").Comment("费用").Optional(),
 	}
 }
 

@@ -139,6 +139,48 @@ func (bpc *BootcampParticipantCreate) SetNillableFields(s *string) *BootcampPart
 	return bpc
 }
 
+// SetOrderID sets the "order_id" field.
+func (bpc *BootcampParticipantCreate) SetOrderID(i int64) *BootcampParticipantCreate {
+	bpc.mutation.SetOrderID(i)
+	return bpc
+}
+
+// SetNillableOrderID sets the "order_id" field if the given value is not nil.
+func (bpc *BootcampParticipantCreate) SetNillableOrderID(i *int64) *BootcampParticipantCreate {
+	if i != nil {
+		bpc.SetOrderID(*i)
+	}
+	return bpc
+}
+
+// SetOrderSn sets the "order_sn" field.
+func (bpc *BootcampParticipantCreate) SetOrderSn(s string) *BootcampParticipantCreate {
+	bpc.mutation.SetOrderSn(s)
+	return bpc
+}
+
+// SetNillableOrderSn sets the "order_sn" field if the given value is not nil.
+func (bpc *BootcampParticipantCreate) SetNillableOrderSn(s *string) *BootcampParticipantCreate {
+	if s != nil {
+		bpc.SetOrderSn(*s)
+	}
+	return bpc
+}
+
+// SetFee sets the "fee" field.
+func (bpc *BootcampParticipantCreate) SetFee(f float64) *BootcampParticipantCreate {
+	bpc.mutation.SetFee(f)
+	return bpc
+}
+
+// SetNillableFee sets the "fee" field if the given value is not nil.
+func (bpc *BootcampParticipantCreate) SetNillableFee(f *float64) *BootcampParticipantCreate {
+	if f != nil {
+		bpc.SetFee(*f)
+	}
+	return bpc
+}
+
 // SetID sets the "id" field.
 func (bpc *BootcampParticipantCreate) SetID(i int64) *BootcampParticipantCreate {
 	bpc.mutation.SetID(i)
@@ -200,6 +242,14 @@ func (bpc *BootcampParticipantCreate) defaults() {
 	if _, ok := bpc.mutation.Status(); !ok {
 		v := bootcampparticipant.DefaultStatus
 		bpc.mutation.SetStatus(v)
+	}
+	if _, ok := bpc.mutation.OrderID(); !ok {
+		v := bootcampparticipant.DefaultOrderID
+		bpc.mutation.SetOrderID(v)
+	}
+	if _, ok := bpc.mutation.OrderSn(); !ok {
+		v := bootcampparticipant.DefaultOrderSn
+		bpc.mutation.SetOrderSn(v)
 	}
 }
 
@@ -280,6 +330,18 @@ func (bpc *BootcampParticipantCreate) createSpec() (*BootcampParticipant, *sqlgr
 	if value, ok := bpc.mutation.GetFields(); ok {
 		_spec.SetField(bootcampparticipant.FieldFields, field.TypeString, value)
 		_node.Fields = value
+	}
+	if value, ok := bpc.mutation.OrderID(); ok {
+		_spec.SetField(bootcampparticipant.FieldOrderID, field.TypeInt64, value)
+		_node.OrderID = value
+	}
+	if value, ok := bpc.mutation.OrderSn(); ok {
+		_spec.SetField(bootcampparticipant.FieldOrderSn, field.TypeString, value)
+		_node.OrderSn = value
+	}
+	if value, ok := bpc.mutation.Fee(); ok {
+		_spec.SetField(bootcampparticipant.FieldFee, field.TypeFloat64, value)
+		_node.Fee = value
 	}
 	if nodes := bpc.mutation.BootcampIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -100,6 +100,21 @@ func Fields(v string) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(sql.FieldEQ(FieldFields, v))
 }
 
+// OrderID applies equality check predicate on the "order_id" field. It's identical to OrderIDEQ.
+func OrderID(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEQ(FieldOrderID, v))
+}
+
+// OrderSn applies equality check predicate on the "order_sn" field. It's identical to OrderSnEQ.
+func OrderSn(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEQ(FieldOrderSn, v))
+}
+
+// Fee applies equality check predicate on the "fee" field. It's identical to FeeEQ.
+func Fee(v float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEQ(FieldFee, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(sql.FieldEQ(FieldCreatedAt, v))
@@ -563,6 +578,181 @@ func FieldsEqualFold(v string) predicate.BootcampParticipant {
 // FieldsContainsFold applies the ContainsFold predicate on the "fields" field.
 func FieldsContainsFold(v string) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(sql.FieldContainsFold(FieldFields, v))
+}
+
+// OrderIDEQ applies the EQ predicate on the "order_id" field.
+func OrderIDEQ(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEQ(FieldOrderID, v))
+}
+
+// OrderIDNEQ applies the NEQ predicate on the "order_id" field.
+func OrderIDNEQ(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNEQ(FieldOrderID, v))
+}
+
+// OrderIDIn applies the In predicate on the "order_id" field.
+func OrderIDIn(vs ...int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldIn(FieldOrderID, vs...))
+}
+
+// OrderIDNotIn applies the NotIn predicate on the "order_id" field.
+func OrderIDNotIn(vs ...int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNotIn(FieldOrderID, vs...))
+}
+
+// OrderIDGT applies the GT predicate on the "order_id" field.
+func OrderIDGT(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldGT(FieldOrderID, v))
+}
+
+// OrderIDGTE applies the GTE predicate on the "order_id" field.
+func OrderIDGTE(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldGTE(FieldOrderID, v))
+}
+
+// OrderIDLT applies the LT predicate on the "order_id" field.
+func OrderIDLT(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldLT(FieldOrderID, v))
+}
+
+// OrderIDLTE applies the LTE predicate on the "order_id" field.
+func OrderIDLTE(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldLTE(FieldOrderID, v))
+}
+
+// OrderIDIsNil applies the IsNil predicate on the "order_id" field.
+func OrderIDIsNil() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldIsNull(FieldOrderID))
+}
+
+// OrderIDNotNil applies the NotNil predicate on the "order_id" field.
+func OrderIDNotNil() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNotNull(FieldOrderID))
+}
+
+// OrderSnEQ applies the EQ predicate on the "order_sn" field.
+func OrderSnEQ(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEQ(FieldOrderSn, v))
+}
+
+// OrderSnNEQ applies the NEQ predicate on the "order_sn" field.
+func OrderSnNEQ(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNEQ(FieldOrderSn, v))
+}
+
+// OrderSnIn applies the In predicate on the "order_sn" field.
+func OrderSnIn(vs ...string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldIn(FieldOrderSn, vs...))
+}
+
+// OrderSnNotIn applies the NotIn predicate on the "order_sn" field.
+func OrderSnNotIn(vs ...string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNotIn(FieldOrderSn, vs...))
+}
+
+// OrderSnGT applies the GT predicate on the "order_sn" field.
+func OrderSnGT(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldGT(FieldOrderSn, v))
+}
+
+// OrderSnGTE applies the GTE predicate on the "order_sn" field.
+func OrderSnGTE(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldGTE(FieldOrderSn, v))
+}
+
+// OrderSnLT applies the LT predicate on the "order_sn" field.
+func OrderSnLT(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldLT(FieldOrderSn, v))
+}
+
+// OrderSnLTE applies the LTE predicate on the "order_sn" field.
+func OrderSnLTE(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldLTE(FieldOrderSn, v))
+}
+
+// OrderSnContains applies the Contains predicate on the "order_sn" field.
+func OrderSnContains(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldContains(FieldOrderSn, v))
+}
+
+// OrderSnHasPrefix applies the HasPrefix predicate on the "order_sn" field.
+func OrderSnHasPrefix(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldHasPrefix(FieldOrderSn, v))
+}
+
+// OrderSnHasSuffix applies the HasSuffix predicate on the "order_sn" field.
+func OrderSnHasSuffix(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldHasSuffix(FieldOrderSn, v))
+}
+
+// OrderSnIsNil applies the IsNil predicate on the "order_sn" field.
+func OrderSnIsNil() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldIsNull(FieldOrderSn))
+}
+
+// OrderSnNotNil applies the NotNil predicate on the "order_sn" field.
+func OrderSnNotNil() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNotNull(FieldOrderSn))
+}
+
+// OrderSnEqualFold applies the EqualFold predicate on the "order_sn" field.
+func OrderSnEqualFold(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEqualFold(FieldOrderSn, v))
+}
+
+// OrderSnContainsFold applies the ContainsFold predicate on the "order_sn" field.
+func OrderSnContainsFold(v string) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldContainsFold(FieldOrderSn, v))
+}
+
+// FeeEQ applies the EQ predicate on the "fee" field.
+func FeeEQ(v float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEQ(FieldFee, v))
+}
+
+// FeeNEQ applies the NEQ predicate on the "fee" field.
+func FeeNEQ(v float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNEQ(FieldFee, v))
+}
+
+// FeeIn applies the In predicate on the "fee" field.
+func FeeIn(vs ...float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldIn(FieldFee, vs...))
+}
+
+// FeeNotIn applies the NotIn predicate on the "fee" field.
+func FeeNotIn(vs ...float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNotIn(FieldFee, vs...))
+}
+
+// FeeGT applies the GT predicate on the "fee" field.
+func FeeGT(v float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldGT(FieldFee, v))
+}
+
+// FeeGTE applies the GTE predicate on the "fee" field.
+func FeeGTE(v float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldGTE(FieldFee, v))
+}
+
+// FeeLT applies the LT predicate on the "fee" field.
+func FeeLT(v float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldLT(FieldFee, v))
+}
+
+// FeeLTE applies the LTE predicate on the "fee" field.
+func FeeLTE(v float64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldLTE(FieldFee, v))
+}
+
+// FeeIsNil applies the IsNil predicate on the "fee" field.
+func FeeIsNil() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldIsNull(FieldFee))
+}
+
+// FeeNotNil applies the NotNil predicate on the "fee" field.
+func FeeNotNil() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNotNull(FieldFee))
 }
 
 // HasBootcamp applies the HasEdge predicate on the "bootcamp" edge.

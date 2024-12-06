@@ -9,6 +9,9 @@ import (
 // API is the predicate function for api builders.
 type API func(*sql.Selector)
 
+// Banner is the predicate function for banner builders.
+type Banner func(*sql.Selector)
+
 // Bootcamp is the predicate function for bootcamp builders.
 type Bootcamp func(*sql.Selector)
 
