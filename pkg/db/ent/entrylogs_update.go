@@ -37,6 +37,41 @@ func (elu *EntryLogsUpdate) SetUpdatedAt(t time.Time) *EntryLogsUpdate {
 	return elu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (elu *EntryLogsUpdate) SetDeleteAt(t time.Time) *EntryLogsUpdate {
+	elu.mutation.SetDeleteAt(t)
+	return elu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableDeleteAt(t *time.Time) *EntryLogsUpdate {
+	if t != nil {
+		elu.SetDeleteAt(*t)
+	}
+	return elu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (elu *EntryLogsUpdate) SetCreatedID(i int64) *EntryLogsUpdate {
+	elu.mutation.ResetCreatedID()
+	elu.mutation.SetCreatedID(i)
+	return elu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableCreatedID(i *int64) *EntryLogsUpdate {
+	if i != nil {
+		elu.SetCreatedID(*i)
+	}
+	return elu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (elu *EntryLogsUpdate) AddCreatedID(i int64) *EntryLogsUpdate {
+	elu.mutation.AddCreatedID(i)
+	return elu
+}
+
 // SetMemberID sets the "member_id" field.
 func (elu *EntryLogsUpdate) SetMemberID(i int64) *EntryLogsUpdate {
 	elu.mutation.SetMemberID(i)
@@ -319,6 +354,15 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := elu.mutation.UpdatedAt(); ok {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := elu.mutation.DeleteAt(); ok {
+		_spec.SetField(entrylogs.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := elu.mutation.CreatedID(); ok {
+		_spec.SetField(entrylogs.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := elu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(entrylogs.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := elu.mutation.MemberProductID(); ok {
 		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
 	}
@@ -459,6 +503,41 @@ type EntryLogsUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (eluo *EntryLogsUpdateOne) SetUpdatedAt(t time.Time) *EntryLogsUpdateOne {
 	eluo.mutation.SetUpdatedAt(t)
+	return eluo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (eluo *EntryLogsUpdateOne) SetDeleteAt(t time.Time) *EntryLogsUpdateOne {
+	eluo.mutation.SetDeleteAt(t)
+	return eluo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableDeleteAt(t *time.Time) *EntryLogsUpdateOne {
+	if t != nil {
+		eluo.SetDeleteAt(*t)
+	}
+	return eluo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (eluo *EntryLogsUpdateOne) SetCreatedID(i int64) *EntryLogsUpdateOne {
+	eluo.mutation.ResetCreatedID()
+	eluo.mutation.SetCreatedID(i)
+	return eluo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableCreatedID(i *int64) *EntryLogsUpdateOne {
+	if i != nil {
+		eluo.SetCreatedID(*i)
+	}
+	return eluo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (eluo *EntryLogsUpdateOne) AddCreatedID(i int64) *EntryLogsUpdateOne {
+	eluo.mutation.AddCreatedID(i)
 	return eluo
 }
 
@@ -773,6 +852,15 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 	}
 	if value, ok := eluo.mutation.UpdatedAt(); ok {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := eluo.mutation.DeleteAt(); ok {
+		_spec.SetField(entrylogs.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := eluo.mutation.CreatedID(); ok {
+		_spec.SetField(entrylogs.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := eluo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(entrylogs.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := eluo.mutation.MemberProductID(); ok {
 		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)

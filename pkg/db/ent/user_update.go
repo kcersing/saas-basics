@@ -38,6 +38,41 @@ func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
 	return uu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (uu *UserUpdate) SetDeleteAt(t time.Time) *UserUpdate {
+	uu.mutation.SetDeleteAt(t)
+	return uu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableDeleteAt(t *time.Time) *UserUpdate {
+	if t != nil {
+		uu.SetDeleteAt(*t)
+	}
+	return uu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (uu *UserUpdate) SetCreatedID(i int64) *UserUpdate {
+	uu.mutation.ResetCreatedID()
+	uu.mutation.SetCreatedID(i)
+	return uu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableCreatedID(i *int64) *UserUpdate {
+	if i != nil {
+		uu.SetCreatedID(*i)
+	}
+	return uu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (uu *UserUpdate) AddCreatedID(i int64) *UserUpdate {
+	uu.mutation.AddCreatedID(i)
+	return uu
+}
+
 // SetStatus sets the "status" field.
 func (uu *UserUpdate) SetStatus(i int64) *UserUpdate {
 	uu.mutation.ResetStatus()
@@ -475,6 +510,15 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := uu.mutation.DeleteAt(); ok {
+		_spec.SetField(user.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := uu.mutation.CreatedID(); ok {
+		_spec.SetField(user.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := uu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(user.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := uu.mutation.Status(); ok {
 		_spec.SetField(user.FieldStatus, field.TypeInt64, value)
 	}
@@ -737,6 +781,41 @@ type UserUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
 	uuo.mutation.SetUpdatedAt(t)
+	return uuo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (uuo *UserUpdateOne) SetDeleteAt(t time.Time) *UserUpdateOne {
+	uuo.mutation.SetDeleteAt(t)
+	return uuo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableDeleteAt(t *time.Time) *UserUpdateOne {
+	if t != nil {
+		uuo.SetDeleteAt(*t)
+	}
+	return uuo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (uuo *UserUpdateOne) SetCreatedID(i int64) *UserUpdateOne {
+	uuo.mutation.ResetCreatedID()
+	uuo.mutation.SetCreatedID(i)
+	return uuo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableCreatedID(i *int64) *UserUpdateOne {
+	if i != nil {
+		uuo.SetCreatedID(*i)
+	}
+	return uuo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (uuo *UserUpdateOne) AddCreatedID(i int64) *UserUpdateOne {
+	uuo.mutation.AddCreatedID(i)
 	return uuo
 }
 
@@ -1206,6 +1285,15 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := uuo.mutation.DeleteAt(); ok {
+		_spec.SetField(user.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := uuo.mutation.CreatedID(); ok {
+		_spec.SetField(user.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := uuo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(user.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := uuo.mutation.Status(); ok {
 		_spec.SetField(user.FieldStatus, field.TypeInt64, value)

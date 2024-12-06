@@ -9,6 +9,12 @@ import (
 // API is the predicate function for api builders.
 type API func(*sql.Selector)
 
+// Bootcamp is the predicate function for bootcamp builders.
+type Bootcamp func(*sql.Selector)
+
+// BootcampParticipant is the predicate function for bootcampparticipant builders.
+type BootcampParticipant func(*sql.Selector)
+
 // Contest is the predicate function for contest builders.
 type Contest func(*sql.Selector)
 

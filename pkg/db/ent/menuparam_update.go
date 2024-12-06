@@ -35,6 +35,41 @@ func (mpu *MenuParamUpdate) SetUpdatedAt(t time.Time) *MenuParamUpdate {
 	return mpu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (mpu *MenuParamUpdate) SetDeleteAt(t time.Time) *MenuParamUpdate {
+	mpu.mutation.SetDeleteAt(t)
+	return mpu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mpu *MenuParamUpdate) SetNillableDeleteAt(t *time.Time) *MenuParamUpdate {
+	if t != nil {
+		mpu.SetDeleteAt(*t)
+	}
+	return mpu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mpu *MenuParamUpdate) SetCreatedID(i int64) *MenuParamUpdate {
+	mpu.mutation.ResetCreatedID()
+	mpu.mutation.SetCreatedID(i)
+	return mpu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mpu *MenuParamUpdate) SetNillableCreatedID(i *int64) *MenuParamUpdate {
+	if i != nil {
+		mpu.SetCreatedID(*i)
+	}
+	return mpu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mpu *MenuParamUpdate) AddCreatedID(i int64) *MenuParamUpdate {
+	mpu.mutation.AddCreatedID(i)
+	return mpu
+}
+
 // SetType sets the "type" field.
 func (mpu *MenuParamUpdate) SetType(s string) *MenuParamUpdate {
 	mpu.mutation.SetType(s)
@@ -155,6 +190,15 @@ func (mpu *MenuParamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mpu.mutation.UpdatedAt(); ok {
 		_spec.SetField(menuparam.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := mpu.mutation.DeleteAt(); ok {
+		_spec.SetField(menuparam.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mpu.mutation.CreatedID(); ok {
+		_spec.SetField(menuparam.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(menuparam.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := mpu.mutation.GetType(); ok {
 		_spec.SetField(menuparam.FieldType, field.TypeString, value)
 	}
@@ -216,6 +260,41 @@ type MenuParamUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (mpuo *MenuParamUpdateOne) SetUpdatedAt(t time.Time) *MenuParamUpdateOne {
 	mpuo.mutation.SetUpdatedAt(t)
+	return mpuo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (mpuo *MenuParamUpdateOne) SetDeleteAt(t time.Time) *MenuParamUpdateOne {
+	mpuo.mutation.SetDeleteAt(t)
+	return mpuo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mpuo *MenuParamUpdateOne) SetNillableDeleteAt(t *time.Time) *MenuParamUpdateOne {
+	if t != nil {
+		mpuo.SetDeleteAt(*t)
+	}
+	return mpuo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mpuo *MenuParamUpdateOne) SetCreatedID(i int64) *MenuParamUpdateOne {
+	mpuo.mutation.ResetCreatedID()
+	mpuo.mutation.SetCreatedID(i)
+	return mpuo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mpuo *MenuParamUpdateOne) SetNillableCreatedID(i *int64) *MenuParamUpdateOne {
+	if i != nil {
+		mpuo.SetCreatedID(*i)
+	}
+	return mpuo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mpuo *MenuParamUpdateOne) AddCreatedID(i int64) *MenuParamUpdateOne {
+	mpuo.mutation.AddCreatedID(i)
 	return mpuo
 }
 
@@ -368,6 +447,15 @@ func (mpuo *MenuParamUpdateOne) sqlSave(ctx context.Context) (_node *MenuParam, 
 	}
 	if value, ok := mpuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(menuparam.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := mpuo.mutation.DeleteAt(); ok {
+		_spec.SetField(menuparam.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mpuo.mutation.CreatedID(); ok {
+		_spec.SetField(menuparam.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(menuparam.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := mpuo.mutation.GetType(); ok {
 		_spec.SetField(menuparam.FieldType, field.TypeString, value)

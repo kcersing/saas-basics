@@ -23,6 +23,10 @@ type OrderPay struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// last delete time
+	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// created
+	CreatedID int64 `json:"created_id,omitempty"`
 	// 订单id
 	OrderID int64 `json:"order_id,omitempty"`
 	// 减免
@@ -70,11 +74,11 @@ func (*OrderPay) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case orderpay.FieldRemission, orderpay.FieldPay:
 			values[i] = new(sql.NullFloat64)
-		case orderpay.FieldID, orderpay.FieldOrderID, orderpay.FieldCreateID:
+		case orderpay.FieldID, orderpay.FieldCreatedID, orderpay.FieldOrderID, orderpay.FieldCreateID:
 			values[i] = new(sql.NullInt64)
 		case orderpay.FieldNote, orderpay.FieldPayWay:
 			values[i] = new(sql.NullString)
-		case orderpay.FieldCreatedAt, orderpay.FieldUpdatedAt:
+		case orderpay.FieldCreatedAt, orderpay.FieldUpdatedAt, orderpay.FieldDeleteAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -108,6 +112,18 @@ func (op *OrderPay) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				op.UpdatedAt = value.Time
+			}
+		case orderpay.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				op.DeleteAt = value.Time
+			}
+		case orderpay.FieldCreatedID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_id", values[i])
+			} else if value.Valid {
+				op.CreatedID = value.Int64
 			}
 		case orderpay.FieldOrderID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -191,6 +207,12 @@ func (op *OrderPay) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(op.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("delete_at=")
+	builder.WriteString(op.DeleteAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_id=")
+	builder.WriteString(fmt.Sprintf("%v", op.CreatedID))
 	builder.WriteString(", ")
 	builder.WriteString("order_id=")
 	builder.WriteString(fmt.Sprintf("%v", op.OrderID))

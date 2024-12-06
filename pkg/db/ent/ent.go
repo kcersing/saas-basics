@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"reflect"
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/bootcamp"
+	"saas/pkg/db/ent/bootcampparticipant"
 	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
 	"saas/pkg/db/ent/contract"
@@ -99,6 +101,8 @@ func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			api.Table:                   api.ValidColumn,
+			bootcamp.Table:              bootcamp.ValidColumn,
+			bootcampparticipant.Table:   bootcampparticipant.ValidColumn,
 			contest.Table:               contest.ValidColumn,
 			contestparticipant.Table:    contestparticipant.ValidColumn,
 			contract.Table:              contract.ValidColumn,

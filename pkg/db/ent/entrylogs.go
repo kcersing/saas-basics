@@ -25,6 +25,10 @@ type EntryLogs struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// last delete time
+	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// created
+	CreatedID int64 `json:"created_id,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
 	// 用户id
@@ -102,9 +106,9 @@ func (*EntryLogs) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case entrylogs.FieldID, entrylogs.FieldMemberID, entrylogs.FieldUserID, entrylogs.FieldVenueID, entrylogs.FieldMemberProductID, entrylogs.FieldMemberPropertyID:
+		case entrylogs.FieldID, entrylogs.FieldCreatedID, entrylogs.FieldMemberID, entrylogs.FieldUserID, entrylogs.FieldVenueID, entrylogs.FieldMemberProductID, entrylogs.FieldMemberPropertyID:
 			values[i] = new(sql.NullInt64)
-		case entrylogs.FieldCreatedAt, entrylogs.FieldUpdatedAt, entrylogs.FieldEntryTime, entrylogs.FieldLeavingTime:
+		case entrylogs.FieldCreatedAt, entrylogs.FieldUpdatedAt, entrylogs.FieldDeleteAt, entrylogs.FieldEntryTime, entrylogs.FieldLeavingTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -138,6 +142,18 @@ func (el *EntryLogs) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				el.UpdatedAt = value.Time
+			}
+		case entrylogs.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				el.DeleteAt = value.Time
+			}
+		case entrylogs.FieldCreatedID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_id", values[i])
+			} else if value.Valid {
+				el.CreatedID = value.Int64
 			}
 		case entrylogs.FieldMemberID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -237,6 +253,12 @@ func (el *EntryLogs) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(el.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("delete_at=")
+	builder.WriteString(el.DeleteAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_id=")
+	builder.WriteString(fmt.Sprintf("%v", el.CreatedID))
 	builder.WriteString(", ")
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", el.MemberID))

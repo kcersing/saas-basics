@@ -51,6 +51,26 @@ func (elc *EntryLogsCreate) SetNillableUpdatedAt(t *time.Time) *EntryLogsCreate 
 	return elc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (elc *EntryLogsCreate) SetDeleteAt(t time.Time) *EntryLogsCreate {
+	elc.mutation.SetDeleteAt(t)
+	return elc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (elc *EntryLogsCreate) SetCreatedID(i int64) *EntryLogsCreate {
+	elc.mutation.SetCreatedID(i)
+	return elc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (elc *EntryLogsCreate) SetNillableCreatedID(i *int64) *EntryLogsCreate {
+	if i != nil {
+		elc.SetCreatedID(*i)
+	}
+	return elc
+}
+
 // SetMemberID sets the "member_id" field.
 func (elc *EntryLogsCreate) SetMemberID(i int64) *EntryLogsCreate {
 	elc.mutation.SetMemberID(i)
@@ -255,6 +275,10 @@ func (elc *EntryLogsCreate) defaults() {
 		v := entrylogs.DefaultUpdatedAt()
 		elc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := elc.mutation.CreatedID(); !ok {
+		v := entrylogs.DefaultCreatedID
+		elc.mutation.SetCreatedID(v)
+	}
 	if _, ok := elc.mutation.MemberID(); !ok {
 		v := entrylogs.DefaultMemberID
 		elc.mutation.SetMemberID(v)
@@ -272,6 +296,12 @@ func (elc *EntryLogsCreate) check() error {
 	}
 	if _, ok := elc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "EntryLogs.updated_at"`)}
+	}
+	if _, ok := elc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "EntryLogs.delete_at"`)}
+	}
+	if _, ok := elc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "EntryLogs.created_id"`)}
 	}
 	return nil
 }
@@ -312,6 +342,14 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 	if value, ok := elc.mutation.UpdatedAt(); ok {
 		_spec.SetField(entrylogs.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := elc.mutation.DeleteAt(); ok {
+		_spec.SetField(entrylogs.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := elc.mutation.CreatedID(); ok {
+		_spec.SetField(entrylogs.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := elc.mutation.MemberProductID(); ok {
 		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)

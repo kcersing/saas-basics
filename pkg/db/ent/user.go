@@ -23,6 +23,10 @@ type User struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// last delete time
+	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// created
+	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// mobile number | 手机号
@@ -113,11 +117,11 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldStatus, user.FieldGender, user.FieldJobTime, user.FieldRoleID, user.FieldDefaultVenueID:
+		case user.FieldID, user.FieldCreatedID, user.FieldStatus, user.FieldGender, user.FieldJobTime, user.FieldRoleID, user.FieldDefaultVenueID:
 			values[i] = new(sql.NullInt64)
 		case user.FieldMobile, user.FieldName, user.FieldUsername, user.FieldPassword, user.FieldFunctions, user.FieldAvatar, user.FieldDetail:
 			values[i] = new(sql.NullString)
-		case user.FieldCreatedAt, user.FieldUpdatedAt:
+		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldDeleteAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -151,6 +155,18 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				u.UpdatedAt = value.Time
+			}
+		case user.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				u.DeleteAt = value.Time
+			}
+		case user.FieldCreatedID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_id", values[i])
+			} else if value.Valid {
+				u.CreatedID = value.Int64
 			}
 		case user.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -285,6 +301,12 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("delete_at=")
+	builder.WriteString(u.DeleteAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_id=")
+	builder.WriteString(fmt.Sprintf("%v", u.CreatedID))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", u.Status))

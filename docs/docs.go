@@ -439,6 +439,11 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/contest/show": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/contest/status": {
             "post": {
                 "description": "更新比赛状态 Description",
@@ -2263,9 +2268,15 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "condition": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "createdAt": {
+                    "type": "string"
+                },
+                "createdId": {
+                    "type": "integer"
+                },
+                "createdName": {
                     "type": "string"
                 },
                 "detail": {
@@ -2284,6 +2295,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "isFee": {
+                    "type": "integer"
+                },
+                "isShow": {
                     "type": "integer"
                 },
                 "name": {

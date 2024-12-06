@@ -35,6 +35,41 @@ func (oau *OrderAmountUpdate) SetUpdatedAt(t time.Time) *OrderAmountUpdate {
 	return oau
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (oau *OrderAmountUpdate) SetDeleteAt(t time.Time) *OrderAmountUpdate {
+	oau.mutation.SetDeleteAt(t)
+	return oau
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (oau *OrderAmountUpdate) SetNillableDeleteAt(t *time.Time) *OrderAmountUpdate {
+	if t != nil {
+		oau.SetDeleteAt(*t)
+	}
+	return oau
+}
+
+// SetCreatedID sets the "created_id" field.
+func (oau *OrderAmountUpdate) SetCreatedID(i int64) *OrderAmountUpdate {
+	oau.mutation.ResetCreatedID()
+	oau.mutation.SetCreatedID(i)
+	return oau
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (oau *OrderAmountUpdate) SetNillableCreatedID(i *int64) *OrderAmountUpdate {
+	if i != nil {
+		oau.SetCreatedID(*i)
+	}
+	return oau
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (oau *OrderAmountUpdate) AddCreatedID(i int64) *OrderAmountUpdate {
+	oau.mutation.AddCreatedID(i)
+	return oau
+}
+
 // SetOrderID sets the "order_id" field.
 func (oau *OrderAmountUpdate) SetOrderID(i int64) *OrderAmountUpdate {
 	oau.mutation.SetOrderID(i)
@@ -240,6 +275,15 @@ func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := oau.mutation.UpdatedAt(); ok {
 		_spec.SetField(orderamount.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := oau.mutation.DeleteAt(); ok {
+		_spec.SetField(orderamount.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := oau.mutation.CreatedID(); ok {
+		_spec.SetField(orderamount.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := oau.mutation.AddedCreatedID(); ok {
+		_spec.AddField(orderamount.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := oau.mutation.Total(); ok {
 		_spec.SetField(orderamount.FieldTotal, field.TypeFloat64, value)
 	}
@@ -328,6 +372,41 @@ type OrderAmountUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (oauo *OrderAmountUpdateOne) SetUpdatedAt(t time.Time) *OrderAmountUpdateOne {
 	oauo.mutation.SetUpdatedAt(t)
+	return oauo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (oauo *OrderAmountUpdateOne) SetDeleteAt(t time.Time) *OrderAmountUpdateOne {
+	oauo.mutation.SetDeleteAt(t)
+	return oauo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (oauo *OrderAmountUpdateOne) SetNillableDeleteAt(t *time.Time) *OrderAmountUpdateOne {
+	if t != nil {
+		oauo.SetDeleteAt(*t)
+	}
+	return oauo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (oauo *OrderAmountUpdateOne) SetCreatedID(i int64) *OrderAmountUpdateOne {
+	oauo.mutation.ResetCreatedID()
+	oauo.mutation.SetCreatedID(i)
+	return oauo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (oauo *OrderAmountUpdateOne) SetNillableCreatedID(i *int64) *OrderAmountUpdateOne {
+	if i != nil {
+		oauo.SetCreatedID(*i)
+	}
+	return oauo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (oauo *OrderAmountUpdateOne) AddCreatedID(i int64) *OrderAmountUpdateOne {
+	oauo.mutation.AddCreatedID(i)
 	return oauo
 }
 
@@ -565,6 +644,15 @@ func (oauo *OrderAmountUpdateOne) sqlSave(ctx context.Context) (_node *OrderAmou
 	}
 	if value, ok := oauo.mutation.UpdatedAt(); ok {
 		_spec.SetField(orderamount.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := oauo.mutation.DeleteAt(); ok {
+		_spec.SetField(orderamount.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := oauo.mutation.CreatedID(); ok {
+		_spec.SetField(orderamount.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := oauo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(orderamount.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := oauo.mutation.Total(); ok {
 		_spec.SetField(orderamount.FieldTotal, field.TypeFloat64, value)

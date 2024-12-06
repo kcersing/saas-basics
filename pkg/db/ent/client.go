@@ -12,6 +12,8 @@ import (
 	"saas/pkg/db/ent/migrate"
 
 	"saas/pkg/db/ent/api"
+	"saas/pkg/db/ent/bootcamp"
+	"saas/pkg/db/ent/bootcampparticipant"
 	"saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
 	"saas/pkg/db/ent/contract"
@@ -51,6 +53,10 @@ type Client struct {
 	Schema *migrate.Schema
 	// API is the client for interacting with the API builders.
 	API *APIClient
+	// Bootcamp is the client for interacting with the Bootcamp builders.
+	Bootcamp *BootcampClient
+	// BootcampParticipant is the client for interacting with the BootcampParticipant builders.
+	BootcampParticipant *BootcampParticipantClient
 	// Contest is the client for interacting with the Contest builders.
 	Contest *ContestClient
 	// ContestParticipant is the client for interacting with the ContestParticipant builders.
@@ -113,6 +119,8 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.API = NewAPIClient(c.config)
+	c.Bootcamp = NewBootcampClient(c.config)
+	c.BootcampParticipant = NewBootcampParticipantClient(c.config)
 	c.Contest = NewContestClient(c.config)
 	c.ContestParticipant = NewContestParticipantClient(c.config)
 	c.Contract = NewContractClient(c.config)
@@ -231,6 +239,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                   ctx,
 		config:                cfg,
 		API:                   NewAPIClient(cfg),
+		Bootcamp:              NewBootcampClient(cfg),
+		BootcampParticipant:   NewBootcampParticipantClient(cfg),
 		Contest:               NewContestClient(cfg),
 		ContestParticipant:    NewContestParticipantClient(cfg),
 		Contract:              NewContractClient(cfg),
@@ -276,6 +286,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                   ctx,
 		config:                cfg,
 		API:                   NewAPIClient(cfg),
+		Bootcamp:              NewBootcampClient(cfg),
+		BootcampParticipant:   NewBootcampParticipantClient(cfg),
 		Contest:               NewContestClient(cfg),
 		ContestParticipant:    NewContestParticipantClient(cfg),
 		Contract:              NewContractClient(cfg),
@@ -330,11 +342,11 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.API, c.Contest, c.ContestParticipant, c.Contract, c.Dictionary,
-		c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member, c.MemberContract,
-		c.MemberContractContent, c.MemberDetails, c.MemberNote, c.Menu, c.MenuParam,
-		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
-		c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
+		c.API, c.Bootcamp, c.BootcampParticipant, c.Contest, c.ContestParticipant,
+		c.Contract, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
+		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
+		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
+		c.OrderPay, c.OrderSales, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
 	} {
 		n.Use(hooks...)
 	}
@@ -344,11 +356,11 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.API, c.Contest, c.ContestParticipant, c.Contract, c.Dictionary,
-		c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member, c.MemberContract,
-		c.MemberContractContent, c.MemberDetails, c.MemberNote, c.Menu, c.MenuParam,
-		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
-		c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
+		c.API, c.Bootcamp, c.BootcampParticipant, c.Contest, c.ContestParticipant,
+		c.Contract, c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
+		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
+		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
+		c.OrderPay, c.OrderSales, c.Role, c.Token, c.User, c.Venue, c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -359,6 +371,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *APIMutation:
 		return c.API.mutate(ctx, m)
+	case *BootcampMutation:
+		return c.Bootcamp.mutate(ctx, m)
+	case *BootcampParticipantMutation:
+		return c.BootcampParticipant.mutate(ctx, m)
 	case *ContestMutation:
 		return c.Contest.mutate(ctx, m)
 	case *ContestParticipantMutation:
@@ -544,6 +560,304 @@ func (c *APIClient) mutate(ctx context.Context, m *APIMutation) (Value, error) {
 		return (&APIDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown API mutation op: %q", m.Op())
+	}
+}
+
+// BootcampClient is a client for the Bootcamp schema.
+type BootcampClient struct {
+	config
+}
+
+// NewBootcampClient returns a client for the Bootcamp from the given config.
+func NewBootcampClient(c config) *BootcampClient {
+	return &BootcampClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `bootcamp.Hooks(f(g(h())))`.
+func (c *BootcampClient) Use(hooks ...Hook) {
+	c.hooks.Bootcamp = append(c.hooks.Bootcamp, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `bootcamp.Intercept(f(g(h())))`.
+func (c *BootcampClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Bootcamp = append(c.inters.Bootcamp, interceptors...)
+}
+
+// Create returns a builder for creating a Bootcamp entity.
+func (c *BootcampClient) Create() *BootcampCreate {
+	mutation := newBootcampMutation(c.config, OpCreate)
+	return &BootcampCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Bootcamp entities.
+func (c *BootcampClient) CreateBulk(builders ...*BootcampCreate) *BootcampCreateBulk {
+	return &BootcampCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *BootcampClient) MapCreateBulk(slice any, setFunc func(*BootcampCreate, int)) *BootcampCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &BootcampCreateBulk{err: fmt.Errorf("calling to BootcampClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*BootcampCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &BootcampCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Bootcamp.
+func (c *BootcampClient) Update() *BootcampUpdate {
+	mutation := newBootcampMutation(c.config, OpUpdate)
+	return &BootcampUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BootcampClient) UpdateOne(b *Bootcamp) *BootcampUpdateOne {
+	mutation := newBootcampMutation(c.config, OpUpdateOne, withBootcamp(b))
+	return &BootcampUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BootcampClient) UpdateOneID(id int64) *BootcampUpdateOne {
+	mutation := newBootcampMutation(c.config, OpUpdateOne, withBootcampID(id))
+	return &BootcampUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Bootcamp.
+func (c *BootcampClient) Delete() *BootcampDelete {
+	mutation := newBootcampMutation(c.config, OpDelete)
+	return &BootcampDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *BootcampClient) DeleteOne(b *Bootcamp) *BootcampDeleteOne {
+	return c.DeleteOneID(b.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *BootcampClient) DeleteOneID(id int64) *BootcampDeleteOne {
+	builder := c.Delete().Where(bootcamp.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &BootcampDeleteOne{builder}
+}
+
+// Query returns a query builder for Bootcamp.
+func (c *BootcampClient) Query() *BootcampQuery {
+	return &BootcampQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeBootcamp},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Bootcamp entity by its id.
+func (c *BootcampClient) Get(ctx context.Context, id int64) (*Bootcamp, error) {
+	return c.Query().Where(bootcamp.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BootcampClient) GetX(ctx context.Context, id int64) *Bootcamp {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryBootcampParticipants queries the bootcamp_participants edge of a Bootcamp.
+func (c *BootcampClient) QueryBootcampParticipants(b *Bootcamp) *BootcampParticipantQuery {
+	query := (&BootcampParticipantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bootcamp.Table, bootcamp.FieldID, id),
+			sqlgraph.To(bootcampparticipant.Table, bootcampparticipant.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, bootcamp.BootcampParticipantsTable, bootcamp.BootcampParticipantsColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *BootcampClient) Hooks() []Hook {
+	return c.hooks.Bootcamp
+}
+
+// Interceptors returns the client interceptors.
+func (c *BootcampClient) Interceptors() []Interceptor {
+	return c.inters.Bootcamp
+}
+
+func (c *BootcampClient) mutate(ctx context.Context, m *BootcampMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BootcampCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BootcampUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BootcampUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BootcampDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Bootcamp mutation op: %q", m.Op())
+	}
+}
+
+// BootcampParticipantClient is a client for the BootcampParticipant schema.
+type BootcampParticipantClient struct {
+	config
+}
+
+// NewBootcampParticipantClient returns a client for the BootcampParticipant from the given config.
+func NewBootcampParticipantClient(c config) *BootcampParticipantClient {
+	return &BootcampParticipantClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `bootcampparticipant.Hooks(f(g(h())))`.
+func (c *BootcampParticipantClient) Use(hooks ...Hook) {
+	c.hooks.BootcampParticipant = append(c.hooks.BootcampParticipant, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `bootcampparticipant.Intercept(f(g(h())))`.
+func (c *BootcampParticipantClient) Intercept(interceptors ...Interceptor) {
+	c.inters.BootcampParticipant = append(c.inters.BootcampParticipant, interceptors...)
+}
+
+// Create returns a builder for creating a BootcampParticipant entity.
+func (c *BootcampParticipantClient) Create() *BootcampParticipantCreate {
+	mutation := newBootcampParticipantMutation(c.config, OpCreate)
+	return &BootcampParticipantCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of BootcampParticipant entities.
+func (c *BootcampParticipantClient) CreateBulk(builders ...*BootcampParticipantCreate) *BootcampParticipantCreateBulk {
+	return &BootcampParticipantCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *BootcampParticipantClient) MapCreateBulk(slice any, setFunc func(*BootcampParticipantCreate, int)) *BootcampParticipantCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &BootcampParticipantCreateBulk{err: fmt.Errorf("calling to BootcampParticipantClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*BootcampParticipantCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &BootcampParticipantCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for BootcampParticipant.
+func (c *BootcampParticipantClient) Update() *BootcampParticipantUpdate {
+	mutation := newBootcampParticipantMutation(c.config, OpUpdate)
+	return &BootcampParticipantUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BootcampParticipantClient) UpdateOne(bp *BootcampParticipant) *BootcampParticipantUpdateOne {
+	mutation := newBootcampParticipantMutation(c.config, OpUpdateOne, withBootcampParticipant(bp))
+	return &BootcampParticipantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BootcampParticipantClient) UpdateOneID(id int64) *BootcampParticipantUpdateOne {
+	mutation := newBootcampParticipantMutation(c.config, OpUpdateOne, withBootcampParticipantID(id))
+	return &BootcampParticipantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for BootcampParticipant.
+func (c *BootcampParticipantClient) Delete() *BootcampParticipantDelete {
+	mutation := newBootcampParticipantMutation(c.config, OpDelete)
+	return &BootcampParticipantDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *BootcampParticipantClient) DeleteOne(bp *BootcampParticipant) *BootcampParticipantDeleteOne {
+	return c.DeleteOneID(bp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *BootcampParticipantClient) DeleteOneID(id int64) *BootcampParticipantDeleteOne {
+	builder := c.Delete().Where(bootcampparticipant.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &BootcampParticipantDeleteOne{builder}
+}
+
+// Query returns a query builder for BootcampParticipant.
+func (c *BootcampParticipantClient) Query() *BootcampParticipantQuery {
+	return &BootcampParticipantQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeBootcampParticipant},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a BootcampParticipant entity by its id.
+func (c *BootcampParticipantClient) Get(ctx context.Context, id int64) (*BootcampParticipant, error) {
+	return c.Query().Where(bootcampparticipant.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BootcampParticipantClient) GetX(ctx context.Context, id int64) *BootcampParticipant {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryBootcamp queries the bootcamp edge of a BootcampParticipant.
+func (c *BootcampParticipantClient) QueryBootcamp(bp *BootcampParticipant) *BootcampQuery {
+	query := (&BootcampClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := bp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bootcampparticipant.Table, bootcampparticipant.FieldID, id),
+			sqlgraph.To(bootcamp.Table, bootcamp.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bootcampparticipant.BootcampTable, bootcampparticipant.BootcampColumn),
+		)
+		fromV = sqlgraph.Neighbors(bp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *BootcampParticipantClient) Hooks() []Hook {
+	return c.hooks.BootcampParticipant
+}
+
+// Interceptors returns the client interceptors.
+func (c *BootcampParticipantClient) Interceptors() []Interceptor {
+	return c.inters.BootcampParticipant
+}
+
+func (c *BootcampParticipantClient) mutate(ctx context.Context, m *BootcampParticipantMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BootcampParticipantCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BootcampParticipantUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BootcampParticipantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BootcampParticipantDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown BootcampParticipant mutation op: %q", m.Op())
 	}
 }
 
@@ -4611,15 +4925,17 @@ func (c *VenuePlaceClient) mutate(ctx context.Context, m *VenuePlaceMutation) (V
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		API, Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail,
-		EntryLogs, Logs, Member, MemberContract, MemberContractContent, MemberDetails,
-		MemberNote, Menu, MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay,
-		OrderSales, Role, Token, User, Venue, VenuePlace []ent.Hook
+		API, Bootcamp, BootcampParticipant, Contest, ContestParticipant, Contract,
+		Dictionary, DictionaryDetail, EntryLogs, Logs, Member, MemberContract,
+		MemberContractContent, MemberDetails, MemberNote, Menu, MenuParam, Messages,
+		Order, OrderAmount, OrderItem, OrderPay, OrderSales, Role, Token, User, Venue,
+		VenuePlace []ent.Hook
 	}
 	inters struct {
-		API, Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail,
-		EntryLogs, Logs, Member, MemberContract, MemberContractContent, MemberDetails,
-		MemberNote, Menu, MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay,
-		OrderSales, Role, Token, User, Venue, VenuePlace []ent.Interceptor
+		API, Bootcamp, BootcampParticipant, Contest, ContestParticipant, Contract,
+		Dictionary, DictionaryDetail, EntryLogs, Logs, Member, MemberContract,
+		MemberContractContent, MemberDetails, MemberNote, Menu, MenuParam, Messages,
+		Order, OrderAmount, OrderItem, OrderPay, OrderSales, Role, Token, User, Venue,
+		VenuePlace []ent.Interceptor
 	}
 )

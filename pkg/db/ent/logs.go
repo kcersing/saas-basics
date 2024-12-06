@@ -22,6 +22,10 @@ type Logs struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// last delete time
+	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// created
+	CreatedID int64 `json:"created_id,omitempty"`
 	// type of log | 日志类型
 	Type string `json:"type,omitempty"`
 	// method of log | 日志请求方法
@@ -52,11 +56,11 @@ func (*Logs) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case logs.FieldSuccess:
 			values[i] = new(sql.NullBool)
-		case logs.FieldID, logs.FieldTime:
+		case logs.FieldID, logs.FieldCreatedID, logs.FieldTime:
 			values[i] = new(sql.NullInt64)
 		case logs.FieldType, logs.FieldMethod, logs.FieldAPI, logs.FieldReqContent, logs.FieldRespContent, logs.FieldIP, logs.FieldUserAgent, logs.FieldOperator:
 			values[i] = new(sql.NullString)
-		case logs.FieldCreatedAt, logs.FieldUpdatedAt:
+		case logs.FieldCreatedAt, logs.FieldUpdatedAt, logs.FieldDeleteAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -90,6 +94,18 @@ func (l *Logs) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				l.UpdatedAt = value.Time
+			}
+		case logs.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				l.DeleteAt = value.Time
+			}
+		case logs.FieldCreatedID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_id", values[i])
+			} else if value.Valid {
+				l.CreatedID = value.Int64
 			}
 		case logs.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -192,6 +208,12 @@ func (l *Logs) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(l.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("delete_at=")
+	builder.WriteString(l.DeleteAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_id=")
+	builder.WriteString(fmt.Sprintf("%v", l.CreatedID))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(l.Type)

@@ -65,6 +65,16 @@ func UpdatedAt(v time.Time) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// DeleteAt applies equality check predicate on the "delete_at" field. It's identical to DeleteAtEQ.
+func DeleteAt(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldDeleteAt, v))
+}
+
+// CreatedID applies equality check predicate on the "created_id" field. It's identical to CreatedIDEQ.
+func CreatedID(v int64) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldCreatedID, v))
+}
+
 // OrderSn applies equality check predicate on the "order_sn" field. It's identical to OrderSnEQ.
 func OrderSn(v string) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldOrderSn, v))
@@ -193,6 +203,86 @@ func UpdatedAtLT(v time.Time) predicate.Order {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.Order {
 	return predicate.Order(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// DeleteAtEQ applies the EQ predicate on the "delete_at" field.
+func DeleteAtEQ(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldDeleteAt, v))
+}
+
+// DeleteAtNEQ applies the NEQ predicate on the "delete_at" field.
+func DeleteAtNEQ(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldNEQ(FieldDeleteAt, v))
+}
+
+// DeleteAtIn applies the In predicate on the "delete_at" field.
+func DeleteAtIn(vs ...time.Time) predicate.Order {
+	return predicate.Order(sql.FieldIn(FieldDeleteAt, vs...))
+}
+
+// DeleteAtNotIn applies the NotIn predicate on the "delete_at" field.
+func DeleteAtNotIn(vs ...time.Time) predicate.Order {
+	return predicate.Order(sql.FieldNotIn(FieldDeleteAt, vs...))
+}
+
+// DeleteAtGT applies the GT predicate on the "delete_at" field.
+func DeleteAtGT(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldGT(FieldDeleteAt, v))
+}
+
+// DeleteAtGTE applies the GTE predicate on the "delete_at" field.
+func DeleteAtGTE(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldGTE(FieldDeleteAt, v))
+}
+
+// DeleteAtLT applies the LT predicate on the "delete_at" field.
+func DeleteAtLT(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldLT(FieldDeleteAt, v))
+}
+
+// DeleteAtLTE applies the LTE predicate on the "delete_at" field.
+func DeleteAtLTE(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldLTE(FieldDeleteAt, v))
+}
+
+// CreatedIDEQ applies the EQ predicate on the "created_id" field.
+func CreatedIDEQ(v int64) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldCreatedID, v))
+}
+
+// CreatedIDNEQ applies the NEQ predicate on the "created_id" field.
+func CreatedIDNEQ(v int64) predicate.Order {
+	return predicate.Order(sql.FieldNEQ(FieldCreatedID, v))
+}
+
+// CreatedIDIn applies the In predicate on the "created_id" field.
+func CreatedIDIn(vs ...int64) predicate.Order {
+	return predicate.Order(sql.FieldIn(FieldCreatedID, vs...))
+}
+
+// CreatedIDNotIn applies the NotIn predicate on the "created_id" field.
+func CreatedIDNotIn(vs ...int64) predicate.Order {
+	return predicate.Order(sql.FieldNotIn(FieldCreatedID, vs...))
+}
+
+// CreatedIDGT applies the GT predicate on the "created_id" field.
+func CreatedIDGT(v int64) predicate.Order {
+	return predicate.Order(sql.FieldGT(FieldCreatedID, v))
+}
+
+// CreatedIDGTE applies the GTE predicate on the "created_id" field.
+func CreatedIDGTE(v int64) predicate.Order {
+	return predicate.Order(sql.FieldGTE(FieldCreatedID, v))
+}
+
+// CreatedIDLT applies the LT predicate on the "created_id" field.
+func CreatedIDLT(v int64) predicate.Order {
+	return predicate.Order(sql.FieldLT(FieldCreatedID, v))
+}
+
+// CreatedIDLTE applies the LTE predicate on the "created_id" field.
+func CreatedIDLTE(v int64) predicate.Order {
+	return predicate.Order(sql.FieldLTE(FieldCreatedID, v))
 }
 
 // OrderSnEQ applies the EQ predicate on the "order_sn" field.

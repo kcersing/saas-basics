@@ -18,6 +18,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldDeleteAt holds the string denoting the delete_at field in the database.
+	FieldDeleteAt = "delete_at"
+	// FieldCreatedID holds the string denoting the created_id field in the database.
+	FieldCreatedID = "created_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldName holds the string denoting the name field in the database.
@@ -42,6 +46,8 @@ const (
 	FieldFee = "fee"
 	// FieldIsFee holds the string denoting the is_fee field in the database.
 	FieldIsFee = "is_fee"
+	// FieldIsShow holds the string denoting the is_show field in the database.
+	FieldIsShow = "is_show"
 	// FieldIsCancel holds the string denoting the is_cancel field in the database.
 	FieldIsCancel = "is_cancel"
 	// FieldCancelTime holds the string denoting the cancel_time field in the database.
@@ -70,6 +76,8 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldDeleteAt,
+	FieldCreatedID,
 	FieldStatus,
 	FieldName,
 	FieldSignNumber,
@@ -82,6 +90,7 @@ var Columns = []string{
 	FieldSponsor,
 	FieldFee,
 	FieldIsFee,
+	FieldIsShow,
 	FieldIsCancel,
 	FieldCancelTime,
 	FieldDetail,
@@ -106,10 +115,14 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultCreatedID holds the default value on creation for the "created_id" field.
+	DefaultCreatedID int64
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int64
 	// DefaultIsFee holds the default value on creation for the "is_fee" field.
 	DefaultIsFee int64
+	// DefaultIsShow holds the default value on creation for the "is_show" field.
+	DefaultIsShow int64
 	// DefaultIsCancel holds the default value on creation for the "is_cancel" field.
 	DefaultIsCancel int64
 	// DefaultCancelTime holds the default value on creation for the "cancel_time" field.
@@ -134,6 +147,16 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByDeleteAt orders the results by the delete_at field.
+func ByDeleteAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeleteAt, opts...).ToFunc()
+}
+
+// ByCreatedID orders the results by the created_id field.
+func ByCreatedID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
@@ -194,6 +217,11 @@ func ByFee(opts ...sql.OrderTermOption) OrderOption {
 // ByIsFee orders the results by the is_fee field.
 func ByIsFee(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsFee, opts...).ToFunc()
+}
+
+// ByIsShow orders the results by the is_show field.
+func ByIsShow(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsShow, opts...).ToFunc()
 }
 
 // ByIsCancel orders the results by the is_cancel field.

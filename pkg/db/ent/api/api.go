@@ -17,6 +17,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldDeleteAt holds the string denoting the delete_at field in the database.
+	FieldDeleteAt = "delete_at"
+	// FieldCreatedID holds the string denoting the created_id field in the database.
+	FieldCreatedID = "created_id"
 	// FieldPath holds the string denoting the path field in the database.
 	FieldPath = "path"
 	// FieldTitle holds the string denoting the title field in the database.
@@ -36,6 +40,8 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldDeleteAt,
+	FieldCreatedID,
 	FieldPath,
 	FieldTitle,
 	FieldDescription,
@@ -60,6 +66,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultCreatedID holds the default value on creation for the "created_id" field.
+	DefaultCreatedID int64
 	// DefaultMethod holds the default value on creation for the "method" field.
 	DefaultMethod string
 )
@@ -80,6 +88,16 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByDeleteAt orders the results by the delete_at field.
+func ByDeleteAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeleteAt, opts...).ToFunc()
+}
+
+// ByCreatedID orders the results by the created_id field.
+func ByCreatedID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedID, opts...).ToFunc()
 }
 
 // ByPath orders the results by the path field.

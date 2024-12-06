@@ -100,3 +100,13 @@ func _resultsuploadMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _updatecontestshowMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updateconteststatusMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

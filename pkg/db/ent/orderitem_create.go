@@ -49,6 +49,26 @@ func (oic *OrderItemCreate) SetNillableUpdatedAt(t *time.Time) *OrderItemCreate 
 	return oic
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (oic *OrderItemCreate) SetDeleteAt(t time.Time) *OrderItemCreate {
+	oic.mutation.SetDeleteAt(t)
+	return oic
+}
+
+// SetCreatedID sets the "created_id" field.
+func (oic *OrderItemCreate) SetCreatedID(i int64) *OrderItemCreate {
+	oic.mutation.SetCreatedID(i)
+	return oic
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (oic *OrderItemCreate) SetNillableCreatedID(i *int64) *OrderItemCreate {
+	if i != nil {
+		oic.SetCreatedID(*i)
+	}
+	return oic
+}
+
 // SetOrderID sets the "order_id" field.
 func (oic *OrderItemCreate) SetOrderID(i int64) *OrderItemCreate {
 	oic.mutation.SetOrderID(i)
@@ -145,6 +165,10 @@ func (oic *OrderItemCreate) defaults() {
 		v := orderitem.DefaultUpdatedAt()
 		oic.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := oic.mutation.CreatedID(); !ok {
+		v := orderitem.DefaultCreatedID
+		oic.mutation.SetCreatedID(v)
+	}
 	if _, ok := oic.mutation.RelatedUserProductID(); !ok {
 		v := orderitem.DefaultRelatedUserProductID
 		oic.mutation.SetRelatedUserProductID(v)
@@ -158,6 +182,12 @@ func (oic *OrderItemCreate) check() error {
 	}
 	if _, ok := oic.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OrderItem.updated_at"`)}
+	}
+	if _, ok := oic.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "OrderItem.delete_at"`)}
+	}
+	if _, ok := oic.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "OrderItem.created_id"`)}
 	}
 	return nil
 }
@@ -198,6 +228,14 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 	if value, ok := oic.mutation.UpdatedAt(); ok {
 		_spec.SetField(orderitem.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := oic.mutation.DeleteAt(); ok {
+		_spec.SetField(orderitem.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := oic.mutation.CreatedID(); ok {
+		_spec.SetField(orderitem.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := oic.mutation.ProductID(); ok {
 		_spec.SetField(orderitem.FieldProductID, field.TypeInt64, value)

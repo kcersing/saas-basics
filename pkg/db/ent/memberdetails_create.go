@@ -49,6 +49,26 @@ func (mdc *MemberDetailsCreate) SetNillableUpdatedAt(t *time.Time) *MemberDetail
 	return mdc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (mdc *MemberDetailsCreate) SetDeleteAt(t time.Time) *MemberDetailsCreate {
+	mdc.mutation.SetDeleteAt(t)
+	return mdc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mdc *MemberDetailsCreate) SetCreatedID(i int64) *MemberDetailsCreate {
+	mdc.mutation.SetCreatedID(i)
+	return mdc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableCreatedID(i *int64) *MemberDetailsCreate {
+	if i != nil {
+		mdc.SetCreatedID(*i)
+	}
+	return mdc
+}
+
 // SetMemberID sets the "member_id" field.
 func (mdc *MemberDetailsCreate) SetMemberID(i int64) *MemberDetailsCreate {
 	mdc.mutation.SetMemberID(i)
@@ -397,6 +417,10 @@ func (mdc *MemberDetailsCreate) defaults() {
 		v := memberdetails.DefaultUpdatedAt()
 		mdc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mdc.mutation.CreatedID(); !ok {
+		v := memberdetails.DefaultCreatedID
+		mdc.mutation.SetCreatedID(v)
+	}
 	if _, ok := mdc.mutation.Gender(); !ok {
 		v := memberdetails.DefaultGender
 		mdc.mutation.SetGender(v)
@@ -434,6 +458,12 @@ func (mdc *MemberDetailsCreate) check() error {
 	}
 	if _, ok := mdc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "MemberDetails.updated_at"`)}
+	}
+	if _, ok := mdc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "MemberDetails.delete_at"`)}
+	}
+	if _, ok := mdc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "MemberDetails.created_id"`)}
 	}
 	return nil
 }
@@ -474,6 +504,14 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 	if value, ok := mdc.mutation.UpdatedAt(); ok {
 		_spec.SetField(memberdetails.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := mdc.mutation.DeleteAt(); ok {
+		_spec.SetField(memberdetails.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := mdc.mutation.CreatedID(); ok {
+		_spec.SetField(memberdetails.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := mdc.mutation.Email(); ok {
 		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)

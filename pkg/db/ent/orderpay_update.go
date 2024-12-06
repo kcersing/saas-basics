@@ -35,6 +35,41 @@ func (opu *OrderPayUpdate) SetUpdatedAt(t time.Time) *OrderPayUpdate {
 	return opu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (opu *OrderPayUpdate) SetDeleteAt(t time.Time) *OrderPayUpdate {
+	opu.mutation.SetDeleteAt(t)
+	return opu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (opu *OrderPayUpdate) SetNillableDeleteAt(t *time.Time) *OrderPayUpdate {
+	if t != nil {
+		opu.SetDeleteAt(*t)
+	}
+	return opu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (opu *OrderPayUpdate) SetCreatedID(i int64) *OrderPayUpdate {
+	opu.mutation.ResetCreatedID()
+	opu.mutation.SetCreatedID(i)
+	return opu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (opu *OrderPayUpdate) SetNillableCreatedID(i *int64) *OrderPayUpdate {
+	if i != nil {
+		opu.SetCreatedID(*i)
+	}
+	return opu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (opu *OrderPayUpdate) AddCreatedID(i int64) *OrderPayUpdate {
+	opu.mutation.AddCreatedID(i)
+	return opu
+}
+
 // SetOrderID sets the "order_id" field.
 func (opu *OrderPayUpdate) SetOrderID(i int64) *OrderPayUpdate {
 	opu.mutation.SetOrderID(i)
@@ -240,6 +275,15 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := opu.mutation.UpdatedAt(); ok {
 		_spec.SetField(orderpay.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := opu.mutation.DeleteAt(); ok {
+		_spec.SetField(orderpay.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := opu.mutation.CreatedID(); ok {
+		_spec.SetField(orderpay.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := opu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(orderpay.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := opu.mutation.Remission(); ok {
 		_spec.SetField(orderpay.FieldRemission, field.TypeFloat64, value)
 	}
@@ -331,6 +375,41 @@ type OrderPayUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (opuo *OrderPayUpdateOne) SetUpdatedAt(t time.Time) *OrderPayUpdateOne {
 	opuo.mutation.SetUpdatedAt(t)
+	return opuo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (opuo *OrderPayUpdateOne) SetDeleteAt(t time.Time) *OrderPayUpdateOne {
+	opuo.mutation.SetDeleteAt(t)
+	return opuo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (opuo *OrderPayUpdateOne) SetNillableDeleteAt(t *time.Time) *OrderPayUpdateOne {
+	if t != nil {
+		opuo.SetDeleteAt(*t)
+	}
+	return opuo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (opuo *OrderPayUpdateOne) SetCreatedID(i int64) *OrderPayUpdateOne {
+	opuo.mutation.ResetCreatedID()
+	opuo.mutation.SetCreatedID(i)
+	return opuo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (opuo *OrderPayUpdateOne) SetNillableCreatedID(i *int64) *OrderPayUpdateOne {
+	if i != nil {
+		opuo.SetCreatedID(*i)
+	}
+	return opuo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (opuo *OrderPayUpdateOne) AddCreatedID(i int64) *OrderPayUpdateOne {
+	opuo.mutation.AddCreatedID(i)
 	return opuo
 }
 
@@ -568,6 +647,15 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 	}
 	if value, ok := opuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(orderpay.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := opuo.mutation.DeleteAt(); ok {
+		_spec.SetField(orderpay.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := opuo.mutation.CreatedID(); ok {
+		_spec.SetField(orderpay.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := opuo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(orderpay.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := opuo.mutation.Remission(); ok {
 		_spec.SetField(orderpay.FieldRemission, field.TypeFloat64, value)

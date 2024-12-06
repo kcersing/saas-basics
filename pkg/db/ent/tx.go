@@ -14,6 +14,10 @@ type Tx struct {
 	config
 	// API is the client for interacting with the API builders.
 	API *APIClient
+	// Bootcamp is the client for interacting with the Bootcamp builders.
+	Bootcamp *BootcampClient
+	// BootcampParticipant is the client for interacting with the BootcampParticipant builders.
+	BootcampParticipant *BootcampParticipantClient
 	// Contest is the client for interacting with the Contest builders.
 	Contest *ContestClient
 	// ContestParticipant is the client for interacting with the ContestParticipant builders.
@@ -196,6 +200,8 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.API = NewAPIClient(tx.config)
+	tx.Bootcamp = NewBootcampClient(tx.config)
+	tx.BootcampParticipant = NewBootcampParticipantClient(tx.config)
 	tx.Contest = NewContestClient(tx.config)
 	tx.ContestParticipant = NewContestParticipantClient(tx.config)
 	tx.Contract = NewContractClient(tx.config)

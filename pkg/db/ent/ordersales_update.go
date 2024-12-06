@@ -35,6 +35,41 @@ func (osu *OrderSalesUpdate) SetUpdatedAt(t time.Time) *OrderSalesUpdate {
 	return osu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (osu *OrderSalesUpdate) SetDeleteAt(t time.Time) *OrderSalesUpdate {
+	osu.mutation.SetDeleteAt(t)
+	return osu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (osu *OrderSalesUpdate) SetNillableDeleteAt(t *time.Time) *OrderSalesUpdate {
+	if t != nil {
+		osu.SetDeleteAt(*t)
+	}
+	return osu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (osu *OrderSalesUpdate) SetCreatedID(i int64) *OrderSalesUpdate {
+	osu.mutation.ResetCreatedID()
+	osu.mutation.SetCreatedID(i)
+	return osu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (osu *OrderSalesUpdate) SetNillableCreatedID(i *int64) *OrderSalesUpdate {
+	if i != nil {
+		osu.SetCreatedID(*i)
+	}
+	return osu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (osu *OrderSalesUpdate) AddCreatedID(i int64) *OrderSalesUpdate {
+	osu.mutation.AddCreatedID(i)
+	return osu
+}
+
 // SetStatus sets the "status" field.
 func (osu *OrderSalesUpdate) SetStatus(i int64) *OrderSalesUpdate {
 	osu.mutation.ResetStatus()
@@ -227,6 +262,15 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := osu.mutation.UpdatedAt(); ok {
 		_spec.SetField(ordersales.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := osu.mutation.DeleteAt(); ok {
+		_spec.SetField(ordersales.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := osu.mutation.CreatedID(); ok {
+		_spec.SetField(ordersales.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := osu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(ordersales.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := osu.mutation.Status(); ok {
 		_spec.SetField(ordersales.FieldStatus, field.TypeInt64, value)
 	}
@@ -315,6 +359,41 @@ type OrderSalesUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (osuo *OrderSalesUpdateOne) SetUpdatedAt(t time.Time) *OrderSalesUpdateOne {
 	osuo.mutation.SetUpdatedAt(t)
+	return osuo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (osuo *OrderSalesUpdateOne) SetDeleteAt(t time.Time) *OrderSalesUpdateOne {
+	osuo.mutation.SetDeleteAt(t)
+	return osuo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (osuo *OrderSalesUpdateOne) SetNillableDeleteAt(t *time.Time) *OrderSalesUpdateOne {
+	if t != nil {
+		osuo.SetDeleteAt(*t)
+	}
+	return osuo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (osuo *OrderSalesUpdateOne) SetCreatedID(i int64) *OrderSalesUpdateOne {
+	osuo.mutation.ResetCreatedID()
+	osuo.mutation.SetCreatedID(i)
+	return osuo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (osuo *OrderSalesUpdateOne) SetNillableCreatedID(i *int64) *OrderSalesUpdateOne {
+	if i != nil {
+		osuo.SetCreatedID(*i)
+	}
+	return osuo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (osuo *OrderSalesUpdateOne) AddCreatedID(i int64) *OrderSalesUpdateOne {
+	osuo.mutation.AddCreatedID(i)
 	return osuo
 }
 
@@ -539,6 +618,15 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 	}
 	if value, ok := osuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(ordersales.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := osuo.mutation.DeleteAt(); ok {
+		_spec.SetField(ordersales.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := osuo.mutation.CreatedID(); ok {
+		_spec.SetField(ordersales.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := osuo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(ordersales.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := osuo.mutation.Status(); ok {
 		_spec.SetField(ordersales.FieldStatus, field.TypeInt64, value)

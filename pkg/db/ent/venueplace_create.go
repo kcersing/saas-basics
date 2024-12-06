@@ -49,6 +49,26 @@ func (vpc *VenuePlaceCreate) SetNillableUpdatedAt(t *time.Time) *VenuePlaceCreat
 	return vpc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (vpc *VenuePlaceCreate) SetDeleteAt(t time.Time) *VenuePlaceCreate {
+	vpc.mutation.SetDeleteAt(t)
+	return vpc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (vpc *VenuePlaceCreate) SetCreatedID(i int64) *VenuePlaceCreate {
+	vpc.mutation.SetCreatedID(i)
+	return vpc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableCreatedID(i *int64) *VenuePlaceCreate {
+	if i != nil {
+		vpc.SetCreatedID(*i)
+	}
+	return vpc
+}
+
 // SetStatus sets the "status" field.
 func (vpc *VenuePlaceCreate) SetStatus(i int64) *VenuePlaceCreate {
 	vpc.mutation.SetStatus(i)
@@ -187,6 +207,10 @@ func (vpc *VenuePlaceCreate) defaults() {
 		v := venueplace.DefaultUpdatedAt()
 		vpc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := vpc.mutation.CreatedID(); !ok {
+		v := venueplace.DefaultCreatedID
+		vpc.mutation.SetCreatedID(v)
+	}
 	if _, ok := vpc.mutation.Status(); !ok {
 		v := venueplace.DefaultStatus
 		vpc.mutation.SetStatus(v)
@@ -200,6 +224,12 @@ func (vpc *VenuePlaceCreate) check() error {
 	}
 	if _, ok := vpc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "VenuePlace.updated_at"`)}
+	}
+	if _, ok := vpc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "VenuePlace.delete_at"`)}
+	}
+	if _, ok := vpc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "VenuePlace.created_id"`)}
 	}
 	return nil
 }
@@ -240,6 +270,14 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 	if value, ok := vpc.mutation.UpdatedAt(); ok {
 		_spec.SetField(venueplace.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := vpc.mutation.DeleteAt(); ok {
+		_spec.SetField(venueplace.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := vpc.mutation.CreatedID(); ok {
+		_spec.SetField(venueplace.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := vpc.mutation.Status(); ok {
 		_spec.SetField(venueplace.FieldStatus, field.TypeInt64, value)

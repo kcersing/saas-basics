@@ -49,6 +49,26 @@ func (cc *ContestCreate) SetNillableUpdatedAt(t *time.Time) *ContestCreate {
 	return cc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (cc *ContestCreate) SetDeleteAt(t time.Time) *ContestCreate {
+	cc.mutation.SetDeleteAt(t)
+	return cc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (cc *ContestCreate) SetCreatedID(i int64) *ContestCreate {
+	cc.mutation.SetCreatedID(i)
+	return cc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (cc *ContestCreate) SetNillableCreatedID(i *int64) *ContestCreate {
+	if i != nil {
+		cc.SetCreatedID(*i)
+	}
+	return cc
+}
+
 // SetStatus sets the "status" field.
 func (cc *ContestCreate) SetStatus(i int64) *ContestCreate {
 	cc.mutation.SetStatus(i)
@@ -217,6 +237,20 @@ func (cc *ContestCreate) SetNillableIsFee(i *int64) *ContestCreate {
 	return cc
 }
 
+// SetIsShow sets the "is_show" field.
+func (cc *ContestCreate) SetIsShow(i int64) *ContestCreate {
+	cc.mutation.SetIsShow(i)
+	return cc
+}
+
+// SetNillableIsShow sets the "is_show" field if the given value is not nil.
+func (cc *ContestCreate) SetNillableIsShow(i *int64) *ContestCreate {
+	if i != nil {
+		cc.SetIsShow(*i)
+	}
+	return cc
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (cc *ContestCreate) SetIsCancel(i int64) *ContestCreate {
 	cc.mutation.SetIsCancel(i)
@@ -351,6 +385,10 @@ func (cc *ContestCreate) defaults() {
 		v := contest.DefaultUpdatedAt()
 		cc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := cc.mutation.CreatedID(); !ok {
+		v := contest.DefaultCreatedID
+		cc.mutation.SetCreatedID(v)
+	}
 	if _, ok := cc.mutation.Status(); !ok {
 		v := contest.DefaultStatus
 		cc.mutation.SetStatus(v)
@@ -358,6 +396,10 @@ func (cc *ContestCreate) defaults() {
 	if _, ok := cc.mutation.IsFee(); !ok {
 		v := contest.DefaultIsFee
 		cc.mutation.SetIsFee(v)
+	}
+	if _, ok := cc.mutation.IsShow(); !ok {
+		v := contest.DefaultIsShow
+		cc.mutation.SetIsShow(v)
 	}
 	if _, ok := cc.mutation.IsCancel(); !ok {
 		v := contest.DefaultIsCancel
@@ -380,6 +422,12 @@ func (cc *ContestCreate) check() error {
 	}
 	if _, ok := cc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Contest.updated_at"`)}
+	}
+	if _, ok := cc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Contest.delete_at"`)}
+	}
+	if _, ok := cc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Contest.created_id"`)}
 	}
 	return nil
 }
@@ -420,6 +468,14 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.UpdatedAt(); ok {
 		_spec.SetField(contest.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := cc.mutation.DeleteAt(); ok {
+		_spec.SetField(contest.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := cc.mutation.CreatedID(); ok {
+		_spec.SetField(contest.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := cc.mutation.Status(); ok {
 		_spec.SetField(contest.FieldStatus, field.TypeInt64, value)
@@ -468,6 +524,10 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.IsFee(); ok {
 		_spec.SetField(contest.FieldIsFee, field.TypeInt64, value)
 		_node.IsFee = value
+	}
+	if value, ok := cc.mutation.IsShow(); ok {
+		_spec.SetField(contest.FieldIsShow, field.TypeInt64, value)
+		_node.IsShow = value
 	}
 	if value, ok := cc.mutation.IsCancel(); ok {
 		_spec.SetField(contest.FieldIsCancel, field.TypeInt64, value)

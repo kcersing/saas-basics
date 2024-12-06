@@ -50,6 +50,26 @@ func (ddc *DictionaryDetailCreate) SetNillableUpdatedAt(t *time.Time) *Dictionar
 	return ddc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (ddc *DictionaryDetailCreate) SetDeleteAt(t time.Time) *DictionaryDetailCreate {
+	ddc.mutation.SetDeleteAt(t)
+	return ddc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (ddc *DictionaryDetailCreate) SetCreatedID(i int64) *DictionaryDetailCreate {
+	ddc.mutation.SetCreatedID(i)
+	return ddc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (ddc *DictionaryDetailCreate) SetNillableCreatedID(i *int64) *DictionaryDetailCreate {
+	if i != nil {
+		ddc.SetCreatedID(*i)
+	}
+	return ddc
+}
+
 // SetStatus sets the "status" field.
 func (ddc *DictionaryDetailCreate) SetStatus(i int64) *DictionaryDetailCreate {
 	ddc.mutation.SetStatus(i)
@@ -165,6 +185,10 @@ func (ddc *DictionaryDetailCreate) defaults() {
 		v := dictionarydetail.DefaultUpdatedAt()
 		ddc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ddc.mutation.CreatedID(); !ok {
+		v := dictionarydetail.DefaultCreatedID
+		ddc.mutation.SetCreatedID(v)
+	}
 	if _, ok := ddc.mutation.Status(); !ok {
 		v := dictionarydetail.DefaultStatus
 		ddc.mutation.SetStatus(v)
@@ -178,6 +202,12 @@ func (ddc *DictionaryDetailCreate) check() error {
 	}
 	if _, ok := ddc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "DictionaryDetail.updated_at"`)}
+	}
+	if _, ok := ddc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "DictionaryDetail.delete_at"`)}
+	}
+	if _, ok := ddc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "DictionaryDetail.created_id"`)}
 	}
 	if _, ok := ddc.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "DictionaryDetail.title"`)}
@@ -227,6 +257,14 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 	if value, ok := ddc.mutation.UpdatedAt(); ok {
 		_spec.SetField(dictionarydetail.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := ddc.mutation.DeleteAt(); ok {
+		_spec.SetField(dictionarydetail.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := ddc.mutation.CreatedID(); ok {
+		_spec.SetField(dictionarydetail.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := ddc.mutation.Status(); ok {
 		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt64, value)

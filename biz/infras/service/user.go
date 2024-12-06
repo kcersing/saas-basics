@@ -84,7 +84,7 @@ func (u User) Info(id int64) (info *user.UserInfo, err error) {
 	//if !userEnt.Birthday.IsZero() {
 	//	info.Age = int64(time.Now().Sub(userEnt.Birthday).Hours() / 24 / 365)
 	//}
-	//info.Birthday = userEnt.Birthday.Format(time.DateOnly)
+	//info.Birthday = userEnt.Birthday.Format(time.DateTime)
 	//u.cache.SetWithTTL("userInfo"+strconv.Itoa(int(info.Id)), &info, 1, 1*time.Hour)
 	return
 }
@@ -109,7 +109,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 	} else {
 		gender = 2
 	}
-	//parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
+	//parsedTime, _ := time.Parse(time.DateTime, req.Birthday)
 	functions := strings.Join(req.Functions, ",")
 
 	tx, err := u.db.Tx(u.ctx)
@@ -162,7 +162,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 	} else {
 		gender = 2
 	}
-	//parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
+	//parsedTime, _ := time.Parse(time.DateTime, req.Birthday)
 
 	//password, _ := encrypt.Crypt(req.Password)
 

@@ -65,6 +65,16 @@ func UpdatedAt(v time.Time) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// DeleteAt applies equality check predicate on the "delete_at" field. It's identical to DeleteAtEQ.
+func DeleteAt(v time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldDeleteAt, v))
+}
+
+// CreatedID applies equality check predicate on the "created_id" field. It's identical to CreatedIDEQ.
+func CreatedID(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldCreatedID, v))
+}
+
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldStatus, v))
@@ -123,6 +133,11 @@ func Fee(v float64) predicate.Contest {
 // IsFee applies equality check predicate on the "is_fee" field. It's identical to IsFeeEQ.
 func IsFee(v int64) predicate.Contest {
 	return predicate.Contest(sql.FieldEQ(FieldIsFee, v))
+}
+
+// IsShow applies equality check predicate on the "is_show" field. It's identical to IsShowEQ.
+func IsShow(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldIsShow, v))
 }
 
 // IsCancel applies equality check predicate on the "is_cancel" field. It's identical to IsCancelEQ.
@@ -228,6 +243,86 @@ func UpdatedAtLT(v time.Time) predicate.Contest {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.Contest {
 	return predicate.Contest(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// DeleteAtEQ applies the EQ predicate on the "delete_at" field.
+func DeleteAtEQ(v time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldDeleteAt, v))
+}
+
+// DeleteAtNEQ applies the NEQ predicate on the "delete_at" field.
+func DeleteAtNEQ(v time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldNEQ(FieldDeleteAt, v))
+}
+
+// DeleteAtIn applies the In predicate on the "delete_at" field.
+func DeleteAtIn(vs ...time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldIn(FieldDeleteAt, vs...))
+}
+
+// DeleteAtNotIn applies the NotIn predicate on the "delete_at" field.
+func DeleteAtNotIn(vs ...time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldNotIn(FieldDeleteAt, vs...))
+}
+
+// DeleteAtGT applies the GT predicate on the "delete_at" field.
+func DeleteAtGT(v time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldGT(FieldDeleteAt, v))
+}
+
+// DeleteAtGTE applies the GTE predicate on the "delete_at" field.
+func DeleteAtGTE(v time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldGTE(FieldDeleteAt, v))
+}
+
+// DeleteAtLT applies the LT predicate on the "delete_at" field.
+func DeleteAtLT(v time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldLT(FieldDeleteAt, v))
+}
+
+// DeleteAtLTE applies the LTE predicate on the "delete_at" field.
+func DeleteAtLTE(v time.Time) predicate.Contest {
+	return predicate.Contest(sql.FieldLTE(FieldDeleteAt, v))
+}
+
+// CreatedIDEQ applies the EQ predicate on the "created_id" field.
+func CreatedIDEQ(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldCreatedID, v))
+}
+
+// CreatedIDNEQ applies the NEQ predicate on the "created_id" field.
+func CreatedIDNEQ(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldNEQ(FieldCreatedID, v))
+}
+
+// CreatedIDIn applies the In predicate on the "created_id" field.
+func CreatedIDIn(vs ...int64) predicate.Contest {
+	return predicate.Contest(sql.FieldIn(FieldCreatedID, vs...))
+}
+
+// CreatedIDNotIn applies the NotIn predicate on the "created_id" field.
+func CreatedIDNotIn(vs ...int64) predicate.Contest {
+	return predicate.Contest(sql.FieldNotIn(FieldCreatedID, vs...))
+}
+
+// CreatedIDGT applies the GT predicate on the "created_id" field.
+func CreatedIDGT(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldGT(FieldCreatedID, v))
+}
+
+// CreatedIDGTE applies the GTE predicate on the "created_id" field.
+func CreatedIDGTE(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldGTE(FieldCreatedID, v))
+}
+
+// CreatedIDLT applies the LT predicate on the "created_id" field.
+func CreatedIDLT(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldLT(FieldCreatedID, v))
+}
+
+// CreatedIDLTE applies the LTE predicate on the "created_id" field.
+func CreatedIDLTE(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldLTE(FieldCreatedID, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
@@ -903,6 +998,56 @@ func IsFeeIsNil() predicate.Contest {
 // IsFeeNotNil applies the NotNil predicate on the "is_fee" field.
 func IsFeeNotNil() predicate.Contest {
 	return predicate.Contest(sql.FieldNotNull(FieldIsFee))
+}
+
+// IsShowEQ applies the EQ predicate on the "is_show" field.
+func IsShowEQ(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldEQ(FieldIsShow, v))
+}
+
+// IsShowNEQ applies the NEQ predicate on the "is_show" field.
+func IsShowNEQ(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldNEQ(FieldIsShow, v))
+}
+
+// IsShowIn applies the In predicate on the "is_show" field.
+func IsShowIn(vs ...int64) predicate.Contest {
+	return predicate.Contest(sql.FieldIn(FieldIsShow, vs...))
+}
+
+// IsShowNotIn applies the NotIn predicate on the "is_show" field.
+func IsShowNotIn(vs ...int64) predicate.Contest {
+	return predicate.Contest(sql.FieldNotIn(FieldIsShow, vs...))
+}
+
+// IsShowGT applies the GT predicate on the "is_show" field.
+func IsShowGT(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldGT(FieldIsShow, v))
+}
+
+// IsShowGTE applies the GTE predicate on the "is_show" field.
+func IsShowGTE(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldGTE(FieldIsShow, v))
+}
+
+// IsShowLT applies the LT predicate on the "is_show" field.
+func IsShowLT(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldLT(FieldIsShow, v))
+}
+
+// IsShowLTE applies the LTE predicate on the "is_show" field.
+func IsShowLTE(v int64) predicate.Contest {
+	return predicate.Contest(sql.FieldLTE(FieldIsShow, v))
+}
+
+// IsShowIsNil applies the IsNil predicate on the "is_show" field.
+func IsShowIsNil() predicate.Contest {
+	return predicate.Contest(sql.FieldIsNull(FieldIsShow))
+}
+
+// IsShowNotNil applies the NotNil predicate on the "is_show" field.
+func IsShowNotNil() predicate.Contest {
+	return predicate.Contest(sql.FieldNotNull(FieldIsShow))
 }
 
 // IsCancelEQ applies the EQ predicate on the "is_cancel" field.

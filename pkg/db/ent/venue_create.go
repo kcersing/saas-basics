@@ -51,6 +51,26 @@ func (vc *VenueCreate) SetNillableUpdatedAt(t *time.Time) *VenueCreate {
 	return vc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (vc *VenueCreate) SetDeleteAt(t time.Time) *VenueCreate {
+	vc.mutation.SetDeleteAt(t)
+	return vc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (vc *VenueCreate) SetCreatedID(i int64) *VenueCreate {
+	vc.mutation.SetCreatedID(i)
+	return vc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (vc *VenueCreate) SetNillableCreatedID(i *int64) *VenueCreate {
+	if i != nil {
+		vc.SetCreatedID(*i)
+	}
+	return vc
+}
+
 // SetStatus sets the "status" field.
 func (vc *VenueCreate) SetStatus(i int64) *VenueCreate {
 	vc.mutation.SetStatus(i)
@@ -285,6 +305,10 @@ func (vc *VenueCreate) defaults() {
 		v := venue.DefaultUpdatedAt()
 		vc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := vc.mutation.CreatedID(); !ok {
+		v := venue.DefaultCreatedID
+		vc.mutation.SetCreatedID(v)
+	}
 	if _, ok := vc.mutation.Status(); !ok {
 		v := venue.DefaultStatus
 		vc.mutation.SetStatus(v)
@@ -298,6 +322,12 @@ func (vc *VenueCreate) check() error {
 	}
 	if _, ok := vc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Venue.updated_at"`)}
+	}
+	if _, ok := vc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Venue.delete_at"`)}
+	}
+	if _, ok := vc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Venue.created_id"`)}
 	}
 	return nil
 }
@@ -338,6 +368,14 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 	if value, ok := vc.mutation.UpdatedAt(); ok {
 		_spec.SetField(venue.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := vc.mutation.DeleteAt(); ok {
+		_spec.SetField(venue.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := vc.mutation.CreatedID(); ok {
+		_spec.SetField(venue.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := vc.mutation.Status(); ok {
 		_spec.SetField(venue.FieldStatus, field.TypeInt64, value)

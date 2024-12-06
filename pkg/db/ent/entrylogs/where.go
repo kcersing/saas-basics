@@ -65,6 +65,16 @@ func UpdatedAt(v time.Time) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// DeleteAt applies equality check predicate on the "delete_at" field. It's identical to DeleteAtEQ.
+func DeleteAt(v time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldEQ(FieldDeleteAt, v))
+}
+
+// CreatedID applies equality check predicate on the "created_id" field. It's identical to CreatedIDEQ.
+func CreatedID(v int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldEQ(FieldCreatedID, v))
+}
+
 // MemberID applies equality check predicate on the "member_id" field. It's identical to MemberIDEQ.
 func MemberID(v int64) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldEQ(FieldMemberID, v))
@@ -178,6 +188,86 @@ func UpdatedAtLT(v time.Time) predicate.EntryLogs {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// DeleteAtEQ applies the EQ predicate on the "delete_at" field.
+func DeleteAtEQ(v time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldEQ(FieldDeleteAt, v))
+}
+
+// DeleteAtNEQ applies the NEQ predicate on the "delete_at" field.
+func DeleteAtNEQ(v time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldNEQ(FieldDeleteAt, v))
+}
+
+// DeleteAtIn applies the In predicate on the "delete_at" field.
+func DeleteAtIn(vs ...time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldIn(FieldDeleteAt, vs...))
+}
+
+// DeleteAtNotIn applies the NotIn predicate on the "delete_at" field.
+func DeleteAtNotIn(vs ...time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldNotIn(FieldDeleteAt, vs...))
+}
+
+// DeleteAtGT applies the GT predicate on the "delete_at" field.
+func DeleteAtGT(v time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldGT(FieldDeleteAt, v))
+}
+
+// DeleteAtGTE applies the GTE predicate on the "delete_at" field.
+func DeleteAtGTE(v time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldGTE(FieldDeleteAt, v))
+}
+
+// DeleteAtLT applies the LT predicate on the "delete_at" field.
+func DeleteAtLT(v time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldLT(FieldDeleteAt, v))
+}
+
+// DeleteAtLTE applies the LTE predicate on the "delete_at" field.
+func DeleteAtLTE(v time.Time) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldLTE(FieldDeleteAt, v))
+}
+
+// CreatedIDEQ applies the EQ predicate on the "created_id" field.
+func CreatedIDEQ(v int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldEQ(FieldCreatedID, v))
+}
+
+// CreatedIDNEQ applies the NEQ predicate on the "created_id" field.
+func CreatedIDNEQ(v int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldNEQ(FieldCreatedID, v))
+}
+
+// CreatedIDIn applies the In predicate on the "created_id" field.
+func CreatedIDIn(vs ...int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldIn(FieldCreatedID, vs...))
+}
+
+// CreatedIDNotIn applies the NotIn predicate on the "created_id" field.
+func CreatedIDNotIn(vs ...int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldNotIn(FieldCreatedID, vs...))
+}
+
+// CreatedIDGT applies the GT predicate on the "created_id" field.
+func CreatedIDGT(v int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldGT(FieldCreatedID, v))
+}
+
+// CreatedIDGTE applies the GTE predicate on the "created_id" field.
+func CreatedIDGTE(v int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldGTE(FieldCreatedID, v))
+}
+
+// CreatedIDLT applies the LT predicate on the "created_id" field.
+func CreatedIDLT(v int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldLT(FieldCreatedID, v))
+}
+
+// CreatedIDLTE applies the LTE predicate on the "created_id" field.
+func CreatedIDLTE(v int64) predicate.EntryLogs {
+	return predicate.EntryLogs(sql.FieldLTE(FieldCreatedID, v))
 }
 
 // MemberIDEQ applies the EQ predicate on the "member_id" field.

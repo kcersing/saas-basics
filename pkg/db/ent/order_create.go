@@ -56,6 +56,26 @@ func (oc *OrderCreate) SetNillableUpdatedAt(t *time.Time) *OrderCreate {
 	return oc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (oc *OrderCreate) SetDeleteAt(t time.Time) *OrderCreate {
+	oc.mutation.SetDeleteAt(t)
+	return oc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (oc *OrderCreate) SetCreatedID(i int64) *OrderCreate {
+	oc.mutation.SetCreatedID(i)
+	return oc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (oc *OrderCreate) SetNillableCreatedID(i *int64) *OrderCreate {
+	if i != nil {
+		oc.SetCreatedID(*i)
+	}
+	return oc
+}
+
 // SetOrderSn sets the "order_sn" field.
 func (oc *OrderCreate) SetOrderSn(s string) *OrderCreate {
 	oc.mutation.SetOrderSn(s)
@@ -377,6 +397,10 @@ func (oc *OrderCreate) defaults() {
 		v := order.DefaultUpdatedAt()
 		oc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := oc.mutation.CreatedID(); !ok {
+		v := order.DefaultCreatedID
+		oc.mutation.SetCreatedID(v)
+	}
 	if _, ok := oc.mutation.Status(); !ok {
 		v := order.DefaultStatus
 		oc.mutation.SetStatus(v)
@@ -398,6 +422,12 @@ func (oc *OrderCreate) check() error {
 	}
 	if _, ok := oc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Order.updated_at"`)}
+	}
+	if _, ok := oc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Order.delete_at"`)}
+	}
+	if _, ok := oc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Order.created_id"`)}
 	}
 	return nil
 }
@@ -438,6 +468,14 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 	if value, ok := oc.mutation.UpdatedAt(); ok {
 		_spec.SetField(order.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := oc.mutation.DeleteAt(); ok {
+		_spec.SetField(order.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := oc.mutation.CreatedID(); ok {
+		_spec.SetField(order.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := oc.mutation.OrderSn(); ok {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)

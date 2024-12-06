@@ -13,8 +13,9 @@ service ContestService {
 
   base.NilResponse ContestList(1: ContestListReq req) (api.post = "/service/contest/list")
 
-  base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/contest/status")
+  base.NilResponse UpdateContestStatus(1: base.StatusCodeReq req) (api.post = "/service/contest/status")
 
+  base.NilResponse UpdateContestShow (1: base.StatusCodeReq req) (api.post = "/service/contest/show")
 
   base.NilResponse CreateParticipant(1: ParticipantInfo req) (api.post = "/service/participant/create")
 
@@ -81,7 +82,11 @@ struct ContestInfo{
     16:  optional string createdAt="" (api.raw = "createdAt")
     17:  optional string updatedAt="" (api.raw = "updatedAt")
     
-    18:  optional string condition="" (api.raw = "condition")
+    18:  optional i64 condition=0 (api.raw = "condition")
     19:  optional i64 isFee=0 (api.raw = "isFee")
+
+    20:  optional i64 createdId=0 (api.raw = "createdId")
+    21:  optional string createdName="0" (api.raw = "createdName")
+    22:  optional i64 isShow=1 (api.raw = "isShow")
 
 }

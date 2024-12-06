@@ -50,6 +50,26 @@ func (mc *MenuCreate) SetNillableUpdatedAt(t *time.Time) *MenuCreate {
 	return mc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (mc *MenuCreate) SetDeleteAt(t time.Time) *MenuCreate {
+	mc.mutation.SetDeleteAt(t)
+	return mc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mc *MenuCreate) SetCreatedID(i int64) *MenuCreate {
+	mc.mutation.SetCreatedID(i)
+	return mc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableCreatedID(i *int64) *MenuCreate {
+	if i != nil {
+		mc.SetCreatedID(*i)
+	}
+	return mc
+}
+
 // SetStatus sets the "status" field.
 func (mc *MenuCreate) SetStatus(i int64) *MenuCreate {
 	mc.mutation.SetStatus(i)
@@ -401,6 +421,10 @@ func (mc *MenuCreate) defaults() {
 		v := menu.DefaultUpdatedAt()
 		mc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mc.mutation.CreatedID(); !ok {
+		v := menu.DefaultCreatedID
+		mc.mutation.SetCreatedID(v)
+	}
 	if _, ok := mc.mutation.Status(); !ok {
 		v := menu.DefaultStatus
 		mc.mutation.SetStatus(v)
@@ -459,6 +483,12 @@ func (mc *MenuCreate) check() error {
 	if _, ok := mc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Menu.updated_at"`)}
 	}
+	if _, ok := mc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Menu.delete_at"`)}
+	}
+	if _, ok := mc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Menu.created_id"`)}
+	}
 	return nil
 }
 
@@ -498,6 +528,14 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.UpdatedAt(); ok {
 		_spec.SetField(menu.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := mc.mutation.DeleteAt(); ok {
+		_spec.SetField(menu.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := mc.mutation.CreatedID(); ok {
+		_spec.SetField(menu.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := mc.mutation.Status(); ok {
 		_spec.SetField(menu.FieldStatus, field.TypeInt64, value)

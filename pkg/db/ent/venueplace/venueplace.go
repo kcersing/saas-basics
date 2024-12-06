@@ -18,6 +18,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldDeleteAt holds the string denoting the delete_at field in the database.
+	FieldDeleteAt = "delete_at"
+	// FieldCreatedID holds the string denoting the created_id field in the database.
+	FieldCreatedID = "created_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldName holds the string denoting the name field in the database.
@@ -48,6 +52,8 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldDeleteAt,
+	FieldCreatedID,
 	FieldStatus,
 	FieldName,
 	FieldPic,
@@ -73,6 +79,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultCreatedID holds the default value on creation for the "created_id" field.
+	DefaultCreatedID int64
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int64
 )
@@ -93,6 +101,16 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByDeleteAt orders the results by the delete_at field.
+func ByDeleteAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeleteAt, opts...).ToFunc()
+}
+
+// ByCreatedID orders the results by the created_id field.
+func ByCreatedID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

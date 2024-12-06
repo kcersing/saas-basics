@@ -49,6 +49,26 @@ func (mnc *MemberNoteCreate) SetNillableUpdatedAt(t *time.Time) *MemberNoteCreat
 	return mnc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (mnc *MemberNoteCreate) SetDeleteAt(t time.Time) *MemberNoteCreate {
+	mnc.mutation.SetDeleteAt(t)
+	return mnc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mnc *MemberNoteCreate) SetCreatedID(i int64) *MemberNoteCreate {
+	mnc.mutation.SetCreatedID(i)
+	return mnc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mnc *MemberNoteCreate) SetNillableCreatedID(i *int64) *MemberNoteCreate {
+	if i != nil {
+		mnc.SetCreatedID(*i)
+	}
+	return mnc
+}
+
 // SetStatus sets the "status" field.
 func (mnc *MemberNoteCreate) SetStatus(i int64) *MemberNoteCreate {
 	mnc.mutation.SetStatus(i)
@@ -159,6 +179,10 @@ func (mnc *MemberNoteCreate) defaults() {
 		v := membernote.DefaultUpdatedAt()
 		mnc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mnc.mutation.CreatedID(); !ok {
+		v := membernote.DefaultCreatedID
+		mnc.mutation.SetCreatedID(v)
+	}
 	if _, ok := mnc.mutation.Status(); !ok {
 		v := membernote.DefaultStatus
 		mnc.mutation.SetStatus(v)
@@ -176,6 +200,12 @@ func (mnc *MemberNoteCreate) check() error {
 	}
 	if _, ok := mnc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "MemberNote.updated_at"`)}
+	}
+	if _, ok := mnc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "MemberNote.delete_at"`)}
+	}
+	if _, ok := mnc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "MemberNote.created_id"`)}
 	}
 	return nil
 }
@@ -216,6 +246,14 @@ func (mnc *MemberNoteCreate) createSpec() (*MemberNote, *sqlgraph.CreateSpec) {
 	if value, ok := mnc.mutation.UpdatedAt(); ok {
 		_spec.SetField(membernote.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := mnc.mutation.DeleteAt(); ok {
+		_spec.SetField(membernote.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := mnc.mutation.CreatedID(); ok {
+		_spec.SetField(membernote.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := mnc.mutation.Status(); ok {
 		_spec.SetField(membernote.FieldStatus, field.TypeInt64, value)

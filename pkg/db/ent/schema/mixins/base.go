@@ -28,5 +28,9 @@ func (BaseMixin) Fields() []ent.Field {
 			Default(time.Now).
 			UpdateDefault(time.Now).
 			Comment("last update time"),
+		field.Time("delete_at").
+			Default(nil).
+			Comment("last delete time"),
+		field.Int64("created_id").Default(0).Comment("created "),
 	}
 }

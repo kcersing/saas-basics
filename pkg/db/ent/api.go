@@ -22,6 +22,10 @@ type API struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// last delete time
+	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// created
+	CreatedID int64 `json:"created_id,omitempty"`
 	// API path | API 路径
 	Path string `json:"path,omitempty"`
 	// API title | API 名称
@@ -40,11 +44,11 @@ func (*API) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case api.FieldID:
+		case api.FieldID, api.FieldCreatedID:
 			values[i] = new(sql.NullInt64)
 		case api.FieldPath, api.FieldTitle, api.FieldDescription, api.FieldAPIGroup, api.FieldMethod:
 			values[i] = new(sql.NullString)
-		case api.FieldCreatedAt, api.FieldUpdatedAt:
+		case api.FieldCreatedAt, api.FieldUpdatedAt, api.FieldDeleteAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -78,6 +82,18 @@ func (a *API) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				a.UpdatedAt = value.Time
+			}
+		case api.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				a.DeleteAt = value.Time
+			}
+		case api.FieldCreatedID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_id", values[i])
+			} else if value.Valid {
+				a.CreatedID = value.Int64
 			}
 		case api.FieldPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -150,6 +166,12 @@ func (a *API) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(a.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("delete_at=")
+	builder.WriteString(a.DeleteAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_id=")
+	builder.WriteString(fmt.Sprintf("%v", a.CreatedID))
 	builder.WriteString(", ")
 	builder.WriteString("path=")
 	builder.WriteString(a.Path)

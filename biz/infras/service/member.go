@@ -112,7 +112,7 @@ func NewMember(ctx context.Context, c *app.RequestContext) do.Member {
 
 func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 
-	parsedTime, _ := time.Parse(time.DateOnly, req.Birthday)
+	parsedTime, _ := time.Parse(time.DateTime, req.Birthday)
 
 	var gender int64
 	if req.Gender == "女性" {
@@ -294,7 +294,7 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 		Nickname:  v.Nickname,
 		Condition: v.Condition,
 		Age:       age,
-		Birthday:  d.Birthday.Format(time.DateOnly),
+		Birthday:  d.Birthday.Format(time.DateTime),
 	}
 }
 
@@ -365,7 +365,7 @@ func (m Member) MemberPrivacy(ID int64) (info *member.MemberPrivacy, err error) 
 	//		info.BackIdentityCard = faceFirst.BackIdentityCard
 	//		info.FacePic = faceFirst.FacePic
 	//		info.FaceEigenvalue = faceFirst.FaceEigenvalue
-	//		info.FacePicUpdatedTime = faceFirst.FacePicUpdatedTime.Format(time.DateOnly)
+	//		info.FacePicUpdatedTime = faceFirst.FacePicUpdatedTime.Format(time.DateTime)
 	//	}
 	return
 }
@@ -391,11 +391,11 @@ func (m Member) MemberNode(ID int64) (info *member.MemberNode, err error) {
 	}
 	info.CreatedAt = memberEnt.CreatedAt.Format(time.DateTime)
 	//进馆最后期限时间
-	info.EntryDeadlineTime = memberDetails.EntryDeadlineTime.Format(time.DateOnly)
+	info.EntryDeadlineTime = memberDetails.EntryDeadlineTime.Format(time.DateTime)
 	//最后一次进馆时间
-	info.EntryLastTime = memberDetails.EntryLastTime.Format(time.DateOnly)
+	info.EntryLastTime = memberDetails.EntryLastTime.Format(time.DateTime)
 	//最后一次上课时间
-	info.ClassLastTime = memberDetails.ClassLastTime.Format(time.DateOnly)
+	info.ClassLastTime = memberDetails.ClassLastTime.Format(time.DateTime)
 
 	////消费总金额
 	info.MoneySum = memberDetails.MoneySum

@@ -48,6 +48,26 @@ func (lc *LogsCreate) SetNillableUpdatedAt(t *time.Time) *LogsCreate {
 	return lc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (lc *LogsCreate) SetDeleteAt(t time.Time) *LogsCreate {
+	lc.mutation.SetDeleteAt(t)
+	return lc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (lc *LogsCreate) SetCreatedID(i int64) *LogsCreate {
+	lc.mutation.SetCreatedID(i)
+	return lc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (lc *LogsCreate) SetNillableCreatedID(i *int64) *LogsCreate {
+	if i != nil {
+		lc.SetCreatedID(*i)
+	}
+	return lc
+}
+
 // SetType sets the "type" field.
 func (lc *LogsCreate) SetType(s string) *LogsCreate {
 	lc.mutation.SetType(s)
@@ -205,6 +225,10 @@ func (lc *LogsCreate) defaults() {
 		v := logs.DefaultUpdatedAt()
 		lc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := lc.mutation.CreatedID(); !ok {
+		v := logs.DefaultCreatedID
+		lc.mutation.SetCreatedID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -214,6 +238,12 @@ func (lc *LogsCreate) check() error {
 	}
 	if _, ok := lc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Logs.updated_at"`)}
+	}
+	if _, ok := lc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Logs.delete_at"`)}
+	}
+	if _, ok := lc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Logs.created_id"`)}
 	}
 	if _, ok := lc.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Logs.type"`)}
@@ -266,6 +296,14 @@ func (lc *LogsCreate) createSpec() (*Logs, *sqlgraph.CreateSpec) {
 	if value, ok := lc.mutation.UpdatedAt(); ok {
 		_spec.SetField(logs.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := lc.mutation.DeleteAt(); ok {
+		_spec.SetField(logs.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := lc.mutation.CreatedID(); ok {
+		_spec.SetField(logs.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := lc.mutation.GetType(); ok {
 		_spec.SetField(logs.FieldType, field.TypeString, value)

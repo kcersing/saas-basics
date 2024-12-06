@@ -34,6 +34,41 @@ func (au *APIUpdate) SetUpdatedAt(t time.Time) *APIUpdate {
 	return au
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (au *APIUpdate) SetDeleteAt(t time.Time) *APIUpdate {
+	au.mutation.SetDeleteAt(t)
+	return au
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (au *APIUpdate) SetNillableDeleteAt(t *time.Time) *APIUpdate {
+	if t != nil {
+		au.SetDeleteAt(*t)
+	}
+	return au
+}
+
+// SetCreatedID sets the "created_id" field.
+func (au *APIUpdate) SetCreatedID(i int64) *APIUpdate {
+	au.mutation.ResetCreatedID()
+	au.mutation.SetCreatedID(i)
+	return au
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (au *APIUpdate) SetNillableCreatedID(i *int64) *APIUpdate {
+	if i != nil {
+		au.SetCreatedID(*i)
+	}
+	return au
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (au *APIUpdate) AddCreatedID(i int64) *APIUpdate {
+	au.mutation.AddCreatedID(i)
+	return au
+}
+
 // SetPath sets the "path" field.
 func (au *APIUpdate) SetPath(s string) *APIUpdate {
 	au.mutation.SetPath(s)
@@ -157,6 +192,15 @@ func (au *APIUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := au.mutation.UpdatedAt(); ok {
 		_spec.SetField(api.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := au.mutation.DeleteAt(); ok {
+		_spec.SetField(api.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := au.mutation.CreatedID(); ok {
+		_spec.SetField(api.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := au.mutation.AddedCreatedID(); ok {
+		_spec.AddField(api.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := au.mutation.Path(); ok {
 		_spec.SetField(api.FieldPath, field.TypeString, value)
 	}
@@ -195,6 +239,41 @@ type APIUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (auo *APIUpdateOne) SetUpdatedAt(t time.Time) *APIUpdateOne {
 	auo.mutation.SetUpdatedAt(t)
+	return auo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (auo *APIUpdateOne) SetDeleteAt(t time.Time) *APIUpdateOne {
+	auo.mutation.SetDeleteAt(t)
+	return auo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (auo *APIUpdateOne) SetNillableDeleteAt(t *time.Time) *APIUpdateOne {
+	if t != nil {
+		auo.SetDeleteAt(*t)
+	}
+	return auo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (auo *APIUpdateOne) SetCreatedID(i int64) *APIUpdateOne {
+	auo.mutation.ResetCreatedID()
+	auo.mutation.SetCreatedID(i)
+	return auo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (auo *APIUpdateOne) SetNillableCreatedID(i *int64) *APIUpdateOne {
+	if i != nil {
+		auo.SetCreatedID(*i)
+	}
+	return auo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (auo *APIUpdateOne) AddCreatedID(i int64) *APIUpdateOne {
+	auo.mutation.AddCreatedID(i)
 	return auo
 }
 
@@ -350,6 +429,15 @@ func (auo *APIUpdateOne) sqlSave(ctx context.Context) (_node *API, err error) {
 	}
 	if value, ok := auo.mutation.UpdatedAt(); ok {
 		_spec.SetField(api.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := auo.mutation.DeleteAt(); ok {
+		_spec.SetField(api.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := auo.mutation.CreatedID(); ok {
+		_spec.SetField(api.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := auo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(api.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := auo.mutation.Path(); ok {
 		_spec.SetField(api.FieldPath, field.TypeString, value)

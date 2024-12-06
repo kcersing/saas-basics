@@ -23,6 +23,10 @@ type ContestParticipant struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// last delete time
+	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// created
+	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// 赛事id
@@ -66,11 +70,11 @@ func (*ContestParticipant) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case contestparticipant.FieldID, contestparticipant.FieldStatus, contestparticipant.FieldContestID:
+		case contestparticipant.FieldID, contestparticipant.FieldCreatedID, contestparticipant.FieldStatus, contestparticipant.FieldContestID:
 			values[i] = new(sql.NullInt64)
 		case contestparticipant.FieldName, contestparticipant.FieldMobile, contestparticipant.FieldFields:
 			values[i] = new(sql.NullString)
-		case contestparticipant.FieldCreatedAt, contestparticipant.FieldUpdatedAt:
+		case contestparticipant.FieldCreatedAt, contestparticipant.FieldUpdatedAt, contestparticipant.FieldDeleteAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -104,6 +108,18 @@ func (cp *ContestParticipant) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				cp.UpdatedAt = value.Time
+			}
+		case contestparticipant.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				cp.DeleteAt = value.Time
+			}
+		case contestparticipant.FieldCreatedID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_id", values[i])
+			} else if value.Valid {
+				cp.CreatedID = value.Int64
 			}
 		case contestparticipant.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -181,6 +197,12 @@ func (cp *ContestParticipant) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(cp.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("delete_at=")
+	builder.WriteString(cp.DeleteAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_id=")
+	builder.WriteString(fmt.Sprintf("%v", cp.CreatedID))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", cp.Status))

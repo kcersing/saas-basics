@@ -22,6 +22,10 @@ type Contest struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// last delete time
+	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// created
+	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// 比赛名称
@@ -46,6 +50,8 @@ type Contest struct {
 	Fee float64 `json:"fee,omitempty"`
 	// 是否有费用 1 无 2 有
 	IsFee int64 `json:"is_fee,omitempty"`
+	// 是否展示 1 展示 2 不展示
+	IsShow int64 `json:"is_show,omitempty"`
 	// 是否支持取消报名 0支持 1不支持
 	IsCancel int64 `json:"is_cancel,omitempty"`
 	// 取消时间
@@ -87,11 +93,11 @@ func (*Contest) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case contest.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case contest.FieldID, contest.FieldStatus, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsFee, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
+		case contest.FieldID, contest.FieldCreatedID, contest.FieldStatus, contest.FieldSignNumber, contest.FieldNumber, contest.FieldIsFee, contest.FieldIsShow, contest.FieldIsCancel, contest.FieldCancelTime, contest.FieldCondition:
 			values[i] = new(sql.NullInt64)
 		case contest.FieldName, contest.FieldPic, contest.FieldSponsor, contest.FieldDetail, contest.FieldSignFields:
 			values[i] = new(sql.NullString)
-		case contest.FieldCreatedAt, contest.FieldUpdatedAt, contest.FieldSignStartAt, contest.FieldSignEndAt, contest.FieldStartAt, contest.FieldEndAt:
+		case contest.FieldCreatedAt, contest.FieldUpdatedAt, contest.FieldDeleteAt, contest.FieldSignStartAt, contest.FieldSignEndAt, contest.FieldStartAt, contest.FieldEndAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -125,6 +131,18 @@ func (c *Contest) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				c.UpdatedAt = value.Time
+			}
+		case contest.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				c.DeleteAt = value.Time
+			}
+		case contest.FieldCreatedID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_id", values[i])
+			} else if value.Valid {
+				c.CreatedID = value.Int64
 			}
 		case contest.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -197,6 +215,12 @@ func (c *Contest) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field is_fee", values[i])
 			} else if value.Valid {
 				c.IsFee = value.Int64
+			}
+		case contest.FieldIsShow:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_show", values[i])
+			} else if value.Valid {
+				c.IsShow = value.Int64
 			}
 		case contest.FieldIsCancel:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -275,6 +299,12 @@ func (c *Contest) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("delete_at=")
+	builder.WriteString(c.DeleteAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_id=")
+	builder.WriteString(fmt.Sprintf("%v", c.CreatedID))
+	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", c.Status))
 	builder.WriteString(", ")
@@ -310,6 +340,9 @@ func (c *Contest) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_fee=")
 	builder.WriteString(fmt.Sprintf("%v", c.IsFee))
+	builder.WriteString(", ")
+	builder.WriteString("is_show=")
+	builder.WriteString(fmt.Sprintf("%v", c.IsShow))
 	builder.WriteString(", ")
 	builder.WriteString("is_cancel=")
 	builder.WriteString(fmt.Sprintf("%v", c.IsCancel))

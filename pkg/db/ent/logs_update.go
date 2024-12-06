@@ -34,6 +34,41 @@ func (lu *LogsUpdate) SetUpdatedAt(t time.Time) *LogsUpdate {
 	return lu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (lu *LogsUpdate) SetDeleteAt(t time.Time) *LogsUpdate {
+	lu.mutation.SetDeleteAt(t)
+	return lu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (lu *LogsUpdate) SetNillableDeleteAt(t *time.Time) *LogsUpdate {
+	if t != nil {
+		lu.SetDeleteAt(*t)
+	}
+	return lu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (lu *LogsUpdate) SetCreatedID(i int64) *LogsUpdate {
+	lu.mutation.ResetCreatedID()
+	lu.mutation.SetCreatedID(i)
+	return lu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (lu *LogsUpdate) SetNillableCreatedID(i *int64) *LogsUpdate {
+	if i != nil {
+		lu.SetCreatedID(*i)
+	}
+	return lu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (lu *LogsUpdate) AddCreatedID(i int64) *LogsUpdate {
+	lu.mutation.AddCreatedID(i)
+	return lu
+}
+
 // SetType sets the "type" field.
 func (lu *LogsUpdate) SetType(s string) *LogsUpdate {
 	lu.mutation.SetType(s)
@@ -270,6 +305,15 @@ func (lu *LogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := lu.mutation.UpdatedAt(); ok {
 		_spec.SetField(logs.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := lu.mutation.DeleteAt(); ok {
+		_spec.SetField(logs.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := lu.mutation.CreatedID(); ok {
+		_spec.SetField(logs.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := lu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(logs.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := lu.mutation.GetType(); ok {
 		_spec.SetField(logs.FieldType, field.TypeString, value)
 	}
@@ -344,6 +388,41 @@ type LogsUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (luo *LogsUpdateOne) SetUpdatedAt(t time.Time) *LogsUpdateOne {
 	luo.mutation.SetUpdatedAt(t)
+	return luo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (luo *LogsUpdateOne) SetDeleteAt(t time.Time) *LogsUpdateOne {
+	luo.mutation.SetDeleteAt(t)
+	return luo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (luo *LogsUpdateOne) SetNillableDeleteAt(t *time.Time) *LogsUpdateOne {
+	if t != nil {
+		luo.SetDeleteAt(*t)
+	}
+	return luo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (luo *LogsUpdateOne) SetCreatedID(i int64) *LogsUpdateOne {
+	luo.mutation.ResetCreatedID()
+	luo.mutation.SetCreatedID(i)
+	return luo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (luo *LogsUpdateOne) SetNillableCreatedID(i *int64) *LogsUpdateOne {
+	if i != nil {
+		luo.SetCreatedID(*i)
+	}
+	return luo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (luo *LogsUpdateOne) AddCreatedID(i int64) *LogsUpdateOne {
+	luo.mutation.AddCreatedID(i)
 	return luo
 }
 
@@ -612,6 +691,15 @@ func (luo *LogsUpdateOne) sqlSave(ctx context.Context) (_node *Logs, err error) 
 	}
 	if value, ok := luo.mutation.UpdatedAt(); ok {
 		_spec.SetField(logs.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := luo.mutation.DeleteAt(); ok {
+		_spec.SetField(logs.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := luo.mutation.CreatedID(); ok {
+		_spec.SetField(logs.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := luo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(logs.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := luo.mutation.GetType(); ok {
 		_spec.SetField(logs.FieldType, field.TypeString, value)

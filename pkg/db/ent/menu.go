@@ -22,6 +22,10 @@ type Menu struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// last delete time
+	DeleteAt time.Time `json:"delete_at,omitempty"`
+	// created
+	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// parent menu ID | 父菜单ID
@@ -126,11 +130,11 @@ func (*Menu) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case menu.FieldIgnore, menu.FieldHidden, menu.FieldAffix, menu.FieldNoCache:
 			values[i] = new(sql.NullBool)
-		case menu.FieldID, menu.FieldStatus, menu.FieldParentID, menu.FieldSort, menu.FieldDisabled, menu.FieldLevel, menu.FieldMenuType:
+		case menu.FieldID, menu.FieldCreatedID, menu.FieldStatus, menu.FieldParentID, menu.FieldSort, menu.FieldDisabled, menu.FieldLevel, menu.FieldMenuType:
 			values[i] = new(sql.NullInt64)
 		case menu.FieldPath, menu.FieldName, menu.FieldRedirect, menu.FieldComponent, menu.FieldURL, menu.FieldTitle, menu.FieldIcon, menu.FieldActiveMenu:
 			values[i] = new(sql.NullString)
-		case menu.FieldCreatedAt, menu.FieldUpdatedAt:
+		case menu.FieldCreatedAt, menu.FieldUpdatedAt, menu.FieldDeleteAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -164,6 +168,18 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				m.UpdatedAt = value.Time
+			}
+		case menu.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				m.DeleteAt = value.Time
+			}
+		case menu.FieldCreatedID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_id", values[i])
+			} else if value.Valid {
+				m.CreatedID = value.Int64
 			}
 		case menu.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -334,6 +350,12 @@ func (m *Menu) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(m.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("delete_at=")
+	builder.WriteString(m.DeleteAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_id=")
+	builder.WriteString(fmt.Sprintf("%v", m.CreatedID))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", m.Status))

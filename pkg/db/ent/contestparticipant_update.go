@@ -35,6 +35,41 @@ func (cpu *ContestParticipantUpdate) SetUpdatedAt(t time.Time) *ContestParticipa
 	return cpu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (cpu *ContestParticipantUpdate) SetDeleteAt(t time.Time) *ContestParticipantUpdate {
+	cpu.mutation.SetDeleteAt(t)
+	return cpu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (cpu *ContestParticipantUpdate) SetNillableDeleteAt(t *time.Time) *ContestParticipantUpdate {
+	if t != nil {
+		cpu.SetDeleteAt(*t)
+	}
+	return cpu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (cpu *ContestParticipantUpdate) SetCreatedID(i int64) *ContestParticipantUpdate {
+	cpu.mutation.ResetCreatedID()
+	cpu.mutation.SetCreatedID(i)
+	return cpu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (cpu *ContestParticipantUpdate) SetNillableCreatedID(i *int64) *ContestParticipantUpdate {
+	if i != nil {
+		cpu.SetCreatedID(*i)
+	}
+	return cpu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (cpu *ContestParticipantUpdate) AddCreatedID(i int64) *ContestParticipantUpdate {
+	cpu.mutation.AddCreatedID(i)
+	return cpu
+}
+
 // SetStatus sets the "status" field.
 func (cpu *ContestParticipantUpdate) SetStatus(i int64) *ContestParticipantUpdate {
 	cpu.mutation.ResetStatus()
@@ -206,6 +241,15 @@ func (cpu *ContestParticipantUpdate) sqlSave(ctx context.Context) (n int, err er
 	if value, ok := cpu.mutation.UpdatedAt(); ok {
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := cpu.mutation.DeleteAt(); ok {
+		_spec.SetField(contestparticipant.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := cpu.mutation.CreatedID(); ok {
+		_spec.SetField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := cpu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := cpu.mutation.Status(); ok {
 		_spec.SetField(contestparticipant.FieldStatus, field.TypeInt64, value)
 	}
@@ -285,6 +329,41 @@ type ContestParticipantUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (cpuo *ContestParticipantUpdateOne) SetUpdatedAt(t time.Time) *ContestParticipantUpdateOne {
 	cpuo.mutation.SetUpdatedAt(t)
+	return cpuo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (cpuo *ContestParticipantUpdateOne) SetDeleteAt(t time.Time) *ContestParticipantUpdateOne {
+	cpuo.mutation.SetDeleteAt(t)
+	return cpuo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (cpuo *ContestParticipantUpdateOne) SetNillableDeleteAt(t *time.Time) *ContestParticipantUpdateOne {
+	if t != nil {
+		cpuo.SetDeleteAt(*t)
+	}
+	return cpuo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (cpuo *ContestParticipantUpdateOne) SetCreatedID(i int64) *ContestParticipantUpdateOne {
+	cpuo.mutation.ResetCreatedID()
+	cpuo.mutation.SetCreatedID(i)
+	return cpuo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (cpuo *ContestParticipantUpdateOne) SetNillableCreatedID(i *int64) *ContestParticipantUpdateOne {
+	if i != nil {
+		cpuo.SetCreatedID(*i)
+	}
+	return cpuo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (cpuo *ContestParticipantUpdateOne) AddCreatedID(i int64) *ContestParticipantUpdateOne {
+	cpuo.mutation.AddCreatedID(i)
 	return cpuo
 }
 
@@ -488,6 +567,15 @@ func (cpuo *ContestParticipantUpdateOne) sqlSave(ctx context.Context) (_node *Co
 	}
 	if value, ok := cpuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := cpuo.mutation.DeleteAt(); ok {
+		_spec.SetField(contestparticipant.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := cpuo.mutation.CreatedID(); ok {
+		_spec.SetField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := cpuo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := cpuo.mutation.Status(); ok {
 		_spec.SetField(contestparticipant.FieldStatus, field.TypeInt64, value)

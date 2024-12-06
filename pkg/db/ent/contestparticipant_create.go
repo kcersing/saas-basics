@@ -49,6 +49,26 @@ func (cpc *ContestParticipantCreate) SetNillableUpdatedAt(t *time.Time) *Contest
 	return cpc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (cpc *ContestParticipantCreate) SetDeleteAt(t time.Time) *ContestParticipantCreate {
+	cpc.mutation.SetDeleteAt(t)
+	return cpc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (cpc *ContestParticipantCreate) SetCreatedID(i int64) *ContestParticipantCreate {
+	cpc.mutation.SetCreatedID(i)
+	return cpc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (cpc *ContestParticipantCreate) SetNillableCreatedID(i *int64) *ContestParticipantCreate {
+	if i != nil {
+		cpc.SetCreatedID(*i)
+	}
+	return cpc
+}
+
 // SetStatus sets the "status" field.
 func (cpc *ContestParticipantCreate) SetStatus(i int64) *ContestParticipantCreate {
 	cpc.mutation.SetStatus(i)
@@ -173,6 +193,10 @@ func (cpc *ContestParticipantCreate) defaults() {
 		v := contestparticipant.DefaultUpdatedAt()
 		cpc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := cpc.mutation.CreatedID(); !ok {
+		v := contestparticipant.DefaultCreatedID
+		cpc.mutation.SetCreatedID(v)
+	}
 	if _, ok := cpc.mutation.Status(); !ok {
 		v := contestparticipant.DefaultStatus
 		cpc.mutation.SetStatus(v)
@@ -186,6 +210,12 @@ func (cpc *ContestParticipantCreate) check() error {
 	}
 	if _, ok := cpc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ContestParticipant.updated_at"`)}
+	}
+	if _, ok := cpc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "ContestParticipant.delete_at"`)}
+	}
+	if _, ok := cpc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "ContestParticipant.created_id"`)}
 	}
 	return nil
 }
@@ -226,6 +256,14 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 	if value, ok := cpc.mutation.UpdatedAt(); ok {
 		_spec.SetField(contestparticipant.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := cpc.mutation.DeleteAt(); ok {
+		_spec.SetField(contestparticipant.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := cpc.mutation.CreatedID(); ok {
+		_spec.SetField(contestparticipant.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := cpc.mutation.Status(); ok {
 		_spec.SetField(contestparticipant.FieldStatus, field.TypeInt64, value)

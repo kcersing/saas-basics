@@ -34,6 +34,41 @@ func (mu *MessagesUpdate) SetUpdatedAt(t time.Time) *MessagesUpdate {
 	return mu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (mu *MessagesUpdate) SetDeleteAt(t time.Time) *MessagesUpdate {
+	mu.mutation.SetDeleteAt(t)
+	return mu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mu *MessagesUpdate) SetNillableDeleteAt(t *time.Time) *MessagesUpdate {
+	if t != nil {
+		mu.SetDeleteAt(*t)
+	}
+	return mu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mu *MessagesUpdate) SetCreatedID(i int64) *MessagesUpdate {
+	mu.mutation.ResetCreatedID()
+	mu.mutation.SetCreatedID(i)
+	return mu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mu *MessagesUpdate) SetNillableCreatedID(i *int64) *MessagesUpdate {
+	if i != nil {
+		mu.SetCreatedID(*i)
+	}
+	return mu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mu *MessagesUpdate) AddCreatedID(i int64) *MessagesUpdate {
+	mu.mutation.AddCreatedID(i)
+	return mu
+}
+
 // SetType sets the "type" field.
 func (mu *MessagesUpdate) SetType(s string) *MessagesUpdate {
 	mu.mutation.SetType(s)
@@ -143,6 +178,15 @@ func (mu *MessagesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.UpdatedAt(); ok {
 		_spec.SetField(messages.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := mu.mutation.DeleteAt(); ok {
+		_spec.SetField(messages.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mu.mutation.CreatedID(); ok {
+		_spec.SetField(messages.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(messages.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := mu.mutation.GetType(); ok {
 		_spec.SetField(messages.FieldType, field.TypeString, value)
 	}
@@ -178,6 +222,41 @@ type MessagesUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (muo *MessagesUpdateOne) SetUpdatedAt(t time.Time) *MessagesUpdateOne {
 	muo.mutation.SetUpdatedAt(t)
+	return muo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (muo *MessagesUpdateOne) SetDeleteAt(t time.Time) *MessagesUpdateOne {
+	muo.mutation.SetDeleteAt(t)
+	return muo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (muo *MessagesUpdateOne) SetNillableDeleteAt(t *time.Time) *MessagesUpdateOne {
+	if t != nil {
+		muo.SetDeleteAt(*t)
+	}
+	return muo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (muo *MessagesUpdateOne) SetCreatedID(i int64) *MessagesUpdateOne {
+	muo.mutation.ResetCreatedID()
+	muo.mutation.SetCreatedID(i)
+	return muo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (muo *MessagesUpdateOne) SetNillableCreatedID(i *int64) *MessagesUpdateOne {
+	if i != nil {
+		muo.SetCreatedID(*i)
+	}
+	return muo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (muo *MessagesUpdateOne) AddCreatedID(i int64) *MessagesUpdateOne {
+	muo.mutation.AddCreatedID(i)
 	return muo
 }
 
@@ -319,6 +398,15 @@ func (muo *MessagesUpdateOne) sqlSave(ctx context.Context) (_node *Messages, err
 	}
 	if value, ok := muo.mutation.UpdatedAt(); ok {
 		_spec.SetField(messages.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := muo.mutation.DeleteAt(); ok {
+		_spec.SetField(messages.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := muo.mutation.CreatedID(); ok {
+		_spec.SetField(messages.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := muo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(messages.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := muo.mutation.GetType(); ok {
 		_spec.SetField(messages.FieldType, field.TypeString, value)

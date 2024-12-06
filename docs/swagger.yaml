@@ -95,8 +95,12 @@ definitions:
       cancelTime:
         type: integer
       condition:
-        type: string
+        type: integer
       createdAt:
+        type: string
+      createdId:
+        type: integer
+      createdName:
         type: string
       detail:
         type: string
@@ -109,6 +113,8 @@ definitions:
       isCancel:
         type: integer
       isFee:
+        type: integer
+      isShow:
         type: integer
       name:
         type: string
@@ -914,6 +920,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 上传比赛成绩 Summary
+  /service/contest/show:
+    post:
+      responses: {}
   /service/contest/status:
     post:
       description: 更新比赛状态 Description

@@ -35,6 +35,41 @@ func (mdu *MemberDetailsUpdate) SetUpdatedAt(t time.Time) *MemberDetailsUpdate {
 	return mdu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (mdu *MemberDetailsUpdate) SetDeleteAt(t time.Time) *MemberDetailsUpdate {
+	mdu.mutation.SetDeleteAt(t)
+	return mdu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableDeleteAt(t *time.Time) *MemberDetailsUpdate {
+	if t != nil {
+		mdu.SetDeleteAt(*t)
+	}
+	return mdu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mdu *MemberDetailsUpdate) SetCreatedID(i int64) *MemberDetailsUpdate {
+	mdu.mutation.ResetCreatedID()
+	mdu.mutation.SetCreatedID(i)
+	return mdu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableCreatedID(i *int64) *MemberDetailsUpdate {
+	if i != nil {
+		mdu.SetCreatedID(*i)
+	}
+	return mdu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mdu *MemberDetailsUpdate) AddCreatedID(i int64) *MemberDetailsUpdate {
+	mdu.mutation.AddCreatedID(i)
+	return mdu
+}
+
 // SetMemberID sets the "member_id" field.
 func (mdu *MemberDetailsUpdate) SetMemberID(i int64) *MemberDetailsUpdate {
 	mdu.mutation.SetMemberID(i)
@@ -569,6 +604,15 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if value, ok := mdu.mutation.UpdatedAt(); ok {
 		_spec.SetField(memberdetails.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := mdu.mutation.DeleteAt(); ok {
+		_spec.SetField(memberdetails.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mdu.mutation.CreatedID(); ok {
+		_spec.SetField(memberdetails.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mdu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(memberdetails.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := mdu.mutation.Email(); ok {
 		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)
 	}
@@ -759,6 +803,41 @@ type MemberDetailsUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (mduo *MemberDetailsUpdateOne) SetUpdatedAt(t time.Time) *MemberDetailsUpdateOne {
 	mduo.mutation.SetUpdatedAt(t)
+	return mduo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (mduo *MemberDetailsUpdateOne) SetDeleteAt(t time.Time) *MemberDetailsUpdateOne {
+	mduo.mutation.SetDeleteAt(t)
+	return mduo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableDeleteAt(t *time.Time) *MemberDetailsUpdateOne {
+	if t != nil {
+		mduo.SetDeleteAt(*t)
+	}
+	return mduo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mduo *MemberDetailsUpdateOne) SetCreatedID(i int64) *MemberDetailsUpdateOne {
+	mduo.mutation.ResetCreatedID()
+	mduo.mutation.SetCreatedID(i)
+	return mduo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableCreatedID(i *int64) *MemberDetailsUpdateOne {
+	if i != nil {
+		mduo.SetCreatedID(*i)
+	}
+	return mduo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mduo *MemberDetailsUpdateOne) AddCreatedID(i int64) *MemberDetailsUpdateOne {
+	mduo.mutation.AddCreatedID(i)
 	return mduo
 }
 
@@ -1325,6 +1404,15 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	}
 	if value, ok := mduo.mutation.UpdatedAt(); ok {
 		_spec.SetField(memberdetails.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := mduo.mutation.DeleteAt(); ok {
+		_spec.SetField(memberdetails.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mduo.mutation.CreatedID(); ok {
+		_spec.SetField(memberdetails.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mduo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(memberdetails.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := mduo.mutation.Email(); ok {
 		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)

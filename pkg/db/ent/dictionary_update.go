@@ -35,6 +35,41 @@ func (du *DictionaryUpdate) SetUpdatedAt(t time.Time) *DictionaryUpdate {
 	return du
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (du *DictionaryUpdate) SetDeleteAt(t time.Time) *DictionaryUpdate {
+	du.mutation.SetDeleteAt(t)
+	return du
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (du *DictionaryUpdate) SetNillableDeleteAt(t *time.Time) *DictionaryUpdate {
+	if t != nil {
+		du.SetDeleteAt(*t)
+	}
+	return du
+}
+
+// SetCreatedID sets the "created_id" field.
+func (du *DictionaryUpdate) SetCreatedID(i int64) *DictionaryUpdate {
+	du.mutation.ResetCreatedID()
+	du.mutation.SetCreatedID(i)
+	return du
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (du *DictionaryUpdate) SetNillableCreatedID(i *int64) *DictionaryUpdate {
+	if i != nil {
+		du.SetCreatedID(*i)
+	}
+	return du
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (du *DictionaryUpdate) AddCreatedID(i int64) *DictionaryUpdate {
+	du.mutation.AddCreatedID(i)
+	return du
+}
+
 // SetStatus sets the "status" field.
 func (du *DictionaryUpdate) SetStatus(i int64) *DictionaryUpdate {
 	du.mutation.ResetStatus()
@@ -193,6 +228,15 @@ func (du *DictionaryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := du.mutation.UpdatedAt(); ok {
 		_spec.SetField(dictionary.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := du.mutation.DeleteAt(); ok {
+		_spec.SetField(dictionary.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := du.mutation.CreatedID(); ok {
+		_spec.SetField(dictionary.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := du.mutation.AddedCreatedID(); ok {
+		_spec.AddField(dictionary.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := du.mutation.Status(); ok {
 		_spec.SetField(dictionary.FieldStatus, field.TypeInt64, value)
 	}
@@ -279,6 +323,41 @@ type DictionaryUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (duo *DictionaryUpdateOne) SetUpdatedAt(t time.Time) *DictionaryUpdateOne {
 	duo.mutation.SetUpdatedAt(t)
+	return duo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (duo *DictionaryUpdateOne) SetDeleteAt(t time.Time) *DictionaryUpdateOne {
+	duo.mutation.SetDeleteAt(t)
+	return duo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (duo *DictionaryUpdateOne) SetNillableDeleteAt(t *time.Time) *DictionaryUpdateOne {
+	if t != nil {
+		duo.SetDeleteAt(*t)
+	}
+	return duo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (duo *DictionaryUpdateOne) SetCreatedID(i int64) *DictionaryUpdateOne {
+	duo.mutation.ResetCreatedID()
+	duo.mutation.SetCreatedID(i)
+	return duo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (duo *DictionaryUpdateOne) SetNillableCreatedID(i *int64) *DictionaryUpdateOne {
+	if i != nil {
+		duo.SetCreatedID(*i)
+	}
+	return duo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (duo *DictionaryUpdateOne) AddCreatedID(i int64) *DictionaryUpdateOne {
+	duo.mutation.AddCreatedID(i)
 	return duo
 }
 
@@ -469,6 +548,15 @@ func (duo *DictionaryUpdateOne) sqlSave(ctx context.Context) (_node *Dictionary,
 	}
 	if value, ok := duo.mutation.UpdatedAt(); ok {
 		_spec.SetField(dictionary.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := duo.mutation.DeleteAt(); ok {
+		_spec.SetField(dictionary.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := duo.mutation.CreatedID(); ok {
+		_spec.SetField(dictionary.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := duo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(dictionary.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := duo.mutation.Status(); ok {
 		_spec.SetField(dictionary.FieldStatus, field.TypeInt64, value)

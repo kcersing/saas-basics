@@ -35,6 +35,41 @@ func (mnu *MemberNoteUpdate) SetUpdatedAt(t time.Time) *MemberNoteUpdate {
 	return mnu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (mnu *MemberNoteUpdate) SetDeleteAt(t time.Time) *MemberNoteUpdate {
+	mnu.mutation.SetDeleteAt(t)
+	return mnu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mnu *MemberNoteUpdate) SetNillableDeleteAt(t *time.Time) *MemberNoteUpdate {
+	if t != nil {
+		mnu.SetDeleteAt(*t)
+	}
+	return mnu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mnu *MemberNoteUpdate) SetCreatedID(i int64) *MemberNoteUpdate {
+	mnu.mutation.ResetCreatedID()
+	mnu.mutation.SetCreatedID(i)
+	return mnu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mnu *MemberNoteUpdate) SetNillableCreatedID(i *int64) *MemberNoteUpdate {
+	if i != nil {
+		mnu.SetCreatedID(*i)
+	}
+	return mnu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mnu *MemberNoteUpdate) AddCreatedID(i int64) *MemberNoteUpdate {
+	mnu.mutation.AddCreatedID(i)
+	return mnu
+}
+
 // SetStatus sets the "status" field.
 func (mnu *MemberNoteUpdate) SetStatus(i int64) *MemberNoteUpdate {
 	mnu.mutation.ResetStatus()
@@ -180,6 +215,15 @@ func (mnu *MemberNoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mnu.mutation.UpdatedAt(); ok {
 		_spec.SetField(membernote.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := mnu.mutation.DeleteAt(); ok {
+		_spec.SetField(membernote.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mnu.mutation.CreatedID(); ok {
+		_spec.SetField(membernote.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mnu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(membernote.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := mnu.mutation.Status(); ok {
 		_spec.SetField(membernote.FieldStatus, field.TypeInt64, value)
 	}
@@ -247,6 +291,41 @@ type MemberNoteUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (mnuo *MemberNoteUpdateOne) SetUpdatedAt(t time.Time) *MemberNoteUpdateOne {
 	mnuo.mutation.SetUpdatedAt(t)
+	return mnuo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (mnuo *MemberNoteUpdateOne) SetDeleteAt(t time.Time) *MemberNoteUpdateOne {
+	mnuo.mutation.SetDeleteAt(t)
+	return mnuo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mnuo *MemberNoteUpdateOne) SetNillableDeleteAt(t *time.Time) *MemberNoteUpdateOne {
+	if t != nil {
+		mnuo.SetDeleteAt(*t)
+	}
+	return mnuo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mnuo *MemberNoteUpdateOne) SetCreatedID(i int64) *MemberNoteUpdateOne {
+	mnuo.mutation.ResetCreatedID()
+	mnuo.mutation.SetCreatedID(i)
+	return mnuo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mnuo *MemberNoteUpdateOne) SetNillableCreatedID(i *int64) *MemberNoteUpdateOne {
+	if i != nil {
+		mnuo.SetCreatedID(*i)
+	}
+	return mnuo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mnuo *MemberNoteUpdateOne) AddCreatedID(i int64) *MemberNoteUpdateOne {
+	mnuo.mutation.AddCreatedID(i)
 	return mnuo
 }
 
@@ -424,6 +503,15 @@ func (mnuo *MemberNoteUpdateOne) sqlSave(ctx context.Context) (_node *MemberNote
 	}
 	if value, ok := mnuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(membernote.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := mnuo.mutation.DeleteAt(); ok {
+		_spec.SetField(membernote.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mnuo.mutation.CreatedID(); ok {
+		_spec.SetField(membernote.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mnuo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(membernote.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := mnuo.mutation.Status(); ok {
 		_spec.SetField(membernote.FieldStatus, field.TypeInt64, value)

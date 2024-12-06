@@ -36,6 +36,41 @@ func (ru *RoleUpdate) SetUpdatedAt(t time.Time) *RoleUpdate {
 	return ru
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (ru *RoleUpdate) SetDeleteAt(t time.Time) *RoleUpdate {
+	ru.mutation.SetDeleteAt(t)
+	return ru
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (ru *RoleUpdate) SetNillableDeleteAt(t *time.Time) *RoleUpdate {
+	if t != nil {
+		ru.SetDeleteAt(*t)
+	}
+	return ru
+}
+
+// SetCreatedID sets the "created_id" field.
+func (ru *RoleUpdate) SetCreatedID(i int64) *RoleUpdate {
+	ru.mutation.ResetCreatedID()
+	ru.mutation.SetCreatedID(i)
+	return ru
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (ru *RoleUpdate) SetNillableCreatedID(i *int64) *RoleUpdate {
+	if i != nil {
+		ru.SetCreatedID(*i)
+	}
+	return ru
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (ru *RoleUpdate) AddCreatedID(i int64) *RoleUpdate {
+	ru.mutation.AddCreatedID(i)
+	return ru
+}
+
 // SetStatus sets the "status" field.
 func (ru *RoleUpdate) SetStatus(i int64) *RoleUpdate {
 	ru.mutation.ResetStatus()
@@ -241,6 +276,15 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ru.mutation.UpdatedAt(); ok {
 		_spec.SetField(role.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := ru.mutation.DeleteAt(); ok {
+		_spec.SetField(role.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := ru.mutation.CreatedID(); ok {
+		_spec.SetField(role.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := ru.mutation.AddedCreatedID(); ok {
+		_spec.AddField(role.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := ru.mutation.Status(); ok {
 		_spec.SetField(role.FieldStatus, field.TypeInt64, value)
 	}
@@ -344,6 +388,41 @@ type RoleUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (ruo *RoleUpdateOne) SetUpdatedAt(t time.Time) *RoleUpdateOne {
 	ruo.mutation.SetUpdatedAt(t)
+	return ruo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (ruo *RoleUpdateOne) SetDeleteAt(t time.Time) *RoleUpdateOne {
+	ruo.mutation.SetDeleteAt(t)
+	return ruo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (ruo *RoleUpdateOne) SetNillableDeleteAt(t *time.Time) *RoleUpdateOne {
+	if t != nil {
+		ruo.SetDeleteAt(*t)
+	}
+	return ruo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (ruo *RoleUpdateOne) SetCreatedID(i int64) *RoleUpdateOne {
+	ruo.mutation.ResetCreatedID()
+	ruo.mutation.SetCreatedID(i)
+	return ruo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (ruo *RoleUpdateOne) SetNillableCreatedID(i *int64) *RoleUpdateOne {
+	if i != nil {
+		ruo.SetCreatedID(*i)
+	}
+	return ruo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (ruo *RoleUpdateOne) AddCreatedID(i int64) *RoleUpdateOne {
+	ruo.mutation.AddCreatedID(i)
 	return ruo
 }
 
@@ -581,6 +660,15 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 	}
 	if value, ok := ruo.mutation.UpdatedAt(); ok {
 		_spec.SetField(role.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := ruo.mutation.DeleteAt(); ok {
+		_spec.SetField(role.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := ruo.mutation.CreatedID(); ok {
+		_spec.SetField(role.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := ruo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(role.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := ruo.mutation.Status(); ok {
 		_spec.SetField(role.FieldStatus, field.TypeInt64, value)

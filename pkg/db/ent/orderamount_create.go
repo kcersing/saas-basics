@@ -49,6 +49,26 @@ func (oac *OrderAmountCreate) SetNillableUpdatedAt(t *time.Time) *OrderAmountCre
 	return oac
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (oac *OrderAmountCreate) SetDeleteAt(t time.Time) *OrderAmountCreate {
+	oac.mutation.SetDeleteAt(t)
+	return oac
+}
+
+// SetCreatedID sets the "created_id" field.
+func (oac *OrderAmountCreate) SetCreatedID(i int64) *OrderAmountCreate {
+	oac.mutation.SetCreatedID(i)
+	return oac
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (oac *OrderAmountCreate) SetNillableCreatedID(i *int64) *OrderAmountCreate {
+	if i != nil {
+		oac.SetCreatedID(*i)
+	}
+	return oac
+}
+
 // SetOrderID sets the "order_id" field.
 func (oac *OrderAmountCreate) SetOrderID(i int64) *OrderAmountCreate {
 	oac.mutation.SetOrderID(i)
@@ -173,6 +193,10 @@ func (oac *OrderAmountCreate) defaults() {
 		v := orderamount.DefaultUpdatedAt()
 		oac.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := oac.mutation.CreatedID(); !ok {
+		v := orderamount.DefaultCreatedID
+		oac.mutation.SetCreatedID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -182,6 +206,12 @@ func (oac *OrderAmountCreate) check() error {
 	}
 	if _, ok := oac.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OrderAmount.updated_at"`)}
+	}
+	if _, ok := oac.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "OrderAmount.delete_at"`)}
+	}
+	if _, ok := oac.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "OrderAmount.created_id"`)}
 	}
 	if v, ok := oac.mutation.OrderID(); ok {
 		if err := orderamount.OrderIDValidator(v); err != nil {
@@ -227,6 +257,14 @@ func (oac *OrderAmountCreate) createSpec() (*OrderAmount, *sqlgraph.CreateSpec) 
 	if value, ok := oac.mutation.UpdatedAt(); ok {
 		_spec.SetField(orderamount.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := oac.mutation.DeleteAt(); ok {
+		_spec.SetField(orderamount.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := oac.mutation.CreatedID(); ok {
+		_spec.SetField(orderamount.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := oac.mutation.Total(); ok {
 		_spec.SetField(orderamount.FieldTotal, field.TypeFloat64, value)

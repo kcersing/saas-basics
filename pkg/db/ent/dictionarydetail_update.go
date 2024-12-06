@@ -36,6 +36,41 @@ func (ddu *DictionaryDetailUpdate) SetUpdatedAt(t time.Time) *DictionaryDetailUp
 	return ddu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (ddu *DictionaryDetailUpdate) SetDeleteAt(t time.Time) *DictionaryDetailUpdate {
+	ddu.mutation.SetDeleteAt(t)
+	return ddu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (ddu *DictionaryDetailUpdate) SetNillableDeleteAt(t *time.Time) *DictionaryDetailUpdate {
+	if t != nil {
+		ddu.SetDeleteAt(*t)
+	}
+	return ddu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (ddu *DictionaryDetailUpdate) SetCreatedID(i int64) *DictionaryDetailUpdate {
+	ddu.mutation.ResetCreatedID()
+	ddu.mutation.SetCreatedID(i)
+	return ddu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (ddu *DictionaryDetailUpdate) SetNillableCreatedID(i *int64) *DictionaryDetailUpdate {
+	if i != nil {
+		ddu.SetCreatedID(*i)
+	}
+	return ddu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (ddu *DictionaryDetailUpdate) AddCreatedID(i int64) *DictionaryDetailUpdate {
+	ddu.mutation.AddCreatedID(i)
+	return ddu
+}
+
 // SetStatus sets the "status" field.
 func (ddu *DictionaryDetailUpdate) SetStatus(i int64) *DictionaryDetailUpdate {
 	ddu.mutation.ResetStatus()
@@ -225,6 +260,15 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if value, ok := ddu.mutation.UpdatedAt(); ok {
 		_spec.SetField(dictionarydetail.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := ddu.mutation.DeleteAt(); ok {
+		_spec.SetField(dictionarydetail.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := ddu.mutation.CreatedID(); ok {
+		_spec.SetField(dictionarydetail.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := ddu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(dictionarydetail.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := ddu.mutation.Status(); ok {
 		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt64, value)
 	}
@@ -340,6 +384,41 @@ type DictionaryDetailUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (dduo *DictionaryDetailUpdateOne) SetUpdatedAt(t time.Time) *DictionaryDetailUpdateOne {
 	dduo.mutation.SetUpdatedAt(t)
+	return dduo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (dduo *DictionaryDetailUpdateOne) SetDeleteAt(t time.Time) *DictionaryDetailUpdateOne {
+	dduo.mutation.SetDeleteAt(t)
+	return dduo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (dduo *DictionaryDetailUpdateOne) SetNillableDeleteAt(t *time.Time) *DictionaryDetailUpdateOne {
+	if t != nil {
+		dduo.SetDeleteAt(*t)
+	}
+	return dduo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (dduo *DictionaryDetailUpdateOne) SetCreatedID(i int64) *DictionaryDetailUpdateOne {
+	dduo.mutation.ResetCreatedID()
+	dduo.mutation.SetCreatedID(i)
+	return dduo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (dduo *DictionaryDetailUpdateOne) SetNillableCreatedID(i *int64) *DictionaryDetailUpdateOne {
+	if i != nil {
+		dduo.SetCreatedID(*i)
+	}
+	return dduo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (dduo *DictionaryDetailUpdateOne) AddCreatedID(i int64) *DictionaryDetailUpdateOne {
+	dduo.mutation.AddCreatedID(i)
 	return dduo
 }
 
@@ -561,6 +640,15 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 	}
 	if value, ok := dduo.mutation.UpdatedAt(); ok {
 		_spec.SetField(dictionarydetail.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := dduo.mutation.DeleteAt(); ok {
+		_spec.SetField(dictionarydetail.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := dduo.mutation.CreatedID(); ok {
+		_spec.SetField(dictionarydetail.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := dduo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(dictionarydetail.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := dduo.mutation.Status(); ok {
 		_spec.SetField(dictionarydetail.FieldStatus, field.TypeInt64, value)

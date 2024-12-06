@@ -49,6 +49,26 @@ func (tc *TokenCreate) SetNillableUpdatedAt(t *time.Time) *TokenCreate {
 	return tc
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (tc *TokenCreate) SetDeleteAt(t time.Time) *TokenCreate {
+	tc.mutation.SetDeleteAt(t)
+	return tc
+}
+
+// SetCreatedID sets the "created_id" field.
+func (tc *TokenCreate) SetCreatedID(i int64) *TokenCreate {
+	tc.mutation.SetCreatedID(i)
+	return tc
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (tc *TokenCreate) SetNillableCreatedID(i *int64) *TokenCreate {
+	if i != nil {
+		tc.SetCreatedID(*i)
+	}
+	return tc
+}
+
 // SetUserID sets the "user_id" field.
 func (tc *TokenCreate) SetUserID(i int64) *TokenCreate {
 	tc.mutation.SetUserID(i)
@@ -141,6 +161,10 @@ func (tc *TokenCreate) defaults() {
 		v := token.DefaultUpdatedAt()
 		tc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := tc.mutation.CreatedID(); !ok {
+		v := token.DefaultCreatedID
+		tc.mutation.SetCreatedID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -150,6 +174,12 @@ func (tc *TokenCreate) check() error {
 	}
 	if _, ok := tc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Token.updated_at"`)}
+	}
+	if _, ok := tc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "Token.delete_at"`)}
+	}
+	if _, ok := tc.mutation.CreatedID(); !ok {
+		return &ValidationError{Name: "created_id", err: errors.New(`ent: missing required field "Token.created_id"`)}
 	}
 	if _, ok := tc.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "Token.user_id"`)}
@@ -202,6 +232,14 @@ func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.UpdatedAt(); ok {
 		_spec.SetField(token.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := tc.mutation.DeleteAt(); ok {
+		_spec.SetField(token.FieldDeleteAt, field.TypeTime, value)
+		_node.DeleteAt = value
+	}
+	if value, ok := tc.mutation.CreatedID(); ok {
+		_spec.SetField(token.FieldCreatedID, field.TypeInt64, value)
+		_node.CreatedID = value
 	}
 	if value, ok := tc.mutation.UserID(); ok {
 		_spec.SetField(token.FieldUserID, field.TypeInt64, value)

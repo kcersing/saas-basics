@@ -14,6 +14,7 @@ import (
 	contest2 "saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
 	"saas/pkg/db/ent/predicate"
+	"saas/pkg/db/ent/user"
 	"saas/pkg/minio"
 	"strconv"
 	"time"
@@ -29,10 +30,16 @@ type Contest struct {
 
 func (c Contest) CreateContest(req contest.ContestInfo) error {
 
-	signStartAt, _ := time.Parse(time.DateOnly, req.SignStartAt)
-	signEndAt, _ := time.Parse(time.DateOnly, req.SignEndAt)
-	startAt, _ := time.Parse(time.DateOnly, req.StartAt)
-	endAt, _ := time.Parse(time.DateOnly, req.EndAt)
+	signStartAt, _ := time.Parse(time.DateTime, req.SignStartAt)
+	signEndAt, _ := time.Parse(time.DateTime, req.SignEndAt)
+	startAt, _ := time.Parse(time.DateTime, req.StartAt)
+	endAt, _ := time.Parse(time.DateTime, req.EndAt)
+
+	var createdId int64
+	userId, exist := c.c.Get("userId")
+	if !exist || userId == nil {
+		createdId = userId.(int64)
+	}
 
 	tx, err := c.db.Tx(c.ctx)
 	if err != nil {
@@ -54,7 +61,9 @@ func (c Contest) CreateContest(req contest.ContestInfo) error {
 		SetIsCancel(req.IsCancel).
 		SetCancelTime(req.CancelTime).
 		SetSignFields(req.SignFields).
-		SetIsFee(req.IsFee)
+		SetIsFee(req.IsFee).
+		SetIsShow(req.IsShow).
+		SetCreatedID(createdId)
 
 	_, err = cont.Save(c.ctx)
 
@@ -65,10 +74,10 @@ func (c Contest) CreateContest(req contest.ContestInfo) error {
 }
 
 func (c Contest) UpdateContest(req contest.ContestInfo) error {
-	signStartAt, _ := time.Parse(time.DateOnly, req.SignStartAt)
-	signEndAt, _ := time.Parse(time.DateOnly, req.SignEndAt)
-	startAt, _ := time.Parse(time.DateOnly, req.StartAt)
-	endAt, _ := time.Parse(time.DateOnly, req.EndAt)
+	signStartAt, _ := time.Parse(time.DateTime, req.SignStartAt)
+	signEndAt, _ := time.Parse(time.DateTime, req.SignEndAt)
+	startAt, _ := time.Parse(time.DateTime, req.StartAt)
+	endAt, _ := time.Parse(time.DateTime, req.EndAt)
 
 	tx, err := c.db.Tx(c.ctx)
 	if err != nil {
@@ -121,15 +130,15 @@ func (c Contest) ContestList(req contest.ContestListReq) (resp []*contest.Contes
 	}
 
 	if req.SignStartAt != "" && req.SignEndAt != "" {
-		signStartAt, _ := time.Parse(time.DateOnly, req.SignStartAt)
-		signEndAt, _ := time.Parse(time.DateOnly, req.SignEndAt)
+		signStartAt, _ := time.Parse(time.DateTime, req.SignStartAt)
+		signEndAt, _ := time.Parse(time.DateTime, req.SignEndAt)
 
 		predicates = append(predicates, contest2.SignStartAtGT(signStartAt))
 		predicates = append(predicates, contest2.SignEndAtEQ(signEndAt))
 	}
 	if req.StartAt != "" && req.EndAt != "" {
-		startAt, _ := time.Parse(time.DateOnly, req.StartAt)
-		endAt, _ := time.Parse(time.DateOnly, req.EndAt)
+		startAt, _ := time.Parse(time.DateTime, req.StartAt)
+		endAt, _ := time.Parse(time.DateTime, req.EndAt)
 
 		predicates = append(predicates, contest2.StartAtGT(startAt))
 		predicates = append(predicates, contest2.EndAtEQ(endAt))
@@ -179,7 +188,14 @@ func (c Contest) entContestInfo(v *ent.Contest) *contest.ContestInfo {
 	startAt := v.SignStartAt.Unix()
 	signEndAt := v.SignStartAt.Unix()
 	endAt := v.SignStartAt.Unix()
+	createdAt := v.CreatedAt.Unix()
 	pic := minio.URLconvert(c.ctx, c.c, v.Pic)
+	var createdName string
+	first, _ := c.db.User.Query().Where(user.IDEQ(v.CreatedID)).First(c.ctx)
+	if first != nil {
+		createdName = first.Name
+	}
+
 	return &contest.ContestInfo{
 		Pic:         pic,
 		ID:          v.ID,
@@ -197,11 +213,20 @@ func (c Contest) entContestInfo(v *ent.Contest) *contest.ContestInfo {
 		CancelTime:  v.CancelTime,
 		SignFields:  v.SignFields,
 		IsFee:       v.IsFee,
+		CreatedAt:   strconv.FormatInt(createdAt, 10),
+		Condition:   v.Condition,
+		CreatedId:   v.CreatedID,
+		CreatedName: createdName,
+		IsShow:      v.IsShow,
 	}
 }
 
 func (c Contest) UpdateContestStatus(ID int64, status int64) error {
 	_, err := c.db.Contest.Update().Where(contest2.IDEQ(ID)).SetStatus(status).Save(c.ctx)
+	return err
+}
+func (c Contest) UpdateContestShow(ID int64, status int64) error {
+	_, err := c.db.Contest.Update().Where(contest2.IDEQ(ID)).SetIsShow(status).Save(c.ctx)
 	return err
 }
 

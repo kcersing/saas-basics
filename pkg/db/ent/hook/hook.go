@@ -20,6 +20,30 @@ func (f APIFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.APIMutation", m)
 }
 
+// The BootcampFunc type is an adapter to allow the use of ordinary
+// function as Bootcamp mutator.
+type BootcampFunc func(context.Context, *ent.BootcampMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BootcampFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.BootcampMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BootcampMutation", m)
+}
+
+// The BootcampParticipantFunc type is an adapter to allow the use of ordinary
+// function as BootcampParticipant mutator.
+type BootcampParticipantFunc func(context.Context, *ent.BootcampParticipantMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BootcampParticipantFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.BootcampParticipantMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BootcampParticipantMutation", m)
+}
+
 // The ContestFunc type is an adapter to allow the use of ordinary
 // function as Contest mutator.
 type ContestFunc func(context.Context, *ent.ContestMutation) (ent.Value, error)

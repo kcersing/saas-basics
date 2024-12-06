@@ -35,6 +35,41 @@ func (mccu *MemberContractContentUpdate) SetUpdatedAt(t time.Time) *MemberContra
 	return mccu
 }
 
+// SetDeleteAt sets the "delete_at" field.
+func (mccu *MemberContractContentUpdate) SetDeleteAt(t time.Time) *MemberContractContentUpdate {
+	mccu.mutation.SetDeleteAt(t)
+	return mccu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mccu *MemberContractContentUpdate) SetNillableDeleteAt(t *time.Time) *MemberContractContentUpdate {
+	if t != nil {
+		mccu.SetDeleteAt(*t)
+	}
+	return mccu
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mccu *MemberContractContentUpdate) SetCreatedID(i int64) *MemberContractContentUpdate {
+	mccu.mutation.ResetCreatedID()
+	mccu.mutation.SetCreatedID(i)
+	return mccu
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mccu *MemberContractContentUpdate) SetNillableCreatedID(i *int64) *MemberContractContentUpdate {
+	if i != nil {
+		mccu.SetCreatedID(*i)
+	}
+	return mccu
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mccu *MemberContractContentUpdate) AddCreatedID(i int64) *MemberContractContentUpdate {
+	mccu.mutation.AddCreatedID(i)
+	return mccu
+}
+
 // SetMemberContractID sets the "member_contract_id" field.
 func (mccu *MemberContractContentUpdate) SetMemberContractID(i int64) *MemberContractContentUpdate {
 	mccu.mutation.SetMemberContractID(i)
@@ -173,6 +208,15 @@ func (mccu *MemberContractContentUpdate) sqlSave(ctx context.Context) (n int, er
 	if value, ok := mccu.mutation.UpdatedAt(); ok {
 		_spec.SetField(membercontractcontent.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := mccu.mutation.DeleteAt(); ok {
+		_spec.SetField(membercontractcontent.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mccu.mutation.CreatedID(); ok {
+		_spec.SetField(membercontractcontent.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mccu.mutation.AddedCreatedID(); ok {
+		_spec.AddField(membercontractcontent.FieldCreatedID, field.TypeInt64, value)
+	}
 	if value, ok := mccu.mutation.Content(); ok {
 		_spec.SetField(membercontractcontent.FieldContent, field.TypeString, value)
 	}
@@ -237,6 +281,41 @@ type MemberContractContentUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (mccuo *MemberContractContentUpdateOne) SetUpdatedAt(t time.Time) *MemberContractContentUpdateOne {
 	mccuo.mutation.SetUpdatedAt(t)
+	return mccuo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (mccuo *MemberContractContentUpdateOne) SetDeleteAt(t time.Time) *MemberContractContentUpdateOne {
+	mccuo.mutation.SetDeleteAt(t)
+	return mccuo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (mccuo *MemberContractContentUpdateOne) SetNillableDeleteAt(t *time.Time) *MemberContractContentUpdateOne {
+	if t != nil {
+		mccuo.SetDeleteAt(*t)
+	}
+	return mccuo
+}
+
+// SetCreatedID sets the "created_id" field.
+func (mccuo *MemberContractContentUpdateOne) SetCreatedID(i int64) *MemberContractContentUpdateOne {
+	mccuo.mutation.ResetCreatedID()
+	mccuo.mutation.SetCreatedID(i)
+	return mccuo
+}
+
+// SetNillableCreatedID sets the "created_id" field if the given value is not nil.
+func (mccuo *MemberContractContentUpdateOne) SetNillableCreatedID(i *int64) *MemberContractContentUpdateOne {
+	if i != nil {
+		mccuo.SetCreatedID(*i)
+	}
+	return mccuo
+}
+
+// AddCreatedID adds i to the "created_id" field.
+func (mccuo *MemberContractContentUpdateOne) AddCreatedID(i int64) *MemberContractContentUpdateOne {
+	mccuo.mutation.AddCreatedID(i)
 	return mccuo
 }
 
@@ -407,6 +486,15 @@ func (mccuo *MemberContractContentUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if value, ok := mccuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(membercontractcontent.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := mccuo.mutation.DeleteAt(); ok {
+		_spec.SetField(membercontractcontent.FieldDeleteAt, field.TypeTime, value)
+	}
+	if value, ok := mccuo.mutation.CreatedID(); ok {
+		_spec.SetField(membercontractcontent.FieldCreatedID, field.TypeInt64, value)
+	}
+	if value, ok := mccuo.mutation.AddedCreatedID(); ok {
+		_spec.AddField(membercontractcontent.FieldCreatedID, field.TypeInt64, value)
 	}
 	if value, ok := mccuo.mutation.Content(); ok {
 		_spec.SetField(membercontractcontent.FieldContent, field.TypeString, value)

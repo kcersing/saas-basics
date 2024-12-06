@@ -28,7 +28,7 @@ func (Contest) Fields() []ent.Field {
 		field.String("sponsor").Comment("主办方").Optional(),
 		field.Float("fee").Comment("费用").Optional(),
 		field.Int64("is_fee").Default(1).Comment("是否有费用 1 无 2 有").Optional(),
-
+		field.Int64("is_show").Default(1).Comment("是否展示 1 展示 2 不展示").Optional(),
 		field.Int64("is_cancel").Comment("是否支持取消报名 0支持 1不支持").Default(0).Optional(),
 		field.Int64("cancel_time").Comment("取消时间").Default(0).Optional(),
 		field.String("detail").Comment("详情").Optional(),

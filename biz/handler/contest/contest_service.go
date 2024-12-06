@@ -4,14 +4,15 @@ package contest
 
 import (
 	"context"
-	"saas/biz/infras/service"
-	"saas/pkg/errno"
-	"saas/pkg/utils"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	qrcode "github.com/skip2/go-qrcode"
+	"saas/biz/infras/service"
 	base "saas/idl_gen/model/base"
 	contest "saas/idl_gen/model/contest"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
+	"strconv"
 )
 
 // CreateContest .
@@ -111,31 +112,6 @@ func ContestList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
-	return
-}
-
-// UpdateMemberStatus .
-//
-//	@Summary		更新比赛状态 Summary
-//	@Description	更新比赛状态 Description
-//	@Param			request	body		base.StatusCodeReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/contest/status [POST]
-func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.StatusCodeReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	err = service.NewContest(ctx, c).UpdateParticipantStatus(req.ID, req.Status)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
 
@@ -297,8 +273,59 @@ func PromotionalLinks(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	qrCode, err := qrcode.Encode("weixin://dl/business/?t= *TICKET*&Contest_id="+strconv.FormatInt(req.ID, 10), qrcode.Medium, 256)
+	if err != nil {
+		utils.SendResponse(c, errno.ServiceErr, nil, 0, "")
+	}
+	type img struct {
+		Bs64 []byte `json:"bs64"`
+	}
+	utils.SendResponse(c, errno.Success, img{Bs64: qrCode}, 0, "")
+}
 
-	resp := new(base.NilResponse)
+// UpdateContestStatus .
+//
+//	@Summary		更新比赛状态 Summary
+//	@Description	更新比赛状态 Description
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@router			/service/contest/status [POST]
+//
+// @router /service/contest/status [POST]
+func UpdateContestStatus(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.StatusCodeReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewContest(ctx, c).UpdateContestStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
+
+// UpdateContestShow .
+// @router /service/contest/show [POST]
+func UpdateContestShow(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.StatusCodeReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = service.NewContest(ctx, c).UpdateContestShow(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
