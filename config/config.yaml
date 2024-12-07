@@ -15,8 +15,7 @@ Auth:
   AccessExpire: 259200 # seconds, 3 days
 
 Redis:
-  Host: 127.0.0.1
-  Port: 6379
+  Host:
   Type: node
 
 MySQL:
@@ -43,6 +42,12 @@ Casbin:
 
 # 支付平台信息配置
 Payment:
+  Alipay: # 以下配置文件为新沙箱环境配置
+    appid:
+    private_key:
+    app_public_cert_content:
+    alipay_root_cert_content:
+    alipay_public_cert_content:
   Wechat:
     appid: wx1234567890
     mch_id:
@@ -51,12 +56,8 @@ Payment:
     cert_file_content:
     key_file_content:
     pkcs12_file_content:
-  Alipay: # 以下配置文件为新沙箱环境配置
-    appid:
-    private_key:
-    app_public_cert_content:
-    alipay_root_cert_content:
-    alipay_public_cert_content:
+    serial_no:
+    notify_url:
 
 Minio:
   EndPoint : 39.107.73.87:9000

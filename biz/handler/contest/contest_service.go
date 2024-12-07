@@ -389,3 +389,25 @@ func ParticipantListListExport(ctx context.Context, c *app.RequestContext) {
 		"url": export,
 	}, 0, "")
 }
+
+// ParticipantFinish .
+//
+//	@Summary		参赛人确定比赛 Summary
+//	@Description	参赛人确定比赛 Description
+//	@Param			request	body		contest.ParticipantFinishReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/participant/finish [POST]
+func ParticipantFinish(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req contest.ParticipantFinishReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

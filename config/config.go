@@ -38,7 +38,6 @@ type Auth struct {
 
 type Redis struct {
 	Host string `mapstructure:"Host" json:"Host"`
-	Port int    `mapstructure:"Port" json:"Port"`
 	Type string `mapstructure:"Type" json:"Type"`
 }
 
@@ -47,11 +46,11 @@ type CasbinConf struct {
 }
 
 type Payment struct {
-	Wechat *WechatPay `mapstructure:"Wechat" yaml:"Wechat"`
-	Alipay *AliPay    `mapstructure:"Alipay" yaml:"Alipay"`
+	Alipay *AliPay `mapstructure:"Alipay" yaml:"Alipay"`
+	Wechat *Wechat `mapstructure:"Wechat" json:"Wechat"`
 }
 
-type WechatPay struct {
+type Wechat struct {
 	Appid             string `mapstructure:"ModelText" yaml:"appid"`
 	MchId             string `mapstructure:"ModelText" yaml:"mch_id"`
 	ApiKey            string `mapstructure:"ModelText" yaml:"api_key"`
@@ -59,6 +58,8 @@ type WechatPay struct {
 	CertFileContent   string `mapstructure:"ModelText" yaml:"cert_file_content"`
 	KeyFileContent    string `mapstructure:"ModelText" yaml:"key_file_content"`
 	Pkcs12FileContent string `mapstructure:"ModelText" yaml:"pkcs12_file_content"`
+	SerialNo          string `mapstructure:"ModelText" yaml:"serial_no"`
+	NotifyUrl         string `mapstructure:"ModelText" yaml:"notify_url"`
 }
 
 type AliPay struct {

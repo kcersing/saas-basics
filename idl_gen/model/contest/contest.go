@@ -9,6 +9,238 @@ import (
 	"saas/idl_gen/model/base"
 )
 
+type ParticipantFinishReq struct {
+	ContestId int64   `thrift:"contestId,1,optional" form:"contestId" json:"contestId" query:"contestId"`
+	MemberId  []int64 `thrift:"memberId,2,optional" form:"memberId" json:"memberId" query:"memberId"`
+}
+
+func NewParticipantFinishReq() *ParticipantFinishReq {
+	return &ParticipantFinishReq{
+
+		ContestId: 0,
+	}
+}
+
+func (p *ParticipantFinishReq) InitDefault() {
+	p.ContestId = 0
+}
+
+var ParticipantFinishReq_ContestId_DEFAULT int64 = 0
+
+func (p *ParticipantFinishReq) GetContestId() (v int64) {
+	if !p.IsSetContestId() {
+		return ParticipantFinishReq_ContestId_DEFAULT
+	}
+	return p.ContestId
+}
+
+var ParticipantFinishReq_MemberId_DEFAULT []int64
+
+func (p *ParticipantFinishReq) GetMemberId() (v []int64) {
+	if !p.IsSetMemberId() {
+		return ParticipantFinishReq_MemberId_DEFAULT
+	}
+	return p.MemberId
+}
+
+var fieldIDToName_ParticipantFinishReq = map[int16]string{
+	1: "contestId",
+	2: "memberId",
+}
+
+func (p *ParticipantFinishReq) IsSetContestId() bool {
+	return p.ContestId != ParticipantFinishReq_ContestId_DEFAULT
+}
+
+func (p *ParticipantFinishReq) IsSetMemberId() bool {
+	return p.MemberId != nil
+}
+
+func (p *ParticipantFinishReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ParticipantFinishReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ParticipantFinishReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.ContestId = _field
+	return nil
+}
+func (p *ParticipantFinishReq) ReadField2(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]int64, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem int64
+		if v, err := iprot.ReadI64(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.MemberId = _field
+	return nil
+}
+
+func (p *ParticipantFinishReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ParticipantFinishReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ParticipantFinishReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetContestId() {
+		if err = oprot.WriteFieldBegin("contestId", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.ContestId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ParticipantFinishReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMemberId() {
+		if err = oprot.WriteFieldBegin("memberId", thrift.LIST, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.I64, len(p.MemberId)); err != nil {
+			return err
+		}
+		for _, v := range p.MemberId {
+			if err := oprot.WriteI64(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ParticipantFinishReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ParticipantFinishReq(%+v)", *p)
+
+}
+
 type ResultsUploadReq struct {
 	Pic string `thrift:"pic,1,optional" form:"pic" json:"pic" query:"pic"`
 }
@@ -3233,6 +3465,8 @@ type ContestService interface {
 	PromotionalLinks(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 
 	DelContest(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
+
+	ParticipantFinish(ctx context.Context, req *ParticipantFinishReq) (r *base.NilResponse, err error)
 }
 
 type ContestServiceClient struct {
@@ -3396,6 +3630,15 @@ func (p *ContestServiceClient) DelContest(ctx context.Context, req *base.IDReq) 
 	}
 	return _result.GetSuccess(), nil
 }
+func (p *ContestServiceClient) ParticipantFinish(ctx context.Context, req *ParticipantFinishReq) (r *base.NilResponse, err error) {
+	var _args ContestServiceParticipantFinishArgs
+	_args.Req = req
+	var _result ContestServiceParticipantFinishResult
+	if err = p.Client_().Call(ctx, "ParticipantFinish", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
 
 type ContestServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
@@ -3432,6 +3675,7 @@ func NewContestServiceProcessor(handler ContestService) *ContestServiceProcessor
 	self.AddToProcessorMap("ResultsUpload", &contestServiceProcessorResultsUpload{handler: handler})
 	self.AddToProcessorMap("PromotionalLinks", &contestServiceProcessorPromotionalLinks{handler: handler})
 	self.AddToProcessorMap("DelContest", &contestServiceProcessorDelContest{handler: handler})
+	self.AddToProcessorMap("ParticipantFinish", &contestServiceProcessorParticipantFinish{handler: handler})
 	return self
 }
 func (p *ContestServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -4155,6 +4399,54 @@ func (p *contestServiceProcessorDelContest) Process(ctx context.Context, seqId i
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("DelContest", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type contestServiceProcessorParticipantFinish struct {
+	handler ContestService
+}
+
+func (p *contestServiceProcessorParticipantFinish) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ContestServiceParticipantFinishArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("ParticipantFinish", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := ContestServiceParticipantFinishResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.ParticipantFinish(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ParticipantFinish: "+err2.Error())
+		oprot.WriteMessageBegin("ParticipantFinish", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("ParticipantFinish", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -8579,5 +8871,299 @@ func (p *ContestServiceDelContestResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ContestServiceDelContestResult(%+v)", *p)
+
+}
+
+type ContestServiceParticipantFinishArgs struct {
+	Req *ParticipantFinishReq `thrift:"req,1"`
+}
+
+func NewContestServiceParticipantFinishArgs() *ContestServiceParticipantFinishArgs {
+	return &ContestServiceParticipantFinishArgs{}
+}
+
+func (p *ContestServiceParticipantFinishArgs) InitDefault() {
+}
+
+var ContestServiceParticipantFinishArgs_Req_DEFAULT *ParticipantFinishReq
+
+func (p *ContestServiceParticipantFinishArgs) GetReq() (v *ParticipantFinishReq) {
+	if !p.IsSetReq() {
+		return ContestServiceParticipantFinishArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_ContestServiceParticipantFinishArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *ContestServiceParticipantFinishArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ContestServiceParticipantFinishArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ContestServiceParticipantFinishArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ContestServiceParticipantFinishArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewParticipantFinishReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *ContestServiceParticipantFinishArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ParticipantFinish_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ContestServiceParticipantFinishArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ContestServiceParticipantFinishArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ContestServiceParticipantFinishArgs(%+v)", *p)
+
+}
+
+type ContestServiceParticipantFinishResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewContestServiceParticipantFinishResult() *ContestServiceParticipantFinishResult {
+	return &ContestServiceParticipantFinishResult{}
+}
+
+func (p *ContestServiceParticipantFinishResult) InitDefault() {
+}
+
+var ContestServiceParticipantFinishResult_Success_DEFAULT *base.NilResponse
+
+func (p *ContestServiceParticipantFinishResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return ContestServiceParticipantFinishResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_ContestServiceParticipantFinishResult = map[int16]string{
+	0: "success",
+}
+
+func (p *ContestServiceParticipantFinishResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ContestServiceParticipantFinishResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ContestServiceParticipantFinishResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ContestServiceParticipantFinishResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *ContestServiceParticipantFinishResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ParticipantFinish_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ContestServiceParticipantFinishResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *ContestServiceParticipantFinishResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ContestServiceParticipantFinishResult(%+v)", *p)
 
 }

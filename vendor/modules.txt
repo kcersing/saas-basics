@@ -34,6 +34,62 @@ entgo.io/ent/schema/edge
 entgo.io/ent/schema/field
 entgo.io/ent/schema/index
 entgo.io/ent/schema/mixin
+# github.com/ArtisanCloud/PowerLibs/v2 v2.0.49
+## explicit; go 1.17
+github.com/ArtisanCloud/PowerLibs/v2/cache
+github.com/ArtisanCloud/PowerLibs/v2/fmt
+github.com/ArtisanCloud/PowerLibs/v2/http/contract
+github.com/ArtisanCloud/PowerLibs/v2/http/drivers/gout
+github.com/ArtisanCloud/PowerLibs/v2/http/request
+github.com/ArtisanCloud/PowerLibs/v2/http/response
+github.com/ArtisanCloud/PowerLibs/v2/logger
+github.com/ArtisanCloud/PowerLibs/v2/logger/contract
+github.com/ArtisanCloud/PowerLibs/v2/logger/drivers/zap
+github.com/ArtisanCloud/PowerLibs/v2/object
+github.com/ArtisanCloud/PowerLibs/v2/security/encryption
+github.com/ArtisanCloud/PowerLibs/v2/security/sign
+# github.com/ArtisanCloud/PowerWeChat/v2 v2.0.40
+## explicit; go 1.17
+github.com/ArtisanCloud/PowerWeChat/v2/src/basicService/jssdk
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/contract
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/decorators
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/messages
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/models
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/power
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/providers
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/response
+github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/support
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/base
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/bill
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/bill/response
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/jssdk
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/kernel
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/notify
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/notify/request
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/order
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/order/request
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/order/response
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/profitSharing
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/profitSharing/request
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/profitSharing/response
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/redpack
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/redpack/request
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/redpack/response
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/refund
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/refund/request
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/refund/response
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/reverse
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/reverse/response
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/sandbox
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer/request
+github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer/response
+# github.com/ArtisanCloud/PowerWeChat/v3 v3.2.55
+## explicit; go 1.23
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/partner/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/request
 # github.com/KyleBanks/depth v1.2.1
 ## explicit
 github.com/KyleBanks/depth
@@ -121,7 +177,7 @@ github.com/casbin/ent-adapter/ent/schema
 # github.com/casbin/govaluate v1.1.0
 ## explicit; go 1.13
 github.com/casbin/govaluate
-# github.com/cespare/xxhash/v2 v2.1.1
+# github.com/cespare/xxhash/v2 v2.2.0
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
 # github.com/cloudwego/base64x v0.1.4
@@ -221,6 +277,9 @@ github.com/cockroachdb/redact/internal/rfmt/fmtsort
 github.com/dgraph-io/ristretto
 github.com/dgraph-io/ristretto/z
 github.com/dgraph-io/ristretto/z/simd
+# github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f
+## explicit
+github.com/dgryski/go-rendezvous
 # github.com/dustin/go-humanize v1.0.1
 ## explicit; go 1.16
 github.com/dustin/go-humanize
@@ -250,6 +309,28 @@ github.com/go-openapi/spec
 # github.com/go-openapi/swag v0.22.4
 ## explicit; go 1.18
 github.com/go-openapi/swag
+# github.com/go-playground/locales v0.14.0
+## explicit; go 1.13
+github.com/go-playground/locales
+github.com/go-playground/locales/currency
+github.com/go-playground/locales/en
+# github.com/go-playground/universal-translator v0.18.0
+## explicit; go 1.13
+github.com/go-playground/universal-translator
+# github.com/go-playground/validator/v10 v10.11.1
+## explicit; go 1.13
+github.com/go-playground/validator/v10
+github.com/go-playground/validator/v10/translations/en
+# github.com/go-redis/redis/v8 v8.11.0
+## explicit; go 1.13
+github.com/go-redis/redis/v8
+github.com/go-redis/redis/v8/internal
+github.com/go-redis/redis/v8/internal/hashtag
+github.com/go-redis/redis/v8/internal/hscan
+github.com/go-redis/redis/v8/internal/pool
+github.com/go-redis/redis/v8/internal/proto
+github.com/go-redis/redis/v8/internal/rand
+github.com/go-redis/redis/v8/internal/util
 # github.com/go-sql-driver/mysql v1.7.1
 ## explicit; go 1.13
 github.com/go-sql-driver/mysql
@@ -287,6 +368,20 @@ github.com/google/uuid
 # github.com/gorilla/websocket v1.5.1
 ## explicit; go 1.20
 github.com/gorilla/websocket
+# github.com/guonaihong/gout v0.3.1
+## explicit; go 1.18
+github.com/guonaihong/gout
+github.com/guonaihong/gout/bench
+github.com/guonaihong/gout/color
+github.com/guonaihong/gout/core
+github.com/guonaihong/gout/dataflow
+github.com/guonaihong/gout/debug
+github.com/guonaihong/gout/decode
+github.com/guonaihong/gout/encode
+github.com/guonaihong/gout/export
+github.com/guonaihong/gout/filter
+github.com/guonaihong/gout/interface
+github.com/guonaihong/gout/setting
 # github.com/hashicorp/hcl v1.0.0
 ## explicit
 github.com/hashicorp/hcl
@@ -405,6 +500,9 @@ github.com/kr/pretty
 # github.com/kr/text v0.2.0
 ## explicit
 github.com/kr/text
+# github.com/leodido/go-urn v1.2.1
+## explicit; go 1.13
+github.com/leodido/go-urn
 # github.com/lib/pq v1.10.2
 ## explicit; go 1.13
 github.com/lib/pq
@@ -419,6 +517,9 @@ github.com/mailru/easyjson
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
+# github.com/mattn/go-isatty v0.0.17
+## explicit; go 1.15
+github.com/mattn/go-isatty
 # github.com/medivhzhan/weapp/v2 v2.5.0
 ## explicit; go 1.12
 github.com/medivhzhan/weapp/v2
@@ -470,6 +571,9 @@ github.com/nyaruka/phonenumbers
 github.com/olivere/elastic/v7
 github.com/olivere/elastic/v7/config
 github.com/olivere/elastic/v7/uritemplates
+# github.com/patrickmn/go-cache v2.1.0+incompatible
+## explicit
+github.com/patrickmn/go-cache
 # github.com/pelletier/go-toml/v2 v2.1.0
 ## explicit; go 1.16
 github.com/pelletier/go-toml/v2
@@ -607,6 +711,14 @@ go.uber.org/atomic
 # go.uber.org/multierr v1.9.0
 ## explicit; go 1.19
 go.uber.org/multierr
+# go.uber.org/zap v1.21.0
+## explicit; go 1.13
+go.uber.org/zap
+go.uber.org/zap/buffer
+go.uber.org/zap/internal/bufferpool
+go.uber.org/zap/internal/color
+go.uber.org/zap/internal/exit
+go.uber.org/zap/zapcore
 # golang.org/x/arch v0.2.0
 ## explicit; go 1.17
 golang.org/x/arch/x86/x86asm
@@ -624,6 +736,7 @@ golang.org/x/crypto/internal/poly1305
 golang.org/x/crypto/md4
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/ripemd160
+golang.org/x/crypto/sha3
 # golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 ## explicit; go 1.20
 golang.org/x/exp/constraints
@@ -734,6 +847,9 @@ gopkg.in/ini.v1
 # gopkg.in/natefinch/lumberjack.v2 v2.2.1
 ## explicit; go 1.13
 gopkg.in/natefinch/lumberjack.v2
+# gopkg.in/yaml.v2 v2.4.0
+## explicit; go 1.15
+gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3

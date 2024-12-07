@@ -167,6 +167,15 @@ definitions:
       startAt:
         type: string
     type: object
+  contest.ParticipantFinishReq:
+    properties:
+      contestId:
+        type: integer
+      memberId:
+        items:
+          type: integer
+        type: array
+    type: object
   contest.ParticipantInfo:
     properties:
       contestId:
@@ -1722,6 +1731,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 导出比赛信息 Summary
+  /service/participant/finish:
+    post:
+      description: 参赛人确定比赛 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contest.ParticipantFinishReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 参赛人确定比赛 Summary
   /service/participant/info:
     post:
       description: 参赛人信息 Description
@@ -1786,6 +1811,12 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新参赛人 Summary
+  /service/payment/WXNotify:
+    post:
+      responses: {}
+  /service/payment/WXPay:
+    post:
+      responses: {}
   /service/place/create:
     post:
       description: 创建场地 Description

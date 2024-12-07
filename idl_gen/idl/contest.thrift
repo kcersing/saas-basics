@@ -35,7 +35,14 @@ service ContestService {
 
   base.NilResponse DelContest(1: base.IDReq req) (api.post = "/service/contest/del")
 
+  base.NilResponse ParticipantFinish(1: ParticipantFinishReq req) (api.post = "/service/participant/finish")
 }
+
+struct ParticipantFinishReq{
+  1:  optional i64 contestId=0 (api.raw = "contestId")
+  2:  optional list<i64> memberId (api.raw = "memberId")
+}
+
 struct ResultsUploadReq{
     1:  optional string pic="" (api.raw = "pic")
 }

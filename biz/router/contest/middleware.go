@@ -120,3 +120,13 @@ func _participantlistlistexportMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _contestfinishMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _participantfinishMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

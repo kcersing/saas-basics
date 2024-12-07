@@ -1663,6 +1663,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/participant/finish": {
+            "post": {
+                "description": "参赛人确定比赛 Description",
+                "summary": "参赛人确定比赛 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contest.ParticipantFinishReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/participant/info": {
             "post": {
                 "description": "参赛人信息 Description",
@@ -1761,6 +1786,16 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/service/payment/WXNotify": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/payment/WXPay": {
+            "post": {
+                "responses": {}
             }
         },
         "/service/place/create": {
@@ -2570,6 +2605,20 @@ const docTemplate = `{
                 },
                 "startAt": {
                     "type": "string"
+                }
+            }
+        },
+        "contest.ParticipantFinishReq": {
+            "type": "object",
+            "properties": {
+                "contestId": {
+                    "type": "integer"
+                },
+                "memberId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
