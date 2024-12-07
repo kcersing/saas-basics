@@ -42,7 +42,7 @@ type RequestNativePrepay struct {
 	OutTradeNo  string            `json:"out_trade_no"`          // 商户订单号
 	TimeExpire  string            `json:"time_expire,omitempty"` // 交易结束时间
 	Attach      string            `json:"attach"`                // 附加数据
-	GoodsTag    string            `json:"goods_tag"`             // 订单优惠标记
+	GoodsTag    string            `json:"goods_tag,omitempty"`   // 订单优惠标记
 	Amount      *NativeAmount     `json:"amount,omitempty"`      // 订单金额
 	Detail      *NativeDetail     `json:"detail,omitempty"`      // 优惠功能
 	SceneInfo   *NativeSceneInfo  `json:"scene_info,omitempty"`  // 场景信息

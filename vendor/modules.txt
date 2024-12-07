@@ -88,7 +88,7 @@ github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer/request
 github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer/response
 # github.com/ArtisanCloud/PowerWeChat/v3 v3.2.55
 ## explicit; go 1.23
-github.com/ArtisanCloud/PowerWeChat/v3/src/payment/partner/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/order/request
 github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/request
 # github.com/KyleBanks/depth v1.2.1
 ## explicit
@@ -113,6 +113,8 @@ github.com/bytedance/gopkg/lang/fastrand
 github.com/bytedance/gopkg/lang/mcache
 github.com/bytedance/gopkg/util/gopool
 github.com/bytedance/gopkg/util/logger
+# github.com/bytedance/mockey v1.2.7
+## explicit; go 1.18
 # github.com/bytedance/sonic v1.12.2
 ## explicit; go 1.17
 github.com/bytedance/sonic
@@ -231,9 +233,6 @@ github.com/cloudwego/hertz/pkg/route/param
 ## explicit; go 1.16
 github.com/cloudwego/iasm/expr
 github.com/cloudwego/iasm/x86_64
-# github.com/cloudwego/kitex v0.8.0
-## explicit; go 1.13
-github.com/cloudwego/kitex/pkg/klog
 # github.com/cloudwego/netpoll v0.5.1
 ## explicit; go 1.15
 github.com/cloudwego/netpoll
@@ -352,6 +351,8 @@ github.com/golang/freetype/truetype
 # github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 ## explicit
 github.com/golang/glog
+# github.com/golang/mock v1.6.0
+## explicit; go 1.11
 # github.com/golang/protobuf v1.5.3
 ## explicit; go 1.9
 github.com/golang/protobuf/proto
@@ -520,9 +521,6 @@ github.com/mailru/easyjson/jwriter
 # github.com/mattn/go-isatty v0.0.17
 ## explicit; go 1.15
 github.com/mattn/go-isatty
-# github.com/medivhzhan/weapp/v2 v2.5.0
-## explicit; go 1.12
-github.com/medivhzhan/weapp/v2
 # github.com/minio/md5-simd v1.1.2
 ## explicit; go 1.14
 github.com/minio/md5-simd

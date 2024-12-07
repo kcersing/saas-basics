@@ -15,7 +15,6 @@ require (
 	github.com/casbin/casbin/v2 v2.82.0
 	github.com/casbin/ent-adapter v0.3.0
 	github.com/cloudwego/hertz v0.8.0
-	github.com/cloudwego/kitex v0.8.0
 	github.com/cockroachdb/errors v1.11.1
 	github.com/dgraph-io/ristretto v0.1.1
 	github.com/go-sql-driver/mysql v1.7.1
@@ -28,7 +27,6 @@ require (
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/jinzhu/copier v0.4.0
 	github.com/lib/pq v1.10.2
-	github.com/medivhzhan/weapp/v2 v2.5.0
 	github.com/minio/minio-go/v7 v7.0.69
 	github.com/mojocn/base64Captcha v1.3.6
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
@@ -53,6 +51,7 @@ require (
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
 	github.com/bytedance/gopkg v0.0.0-20230728082804-614d0af6619b // indirect
+	github.com/bytedance/mockey v1.2.7 // indirect
 	github.com/bytedance/sonic v1.12.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.0 // indirect
 	github.com/casbin/govaluate v1.1.0 // indirect
@@ -79,6 +78,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.1 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
