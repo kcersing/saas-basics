@@ -15,6 +15,8 @@ const (
 
 	HlogFilePath = "./tmp/hlog/logs/"
 
+	ExportFilePath = "./tmp/export/"
+
 	MySqlDSN    = "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 	RabbitMqURI = "amqp://%s:%s@%s:%d/"
 

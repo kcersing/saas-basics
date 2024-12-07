@@ -32,9 +32,9 @@ func InitLogger() {
 		}
 	}
 	logger := hertzlogrus.NewLogger()
-	//logger.Logger().SetReportCaller(true)
+	logger.Logger().SetReportCaller(true)
 	// hlog will warp a layer of logrus, so you need to calculate the depth of the caller file separately.
-	//logger.Logger().AddHook(NewCustomHook(10))
+	logger.Logger().AddHook(NewCustomHook(10))
 	// Provides compression and deletion
 	lumberjackLogger := &lumberjack.Logger{
 		Filename:   fileName,

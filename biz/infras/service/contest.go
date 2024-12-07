@@ -7,11 +7,13 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"github.com/xuri/excelize/v2"
+	"os"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/contest"
+	"saas/pkg/consts"
 	"saas/pkg/db/ent"
 	contest2 "saas/pkg/db/ent/contest"
 	"saas/pkg/db/ent/contestparticipant"
@@ -346,12 +348,19 @@ func (c Contest) UpdateParticipantStatus(ID int64, status int64) error {
 	return err
 }
 
-func (c Contest) ParticipantListListExport(req contest.ParticipantListReq) {
+func (c Contest) ParticipantListListExport(req contest.ParticipantListReq) (string, error) {
+
+	exportFilePath := consts.ExportFilePath + time.Now().Format(time.DateOnly) + "/"
+	if err := os.MkdirAll(exportFilePath, 0o777); err != nil {
+		panic(err)
+	}
+
+	contest, _ := c.db.Contest.Query().Where(contest2.IDEQ(req.ContestId)).First(c.ctx)
 
 	resp, total, _ := c.ParticipantList(req)
 
 	if total == 0 {
-		return
+		return "", errors.New("暂无数据")
 	}
 
 	f := excelize.NewFile()
@@ -363,33 +372,53 @@ func (c Contest) ParticipantListListExport(req contest.ParticipantListReq) {
 
 	cell, err := excelize.CoordinatesToCellName(1, 1)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return "", err
 	}
 	tale := []interface{}{"名称", "手机号", "费用", "状态", "报名时间"}
 	//row = []interface{}{resp[idx].Name, resp[idx].Mobile, resp[idx].Fee, resp[idx].Status, resp[idx].CreatedAt}
 	err = f.SetSheetRow("Sheet1", cell, &tale)
 	if err != nil {
-		return
+		return "", err
 	}
 
 	for idx, row := range resp {
 		cell, err := excelize.CoordinatesToCellName(1, idx+2)
 		if err != nil {
-			fmt.Println(err)
-			return
+			return "", err
 		}
-		r := []interface{}{row.Name, row.Mobile, row.Fee, row.Status, row.CreatedAt}
+		var createdAt int64
+		createdAt, _ = strconv.ParseInt(row.CreatedAt, 10, 64)
+		createdAtr := time.Unix(createdAt, 0).Format(time.DateTime)
+
+		var status string
+		switch row.Status {
+		case 1:
+			status = "报名中"
+		case 2:
+			status = "报名完成"
+		case 3:
+			status = "取消报名"
+		case 4:
+			status = "报名失效"
+		case 5:
+			status = "报名成功"
+		default:
+			status = "状态异常"
+		}
+
+		r := []interface{}{row.Name, row.Mobile, row.Fee, status, createdAtr}
 		err = f.SetSheetRow("Sheet1", cell, &r)
 		if err != nil {
-			return
+			fmt.Println(err)
+			return "", err
 		}
 	}
+	ing := strconv.FormatInt(time.Now().Unix(), 10)
+	files := exportFilePath + contest.Name + "-参赛人导出" + ing + ".xlsx"
+	//Save spreadsheet by the given path.
+	if err := f.SaveAs(files); err != nil {
+		fmt.Println(err)
+	}
+	return files, nil
 
-	// Save spreadsheet by the given path.
-	//if err := f.SaveAs("Book1.xlsx"); err != nil {
-	//	fmt.Println(err)
-	//}
-
-	panic("implement me")
 }
