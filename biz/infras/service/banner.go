@@ -6,10 +6,10 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
+	"saas/biz/dal/db/ent"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/banner"
-	"saas/pkg/db/ent"
 )
 
 type Banner struct {

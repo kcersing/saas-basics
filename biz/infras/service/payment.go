@@ -6,10 +6,10 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
+	"saas/biz/dal/db/ent"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/payment"
-	"saas/pkg/db/ent"
 )
 
 // https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-login/code2Session.html

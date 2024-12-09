@@ -11,12 +11,12 @@ import (
 	"saas/biz/dal/cache"
 	casbin2 "saas/biz/dal/casbin"
 	"saas/biz/dal/db"
+	"saas/biz/dal/db/ent"
+	"saas/biz/dal/db/ent/api"
+	"saas/biz/dal/db/ent/role"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/auth"
-	"saas/pkg/db/ent"
-	"saas/pkg/db/ent/api"
-	"saas/pkg/db/ent/role"
 	"strconv"
 )
 

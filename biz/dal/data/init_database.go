@@ -10,7 +10,7 @@ import (
 	"context"
 	casbin2 "saas/biz/dal/casbin"
 	"saas/biz/dal/db"
-	"saas/pkg/db/ent"
+	"saas/biz/dal/db/ent"
 	"saas/pkg/encrypt"
 
 	"sync"

@@ -2176,18 +2176,20 @@ type CreateOrUpdateUserReq struct {
 func NewCreateOrUpdateUserReq() *CreateOrUpdateUserReq {
 	return &CreateOrUpdateUserReq{
 
-		ID:       0,
-		Avatar:   "",
-		Mobile:   "",
-		Status:   1,
-		Name:     "",
-		Gender:   "",
-		RoleId:   0,
-		CreateId: 0,
-		Password: "",
-		Username: "",
-		Detail:   "",
-		JobTime:  0,
+		ID:        0,
+		Avatar:    "",
+		Mobile:    "",
+		Status:    1,
+		Name:      "",
+		Gender:    "",
+		RoleId:    0,
+		CreateId:  0,
+		Password:  "",
+		Username:  "",
+		Functions: []string{},
+		Detail:    "",
+		JobTime:   0,
+		UserTags:  []int64{},
 	}
 }
 
@@ -2202,8 +2204,10 @@ func (p *CreateOrUpdateUserReq) InitDefault() {
 	p.CreateId = 0
 	p.Password = ""
 	p.Username = ""
+	p.Functions = []string{}
 	p.Detail = ""
 	p.JobTime = 0
+	p.UserTags = []int64{}
 }
 
 var CreateOrUpdateUserReq_ID_DEFAULT int64 = 0
@@ -2296,7 +2300,7 @@ func (p *CreateOrUpdateUserReq) GetUsername() (v string) {
 	return p.Username
 }
 
-var CreateOrUpdateUserReq_Functions_DEFAULT []string
+var CreateOrUpdateUserReq_Functions_DEFAULT []string = []string{}
 
 func (p *CreateOrUpdateUserReq) GetFunctions() (v []string) {
 	if !p.IsSetFunctions() {
@@ -2323,7 +2327,7 @@ func (p *CreateOrUpdateUserReq) GetJobTime() (v int64) {
 	return p.JobTime
 }
 
-var CreateOrUpdateUserReq_UserTags_DEFAULT []int64
+var CreateOrUpdateUserReq_UserTags_DEFAULT []int64 = []int64{}
 
 func (p *CreateOrUpdateUserReq) GetUserTags() (v []int64) {
 	if !p.IsSetUserTags() {

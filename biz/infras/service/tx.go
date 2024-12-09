@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"saas/pkg/db/ent"
+	"saas/biz/dal/db/ent"
 )
 
 // rollback calls to tx.Rollback and wraps the given error

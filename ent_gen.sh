@@ -4,7 +4,7 @@
 # /biz/del/db/ent/schema/
 #go generate ./ent
 
-go generate ./pkg/db/ent
+go generate ./biz/dal/db/ent
 
 
 #--feature sql/versioned-migration
@@ -12,8 +12,8 @@ go generate ./pkg/db/ent
 
 
 
- go run -mod=mod entgo.io/ent/cmd/ent generate --feature sql/modifier ./pkg/db/ent/schema
-  go run -mod=mod entgo.io/ent/cmd/ent generate --feature sql/modifier  ./ent/schema
+ go run -mod=mod entgo.io/ent/cmd/ent generate --feature sql/modifier ./biz/dal/db/ent/schema
+  go run -mod=mod entgo.io/ent/cmd/ent generate --feature sql/modifier  ./biz/dal/db/ent/schema
 
 
 

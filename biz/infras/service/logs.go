@@ -7,13 +7,13 @@ import (
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
+	"saas/biz/dal/db/ent/logs"
+	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/auth"
 
-	"saas/pkg/db/ent"
-	"saas/pkg/db/ent/logs"
-	"saas/pkg/db/ent/predicate"
+	"saas/biz/dal/db/ent"
 	"time"
 )
 

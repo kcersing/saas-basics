@@ -8,13 +8,13 @@ import (
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
+	"saas/biz/dal/db/ent"
+	dictionary2 "saas/biz/dal/db/ent/dictionary"
+	"saas/biz/dal/db/ent/dictionarydetail"
+	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/dictionary"
-	"saas/pkg/db/ent"
-	dictionary2 "saas/pkg/db/ent/dictionary"
-	"saas/pkg/db/ent/dictionarydetail"
-	"saas/pkg/db/ent/predicate"
 
 	"time"
 )
