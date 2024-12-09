@@ -6,11 +6,11 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"saas/biz/dal/minio"
 
 	"path"
 	"saas/config"
 	"saas/pkg/errno"
-	"saas/pkg/minio"
 	"saas/pkg/utils"
 	"strconv"
 	"time"

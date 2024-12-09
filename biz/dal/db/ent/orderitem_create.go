@@ -118,6 +118,40 @@ func (oic *OrderItemCreate) SetNillableRelatedUserProductID(i *int64) *OrderItem
 	return oic
 }
 
+// SetContestID sets the "contest_id" field.
+func (oic *OrderItemCreate) SetContestID(i int64) *OrderItemCreate {
+	oic.mutation.SetContestID(i)
+	return oic
+}
+
+// SetNillableContestID sets the "contest_id" field if the given value is not nil.
+func (oic *OrderItemCreate) SetNillableContestID(i *int64) *OrderItemCreate {
+	if i != nil {
+		oic.SetContestID(*i)
+	}
+	return oic
+}
+
+// SetBootcampID sets the "bootcamp_id" field.
+func (oic *OrderItemCreate) SetBootcampID(i int64) *OrderItemCreate {
+	oic.mutation.SetBootcampID(i)
+	return oic
+}
+
+// SetNillableBootcampID sets the "bootcamp_id" field if the given value is not nil.
+func (oic *OrderItemCreate) SetNillableBootcampID(i *int64) *OrderItemCreate {
+	if i != nil {
+		oic.SetBootcampID(*i)
+	}
+	return oic
+}
+
+// SetData sets the "data" field.
+func (oic *OrderItemCreate) SetData(s []string) *OrderItemCreate {
+	oic.mutation.SetData(s)
+	return oic
+}
+
 // SetID sets the "id" field.
 func (oic *OrderItemCreate) SetID(i int64) *OrderItemCreate {
 	oic.mutation.SetID(i)
@@ -243,6 +277,18 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 	if value, ok := oic.mutation.RelatedUserProductID(); ok {
 		_spec.SetField(orderitem.FieldRelatedUserProductID, field.TypeInt64, value)
 		_node.RelatedUserProductID = value
+	}
+	if value, ok := oic.mutation.ContestID(); ok {
+		_spec.SetField(orderitem.FieldContestID, field.TypeInt64, value)
+		_node.ContestID = value
+	}
+	if value, ok := oic.mutation.BootcampID(); ok {
+		_spec.SetField(orderitem.FieldBootcampID, field.TypeInt64, value)
+		_node.BootcampID = value
+	}
+	if value, ok := oic.mutation.Data(); ok {
+		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)
+		_node.Data = value
 	}
 	if nodes := oic.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

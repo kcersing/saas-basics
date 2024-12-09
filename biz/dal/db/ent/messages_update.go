@@ -18,9 +18,8 @@ import (
 // MessagesUpdate is the builder for updating Messages entities.
 type MessagesUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *MessagesMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *MessagesMutation
 }
 
 // Where appends a list predicates to the MessagesUpdate builder.
@@ -192,12 +191,6 @@ func (mu *MessagesUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mu *MessagesUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MessagesUpdate {
-	mu.modifiers = append(mu.modifiers, modifiers...)
-	return mu
-}
-
 func (mu *MessagesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(messages.Table, messages.Columns, sqlgraph.NewFieldSpec(messages.FieldID, field.TypeInt64))
 	if ps := mu.mutation.predicates; len(ps) > 0 {
@@ -246,7 +239,6 @@ func (mu *MessagesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.Content(); ok {
 		_spec.SetField(messages.FieldContent, field.TypeString, value)
 	}
-	_spec.AddModifiers(mu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{messages.Label}
@@ -262,10 +254,9 @@ func (mu *MessagesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // MessagesUpdateOne is the builder for updating a single Messages entity.
 type MessagesUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *MessagesMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *MessagesMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -444,12 +435,6 @@ func (muo *MessagesUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (muo *MessagesUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MessagesUpdateOne {
-	muo.modifiers = append(muo.modifiers, modifiers...)
-	return muo
-}
-
 func (muo *MessagesUpdateOne) sqlSave(ctx context.Context) (_node *Messages, err error) {
 	_spec := sqlgraph.NewUpdateSpec(messages.Table, messages.Columns, sqlgraph.NewFieldSpec(messages.FieldID, field.TypeInt64))
 	id, ok := muo.mutation.ID()
@@ -515,7 +500,6 @@ func (muo *MessagesUpdateOne) sqlSave(ctx context.Context) (_node *Messages, err
 	if value, ok := muo.mutation.Content(); ok {
 		_spec.SetField(messages.FieldContent, field.TypeString, value)
 	}
-	_spec.AddModifiers(muo.modifiers...)
 	_node = &Messages{config: muo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

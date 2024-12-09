@@ -23,7 +23,6 @@ type MemberDetailsQuery struct {
 	inters     []Interceptor
 	predicates []predicate.MemberDetails
 	withInfo   *MemberQuery
-	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -383,9 +382,6 @@ func (mdq *MemberDetailsQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(mdq.modifiers) > 0 {
-		_spec.Modifiers = mdq.modifiers
-	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -436,9 +432,6 @@ func (mdq *MemberDetailsQuery) loadInfo(ctx context.Context, query *MemberQuery,
 
 func (mdq *MemberDetailsQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mdq.querySpec()
-	if len(mdq.modifiers) > 0 {
-		_spec.Modifiers = mdq.modifiers
-	}
 	_spec.Node.Columns = mdq.ctx.Fields
 	if len(mdq.ctx.Fields) > 0 {
 		_spec.Unique = mdq.ctx.Unique != nil && *mdq.ctx.Unique
@@ -504,9 +497,6 @@ func (mdq *MemberDetailsQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mdq.ctx.Unique != nil && *mdq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range mdq.modifiers {
-		m(selector)
-	}
 	for _, p := range mdq.predicates {
 		p(selector)
 	}
@@ -522,12 +512,6 @@ func (mdq *MemberDetailsQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (mdq *MemberDetailsQuery) Modify(modifiers ...func(s *sql.Selector)) *MemberDetailsSelect {
-	mdq.modifiers = append(mdq.modifiers, modifiers...)
-	return mdq.Select()
 }
 
 // MemberDetailsGroupBy is the group-by builder for MemberDetails entities.
@@ -618,10 +602,4 @@ func (mds *MemberDetailsSelect) sqlScan(ctx context.Context, root *MemberDetails
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (mds *MemberDetailsSelect) Modify(modifiers ...func(s *sql.Selector)) *MemberDetailsSelect {
-	mds.modifiers = append(mds.modifiers, modifiers...)
-	return mds
 }

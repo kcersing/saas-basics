@@ -268,6 +268,10 @@ func init() {
 	contestparticipantDescOrderSn := contestparticipantFields[5].Descriptor()
 	// contestparticipant.DefaultOrderSn holds the default value on creation for the order_sn field.
 	contestparticipant.DefaultOrderSn = contestparticipantDescOrderSn.Default.(string)
+	// contestparticipantDescMemberID is the schema descriptor for member_id field.
+	contestparticipantDescMemberID := contestparticipantFields[7].Descriptor()
+	// contestparticipant.DefaultMemberID holds the default value on creation for the member_id field.
+	contestparticipant.DefaultMemberID = contestparticipantDescMemberID.Default.(int64)
 	contractMixin := schema.Contract{}.Mixin()
 	contractMixinFields0 := contractMixin[0].Fields()
 	_ = contractMixinFields0
@@ -725,15 +729,15 @@ func init() {
 	// order.DefaultCreatedID holds the default value on creation for the created_id field.
 	order.DefaultCreatedID = orderDescCreatedID.Default.(int64)
 	// orderDescStatus is the schema descriptor for status field.
-	orderDescStatus := orderFields[4].Descriptor()
+	orderDescStatus := orderFields[5].Descriptor()
 	// order.DefaultStatus holds the default value on creation for the status field.
 	order.DefaultStatus = orderDescStatus.Default.(int64)
 	// orderDescSource is the schema descriptor for source field.
-	orderDescSource := orderFields[5].Descriptor()
+	orderDescSource := orderFields[6].Descriptor()
 	// order.DefaultSource holds the default value on creation for the source field.
 	order.DefaultSource = orderDescSource.Default.(string)
 	// orderDescDevice is the schema descriptor for device field.
-	orderDescDevice := orderFields[6].Descriptor()
+	orderDescDevice := orderFields[7].Descriptor()
 	// order.DefaultDevice holds the default value on creation for the device field.
 	order.DefaultDevice = orderDescDevice.Default.(string)
 	orderamountMixin := schema.OrderAmount{}.Mixin()

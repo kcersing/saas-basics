@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderpay"
@@ -23,7 +24,7 @@ type OrderPay struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete
+	// last delete  1:已删除
 	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
@@ -39,6 +40,12 @@ type OrderPay struct {
 	PayWay string `json:"pay_way,omitempty"`
 	// 操作人id
 	CreateID int64 `json:"create_id,omitempty"`
+	// 支付单号
+	PaySn string `json:"pay_sn,omitempty"`
+	// 预支付交易会话标识
+	PrepayID string `json:"prepay_id,omitempty"`
+	// 支付额外信息
+	PayExtra []string `json:"pay_extra,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderPayQuery when eager-loading is set.
 	Edges        OrderPayEdges `json:"edges"`
@@ -72,11 +79,13 @@ func (*OrderPay) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case orderpay.FieldPayExtra:
+			values[i] = new([]byte)
 		case orderpay.FieldRemission, orderpay.FieldPay:
 			values[i] = new(sql.NullFloat64)
 		case orderpay.FieldID, orderpay.FieldDelete, orderpay.FieldCreatedID, orderpay.FieldOrderID, orderpay.FieldCreateID:
 			values[i] = new(sql.NullInt64)
-		case orderpay.FieldNote, orderpay.FieldPayWay:
+		case orderpay.FieldNote, orderpay.FieldPayWay, orderpay.FieldPaySn, orderpay.FieldPrepayID:
 			values[i] = new(sql.NullString)
 		case orderpay.FieldCreatedAt, orderpay.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -161,6 +170,26 @@ func (op *OrderPay) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				op.CreateID = value.Int64
 			}
+		case orderpay.FieldPaySn:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field pay_sn", values[i])
+			} else if value.Valid {
+				op.PaySn = value.String
+			}
+		case orderpay.FieldPrepayID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field prepay_id", values[i])
+			} else if value.Valid {
+				op.PrepayID = value.String
+			}
+		case orderpay.FieldPayExtra:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field pay_extra", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &op.PayExtra); err != nil {
+					return fmt.Errorf("unmarshal field pay_extra: %w", err)
+				}
+			}
 		default:
 			op.selectValues.Set(columns[i], values[i])
 		}
@@ -231,6 +260,15 @@ func (op *OrderPay) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("create_id=")
 	builder.WriteString(fmt.Sprintf("%v", op.CreateID))
+	builder.WriteString(", ")
+	builder.WriteString("pay_sn=")
+	builder.WriteString(op.PaySn)
+	builder.WriteString(", ")
+	builder.WriteString("prepay_id=")
+	builder.WriteString(op.PrepayID)
+	builder.WriteString(", ")
+	builder.WriteString("pay_extra=")
+	builder.WriteString(fmt.Sprintf("%v", op.PayExtra))
 	builder.WriteByte(')')
 	return builder.String()
 }

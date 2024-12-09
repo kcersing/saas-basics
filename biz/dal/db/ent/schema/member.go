@@ -27,7 +27,7 @@ func (Member) Fields() []ent.Field {
 			Default("").
 			Comment("avatar | 头像路径"),
 		field.Int64("condition").
-			Default(1).
+			Default(0).
 			Optional().
 			Comment("状态[0:潜在;1:正式;3:冻结;4:到期]"),
 	}
@@ -48,7 +48,7 @@ func (Member) Edges() []ent.Edge {
 		//edge.To("member_products", MemberProduct.Type),
 		edge.To("member_entry", EntryLogs.Type),
 		edge.To("member_contents", MemberContract.Type),
-
+		edge.To("participants", ContestParticipant.Type),
 		//edge.To("member_face", Face.Type),
 	}
 }

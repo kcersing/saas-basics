@@ -46,6 +46,8 @@ const (
 	EdgeMemberEntry = "member_entry"
 	// EdgeMemberContents holds the string denoting the member_contents edge name in mutations.
 	EdgeMemberContents = "member_contents"
+	// EdgeParticipants holds the string denoting the participants edge name in mutations.
+	EdgeParticipants = "participants"
 	// Table holds the table name of the member in the database.
 	Table = "member"
 	// MemberDetailsTable is the table that holds the member_details relation/edge.
@@ -83,6 +85,11 @@ const (
 	MemberContentsInverseTable = "member_contract"
 	// MemberContentsColumn is the table column denoting the member_contents relation/edge.
 	MemberContentsColumn = "member_id"
+	// ParticipantsTable is the table that holds the participants relation/edge. The primary key declared below.
+	ParticipantsTable = "member_participants"
+	// ParticipantsInverseTable is the table name for the ContestParticipant entity.
+	// It exists in this package in order to avoid circular dependency with the "contestparticipant" package.
+	ParticipantsInverseTable = "contest_participant"
 )
 
 // Columns holds all SQL columns for member fields.
@@ -100,6 +107,12 @@ var Columns = []string{
 	FieldAvatar,
 	FieldCondition,
 }
+
+var (
+	// ParticipantsPrimaryKey and ParticipantsColumn2 are the table columns denoting the
+	// primary key for the participants relation (M2M).
+	ParticipantsPrimaryKey = []string{"member_id", "contest_participant_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -262,6 +275,20 @@ func ByMemberContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newMemberContentsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByParticipantsCount orders the results by participants count.
+func ByParticipantsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newParticipantsStep(), opts...)
+	}
+}
+
+// ByParticipants orders the results by participants terms.
+func ByParticipants(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newParticipantsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newMemberDetailsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -295,5 +322,12 @@ func newMemberContentsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MemberContentsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberContentsTable, MemberContentsColumn),
+	)
+}
+func newParticipantsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ParticipantsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ParticipantsTable, ParticipantsPrimaryKey...),
 	)
 }

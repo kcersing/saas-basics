@@ -32,7 +32,7 @@ func (BaseMixin) Fields() []ent.Field {
 			Optional(),
 		field.Int64("delete").
 			Default(0).
-			Comment("last delete ").
+			Comment("last delete  1:已删除").
 			Optional(),
 		field.Int64("created_id").Default(0).Comment("created").
 			Optional(),

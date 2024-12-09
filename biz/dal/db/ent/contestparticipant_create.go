@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
+	"saas/biz/dal/db/ent/member"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -188,6 +189,20 @@ func (cpc *ContestParticipantCreate) SetNillableFee(f *float64) *ContestParticip
 	return cpc
 }
 
+// SetMemberID sets the "member_id" field.
+func (cpc *ContestParticipantCreate) SetMemberID(i int64) *ContestParticipantCreate {
+	cpc.mutation.SetMemberID(i)
+	return cpc
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (cpc *ContestParticipantCreate) SetNillableMemberID(i *int64) *ContestParticipantCreate {
+	if i != nil {
+		cpc.SetMemberID(*i)
+	}
+	return cpc
+}
+
 // SetID sets the "id" field.
 func (cpc *ContestParticipantCreate) SetID(i int64) *ContestParticipantCreate {
 	cpc.mutation.SetID(i)
@@ -197,6 +212,21 @@ func (cpc *ContestParticipantCreate) SetID(i int64) *ContestParticipantCreate {
 // SetContest sets the "contest" edge to the Contest entity.
 func (cpc *ContestParticipantCreate) SetContest(c *Contest) *ContestParticipantCreate {
 	return cpc.SetContestID(c.ID)
+}
+
+// AddMemberIDs adds the "members" edge to the Member entity by IDs.
+func (cpc *ContestParticipantCreate) AddMemberIDs(ids ...int64) *ContestParticipantCreate {
+	cpc.mutation.AddMemberIDs(ids...)
+	return cpc
+}
+
+// AddMembers adds the "members" edges to the Member entity.
+func (cpc *ContestParticipantCreate) AddMembers(m ...*Member) *ContestParticipantCreate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return cpc.AddMemberIDs(ids...)
 }
 
 // Mutation returns the ContestParticipantMutation object of the builder.
@@ -261,6 +291,10 @@ func (cpc *ContestParticipantCreate) defaults() {
 	if _, ok := cpc.mutation.OrderSn(); !ok {
 		v := contestparticipant.DefaultOrderSn
 		cpc.mutation.SetOrderSn(v)
+	}
+	if _, ok := cpc.mutation.MemberID(); !ok {
+		v := contestparticipant.DefaultMemberID
+		cpc.mutation.SetMemberID(v)
 	}
 }
 
@@ -342,6 +376,10 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 		_spec.SetField(contestparticipant.FieldFee, field.TypeFloat64, value)
 		_node.Fee = value
 	}
+	if value, ok := cpc.mutation.MemberID(); ok {
+		_spec.SetField(contestparticipant.FieldMemberID, field.TypeInt64, value)
+		_node.MemberID = value
+	}
 	if nodes := cpc.mutation.ContestIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -357,6 +395,22 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ContestID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cpc.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   contestparticipant.MembersTable,
+			Columns: contestparticipant.MembersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

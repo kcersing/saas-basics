@@ -27,6 +27,7 @@ struct VenueInfo {
     11:  optional string CreatedAt="" (api.raw = "createdAt")
     12:  optional string UpdatedAt="" (api.raw = "updatedAt")
     13:  optional string email =""(api.raw = "email")
+    14:  optional string type =""(api.raw = "type")
 
 }
 

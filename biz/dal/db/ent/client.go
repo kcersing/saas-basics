@@ -1277,6 +1277,22 @@ func (c *ContestParticipantClient) QueryContest(cp *ContestParticipant) *Contest
 	return query
 }
 
+// QueryMembers queries the members edge of a ContestParticipant.
+func (c *ContestParticipantClient) QueryMembers(cp *ContestParticipant) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contestparticipant.Table, contestparticipant.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, contestparticipant.MembersTable, contestparticipant.MembersPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(cp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ContestParticipantClient) Hooks() []Hook {
 	return c.hooks.ContestParticipant
@@ -2244,6 +2260,22 @@ func (c *MemberClient) QueryMemberContents(m *Member) *MemberContractQuery {
 			sqlgraph.From(member.Table, member.FieldID, id),
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberContentsTable, member.MemberContentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryParticipants queries the participants edge of a Member.
+func (c *MemberClient) QueryParticipants(m *Member) *ContestParticipantQuery {
+	query := (&ContestParticipantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.ParticipantsTable, member.ParticipantsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil

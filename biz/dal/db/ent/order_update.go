@@ -26,9 +26,8 @@ import (
 // OrderUpdate is the builder for updating Order entities.
 type OrderUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrderMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrderMutation
 }
 
 // Where appends a list predicates to the OrderUpdate builder.
@@ -163,30 +162,43 @@ func (ou *OrderUpdate) ClearMemberID() *OrderUpdate {
 	return ou
 }
 
-// SetMemberProductID sets the "member_product_id" field.
-func (ou *OrderUpdate) SetMemberProductID(i int64) *OrderUpdate {
-	ou.mutation.ResetMemberProductID()
-	ou.mutation.SetMemberProductID(i)
+// SetNature sets the "nature" field.
+func (ou *OrderUpdate) SetNature(s string) *OrderUpdate {
+	ou.mutation.SetNature(s)
 	return ou
 }
 
-// SetNillableMemberProductID sets the "member_product_id" field if the given value is not nil.
-func (ou *OrderUpdate) SetNillableMemberProductID(i *int64) *OrderUpdate {
-	if i != nil {
-		ou.SetMemberProductID(*i)
+// SetNillableNature sets the "nature" field if the given value is not nil.
+func (ou *OrderUpdate) SetNillableNature(s *string) *OrderUpdate {
+	if s != nil {
+		ou.SetNature(*s)
 	}
 	return ou
 }
 
-// AddMemberProductID adds i to the "member_product_id" field.
-func (ou *OrderUpdate) AddMemberProductID(i int64) *OrderUpdate {
-	ou.mutation.AddMemberProductID(i)
+// ClearNature clears the value of the "nature" field.
+func (ou *OrderUpdate) ClearNature() *OrderUpdate {
+	ou.mutation.ClearNature()
 	return ou
 }
 
-// ClearMemberProductID clears the value of the "member_product_id" field.
-func (ou *OrderUpdate) ClearMemberProductID() *OrderUpdate {
-	ou.mutation.ClearMemberProductID()
+// SetProductType sets the "product_type" field.
+func (ou *OrderUpdate) SetProductType(s string) *OrderUpdate {
+	ou.mutation.SetProductType(s)
+	return ou
+}
+
+// SetNillableProductType sets the "product_type" field if the given value is not nil.
+func (ou *OrderUpdate) SetNillableProductType(s *string) *OrderUpdate {
+	if s != nil {
+		ou.SetProductType(*s)
+	}
+	return ou
+}
+
+// ClearProductType clears the value of the "product_type" field.
+func (ou *OrderUpdate) ClearProductType() *OrderUpdate {
+	ou.mutation.ClearProductType()
 	return ou
 }
 
@@ -254,33 +266,6 @@ func (ou *OrderUpdate) SetNillableDevice(s *string) *OrderUpdate {
 // ClearDevice clears the value of the "device" field.
 func (ou *OrderUpdate) ClearDevice() *OrderUpdate {
 	ou.mutation.ClearDevice()
-	return ou
-}
-
-// SetNature sets the "nature" field.
-func (ou *OrderUpdate) SetNature(i int64) *OrderUpdate {
-	ou.mutation.ResetNature()
-	ou.mutation.SetNature(i)
-	return ou
-}
-
-// SetNillableNature sets the "nature" field if the given value is not nil.
-func (ou *OrderUpdate) SetNillableNature(i *int64) *OrderUpdate {
-	if i != nil {
-		ou.SetNature(*i)
-	}
-	return ou
-}
-
-// AddNature adds i to the "nature" field.
-func (ou *OrderUpdate) AddNature(i int64) *OrderUpdate {
-	ou.mutation.AddNature(i)
-	return ou
-}
-
-// ClearNature clears the value of the "nature" field.
-func (ou *OrderUpdate) ClearNature() *OrderUpdate {
-	ou.mutation.ClearNature()
 	return ou
 }
 
@@ -620,12 +605,6 @@ func (ou *OrderUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ou *OrderUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderUpdate {
-	ou.modifiers = append(ou.modifiers, modifiers...)
-	return ou
-}
-
 func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(order.Table, order.Columns, sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64))
 	if ps := ou.mutation.predicates; len(ps) > 0 {
@@ -668,14 +647,17 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.OrderSnCleared() {
 		_spec.ClearField(order.FieldOrderSn, field.TypeString)
 	}
-	if value, ok := ou.mutation.MemberProductID(); ok {
-		_spec.SetField(order.FieldMemberProductID, field.TypeInt64, value)
+	if value, ok := ou.mutation.Nature(); ok {
+		_spec.SetField(order.FieldNature, field.TypeString, value)
 	}
-	if value, ok := ou.mutation.AddedMemberProductID(); ok {
-		_spec.AddField(order.FieldMemberProductID, field.TypeInt64, value)
+	if ou.mutation.NatureCleared() {
+		_spec.ClearField(order.FieldNature, field.TypeString)
 	}
-	if ou.mutation.MemberProductIDCleared() {
-		_spec.ClearField(order.FieldMemberProductID, field.TypeInt64)
+	if value, ok := ou.mutation.ProductType(); ok {
+		_spec.SetField(order.FieldProductType, field.TypeString, value)
+	}
+	if ou.mutation.ProductTypeCleared() {
+		_spec.ClearField(order.FieldProductType, field.TypeString)
 	}
 	if value, ok := ou.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
@@ -697,15 +679,6 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.DeviceCleared() {
 		_spec.ClearField(order.FieldDevice, field.TypeString)
-	}
-	if value, ok := ou.mutation.Nature(); ok {
-		_spec.SetField(order.FieldNature, field.TypeInt64, value)
-	}
-	if value, ok := ou.mutation.AddedNature(); ok {
-		_spec.AddField(order.FieldNature, field.TypeInt64, value)
-	}
-	if ou.mutation.NatureCleared() {
-		_spec.ClearField(order.FieldNature, field.TypeInt64)
 	}
 	if value, ok := ou.mutation.CompletionAt(); ok {
 		_spec.SetField(order.FieldCompletionAt, field.TypeTime, value)
@@ -1025,7 +998,6 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(ou.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ou.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{order.Label}
@@ -1041,10 +1013,9 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // OrderUpdateOne is the builder for updating a single Order entity.
 type OrderUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrderMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *OrderMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1173,30 +1144,43 @@ func (ouo *OrderUpdateOne) ClearMemberID() *OrderUpdateOne {
 	return ouo
 }
 
-// SetMemberProductID sets the "member_product_id" field.
-func (ouo *OrderUpdateOne) SetMemberProductID(i int64) *OrderUpdateOne {
-	ouo.mutation.ResetMemberProductID()
-	ouo.mutation.SetMemberProductID(i)
+// SetNature sets the "nature" field.
+func (ouo *OrderUpdateOne) SetNature(s string) *OrderUpdateOne {
+	ouo.mutation.SetNature(s)
 	return ouo
 }
 
-// SetNillableMemberProductID sets the "member_product_id" field if the given value is not nil.
-func (ouo *OrderUpdateOne) SetNillableMemberProductID(i *int64) *OrderUpdateOne {
-	if i != nil {
-		ouo.SetMemberProductID(*i)
+// SetNillableNature sets the "nature" field if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableNature(s *string) *OrderUpdateOne {
+	if s != nil {
+		ouo.SetNature(*s)
 	}
 	return ouo
 }
 
-// AddMemberProductID adds i to the "member_product_id" field.
-func (ouo *OrderUpdateOne) AddMemberProductID(i int64) *OrderUpdateOne {
-	ouo.mutation.AddMemberProductID(i)
+// ClearNature clears the value of the "nature" field.
+func (ouo *OrderUpdateOne) ClearNature() *OrderUpdateOne {
+	ouo.mutation.ClearNature()
 	return ouo
 }
 
-// ClearMemberProductID clears the value of the "member_product_id" field.
-func (ouo *OrderUpdateOne) ClearMemberProductID() *OrderUpdateOne {
-	ouo.mutation.ClearMemberProductID()
+// SetProductType sets the "product_type" field.
+func (ouo *OrderUpdateOne) SetProductType(s string) *OrderUpdateOne {
+	ouo.mutation.SetProductType(s)
+	return ouo
+}
+
+// SetNillableProductType sets the "product_type" field if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableProductType(s *string) *OrderUpdateOne {
+	if s != nil {
+		ouo.SetProductType(*s)
+	}
+	return ouo
+}
+
+// ClearProductType clears the value of the "product_type" field.
+func (ouo *OrderUpdateOne) ClearProductType() *OrderUpdateOne {
+	ouo.mutation.ClearProductType()
 	return ouo
 }
 
@@ -1264,33 +1248,6 @@ func (ouo *OrderUpdateOne) SetNillableDevice(s *string) *OrderUpdateOne {
 // ClearDevice clears the value of the "device" field.
 func (ouo *OrderUpdateOne) ClearDevice() *OrderUpdateOne {
 	ouo.mutation.ClearDevice()
-	return ouo
-}
-
-// SetNature sets the "nature" field.
-func (ouo *OrderUpdateOne) SetNature(i int64) *OrderUpdateOne {
-	ouo.mutation.ResetNature()
-	ouo.mutation.SetNature(i)
-	return ouo
-}
-
-// SetNillableNature sets the "nature" field if the given value is not nil.
-func (ouo *OrderUpdateOne) SetNillableNature(i *int64) *OrderUpdateOne {
-	if i != nil {
-		ouo.SetNature(*i)
-	}
-	return ouo
-}
-
-// AddNature adds i to the "nature" field.
-func (ouo *OrderUpdateOne) AddNature(i int64) *OrderUpdateOne {
-	ouo.mutation.AddNature(i)
-	return ouo
-}
-
-// ClearNature clears the value of the "nature" field.
-func (ouo *OrderUpdateOne) ClearNature() *OrderUpdateOne {
-	ouo.mutation.ClearNature()
 	return ouo
 }
 
@@ -1643,12 +1600,6 @@ func (ouo *OrderUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ouo *OrderUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderUpdateOne {
-	ouo.modifiers = append(ouo.modifiers, modifiers...)
-	return ouo
-}
-
 func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error) {
 	_spec := sqlgraph.NewUpdateSpec(order.Table, order.Columns, sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64))
 	id, ok := ouo.mutation.ID()
@@ -1708,14 +1659,17 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	if ouo.mutation.OrderSnCleared() {
 		_spec.ClearField(order.FieldOrderSn, field.TypeString)
 	}
-	if value, ok := ouo.mutation.MemberProductID(); ok {
-		_spec.SetField(order.FieldMemberProductID, field.TypeInt64, value)
+	if value, ok := ouo.mutation.Nature(); ok {
+		_spec.SetField(order.FieldNature, field.TypeString, value)
 	}
-	if value, ok := ouo.mutation.AddedMemberProductID(); ok {
-		_spec.AddField(order.FieldMemberProductID, field.TypeInt64, value)
+	if ouo.mutation.NatureCleared() {
+		_spec.ClearField(order.FieldNature, field.TypeString)
 	}
-	if ouo.mutation.MemberProductIDCleared() {
-		_spec.ClearField(order.FieldMemberProductID, field.TypeInt64)
+	if value, ok := ouo.mutation.ProductType(); ok {
+		_spec.SetField(order.FieldProductType, field.TypeString, value)
+	}
+	if ouo.mutation.ProductTypeCleared() {
+		_spec.ClearField(order.FieldProductType, field.TypeString)
 	}
 	if value, ok := ouo.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
@@ -1737,15 +1691,6 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	}
 	if ouo.mutation.DeviceCleared() {
 		_spec.ClearField(order.FieldDevice, field.TypeString)
-	}
-	if value, ok := ouo.mutation.Nature(); ok {
-		_spec.SetField(order.FieldNature, field.TypeInt64, value)
-	}
-	if value, ok := ouo.mutation.AddedNature(); ok {
-		_spec.AddField(order.FieldNature, field.TypeInt64, value)
-	}
-	if ouo.mutation.NatureCleared() {
-		_spec.ClearField(order.FieldNature, field.TypeInt64)
 	}
 	if value, ok := ouo.mutation.CompletionAt(); ok {
 		_spec.SetField(order.FieldCompletionAt, field.TypeTime, value)
@@ -2065,7 +2010,6 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(ouo.modifiers...)
 	_node = &Order{config: ouo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

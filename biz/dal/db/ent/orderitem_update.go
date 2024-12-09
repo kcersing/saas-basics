@@ -13,15 +13,15 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 )
 
 // OrderItemUpdate is the builder for updating OrderItem entities.
 type OrderItemUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrderItemMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrderItemMutation
 }
 
 // Where appends a list predicates to the OrderItemUpdate builder.
@@ -170,6 +170,78 @@ func (oiu *OrderItemUpdate) ClearRelatedUserProductID() *OrderItemUpdate {
 	return oiu
 }
 
+// SetContestID sets the "contest_id" field.
+func (oiu *OrderItemUpdate) SetContestID(i int64) *OrderItemUpdate {
+	oiu.mutation.ResetContestID()
+	oiu.mutation.SetContestID(i)
+	return oiu
+}
+
+// SetNillableContestID sets the "contest_id" field if the given value is not nil.
+func (oiu *OrderItemUpdate) SetNillableContestID(i *int64) *OrderItemUpdate {
+	if i != nil {
+		oiu.SetContestID(*i)
+	}
+	return oiu
+}
+
+// AddContestID adds i to the "contest_id" field.
+func (oiu *OrderItemUpdate) AddContestID(i int64) *OrderItemUpdate {
+	oiu.mutation.AddContestID(i)
+	return oiu
+}
+
+// ClearContestID clears the value of the "contest_id" field.
+func (oiu *OrderItemUpdate) ClearContestID() *OrderItemUpdate {
+	oiu.mutation.ClearContestID()
+	return oiu
+}
+
+// SetBootcampID sets the "bootcamp_id" field.
+func (oiu *OrderItemUpdate) SetBootcampID(i int64) *OrderItemUpdate {
+	oiu.mutation.ResetBootcampID()
+	oiu.mutation.SetBootcampID(i)
+	return oiu
+}
+
+// SetNillableBootcampID sets the "bootcamp_id" field if the given value is not nil.
+func (oiu *OrderItemUpdate) SetNillableBootcampID(i *int64) *OrderItemUpdate {
+	if i != nil {
+		oiu.SetBootcampID(*i)
+	}
+	return oiu
+}
+
+// AddBootcampID adds i to the "bootcamp_id" field.
+func (oiu *OrderItemUpdate) AddBootcampID(i int64) *OrderItemUpdate {
+	oiu.mutation.AddBootcampID(i)
+	return oiu
+}
+
+// ClearBootcampID clears the value of the "bootcamp_id" field.
+func (oiu *OrderItemUpdate) ClearBootcampID() *OrderItemUpdate {
+	oiu.mutation.ClearBootcampID()
+	return oiu
+}
+
+// SetData sets the "data" field.
+func (oiu *OrderItemUpdate) SetData(s []string) *OrderItemUpdate {
+	oiu.mutation.SetData(s)
+	return oiu
+}
+
+// AppendData appends s to the "data" field.
+func (oiu *OrderItemUpdate) AppendData(s []string) *OrderItemUpdate {
+	oiu.mutation.AppendData(s)
+	return oiu
+}
+
+// ClearData clears the value of the "data" field.
+func (oiu *OrderItemUpdate) ClearData() *OrderItemUpdate {
+	oiu.mutation.ClearData()
+	return oiu
+}
+
 // SetOrder sets the "order" edge to the Order entity.
 func (oiu *OrderItemUpdate) SetOrder(o *Order) *OrderItemUpdate {
 	return oiu.SetOrderID(o.ID)
@@ -220,12 +292,6 @@ func (oiu *OrderItemUpdate) defaults() {
 		v := orderitem.UpdateDefaultUpdatedAt()
 		oiu.mutation.SetUpdatedAt(v)
 	}
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (oiu *OrderItemUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderItemUpdate {
-	oiu.modifiers = append(oiu.modifiers, modifiers...)
-	return oiu
 }
 
 func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -282,6 +348,35 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if oiu.mutation.RelatedUserProductIDCleared() {
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
+	if value, ok := oiu.mutation.ContestID(); ok {
+		_spec.SetField(orderitem.FieldContestID, field.TypeInt64, value)
+	}
+	if value, ok := oiu.mutation.AddedContestID(); ok {
+		_spec.AddField(orderitem.FieldContestID, field.TypeInt64, value)
+	}
+	if oiu.mutation.ContestIDCleared() {
+		_spec.ClearField(orderitem.FieldContestID, field.TypeInt64)
+	}
+	if value, ok := oiu.mutation.BootcampID(); ok {
+		_spec.SetField(orderitem.FieldBootcampID, field.TypeInt64, value)
+	}
+	if value, ok := oiu.mutation.AddedBootcampID(); ok {
+		_spec.AddField(orderitem.FieldBootcampID, field.TypeInt64, value)
+	}
+	if oiu.mutation.BootcampIDCleared() {
+		_spec.ClearField(orderitem.FieldBootcampID, field.TypeInt64)
+	}
+	if value, ok := oiu.mutation.Data(); ok {
+		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)
+	}
+	if value, ok := oiu.mutation.AppendedData(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orderitem.FieldData, value)
+		})
+	}
+	if oiu.mutation.DataCleared() {
+		_spec.ClearField(orderitem.FieldData, field.TypeJSON)
+	}
 	if oiu.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -311,7 +406,6 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(oiu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, oiu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orderitem.Label}
@@ -327,10 +421,9 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // OrderItemUpdateOne is the builder for updating a single OrderItem entity.
 type OrderItemUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrderItemMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *OrderItemMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -473,6 +566,78 @@ func (oiuo *OrderItemUpdateOne) ClearRelatedUserProductID() *OrderItemUpdateOne 
 	return oiuo
 }
 
+// SetContestID sets the "contest_id" field.
+func (oiuo *OrderItemUpdateOne) SetContestID(i int64) *OrderItemUpdateOne {
+	oiuo.mutation.ResetContestID()
+	oiuo.mutation.SetContestID(i)
+	return oiuo
+}
+
+// SetNillableContestID sets the "contest_id" field if the given value is not nil.
+func (oiuo *OrderItemUpdateOne) SetNillableContestID(i *int64) *OrderItemUpdateOne {
+	if i != nil {
+		oiuo.SetContestID(*i)
+	}
+	return oiuo
+}
+
+// AddContestID adds i to the "contest_id" field.
+func (oiuo *OrderItemUpdateOne) AddContestID(i int64) *OrderItemUpdateOne {
+	oiuo.mutation.AddContestID(i)
+	return oiuo
+}
+
+// ClearContestID clears the value of the "contest_id" field.
+func (oiuo *OrderItemUpdateOne) ClearContestID() *OrderItemUpdateOne {
+	oiuo.mutation.ClearContestID()
+	return oiuo
+}
+
+// SetBootcampID sets the "bootcamp_id" field.
+func (oiuo *OrderItemUpdateOne) SetBootcampID(i int64) *OrderItemUpdateOne {
+	oiuo.mutation.ResetBootcampID()
+	oiuo.mutation.SetBootcampID(i)
+	return oiuo
+}
+
+// SetNillableBootcampID sets the "bootcamp_id" field if the given value is not nil.
+func (oiuo *OrderItemUpdateOne) SetNillableBootcampID(i *int64) *OrderItemUpdateOne {
+	if i != nil {
+		oiuo.SetBootcampID(*i)
+	}
+	return oiuo
+}
+
+// AddBootcampID adds i to the "bootcamp_id" field.
+func (oiuo *OrderItemUpdateOne) AddBootcampID(i int64) *OrderItemUpdateOne {
+	oiuo.mutation.AddBootcampID(i)
+	return oiuo
+}
+
+// ClearBootcampID clears the value of the "bootcamp_id" field.
+func (oiuo *OrderItemUpdateOne) ClearBootcampID() *OrderItemUpdateOne {
+	oiuo.mutation.ClearBootcampID()
+	return oiuo
+}
+
+// SetData sets the "data" field.
+func (oiuo *OrderItemUpdateOne) SetData(s []string) *OrderItemUpdateOne {
+	oiuo.mutation.SetData(s)
+	return oiuo
+}
+
+// AppendData appends s to the "data" field.
+func (oiuo *OrderItemUpdateOne) AppendData(s []string) *OrderItemUpdateOne {
+	oiuo.mutation.AppendData(s)
+	return oiuo
+}
+
+// ClearData clears the value of the "data" field.
+func (oiuo *OrderItemUpdateOne) ClearData() *OrderItemUpdateOne {
+	oiuo.mutation.ClearData()
+	return oiuo
+}
+
 // SetOrder sets the "order" edge to the Order entity.
 func (oiuo *OrderItemUpdateOne) SetOrder(o *Order) *OrderItemUpdateOne {
 	return oiuo.SetOrderID(o.ID)
@@ -536,12 +701,6 @@ func (oiuo *OrderItemUpdateOne) defaults() {
 		v := orderitem.UpdateDefaultUpdatedAt()
 		oiuo.mutation.SetUpdatedAt(v)
 	}
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (oiuo *OrderItemUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderItemUpdateOne {
-	oiuo.modifiers = append(oiuo.modifiers, modifiers...)
-	return oiuo
 }
 
 func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, err error) {
@@ -615,6 +774,35 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 	if oiuo.mutation.RelatedUserProductIDCleared() {
 		_spec.ClearField(orderitem.FieldRelatedUserProductID, field.TypeInt64)
 	}
+	if value, ok := oiuo.mutation.ContestID(); ok {
+		_spec.SetField(orderitem.FieldContestID, field.TypeInt64, value)
+	}
+	if value, ok := oiuo.mutation.AddedContestID(); ok {
+		_spec.AddField(orderitem.FieldContestID, field.TypeInt64, value)
+	}
+	if oiuo.mutation.ContestIDCleared() {
+		_spec.ClearField(orderitem.FieldContestID, field.TypeInt64)
+	}
+	if value, ok := oiuo.mutation.BootcampID(); ok {
+		_spec.SetField(orderitem.FieldBootcampID, field.TypeInt64, value)
+	}
+	if value, ok := oiuo.mutation.AddedBootcampID(); ok {
+		_spec.AddField(orderitem.FieldBootcampID, field.TypeInt64, value)
+	}
+	if oiuo.mutation.BootcampIDCleared() {
+		_spec.ClearField(orderitem.FieldBootcampID, field.TypeInt64)
+	}
+	if value, ok := oiuo.mutation.Data(); ok {
+		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)
+	}
+	if value, ok := oiuo.mutation.AppendedData(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orderitem.FieldData, value)
+		})
+	}
+	if oiuo.mutation.DataCleared() {
+		_spec.ClearField(orderitem.FieldData, field.TypeJSON)
+	}
 	if oiuo.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -644,7 +832,6 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(oiuo.modifiers...)
 	_node = &OrderItem{config: oiuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -90,6 +90,16 @@ func RelatedUserProductID(v int64) predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldEQ(FieldRelatedUserProductID, v))
 }
 
+// ContestID applies equality check predicate on the "contest_id" field. It's identical to ContestIDEQ.
+func ContestID(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldEQ(FieldContestID, v))
+}
+
+// BootcampID applies equality check predicate on the "bootcamp_id" field. It's identical to BootcampIDEQ.
+func BootcampID(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldEQ(FieldBootcampID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldEQ(FieldCreatedAt, v))
@@ -418,6 +428,116 @@ func RelatedUserProductIDIsNil() predicate.OrderItem {
 // RelatedUserProductIDNotNil applies the NotNil predicate on the "related_user_product_id" field.
 func RelatedUserProductIDNotNil() predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldNotNull(FieldRelatedUserProductID))
+}
+
+// ContestIDEQ applies the EQ predicate on the "contest_id" field.
+func ContestIDEQ(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldEQ(FieldContestID, v))
+}
+
+// ContestIDNEQ applies the NEQ predicate on the "contest_id" field.
+func ContestIDNEQ(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNEQ(FieldContestID, v))
+}
+
+// ContestIDIn applies the In predicate on the "contest_id" field.
+func ContestIDIn(vs ...int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldIn(FieldContestID, vs...))
+}
+
+// ContestIDNotIn applies the NotIn predicate on the "contest_id" field.
+func ContestIDNotIn(vs ...int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNotIn(FieldContestID, vs...))
+}
+
+// ContestIDGT applies the GT predicate on the "contest_id" field.
+func ContestIDGT(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldGT(FieldContestID, v))
+}
+
+// ContestIDGTE applies the GTE predicate on the "contest_id" field.
+func ContestIDGTE(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldGTE(FieldContestID, v))
+}
+
+// ContestIDLT applies the LT predicate on the "contest_id" field.
+func ContestIDLT(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldLT(FieldContestID, v))
+}
+
+// ContestIDLTE applies the LTE predicate on the "contest_id" field.
+func ContestIDLTE(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldLTE(FieldContestID, v))
+}
+
+// ContestIDIsNil applies the IsNil predicate on the "contest_id" field.
+func ContestIDIsNil() predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldIsNull(FieldContestID))
+}
+
+// ContestIDNotNil applies the NotNil predicate on the "contest_id" field.
+func ContestIDNotNil() predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNotNull(FieldContestID))
+}
+
+// BootcampIDEQ applies the EQ predicate on the "bootcamp_id" field.
+func BootcampIDEQ(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldEQ(FieldBootcampID, v))
+}
+
+// BootcampIDNEQ applies the NEQ predicate on the "bootcamp_id" field.
+func BootcampIDNEQ(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNEQ(FieldBootcampID, v))
+}
+
+// BootcampIDIn applies the In predicate on the "bootcamp_id" field.
+func BootcampIDIn(vs ...int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldIn(FieldBootcampID, vs...))
+}
+
+// BootcampIDNotIn applies the NotIn predicate on the "bootcamp_id" field.
+func BootcampIDNotIn(vs ...int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNotIn(FieldBootcampID, vs...))
+}
+
+// BootcampIDGT applies the GT predicate on the "bootcamp_id" field.
+func BootcampIDGT(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldGT(FieldBootcampID, v))
+}
+
+// BootcampIDGTE applies the GTE predicate on the "bootcamp_id" field.
+func BootcampIDGTE(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldGTE(FieldBootcampID, v))
+}
+
+// BootcampIDLT applies the LT predicate on the "bootcamp_id" field.
+func BootcampIDLT(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldLT(FieldBootcampID, v))
+}
+
+// BootcampIDLTE applies the LTE predicate on the "bootcamp_id" field.
+func BootcampIDLTE(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldLTE(FieldBootcampID, v))
+}
+
+// BootcampIDIsNil applies the IsNil predicate on the "bootcamp_id" field.
+func BootcampIDIsNil() predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldIsNull(FieldBootcampID))
+}
+
+// BootcampIDNotNil applies the NotNil predicate on the "bootcamp_id" field.
+func BootcampIDNotNil() predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNotNull(FieldBootcampID))
+}
+
+// DataIsNil applies the IsNil predicate on the "data" field.
+func DataIsNil() predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldIsNull(FieldData))
+}
+
+// DataNotNil applies the NotNil predicate on the "data" field.
+func DataNotNil() predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNotNull(FieldData))
 }
 
 // HasOrder applies the HasEdge predicate on the "order" edge.

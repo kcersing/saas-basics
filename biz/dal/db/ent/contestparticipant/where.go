@@ -115,6 +115,11 @@ func Fee(v float64) predicate.ContestParticipant {
 	return predicate.ContestParticipant(sql.FieldEQ(FieldFee, v))
 }
 
+// MemberID applies equality check predicate on the "member_id" field. It's identical to MemberIDEQ.
+func MemberID(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldEQ(FieldMemberID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ContestParticipant {
 	return predicate.ContestParticipant(sql.FieldEQ(FieldCreatedAt, v))
@@ -795,6 +800,56 @@ func FeeNotNil() predicate.ContestParticipant {
 	return predicate.ContestParticipant(sql.FieldNotNull(FieldFee))
 }
 
+// MemberIDEQ applies the EQ predicate on the "member_id" field.
+func MemberIDEQ(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldEQ(FieldMemberID, v))
+}
+
+// MemberIDNEQ applies the NEQ predicate on the "member_id" field.
+func MemberIDNEQ(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldNEQ(FieldMemberID, v))
+}
+
+// MemberIDIn applies the In predicate on the "member_id" field.
+func MemberIDIn(vs ...int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldIn(FieldMemberID, vs...))
+}
+
+// MemberIDNotIn applies the NotIn predicate on the "member_id" field.
+func MemberIDNotIn(vs ...int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldNotIn(FieldMemberID, vs...))
+}
+
+// MemberIDGT applies the GT predicate on the "member_id" field.
+func MemberIDGT(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldGT(FieldMemberID, v))
+}
+
+// MemberIDGTE applies the GTE predicate on the "member_id" field.
+func MemberIDGTE(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldGTE(FieldMemberID, v))
+}
+
+// MemberIDLT applies the LT predicate on the "member_id" field.
+func MemberIDLT(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldLT(FieldMemberID, v))
+}
+
+// MemberIDLTE applies the LTE predicate on the "member_id" field.
+func MemberIDLTE(v int64) predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldLTE(FieldMemberID, v))
+}
+
+// MemberIDIsNil applies the IsNil predicate on the "member_id" field.
+func MemberIDIsNil() predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldIsNull(FieldMemberID))
+}
+
+// MemberIDNotNil applies the NotNil predicate on the "member_id" field.
+func MemberIDNotNil() predicate.ContestParticipant {
+	return predicate.ContestParticipant(sql.FieldNotNull(FieldMemberID))
+}
+
 // HasContest applies the HasEdge predicate on the "contest" edge.
 func HasContest() predicate.ContestParticipant {
 	return predicate.ContestParticipant(func(s *sql.Selector) {
@@ -810,6 +865,29 @@ func HasContest() predicate.ContestParticipant {
 func HasContestWith(preds ...predicate.Contest) predicate.ContestParticipant {
 	return predicate.ContestParticipant(func(s *sql.Selector) {
 		step := newContestStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMembers applies the HasEdge predicate on the "members" edge.
+func HasMembers() predicate.ContestParticipant {
+	return predicate.ContestParticipant(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, MembersTable, MembersPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMembersWith applies the HasEdge predicate on the "members" edge with a given conditions (other predicates).
+func HasMembersWith(preds ...predicate.Member) predicate.ContestParticipant {
+	return predicate.ContestParticipant(func(s *sql.Selector) {
+		step := newMembersStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

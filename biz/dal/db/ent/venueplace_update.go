@@ -19,9 +19,8 @@ import (
 // VenuePlaceUpdate is the builder for updating VenuePlace entities.
 type VenuePlaceUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *VenuePlaceMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *VenuePlaceMutation
 }
 
 // Where appends a list predicates to the VenuePlaceUpdate builder.
@@ -282,12 +281,6 @@ func (vpu *VenuePlaceUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (vpu *VenuePlaceUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *VenuePlaceUpdate {
-	vpu.modifiers = append(vpu.modifiers, modifiers...)
-	return vpu
-}
-
 func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(venueplace.Table, venueplace.Columns, sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64))
 	if ps := vpu.mutation.predicates; len(ps) > 0 {
@@ -389,7 +382,6 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(vpu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, vpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{venueplace.Label}
@@ -405,10 +397,9 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // VenuePlaceUpdateOne is the builder for updating a single VenuePlace entity.
 type VenuePlaceUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *VenuePlaceMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *VenuePlaceMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -676,12 +667,6 @@ func (vpuo *VenuePlaceUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (vpuo *VenuePlaceUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *VenuePlaceUpdateOne {
-	vpuo.modifiers = append(vpuo.modifiers, modifiers...)
-	return vpuo
-}
-
 func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace, err error) {
 	_spec := sqlgraph.NewUpdateSpec(venueplace.Table, venueplace.Columns, sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64))
 	id, ok := vpuo.mutation.ID()
@@ -800,7 +785,6 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(vpuo.modifiers...)
 	_node = &VenuePlace{config: vpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

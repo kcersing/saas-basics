@@ -359,8 +359,8 @@ const docTemplate = `{
         },
         "/service/banner/list": {
             "post": {
-                "description": "Banner列表 Description",
-                "summary": "Banner列表 Summary",
+                "description": "获取Banner列表 Description",
+                "summary": "获取Banner列表 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -368,7 +368,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/base.PageInfoReq"
+                            "$ref": "#/definitions/banner.BannerListReq"
                         }
                     }
                 ],
@@ -1613,6 +1613,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/order/info": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/service/order/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/order/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/order/update": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/participant/create": {
             "post": {
                 "description": "添加参赛人 Description",
@@ -1795,6 +1815,8 @@ const docTemplate = `{
         },
         "/service/payment/WXPay": {
             "post": {
+                "description": "WXPay.",
+                "summary": "WXPay.",
                 "responses": {}
             }
         },
@@ -2453,6 +2475,9 @@ const docTemplate = `{
         "banner.BannerInfo": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "integer"
+                },
                 "isShow": {
                     "type": "integer"
                 },
@@ -2464,6 +2489,17 @@ const docTemplate = `{
                 },
                 "pic": {
                     "type": "string"
+                }
+            }
+        },
+        "banner.BannerListReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
                 }
             }
         },

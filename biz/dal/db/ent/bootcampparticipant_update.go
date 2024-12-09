@@ -19,9 +19,8 @@ import (
 // BootcampParticipantUpdate is the builder for updating BootcampParticipant entities.
 type BootcampParticipantUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *BootcampParticipantMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *BootcampParticipantMutation
 }
 
 // Where appends a list predicates to the BootcampParticipantUpdate builder.
@@ -329,12 +328,6 @@ func (bpu *BootcampParticipantUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (bpu *BootcampParticipantUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *BootcampParticipantUpdate {
-	bpu.modifiers = append(bpu.modifiers, modifiers...)
-	return bpu
-}
-
 func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(bootcampparticipant.Table, bootcampparticipant.Columns, sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64))
 	if ps := bpu.mutation.predicates; len(ps) > 0 {
@@ -451,7 +444,6 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(bpu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, bpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{bootcampparticipant.Label}
@@ -467,10 +459,9 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 // BootcampParticipantUpdateOne is the builder for updating a single BootcampParticipant entity.
 type BootcampParticipantUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *BootcampParticipantMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *BootcampParticipantMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -785,12 +776,6 @@ func (bpuo *BootcampParticipantUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (bpuo *BootcampParticipantUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *BootcampParticipantUpdateOne {
-	bpuo.modifiers = append(bpuo.modifiers, modifiers...)
-	return bpuo
-}
-
 func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *BootcampParticipant, err error) {
 	_spec := sqlgraph.NewUpdateSpec(bootcampparticipant.Table, bootcampparticipant.Columns, sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64))
 	id, ok := bpuo.mutation.ID()
@@ -924,7 +909,6 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(bpuo.modifiers...)
 	_node = &BootcampParticipant{config: bpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

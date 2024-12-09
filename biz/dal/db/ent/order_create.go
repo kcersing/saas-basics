@@ -125,16 +125,30 @@ func (oc *OrderCreate) SetNillableMemberID(i *int64) *OrderCreate {
 	return oc
 }
 
-// SetMemberProductID sets the "member_product_id" field.
-func (oc *OrderCreate) SetMemberProductID(i int64) *OrderCreate {
-	oc.mutation.SetMemberProductID(i)
+// SetNature sets the "nature" field.
+func (oc *OrderCreate) SetNature(s string) *OrderCreate {
+	oc.mutation.SetNature(s)
 	return oc
 }
 
-// SetNillableMemberProductID sets the "member_product_id" field if the given value is not nil.
-func (oc *OrderCreate) SetNillableMemberProductID(i *int64) *OrderCreate {
-	if i != nil {
-		oc.SetMemberProductID(*i)
+// SetNillableNature sets the "nature" field if the given value is not nil.
+func (oc *OrderCreate) SetNillableNature(s *string) *OrderCreate {
+	if s != nil {
+		oc.SetNature(*s)
+	}
+	return oc
+}
+
+// SetProductType sets the "product_type" field.
+func (oc *OrderCreate) SetProductType(s string) *OrderCreate {
+	oc.mutation.SetProductType(s)
+	return oc
+}
+
+// SetNillableProductType sets the "product_type" field if the given value is not nil.
+func (oc *OrderCreate) SetNillableProductType(s *string) *OrderCreate {
+	if s != nil {
+		oc.SetProductType(*s)
 	}
 	return oc
 }
@@ -177,20 +191,6 @@ func (oc *OrderCreate) SetDevice(s string) *OrderCreate {
 func (oc *OrderCreate) SetNillableDevice(s *string) *OrderCreate {
 	if s != nil {
 		oc.SetDevice(*s)
-	}
-	return oc
-}
-
-// SetNature sets the "nature" field.
-func (oc *OrderCreate) SetNature(i int64) *OrderCreate {
-	oc.mutation.SetNature(i)
-	return oc
-}
-
-// SetNillableNature sets the "nature" field if the given value is not nil.
-func (oc *OrderCreate) SetNillableNature(i *int64) *OrderCreate {
-	if i != nil {
-		oc.SetNature(*i)
 	}
 	return oc
 }
@@ -480,9 +480,13 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)
 		_node.OrderSn = value
 	}
-	if value, ok := oc.mutation.MemberProductID(); ok {
-		_spec.SetField(order.FieldMemberProductID, field.TypeInt64, value)
-		_node.MemberProductID = value
+	if value, ok := oc.mutation.Nature(); ok {
+		_spec.SetField(order.FieldNature, field.TypeString, value)
+		_node.Nature = value
+	}
+	if value, ok := oc.mutation.ProductType(); ok {
+		_spec.SetField(order.FieldProductType, field.TypeString, value)
+		_node.ProductType = value
 	}
 	if value, ok := oc.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
@@ -495,10 +499,6 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 	if value, ok := oc.mutation.Device(); ok {
 		_spec.SetField(order.FieldDevice, field.TypeString, value)
 		_node.Device = value
-	}
-	if value, ok := oc.mutation.Nature(); ok {
-		_spec.SetField(order.FieldNature, field.TypeInt64, value)
-		_node.Nature = value
 	}
 	if value, ok := oc.mutation.CompletionAt(); ok {
 		_spec.SetField(order.FieldCompletionAt, field.TypeTime, value)

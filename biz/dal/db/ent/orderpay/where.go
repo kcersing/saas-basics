@@ -105,6 +105,16 @@ func CreateID(v int64) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldCreateID, v))
 }
 
+// PaySn applies equality check predicate on the "pay_sn" field. It's identical to PaySnEQ.
+func PaySn(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldPaySn, v))
+}
+
+// PrepayID applies equality check predicate on the "prepay_id" field. It's identical to PrepayIDEQ.
+func PrepayID(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldPrepayID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldCreatedAt, v))
@@ -633,6 +643,166 @@ func CreateIDIsNil() predicate.OrderPay {
 // CreateIDNotNil applies the NotNil predicate on the "create_id" field.
 func CreateIDNotNil() predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldNotNull(FieldCreateID))
+}
+
+// PaySnEQ applies the EQ predicate on the "pay_sn" field.
+func PaySnEQ(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldPaySn, v))
+}
+
+// PaySnNEQ applies the NEQ predicate on the "pay_sn" field.
+func PaySnNEQ(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNEQ(FieldPaySn, v))
+}
+
+// PaySnIn applies the In predicate on the "pay_sn" field.
+func PaySnIn(vs ...string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIn(FieldPaySn, vs...))
+}
+
+// PaySnNotIn applies the NotIn predicate on the "pay_sn" field.
+func PaySnNotIn(vs ...string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotIn(FieldPaySn, vs...))
+}
+
+// PaySnGT applies the GT predicate on the "pay_sn" field.
+func PaySnGT(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGT(FieldPaySn, v))
+}
+
+// PaySnGTE applies the GTE predicate on the "pay_sn" field.
+func PaySnGTE(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGTE(FieldPaySn, v))
+}
+
+// PaySnLT applies the LT predicate on the "pay_sn" field.
+func PaySnLT(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLT(FieldPaySn, v))
+}
+
+// PaySnLTE applies the LTE predicate on the "pay_sn" field.
+func PaySnLTE(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLTE(FieldPaySn, v))
+}
+
+// PaySnContains applies the Contains predicate on the "pay_sn" field.
+func PaySnContains(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldContains(FieldPaySn, v))
+}
+
+// PaySnHasPrefix applies the HasPrefix predicate on the "pay_sn" field.
+func PaySnHasPrefix(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldHasPrefix(FieldPaySn, v))
+}
+
+// PaySnHasSuffix applies the HasSuffix predicate on the "pay_sn" field.
+func PaySnHasSuffix(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldHasSuffix(FieldPaySn, v))
+}
+
+// PaySnIsNil applies the IsNil predicate on the "pay_sn" field.
+func PaySnIsNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIsNull(FieldPaySn))
+}
+
+// PaySnNotNil applies the NotNil predicate on the "pay_sn" field.
+func PaySnNotNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotNull(FieldPaySn))
+}
+
+// PaySnEqualFold applies the EqualFold predicate on the "pay_sn" field.
+func PaySnEqualFold(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEqualFold(FieldPaySn, v))
+}
+
+// PaySnContainsFold applies the ContainsFold predicate on the "pay_sn" field.
+func PaySnContainsFold(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldContainsFold(FieldPaySn, v))
+}
+
+// PrepayIDEQ applies the EQ predicate on the "prepay_id" field.
+func PrepayIDEQ(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldPrepayID, v))
+}
+
+// PrepayIDNEQ applies the NEQ predicate on the "prepay_id" field.
+func PrepayIDNEQ(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNEQ(FieldPrepayID, v))
+}
+
+// PrepayIDIn applies the In predicate on the "prepay_id" field.
+func PrepayIDIn(vs ...string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIn(FieldPrepayID, vs...))
+}
+
+// PrepayIDNotIn applies the NotIn predicate on the "prepay_id" field.
+func PrepayIDNotIn(vs ...string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotIn(FieldPrepayID, vs...))
+}
+
+// PrepayIDGT applies the GT predicate on the "prepay_id" field.
+func PrepayIDGT(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGT(FieldPrepayID, v))
+}
+
+// PrepayIDGTE applies the GTE predicate on the "prepay_id" field.
+func PrepayIDGTE(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGTE(FieldPrepayID, v))
+}
+
+// PrepayIDLT applies the LT predicate on the "prepay_id" field.
+func PrepayIDLT(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLT(FieldPrepayID, v))
+}
+
+// PrepayIDLTE applies the LTE predicate on the "prepay_id" field.
+func PrepayIDLTE(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLTE(FieldPrepayID, v))
+}
+
+// PrepayIDContains applies the Contains predicate on the "prepay_id" field.
+func PrepayIDContains(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldContains(FieldPrepayID, v))
+}
+
+// PrepayIDHasPrefix applies the HasPrefix predicate on the "prepay_id" field.
+func PrepayIDHasPrefix(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldHasPrefix(FieldPrepayID, v))
+}
+
+// PrepayIDHasSuffix applies the HasSuffix predicate on the "prepay_id" field.
+func PrepayIDHasSuffix(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldHasSuffix(FieldPrepayID, v))
+}
+
+// PrepayIDIsNil applies the IsNil predicate on the "prepay_id" field.
+func PrepayIDIsNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIsNull(FieldPrepayID))
+}
+
+// PrepayIDNotNil applies the NotNil predicate on the "prepay_id" field.
+func PrepayIDNotNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotNull(FieldPrepayID))
+}
+
+// PrepayIDEqualFold applies the EqualFold predicate on the "prepay_id" field.
+func PrepayIDEqualFold(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEqualFold(FieldPrepayID, v))
+}
+
+// PrepayIDContainsFold applies the ContainsFold predicate on the "prepay_id" field.
+func PrepayIDContainsFold(v string) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldContainsFold(FieldPrepayID, v))
+}
+
+// PayExtraIsNil applies the IsNil predicate on the "pay_extra" field.
+func PayExtraIsNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIsNull(FieldPayExtra))
+}
+
+// PayExtraNotNil applies the NotNil predicate on the "pay_extra" field.
+func PayExtraNotNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotNull(FieldPayExtra))
 }
 
 // HasOrder applies the HasEdge predicate on the "order" edge.

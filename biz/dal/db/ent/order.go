@@ -25,7 +25,7 @@ type Order struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete
+	// last delete  1:已删除
 	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
@@ -35,16 +35,16 @@ type Order struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
-	// 会员产品id
-	MemberProductID int64 `json:"member_product_id,omitempty"`
-	// 状态 | [0:正常;1:禁用]
+	// 业务类型
+	Nature string `json:"nature,omitempty"`
+	// 产品类型
+	ProductType string `json:"product_type,omitempty"`
+	// 状态 | [1:待付款]
 	Status int64 `json:"status,omitempty"`
 	// 订单来源
 	Source string `json:"source,omitempty"`
 	// 设备来源
 	Device string `json:"device,omitempty"`
-	// 业务类型
-	Nature int64 `json:"nature,omitempty"`
 	// 订单完成时间
 	CompletionAt time.Time `json:"completion_at,omitempty"`
 	// 创建人id
@@ -167,9 +167,9 @@ func (*Order) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case order.FieldID, order.FieldDelete, order.FieldCreatedID, order.FieldVenueID, order.FieldMemberID, order.FieldMemberProductID, order.FieldStatus, order.FieldNature, order.FieldCreateID:
+		case order.FieldID, order.FieldDelete, order.FieldCreatedID, order.FieldVenueID, order.FieldMemberID, order.FieldStatus, order.FieldCreateID:
 			values[i] = new(sql.NullInt64)
-		case order.FieldOrderSn, order.FieldSource, order.FieldDevice:
+		case order.FieldOrderSn, order.FieldNature, order.FieldProductType, order.FieldSource, order.FieldDevice:
 			values[i] = new(sql.NullString)
 		case order.FieldCreatedAt, order.FieldUpdatedAt, order.FieldCompletionAt:
 			values[i] = new(sql.NullTime)
@@ -236,11 +236,17 @@ func (o *Order) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				o.MemberID = value.Int64
 			}
-		case order.FieldMemberProductID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field member_product_id", values[i])
+		case order.FieldNature:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field nature", values[i])
 			} else if value.Valid {
-				o.MemberProductID = value.Int64
+				o.Nature = value.String
+			}
+		case order.FieldProductType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field product_type", values[i])
+			} else if value.Valid {
+				o.ProductType = value.String
 			}
 		case order.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -259,12 +265,6 @@ func (o *Order) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field device", values[i])
 			} else if value.Valid {
 				o.Device = value.String
-			}
-		case order.FieldNature:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field nature", values[i])
-			} else if value.Valid {
-				o.Nature = value.Int64
 			}
 		case order.FieldCompletionAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -375,8 +375,11 @@ func (o *Order) String() string {
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", o.MemberID))
 	builder.WriteString(", ")
-	builder.WriteString("member_product_id=")
-	builder.WriteString(fmt.Sprintf("%v", o.MemberProductID))
+	builder.WriteString("nature=")
+	builder.WriteString(o.Nature)
+	builder.WriteString(", ")
+	builder.WriteString("product_type=")
+	builder.WriteString(o.ProductType)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", o.Status))
@@ -386,9 +389,6 @@ func (o *Order) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("device=")
 	builder.WriteString(o.Device)
-	builder.WriteString(", ")
-	builder.WriteString("nature=")
-	builder.WriteString(fmt.Sprintf("%v", o.Nature))
 	builder.WriteString(", ")
 	builder.WriteString("completion_at=")
 	builder.WriteString(o.CompletionAt.Format(time.ANSIC))

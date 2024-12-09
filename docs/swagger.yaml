@@ -66,6 +66,8 @@ definitions:
     type: object
   banner.BannerInfo:
     properties:
+      id:
+        type: integer
       isShow:
         type: integer
       link:
@@ -74,6 +76,13 @@ definitions:
         type: string
       pic:
         type: string
+    type: object
+  banner.BannerListReq:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
     type: object
   base.IDReq:
     properties:
@@ -897,20 +906,20 @@ paths:
       summary: 删除Banner Summary
   /service/banner/list:
     post:
-      description: Banner列表 Description
+      description: 获取Banner列表 Description
       parameters:
       - description: query params
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/base.PageInfoReq'
+          $ref: '#/definitions/banner.BannerListReq'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: Banner列表 Summary
+      summary: 获取Banner列表 Summary
   /service/banner/show:
     post:
       description: 更新Banner显示状态 Description
@@ -1699,6 +1708,18 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新菜单 Summary
+  /service/order/info:
+    get:
+      responses: {}
+  /service/order/list:
+    post:
+      responses: {}
+  /service/order/status:
+    post:
+      responses: {}
+  /service/order/update:
+    post:
+      responses: {}
   /service/participant/create:
     post:
       description: 添加参赛人 Description
@@ -1816,7 +1837,9 @@ paths:
       responses: {}
   /service/payment/WXPay:
     post:
+      description: WXPay.
       responses: {}
+      summary: WXPay.
   /service/place/create:
     post:
       description: 创建场地 Description

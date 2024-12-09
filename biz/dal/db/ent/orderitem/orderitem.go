@@ -28,6 +28,12 @@ const (
 	FieldProductID = "product_id"
 	// FieldRelatedUserProductID holds the string denoting the related_user_product_id field in the database.
 	FieldRelatedUserProductID = "related_user_product_id"
+	// FieldContestID holds the string denoting the contest_id field in the database.
+	FieldContestID = "contest_id"
+	// FieldBootcampID holds the string denoting the bootcamp_id field in the database.
+	FieldBootcampID = "bootcamp_id"
+	// FieldData holds the string denoting the data field in the database.
+	FieldData = "data"
 	// EdgeOrder holds the string denoting the order edge name in mutations.
 	EdgeOrder = "order"
 	// Table holds the table name of the orderitem in the database.
@@ -51,6 +57,9 @@ var Columns = []string{
 	FieldOrderID,
 	FieldProductID,
 	FieldRelatedUserProductID,
+	FieldContestID,
+	FieldBootcampID,
+	FieldData,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -119,6 +128,16 @@ func ByProductID(opts ...sql.OrderTermOption) OrderOption {
 // ByRelatedUserProductID orders the results by the related_user_product_id field.
 func ByRelatedUserProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelatedUserProductID, opts...).ToFunc()
+}
+
+// ByContestID orders the results by the contest_id field.
+func ByContestID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContestID, opts...).ToFunc()
+}
+
+// ByBootcampID orders the results by the bootcamp_id field.
+func ByBootcampID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBootcampID, opts...).ToFunc()
 }
 
 // ByOrderField orders the results by order field.

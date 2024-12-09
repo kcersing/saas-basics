@@ -21,9 +21,8 @@ import (
 // EntryLogsUpdate is the builder for updating EntryLogs entities.
 type EntryLogsUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *EntryLogsMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *EntryLogsMutation
 }
 
 // Where appends a list predicates to the EntryLogsUpdate builder.
@@ -368,12 +367,6 @@ func (elu *EntryLogsUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (elu *EntryLogsUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntryLogsUpdate {
-	elu.modifiers = append(elu.modifiers, modifiers...)
-	return elu
-}
-
 func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entrylogs.Table, entrylogs.Columns, sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64))
 	if ps := elu.mutation.predicates; len(ps) > 0 {
@@ -527,7 +520,6 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(elu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, elu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entrylogs.Label}
@@ -543,10 +535,9 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // EntryLogsUpdateOne is the builder for updating a single EntryLogs entity.
 type EntryLogsUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *EntryLogsMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *EntryLogsMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -898,12 +889,6 @@ func (eluo *EntryLogsUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (eluo *EntryLogsUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntryLogsUpdateOne {
-	eluo.modifiers = append(eluo.modifiers, modifiers...)
-	return eluo
-}
-
 func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entrylogs.Table, entrylogs.Columns, sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64))
 	id, ok := eluo.mutation.ID()
@@ -1074,7 +1059,6 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(eluo.modifiers...)
 	_node = &EntryLogs{config: eluo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -6,6 +6,7 @@
         <method importPath="saas/pkg/db/ent" receiver="*Client" name="Tx" />
         <method importPath="saas/pkg/db/ent" receiver="*ContestQuery" name="First" />
         <method importPath="saas/pkg/db/ent" receiver="*ContestParticipantQuery" name="First" />
+        <method importPath="saas/biz/dal/db/ent" receiver="*MemberQuery" name="First" />
       </methods>
     </inspection_tool>
   </profile>

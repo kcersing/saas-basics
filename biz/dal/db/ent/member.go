@@ -22,7 +22,7 @@ type Member struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete
+	// last delete  1:已删除
 	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
@@ -58,9 +58,11 @@ type MemberEdges struct {
 	MemberEntry []*EntryLogs `json:"member_entry,omitempty"`
 	// MemberContents holds the value of the member_contents edge.
 	MemberContents []*MemberContract `json:"member_contents,omitempty"`
+	// Participants holds the value of the participants edge.
+	Participants []*ContestParticipant `json:"participants,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 }
 
 // MemberDetailsOrErr returns the MemberDetails value or an error if the edge
@@ -106,6 +108,15 @@ func (e MemberEdges) MemberContentsOrErr() ([]*MemberContract, error) {
 		return e.MemberContents, nil
 	}
 	return nil, &NotLoadedError{edge: "member_contents"}
+}
+
+// ParticipantsOrErr returns the Participants value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) ParticipantsOrErr() ([]*ContestParticipant, error) {
+	if e.loadedTypes[5] {
+		return e.Participants, nil
+	}
+	return nil, &NotLoadedError{edge: "participants"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -242,6 +253,11 @@ func (m *Member) QueryMemberEntry() *EntryLogsQuery {
 // QueryMemberContents queries the "member_contents" edge of the Member entity.
 func (m *Member) QueryMemberContents() *MemberContractQuery {
 	return NewMemberClient(m.config).QueryMemberContents(m)
+}
+
+// QueryParticipants queries the "participants" edge of the Member entity.
+func (m *Member) QueryParticipants() *ContestParticipantQuery {
+	return NewMemberClient(m.config).QueryParticipants(m)
 }
 
 // Update returns a builder for updating this Member.

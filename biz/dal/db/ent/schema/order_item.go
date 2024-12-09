@@ -20,8 +20,10 @@ func (OrderItem) Fields() []ent.Field {
 		field.Int64("order_id").Comment("订单id").Optional(),
 		field.Int64("product_id").Comment("产品id").Optional(),
 		field.Int64("related_user_product_id").Default(0).Comment("关联会员产品id").Optional(),
-		//field.Text("data").Default("").Comment("数据附件").Optional(),
-		//field.JSON("data", do.CreateOrder{}).Comment("数据附件").Optional(),
+		field.Int64("contest_id").Comment("赛事id").Optional(),
+		field.Int64("bootcamp_id").Comment("训练营id").Optional(),
+
+		field.JSON("data", []string{}).Comment("数据附件").Optional(),
 	}
 }
 

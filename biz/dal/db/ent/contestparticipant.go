@@ -23,7 +23,7 @@ type ContestParticipant struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete
+	// last delete  1:已删除
 	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
@@ -43,6 +43,8 @@ type ContestParticipant struct {
 	OrderSn string `json:"order_sn,omitempty"`
 	// 费用
 	Fee float64 `json:"fee,omitempty"`
+	// 会员ID
+	MemberID int64 `json:"member_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ContestParticipantQuery when eager-loading is set.
 	Edges        ContestParticipantEdges `json:"edges"`
@@ -53,9 +55,11 @@ type ContestParticipant struct {
 type ContestParticipantEdges struct {
 	// Contest holds the value of the contest edge.
 	Contest *Contest `json:"contest,omitempty"`
+	// Members holds the value of the members edge.
+	Members []*Member `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // ContestOrErr returns the Contest value or an error if the edge
@@ -71,6 +75,15 @@ func (e ContestParticipantEdges) ContestOrErr() (*Contest, error) {
 	return nil, &NotLoadedError{edge: "contest"}
 }
 
+// MembersOrErr returns the Members value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContestParticipantEdges) MembersOrErr() ([]*Member, error) {
+	if e.loadedTypes[1] {
+		return e.Members, nil
+	}
+	return nil, &NotLoadedError{edge: "members"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ContestParticipant) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -78,7 +91,7 @@ func (*ContestParticipant) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case contestparticipant.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case contestparticipant.FieldID, contestparticipant.FieldDelete, contestparticipant.FieldCreatedID, contestparticipant.FieldStatus, contestparticipant.FieldContestID, contestparticipant.FieldOrderID:
+		case contestparticipant.FieldID, contestparticipant.FieldDelete, contestparticipant.FieldCreatedID, contestparticipant.FieldStatus, contestparticipant.FieldContestID, contestparticipant.FieldOrderID, contestparticipant.FieldMemberID:
 			values[i] = new(sql.NullInt64)
 		case contestparticipant.FieldName, contestparticipant.FieldMobile, contestparticipant.FieldFields, contestparticipant.FieldOrderSn:
 			values[i] = new(sql.NullString)
@@ -177,6 +190,12 @@ func (cp *ContestParticipant) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				cp.Fee = value.Float64
 			}
+		case contestparticipant.FieldMemberID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field member_id", values[i])
+			} else if value.Valid {
+				cp.MemberID = value.Int64
+			}
 		default:
 			cp.selectValues.Set(columns[i], values[i])
 		}
@@ -193,6 +212,11 @@ func (cp *ContestParticipant) Value(name string) (ent.Value, error) {
 // QueryContest queries the "contest" edge of the ContestParticipant entity.
 func (cp *ContestParticipant) QueryContest() *ContestQuery {
 	return NewContestParticipantClient(cp.config).QueryContest(cp)
+}
+
+// QueryMembers queries the "members" edge of the ContestParticipant entity.
+func (cp *ContestParticipant) QueryMembers() *MemberQuery {
+	return NewContestParticipantClient(cp.config).QueryMembers(cp)
 }
 
 // Update returns a builder for updating this ContestParticipant.
@@ -253,6 +277,9 @@ func (cp *ContestParticipant) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("fee=")
 	builder.WriteString(fmt.Sprintf("%v", cp.Fee))
+	builder.WriteString(", ")
+	builder.WriteString("member_id=")
+	builder.WriteString(fmt.Sprintf("%v", cp.MemberID))
 	builder.WriteByte(')')
 	return builder.String()
 }

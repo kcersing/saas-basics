@@ -24,7 +24,6 @@ type BootcampQuery struct {
 	inters                   []Interceptor
 	predicates               []predicate.Bootcamp
 	withBootcampParticipants *BootcampParticipantQuery
-	modifiers                []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -384,9 +383,6 @@ func (bq *BootcampQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Boo
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(bq.modifiers) > 0 {
-		_spec.Modifiers = bq.modifiers
-	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -441,9 +437,6 @@ func (bq *BootcampQuery) loadBootcampParticipants(ctx context.Context, query *Bo
 
 func (bq *BootcampQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := bq.querySpec()
-	if len(bq.modifiers) > 0 {
-		_spec.Modifiers = bq.modifiers
-	}
 	_spec.Node.Columns = bq.ctx.Fields
 	if len(bq.ctx.Fields) > 0 {
 		_spec.Unique = bq.ctx.Unique != nil && *bq.ctx.Unique
@@ -506,9 +499,6 @@ func (bq *BootcampQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if bq.ctx.Unique != nil && *bq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range bq.modifiers {
-		m(selector)
-	}
 	for _, p := range bq.predicates {
 		p(selector)
 	}
@@ -524,12 +514,6 @@ func (bq *BootcampQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (bq *BootcampQuery) Modify(modifiers ...func(s *sql.Selector)) *BootcampSelect {
-	bq.modifiers = append(bq.modifiers, modifiers...)
-	return bq.Select()
 }
 
 // BootcampGroupBy is the group-by builder for Bootcamp entities.
@@ -620,10 +604,4 @@ func (bs *BootcampSelect) sqlScan(ctx context.Context, root *BootcampQuery, v an
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (bs *BootcampSelect) Modify(modifiers ...func(s *sql.Selector)) *BootcampSelect {
-	bs.modifiers = append(bs.modifiers, modifiers...)
-	return bs
 }

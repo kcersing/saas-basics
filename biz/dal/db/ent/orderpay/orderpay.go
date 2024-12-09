@@ -34,6 +34,12 @@ const (
 	FieldPayWay = "pay_way"
 	// FieldCreateID holds the string denoting the create_id field in the database.
 	FieldCreateID = "create_id"
+	// FieldPaySn holds the string denoting the pay_sn field in the database.
+	FieldPaySn = "pay_sn"
+	// FieldPrepayID holds the string denoting the prepay_id field in the database.
+	FieldPrepayID = "prepay_id"
+	// FieldPayExtra holds the string denoting the pay_extra field in the database.
+	FieldPayExtra = "pay_extra"
 	// EdgeOrder holds the string denoting the order edge name in mutations.
 	EdgeOrder = "order"
 	// Table holds the table name of the orderpay in the database.
@@ -60,6 +66,9 @@ var Columns = []string{
 	FieldNote,
 	FieldPayWay,
 	FieldCreateID,
+	FieldPaySn,
+	FieldPrepayID,
+	FieldPayExtra,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -141,6 +150,16 @@ func ByPayWay(opts ...sql.OrderTermOption) OrderOption {
 // ByCreateID orders the results by the create_id field.
 func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
+}
+
+// ByPaySn orders the results by the pay_sn field.
+func ByPaySn(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPaySn, opts...).ToFunc()
+}
+
+// ByPrepayID orders the results by the prepay_id field.
+func ByPrepayID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrepayID, opts...).ToFunc()
 }
 
 // ByOrderField orders the results by order field.

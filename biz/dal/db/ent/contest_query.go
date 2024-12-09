@@ -24,7 +24,6 @@ type ContestQuery struct {
 	inters                  []Interceptor
 	predicates              []predicate.Contest
 	withContestParticipants *ContestParticipantQuery
-	modifiers               []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -384,9 +383,6 @@ func (cq *ContestQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(cq.modifiers) > 0 {
-		_spec.Modifiers = cq.modifiers
-	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -441,9 +437,6 @@ func (cq *ContestQuery) loadContestParticipants(ctx context.Context, query *Cont
 
 func (cq *ContestQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
-	if len(cq.modifiers) > 0 {
-		_spec.Modifiers = cq.modifiers
-	}
 	_spec.Node.Columns = cq.ctx.Fields
 	if len(cq.ctx.Fields) > 0 {
 		_spec.Unique = cq.ctx.Unique != nil && *cq.ctx.Unique
@@ -506,9 +499,6 @@ func (cq *ContestQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if cq.ctx.Unique != nil && *cq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range cq.modifiers {
-		m(selector)
-	}
 	for _, p := range cq.predicates {
 		p(selector)
 	}
@@ -524,12 +514,6 @@ func (cq *ContestQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (cq *ContestQuery) Modify(modifiers ...func(s *sql.Selector)) *ContestSelect {
-	cq.modifiers = append(cq.modifiers, modifiers...)
-	return cq.Select()
 }
 
 // ContestGroupBy is the group-by builder for Contest entities.
@@ -620,10 +604,4 @@ func (cs *ContestSelect) sqlScan(ctx context.Context, root *ContestQuery, v any)
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (cs *ContestSelect) Modify(modifiers ...func(s *sql.Selector)) *ContestSelect {
-	cs.modifiers = append(cs.modifiers, modifiers...)
-	return cs
 }

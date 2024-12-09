@@ -13,15 +13,15 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 )
 
 // OrderPayUpdate is the builder for updating OrderPay entities.
 type OrderPayUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrderPayMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrderPayMutation
 }
 
 // Where appends a list predicates to the OrderPayUpdate builder.
@@ -237,6 +237,64 @@ func (opu *OrderPayUpdate) ClearCreateID() *OrderPayUpdate {
 	return opu
 }
 
+// SetPaySn sets the "pay_sn" field.
+func (opu *OrderPayUpdate) SetPaySn(s string) *OrderPayUpdate {
+	opu.mutation.SetPaySn(s)
+	return opu
+}
+
+// SetNillablePaySn sets the "pay_sn" field if the given value is not nil.
+func (opu *OrderPayUpdate) SetNillablePaySn(s *string) *OrderPayUpdate {
+	if s != nil {
+		opu.SetPaySn(*s)
+	}
+	return opu
+}
+
+// ClearPaySn clears the value of the "pay_sn" field.
+func (opu *OrderPayUpdate) ClearPaySn() *OrderPayUpdate {
+	opu.mutation.ClearPaySn()
+	return opu
+}
+
+// SetPrepayID sets the "prepay_id" field.
+func (opu *OrderPayUpdate) SetPrepayID(s string) *OrderPayUpdate {
+	opu.mutation.SetPrepayID(s)
+	return opu
+}
+
+// SetNillablePrepayID sets the "prepay_id" field if the given value is not nil.
+func (opu *OrderPayUpdate) SetNillablePrepayID(s *string) *OrderPayUpdate {
+	if s != nil {
+		opu.SetPrepayID(*s)
+	}
+	return opu
+}
+
+// ClearPrepayID clears the value of the "prepay_id" field.
+func (opu *OrderPayUpdate) ClearPrepayID() *OrderPayUpdate {
+	opu.mutation.ClearPrepayID()
+	return opu
+}
+
+// SetPayExtra sets the "pay_extra" field.
+func (opu *OrderPayUpdate) SetPayExtra(s []string) *OrderPayUpdate {
+	opu.mutation.SetPayExtra(s)
+	return opu
+}
+
+// AppendPayExtra appends s to the "pay_extra" field.
+func (opu *OrderPayUpdate) AppendPayExtra(s []string) *OrderPayUpdate {
+	opu.mutation.AppendPayExtra(s)
+	return opu
+}
+
+// ClearPayExtra clears the value of the "pay_extra" field.
+func (opu *OrderPayUpdate) ClearPayExtra() *OrderPayUpdate {
+	opu.mutation.ClearPayExtra()
+	return opu
+}
+
 // SetOrder sets the "order" edge to the Order entity.
 func (opu *OrderPayUpdate) SetOrder(o *Order) *OrderPayUpdate {
 	return opu.SetOrderID(o.ID)
@@ -287,12 +345,6 @@ func (opu *OrderPayUpdate) defaults() {
 		v := orderpay.UpdateDefaultUpdatedAt()
 		opu.mutation.SetUpdatedAt(v)
 	}
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (opu *OrderPayUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderPayUpdate {
-	opu.modifiers = append(opu.modifiers, modifiers...)
-	return opu
 }
 
 func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -370,6 +422,29 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if opu.mutation.CreateIDCleared() {
 		_spec.ClearField(orderpay.FieldCreateID, field.TypeInt64)
 	}
+	if value, ok := opu.mutation.PaySn(); ok {
+		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)
+	}
+	if opu.mutation.PaySnCleared() {
+		_spec.ClearField(orderpay.FieldPaySn, field.TypeString)
+	}
+	if value, ok := opu.mutation.PrepayID(); ok {
+		_spec.SetField(orderpay.FieldPrepayID, field.TypeString, value)
+	}
+	if opu.mutation.PrepayIDCleared() {
+		_spec.ClearField(orderpay.FieldPrepayID, field.TypeString)
+	}
+	if value, ok := opu.mutation.PayExtra(); ok {
+		_spec.SetField(orderpay.FieldPayExtra, field.TypeJSON, value)
+	}
+	if value, ok := opu.mutation.AppendedPayExtra(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orderpay.FieldPayExtra, value)
+		})
+	}
+	if opu.mutation.PayExtraCleared() {
+		_spec.ClearField(orderpay.FieldPayExtra, field.TypeJSON)
+	}
 	if opu.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -399,7 +474,6 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(opu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, opu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orderpay.Label}
@@ -415,10 +489,9 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // OrderPayUpdateOne is the builder for updating a single OrderPay entity.
 type OrderPayUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrderPayMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *OrderPayMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -628,6 +701,64 @@ func (opuo *OrderPayUpdateOne) ClearCreateID() *OrderPayUpdateOne {
 	return opuo
 }
 
+// SetPaySn sets the "pay_sn" field.
+func (opuo *OrderPayUpdateOne) SetPaySn(s string) *OrderPayUpdateOne {
+	opuo.mutation.SetPaySn(s)
+	return opuo
+}
+
+// SetNillablePaySn sets the "pay_sn" field if the given value is not nil.
+func (opuo *OrderPayUpdateOne) SetNillablePaySn(s *string) *OrderPayUpdateOne {
+	if s != nil {
+		opuo.SetPaySn(*s)
+	}
+	return opuo
+}
+
+// ClearPaySn clears the value of the "pay_sn" field.
+func (opuo *OrderPayUpdateOne) ClearPaySn() *OrderPayUpdateOne {
+	opuo.mutation.ClearPaySn()
+	return opuo
+}
+
+// SetPrepayID sets the "prepay_id" field.
+func (opuo *OrderPayUpdateOne) SetPrepayID(s string) *OrderPayUpdateOne {
+	opuo.mutation.SetPrepayID(s)
+	return opuo
+}
+
+// SetNillablePrepayID sets the "prepay_id" field if the given value is not nil.
+func (opuo *OrderPayUpdateOne) SetNillablePrepayID(s *string) *OrderPayUpdateOne {
+	if s != nil {
+		opuo.SetPrepayID(*s)
+	}
+	return opuo
+}
+
+// ClearPrepayID clears the value of the "prepay_id" field.
+func (opuo *OrderPayUpdateOne) ClearPrepayID() *OrderPayUpdateOne {
+	opuo.mutation.ClearPrepayID()
+	return opuo
+}
+
+// SetPayExtra sets the "pay_extra" field.
+func (opuo *OrderPayUpdateOne) SetPayExtra(s []string) *OrderPayUpdateOne {
+	opuo.mutation.SetPayExtra(s)
+	return opuo
+}
+
+// AppendPayExtra appends s to the "pay_extra" field.
+func (opuo *OrderPayUpdateOne) AppendPayExtra(s []string) *OrderPayUpdateOne {
+	opuo.mutation.AppendPayExtra(s)
+	return opuo
+}
+
+// ClearPayExtra clears the value of the "pay_extra" field.
+func (opuo *OrderPayUpdateOne) ClearPayExtra() *OrderPayUpdateOne {
+	opuo.mutation.ClearPayExtra()
+	return opuo
+}
+
 // SetOrder sets the "order" edge to the Order entity.
 func (opuo *OrderPayUpdateOne) SetOrder(o *Order) *OrderPayUpdateOne {
 	return opuo.SetOrderID(o.ID)
@@ -691,12 +822,6 @@ func (opuo *OrderPayUpdateOne) defaults() {
 		v := orderpay.UpdateDefaultUpdatedAt()
 		opuo.mutation.SetUpdatedAt(v)
 	}
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (opuo *OrderPayUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrderPayUpdateOne {
-	opuo.modifiers = append(opuo.modifiers, modifiers...)
-	return opuo
 }
 
 func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, err error) {
@@ -791,6 +916,29 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 	if opuo.mutation.CreateIDCleared() {
 		_spec.ClearField(orderpay.FieldCreateID, field.TypeInt64)
 	}
+	if value, ok := opuo.mutation.PaySn(); ok {
+		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)
+	}
+	if opuo.mutation.PaySnCleared() {
+		_spec.ClearField(orderpay.FieldPaySn, field.TypeString)
+	}
+	if value, ok := opuo.mutation.PrepayID(); ok {
+		_spec.SetField(orderpay.FieldPrepayID, field.TypeString, value)
+	}
+	if opuo.mutation.PrepayIDCleared() {
+		_spec.ClearField(orderpay.FieldPrepayID, field.TypeString)
+	}
+	if value, ok := opuo.mutation.PayExtra(); ok {
+		_spec.SetField(orderpay.FieldPayExtra, field.TypeJSON, value)
+	}
+	if value, ok := opuo.mutation.AppendedPayExtra(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orderpay.FieldPayExtra, value)
+		})
+	}
+	if opuo.mutation.PayExtraCleared() {
+		_spec.ClearField(orderpay.FieldPayExtra, field.TypeJSON)
+	}
 	if opuo.mutation.OrderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -820,7 +968,6 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(opuo.modifiers...)
 	_node = &OrderPay{config: opuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -28,16 +28,16 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
-	// FieldMemberProductID holds the string denoting the member_product_id field in the database.
-	FieldMemberProductID = "member_product_id"
+	// FieldNature holds the string denoting the nature field in the database.
+	FieldNature = "nature"
+	// FieldProductType holds the string denoting the product_type field in the database.
+	FieldProductType = "product_type"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
 	// FieldDevice holds the string denoting the device field in the database.
 	FieldDevice = "device"
-	// FieldNature holds the string denoting the nature field in the database.
-	FieldNature = "nature"
 	// FieldCompletionAt holds the string denoting the completion_at field in the database.
 	FieldCompletionAt = "completion_at"
 	// FieldCreateID holds the string denoting the create_id field in the database.
@@ -128,11 +128,11 @@ var Columns = []string{
 	FieldOrderSn,
 	FieldVenueID,
 	FieldMemberID,
-	FieldMemberProductID,
+	FieldNature,
+	FieldProductType,
 	FieldStatus,
 	FieldSource,
 	FieldDevice,
-	FieldNature,
 	FieldCompletionAt,
 	FieldCreateID,
 }
@@ -209,9 +209,14 @@ func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
 }
 
-// ByMemberProductID orders the results by the member_product_id field.
-func ByMemberProductID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMemberProductID, opts...).ToFunc()
+// ByNature orders the results by the nature field.
+func ByNature(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNature, opts...).ToFunc()
+}
+
+// ByProductType orders the results by the product_type field.
+func ByProductType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProductType, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
@@ -227,11 +232,6 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 // ByDevice orders the results by the device field.
 func ByDevice(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDevice, opts...).ToFunc()
-}
-
-// ByNature orders the results by the nature field.
-func ByNature(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNature, opts...).ToFunc()
 }
 
 // ByCompletionAt orders the results by the completion_at field.

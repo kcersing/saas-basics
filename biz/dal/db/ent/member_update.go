@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
@@ -23,9 +24,8 @@ import (
 // MemberUpdate is the builder for updating Member entities.
 type MemberUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *MemberMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *MemberMutation
 }
 
 // Where appends a list predicates to the MemberUpdate builder.
@@ -329,6 +329,21 @@ func (mu *MemberUpdate) AddMemberContents(m ...*MemberContract) *MemberUpdate {
 	return mu.AddMemberContentIDs(ids...)
 }
 
+// AddParticipantIDs adds the "participants" edge to the ContestParticipant entity by IDs.
+func (mu *MemberUpdate) AddParticipantIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.AddParticipantIDs(ids...)
+	return mu
+}
+
+// AddParticipants adds the "participants" edges to the ContestParticipant entity.
+func (mu *MemberUpdate) AddParticipants(c ...*ContestParticipant) *MemberUpdate {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return mu.AddParticipantIDs(ids...)
+}
+
 // Mutation returns the MemberMutation object of the builder.
 func (mu *MemberUpdate) Mutation() *MemberMutation {
 	return mu.mutation
@@ -439,6 +454,27 @@ func (mu *MemberUpdate) RemoveMemberContents(m ...*MemberContract) *MemberUpdate
 	return mu.RemoveMemberContentIDs(ids...)
 }
 
+// ClearParticipants clears all "participants" edges to the ContestParticipant entity.
+func (mu *MemberUpdate) ClearParticipants() *MemberUpdate {
+	mu.mutation.ClearParticipants()
+	return mu
+}
+
+// RemoveParticipantIDs removes the "participants" edge to ContestParticipant entities by IDs.
+func (mu *MemberUpdate) RemoveParticipantIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.RemoveParticipantIDs(ids...)
+	return mu
+}
+
+// RemoveParticipants removes "participants" edges to ContestParticipant entities.
+func (mu *MemberUpdate) RemoveParticipants(c ...*ContestParticipant) *MemberUpdate {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return mu.RemoveParticipantIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (mu *MemberUpdate) Save(ctx context.Context) (int, error) {
 	mu.defaults()
@@ -473,12 +509,6 @@ func (mu *MemberUpdate) defaults() {
 		v := member.UpdateDefaultUpdatedAt()
 		mu.mutation.SetUpdatedAt(v)
 	}
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mu *MemberUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberUpdate {
-	mu.modifiers = append(mu.modifiers, modifiers...)
-	return mu
 }
 
 func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -790,7 +820,51 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mu.modifiers...)
+	if mu.mutation.ParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.ParticipantsTable,
+			Columns: member.ParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.RemovedParticipantsIDs(); len(nodes) > 0 && !mu.mutation.ParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.ParticipantsTable,
+			Columns: member.ParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.ParticipantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.ParticipantsTable,
+			Columns: member.ParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{member.Label}
@@ -806,10 +880,9 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // MemberUpdateOne is the builder for updating a single Member entity.
 type MemberUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *MemberMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *MemberMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1107,6 +1180,21 @@ func (muo *MemberUpdateOne) AddMemberContents(m ...*MemberContract) *MemberUpdat
 	return muo.AddMemberContentIDs(ids...)
 }
 
+// AddParticipantIDs adds the "participants" edge to the ContestParticipant entity by IDs.
+func (muo *MemberUpdateOne) AddParticipantIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.AddParticipantIDs(ids...)
+	return muo
+}
+
+// AddParticipants adds the "participants" edges to the ContestParticipant entity.
+func (muo *MemberUpdateOne) AddParticipants(c ...*ContestParticipant) *MemberUpdateOne {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return muo.AddParticipantIDs(ids...)
+}
+
 // Mutation returns the MemberMutation object of the builder.
 func (muo *MemberUpdateOne) Mutation() *MemberMutation {
 	return muo.mutation
@@ -1217,6 +1305,27 @@ func (muo *MemberUpdateOne) RemoveMemberContents(m ...*MemberContract) *MemberUp
 	return muo.RemoveMemberContentIDs(ids...)
 }
 
+// ClearParticipants clears all "participants" edges to the ContestParticipant entity.
+func (muo *MemberUpdateOne) ClearParticipants() *MemberUpdateOne {
+	muo.mutation.ClearParticipants()
+	return muo
+}
+
+// RemoveParticipantIDs removes the "participants" edge to ContestParticipant entities by IDs.
+func (muo *MemberUpdateOne) RemoveParticipantIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.RemoveParticipantIDs(ids...)
+	return muo
+}
+
+// RemoveParticipants removes "participants" edges to ContestParticipant entities.
+func (muo *MemberUpdateOne) RemoveParticipants(c ...*ContestParticipant) *MemberUpdateOne {
+	ids := make([]int64, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return muo.RemoveParticipantIDs(ids...)
+}
+
 // Where appends a list predicates to the MemberUpdate builder.
 func (muo *MemberUpdateOne) Where(ps ...predicate.Member) *MemberUpdateOne {
 	muo.mutation.Where(ps...)
@@ -1264,12 +1373,6 @@ func (muo *MemberUpdateOne) defaults() {
 		v := member.UpdateDefaultUpdatedAt()
 		muo.mutation.SetUpdatedAt(v)
 	}
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (muo *MemberUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MemberUpdateOne {
-	muo.modifiers = append(muo.modifiers, modifiers...)
-	return muo
 }
 
 func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err error) {
@@ -1598,7 +1701,51 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(muo.modifiers...)
+	if muo.mutation.ParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.ParticipantsTable,
+			Columns: member.ParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.RemovedParticipantsIDs(); len(nodes) > 0 && !muo.mutation.ParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.ParticipantsTable,
+			Columns: member.ParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.ParticipantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.ParticipantsTable,
+			Columns: member.ParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_node = &Member{config: muo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

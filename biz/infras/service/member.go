@@ -13,11 +13,10 @@ import (
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/predicate"
+	"saas/biz/dal/minio"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/member"
-	"saas/pkg/minio"
-
 	"saas/pkg/encrypt"
 	"strconv"
 	"time"

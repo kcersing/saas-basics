@@ -10,10 +10,11 @@ import (
 )
 
 type BannerInfo struct {
-	Name   string `thrift:"name,1" form:"name" json:"name" query:"name"`
-	Pic    string `thrift:"pic,2" form:"pic" json:"pic" query:"pic"`
-	Link   string `thrift:"link,3" form:"link" json:"link" query:"link"`
-	IsShow int64  `thrift:"isShow,4" form:"isShow" json:"isShow" query:"isShow"`
+	Name   string `thrift:"name,1,optional" form:"name" json:"name" query:"name"`
+	Pic    string `thrift:"pic,2,optional" form:"pic" json:"pic" query:"pic"`
+	Link   string `thrift:"link,3,optional" form:"link" json:"link" query:"link"`
+	IsShow int64  `thrift:"isShow,4,optional" form:"isShow" json:"isShow" query:"isShow"`
+	ID     int64  `thrift:"id,5,optional" form:"id" json:"id" query:"id"`
 }
 
 func NewBannerInfo() *BannerInfo {
@@ -23,6 +24,7 @@ func NewBannerInfo() *BannerInfo {
 		Pic:    "",
 		Link:   "",
 		IsShow: 1,
+		ID:     0,
 	}
 }
 
@@ -31,22 +33,52 @@ func (p *BannerInfo) InitDefault() {
 	p.Pic = ""
 	p.Link = ""
 	p.IsShow = 1
+	p.ID = 0
 }
 
+var BannerInfo_Name_DEFAULT string = ""
+
 func (p *BannerInfo) GetName() (v string) {
+	if !p.IsSetName() {
+		return BannerInfo_Name_DEFAULT
+	}
 	return p.Name
 }
 
+var BannerInfo_Pic_DEFAULT string = ""
+
 func (p *BannerInfo) GetPic() (v string) {
+	if !p.IsSetPic() {
+		return BannerInfo_Pic_DEFAULT
+	}
 	return p.Pic
 }
 
+var BannerInfo_Link_DEFAULT string = ""
+
 func (p *BannerInfo) GetLink() (v string) {
+	if !p.IsSetLink() {
+		return BannerInfo_Link_DEFAULT
+	}
 	return p.Link
 }
 
+var BannerInfo_IsShow_DEFAULT int64 = 1
+
 func (p *BannerInfo) GetIsShow() (v int64) {
+	if !p.IsSetIsShow() {
+		return BannerInfo_IsShow_DEFAULT
+	}
 	return p.IsShow
+}
+
+var BannerInfo_ID_DEFAULT int64 = 0
+
+func (p *BannerInfo) GetID() (v int64) {
+	if !p.IsSetID() {
+		return BannerInfo_ID_DEFAULT
+	}
+	return p.ID
 }
 
 var fieldIDToName_BannerInfo = map[int16]string{
@@ -54,6 +86,27 @@ var fieldIDToName_BannerInfo = map[int16]string{
 	2: "pic",
 	3: "link",
 	4: "isShow",
+	5: "id",
+}
+
+func (p *BannerInfo) IsSetName() bool {
+	return p.Name != BannerInfo_Name_DEFAULT
+}
+
+func (p *BannerInfo) IsSetPic() bool {
+	return p.Pic != BannerInfo_Pic_DEFAULT
+}
+
+func (p *BannerInfo) IsSetLink() bool {
+	return p.Link != BannerInfo_Link_DEFAULT
+}
+
+func (p *BannerInfo) IsSetIsShow() bool {
+	return p.IsShow != BannerInfo_IsShow_DEFAULT
+}
+
+func (p *BannerInfo) IsSetID() bool {
+	return p.ID != BannerInfo_ID_DEFAULT
 }
 
 func (p *BannerInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -102,6 +155,14 @@ func (p *BannerInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -180,6 +241,17 @@ func (p *BannerInfo) ReadField4(iprot thrift.TProtocol) error {
 	p.IsShow = _field
 	return nil
 }
+func (p *BannerInfo) ReadField5(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.ID = _field
+	return nil
+}
 
 func (p *BannerInfo) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -203,6 +275,10 @@ func (p *BannerInfo) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 4
 			goto WriteFieldError
 		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -222,14 +298,16 @@ WriteStructEndError:
 }
 
 func (p *BannerInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("name", thrift.STRING, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Name); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -239,14 +317,16 @@ WriteFieldEndError:
 }
 
 func (p *BannerInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("pic", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Pic); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPic() {
+		if err = oprot.WriteFieldBegin("pic", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Pic); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -256,14 +336,16 @@ WriteFieldEndError:
 }
 
 func (p *BannerInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("link", thrift.STRING, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Link); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetLink() {
+		if err = oprot.WriteFieldBegin("link", thrift.STRING, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Link); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -273,14 +355,16 @@ WriteFieldEndError:
 }
 
 func (p *BannerInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("isShow", thrift.I64, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.IsShow); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetIsShow() {
+		if err = oprot.WriteFieldBegin("isShow", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.IsShow); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -289,11 +373,244 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
+func (p *BannerInfo) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetID() {
+		if err = oprot.WriteFieldBegin("id", thrift.I64, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.ID); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
 func (p *BannerInfo) String() string {
 	if p == nil {
 		return "<nil>"
 	}
 	return fmt.Sprintf("BannerInfo(%+v)", *p)
+
+}
+
+type BannerListReq struct {
+	Page     int64 `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize int64 `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+}
+
+func NewBannerListReq() *BannerListReq {
+	return &BannerListReq{
+
+		Page:     1,
+		PageSize: 1000,
+	}
+}
+
+func (p *BannerListReq) InitDefault() {
+	p.Page = 1
+	p.PageSize = 1000
+}
+
+var BannerListReq_Page_DEFAULT int64 = 1
+
+func (p *BannerListReq) GetPage() (v int64) {
+	if !p.IsSetPage() {
+		return BannerListReq_Page_DEFAULT
+	}
+	return p.Page
+}
+
+var BannerListReq_PageSize_DEFAULT int64 = 1000
+
+func (p *BannerListReq) GetPageSize() (v int64) {
+	if !p.IsSetPageSize() {
+		return BannerListReq_PageSize_DEFAULT
+	}
+	return p.PageSize
+}
+
+var fieldIDToName_BannerListReq = map[int16]string{
+	1: "page",
+	2: "pageSize",
+}
+
+func (p *BannerListReq) IsSetPage() bool {
+	return p.Page != BannerListReq_Page_DEFAULT
+}
+
+func (p *BannerListReq) IsSetPageSize() bool {
+	return p.PageSize != BannerListReq_PageSize_DEFAULT
+}
+
+func (p *BannerListReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_BannerListReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *BannerListReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Page = _field
+	return nil
+}
+func (p *BannerListReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.PageSize = _field
+	return nil
+}
+
+func (p *BannerListReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("BannerListReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *BannerListReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetPage() {
+		if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Page); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *BannerListReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetPageSize() {
+		if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.PageSize); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *BannerListReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("BannerListReq(%+v)", *p)
 
 }
 
@@ -305,7 +622,7 @@ type BannerService interface {
 
 	DelBanner(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 
-	BannerList(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error)
+	BannerList(ctx context.Context, req *BannerListReq) (r *base.NilResponse, err error)
 
 	UpdateBannerShow(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
 }
@@ -363,7 +680,7 @@ func (p *BannerServiceClient) DelBanner(ctx context.Context, req *base.IDReq) (r
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *BannerServiceClient) BannerList(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error) {
+func (p *BannerServiceClient) BannerList(ctx context.Context, req *BannerListReq) (r *base.NilResponse, err error) {
 	var _args BannerServiceBannerListArgs
 	_args.Req = req
 	var _result BannerServiceBannerListResult
@@ -1550,7 +1867,7 @@ func (p *BannerServiceDelBannerResult) String() string {
 }
 
 type BannerServiceBannerListArgs struct {
-	Req *base.PageInfoReq `thrift:"req,1"`
+	Req *BannerListReq `thrift:"req,1"`
 }
 
 func NewBannerServiceBannerListArgs() *BannerServiceBannerListArgs {
@@ -1560,9 +1877,9 @@ func NewBannerServiceBannerListArgs() *BannerServiceBannerListArgs {
 func (p *BannerServiceBannerListArgs) InitDefault() {
 }
 
-var BannerServiceBannerListArgs_Req_DEFAULT *base.PageInfoReq
+var BannerServiceBannerListArgs_Req_DEFAULT *BannerListReq
 
-func (p *BannerServiceBannerListArgs) GetReq() (v *base.PageInfoReq) {
+func (p *BannerServiceBannerListArgs) GetReq() (v *BannerListReq) {
 	if !p.IsSetReq() {
 		return BannerServiceBannerListArgs_Req_DEFAULT
 	}
@@ -1634,7 +1951,7 @@ ReadStructEndError:
 }
 
 func (p *BannerServiceBannerListArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := base.NewPageInfoReq()
+	_field := NewBannerListReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}

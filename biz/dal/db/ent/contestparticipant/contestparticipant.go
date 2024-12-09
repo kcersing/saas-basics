@@ -38,8 +38,12 @@ const (
 	FieldOrderSn = "order_sn"
 	// FieldFee holds the string denoting the fee field in the database.
 	FieldFee = "fee"
+	// FieldMemberID holds the string denoting the member_id field in the database.
+	FieldMemberID = "member_id"
 	// EdgeContest holds the string denoting the contest edge name in mutations.
 	EdgeContest = "contest"
+	// EdgeMembers holds the string denoting the members edge name in mutations.
+	EdgeMembers = "members"
 	// Table holds the table name of the contestparticipant in the database.
 	Table = "contest_participant"
 	// ContestTable is the table that holds the contest relation/edge.
@@ -49,6 +53,11 @@ const (
 	ContestInverseTable = "contest"
 	// ContestColumn is the table column denoting the contest relation/edge.
 	ContestColumn = "contest_id"
+	// MembersTable is the table that holds the members relation/edge. The primary key declared below.
+	MembersTable = "member_participants"
+	// MembersInverseTable is the table name for the Member entity.
+	// It exists in this package in order to avoid circular dependency with the "member" package.
+	MembersInverseTable = "member"
 )
 
 // Columns holds all SQL columns for contestparticipant fields.
@@ -66,7 +75,14 @@ var Columns = []string{
 	FieldOrderID,
 	FieldOrderSn,
 	FieldFee,
+	FieldMemberID,
 }
+
+var (
+	// MembersPrimaryKey and MembersColumn2 are the table columns denoting the
+	// primary key for the members relation (M2M).
+	MembersPrimaryKey = []string{"member_id", "contest_participant_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -95,6 +111,8 @@ var (
 	DefaultOrderID int64
 	// DefaultOrderSn holds the default value on creation for the "order_sn" field.
 	DefaultOrderSn string
+	// DefaultMemberID holds the default value on creation for the "member_id" field.
+	DefaultMemberID int64
 )
 
 // OrderOption defines the ordering options for the ContestParticipant queries.
@@ -165,10 +183,29 @@ func ByFee(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFee, opts...).ToFunc()
 }
 
+// ByMemberID orders the results by the member_id field.
+func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
+}
+
 // ByContestField orders the results by contest field.
 func ByContestField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newContestStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByMembersCount orders the results by members count.
+func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMembersStep(), opts...)
+	}
+}
+
+// ByMembers orders the results by members terms.
+func ByMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newContestStep() *sqlgraph.Step {
@@ -176,5 +213,12 @@ func newContestStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ContestInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, ContestTable, ContestColumn),
+	)
+}
+func newMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MembersTable, MembersPrimaryKey...),
 	)
 }

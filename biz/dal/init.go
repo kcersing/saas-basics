@@ -7,8 +7,8 @@ import (
 	"saas/biz/dal/data"
 	"saas/biz/dal/db"
 	"saas/biz/dal/logger"
+	"saas/biz/dal/minio"
 	"saas/biz/dal/wechat"
-	"saas/pkg/minio"
 )
 
 func Init() {

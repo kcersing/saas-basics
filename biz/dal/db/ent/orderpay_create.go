@@ -160,6 +160,40 @@ func (opc *OrderPayCreate) SetNillableCreateID(i *int64) *OrderPayCreate {
 	return opc
 }
 
+// SetPaySn sets the "pay_sn" field.
+func (opc *OrderPayCreate) SetPaySn(s string) *OrderPayCreate {
+	opc.mutation.SetPaySn(s)
+	return opc
+}
+
+// SetNillablePaySn sets the "pay_sn" field if the given value is not nil.
+func (opc *OrderPayCreate) SetNillablePaySn(s *string) *OrderPayCreate {
+	if s != nil {
+		opc.SetPaySn(*s)
+	}
+	return opc
+}
+
+// SetPrepayID sets the "prepay_id" field.
+func (opc *OrderPayCreate) SetPrepayID(s string) *OrderPayCreate {
+	opc.mutation.SetPrepayID(s)
+	return opc
+}
+
+// SetNillablePrepayID sets the "prepay_id" field if the given value is not nil.
+func (opc *OrderPayCreate) SetNillablePrepayID(s *string) *OrderPayCreate {
+	if s != nil {
+		opc.SetPrepayID(*s)
+	}
+	return opc
+}
+
+// SetPayExtra sets the "pay_extra" field.
+func (opc *OrderPayCreate) SetPayExtra(s []string) *OrderPayCreate {
+	opc.mutation.SetPayExtra(s)
+	return opc
+}
+
 // SetID sets the "id" field.
 func (opc *OrderPayCreate) SetID(i int64) *OrderPayCreate {
 	opc.mutation.SetID(i)
@@ -293,6 +327,18 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 	if value, ok := opc.mutation.CreateID(); ok {
 		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)
 		_node.CreateID = value
+	}
+	if value, ok := opc.mutation.PaySn(); ok {
+		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)
+		_node.PaySn = value
+	}
+	if value, ok := opc.mutation.PrepayID(); ok {
+		_spec.SetField(orderpay.FieldPrepayID, field.TypeString, value)
+		_node.PrepayID = value
+	}
+	if value, ok := opc.mutation.PayExtra(); ok {
+		_spec.SetField(orderpay.FieldPayExtra, field.TypeJSON, value)
+		_node.PayExtra = value
 	}
 	if nodes := opc.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

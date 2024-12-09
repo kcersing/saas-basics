@@ -27,6 +27,15 @@ type Menu struct {
 	cache *ristretto.Cache
 }
 
+func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
+	return &Menu{
+		ctx:   ctx,
+		c:     c,
+		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
+		db:    db.DB,
+		cache: cache.Cache,
+	}
+}
 func (m Menu) MenuInfo(id int64) (info *menu.MenuInfo, err error) {
 	//TODO implement me
 
@@ -40,15 +49,6 @@ func (m Menu) MenuInfo(id int64) (info *menu.MenuInfo, err error) {
 
 }
 
-func NewMenu(ctx context.Context, c *app.RequestContext) do.Menu {
-	return &Menu{
-		ctx:   ctx,
-		c:     c,
-		salt:  config.GlobalServerConfig.MySQLInfo.Salt,
-		db:    db.DB,
-		cache: cache.Cache,
-	}
-}
 func (m Menu) Create(menuReq *menu.CreateOrUpdateMenuReq) error {
 	// get menu level
 	if menuReq.ParentId == 0 {

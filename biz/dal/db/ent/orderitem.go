@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderitem"
@@ -23,7 +24,7 @@ type OrderItem struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// last update time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// last delete
+	// last delete  1:已删除
 	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
@@ -33,6 +34,12 @@ type OrderItem struct {
 	ProductID int64 `json:"product_id,omitempty"`
 	// 关联会员产品id
 	RelatedUserProductID int64 `json:"related_user_product_id,omitempty"`
+	// 赛事id
+	ContestID int64 `json:"contest_id,omitempty"`
+	// 训练营id
+	BootcampID int64 `json:"bootcamp_id,omitempty"`
+	// 数据附件
+	Data []string `json:"data,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderItemQuery when eager-loading is set.
 	Edges        OrderItemEdges `json:"edges"`
@@ -66,7 +73,9 @@ func (*OrderItem) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orderitem.FieldID, orderitem.FieldDelete, orderitem.FieldCreatedID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID:
+		case orderitem.FieldData:
+			values[i] = new([]byte)
+		case orderitem.FieldID, orderitem.FieldDelete, orderitem.FieldCreatedID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID, orderitem.FieldContestID, orderitem.FieldBootcampID:
 			values[i] = new(sql.NullInt64)
 		case orderitem.FieldCreatedAt, orderitem.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -133,6 +142,26 @@ func (oi *OrderItem) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				oi.RelatedUserProductID = value.Int64
 			}
+		case orderitem.FieldContestID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field contest_id", values[i])
+			} else if value.Valid {
+				oi.ContestID = value.Int64
+			}
+		case orderitem.FieldBootcampID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field bootcamp_id", values[i])
+			} else if value.Valid {
+				oi.BootcampID = value.Int64
+			}
+		case orderitem.FieldData:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field data", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &oi.Data); err != nil {
+					return fmt.Errorf("unmarshal field data: %w", err)
+				}
+			}
 		default:
 			oi.selectValues.Set(columns[i], values[i])
 		}
@@ -194,6 +223,15 @@ func (oi *OrderItem) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("related_user_product_id=")
 	builder.WriteString(fmt.Sprintf("%v", oi.RelatedUserProductID))
+	builder.WriteString(", ")
+	builder.WriteString("contest_id=")
+	builder.WriteString(fmt.Sprintf("%v", oi.ContestID))
+	builder.WriteString(", ")
+	builder.WriteString("bootcamp_id=")
+	builder.WriteString(fmt.Sprintf("%v", oi.BootcampID))
+	builder.WriteString(", ")
+	builder.WriteString("data=")
+	builder.WriteString(fmt.Sprintf("%v", oi.Data))
 	builder.WriteByte(')')
 	return builder.String()
 }

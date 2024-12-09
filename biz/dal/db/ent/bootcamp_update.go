@@ -19,9 +19,8 @@ import (
 // BootcampUpdate is the builder for updating Bootcamp entities.
 type BootcampUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *BootcampMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *BootcampMutation
 }
 
 // Where appends a list predicates to the BootcampUpdate builder.
@@ -569,12 +568,6 @@ func (bu *BootcampUpdate) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (bu *BootcampUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *BootcampUpdate {
-	bu.modifiers = append(bu.modifiers, modifiers...)
-	return bu
-}
-
 func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(bootcamp.Table, bootcamp.Columns, sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64))
 	if ps := bu.mutation.predicates; len(ps) > 0 {
@@ -782,7 +775,6 @@ func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(bu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{bootcamp.Label}
@@ -798,10 +790,9 @@ func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // BootcampUpdateOne is the builder for updating a single Bootcamp entity.
 type BootcampUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *BootcampMutation
-	modifiers []func(*sql.UpdateBuilder)
+	fields   []string
+	hooks    []Hook
+	mutation *BootcampMutation
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1356,12 +1347,6 @@ func (buo *BootcampUpdateOne) defaults() {
 	}
 }
 
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (buo *BootcampUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *BootcampUpdateOne {
-	buo.modifiers = append(buo.modifiers, modifiers...)
-	return buo
-}
-
 func (buo *BootcampUpdateOne) sqlSave(ctx context.Context) (_node *Bootcamp, err error) {
 	_spec := sqlgraph.NewUpdateSpec(bootcamp.Table, bootcamp.Columns, sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64))
 	id, ok := buo.mutation.ID()
@@ -1586,7 +1571,6 @@ func (buo *BootcampUpdateOne) sqlSave(ctx context.Context) (_node *Bootcamp, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(buo.modifiers...)
 	_node = &Bootcamp{config: buo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -4,10 +4,12 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
+	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -23,7 +25,7 @@ type ContestParticipantQuery struct {
 	inters      []Interceptor
 	predicates  []predicate.ContestParticipant
 	withContest *ContestQuery
-	modifiers   []func(*sql.Selector)
+	withMembers *MemberQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -75,6 +77,28 @@ func (cpq *ContestParticipantQuery) QueryContest() *ContestQuery {
 			sqlgraph.From(contestparticipant.Table, contestparticipant.FieldID, selector),
 			sqlgraph.To(contest.Table, contest.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, contestparticipant.ContestTable, contestparticipant.ContestColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cpq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMembers chains the current query on the "members" edge.
+func (cpq *ContestParticipantQuery) QueryMembers() *MemberQuery {
+	query := (&MemberClient{config: cpq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cpq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cpq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contestparticipant.Table, contestparticipant.FieldID, selector),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, contestparticipant.MembersTable, contestparticipant.MembersPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(cpq.driver.Dialect(), step)
 		return fromU, nil
@@ -275,6 +299,7 @@ func (cpq *ContestParticipantQuery) Clone() *ContestParticipantQuery {
 		inters:      append([]Interceptor{}, cpq.inters...),
 		predicates:  append([]predicate.ContestParticipant{}, cpq.predicates...),
 		withContest: cpq.withContest.Clone(),
+		withMembers: cpq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:  cpq.sql.Clone(),
 		path: cpq.path,
@@ -289,6 +314,17 @@ func (cpq *ContestParticipantQuery) WithContest(opts ...func(*ContestQuery)) *Co
 		opt(query)
 	}
 	cpq.withContest = query
+	return cpq
+}
+
+// WithMembers tells the query-builder to eager-load the nodes that are connected to
+// the "members" edge. The optional arguments are used to configure the query builder of the edge.
+func (cpq *ContestParticipantQuery) WithMembers(opts ...func(*MemberQuery)) *ContestParticipantQuery {
+	query := (&MemberClient{config: cpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cpq.withMembers = query
 	return cpq
 }
 
@@ -370,8 +406,9 @@ func (cpq *ContestParticipantQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	var (
 		nodes       = []*ContestParticipant{}
 		_spec       = cpq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			cpq.withContest != nil,
+			cpq.withMembers != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -382,9 +419,6 @@ func (cpq *ContestParticipantQuery) sqlAll(ctx context.Context, hooks ...queryHo
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
-	}
-	if len(cpq.modifiers) > 0 {
-		_spec.Modifiers = cpq.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
@@ -398,6 +432,13 @@ func (cpq *ContestParticipantQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	if query := cpq.withContest; query != nil {
 		if err := cpq.loadContest(ctx, query, nodes, nil,
 			func(n *ContestParticipant, e *Contest) { n.Edges.Contest = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cpq.withMembers; query != nil {
+		if err := cpq.loadMembers(ctx, query, nodes,
+			func(n *ContestParticipant) { n.Edges.Members = []*Member{} },
+			func(n *ContestParticipant, e *Member) { n.Edges.Members = append(n.Edges.Members, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -433,12 +474,70 @@ func (cpq *ContestParticipantQuery) loadContest(ctx context.Context, query *Cont
 	}
 	return nil
 }
+func (cpq *ContestParticipantQuery) loadMembers(ctx context.Context, query *MemberQuery, nodes []*ContestParticipant, init func(*ContestParticipant), assign func(*ContestParticipant, *Member)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int64]*ContestParticipant)
+	nids := make(map[int64]map[*ContestParticipant]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(contestparticipant.MembersTable)
+		s.Join(joinT).On(s.C(member.FieldID), joinT.C(contestparticipant.MembersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(contestparticipant.MembersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(contestparticipant.MembersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullInt64).Int64
+				inValue := values[1].(*sql.NullInt64).Int64
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ContestParticipant]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Member](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "members" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (cpq *ContestParticipantQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cpq.querySpec()
-	if len(cpq.modifiers) > 0 {
-		_spec.Modifiers = cpq.modifiers
-	}
 	_spec.Node.Columns = cpq.ctx.Fields
 	if len(cpq.ctx.Fields) > 0 {
 		_spec.Unique = cpq.ctx.Unique != nil && *cpq.ctx.Unique
@@ -504,9 +603,6 @@ func (cpq *ContestParticipantQuery) sqlQuery(ctx context.Context) *sql.Selector 
 	if cpq.ctx.Unique != nil && *cpq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range cpq.modifiers {
-		m(selector)
-	}
 	for _, p := range cpq.predicates {
 		p(selector)
 	}
@@ -522,12 +618,6 @@ func (cpq *ContestParticipantQuery) sqlQuery(ctx context.Context) *sql.Selector 
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (cpq *ContestParticipantQuery) Modify(modifiers ...func(s *sql.Selector)) *ContestParticipantSelect {
-	cpq.modifiers = append(cpq.modifiers, modifiers...)
-	return cpq.Select()
 }
 
 // ContestParticipantGroupBy is the group-by builder for ContestParticipant entities.
@@ -618,10 +708,4 @@ func (cps *ContestParticipantSelect) sqlScan(ctx context.Context, root *ContestP
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (cps *ContestParticipantSelect) Modify(modifiers ...func(s *sql.Selector)) *ContestParticipantSelect {
-	cps.modifiers = append(cps.modifiers, modifiers...)
-	return cps
 }

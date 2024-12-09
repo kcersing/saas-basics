@@ -11,6 +11,22 @@ import (
 	order "saas/idl_gen/model/order"
 )
 
+// Update .
+// @router /service/order/update [POST]
+func Update(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.UpdateOrderReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
 // UpdateStatus .
 // @router /service/order/status [POST]
 func UpdateStatus(ctx context.Context, c *app.RequestContext) {

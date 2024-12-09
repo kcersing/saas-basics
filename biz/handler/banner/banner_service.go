@@ -4,6 +4,9 @@ package banner
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -12,10 +15,12 @@ import (
 )
 
 // CreateBanner .
-// @Summary		创建Banner Summary
-// @Description	创建Banner Description
-// @Param			request	body	banner.BannerInfo	true	"query params"
-// @Success		200		{object}	utils.Response
+//
+//	@Summary		创建Banner Summary
+//	@Description	创建Banner Description
+//	@Param			request	body		banner.BannerInfo	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/banner/create [POST]
 func CreateBanner(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -26,16 +31,22 @@ func CreateBanner(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewBanner(ctx, c).Create(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateBanner .
-// @Summary		更新Banner Summary
-// @Description	更新Banner Description
-// @Param			request	body	banner.BannerInfo	true	"query params"
-// @Success		200		{object}	utils.Response
+//
+//	@Summary		更新Banner Summary
+//	@Description	更新Banner Description
+//	@Param			request	body		banner.BannerInfo	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/banner/update [POST]
 func UpdateBanner(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -46,56 +57,22 @@ func UpdateBanner(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// BannerList .
-// @Summary		Banner列表 Summary
-// @Description	Banner列表 Description
-// @Param			request	body		base.PageInfoReq	true	"query params"
-// @Success		200		{object}	utils.Response
-// @router /service/banner/list [POST]
-func BannerList(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.PageInfoReq
-	err = c.BindAndValidate(&req)
+	err = service.NewBanner(ctx, c).Update(req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// UpdateBannerShow .
-// @Summary		更新Banner显示状态 Summary
-// @Description	更新Banner显示状态 Description
-// @Param			request	body		base.StatusCodeReq	true	"query params"
-// @Success		200		{object}	utils.Response
-// @router /service/banner/show [POST]
-func UpdateBannerShow(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.StatusCodeReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DelBanner .
-// @Summary		删除Banner Summary
-// @Description	删除Banner Description
-// @Param			request	body		base.IDReq	true	"query params"
-// @Success		200		{object}	utils.Response
+//
+//	@Summary		删除Banner Summary
+//	@Description	删除Banner Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/banner/del [POST]
 func DelBanner(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -106,7 +83,63 @@ func DelBanner(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	err = service.NewBanner(ctx, c).Delete(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
 
-	c.JSON(consts.StatusOK, resp)
+// BannerList .
+//
+//	@Summary		获取Banner列表 Summary
+//	@Description	获取Banner列表 Description
+//	@Param			request	body		banner.BannerListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/banner/list [POST]
+func BannerList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req banner.BannerListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	list, total, err := service.NewBanner(ctx, c).List(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
+}
+
+// UpdateBannerShow .
+//
+//	@Summary		更新Banner显示状态 Summary
+//	@Description	更新Banner显示状态 Description
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/banner/show [POST]
+func UpdateBannerShow(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.StatusCodeReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = service.NewBanner(ctx, c).UpdateShow(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
