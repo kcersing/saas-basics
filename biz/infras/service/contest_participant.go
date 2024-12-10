@@ -17,6 +17,17 @@ import (
 	"time"
 )
 
+func (c Contest) CreateParticipantMember(req contest.ParticipantInfo) (member *ent.Member, err error) {
+	member, err = c.db.Member.Query().Where(member2.Mobile(req.Mobile)).First(c.ctx)
+	if member == nil {
+		member, err = c.db.Member.Create().SetName(req.Name).SetMobile(req.Mobile).Save(c.ctx)
+		if err != nil {
+			return nil, err
+		}
+		_, err = c.db.MemberDetails.Create().SetMemberID(member.ID).Save(c.ctx)
+	}
+	return member, nil
+}
 func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 
 	tx, err := c.db.Tx(c.ctx)
@@ -24,12 +35,9 @@ func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 		return errors.Wrap(err, "starting a transaction:")
 	}
 
-	member, err := c.db.Member.Query().Where(member2.Mobile(req.Mobile)).First(c.ctx)
-	if member == nil {
-		member, err = c.db.Member.Create().SetName(req.Name).SetMobile(req.Mobile).Save(c.ctx)
-		if err != nil {
-			return err
-		}
+	member, err := c.CreateParticipantMember(req)
+	if err != nil {
+		return err
 	}
 
 	cont := tx.ContestParticipant.Create().
