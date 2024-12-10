@@ -30472,6 +30472,7 @@ type OrderItemMutation struct {
 	addcontest_id              *int64
 	bootcamp_id                *int64
 	addbootcamp_id             *int64
+	name                       *string
 	data                       *[]string
 	appenddata                 []string
 	clearedFields              map[string]struct{}
@@ -31153,6 +31154,55 @@ func (m *OrderItemMutation) ResetBootcampID() {
 	delete(m.clearedFields, orderitem.FieldBootcampID)
 }
 
+// SetName sets the "name" field.
+func (m *OrderItemMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *OrderItemMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the OrderItem entity.
+// If the OrderItem object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrderItemMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ClearName clears the value of the "name" field.
+func (m *OrderItemMutation) ClearName() {
+	m.name = nil
+	m.clearedFields[orderitem.FieldName] = struct{}{}
+}
+
+// NameCleared returns if the "name" field was cleared in this mutation.
+func (m *OrderItemMutation) NameCleared() bool {
+	_, ok := m.clearedFields[orderitem.FieldName]
+	return ok
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *OrderItemMutation) ResetName() {
+	m.name = nil
+	delete(m.clearedFields, orderitem.FieldName)
+}
+
 // SetData sets the "data" field.
 func (m *OrderItemMutation) SetData(s []string) {
 	m.data = &s
@@ -31279,7 +31329,7 @@ func (m *OrderItemMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrderItemMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, orderitem.FieldCreatedAt)
 	}
@@ -31306,6 +31356,9 @@ func (m *OrderItemMutation) Fields() []string {
 	}
 	if m.bootcamp_id != nil {
 		fields = append(fields, orderitem.FieldBootcampID)
+	}
+	if m.name != nil {
+		fields = append(fields, orderitem.FieldName)
 	}
 	if m.data != nil {
 		fields = append(fields, orderitem.FieldData)
@@ -31336,6 +31389,8 @@ func (m *OrderItemMutation) Field(name string) (ent.Value, bool) {
 		return m.ContestID()
 	case orderitem.FieldBootcampID:
 		return m.BootcampID()
+	case orderitem.FieldName:
+		return m.Name()
 	case orderitem.FieldData:
 		return m.Data()
 	}
@@ -31365,6 +31420,8 @@ func (m *OrderItemMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldContestID(ctx)
 	case orderitem.FieldBootcampID:
 		return m.OldBootcampID(ctx)
+	case orderitem.FieldName:
+		return m.OldName(ctx)
 	case orderitem.FieldData:
 		return m.OldData(ctx)
 	}
@@ -31438,6 +31495,13 @@ func (m *OrderItemMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetBootcampID(v)
+		return nil
+	case orderitem.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
 		return nil
 	case orderitem.FieldData:
 		v, ok := value.([]string)
@@ -31578,6 +31642,9 @@ func (m *OrderItemMutation) ClearedFields() []string {
 	if m.FieldCleared(orderitem.FieldBootcampID) {
 		fields = append(fields, orderitem.FieldBootcampID)
 	}
+	if m.FieldCleared(orderitem.FieldName) {
+		fields = append(fields, orderitem.FieldName)
+	}
 	if m.FieldCleared(orderitem.FieldData) {
 		fields = append(fields, orderitem.FieldData)
 	}
@@ -31622,6 +31689,9 @@ func (m *OrderItemMutation) ClearField(name string) error {
 	case orderitem.FieldBootcampID:
 		m.ClearBootcampID()
 		return nil
+	case orderitem.FieldName:
+		m.ClearName()
+		return nil
 	case orderitem.FieldData:
 		m.ClearData()
 		return nil
@@ -31659,6 +31729,9 @@ func (m *OrderItemMutation) ResetField(name string) error {
 		return nil
 	case orderitem.FieldBootcampID:
 		m.ResetBootcampID()
+		return nil
+	case orderitem.FieldName:
+		m.ResetName()
 		return nil
 	case orderitem.FieldData:
 		m.ResetData()

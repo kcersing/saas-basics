@@ -38,6 +38,8 @@ type OrderItem struct {
 	ContestID int64 `json:"contest_id,omitempty"`
 	// 训练营id
 	BootcampID int64 `json:"bootcamp_id,omitempty"`
+	// 名称
+	Name string `json:"name,omitempty"`
 	// 数据附件
 	Data []string `json:"data,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -77,6 +79,8 @@ func (*OrderItem) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case orderitem.FieldID, orderitem.FieldDelete, orderitem.FieldCreatedID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID, orderitem.FieldContestID, orderitem.FieldBootcampID:
 			values[i] = new(sql.NullInt64)
+		case orderitem.FieldName:
+			values[i] = new(sql.NullString)
 		case orderitem.FieldCreatedAt, orderitem.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
@@ -154,6 +158,12 @@ func (oi *OrderItem) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				oi.BootcampID = value.Int64
 			}
+		case orderitem.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				oi.Name = value.String
+			}
 		case orderitem.FieldData:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field data", values[i])
@@ -229,6 +239,9 @@ func (oi *OrderItem) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("bootcamp_id=")
 	builder.WriteString(fmt.Sprintf("%v", oi.BootcampID))
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(oi.Name)
 	builder.WriteString(", ")
 	builder.WriteString("data=")
 	builder.WriteString(fmt.Sprintf("%v", oi.Data))

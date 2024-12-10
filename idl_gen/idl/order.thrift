@@ -64,6 +64,7 @@ struct OrderItem {
     5:  optional i64 bootcampId=0 (api.raw = "bootcampId")
     6:  optional i64 orderId=0 (api.raw = "orderId")
     7:  optional string data="" (api.raw = "data")
+    8:  optional string name="" (api.raw = "name")
     16:  optional string createdAt="" (api.raw = "createdAt")
     17:  optional string updatedAt="" (api.raw = "updatedAt")
 }

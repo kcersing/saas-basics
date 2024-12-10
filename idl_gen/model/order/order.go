@@ -2602,6 +2602,7 @@ type OrderItem struct {
 	BootcampId           int64  `thrift:"bootcampId,5,optional" form:"bootcampId" json:"bootcampId" query:"bootcampId"`
 	OrderId              int64  `thrift:"orderId,6,optional" form:"orderId" json:"orderId" query:"orderId"`
 	Data                 string `thrift:"data,7,optional" form:"data" json:"data" query:"data"`
+	Name                 string `thrift:"name,8,optional" form:"name" json:"name" query:"name"`
 	CreatedAt            string `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt            string `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 }
@@ -2616,6 +2617,7 @@ func NewOrderItem() *OrderItem {
 		BootcampId:           0,
 		OrderId:              0,
 		Data:                 "",
+		Name:                 "",
 		CreatedAt:            "",
 		UpdatedAt:            "",
 	}
@@ -2629,6 +2631,7 @@ func (p *OrderItem) InitDefault() {
 	p.BootcampId = 0
 	p.OrderId = 0
 	p.Data = ""
+	p.Name = ""
 	p.CreatedAt = ""
 	p.UpdatedAt = ""
 }
@@ -2696,6 +2699,15 @@ func (p *OrderItem) GetData() (v string) {
 	return p.Data
 }
 
+var OrderItem_Name_DEFAULT string = ""
+
+func (p *OrderItem) GetName() (v string) {
+	if !p.IsSetName() {
+		return OrderItem_Name_DEFAULT
+	}
+	return p.Name
+}
+
 var OrderItem_CreatedAt_DEFAULT string = ""
 
 func (p *OrderItem) GetCreatedAt() (v string) {
@@ -2722,6 +2734,7 @@ var fieldIDToName_OrderItem = map[int16]string{
 	5:  "bootcampId",
 	6:  "orderId",
 	7:  "data",
+	8:  "name",
 	16: "createdAt",
 	17: "updatedAt",
 }
@@ -2752,6 +2765,10 @@ func (p *OrderItem) IsSetOrderId() bool {
 
 func (p *OrderItem) IsSetData() bool {
 	return p.Data != OrderItem_Data_DEFAULT
+}
+
+func (p *OrderItem) IsSetName() bool {
+	return p.Name != OrderItem_Name_DEFAULT
 }
 
 func (p *OrderItem) IsSetCreatedAt() bool {
@@ -2832,6 +2849,14 @@ func (p *OrderItem) Read(iprot thrift.TProtocol) (err error) {
 		case 7:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2959,6 +2984,17 @@ func (p *OrderItem) ReadField7(iprot thrift.TProtocol) error {
 	p.Data = _field
 	return nil
 }
+func (p *OrderItem) ReadField8(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Name = _field
+	return nil
+}
 func (p *OrderItem) ReadField16(iprot thrift.TProtocol) error {
 
 	var _field string
@@ -3014,6 +3050,10 @@ func (p *OrderItem) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField7(oprot); err != nil {
 			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
 			goto WriteFieldError
 		}
 		if err = p.writeField16(oprot); err != nil {
@@ -3173,6 +3213,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *OrderItem) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
 func (p *OrderItem) writeField16(oprot thrift.TProtocol) (err error) {

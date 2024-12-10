@@ -124,6 +124,7 @@ func (o Order) entOrderItem(v *ent.Order) *order.OrderItem {
 		ContestId:            first.ContestID,
 		BootcampId:           first.BootcampID,
 		OrderId:              first.OrderID,
+		Name:                 first.Name,
 		//Data:                 data,
 		CreatedAt: first.CreatedAt.Format(time.DateTime),
 		UpdatedAt: first.UpdatedAt.Format(time.DateTime),

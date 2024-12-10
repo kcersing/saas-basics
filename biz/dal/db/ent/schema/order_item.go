@@ -22,7 +22,7 @@ func (OrderItem) Fields() []ent.Field {
 		field.Int64("related_user_product_id").Default(0).Comment("关联会员产品id").Optional(),
 		field.Int64("contest_id").Comment("赛事id").Optional(),
 		field.Int64("bootcamp_id").Comment("训练营id").Optional(),
-
+		field.String("name").Comment("名称").Optional(),
 		field.JSON("data", []string{}).Comment("数据附件").Optional(),
 	}
 }

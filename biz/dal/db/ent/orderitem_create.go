@@ -146,6 +146,20 @@ func (oic *OrderItemCreate) SetNillableBootcampID(i *int64) *OrderItemCreate {
 	return oic
 }
 
+// SetName sets the "name" field.
+func (oic *OrderItemCreate) SetName(s string) *OrderItemCreate {
+	oic.mutation.SetName(s)
+	return oic
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (oic *OrderItemCreate) SetNillableName(s *string) *OrderItemCreate {
+	if s != nil {
+		oic.SetName(*s)
+	}
+	return oic
+}
+
 // SetData sets the "data" field.
 func (oic *OrderItemCreate) SetData(s []string) *OrderItemCreate {
 	oic.mutation.SetData(s)
@@ -285,6 +299,10 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 	if value, ok := oic.mutation.BootcampID(); ok {
 		_spec.SetField(orderitem.FieldBootcampID, field.TypeInt64, value)
 		_node.BootcampID = value
+	}
+	if value, ok := oic.mutation.Name(); ok {
+		_spec.SetField(orderitem.FieldName, field.TypeString, value)
+		_node.Name = value
 	}
 	if value, ok := oic.mutation.Data(); ok {
 		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)

@@ -22,6 +22,14 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 		return nil, errors.Wrap(err, "未找到会员")
 	}
 
+	var total float64
+	var contestName string
+	contests, _ := o.db.Contest.Query().Where(contest.ID(req.ContestId)).First(o.ctx)
+	if contests != nil {
+		total = contests.Fee
+		contestName = contests.Name
+	}
+
 	errChan := make(chan error, 99)
 	defer close(errChan)
 	var wg sync.WaitGroup
@@ -64,6 +72,7 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 	go func() {
 		_, err := tx.OrderItem.Create().
 			SetOrder(one).
+			SetName(contestName).
 			SetContestID(req.ContestId).
 			Save(o.ctx)
 		if err != nil {
@@ -73,11 +82,7 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 
 		wg.Done()
 	}()
-	var total float64
-	contest, _ := o.db.Contest.Query().Where(contest.ID(req.ContestId)).First(o.ctx)
-	if contest != nil {
-		total = contest.Fee
-	}
+
 	go func() {
 		_, err = tx.OrderAmount.Create().
 			SetOrder(one).

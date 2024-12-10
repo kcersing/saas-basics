@@ -224,6 +224,26 @@ func (oiu *OrderItemUpdate) ClearBootcampID() *OrderItemUpdate {
 	return oiu
 }
 
+// SetName sets the "name" field.
+func (oiu *OrderItemUpdate) SetName(s string) *OrderItemUpdate {
+	oiu.mutation.SetName(s)
+	return oiu
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (oiu *OrderItemUpdate) SetNillableName(s *string) *OrderItemUpdate {
+	if s != nil {
+		oiu.SetName(*s)
+	}
+	return oiu
+}
+
+// ClearName clears the value of the "name" field.
+func (oiu *OrderItemUpdate) ClearName() *OrderItemUpdate {
+	oiu.mutation.ClearName()
+	return oiu
+}
+
 // SetData sets the "data" field.
 func (oiu *OrderItemUpdate) SetData(s []string) *OrderItemUpdate {
 	oiu.mutation.SetData(s)
@@ -365,6 +385,12 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if oiu.mutation.BootcampIDCleared() {
 		_spec.ClearField(orderitem.FieldBootcampID, field.TypeInt64)
+	}
+	if value, ok := oiu.mutation.Name(); ok {
+		_spec.SetField(orderitem.FieldName, field.TypeString, value)
+	}
+	if oiu.mutation.NameCleared() {
+		_spec.ClearField(orderitem.FieldName, field.TypeString)
 	}
 	if value, ok := oiu.mutation.Data(); ok {
 		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)
@@ -620,6 +646,26 @@ func (oiuo *OrderItemUpdateOne) ClearBootcampID() *OrderItemUpdateOne {
 	return oiuo
 }
 
+// SetName sets the "name" field.
+func (oiuo *OrderItemUpdateOne) SetName(s string) *OrderItemUpdateOne {
+	oiuo.mutation.SetName(s)
+	return oiuo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (oiuo *OrderItemUpdateOne) SetNillableName(s *string) *OrderItemUpdateOne {
+	if s != nil {
+		oiuo.SetName(*s)
+	}
+	return oiuo
+}
+
+// ClearName clears the value of the "name" field.
+func (oiuo *OrderItemUpdateOne) ClearName() *OrderItemUpdateOne {
+	oiuo.mutation.ClearName()
+	return oiuo
+}
+
 // SetData sets the "data" field.
 func (oiuo *OrderItemUpdateOne) SetData(s []string) *OrderItemUpdateOne {
 	oiuo.mutation.SetData(s)
@@ -791,6 +837,12 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 	}
 	if oiuo.mutation.BootcampIDCleared() {
 		_spec.ClearField(orderitem.FieldBootcampID, field.TypeInt64)
+	}
+	if value, ok := oiuo.mutation.Name(); ok {
+		_spec.SetField(orderitem.FieldName, field.TypeString, value)
+	}
+	if oiuo.mutation.NameCleared() {
+		_spec.ClearField(orderitem.FieldName, field.TypeString)
 	}
 	if value, ok := oiuo.mutation.Data(); ok {
 		_spec.SetField(orderitem.FieldData, field.TypeJSON, value)

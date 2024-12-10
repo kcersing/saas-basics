@@ -742,6 +742,7 @@ var (
 		{Name: "related_user_product_id", Type: field.TypeInt64, Nullable: true, Comment: "关联会员产品id", Default: 0},
 		{Name: "contest_id", Type: field.TypeInt64, Nullable: true, Comment: "赛事id"},
 		{Name: "bootcamp_id", Type: field.TypeInt64, Nullable: true, Comment: "训练营id"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "data", Type: field.TypeJSON, Nullable: true, Comment: "数据附件"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单id"},
 	}
@@ -753,7 +754,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_item_order_item",
-				Columns:    []*schema.Column{OrderItemColumns[10]},
+				Columns:    []*schema.Column{OrderItemColumns[11]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -762,7 +763,7 @@ var (
 			{
 				Name:    "orderitem_order_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderItemColumns[10]},
+				Columns: []*schema.Column{OrderItemColumns[11]},
 			},
 			{
 				Name:    "orderitem_product_id",

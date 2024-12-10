@@ -32,6 +32,8 @@ const (
 	FieldContestID = "contest_id"
 	// FieldBootcampID holds the string denoting the bootcamp_id field in the database.
 	FieldBootcampID = "bootcamp_id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldData holds the string denoting the data field in the database.
 	FieldData = "data"
 	// EdgeOrder holds the string denoting the order edge name in mutations.
@@ -59,6 +61,7 @@ var Columns = []string{
 	FieldRelatedUserProductID,
 	FieldContestID,
 	FieldBootcampID,
+	FieldName,
 	FieldData,
 }
 
@@ -138,6 +141,11 @@ func ByContestID(opts ...sql.OrderTermOption) OrderOption {
 // ByBootcampID orders the results by the bootcamp_id field.
 func ByBootcampID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBootcampID, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
 // ByOrderField orders the results by order field.
