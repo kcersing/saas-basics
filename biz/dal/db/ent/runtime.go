@@ -133,16 +133,20 @@ func init() {
 	bootcampDescIsFee := bootcampFields[10].Descriptor()
 	// bootcamp.DefaultIsFee holds the default value on creation for the is_fee field.
 	bootcamp.DefaultIsFee = bootcampDescIsFee.Default.(int64)
+	// bootcampDescIsShow is the schema descriptor for is_show field.
+	bootcampDescIsShow := bootcampFields[11].Descriptor()
+	// bootcamp.DefaultIsShow holds the default value on creation for the is_show field.
+	bootcamp.DefaultIsShow = bootcampDescIsShow.Default.(int64)
 	// bootcampDescIsCancel is the schema descriptor for is_cancel field.
-	bootcampDescIsCancel := bootcampFields[11].Descriptor()
+	bootcampDescIsCancel := bootcampFields[12].Descriptor()
 	// bootcamp.DefaultIsCancel holds the default value on creation for the is_cancel field.
 	bootcamp.DefaultIsCancel = bootcampDescIsCancel.Default.(int64)
 	// bootcampDescCancelTime is the schema descriptor for cancel_time field.
-	bootcampDescCancelTime := bootcampFields[12].Descriptor()
+	bootcampDescCancelTime := bootcampFields[13].Descriptor()
 	// bootcamp.DefaultCancelTime holds the default value on creation for the cancel_time field.
 	bootcamp.DefaultCancelTime = bootcampDescCancelTime.Default.(int64)
 	// bootcampDescCondition is the schema descriptor for condition field.
-	bootcampDescCondition := bootcampFields[15].Descriptor()
+	bootcampDescCondition := bootcampFields[16].Descriptor()
 	// bootcamp.DefaultCondition holds the default value on creation for the condition field.
 	bootcamp.DefaultCondition = bootcampDescCondition.Default.(int64)
 	bootcampparticipantMixin := schema.BootcampParticipant{}.Mixin()
@@ -182,6 +186,10 @@ func init() {
 	bootcampparticipantDescOrderSn := bootcampparticipantFields[5].Descriptor()
 	// bootcampparticipant.DefaultOrderSn holds the default value on creation for the order_sn field.
 	bootcampparticipant.DefaultOrderSn = bootcampparticipantDescOrderSn.Default.(string)
+	// bootcampparticipantDescMemberID is the schema descriptor for member_id field.
+	bootcampparticipantDescMemberID := bootcampparticipantFields[7].Descriptor()
+	// bootcampparticipant.DefaultMemberID holds the default value on creation for the member_id field.
+	bootcampparticipant.DefaultMemberID = bootcampparticipantDescMemberID.Default.(int64)
 	contestMixin := schema.Contest{}.Mixin()
 	contestMixinFields0 := contestMixin[0].Fields()
 	_ = contestMixinFields0

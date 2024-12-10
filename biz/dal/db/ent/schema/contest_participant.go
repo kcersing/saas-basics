@@ -37,7 +37,7 @@ func (ContestParticipant) Mixin() []ent.Mixin {
 func (ContestParticipant) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("contest", Contest.Type).Ref("contest_participants").Field("contest_id").Unique(),
-		edge.From("members", Member.Type).Ref("participants"),
+		edge.From("members", Member.Type).Ref("contestParticipants"),
 	}
 }
 

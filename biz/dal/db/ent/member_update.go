@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/bootcampparticipant"
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/member"
@@ -329,19 +330,34 @@ func (mu *MemberUpdate) AddMemberContents(m ...*MemberContract) *MemberUpdate {
 	return mu.AddMemberContentIDs(ids...)
 }
 
-// AddParticipantIDs adds the "participants" edge to the ContestParticipant entity by IDs.
-func (mu *MemberUpdate) AddParticipantIDs(ids ...int64) *MemberUpdate {
-	mu.mutation.AddParticipantIDs(ids...)
+// AddContestParticipantIDs adds the "contestParticipants" edge to the ContestParticipant entity by IDs.
+func (mu *MemberUpdate) AddContestParticipantIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.AddContestParticipantIDs(ids...)
 	return mu
 }
 
-// AddParticipants adds the "participants" edges to the ContestParticipant entity.
-func (mu *MemberUpdate) AddParticipants(c ...*ContestParticipant) *MemberUpdate {
+// AddContestParticipants adds the "contestParticipants" edges to the ContestParticipant entity.
+func (mu *MemberUpdate) AddContestParticipants(c ...*ContestParticipant) *MemberUpdate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return mu.AddParticipantIDs(ids...)
+	return mu.AddContestParticipantIDs(ids...)
+}
+
+// AddBootcampParticipantIDs adds the "bootcampParticipants" edge to the BootcampParticipant entity by IDs.
+func (mu *MemberUpdate) AddBootcampParticipantIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.AddBootcampParticipantIDs(ids...)
+	return mu
+}
+
+// AddBootcampParticipants adds the "bootcampParticipants" edges to the BootcampParticipant entity.
+func (mu *MemberUpdate) AddBootcampParticipants(b ...*BootcampParticipant) *MemberUpdate {
+	ids := make([]int64, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return mu.AddBootcampParticipantIDs(ids...)
 }
 
 // Mutation returns the MemberMutation object of the builder.
@@ -454,25 +470,46 @@ func (mu *MemberUpdate) RemoveMemberContents(m ...*MemberContract) *MemberUpdate
 	return mu.RemoveMemberContentIDs(ids...)
 }
 
-// ClearParticipants clears all "participants" edges to the ContestParticipant entity.
-func (mu *MemberUpdate) ClearParticipants() *MemberUpdate {
-	mu.mutation.ClearParticipants()
+// ClearContestParticipants clears all "contestParticipants" edges to the ContestParticipant entity.
+func (mu *MemberUpdate) ClearContestParticipants() *MemberUpdate {
+	mu.mutation.ClearContestParticipants()
 	return mu
 }
 
-// RemoveParticipantIDs removes the "participants" edge to ContestParticipant entities by IDs.
-func (mu *MemberUpdate) RemoveParticipantIDs(ids ...int64) *MemberUpdate {
-	mu.mutation.RemoveParticipantIDs(ids...)
+// RemoveContestParticipantIDs removes the "contestParticipants" edge to ContestParticipant entities by IDs.
+func (mu *MemberUpdate) RemoveContestParticipantIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.RemoveContestParticipantIDs(ids...)
 	return mu
 }
 
-// RemoveParticipants removes "participants" edges to ContestParticipant entities.
-func (mu *MemberUpdate) RemoveParticipants(c ...*ContestParticipant) *MemberUpdate {
+// RemoveContestParticipants removes "contestParticipants" edges to ContestParticipant entities.
+func (mu *MemberUpdate) RemoveContestParticipants(c ...*ContestParticipant) *MemberUpdate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return mu.RemoveParticipantIDs(ids...)
+	return mu.RemoveContestParticipantIDs(ids...)
+}
+
+// ClearBootcampParticipants clears all "bootcampParticipants" edges to the BootcampParticipant entity.
+func (mu *MemberUpdate) ClearBootcampParticipants() *MemberUpdate {
+	mu.mutation.ClearBootcampParticipants()
+	return mu
+}
+
+// RemoveBootcampParticipantIDs removes the "bootcampParticipants" edge to BootcampParticipant entities by IDs.
+func (mu *MemberUpdate) RemoveBootcampParticipantIDs(ids ...int64) *MemberUpdate {
+	mu.mutation.RemoveBootcampParticipantIDs(ids...)
+	return mu
+}
+
+// RemoveBootcampParticipants removes "bootcampParticipants" edges to BootcampParticipant entities.
+func (mu *MemberUpdate) RemoveBootcampParticipants(b ...*BootcampParticipant) *MemberUpdate {
+	ids := make([]int64, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return mu.RemoveBootcampParticipantIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -820,12 +857,12 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mu.mutation.ParticipantsCleared() {
+	if mu.mutation.ContestParticipantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   member.ParticipantsTable,
-			Columns: member.ParticipantsPrimaryKey,
+			Table:   member.ContestParticipantsTable,
+			Columns: member.ContestParticipantsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
@@ -833,12 +870,12 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mu.mutation.RemovedParticipantsIDs(); len(nodes) > 0 && !mu.mutation.ParticipantsCleared() {
+	if nodes := mu.mutation.RemovedContestParticipantsIDs(); len(nodes) > 0 && !mu.mutation.ContestParticipantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   member.ParticipantsTable,
-			Columns: member.ParticipantsPrimaryKey,
+			Table:   member.ContestParticipantsTable,
+			Columns: member.ContestParticipantsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
@@ -849,15 +886,60 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mu.mutation.ParticipantsIDs(); len(nodes) > 0 {
+	if nodes := mu.mutation.ContestParticipantsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   member.ParticipantsTable,
-			Columns: member.ParticipantsPrimaryKey,
+			Table:   member.ContestParticipantsTable,
+			Columns: member.ContestParticipantsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mu.mutation.BootcampParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.BootcampParticipantsTable,
+			Columns: member.BootcampParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.RemovedBootcampParticipantsIDs(); len(nodes) > 0 && !mu.mutation.BootcampParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.BootcampParticipantsTable,
+			Columns: member.BootcampParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.BootcampParticipantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.BootcampParticipantsTable,
+			Columns: member.BootcampParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1180,19 +1262,34 @@ func (muo *MemberUpdateOne) AddMemberContents(m ...*MemberContract) *MemberUpdat
 	return muo.AddMemberContentIDs(ids...)
 }
 
-// AddParticipantIDs adds the "participants" edge to the ContestParticipant entity by IDs.
-func (muo *MemberUpdateOne) AddParticipantIDs(ids ...int64) *MemberUpdateOne {
-	muo.mutation.AddParticipantIDs(ids...)
+// AddContestParticipantIDs adds the "contestParticipants" edge to the ContestParticipant entity by IDs.
+func (muo *MemberUpdateOne) AddContestParticipantIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.AddContestParticipantIDs(ids...)
 	return muo
 }
 
-// AddParticipants adds the "participants" edges to the ContestParticipant entity.
-func (muo *MemberUpdateOne) AddParticipants(c ...*ContestParticipant) *MemberUpdateOne {
+// AddContestParticipants adds the "contestParticipants" edges to the ContestParticipant entity.
+func (muo *MemberUpdateOne) AddContestParticipants(c ...*ContestParticipant) *MemberUpdateOne {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return muo.AddParticipantIDs(ids...)
+	return muo.AddContestParticipantIDs(ids...)
+}
+
+// AddBootcampParticipantIDs adds the "bootcampParticipants" edge to the BootcampParticipant entity by IDs.
+func (muo *MemberUpdateOne) AddBootcampParticipantIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.AddBootcampParticipantIDs(ids...)
+	return muo
+}
+
+// AddBootcampParticipants adds the "bootcampParticipants" edges to the BootcampParticipant entity.
+func (muo *MemberUpdateOne) AddBootcampParticipants(b ...*BootcampParticipant) *MemberUpdateOne {
+	ids := make([]int64, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return muo.AddBootcampParticipantIDs(ids...)
 }
 
 // Mutation returns the MemberMutation object of the builder.
@@ -1305,25 +1402,46 @@ func (muo *MemberUpdateOne) RemoveMemberContents(m ...*MemberContract) *MemberUp
 	return muo.RemoveMemberContentIDs(ids...)
 }
 
-// ClearParticipants clears all "participants" edges to the ContestParticipant entity.
-func (muo *MemberUpdateOne) ClearParticipants() *MemberUpdateOne {
-	muo.mutation.ClearParticipants()
+// ClearContestParticipants clears all "contestParticipants" edges to the ContestParticipant entity.
+func (muo *MemberUpdateOne) ClearContestParticipants() *MemberUpdateOne {
+	muo.mutation.ClearContestParticipants()
 	return muo
 }
 
-// RemoveParticipantIDs removes the "participants" edge to ContestParticipant entities by IDs.
-func (muo *MemberUpdateOne) RemoveParticipantIDs(ids ...int64) *MemberUpdateOne {
-	muo.mutation.RemoveParticipantIDs(ids...)
+// RemoveContestParticipantIDs removes the "contestParticipants" edge to ContestParticipant entities by IDs.
+func (muo *MemberUpdateOne) RemoveContestParticipantIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.RemoveContestParticipantIDs(ids...)
 	return muo
 }
 
-// RemoveParticipants removes "participants" edges to ContestParticipant entities.
-func (muo *MemberUpdateOne) RemoveParticipants(c ...*ContestParticipant) *MemberUpdateOne {
+// RemoveContestParticipants removes "contestParticipants" edges to ContestParticipant entities.
+func (muo *MemberUpdateOne) RemoveContestParticipants(c ...*ContestParticipant) *MemberUpdateOne {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return muo.RemoveParticipantIDs(ids...)
+	return muo.RemoveContestParticipantIDs(ids...)
+}
+
+// ClearBootcampParticipants clears all "bootcampParticipants" edges to the BootcampParticipant entity.
+func (muo *MemberUpdateOne) ClearBootcampParticipants() *MemberUpdateOne {
+	muo.mutation.ClearBootcampParticipants()
+	return muo
+}
+
+// RemoveBootcampParticipantIDs removes the "bootcampParticipants" edge to BootcampParticipant entities by IDs.
+func (muo *MemberUpdateOne) RemoveBootcampParticipantIDs(ids ...int64) *MemberUpdateOne {
+	muo.mutation.RemoveBootcampParticipantIDs(ids...)
+	return muo
+}
+
+// RemoveBootcampParticipants removes "bootcampParticipants" edges to BootcampParticipant entities.
+func (muo *MemberUpdateOne) RemoveBootcampParticipants(b ...*BootcampParticipant) *MemberUpdateOne {
+	ids := make([]int64, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return muo.RemoveBootcampParticipantIDs(ids...)
 }
 
 // Where appends a list predicates to the MemberUpdate builder.
@@ -1701,12 +1819,12 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if muo.mutation.ParticipantsCleared() {
+	if muo.mutation.ContestParticipantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   member.ParticipantsTable,
-			Columns: member.ParticipantsPrimaryKey,
+			Table:   member.ContestParticipantsTable,
+			Columns: member.ContestParticipantsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
@@ -1714,12 +1832,12 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := muo.mutation.RemovedParticipantsIDs(); len(nodes) > 0 && !muo.mutation.ParticipantsCleared() {
+	if nodes := muo.mutation.RemovedContestParticipantsIDs(); len(nodes) > 0 && !muo.mutation.ContestParticipantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   member.ParticipantsTable,
-			Columns: member.ParticipantsPrimaryKey,
+			Table:   member.ContestParticipantsTable,
+			Columns: member.ContestParticipantsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
@@ -1730,15 +1848,60 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := muo.mutation.ParticipantsIDs(); len(nodes) > 0 {
+	if nodes := muo.mutation.ContestParticipantsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   member.ParticipantsTable,
-			Columns: member.ParticipantsPrimaryKey,
+			Table:   member.ContestParticipantsTable,
+			Columns: member.ContestParticipantsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if muo.mutation.BootcampParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.BootcampParticipantsTable,
+			Columns: member.BootcampParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.RemovedBootcampParticipantsIDs(); len(nodes) > 0 && !muo.mutation.BootcampParticipantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.BootcampParticipantsTable,
+			Columns: member.BootcampParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.BootcampParticipantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.BootcampParticipantsTable,
+			Columns: member.BootcampParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

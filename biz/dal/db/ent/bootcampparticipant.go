@@ -43,6 +43,8 @@ type BootcampParticipant struct {
 	OrderSn string `json:"order_sn,omitempty"`
 	// 费用
 	Fee float64 `json:"fee,omitempty"`
+	// 会员ID
+	MemberID int64 `json:"member_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BootcampParticipantQuery when eager-loading is set.
 	Edges        BootcampParticipantEdges `json:"edges"`
@@ -51,11 +53,13 @@ type BootcampParticipant struct {
 
 // BootcampParticipantEdges holds the relations/edges for other nodes in the graph.
 type BootcampParticipantEdges struct {
-	// Bootcamp holds the value of the bootcamp edge.
-	Bootcamp *Bootcamp `json:"bootcamp,omitempty"`
+	// Bootcamp holds the value of the Bootcamp edge.
+	Bootcamp *Bootcamp `json:"Bootcamp,omitempty"`
+	// Members holds the value of the members edge.
+	Members []*Member `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // BootcampOrErr returns the Bootcamp value or an error if the edge
@@ -68,7 +72,16 @@ func (e BootcampParticipantEdges) BootcampOrErr() (*Bootcamp, error) {
 		}
 		return e.Bootcamp, nil
 	}
-	return nil, &NotLoadedError{edge: "bootcamp"}
+	return nil, &NotLoadedError{edge: "Bootcamp"}
+}
+
+// MembersOrErr returns the Members value or an error if the edge
+// was not loaded in eager-loading.
+func (e BootcampParticipantEdges) MembersOrErr() ([]*Member, error) {
+	if e.loadedTypes[1] {
+		return e.Members, nil
+	}
+	return nil, &NotLoadedError{edge: "members"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -78,7 +91,7 @@ func (*BootcampParticipant) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case bootcampparticipant.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case bootcampparticipant.FieldID, bootcampparticipant.FieldDelete, bootcampparticipant.FieldCreatedID, bootcampparticipant.FieldStatus, bootcampparticipant.FieldBootcampID, bootcampparticipant.FieldOrderID:
+		case bootcampparticipant.FieldID, bootcampparticipant.FieldDelete, bootcampparticipant.FieldCreatedID, bootcampparticipant.FieldStatus, bootcampparticipant.FieldBootcampID, bootcampparticipant.FieldOrderID, bootcampparticipant.FieldMemberID:
 			values[i] = new(sql.NullInt64)
 		case bootcampparticipant.FieldName, bootcampparticipant.FieldMobile, bootcampparticipant.FieldFields, bootcampparticipant.FieldOrderSn:
 			values[i] = new(sql.NullString)
@@ -177,6 +190,12 @@ func (bp *BootcampParticipant) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				bp.Fee = value.Float64
 			}
+		case bootcampparticipant.FieldMemberID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field member_id", values[i])
+			} else if value.Valid {
+				bp.MemberID = value.Int64
+			}
 		default:
 			bp.selectValues.Set(columns[i], values[i])
 		}
@@ -190,9 +209,14 @@ func (bp *BootcampParticipant) Value(name string) (ent.Value, error) {
 	return bp.selectValues.Get(name)
 }
 
-// QueryBootcamp queries the "bootcamp" edge of the BootcampParticipant entity.
+// QueryBootcamp queries the "Bootcamp" edge of the BootcampParticipant entity.
 func (bp *BootcampParticipant) QueryBootcamp() *BootcampQuery {
 	return NewBootcampParticipantClient(bp.config).QueryBootcamp(bp)
+}
+
+// QueryMembers queries the "members" edge of the BootcampParticipant entity.
+func (bp *BootcampParticipant) QueryMembers() *MemberQuery {
+	return NewBootcampParticipantClient(bp.config).QueryMembers(bp)
 }
 
 // Update returns a builder for updating this BootcampParticipant.
@@ -253,6 +277,9 @@ func (bp *BootcampParticipant) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("fee=")
 	builder.WriteString(fmt.Sprintf("%v", bp.Fee))
+	builder.WriteString(", ")
+	builder.WriteString("member_id=")
+	builder.WriteString(fmt.Sprintf("%v", bp.MemberID))
 	builder.WriteByte(')')
 	return builder.String()
 }

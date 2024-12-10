@@ -62,22 +62,23 @@ var (
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
-		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "训练营名称"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "比赛名称"},
 		{Name: "sign_number", Type: field.TypeInt64, Nullable: true, Comment: "报名人数"},
 		{Name: "sign_start_at", Type: field.TypeTime, Nullable: true, Comment: "报名开始时间"},
 		{Name: "sign_end_at", Type: field.TypeTime, Nullable: true, Comment: "报名结束时间"},
-		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "训练营人数"},
-		{Name: "start_at", Type: field.TypeTime, Nullable: true, Comment: "训练营开始时间"},
-		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "训练营结束时间"},
-		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "训练营图片"},
+		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "参赛人数"},
+		{Name: "start_at", Type: field.TypeTime, Nullable: true, Comment: "比赛开始时间"},
+		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "比赛结束时间"},
+		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "比赛图片"},
 		{Name: "sponsor", Type: field.TypeString, Nullable: true, Comment: "主办方"},
 		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "费用"},
 		{Name: "is_fee", Type: field.TypeInt64, Nullable: true, Comment: "是否有费用 1 无 2 有", Default: 1},
+		{Name: "is_show", Type: field.TypeInt64, Nullable: true, Comment: "是否展示 1 展示 2 不展示", Default: 1},
 		{Name: "is_cancel", Type: field.TypeInt64, Nullable: true, Comment: "是否支持取消报名 0支持 1不支持", Default: 0},
 		{Name: "cancel_time", Type: field.TypeInt64, Nullable: true, Comment: "取消时间", Default: 0},
 		{Name: "detail", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "详情"},
 		{Name: "sign_fields", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "报名信息"},
-		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:未报名;2:报名中;3:未开始;4:进行中;5:结束]", Default: 1},
+		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:未报名;2:报名中;3:未比赛;4:比赛中;5:比赛结束]", Default: 1},
 	}
 	// BootcampTable holds the schema information for the "bootcamp" table.
 	BootcampTable = &schema.Table{
@@ -106,6 +107,7 @@ var (
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单ID", Default: 0},
 		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号", Default: ""},
 		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "费用"},
+		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员ID", Default: 0},
 		{Name: "bootcamp_id", Type: field.TypeInt64, Nullable: true, Comment: "赛事id"},
 	}
 	// BootcampParticipantTable holds the schema information for the "bootcamp_participant" table.
@@ -116,7 +118,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "bootcamp_participant_bootcamp_bootcamp_participants",
-				Columns:    []*schema.Column{BootcampParticipantColumns[12]},
+				Columns:    []*schema.Column{BootcampParticipantColumns[13]},
 				RefColumns: []*schema.Column{BootcampColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1006,27 +1008,52 @@ var (
 			},
 		},
 	}
-	// MemberParticipantsColumns holds the columns for the "member_participants" table.
-	MemberParticipantsColumns = []*schema.Column{
+	// MemberContestParticipantsColumns holds the columns for the "member_contestParticipants" table.
+	MemberContestParticipantsColumns = []*schema.Column{
 		{Name: "member_id", Type: field.TypeInt64},
 		{Name: "contest_participant_id", Type: field.TypeInt64},
 	}
-	// MemberParticipantsTable holds the schema information for the "member_participants" table.
-	MemberParticipantsTable = &schema.Table{
-		Name:       "member_participants",
-		Columns:    MemberParticipantsColumns,
-		PrimaryKey: []*schema.Column{MemberParticipantsColumns[0], MemberParticipantsColumns[1]},
+	// MemberContestParticipantsTable holds the schema information for the "member_contestParticipants" table.
+	MemberContestParticipantsTable = &schema.Table{
+		Name:       "member_contestParticipants",
+		Columns:    MemberContestParticipantsColumns,
+		PrimaryKey: []*schema.Column{MemberContestParticipantsColumns[0], MemberContestParticipantsColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "member_participants_member_id",
-				Columns:    []*schema.Column{MemberParticipantsColumns[0]},
+				Symbol:     "member_contestParticipants_member_id",
+				Columns:    []*schema.Column{MemberContestParticipantsColumns[0]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "member_participants_contest_participant_id",
-				Columns:    []*schema.Column{MemberParticipantsColumns[1]},
+				Symbol:     "member_contestParticipants_contest_participant_id",
+				Columns:    []*schema.Column{MemberContestParticipantsColumns[1]},
 				RefColumns: []*schema.Column{ContestParticipantColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// MemberBootcampParticipantsColumns holds the columns for the "member_bootcampParticipants" table.
+	MemberBootcampParticipantsColumns = []*schema.Column{
+		{Name: "member_id", Type: field.TypeInt64},
+		{Name: "bootcamp_participant_id", Type: field.TypeInt64},
+	}
+	// MemberBootcampParticipantsTable holds the schema information for the "member_bootcampParticipants" table.
+	MemberBootcampParticipantsTable = &schema.Table{
+		Name:       "member_bootcampParticipants",
+		Columns:    MemberBootcampParticipantsColumns,
+		PrimaryKey: []*schema.Column{MemberBootcampParticipantsColumns[0], MemberBootcampParticipantsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "member_bootcampParticipants_member_id",
+				Columns:    []*schema.Column{MemberBootcampParticipantsColumns[0]},
+				RefColumns: []*schema.Column{MemberColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "member_bootcampParticipants_bootcamp_participant_id",
+				Columns:    []*schema.Column{MemberBootcampParticipantsColumns[1]},
+				RefColumns: []*schema.Column{BootcampParticipantColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -1112,7 +1139,8 @@ var (
 		SysUsersTable,
 		VenueTable,
 		VenuePlaceTable,
-		MemberParticipantsTable,
+		MemberContestParticipantsTable,
+		MemberBootcampParticipantsTable,
 		RoleMenusTable,
 		UserTagTable,
 	}
@@ -1243,8 +1271,10 @@ func init() {
 		Table:   "venue_place",
 		Options: "AUTO_INCREMENT = 100000",
 	}
-	MemberParticipantsTable.ForeignKeys[0].RefTable = MemberTable
-	MemberParticipantsTable.ForeignKeys[1].RefTable = ContestParticipantTable
+	MemberContestParticipantsTable.ForeignKeys[0].RefTable = MemberTable
+	MemberContestParticipantsTable.ForeignKeys[1].RefTable = ContestParticipantTable
+	MemberBootcampParticipantsTable.ForeignKeys[0].RefTable = MemberTable
+	MemberBootcampParticipantsTable.ForeignKeys[1].RefTable = BootcampParticipantTable
 	RoleMenusTable.ForeignKeys[0].RefTable = SysRolesTable
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
 	UserTagTable.ForeignKeys[0].RefTable = SysUsersTable

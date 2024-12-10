@@ -23,6 +23,7 @@ func (BootcampParticipant) Fields() []ent.Field {
 		field.Int64("order_id").Default(0).Comment("订单ID").Optional(),
 		field.String("order_sn").Default("").Comment("订单编号").Optional(),
 		field.Float("fee").Comment("费用").Optional(),
+		field.Int64("member_id").Default(0).Comment("会员ID").Optional(),
 	}
 }
 
@@ -35,7 +36,8 @@ func (BootcampParticipant) Mixin() []ent.Mixin {
 
 func (BootcampParticipant) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("bootcamp", Bootcamp.Type).Ref("bootcamp_participants").Field("bootcamp_id").Unique(),
+		edge.From("Bootcamp", Bootcamp.Type).Ref("bootcamp_participants").Field("bootcamp_id").Unique(),
+		edge.From("members", Member.Type).Ref("bootcampParticipants"),
 	}
 }
 

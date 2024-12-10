@@ -963,7 +963,7 @@ func (c *BootcampParticipantClient) GetX(ctx context.Context, id int64) *Bootcam
 	return obj
 }
 
-// QueryBootcamp queries the bootcamp edge of a BootcampParticipant.
+// QueryBootcamp queries the Bootcamp edge of a BootcampParticipant.
 func (c *BootcampParticipantClient) QueryBootcamp(bp *BootcampParticipant) *BootcampQuery {
 	query := (&BootcampClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
@@ -972,6 +972,22 @@ func (c *BootcampParticipantClient) QueryBootcamp(bp *BootcampParticipant) *Boot
 			sqlgraph.From(bootcampparticipant.Table, bootcampparticipant.FieldID, id),
 			sqlgraph.To(bootcamp.Table, bootcamp.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, bootcampparticipant.BootcampTable, bootcampparticipant.BootcampColumn),
+		)
+		fromV = sqlgraph.Neighbors(bp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMembers queries the members edge of a BootcampParticipant.
+func (c *BootcampParticipantClient) QueryMembers(bp *BootcampParticipant) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := bp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bootcampparticipant.Table, bootcampparticipant.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, bootcampparticipant.MembersTable, bootcampparticipant.MembersPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(bp.driver.Dialect(), step)
 		return fromV, nil
@@ -2267,15 +2283,31 @@ func (c *MemberClient) QueryMemberContents(m *Member) *MemberContractQuery {
 	return query
 }
 
-// QueryParticipants queries the participants edge of a Member.
-func (c *MemberClient) QueryParticipants(m *Member) *ContestParticipantQuery {
+// QueryContestParticipants queries the contestParticipants edge of a Member.
+func (c *MemberClient) QueryContestParticipants(m *Member) *ContestParticipantQuery {
 	query := (&ContestParticipantClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(member.Table, member.FieldID, id),
 			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, member.ParticipantsTable, member.ParticipantsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.ContestParticipantsTable, member.ContestParticipantsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBootcampParticipants queries the bootcampParticipants edge of a Member.
+func (c *MemberClient) QueryBootcampParticipants(m *Member) *BootcampParticipantQuery {
+	query := (&BootcampParticipantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(bootcampparticipant.Table, bootcampparticipant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.BootcampParticipantsTable, member.BootcampParticipantsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil

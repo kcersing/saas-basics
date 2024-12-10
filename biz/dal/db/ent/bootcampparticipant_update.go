@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -276,9 +277,51 @@ func (bpu *BootcampParticipantUpdate) ClearFee() *BootcampParticipantUpdate {
 	return bpu
 }
 
-// SetBootcamp sets the "bootcamp" edge to the Bootcamp entity.
+// SetMemberID sets the "member_id" field.
+func (bpu *BootcampParticipantUpdate) SetMemberID(i int64) *BootcampParticipantUpdate {
+	bpu.mutation.ResetMemberID()
+	bpu.mutation.SetMemberID(i)
+	return bpu
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (bpu *BootcampParticipantUpdate) SetNillableMemberID(i *int64) *BootcampParticipantUpdate {
+	if i != nil {
+		bpu.SetMemberID(*i)
+	}
+	return bpu
+}
+
+// AddMemberID adds i to the "member_id" field.
+func (bpu *BootcampParticipantUpdate) AddMemberID(i int64) *BootcampParticipantUpdate {
+	bpu.mutation.AddMemberID(i)
+	return bpu
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (bpu *BootcampParticipantUpdate) ClearMemberID() *BootcampParticipantUpdate {
+	bpu.mutation.ClearMemberID()
+	return bpu
+}
+
+// SetBootcamp sets the "Bootcamp" edge to the Bootcamp entity.
 func (bpu *BootcampParticipantUpdate) SetBootcamp(b *Bootcamp) *BootcampParticipantUpdate {
 	return bpu.SetBootcampID(b.ID)
+}
+
+// AddMemberIDs adds the "members" edge to the Member entity by IDs.
+func (bpu *BootcampParticipantUpdate) AddMemberIDs(ids ...int64) *BootcampParticipantUpdate {
+	bpu.mutation.AddMemberIDs(ids...)
+	return bpu
+}
+
+// AddMembers adds the "members" edges to the Member entity.
+func (bpu *BootcampParticipantUpdate) AddMembers(m ...*Member) *BootcampParticipantUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return bpu.AddMemberIDs(ids...)
 }
 
 // Mutation returns the BootcampParticipantMutation object of the builder.
@@ -286,10 +329,31 @@ func (bpu *BootcampParticipantUpdate) Mutation() *BootcampParticipantMutation {
 	return bpu.mutation
 }
 
-// ClearBootcamp clears the "bootcamp" edge to the Bootcamp entity.
+// ClearBootcamp clears the "Bootcamp" edge to the Bootcamp entity.
 func (bpu *BootcampParticipantUpdate) ClearBootcamp() *BootcampParticipantUpdate {
 	bpu.mutation.ClearBootcamp()
 	return bpu
+}
+
+// ClearMembers clears all "members" edges to the Member entity.
+func (bpu *BootcampParticipantUpdate) ClearMembers() *BootcampParticipantUpdate {
+	bpu.mutation.ClearMembers()
+	return bpu
+}
+
+// RemoveMemberIDs removes the "members" edge to Member entities by IDs.
+func (bpu *BootcampParticipantUpdate) RemoveMemberIDs(ids ...int64) *BootcampParticipantUpdate {
+	bpu.mutation.RemoveMemberIDs(ids...)
+	return bpu
+}
+
+// RemoveMembers removes "members" edges to Member entities.
+func (bpu *BootcampParticipantUpdate) RemoveMembers(m ...*Member) *BootcampParticipantUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return bpu.RemoveMemberIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -415,6 +479,15 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 	if bpu.mutation.FeeCleared() {
 		_spec.ClearField(bootcampparticipant.FieldFee, field.TypeFloat64)
 	}
+	if value, ok := bpu.mutation.MemberID(); ok {
+		_spec.SetField(bootcampparticipant.FieldMemberID, field.TypeInt64, value)
+	}
+	if value, ok := bpu.mutation.AddedMemberID(); ok {
+		_spec.AddField(bootcampparticipant.FieldMemberID, field.TypeInt64, value)
+	}
+	if bpu.mutation.MemberIDCleared() {
+		_spec.ClearField(bootcampparticipant.FieldMemberID, field.TypeInt64)
+	}
 	if bpu.mutation.BootcampCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -437,6 +510,51 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bpu.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bootcampparticipant.MembersTable,
+			Columns: bootcampparticipant.MembersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bpu.mutation.RemovedMembersIDs(); len(nodes) > 0 && !bpu.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bootcampparticipant.MembersTable,
+			Columns: bootcampparticipant.MembersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bpu.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bootcampparticipant.MembersTable,
+			Columns: bootcampparticipant.MembersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -711,9 +829,51 @@ func (bpuo *BootcampParticipantUpdateOne) ClearFee() *BootcampParticipantUpdateO
 	return bpuo
 }
 
-// SetBootcamp sets the "bootcamp" edge to the Bootcamp entity.
+// SetMemberID sets the "member_id" field.
+func (bpuo *BootcampParticipantUpdateOne) SetMemberID(i int64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.ResetMemberID()
+	bpuo.mutation.SetMemberID(i)
+	return bpuo
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (bpuo *BootcampParticipantUpdateOne) SetNillableMemberID(i *int64) *BootcampParticipantUpdateOne {
+	if i != nil {
+		bpuo.SetMemberID(*i)
+	}
+	return bpuo
+}
+
+// AddMemberID adds i to the "member_id" field.
+func (bpuo *BootcampParticipantUpdateOne) AddMemberID(i int64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.AddMemberID(i)
+	return bpuo
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (bpuo *BootcampParticipantUpdateOne) ClearMemberID() *BootcampParticipantUpdateOne {
+	bpuo.mutation.ClearMemberID()
+	return bpuo
+}
+
+// SetBootcamp sets the "Bootcamp" edge to the Bootcamp entity.
 func (bpuo *BootcampParticipantUpdateOne) SetBootcamp(b *Bootcamp) *BootcampParticipantUpdateOne {
 	return bpuo.SetBootcampID(b.ID)
+}
+
+// AddMemberIDs adds the "members" edge to the Member entity by IDs.
+func (bpuo *BootcampParticipantUpdateOne) AddMemberIDs(ids ...int64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.AddMemberIDs(ids...)
+	return bpuo
+}
+
+// AddMembers adds the "members" edges to the Member entity.
+func (bpuo *BootcampParticipantUpdateOne) AddMembers(m ...*Member) *BootcampParticipantUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return bpuo.AddMemberIDs(ids...)
 }
 
 // Mutation returns the BootcampParticipantMutation object of the builder.
@@ -721,10 +881,31 @@ func (bpuo *BootcampParticipantUpdateOne) Mutation() *BootcampParticipantMutatio
 	return bpuo.mutation
 }
 
-// ClearBootcamp clears the "bootcamp" edge to the Bootcamp entity.
+// ClearBootcamp clears the "Bootcamp" edge to the Bootcamp entity.
 func (bpuo *BootcampParticipantUpdateOne) ClearBootcamp() *BootcampParticipantUpdateOne {
 	bpuo.mutation.ClearBootcamp()
 	return bpuo
+}
+
+// ClearMembers clears all "members" edges to the Member entity.
+func (bpuo *BootcampParticipantUpdateOne) ClearMembers() *BootcampParticipantUpdateOne {
+	bpuo.mutation.ClearMembers()
+	return bpuo
+}
+
+// RemoveMemberIDs removes the "members" edge to Member entities by IDs.
+func (bpuo *BootcampParticipantUpdateOne) RemoveMemberIDs(ids ...int64) *BootcampParticipantUpdateOne {
+	bpuo.mutation.RemoveMemberIDs(ids...)
+	return bpuo
+}
+
+// RemoveMembers removes "members" edges to Member entities.
+func (bpuo *BootcampParticipantUpdateOne) RemoveMembers(m ...*Member) *BootcampParticipantUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return bpuo.RemoveMemberIDs(ids...)
 }
 
 // Where appends a list predicates to the BootcampParticipantUpdate builder.
@@ -880,6 +1061,15 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 	if bpuo.mutation.FeeCleared() {
 		_spec.ClearField(bootcampparticipant.FieldFee, field.TypeFloat64)
 	}
+	if value, ok := bpuo.mutation.MemberID(); ok {
+		_spec.SetField(bootcampparticipant.FieldMemberID, field.TypeInt64, value)
+	}
+	if value, ok := bpuo.mutation.AddedMemberID(); ok {
+		_spec.AddField(bootcampparticipant.FieldMemberID, field.TypeInt64, value)
+	}
+	if bpuo.mutation.MemberIDCleared() {
+		_spec.ClearField(bootcampparticipant.FieldMemberID, field.TypeInt64)
+	}
 	if bpuo.mutation.BootcampCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -902,6 +1092,51 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bpuo.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bootcampparticipant.MembersTable,
+			Columns: bootcampparticipant.MembersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bpuo.mutation.RemovedMembersIDs(); len(nodes) > 0 && !bpuo.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bootcampparticipant.MembersTable,
+			Columns: bootcampparticipant.MembersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bpuo.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bootcampparticipant.MembersTable,
+			Columns: bootcampparticipant.MembersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

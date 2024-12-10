@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"fmt"
+	"saas/biz/dal/db/ent/bootcampparticipant"
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/member"
@@ -260,19 +261,34 @@ func (mc *MemberCreate) AddMemberContents(m ...*MemberContract) *MemberCreate {
 	return mc.AddMemberContentIDs(ids...)
 }
 
-// AddParticipantIDs adds the "participants" edge to the ContestParticipant entity by IDs.
-func (mc *MemberCreate) AddParticipantIDs(ids ...int64) *MemberCreate {
-	mc.mutation.AddParticipantIDs(ids...)
+// AddContestParticipantIDs adds the "contestParticipants" edge to the ContestParticipant entity by IDs.
+func (mc *MemberCreate) AddContestParticipantIDs(ids ...int64) *MemberCreate {
+	mc.mutation.AddContestParticipantIDs(ids...)
 	return mc
 }
 
-// AddParticipants adds the "participants" edges to the ContestParticipant entity.
-func (mc *MemberCreate) AddParticipants(c ...*ContestParticipant) *MemberCreate {
+// AddContestParticipants adds the "contestParticipants" edges to the ContestParticipant entity.
+func (mc *MemberCreate) AddContestParticipants(c ...*ContestParticipant) *MemberCreate {
 	ids := make([]int64, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return mc.AddParticipantIDs(ids...)
+	return mc.AddContestParticipantIDs(ids...)
+}
+
+// AddBootcampParticipantIDs adds the "bootcampParticipants" edge to the BootcampParticipant entity by IDs.
+func (mc *MemberCreate) AddBootcampParticipantIDs(ids ...int64) *MemberCreate {
+	mc.mutation.AddBootcampParticipantIDs(ids...)
+	return mc
+}
+
+// AddBootcampParticipants adds the "bootcampParticipants" edges to the BootcampParticipant entity.
+func (mc *MemberCreate) AddBootcampParticipants(b ...*BootcampParticipant) *MemberCreate {
+	ids := make([]int64, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return mc.AddBootcampParticipantIDs(ids...)
 }
 
 // Mutation returns the MemberMutation object of the builder.
@@ -498,15 +514,31 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mc.mutation.ParticipantsIDs(); len(nodes) > 0 {
+	if nodes := mc.mutation.ContestParticipantsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   member.ParticipantsTable,
-			Columns: member.ParticipantsPrimaryKey,
+			Table:   member.ContestParticipantsTable,
+			Columns: member.ContestParticipantsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mc.mutation.BootcampParticipantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   member.BootcampParticipantsTable,
+			Columns: member.BootcampParticipantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

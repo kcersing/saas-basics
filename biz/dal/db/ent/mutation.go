@@ -2046,6 +2046,8 @@ type BootcampMutation struct {
 	addfee                       *float64
 	is_fee                       *int64
 	addis_fee                    *int64
+	is_show                      *int64
+	addis_show                   *int64
 	is_cancel                    *int64
 	addis_cancel                 *int64
 	cancel_time                  *int64
@@ -3098,6 +3100,76 @@ func (m *BootcampMutation) ResetIsFee() {
 	delete(m.clearedFields, bootcamp.FieldIsFee)
 }
 
+// SetIsShow sets the "is_show" field.
+func (m *BootcampMutation) SetIsShow(i int64) {
+	m.is_show = &i
+	m.addis_show = nil
+}
+
+// IsShow returns the value of the "is_show" field in the mutation.
+func (m *BootcampMutation) IsShow() (r int64, exists bool) {
+	v := m.is_show
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsShow returns the old "is_show" field's value of the Bootcamp entity.
+// If the Bootcamp object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BootcampMutation) OldIsShow(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsShow is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsShow requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsShow: %w", err)
+	}
+	return oldValue.IsShow, nil
+}
+
+// AddIsShow adds i to the "is_show" field.
+func (m *BootcampMutation) AddIsShow(i int64) {
+	if m.addis_show != nil {
+		*m.addis_show += i
+	} else {
+		m.addis_show = &i
+	}
+}
+
+// AddedIsShow returns the value that was added to the "is_show" field in this mutation.
+func (m *BootcampMutation) AddedIsShow() (r int64, exists bool) {
+	v := m.addis_show
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsShow clears the value of the "is_show" field.
+func (m *BootcampMutation) ClearIsShow() {
+	m.is_show = nil
+	m.addis_show = nil
+	m.clearedFields[bootcamp.FieldIsShow] = struct{}{}
+}
+
+// IsShowCleared returns if the "is_show" field was cleared in this mutation.
+func (m *BootcampMutation) IsShowCleared() bool {
+	_, ok := m.clearedFields[bootcamp.FieldIsShow]
+	return ok
+}
+
+// ResetIsShow resets all changes to the "is_show" field.
+func (m *BootcampMutation) ResetIsShow() {
+	m.is_show = nil
+	m.addis_show = nil
+	delete(m.clearedFields, bootcamp.FieldIsShow)
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (m *BootcampMutation) SetIsCancel(i int64) {
 	m.is_cancel = &i
@@ -3494,7 +3566,7 @@ func (m *BootcampMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BootcampMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, bootcamp.FieldCreatedAt)
 	}
@@ -3542,6 +3614,9 @@ func (m *BootcampMutation) Fields() []string {
 	}
 	if m.is_fee != nil {
 		fields = append(fields, bootcamp.FieldIsFee)
+	}
+	if m.is_show != nil {
+		fields = append(fields, bootcamp.FieldIsShow)
 	}
 	if m.is_cancel != nil {
 		fields = append(fields, bootcamp.FieldIsCancel)
@@ -3598,6 +3673,8 @@ func (m *BootcampMutation) Field(name string) (ent.Value, bool) {
 		return m.Fee()
 	case bootcamp.FieldIsFee:
 		return m.IsFee()
+	case bootcamp.FieldIsShow:
+		return m.IsShow()
 	case bootcamp.FieldIsCancel:
 		return m.IsCancel()
 	case bootcamp.FieldCancelTime:
@@ -3649,6 +3726,8 @@ func (m *BootcampMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldFee(ctx)
 	case bootcamp.FieldIsFee:
 		return m.OldIsFee(ctx)
+	case bootcamp.FieldIsShow:
+		return m.OldIsShow(ctx)
 	case bootcamp.FieldIsCancel:
 		return m.OldIsCancel(ctx)
 	case bootcamp.FieldCancelTime:
@@ -3780,6 +3859,13 @@ func (m *BootcampMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsFee(v)
 		return nil
+	case bootcamp.FieldIsShow:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsShow(v)
+		return nil
 	case bootcamp.FieldIsCancel:
 		v, ok := value.(int64)
 		if !ok {
@@ -3844,6 +3930,9 @@ func (m *BootcampMutation) AddedFields() []string {
 	if m.addis_fee != nil {
 		fields = append(fields, bootcamp.FieldIsFee)
 	}
+	if m.addis_show != nil {
+		fields = append(fields, bootcamp.FieldIsShow)
+	}
 	if m.addis_cancel != nil {
 		fields = append(fields, bootcamp.FieldIsCancel)
 	}
@@ -3875,6 +3964,8 @@ func (m *BootcampMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedFee()
 	case bootcamp.FieldIsFee:
 		return m.AddedIsFee()
+	case bootcamp.FieldIsShow:
+		return m.AddedIsShow()
 	case bootcamp.FieldIsCancel:
 		return m.AddedIsCancel()
 	case bootcamp.FieldCancelTime:
@@ -3938,6 +4029,13 @@ func (m *BootcampMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddIsFee(v)
+		return nil
+	case bootcamp.FieldIsShow:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsShow(v)
 		return nil
 	case bootcamp.FieldIsCancel:
 		v, ok := value.(int64)
@@ -4016,6 +4114,9 @@ func (m *BootcampMutation) ClearedFields() []string {
 	if m.FieldCleared(bootcamp.FieldIsFee) {
 		fields = append(fields, bootcamp.FieldIsFee)
 	}
+	if m.FieldCleared(bootcamp.FieldIsShow) {
+		fields = append(fields, bootcamp.FieldIsShow)
+	}
 	if m.FieldCleared(bootcamp.FieldIsCancel) {
 		fields = append(fields, bootcamp.FieldIsCancel)
 	}
@@ -4093,6 +4194,9 @@ func (m *BootcampMutation) ClearField(name string) error {
 	case bootcamp.FieldIsFee:
 		m.ClearIsFee()
 		return nil
+	case bootcamp.FieldIsShow:
+		m.ClearIsShow()
+		return nil
 	case bootcamp.FieldIsCancel:
 		m.ClearIsCancel()
 		return nil
@@ -4163,6 +4267,9 @@ func (m *BootcampMutation) ResetField(name string) error {
 		return nil
 	case bootcamp.FieldIsFee:
 		m.ResetIsFee()
+		return nil
+	case bootcamp.FieldIsShow:
+		m.ResetIsShow()
 		return nil
 	case bootcamp.FieldIsCancel:
 		m.ResetIsCancel()
@@ -4270,31 +4377,36 @@ func (m *BootcampMutation) ResetEdge(name string) error {
 // BootcampParticipantMutation represents an operation that mutates the BootcampParticipant nodes in the graph.
 type BootcampParticipantMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int64
-	created_at      *time.Time
-	updated_at      *time.Time
-	delete          *int64
-	adddelete       *int64
-	created_id      *int64
-	addcreated_id   *int64
-	status          *int64
-	addstatus       *int64
-	name            *string
-	mobile          *string
-	fields          *string
-	order_id        *int64
-	addorder_id     *int64
-	order_sn        *string
-	fee             *float64
-	addfee          *float64
-	clearedFields   map[string]struct{}
-	bootcamp        *int64
-	clearedbootcamp bool
-	done            bool
-	oldValue        func(context.Context) (*BootcampParticipant, error)
-	predicates      []predicate.BootcampParticipant
+	op               Op
+	typ              string
+	id               *int64
+	created_at       *time.Time
+	updated_at       *time.Time
+	delete           *int64
+	adddelete        *int64
+	created_id       *int64
+	addcreated_id    *int64
+	status           *int64
+	addstatus        *int64
+	name             *string
+	mobile           *string
+	fields           *string
+	order_id         *int64
+	addorder_id      *int64
+	order_sn         *string
+	fee              *float64
+	addfee           *float64
+	member_id        *int64
+	addmember_id     *int64
+	clearedFields    map[string]struct{}
+	_Bootcamp        *int64
+	cleared_Bootcamp bool
+	members          map[int64]struct{}
+	removedmembers   map[int64]struct{}
+	clearedmembers   bool
+	done             bool
+	oldValue         func(context.Context) (*BootcampParticipant, error)
+	predicates       []predicate.BootcampParticipant
 }
 
 var _ ent.Mutation = (*BootcampParticipantMutation)(nil)
@@ -4711,12 +4823,12 @@ func (m *BootcampParticipantMutation) ResetStatus() {
 
 // SetBootcampID sets the "bootcamp_id" field.
 func (m *BootcampParticipantMutation) SetBootcampID(i int64) {
-	m.bootcamp = &i
+	m._Bootcamp = &i
 }
 
 // BootcampID returns the value of the "bootcamp_id" field in the mutation.
 func (m *BootcampParticipantMutation) BootcampID() (r int64, exists bool) {
-	v := m.bootcamp
+	v := m._Bootcamp
 	if v == nil {
 		return
 	}
@@ -4742,7 +4854,7 @@ func (m *BootcampParticipantMutation) OldBootcampID(ctx context.Context) (v int6
 
 // ClearBootcampID clears the value of the "bootcamp_id" field.
 func (m *BootcampParticipantMutation) ClearBootcampID() {
-	m.bootcamp = nil
+	m._Bootcamp = nil
 	m.clearedFields[bootcampparticipant.FieldBootcampID] = struct{}{}
 }
 
@@ -4754,7 +4866,7 @@ func (m *BootcampParticipantMutation) BootcampIDCleared() bool {
 
 // ResetBootcampID resets all changes to the "bootcamp_id" field.
 func (m *BootcampParticipantMutation) ResetBootcampID() {
-	m.bootcamp = nil
+	m._Bootcamp = nil
 	delete(m.clearedFields, bootcampparticipant.FieldBootcampID)
 }
 
@@ -5094,31 +5206,155 @@ func (m *BootcampParticipantMutation) ResetFee() {
 	delete(m.clearedFields, bootcampparticipant.FieldFee)
 }
 
-// ClearBootcamp clears the "bootcamp" edge to the Bootcamp entity.
+// SetMemberID sets the "member_id" field.
+func (m *BootcampParticipantMutation) SetMemberID(i int64) {
+	m.member_id = &i
+	m.addmember_id = nil
+}
+
+// MemberID returns the value of the "member_id" field in the mutation.
+func (m *BootcampParticipantMutation) MemberID() (r int64, exists bool) {
+	v := m.member_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemberID returns the old "member_id" field's value of the BootcampParticipant entity.
+// If the BootcampParticipant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BootcampParticipantMutation) OldMemberID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemberID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemberID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemberID: %w", err)
+	}
+	return oldValue.MemberID, nil
+}
+
+// AddMemberID adds i to the "member_id" field.
+func (m *BootcampParticipantMutation) AddMemberID(i int64) {
+	if m.addmember_id != nil {
+		*m.addmember_id += i
+	} else {
+		m.addmember_id = &i
+	}
+}
+
+// AddedMemberID returns the value that was added to the "member_id" field in this mutation.
+func (m *BootcampParticipantMutation) AddedMemberID() (r int64, exists bool) {
+	v := m.addmember_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearMemberID clears the value of the "member_id" field.
+func (m *BootcampParticipantMutation) ClearMemberID() {
+	m.member_id = nil
+	m.addmember_id = nil
+	m.clearedFields[bootcampparticipant.FieldMemberID] = struct{}{}
+}
+
+// MemberIDCleared returns if the "member_id" field was cleared in this mutation.
+func (m *BootcampParticipantMutation) MemberIDCleared() bool {
+	_, ok := m.clearedFields[bootcampparticipant.FieldMemberID]
+	return ok
+}
+
+// ResetMemberID resets all changes to the "member_id" field.
+func (m *BootcampParticipantMutation) ResetMemberID() {
+	m.member_id = nil
+	m.addmember_id = nil
+	delete(m.clearedFields, bootcampparticipant.FieldMemberID)
+}
+
+// ClearBootcamp clears the "Bootcamp" edge to the Bootcamp entity.
 func (m *BootcampParticipantMutation) ClearBootcamp() {
-	m.clearedbootcamp = true
+	m.cleared_Bootcamp = true
 	m.clearedFields[bootcampparticipant.FieldBootcampID] = struct{}{}
 }
 
-// BootcampCleared reports if the "bootcamp" edge to the Bootcamp entity was cleared.
+// BootcampCleared reports if the "Bootcamp" edge to the Bootcamp entity was cleared.
 func (m *BootcampParticipantMutation) BootcampCleared() bool {
-	return m.BootcampIDCleared() || m.clearedbootcamp
+	return m.BootcampIDCleared() || m.cleared_Bootcamp
 }
 
-// BootcampIDs returns the "bootcamp" edge IDs in the mutation.
+// BootcampIDs returns the "Bootcamp" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // BootcampID instead. It exists only for internal usage by the builders.
 func (m *BootcampParticipantMutation) BootcampIDs() (ids []int64) {
-	if id := m.bootcamp; id != nil {
+	if id := m._Bootcamp; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetBootcamp resets all changes to the "bootcamp" edge.
+// ResetBootcamp resets all changes to the "Bootcamp" edge.
 func (m *BootcampParticipantMutation) ResetBootcamp() {
-	m.bootcamp = nil
-	m.clearedbootcamp = false
+	m._Bootcamp = nil
+	m.cleared_Bootcamp = false
+}
+
+// AddMemberIDs adds the "members" edge to the Member entity by ids.
+func (m *BootcampParticipantMutation) AddMemberIDs(ids ...int64) {
+	if m.members == nil {
+		m.members = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMembers clears the "members" edge to the Member entity.
+func (m *BootcampParticipantMutation) ClearMembers() {
+	m.clearedmembers = true
+}
+
+// MembersCleared reports if the "members" edge to the Member entity was cleared.
+func (m *BootcampParticipantMutation) MembersCleared() bool {
+	return m.clearedmembers
+}
+
+// RemoveMemberIDs removes the "members" edge to the Member entity by IDs.
+func (m *BootcampParticipantMutation) RemoveMemberIDs(ids ...int64) {
+	if m.removedmembers == nil {
+		m.removedmembers = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.members, ids[i])
+		m.removedmembers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMembers returns the removed IDs of the "members" edge to the Member entity.
+func (m *BootcampParticipantMutation) RemovedMembersIDs() (ids []int64) {
+	for id := range m.removedmembers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MembersIDs returns the "members" edge IDs in the mutation.
+func (m *BootcampParticipantMutation) MembersIDs() (ids []int64) {
+	for id := range m.members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMembers resets all changes to the "members" edge.
+func (m *BootcampParticipantMutation) ResetMembers() {
+	m.members = nil
+	m.clearedmembers = false
+	m.removedmembers = nil
 }
 
 // Where appends a list predicates to the BootcampParticipantMutation builder.
@@ -5155,7 +5391,7 @@ func (m *BootcampParticipantMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BootcampParticipantMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, bootcampparticipant.FieldCreatedAt)
 	}
@@ -5171,7 +5407,7 @@ func (m *BootcampParticipantMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, bootcampparticipant.FieldStatus)
 	}
-	if m.bootcamp != nil {
+	if m._Bootcamp != nil {
 		fields = append(fields, bootcampparticipant.FieldBootcampID)
 	}
 	if m.name != nil {
@@ -5191,6 +5427,9 @@ func (m *BootcampParticipantMutation) Fields() []string {
 	}
 	if m.fee != nil {
 		fields = append(fields, bootcampparticipant.FieldFee)
+	}
+	if m.member_id != nil {
+		fields = append(fields, bootcampparticipant.FieldMemberID)
 	}
 	return fields
 }
@@ -5224,6 +5463,8 @@ func (m *BootcampParticipantMutation) Field(name string) (ent.Value, bool) {
 		return m.OrderSn()
 	case bootcampparticipant.FieldFee:
 		return m.Fee()
+	case bootcampparticipant.FieldMemberID:
+		return m.MemberID()
 	}
 	return nil, false
 }
@@ -5257,6 +5498,8 @@ func (m *BootcampParticipantMutation) OldField(ctx context.Context, name string)
 		return m.OldOrderSn(ctx)
 	case bootcampparticipant.FieldFee:
 		return m.OldFee(ctx)
+	case bootcampparticipant.FieldMemberID:
+		return m.OldMemberID(ctx)
 	}
 	return nil, fmt.Errorf("unknown BootcampParticipant field %s", name)
 }
@@ -5350,6 +5593,13 @@ func (m *BootcampParticipantMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetFee(v)
 		return nil
+	case bootcampparticipant.FieldMemberID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemberID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant field %s", name)
 }
@@ -5373,6 +5623,9 @@ func (m *BootcampParticipantMutation) AddedFields() []string {
 	if m.addfee != nil {
 		fields = append(fields, bootcampparticipant.FieldFee)
 	}
+	if m.addmember_id != nil {
+		fields = append(fields, bootcampparticipant.FieldMemberID)
+	}
 	return fields
 }
 
@@ -5391,6 +5644,8 @@ func (m *BootcampParticipantMutation) AddedField(name string) (ent.Value, bool) 
 		return m.AddedOrderID()
 	case bootcampparticipant.FieldFee:
 		return m.AddedFee()
+	case bootcampparticipant.FieldMemberID:
+		return m.AddedMemberID()
 	}
 	return nil, false
 }
@@ -5435,6 +5690,13 @@ func (m *BootcampParticipantMutation) AddField(name string, value ent.Value) err
 		}
 		m.AddFee(v)
 		return nil
+	case bootcampparticipant.FieldMemberID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMemberID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant numeric field %s", name)
 }
@@ -5478,6 +5740,9 @@ func (m *BootcampParticipantMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(bootcampparticipant.FieldFee) {
 		fields = append(fields, bootcampparticipant.FieldFee)
+	}
+	if m.FieldCleared(bootcampparticipant.FieldMemberID) {
+		fields = append(fields, bootcampparticipant.FieldMemberID)
 	}
 	return fields
 }
@@ -5529,6 +5794,9 @@ func (m *BootcampParticipantMutation) ClearField(name string) error {
 	case bootcampparticipant.FieldFee:
 		m.ClearFee()
 		return nil
+	case bootcampparticipant.FieldMemberID:
+		m.ClearMemberID()
+		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant nullable field %s", name)
 }
@@ -5573,15 +5841,21 @@ func (m *BootcampParticipantMutation) ResetField(name string) error {
 	case bootcampparticipant.FieldFee:
 		m.ResetFee()
 		return nil
+	case bootcampparticipant.FieldMemberID:
+		m.ResetMemberID()
+		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *BootcampParticipantMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.bootcamp != nil {
+	edges := make([]string, 0, 2)
+	if m._Bootcamp != nil {
 		edges = append(edges, bootcampparticipant.EdgeBootcamp)
+	}
+	if m.members != nil {
+		edges = append(edges, bootcampparticipant.EdgeMembers)
 	}
 	return edges
 }
@@ -5591,30 +5865,50 @@ func (m *BootcampParticipantMutation) AddedEdges() []string {
 func (m *BootcampParticipantMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case bootcampparticipant.EdgeBootcamp:
-		if id := m.bootcamp; id != nil {
+		if id := m._Bootcamp; id != nil {
 			return []ent.Value{*id}
 		}
+	case bootcampparticipant.EdgeMembers:
+		ids := make([]ent.Value, 0, len(m.members))
+		for id := range m.members {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *BootcampParticipantMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.removedmembers != nil {
+		edges = append(edges, bootcampparticipant.EdgeMembers)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *BootcampParticipantMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case bootcampparticipant.EdgeMembers:
+		ids := make([]ent.Value, 0, len(m.removedmembers))
+		for id := range m.removedmembers {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *BootcampParticipantMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedbootcamp {
+	edges := make([]string, 0, 2)
+	if m.cleared_Bootcamp {
 		edges = append(edges, bootcampparticipant.EdgeBootcamp)
+	}
+	if m.clearedmembers {
+		edges = append(edges, bootcampparticipant.EdgeMembers)
 	}
 	return edges
 }
@@ -5624,7 +5918,9 @@ func (m *BootcampParticipantMutation) ClearedEdges() []string {
 func (m *BootcampParticipantMutation) EdgeCleared(name string) bool {
 	switch name {
 	case bootcampparticipant.EdgeBootcamp:
-		return m.clearedbootcamp
+		return m.cleared_Bootcamp
+	case bootcampparticipant.EdgeMembers:
+		return m.clearedmembers
 	}
 	return false
 }
@@ -5646,6 +5942,9 @@ func (m *BootcampParticipantMutation) ResetEdge(name string) error {
 	switch name {
 	case bootcampparticipant.EdgeBootcamp:
 		m.ResetBootcamp()
+		return nil
+	case bootcampparticipant.EdgeMembers:
+		m.ResetMembers()
 		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant edge %s", name)
@@ -15355,46 +15654,49 @@ func (m *LogsMutation) ResetEdge(name string) error {
 // MemberMutation represents an operation that mutates the Member nodes in the graph.
 type MemberMutation struct {
 	config
-	op                     Op
-	typ                    string
-	id                     *int64
-	created_at             *time.Time
-	updated_at             *time.Time
-	delete                 *int64
-	adddelete              *int64
-	created_id             *int64
-	addcreated_id          *int64
-	status                 *int64
-	addstatus              *int64
-	password               *string
-	name                   *string
-	nickname               *string
-	mobile                 *string
-	avatar                 *string
-	condition              *int64
-	addcondition           *int64
-	clearedFields          map[string]struct{}
-	member_details         map[int64]struct{}
-	removedmember_details  map[int64]struct{}
-	clearedmember_details  bool
-	member_notes           map[int64]struct{}
-	removedmember_notes    map[int64]struct{}
-	clearedmember_notes    bool
-	member_orders          map[int64]struct{}
-	removedmember_orders   map[int64]struct{}
-	clearedmember_orders   bool
-	member_entry           map[int64]struct{}
-	removedmember_entry    map[int64]struct{}
-	clearedmember_entry    bool
-	member_contents        map[int64]struct{}
-	removedmember_contents map[int64]struct{}
-	clearedmember_contents bool
-	participants           map[int64]struct{}
-	removedparticipants    map[int64]struct{}
-	clearedparticipants    bool
-	done                   bool
-	oldValue               func(context.Context) (*Member, error)
-	predicates             []predicate.Member
+	op                          Op
+	typ                         string
+	id                          *int64
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	delete                      *int64
+	adddelete                   *int64
+	created_id                  *int64
+	addcreated_id               *int64
+	status                      *int64
+	addstatus                   *int64
+	password                    *string
+	name                        *string
+	nickname                    *string
+	mobile                      *string
+	avatar                      *string
+	condition                   *int64
+	addcondition                *int64
+	clearedFields               map[string]struct{}
+	member_details              map[int64]struct{}
+	removedmember_details       map[int64]struct{}
+	clearedmember_details       bool
+	member_notes                map[int64]struct{}
+	removedmember_notes         map[int64]struct{}
+	clearedmember_notes         bool
+	member_orders               map[int64]struct{}
+	removedmember_orders        map[int64]struct{}
+	clearedmember_orders        bool
+	member_entry                map[int64]struct{}
+	removedmember_entry         map[int64]struct{}
+	clearedmember_entry         bool
+	member_contents             map[int64]struct{}
+	removedmember_contents      map[int64]struct{}
+	clearedmember_contents      bool
+	contestParticipants         map[int64]struct{}
+	removedcontestParticipants  map[int64]struct{}
+	clearedcontestParticipants  bool
+	bootcampParticipants        map[int64]struct{}
+	removedbootcampParticipants map[int64]struct{}
+	clearedbootcampParticipants bool
+	done                        bool
+	oldValue                    func(context.Context) (*Member, error)
+	predicates                  []predicate.Member
 }
 
 var _ ent.Mutation = (*MemberMutation)(nil)
@@ -16394,58 +16696,112 @@ func (m *MemberMutation) ResetMemberContents() {
 	m.removedmember_contents = nil
 }
 
-// AddParticipantIDs adds the "participants" edge to the ContestParticipant entity by ids.
-func (m *MemberMutation) AddParticipantIDs(ids ...int64) {
-	if m.participants == nil {
-		m.participants = make(map[int64]struct{})
+// AddContestParticipantIDs adds the "contestParticipants" edge to the ContestParticipant entity by ids.
+func (m *MemberMutation) AddContestParticipantIDs(ids ...int64) {
+	if m.contestParticipants == nil {
+		m.contestParticipants = make(map[int64]struct{})
 	}
 	for i := range ids {
-		m.participants[ids[i]] = struct{}{}
+		m.contestParticipants[ids[i]] = struct{}{}
 	}
 }
 
-// ClearParticipants clears the "participants" edge to the ContestParticipant entity.
-func (m *MemberMutation) ClearParticipants() {
-	m.clearedparticipants = true
+// ClearContestParticipants clears the "contestParticipants" edge to the ContestParticipant entity.
+func (m *MemberMutation) ClearContestParticipants() {
+	m.clearedcontestParticipants = true
 }
 
-// ParticipantsCleared reports if the "participants" edge to the ContestParticipant entity was cleared.
-func (m *MemberMutation) ParticipantsCleared() bool {
-	return m.clearedparticipants
+// ContestParticipantsCleared reports if the "contestParticipants" edge to the ContestParticipant entity was cleared.
+func (m *MemberMutation) ContestParticipantsCleared() bool {
+	return m.clearedcontestParticipants
 }
 
-// RemoveParticipantIDs removes the "participants" edge to the ContestParticipant entity by IDs.
-func (m *MemberMutation) RemoveParticipantIDs(ids ...int64) {
-	if m.removedparticipants == nil {
-		m.removedparticipants = make(map[int64]struct{})
+// RemoveContestParticipantIDs removes the "contestParticipants" edge to the ContestParticipant entity by IDs.
+func (m *MemberMutation) RemoveContestParticipantIDs(ids ...int64) {
+	if m.removedcontestParticipants == nil {
+		m.removedcontestParticipants = make(map[int64]struct{})
 	}
 	for i := range ids {
-		delete(m.participants, ids[i])
-		m.removedparticipants[ids[i]] = struct{}{}
+		delete(m.contestParticipants, ids[i])
+		m.removedcontestParticipants[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedParticipants returns the removed IDs of the "participants" edge to the ContestParticipant entity.
-func (m *MemberMutation) RemovedParticipantsIDs() (ids []int64) {
-	for id := range m.removedparticipants {
+// RemovedContestParticipants returns the removed IDs of the "contestParticipants" edge to the ContestParticipant entity.
+func (m *MemberMutation) RemovedContestParticipantsIDs() (ids []int64) {
+	for id := range m.removedcontestParticipants {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ParticipantsIDs returns the "participants" edge IDs in the mutation.
-func (m *MemberMutation) ParticipantsIDs() (ids []int64) {
-	for id := range m.participants {
+// ContestParticipantsIDs returns the "contestParticipants" edge IDs in the mutation.
+func (m *MemberMutation) ContestParticipantsIDs() (ids []int64) {
+	for id := range m.contestParticipants {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetParticipants resets all changes to the "participants" edge.
-func (m *MemberMutation) ResetParticipants() {
-	m.participants = nil
-	m.clearedparticipants = false
-	m.removedparticipants = nil
+// ResetContestParticipants resets all changes to the "contestParticipants" edge.
+func (m *MemberMutation) ResetContestParticipants() {
+	m.contestParticipants = nil
+	m.clearedcontestParticipants = false
+	m.removedcontestParticipants = nil
+}
+
+// AddBootcampParticipantIDs adds the "bootcampParticipants" edge to the BootcampParticipant entity by ids.
+func (m *MemberMutation) AddBootcampParticipantIDs(ids ...int64) {
+	if m.bootcampParticipants == nil {
+		m.bootcampParticipants = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.bootcampParticipants[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBootcampParticipants clears the "bootcampParticipants" edge to the BootcampParticipant entity.
+func (m *MemberMutation) ClearBootcampParticipants() {
+	m.clearedbootcampParticipants = true
+}
+
+// BootcampParticipantsCleared reports if the "bootcampParticipants" edge to the BootcampParticipant entity was cleared.
+func (m *MemberMutation) BootcampParticipantsCleared() bool {
+	return m.clearedbootcampParticipants
+}
+
+// RemoveBootcampParticipantIDs removes the "bootcampParticipants" edge to the BootcampParticipant entity by IDs.
+func (m *MemberMutation) RemoveBootcampParticipantIDs(ids ...int64) {
+	if m.removedbootcampParticipants == nil {
+		m.removedbootcampParticipants = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.bootcampParticipants, ids[i])
+		m.removedbootcampParticipants[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBootcampParticipants returns the removed IDs of the "bootcampParticipants" edge to the BootcampParticipant entity.
+func (m *MemberMutation) RemovedBootcampParticipantsIDs() (ids []int64) {
+	for id := range m.removedbootcampParticipants {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BootcampParticipantsIDs returns the "bootcampParticipants" edge IDs in the mutation.
+func (m *MemberMutation) BootcampParticipantsIDs() (ids []int64) {
+	for id := range m.bootcampParticipants {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBootcampParticipants resets all changes to the "bootcampParticipants" edge.
+func (m *MemberMutation) ResetBootcampParticipants() {
+	m.bootcampParticipants = nil
+	m.clearedbootcampParticipants = false
+	m.removedbootcampParticipants = nil
 }
 
 // Where appends a list predicates to the MemberMutation builder.
@@ -16871,7 +17227,7 @@ func (m *MemberMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MemberMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.member_details != nil {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -16887,8 +17243,11 @@ func (m *MemberMutation) AddedEdges() []string {
 	if m.member_contents != nil {
 		edges = append(edges, member.EdgeMemberContents)
 	}
-	if m.participants != nil {
-		edges = append(edges, member.EdgeParticipants)
+	if m.contestParticipants != nil {
+		edges = append(edges, member.EdgeContestParticipants)
+	}
+	if m.bootcampParticipants != nil {
+		edges = append(edges, member.EdgeBootcampParticipants)
 	}
 	return edges
 }
@@ -16927,9 +17286,15 @@ func (m *MemberMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case member.EdgeParticipants:
-		ids := make([]ent.Value, 0, len(m.participants))
-		for id := range m.participants {
+	case member.EdgeContestParticipants:
+		ids := make([]ent.Value, 0, len(m.contestParticipants))
+		for id := range m.contestParticipants {
+			ids = append(ids, id)
+		}
+		return ids
+	case member.EdgeBootcampParticipants:
+		ids := make([]ent.Value, 0, len(m.bootcampParticipants))
+		for id := range m.bootcampParticipants {
 			ids = append(ids, id)
 		}
 		return ids
@@ -16939,7 +17304,7 @@ func (m *MemberMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MemberMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedmember_details != nil {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -16955,8 +17320,11 @@ func (m *MemberMutation) RemovedEdges() []string {
 	if m.removedmember_contents != nil {
 		edges = append(edges, member.EdgeMemberContents)
 	}
-	if m.removedparticipants != nil {
-		edges = append(edges, member.EdgeParticipants)
+	if m.removedcontestParticipants != nil {
+		edges = append(edges, member.EdgeContestParticipants)
+	}
+	if m.removedbootcampParticipants != nil {
+		edges = append(edges, member.EdgeBootcampParticipants)
 	}
 	return edges
 }
@@ -16995,9 +17363,15 @@ func (m *MemberMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case member.EdgeParticipants:
-		ids := make([]ent.Value, 0, len(m.removedparticipants))
-		for id := range m.removedparticipants {
+	case member.EdgeContestParticipants:
+		ids := make([]ent.Value, 0, len(m.removedcontestParticipants))
+		for id := range m.removedcontestParticipants {
+			ids = append(ids, id)
+		}
+		return ids
+	case member.EdgeBootcampParticipants:
+		ids := make([]ent.Value, 0, len(m.removedbootcampParticipants))
+		for id := range m.removedbootcampParticipants {
 			ids = append(ids, id)
 		}
 		return ids
@@ -17007,7 +17381,7 @@ func (m *MemberMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MemberMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedmember_details {
 		edges = append(edges, member.EdgeMemberDetails)
 	}
@@ -17023,8 +17397,11 @@ func (m *MemberMutation) ClearedEdges() []string {
 	if m.clearedmember_contents {
 		edges = append(edges, member.EdgeMemberContents)
 	}
-	if m.clearedparticipants {
-		edges = append(edges, member.EdgeParticipants)
+	if m.clearedcontestParticipants {
+		edges = append(edges, member.EdgeContestParticipants)
+	}
+	if m.clearedbootcampParticipants {
+		edges = append(edges, member.EdgeBootcampParticipants)
 	}
 	return edges
 }
@@ -17043,8 +17420,10 @@ func (m *MemberMutation) EdgeCleared(name string) bool {
 		return m.clearedmember_entry
 	case member.EdgeMemberContents:
 		return m.clearedmember_contents
-	case member.EdgeParticipants:
-		return m.clearedparticipants
+	case member.EdgeContestParticipants:
+		return m.clearedcontestParticipants
+	case member.EdgeBootcampParticipants:
+		return m.clearedbootcampParticipants
 	}
 	return false
 }
@@ -17076,8 +17455,11 @@ func (m *MemberMutation) ResetEdge(name string) error {
 	case member.EdgeMemberContents:
 		m.ResetMemberContents()
 		return nil
-	case member.EdgeParticipants:
-		m.ResetParticipants()
+	case member.EdgeContestParticipants:
+		m.ResetContestParticipants()
+		return nil
+	case member.EdgeBootcampParticipants:
+		m.ResetBootcampParticipants()
 		return nil
 	}
 	return fmt.Errorf("unknown Member edge %s", name)

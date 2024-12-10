@@ -58,11 +58,13 @@ type MemberEdges struct {
 	MemberEntry []*EntryLogs `json:"member_entry,omitempty"`
 	// MemberContents holds the value of the member_contents edge.
 	MemberContents []*MemberContract `json:"member_contents,omitempty"`
-	// Participants holds the value of the participants edge.
-	Participants []*ContestParticipant `json:"participants,omitempty"`
+	// ContestParticipants holds the value of the contestParticipants edge.
+	ContestParticipants []*ContestParticipant `json:"contestParticipants,omitempty"`
+	// BootcampParticipants holds the value of the bootcampParticipants edge.
+	BootcampParticipants []*BootcampParticipant `json:"bootcampParticipants,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 }
 
 // MemberDetailsOrErr returns the MemberDetails value or an error if the edge
@@ -110,13 +112,22 @@ func (e MemberEdges) MemberContentsOrErr() ([]*MemberContract, error) {
 	return nil, &NotLoadedError{edge: "member_contents"}
 }
 
-// ParticipantsOrErr returns the Participants value or an error if the edge
+// ContestParticipantsOrErr returns the ContestParticipants value or an error if the edge
 // was not loaded in eager-loading.
-func (e MemberEdges) ParticipantsOrErr() ([]*ContestParticipant, error) {
+func (e MemberEdges) ContestParticipantsOrErr() ([]*ContestParticipant, error) {
 	if e.loadedTypes[5] {
-		return e.Participants, nil
+		return e.ContestParticipants, nil
 	}
-	return nil, &NotLoadedError{edge: "participants"}
+	return nil, &NotLoadedError{edge: "contestParticipants"}
+}
+
+// BootcampParticipantsOrErr returns the BootcampParticipants value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) BootcampParticipantsOrErr() ([]*BootcampParticipant, error) {
+	if e.loadedTypes[6] {
+		return e.BootcampParticipants, nil
+	}
+	return nil, &NotLoadedError{edge: "bootcampParticipants"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -255,9 +266,14 @@ func (m *Member) QueryMemberContents() *MemberContractQuery {
 	return NewMemberClient(m.config).QueryMemberContents(m)
 }
 
-// QueryParticipants queries the "participants" edge of the Member entity.
-func (m *Member) QueryParticipants() *ContestParticipantQuery {
-	return NewMemberClient(m.config).QueryParticipants(m)
+// QueryContestParticipants queries the "contestParticipants" edge of the Member entity.
+func (m *Member) QueryContestParticipants() *ContestParticipantQuery {
+	return NewMemberClient(m.config).QueryContestParticipants(m)
+}
+
+// QueryBootcampParticipants queries the "bootcampParticipants" edge of the Member entity.
+func (m *Member) QueryBootcampParticipants() *BootcampParticipantQuery {
+	return NewMemberClient(m.config).QueryBootcampParticipants(m)
 }
 
 // Update returns a builder for updating this Member.

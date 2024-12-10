@@ -135,6 +135,11 @@ func IsFee(v int64) predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldEQ(FieldIsFee, v))
 }
 
+// IsShow applies equality check predicate on the "is_show" field. It's identical to IsShowEQ.
+func IsShow(v int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldEQ(FieldIsShow, v))
+}
+
 // IsCancel applies equality check predicate on the "is_cancel" field. It's identical to IsCancelEQ.
 func IsCancel(v int64) predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldEQ(FieldIsCancel, v))
@@ -1033,6 +1038,56 @@ func IsFeeIsNil() predicate.Bootcamp {
 // IsFeeNotNil applies the NotNil predicate on the "is_fee" field.
 func IsFeeNotNil() predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldNotNull(FieldIsFee))
+}
+
+// IsShowEQ applies the EQ predicate on the "is_show" field.
+func IsShowEQ(v int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldEQ(FieldIsShow, v))
+}
+
+// IsShowNEQ applies the NEQ predicate on the "is_show" field.
+func IsShowNEQ(v int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldNEQ(FieldIsShow, v))
+}
+
+// IsShowIn applies the In predicate on the "is_show" field.
+func IsShowIn(vs ...int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldIn(FieldIsShow, vs...))
+}
+
+// IsShowNotIn applies the NotIn predicate on the "is_show" field.
+func IsShowNotIn(vs ...int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldNotIn(FieldIsShow, vs...))
+}
+
+// IsShowGT applies the GT predicate on the "is_show" field.
+func IsShowGT(v int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldGT(FieldIsShow, v))
+}
+
+// IsShowGTE applies the GTE predicate on the "is_show" field.
+func IsShowGTE(v int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldGTE(FieldIsShow, v))
+}
+
+// IsShowLT applies the LT predicate on the "is_show" field.
+func IsShowLT(v int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldLT(FieldIsShow, v))
+}
+
+// IsShowLTE applies the LTE predicate on the "is_show" field.
+func IsShowLTE(v int64) predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldLTE(FieldIsShow, v))
+}
+
+// IsShowIsNil applies the IsNil predicate on the "is_show" field.
+func IsShowIsNil() predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldIsNull(FieldIsShow))
+}
+
+// IsShowNotNil applies the NotNil predicate on the "is_show" field.
+func IsShowNotNil() predicate.Bootcamp {
+	return predicate.Bootcamp(sql.FieldNotNull(FieldIsShow))
 }
 
 // IsCancelEQ applies the EQ predicate on the "is_cancel" field.

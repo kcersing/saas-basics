@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/member"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -188,15 +189,44 @@ func (bpc *BootcampParticipantCreate) SetNillableFee(f *float64) *BootcampPartic
 	return bpc
 }
 
+// SetMemberID sets the "member_id" field.
+func (bpc *BootcampParticipantCreate) SetMemberID(i int64) *BootcampParticipantCreate {
+	bpc.mutation.SetMemberID(i)
+	return bpc
+}
+
+// SetNillableMemberID sets the "member_id" field if the given value is not nil.
+func (bpc *BootcampParticipantCreate) SetNillableMemberID(i *int64) *BootcampParticipantCreate {
+	if i != nil {
+		bpc.SetMemberID(*i)
+	}
+	return bpc
+}
+
 // SetID sets the "id" field.
 func (bpc *BootcampParticipantCreate) SetID(i int64) *BootcampParticipantCreate {
 	bpc.mutation.SetID(i)
 	return bpc
 }
 
-// SetBootcamp sets the "bootcamp" edge to the Bootcamp entity.
+// SetBootcamp sets the "Bootcamp" edge to the Bootcamp entity.
 func (bpc *BootcampParticipantCreate) SetBootcamp(b *Bootcamp) *BootcampParticipantCreate {
 	return bpc.SetBootcampID(b.ID)
+}
+
+// AddMemberIDs adds the "members" edge to the Member entity by IDs.
+func (bpc *BootcampParticipantCreate) AddMemberIDs(ids ...int64) *BootcampParticipantCreate {
+	bpc.mutation.AddMemberIDs(ids...)
+	return bpc
+}
+
+// AddMembers adds the "members" edges to the Member entity.
+func (bpc *BootcampParticipantCreate) AddMembers(m ...*Member) *BootcampParticipantCreate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return bpc.AddMemberIDs(ids...)
 }
 
 // Mutation returns the BootcampParticipantMutation object of the builder.
@@ -261,6 +291,10 @@ func (bpc *BootcampParticipantCreate) defaults() {
 	if _, ok := bpc.mutation.OrderSn(); !ok {
 		v := bootcampparticipant.DefaultOrderSn
 		bpc.mutation.SetOrderSn(v)
+	}
+	if _, ok := bpc.mutation.MemberID(); !ok {
+		v := bootcampparticipant.DefaultMemberID
+		bpc.mutation.SetMemberID(v)
 	}
 }
 
@@ -342,6 +376,10 @@ func (bpc *BootcampParticipantCreate) createSpec() (*BootcampParticipant, *sqlgr
 		_spec.SetField(bootcampparticipant.FieldFee, field.TypeFloat64, value)
 		_node.Fee = value
 	}
+	if value, ok := bpc.mutation.MemberID(); ok {
+		_spec.SetField(bootcampparticipant.FieldMemberID, field.TypeInt64, value)
+		_node.MemberID = value
+	}
 	if nodes := bpc.mutation.BootcampIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -357,6 +395,22 @@ func (bpc *BootcampParticipantCreate) createSpec() (*BootcampParticipant, *sqlgr
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.BootcampID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bpc.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bootcampparticipant.MembersTable,
+			Columns: bootcampparticipant.MembersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -28,7 +28,7 @@ type Bootcamp struct {
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
-	// 训练营名称
+	// 比赛名称
 	Name string `json:"name,omitempty"`
 	// 报名人数
 	SignNumber int64 `json:"sign_number,omitempty"`
@@ -36,13 +36,13 @@ type Bootcamp struct {
 	SignStartAt time.Time `json:"sign_start_at,omitempty"`
 	// 报名结束时间
 	SignEndAt time.Time `json:"sign_end_at,omitempty"`
-	// 训练营人数
+	// 参赛人数
 	Number int64 `json:"number,omitempty"`
-	// 训练营开始时间
+	// 比赛开始时间
 	StartAt time.Time `json:"start_at,omitempty"`
-	// 训练营结束时间
+	// 比赛结束时间
 	EndAt time.Time `json:"end_at,omitempty"`
-	// 训练营图片
+	// 比赛图片
 	Pic string `json:"pic,omitempty"`
 	// 主办方
 	Sponsor string `json:"sponsor,omitempty"`
@@ -50,6 +50,8 @@ type Bootcamp struct {
 	Fee float64 `json:"fee,omitempty"`
 	// 是否有费用 1 无 2 有
 	IsFee int64 `json:"is_fee,omitempty"`
+	// 是否展示 1 展示 2 不展示
+	IsShow int64 `json:"is_show,omitempty"`
 	// 是否支持取消报名 0支持 1不支持
 	IsCancel int64 `json:"is_cancel,omitempty"`
 	// 取消时间
@@ -58,7 +60,7 @@ type Bootcamp struct {
 	Detail string `json:"detail,omitempty"`
 	// 报名信息
 	SignFields string `json:"sign_fields,omitempty"`
-	// 状态[1:未报名;2:报名中;3:未开始;4:进行中;5:结束]
+	// 状态[1:未报名;2:报名中;3:未比赛;4:比赛中;5:比赛结束]
 	Condition int64 `json:"condition,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BootcampQuery when eager-loading is set.
@@ -91,7 +93,7 @@ func (*Bootcamp) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case bootcamp.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case bootcamp.FieldID, bootcamp.FieldDelete, bootcamp.FieldCreatedID, bootcamp.FieldStatus, bootcamp.FieldSignNumber, bootcamp.FieldNumber, bootcamp.FieldIsFee, bootcamp.FieldIsCancel, bootcamp.FieldCancelTime, bootcamp.FieldCondition:
+		case bootcamp.FieldID, bootcamp.FieldDelete, bootcamp.FieldCreatedID, bootcamp.FieldStatus, bootcamp.FieldSignNumber, bootcamp.FieldNumber, bootcamp.FieldIsFee, bootcamp.FieldIsShow, bootcamp.FieldIsCancel, bootcamp.FieldCancelTime, bootcamp.FieldCondition:
 			values[i] = new(sql.NullInt64)
 		case bootcamp.FieldName, bootcamp.FieldPic, bootcamp.FieldSponsor, bootcamp.FieldDetail, bootcamp.FieldSignFields:
 			values[i] = new(sql.NullString)
@@ -214,6 +216,12 @@ func (b *Bootcamp) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				b.IsFee = value.Int64
 			}
+		case bootcamp.FieldIsShow:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_show", values[i])
+			} else if value.Valid {
+				b.IsShow = value.Int64
+			}
 		case bootcamp.FieldIsCancel:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_cancel", values[i])
@@ -332,6 +340,9 @@ func (b *Bootcamp) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_fee=")
 	builder.WriteString(fmt.Sprintf("%v", b.IsFee))
+	builder.WriteString(", ")
+	builder.WriteString("is_show=")
+	builder.WriteString(fmt.Sprintf("%v", b.IsShow))
 	builder.WriteString(", ")
 	builder.WriteString("is_cancel=")
 	builder.WriteString(fmt.Sprintf("%v", b.IsCancel))

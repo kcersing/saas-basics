@@ -370,6 +370,33 @@ func (bu *BootcampUpdate) ClearIsFee() *BootcampUpdate {
 	return bu
 }
 
+// SetIsShow sets the "is_show" field.
+func (bu *BootcampUpdate) SetIsShow(i int64) *BootcampUpdate {
+	bu.mutation.ResetIsShow()
+	bu.mutation.SetIsShow(i)
+	return bu
+}
+
+// SetNillableIsShow sets the "is_show" field if the given value is not nil.
+func (bu *BootcampUpdate) SetNillableIsShow(i *int64) *BootcampUpdate {
+	if i != nil {
+		bu.SetIsShow(*i)
+	}
+	return bu
+}
+
+// AddIsShow adds i to the "is_show" field.
+func (bu *BootcampUpdate) AddIsShow(i int64) *BootcampUpdate {
+	bu.mutation.AddIsShow(i)
+	return bu
+}
+
+// ClearIsShow clears the value of the "is_show" field.
+func (bu *BootcampUpdate) ClearIsShow() *BootcampUpdate {
+	bu.mutation.ClearIsShow()
+	return bu
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (bu *BootcampUpdate) SetIsCancel(i int64) *BootcampUpdate {
 	bu.mutation.ResetIsCancel()
@@ -690,6 +717,15 @@ func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if bu.mutation.IsFeeCleared() {
 		_spec.ClearField(bootcamp.FieldIsFee, field.TypeInt64)
+	}
+	if value, ok := bu.mutation.IsShow(); ok {
+		_spec.SetField(bootcamp.FieldIsShow, field.TypeInt64, value)
+	}
+	if value, ok := bu.mutation.AddedIsShow(); ok {
+		_spec.AddField(bootcamp.FieldIsShow, field.TypeInt64, value)
+	}
+	if bu.mutation.IsShowCleared() {
+		_spec.ClearField(bootcamp.FieldIsShow, field.TypeInt64)
 	}
 	if value, ok := bu.mutation.IsCancel(); ok {
 		_spec.SetField(bootcamp.FieldIsCancel, field.TypeInt64, value)
@@ -1136,6 +1172,33 @@ func (buo *BootcampUpdateOne) ClearIsFee() *BootcampUpdateOne {
 	return buo
 }
 
+// SetIsShow sets the "is_show" field.
+func (buo *BootcampUpdateOne) SetIsShow(i int64) *BootcampUpdateOne {
+	buo.mutation.ResetIsShow()
+	buo.mutation.SetIsShow(i)
+	return buo
+}
+
+// SetNillableIsShow sets the "is_show" field if the given value is not nil.
+func (buo *BootcampUpdateOne) SetNillableIsShow(i *int64) *BootcampUpdateOne {
+	if i != nil {
+		buo.SetIsShow(*i)
+	}
+	return buo
+}
+
+// AddIsShow adds i to the "is_show" field.
+func (buo *BootcampUpdateOne) AddIsShow(i int64) *BootcampUpdateOne {
+	buo.mutation.AddIsShow(i)
+	return buo
+}
+
+// ClearIsShow clears the value of the "is_show" field.
+func (buo *BootcampUpdateOne) ClearIsShow() *BootcampUpdateOne {
+	buo.mutation.ClearIsShow()
+	return buo
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (buo *BootcampUpdateOne) SetIsCancel(i int64) *BootcampUpdateOne {
 	buo.mutation.ResetIsCancel()
@@ -1486,6 +1549,15 @@ func (buo *BootcampUpdateOne) sqlSave(ctx context.Context) (_node *Bootcamp, err
 	}
 	if buo.mutation.IsFeeCleared() {
 		_spec.ClearField(bootcamp.FieldIsFee, field.TypeInt64)
+	}
+	if value, ok := buo.mutation.IsShow(); ok {
+		_spec.SetField(bootcamp.FieldIsShow, field.TypeInt64, value)
+	}
+	if value, ok := buo.mutation.AddedIsShow(); ok {
+		_spec.AddField(bootcamp.FieldIsShow, field.TypeInt64, value)
+	}
+	if buo.mutation.IsShowCleared() {
+		_spec.ClearField(bootcamp.FieldIsShow, field.TypeInt64)
 	}
 	if value, ok := buo.mutation.IsCancel(); ok {
 		_spec.SetField(bootcamp.FieldIsCancel, field.TypeInt64, value)

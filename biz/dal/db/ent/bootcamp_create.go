@@ -244,6 +244,20 @@ func (bc *BootcampCreate) SetNillableIsFee(i *int64) *BootcampCreate {
 	return bc
 }
 
+// SetIsShow sets the "is_show" field.
+func (bc *BootcampCreate) SetIsShow(i int64) *BootcampCreate {
+	bc.mutation.SetIsShow(i)
+	return bc
+}
+
+// SetNillableIsShow sets the "is_show" field if the given value is not nil.
+func (bc *BootcampCreate) SetNillableIsShow(i *int64) *BootcampCreate {
+	if i != nil {
+		bc.SetIsShow(*i)
+	}
+	return bc
+}
+
 // SetIsCancel sets the "is_cancel" field.
 func (bc *BootcampCreate) SetIsCancel(i int64) *BootcampCreate {
 	bc.mutation.SetIsCancel(i)
@@ -394,6 +408,10 @@ func (bc *BootcampCreate) defaults() {
 		v := bootcamp.DefaultIsFee
 		bc.mutation.SetIsFee(v)
 	}
+	if _, ok := bc.mutation.IsShow(); !ok {
+		v := bootcamp.DefaultIsShow
+		bc.mutation.SetIsShow(v)
+	}
 	if _, ok := bc.mutation.IsCancel(); !ok {
 		v := bootcamp.DefaultIsCancel
 		bc.mutation.SetIsCancel(v)
@@ -505,6 +523,10 @@ func (bc *BootcampCreate) createSpec() (*Bootcamp, *sqlgraph.CreateSpec) {
 	if value, ok := bc.mutation.IsFee(); ok {
 		_spec.SetField(bootcamp.FieldIsFee, field.TypeInt64, value)
 		_node.IsFee = value
+	}
+	if value, ok := bc.mutation.IsShow(); ok {
+		_spec.SetField(bootcamp.FieldIsShow, field.TypeInt64, value)
+		_node.IsShow = value
 	}
 	if value, ok := bc.mutation.IsCancel(); ok {
 		_spec.SetField(bootcamp.FieldIsCancel, field.TypeInt64, value)

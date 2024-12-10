@@ -54,7 +54,7 @@ const (
 	// ContestColumn is the table column denoting the contest relation/edge.
 	ContestColumn = "contest_id"
 	// MembersTable is the table that holds the members relation/edge. The primary key declared below.
-	MembersTable = "member_participants"
+	MembersTable = "member_contestParticipants"
 	// MembersInverseTable is the table name for the Member entity.
 	// It exists in this package in order to avoid circular dependency with the "member" package.
 	MembersInverseTable = "member"

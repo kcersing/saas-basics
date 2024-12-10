@@ -115,6 +115,11 @@ func Fee(v float64) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(sql.FieldEQ(FieldFee, v))
 }
 
+// MemberID applies equality check predicate on the "member_id" field. It's identical to MemberIDEQ.
+func MemberID(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEQ(FieldMemberID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(sql.FieldEQ(FieldCreatedAt, v))
@@ -795,7 +800,57 @@ func FeeNotNil() predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(sql.FieldNotNull(FieldFee))
 }
 
-// HasBootcamp applies the HasEdge predicate on the "bootcamp" edge.
+// MemberIDEQ applies the EQ predicate on the "member_id" field.
+func MemberIDEQ(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldEQ(FieldMemberID, v))
+}
+
+// MemberIDNEQ applies the NEQ predicate on the "member_id" field.
+func MemberIDNEQ(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNEQ(FieldMemberID, v))
+}
+
+// MemberIDIn applies the In predicate on the "member_id" field.
+func MemberIDIn(vs ...int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldIn(FieldMemberID, vs...))
+}
+
+// MemberIDNotIn applies the NotIn predicate on the "member_id" field.
+func MemberIDNotIn(vs ...int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNotIn(FieldMemberID, vs...))
+}
+
+// MemberIDGT applies the GT predicate on the "member_id" field.
+func MemberIDGT(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldGT(FieldMemberID, v))
+}
+
+// MemberIDGTE applies the GTE predicate on the "member_id" field.
+func MemberIDGTE(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldGTE(FieldMemberID, v))
+}
+
+// MemberIDLT applies the LT predicate on the "member_id" field.
+func MemberIDLT(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldLT(FieldMemberID, v))
+}
+
+// MemberIDLTE applies the LTE predicate on the "member_id" field.
+func MemberIDLTE(v int64) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldLTE(FieldMemberID, v))
+}
+
+// MemberIDIsNil applies the IsNil predicate on the "member_id" field.
+func MemberIDIsNil() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldIsNull(FieldMemberID))
+}
+
+// MemberIDNotNil applies the NotNil predicate on the "member_id" field.
+func MemberIDNotNil() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(sql.FieldNotNull(FieldMemberID))
+}
+
+// HasBootcamp applies the HasEdge predicate on the "Bootcamp" edge.
 func HasBootcamp() predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
@@ -806,10 +861,33 @@ func HasBootcamp() predicate.BootcampParticipant {
 	})
 }
 
-// HasBootcampWith applies the HasEdge predicate on the "bootcamp" edge with a given conditions (other predicates).
+// HasBootcampWith applies the HasEdge predicate on the "Bootcamp" edge with a given conditions (other predicates).
 func HasBootcampWith(preds ...predicate.Bootcamp) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(func(s *sql.Selector) {
 		step := newBootcampStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMembers applies the HasEdge predicate on the "members" edge.
+func HasMembers() predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, MembersTable, MembersPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMembersWith applies the HasEdge predicate on the "members" edge with a given conditions (other predicates).
+func HasMembersWith(preds ...predicate.Member) predicate.BootcampParticipant {
+	return predicate.BootcampParticipant(func(s *sql.Selector) {
+		step := newMembersStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

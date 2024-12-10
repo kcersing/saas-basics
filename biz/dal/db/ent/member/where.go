@@ -900,21 +900,44 @@ func HasMemberContentsWith(preds ...predicate.MemberContract) predicate.Member {
 	})
 }
 
-// HasParticipants applies the HasEdge predicate on the "participants" edge.
-func HasParticipants() predicate.Member {
+// HasContestParticipants applies the HasEdge predicate on the "contestParticipants" edge.
+func HasContestParticipants() predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ParticipantsTable, ParticipantsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, ContestParticipantsTable, ContestParticipantsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasParticipantsWith applies the HasEdge predicate on the "participants" edge with a given conditions (other predicates).
-func HasParticipantsWith(preds ...predicate.ContestParticipant) predicate.Member {
+// HasContestParticipantsWith applies the HasEdge predicate on the "contestParticipants" edge with a given conditions (other predicates).
+func HasContestParticipantsWith(preds ...predicate.ContestParticipant) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
-		step := newParticipantsStep()
+		step := newContestParticipantsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasBootcampParticipants applies the HasEdge predicate on the "bootcampParticipants" edge.
+func HasBootcampParticipants() predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, BootcampParticipantsTable, BootcampParticipantsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBootcampParticipantsWith applies the HasEdge predicate on the "bootcampParticipants" edge with a given conditions (other predicates).
+func HasBootcampParticipantsWith(preds ...predicate.BootcampParticipant) predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := newBootcampParticipantsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

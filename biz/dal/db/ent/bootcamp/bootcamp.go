@@ -46,6 +46,8 @@ const (
 	FieldFee = "fee"
 	// FieldIsFee holds the string denoting the is_fee field in the database.
 	FieldIsFee = "is_fee"
+	// FieldIsShow holds the string denoting the is_show field in the database.
+	FieldIsShow = "is_show"
 	// FieldIsCancel holds the string denoting the is_cancel field in the database.
 	FieldIsCancel = "is_cancel"
 	// FieldCancelTime holds the string denoting the cancel_time field in the database.
@@ -88,6 +90,7 @@ var Columns = []string{
 	FieldSponsor,
 	FieldFee,
 	FieldIsFee,
+	FieldIsShow,
 	FieldIsCancel,
 	FieldCancelTime,
 	FieldDetail,
@@ -120,6 +123,8 @@ var (
 	DefaultStatus int64
 	// DefaultIsFee holds the default value on creation for the "is_fee" field.
 	DefaultIsFee int64
+	// DefaultIsShow holds the default value on creation for the "is_show" field.
+	DefaultIsShow int64
 	// DefaultIsCancel holds the default value on creation for the "is_cancel" field.
 	DefaultIsCancel int64
 	// DefaultCancelTime holds the default value on creation for the "cancel_time" field.
@@ -214,6 +219,11 @@ func ByFee(opts ...sql.OrderTermOption) OrderOption {
 // ByIsFee orders the results by the is_fee field.
 func ByIsFee(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsFee, opts...).ToFunc()
+}
+
+// ByIsShow orders the results by the is_show field.
+func ByIsShow(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsShow, opts...).ToFunc()
 }
 
 // ByIsCancel orders the results by the is_cancel field.
