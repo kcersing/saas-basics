@@ -30,10 +30,10 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 		contestName = contests.Name
 	}
 
-	errChan := make(chan error, 99)
+	errChan := make(chan error, 2)
 	defer close(errChan)
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(1)
 
 	tx, err := o.db.Tx(o.ctx)
 
