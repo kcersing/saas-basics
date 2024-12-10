@@ -50,3 +50,13 @@ func _contractupdateMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _contractdelMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _contract0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

@@ -1133,6 +1133,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 创建合同 Summary
+  /service/contract/del:
+    post:
+      description: 删除合同
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除合同
   /service/contract/list:
     post:
       description: 合同列表 Description

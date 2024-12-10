@@ -20,12 +20,14 @@ func Register(r *server.Hertz) {
 	{
 		_service := root.Group("/service", _serviceMw()...)
 		_service.POST("/contract", append(_contractbyidMw(), contract.ContractByID)...)
+		_contract := _service.Group("/contract", _contractMw()...)
+		_contract.POST("/del", append(_contractdelMw(), contract.ContractDel)...)
 		{
-			_contract := _service.Group("/contract", _contractMw()...)
-			_contract.POST("/create", append(_contractcreateMw(), contract.ContractCreate)...)
-			_contract.POST("/list", append(_contractlistMw(), contract.ContractList)...)
-			_contract.POST("/status", append(_contractupdatestatusMw(), contract.ContractUpdateStatus)...)
-			_contract.POST("/update", append(_contractupdateMw(), contract.ContractUpdate)...)
+			_contract0 := _service.Group("/contract", _contract0Mw()...)
+			_contract0.POST("/create", append(_contractcreateMw(), contract.ContractCreate)...)
+			_contract0.POST("/list", append(_contractlistMw(), contract.ContractList)...)
+			_contract0.POST("/status", append(_contractupdatestatusMw(), contract.ContractUpdateStatus)...)
+			_contract0.POST("/update", append(_contractupdateMw(), contract.ContractUpdate)...)
 		}
 	}
 }

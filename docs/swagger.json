@@ -703,6 +703,31 @@
                 }
             }
         },
+        "/service/contract/del": {
+            "post": {
+                "description": "删除合同",
+                "summary": "删除合同",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/contract/list": {
             "post": {
                 "description": "合同列表 Description",

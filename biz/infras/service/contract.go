@@ -25,6 +25,11 @@ type Contract struct {
 	cache *ristretto.Cache
 }
 
+func (c Contract) Delete(ID int64) error {
+	_, err := c.db.Contract.Update().Where(contract2.IDEQ(ID)).SetDelete(1).Save(c.ctx)
+	return err
+}
+
 func NewContract(ctx context.Context, c *app.RequestContext) do.Contract {
 	return &Contract{
 		ctx:   ctx,

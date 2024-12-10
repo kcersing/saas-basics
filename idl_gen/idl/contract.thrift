@@ -30,4 +30,5 @@ service ContractService {
    base.NilResponse ContractUpdate(1: CreateOrUpdateContractReq req) (api.post = "/service/contract/update")
    base.NilResponse ContractUpdateStatus(1: base.StatusCodeReq req) (api.post = "/service/contract/status")
    base.NilResponse ContractByID(1: base.IDReq req) (api.post = "/service/contract")
+   base.NilResponse ContractDel(1: base.IDReq req) (api.post = "/service/contract/del")
 }
