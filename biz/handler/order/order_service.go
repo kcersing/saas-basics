@@ -4,6 +4,9 @@ package order
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -12,6 +15,12 @@ import (
 )
 
 // Update .
+//
+//	@Summary		更新订单信息 Summary
+//	@Description	更新订单信息 Description
+//	@Param			request	body		order.UpdateOrderReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/order/update [POST]
 func Update(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -28,6 +37,12 @@ func Update(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateStatus .
+//
+//	@Summary		更新订单状态 Summary
+//	@Description	更新订单状态 Description
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/order/status [POST]
 func UpdateStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -44,6 +59,12 @@ func UpdateStatus(ctx context.Context, c *app.RequestContext) {
 }
 
 // ListOrder .
+//
+//	@Summary		获取订单列表 Summary
+//	@Description	获取订单列表 Description
+//	@Param			request	body		order.ListOrderReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/order/list [POST]
 func ListOrder(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -54,12 +75,22 @@ func ListOrder(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewOrder(ctx, c).List(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // GetOrderById .
+//
+//	@Summary		获取订单详情 Summary
+//	@Description	获取订单详情 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/order/info [GET]
 func GetOrderById(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -70,7 +101,11 @@ func GetOrderById(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewOrder(ctx, c).Info(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 1, "")
+	return
 }

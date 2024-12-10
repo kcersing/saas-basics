@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/contestparticipant"
 	member2 "saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
+	"saas/biz/infras/do"
 	"saas/idl_gen/model/contest"
 	"saas/pkg/consts"
 	"saas/pkg/enums"
@@ -51,6 +52,16 @@ func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 	if err = tx.Commit(); err != nil {
 		return err
 	}
+
+	_, err = NewOrder(c.ctx, c.c).CreateParticipantOrder(do.CreateParticipantOrderReq{
+		Member:    member,
+		Device:    "",
+		ContestId: req.ContestId,
+	})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -188,7 +199,7 @@ func (c Contest) ParticipantListListExport(req contest.ParticipantListReq) (stri
 		createdAt, _ = strconv.ParseInt(row.CreatedAt, 10, 64)
 		createdAtr := time.Unix(createdAt, 0).Format(time.DateTime)
 
-		status := enums.ReturnParticipantStatusValues(row.Status)
+		status := enums.ReturnContestParticipantStatusValues(row.Status)
 
 		r := []interface{}{row.Name, row.Mobile, row.Fee, status, createdAtr}
 		err = f.SetSheetRow("Sheet1", cell, &r)

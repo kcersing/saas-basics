@@ -100,11 +100,6 @@ func SignEndAt(v time.Time) predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldEQ(FieldSignEndAt, v))
 }
 
-// Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
-func Number(v int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldEQ(FieldNumber, v))
-}
-
 // StartAt applies equality check predicate on the "start_at" field. It's identical to StartAtEQ.
 func StartAt(v time.Time) predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldEQ(FieldStartAt, v))
@@ -118,11 +113,6 @@ func EndAt(v time.Time) predicate.Bootcamp {
 // Pic applies equality check predicate on the "pic" field. It's identical to PicEQ.
 func Pic(v string) predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldEQ(FieldPic, v))
-}
-
-// Sponsor applies equality check predicate on the "sponsor" field. It's identical to SponsorEQ.
-func Sponsor(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldEQ(FieldSponsor, v))
 }
 
 // Fee applies equality check predicate on the "fee" field. It's identical to FeeEQ.
@@ -640,56 +630,6 @@ func SignEndAtNotNil() predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldNotNull(FieldSignEndAt))
 }
 
-// NumberEQ applies the EQ predicate on the "number" field.
-func NumberEQ(v int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldEQ(FieldNumber, v))
-}
-
-// NumberNEQ applies the NEQ predicate on the "number" field.
-func NumberNEQ(v int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldNEQ(FieldNumber, v))
-}
-
-// NumberIn applies the In predicate on the "number" field.
-func NumberIn(vs ...int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldIn(FieldNumber, vs...))
-}
-
-// NumberNotIn applies the NotIn predicate on the "number" field.
-func NumberNotIn(vs ...int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldNotIn(FieldNumber, vs...))
-}
-
-// NumberGT applies the GT predicate on the "number" field.
-func NumberGT(v int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldGT(FieldNumber, v))
-}
-
-// NumberGTE applies the GTE predicate on the "number" field.
-func NumberGTE(v int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldGTE(FieldNumber, v))
-}
-
-// NumberLT applies the LT predicate on the "number" field.
-func NumberLT(v int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldLT(FieldNumber, v))
-}
-
-// NumberLTE applies the LTE predicate on the "number" field.
-func NumberLTE(v int64) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldLTE(FieldNumber, v))
-}
-
-// NumberIsNil applies the IsNil predicate on the "number" field.
-func NumberIsNil() predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldIsNull(FieldNumber))
-}
-
-// NumberNotNil applies the NotNil predicate on the "number" field.
-func NumberNotNil() predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldNotNull(FieldNumber))
-}
-
 // StartAtEQ applies the EQ predicate on the "start_at" field.
 func StartAtEQ(v time.Time) predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldEQ(FieldStartAt, v))
@@ -863,81 +803,6 @@ func PicEqualFold(v string) predicate.Bootcamp {
 // PicContainsFold applies the ContainsFold predicate on the "pic" field.
 func PicContainsFold(v string) predicate.Bootcamp {
 	return predicate.Bootcamp(sql.FieldContainsFold(FieldPic, v))
-}
-
-// SponsorEQ applies the EQ predicate on the "sponsor" field.
-func SponsorEQ(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldEQ(FieldSponsor, v))
-}
-
-// SponsorNEQ applies the NEQ predicate on the "sponsor" field.
-func SponsorNEQ(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldNEQ(FieldSponsor, v))
-}
-
-// SponsorIn applies the In predicate on the "sponsor" field.
-func SponsorIn(vs ...string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldIn(FieldSponsor, vs...))
-}
-
-// SponsorNotIn applies the NotIn predicate on the "sponsor" field.
-func SponsorNotIn(vs ...string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldNotIn(FieldSponsor, vs...))
-}
-
-// SponsorGT applies the GT predicate on the "sponsor" field.
-func SponsorGT(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldGT(FieldSponsor, v))
-}
-
-// SponsorGTE applies the GTE predicate on the "sponsor" field.
-func SponsorGTE(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldGTE(FieldSponsor, v))
-}
-
-// SponsorLT applies the LT predicate on the "sponsor" field.
-func SponsorLT(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldLT(FieldSponsor, v))
-}
-
-// SponsorLTE applies the LTE predicate on the "sponsor" field.
-func SponsorLTE(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldLTE(FieldSponsor, v))
-}
-
-// SponsorContains applies the Contains predicate on the "sponsor" field.
-func SponsorContains(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldContains(FieldSponsor, v))
-}
-
-// SponsorHasPrefix applies the HasPrefix predicate on the "sponsor" field.
-func SponsorHasPrefix(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldHasPrefix(FieldSponsor, v))
-}
-
-// SponsorHasSuffix applies the HasSuffix predicate on the "sponsor" field.
-func SponsorHasSuffix(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldHasSuffix(FieldSponsor, v))
-}
-
-// SponsorIsNil applies the IsNil predicate on the "sponsor" field.
-func SponsorIsNil() predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldIsNull(FieldSponsor))
-}
-
-// SponsorNotNil applies the NotNil predicate on the "sponsor" field.
-func SponsorNotNil() predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldNotNull(FieldSponsor))
-}
-
-// SponsorEqualFold applies the EqualFold predicate on the "sponsor" field.
-func SponsorEqualFold(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldEqualFold(FieldSponsor, v))
-}
-
-// SponsorContainsFold applies the ContainsFold predicate on the "sponsor" field.
-func SponsorContainsFold(v string) predicate.Bootcamp {
-	return predicate.Bootcamp(sql.FieldContainsFold(FieldSponsor, v))
 }
 
 // FeeEQ applies the EQ predicate on the "fee" field.

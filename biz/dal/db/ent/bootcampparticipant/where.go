@@ -850,21 +850,21 @@ func MemberIDNotNil() predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(sql.FieldNotNull(FieldMemberID))
 }
 
-// HasBootcamp applies the HasEdge predicate on the "Bootcamp" edge.
-func HasBootcamp() predicate.BootcampParticipant {
+// HasBootcamps applies the HasEdge predicate on the "bootcamps" edge.
+func HasBootcamps() predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, BootcampTable, BootcampColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, BootcampsTable, BootcampsColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasBootcampWith applies the HasEdge predicate on the "Bootcamp" edge with a given conditions (other predicates).
-func HasBootcampWith(preds ...predicate.Bootcamp) predicate.BootcampParticipant {
+// HasBootcampsWith applies the HasEdge predicate on the "bootcamps" edge with a given conditions (other predicates).
+func HasBootcampsWith(preds ...predicate.Bootcamp) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(func(s *sql.Selector) {
-		step := newBootcampStep()
+		step := newBootcampsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

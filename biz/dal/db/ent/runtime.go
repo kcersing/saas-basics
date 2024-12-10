@@ -130,23 +130,23 @@ func init() {
 	// bootcamp.DefaultStatus holds the default value on creation for the status field.
 	bootcamp.DefaultStatus = bootcampDescStatus.Default.(int64)
 	// bootcampDescIsFee is the schema descriptor for is_fee field.
-	bootcampDescIsFee := bootcampFields[10].Descriptor()
+	bootcampDescIsFee := bootcampFields[8].Descriptor()
 	// bootcamp.DefaultIsFee holds the default value on creation for the is_fee field.
 	bootcamp.DefaultIsFee = bootcampDescIsFee.Default.(int64)
 	// bootcampDescIsShow is the schema descriptor for is_show field.
-	bootcampDescIsShow := bootcampFields[11].Descriptor()
+	bootcampDescIsShow := bootcampFields[9].Descriptor()
 	// bootcamp.DefaultIsShow holds the default value on creation for the is_show field.
 	bootcamp.DefaultIsShow = bootcampDescIsShow.Default.(int64)
 	// bootcampDescIsCancel is the schema descriptor for is_cancel field.
-	bootcampDescIsCancel := bootcampFields[12].Descriptor()
+	bootcampDescIsCancel := bootcampFields[10].Descriptor()
 	// bootcamp.DefaultIsCancel holds the default value on creation for the is_cancel field.
 	bootcamp.DefaultIsCancel = bootcampDescIsCancel.Default.(int64)
 	// bootcampDescCancelTime is the schema descriptor for cancel_time field.
-	bootcampDescCancelTime := bootcampFields[13].Descriptor()
+	bootcampDescCancelTime := bootcampFields[11].Descriptor()
 	// bootcamp.DefaultCancelTime holds the default value on creation for the cancel_time field.
 	bootcamp.DefaultCancelTime = bootcampDescCancelTime.Default.(int64)
 	// bootcampDescCondition is the schema descriptor for condition field.
-	bootcampDescCondition := bootcampFields[16].Descriptor()
+	bootcampDescCondition := bootcampFields[14].Descriptor()
 	// bootcamp.DefaultCondition holds the default value on creation for the condition field.
 	bootcamp.DefaultCondition = bootcampDescCondition.Default.(int64)
 	bootcampparticipantMixin := schema.BootcampParticipant{}.Mixin()

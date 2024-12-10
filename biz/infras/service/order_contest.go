@@ -2,9 +2,9 @@ package service
 
 import (
 	"github.com/pkg/errors"
-	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/user"
+	"saas/biz/infras/do"
 	"saas/idl_gen/model/order"
 	"saas/pkg/enums"
 	"saas/pkg/utils"
@@ -12,14 +12,7 @@ import (
 	"sync"
 )
 
-type CreateParticipantOrderReq struct {
-	Member    *ent.Member
-	Device    string
-	ContestId int64
-	Total     float64
-}
-
-func (o Order) CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *order.OrderInfo, err error) {
+func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOne *order.OrderInfo, err error) {
 
 	if !o.ContestStock(req) {
 		return nil, errors.Wrap(err, "报名人数已满")
@@ -32,7 +25,7 @@ func (o Order) CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *
 	errChan := make(chan error, 99)
 	defer close(errChan)
 	var wg sync.WaitGroup
-	wg.Add(5)
+	wg.Add(2)
 
 	tx, err := o.db.Tx(o.ctx)
 
@@ -43,7 +36,9 @@ func (o Order) CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *
 	orderTx := tx.Order.
 		Create().
 		SetOrderSn(utils.CreateCn()).
-		SetOrderMembers(req.Member)
+		SetOrderMembers(req.Member).
+		SetProductType(enums.Contest).
+		SetNature(enums.Buy)
 
 	userId, exist := o.c.Get("userId")
 	if exist || userId != nil {
@@ -57,7 +52,10 @@ func (o Order) CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *
 		}
 	}
 
-	one, err := orderTx.SetStatus(0).SetNature(enums.Buy).SetDevice(req.Device).Save(o.ctx)
+	one, err := orderTx.
+		SetStatus(0).
+		SetNature(enums.Buy).
+		SetDevice(req.Device).Save(o.ctx)
 
 	if err != nil {
 		return nil, rollback(tx, errors.Wrap(err, "创建 Order 失败"))
@@ -75,11 +73,16 @@ func (o Order) CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *
 
 		wg.Done()
 	}()
+	var total float64
+	contest, _ := o.db.Contest.Query().Where(contest.ID(req.ContestId)).First(o.ctx)
+	if contest != nil {
+		total = contest.Fee
+	}
 	go func() {
 		_, err = tx.OrderAmount.Create().
 			SetOrder(one).
-			SetTotal(req.Total).
-			SetResidue(req.Total).
+			SetTotal(total).
+			SetResidue(total).
 			Save(o.ctx)
 		if err != nil {
 			err = errors.Wrap(err, "创建Order Amount失败")
@@ -102,7 +105,7 @@ func (o Order) CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *
 	return orderOne, nil
 }
 
-func (o Order) ContestStock(req CreateParticipantOrderReq) bool {
+func (o Order) ContestStock(req do.CreateParticipantOrderReq) bool {
 	first, err := o.db.Contest.Query().Where(contest.ID(req.ContestId)).First(o.ctx)
 	if err != nil {
 		return false

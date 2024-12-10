@@ -77,7 +77,6 @@ func (ou *OrderUpdate) ClearDelete() *OrderUpdate {
 
 // SetCreatedID sets the "created_id" field.
 func (ou *OrderUpdate) SetCreatedID(i int64) *OrderUpdate {
-	ou.mutation.ResetCreatedID()
 	ou.mutation.SetCreatedID(i)
 	return ou
 }
@@ -87,12 +86,6 @@ func (ou *OrderUpdate) SetNillableCreatedID(i *int64) *OrderUpdate {
 	if i != nil {
 		ou.SetCreatedID(*i)
 	}
-	return ou
-}
-
-// AddCreatedID adds i to the "created_id" field.
-func (ou *OrderUpdate) AddCreatedID(i int64) *OrderUpdate {
-	ou.mutation.AddCreatedID(i)
 	return ou
 }
 
@@ -286,26 +279,6 @@ func (ou *OrderUpdate) SetNillableCompletionAt(t *time.Time) *OrderUpdate {
 // ClearCompletionAt clears the value of the "completion_at" field.
 func (ou *OrderUpdate) ClearCompletionAt() *OrderUpdate {
 	ou.mutation.ClearCompletionAt()
-	return ou
-}
-
-// SetCreateID sets the "create_id" field.
-func (ou *OrderUpdate) SetCreateID(i int64) *OrderUpdate {
-	ou.mutation.SetCreateID(i)
-	return ou
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (ou *OrderUpdate) SetNillableCreateID(i *int64) *OrderUpdate {
-	if i != nil {
-		ou.SetCreateID(*i)
-	}
-	return ou
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (ou *OrderUpdate) ClearCreateID() *OrderUpdate {
-	ou.mutation.ClearCreateID()
 	return ou
 }
 
@@ -631,15 +604,6 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.DeleteCleared() {
 		_spec.ClearField(order.FieldDelete, field.TypeInt64)
-	}
-	if value, ok := ou.mutation.CreatedID(); ok {
-		_spec.SetField(order.FieldCreatedID, field.TypeInt64, value)
-	}
-	if value, ok := ou.mutation.AddedCreatedID(); ok {
-		_spec.AddField(order.FieldCreatedID, field.TypeInt64, value)
-	}
-	if ou.mutation.CreatedIDCleared() {
-		_spec.ClearField(order.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := ou.mutation.OrderSn(); ok {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)
@@ -1059,7 +1023,6 @@ func (ouo *OrderUpdateOne) ClearDelete() *OrderUpdateOne {
 
 // SetCreatedID sets the "created_id" field.
 func (ouo *OrderUpdateOne) SetCreatedID(i int64) *OrderUpdateOne {
-	ouo.mutation.ResetCreatedID()
 	ouo.mutation.SetCreatedID(i)
 	return ouo
 }
@@ -1069,12 +1032,6 @@ func (ouo *OrderUpdateOne) SetNillableCreatedID(i *int64) *OrderUpdateOne {
 	if i != nil {
 		ouo.SetCreatedID(*i)
 	}
-	return ouo
-}
-
-// AddCreatedID adds i to the "created_id" field.
-func (ouo *OrderUpdateOne) AddCreatedID(i int64) *OrderUpdateOne {
-	ouo.mutation.AddCreatedID(i)
 	return ouo
 }
 
@@ -1268,26 +1225,6 @@ func (ouo *OrderUpdateOne) SetNillableCompletionAt(t *time.Time) *OrderUpdateOne
 // ClearCompletionAt clears the value of the "completion_at" field.
 func (ouo *OrderUpdateOne) ClearCompletionAt() *OrderUpdateOne {
 	ouo.mutation.ClearCompletionAt()
-	return ouo
-}
-
-// SetCreateID sets the "create_id" field.
-func (ouo *OrderUpdateOne) SetCreateID(i int64) *OrderUpdateOne {
-	ouo.mutation.SetCreateID(i)
-	return ouo
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (ouo *OrderUpdateOne) SetNillableCreateID(i *int64) *OrderUpdateOne {
-	if i != nil {
-		ouo.SetCreateID(*i)
-	}
-	return ouo
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (ouo *OrderUpdateOne) ClearCreateID() *OrderUpdateOne {
-	ouo.mutation.ClearCreateID()
 	return ouo
 }
 
@@ -1643,15 +1580,6 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	}
 	if ouo.mutation.DeleteCleared() {
 		_spec.ClearField(order.FieldDelete, field.TypeInt64)
-	}
-	if value, ok := ouo.mutation.CreatedID(); ok {
-		_spec.SetField(order.FieldCreatedID, field.TypeInt64, value)
-	}
-	if value, ok := ouo.mutation.AddedCreatedID(); ok {
-		_spec.AddField(order.FieldCreatedID, field.TypeInt64, value)
-	}
-	if ouo.mutation.CreatedIDCleared() {
-		_spec.ClearField(order.FieldCreatedID, field.TypeInt64)
 	}
 	if value, ok := ouo.mutation.OrderSn(); ok {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)

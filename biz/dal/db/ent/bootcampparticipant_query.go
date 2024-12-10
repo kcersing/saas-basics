@@ -20,12 +20,12 @@ import (
 // BootcampParticipantQuery is the builder for querying BootcampParticipant entities.
 type BootcampParticipantQuery struct {
 	config
-	ctx          *QueryContext
-	order        []bootcampparticipant.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.BootcampParticipant
-	withBootcamp *BootcampQuery
-	withMembers  *MemberQuery
+	ctx           *QueryContext
+	order         []bootcampparticipant.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.BootcampParticipant
+	withBootcamps *BootcampQuery
+	withMembers   *MemberQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -62,8 +62,8 @@ func (bpq *BootcampParticipantQuery) Order(o ...bootcampparticipant.OrderOption)
 	return bpq
 }
 
-// QueryBootcamp chains the current query on the "Bootcamp" edge.
-func (bpq *BootcampParticipantQuery) QueryBootcamp() *BootcampQuery {
+// QueryBootcamps chains the current query on the "bootcamps" edge.
+func (bpq *BootcampParticipantQuery) QueryBootcamps() *BootcampQuery {
 	query := (&BootcampClient{config: bpq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := bpq.prepareQuery(ctx); err != nil {
@@ -76,7 +76,7 @@ func (bpq *BootcampParticipantQuery) QueryBootcamp() *BootcampQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(bootcampparticipant.Table, bootcampparticipant.FieldID, selector),
 			sqlgraph.To(bootcamp.Table, bootcamp.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, bootcampparticipant.BootcampTable, bootcampparticipant.BootcampColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, bootcampparticipant.BootcampsTable, bootcampparticipant.BootcampsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bpq.driver.Dialect(), step)
 		return fromU, nil
@@ -293,27 +293,27 @@ func (bpq *BootcampParticipantQuery) Clone() *BootcampParticipantQuery {
 		return nil
 	}
 	return &BootcampParticipantQuery{
-		config:       bpq.config,
-		ctx:          bpq.ctx.Clone(),
-		order:        append([]bootcampparticipant.OrderOption{}, bpq.order...),
-		inters:       append([]Interceptor{}, bpq.inters...),
-		predicates:   append([]predicate.BootcampParticipant{}, bpq.predicates...),
-		withBootcamp: bpq.withBootcamp.Clone(),
-		withMembers:  bpq.withMembers.Clone(),
+		config:        bpq.config,
+		ctx:           bpq.ctx.Clone(),
+		order:         append([]bootcampparticipant.OrderOption{}, bpq.order...),
+		inters:        append([]Interceptor{}, bpq.inters...),
+		predicates:    append([]predicate.BootcampParticipant{}, bpq.predicates...),
+		withBootcamps: bpq.withBootcamps.Clone(),
+		withMembers:   bpq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:  bpq.sql.Clone(),
 		path: bpq.path,
 	}
 }
 
-// WithBootcamp tells the query-builder to eager-load the nodes that are connected to
-// the "Bootcamp" edge. The optional arguments are used to configure the query builder of the edge.
-func (bpq *BootcampParticipantQuery) WithBootcamp(opts ...func(*BootcampQuery)) *BootcampParticipantQuery {
+// WithBootcamps tells the query-builder to eager-load the nodes that are connected to
+// the "bootcamps" edge. The optional arguments are used to configure the query builder of the edge.
+func (bpq *BootcampParticipantQuery) WithBootcamps(opts ...func(*BootcampQuery)) *BootcampParticipantQuery {
 	query := (&BootcampClient{config: bpq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	bpq.withBootcamp = query
+	bpq.withBootcamps = query
 	return bpq
 }
 
@@ -407,7 +407,7 @@ func (bpq *BootcampParticipantQuery) sqlAll(ctx context.Context, hooks ...queryH
 		nodes       = []*BootcampParticipant{}
 		_spec       = bpq.querySpec()
 		loadedTypes = [2]bool{
-			bpq.withBootcamp != nil,
+			bpq.withBootcamps != nil,
 			bpq.withMembers != nil,
 		}
 	)
@@ -429,9 +429,9 @@ func (bpq *BootcampParticipantQuery) sqlAll(ctx context.Context, hooks ...queryH
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := bpq.withBootcamp; query != nil {
-		if err := bpq.loadBootcamp(ctx, query, nodes, nil,
-			func(n *BootcampParticipant, e *Bootcamp) { n.Edges.Bootcamp = e }); err != nil {
+	if query := bpq.withBootcamps; query != nil {
+		if err := bpq.loadBootcamps(ctx, query, nodes, nil,
+			func(n *BootcampParticipant, e *Bootcamp) { n.Edges.Bootcamps = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -445,7 +445,7 @@ func (bpq *BootcampParticipantQuery) sqlAll(ctx context.Context, hooks ...queryH
 	return nodes, nil
 }
 
-func (bpq *BootcampParticipantQuery) loadBootcamp(ctx context.Context, query *BootcampQuery, nodes []*BootcampParticipant, init func(*BootcampParticipant), assign func(*BootcampParticipant, *Bootcamp)) error {
+func (bpq *BootcampParticipantQuery) loadBootcamps(ctx context.Context, query *BootcampQuery, nodes []*BootcampParticipant, init func(*BootcampParticipant), assign func(*BootcampParticipant, *Bootcamp)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*BootcampParticipant)
 	for i := range nodes {
@@ -561,7 +561,7 @@ func (bpq *BootcampParticipantQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if bpq.withBootcamp != nil {
+		if bpq.withBootcamps != nil {
 			_spec.Node.AddColumnOnce(bootcampparticipant.FieldBootcampID)
 		}
 	}

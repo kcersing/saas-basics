@@ -74,7 +74,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "order" package.
 	CreatedOrdersInverseTable = "order"
 	// CreatedOrdersColumn is the table column denoting the created_orders relation/edge.
-	CreatedOrdersColumn = "create_id"
+	CreatedOrdersColumn = "created_id"
 	// UserEntryTable is the table that holds the user_entry relation/edge.
 	UserEntryTable = "entry_logs"
 	// UserEntryInverseTable is the table name for the EntryLogs entity.

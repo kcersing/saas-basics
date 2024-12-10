@@ -209,33 +209,6 @@ func (bu *BootcampUpdate) ClearSignEndAt() *BootcampUpdate {
 	return bu
 }
 
-// SetNumber sets the "number" field.
-func (bu *BootcampUpdate) SetNumber(i int64) *BootcampUpdate {
-	bu.mutation.ResetNumber()
-	bu.mutation.SetNumber(i)
-	return bu
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (bu *BootcampUpdate) SetNillableNumber(i *int64) *BootcampUpdate {
-	if i != nil {
-		bu.SetNumber(*i)
-	}
-	return bu
-}
-
-// AddNumber adds i to the "number" field.
-func (bu *BootcampUpdate) AddNumber(i int64) *BootcampUpdate {
-	bu.mutation.AddNumber(i)
-	return bu
-}
-
-// ClearNumber clears the value of the "number" field.
-func (bu *BootcampUpdate) ClearNumber() *BootcampUpdate {
-	bu.mutation.ClearNumber()
-	return bu
-}
-
 // SetStartAt sets the "start_at" field.
 func (bu *BootcampUpdate) SetStartAt(t time.Time) *BootcampUpdate {
 	bu.mutation.SetStartAt(t)
@@ -293,26 +266,6 @@ func (bu *BootcampUpdate) SetNillablePic(s *string) *BootcampUpdate {
 // ClearPic clears the value of the "pic" field.
 func (bu *BootcampUpdate) ClearPic() *BootcampUpdate {
 	bu.mutation.ClearPic()
-	return bu
-}
-
-// SetSponsor sets the "sponsor" field.
-func (bu *BootcampUpdate) SetSponsor(s string) *BootcampUpdate {
-	bu.mutation.SetSponsor(s)
-	return bu
-}
-
-// SetNillableSponsor sets the "sponsor" field if the given value is not nil.
-func (bu *BootcampUpdate) SetNillableSponsor(s *string) *BootcampUpdate {
-	if s != nil {
-		bu.SetSponsor(*s)
-	}
-	return bu
-}
-
-// ClearSponsor clears the value of the "sponsor" field.
-func (bu *BootcampUpdate) ClearSponsor() *BootcampUpdate {
-	bu.mutation.ClearSponsor()
 	return bu
 }
 
@@ -667,15 +620,6 @@ func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if bu.mutation.SignEndAtCleared() {
 		_spec.ClearField(bootcamp.FieldSignEndAt, field.TypeTime)
 	}
-	if value, ok := bu.mutation.Number(); ok {
-		_spec.SetField(bootcamp.FieldNumber, field.TypeInt64, value)
-	}
-	if value, ok := bu.mutation.AddedNumber(); ok {
-		_spec.AddField(bootcamp.FieldNumber, field.TypeInt64, value)
-	}
-	if bu.mutation.NumberCleared() {
-		_spec.ClearField(bootcamp.FieldNumber, field.TypeInt64)
-	}
 	if value, ok := bu.mutation.StartAt(); ok {
 		_spec.SetField(bootcamp.FieldStartAt, field.TypeTime, value)
 	}
@@ -693,12 +637,6 @@ func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if bu.mutation.PicCleared() {
 		_spec.ClearField(bootcamp.FieldPic, field.TypeString)
-	}
-	if value, ok := bu.mutation.Sponsor(); ok {
-		_spec.SetField(bootcamp.FieldSponsor, field.TypeString, value)
-	}
-	if bu.mutation.SponsorCleared() {
-		_spec.ClearField(bootcamp.FieldSponsor, field.TypeString)
 	}
 	if value, ok := bu.mutation.Fee(); ok {
 		_spec.SetField(bootcamp.FieldFee, field.TypeFloat64, value)
@@ -1011,33 +949,6 @@ func (buo *BootcampUpdateOne) ClearSignEndAt() *BootcampUpdateOne {
 	return buo
 }
 
-// SetNumber sets the "number" field.
-func (buo *BootcampUpdateOne) SetNumber(i int64) *BootcampUpdateOne {
-	buo.mutation.ResetNumber()
-	buo.mutation.SetNumber(i)
-	return buo
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (buo *BootcampUpdateOne) SetNillableNumber(i *int64) *BootcampUpdateOne {
-	if i != nil {
-		buo.SetNumber(*i)
-	}
-	return buo
-}
-
-// AddNumber adds i to the "number" field.
-func (buo *BootcampUpdateOne) AddNumber(i int64) *BootcampUpdateOne {
-	buo.mutation.AddNumber(i)
-	return buo
-}
-
-// ClearNumber clears the value of the "number" field.
-func (buo *BootcampUpdateOne) ClearNumber() *BootcampUpdateOne {
-	buo.mutation.ClearNumber()
-	return buo
-}
-
 // SetStartAt sets the "start_at" field.
 func (buo *BootcampUpdateOne) SetStartAt(t time.Time) *BootcampUpdateOne {
 	buo.mutation.SetStartAt(t)
@@ -1095,26 +1006,6 @@ func (buo *BootcampUpdateOne) SetNillablePic(s *string) *BootcampUpdateOne {
 // ClearPic clears the value of the "pic" field.
 func (buo *BootcampUpdateOne) ClearPic() *BootcampUpdateOne {
 	buo.mutation.ClearPic()
-	return buo
-}
-
-// SetSponsor sets the "sponsor" field.
-func (buo *BootcampUpdateOne) SetSponsor(s string) *BootcampUpdateOne {
-	buo.mutation.SetSponsor(s)
-	return buo
-}
-
-// SetNillableSponsor sets the "sponsor" field if the given value is not nil.
-func (buo *BootcampUpdateOne) SetNillableSponsor(s *string) *BootcampUpdateOne {
-	if s != nil {
-		buo.SetSponsor(*s)
-	}
-	return buo
-}
-
-// ClearSponsor clears the value of the "sponsor" field.
-func (buo *BootcampUpdateOne) ClearSponsor() *BootcampUpdateOne {
-	buo.mutation.ClearSponsor()
 	return buo
 }
 
@@ -1499,15 +1390,6 @@ func (buo *BootcampUpdateOne) sqlSave(ctx context.Context) (_node *Bootcamp, err
 	if buo.mutation.SignEndAtCleared() {
 		_spec.ClearField(bootcamp.FieldSignEndAt, field.TypeTime)
 	}
-	if value, ok := buo.mutation.Number(); ok {
-		_spec.SetField(bootcamp.FieldNumber, field.TypeInt64, value)
-	}
-	if value, ok := buo.mutation.AddedNumber(); ok {
-		_spec.AddField(bootcamp.FieldNumber, field.TypeInt64, value)
-	}
-	if buo.mutation.NumberCleared() {
-		_spec.ClearField(bootcamp.FieldNumber, field.TypeInt64)
-	}
 	if value, ok := buo.mutation.StartAt(); ok {
 		_spec.SetField(bootcamp.FieldStartAt, field.TypeTime, value)
 	}
@@ -1525,12 +1407,6 @@ func (buo *BootcampUpdateOne) sqlSave(ctx context.Context) (_node *Bootcamp, err
 	}
 	if buo.mutation.PicCleared() {
 		_spec.ClearField(bootcamp.FieldPic, field.TypeString)
-	}
-	if value, ok := buo.mutation.Sponsor(); ok {
-		_spec.SetField(bootcamp.FieldSponsor, field.TypeString, value)
-	}
-	if buo.mutation.SponsorCleared() {
-		_spec.ClearField(bootcamp.FieldSponsor, field.TypeString)
 	}
 	if value, ok := buo.mutation.Fee(); ok {
 		_spec.SetField(bootcamp.FieldFee, field.TypeFloat64, value)

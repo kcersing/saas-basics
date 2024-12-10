@@ -963,15 +963,15 @@ func (c *BootcampParticipantClient) GetX(ctx context.Context, id int64) *Bootcam
 	return obj
 }
 
-// QueryBootcamp queries the Bootcamp edge of a BootcampParticipant.
-func (c *BootcampParticipantClient) QueryBootcamp(bp *BootcampParticipant) *BootcampQuery {
+// QueryBootcamps queries the bootcamps edge of a BootcampParticipant.
+func (c *BootcampParticipantClient) QueryBootcamps(bp *BootcampParticipant) *BootcampQuery {
 	query := (&BootcampClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := bp.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(bootcampparticipant.Table, bootcampparticipant.FieldID, id),
 			sqlgraph.To(bootcamp.Table, bootcamp.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, bootcampparticipant.BootcampTable, bootcampparticipant.BootcampColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, bootcampparticipant.BootcampsTable, bootcampparticipant.BootcampsColumn),
 		)
 		fromV = sqlgraph.Neighbors(bp.driver.Dialect(), step)
 		return fromV, nil

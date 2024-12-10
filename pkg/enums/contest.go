@@ -1,7 +1,7 @@
 package enums
 
-// ReturnParticipantStatusValues 获取比赛人员状态
-func ReturnParticipantStatusValues(key int64) (values string) {
+// ReturnContestParticipantStatusValues 获取比赛人员状态
+func ReturnContestParticipantStatusValues(key int64) (values string) {
 	switch key {
 	case 1:
 		values = "报名中"

@@ -2036,12 +2036,9 @@ type BootcampMutation struct {
 	addsign_number               *int64
 	sign_start_at                *time.Time
 	sign_end_at                  *time.Time
-	number                       *int64
-	addnumber                    *int64
 	start_at                     *time.Time
 	end_at                       *time.Time
 	pic                          *string
-	sponsor                      *string
 	fee                          *float64
 	addfee                       *float64
 	is_fee                       *int64
@@ -2694,76 +2691,6 @@ func (m *BootcampMutation) ResetSignEndAt() {
 	delete(m.clearedFields, bootcamp.FieldSignEndAt)
 }
 
-// SetNumber sets the "number" field.
-func (m *BootcampMutation) SetNumber(i int64) {
-	m.number = &i
-	m.addnumber = nil
-}
-
-// Number returns the value of the "number" field in the mutation.
-func (m *BootcampMutation) Number() (r int64, exists bool) {
-	v := m.number
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldNumber returns the old "number" field's value of the Bootcamp entity.
-// If the Bootcamp object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BootcampMutation) OldNumber(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNumber requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
-	}
-	return oldValue.Number, nil
-}
-
-// AddNumber adds i to the "number" field.
-func (m *BootcampMutation) AddNumber(i int64) {
-	if m.addnumber != nil {
-		*m.addnumber += i
-	} else {
-		m.addnumber = &i
-	}
-}
-
-// AddedNumber returns the value that was added to the "number" field in this mutation.
-func (m *BootcampMutation) AddedNumber() (r int64, exists bool) {
-	v := m.addnumber
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearNumber clears the value of the "number" field.
-func (m *BootcampMutation) ClearNumber() {
-	m.number = nil
-	m.addnumber = nil
-	m.clearedFields[bootcamp.FieldNumber] = struct{}{}
-}
-
-// NumberCleared returns if the "number" field was cleared in this mutation.
-func (m *BootcampMutation) NumberCleared() bool {
-	_, ok := m.clearedFields[bootcamp.FieldNumber]
-	return ok
-}
-
-// ResetNumber resets all changes to the "number" field.
-func (m *BootcampMutation) ResetNumber() {
-	m.number = nil
-	m.addnumber = nil
-	delete(m.clearedFields, bootcamp.FieldNumber)
-}
-
 // SetStartAt sets the "start_at" field.
 func (m *BootcampMutation) SetStartAt(t time.Time) {
 	m.start_at = &t
@@ -2909,55 +2836,6 @@ func (m *BootcampMutation) PicCleared() bool {
 func (m *BootcampMutation) ResetPic() {
 	m.pic = nil
 	delete(m.clearedFields, bootcamp.FieldPic)
-}
-
-// SetSponsor sets the "sponsor" field.
-func (m *BootcampMutation) SetSponsor(s string) {
-	m.sponsor = &s
-}
-
-// Sponsor returns the value of the "sponsor" field in the mutation.
-func (m *BootcampMutation) Sponsor() (r string, exists bool) {
-	v := m.sponsor
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldSponsor returns the old "sponsor" field's value of the Bootcamp entity.
-// If the Bootcamp object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BootcampMutation) OldSponsor(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSponsor is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSponsor requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSponsor: %w", err)
-	}
-	return oldValue.Sponsor, nil
-}
-
-// ClearSponsor clears the value of the "sponsor" field.
-func (m *BootcampMutation) ClearSponsor() {
-	m.sponsor = nil
-	m.clearedFields[bootcamp.FieldSponsor] = struct{}{}
-}
-
-// SponsorCleared returns if the "sponsor" field was cleared in this mutation.
-func (m *BootcampMutation) SponsorCleared() bool {
-	_, ok := m.clearedFields[bootcamp.FieldSponsor]
-	return ok
-}
-
-// ResetSponsor resets all changes to the "sponsor" field.
-func (m *BootcampMutation) ResetSponsor() {
-	m.sponsor = nil
-	delete(m.clearedFields, bootcamp.FieldSponsor)
 }
 
 // SetFee sets the "fee" field.
@@ -3566,7 +3444,7 @@ func (m *BootcampMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BootcampMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 20)
 	if m.created_at != nil {
 		fields = append(fields, bootcamp.FieldCreatedAt)
 	}
@@ -3594,9 +3472,6 @@ func (m *BootcampMutation) Fields() []string {
 	if m.sign_end_at != nil {
 		fields = append(fields, bootcamp.FieldSignEndAt)
 	}
-	if m.number != nil {
-		fields = append(fields, bootcamp.FieldNumber)
-	}
 	if m.start_at != nil {
 		fields = append(fields, bootcamp.FieldStartAt)
 	}
@@ -3605,9 +3480,6 @@ func (m *BootcampMutation) Fields() []string {
 	}
 	if m.pic != nil {
 		fields = append(fields, bootcamp.FieldPic)
-	}
-	if m.sponsor != nil {
-		fields = append(fields, bootcamp.FieldSponsor)
 	}
 	if m.fee != nil {
 		fields = append(fields, bootcamp.FieldFee)
@@ -3659,16 +3531,12 @@ func (m *BootcampMutation) Field(name string) (ent.Value, bool) {
 		return m.SignStartAt()
 	case bootcamp.FieldSignEndAt:
 		return m.SignEndAt()
-	case bootcamp.FieldNumber:
-		return m.Number()
 	case bootcamp.FieldStartAt:
 		return m.StartAt()
 	case bootcamp.FieldEndAt:
 		return m.EndAt()
 	case bootcamp.FieldPic:
 		return m.Pic()
-	case bootcamp.FieldSponsor:
-		return m.Sponsor()
 	case bootcamp.FieldFee:
 		return m.Fee()
 	case bootcamp.FieldIsFee:
@@ -3712,16 +3580,12 @@ func (m *BootcampMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldSignStartAt(ctx)
 	case bootcamp.FieldSignEndAt:
 		return m.OldSignEndAt(ctx)
-	case bootcamp.FieldNumber:
-		return m.OldNumber(ctx)
 	case bootcamp.FieldStartAt:
 		return m.OldStartAt(ctx)
 	case bootcamp.FieldEndAt:
 		return m.OldEndAt(ctx)
 	case bootcamp.FieldPic:
 		return m.OldPic(ctx)
-	case bootcamp.FieldSponsor:
-		return m.OldSponsor(ctx)
 	case bootcamp.FieldFee:
 		return m.OldFee(ctx)
 	case bootcamp.FieldIsFee:
@@ -3810,13 +3674,6 @@ func (m *BootcampMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSignEndAt(v)
 		return nil
-	case bootcamp.FieldNumber:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetNumber(v)
-		return nil
 	case bootcamp.FieldStartAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -3837,13 +3694,6 @@ func (m *BootcampMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPic(v)
-		return nil
-	case bootcamp.FieldSponsor:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetSponsor(v)
 		return nil
 	case bootcamp.FieldFee:
 		v, ok := value.(float64)
@@ -3921,9 +3771,6 @@ func (m *BootcampMutation) AddedFields() []string {
 	if m.addsign_number != nil {
 		fields = append(fields, bootcamp.FieldSignNumber)
 	}
-	if m.addnumber != nil {
-		fields = append(fields, bootcamp.FieldNumber)
-	}
 	if m.addfee != nil {
 		fields = append(fields, bootcamp.FieldFee)
 	}
@@ -3958,8 +3805,6 @@ func (m *BootcampMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedStatus()
 	case bootcamp.FieldSignNumber:
 		return m.AddedSignNumber()
-	case bootcamp.FieldNumber:
-		return m.AddedNumber()
 	case bootcamp.FieldFee:
 		return m.AddedFee()
 	case bootcamp.FieldIsFee:
@@ -4008,13 +3853,6 @@ func (m *BootcampMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddSignNumber(v)
-		return nil
-	case bootcamp.FieldNumber:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddNumber(v)
 		return nil
 	case bootcamp.FieldFee:
 		v, ok := value.(float64)
@@ -4093,9 +3931,6 @@ func (m *BootcampMutation) ClearedFields() []string {
 	if m.FieldCleared(bootcamp.FieldSignEndAt) {
 		fields = append(fields, bootcamp.FieldSignEndAt)
 	}
-	if m.FieldCleared(bootcamp.FieldNumber) {
-		fields = append(fields, bootcamp.FieldNumber)
-	}
 	if m.FieldCleared(bootcamp.FieldStartAt) {
 		fields = append(fields, bootcamp.FieldStartAt)
 	}
@@ -4104,9 +3939,6 @@ func (m *BootcampMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(bootcamp.FieldPic) {
 		fields = append(fields, bootcamp.FieldPic)
-	}
-	if m.FieldCleared(bootcamp.FieldSponsor) {
-		fields = append(fields, bootcamp.FieldSponsor)
 	}
 	if m.FieldCleared(bootcamp.FieldFee) {
 		fields = append(fields, bootcamp.FieldFee)
@@ -4173,9 +4005,6 @@ func (m *BootcampMutation) ClearField(name string) error {
 	case bootcamp.FieldSignEndAt:
 		m.ClearSignEndAt()
 		return nil
-	case bootcamp.FieldNumber:
-		m.ClearNumber()
-		return nil
 	case bootcamp.FieldStartAt:
 		m.ClearStartAt()
 		return nil
@@ -4184,9 +4013,6 @@ func (m *BootcampMutation) ClearField(name string) error {
 		return nil
 	case bootcamp.FieldPic:
 		m.ClearPic()
-		return nil
-	case bootcamp.FieldSponsor:
-		m.ClearSponsor()
 		return nil
 	case bootcamp.FieldFee:
 		m.ClearFee()
@@ -4247,9 +4073,6 @@ func (m *BootcampMutation) ResetField(name string) error {
 	case bootcamp.FieldSignEndAt:
 		m.ResetSignEndAt()
 		return nil
-	case bootcamp.FieldNumber:
-		m.ResetNumber()
-		return nil
 	case bootcamp.FieldStartAt:
 		m.ResetStartAt()
 		return nil
@@ -4258,9 +4081,6 @@ func (m *BootcampMutation) ResetField(name string) error {
 		return nil
 	case bootcamp.FieldPic:
 		m.ResetPic()
-		return nil
-	case bootcamp.FieldSponsor:
-		m.ResetSponsor()
 		return nil
 	case bootcamp.FieldFee:
 		m.ResetFee()
@@ -4399,8 +4219,8 @@ type BootcampParticipantMutation struct {
 	member_id        *int64
 	addmember_id     *int64
 	clearedFields    map[string]struct{}
-	_Bootcamp        *int64
-	cleared_Bootcamp bool
+	bootcamps        *int64
+	clearedbootcamps bool
 	members          map[int64]struct{}
 	removedmembers   map[int64]struct{}
 	clearedmembers   bool
@@ -4823,12 +4643,12 @@ func (m *BootcampParticipantMutation) ResetStatus() {
 
 // SetBootcampID sets the "bootcamp_id" field.
 func (m *BootcampParticipantMutation) SetBootcampID(i int64) {
-	m._Bootcamp = &i
+	m.bootcamps = &i
 }
 
 // BootcampID returns the value of the "bootcamp_id" field in the mutation.
 func (m *BootcampParticipantMutation) BootcampID() (r int64, exists bool) {
-	v := m._Bootcamp
+	v := m.bootcamps
 	if v == nil {
 		return
 	}
@@ -4854,7 +4674,7 @@ func (m *BootcampParticipantMutation) OldBootcampID(ctx context.Context) (v int6
 
 // ClearBootcampID clears the value of the "bootcamp_id" field.
 func (m *BootcampParticipantMutation) ClearBootcampID() {
-	m._Bootcamp = nil
+	m.bootcamps = nil
 	m.clearedFields[bootcampparticipant.FieldBootcampID] = struct{}{}
 }
 
@@ -4866,7 +4686,7 @@ func (m *BootcampParticipantMutation) BootcampIDCleared() bool {
 
 // ResetBootcampID resets all changes to the "bootcamp_id" field.
 func (m *BootcampParticipantMutation) ResetBootcampID() {
-	m._Bootcamp = nil
+	m.bootcamps = nil
 	delete(m.clearedFields, bootcampparticipant.FieldBootcampID)
 }
 
@@ -5276,31 +5096,44 @@ func (m *BootcampParticipantMutation) ResetMemberID() {
 	delete(m.clearedFields, bootcampparticipant.FieldMemberID)
 }
 
-// ClearBootcamp clears the "Bootcamp" edge to the Bootcamp entity.
-func (m *BootcampParticipantMutation) ClearBootcamp() {
-	m.cleared_Bootcamp = true
+// SetBootcampsID sets the "bootcamps" edge to the Bootcamp entity by id.
+func (m *BootcampParticipantMutation) SetBootcampsID(id int64) {
+	m.bootcamps = &id
+}
+
+// ClearBootcamps clears the "bootcamps" edge to the Bootcamp entity.
+func (m *BootcampParticipantMutation) ClearBootcamps() {
+	m.clearedbootcamps = true
 	m.clearedFields[bootcampparticipant.FieldBootcampID] = struct{}{}
 }
 
-// BootcampCleared reports if the "Bootcamp" edge to the Bootcamp entity was cleared.
-func (m *BootcampParticipantMutation) BootcampCleared() bool {
-	return m.BootcampIDCleared() || m.cleared_Bootcamp
+// BootcampsCleared reports if the "bootcamps" edge to the Bootcamp entity was cleared.
+func (m *BootcampParticipantMutation) BootcampsCleared() bool {
+	return m.BootcampIDCleared() || m.clearedbootcamps
 }
 
-// BootcampIDs returns the "Bootcamp" edge IDs in the mutation.
+// BootcampsID returns the "bootcamps" edge ID in the mutation.
+func (m *BootcampParticipantMutation) BootcampsID() (id int64, exists bool) {
+	if m.bootcamps != nil {
+		return *m.bootcamps, true
+	}
+	return
+}
+
+// BootcampsIDs returns the "bootcamps" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// BootcampID instead. It exists only for internal usage by the builders.
-func (m *BootcampParticipantMutation) BootcampIDs() (ids []int64) {
-	if id := m._Bootcamp; id != nil {
+// BootcampsID instead. It exists only for internal usage by the builders.
+func (m *BootcampParticipantMutation) BootcampsIDs() (ids []int64) {
+	if id := m.bootcamps; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetBootcamp resets all changes to the "Bootcamp" edge.
-func (m *BootcampParticipantMutation) ResetBootcamp() {
-	m._Bootcamp = nil
-	m.cleared_Bootcamp = false
+// ResetBootcamps resets all changes to the "bootcamps" edge.
+func (m *BootcampParticipantMutation) ResetBootcamps() {
+	m.bootcamps = nil
+	m.clearedbootcamps = false
 }
 
 // AddMemberIDs adds the "members" edge to the Member entity by ids.
@@ -5407,7 +5240,7 @@ func (m *BootcampParticipantMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, bootcampparticipant.FieldStatus)
 	}
-	if m._Bootcamp != nil {
+	if m.bootcamps != nil {
 		fields = append(fields, bootcampparticipant.FieldBootcampID)
 	}
 	if m.name != nil {
@@ -5851,8 +5684,8 @@ func (m *BootcampParticipantMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *BootcampParticipantMutation) AddedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m._Bootcamp != nil {
-		edges = append(edges, bootcampparticipant.EdgeBootcamp)
+	if m.bootcamps != nil {
+		edges = append(edges, bootcampparticipant.EdgeBootcamps)
 	}
 	if m.members != nil {
 		edges = append(edges, bootcampparticipant.EdgeMembers)
@@ -5864,8 +5697,8 @@ func (m *BootcampParticipantMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *BootcampParticipantMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case bootcampparticipant.EdgeBootcamp:
-		if id := m._Bootcamp; id != nil {
+	case bootcampparticipant.EdgeBootcamps:
+		if id := m.bootcamps; id != nil {
 			return []ent.Value{*id}
 		}
 	case bootcampparticipant.EdgeMembers:
@@ -5904,8 +5737,8 @@ func (m *BootcampParticipantMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *BootcampParticipantMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.cleared_Bootcamp {
-		edges = append(edges, bootcampparticipant.EdgeBootcamp)
+	if m.clearedbootcamps {
+		edges = append(edges, bootcampparticipant.EdgeBootcamps)
 	}
 	if m.clearedmembers {
 		edges = append(edges, bootcampparticipant.EdgeMembers)
@@ -5917,8 +5750,8 @@ func (m *BootcampParticipantMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *BootcampParticipantMutation) EdgeCleared(name string) bool {
 	switch name {
-	case bootcampparticipant.EdgeBootcamp:
-		return m.cleared_Bootcamp
+	case bootcampparticipant.EdgeBootcamps:
+		return m.clearedbootcamps
 	case bootcampparticipant.EdgeMembers:
 		return m.clearedmembers
 	}
@@ -5929,8 +5762,8 @@ func (m *BootcampParticipantMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *BootcampParticipantMutation) ClearEdge(name string) error {
 	switch name {
-	case bootcampparticipant.EdgeBootcamp:
-		m.ClearBootcamp()
+	case bootcampparticipant.EdgeBootcamps:
+		m.ClearBootcamps()
 		return nil
 	}
 	return fmt.Errorf("unknown BootcampParticipant unique edge %s", name)
@@ -5940,8 +5773,8 @@ func (m *BootcampParticipantMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *BootcampParticipantMutation) ResetEdge(name string) error {
 	switch name {
-	case bootcampparticipant.EdgeBootcamp:
-		m.ResetBootcamp()
+	case bootcampparticipant.EdgeBootcamps:
+		m.ResetBootcamps()
 		return nil
 	case bootcampparticipant.EdgeMembers:
 		m.ResetMembers()
@@ -27527,8 +27360,6 @@ type OrderMutation struct {
 	updated_at            *time.Time
 	delete                *int64
 	adddelete             *int64
-	created_id            *int64
-	addcreated_id         *int64
 	order_sn              *string
 	nature                *string
 	product_type          *string
@@ -27838,13 +27669,12 @@ func (m *OrderMutation) ResetDelete() {
 
 // SetCreatedID sets the "created_id" field.
 func (m *OrderMutation) SetCreatedID(i int64) {
-	m.created_id = &i
-	m.addcreated_id = nil
+	m.order_creates = &i
 }
 
 // CreatedID returns the value of the "created_id" field in the mutation.
 func (m *OrderMutation) CreatedID() (r int64, exists bool) {
-	v := m.created_id
+	v := m.order_creates
 	if v == nil {
 		return
 	}
@@ -27868,28 +27698,9 @@ func (m *OrderMutation) OldCreatedID(ctx context.Context) (v int64, err error) {
 	return oldValue.CreatedID, nil
 }
 
-// AddCreatedID adds i to the "created_id" field.
-func (m *OrderMutation) AddCreatedID(i int64) {
-	if m.addcreated_id != nil {
-		*m.addcreated_id += i
-	} else {
-		m.addcreated_id = &i
-	}
-}
-
-// AddedCreatedID returns the value that was added to the "created_id" field in this mutation.
-func (m *OrderMutation) AddedCreatedID() (r int64, exists bool) {
-	v := m.addcreated_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearCreatedID clears the value of the "created_id" field.
 func (m *OrderMutation) ClearCreatedID() {
-	m.created_id = nil
-	m.addcreated_id = nil
+	m.order_creates = nil
 	m.clearedFields[order.FieldCreatedID] = struct{}{}
 }
 
@@ -27901,8 +27712,7 @@ func (m *OrderMutation) CreatedIDCleared() bool {
 
 // ResetCreatedID resets all changes to the "created_id" field.
 func (m *OrderMutation) ResetCreatedID() {
-	m.created_id = nil
-	m.addcreated_id = nil
+	m.order_creates = nil
 	delete(m.clearedFields, order.FieldCreatedID)
 }
 
@@ -28368,55 +28178,6 @@ func (m *OrderMutation) ResetCompletionAt() {
 	delete(m.clearedFields, order.FieldCompletionAt)
 }
 
-// SetCreateID sets the "create_id" field.
-func (m *OrderMutation) SetCreateID(i int64) {
-	m.order_creates = &i
-}
-
-// CreateID returns the value of the "create_id" field in the mutation.
-func (m *OrderMutation) CreateID() (r int64, exists bool) {
-	v := m.order_creates
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreateID returns the old "create_id" field's value of the Order entity.
-// If the Order object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrderMutation) OldCreateID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreateID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreateID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreateID: %w", err)
-	}
-	return oldValue.CreateID, nil
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (m *OrderMutation) ClearCreateID() {
-	m.order_creates = nil
-	m.clearedFields[order.FieldCreateID] = struct{}{}
-}
-
-// CreateIDCleared returns if the "create_id" field was cleared in this mutation.
-func (m *OrderMutation) CreateIDCleared() bool {
-	_, ok := m.clearedFields[order.FieldCreateID]
-	return ok
-}
-
-// ResetCreateID resets all changes to the "create_id" field.
-func (m *OrderMutation) ResetCreateID() {
-	m.order_creates = nil
-	delete(m.clearedFields, order.FieldCreateID)
-}
-
 // AddAmountIDs adds the "amount" edge to the OrderAmount entity by ids.
 func (m *OrderMutation) AddAmountIDs(ids ...int64) {
 	if m.amount == nil {
@@ -28775,12 +28536,12 @@ func (m *OrderMutation) SetOrderCreatesID(id int64) {
 // ClearOrderCreates clears the "order_creates" edge to the User entity.
 func (m *OrderMutation) ClearOrderCreates() {
 	m.clearedorder_creates = true
-	m.clearedFields[order.FieldCreateID] = struct{}{}
+	m.clearedFields[order.FieldCreatedID] = struct{}{}
 }
 
 // OrderCreatesCleared reports if the "order_creates" edge to the User entity was cleared.
 func (m *OrderMutation) OrderCreatesCleared() bool {
-	return m.CreateIDCleared() || m.clearedorder_creates
+	return m.CreatedIDCleared() || m.clearedorder_creates
 }
 
 // OrderCreatesID returns the "order_creates" edge ID in the mutation.
@@ -28841,7 +28602,7 @@ func (m *OrderMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrderMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, order.FieldCreatedAt)
 	}
@@ -28851,7 +28612,7 @@ func (m *OrderMutation) Fields() []string {
 	if m.delete != nil {
 		fields = append(fields, order.FieldDelete)
 	}
-	if m.created_id != nil {
+	if m.order_creates != nil {
 		fields = append(fields, order.FieldCreatedID)
 	}
 	if m.order_sn != nil {
@@ -28880,9 +28641,6 @@ func (m *OrderMutation) Fields() []string {
 	}
 	if m.completion_at != nil {
 		fields = append(fields, order.FieldCompletionAt)
-	}
-	if m.order_creates != nil {
-		fields = append(fields, order.FieldCreateID)
 	}
 	return fields
 }
@@ -28918,8 +28676,6 @@ func (m *OrderMutation) Field(name string) (ent.Value, bool) {
 		return m.Device()
 	case order.FieldCompletionAt:
 		return m.CompletionAt()
-	case order.FieldCreateID:
-		return m.CreateID()
 	}
 	return nil, false
 }
@@ -28955,8 +28711,6 @@ func (m *OrderMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldDevice(ctx)
 	case order.FieldCompletionAt:
 		return m.OldCompletionAt(ctx)
-	case order.FieldCreateID:
-		return m.OldCreateID(ctx)
 	}
 	return nil, fmt.Errorf("unknown Order field %s", name)
 }
@@ -29057,13 +28811,6 @@ func (m *OrderMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCompletionAt(v)
 		return nil
-	case order.FieldCreateID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreateID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown Order field %s", name)
 }
@@ -29074,9 +28821,6 @@ func (m *OrderMutation) AddedFields() []string {
 	var fields []string
 	if m.adddelete != nil {
 		fields = append(fields, order.FieldDelete)
-	}
-	if m.addcreated_id != nil {
-		fields = append(fields, order.FieldCreatedID)
 	}
 	if m.addstatus != nil {
 		fields = append(fields, order.FieldStatus)
@@ -29091,8 +28835,6 @@ func (m *OrderMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case order.FieldDelete:
 		return m.AddedDelete()
-	case order.FieldCreatedID:
-		return m.AddedCreatedID()
 	case order.FieldStatus:
 		return m.AddedStatus()
 	}
@@ -29110,13 +28852,6 @@ func (m *OrderMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDelete(v)
-		return nil
-	case order.FieldCreatedID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddCreatedID(v)
 		return nil
 	case order.FieldStatus:
 		v, ok := value.(int64)
@@ -29172,9 +28907,6 @@ func (m *OrderMutation) ClearedFields() []string {
 	if m.FieldCleared(order.FieldCompletionAt) {
 		fields = append(fields, order.FieldCompletionAt)
 	}
-	if m.FieldCleared(order.FieldCreateID) {
-		fields = append(fields, order.FieldCreateID)
-	}
 	return fields
 }
 
@@ -29228,9 +28960,6 @@ func (m *OrderMutation) ClearField(name string) error {
 	case order.FieldCompletionAt:
 		m.ClearCompletionAt()
 		return nil
-	case order.FieldCreateID:
-		m.ClearCreateID()
-		return nil
 	}
 	return fmt.Errorf("unknown Order nullable field %s", name)
 }
@@ -29277,9 +29006,6 @@ func (m *OrderMutation) ResetField(name string) error {
 		return nil
 	case order.FieldCompletionAt:
 		m.ResetCompletionAt()
-		return nil
-	case order.FieldCreateID:
-		m.ResetCreateID()
 		return nil
 	}
 	return fmt.Errorf("unknown Order field %s", name)
@@ -32033,8 +31759,6 @@ type OrderPayMutation struct {
 	addpay          *float64
 	note            *string
 	pay_way         *string
-	create_id       *int64
-	addcreate_id    *int64
 	pay_sn          *string
 	prepay_id       *string
 	pay_extra       *[]string
@@ -32676,76 +32400,6 @@ func (m *OrderPayMutation) ResetPayWay() {
 	delete(m.clearedFields, orderpay.FieldPayWay)
 }
 
-// SetCreateID sets the "create_id" field.
-func (m *OrderPayMutation) SetCreateID(i int64) {
-	m.create_id = &i
-	m.addcreate_id = nil
-}
-
-// CreateID returns the value of the "create_id" field in the mutation.
-func (m *OrderPayMutation) CreateID() (r int64, exists bool) {
-	v := m.create_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreateID returns the old "create_id" field's value of the OrderPay entity.
-// If the OrderPay object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrderPayMutation) OldCreateID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreateID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreateID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreateID: %w", err)
-	}
-	return oldValue.CreateID, nil
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (m *OrderPayMutation) AddCreateID(i int64) {
-	if m.addcreate_id != nil {
-		*m.addcreate_id += i
-	} else {
-		m.addcreate_id = &i
-	}
-}
-
-// AddedCreateID returns the value that was added to the "create_id" field in this mutation.
-func (m *OrderPayMutation) AddedCreateID() (r int64, exists bool) {
-	v := m.addcreate_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (m *OrderPayMutation) ClearCreateID() {
-	m.create_id = nil
-	m.addcreate_id = nil
-	m.clearedFields[orderpay.FieldCreateID] = struct{}{}
-}
-
-// CreateIDCleared returns if the "create_id" field was cleared in this mutation.
-func (m *OrderPayMutation) CreateIDCleared() bool {
-	_, ok := m.clearedFields[orderpay.FieldCreateID]
-	return ok
-}
-
-// ResetCreateID resets all changes to the "create_id" field.
-func (m *OrderPayMutation) ResetCreateID() {
-	m.create_id = nil
-	m.addcreate_id = nil
-	delete(m.clearedFields, orderpay.FieldCreateID)
-}
-
 // SetPaySn sets the "pay_sn" field.
 func (m *OrderPayMutation) SetPaySn(s string) {
 	m.pay_sn = &s
@@ -32970,7 +32624,7 @@ func (m *OrderPayMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrderPayMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, orderpay.FieldCreatedAt)
 	}
@@ -32997,9 +32651,6 @@ func (m *OrderPayMutation) Fields() []string {
 	}
 	if m.pay_way != nil {
 		fields = append(fields, orderpay.FieldPayWay)
-	}
-	if m.create_id != nil {
-		fields = append(fields, orderpay.FieldCreateID)
 	}
 	if m.pay_sn != nil {
 		fields = append(fields, orderpay.FieldPaySn)
@@ -33036,8 +32687,6 @@ func (m *OrderPayMutation) Field(name string) (ent.Value, bool) {
 		return m.Note()
 	case orderpay.FieldPayWay:
 		return m.PayWay()
-	case orderpay.FieldCreateID:
-		return m.CreateID()
 	case orderpay.FieldPaySn:
 		return m.PaySn()
 	case orderpay.FieldPrepayID:
@@ -33071,8 +32720,6 @@ func (m *OrderPayMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldNote(ctx)
 	case orderpay.FieldPayWay:
 		return m.OldPayWay(ctx)
-	case orderpay.FieldCreateID:
-		return m.OldCreateID(ctx)
 	case orderpay.FieldPaySn:
 		return m.OldPaySn(ctx)
 	case orderpay.FieldPrepayID:
@@ -33151,13 +32798,6 @@ func (m *OrderPayMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPayWay(v)
 		return nil
-	case orderpay.FieldCreateID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreateID(v)
-		return nil
 	case orderpay.FieldPaySn:
 		v, ok := value.(string)
 		if !ok {
@@ -33199,9 +32839,6 @@ func (m *OrderPayMutation) AddedFields() []string {
 	if m.addpay != nil {
 		fields = append(fields, orderpay.FieldPay)
 	}
-	if m.addcreate_id != nil {
-		fields = append(fields, orderpay.FieldCreateID)
-	}
 	return fields
 }
 
@@ -33218,8 +32855,6 @@ func (m *OrderPayMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedRemission()
 	case orderpay.FieldPay:
 		return m.AddedPay()
-	case orderpay.FieldCreateID:
-		return m.AddedCreateID()
 	}
 	return nil, false
 }
@@ -33257,13 +32892,6 @@ func (m *OrderPayMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddPay(v)
 		return nil
-	case orderpay.FieldCreateID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddCreateID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown OrderPay numeric field %s", name)
 }
@@ -33298,9 +32926,6 @@ func (m *OrderPayMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(orderpay.FieldPayWay) {
 		fields = append(fields, orderpay.FieldPayWay)
-	}
-	if m.FieldCleared(orderpay.FieldCreateID) {
-		fields = append(fields, orderpay.FieldCreateID)
 	}
 	if m.FieldCleared(orderpay.FieldPaySn) {
 		fields = append(fields, orderpay.FieldPaySn)
@@ -33352,9 +32977,6 @@ func (m *OrderPayMutation) ClearField(name string) error {
 	case orderpay.FieldPayWay:
 		m.ClearPayWay()
 		return nil
-	case orderpay.FieldCreateID:
-		m.ClearCreateID()
-		return nil
 	case orderpay.FieldPaySn:
 		m.ClearPaySn()
 		return nil
@@ -33398,9 +33020,6 @@ func (m *OrderPayMutation) ResetField(name string) error {
 		return nil
 	case orderpay.FieldPayWay:
 		m.ResetPayWay()
-		return nil
-	case orderpay.FieldCreateID:
-		m.ResetCreateID()
 		return nil
 	case orderpay.FieldPaySn:
 		m.ResetPaySn()

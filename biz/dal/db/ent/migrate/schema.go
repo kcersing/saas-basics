@@ -62,15 +62,13 @@ var (
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
-		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "比赛名称"},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "训练营名称"},
 		{Name: "sign_number", Type: field.TypeInt64, Nullable: true, Comment: "报名人数"},
 		{Name: "sign_start_at", Type: field.TypeTime, Nullable: true, Comment: "报名开始时间"},
 		{Name: "sign_end_at", Type: field.TypeTime, Nullable: true, Comment: "报名结束时间"},
-		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "参赛人数"},
-		{Name: "start_at", Type: field.TypeTime, Nullable: true, Comment: "比赛开始时间"},
-		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "比赛结束时间"},
-		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "比赛图片"},
-		{Name: "sponsor", Type: field.TypeString, Nullable: true, Comment: "主办方"},
+		{Name: "start_at", Type: field.TypeTime, Nullable: true, Comment: "训练营开始时间"},
+		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "训练营结束时间"},
+		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "图片"},
 		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "费用"},
 		{Name: "is_fee", Type: field.TypeInt64, Nullable: true, Comment: "是否有费用 1 无 2 有", Default: 1},
 		{Name: "is_show", Type: field.TypeInt64, Nullable: true, Comment: "是否展示 1 展示 2 不展示", Default: 1},
@@ -78,7 +76,7 @@ var (
 		{Name: "cancel_time", Type: field.TypeInt64, Nullable: true, Comment: "取消时间", Default: 0},
 		{Name: "detail", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "详情"},
 		{Name: "sign_fields", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "报名信息"},
-		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:未报名;2:报名中;3:未比赛;4:比赛中;5:比赛结束]", Default: 1},
+		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:未报名;2:报名中;3:进行中;4:;5:已结束]", Default: 1},
 	}
 	// BootcampTable holds the schema information for the "bootcamp" table.
 	BootcampTable = &schema.Table{
@@ -89,7 +87,7 @@ var (
 			{
 				Name:    "bootcamp_name_sign_start_at_sign_end_at_start_at_end_at",
 				Unique:  true,
-				Columns: []*schema.Column{BootcampColumns[6], BootcampColumns[8], BootcampColumns[9], BootcampColumns[11], BootcampColumns[12]},
+				Columns: []*schema.Column{BootcampColumns[6], BootcampColumns[8], BootcampColumns[9], BootcampColumns[10], BootcampColumns[11]},
 			},
 		},
 	}
@@ -108,7 +106,7 @@ var (
 		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号", Default: ""},
 		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "费用"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员ID", Default: 0},
-		{Name: "bootcamp_id", Type: field.TypeInt64, Nullable: true, Comment: "赛事id"},
+		{Name: "bootcamp_id", Type: field.TypeInt64, Nullable: true, Comment: "训练营id"},
 	}
 	// BootcampParticipantTable holds the schema information for the "bootcamp_participant" table.
 	BootcampParticipantTable = &schema.Table{
@@ -640,7 +638,6 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
-		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "order_sn", Type: field.TypeString, Nullable: true, Comment: "订单编号"},
 		{Name: "nature", Type: field.TypeString, Nullable: true, Comment: "业务类型"},
 		{Name: "product_type", Type: field.TypeString, Nullable: true, Comment: "产品类型"},
@@ -649,7 +646,7 @@ var (
 		{Name: "device", Type: field.TypeString, Nullable: true, Comment: "设备来源", Default: ""},
 		{Name: "completion_at", Type: field.TypeTime, Nullable: true, Comment: "订单完成时间"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
-		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "创建人id"},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 	}
 	// OrderTable holds the schema information for the "order" table.
@@ -660,19 +657,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_member_member_orders",
-				Columns:    []*schema.Column{OrderColumns[12]},
+				Columns:    []*schema.Column{OrderColumns[11]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "order_sys_users_created_orders",
-				Columns:    []*schema.Column{OrderColumns[13]},
+				Columns:    []*schema.Column{OrderColumns[12]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "order_venue_venue_orders",
-				Columns:    []*schema.Column{OrderColumns[14]},
+				Columns:    []*schema.Column{OrderColumns[13]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -681,22 +678,22 @@ var (
 			{
 				Name:    "order_order_sn",
 				Unique:  false,
-				Columns: []*schema.Column{OrderColumns[5]},
+				Columns: []*schema.Column{OrderColumns[4]},
 			},
 			{
 				Name:    "order_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderColumns[14]},
+				Columns: []*schema.Column{OrderColumns[13]},
 			},
 			{
 				Name:    "order_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderColumns[12]},
+				Columns: []*schema.Column{OrderColumns[11]},
 			},
 			{
 				Name:    "order_completion_at",
 				Unique:  false,
-				Columns: []*schema.Column{OrderColumns[11]},
+				Columns: []*schema.Column{OrderColumns[10]},
 			},
 		},
 	}
@@ -785,7 +782,6 @@ var (
 		{Name: "pay", Type: field.TypeFloat64, Nullable: true, Comment: "实际付款"},
 		{Name: "note", Type: field.TypeString, Nullable: true, Comment: "备注"},
 		{Name: "pay_way", Type: field.TypeString, Nullable: true, Comment: "支付方式"},
-		{Name: "create_id", Type: field.TypeInt64, Nullable: true, Comment: "操作人id"},
 		{Name: "pay_sn", Type: field.TypeString, Nullable: true, Comment: "支付单号"},
 		{Name: "prepay_id", Type: field.TypeString, Nullable: true, Comment: "预支付交易会话标识"},
 		{Name: "pay_extra", Type: field.TypeJSON, Nullable: true, Comment: "支付额外信息"},
@@ -799,7 +795,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_pay_order_pay",
-				Columns:    []*schema.Column{OrderPayColumns[13]},
+				Columns:    []*schema.Column{OrderPayColumns[12]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -808,7 +804,7 @@ var (
 			{
 				Name:    "orderpay_order_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderPayColumns[13]},
+				Columns: []*schema.Column{OrderPayColumns[12]},
 			},
 		},
 	}

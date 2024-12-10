@@ -633,7 +633,7 @@ func (uq *UserQuery) loadCreatedOrders(ctx context.Context, query *OrderQuery, n
 		}
 	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(order.FieldCreateID)
+		query.ctx.AppendFieldOnce(order.FieldCreatedID)
 	}
 	query.Where(predicate.Order(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.CreatedOrdersColumn), fks...))
@@ -643,10 +643,10 @@ func (uq *UserQuery) loadCreatedOrders(ctx context.Context, query *OrderQuery, n
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.CreateID
+		fk := n.CreatedID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "create_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "created_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

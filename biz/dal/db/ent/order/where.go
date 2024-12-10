@@ -120,11 +120,6 @@ func CompletionAt(v time.Time) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldCompletionAt, v))
 }
 
-// CreateID applies equality check predicate on the "create_id" field. It's identical to CreateIDEQ.
-func CreateID(v int64) predicate.Order {
-	return predicate.Order(sql.FieldEQ(FieldCreateID, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldCreatedAt, v))
@@ -293,26 +288,6 @@ func CreatedIDIn(vs ...int64) predicate.Order {
 // CreatedIDNotIn applies the NotIn predicate on the "created_id" field.
 func CreatedIDNotIn(vs ...int64) predicate.Order {
 	return predicate.Order(sql.FieldNotIn(FieldCreatedID, vs...))
-}
-
-// CreatedIDGT applies the GT predicate on the "created_id" field.
-func CreatedIDGT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGT(FieldCreatedID, v))
-}
-
-// CreatedIDGTE applies the GTE predicate on the "created_id" field.
-func CreatedIDGTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldGTE(FieldCreatedID, v))
-}
-
-// CreatedIDLT applies the LT predicate on the "created_id" field.
-func CreatedIDLT(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLT(FieldCreatedID, v))
-}
-
-// CreatedIDLTE applies the LTE predicate on the "created_id" field.
-func CreatedIDLTE(v int64) predicate.Order {
-	return predicate.Order(sql.FieldLTE(FieldCreatedID, v))
 }
 
 // CreatedIDIsNil applies the IsNil predicate on the "created_id" field.
@@ -858,36 +833,6 @@ func CompletionAtIsNil() predicate.Order {
 // CompletionAtNotNil applies the NotNil predicate on the "completion_at" field.
 func CompletionAtNotNil() predicate.Order {
 	return predicate.Order(sql.FieldNotNull(FieldCompletionAt))
-}
-
-// CreateIDEQ applies the EQ predicate on the "create_id" field.
-func CreateIDEQ(v int64) predicate.Order {
-	return predicate.Order(sql.FieldEQ(FieldCreateID, v))
-}
-
-// CreateIDNEQ applies the NEQ predicate on the "create_id" field.
-func CreateIDNEQ(v int64) predicate.Order {
-	return predicate.Order(sql.FieldNEQ(FieldCreateID, v))
-}
-
-// CreateIDIn applies the In predicate on the "create_id" field.
-func CreateIDIn(vs ...int64) predicate.Order {
-	return predicate.Order(sql.FieldIn(FieldCreateID, vs...))
-}
-
-// CreateIDNotIn applies the NotIn predicate on the "create_id" field.
-func CreateIDNotIn(vs ...int64) predicate.Order {
-	return predicate.Order(sql.FieldNotIn(FieldCreateID, vs...))
-}
-
-// CreateIDIsNil applies the IsNil predicate on the "create_id" field.
-func CreateIDIsNil() predicate.Order {
-	return predicate.Order(sql.FieldIsNull(FieldCreateID))
-}
-
-// CreateIDNotNil applies the NotNil predicate on the "create_id" field.
-func CreateIDNotNil() predicate.Order {
-	return predicate.Order(sql.FieldNotNull(FieldCreateID))
 }
 
 // HasAmount applies the HasEdge predicate on the "amount" edge.

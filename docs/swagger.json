@@ -1629,22 +1629,102 @@
         },
         "/service/order/info": {
             "get": {
-                "responses": {}
+                "description": "获取订单详情 Description",
+                "summary": "获取订单详情 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/order/list": {
             "post": {
-                "responses": {}
+                "description": "获取订单列表 Description",
+                "summary": "获取订单列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.ListOrderReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/order/status": {
             "post": {
-                "responses": {}
+                "description": "更新订单状态 Description",
+                "summary": "更新订单状态 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/order/update": {
             "post": {
-                "responses": {}
+                "description": "更新订单信息 Description",
+                "summary": "更新订单信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.UpdateOrderReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/participant/create": {
@@ -3175,6 +3255,62 @@
                     "type": "string"
                 }
             }
+        },
+        "order.ListOrderReq": {
+            "type": "object",
+            "properties": {
+                "endCompletionAt": {
+                    "type": "string"
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "nature": {
+                    "type": "string"
+                },
+                "orderSn": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "productId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "productType": {
+                    "type": "string"
+                },
+                "sellId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "startCompletionAt": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "venueId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "order.UpdateOrderReq": {
+            "type": "object"
         },
         "token.TokenInfo": {
             "type": "object",

@@ -209,20 +209,6 @@ func (oc *OrderCreate) SetNillableCompletionAt(t *time.Time) *OrderCreate {
 	return oc
 }
 
-// SetCreateID sets the "create_id" field.
-func (oc *OrderCreate) SetCreateID(i int64) *OrderCreate {
-	oc.mutation.SetCreateID(i)
-	return oc
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (oc *OrderCreate) SetNillableCreateID(i *int64) *OrderCreate {
-	if i != nil {
-		oc.SetCreateID(*i)
-	}
-	return oc
-}
-
 // SetID sets the "id" field.
 func (oc *OrderCreate) SetID(i int64) *OrderCreate {
 	oc.mutation.SetID(i)
@@ -472,10 +458,6 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		_spec.SetField(order.FieldDelete, field.TypeInt64, value)
 		_node.Delete = value
 	}
-	if value, ok := oc.mutation.CreatedID(); ok {
-		_spec.SetField(order.FieldCreatedID, field.TypeInt64, value)
-		_node.CreatedID = value
-	}
 	if value, ok := oc.mutation.OrderSn(); ok {
 		_spec.SetField(order.FieldOrderSn, field.TypeString, value)
 		_node.OrderSn = value
@@ -632,7 +614,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreateID = nodes[0]
+		_node.CreatedID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -38,8 +38,6 @@ type OrderPay struct {
 	Note string `json:"note,omitempty"`
 	// 支付方式
 	PayWay string `json:"pay_way,omitempty"`
-	// 操作人id
-	CreateID int64 `json:"create_id,omitempty"`
 	// 支付单号
 	PaySn string `json:"pay_sn,omitempty"`
 	// 预支付交易会话标识
@@ -83,7 +81,7 @@ func (*OrderPay) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case orderpay.FieldRemission, orderpay.FieldPay:
 			values[i] = new(sql.NullFloat64)
-		case orderpay.FieldID, orderpay.FieldDelete, orderpay.FieldCreatedID, orderpay.FieldOrderID, orderpay.FieldCreateID:
+		case orderpay.FieldID, orderpay.FieldDelete, orderpay.FieldCreatedID, orderpay.FieldOrderID:
 			values[i] = new(sql.NullInt64)
 		case orderpay.FieldNote, orderpay.FieldPayWay, orderpay.FieldPaySn, orderpay.FieldPrepayID:
 			values[i] = new(sql.NullString)
@@ -163,12 +161,6 @@ func (op *OrderPay) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field pay_way", values[i])
 			} else if value.Valid {
 				op.PayWay = value.String
-			}
-		case orderpay.FieldCreateID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field create_id", values[i])
-			} else if value.Valid {
-				op.CreateID = value.Int64
 			}
 		case orderpay.FieldPaySn:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -257,9 +249,6 @@ func (op *OrderPay) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("pay_way=")
 	builder.WriteString(op.PayWay)
-	builder.WriteString(", ")
-	builder.WriteString("create_id=")
-	builder.WriteString(fmt.Sprintf("%v", op.CreateID))
 	builder.WriteString(", ")
 	builder.WriteString("pay_sn=")
 	builder.WriteString(op.PaySn)

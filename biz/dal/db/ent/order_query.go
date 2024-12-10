@@ -919,7 +919,7 @@ func (oq *OrderQuery) loadOrderCreates(ctx context.Context, query *UserQuery, no
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*Order)
 	for i := range nodes {
-		fk := nodes[i].CreateID
+		fk := nodes[i].CreatedID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -936,7 +936,7 @@ func (oq *OrderQuery) loadOrderCreates(ctx context.Context, query *UserQuery, no
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "create_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -977,7 +977,7 @@ func (oq *OrderQuery) querySpec() *sqlgraph.QuerySpec {
 			_spec.Node.AddColumnOnce(order.FieldMemberID)
 		}
 		if oq.withOrderCreates != nil {
-			_spec.Node.AddColumnOnce(order.FieldCreateID)
+			_spec.Node.AddColumnOnce(order.FieldCreatedID)
 		}
 	}
 	if ps := oq.predicates; len(ps) > 0 {

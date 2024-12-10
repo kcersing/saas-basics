@@ -209,9 +209,23 @@ func (bpc *BootcampParticipantCreate) SetID(i int64) *BootcampParticipantCreate 
 	return bpc
 }
 
-// SetBootcamp sets the "Bootcamp" edge to the Bootcamp entity.
-func (bpc *BootcampParticipantCreate) SetBootcamp(b *Bootcamp) *BootcampParticipantCreate {
-	return bpc.SetBootcampID(b.ID)
+// SetBootcampsID sets the "bootcamps" edge to the Bootcamp entity by ID.
+func (bpc *BootcampParticipantCreate) SetBootcampsID(id int64) *BootcampParticipantCreate {
+	bpc.mutation.SetBootcampsID(id)
+	return bpc
+}
+
+// SetNillableBootcampsID sets the "bootcamps" edge to the Bootcamp entity by ID if the given value is not nil.
+func (bpc *BootcampParticipantCreate) SetNillableBootcampsID(id *int64) *BootcampParticipantCreate {
+	if id != nil {
+		bpc = bpc.SetBootcampsID(*id)
+	}
+	return bpc
+}
+
+// SetBootcamps sets the "bootcamps" edge to the Bootcamp entity.
+func (bpc *BootcampParticipantCreate) SetBootcamps(b *Bootcamp) *BootcampParticipantCreate {
+	return bpc.SetBootcampsID(b.ID)
 }
 
 // AddMemberIDs adds the "members" edge to the Member entity by IDs.
@@ -380,12 +394,12 @@ func (bpc *BootcampParticipantCreate) createSpec() (*BootcampParticipant, *sqlgr
 		_spec.SetField(bootcampparticipant.FieldMemberID, field.TypeInt64, value)
 		_node.MemberID = value
 	}
-	if nodes := bpc.mutation.BootcampIDs(); len(nodes) > 0 {
+	if nodes := bpc.mutation.BootcampsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   bootcampparticipant.BootcampTable,
-			Columns: []string{bootcampparticipant.BootcampColumn},
+			Table:   bootcampparticipant.BootcampsTable,
+			Columns: []string{bootcampparticipant.BootcampsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64),

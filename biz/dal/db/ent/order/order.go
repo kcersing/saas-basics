@@ -40,8 +40,6 @@ const (
 	FieldDevice = "device"
 	// FieldCompletionAt holds the string denoting the completion_at field in the database.
 	FieldCompletionAt = "completion_at"
-	// FieldCreateID holds the string denoting the create_id field in the database.
-	FieldCreateID = "create_id"
 	// EdgeAmount holds the string denoting the amount edge name in mutations.
 	EdgeAmount = "amount"
 	// EdgeItem holds the string denoting the item edge name in mutations.
@@ -115,7 +113,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	OrderCreatesInverseTable = "sys_users"
 	// OrderCreatesColumn is the table column denoting the order_creates relation/edge.
-	OrderCreatesColumn = "create_id"
+	OrderCreatesColumn = "created_id"
 )
 
 // Columns holds all SQL columns for order fields.
@@ -134,7 +132,6 @@ var Columns = []string{
 	FieldSource,
 	FieldDevice,
 	FieldCompletionAt,
-	FieldCreateID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -237,11 +234,6 @@ func ByDevice(opts ...sql.OrderTermOption) OrderOption {
 // ByCompletionAt orders the results by the completion_at field.
 func ByCompletionAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompletionAt, opts...).ToFunc()
-}
-
-// ByCreateID orders the results by the create_id field.
-func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
 }
 
 // ByAmountCount orders the results by amount count.

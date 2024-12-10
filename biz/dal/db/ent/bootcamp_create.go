@@ -146,20 +146,6 @@ func (bc *BootcampCreate) SetNillableSignEndAt(t *time.Time) *BootcampCreate {
 	return bc
 }
 
-// SetNumber sets the "number" field.
-func (bc *BootcampCreate) SetNumber(i int64) *BootcampCreate {
-	bc.mutation.SetNumber(i)
-	return bc
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (bc *BootcampCreate) SetNillableNumber(i *int64) *BootcampCreate {
-	if i != nil {
-		bc.SetNumber(*i)
-	}
-	return bc
-}
-
 // SetStartAt sets the "start_at" field.
 func (bc *BootcampCreate) SetStartAt(t time.Time) *BootcampCreate {
 	bc.mutation.SetStartAt(t)
@@ -198,20 +184,6 @@ func (bc *BootcampCreate) SetPic(s string) *BootcampCreate {
 func (bc *BootcampCreate) SetNillablePic(s *string) *BootcampCreate {
 	if s != nil {
 		bc.SetPic(*s)
-	}
-	return bc
-}
-
-// SetSponsor sets the "sponsor" field.
-func (bc *BootcampCreate) SetSponsor(s string) *BootcampCreate {
-	bc.mutation.SetSponsor(s)
-	return bc
-}
-
-// SetNillableSponsor sets the "sponsor" field if the given value is not nil.
-func (bc *BootcampCreate) SetNillableSponsor(s *string) *BootcampCreate {
-	if s != nil {
-		bc.SetSponsor(*s)
 	}
 	return bc
 }
@@ -496,10 +468,6 @@ func (bc *BootcampCreate) createSpec() (*Bootcamp, *sqlgraph.CreateSpec) {
 		_spec.SetField(bootcamp.FieldSignEndAt, field.TypeTime, value)
 		_node.SignEndAt = value
 	}
-	if value, ok := bc.mutation.Number(); ok {
-		_spec.SetField(bootcamp.FieldNumber, field.TypeInt64, value)
-		_node.Number = value
-	}
 	if value, ok := bc.mutation.StartAt(); ok {
 		_spec.SetField(bootcamp.FieldStartAt, field.TypeTime, value)
 		_node.StartAt = value
@@ -511,10 +479,6 @@ func (bc *BootcampCreate) createSpec() (*Bootcamp, *sqlgraph.CreateSpec) {
 	if value, ok := bc.mutation.Pic(); ok {
 		_spec.SetField(bootcamp.FieldPic, field.TypeString, value)
 		_node.Pic = value
-	}
-	if value, ok := bc.mutation.Sponsor(); ok {
-		_spec.SetField(bootcamp.FieldSponsor, field.TypeString, value)
-		_node.Sponsor = value
 	}
 	if value, ok := bc.mutation.Fee(); ok {
 		_spec.SetField(bootcamp.FieldFee, field.TypeFloat64, value)

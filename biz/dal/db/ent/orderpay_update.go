@@ -210,33 +210,6 @@ func (opu *OrderPayUpdate) ClearPayWay() *OrderPayUpdate {
 	return opu
 }
 
-// SetCreateID sets the "create_id" field.
-func (opu *OrderPayUpdate) SetCreateID(i int64) *OrderPayUpdate {
-	opu.mutation.ResetCreateID()
-	opu.mutation.SetCreateID(i)
-	return opu
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (opu *OrderPayUpdate) SetNillableCreateID(i *int64) *OrderPayUpdate {
-	if i != nil {
-		opu.SetCreateID(*i)
-	}
-	return opu
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (opu *OrderPayUpdate) AddCreateID(i int64) *OrderPayUpdate {
-	opu.mutation.AddCreateID(i)
-	return opu
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (opu *OrderPayUpdate) ClearCreateID() *OrderPayUpdate {
-	opu.mutation.ClearCreateID()
-	return opu
-}
-
 // SetPaySn sets the "pay_sn" field.
 func (opu *OrderPayUpdate) SetPaySn(s string) *OrderPayUpdate {
 	opu.mutation.SetPaySn(s)
@@ -412,15 +385,6 @@ func (opu *OrderPayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if opu.mutation.PayWayCleared() {
 		_spec.ClearField(orderpay.FieldPayWay, field.TypeString)
-	}
-	if value, ok := opu.mutation.CreateID(); ok {
-		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := opu.mutation.AddedCreateID(); ok {
-		_spec.AddField(orderpay.FieldCreateID, field.TypeInt64, value)
-	}
-	if opu.mutation.CreateIDCleared() {
-		_spec.ClearField(orderpay.FieldCreateID, field.TypeInt64)
 	}
 	if value, ok := opu.mutation.PaySn(); ok {
 		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)
@@ -674,33 +638,6 @@ func (opuo *OrderPayUpdateOne) ClearPayWay() *OrderPayUpdateOne {
 	return opuo
 }
 
-// SetCreateID sets the "create_id" field.
-func (opuo *OrderPayUpdateOne) SetCreateID(i int64) *OrderPayUpdateOne {
-	opuo.mutation.ResetCreateID()
-	opuo.mutation.SetCreateID(i)
-	return opuo
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (opuo *OrderPayUpdateOne) SetNillableCreateID(i *int64) *OrderPayUpdateOne {
-	if i != nil {
-		opuo.SetCreateID(*i)
-	}
-	return opuo
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (opuo *OrderPayUpdateOne) AddCreateID(i int64) *OrderPayUpdateOne {
-	opuo.mutation.AddCreateID(i)
-	return opuo
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (opuo *OrderPayUpdateOne) ClearCreateID() *OrderPayUpdateOne {
-	opuo.mutation.ClearCreateID()
-	return opuo
-}
-
 // SetPaySn sets the "pay_sn" field.
 func (opuo *OrderPayUpdateOne) SetPaySn(s string) *OrderPayUpdateOne {
 	opuo.mutation.SetPaySn(s)
@@ -906,15 +843,6 @@ func (opuo *OrderPayUpdateOne) sqlSave(ctx context.Context) (_node *OrderPay, er
 	}
 	if opuo.mutation.PayWayCleared() {
 		_spec.ClearField(orderpay.FieldPayWay, field.TypeString)
-	}
-	if value, ok := opuo.mutation.CreateID(); ok {
-		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := opuo.mutation.AddedCreateID(); ok {
-		_spec.AddField(orderpay.FieldCreateID, field.TypeInt64, value)
-	}
-	if opuo.mutation.CreateIDCleared() {
-		_spec.ClearField(orderpay.FieldCreateID, field.TypeInt64)
 	}
 	if value, ok := opuo.mutation.PaySn(); ok {
 		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)

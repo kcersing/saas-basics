@@ -100,11 +100,6 @@ func PayWay(v string) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldPayWay, v))
 }
 
-// CreateID applies equality check predicate on the "create_id" field. It's identical to CreateIDEQ.
-func CreateID(v int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldEQ(FieldCreateID, v))
-}
-
 // PaySn applies equality check predicate on the "pay_sn" field. It's identical to PaySnEQ.
 func PaySn(v string) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldPaySn, v))
@@ -593,56 +588,6 @@ func PayWayEqualFold(v string) predicate.OrderPay {
 // PayWayContainsFold applies the ContainsFold predicate on the "pay_way" field.
 func PayWayContainsFold(v string) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldContainsFold(FieldPayWay, v))
-}
-
-// CreateIDEQ applies the EQ predicate on the "create_id" field.
-func CreateIDEQ(v int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldEQ(FieldCreateID, v))
-}
-
-// CreateIDNEQ applies the NEQ predicate on the "create_id" field.
-func CreateIDNEQ(v int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldNEQ(FieldCreateID, v))
-}
-
-// CreateIDIn applies the In predicate on the "create_id" field.
-func CreateIDIn(vs ...int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldIn(FieldCreateID, vs...))
-}
-
-// CreateIDNotIn applies the NotIn predicate on the "create_id" field.
-func CreateIDNotIn(vs ...int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldNotIn(FieldCreateID, vs...))
-}
-
-// CreateIDGT applies the GT predicate on the "create_id" field.
-func CreateIDGT(v int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldGT(FieldCreateID, v))
-}
-
-// CreateIDGTE applies the GTE predicate on the "create_id" field.
-func CreateIDGTE(v int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldGTE(FieldCreateID, v))
-}
-
-// CreateIDLT applies the LT predicate on the "create_id" field.
-func CreateIDLT(v int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldLT(FieldCreateID, v))
-}
-
-// CreateIDLTE applies the LTE predicate on the "create_id" field.
-func CreateIDLTE(v int64) predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldLTE(FieldCreateID, v))
-}
-
-// CreateIDIsNil applies the IsNil predicate on the "create_id" field.
-func CreateIDIsNil() predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldIsNull(FieldCreateID))
-}
-
-// CreateIDNotNil applies the NotNil predicate on the "create_id" field.
-func CreateIDNotNil() predicate.OrderPay {
-	return predicate.OrderPay(sql.FieldNotNull(FieldCreateID))
 }
 
 // PaySnEQ applies the EQ predicate on the "pay_sn" field.

@@ -28,7 +28,7 @@ type Bootcamp struct {
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
-	// 比赛名称
+	// 训练营名称
 	Name string `json:"name,omitempty"`
 	// 报名人数
 	SignNumber int64 `json:"sign_number,omitempty"`
@@ -36,16 +36,12 @@ type Bootcamp struct {
 	SignStartAt time.Time `json:"sign_start_at,omitempty"`
 	// 报名结束时间
 	SignEndAt time.Time `json:"sign_end_at,omitempty"`
-	// 参赛人数
-	Number int64 `json:"number,omitempty"`
-	// 比赛开始时间
+	// 训练营开始时间
 	StartAt time.Time `json:"start_at,omitempty"`
-	// 比赛结束时间
+	// 训练营结束时间
 	EndAt time.Time `json:"end_at,omitempty"`
-	// 比赛图片
+	// 图片
 	Pic string `json:"pic,omitempty"`
-	// 主办方
-	Sponsor string `json:"sponsor,omitempty"`
 	// 费用
 	Fee float64 `json:"fee,omitempty"`
 	// 是否有费用 1 无 2 有
@@ -60,7 +56,7 @@ type Bootcamp struct {
 	Detail string `json:"detail,omitempty"`
 	// 报名信息
 	SignFields string `json:"sign_fields,omitempty"`
-	// 状态[1:未报名;2:报名中;3:未比赛;4:比赛中;5:比赛结束]
+	// 状态[1:未报名;2:报名中;3:进行中;4:;5:已结束]
 	Condition int64 `json:"condition,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BootcampQuery when eager-loading is set.
@@ -93,9 +89,9 @@ func (*Bootcamp) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case bootcamp.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case bootcamp.FieldID, bootcamp.FieldDelete, bootcamp.FieldCreatedID, bootcamp.FieldStatus, bootcamp.FieldSignNumber, bootcamp.FieldNumber, bootcamp.FieldIsFee, bootcamp.FieldIsShow, bootcamp.FieldIsCancel, bootcamp.FieldCancelTime, bootcamp.FieldCondition:
+		case bootcamp.FieldID, bootcamp.FieldDelete, bootcamp.FieldCreatedID, bootcamp.FieldStatus, bootcamp.FieldSignNumber, bootcamp.FieldIsFee, bootcamp.FieldIsShow, bootcamp.FieldIsCancel, bootcamp.FieldCancelTime, bootcamp.FieldCondition:
 			values[i] = new(sql.NullInt64)
-		case bootcamp.FieldName, bootcamp.FieldPic, bootcamp.FieldSponsor, bootcamp.FieldDetail, bootcamp.FieldSignFields:
+		case bootcamp.FieldName, bootcamp.FieldPic, bootcamp.FieldDetail, bootcamp.FieldSignFields:
 			values[i] = new(sql.NullString)
 		case bootcamp.FieldCreatedAt, bootcamp.FieldUpdatedAt, bootcamp.FieldSignStartAt, bootcamp.FieldSignEndAt, bootcamp.FieldStartAt, bootcamp.FieldEndAt:
 			values[i] = new(sql.NullTime)
@@ -174,12 +170,6 @@ func (b *Bootcamp) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				b.SignEndAt = value.Time
 			}
-		case bootcamp.FieldNumber:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field number", values[i])
-			} else if value.Valid {
-				b.Number = value.Int64
-			}
 		case bootcamp.FieldStartAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field start_at", values[i])
@@ -197,12 +187,6 @@ func (b *Bootcamp) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field pic", values[i])
 			} else if value.Valid {
 				b.Pic = value.String
-			}
-		case bootcamp.FieldSponsor:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field sponsor", values[i])
-			} else if value.Valid {
-				b.Sponsor = value.String
 			}
 		case bootcamp.FieldFee:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
@@ -320,9 +304,6 @@ func (b *Bootcamp) String() string {
 	builder.WriteString("sign_end_at=")
 	builder.WriteString(b.SignEndAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("number=")
-	builder.WriteString(fmt.Sprintf("%v", b.Number))
-	builder.WriteString(", ")
 	builder.WriteString("start_at=")
 	builder.WriteString(b.StartAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -331,9 +312,6 @@ func (b *Bootcamp) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("pic=")
 	builder.WriteString(b.Pic)
-	builder.WriteString(", ")
-	builder.WriteString("sponsor=")
-	builder.WriteString(b.Sponsor)
 	builder.WriteString(", ")
 	builder.WriteString("fee=")
 	builder.WriteString(fmt.Sprintf("%v", b.Fee))

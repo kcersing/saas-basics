@@ -16,7 +16,7 @@ type BootcampParticipant struct {
 
 func (BootcampParticipant) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("bootcamp_id").Comment("赛事id").Optional(),
+		field.Int64("bootcamp_id").Comment("训练营id").Optional(),
 		field.String("name").Comment("名称").Optional(),
 		field.String("mobile").Comment("手机号").Optional(),
 		field.Text("fields").Comment("更多").Optional(),
@@ -36,7 +36,7 @@ func (BootcampParticipant) Mixin() []ent.Mixin {
 
 func (BootcampParticipant) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("Bootcamp", Bootcamp.Type).Ref("bootcamp_participants").Field("bootcamp_id").Unique(),
+		edge.From("bootcamps", Bootcamp.Type).Ref("bootcamp_participants").Field("bootcamp_id").Unique(),
 		edge.From("members", Member.Type).Ref("bootcampParticipants"),
 	}
 }

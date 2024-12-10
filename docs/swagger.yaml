@@ -514,6 +514,43 @@ definitions:
       url:
         type: string
     type: object
+  order.ListOrderReq:
+    properties:
+      endCompletionAt:
+        type: string
+      mobile:
+        type: string
+      nature:
+        type: string
+      orderSn:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      productId:
+        items:
+          type: integer
+        type: array
+      productType:
+        type: string
+      sellId:
+        items:
+          type: integer
+        type: array
+      startCompletionAt:
+        type: string
+      status:
+        items:
+          type: integer
+        type: array
+      venueId:
+        items:
+          type: integer
+        type: array
+    type: object
+  order.UpdateOrderReq:
+    type: object
   token.TokenInfo:
     properties:
       createdAt:
@@ -1726,16 +1763,68 @@ paths:
       summary: 更新菜单 Summary
   /service/order/info:
     get:
-      responses: {}
+      description: 获取订单详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取订单详情 Summary
   /service/order/list:
     post:
-      responses: {}
+      description: 获取订单列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/order.ListOrderReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取订单列表 Summary
   /service/order/status:
     post:
-      responses: {}
+      description: 更新订单状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新订单状态 Summary
   /service/order/update:
     post:
-      responses: {}
+      description: 更新订单信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/order.UpdateOrderReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新订单信息 Summary
   /service/participant/create:
     post:
       description: 添加参赛人 Description

@@ -40,19 +40,19 @@ const (
 	FieldFee = "fee"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
-	// EdgeBootcamp holds the string denoting the bootcamp edge name in mutations.
-	EdgeBootcamp = "Bootcamp"
+	// EdgeBootcamps holds the string denoting the bootcamps edge name in mutations.
+	EdgeBootcamps = "bootcamps"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the bootcampparticipant in the database.
 	Table = "bootcamp_participant"
-	// BootcampTable is the table that holds the Bootcamp relation/edge.
-	BootcampTable = "bootcamp_participant"
-	// BootcampInverseTable is the table name for the Bootcamp entity.
+	// BootcampsTable is the table that holds the bootcamps relation/edge.
+	BootcampsTable = "bootcamp_participant"
+	// BootcampsInverseTable is the table name for the Bootcamp entity.
 	// It exists in this package in order to avoid circular dependency with the "bootcamp" package.
-	BootcampInverseTable = "bootcamp"
-	// BootcampColumn is the table column denoting the Bootcamp relation/edge.
-	BootcampColumn = "bootcamp_id"
+	BootcampsInverseTable = "bootcamp"
+	// BootcampsColumn is the table column denoting the bootcamps relation/edge.
+	BootcampsColumn = "bootcamp_id"
 	// MembersTable is the table that holds the members relation/edge. The primary key declared below.
 	MembersTable = "member_bootcampParticipants"
 	// MembersInverseTable is the table name for the Member entity.
@@ -188,10 +188,10 @@ func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
 }
 
-// ByBootcampField orders the results by Bootcamp field.
-func ByBootcampField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByBootcampsField orders the results by bootcamps field.
+func ByBootcampsField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newBootcampStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newBootcampsStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -208,11 +208,11 @@ func ByMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newBootcampStep() *sqlgraph.Step {
+func newBootcampsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(BootcampInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, BootcampTable, BootcampColumn),
+		sqlgraph.To(BootcampsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, BootcampsTable, BootcampsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

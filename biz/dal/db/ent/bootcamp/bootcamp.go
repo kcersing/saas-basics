@@ -32,16 +32,12 @@ const (
 	FieldSignStartAt = "sign_start_at"
 	// FieldSignEndAt holds the string denoting the sign_end_at field in the database.
 	FieldSignEndAt = "sign_end_at"
-	// FieldNumber holds the string denoting the number field in the database.
-	FieldNumber = "number"
 	// FieldStartAt holds the string denoting the start_at field in the database.
 	FieldStartAt = "start_at"
 	// FieldEndAt holds the string denoting the end_at field in the database.
 	FieldEndAt = "end_at"
 	// FieldPic holds the string denoting the pic field in the database.
 	FieldPic = "pic"
-	// FieldSponsor holds the string denoting the sponsor field in the database.
-	FieldSponsor = "sponsor"
 	// FieldFee holds the string denoting the fee field in the database.
 	FieldFee = "fee"
 	// FieldIsFee holds the string denoting the is_fee field in the database.
@@ -83,11 +79,9 @@ var Columns = []string{
 	FieldSignNumber,
 	FieldSignStartAt,
 	FieldSignEndAt,
-	FieldNumber,
 	FieldStartAt,
 	FieldEndAt,
 	FieldPic,
-	FieldSponsor,
 	FieldFee,
 	FieldIsFee,
 	FieldIsShow,
@@ -186,11 +180,6 @@ func BySignEndAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSignEndAt, opts...).ToFunc()
 }
 
-// ByNumber orders the results by the number field.
-func ByNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNumber, opts...).ToFunc()
-}
-
 // ByStartAt orders the results by the start_at field.
 func ByStartAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStartAt, opts...).ToFunc()
@@ -204,11 +193,6 @@ func ByEndAt(opts ...sql.OrderTermOption) OrderOption {
 // ByPic orders the results by the pic field.
 func ByPic(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPic, opts...).ToFunc()
-}
-
-// BySponsor orders the results by the sponsor field.
-func BySponsor(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSponsor, opts...).ToFunc()
 }
 
 // ByFee orders the results by the fee field.

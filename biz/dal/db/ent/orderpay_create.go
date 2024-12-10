@@ -146,20 +146,6 @@ func (opc *OrderPayCreate) SetNillablePayWay(s *string) *OrderPayCreate {
 	return opc
 }
 
-// SetCreateID sets the "create_id" field.
-func (opc *OrderPayCreate) SetCreateID(i int64) *OrderPayCreate {
-	opc.mutation.SetCreateID(i)
-	return opc
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (opc *OrderPayCreate) SetNillableCreateID(i *int64) *OrderPayCreate {
-	if i != nil {
-		opc.SetCreateID(*i)
-	}
-	return opc
-}
-
 // SetPaySn sets the "pay_sn" field.
 func (opc *OrderPayCreate) SetPaySn(s string) *OrderPayCreate {
 	opc.mutation.SetPaySn(s)
@@ -323,10 +309,6 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 	if value, ok := opc.mutation.PayWay(); ok {
 		_spec.SetField(orderpay.FieldPayWay, field.TypeString, value)
 		_node.PayWay = value
-	}
-	if value, ok := opc.mutation.CreateID(); ok {
-		_spec.SetField(orderpay.FieldCreateID, field.TypeInt64, value)
-		_node.CreateID = value
 	}
 	if value, ok := opc.mutation.PaySn(); ok {
 		_spec.SetField(orderpay.FieldPaySn, field.TypeString, value)

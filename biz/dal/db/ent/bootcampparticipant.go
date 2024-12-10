@@ -29,7 +29,7 @@ type BootcampParticipant struct {
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
-	// 赛事id
+	// 训练营id
 	BootcampID int64 `json:"bootcamp_id,omitempty"`
 	// 名称
 	Name string `json:"name,omitempty"`
@@ -53,8 +53,8 @@ type BootcampParticipant struct {
 
 // BootcampParticipantEdges holds the relations/edges for other nodes in the graph.
 type BootcampParticipantEdges struct {
-	// Bootcamp holds the value of the Bootcamp edge.
-	Bootcamp *Bootcamp `json:"Bootcamp,omitempty"`
+	// Bootcamps holds the value of the bootcamps edge.
+	Bootcamps *Bootcamp `json:"bootcamps,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*Member `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -62,17 +62,17 @@ type BootcampParticipantEdges struct {
 	loadedTypes [2]bool
 }
 
-// BootcampOrErr returns the Bootcamp value or an error if the edge
+// BootcampsOrErr returns the Bootcamps value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e BootcampParticipantEdges) BootcampOrErr() (*Bootcamp, error) {
+func (e BootcampParticipantEdges) BootcampsOrErr() (*Bootcamp, error) {
 	if e.loadedTypes[0] {
-		if e.Bootcamp == nil {
+		if e.Bootcamps == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: bootcamp.Label}
 		}
-		return e.Bootcamp, nil
+		return e.Bootcamps, nil
 	}
-	return nil, &NotLoadedError{edge: "Bootcamp"}
+	return nil, &NotLoadedError{edge: "bootcamps"}
 }
 
 // MembersOrErr returns the Members value or an error if the edge
@@ -209,9 +209,9 @@ func (bp *BootcampParticipant) Value(name string) (ent.Value, error) {
 	return bp.selectValues.Get(name)
 }
 
-// QueryBootcamp queries the "Bootcamp" edge of the BootcampParticipant entity.
-func (bp *BootcampParticipant) QueryBootcamp() *BootcampQuery {
-	return NewBootcampParticipantClient(bp.config).QueryBootcamp(bp)
+// QueryBootcamps queries the "bootcamps" edge of the BootcampParticipant entity.
+func (bp *BootcampParticipant) QueryBootcamps() *BootcampQuery {
+	return NewBootcampParticipantClient(bp.config).QueryBootcamps(bp)
 }
 
 // QueryMembers queries the "members" edge of the BootcampParticipant entity.
