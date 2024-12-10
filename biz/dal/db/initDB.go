@@ -48,11 +48,11 @@ func InItDB(databaseUrl string, isProd bool) (DB *ent.Client) {
 	// 生产环境使用默认mysql驱动，开发环境使用debug驱动
 	var drive dialect.Driver
 	if isProd {
-		hlog.Info("prod mode, use default mysql driver")
+		hlog.Info("默认mysql驱动")
 		drive = drv
 	} else {
 		// Debug driver.
-		hlog.Info("dev mode, use debug mysql driver")
+		hlog.Info("debug驱动")
 		drive = &DebugTimeDriver{
 			Driver: drv,
 			log: func(ctx context.Context, info ...any) {
