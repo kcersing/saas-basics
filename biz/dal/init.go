@@ -24,6 +24,6 @@ func Init() {
 	data.NewInitDatabase().InsertDatabaseMenuData()
 	data.NewInitDatabase().InitDatabaseApi()
 
-	minio.Init()
+	go minio.Init()
 	wechat.InitWXPaymentApp()
 }
