@@ -18,11 +18,9 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 		return nil, errors.Wrap(err, "报名人数已满")
 	}
 
-	var total float64
 	var contestName string
 	contests, _ := o.db.Contest.Query().Where(contest.ID(req.ContestId)).First(o.ctx)
 	if contests != nil {
-		total = contests.Fee
 		contestName = contests.Name
 	}
 
@@ -83,8 +81,8 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 	go func() {
 		tx.OrderAmount.Create().
 			SetOrder(one).
-			SetTotal(total).
-			SetResidue(total).
+			SetTotal(req.Fee).
+			SetResidue(req.Fee).
 			Save(o.ctx)
 		if err != nil {
 			err = errors.Wrap(err, "创建Order Amount失败")
@@ -104,6 +102,7 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 	if err = tx.Commit(); err != nil {
 		return nil, err
 	}
+	orderOne = o.entOrderInfo(one)
 	return orderOne, nil
 }
 

@@ -10,11 +10,13 @@ import (
 	contest2 "saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
 	member2 "saas/biz/dal/db/ent/member"
+	order2 "saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/infras/do"
 	"saas/idl_gen/model/contest"
 	"saas/pkg/consts"
 	"saas/pkg/enums"
+	"saas/pkg/utils"
 	"strconv"
 	"time"
 )
@@ -67,13 +69,29 @@ func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 		return err
 	}
 
-	_, err = NewOrder(c.ctx, c.c).CreateParticipantOrder(do.CreateParticipantOrderReq{
+	order, err := NewOrder(c.ctx, c.c).CreateParticipantOrder(do.CreateParticipantOrderReq{
 		Member:    member,
 		Device:    req.Device,
 		ContestId: req.ContestId,
+		Fee:       0,
 	})
 	if err != nil {
 		return err
+	}
+	if req.Device == "pc" {
+		c.db.OrderPay.Create().
+			SetOrderID(order.ID).
+			SetPayWay("pc").
+			SetRemission(0).
+			SetPaySn(utils.CreateCn()).
+			SetPayAt(time.Now()).
+			SetPay(0).
+			Save(c.ctx)
+		c.db.Order.Update().
+			Where(order2.IDEQ(order.ID)).
+			SetStatus(5).
+			SetCompletionAt(time.Now()).
+			Save(c.ctx)
 	}
 
 	return nil

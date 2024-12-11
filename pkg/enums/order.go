@@ -41,3 +41,15 @@ func ReturnOrderDeviceValues(key string) (values string) {
 	}
 	return
 }
+func ReturnOrderPayWayValues(key string) (values string) {
+	switch key {
+	case "pc":
+		values = "电脑支付"
+	case "wxc":
+		values = "微信小程序支付"
+
+	default:
+		values = "状态异常"
+	}
+	return
+}

@@ -17,4 +17,5 @@ type CreateParticipantOrderReq struct {
 	Member    *ent.Member
 	Device    string
 	ContestId int64
+	Fee       float64
 }
