@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/order"
+	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
 	"time"
@@ -106,6 +107,34 @@ func (vc *VenueCreate) SetNillableName(s *string) *VenueCreate {
 	return vc
 }
 
+// SetType sets the "type" field.
+func (vc *VenueCreate) SetType(s string) *VenueCreate {
+	vc.mutation.SetType(s)
+	return vc
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (vc *VenueCreate) SetNillableType(s *string) *VenueCreate {
+	if s != nil {
+		vc.SetType(*s)
+	}
+	return vc
+}
+
+// SetClassify sets the "classify" field.
+func (vc *VenueCreate) SetClassify(i int64) *VenueCreate {
+	vc.mutation.SetClassify(i)
+	return vc
+}
+
+// SetNillableClassify sets the "classify" field if the given value is not nil.
+func (vc *VenueCreate) SetNillableClassify(i *int64) *VenueCreate {
+	if i != nil {
+		vc.SetClassify(*i)
+	}
+	return vc
+}
+
 // SetAddress sets the "address" field.
 func (vc *VenueCreate) SetAddress(s string) *VenueCreate {
 	vc.mutation.SetAddress(s)
@@ -190,20 +219,6 @@ func (vc *VenueCreate) SetNillableEmail(s *string) *VenueCreate {
 	return vc
 }
 
-// SetInformation sets the "information" field.
-func (vc *VenueCreate) SetInformation(s string) *VenueCreate {
-	vc.mutation.SetInformation(s)
-	return vc
-}
-
-// SetNillableInformation sets the "information" field if the given value is not nil.
-func (vc *VenueCreate) SetNillableInformation(s *string) *VenueCreate {
-	if s != nil {
-		vc.SetInformation(*s)
-	}
-	return vc
-}
-
 // SetPic sets the "pic" field.
 func (vc *VenueCreate) SetPic(s string) *VenueCreate {
 	vc.mutation.SetPic(s)
@@ -214,6 +229,34 @@ func (vc *VenueCreate) SetPic(s string) *VenueCreate {
 func (vc *VenueCreate) SetNillablePic(s *string) *VenueCreate {
 	if s != nil {
 		vc.SetPic(*s)
+	}
+	return vc
+}
+
+// SetSeal sets the "seal" field.
+func (vc *VenueCreate) SetSeal(s string) *VenueCreate {
+	vc.mutation.SetSeal(s)
+	return vc
+}
+
+// SetNillableSeal sets the "seal" field if the given value is not nil.
+func (vc *VenueCreate) SetNillableSeal(s *string) *VenueCreate {
+	if s != nil {
+		vc.SetSeal(*s)
+	}
+	return vc
+}
+
+// SetInformation sets the "information" field.
+func (vc *VenueCreate) SetInformation(s string) *VenueCreate {
+	vc.mutation.SetInformation(s)
+	return vc
+}
+
+// SetNillableInformation sets the "information" field if the given value is not nil.
+func (vc *VenueCreate) SetNillableInformation(s *string) *VenueCreate {
+	if s != nil {
+		vc.SetInformation(*s)
 	}
 	return vc
 }
@@ -267,6 +310,21 @@ func (vc *VenueCreate) AddVenueEntry(e ...*EntryLogs) *VenueCreate {
 		ids[i] = e[i].ID
 	}
 	return vc.AddVenueEntryIDs(ids...)
+}
+
+// AddUserIDs adds the "users" edge to the User entity by IDs.
+func (vc *VenueCreate) AddUserIDs(ids ...int64) *VenueCreate {
+	vc.mutation.AddUserIDs(ids...)
+	return vc
+}
+
+// AddUsers adds the "users" edges to the User entity.
+func (vc *VenueCreate) AddUsers(u ...*User) *VenueCreate {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return vc.AddUserIDs(ids...)
 }
 
 // Mutation returns the VenueMutation object of the builder.
@@ -384,6 +442,14 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 		_spec.SetField(venue.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
+	if value, ok := vc.mutation.GetType(); ok {
+		_spec.SetField(venue.FieldType, field.TypeString, value)
+		_node.Type = value
+	}
+	if value, ok := vc.mutation.Classify(); ok {
+		_spec.SetField(venue.FieldClassify, field.TypeInt64, value)
+		_node.Classify = value
+	}
 	if value, ok := vc.mutation.Address(); ok {
 		_spec.SetField(venue.FieldAddress, field.TypeString, value)
 		_node.Address = value
@@ -408,13 +474,17 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 		_spec.SetField(venue.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := vc.mutation.Information(); ok {
-		_spec.SetField(venue.FieldInformation, field.TypeString, value)
-		_node.Information = value
-	}
 	if value, ok := vc.mutation.Pic(); ok {
 		_spec.SetField(venue.FieldPic, field.TypeString, value)
 		_node.Pic = value
+	}
+	if value, ok := vc.mutation.Seal(); ok {
+		_spec.SetField(venue.FieldSeal, field.TypeString, value)
+		_node.Seal = value
+	}
+	if value, ok := vc.mutation.Information(); ok {
+		_spec.SetField(venue.FieldInformation, field.TypeString, value)
+		_node.Information = value
 	}
 	if nodes := vc.mutation.PlacesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -457,6 +527,22 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vc.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   venue.UsersTable,
+			Columns: venue.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

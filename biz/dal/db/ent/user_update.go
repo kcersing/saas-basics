@@ -12,6 +12,7 @@ import (
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
+	"saas/biz/dal/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -413,6 +414,21 @@ func (uu *UserUpdate) AddUserEntry(e ...*EntryLogs) *UserUpdate {
 	return uu.AddUserEntryIDs(ids...)
 }
 
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (uu *UserUpdate) AddVenueIDs(ids ...int64) *UserUpdate {
+	uu.mutation.AddVenueIDs(ids...)
+	return uu
+}
+
+// AddVenues adds the "venues" edges to the Venue entity.
+func (uu *UserUpdate) AddVenues(v ...*Venue) *UserUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return uu.AddVenueIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -485,6 +501,27 @@ func (uu *UserUpdate) RemoveUserEntry(e ...*EntryLogs) *UserUpdate {
 		ids[i] = e[i].ID
 	}
 	return uu.RemoveUserEntryIDs(ids...)
+}
+
+// ClearVenues clears all "venues" edges to the Venue entity.
+func (uu *UserUpdate) ClearVenues() *UserUpdate {
+	uu.mutation.ClearVenues()
+	return uu
+}
+
+// RemoveVenueIDs removes the "venues" edge to Venue entities by IDs.
+func (uu *UserUpdate) RemoveVenueIDs(ids ...int64) *UserUpdate {
+	uu.mutation.RemoveVenueIDs(ids...)
+	return uu
+}
+
+// RemoveVenues removes "venues" edges to Venue entities.
+func (uu *UserUpdate) RemoveVenues(v ...*Venue) *UserUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return uu.RemoveVenueIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -791,6 +828,51 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.VenuesTable,
+			Columns: user.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedVenuesIDs(); len(nodes) > 0 && !uu.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.VenuesTable,
+			Columns: user.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.VenuesTable,
+			Columns: user.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1199,6 +1281,21 @@ func (uuo *UserUpdateOne) AddUserEntry(e ...*EntryLogs) *UserUpdateOne {
 	return uuo.AddUserEntryIDs(ids...)
 }
 
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (uuo *UserUpdateOne) AddVenueIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.AddVenueIDs(ids...)
+	return uuo
+}
+
+// AddVenues adds the "venues" edges to the Venue entity.
+func (uuo *UserUpdateOne) AddVenues(v ...*Venue) *UserUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return uuo.AddVenueIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
@@ -1271,6 +1368,27 @@ func (uuo *UserUpdateOne) RemoveUserEntry(e ...*EntryLogs) *UserUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return uuo.RemoveUserEntryIDs(ids...)
+}
+
+// ClearVenues clears all "venues" edges to the Venue entity.
+func (uuo *UserUpdateOne) ClearVenues() *UserUpdateOne {
+	uuo.mutation.ClearVenues()
+	return uuo
+}
+
+// RemoveVenueIDs removes the "venues" edge to Venue entities by IDs.
+func (uuo *UserUpdateOne) RemoveVenueIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.RemoveVenueIDs(ids...)
+	return uuo
+}
+
+// RemoveVenues removes "venues" edges to Venue entities.
+func (uuo *UserUpdateOne) RemoveVenues(v ...*Venue) *UserUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return uuo.RemoveVenueIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -1607,6 +1725,51 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.VenuesTable,
+			Columns: user.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedVenuesIDs(); len(nodes) > 0 && !uuo.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.VenuesTable,
+			Columns: user.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.VenuesTable,
+			Columns: user.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

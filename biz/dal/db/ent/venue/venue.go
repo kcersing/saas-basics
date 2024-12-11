@@ -26,6 +26,10 @@ const (
 	FieldStatus = "status"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
+	// FieldClassify holds the string denoting the classify field in the database.
+	FieldClassify = "classify"
 	// FieldAddress holds the string denoting the address field in the database.
 	FieldAddress = "address"
 	// FieldAddressDetail holds the string denoting the address_detail field in the database.
@@ -38,16 +42,20 @@ const (
 	FieldMobile = "mobile"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldInformation holds the string denoting the information field in the database.
-	FieldInformation = "information"
 	// FieldPic holds the string denoting the pic field in the database.
 	FieldPic = "pic"
+	// FieldSeal holds the string denoting the seal field in the database.
+	FieldSeal = "seal"
+	// FieldInformation holds the string denoting the information field in the database.
+	FieldInformation = "information"
 	// EdgePlaces holds the string denoting the places edge name in mutations.
 	EdgePlaces = "places"
 	// EdgeVenueOrders holds the string denoting the venue_orders edge name in mutations.
 	EdgeVenueOrders = "venue_orders"
 	// EdgeVenueEntry holds the string denoting the venue_entry edge name in mutations.
 	EdgeVenueEntry = "venue_entry"
+	// EdgeUsers holds the string denoting the users edge name in mutations.
+	EdgeUsers = "users"
 	// Table holds the table name of the venue in the database.
 	Table = "venue"
 	// PlacesTable is the table that holds the places relation/edge.
@@ -71,6 +79,11 @@ const (
 	VenueEntryInverseTable = "entry_logs"
 	// VenueEntryColumn is the table column denoting the venue_entry relation/edge.
 	VenueEntryColumn = "venue_id"
+	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
+	UsersTable = "user_venues"
+	// UsersInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UsersInverseTable = "sys_users"
 )
 
 // Columns holds all SQL columns for venue fields.
@@ -82,15 +95,24 @@ var Columns = []string{
 	FieldCreatedID,
 	FieldStatus,
 	FieldName,
+	FieldType,
+	FieldClassify,
 	FieldAddress,
 	FieldAddressDetail,
 	FieldLatitude,
 	FieldLongitude,
 	FieldMobile,
 	FieldEmail,
-	FieldInformation,
 	FieldPic,
+	FieldSeal,
+	FieldInformation,
 }
+
+var (
+	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
+	// primary key for the users relation (M2M).
+	UsersPrimaryKey = []string{"user_id", "venue_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -155,6 +177,16 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
+// ByClassify orders the results by the classify field.
+func ByClassify(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldClassify, opts...).ToFunc()
+}
+
 // ByAddress orders the results by the address field.
 func ByAddress(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAddress, opts...).ToFunc()
@@ -185,14 +217,19 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
-// ByInformation orders the results by the information field.
-func ByInformation(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldInformation, opts...).ToFunc()
-}
-
 // ByPic orders the results by the pic field.
 func ByPic(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPic, opts...).ToFunc()
+}
+
+// BySeal orders the results by the seal field.
+func BySeal(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSeal, opts...).ToFunc()
+}
+
+// ByInformation orders the results by the information field.
+func ByInformation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInformation, opts...).ToFunc()
 }
 
 // ByPlacesCount orders the results by places count.
@@ -236,6 +273,20 @@ func ByVenueEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newVenueEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByUsersCount orders the results by users count.
+func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUsersStep(), opts...)
+	}
+}
+
+// ByUsers orders the results by users terms.
+func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newPlacesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -255,5 +306,12 @@ func newVenueEntryStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VenueEntryInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, VenueEntryTable, VenueEntryColumn),
+	)
+}
+func newUsersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UsersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 	)
 }

@@ -30,6 +30,10 @@ type Venue struct {
 	Status int64 `json:"status,omitempty"`
 	// 名称
 	Name string `json:"name,omitempty"`
+	// 类型
+	Type string `json:"type,omitempty"`
+	// 分类
+	Classify int64 `json:"classify,omitempty"`
 	// 地址 省/市/区
 	Address string `json:"address,omitempty"`
 	// 详细地址
@@ -42,10 +46,12 @@ type Venue struct {
 	Mobile string `json:"mobile,omitempty"`
 	// 邮箱
 	Email string `json:"email,omitempty"`
+	// 照片
+	Pic string `json:"pic,omitempty"`
+	// 公章
+	Seal string `json:"seal,omitempty"`
 	// 详情
 	Information string `json:"information,omitempty"`
-	// pic | 照片
-	Pic string `json:"pic,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VenueQuery when eager-loading is set.
 	Edges        VenueEdges `json:"edges"`
@@ -60,9 +66,11 @@ type VenueEdges struct {
 	VenueOrders []*Order `json:"venue_orders,omitempty"`
 	// VenueEntry holds the value of the venue_entry edge.
 	VenueEntry []*EntryLogs `json:"venue_entry,omitempty"`
+	// Users holds the value of the users edge.
+	Users []*User `json:"users,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // PlacesOrErr returns the Places value or an error if the edge
@@ -92,14 +100,23 @@ func (e VenueEdges) VenueEntryOrErr() ([]*EntryLogs, error) {
 	return nil, &NotLoadedError{edge: "venue_entry"}
 }
 
+// UsersOrErr returns the Users value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) UsersOrErr() ([]*User, error) {
+	if e.loadedTypes[3] {
+		return e.Users, nil
+	}
+	return nil, &NotLoadedError{edge: "users"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Venue) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case venue.FieldID, venue.FieldDelete, venue.FieldCreatedID, venue.FieldStatus:
+		case venue.FieldID, venue.FieldDelete, venue.FieldCreatedID, venue.FieldStatus, venue.FieldClassify:
 			values[i] = new(sql.NullInt64)
-		case venue.FieldName, venue.FieldAddress, venue.FieldAddressDetail, venue.FieldLatitude, venue.FieldLongitude, venue.FieldMobile, venue.FieldEmail, venue.FieldInformation, venue.FieldPic:
+		case venue.FieldName, venue.FieldType, venue.FieldAddress, venue.FieldAddressDetail, venue.FieldLatitude, venue.FieldLongitude, venue.FieldMobile, venue.FieldEmail, venue.FieldPic, venue.FieldSeal, venue.FieldInformation:
 			values[i] = new(sql.NullString)
 		case venue.FieldCreatedAt, venue.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -160,6 +177,18 @@ func (v *Venue) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				v.Name = value.String
 			}
+		case venue.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				v.Type = value.String
+			}
+		case venue.FieldClassify:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field classify", values[i])
+			} else if value.Valid {
+				v.Classify = value.Int64
+			}
 		case venue.FieldAddress:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field address", values[i])
@@ -196,17 +225,23 @@ func (v *Venue) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				v.Email = value.String
 			}
-		case venue.FieldInformation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field information", values[i])
-			} else if value.Valid {
-				v.Information = value.String
-			}
 		case venue.FieldPic:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field pic", values[i])
 			} else if value.Valid {
 				v.Pic = value.String
+			}
+		case venue.FieldSeal:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field seal", values[i])
+			} else if value.Valid {
+				v.Seal = value.String
+			}
+		case venue.FieldInformation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field information", values[i])
+			} else if value.Valid {
+				v.Information = value.String
 			}
 		default:
 			v.selectValues.Set(columns[i], values[i])
@@ -234,6 +269,11 @@ func (v *Venue) QueryVenueOrders() *OrderQuery {
 // QueryVenueEntry queries the "venue_entry" edge of the Venue entity.
 func (v *Venue) QueryVenueEntry() *EntryLogsQuery {
 	return NewVenueClient(v.config).QueryVenueEntry(v)
+}
+
+// QueryUsers queries the "users" edge of the Venue entity.
+func (v *Venue) QueryUsers() *UserQuery {
+	return NewVenueClient(v.config).QueryUsers(v)
 }
 
 // Update returns a builder for updating this Venue.
@@ -277,6 +317,12 @@ func (v *Venue) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(v.Name)
 	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(v.Type)
+	builder.WriteString(", ")
+	builder.WriteString("classify=")
+	builder.WriteString(fmt.Sprintf("%v", v.Classify))
+	builder.WriteString(", ")
 	builder.WriteString("address=")
 	builder.WriteString(v.Address)
 	builder.WriteString(", ")
@@ -295,11 +341,14 @@ func (v *Venue) String() string {
 	builder.WriteString("email=")
 	builder.WriteString(v.Email)
 	builder.WriteString(", ")
-	builder.WriteString("information=")
-	builder.WriteString(v.Information)
-	builder.WriteString(", ")
 	builder.WriteString("pic=")
 	builder.WriteString(v.Pic)
+	builder.WriteString(", ")
+	builder.WriteString("seal=")
+	builder.WriteString(v.Seal)
+	builder.WriteString(", ")
+	builder.WriteString("information=")
+	builder.WriteString(v.Information)
 	builder.WriteByte(')')
 	return builder.String()
 }

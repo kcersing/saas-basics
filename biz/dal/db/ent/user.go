@@ -67,9 +67,11 @@ type UserEdges struct {
 	CreatedOrders []*Order `json:"created_orders,omitempty"`
 	// UserEntry holds the value of the user_entry edge.
 	UserEntry []*EntryLogs `json:"user_entry,omitempty"`
+	// Venues holds the value of the venues edge.
+	Venues []*Venue `json:"venues,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 }
 
 // TokenOrErr returns the Token value or an error if the edge
@@ -110,6 +112,15 @@ func (e UserEdges) UserEntryOrErr() ([]*EntryLogs, error) {
 		return e.UserEntry, nil
 	}
 	return nil, &NotLoadedError{edge: "user_entry"}
+}
+
+// VenuesOrErr returns the Venues value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) VenuesOrErr() ([]*Venue, error) {
+	if e.loadedTypes[4] {
+		return e.Venues, nil
+	}
+	return nil, &NotLoadedError{edge: "venues"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -271,6 +282,11 @@ func (u *User) QueryCreatedOrders() *OrderQuery {
 // QueryUserEntry queries the "user_entry" edge of the User entity.
 func (u *User) QueryUserEntry() *EntryLogsQuery {
 	return NewUserClient(u.config).QueryUserEntry(u)
+}
+
+// QueryVenues queries the "venues" edge of the User entity.
+func (u *User) QueryVenues() *VenueQuery {
+	return NewUserClient(u.config).QueryVenues(u)
 }
 
 // Update returns a builder for updating this User.

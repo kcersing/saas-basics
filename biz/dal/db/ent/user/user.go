@@ -54,6 +54,8 @@ const (
 	EdgeCreatedOrders = "created_orders"
 	// EdgeUserEntry holds the string denoting the user_entry edge name in mutations.
 	EdgeUserEntry = "user_entry"
+	// EdgeVenues holds the string denoting the venues edge name in mutations.
+	EdgeVenues = "venues"
 	// Table holds the table name of the user in the database.
 	Table = "sys_users"
 	// TokenTable is the table that holds the token relation/edge.
@@ -82,6 +84,11 @@ const (
 	UserEntryInverseTable = "entry_logs"
 	// UserEntryColumn is the table column denoting the user_entry relation/edge.
 	UserEntryColumn = "user_id"
+	// VenuesTable is the table that holds the venues relation/edge. The primary key declared below.
+	VenuesTable = "user_venues"
+	// VenuesInverseTable is the table name for the Venue entity.
+	// It exists in this package in order to avoid circular dependency with the "venue" package.
+	VenuesInverseTable = "venue"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -109,6 +116,9 @@ var (
 	// TagPrimaryKey and TagColumn2 are the table columns denoting the
 	// primary key for the tag relation (M2M).
 	TagPrimaryKey = []string{"user_id", "dictionary_detail_id"}
+	// VenuesPrimaryKey and VenuesColumn2 are the table columns denoting the
+	// primary key for the venues relation (M2M).
+	VenuesPrimaryKey = []string{"user_id", "venue_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -278,6 +288,20 @@ func ByUserEntry(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUserEntryStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByVenuesCount orders the results by venues count.
+func ByVenuesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVenuesStep(), opts...)
+	}
+}
+
+// ByVenues orders the results by venues terms.
+func ByVenues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVenuesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTokenStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -304,5 +328,12 @@ func newUserEntryStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserEntryInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, UserEntryTable, UserEntryColumn),
+	)
+}
+func newVenuesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VenuesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, VenuesTable, VenuesPrimaryKey...),
 	)
 }
