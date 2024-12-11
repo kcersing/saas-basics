@@ -99,8 +99,11 @@ func (c Contest) UpdateParticipant(req contest.ParticipantInfo) error {
 }
 
 func (c Contest) DeleteParticipant(id int64) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := c.db.ContestParticipant.Update().Where(contestparticipant.IDEQ(id)).SetDelete(1).Save(c.ctx)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c Contest) ParticipantInfo(id int64) (resp *contest.ParticipantInfo, err error) {
