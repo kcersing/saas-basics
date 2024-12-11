@@ -1087,8 +1087,11 @@ var (
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
+		{Name: "classify", Type: field.TypeInt64, Nullable: true, Comment: "分类"},
 		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "pic | 照片", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "可容纳人数"},
+		{Name: "is_show", Type: field.TypeInt64, Nullable: true, Comment: "是否展示:1展示;2不展示", Default: 1},
+		{Name: "is_accessible", Type: field.TypeInt64, Nullable: true, Comment: "是否展示;1开放;2关闭", Default: 1},
 		{Name: "information", Type: field.TypeString, Nullable: true, Comment: "详情"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 	}
@@ -1100,7 +1103,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "venue_place_venue_places",
-				Columns:    []*schema.Column{VenuePlaceColumns[10]},
+				Columns:    []*schema.Column{VenuePlaceColumns[13]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1109,7 +1112,7 @@ var (
 			{
 				Name:    "venueplace_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{VenuePlaceColumns[10]},
+				Columns: []*schema.Column{VenuePlaceColumns[13]},
 			},
 		},
 	}

@@ -142,6 +142,33 @@ func (vpu *VenuePlaceUpdate) ClearName() *VenuePlaceUpdate {
 	return vpu
 }
 
+// SetClassify sets the "classify" field.
+func (vpu *VenuePlaceUpdate) SetClassify(i int64) *VenuePlaceUpdate {
+	vpu.mutation.ResetClassify()
+	vpu.mutation.SetClassify(i)
+	return vpu
+}
+
+// SetNillableClassify sets the "classify" field if the given value is not nil.
+func (vpu *VenuePlaceUpdate) SetNillableClassify(i *int64) *VenuePlaceUpdate {
+	if i != nil {
+		vpu.SetClassify(*i)
+	}
+	return vpu
+}
+
+// AddClassify adds i to the "classify" field.
+func (vpu *VenuePlaceUpdate) AddClassify(i int64) *VenuePlaceUpdate {
+	vpu.mutation.AddClassify(i)
+	return vpu
+}
+
+// ClearClassify clears the value of the "classify" field.
+func (vpu *VenuePlaceUpdate) ClearClassify() *VenuePlaceUpdate {
+	vpu.mutation.ClearClassify()
+	return vpu
+}
+
 // SetPic sets the "pic" field.
 func (vpu *VenuePlaceUpdate) SetPic(s string) *VenuePlaceUpdate {
 	vpu.mutation.SetPic(s)
@@ -206,6 +233,60 @@ func (vpu *VenuePlaceUpdate) AddNumber(i int64) *VenuePlaceUpdate {
 // ClearNumber clears the value of the "number" field.
 func (vpu *VenuePlaceUpdate) ClearNumber() *VenuePlaceUpdate {
 	vpu.mutation.ClearNumber()
+	return vpu
+}
+
+// SetIsShow sets the "is_show" field.
+func (vpu *VenuePlaceUpdate) SetIsShow(i int64) *VenuePlaceUpdate {
+	vpu.mutation.ResetIsShow()
+	vpu.mutation.SetIsShow(i)
+	return vpu
+}
+
+// SetNillableIsShow sets the "is_show" field if the given value is not nil.
+func (vpu *VenuePlaceUpdate) SetNillableIsShow(i *int64) *VenuePlaceUpdate {
+	if i != nil {
+		vpu.SetIsShow(*i)
+	}
+	return vpu
+}
+
+// AddIsShow adds i to the "is_show" field.
+func (vpu *VenuePlaceUpdate) AddIsShow(i int64) *VenuePlaceUpdate {
+	vpu.mutation.AddIsShow(i)
+	return vpu
+}
+
+// ClearIsShow clears the value of the "is_show" field.
+func (vpu *VenuePlaceUpdate) ClearIsShow() *VenuePlaceUpdate {
+	vpu.mutation.ClearIsShow()
+	return vpu
+}
+
+// SetIsAccessible sets the "is_accessible" field.
+func (vpu *VenuePlaceUpdate) SetIsAccessible(i int64) *VenuePlaceUpdate {
+	vpu.mutation.ResetIsAccessible()
+	vpu.mutation.SetIsAccessible(i)
+	return vpu
+}
+
+// SetNillableIsAccessible sets the "is_accessible" field if the given value is not nil.
+func (vpu *VenuePlaceUpdate) SetNillableIsAccessible(i *int64) *VenuePlaceUpdate {
+	if i != nil {
+		vpu.SetIsAccessible(*i)
+	}
+	return vpu
+}
+
+// AddIsAccessible adds i to the "is_accessible" field.
+func (vpu *VenuePlaceUpdate) AddIsAccessible(i int64) *VenuePlaceUpdate {
+	vpu.mutation.AddIsAccessible(i)
+	return vpu
+}
+
+// ClearIsAccessible clears the value of the "is_accessible" field.
+func (vpu *VenuePlaceUpdate) ClearIsAccessible() *VenuePlaceUpdate {
+	vpu.mutation.ClearIsAccessible()
 	return vpu
 }
 
@@ -332,6 +413,15 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if vpu.mutation.NameCleared() {
 		_spec.ClearField(venueplace.FieldName, field.TypeString)
 	}
+	if value, ok := vpu.mutation.Classify(); ok {
+		_spec.SetField(venueplace.FieldClassify, field.TypeInt64, value)
+	}
+	if value, ok := vpu.mutation.AddedClassify(); ok {
+		_spec.AddField(venueplace.FieldClassify, field.TypeInt64, value)
+	}
+	if vpu.mutation.ClassifyCleared() {
+		_spec.ClearField(venueplace.FieldClassify, field.TypeInt64)
+	}
 	if value, ok := vpu.mutation.Pic(); ok {
 		_spec.SetField(venueplace.FieldPic, field.TypeString, value)
 	}
@@ -346,6 +436,24 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vpu.mutation.NumberCleared() {
 		_spec.ClearField(venueplace.FieldNumber, field.TypeInt64)
+	}
+	if value, ok := vpu.mutation.IsShow(); ok {
+		_spec.SetField(venueplace.FieldIsShow, field.TypeInt64, value)
+	}
+	if value, ok := vpu.mutation.AddedIsShow(); ok {
+		_spec.AddField(venueplace.FieldIsShow, field.TypeInt64, value)
+	}
+	if vpu.mutation.IsShowCleared() {
+		_spec.ClearField(venueplace.FieldIsShow, field.TypeInt64)
+	}
+	if value, ok := vpu.mutation.IsAccessible(); ok {
+		_spec.SetField(venueplace.FieldIsAccessible, field.TypeInt64, value)
+	}
+	if value, ok := vpu.mutation.AddedIsAccessible(); ok {
+		_spec.AddField(venueplace.FieldIsAccessible, field.TypeInt64, value)
+	}
+	if vpu.mutation.IsAccessibleCleared() {
+		_spec.ClearField(venueplace.FieldIsAccessible, field.TypeInt64)
 	}
 	if value, ok := vpu.mutation.Information(); ok {
 		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)
@@ -515,6 +623,33 @@ func (vpuo *VenuePlaceUpdateOne) ClearName() *VenuePlaceUpdateOne {
 	return vpuo
 }
 
+// SetClassify sets the "classify" field.
+func (vpuo *VenuePlaceUpdateOne) SetClassify(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.ResetClassify()
+	vpuo.mutation.SetClassify(i)
+	return vpuo
+}
+
+// SetNillableClassify sets the "classify" field if the given value is not nil.
+func (vpuo *VenuePlaceUpdateOne) SetNillableClassify(i *int64) *VenuePlaceUpdateOne {
+	if i != nil {
+		vpuo.SetClassify(*i)
+	}
+	return vpuo
+}
+
+// AddClassify adds i to the "classify" field.
+func (vpuo *VenuePlaceUpdateOne) AddClassify(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.AddClassify(i)
+	return vpuo
+}
+
+// ClearClassify clears the value of the "classify" field.
+func (vpuo *VenuePlaceUpdateOne) ClearClassify() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearClassify()
+	return vpuo
+}
+
 // SetPic sets the "pic" field.
 func (vpuo *VenuePlaceUpdateOne) SetPic(s string) *VenuePlaceUpdateOne {
 	vpuo.mutation.SetPic(s)
@@ -579,6 +714,60 @@ func (vpuo *VenuePlaceUpdateOne) AddNumber(i int64) *VenuePlaceUpdateOne {
 // ClearNumber clears the value of the "number" field.
 func (vpuo *VenuePlaceUpdateOne) ClearNumber() *VenuePlaceUpdateOne {
 	vpuo.mutation.ClearNumber()
+	return vpuo
+}
+
+// SetIsShow sets the "is_show" field.
+func (vpuo *VenuePlaceUpdateOne) SetIsShow(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.ResetIsShow()
+	vpuo.mutation.SetIsShow(i)
+	return vpuo
+}
+
+// SetNillableIsShow sets the "is_show" field if the given value is not nil.
+func (vpuo *VenuePlaceUpdateOne) SetNillableIsShow(i *int64) *VenuePlaceUpdateOne {
+	if i != nil {
+		vpuo.SetIsShow(*i)
+	}
+	return vpuo
+}
+
+// AddIsShow adds i to the "is_show" field.
+func (vpuo *VenuePlaceUpdateOne) AddIsShow(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.AddIsShow(i)
+	return vpuo
+}
+
+// ClearIsShow clears the value of the "is_show" field.
+func (vpuo *VenuePlaceUpdateOne) ClearIsShow() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearIsShow()
+	return vpuo
+}
+
+// SetIsAccessible sets the "is_accessible" field.
+func (vpuo *VenuePlaceUpdateOne) SetIsAccessible(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.ResetIsAccessible()
+	vpuo.mutation.SetIsAccessible(i)
+	return vpuo
+}
+
+// SetNillableIsAccessible sets the "is_accessible" field if the given value is not nil.
+func (vpuo *VenuePlaceUpdateOne) SetNillableIsAccessible(i *int64) *VenuePlaceUpdateOne {
+	if i != nil {
+		vpuo.SetIsAccessible(*i)
+	}
+	return vpuo
+}
+
+// AddIsAccessible adds i to the "is_accessible" field.
+func (vpuo *VenuePlaceUpdateOne) AddIsAccessible(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.AddIsAccessible(i)
+	return vpuo
+}
+
+// ClearIsAccessible clears the value of the "is_accessible" field.
+func (vpuo *VenuePlaceUpdateOne) ClearIsAccessible() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearIsAccessible()
 	return vpuo
 }
 
@@ -735,6 +924,15 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 	if vpuo.mutation.NameCleared() {
 		_spec.ClearField(venueplace.FieldName, field.TypeString)
 	}
+	if value, ok := vpuo.mutation.Classify(); ok {
+		_spec.SetField(venueplace.FieldClassify, field.TypeInt64, value)
+	}
+	if value, ok := vpuo.mutation.AddedClassify(); ok {
+		_spec.AddField(venueplace.FieldClassify, field.TypeInt64, value)
+	}
+	if vpuo.mutation.ClassifyCleared() {
+		_spec.ClearField(venueplace.FieldClassify, field.TypeInt64)
+	}
 	if value, ok := vpuo.mutation.Pic(); ok {
 		_spec.SetField(venueplace.FieldPic, field.TypeString, value)
 	}
@@ -749,6 +947,24 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 	}
 	if vpuo.mutation.NumberCleared() {
 		_spec.ClearField(venueplace.FieldNumber, field.TypeInt64)
+	}
+	if value, ok := vpuo.mutation.IsShow(); ok {
+		_spec.SetField(venueplace.FieldIsShow, field.TypeInt64, value)
+	}
+	if value, ok := vpuo.mutation.AddedIsShow(); ok {
+		_spec.AddField(venueplace.FieldIsShow, field.TypeInt64, value)
+	}
+	if vpuo.mutation.IsShowCleared() {
+		_spec.ClearField(venueplace.FieldIsShow, field.TypeInt64)
+	}
+	if value, ok := vpuo.mutation.IsAccessible(); ok {
+		_spec.SetField(venueplace.FieldIsAccessible, field.TypeInt64, value)
+	}
+	if value, ok := vpuo.mutation.AddedIsAccessible(); ok {
+		_spec.AddField(venueplace.FieldIsAccessible, field.TypeInt64, value)
+	}
+	if vpuo.mutation.IsAccessibleCleared() {
+		_spec.ClearField(venueplace.FieldIsAccessible, field.TypeInt64)
 	}
 	if value, ok := vpuo.mutation.Information(); ok {
 		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)

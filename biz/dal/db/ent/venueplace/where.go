@@ -85,6 +85,11 @@ func Name(v string) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldName, v))
 }
 
+// Classify applies equality check predicate on the "classify" field. It's identical to ClassifyEQ.
+func Classify(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldClassify, v))
+}
+
 // Pic applies equality check predicate on the "pic" field. It's identical to PicEQ.
 func Pic(v string) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldPic, v))
@@ -98,6 +103,16 @@ func VenueID(v int64) predicate.VenuePlace {
 // Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
 func Number(v int64) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldNumber, v))
+}
+
+// IsShow applies equality check predicate on the "is_show" field. It's identical to IsShowEQ.
+func IsShow(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldIsShow, v))
+}
+
+// IsAccessible applies equality check predicate on the "is_accessible" field. It's identical to IsAccessibleEQ.
+func IsAccessible(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldIsAccessible, v))
 }
 
 // Information applies equality check predicate on the "information" field. It's identical to InformationEQ.
@@ -430,6 +445,56 @@ func NameContainsFold(v string) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldContainsFold(FieldName, v))
 }
 
+// ClassifyEQ applies the EQ predicate on the "classify" field.
+func ClassifyEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldClassify, v))
+}
+
+// ClassifyNEQ applies the NEQ predicate on the "classify" field.
+func ClassifyNEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNEQ(FieldClassify, v))
+}
+
+// ClassifyIn applies the In predicate on the "classify" field.
+func ClassifyIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIn(FieldClassify, vs...))
+}
+
+// ClassifyNotIn applies the NotIn predicate on the "classify" field.
+func ClassifyNotIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotIn(FieldClassify, vs...))
+}
+
+// ClassifyGT applies the GT predicate on the "classify" field.
+func ClassifyGT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGT(FieldClassify, v))
+}
+
+// ClassifyGTE applies the GTE predicate on the "classify" field.
+func ClassifyGTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGTE(FieldClassify, v))
+}
+
+// ClassifyLT applies the LT predicate on the "classify" field.
+func ClassifyLT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLT(FieldClassify, v))
+}
+
+// ClassifyLTE applies the LTE predicate on the "classify" field.
+func ClassifyLTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLTE(FieldClassify, v))
+}
+
+// ClassifyIsNil applies the IsNil predicate on the "classify" field.
+func ClassifyIsNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIsNull(FieldClassify))
+}
+
+// ClassifyNotNil applies the NotNil predicate on the "classify" field.
+func ClassifyNotNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotNull(FieldClassify))
+}
+
 // PicEQ applies the EQ predicate on the "pic" field.
 func PicEQ(v string) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldPic, v))
@@ -583,6 +648,106 @@ func NumberIsNil() predicate.VenuePlace {
 // NumberNotNil applies the NotNil predicate on the "number" field.
 func NumberNotNil() predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldNotNull(FieldNumber))
+}
+
+// IsShowEQ applies the EQ predicate on the "is_show" field.
+func IsShowEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldIsShow, v))
+}
+
+// IsShowNEQ applies the NEQ predicate on the "is_show" field.
+func IsShowNEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNEQ(FieldIsShow, v))
+}
+
+// IsShowIn applies the In predicate on the "is_show" field.
+func IsShowIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIn(FieldIsShow, vs...))
+}
+
+// IsShowNotIn applies the NotIn predicate on the "is_show" field.
+func IsShowNotIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotIn(FieldIsShow, vs...))
+}
+
+// IsShowGT applies the GT predicate on the "is_show" field.
+func IsShowGT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGT(FieldIsShow, v))
+}
+
+// IsShowGTE applies the GTE predicate on the "is_show" field.
+func IsShowGTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGTE(FieldIsShow, v))
+}
+
+// IsShowLT applies the LT predicate on the "is_show" field.
+func IsShowLT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLT(FieldIsShow, v))
+}
+
+// IsShowLTE applies the LTE predicate on the "is_show" field.
+func IsShowLTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLTE(FieldIsShow, v))
+}
+
+// IsShowIsNil applies the IsNil predicate on the "is_show" field.
+func IsShowIsNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIsNull(FieldIsShow))
+}
+
+// IsShowNotNil applies the NotNil predicate on the "is_show" field.
+func IsShowNotNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotNull(FieldIsShow))
+}
+
+// IsAccessibleEQ applies the EQ predicate on the "is_accessible" field.
+func IsAccessibleEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldIsAccessible, v))
+}
+
+// IsAccessibleNEQ applies the NEQ predicate on the "is_accessible" field.
+func IsAccessibleNEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNEQ(FieldIsAccessible, v))
+}
+
+// IsAccessibleIn applies the In predicate on the "is_accessible" field.
+func IsAccessibleIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIn(FieldIsAccessible, vs...))
+}
+
+// IsAccessibleNotIn applies the NotIn predicate on the "is_accessible" field.
+func IsAccessibleNotIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotIn(FieldIsAccessible, vs...))
+}
+
+// IsAccessibleGT applies the GT predicate on the "is_accessible" field.
+func IsAccessibleGT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGT(FieldIsAccessible, v))
+}
+
+// IsAccessibleGTE applies the GTE predicate on the "is_accessible" field.
+func IsAccessibleGTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGTE(FieldIsAccessible, v))
+}
+
+// IsAccessibleLT applies the LT predicate on the "is_accessible" field.
+func IsAccessibleLT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLT(FieldIsAccessible, v))
+}
+
+// IsAccessibleLTE applies the LTE predicate on the "is_accessible" field.
+func IsAccessibleLTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLTE(FieldIsAccessible, v))
+}
+
+// IsAccessibleIsNil applies the IsNil predicate on the "is_accessible" field.
+func IsAccessibleIsNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIsNull(FieldIsAccessible))
+}
+
+// IsAccessibleNotNil applies the NotNil predicate on the "is_accessible" field.
+func IsAccessibleNotNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotNull(FieldIsAccessible))
 }
 
 // InformationEQ applies the EQ predicate on the "information" field.

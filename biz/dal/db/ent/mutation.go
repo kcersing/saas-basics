@@ -45934,28 +45934,34 @@ func (m *VenueMutation) ResetEdge(name string) error {
 // VenuePlaceMutation represents an operation that mutates the VenuePlace nodes in the graph.
 type VenuePlaceMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int64
-	created_at    *time.Time
-	updated_at    *time.Time
-	delete        *int64
-	adddelete     *int64
-	created_id    *int64
-	addcreated_id *int64
-	status        *int64
-	addstatus     *int64
-	name          *string
-	pic           *string
-	number        *int64
-	addnumber     *int64
-	information   *string
-	clearedFields map[string]struct{}
-	venue         *int64
-	clearedvenue  bool
-	done          bool
-	oldValue      func(context.Context) (*VenuePlace, error)
-	predicates    []predicate.VenuePlace
+	op               Op
+	typ              string
+	id               *int64
+	created_at       *time.Time
+	updated_at       *time.Time
+	delete           *int64
+	adddelete        *int64
+	created_id       *int64
+	addcreated_id    *int64
+	status           *int64
+	addstatus        *int64
+	name             *string
+	classify         *int64
+	addclassify      *int64
+	pic              *string
+	number           *int64
+	addnumber        *int64
+	is_show          *int64
+	addis_show       *int64
+	is_accessible    *int64
+	addis_accessible *int64
+	information      *string
+	clearedFields    map[string]struct{}
+	venue            *int64
+	clearedvenue     bool
+	done             bool
+	oldValue         func(context.Context) (*VenuePlace, error)
+	predicates       []predicate.VenuePlace
 }
 
 var _ ent.Mutation = (*VenuePlaceMutation)(nil)
@@ -46419,6 +46425,76 @@ func (m *VenuePlaceMutation) ResetName() {
 	delete(m.clearedFields, venueplace.FieldName)
 }
 
+// SetClassify sets the "classify" field.
+func (m *VenuePlaceMutation) SetClassify(i int64) {
+	m.classify = &i
+	m.addclassify = nil
+}
+
+// Classify returns the value of the "classify" field in the mutation.
+func (m *VenuePlaceMutation) Classify() (r int64, exists bool) {
+	v := m.classify
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldClassify returns the old "classify" field's value of the VenuePlace entity.
+// If the VenuePlace object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VenuePlaceMutation) OldClassify(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldClassify is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldClassify requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldClassify: %w", err)
+	}
+	return oldValue.Classify, nil
+}
+
+// AddClassify adds i to the "classify" field.
+func (m *VenuePlaceMutation) AddClassify(i int64) {
+	if m.addclassify != nil {
+		*m.addclassify += i
+	} else {
+		m.addclassify = &i
+	}
+}
+
+// AddedClassify returns the value that was added to the "classify" field in this mutation.
+func (m *VenuePlaceMutation) AddedClassify() (r int64, exists bool) {
+	v := m.addclassify
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearClassify clears the value of the "classify" field.
+func (m *VenuePlaceMutation) ClearClassify() {
+	m.classify = nil
+	m.addclassify = nil
+	m.clearedFields[venueplace.FieldClassify] = struct{}{}
+}
+
+// ClassifyCleared returns if the "classify" field was cleared in this mutation.
+func (m *VenuePlaceMutation) ClassifyCleared() bool {
+	_, ok := m.clearedFields[venueplace.FieldClassify]
+	return ok
+}
+
+// ResetClassify resets all changes to the "classify" field.
+func (m *VenuePlaceMutation) ResetClassify() {
+	m.classify = nil
+	m.addclassify = nil
+	delete(m.clearedFields, venueplace.FieldClassify)
+}
+
 // SetPic sets the "pic" field.
 func (m *VenuePlaceMutation) SetPic(s string) {
 	m.pic = &s
@@ -46587,6 +46663,146 @@ func (m *VenuePlaceMutation) ResetNumber() {
 	delete(m.clearedFields, venueplace.FieldNumber)
 }
 
+// SetIsShow sets the "is_show" field.
+func (m *VenuePlaceMutation) SetIsShow(i int64) {
+	m.is_show = &i
+	m.addis_show = nil
+}
+
+// IsShow returns the value of the "is_show" field in the mutation.
+func (m *VenuePlaceMutation) IsShow() (r int64, exists bool) {
+	v := m.is_show
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsShow returns the old "is_show" field's value of the VenuePlace entity.
+// If the VenuePlace object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VenuePlaceMutation) OldIsShow(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsShow is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsShow requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsShow: %w", err)
+	}
+	return oldValue.IsShow, nil
+}
+
+// AddIsShow adds i to the "is_show" field.
+func (m *VenuePlaceMutation) AddIsShow(i int64) {
+	if m.addis_show != nil {
+		*m.addis_show += i
+	} else {
+		m.addis_show = &i
+	}
+}
+
+// AddedIsShow returns the value that was added to the "is_show" field in this mutation.
+func (m *VenuePlaceMutation) AddedIsShow() (r int64, exists bool) {
+	v := m.addis_show
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsShow clears the value of the "is_show" field.
+func (m *VenuePlaceMutation) ClearIsShow() {
+	m.is_show = nil
+	m.addis_show = nil
+	m.clearedFields[venueplace.FieldIsShow] = struct{}{}
+}
+
+// IsShowCleared returns if the "is_show" field was cleared in this mutation.
+func (m *VenuePlaceMutation) IsShowCleared() bool {
+	_, ok := m.clearedFields[venueplace.FieldIsShow]
+	return ok
+}
+
+// ResetIsShow resets all changes to the "is_show" field.
+func (m *VenuePlaceMutation) ResetIsShow() {
+	m.is_show = nil
+	m.addis_show = nil
+	delete(m.clearedFields, venueplace.FieldIsShow)
+}
+
+// SetIsAccessible sets the "is_accessible" field.
+func (m *VenuePlaceMutation) SetIsAccessible(i int64) {
+	m.is_accessible = &i
+	m.addis_accessible = nil
+}
+
+// IsAccessible returns the value of the "is_accessible" field in the mutation.
+func (m *VenuePlaceMutation) IsAccessible() (r int64, exists bool) {
+	v := m.is_accessible
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsAccessible returns the old "is_accessible" field's value of the VenuePlace entity.
+// If the VenuePlace object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VenuePlaceMutation) OldIsAccessible(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsAccessible is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsAccessible requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsAccessible: %w", err)
+	}
+	return oldValue.IsAccessible, nil
+}
+
+// AddIsAccessible adds i to the "is_accessible" field.
+func (m *VenuePlaceMutation) AddIsAccessible(i int64) {
+	if m.addis_accessible != nil {
+		*m.addis_accessible += i
+	} else {
+		m.addis_accessible = &i
+	}
+}
+
+// AddedIsAccessible returns the value that was added to the "is_accessible" field in this mutation.
+func (m *VenuePlaceMutation) AddedIsAccessible() (r int64, exists bool) {
+	v := m.addis_accessible
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsAccessible clears the value of the "is_accessible" field.
+func (m *VenuePlaceMutation) ClearIsAccessible() {
+	m.is_accessible = nil
+	m.addis_accessible = nil
+	m.clearedFields[venueplace.FieldIsAccessible] = struct{}{}
+}
+
+// IsAccessibleCleared returns if the "is_accessible" field was cleared in this mutation.
+func (m *VenuePlaceMutation) IsAccessibleCleared() bool {
+	_, ok := m.clearedFields[venueplace.FieldIsAccessible]
+	return ok
+}
+
+// ResetIsAccessible resets all changes to the "is_accessible" field.
+func (m *VenuePlaceMutation) ResetIsAccessible() {
+	m.is_accessible = nil
+	m.addis_accessible = nil
+	delete(m.clearedFields, venueplace.FieldIsAccessible)
+}
+
 // SetInformation sets the "information" field.
 func (m *VenuePlaceMutation) SetInformation(s string) {
 	m.information = &s
@@ -46697,7 +46913,7 @@ func (m *VenuePlaceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VenuePlaceMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, venueplace.FieldCreatedAt)
 	}
@@ -46716,6 +46932,9 @@ func (m *VenuePlaceMutation) Fields() []string {
 	if m.name != nil {
 		fields = append(fields, venueplace.FieldName)
 	}
+	if m.classify != nil {
+		fields = append(fields, venueplace.FieldClassify)
+	}
 	if m.pic != nil {
 		fields = append(fields, venueplace.FieldPic)
 	}
@@ -46724,6 +46943,12 @@ func (m *VenuePlaceMutation) Fields() []string {
 	}
 	if m.number != nil {
 		fields = append(fields, venueplace.FieldNumber)
+	}
+	if m.is_show != nil {
+		fields = append(fields, venueplace.FieldIsShow)
+	}
+	if m.is_accessible != nil {
+		fields = append(fields, venueplace.FieldIsAccessible)
 	}
 	if m.information != nil {
 		fields = append(fields, venueplace.FieldInformation)
@@ -46748,12 +46973,18 @@ func (m *VenuePlaceMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case venueplace.FieldName:
 		return m.Name()
+	case venueplace.FieldClassify:
+		return m.Classify()
 	case venueplace.FieldPic:
 		return m.Pic()
 	case venueplace.FieldVenueID:
 		return m.VenueID()
 	case venueplace.FieldNumber:
 		return m.Number()
+	case venueplace.FieldIsShow:
+		return m.IsShow()
+	case venueplace.FieldIsAccessible:
+		return m.IsAccessible()
 	case venueplace.FieldInformation:
 		return m.Information()
 	}
@@ -46777,12 +47008,18 @@ func (m *VenuePlaceMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldStatus(ctx)
 	case venueplace.FieldName:
 		return m.OldName(ctx)
+	case venueplace.FieldClassify:
+		return m.OldClassify(ctx)
 	case venueplace.FieldPic:
 		return m.OldPic(ctx)
 	case venueplace.FieldVenueID:
 		return m.OldVenueID(ctx)
 	case venueplace.FieldNumber:
 		return m.OldNumber(ctx)
+	case venueplace.FieldIsShow:
+		return m.OldIsShow(ctx)
+	case venueplace.FieldIsAccessible:
+		return m.OldIsAccessible(ctx)
 	case venueplace.FieldInformation:
 		return m.OldInformation(ctx)
 	}
@@ -46836,6 +47073,13 @@ func (m *VenuePlaceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetName(v)
 		return nil
+	case venueplace.FieldClassify:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetClassify(v)
+		return nil
 	case venueplace.FieldPic:
 		v, ok := value.(string)
 		if !ok {
@@ -46856,6 +47100,20 @@ func (m *VenuePlaceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNumber(v)
+		return nil
+	case venueplace.FieldIsShow:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsShow(v)
+		return nil
+	case venueplace.FieldIsAccessible:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsAccessible(v)
 		return nil
 	case venueplace.FieldInformation:
 		v, ok := value.(string)
@@ -46881,8 +47139,17 @@ func (m *VenuePlaceMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, venueplace.FieldStatus)
 	}
+	if m.addclassify != nil {
+		fields = append(fields, venueplace.FieldClassify)
+	}
 	if m.addnumber != nil {
 		fields = append(fields, venueplace.FieldNumber)
+	}
+	if m.addis_show != nil {
+		fields = append(fields, venueplace.FieldIsShow)
+	}
+	if m.addis_accessible != nil {
+		fields = append(fields, venueplace.FieldIsAccessible)
 	}
 	return fields
 }
@@ -46898,8 +47165,14 @@ func (m *VenuePlaceMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedCreatedID()
 	case venueplace.FieldStatus:
 		return m.AddedStatus()
+	case venueplace.FieldClassify:
+		return m.AddedClassify()
 	case venueplace.FieldNumber:
 		return m.AddedNumber()
+	case venueplace.FieldIsShow:
+		return m.AddedIsShow()
+	case venueplace.FieldIsAccessible:
+		return m.AddedIsAccessible()
 	}
 	return nil, false
 }
@@ -46930,12 +47203,33 @@ func (m *VenuePlaceMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddStatus(v)
 		return nil
+	case venueplace.FieldClassify:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddClassify(v)
+		return nil
 	case venueplace.FieldNumber:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddNumber(v)
+		return nil
+	case venueplace.FieldIsShow:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsShow(v)
+		return nil
+	case venueplace.FieldIsAccessible:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsAccessible(v)
 		return nil
 	}
 	return fmt.Errorf("unknown VenuePlace numeric field %s", name)
@@ -46963,6 +47257,9 @@ func (m *VenuePlaceMutation) ClearedFields() []string {
 	if m.FieldCleared(venueplace.FieldName) {
 		fields = append(fields, venueplace.FieldName)
 	}
+	if m.FieldCleared(venueplace.FieldClassify) {
+		fields = append(fields, venueplace.FieldClassify)
+	}
 	if m.FieldCleared(venueplace.FieldPic) {
 		fields = append(fields, venueplace.FieldPic)
 	}
@@ -46971,6 +47268,12 @@ func (m *VenuePlaceMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(venueplace.FieldNumber) {
 		fields = append(fields, venueplace.FieldNumber)
+	}
+	if m.FieldCleared(venueplace.FieldIsShow) {
+		fields = append(fields, venueplace.FieldIsShow)
+	}
+	if m.FieldCleared(venueplace.FieldIsAccessible) {
+		fields = append(fields, venueplace.FieldIsAccessible)
 	}
 	if m.FieldCleared(venueplace.FieldInformation) {
 		fields = append(fields, venueplace.FieldInformation)
@@ -47007,6 +47310,9 @@ func (m *VenuePlaceMutation) ClearField(name string) error {
 	case venueplace.FieldName:
 		m.ClearName()
 		return nil
+	case venueplace.FieldClassify:
+		m.ClearClassify()
+		return nil
 	case venueplace.FieldPic:
 		m.ClearPic()
 		return nil
@@ -47015,6 +47321,12 @@ func (m *VenuePlaceMutation) ClearField(name string) error {
 		return nil
 	case venueplace.FieldNumber:
 		m.ClearNumber()
+		return nil
+	case venueplace.FieldIsShow:
+		m.ClearIsShow()
+		return nil
+	case venueplace.FieldIsAccessible:
+		m.ClearIsAccessible()
 		return nil
 	case venueplace.FieldInformation:
 		m.ClearInformation()
@@ -47045,6 +47357,9 @@ func (m *VenuePlaceMutation) ResetField(name string) error {
 	case venueplace.FieldName:
 		m.ResetName()
 		return nil
+	case venueplace.FieldClassify:
+		m.ResetClassify()
+		return nil
 	case venueplace.FieldPic:
 		m.ResetPic()
 		return nil
@@ -47053,6 +47368,12 @@ func (m *VenuePlaceMutation) ResetField(name string) error {
 		return nil
 	case venueplace.FieldNumber:
 		m.ResetNumber()
+		return nil
+	case venueplace.FieldIsShow:
+		m.ResetIsShow()
+		return nil
+	case venueplace.FieldIsAccessible:
+		m.ResetIsAccessible()
 		return nil
 	case venueplace.FieldInformation:
 		m.ResetInformation()

@@ -104,6 +104,20 @@ func (vpc *VenuePlaceCreate) SetNillableName(s *string) *VenuePlaceCreate {
 	return vpc
 }
 
+// SetClassify sets the "classify" field.
+func (vpc *VenuePlaceCreate) SetClassify(i int64) *VenuePlaceCreate {
+	vpc.mutation.SetClassify(i)
+	return vpc
+}
+
+// SetNillableClassify sets the "classify" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableClassify(i *int64) *VenuePlaceCreate {
+	if i != nil {
+		vpc.SetClassify(*i)
+	}
+	return vpc
+}
+
 // SetPic sets the "pic" field.
 func (vpc *VenuePlaceCreate) SetPic(s string) *VenuePlaceCreate {
 	vpc.mutation.SetPic(s)
@@ -142,6 +156,34 @@ func (vpc *VenuePlaceCreate) SetNumber(i int64) *VenuePlaceCreate {
 func (vpc *VenuePlaceCreate) SetNillableNumber(i *int64) *VenuePlaceCreate {
 	if i != nil {
 		vpc.SetNumber(*i)
+	}
+	return vpc
+}
+
+// SetIsShow sets the "is_show" field.
+func (vpc *VenuePlaceCreate) SetIsShow(i int64) *VenuePlaceCreate {
+	vpc.mutation.SetIsShow(i)
+	return vpc
+}
+
+// SetNillableIsShow sets the "is_show" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableIsShow(i *int64) *VenuePlaceCreate {
+	if i != nil {
+		vpc.SetIsShow(*i)
+	}
+	return vpc
+}
+
+// SetIsAccessible sets the "is_accessible" field.
+func (vpc *VenuePlaceCreate) SetIsAccessible(i int64) *VenuePlaceCreate {
+	vpc.mutation.SetIsAccessible(i)
+	return vpc
+}
+
+// SetNillableIsAccessible sets the "is_accessible" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableIsAccessible(i *int64) *VenuePlaceCreate {
+	if i != nil {
+		vpc.SetIsAccessible(*i)
 	}
 	return vpc
 }
@@ -226,6 +268,14 @@ func (vpc *VenuePlaceCreate) defaults() {
 		v := venueplace.DefaultStatus
 		vpc.mutation.SetStatus(v)
 	}
+	if _, ok := vpc.mutation.IsShow(); !ok {
+		v := venueplace.DefaultIsShow
+		vpc.mutation.SetIsShow(v)
+	}
+	if _, ok := vpc.mutation.IsAccessible(); !ok {
+		v := venueplace.DefaultIsAccessible
+		vpc.mutation.SetIsAccessible(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -286,6 +336,10 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 		_spec.SetField(venueplace.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
+	if value, ok := vpc.mutation.Classify(); ok {
+		_spec.SetField(venueplace.FieldClassify, field.TypeInt64, value)
+		_node.Classify = value
+	}
 	if value, ok := vpc.mutation.Pic(); ok {
 		_spec.SetField(venueplace.FieldPic, field.TypeString, value)
 		_node.Pic = value
@@ -293,6 +347,14 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 	if value, ok := vpc.mutation.Number(); ok {
 		_spec.SetField(venueplace.FieldNumber, field.TypeInt64, value)
 		_node.Number = value
+	}
+	if value, ok := vpc.mutation.IsShow(); ok {
+		_spec.SetField(venueplace.FieldIsShow, field.TypeInt64, value)
+		_node.IsShow = value
+	}
+	if value, ok := vpc.mutation.IsAccessible(); ok {
+		_spec.SetField(venueplace.FieldIsAccessible, field.TypeInt64, value)
+		_node.IsAccessible = value
 	}
 	if value, ok := vpc.mutation.Information(); ok {
 		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)
