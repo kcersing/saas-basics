@@ -7,6 +7,8 @@ import (
 	"saas/biz/dal/db/ent/banner"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/community"
+	"saas/biz/dal/db/ent/communityparticipant"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/contract"
@@ -19,6 +21,7 @@ import (
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
+	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/messages"
@@ -190,6 +193,96 @@ func init() {
 	bootcampparticipantDescMemberID := bootcampparticipantFields[7].Descriptor()
 	// bootcampparticipant.DefaultMemberID holds the default value on creation for the member_id field.
 	bootcampparticipant.DefaultMemberID = bootcampparticipantDescMemberID.Default.(int64)
+	communityMixin := schema.Community{}.Mixin()
+	communityMixinFields0 := communityMixin[0].Fields()
+	_ = communityMixinFields0
+	communityMixinFields1 := communityMixin[1].Fields()
+	_ = communityMixinFields1
+	communityFields := schema.Community{}.Fields()
+	_ = communityFields
+	// communityDescCreatedAt is the schema descriptor for created_at field.
+	communityDescCreatedAt := communityMixinFields0[1].Descriptor()
+	// community.DefaultCreatedAt holds the default value on creation for the created_at field.
+	community.DefaultCreatedAt = communityDescCreatedAt.Default.(func() time.Time)
+	// communityDescUpdatedAt is the schema descriptor for updated_at field.
+	communityDescUpdatedAt := communityMixinFields0[2].Descriptor()
+	// community.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	community.DefaultUpdatedAt = communityDescUpdatedAt.Default.(func() time.Time)
+	// community.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	community.UpdateDefaultUpdatedAt = communityDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// communityDescDelete is the schema descriptor for delete field.
+	communityDescDelete := communityMixinFields0[3].Descriptor()
+	// community.DefaultDelete holds the default value on creation for the delete field.
+	community.DefaultDelete = communityDescDelete.Default.(int64)
+	// communityDescCreatedID is the schema descriptor for created_id field.
+	communityDescCreatedID := communityMixinFields0[4].Descriptor()
+	// community.DefaultCreatedID holds the default value on creation for the created_id field.
+	community.DefaultCreatedID = communityDescCreatedID.Default.(int64)
+	// communityDescStatus is the schema descriptor for status field.
+	communityDescStatus := communityMixinFields1[0].Descriptor()
+	// community.DefaultStatus holds the default value on creation for the status field.
+	community.DefaultStatus = communityDescStatus.Default.(int64)
+	// communityDescIsFee is the schema descriptor for is_fee field.
+	communityDescIsFee := communityFields[10].Descriptor()
+	// community.DefaultIsFee holds the default value on creation for the is_fee field.
+	community.DefaultIsFee = communityDescIsFee.Default.(int64)
+	// communityDescIsShow is the schema descriptor for is_show field.
+	communityDescIsShow := communityFields[11].Descriptor()
+	// community.DefaultIsShow holds the default value on creation for the is_show field.
+	community.DefaultIsShow = communityDescIsShow.Default.(int64)
+	// communityDescIsCancel is the schema descriptor for is_cancel field.
+	communityDescIsCancel := communityFields[12].Descriptor()
+	// community.DefaultIsCancel holds the default value on creation for the is_cancel field.
+	community.DefaultIsCancel = communityDescIsCancel.Default.(int64)
+	// communityDescCancelTime is the schema descriptor for cancel_time field.
+	communityDescCancelTime := communityFields[13].Descriptor()
+	// community.DefaultCancelTime holds the default value on creation for the cancel_time field.
+	community.DefaultCancelTime = communityDescCancelTime.Default.(int64)
+	// communityDescCondition is the schema descriptor for condition field.
+	communityDescCondition := communityFields[16].Descriptor()
+	// community.DefaultCondition holds the default value on creation for the condition field.
+	community.DefaultCondition = communityDescCondition.Default.(int64)
+	communityparticipantMixin := schema.CommunityParticipant{}.Mixin()
+	communityparticipantMixinFields0 := communityparticipantMixin[0].Fields()
+	_ = communityparticipantMixinFields0
+	communityparticipantMixinFields1 := communityparticipantMixin[1].Fields()
+	_ = communityparticipantMixinFields1
+	communityparticipantFields := schema.CommunityParticipant{}.Fields()
+	_ = communityparticipantFields
+	// communityparticipantDescCreatedAt is the schema descriptor for created_at field.
+	communityparticipantDescCreatedAt := communityparticipantMixinFields0[1].Descriptor()
+	// communityparticipant.DefaultCreatedAt holds the default value on creation for the created_at field.
+	communityparticipant.DefaultCreatedAt = communityparticipantDescCreatedAt.Default.(func() time.Time)
+	// communityparticipantDescUpdatedAt is the schema descriptor for updated_at field.
+	communityparticipantDescUpdatedAt := communityparticipantMixinFields0[2].Descriptor()
+	// communityparticipant.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	communityparticipant.DefaultUpdatedAt = communityparticipantDescUpdatedAt.Default.(func() time.Time)
+	// communityparticipant.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	communityparticipant.UpdateDefaultUpdatedAt = communityparticipantDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// communityparticipantDescDelete is the schema descriptor for delete field.
+	communityparticipantDescDelete := communityparticipantMixinFields0[3].Descriptor()
+	// communityparticipant.DefaultDelete holds the default value on creation for the delete field.
+	communityparticipant.DefaultDelete = communityparticipantDescDelete.Default.(int64)
+	// communityparticipantDescCreatedID is the schema descriptor for created_id field.
+	communityparticipantDescCreatedID := communityparticipantMixinFields0[4].Descriptor()
+	// communityparticipant.DefaultCreatedID holds the default value on creation for the created_id field.
+	communityparticipant.DefaultCreatedID = communityparticipantDescCreatedID.Default.(int64)
+	// communityparticipantDescStatus is the schema descriptor for status field.
+	communityparticipantDescStatus := communityparticipantMixinFields1[0].Descriptor()
+	// communityparticipant.DefaultStatus holds the default value on creation for the status field.
+	communityparticipant.DefaultStatus = communityparticipantDescStatus.Default.(int64)
+	// communityparticipantDescOrderID is the schema descriptor for order_id field.
+	communityparticipantDescOrderID := communityparticipantFields[4].Descriptor()
+	// communityparticipant.DefaultOrderID holds the default value on creation for the order_id field.
+	communityparticipant.DefaultOrderID = communityparticipantDescOrderID.Default.(int64)
+	// communityparticipantDescOrderSn is the schema descriptor for order_sn field.
+	communityparticipantDescOrderSn := communityparticipantFields[5].Descriptor()
+	// communityparticipant.DefaultOrderSn holds the default value on creation for the order_sn field.
+	communityparticipant.DefaultOrderSn = communityparticipantDescOrderSn.Default.(string)
+	// communityparticipantDescMemberID is the schema descriptor for member_id field.
+	communityparticipantDescMemberID := communityparticipantFields[7].Descriptor()
+	// communityparticipant.DefaultMemberID holds the default value on creation for the member_id field.
+	communityparticipant.DefaultMemberID = communityparticipantDescMemberID.Default.(int64)
 	contestMixin := schema.Contest{}.Mixin()
 	contestMixinFields0 := contestMixin[0].Fields()
 	_ = contestMixinFields0
@@ -594,6 +687,45 @@ func init() {
 	membernoteDescNote := membernoteFields[1].Descriptor()
 	// membernote.DefaultNote holds the default value on creation for the note field.
 	membernote.DefaultNote = membernoteDescNote.Default.(string)
+	memberprofileMixin := schema.MemberProfile{}.Mixin()
+	memberprofileMixinFields0 := memberprofileMixin[0].Fields()
+	_ = memberprofileMixinFields0
+	memberprofileFields := schema.MemberProfile{}.Fields()
+	_ = memberprofileFields
+	// memberprofileDescCreatedAt is the schema descriptor for created_at field.
+	memberprofileDescCreatedAt := memberprofileMixinFields0[1].Descriptor()
+	// memberprofile.DefaultCreatedAt holds the default value on creation for the created_at field.
+	memberprofile.DefaultCreatedAt = memberprofileDescCreatedAt.Default.(func() time.Time)
+	// memberprofileDescUpdatedAt is the schema descriptor for updated_at field.
+	memberprofileDescUpdatedAt := memberprofileMixinFields0[2].Descriptor()
+	// memberprofile.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	memberprofile.DefaultUpdatedAt = memberprofileDescUpdatedAt.Default.(func() time.Time)
+	// memberprofile.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	memberprofile.UpdateDefaultUpdatedAt = memberprofileDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// memberprofileDescDelete is the schema descriptor for delete field.
+	memberprofileDescDelete := memberprofileMixinFields0[3].Descriptor()
+	// memberprofile.DefaultDelete holds the default value on creation for the delete field.
+	memberprofile.DefaultDelete = memberprofileDescDelete.Default.(int64)
+	// memberprofileDescCreatedID is the schema descriptor for created_id field.
+	memberprofileDescCreatedID := memberprofileMixinFields0[4].Descriptor()
+	// memberprofile.DefaultCreatedID holds the default value on creation for the created_id field.
+	memberprofile.DefaultCreatedID = memberprofileDescCreatedID.Default.(int64)
+	// memberprofileDescMobileAscription is the schema descriptor for mobile_ascription field.
+	memberprofileDescMobileAscription := memberprofileFields[1].Descriptor()
+	// memberprofile.DefaultMobileAscription holds the default value on creation for the mobile_ascription field.
+	memberprofile.DefaultMobileAscription = memberprofileDescMobileAscription.Default.(int64)
+	// memberprofileDescGrade is the schema descriptor for grade field.
+	memberprofileDescGrade := memberprofileFields[4].Descriptor()
+	// memberprofile.DefaultGrade holds the default value on creation for the grade field.
+	memberprofile.DefaultGrade = memberprofileDescGrade.Default.(int64)
+	// memberprofileDescIntention is the schema descriptor for intention field.
+	memberprofileDescIntention := memberprofileFields[5].Descriptor()
+	// memberprofile.DefaultIntention holds the default value on creation for the intention field.
+	memberprofile.DefaultIntention = memberprofileDescIntention.Default.(int64)
+	// memberprofileDescSource is the schema descriptor for source field.
+	memberprofileDescSource := memberprofileFields[6].Descriptor()
+	// memberprofile.DefaultSource holds the default value on creation for the source field.
+	memberprofile.DefaultSource = memberprofileDescSource.Default.(int64)
 	menuMixin := schema.Menu{}.Mixin()
 	menuMixinFields0 := menuMixin[0].Fields()
 	_ = menuMixinFields0

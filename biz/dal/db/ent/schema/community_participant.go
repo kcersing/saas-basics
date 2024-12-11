@@ -10,13 +10,13 @@ import (
 	"saas/biz/dal/db/ent/schema/mixins"
 )
 
-type ContestParticipant struct {
+type CommunityParticipant struct {
 	ent.Schema
 }
 
-func (ContestParticipant) Fields() []ent.Field {
+func (CommunityParticipant) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("contest_id").Comment("赛事id").Optional(),
+		field.Int64("community_id").Comment("社群id").Optional(),
 		field.String("name").Comment("名称").Optional(),
 		field.String("mobile").Comment("手机号").Optional(),
 		field.Text("fields").Comment("更多").Optional(),
@@ -27,30 +27,30 @@ func (ContestParticipant) Fields() []ent.Field {
 	}
 }
 
-func (ContestParticipant) Mixin() []ent.Mixin {
+func (CommunityParticipant) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
 		mixins.StatusMixin{},
 	}
 }
 
-func (ContestParticipant) Edges() []ent.Edge {
+func (CommunityParticipant) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("contest", Contest.Type).Ref("contest_participants").Field("contest_id").Unique(),
-		edge.From("members", Member.Type).Ref("member_contests"),
+		edge.From("community", Community.Type).Ref("community_participants").Field("community_id").Unique(),
+		edge.From("members", Member.Type).Ref("member_communitys"),
 	}
 }
 
-func (ContestParticipant) Indexes() []ent.Index {
+func (CommunityParticipant) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("name", "mobile").
 			Unique(),
 	}
 }
 
-func (ContestParticipant) Annotations() []schema.Annotation {
+func (CommunityParticipant) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "contest_participant"},
+		entsql.Annotation{Table: "community_participant"},
 		entsql.WithComments(true),
 	}
 }

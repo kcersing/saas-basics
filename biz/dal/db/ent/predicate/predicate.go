@@ -18,6 +18,12 @@ type Bootcamp func(*sql.Selector)
 // BootcampParticipant is the predicate function for bootcampparticipant builders.
 type BootcampParticipant func(*sql.Selector)
 
+// Community is the predicate function for community builders.
+type Community func(*sql.Selector)
+
+// CommunityParticipant is the predicate function for communityparticipant builders.
+type CommunityParticipant func(*sql.Selector)
+
 // Contest is the predicate function for contest builders.
 type Contest func(*sql.Selector)
 
@@ -53,6 +59,9 @@ type MemberDetails func(*sql.Selector)
 
 // MemberNote is the predicate function for membernote builders.
 type MemberNote func(*sql.Selector)
+
+// MemberProfile is the predicate function for memberprofile builders.
+type MemberProfile func(*sql.Selector)
 
 // Menu is the predicate function for menu builders.
 type Menu func(*sql.Selector)

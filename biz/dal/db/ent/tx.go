@@ -20,6 +20,10 @@ type Tx struct {
 	Bootcamp *BootcampClient
 	// BootcampParticipant is the client for interacting with the BootcampParticipant builders.
 	BootcampParticipant *BootcampParticipantClient
+	// Community is the client for interacting with the Community builders.
+	Community *CommunityClient
+	// CommunityParticipant is the client for interacting with the CommunityParticipant builders.
+	CommunityParticipant *CommunityParticipantClient
 	// Contest is the client for interacting with the Contest builders.
 	Contest *ContestClient
 	// ContestParticipant is the client for interacting with the ContestParticipant builders.
@@ -44,6 +48,8 @@ type Tx struct {
 	MemberDetails *MemberDetailsClient
 	// MemberNote is the client for interacting with the MemberNote builders.
 	MemberNote *MemberNoteClient
+	// MemberProfile is the client for interacting with the MemberProfile builders.
+	MemberProfile *MemberProfileClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
@@ -205,6 +211,8 @@ func (tx *Tx) init() {
 	tx.Banner = NewBannerClient(tx.config)
 	tx.Bootcamp = NewBootcampClient(tx.config)
 	tx.BootcampParticipant = NewBootcampParticipantClient(tx.config)
+	tx.Community = NewCommunityClient(tx.config)
+	tx.CommunityParticipant = NewCommunityParticipantClient(tx.config)
 	tx.Contest = NewContestClient(tx.config)
 	tx.ContestParticipant = NewContestParticipantClient(tx.config)
 	tx.Contract = NewContractClient(tx.config)
@@ -217,6 +225,7 @@ func (tx *Tx) init() {
 	tx.MemberContractContent = NewMemberContractContentClient(tx.config)
 	tx.MemberDetails = NewMemberDetailsClient(tx.config)
 	tx.MemberNote = NewMemberNoteClient(tx.config)
+	tx.MemberProfile = NewMemberProfileClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
 	tx.Messages = NewMessagesClient(tx.config)

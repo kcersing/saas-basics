@@ -58,10 +58,6 @@ const (
 	FieldRelationMid = "relation_mid"
 	// FieldRelationMame holds the string denoting the relation_mame field in the database.
 	FieldRelationMame = "relation_mame"
-	// FieldCreateID holds the string denoting the create_id field in the database.
-	FieldCreateID = "create_id"
-	// FieldCreateName holds the string denoting the create_name field in the database.
-	FieldCreateName = "create_name"
 	// EdgeInfo holds the string denoting the info edge name in mutations.
 	EdgeInfo = "info"
 	// Table holds the table name of the memberdetails in the database.
@@ -100,8 +96,6 @@ var Columns = []string{
 	FieldRelationUname,
 	FieldRelationMid,
 	FieldRelationMame,
-	FieldCreateID,
-	FieldCreateName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -257,16 +251,6 @@ func ByRelationMid(opts ...sql.OrderTermOption) OrderOption {
 // ByRelationMame orders the results by the relation_mame field.
 func ByRelationMame(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelationMame, opts...).ToFunc()
-}
-
-// ByCreateID orders the results by the create_id field.
-func ByCreateID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreateID, opts...).ToFunc()
-}
-
-// ByCreateName orders the results by the create_name field.
-func ByCreateName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreateName, opts...).ToFunc()
 }
 
 // ByInfoField orders the results by info field.

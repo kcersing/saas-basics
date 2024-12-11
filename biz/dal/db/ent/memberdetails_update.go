@@ -504,53 +504,6 @@ func (mdu *MemberDetailsUpdate) ClearRelationMame() *MemberDetailsUpdate {
 	return mdu
 }
 
-// SetCreateID sets the "create_id" field.
-func (mdu *MemberDetailsUpdate) SetCreateID(i int64) *MemberDetailsUpdate {
-	mdu.mutation.ResetCreateID()
-	mdu.mutation.SetCreateID(i)
-	return mdu
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableCreateID(i *int64) *MemberDetailsUpdate {
-	if i != nil {
-		mdu.SetCreateID(*i)
-	}
-	return mdu
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (mdu *MemberDetailsUpdate) AddCreateID(i int64) *MemberDetailsUpdate {
-	mdu.mutation.AddCreateID(i)
-	return mdu
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (mdu *MemberDetailsUpdate) ClearCreateID() *MemberDetailsUpdate {
-	mdu.mutation.ClearCreateID()
-	return mdu
-}
-
-// SetCreateName sets the "create_name" field.
-func (mdu *MemberDetailsUpdate) SetCreateName(s string) *MemberDetailsUpdate {
-	mdu.mutation.SetCreateName(s)
-	return mdu
-}
-
-// SetNillableCreateName sets the "create_name" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableCreateName(s *string) *MemberDetailsUpdate {
-	if s != nil {
-		mdu.SetCreateName(*s)
-	}
-	return mdu
-}
-
-// ClearCreateName clears the value of the "create_name" field.
-func (mdu *MemberDetailsUpdate) ClearCreateName() *MemberDetailsUpdate {
-	mdu.mutation.ClearCreateName()
-	return mdu
-}
-
 // SetInfoID sets the "info" edge to the Member entity by ID.
 func (mdu *MemberDetailsUpdate) SetInfoID(id int64) *MemberDetailsUpdate {
 	mdu.mutation.SetInfoID(id)
@@ -775,21 +728,6 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mdu.mutation.RelationMameCleared() {
 		_spec.ClearField(memberdetails.FieldRelationMame, field.TypeString)
-	}
-	if value, ok := mdu.mutation.CreateID(); ok {
-		_spec.SetField(memberdetails.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := mdu.mutation.AddedCreateID(); ok {
-		_spec.AddField(memberdetails.FieldCreateID, field.TypeInt64, value)
-	}
-	if mdu.mutation.CreateIDCleared() {
-		_spec.ClearField(memberdetails.FieldCreateID, field.TypeInt64)
-	}
-	if value, ok := mdu.mutation.CreateName(); ok {
-		_spec.SetField(memberdetails.FieldCreateName, field.TypeString, value)
-	}
-	if mdu.mutation.CreateNameCleared() {
-		_spec.ClearField(memberdetails.FieldCreateName, field.TypeString)
 	}
 	if mdu.mutation.InfoCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1315,53 +1253,6 @@ func (mduo *MemberDetailsUpdateOne) ClearRelationMame() *MemberDetailsUpdateOne 
 	return mduo
 }
 
-// SetCreateID sets the "create_id" field.
-func (mduo *MemberDetailsUpdateOne) SetCreateID(i int64) *MemberDetailsUpdateOne {
-	mduo.mutation.ResetCreateID()
-	mduo.mutation.SetCreateID(i)
-	return mduo
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableCreateID(i *int64) *MemberDetailsUpdateOne {
-	if i != nil {
-		mduo.SetCreateID(*i)
-	}
-	return mduo
-}
-
-// AddCreateID adds i to the "create_id" field.
-func (mduo *MemberDetailsUpdateOne) AddCreateID(i int64) *MemberDetailsUpdateOne {
-	mduo.mutation.AddCreateID(i)
-	return mduo
-}
-
-// ClearCreateID clears the value of the "create_id" field.
-func (mduo *MemberDetailsUpdateOne) ClearCreateID() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearCreateID()
-	return mduo
-}
-
-// SetCreateName sets the "create_name" field.
-func (mduo *MemberDetailsUpdateOne) SetCreateName(s string) *MemberDetailsUpdateOne {
-	mduo.mutation.SetCreateName(s)
-	return mduo
-}
-
-// SetNillableCreateName sets the "create_name" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableCreateName(s *string) *MemberDetailsUpdateOne {
-	if s != nil {
-		mduo.SetCreateName(*s)
-	}
-	return mduo
-}
-
-// ClearCreateName clears the value of the "create_name" field.
-func (mduo *MemberDetailsUpdateOne) ClearCreateName() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearCreateName()
-	return mduo
-}
-
 // SetInfoID sets the "info" edge to the Member entity by ID.
 func (mduo *MemberDetailsUpdateOne) SetInfoID(id int64) *MemberDetailsUpdateOne {
 	mduo.mutation.SetInfoID(id)
@@ -1616,21 +1507,6 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	}
 	if mduo.mutation.RelationMameCleared() {
 		_spec.ClearField(memberdetails.FieldRelationMame, field.TypeString)
-	}
-	if value, ok := mduo.mutation.CreateID(); ok {
-		_spec.SetField(memberdetails.FieldCreateID, field.TypeInt64, value)
-	}
-	if value, ok := mduo.mutation.AddedCreateID(); ok {
-		_spec.AddField(memberdetails.FieldCreateID, field.TypeInt64, value)
-	}
-	if mduo.mutation.CreateIDCleared() {
-		_spec.ClearField(memberdetails.FieldCreateID, field.TypeInt64)
-	}
-	if value, ok := mduo.mutation.CreateName(); ok {
-		_spec.SetField(memberdetails.FieldCreateName, field.TypeString, value)
-	}
-	if mduo.mutation.CreateNameCleared() {
-		_spec.ClearField(memberdetails.FieldCreateName, field.TypeString)
 	}
 	if mduo.mutation.InfoCleared() {
 		edge := &sqlgraph.EdgeSpec{

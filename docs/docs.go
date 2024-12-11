@@ -3273,7 +3273,13 @@ const docTemplate = `{
                 "endCompletionAt": {
                     "type": "string"
                 },
+                "member_name": {
+                    "type": "string"
+                },
                 "mobile": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 },
                 "nature": {

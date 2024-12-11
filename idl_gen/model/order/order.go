@@ -22,6 +22,8 @@ type ListOrderReq struct {
 	EndCompletionAt   string  `thrift:"endCompletionAt,10,optional" form:"endCompletionAt" json:"endCompletionAt" query:"endCompletionAt"`
 	ProductType       string  `thrift:"productType,11,optional" form:"productType" json:"productType" query:"productType"`
 	Nature            string  `thrift:"nature,12,optional" form:"nature" json:"nature" query:"nature"`
+	Name              string  `thrift:"name,13,optional" form:"name" json:"name" query:"name"`
+	MemberName        string  `thrift:"member_name,14,optional" form:"member_name" json:"member_name" query:"member_name"`
 }
 
 func NewListOrderReq() *ListOrderReq {
@@ -39,6 +41,8 @@ func NewListOrderReq() *ListOrderReq {
 		EndCompletionAt:   "",
 		ProductType:       "",
 		Nature:            "",
+		Name:              "",
+		MemberName:        "",
 	}
 }
 
@@ -55,6 +59,8 @@ func (p *ListOrderReq) InitDefault() {
 	p.EndCompletionAt = ""
 	p.ProductType = ""
 	p.Nature = ""
+	p.Name = ""
+	p.MemberName = ""
 }
 
 var ListOrderReq_Page_DEFAULT int64 = 1
@@ -165,6 +171,24 @@ func (p *ListOrderReq) GetNature() (v string) {
 	return p.Nature
 }
 
+var ListOrderReq_Name_DEFAULT string = ""
+
+func (p *ListOrderReq) GetName() (v string) {
+	if !p.IsSetName() {
+		return ListOrderReq_Name_DEFAULT
+	}
+	return p.Name
+}
+
+var ListOrderReq_MemberName_DEFAULT string = ""
+
+func (p *ListOrderReq) GetMemberName() (v string) {
+	if !p.IsSetMemberName() {
+		return ListOrderReq_MemberName_DEFAULT
+	}
+	return p.MemberName
+}
+
 var fieldIDToName_ListOrderReq = map[int16]string{
 	1:  "page",
 	2:  "pageSize",
@@ -178,6 +202,8 @@ var fieldIDToName_ListOrderReq = map[int16]string{
 	10: "endCompletionAt",
 	11: "productType",
 	12: "nature",
+	13: "name",
+	14: "member_name",
 }
 
 func (p *ListOrderReq) IsSetPage() bool {
@@ -226,6 +252,14 @@ func (p *ListOrderReq) IsSetProductType() bool {
 
 func (p *ListOrderReq) IsSetNature() bool {
 	return p.Nature != ListOrderReq_Nature_DEFAULT
+}
+
+func (p *ListOrderReq) IsSetName() bool {
+	return p.Name != ListOrderReq_Name_DEFAULT
+}
+
+func (p *ListOrderReq) IsSetMemberName() bool {
+	return p.MemberName != ListOrderReq_MemberName_DEFAULT
 }
 
 func (p *ListOrderReq) Read(iprot thrift.TProtocol) (err error) {
@@ -338,6 +372,22 @@ func (p *ListOrderReq) Read(iprot thrift.TProtocol) (err error) {
 		case 12:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField12(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 13:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField13(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 14:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField14(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -552,6 +602,28 @@ func (p *ListOrderReq) ReadField12(iprot thrift.TProtocol) error {
 	p.Nature = _field
 	return nil
 }
+func (p *ListOrderReq) ReadField13(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Name = _field
+	return nil
+}
+func (p *ListOrderReq) ReadField14(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.MemberName = _field
+	return nil
+}
 
 func (p *ListOrderReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -605,6 +677,14 @@ func (p *ListOrderReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField12(oprot); err != nil {
 			fieldId = 12
+			goto WriteFieldError
+		}
+		if err = p.writeField13(oprot); err != nil {
+			fieldId = 13
+			goto WriteFieldError
+		}
+		if err = p.writeField14(oprot); err != nil {
+			fieldId = 14
 			goto WriteFieldError
 		}
 	}
@@ -883,6 +963,44 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 12 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 12 end error: ", p), err)
+}
+
+func (p *ListOrderReq) writeField13(oprot thrift.TProtocol) (err error) {
+	if p.IsSetName() {
+		if err = oprot.WriteFieldBegin("name", thrift.STRING, 13); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Name); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 13 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 13 end error: ", p), err)
+}
+
+func (p *ListOrderReq) writeField14(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMemberName() {
+		if err = oprot.WriteFieldBegin("member_name", thrift.STRING, 14); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.MemberName); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 14 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 14 end error: ", p), err)
 }
 
 func (p *ListOrderReq) String() string {

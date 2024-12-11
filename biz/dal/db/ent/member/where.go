@@ -785,6 +785,29 @@ func ConditionNotNil() predicate.Member {
 	return predicate.Member(sql.FieldNotNull(FieldCondition))
 }
 
+// HasMemberProfile applies the HasEdge predicate on the "member_profile" edge.
+func HasMemberProfile() predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MemberProfileTable, MemberProfileColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberProfileWith applies the HasEdge predicate on the "member_profile" edge with a given conditions (other predicates).
+func HasMemberProfileWith(preds ...predicate.MemberProfile) predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := newMemberProfileStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMemberDetails applies the HasEdge predicate on the "member_details" edge.
 func HasMemberDetails() predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
@@ -900,21 +923,21 @@ func HasMemberContentsWith(preds ...predicate.MemberContract) predicate.Member {
 	})
 }
 
-// HasContestParticipants applies the HasEdge predicate on the "contestParticipants" edge.
-func HasContestParticipants() predicate.Member {
+// HasMemberContests applies the HasEdge predicate on the "member_contests" edge.
+func HasMemberContests() predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ContestParticipantsTable, ContestParticipantsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, MemberContestsTable, MemberContestsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasContestParticipantsWith applies the HasEdge predicate on the "contestParticipants" edge with a given conditions (other predicates).
-func HasContestParticipantsWith(preds ...predicate.ContestParticipant) predicate.Member {
+// HasMemberContestsWith applies the HasEdge predicate on the "member_contests" edge with a given conditions (other predicates).
+func HasMemberContestsWith(preds ...predicate.ContestParticipant) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
-		step := newContestParticipantsStep()
+		step := newMemberContestsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -923,21 +946,44 @@ func HasContestParticipantsWith(preds ...predicate.ContestParticipant) predicate
 	})
 }
 
-// HasBootcampParticipants applies the HasEdge predicate on the "bootcampParticipants" edge.
-func HasBootcampParticipants() predicate.Member {
+// HasMemberBootcamps applies the HasEdge predicate on the "member_bootcamps" edge.
+func HasMemberBootcamps() predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, BootcampParticipantsTable, BootcampParticipantsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, MemberBootcampsTable, MemberBootcampsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasBootcampParticipantsWith applies the HasEdge predicate on the "bootcampParticipants" edge with a given conditions (other predicates).
-func HasBootcampParticipantsWith(preds ...predicate.BootcampParticipant) predicate.Member {
+// HasMemberBootcampsWith applies the HasEdge predicate on the "member_bootcamps" edge with a given conditions (other predicates).
+func HasMemberBootcampsWith(preds ...predicate.BootcampParticipant) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
-		step := newBootcampParticipantsStep()
+		step := newMemberBootcampsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMemberCommunitys applies the HasEdge predicate on the "member_communitys" edge.
+func HasMemberCommunitys() predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, MemberCommunitysTable, MemberCommunitysPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberCommunitysWith applies the HasEdge predicate on the "member_communitys" edge with a given conditions (other predicates).
+func HasMemberCommunitysWith(preds ...predicate.CommunityParticipant) predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := newMemberCommunitysStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

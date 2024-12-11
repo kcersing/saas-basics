@@ -36,6 +36,8 @@ const (
 	FieldAvatar = "avatar"
 	// FieldCondition holds the string denoting the condition field in the database.
 	FieldCondition = "condition"
+	// EdgeMemberProfile holds the string denoting the member_profile edge name in mutations.
+	EdgeMemberProfile = "member_profile"
 	// EdgeMemberDetails holds the string denoting the member_details edge name in mutations.
 	EdgeMemberDetails = "member_details"
 	// EdgeMemberNotes holds the string denoting the member_notes edge name in mutations.
@@ -46,12 +48,21 @@ const (
 	EdgeMemberEntry = "member_entry"
 	// EdgeMemberContents holds the string denoting the member_contents edge name in mutations.
 	EdgeMemberContents = "member_contents"
-	// EdgeContestParticipants holds the string denoting the contestparticipants edge name in mutations.
-	EdgeContestParticipants = "contestParticipants"
-	// EdgeBootcampParticipants holds the string denoting the bootcampparticipants edge name in mutations.
-	EdgeBootcampParticipants = "bootcampParticipants"
+	// EdgeMemberContests holds the string denoting the member_contests edge name in mutations.
+	EdgeMemberContests = "member_contests"
+	// EdgeMemberBootcamps holds the string denoting the member_bootcamps edge name in mutations.
+	EdgeMemberBootcamps = "member_bootcamps"
+	// EdgeMemberCommunitys holds the string denoting the member_communitys edge name in mutations.
+	EdgeMemberCommunitys = "member_communitys"
 	// Table holds the table name of the member in the database.
 	Table = "member"
+	// MemberProfileTable is the table that holds the member_profile relation/edge.
+	MemberProfileTable = "member_profile"
+	// MemberProfileInverseTable is the table name for the MemberProfile entity.
+	// It exists in this package in order to avoid circular dependency with the "memberprofile" package.
+	MemberProfileInverseTable = "member_profile"
+	// MemberProfileColumn is the table column denoting the member_profile relation/edge.
+	MemberProfileColumn = "member_id"
 	// MemberDetailsTable is the table that holds the member_details relation/edge.
 	MemberDetailsTable = "member_details"
 	// MemberDetailsInverseTable is the table name for the MemberDetails entity.
@@ -87,16 +98,21 @@ const (
 	MemberContentsInverseTable = "member_contract"
 	// MemberContentsColumn is the table column denoting the member_contents relation/edge.
 	MemberContentsColumn = "member_id"
-	// ContestParticipantsTable is the table that holds the contestParticipants relation/edge. The primary key declared below.
-	ContestParticipantsTable = "member_contestParticipants"
-	// ContestParticipantsInverseTable is the table name for the ContestParticipant entity.
+	// MemberContestsTable is the table that holds the member_contests relation/edge. The primary key declared below.
+	MemberContestsTable = "member_member_contests"
+	// MemberContestsInverseTable is the table name for the ContestParticipant entity.
 	// It exists in this package in order to avoid circular dependency with the "contestparticipant" package.
-	ContestParticipantsInverseTable = "contest_participant"
-	// BootcampParticipantsTable is the table that holds the bootcampParticipants relation/edge. The primary key declared below.
-	BootcampParticipantsTable = "member_bootcampParticipants"
-	// BootcampParticipantsInverseTable is the table name for the BootcampParticipant entity.
+	MemberContestsInverseTable = "contest_participant"
+	// MemberBootcampsTable is the table that holds the member_bootcamps relation/edge. The primary key declared below.
+	MemberBootcampsTable = "member_member_bootcamps"
+	// MemberBootcampsInverseTable is the table name for the BootcampParticipant entity.
 	// It exists in this package in order to avoid circular dependency with the "bootcampparticipant" package.
-	BootcampParticipantsInverseTable = "bootcamp_participant"
+	MemberBootcampsInverseTable = "bootcamp_participant"
+	// MemberCommunitysTable is the table that holds the member_communitys relation/edge. The primary key declared below.
+	MemberCommunitysTable = "member_member_communitys"
+	// MemberCommunitysInverseTable is the table name for the CommunityParticipant entity.
+	// It exists in this package in order to avoid circular dependency with the "communityparticipant" package.
+	MemberCommunitysInverseTable = "community_participant"
 )
 
 // Columns holds all SQL columns for member fields.
@@ -116,12 +132,15 @@ var Columns = []string{
 }
 
 var (
-	// ContestParticipantsPrimaryKey and ContestParticipantsColumn2 are the table columns denoting the
-	// primary key for the contestParticipants relation (M2M).
-	ContestParticipantsPrimaryKey = []string{"member_id", "contest_participant_id"}
-	// BootcampParticipantsPrimaryKey and BootcampParticipantsColumn2 are the table columns denoting the
-	// primary key for the bootcampParticipants relation (M2M).
-	BootcampParticipantsPrimaryKey = []string{"member_id", "bootcamp_participant_id"}
+	// MemberContestsPrimaryKey and MemberContestsColumn2 are the table columns denoting the
+	// primary key for the member_contests relation (M2M).
+	MemberContestsPrimaryKey = []string{"member_id", "contest_participant_id"}
+	// MemberBootcampsPrimaryKey and MemberBootcampsColumn2 are the table columns denoting the
+	// primary key for the member_bootcamps relation (M2M).
+	MemberBootcampsPrimaryKey = []string{"member_id", "bootcamp_participant_id"}
+	// MemberCommunitysPrimaryKey and MemberCommunitysColumn2 are the table columns denoting the
+	// primary key for the member_communitys relation (M2M).
+	MemberCommunitysPrimaryKey = []string{"member_id", "community_participant_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -216,6 +235,20 @@ func ByCondition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCondition, opts...).ToFunc()
 }
 
+// ByMemberProfileCount orders the results by member_profile count.
+func ByMemberProfileCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberProfileStep(), opts...)
+	}
+}
+
+// ByMemberProfile orders the results by member_profile terms.
+func ByMemberProfile(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberProfileStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMemberDetailsCount orders the results by member_details count.
 func ByMemberDetailsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -286,32 +319,53 @@ func ByMemberContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByContestParticipantsCount orders the results by contestParticipants count.
-func ByContestParticipantsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByMemberContestsCount orders the results by member_contests count.
+func ByMemberContestsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newContestParticipantsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newMemberContestsStep(), opts...)
 	}
 }
 
-// ByContestParticipants orders the results by contestParticipants terms.
-func ByContestParticipants(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByMemberContests orders the results by member_contests terms.
+func ByMemberContests(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newContestParticipantsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newMemberContestsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByBootcampParticipantsCount orders the results by bootcampParticipants count.
-func ByBootcampParticipantsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByMemberBootcampsCount orders the results by member_bootcamps count.
+func ByMemberBootcampsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newBootcampParticipantsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newMemberBootcampsStep(), opts...)
 	}
 }
 
-// ByBootcampParticipants orders the results by bootcampParticipants terms.
-func ByBootcampParticipants(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByMemberBootcamps orders the results by member_bootcamps terms.
+func ByMemberBootcamps(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newBootcampParticipantsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newMemberBootcampsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+
+// ByMemberCommunitysCount orders the results by member_communitys count.
+func ByMemberCommunitysCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberCommunitysStep(), opts...)
+	}
+}
+
+// ByMemberCommunitys orders the results by member_communitys terms.
+func ByMemberCommunitys(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberCommunitysStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newMemberProfileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberProfileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberProfileTable, MemberProfileColumn),
+	)
 }
 func newMemberDetailsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
@@ -348,17 +402,24 @@ func newMemberContentsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberContentsTable, MemberContentsColumn),
 	)
 }
-func newContestParticipantsStep() *sqlgraph.Step {
+func newMemberContestsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ContestParticipantsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ContestParticipantsTable, ContestParticipantsPrimaryKey...),
+		sqlgraph.To(MemberContestsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, MemberContestsTable, MemberContestsPrimaryKey...),
 	)
 }
-func newBootcampParticipantsStep() *sqlgraph.Step {
+func newMemberBootcampsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(BootcampParticipantsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, BootcampParticipantsTable, BootcampParticipantsPrimaryKey...),
+		sqlgraph.To(MemberBootcampsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, MemberBootcampsTable, MemberBootcampsPrimaryKey...),
+	)
+}
+func newMemberCommunitysStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberCommunitysInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, MemberCommunitysTable, MemberCommunitysPrimaryKey...),
 	)
 }

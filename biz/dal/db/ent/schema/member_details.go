@@ -44,11 +44,6 @@ func (MemberDetails) Fields() []ent.Field {
 
 		field.Int64("relation_mid").Default(0).Comment("关联会员").Optional(),
 		field.String("relation_mame").Comment("关联会员").Optional(),
-
-		field.Int64("create_id").
-			Optional().
-			Comment("创建人"),
-		field.String("create_name").Comment("创建人").Optional(),
 	}
 }
 
@@ -62,7 +57,8 @@ func (MemberDetails) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("info", Member.Type).
 			Ref("member_details").
-			Field("member_id").Unique(),
+			Field("member_id").
+			Unique(),
 	}
 }
 

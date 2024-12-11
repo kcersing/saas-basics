@@ -56,6 +56,30 @@ func (f BootcampParticipantFunc) Mutate(ctx context.Context, m ent.Mutation) (en
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BootcampParticipantMutation", m)
 }
 
+// The CommunityFunc type is an adapter to allow the use of ordinary
+// function as Community mutator.
+type CommunityFunc func(context.Context, *ent.CommunityMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CommunityFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CommunityMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CommunityMutation", m)
+}
+
+// The CommunityParticipantFunc type is an adapter to allow the use of ordinary
+// function as CommunityParticipant mutator.
+type CommunityParticipantFunc func(context.Context, *ent.CommunityParticipantMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CommunityParticipantFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CommunityParticipantMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CommunityParticipantMutation", m)
+}
+
 // The ContestFunc type is an adapter to allow the use of ordinary
 // function as Contest mutator.
 type ContestFunc func(context.Context, *ent.ContestMutation) (ent.Value, error)
@@ -198,6 +222,18 @@ func (f MemberNoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberNoteMutation", m)
+}
+
+// The MemberProfileFunc type is an adapter to allow the use of ordinary
+// function as MemberProfile mutator.
+type MemberProfileFunc func(context.Context, *ent.MemberProfileMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemberProfileFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemberProfileMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberProfileMutation", m)
 }
 
 // The MenuFunc type is an adapter to allow the use of ordinary

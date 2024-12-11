@@ -11,6 +11,8 @@ import (
 	"saas/biz/dal/db/ent/banner"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/community"
+	"saas/biz/dal/db/ent/communityparticipant"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/contract"
@@ -23,6 +25,7 @@ import (
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
+	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/messages"
@@ -105,6 +108,8 @@ func checkColumn(table, column string) error {
 			banner.Table:                banner.ValidColumn,
 			bootcamp.Table:              bootcamp.ValidColumn,
 			bootcampparticipant.Table:   bootcampparticipant.ValidColumn,
+			community.Table:             community.ValidColumn,
+			communityparticipant.Table:  communityparticipant.ValidColumn,
 			contest.Table:               contest.ValidColumn,
 			contestparticipant.Table:    contestparticipant.ValidColumn,
 			contract.Table:              contract.ValidColumn,
@@ -117,6 +122,7 @@ func checkColumn(table, column string) error {
 			membercontractcontent.Table: membercontractcontent.ValidColumn,
 			memberdetails.Table:         memberdetails.ValidColumn,
 			membernote.Table:            membernote.ValidColumn,
+			memberprofile.Table:         memberprofile.ValidColumn,
 			menu.Table:                  menu.ValidColumn,
 			menuparam.Table:             menuparam.ValidColumn,
 			messages.Table:              messages.ValidColumn,

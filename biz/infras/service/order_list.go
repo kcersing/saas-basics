@@ -2,7 +2,9 @@ package service
 
 import (
 	"github.com/pkg/errors"
+	"saas/biz/dal/db/ent/member"
 	order2 "saas/biz/dal/db/ent/order"
+	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/idl_gen/model/order"
 	"time"
@@ -14,7 +16,13 @@ func (o Order) List(req *order.ListOrderReq) (resp []*order.OrderInfo, total int
 		predicates = append(predicates, order2.OrderSnEQ(req.OrderSn))
 	}
 	if req.Mobile != "" {
-
+		predicates = append(predicates, order2.HasOrderMembersWith(member.MobileEQ(req.Mobile)))
+	}
+	if req.MemberName != "" {
+		predicates = append(predicates, order2.HasOrderMembersWith(member.NameEQ(req.MemberName)))
+	}
+	if req.Name != "" {
+		predicates = append(predicates, order2.HasItemWith(orderitem.NameEQ(req.Name)))
 	}
 	if len(req.Status) > 0 {
 		predicates = append(predicates, order2.StatusIn(req.Status...))

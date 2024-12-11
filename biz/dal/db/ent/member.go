@@ -48,6 +48,8 @@ type Member struct {
 
 // MemberEdges holds the relations/edges for other nodes in the graph.
 type MemberEdges struct {
+	// MemberProfile holds the value of the member_profile edge.
+	MemberProfile []*MemberProfile `json:"member_profile,omitempty"`
 	// MemberDetails holds the value of the member_details edge.
 	MemberDetails []*MemberDetails `json:"member_details,omitempty"`
 	// MemberNotes holds the value of the member_notes edge.
@@ -58,19 +60,30 @@ type MemberEdges struct {
 	MemberEntry []*EntryLogs `json:"member_entry,omitempty"`
 	// MemberContents holds the value of the member_contents edge.
 	MemberContents []*MemberContract `json:"member_contents,omitempty"`
-	// ContestParticipants holds the value of the contestParticipants edge.
-	ContestParticipants []*ContestParticipant `json:"contestParticipants,omitempty"`
-	// BootcampParticipants holds the value of the bootcampParticipants edge.
-	BootcampParticipants []*BootcampParticipant `json:"bootcampParticipants,omitempty"`
+	// MemberContests holds the value of the member_contests edge.
+	MemberContests []*ContestParticipant `json:"member_contests,omitempty"`
+	// MemberBootcamps holds the value of the member_bootcamps edge.
+	MemberBootcamps []*BootcampParticipant `json:"member_bootcamps,omitempty"`
+	// MemberCommunitys holds the value of the member_communitys edge.
+	MemberCommunitys []*CommunityParticipant `json:"member_communitys,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [9]bool
+}
+
+// MemberProfileOrErr returns the MemberProfile value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) MemberProfileOrErr() ([]*MemberProfile, error) {
+	if e.loadedTypes[0] {
+		return e.MemberProfile, nil
+	}
+	return nil, &NotLoadedError{edge: "member_profile"}
 }
 
 // MemberDetailsOrErr returns the MemberDetails value or an error if the edge
 // was not loaded in eager-loading.
 func (e MemberEdges) MemberDetailsOrErr() ([]*MemberDetails, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.MemberDetails, nil
 	}
 	return nil, &NotLoadedError{edge: "member_details"}
@@ -79,7 +92,7 @@ func (e MemberEdges) MemberDetailsOrErr() ([]*MemberDetails, error) {
 // MemberNotesOrErr returns the MemberNotes value or an error if the edge
 // was not loaded in eager-loading.
 func (e MemberEdges) MemberNotesOrErr() ([]*MemberNote, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.MemberNotes, nil
 	}
 	return nil, &NotLoadedError{edge: "member_notes"}
@@ -88,7 +101,7 @@ func (e MemberEdges) MemberNotesOrErr() ([]*MemberNote, error) {
 // MemberOrdersOrErr returns the MemberOrders value or an error if the edge
 // was not loaded in eager-loading.
 func (e MemberEdges) MemberOrdersOrErr() ([]*Order, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.MemberOrders, nil
 	}
 	return nil, &NotLoadedError{edge: "member_orders"}
@@ -97,7 +110,7 @@ func (e MemberEdges) MemberOrdersOrErr() ([]*Order, error) {
 // MemberEntryOrErr returns the MemberEntry value or an error if the edge
 // was not loaded in eager-loading.
 func (e MemberEdges) MemberEntryOrErr() ([]*EntryLogs, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.MemberEntry, nil
 	}
 	return nil, &NotLoadedError{edge: "member_entry"}
@@ -106,28 +119,37 @@ func (e MemberEdges) MemberEntryOrErr() ([]*EntryLogs, error) {
 // MemberContentsOrErr returns the MemberContents value or an error if the edge
 // was not loaded in eager-loading.
 func (e MemberEdges) MemberContentsOrErr() ([]*MemberContract, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.MemberContents, nil
 	}
 	return nil, &NotLoadedError{edge: "member_contents"}
 }
 
-// ContestParticipantsOrErr returns the ContestParticipants value or an error if the edge
+// MemberContestsOrErr returns the MemberContests value or an error if the edge
 // was not loaded in eager-loading.
-func (e MemberEdges) ContestParticipantsOrErr() ([]*ContestParticipant, error) {
-	if e.loadedTypes[5] {
-		return e.ContestParticipants, nil
+func (e MemberEdges) MemberContestsOrErr() ([]*ContestParticipant, error) {
+	if e.loadedTypes[6] {
+		return e.MemberContests, nil
 	}
-	return nil, &NotLoadedError{edge: "contestParticipants"}
+	return nil, &NotLoadedError{edge: "member_contests"}
 }
 
-// BootcampParticipantsOrErr returns the BootcampParticipants value or an error if the edge
+// MemberBootcampsOrErr returns the MemberBootcamps value or an error if the edge
 // was not loaded in eager-loading.
-func (e MemberEdges) BootcampParticipantsOrErr() ([]*BootcampParticipant, error) {
-	if e.loadedTypes[6] {
-		return e.BootcampParticipants, nil
+func (e MemberEdges) MemberBootcampsOrErr() ([]*BootcampParticipant, error) {
+	if e.loadedTypes[7] {
+		return e.MemberBootcamps, nil
 	}
-	return nil, &NotLoadedError{edge: "bootcampParticipants"}
+	return nil, &NotLoadedError{edge: "member_bootcamps"}
+}
+
+// MemberCommunitysOrErr returns the MemberCommunitys value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberEdges) MemberCommunitysOrErr() ([]*CommunityParticipant, error) {
+	if e.loadedTypes[8] {
+		return e.MemberCommunitys, nil
+	}
+	return nil, &NotLoadedError{edge: "member_communitys"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -241,6 +263,11 @@ func (m *Member) Value(name string) (ent.Value, error) {
 	return m.selectValues.Get(name)
 }
 
+// QueryMemberProfile queries the "member_profile" edge of the Member entity.
+func (m *Member) QueryMemberProfile() *MemberProfileQuery {
+	return NewMemberClient(m.config).QueryMemberProfile(m)
+}
+
 // QueryMemberDetails queries the "member_details" edge of the Member entity.
 func (m *Member) QueryMemberDetails() *MemberDetailsQuery {
 	return NewMemberClient(m.config).QueryMemberDetails(m)
@@ -266,14 +293,19 @@ func (m *Member) QueryMemberContents() *MemberContractQuery {
 	return NewMemberClient(m.config).QueryMemberContents(m)
 }
 
-// QueryContestParticipants queries the "contestParticipants" edge of the Member entity.
-func (m *Member) QueryContestParticipants() *ContestParticipantQuery {
-	return NewMemberClient(m.config).QueryContestParticipants(m)
+// QueryMemberContests queries the "member_contests" edge of the Member entity.
+func (m *Member) QueryMemberContests() *ContestParticipantQuery {
+	return NewMemberClient(m.config).QueryMemberContests(m)
 }
 
-// QueryBootcampParticipants queries the "bootcampParticipants" edge of the Member entity.
-func (m *Member) QueryBootcampParticipants() *BootcampParticipantQuery {
-	return NewMemberClient(m.config).QueryBootcampParticipants(m)
+// QueryMemberBootcamps queries the "member_bootcamps" edge of the Member entity.
+func (m *Member) QueryMemberBootcamps() *BootcampParticipantQuery {
+	return NewMemberClient(m.config).QueryMemberBootcamps(m)
+}
+
+// QueryMemberCommunitys queries the "member_communitys" edge of the Member entity.
+func (m *Member) QueryMemberCommunitys() *CommunityParticipantQuery {
+	return NewMemberClient(m.config).QueryMemberCommunitys(m)
 }
 
 // Update returns a builder for updating this Member.

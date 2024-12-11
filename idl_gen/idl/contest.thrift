@@ -55,7 +55,6 @@ struct ContestListReq{
     6:  optional string startAt  = ""(api.raw = "startAt")
     7:  optional string endAt  = ""(api.raw = "endAt")
     8:  optional i64 condition=0 (api.raw = "condition")
-
 }
 struct ParticipantListReq{
     1:  optional i64 page=1 (api.raw = "page")

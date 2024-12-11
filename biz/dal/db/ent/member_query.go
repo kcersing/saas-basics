@@ -8,12 +8,14 @@ import (
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/communityparticipant"
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
+	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -25,17 +27,19 @@ import (
 // MemberQuery is the builder for querying Member entities.
 type MemberQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []member.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.Member
-	withMemberDetails        *MemberDetailsQuery
-	withMemberNotes          *MemberNoteQuery
-	withMemberOrders         *OrderQuery
-	withMemberEntry          *EntryLogsQuery
-	withMemberContents       *MemberContractQuery
-	withContestParticipants  *ContestParticipantQuery
-	withBootcampParticipants *BootcampParticipantQuery
+	ctx                  *QueryContext
+	order                []member.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Member
+	withMemberProfile    *MemberProfileQuery
+	withMemberDetails    *MemberDetailsQuery
+	withMemberNotes      *MemberNoteQuery
+	withMemberOrders     *OrderQuery
+	withMemberEntry      *EntryLogsQuery
+	withMemberContents   *MemberContractQuery
+	withMemberContests   *ContestParticipantQuery
+	withMemberBootcamps  *BootcampParticipantQuery
+	withMemberCommunitys *CommunityParticipantQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -70,6 +74,28 @@ func (mq *MemberQuery) Unique(unique bool) *MemberQuery {
 func (mq *MemberQuery) Order(o ...member.OrderOption) *MemberQuery {
 	mq.order = append(mq.order, o...)
 	return mq
+}
+
+// QueryMemberProfile chains the current query on the "member_profile" edge.
+func (mq *MemberQuery) QueryMemberProfile() *MemberProfileQuery {
+	query := (&MemberProfileClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, selector),
+			sqlgraph.To(memberprofile.Table, memberprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProfileTable, member.MemberProfileColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryMemberDetails chains the current query on the "member_details" edge.
@@ -182,8 +208,8 @@ func (mq *MemberQuery) QueryMemberContents() *MemberContractQuery {
 	return query
 }
 
-// QueryContestParticipants chains the current query on the "contestParticipants" edge.
-func (mq *MemberQuery) QueryContestParticipants() *ContestParticipantQuery {
+// QueryMemberContests chains the current query on the "member_contests" edge.
+func (mq *MemberQuery) QueryMemberContests() *ContestParticipantQuery {
 	query := (&ContestParticipantClient{config: mq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mq.prepareQuery(ctx); err != nil {
@@ -196,7 +222,7 @@ func (mq *MemberQuery) QueryContestParticipants() *ContestParticipantQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(member.Table, member.FieldID, selector),
 			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, member.ContestParticipantsTable, member.ContestParticipantsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberContestsTable, member.MemberContestsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
@@ -204,8 +230,8 @@ func (mq *MemberQuery) QueryContestParticipants() *ContestParticipantQuery {
 	return query
 }
 
-// QueryBootcampParticipants chains the current query on the "bootcampParticipants" edge.
-func (mq *MemberQuery) QueryBootcampParticipants() *BootcampParticipantQuery {
+// QueryMemberBootcamps chains the current query on the "member_bootcamps" edge.
+func (mq *MemberQuery) QueryMemberBootcamps() *BootcampParticipantQuery {
 	query := (&BootcampParticipantClient{config: mq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mq.prepareQuery(ctx); err != nil {
@@ -218,7 +244,29 @@ func (mq *MemberQuery) QueryBootcampParticipants() *BootcampParticipantQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(member.Table, member.FieldID, selector),
 			sqlgraph.To(bootcampparticipant.Table, bootcampparticipant.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, member.BootcampParticipantsTable, member.BootcampParticipantsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberBootcampsTable, member.MemberBootcampsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberCommunitys chains the current query on the "member_communitys" edge.
+func (mq *MemberQuery) QueryMemberCommunitys() *CommunityParticipantQuery {
+	query := (&CommunityParticipantClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, selector),
+			sqlgraph.To(communityparticipant.Table, communityparticipant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberCommunitysTable, member.MemberCommunitysPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
@@ -413,22 +461,35 @@ func (mq *MemberQuery) Clone() *MemberQuery {
 		return nil
 	}
 	return &MemberQuery{
-		config:                   mq.config,
-		ctx:                      mq.ctx.Clone(),
-		order:                    append([]member.OrderOption{}, mq.order...),
-		inters:                   append([]Interceptor{}, mq.inters...),
-		predicates:               append([]predicate.Member{}, mq.predicates...),
-		withMemberDetails:        mq.withMemberDetails.Clone(),
-		withMemberNotes:          mq.withMemberNotes.Clone(),
-		withMemberOrders:         mq.withMemberOrders.Clone(),
-		withMemberEntry:          mq.withMemberEntry.Clone(),
-		withMemberContents:       mq.withMemberContents.Clone(),
-		withContestParticipants:  mq.withContestParticipants.Clone(),
-		withBootcampParticipants: mq.withBootcampParticipants.Clone(),
+		config:               mq.config,
+		ctx:                  mq.ctx.Clone(),
+		order:                append([]member.OrderOption{}, mq.order...),
+		inters:               append([]Interceptor{}, mq.inters...),
+		predicates:           append([]predicate.Member{}, mq.predicates...),
+		withMemberProfile:    mq.withMemberProfile.Clone(),
+		withMemberDetails:    mq.withMemberDetails.Clone(),
+		withMemberNotes:      mq.withMemberNotes.Clone(),
+		withMemberOrders:     mq.withMemberOrders.Clone(),
+		withMemberEntry:      mq.withMemberEntry.Clone(),
+		withMemberContents:   mq.withMemberContents.Clone(),
+		withMemberContests:   mq.withMemberContests.Clone(),
+		withMemberBootcamps:  mq.withMemberBootcamps.Clone(),
+		withMemberCommunitys: mq.withMemberCommunitys.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
 	}
+}
+
+// WithMemberProfile tells the query-builder to eager-load the nodes that are connected to
+// the "member_profile" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithMemberProfile(opts ...func(*MemberProfileQuery)) *MemberQuery {
+	query := (&MemberProfileClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withMemberProfile = query
+	return mq
 }
 
 // WithMemberDetails tells the query-builder to eager-load the nodes that are connected to
@@ -486,25 +547,36 @@ func (mq *MemberQuery) WithMemberContents(opts ...func(*MemberContractQuery)) *M
 	return mq
 }
 
-// WithContestParticipants tells the query-builder to eager-load the nodes that are connected to
-// the "contestParticipants" edge. The optional arguments are used to configure the query builder of the edge.
-func (mq *MemberQuery) WithContestParticipants(opts ...func(*ContestParticipantQuery)) *MemberQuery {
+// WithMemberContests tells the query-builder to eager-load the nodes that are connected to
+// the "member_contests" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithMemberContests(opts ...func(*ContestParticipantQuery)) *MemberQuery {
 	query := (&ContestParticipantClient{config: mq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mq.withContestParticipants = query
+	mq.withMemberContests = query
 	return mq
 }
 
-// WithBootcampParticipants tells the query-builder to eager-load the nodes that are connected to
-// the "bootcampParticipants" edge. The optional arguments are used to configure the query builder of the edge.
-func (mq *MemberQuery) WithBootcampParticipants(opts ...func(*BootcampParticipantQuery)) *MemberQuery {
+// WithMemberBootcamps tells the query-builder to eager-load the nodes that are connected to
+// the "member_bootcamps" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithMemberBootcamps(opts ...func(*BootcampParticipantQuery)) *MemberQuery {
 	query := (&BootcampParticipantClient{config: mq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mq.withBootcampParticipants = query
+	mq.withMemberBootcamps = query
+	return mq
+}
+
+// WithMemberCommunitys tells the query-builder to eager-load the nodes that are connected to
+// the "member_communitys" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithMemberCommunitys(opts ...func(*CommunityParticipantQuery)) *MemberQuery {
+	query := (&CommunityParticipantClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withMemberCommunitys = query
 	return mq
 }
 
@@ -586,14 +658,16 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	var (
 		nodes       = []*Member{}
 		_spec       = mq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [9]bool{
+			mq.withMemberProfile != nil,
 			mq.withMemberDetails != nil,
 			mq.withMemberNotes != nil,
 			mq.withMemberOrders != nil,
 			mq.withMemberEntry != nil,
 			mq.withMemberContents != nil,
-			mq.withContestParticipants != nil,
-			mq.withBootcampParticipants != nil,
+			mq.withMemberContests != nil,
+			mq.withMemberBootcamps != nil,
+			mq.withMemberCommunitys != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -613,6 +687,13 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := mq.withMemberProfile; query != nil {
+		if err := mq.loadMemberProfile(ctx, query, nodes,
+			func(n *Member) { n.Edges.MemberProfile = []*MemberProfile{} },
+			func(n *Member, e *MemberProfile) { n.Edges.MemberProfile = append(n.Edges.MemberProfile, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := mq.withMemberDetails; query != nil {
 		if err := mq.loadMemberDetails(ctx, query, nodes,
@@ -649,20 +730,25 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 			return nil, err
 		}
 	}
-	if query := mq.withContestParticipants; query != nil {
-		if err := mq.loadContestParticipants(ctx, query, nodes,
-			func(n *Member) { n.Edges.ContestParticipants = []*ContestParticipant{} },
-			func(n *Member, e *ContestParticipant) {
-				n.Edges.ContestParticipants = append(n.Edges.ContestParticipants, e)
-			}); err != nil {
+	if query := mq.withMemberContests; query != nil {
+		if err := mq.loadMemberContests(ctx, query, nodes,
+			func(n *Member) { n.Edges.MemberContests = []*ContestParticipant{} },
+			func(n *Member, e *ContestParticipant) { n.Edges.MemberContests = append(n.Edges.MemberContests, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := mq.withBootcampParticipants; query != nil {
-		if err := mq.loadBootcampParticipants(ctx, query, nodes,
-			func(n *Member) { n.Edges.BootcampParticipants = []*BootcampParticipant{} },
-			func(n *Member, e *BootcampParticipant) {
-				n.Edges.BootcampParticipants = append(n.Edges.BootcampParticipants, e)
+	if query := mq.withMemberBootcamps; query != nil {
+		if err := mq.loadMemberBootcamps(ctx, query, nodes,
+			func(n *Member) { n.Edges.MemberBootcamps = []*BootcampParticipant{} },
+			func(n *Member, e *BootcampParticipant) { n.Edges.MemberBootcamps = append(n.Edges.MemberBootcamps, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := mq.withMemberCommunitys; query != nil {
+		if err := mq.loadMemberCommunitys(ctx, query, nodes,
+			func(n *Member) { n.Edges.MemberCommunitys = []*CommunityParticipant{} },
+			func(n *Member, e *CommunityParticipant) {
+				n.Edges.MemberCommunitys = append(n.Edges.MemberCommunitys, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -670,6 +756,36 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	return nodes, nil
 }
 
+func (mq *MemberQuery) loadMemberProfile(ctx context.Context, query *MemberProfileQuery, nodes []*Member, init func(*Member), assign func(*Member, *MemberProfile)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Member)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(memberprofile.FieldMemberID)
+	}
+	query.Where(predicate.MemberProfile(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(member.MemberProfileColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.MemberID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (mq *MemberQuery) loadMemberDetails(ctx context.Context, query *MemberDetailsQuery, nodes []*Member, init func(*Member), assign func(*Member, *MemberDetails)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*Member)
@@ -820,7 +936,7 @@ func (mq *MemberQuery) loadMemberContents(ctx context.Context, query *MemberCont
 	}
 	return nil
 }
-func (mq *MemberQuery) loadContestParticipants(ctx context.Context, query *ContestParticipantQuery, nodes []*Member, init func(*Member), assign func(*Member, *ContestParticipant)) error {
+func (mq *MemberQuery) loadMemberContests(ctx context.Context, query *ContestParticipantQuery, nodes []*Member, init func(*Member), assign func(*Member, *ContestParticipant)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int64]*Member)
 	nids := make(map[int64]map[*Member]struct{})
@@ -832,11 +948,11 @@ func (mq *MemberQuery) loadContestParticipants(ctx context.Context, query *Conte
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(member.ContestParticipantsTable)
-		s.Join(joinT).On(s.C(contestparticipant.FieldID), joinT.C(member.ContestParticipantsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(member.ContestParticipantsPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(member.MemberContestsTable)
+		s.Join(joinT).On(s.C(contestparticipant.FieldID), joinT.C(member.MemberContestsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(member.MemberContestsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(member.ContestParticipantsPrimaryKey[0]))
+		s.Select(joinT.C(member.MemberContestsPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -873,7 +989,7 @@ func (mq *MemberQuery) loadContestParticipants(ctx context.Context, query *Conte
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "contestParticipants" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "member_contests" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -881,7 +997,7 @@ func (mq *MemberQuery) loadContestParticipants(ctx context.Context, query *Conte
 	}
 	return nil
 }
-func (mq *MemberQuery) loadBootcampParticipants(ctx context.Context, query *BootcampParticipantQuery, nodes []*Member, init func(*Member), assign func(*Member, *BootcampParticipant)) error {
+func (mq *MemberQuery) loadMemberBootcamps(ctx context.Context, query *BootcampParticipantQuery, nodes []*Member, init func(*Member), assign func(*Member, *BootcampParticipant)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int64]*Member)
 	nids := make(map[int64]map[*Member]struct{})
@@ -893,11 +1009,11 @@ func (mq *MemberQuery) loadBootcampParticipants(ctx context.Context, query *Boot
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(member.BootcampParticipantsTable)
-		s.Join(joinT).On(s.C(bootcampparticipant.FieldID), joinT.C(member.BootcampParticipantsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(member.BootcampParticipantsPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(member.MemberBootcampsTable)
+		s.Join(joinT).On(s.C(bootcampparticipant.FieldID), joinT.C(member.MemberBootcampsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(member.MemberBootcampsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(member.BootcampParticipantsPrimaryKey[0]))
+		s.Select(joinT.C(member.MemberBootcampsPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -934,7 +1050,68 @@ func (mq *MemberQuery) loadBootcampParticipants(ctx context.Context, query *Boot
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "bootcampParticipants" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "member_bootcamps" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (mq *MemberQuery) loadMemberCommunitys(ctx context.Context, query *CommunityParticipantQuery, nodes []*Member, init func(*Member), assign func(*Member, *CommunityParticipant)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int64]*Member)
+	nids := make(map[int64]map[*Member]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(member.MemberCommunitysTable)
+		s.Join(joinT).On(s.C(communityparticipant.FieldID), joinT.C(member.MemberCommunitysPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(member.MemberCommunitysPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(member.MemberCommunitysPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullInt64).Int64
+				inValue := values[1].(*sql.NullInt64).Int64
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Member]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*CommunityParticipant](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "member_communitys" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)

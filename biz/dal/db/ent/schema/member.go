@@ -42,14 +42,17 @@ func (Member) Mixin() []ent.Mixin {
 
 func (Member) Edges() []ent.Edge {
 	return []ent.Edge{
+
+		edge.To("member_profile", MemberProfile.Type),
 		edge.To("member_details", MemberDetails.Type),
 		edge.To("member_notes", MemberNote.Type),
 		edge.To("member_orders", Order.Type),
 		//edge.To("member_products", MemberProduct.Type),
 		edge.To("member_entry", EntryLogs.Type),
 		edge.To("member_contents", MemberContract.Type),
-		edge.To("contestParticipants", ContestParticipant.Type),
-		edge.To("bootcampParticipants", BootcampParticipant.Type),
+		edge.To("member_contests", ContestParticipant.Type),
+		edge.To("member_bootcamps", BootcampParticipant.Type),
+		edge.To("member_communitys", CommunityParticipant.Type),
 		//edge.To("member_face", Face.Type),
 	}
 }

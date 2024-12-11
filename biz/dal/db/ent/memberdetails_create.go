@@ -328,34 +328,6 @@ func (mdc *MemberDetailsCreate) SetNillableRelationMame(s *string) *MemberDetail
 	return mdc
 }
 
-// SetCreateID sets the "create_id" field.
-func (mdc *MemberDetailsCreate) SetCreateID(i int64) *MemberDetailsCreate {
-	mdc.mutation.SetCreateID(i)
-	return mdc
-}
-
-// SetNillableCreateID sets the "create_id" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableCreateID(i *int64) *MemberDetailsCreate {
-	if i != nil {
-		mdc.SetCreateID(*i)
-	}
-	return mdc
-}
-
-// SetCreateName sets the "create_name" field.
-func (mdc *MemberDetailsCreate) SetCreateName(s string) *MemberDetailsCreate {
-	mdc.mutation.SetCreateName(s)
-	return mdc
-}
-
-// SetNillableCreateName sets the "create_name" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableCreateName(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetCreateName(*s)
-	}
-	return mdc
-}
-
 // SetID sets the "id" field.
 func (mdc *MemberDetailsCreate) SetID(i int64) *MemberDetailsCreate {
 	mdc.mutation.SetID(i)
@@ -579,14 +551,6 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 	if value, ok := mdc.mutation.RelationMame(); ok {
 		_spec.SetField(memberdetails.FieldRelationMame, field.TypeString, value)
 		_node.RelationMame = value
-	}
-	if value, ok := mdc.mutation.CreateID(); ok {
-		_spec.SetField(memberdetails.FieldCreateID, field.TypeInt64, value)
-		_node.CreateID = value
-	}
-	if value, ok := mdc.mutation.CreateName(); ok {
-		_spec.SetField(memberdetails.FieldCreateName, field.TypeString, value)
-		_node.CreateName = value
 	}
 	if nodes := mdc.mutation.InfoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

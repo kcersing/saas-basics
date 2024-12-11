@@ -15,6 +15,8 @@ import (
 	"saas/biz/dal/db/ent/banner"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/community"
+	"saas/biz/dal/db/ent/communityparticipant"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/contract"
@@ -27,6 +29,7 @@ import (
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
+	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/messages"
@@ -60,6 +63,10 @@ type Client struct {
 	Bootcamp *BootcampClient
 	// BootcampParticipant is the client for interacting with the BootcampParticipant builders.
 	BootcampParticipant *BootcampParticipantClient
+	// Community is the client for interacting with the Community builders.
+	Community *CommunityClient
+	// CommunityParticipant is the client for interacting with the CommunityParticipant builders.
+	CommunityParticipant *CommunityParticipantClient
 	// Contest is the client for interacting with the Contest builders.
 	Contest *ContestClient
 	// ContestParticipant is the client for interacting with the ContestParticipant builders.
@@ -84,6 +91,8 @@ type Client struct {
 	MemberDetails *MemberDetailsClient
 	// MemberNote is the client for interacting with the MemberNote builders.
 	MemberNote *MemberNoteClient
+	// MemberProfile is the client for interacting with the MemberProfile builders.
+	MemberProfile *MemberProfileClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
@@ -125,6 +134,8 @@ func (c *Client) init() {
 	c.Banner = NewBannerClient(c.config)
 	c.Bootcamp = NewBootcampClient(c.config)
 	c.BootcampParticipant = NewBootcampParticipantClient(c.config)
+	c.Community = NewCommunityClient(c.config)
+	c.CommunityParticipant = NewCommunityParticipantClient(c.config)
 	c.Contest = NewContestClient(c.config)
 	c.ContestParticipant = NewContestParticipantClient(c.config)
 	c.Contract = NewContractClient(c.config)
@@ -137,6 +148,7 @@ func (c *Client) init() {
 	c.MemberContractContent = NewMemberContractContentClient(c.config)
 	c.MemberDetails = NewMemberDetailsClient(c.config)
 	c.MemberNote = NewMemberNoteClient(c.config)
+	c.MemberProfile = NewMemberProfileClient(c.config)
 	c.Menu = NewMenuClient(c.config)
 	c.MenuParam = NewMenuParamClient(c.config)
 	c.Messages = NewMessagesClient(c.config)
@@ -246,6 +258,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Banner:                NewBannerClient(cfg),
 		Bootcamp:              NewBootcampClient(cfg),
 		BootcampParticipant:   NewBootcampParticipantClient(cfg),
+		Community:             NewCommunityClient(cfg),
+		CommunityParticipant:  NewCommunityParticipantClient(cfg),
 		Contest:               NewContestClient(cfg),
 		ContestParticipant:    NewContestParticipantClient(cfg),
 		Contract:              NewContractClient(cfg),
@@ -258,6 +272,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		MemberContractContent: NewMemberContractContentClient(cfg),
 		MemberDetails:         NewMemberDetailsClient(cfg),
 		MemberNote:            NewMemberNoteClient(cfg),
+		MemberProfile:         NewMemberProfileClient(cfg),
 		Menu:                  NewMenuClient(cfg),
 		MenuParam:             NewMenuParamClient(cfg),
 		Messages:              NewMessagesClient(cfg),
@@ -294,6 +309,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Banner:                NewBannerClient(cfg),
 		Bootcamp:              NewBootcampClient(cfg),
 		BootcampParticipant:   NewBootcampParticipantClient(cfg),
+		Community:             NewCommunityClient(cfg),
+		CommunityParticipant:  NewCommunityParticipantClient(cfg),
 		Contest:               NewContestClient(cfg),
 		ContestParticipant:    NewContestParticipantClient(cfg),
 		Contract:              NewContractClient(cfg),
@@ -306,6 +323,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		MemberContractContent: NewMemberContractContentClient(cfg),
 		MemberDetails:         NewMemberDetailsClient(cfg),
 		MemberNote:            NewMemberNoteClient(cfg),
+		MemberProfile:         NewMemberProfileClient(cfg),
 		Menu:                  NewMenuClient(cfg),
 		MenuParam:             NewMenuParamClient(cfg),
 		Messages:              NewMessagesClient(cfg),
@@ -348,12 +366,13 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.API, c.Banner, c.Bootcamp, c.BootcampParticipant, c.Contest,
-		c.ContestParticipant, c.Contract, c.Dictionary, c.DictionaryDetail,
-		c.EntryLogs, c.Logs, c.Member, c.MemberContract, c.MemberContractContent,
-		c.MemberDetails, c.MemberNote, c.Menu, c.MenuParam, c.Messages, c.Order,
-		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Role, c.Token, c.User,
-		c.Venue, c.VenuePlace,
+		c.API, c.Banner, c.Bootcamp, c.BootcampParticipant, c.Community,
+		c.CommunityParticipant, c.Contest, c.ContestParticipant, c.Contract,
+		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
+		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
+		c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount,
+		c.OrderItem, c.OrderPay, c.OrderSales, c.Role, c.Token, c.User, c.Venue,
+		c.VenuePlace,
 	} {
 		n.Use(hooks...)
 	}
@@ -363,12 +382,13 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.API, c.Banner, c.Bootcamp, c.BootcampParticipant, c.Contest,
-		c.ContestParticipant, c.Contract, c.Dictionary, c.DictionaryDetail,
-		c.EntryLogs, c.Logs, c.Member, c.MemberContract, c.MemberContractContent,
-		c.MemberDetails, c.MemberNote, c.Menu, c.MenuParam, c.Messages, c.Order,
-		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Role, c.Token, c.User,
-		c.Venue, c.VenuePlace,
+		c.API, c.Banner, c.Bootcamp, c.BootcampParticipant, c.Community,
+		c.CommunityParticipant, c.Contest, c.ContestParticipant, c.Contract,
+		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
+		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
+		c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount,
+		c.OrderItem, c.OrderPay, c.OrderSales, c.Role, c.Token, c.User, c.Venue,
+		c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -385,6 +405,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Bootcamp.mutate(ctx, m)
 	case *BootcampParticipantMutation:
 		return c.BootcampParticipant.mutate(ctx, m)
+	case *CommunityMutation:
+		return c.Community.mutate(ctx, m)
+	case *CommunityParticipantMutation:
+		return c.CommunityParticipant.mutate(ctx, m)
 	case *ContestMutation:
 		return c.Contest.mutate(ctx, m)
 	case *ContestParticipantMutation:
@@ -409,6 +433,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.MemberDetails.mutate(ctx, m)
 	case *MemberNoteMutation:
 		return c.MemberNote.mutate(ctx, m)
+	case *MemberProfileMutation:
+		return c.MemberProfile.mutate(ctx, m)
 	case *MenuMutation:
 		return c.Menu.mutate(ctx, m)
 	case *MenuParamMutation:
@@ -1017,6 +1043,320 @@ func (c *BootcampParticipantClient) mutate(ctx context.Context, m *BootcampParti
 		return (&BootcampParticipantDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown BootcampParticipant mutation op: %q", m.Op())
+	}
+}
+
+// CommunityClient is a client for the Community schema.
+type CommunityClient struct {
+	config
+}
+
+// NewCommunityClient returns a client for the Community from the given config.
+func NewCommunityClient(c config) *CommunityClient {
+	return &CommunityClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `community.Hooks(f(g(h())))`.
+func (c *CommunityClient) Use(hooks ...Hook) {
+	c.hooks.Community = append(c.hooks.Community, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `community.Intercept(f(g(h())))`.
+func (c *CommunityClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Community = append(c.inters.Community, interceptors...)
+}
+
+// Create returns a builder for creating a Community entity.
+func (c *CommunityClient) Create() *CommunityCreate {
+	mutation := newCommunityMutation(c.config, OpCreate)
+	return &CommunityCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Community entities.
+func (c *CommunityClient) CreateBulk(builders ...*CommunityCreate) *CommunityCreateBulk {
+	return &CommunityCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CommunityClient) MapCreateBulk(slice any, setFunc func(*CommunityCreate, int)) *CommunityCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CommunityCreateBulk{err: fmt.Errorf("calling to CommunityClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CommunityCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CommunityCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Community.
+func (c *CommunityClient) Update() *CommunityUpdate {
+	mutation := newCommunityMutation(c.config, OpUpdate)
+	return &CommunityUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CommunityClient) UpdateOne(co *Community) *CommunityUpdateOne {
+	mutation := newCommunityMutation(c.config, OpUpdateOne, withCommunity(co))
+	return &CommunityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CommunityClient) UpdateOneID(id int64) *CommunityUpdateOne {
+	mutation := newCommunityMutation(c.config, OpUpdateOne, withCommunityID(id))
+	return &CommunityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Community.
+func (c *CommunityClient) Delete() *CommunityDelete {
+	mutation := newCommunityMutation(c.config, OpDelete)
+	return &CommunityDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CommunityClient) DeleteOne(co *Community) *CommunityDeleteOne {
+	return c.DeleteOneID(co.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CommunityClient) DeleteOneID(id int64) *CommunityDeleteOne {
+	builder := c.Delete().Where(community.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CommunityDeleteOne{builder}
+}
+
+// Query returns a query builder for Community.
+func (c *CommunityClient) Query() *CommunityQuery {
+	return &CommunityQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCommunity},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Community entity by its id.
+func (c *CommunityClient) Get(ctx context.Context, id int64) (*Community, error) {
+	return c.Query().Where(community.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CommunityClient) GetX(ctx context.Context, id int64) *Community {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryCommunityParticipants queries the community_participants edge of a Community.
+func (c *CommunityClient) QueryCommunityParticipants(co *Community) *CommunityParticipantQuery {
+	query := (&CommunityParticipantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(community.Table, community.FieldID, id),
+			sqlgraph.To(communityparticipant.Table, communityparticipant.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, community.CommunityParticipantsTable, community.CommunityParticipantsColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CommunityClient) Hooks() []Hook {
+	return c.hooks.Community
+}
+
+// Interceptors returns the client interceptors.
+func (c *CommunityClient) Interceptors() []Interceptor {
+	return c.inters.Community
+}
+
+func (c *CommunityClient) mutate(ctx context.Context, m *CommunityMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CommunityCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CommunityUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CommunityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CommunityDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Community mutation op: %q", m.Op())
+	}
+}
+
+// CommunityParticipantClient is a client for the CommunityParticipant schema.
+type CommunityParticipantClient struct {
+	config
+}
+
+// NewCommunityParticipantClient returns a client for the CommunityParticipant from the given config.
+func NewCommunityParticipantClient(c config) *CommunityParticipantClient {
+	return &CommunityParticipantClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `communityparticipant.Hooks(f(g(h())))`.
+func (c *CommunityParticipantClient) Use(hooks ...Hook) {
+	c.hooks.CommunityParticipant = append(c.hooks.CommunityParticipant, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `communityparticipant.Intercept(f(g(h())))`.
+func (c *CommunityParticipantClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CommunityParticipant = append(c.inters.CommunityParticipant, interceptors...)
+}
+
+// Create returns a builder for creating a CommunityParticipant entity.
+func (c *CommunityParticipantClient) Create() *CommunityParticipantCreate {
+	mutation := newCommunityParticipantMutation(c.config, OpCreate)
+	return &CommunityParticipantCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CommunityParticipant entities.
+func (c *CommunityParticipantClient) CreateBulk(builders ...*CommunityParticipantCreate) *CommunityParticipantCreateBulk {
+	return &CommunityParticipantCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CommunityParticipantClient) MapCreateBulk(slice any, setFunc func(*CommunityParticipantCreate, int)) *CommunityParticipantCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CommunityParticipantCreateBulk{err: fmt.Errorf("calling to CommunityParticipantClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CommunityParticipantCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CommunityParticipantCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CommunityParticipant.
+func (c *CommunityParticipantClient) Update() *CommunityParticipantUpdate {
+	mutation := newCommunityParticipantMutation(c.config, OpUpdate)
+	return &CommunityParticipantUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CommunityParticipantClient) UpdateOne(cp *CommunityParticipant) *CommunityParticipantUpdateOne {
+	mutation := newCommunityParticipantMutation(c.config, OpUpdateOne, withCommunityParticipant(cp))
+	return &CommunityParticipantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CommunityParticipantClient) UpdateOneID(id int64) *CommunityParticipantUpdateOne {
+	mutation := newCommunityParticipantMutation(c.config, OpUpdateOne, withCommunityParticipantID(id))
+	return &CommunityParticipantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CommunityParticipant.
+func (c *CommunityParticipantClient) Delete() *CommunityParticipantDelete {
+	mutation := newCommunityParticipantMutation(c.config, OpDelete)
+	return &CommunityParticipantDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CommunityParticipantClient) DeleteOne(cp *CommunityParticipant) *CommunityParticipantDeleteOne {
+	return c.DeleteOneID(cp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CommunityParticipantClient) DeleteOneID(id int64) *CommunityParticipantDeleteOne {
+	builder := c.Delete().Where(communityparticipant.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CommunityParticipantDeleteOne{builder}
+}
+
+// Query returns a query builder for CommunityParticipant.
+func (c *CommunityParticipantClient) Query() *CommunityParticipantQuery {
+	return &CommunityParticipantQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCommunityParticipant},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CommunityParticipant entity by its id.
+func (c *CommunityParticipantClient) Get(ctx context.Context, id int64) (*CommunityParticipant, error) {
+	return c.Query().Where(communityparticipant.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CommunityParticipantClient) GetX(ctx context.Context, id int64) *CommunityParticipant {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryCommunity queries the community edge of a CommunityParticipant.
+func (c *CommunityParticipantClient) QueryCommunity(cp *CommunityParticipant) *CommunityQuery {
+	query := (&CommunityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(communityparticipant.Table, communityparticipant.FieldID, id),
+			sqlgraph.To(community.Table, community.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, communityparticipant.CommunityTable, communityparticipant.CommunityColumn),
+		)
+		fromV = sqlgraph.Neighbors(cp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMembers queries the members edge of a CommunityParticipant.
+func (c *CommunityParticipantClient) QueryMembers(cp *CommunityParticipant) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(communityparticipant.Table, communityparticipant.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, communityparticipant.MembersTable, communityparticipant.MembersPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(cp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CommunityParticipantClient) Hooks() []Hook {
+	return c.hooks.CommunityParticipant
+}
+
+// Interceptors returns the client interceptors.
+func (c *CommunityParticipantClient) Interceptors() []Interceptor {
+	return c.inters.CommunityParticipant
+}
+
+func (c *CommunityParticipantClient) mutate(ctx context.Context, m *CommunityParticipantMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CommunityParticipantCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CommunityParticipantUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CommunityParticipantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CommunityParticipantDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown CommunityParticipant mutation op: %q", m.Op())
 	}
 }
 
@@ -2203,6 +2543,22 @@ func (c *MemberClient) GetX(ctx context.Context, id int64) *Member {
 	return obj
 }
 
+// QueryMemberProfile queries the member_profile edge of a Member.
+func (c *MemberClient) QueryMemberProfile(m *Member) *MemberProfileQuery {
+	query := (&MemberProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(memberprofile.Table, memberprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProfileTable, member.MemberProfileColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMemberDetails queries the member_details edge of a Member.
 func (c *MemberClient) QueryMemberDetails(m *Member) *MemberDetailsQuery {
 	query := (&MemberDetailsClient{config: c.config}).Query()
@@ -2283,15 +2639,15 @@ func (c *MemberClient) QueryMemberContents(m *Member) *MemberContractQuery {
 	return query
 }
 
-// QueryContestParticipants queries the contestParticipants edge of a Member.
-func (c *MemberClient) QueryContestParticipants(m *Member) *ContestParticipantQuery {
+// QueryMemberContests queries the member_contests edge of a Member.
+func (c *MemberClient) QueryMemberContests(m *Member) *ContestParticipantQuery {
 	query := (&ContestParticipantClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(member.Table, member.FieldID, id),
 			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, member.ContestParticipantsTable, member.ContestParticipantsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberContestsTable, member.MemberContestsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
@@ -2299,15 +2655,31 @@ func (c *MemberClient) QueryContestParticipants(m *Member) *ContestParticipantQu
 	return query
 }
 
-// QueryBootcampParticipants queries the bootcampParticipants edge of a Member.
-func (c *MemberClient) QueryBootcampParticipants(m *Member) *BootcampParticipantQuery {
+// QueryMemberBootcamps queries the member_bootcamps edge of a Member.
+func (c *MemberClient) QueryMemberBootcamps(m *Member) *BootcampParticipantQuery {
 	query := (&BootcampParticipantClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(member.Table, member.FieldID, id),
 			sqlgraph.To(bootcampparticipant.Table, bootcampparticipant.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, member.BootcampParticipantsTable, member.BootcampParticipantsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberBootcampsTable, member.MemberBootcampsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberCommunitys queries the member_communitys edge of a Member.
+func (c *MemberClient) QueryMemberCommunitys(m *Member) *CommunityParticipantQuery {
+	query := (&CommunityParticipantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(communityparticipant.Table, communityparticipant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberCommunitysTable, member.MemberCommunitysPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
@@ -2965,6 +3337,155 @@ func (c *MemberNoteClient) mutate(ctx context.Context, m *MemberNoteMutation) (V
 		return (&MemberNoteDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown MemberNote mutation op: %q", m.Op())
+	}
+}
+
+// MemberProfileClient is a client for the MemberProfile schema.
+type MemberProfileClient struct {
+	config
+}
+
+// NewMemberProfileClient returns a client for the MemberProfile from the given config.
+func NewMemberProfileClient(c config) *MemberProfileClient {
+	return &MemberProfileClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `memberprofile.Hooks(f(g(h())))`.
+func (c *MemberProfileClient) Use(hooks ...Hook) {
+	c.hooks.MemberProfile = append(c.hooks.MemberProfile, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `memberprofile.Intercept(f(g(h())))`.
+func (c *MemberProfileClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemberProfile = append(c.inters.MemberProfile, interceptors...)
+}
+
+// Create returns a builder for creating a MemberProfile entity.
+func (c *MemberProfileClient) Create() *MemberProfileCreate {
+	mutation := newMemberProfileMutation(c.config, OpCreate)
+	return &MemberProfileCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemberProfile entities.
+func (c *MemberProfileClient) CreateBulk(builders ...*MemberProfileCreate) *MemberProfileCreateBulk {
+	return &MemberProfileCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberProfileClient) MapCreateBulk(slice any, setFunc func(*MemberProfileCreate, int)) *MemberProfileCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberProfileCreateBulk{err: fmt.Errorf("calling to MemberProfileClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberProfileCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberProfileCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemberProfile.
+func (c *MemberProfileClient) Update() *MemberProfileUpdate {
+	mutation := newMemberProfileMutation(c.config, OpUpdate)
+	return &MemberProfileUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberProfileClient) UpdateOne(mp *MemberProfile) *MemberProfileUpdateOne {
+	mutation := newMemberProfileMutation(c.config, OpUpdateOne, withMemberProfile(mp))
+	return &MemberProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberProfileClient) UpdateOneID(id int64) *MemberProfileUpdateOne {
+	mutation := newMemberProfileMutation(c.config, OpUpdateOne, withMemberProfileID(id))
+	return &MemberProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemberProfile.
+func (c *MemberProfileClient) Delete() *MemberProfileDelete {
+	mutation := newMemberProfileMutation(c.config, OpDelete)
+	return &MemberProfileDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberProfileClient) DeleteOne(mp *MemberProfile) *MemberProfileDeleteOne {
+	return c.DeleteOneID(mp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberProfileClient) DeleteOneID(id int64) *MemberProfileDeleteOne {
+	builder := c.Delete().Where(memberprofile.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberProfileDeleteOne{builder}
+}
+
+// Query returns a query builder for MemberProfile.
+func (c *MemberProfileClient) Query() *MemberProfileQuery {
+	return &MemberProfileQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemberProfile},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemberProfile entity by its id.
+func (c *MemberProfileClient) Get(ctx context.Context, id int64) (*MemberProfile, error) {
+	return c.Query().Where(memberprofile.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberProfileClient) GetX(ctx context.Context, id int64) *MemberProfile {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryProfile queries the profile edge of a MemberProfile.
+func (c *MemberProfileClient) QueryProfile(mp *MemberProfile) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberprofile.Table, memberprofile.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberprofile.ProfileTable, memberprofile.ProfileColumn),
+		)
+		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemberProfileClient) Hooks() []Hook {
+	return c.hooks.MemberProfile
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberProfileClient) Interceptors() []Interceptor {
+	return c.inters.MemberProfile
+}
+
+func (c *MemberProfileClient) mutate(ctx context.Context, m *MemberProfileMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberProfileCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberProfileUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberProfileDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemberProfile mutation op: %q", m.Op())
 	}
 }
 
@@ -5132,17 +5653,17 @@ func (c *VenuePlaceClient) mutate(ctx context.Context, m *VenuePlaceMutation) (V
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		API, Banner, Bootcamp, BootcampParticipant, Contest, ContestParticipant,
-		Contract, Dictionary, DictionaryDetail, EntryLogs, Logs, Member,
-		MemberContract, MemberContractContent, MemberDetails, MemberNote, Menu,
-		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales, Role,
-		Token, User, Venue, VenuePlace []ent.Hook
+		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
+		Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail, EntryLogs,
+		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
+		MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount, OrderItem,
+		OrderPay, OrderSales, Role, Token, User, Venue, VenuePlace []ent.Hook
 	}
 	inters struct {
-		API, Banner, Bootcamp, BootcampParticipant, Contest, ContestParticipant,
-		Contract, Dictionary, DictionaryDetail, EntryLogs, Logs, Member,
-		MemberContract, MemberContractContent, MemberDetails, MemberNote, Menu,
-		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales, Role,
-		Token, User, Venue, VenuePlace []ent.Interceptor
+		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
+		Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail, EntryLogs,
+		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
+		MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount, OrderItem,
+		OrderPay, OrderSales, Role, Token, User, Venue, VenuePlace []ent.Interceptor
 	}
 )

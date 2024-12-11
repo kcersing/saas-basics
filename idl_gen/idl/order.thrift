@@ -23,6 +23,8 @@ struct ListOrderReq {
     10: optional string endCompletionAt="" (api.raw = "endCompletionAt")
     11: optional string productType="" (api.raw = "productType")
     12: optional string nature="" (api.raw = "nature")
+    13: optional string name ="" (api.raw = "name ")
+    14: optional string member_name="" (api.raw = "member_name")
 }
 struct OrderInfo {
     1:  optional i64 id=0 (api.raw = "id")

@@ -31,7 +31,7 @@ gen-user:
 	hz update -idl idl_gen/idl/user.thrift -model_dir idl_gen/model/  --unset_omitempty
 	hz update -idl idl_gen/idl/payment.thrift -model_dir idl_gen/model/  --unset_omitempty
 
-
+	swag init
 
 .PHONY: gen-ent
 gen-ent:

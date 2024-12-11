@@ -37,7 +37,7 @@ func (BootcampParticipant) Mixin() []ent.Mixin {
 func (BootcampParticipant) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("bootcamps", Bootcamp.Type).Ref("bootcamp_participants").Field("bootcamp_id").Unique(),
-		edge.From("members", Member.Type).Ref("bootcampParticipants"),
+		edge.From("members", Member.Type).Ref("member_bootcamps"),
 	}
 }
 

@@ -63,10 +63,6 @@ type MemberDetails struct {
 	RelationMid int64 `json:"relation_mid,omitempty"`
 	// 关联会员
 	RelationMame string `json:"relation_mame,omitempty"`
-	// 创建人
-	CreateID int64 `json:"create_id,omitempty"`
-	// 创建人
-	CreateName string `json:"create_name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberDetailsQuery when eager-loading is set.
 	Edges        MemberDetailsEdges `json:"edges"`
@@ -102,9 +98,9 @@ func (*MemberDetails) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberdetails.FieldMoneySum:
 			values[i] = new(sql.NullFloat64)
-		case memberdetails.FieldID, memberdetails.FieldDelete, memberdetails.FieldCreatedID, memberdetails.FieldMemberID, memberdetails.FieldGender, memberdetails.FieldProductID, memberdetails.FieldProductVenue, memberdetails.FieldEntrySum, memberdetails.FieldRelationUID, memberdetails.FieldRelationMid, memberdetails.FieldCreateID:
+		case memberdetails.FieldID, memberdetails.FieldDelete, memberdetails.FieldCreatedID, memberdetails.FieldMemberID, memberdetails.FieldGender, memberdetails.FieldProductID, memberdetails.FieldProductVenue, memberdetails.FieldEntrySum, memberdetails.FieldRelationUID, memberdetails.FieldRelationMid:
 			values[i] = new(sql.NullInt64)
-		case memberdetails.FieldEmail, memberdetails.FieldWecom, memberdetails.FieldProductName, memberdetails.FieldProductVenueName, memberdetails.FieldRelationUname, memberdetails.FieldRelationMame, memberdetails.FieldCreateName:
+		case memberdetails.FieldEmail, memberdetails.FieldWecom, memberdetails.FieldProductName, memberdetails.FieldProductVenueName, memberdetails.FieldRelationUname, memberdetails.FieldRelationMame:
 			values[i] = new(sql.NullString)
 		case memberdetails.FieldCreatedAt, memberdetails.FieldUpdatedAt, memberdetails.FieldBirthday, memberdetails.FieldEntryLastTime, memberdetails.FieldEntryDeadlineTime, memberdetails.FieldClassLastTime:
 			values[i] = new(sql.NullTime)
@@ -261,18 +257,6 @@ func (md *MemberDetails) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				md.RelationMame = value.String
 			}
-		case memberdetails.FieldCreateID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field create_id", values[i])
-			} else if value.Valid {
-				md.CreateID = value.Int64
-			}
-		case memberdetails.FieldCreateName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field create_name", values[i])
-			} else if value.Valid {
-				md.CreateName = value.String
-			}
 		default:
 			md.selectValues.Set(columns[i], values[i])
 		}
@@ -379,12 +363,6 @@ func (md *MemberDetails) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("relation_mame=")
 	builder.WriteString(md.RelationMame)
-	builder.WriteString(", ")
-	builder.WriteString("create_id=")
-	builder.WriteString(fmt.Sprintf("%v", md.CreateID))
-	builder.WriteString(", ")
-	builder.WriteString("create_name=")
-	builder.WriteString(md.CreateName)
 	builder.WriteByte(')')
 	return builder.String()
 }
