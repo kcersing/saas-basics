@@ -80,8 +80,6 @@ var (
 	DefaultDelete int64
 	// DefaultCreatedID holds the default value on creation for the "created_id" field.
 	DefaultCreatedID int64
-	// OrderIDValidator is a validator for the "order_id" field. It is called by the builders before save.
-	OrderIDValidator func(int64) error
 )
 
 // OrderOption defines the ordering options for the OrderAmount queries.

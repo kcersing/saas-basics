@@ -212,11 +212,6 @@ func (oac *OrderAmountCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (oac *OrderAmountCreate) check() error {
-	if v, ok := oac.mutation.OrderID(); ok {
-		if err := orderamount.OrderIDValidator(v); err != nil {
-			return &ValidationError{Name: "order_id", err: fmt.Errorf(`ent: validator failed for field "OrderAmount.order_id": %w`, err)}
-		}
-	}
 	return nil
 }
 

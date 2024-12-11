@@ -771,10 +771,6 @@ func init() {
 	orderamountDescCreatedID := orderamountMixinFields0[4].Descriptor()
 	// orderamount.DefaultCreatedID holds the default value on creation for the created_id field.
 	orderamount.DefaultCreatedID = orderamountDescCreatedID.Default.(int64)
-	// orderamountDescOrderID is the schema descriptor for order_id field.
-	orderamountDescOrderID := orderamountFields[0].Descriptor()
-	// orderamount.OrderIDValidator is a validator for the "order_id" field. It is called by the builders before save.
-	orderamount.OrderIDValidator = orderamountDescOrderID.Validators[0].(func(int64) error)
 	orderitemMixin := schema.OrderItem{}.Mixin()
 	orderitemMixinFields0 := orderitemMixin[0].Fields()
 	_ = orderitemMixinFields0

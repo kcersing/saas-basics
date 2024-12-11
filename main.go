@@ -31,6 +31,10 @@ func main() {
 		server.WithStreamBody(true),
 		server.WithHostPorts(fmt.Sprintf("%s:%d", config.GlobalServerConfig.Host, config.GlobalServerConfig.Port)),
 	)
+	//h.SetCustomSignalWaiter(func(err chan error) error {
+	//	return nil
+	//})
+	//pprof.Register(h, "debug/pprof")
 
 	h.Use(accesslog.New(
 		accesslog.WithFormat("[${time}] | ${status} | ${latency} | ${method} | ${path} | ${queryParams}"),

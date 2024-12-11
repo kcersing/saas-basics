@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
 	"github.com/xuri/excelize/v2"
 	"os"
@@ -20,13 +21,25 @@ import (
 
 func (c Contest) CreateParticipantMember(req contest.ParticipantInfo) (member *ent.Member, err error) {
 	member, err = c.db.Member.Query().Where(member2.Mobile(req.Mobile)).First(c.ctx)
+
 	if member == nil {
 		member, err = c.db.Member.Create().SetName(req.Name).SetMobile(req.Mobile).Save(c.ctx)
+		hlog.Info(err)
 		if err != nil {
 			return nil, err
 		}
 		_, err = c.db.MemberDetails.Create().SetMemberID(member.ID).Save(c.ctx)
+	} else {
+
+		first, _ := c.db.ContestParticipant.Query().Where(
+			contestparticipant.MemberID(member.ID),
+			contestparticipant.ContestID(req.ContestId),
+		).Exist(c.ctx)
+		if first {
+			return nil, errors.New("已报名")
+		}
 	}
+
 	return member, nil
 }
 func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
@@ -37,6 +50,7 @@ func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 	}
 
 	member, err := c.CreateParticipantMember(req)
+
 	if err != nil {
 		return err
 	}

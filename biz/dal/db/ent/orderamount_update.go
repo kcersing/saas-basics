@@ -275,20 +275,7 @@ func (oau *OrderAmountUpdate) defaults() {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (oau *OrderAmountUpdate) check() error {
-	if v, ok := oau.mutation.OrderID(); ok {
-		if err := orderamount.OrderIDValidator(v); err != nil {
-			return &ValidationError{Name: "order_id", err: fmt.Errorf(`ent: validator failed for field "OrderAmount.order_id": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := oau.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(orderamount.Table, orderamount.Columns, sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64))
 	if ps := oau.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -668,20 +655,7 @@ func (oauo *OrderAmountUpdateOne) defaults() {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (oauo *OrderAmountUpdateOne) check() error {
-	if v, ok := oauo.mutation.OrderID(); ok {
-		if err := orderamount.OrderIDValidator(v); err != nil {
-			return &ValidationError{Name: "order_id", err: fmt.Errorf(`ent: validator failed for field "OrderAmount.order_id": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (oauo *OrderAmountUpdateOne) sqlSave(ctx context.Context) (_node *OrderAmount, err error) {
-	if err := oauo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(orderamount.Table, orderamount.Columns, sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64))
 	id, ok := oauo.mutation.ID()
 	if !ok {

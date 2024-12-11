@@ -9,6 +9,7 @@ import (
 	"saas/pkg/enums"
 	"saas/pkg/utils"
 	"strconv"
+	"sync"
 )
 
 func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOne *order.OrderInfo, err error) {
@@ -25,10 +26,10 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 		contestName = contests.Name
 	}
 
-	//errChan := make(chan error, 2)
-	//defer close(errChan)
-	//var wg sync.WaitGroup
-	//wg.Add(1)
+	errChan := make(chan error, 2)
+	defer close(errChan)
+	var wg sync.WaitGroup
+	wg.Add(2)
 
 	tx, err := o.db.Tx(o.ctx)
 
@@ -70,12 +71,12 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 			SetName(contestName).
 			SetContestID(req.ContestId).
 			Save(o.ctx)
-		//if err != nil {
-		//	err = errors.Wrap(err, "创建 Order Item 失败")
-		//	errChan <- err
-		//}
+		if err != nil {
+			err = errors.Wrap(err, "创建 Order Item 失败")
+			errChan <- err
+		}
 
-		//wg.Done()
+		wg.Done()
 	}()
 
 	go func() {
@@ -84,20 +85,20 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 			SetTotal(total).
 			SetResidue(total).
 			Save(o.ctx)
-		//if err != nil {
-		//	err = errors.Wrap(err, "创建Order Amount失败")
-		//	errChan <- err
-		//}
-		//
-		//wg.Done()
+		if err != nil {
+			err = errors.Wrap(err, "创建Order Amount失败")
+			errChan <- err
+		}
+
+		wg.Done()
 	}()
 
-	//wg.Wait()
-	//select {
-	//case result := <-errChan:
-	//	return nil, rollback(tx, result)
-	//default:
-	//}
+	wg.Wait()
+	select {
+	case result := <-errChan:
+		return nil, rollback(tx, result)
+	default:
+	}
 
 	if err = tx.Commit(); err != nil {
 		return nil, err
