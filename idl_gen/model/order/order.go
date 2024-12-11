@@ -1025,6 +1025,8 @@ type OrderInfo struct {
 	CompletionAt string        `thrift:"completionAt,15,optional" form:"completionAt" json:"completionAt" query:"completionAt"`
 	CreatedAt    string        `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt    string        `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	MemberName   string        `thrift:"memberName,18,optional" form:"memberName" json:"memberName" query:"memberName"`
+	MemberMobile string        `thrift:"memberMobile,19,optional" form:"memberMobile" json:"memberMobile" query:"memberMobile"`
 	OrderAmount  *OrderAmount  `thrift:"orderAmount,250,optional" form:"orderAmount" json:"orderAmount" query:"orderAmount"`
 	OrderItem    *OrderItem    `thrift:"orderItem,251,optional" form:"orderItem" json:"orderItem" query:"orderItem"`
 	OrderPay     []*OrderPay   `thrift:"orderPay,252,optional" form:"orderPay" json:"orderPay" query:"orderPay"`
@@ -1047,6 +1049,8 @@ func NewOrderInfo() *OrderInfo {
 		CompletionAt: "",
 		CreatedAt:    "",
 		UpdatedAt:    "",
+		MemberName:   "",
+		MemberMobile: "",
 		OrderAmount:  &OrderAmount{},
 		OrderItem:    &OrderItem{},
 		OrderPay:     []*OrderPay{},
@@ -1068,6 +1072,8 @@ func (p *OrderInfo) InitDefault() {
 	p.CompletionAt = ""
 	p.CreatedAt = ""
 	p.UpdatedAt = ""
+	p.MemberName = ""
+	p.MemberMobile = ""
 	p.OrderAmount = &OrderAmount{}
 	p.OrderItem = &OrderItem{}
 	p.OrderPay = []*OrderPay{}
@@ -1191,6 +1197,24 @@ func (p *OrderInfo) GetUpdatedAt() (v string) {
 	return p.UpdatedAt
 }
 
+var OrderInfo_MemberName_DEFAULT string = ""
+
+func (p *OrderInfo) GetMemberName() (v string) {
+	if !p.IsSetMemberName() {
+		return OrderInfo_MemberName_DEFAULT
+	}
+	return p.MemberName
+}
+
+var OrderInfo_MemberMobile_DEFAULT string = ""
+
+func (p *OrderInfo) GetMemberMobile() (v string) {
+	if !p.IsSetMemberMobile() {
+		return OrderInfo_MemberMobile_DEFAULT
+	}
+	return p.MemberMobile
+}
+
 var OrderInfo_OrderAmount_DEFAULT *OrderAmount = &OrderAmount{}
 
 func (p *OrderInfo) GetOrderAmount() (v *OrderAmount) {
@@ -1241,6 +1265,8 @@ var fieldIDToName_OrderInfo = map[int16]string{
 	15:  "completionAt",
 	16:  "createdAt",
 	17:  "updatedAt",
+	18:  "memberName",
+	19:  "memberMobile",
 	250: "orderAmount",
 	251: "orderItem",
 	252: "orderPay",
@@ -1297,6 +1323,14 @@ func (p *OrderInfo) IsSetCreatedAt() bool {
 
 func (p *OrderInfo) IsSetUpdatedAt() bool {
 	return p.UpdatedAt != OrderInfo_UpdatedAt_DEFAULT
+}
+
+func (p *OrderInfo) IsSetMemberName() bool {
+	return p.MemberName != OrderInfo_MemberName_DEFAULT
+}
+
+func (p *OrderInfo) IsSetMemberMobile() bool {
+	return p.MemberMobile != OrderInfo_MemberMobile_DEFAULT
 }
 
 func (p *OrderInfo) IsSetOrderAmount() bool {
@@ -1433,6 +1467,22 @@ func (p *OrderInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 17:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField17(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 18:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField18(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 19:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField19(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1642,6 +1692,28 @@ func (p *OrderInfo) ReadField17(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
+func (p *OrderInfo) ReadField18(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.MemberName = _field
+	return nil
+}
+func (p *OrderInfo) ReadField19(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.MemberMobile = _field
+	return nil
+}
 func (p *OrderInfo) ReadField250(iprot thrift.TProtocol) error {
 	_field := NewOrderAmount()
 	if err := _field.Read(iprot); err != nil {
@@ -1761,6 +1833,14 @@ func (p *OrderInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField17(oprot); err != nil {
 			fieldId = 17
+			goto WriteFieldError
+		}
+		if err = p.writeField18(oprot); err != nil {
+			fieldId = 18
+			goto WriteFieldError
+		}
+		if err = p.writeField19(oprot); err != nil {
+			fieldId = 19
 			goto WriteFieldError
 		}
 		if err = p.writeField250(oprot); err != nil {
@@ -2042,6 +2122,44 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
+}
+
+func (p *OrderInfo) writeField18(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMemberName() {
+		if err = oprot.WriteFieldBegin("memberName", thrift.STRING, 18); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.MemberName); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
+}
+
+func (p *OrderInfo) writeField19(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMemberMobile() {
+		if err = oprot.WriteFieldBegin("memberMobile", thrift.STRING, 19); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.MemberMobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 end error: ", p), err)
 }
 
 func (p *OrderInfo) writeField250(oprot thrift.TProtocol) (err error) {

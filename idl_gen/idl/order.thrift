@@ -41,6 +41,9 @@ struct OrderInfo {
     16:  optional string createdAt="" (api.raw = "createdAt")
     17:  optional string updatedAt="" (api.raw = "updatedAt")
 
+    18:  optional string memberName="" (api.raw = "memberName")
+    19:  optional string memberMobile="" (api.raw = "memberMobile")
+
     250: optional OrderAmount orderAmount={} (api.raw = "orderAmount")
     251: optional OrderItem orderItem={} (api.raw = "orderItem")
     252: optional list<OrderPay> orderPay={} (api.raw = "orderPay")

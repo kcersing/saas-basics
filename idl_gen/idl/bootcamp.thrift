@@ -1,52 +1,52 @@
 
-namespace go contest
+namespace go bootcamp
 
 include "../base/base.thrift"
 
-service ContestService {
+service BootcampService {
 
-  base.NilResponse CreateContest(1: ContestInfo req) (api.post = "/service/contest/create")
+  base.NilResponse CreateBootcamp(1: BootcampInfo req) (api.post = "/service/bootcamp/create")
 
-  base.NilResponse UpdateContest(1: ContestInfo req) (api.post = "/service/contest/update")
+  base.NilResponse UpdateBootcamp(1: BootcampInfo req) (api.post = "/service/bootcamp/update")
 
-  base.NilResponse ContestInfo(1: base.IDReq req) (api.post = "/service/contest/info")
+  base.NilResponse BootcampInfo(1: base.IDReq req) (api.post = "/service/bootcamp/info")
 
-  base.NilResponse ContestList(1: ContestListReq req) (api.post = "/service/contest/list")
+  base.NilResponse BootcampList(1: BootcampListReq req) (api.post = "/service/bootcamp/list")
 
-  base.NilResponse UpdateContestStatus(1: base.StatusCodeReq req) (api.post = "/service/contest/status")
+  base.NilResponse UpdateBootcampStatus(1: base.StatusCodeReq req) (api.post = "/service/bootcamp/status")
 
-  base.NilResponse UpdateContestShow (1: base.StatusCodeReq req) (api.post = "/service/contest/show")
+  base.NilResponse UpdateBootcampShow (1: base.StatusCodeReq req) (api.post = "/service/bootcamp/show")
 
-  base.NilResponse CreateParticipant(1: ParticipantInfo req) (api.post = "/service/participant/create")
+  base.NilResponse CreateParticipant(1: ParticipantInfo req) (api.post = "/service/bootcamp/participant/create")
 
-  base.NilResponse UpdateParticipant(1: ParticipantInfo req) (api.post = "/service/participant/update")
+  base.NilResponse UpdateParticipant(1: ParticipantInfo req) (api.post = "/service/bootcamp/participant/update")
 
-  base.NilResponse ContestParticipantInfo(1: base.IDReq req) (api.post = "/service/participant/info")
+  base.NilResponse BootcampParticipantInfo(1: base.IDReq req) (api.post = "/service/bootcamp/participant/info")
 
-  base.NilResponse ParticipantListList(1: ParticipantListReq req) (api.post = "/service/participant/list")
+  base.NilResponse ParticipantListList(1: ParticipantListReq req) (api.post = "/service/bootcamp/participant/list")
 
-  base.NilResponse UpdateParticipantStatus(1: base.StatusCodeReq req) (api.post = "/service/participant/status")
+  base.NilResponse UpdateParticipantStatus(1: base.StatusCodeReq req) (api.post = "/service/bootcamp/participant/status")
 
-  base.NilResponse ParticipantListListExport(1: ParticipantListReq req) (api.post = "/service/participant/export")
+  base.NilResponse ParticipantListListExport(1: ParticipantListReq req) (api.post = "/service/bootcamp/participant/export")
 
-  base.NilResponse ResultsUpload(1: ResultsUploadReq req) (api.post = "/service/contest/results-upload")
+  base.NilResponse ResultsUpload(1: ResultsUploadReq req) (api.post = "/service/bootcamp/results-upload")
 
-  base.NilResponse PromotionalLinks(1: base.IDReq req) (api.post = "/service/contest/promotional-links")
+  base.NilResponse PromotionalLinks(1: base.IDReq req) (api.post = "/service/bootcamp/promotional-links")
 
-  base.NilResponse DelContest(1: base.IDReq req) (api.post = "/service/contest/del")
+  base.NilResponse DelBootcamp(1: base.IDReq req) (api.post = "/service/bootcamp/del")
 
-  base.NilResponse ParticipantFinish(1: ParticipantFinishReq req) (api.post = "/service/participant/finish")
+  base.NilResponse ParticipantFinish(1: ParticipantFinishReq req) (api.post = "/service/bootcamp/participant/finish")
 }
 
 struct ParticipantFinishReq{
-  1:  optional i64 contestId=0 (api.raw = "contestId")
+  1:  optional i64 bootcampId=0 (api.raw = "bootcampId")
   2:  optional list<i64> memberId (api.raw = "memberId")
 }
 
 struct ResultsUploadReq{
     1:  optional string pic="" (api.raw = "pic")
 }
-struct ContestListReq{
+struct BootcampListReq{
     1:  optional i64 page=1 (api.raw = "page")
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3:  optional string name = "" (api.raw = "name")
@@ -55,7 +55,6 @@ struct ContestListReq{
     6:  optional string startAt  = ""(api.raw = "startAt")
     7:  optional string endAt  = ""(api.raw = "endAt")
     8:  optional i64 condition=0 (api.raw = "condition")
-
 }
 struct ParticipantListReq{
     1:  optional i64 page=1 (api.raw = "page")
@@ -63,11 +62,11 @@ struct ParticipantListReq{
     3:  optional string name  = ""(api.raw = "name")
     4:  optional string mobile  = ""(api.raw = "mobile")
     5:  optional string sn = "" (api.raw = "sn")
-    6:  optional i64 contestId=0 (api.raw = "contestId")
+    6:  optional i64 bootcampId=0 (api.raw = "bootcampId")
 }
 struct ParticipantInfo{
     1:  optional i64 id=0 (api.raw = "id")
-    2:  optional i64 contestId=0 (api.raw = "contestId")
+    2:  optional i64 bootcampId=0 (api.raw = "bootcampId")
     3:  optional string fields="" (api.raw = "fields")
     4:  optional string name="" (api.raw = "name")
     5:  optional string mobile="" (api.raw = "mobile")
@@ -79,7 +78,7 @@ struct ParticipantInfo{
 
 }
 
-struct ContestInfo{
+struct BootcampInfo{
     1:  optional i64 id=0 (api.raw = "id")
     2:  optional string name="" (api.raw = "name")
     3:  optional i64 signNumber=0 (api.raw = "signNumber")

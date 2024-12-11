@@ -7,6 +7,7 @@ import (
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
+	member2 "saas/biz/dal/db/ent/member"
 	order2 "saas/biz/dal/db/ent/order"
 	"saas/biz/infras/do"
 	"saas/config"
@@ -49,6 +50,14 @@ func (o Order) entOrderInfo(v *ent.Order) *order.OrderInfo {
 	createdAt := v.CreatedAt.Format(time.DateTime)
 	updatedAt := v.UpdatedAt.Format(time.DateTime)
 
+	var memberName, memberMobile string
+	m, _ := o.db.Member.Query().Where(member2.IDEQ(v.MemberID)).First(o.ctx)
+
+	if m != nil {
+		memberName = m.Name
+		memberMobile = m.Mobile
+	}
+
 	return &order.OrderInfo{
 		ID:           v.ID,
 		OrderSn:      v.OrderSn,
@@ -67,6 +76,8 @@ func (o Order) entOrderInfo(v *ent.Order) *order.OrderInfo {
 		OrderItem:    o.entOrderItem(v),
 		OrderPay:     o.entOrderPay(v),
 		OrderSales:   o.entOrderSales(v),
+		MemberName:   memberName,
+		MemberMobile: memberMobile,
 	}
 }
 func (o Order) entOrderSales(v *ent.Order) (sales []*order.OrderSales) {
