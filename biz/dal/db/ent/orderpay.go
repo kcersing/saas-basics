@@ -36,6 +36,8 @@ type OrderPay struct {
 	Pay float64 `json:"pay,omitempty"`
 	// 备注
 	Note string `json:"note,omitempty"`
+	// 支付时间
+	PayAt time.Time `json:"pay_at,omitempty"`
 	// 支付方式
 	PayWay string `json:"pay_way,omitempty"`
 	// 支付单号
@@ -85,7 +87,7 @@ func (*OrderPay) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case orderpay.FieldNote, orderpay.FieldPayWay, orderpay.FieldPaySn, orderpay.FieldPrepayID:
 			values[i] = new(sql.NullString)
-		case orderpay.FieldCreatedAt, orderpay.FieldUpdatedAt:
+		case orderpay.FieldCreatedAt, orderpay.FieldUpdatedAt, orderpay.FieldPayAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -155,6 +157,12 @@ func (op *OrderPay) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field note", values[i])
 			} else if value.Valid {
 				op.Note = value.String
+			}
+		case orderpay.FieldPayAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field pay_at", values[i])
+			} else if value.Valid {
+				op.PayAt = value.Time
 			}
 		case orderpay.FieldPayWay:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -246,6 +254,9 @@ func (op *OrderPay) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("note=")
 	builder.WriteString(op.Note)
+	builder.WriteString(", ")
+	builder.WriteString("pay_at=")
+	builder.WriteString(op.PayAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("pay_way=")
 	builder.WriteString(op.PayWay)

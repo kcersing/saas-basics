@@ -95,6 +95,11 @@ func Note(v string) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldNote, v))
 }
 
+// PayAt applies equality check predicate on the "pay_at" field. It's identical to PayAtEQ.
+func PayAt(v time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldPayAt, v))
+}
+
 // PayWay applies equality check predicate on the "pay_way" field. It's identical to PayWayEQ.
 func PayWay(v string) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldEQ(FieldPayWay, v))
@@ -513,6 +518,56 @@ func NoteEqualFold(v string) predicate.OrderPay {
 // NoteContainsFold applies the ContainsFold predicate on the "note" field.
 func NoteContainsFold(v string) predicate.OrderPay {
 	return predicate.OrderPay(sql.FieldContainsFold(FieldNote, v))
+}
+
+// PayAtEQ applies the EQ predicate on the "pay_at" field.
+func PayAtEQ(v time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldEQ(FieldPayAt, v))
+}
+
+// PayAtNEQ applies the NEQ predicate on the "pay_at" field.
+func PayAtNEQ(v time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNEQ(FieldPayAt, v))
+}
+
+// PayAtIn applies the In predicate on the "pay_at" field.
+func PayAtIn(vs ...time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIn(FieldPayAt, vs...))
+}
+
+// PayAtNotIn applies the NotIn predicate on the "pay_at" field.
+func PayAtNotIn(vs ...time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotIn(FieldPayAt, vs...))
+}
+
+// PayAtGT applies the GT predicate on the "pay_at" field.
+func PayAtGT(v time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGT(FieldPayAt, v))
+}
+
+// PayAtGTE applies the GTE predicate on the "pay_at" field.
+func PayAtGTE(v time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldGTE(FieldPayAt, v))
+}
+
+// PayAtLT applies the LT predicate on the "pay_at" field.
+func PayAtLT(v time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLT(FieldPayAt, v))
+}
+
+// PayAtLTE applies the LTE predicate on the "pay_at" field.
+func PayAtLTE(v time.Time) predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldLTE(FieldPayAt, v))
+}
+
+// PayAtIsNil applies the IsNil predicate on the "pay_at" field.
+func PayAtIsNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldIsNull(FieldPayAt))
+}
+
+// PayAtNotNil applies the NotNil predicate on the "pay_at" field.
+func PayAtNotNil() predicate.OrderPay {
+	return predicate.OrderPay(sql.FieldNotNull(FieldPayAt))
 }
 
 // PayWayEQ applies the EQ predicate on the "pay_way" field.

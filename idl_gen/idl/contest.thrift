@@ -76,6 +76,8 @@ struct ParticipantInfo{
     9:  optional double fee=0 (api.raw = "fee")
     10:  optional i64 status=1 (api.raw = "status")
 
+    11:  optional string device="" (api.raw = "device")
+
 }
 
 struct ContestInfo{

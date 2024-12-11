@@ -30,6 +30,8 @@ const (
 	FieldPay = "pay"
 	// FieldNote holds the string denoting the note field in the database.
 	FieldNote = "note"
+	// FieldPayAt holds the string denoting the pay_at field in the database.
+	FieldPayAt = "pay_at"
 	// FieldPayWay holds the string denoting the pay_way field in the database.
 	FieldPayWay = "pay_way"
 	// FieldPaySn holds the string denoting the pay_sn field in the database.
@@ -62,6 +64,7 @@ var Columns = []string{
 	FieldRemission,
 	FieldPay,
 	FieldNote,
+	FieldPayAt,
 	FieldPayWay,
 	FieldPaySn,
 	FieldPrepayID,
@@ -137,6 +140,11 @@ func ByPay(opts ...sql.OrderTermOption) OrderOption {
 // ByNote orders the results by the note field.
 func ByNote(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNote, opts...).ToFunc()
+}
+
+// ByPayAt orders the results by the pay_at field.
+func ByPayAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPayAt, opts...).ToFunc()
 }
 
 // ByPayWay orders the results by the pay_way field.

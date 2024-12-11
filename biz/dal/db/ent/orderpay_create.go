@@ -132,6 +132,20 @@ func (opc *OrderPayCreate) SetNillableNote(s *string) *OrderPayCreate {
 	return opc
 }
 
+// SetPayAt sets the "pay_at" field.
+func (opc *OrderPayCreate) SetPayAt(t time.Time) *OrderPayCreate {
+	opc.mutation.SetPayAt(t)
+	return opc
+}
+
+// SetNillablePayAt sets the "pay_at" field if the given value is not nil.
+func (opc *OrderPayCreate) SetNillablePayAt(t *time.Time) *OrderPayCreate {
+	if t != nil {
+		opc.SetPayAt(*t)
+	}
+	return opc
+}
+
 // SetPayWay sets the "pay_way" field.
 func (opc *OrderPayCreate) SetPayWay(s string) *OrderPayCreate {
 	opc.mutation.SetPayWay(s)
@@ -305,6 +319,10 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 	if value, ok := opc.mutation.Note(); ok {
 		_spec.SetField(orderpay.FieldNote, field.TypeString, value)
 		_node.Note = value
+	}
+	if value, ok := opc.mutation.PayAt(); ok {
+		_spec.SetField(orderpay.FieldPayAt, field.TypeTime, value)
+		_node.PayAt = value
 	}
 	if value, ok := opc.mutation.PayWay(); ok {
 		_spec.SetField(orderpay.FieldPayWay, field.TypeString, value)

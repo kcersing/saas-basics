@@ -3528,6 +3528,7 @@ type OrderPay struct {
 	CreatedAt string  `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
 	Note      string  `thrift:"note,17,optional" form:"note" json:"note" query:"note"`
 	UpdatedAt string  `thrift:"updatedAt,18,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	PayAt     string  `thrift:"payAt,19,optional" form:"payAt" json:"payAt" query:"payAt"`
 }
 
 func NewOrderPay() *OrderPay {
@@ -3544,6 +3545,7 @@ func NewOrderPay() *OrderPay {
 		CreatedAt: "",
 		Note:      "",
 		UpdatedAt: "",
+		PayAt:     "",
 	}
 }
 
@@ -3559,6 +3561,7 @@ func (p *OrderPay) InitDefault() {
 	p.CreatedAt = ""
 	p.Note = ""
 	p.UpdatedAt = ""
+	p.PayAt = ""
 }
 
 var OrderPay_ID_DEFAULT int64 = 0
@@ -3660,6 +3663,15 @@ func (p *OrderPay) GetUpdatedAt() (v string) {
 	return p.UpdatedAt
 }
 
+var OrderPay_PayAt_DEFAULT string = ""
+
+func (p *OrderPay) GetPayAt() (v string) {
+	if !p.IsSetPayAt() {
+		return OrderPay_PayAt_DEFAULT
+	}
+	return p.PayAt
+}
+
 var fieldIDToName_OrderPay = map[int16]string{
 	1:  "id",
 	2:  "pay",
@@ -3672,6 +3684,7 @@ var fieldIDToName_OrderPay = map[int16]string{
 	16: "createdAt",
 	17: "note",
 	18: "updatedAt",
+	19: "payAt",
 }
 
 func (p *OrderPay) IsSetID() bool {
@@ -3716,6 +3729,10 @@ func (p *OrderPay) IsSetNote() bool {
 
 func (p *OrderPay) IsSetUpdatedAt() bool {
 	return p.UpdatedAt != OrderPay_UpdatedAt_DEFAULT
+}
+
+func (p *OrderPay) IsSetPayAt() bool {
+	return p.PayAt != OrderPay_PayAt_DEFAULT
 }
 
 func (p *OrderPay) Read(iprot thrift.TProtocol) (err error) {
@@ -3820,6 +3837,14 @@ func (p *OrderPay) Read(iprot thrift.TProtocol) (err error) {
 		case 18:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField18(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 19:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField19(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3975,6 +4000,17 @@ func (p *OrderPay) ReadField18(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
+func (p *OrderPay) ReadField19(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.PayAt = _field
+	return nil
+}
 
 func (p *OrderPay) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -4024,6 +4060,10 @@ func (p *OrderPay) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField18(oprot); err != nil {
 			fieldId = 18
+			goto WriteFieldError
+		}
+		if err = p.writeField19(oprot); err != nil {
+			fieldId = 19
 			goto WriteFieldError
 		}
 	}
@@ -4251,6 +4291,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
+}
+
+func (p *OrderPay) writeField19(oprot thrift.TProtocol) (err error) {
+	if p.IsSetPayAt() {
+		if err = oprot.WriteFieldBegin("payAt", thrift.STRING, 19); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.PayAt); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 end error: ", p), err)
 }
 
 func (p *OrderPay) String() string {

@@ -886,6 +886,7 @@ var (
 		{Name: "remission", Type: field.TypeFloat64, Nullable: true, Comment: "减免"},
 		{Name: "pay", Type: field.TypeFloat64, Nullable: true, Comment: "实际付款"},
 		{Name: "note", Type: field.TypeString, Nullable: true, Comment: "备注"},
+		{Name: "pay_at", Type: field.TypeTime, Nullable: true, Comment: "支付时间"},
 		{Name: "pay_way", Type: field.TypeString, Nullable: true, Comment: "支付方式"},
 		{Name: "pay_sn", Type: field.TypeString, Nullable: true, Comment: "支付单号"},
 		{Name: "prepay_id", Type: field.TypeString, Nullable: true, Comment: "预支付交易会话标识"},
@@ -900,7 +901,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_pay_order_pay",
-				Columns:    []*schema.Column{OrderPayColumns[12]},
+				Columns:    []*schema.Column{OrderPayColumns[13]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -909,7 +910,7 @@ var (
 			{
 				Name:    "orderpay_order_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderPayColumns[12]},
+				Columns: []*schema.Column{OrderPayColumns[13]},
 			},
 		},
 	}

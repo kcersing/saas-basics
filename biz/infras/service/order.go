@@ -115,6 +115,7 @@ func (o Order) entOrderPay(v *ent.Order) (pays []*order.OrderPay) {
 			Note:      item.Note,
 			CreatedAt: item.CreatedAt.Format(time.DateTime),
 			UpdatedAt: item.UpdatedAt.Format(time.DateTime),
+			PayAt:     item.PayAt.Format(time.DateTime),
 		},
 		)
 	}

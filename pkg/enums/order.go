@@ -29,3 +29,15 @@ func ReturnOrderStatusValues(key int64) (values string) {
 	}
 	return
 }
+func ReturnOrderDeviceValues(key string) (values string) {
+	switch key {
+	case "pc":
+		values = "电脑端"
+	case "wxc":
+		values = "微信小程序"
+
+	default:
+		values = "状态异常"
+	}
+	return
+}

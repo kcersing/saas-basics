@@ -20,6 +20,7 @@ func (OrderPay) Fields() []ent.Field {
 		field.Float("remission").Comment("减免").Optional(),
 		field.Float("pay").Comment("实际付款").Optional(),
 		field.String("note").Comment("备注").Optional(),
+		field.Time("pay_at").Comment("支付时间").Optional(),
 		field.String("pay_way").Comment("支付方式").Optional(),
 		field.String("pay_sn").Comment("支付单号").Optional(),
 		field.String("prepay_id").Comment("预支付交易会话标识").Optional(),

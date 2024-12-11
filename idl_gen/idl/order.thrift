@@ -86,6 +86,7 @@ struct OrderPay{
     16:  optional string createdAt="" (api.raw = "createdAt")
     17:  optional string note="" (api.raw = "note")
     18:  optional string updatedAt="" (api.raw = "updatedAt")
+    19:  optional string payAt="" (api.raw = "payAt")
 }
 
 struct OrderSales{

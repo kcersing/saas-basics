@@ -37114,6 +37114,7 @@ type OrderPayMutation struct {
 	pay             *float64
 	addpay          *float64
 	note            *string
+	pay_at          *time.Time
 	pay_way         *string
 	pay_sn          *string
 	prepay_id       *string
@@ -37707,6 +37708,55 @@ func (m *OrderPayMutation) ResetNote() {
 	delete(m.clearedFields, orderpay.FieldNote)
 }
 
+// SetPayAt sets the "pay_at" field.
+func (m *OrderPayMutation) SetPayAt(t time.Time) {
+	m.pay_at = &t
+}
+
+// PayAt returns the value of the "pay_at" field in the mutation.
+func (m *OrderPayMutation) PayAt() (r time.Time, exists bool) {
+	v := m.pay_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPayAt returns the old "pay_at" field's value of the OrderPay entity.
+// If the OrderPay object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrderPayMutation) OldPayAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPayAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPayAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPayAt: %w", err)
+	}
+	return oldValue.PayAt, nil
+}
+
+// ClearPayAt clears the value of the "pay_at" field.
+func (m *OrderPayMutation) ClearPayAt() {
+	m.pay_at = nil
+	m.clearedFields[orderpay.FieldPayAt] = struct{}{}
+}
+
+// PayAtCleared returns if the "pay_at" field was cleared in this mutation.
+func (m *OrderPayMutation) PayAtCleared() bool {
+	_, ok := m.clearedFields[orderpay.FieldPayAt]
+	return ok
+}
+
+// ResetPayAt resets all changes to the "pay_at" field.
+func (m *OrderPayMutation) ResetPayAt() {
+	m.pay_at = nil
+	delete(m.clearedFields, orderpay.FieldPayAt)
+}
+
 // SetPayWay sets the "pay_way" field.
 func (m *OrderPayMutation) SetPayWay(s string) {
 	m.pay_way = &s
@@ -37980,7 +38030,7 @@ func (m *OrderPayMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrderPayMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, orderpay.FieldCreatedAt)
 	}
@@ -38004,6 +38054,9 @@ func (m *OrderPayMutation) Fields() []string {
 	}
 	if m.note != nil {
 		fields = append(fields, orderpay.FieldNote)
+	}
+	if m.pay_at != nil {
+		fields = append(fields, orderpay.FieldPayAt)
 	}
 	if m.pay_way != nil {
 		fields = append(fields, orderpay.FieldPayWay)
@@ -38041,6 +38094,8 @@ func (m *OrderPayMutation) Field(name string) (ent.Value, bool) {
 		return m.Pay()
 	case orderpay.FieldNote:
 		return m.Note()
+	case orderpay.FieldPayAt:
+		return m.PayAt()
 	case orderpay.FieldPayWay:
 		return m.PayWay()
 	case orderpay.FieldPaySn:
@@ -38074,6 +38129,8 @@ func (m *OrderPayMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldPay(ctx)
 	case orderpay.FieldNote:
 		return m.OldNote(ctx)
+	case orderpay.FieldPayAt:
+		return m.OldPayAt(ctx)
 	case orderpay.FieldPayWay:
 		return m.OldPayWay(ctx)
 	case orderpay.FieldPaySn:
@@ -38146,6 +38203,13 @@ func (m *OrderPayMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNote(v)
+		return nil
+	case orderpay.FieldPayAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPayAt(v)
 		return nil
 	case orderpay.FieldPayWay:
 		v, ok := value.(string)
@@ -38280,6 +38344,9 @@ func (m *OrderPayMutation) ClearedFields() []string {
 	if m.FieldCleared(orderpay.FieldNote) {
 		fields = append(fields, orderpay.FieldNote)
 	}
+	if m.FieldCleared(orderpay.FieldPayAt) {
+		fields = append(fields, orderpay.FieldPayAt)
+	}
 	if m.FieldCleared(orderpay.FieldPayWay) {
 		fields = append(fields, orderpay.FieldPayWay)
 	}
@@ -38330,6 +38397,9 @@ func (m *OrderPayMutation) ClearField(name string) error {
 	case orderpay.FieldNote:
 		m.ClearNote()
 		return nil
+	case orderpay.FieldPayAt:
+		m.ClearPayAt()
+		return nil
 	case orderpay.FieldPayWay:
 		m.ClearPayWay()
 		return nil
@@ -38373,6 +38443,9 @@ func (m *OrderPayMutation) ResetField(name string) error {
 		return nil
 	case orderpay.FieldNote:
 		m.ResetNote()
+		return nil
+	case orderpay.FieldPayAt:
+		m.ResetPayAt()
 		return nil
 	case orderpay.FieldPayWay:
 		m.ResetPayWay()

@@ -69,7 +69,7 @@ func (c Contest) CreateParticipant(req contest.ParticipantInfo) error {
 
 	_, err = NewOrder(c.ctx, c.c).CreateParticipantOrder(do.CreateParticipantOrderReq{
 		Member:    member,
-		Device:    "",
+		Device:    req.Device,
 		ContestId: req.ContestId,
 	})
 	if err != nil {

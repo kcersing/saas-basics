@@ -41,6 +41,7 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 		Create().
 		SetOrderSn(utils.CreateCn()).
 		SetOrderMembers(req.Member).
+		SetDevice(req.Device).
 		SetProductType(enums.Contest).
 		SetNature(enums.Buy)
 
