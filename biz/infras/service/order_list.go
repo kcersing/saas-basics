@@ -4,15 +4,13 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/xuri/excelize/v2"
-	"os"
 	"saas/biz/dal/db/ent/member"
 	order2 "saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/idl_gen/model/order"
-	"saas/pkg/consts"
 	"saas/pkg/enums"
-	"strconv"
+	"saas/pkg/utils"
 	"time"
 )
 
@@ -76,10 +74,8 @@ func (o Order) List(req *order.ListOrderReq) (resp []*order.OrderInfo, total int
 }
 
 func (o Order) OrderListExport(req *order.ListOrderReq) (string, error) {
-	exportFilePath := consts.ExportFilePath + time.Now().Format(time.DateOnly) + "/"
-	if err := os.MkdirAll(exportFilePath, 0o777); err != nil {
-		panic(err)
-	}
+
+	exportFilePath, domain := utils.ExportFilePath("订单列表导出")
 
 	resp, total, _ := o.List(req)
 
@@ -149,11 +145,13 @@ func (o Order) OrderListExport(req *order.ListOrderReq) (string, error) {
 			return "", err
 		}
 	}
-	ing := strconv.FormatInt(time.Now().Unix(), 10)
-	files := exportFilePath + "订单列表导出" + ing + ".xlsx"
+
 	//Save spreadsheet by the given path.
-	if err := f.SaveAs(files); err != nil {
+	if err := f.SaveAs(exportFilePath); err != nil {
 		fmt.Println(err)
 	}
-	return files, nil
+
+	//Domain: http://39.107.73.87:9039/
+	//http://127.0.0.1:9039/export/2024-12-11/-%E8%AE%A2%E5%8D%95%E5%88%97%E8%A1%A8%E5%AF%BC%E5%87%BA1733907993.xlsx
+	return domain, nil
 }

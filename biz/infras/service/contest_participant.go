@@ -5,7 +5,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
 	"github.com/xuri/excelize/v2"
-	"os"
 	"saas/biz/dal/db/ent"
 	contest2 "saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
@@ -14,7 +13,6 @@ import (
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/infras/do"
 	"saas/idl_gen/model/contest"
-	"saas/pkg/consts"
 	"saas/pkg/enums"
 	"saas/pkg/utils"
 	"strconv"
@@ -194,13 +192,8 @@ func (c Contest) UpdateParticipantStatus(ID int64, status int64) error {
 
 func (c Contest) ParticipantListExport(req contest.ParticipantListReq) (string, error) {
 
-	exportFilePath := consts.ExportFilePath + time.Now().Format(time.DateOnly) + "/"
-	if err := os.MkdirAll(exportFilePath, 0o777); err != nil {
-		panic(err)
-	}
-
 	conteste, _ := c.db.Contest.Query().Where(contest2.IDEQ(req.ContestId)).First(c.ctx)
-
+	exportFilePath, domain := utils.ExportFilePath(conteste.Name + "参赛人导出")
 	resp, total, _ := c.ParticipantList(req)
 
 	if total == 0 {
@@ -243,12 +236,11 @@ func (c Contest) ParticipantListExport(req contest.ParticipantListReq) (string, 
 			return "", err
 		}
 	}
-	ing := strconv.FormatInt(time.Now().Unix(), 10)
-	files := exportFilePath + conteste.Name + "-参赛人导出" + ing + ".xlsx"
+
 	//Save spreadsheet by the given path.
-	if err := f.SaveAs(files); err != nil {
+	if err := f.SaveAs(exportFilePath); err != nil {
 		fmt.Println(err)
 	}
-	return files, nil
+	return domain, nil
 
 }

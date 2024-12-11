@@ -43,7 +43,7 @@ func main() {
 
 	h.NoHijackConnPool = true
 	h.GET("/src/*name", minioReverseProxy)
-
+	h.Static("/export", "./tmp/")
 	url := swagger.URL(config.GlobalServerConfig.Swagger.Url) // The url pointing to API definition
 	h.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler, url))
 

@@ -6,6 +6,7 @@ type ServerConfig struct {
 	Port           int              `mapstructure:"Port" json:"Port"`
 	Timeout        int              `mapstructure:"Timeout" json:"Timeout"`
 	IsProd         bool             `mapstructure:"IsProd" json:"IsProd"`
+	Domain         string           `mapstructure:"Domain" json:"Domain"`
 	MySQLInfo      MySQLConfig      `mapstructure:"MySQL" json:"MySQL"`
 	PostgreSQLInfo PostgreSQLConfig `mapstructure:"PostgreSQL" json:"PostgreSQL"`
 	Captcha        Captcha          `mapstructure:"Captcha" json:"Captcha"`
