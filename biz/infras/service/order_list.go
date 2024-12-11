@@ -1,12 +1,18 @@
 package service
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
+	"github.com/xuri/excelize/v2"
+	"os"
 	"saas/biz/dal/db/ent/member"
 	order2 "saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/idl_gen/model/order"
+	"saas/pkg/consts"
+	"saas/pkg/enums"
+	"strconv"
 	"time"
 )
 
@@ -67,4 +73,87 @@ func (o Order) List(req *order.ListOrderReq) (resp []*order.OrderInfo, total int
 	total, _ = o.db.Order.Query().Where(predicates...).Count(o.ctx)
 	return
 
+}
+
+func (o Order) OrderListExport(req *order.ListOrderReq) (string, error) {
+	exportFilePath := consts.ExportFilePath + time.Now().Format(time.DateOnly) + "/"
+	if err := os.MkdirAll(exportFilePath, 0o777); err != nil {
+		panic(err)
+	}
+
+	resp, total, _ := o.List(req)
+
+	if total == 0 {
+		return "", errors.New("暂无数据")
+	}
+
+	f := excelize.NewFile()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	cell, err := excelize.CoordinatesToCellName(1, 1)
+	if err != nil {
+		return "", err
+	}
+	tale := []interface{}{
+		"订单编号",
+		"姓名",
+		"手机号",
+		"名称",
+		"报名费",
+		"实付金额",
+		"订单状态",
+		"下单时间",
+		"支付时间",
+		"支付方式",
+	}
+
+	err = f.SetSheetRow("Sheet1", cell, &tale)
+	if err != nil {
+		return "", err
+	}
+
+	for idx, row := range resp {
+		cell, err := excelize.CoordinatesToCellName(1, idx+2)
+		if err != nil {
+			return "", err
+		}
+
+		var payWay, PayAt string
+		if len(row.OrderPay) > 0 {
+			payWay = enums.ReturnOrderPayWayValues(row.OrderPay[0].PayWay)
+			PayAt = row.OrderPay[0].PayAt
+		}
+
+		status := enums.ReturnOrderStatusValues(row.Status)
+
+		r := []interface{}{
+			row.OrderSn,
+			row.MemberName,
+			row.MemberMobile,
+			row.OrderItem.Name,
+			row.OrderAmount.Total,
+			row.OrderAmount.Actual,
+			status,
+			row.CompletionAt,
+			PayAt,
+			payWay,
+		}
+
+		err = f.SetSheetRow("Sheet1", cell, &r)
+		if err != nil {
+			fmt.Println(err)
+			return "", err
+		}
+	}
+	ing := strconv.FormatInt(time.Now().Unix(), 10)
+	files := exportFilePath + "订单列表导出" + ing + ".xlsx"
+	//Save spreadsheet by the given path.
+	if err := f.SaveAs(files); err != nil {
+		fmt.Println(err)
+	}
+	return files, nil
 }

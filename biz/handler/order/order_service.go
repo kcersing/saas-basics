@@ -109,3 +109,31 @@ func GetOrderById(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, info, 1, "")
 	return
 }
+
+// OrderListExport .
+//
+//	@Summary		导出订单列表 Summary
+//	@Description	导出订单列表 Description
+//	@Param			request	body		order.ListOrderReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//	@Param			request	body		base.IDReq	true	"query params"
+//
+// @router /service/order/list/export [POST]
+func OrderListExport(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.ListOrderReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	export, err := service.NewOrder(ctx, c).OrderListExport(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.DirtyData, nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, map[string]string{
+		"url": export,
+	}, 0, "")
+}

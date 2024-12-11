@@ -192,7 +192,7 @@ func (c Contest) UpdateParticipantStatus(ID int64, status int64) error {
 	return err
 }
 
-func (c Contest) ParticipantListListExport(req contest.ParticipantListReq) (string, error) {
+func (c Contest) ParticipantListExport(req contest.ParticipantListReq) (string, error) {
 
 	exportFilePath := consts.ExportFilePath + time.Now().Format(time.DateOnly) + "/"
 	if err := os.MkdirAll(exportFilePath, 0o777); err != nil {

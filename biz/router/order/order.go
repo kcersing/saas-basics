@@ -23,6 +23,8 @@ func Register(r *server.Hertz) {
 			_order := _service.Group("/order", _orderMw()...)
 			_order.GET("/info", append(_getorderbyidMw(), order.GetOrderById)...)
 			_order.POST("/list", append(_listorderMw(), order.ListOrder)...)
+			_list := _order.Group("/list", _listMw()...)
+			_list.POST("/export", append(_orderlistexportMw(), order.OrderListExport)...)
 			_order.POST("/status", append(_updatestatusMw(), order.UpdateStatus)...)
 			_order.POST("/update", append(_updateMw(), order.Update)...)
 		}

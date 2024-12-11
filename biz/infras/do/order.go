@@ -12,6 +12,8 @@ type Order interface {
 	UpdateStatus(ID int64, status int64) error
 
 	CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *order.OrderInfo, err error)
+
+	OrderListExport(req *order.ListOrderReq) (string, error)
 }
 type CreateParticipantOrderReq struct {
 	Member    *ent.Member

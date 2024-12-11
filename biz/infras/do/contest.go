@@ -18,5 +18,5 @@ type Contest interface {
 	ParticipantInfo(id int64) (resp *contest.ParticipantInfo, err error)
 	ParticipantList(req contest.ParticipantListReq) (resp []*contest.ParticipantInfo, total int, err error)
 	UpdateParticipantStatus(ID int64, status int64) error
-	ParticipantListListExport(req contest.ParticipantListReq) (string, error)
+	ParticipantListExport(req contest.ParticipantListReq) (string, error)
 }

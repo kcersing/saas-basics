@@ -380,7 +380,7 @@ func ParticipantListListExport(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	export, err := service.NewContest(ctx, c).ParticipantListListExport(req)
+	export, err := service.NewContest(ctx, c).ParticipantListExport(req)
 	if err != nil {
 		utils.SendResponse(c, errno.DirtyData, nil, 0, "")
 		return
