@@ -149,7 +149,7 @@ func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 	_, err = tx.MemberDetails.Create().
 		SetEmail(req.Email).
 		SetWecom(req.Wecom).
-		SetCreateID(req.CreateId).
+		SetCreatedID(req.CreateId).
 		SetGender(gender).
 		SetBirthday(parsedTime).
 		SetInfo(noe).
@@ -409,7 +409,7 @@ func (m Member) MemberNode(ID int64) (info *member.MemberNode, err error) {
 	info.EntrySum = memberDetails.EntrySum
 
 	//关联员工
-	info.RelationUid = memberDetails.CreateID
+	info.RelationUid = memberDetails.CreatedID
 	//info.RelationUname = memberDetails.MoneySum
 	//关联会员
 	info.RelationMid = memberDetails.RelationMid

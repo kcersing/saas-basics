@@ -36,3 +36,8 @@ gen-user:
 .PHONY: gen-ent
 gen-ent:
 	go generate ./pkg/db/ent
+
+#lsof -i :9039
+#export PATH=$PATH:/usr/local/go/bin
+#git pull
+#go run .
