@@ -86,10 +86,6 @@ github.com/ArtisanCloud/PowerWeChat/v2/src/payment/sandbox
 github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer
 github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer/request
 github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer/response
-# github.com/ArtisanCloud/PowerWeChat/v3 v3.2.55
-## explicit; go 1.23
-github.com/ArtisanCloud/PowerWeChat/v3/src/payment/order/request
-github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/request
 # github.com/KyleBanks/depth v1.2.1
 ## explicit
 github.com/KyleBanks/depth
@@ -640,6 +636,8 @@ github.com/spf13/viper/internal/encoding/json
 github.com/spf13/viper/internal/encoding/toml
 github.com/spf13/viper/internal/encoding/yaml
 github.com/spf13/viper/internal/features
+# github.com/stretchr/testify v1.9.0
+## explicit; go 1.17
 # github.com/subosito/gotenv v1.6.0
 ## explicit; go 1.18
 github.com/subosito/gotenv

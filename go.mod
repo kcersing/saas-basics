@@ -8,9 +8,7 @@ replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
 	entgo.io/ent v0.13.0
-	github.com/ArtisanCloud/PowerLibs/v2 v2.0.49
 	github.com/ArtisanCloud/PowerWeChat/v2 v2.0.40
-	github.com/ArtisanCloud/PowerWeChat/v3 v3.2.55
 	github.com/apache/thrift v0.13.0
 	github.com/casbin/casbin/v2 v2.82.0
 	github.com/casbin/ent-adapter v0.3.0
@@ -46,6 +44,7 @@ require (
 require (
 	aidanwoods.dev/go-paseto v1.3.0 // indirect
 	ariga.io/atlas v0.19.1-0.20240203083654-5948b60a8e43 // indirect
+	github.com/ArtisanCloud/PowerLibs/v2 v2.0.49 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
@@ -128,6 +127,7 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tidwall/gjson v1.14.4 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
