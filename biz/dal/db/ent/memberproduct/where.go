@@ -145,6 +145,11 @@ func CountSurplus(v int64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldCountSurplus, v))
 }
 
+// Deadline applies equality check predicate on the "deadline" field. It's identical to DeadlineEQ.
+func Deadline(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldDeadline, v))
+}
+
 // ValidityAt applies equality check predicate on the "validity_at" field. It's identical to ValidityAtEQ.
 func ValidityAt(v time.Time) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldValidityAt, v))
@@ -1108,6 +1113,56 @@ func CountSurplusIsNil() predicate.MemberProduct {
 // CountSurplusNotNil applies the NotNil predicate on the "count_surplus" field.
 func CountSurplusNotNil() predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotNull(FieldCountSurplus))
+}
+
+// DeadlineEQ applies the EQ predicate on the "deadline" field.
+func DeadlineEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldDeadline, v))
+}
+
+// DeadlineNEQ applies the NEQ predicate on the "deadline" field.
+func DeadlineNEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNEQ(FieldDeadline, v))
+}
+
+// DeadlineIn applies the In predicate on the "deadline" field.
+func DeadlineIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIn(FieldDeadline, vs...))
+}
+
+// DeadlineNotIn applies the NotIn predicate on the "deadline" field.
+func DeadlineNotIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotIn(FieldDeadline, vs...))
+}
+
+// DeadlineGT applies the GT predicate on the "deadline" field.
+func DeadlineGT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGT(FieldDeadline, v))
+}
+
+// DeadlineGTE applies the GTE predicate on the "deadline" field.
+func DeadlineGTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGTE(FieldDeadline, v))
+}
+
+// DeadlineLT applies the LT predicate on the "deadline" field.
+func DeadlineLT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLT(FieldDeadline, v))
+}
+
+// DeadlineLTE applies the LTE predicate on the "deadline" field.
+func DeadlineLTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLTE(FieldDeadline, v))
+}
+
+// DeadlineIsNil applies the IsNil predicate on the "deadline" field.
+func DeadlineIsNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIsNull(FieldDeadline))
+}
+
+// DeadlineNotNil applies the NotNil predicate on the "deadline" field.
+func DeadlineNotNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotNull(FieldDeadline))
 }
 
 // ValidityAtEQ applies the EQ predicate on the "validity_at" field.

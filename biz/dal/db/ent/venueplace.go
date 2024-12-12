@@ -31,12 +31,18 @@ type VenuePlace struct {
 	Status int64 `json:"status,omitempty"`
 	// 名称
 	Name string `json:"name,omitempty"`
+	// 分类
+	Classify int64 `json:"classify,omitempty"`
 	// pic | 照片
 	Pic string `json:"pic,omitempty"`
 	// 场馆id
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 可容纳人数
 	Number int64 `json:"number,omitempty"`
+	// 是否展示:1展示;2不展示
+	IsShow int64 `json:"is_show,omitempty"`
+	// 是否展示;1开放;2关闭
+	IsAccessible int64 `json:"is_accessible,omitempty"`
 	// 详情
 	Information string `json:"information,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -72,7 +78,7 @@ func (*VenuePlace) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case venueplace.FieldID, venueplace.FieldDelete, venueplace.FieldCreatedID, venueplace.FieldStatus, venueplace.FieldVenueID, venueplace.FieldNumber:
+		case venueplace.FieldID, venueplace.FieldDelete, venueplace.FieldCreatedID, venueplace.FieldStatus, venueplace.FieldClassify, venueplace.FieldVenueID, venueplace.FieldNumber, venueplace.FieldIsShow, venueplace.FieldIsAccessible:
 			values[i] = new(sql.NullInt64)
 		case venueplace.FieldName, venueplace.FieldPic, venueplace.FieldInformation:
 			values[i] = new(sql.NullString)
@@ -135,6 +141,12 @@ func (vp *VenuePlace) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				vp.Name = value.String
 			}
+		case venueplace.FieldClassify:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field classify", values[i])
+			} else if value.Valid {
+				vp.Classify = value.Int64
+			}
 		case venueplace.FieldPic:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field pic", values[i])
@@ -152,6 +164,18 @@ func (vp *VenuePlace) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field number", values[i])
 			} else if value.Valid {
 				vp.Number = value.Int64
+			}
+		case venueplace.FieldIsShow:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_show", values[i])
+			} else if value.Valid {
+				vp.IsShow = value.Int64
+			}
+		case venueplace.FieldIsAccessible:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_accessible", values[i])
+			} else if value.Valid {
+				vp.IsAccessible = value.Int64
 			}
 		case venueplace.FieldInformation:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -218,6 +242,9 @@ func (vp *VenuePlace) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(vp.Name)
 	builder.WriteString(", ")
+	builder.WriteString("classify=")
+	builder.WriteString(fmt.Sprintf("%v", vp.Classify))
+	builder.WriteString(", ")
 	builder.WriteString("pic=")
 	builder.WriteString(vp.Pic)
 	builder.WriteString(", ")
@@ -226,6 +253,12 @@ func (vp *VenuePlace) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("number=")
 	builder.WriteString(fmt.Sprintf("%v", vp.Number))
+	builder.WriteString(", ")
+	builder.WriteString("is_show=")
+	builder.WriteString(fmt.Sprintf("%v", vp.IsShow))
+	builder.WriteString(", ")
+	builder.WriteString("is_accessible=")
+	builder.WriteString(fmt.Sprintf("%v", vp.IsAccessible))
 	builder.WriteString(", ")
 	builder.WriteString("information=")
 	builder.WriteString(vp.Information)

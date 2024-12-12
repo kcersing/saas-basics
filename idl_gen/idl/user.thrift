@@ -18,12 +18,17 @@ struct UserInfo {
 	12: list<string> functions (api.raw = "functions")
 	13:string Gender (api.raw = "gender")
 //	14:i64 Age (api.raw = "age")
-//	15:string Birthday (api.raw = "birthday")
+	15:string Birthday (api.raw = "birthday")
     16:string Detail (api.raw = "detail")
     17:optional i64 jobTime (api.raw = "jobTime")
     18: list<dictionary.DictionaryDetail> userTags (api.raw = "userTags")
+    19: list<Venues> venues (api.raw = "venues")
 	254:i64 DefaultVenueId (api.raw = "defaultVenueId")
 
+}
+struct Venues {
+    1: i64 Id (api.raw = "id")
+    2: string Name (api.raw = "name")
 }
 
 // login request | 登录参数
@@ -73,6 +78,8 @@ struct CreateOrUpdateUserReq {
     16:  optional i64 jobTime=0 (api.raw = "jobTime")
     18: optional list<i64> userTags="" (api.raw = "userTags")
     19:  optional i64 type=1 (api.raw = "type")
+    20: optional list<i64> venueId=0 (api.raw = "venueId")
+
 }
 
 

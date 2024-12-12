@@ -274,6 +274,20 @@ func (mpc *MemberProductCreate) SetNillableCountSurplus(i *int64) *MemberProduct
 	return mpc
 }
 
+// SetDeadline sets the "deadline" field.
+func (mpc *MemberProductCreate) SetDeadline(i int64) *MemberProductCreate {
+	mpc.mutation.SetDeadline(i)
+	return mpc
+}
+
+// SetNillableDeadline sets the "deadline" field if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableDeadline(i *int64) *MemberProductCreate {
+	if i != nil {
+		mpc.SetDeadline(*i)
+	}
+	return mpc
+}
+
 // SetValidityAt sets the "validity_at" field.
 func (mpc *MemberProductCreate) SetValidityAt(t time.Time) *MemberProductCreate {
 	mpc.mutation.SetValidityAt(t)
@@ -523,6 +537,10 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 	if value, ok := mpc.mutation.CountSurplus(); ok {
 		_spec.SetField(memberproduct.FieldCountSurplus, field.TypeInt64, value)
 		_node.CountSurplus = value
+	}
+	if value, ok := mpc.mutation.Deadline(); ok {
+		_spec.SetField(memberproduct.FieldDeadline, field.TypeInt64, value)
+		_node.Deadline = value
 	}
 	if value, ok := mpc.mutation.ValidityAt(); ok {
 		_spec.SetField(memberproduct.FieldValidityAt, field.TypeTime, value)

@@ -92,6 +92,9 @@ func (v Venue) Create(req *venue.VenueInfo) error {
 		SetPic(req.Pic).
 		SetEmail(req.Email).
 		SetInformation(req.Information).
+		SetClassify(req.Classify).
+		SetType(req.Type).
+		SetSeal(req.Seal).
 		Save(v.ctx)
 
 	if err != nil {
@@ -115,6 +118,9 @@ func (v Venue) Update(req *venue.VenueInfo) error {
 		SetEmail(req.Email).
 		SetInformation(req.Information).
 		SetStatus(req.Status).
+		SetClassify(req.Classify).
+		SetType(req.Type).
+		SetSeal(req.Seal).
 		Save(v.ctx)
 
 	if err != nil {
@@ -160,6 +166,9 @@ func (v Venue) CreatePlace(req *venue.VenuePlaceInfo) error {
 		SetStatus(req.Status).
 		SetNumber(req.Number).
 		SetInformation(req.Information).
+		SetClassify(req.Classify).
+		SetIsShow(req.IsShow).
+		SetIsAccessible(req.IsAccessible).
 		Save(v.ctx)
 
 	if err != nil {
@@ -179,6 +188,9 @@ func (v Venue) UpdatePlace(req *venue.VenuePlaceInfo) error {
 		SetStatus(req.Status).
 		SetNumber(req.Number).
 		SetInformation(req.Information).
+		SetClassify(req.Classify).
+		SetIsShow(req.IsShow).
+		SetIsAccessible(req.IsAccessible).
 		Save(v.ctx)
 
 	if err != nil {
@@ -225,8 +237,12 @@ func entVenueInfo(v *ent.Venue) *venue.VenueInfo {
 		Latitude:  v.Latitude,
 		Longitude: v.Longitude,
 		Status:    v.Status,
+
 		CreatedAt: createdAt,
 		UpdatedAt: updatedAt,
+		Classify:  v.Classify,
+		Type:      v.Type,
+		Seal:      v.Seal,
 	}
 
 }
@@ -236,15 +252,18 @@ func entVenuePlaceInfo(v *ent.VenuePlace) *venue.VenuePlaceInfo {
 	createdAt := v.CreatedAt.Format(time.DateTime)
 	updatedAt := v.UpdatedAt.Format(time.DateTime)
 	return &venue.VenuePlaceInfo{
-		ID:          v.ID,
-		Name:        v.Name,
-		Pic:         v.Pic,
-		VenueId:     v.VenueID,
-		Number:      v.Number,
-		Status:      v.Status,
-		Information: v.Information,
-		CreatedAt:   createdAt,
-		UpdatedAt:   updatedAt,
+		ID:           v.ID,
+		Name:         v.Name,
+		Pic:          v.Pic,
+		VenueId:      v.VenueID,
+		Number:       v.Number,
+		Status:       v.Status,
+		Information:  v.Information,
+		CreatedAt:    createdAt,
+		UpdatedAt:    updatedAt,
+		Classify:     v.Classify,
+		IsShow:       v.IsShow,
+		IsAccessible: v.IsAccessible,
 	}
 }
 

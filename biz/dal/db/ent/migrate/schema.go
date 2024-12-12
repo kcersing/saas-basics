@@ -649,6 +649,7 @@ var (
 		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "单次时长"},
 		{Name: "count", Type: field.TypeInt64, Nullable: true, Comment: "总次数", Default: 0},
 		{Name: "count_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余次数", Default: 0},
+		{Name: "deadline", Type: field.TypeInt64, Nullable: true, Comment: "激活期限"},
 		{Name: "validity_at", Type: field.TypeTime, Nullable: true, Comment: "生效时间"},
 		{Name: "cancel_at", Type: field.TypeTime, Nullable: true, Comment: "作废时间"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
@@ -661,7 +662,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_member_member_products",
-				Columns:    []*schema.Column{MemberProductColumns[20]},
+				Columns:    []*schema.Column{MemberProductColumns[21]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -675,7 +676,7 @@ var (
 			{
 				Name:    "memberproduct_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[20]},
+				Columns: []*schema.Column{MemberProductColumns[21]},
 			},
 			{
 				Name:    "memberproduct_product_id",
@@ -1057,7 +1058,7 @@ var (
 		{Name: "sign_sales_at", Type: field.TypeTime, Nullable: true, Comment: "开始售卖时间"},
 		{Name: "end_sales_at", Type: field.TypeTime, Nullable: true, Comment: "结束售卖时间"},
 		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "主图"},
-		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "详情"},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "详情"},
 	}
 	// ProductTable holds the schema information for the "product" table.
 	ProductTable = &schema.Table{
@@ -1308,14 +1309,17 @@ var (
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
+		{Name: "classify", Type: field.TypeInt64, Nullable: true, Comment: "分类"},
 		{Name: "address", Type: field.TypeString, Nullable: true, Comment: "地址 省/市/区"},
 		{Name: "address_detail", Type: field.TypeString, Nullable: true, Comment: "详细地址"},
 		{Name: "latitude", Type: field.TypeString, Nullable: true, Comment: "维度"},
 		{Name: "longitude", Type: field.TypeString, Nullable: true, Comment: "经度"},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "联系电话"},
 		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "邮箱"},
+		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "照片", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "seal", Type: field.TypeString, Nullable: true, Comment: "公章", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "information", Type: field.TypeString, Nullable: true, Comment: "详情"},
-		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "pic | 照片", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 	}
 	// VenueTable holds the schema information for the "venue" table.
 	VenueTable = &schema.Table{
@@ -1332,8 +1336,11 @@ var (
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
+		{Name: "classify", Type: field.TypeInt64, Nullable: true, Comment: "分类"},
 		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "pic | 照片", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "可容纳人数"},
+		{Name: "is_show", Type: field.TypeInt64, Nullable: true, Comment: "是否展示:1展示;2不展示", Default: 1},
+		{Name: "is_accessible", Type: field.TypeInt64, Nullable: true, Comment: "是否展示;1开放;2关闭", Default: 1},
 		{Name: "information", Type: field.TypeString, Nullable: true, Comment: "详情"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 	}
@@ -1345,7 +1352,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "venue_place_venue_places",
-				Columns:    []*schema.Column{VenuePlaceColumns[10]},
+				Columns:    []*schema.Column{VenuePlaceColumns[13]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1354,7 +1361,7 @@ var (
 			{
 				Name:    "venueplace_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{VenuePlaceColumns[10]},
+				Columns: []*schema.Column{VenuePlaceColumns[13]},
 			},
 		},
 	}
@@ -1508,6 +1515,31 @@ var (
 			},
 		},
 	}
+	// UserVenuesColumns holds the columns for the "user_venues" table.
+	UserVenuesColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeInt64},
+		{Name: "venue_id", Type: field.TypeInt64},
+	}
+	// UserVenuesTable holds the schema information for the "user_venues" table.
+	UserVenuesTable = &schema.Table{
+		Name:       "user_venues",
+		Columns:    UserVenuesColumns,
+		PrimaryKey: []*schema.Column{UserVenuesColumns[0], UserVenuesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_venues_user_id",
+				Columns:    []*schema.Column{UserVenuesColumns[0]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_venues_venue_id",
+				Columns:    []*schema.Column{UserVenuesColumns[1]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
@@ -1553,6 +1585,7 @@ var (
 		ProductContractsTable,
 		RoleMenusTable,
 		UserTagTable,
+		UserVenuesTable,
 	}
 )
 
@@ -1731,4 +1764,6 @@ func init() {
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
 	UserTagTable.ForeignKeys[0].RefTable = SysUsersTable
 	UserTagTable.ForeignKeys[1].RefTable = SysDictionaryDetailsTable
+	UserVenuesTable.ForeignKeys[0].RefTable = SysUsersTable
+	UserVenuesTable.ForeignKeys[1].RefTable = VenueTable
 }

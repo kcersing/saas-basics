@@ -136,7 +136,10 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		return err
 	}
 	//	err = tx.Role.UpdateOneID(roleID).AddMenuIDs(menuIDs...).Exec(a.ctx)
-	tx.User.UpdateOneID(one.ID).AddTagIDs(req.UserTags...).Exec(u.ctx)
+	tx.User.UpdateOneID(one.ID).
+		AddTagIDs(req.UserTags...).
+		AddVenueIDs(req.VenueId...).
+		Exec(u.ctx)
 	//_, err = tx.Face.Create().
 	//	SetUserFaces(noe).
 	//	Save(u.ctx)
@@ -188,7 +191,10 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		err = errors.Wrap(err, "update user failed")
 		return err
 	}
-	u.db.User.UpdateOneID(req.ID).AddTagIDs(req.UserTags...).Exec(u.ctx)
+	u.db.User.UpdateOneID(req.ID).
+		AddTagIDs(req.UserTags...).
+		AddVenueIDs(req.VenueId...).
+		Exec(u.ctx)
 	return nil
 }
 

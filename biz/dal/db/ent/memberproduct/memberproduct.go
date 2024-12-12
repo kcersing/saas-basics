@@ -50,6 +50,8 @@ const (
 	FieldCount = "count"
 	// FieldCountSurplus holds the string denoting the count_surplus field in the database.
 	FieldCountSurplus = "count_surplus"
+	// FieldDeadline holds the string denoting the deadline field in the database.
+	FieldDeadline = "deadline"
 	// FieldValidityAt holds the string denoting the validity_at field in the database.
 	FieldValidityAt = "validity_at"
 	// FieldCancelAt holds the string denoting the cancel_at field in the database.
@@ -106,6 +108,7 @@ var Columns = []string{
 	FieldLength,
 	FieldCount,
 	FieldCountSurplus,
+	FieldDeadline,
 	FieldValidityAt,
 	FieldCancelAt,
 }
@@ -235,6 +238,11 @@ func ByCount(opts ...sql.OrderTermOption) OrderOption {
 // ByCountSurplus orders the results by the count_surplus field.
 func ByCountSurplus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCountSurplus, opts...).ToFunc()
+}
+
+// ByDeadline orders the results by the deadline field.
+func ByDeadline(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeadline, opts...).ToFunc()
 }
 
 // ByValidityAt orders the results by the validity_at field.

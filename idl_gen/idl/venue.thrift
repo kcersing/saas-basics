@@ -28,7 +28,8 @@ struct VenueInfo {
     12:  optional string UpdatedAt="" (api.raw = "updatedAt")
     13:  optional string email =""(api.raw = "email")
     14:  optional string type =""(api.raw = "type")
-
+    15:  optional i64 classify =0(api.raw = "classify")
+    16:  optional string seal =""(api.raw = "seal")
 }
 
 struct VenuePlaceInfo {
@@ -41,6 +42,9 @@ struct VenuePlaceInfo {
     7:  optional string UpdatedAt="" (api.raw = "updatedAt")
     8:  optional i64 number=0 (api.raw = "number")
     9:  optional string information="" (api.raw = "information")
+    10:  optional i64 classify =0(api.raw = "classify")
+    11:  optional i64 is_show=1 (api.raw = "is_show")
+    12:  optional i64 is_accessible=1 (api.raw = "is_accessible")
 }
 
 service VenueService {

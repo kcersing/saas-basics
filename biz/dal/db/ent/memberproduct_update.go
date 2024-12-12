@@ -447,6 +447,33 @@ func (mpu *MemberProductUpdate) ClearCountSurplus() *MemberProductUpdate {
 	return mpu
 }
 
+// SetDeadline sets the "deadline" field.
+func (mpu *MemberProductUpdate) SetDeadline(i int64) *MemberProductUpdate {
+	mpu.mutation.ResetDeadline()
+	mpu.mutation.SetDeadline(i)
+	return mpu
+}
+
+// SetNillableDeadline sets the "deadline" field if the given value is not nil.
+func (mpu *MemberProductUpdate) SetNillableDeadline(i *int64) *MemberProductUpdate {
+	if i != nil {
+		mpu.SetDeadline(*i)
+	}
+	return mpu
+}
+
+// AddDeadline adds i to the "deadline" field.
+func (mpu *MemberProductUpdate) AddDeadline(i int64) *MemberProductUpdate {
+	mpu.mutation.AddDeadline(i)
+	return mpu
+}
+
+// ClearDeadline clears the value of the "deadline" field.
+func (mpu *MemberProductUpdate) ClearDeadline() *MemberProductUpdate {
+	mpu.mutation.ClearDeadline()
+	return mpu
+}
+
 // SetValidityAt sets the "validity_at" field.
 func (mpu *MemberProductUpdate) SetValidityAt(t time.Time) *MemberProductUpdate {
 	mpu.mutation.SetValidityAt(t)
@@ -768,6 +795,15 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mpu.mutation.CountSurplusCleared() {
 		_spec.ClearField(memberproduct.FieldCountSurplus, field.TypeInt64)
+	}
+	if value, ok := mpu.mutation.Deadline(); ok {
+		_spec.SetField(memberproduct.FieldDeadline, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedDeadline(); ok {
+		_spec.AddField(memberproduct.FieldDeadline, field.TypeInt64, value)
+	}
+	if mpu.mutation.DeadlineCleared() {
+		_spec.ClearField(memberproduct.FieldDeadline, field.TypeInt64)
 	}
 	if value, ok := mpu.mutation.ValidityAt(); ok {
 		_spec.SetField(memberproduct.FieldValidityAt, field.TypeTime, value)
@@ -1336,6 +1372,33 @@ func (mpuo *MemberProductUpdateOne) ClearCountSurplus() *MemberProductUpdateOne 
 	return mpuo
 }
 
+// SetDeadline sets the "deadline" field.
+func (mpuo *MemberProductUpdateOne) SetDeadline(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.ResetDeadline()
+	mpuo.mutation.SetDeadline(i)
+	return mpuo
+}
+
+// SetNillableDeadline sets the "deadline" field if the given value is not nil.
+func (mpuo *MemberProductUpdateOne) SetNillableDeadline(i *int64) *MemberProductUpdateOne {
+	if i != nil {
+		mpuo.SetDeadline(*i)
+	}
+	return mpuo
+}
+
+// AddDeadline adds i to the "deadline" field.
+func (mpuo *MemberProductUpdateOne) AddDeadline(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddDeadline(i)
+	return mpuo
+}
+
+// ClearDeadline clears the value of the "deadline" field.
+func (mpuo *MemberProductUpdateOne) ClearDeadline() *MemberProductUpdateOne {
+	mpuo.mutation.ClearDeadline()
+	return mpuo
+}
+
 // SetValidityAt sets the "validity_at" field.
 func (mpuo *MemberProductUpdateOne) SetValidityAt(t time.Time) *MemberProductUpdateOne {
 	mpuo.mutation.SetValidityAt(t)
@@ -1687,6 +1750,15 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	}
 	if mpuo.mutation.CountSurplusCleared() {
 		_spec.ClearField(memberproduct.FieldCountSurplus, field.TypeInt64)
+	}
+	if value, ok := mpuo.mutation.Deadline(); ok {
+		_spec.SetField(memberproduct.FieldDeadline, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedDeadline(); ok {
+		_spec.AddField(memberproduct.FieldDeadline, field.TypeInt64, value)
+	}
+	if mpuo.mutation.DeadlineCleared() {
+		_spec.ClearField(memberproduct.FieldDeadline, field.TypeInt64)
 	}
 	if value, ok := mpuo.mutation.ValidityAt(); ok {
 		_spec.SetField(memberproduct.FieldValidityAt, field.TypeTime, value)

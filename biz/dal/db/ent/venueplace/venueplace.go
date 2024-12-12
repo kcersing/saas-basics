@@ -26,12 +26,18 @@ const (
 	FieldStatus = "status"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldClassify holds the string denoting the classify field in the database.
+	FieldClassify = "classify"
 	// FieldPic holds the string denoting the pic field in the database.
 	FieldPic = "pic"
 	// FieldVenueID holds the string denoting the venue_id field in the database.
 	FieldVenueID = "venue_id"
 	// FieldNumber holds the string denoting the number field in the database.
 	FieldNumber = "number"
+	// FieldIsShow holds the string denoting the is_show field in the database.
+	FieldIsShow = "is_show"
+	// FieldIsAccessible holds the string denoting the is_accessible field in the database.
+	FieldIsAccessible = "is_accessible"
 	// FieldInformation holds the string denoting the information field in the database.
 	FieldInformation = "information"
 	// EdgeVenue holds the string denoting the venue edge name in mutations.
@@ -56,9 +62,12 @@ var Columns = []string{
 	FieldCreatedID,
 	FieldStatus,
 	FieldName,
+	FieldClassify,
 	FieldPic,
 	FieldVenueID,
 	FieldNumber,
+	FieldIsShow,
+	FieldIsAccessible,
 	FieldInformation,
 }
 
@@ -85,6 +94,10 @@ var (
 	DefaultCreatedID int64
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int64
+	// DefaultIsShow holds the default value on creation for the "is_show" field.
+	DefaultIsShow int64
+	// DefaultIsAccessible holds the default value on creation for the "is_accessible" field.
+	DefaultIsAccessible int64
 )
 
 // OrderOption defines the ordering options for the VenuePlace queries.
@@ -125,6 +138,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
+// ByClassify orders the results by the classify field.
+func ByClassify(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldClassify, opts...).ToFunc()
+}
+
 // ByPic orders the results by the pic field.
 func ByPic(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPic, opts...).ToFunc()
@@ -138,6 +156,16 @@ func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 // ByNumber orders the results by the number field.
 func ByNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNumber, opts...).ToFunc()
+}
+
+// ByIsShow orders the results by the is_show field.
+func ByIsShow(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsShow, opts...).ToFunc()
+}
+
+// ByIsAccessible orders the results by the is_accessible field.
+func ByIsAccessible(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsAccessible, opts...).ToFunc()
 }
 
 // ByInformation orders the results by the information field.

@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
+	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
 	"time"
@@ -144,6 +145,53 @@ func (vu *VenueUpdate) ClearName() *VenueUpdate {
 	return vu
 }
 
+// SetType sets the "type" field.
+func (vu *VenueUpdate) SetType(s string) *VenueUpdate {
+	vu.mutation.SetType(s)
+	return vu
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (vu *VenueUpdate) SetNillableType(s *string) *VenueUpdate {
+	if s != nil {
+		vu.SetType(*s)
+	}
+	return vu
+}
+
+// ClearType clears the value of the "type" field.
+func (vu *VenueUpdate) ClearType() *VenueUpdate {
+	vu.mutation.ClearType()
+	return vu
+}
+
+// SetClassify sets the "classify" field.
+func (vu *VenueUpdate) SetClassify(i int64) *VenueUpdate {
+	vu.mutation.ResetClassify()
+	vu.mutation.SetClassify(i)
+	return vu
+}
+
+// SetNillableClassify sets the "classify" field if the given value is not nil.
+func (vu *VenueUpdate) SetNillableClassify(i *int64) *VenueUpdate {
+	if i != nil {
+		vu.SetClassify(*i)
+	}
+	return vu
+}
+
+// AddClassify adds i to the "classify" field.
+func (vu *VenueUpdate) AddClassify(i int64) *VenueUpdate {
+	vu.mutation.AddClassify(i)
+	return vu
+}
+
+// ClearClassify clears the value of the "classify" field.
+func (vu *VenueUpdate) ClearClassify() *VenueUpdate {
+	vu.mutation.ClearClassify()
+	return vu
+}
+
 // SetAddress sets the "address" field.
 func (vu *VenueUpdate) SetAddress(s string) *VenueUpdate {
 	vu.mutation.SetAddress(s)
@@ -264,26 +312,6 @@ func (vu *VenueUpdate) ClearEmail() *VenueUpdate {
 	return vu
 }
 
-// SetInformation sets the "information" field.
-func (vu *VenueUpdate) SetInformation(s string) *VenueUpdate {
-	vu.mutation.SetInformation(s)
-	return vu
-}
-
-// SetNillableInformation sets the "information" field if the given value is not nil.
-func (vu *VenueUpdate) SetNillableInformation(s *string) *VenueUpdate {
-	if s != nil {
-		vu.SetInformation(*s)
-	}
-	return vu
-}
-
-// ClearInformation clears the value of the "information" field.
-func (vu *VenueUpdate) ClearInformation() *VenueUpdate {
-	vu.mutation.ClearInformation()
-	return vu
-}
-
 // SetPic sets the "pic" field.
 func (vu *VenueUpdate) SetPic(s string) *VenueUpdate {
 	vu.mutation.SetPic(s)
@@ -301,6 +329,46 @@ func (vu *VenueUpdate) SetNillablePic(s *string) *VenueUpdate {
 // ClearPic clears the value of the "pic" field.
 func (vu *VenueUpdate) ClearPic() *VenueUpdate {
 	vu.mutation.ClearPic()
+	return vu
+}
+
+// SetSeal sets the "seal" field.
+func (vu *VenueUpdate) SetSeal(s string) *VenueUpdate {
+	vu.mutation.SetSeal(s)
+	return vu
+}
+
+// SetNillableSeal sets the "seal" field if the given value is not nil.
+func (vu *VenueUpdate) SetNillableSeal(s *string) *VenueUpdate {
+	if s != nil {
+		vu.SetSeal(*s)
+	}
+	return vu
+}
+
+// ClearSeal clears the value of the "seal" field.
+func (vu *VenueUpdate) ClearSeal() *VenueUpdate {
+	vu.mutation.ClearSeal()
+	return vu
+}
+
+// SetInformation sets the "information" field.
+func (vu *VenueUpdate) SetInformation(s string) *VenueUpdate {
+	vu.mutation.SetInformation(s)
+	return vu
+}
+
+// SetNillableInformation sets the "information" field if the given value is not nil.
+func (vu *VenueUpdate) SetNillableInformation(s *string) *VenueUpdate {
+	if s != nil {
+		vu.SetInformation(*s)
+	}
+	return vu
+}
+
+// ClearInformation clears the value of the "information" field.
+func (vu *VenueUpdate) ClearInformation() *VenueUpdate {
+	vu.mutation.ClearInformation()
 	return vu
 }
 
@@ -347,6 +415,21 @@ func (vu *VenueUpdate) AddVenueEntry(e ...*EntryLogs) *VenueUpdate {
 		ids[i] = e[i].ID
 	}
 	return vu.AddVenueEntryIDs(ids...)
+}
+
+// AddUserIDs adds the "users" edge to the User entity by IDs.
+func (vu *VenueUpdate) AddUserIDs(ids ...int64) *VenueUpdate {
+	vu.mutation.AddUserIDs(ids...)
+	return vu
+}
+
+// AddUsers adds the "users" edges to the User entity.
+func (vu *VenueUpdate) AddUsers(u ...*User) *VenueUpdate {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return vu.AddUserIDs(ids...)
 }
 
 // Mutation returns the VenueMutation object of the builder.
@@ -415,6 +498,27 @@ func (vu *VenueUpdate) RemoveVenueEntry(e ...*EntryLogs) *VenueUpdate {
 		ids[i] = e[i].ID
 	}
 	return vu.RemoveVenueEntryIDs(ids...)
+}
+
+// ClearUsers clears all "users" edges to the User entity.
+func (vu *VenueUpdate) ClearUsers() *VenueUpdate {
+	vu.mutation.ClearUsers()
+	return vu
+}
+
+// RemoveUserIDs removes the "users" edge to User entities by IDs.
+func (vu *VenueUpdate) RemoveUserIDs(ids ...int64) *VenueUpdate {
+	vu.mutation.RemoveUserIDs(ids...)
+	return vu
+}
+
+// RemoveUsers removes "users" edges to User entities.
+func (vu *VenueUpdate) RemoveUsers(u ...*User) *VenueUpdate {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return vu.RemoveUserIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -504,6 +608,21 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if vu.mutation.NameCleared() {
 		_spec.ClearField(venue.FieldName, field.TypeString)
 	}
+	if value, ok := vu.mutation.GetType(); ok {
+		_spec.SetField(venue.FieldType, field.TypeString, value)
+	}
+	if vu.mutation.TypeCleared() {
+		_spec.ClearField(venue.FieldType, field.TypeString)
+	}
+	if value, ok := vu.mutation.Classify(); ok {
+		_spec.SetField(venue.FieldClassify, field.TypeInt64, value)
+	}
+	if value, ok := vu.mutation.AddedClassify(); ok {
+		_spec.AddField(venue.FieldClassify, field.TypeInt64, value)
+	}
+	if vu.mutation.ClassifyCleared() {
+		_spec.ClearField(venue.FieldClassify, field.TypeInt64)
+	}
 	if value, ok := vu.mutation.Address(); ok {
 		_spec.SetField(venue.FieldAddress, field.TypeString, value)
 	}
@@ -540,17 +659,23 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if vu.mutation.EmailCleared() {
 		_spec.ClearField(venue.FieldEmail, field.TypeString)
 	}
-	if value, ok := vu.mutation.Information(); ok {
-		_spec.SetField(venue.FieldInformation, field.TypeString, value)
-	}
-	if vu.mutation.InformationCleared() {
-		_spec.ClearField(venue.FieldInformation, field.TypeString)
-	}
 	if value, ok := vu.mutation.Pic(); ok {
 		_spec.SetField(venue.FieldPic, field.TypeString, value)
 	}
 	if vu.mutation.PicCleared() {
 		_spec.ClearField(venue.FieldPic, field.TypeString)
+	}
+	if value, ok := vu.mutation.Seal(); ok {
+		_spec.SetField(venue.FieldSeal, field.TypeString, value)
+	}
+	if vu.mutation.SealCleared() {
+		_spec.ClearField(venue.FieldSeal, field.TypeString)
+	}
+	if value, ok := vu.mutation.Information(); ok {
+		_spec.SetField(venue.FieldInformation, field.TypeString, value)
+	}
+	if vu.mutation.InformationCleared() {
+		_spec.ClearField(venue.FieldInformation, field.TypeString)
 	}
 	if vu.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -680,6 +805,51 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vu.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   venue.UsersTable,
+			Columns: venue.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !vu.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   venue.UsersTable,
+			Columns: venue.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   venue.UsersTable,
+			Columns: venue.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -820,6 +990,53 @@ func (vuo *VenueUpdateOne) ClearName() *VenueUpdateOne {
 	return vuo
 }
 
+// SetType sets the "type" field.
+func (vuo *VenueUpdateOne) SetType(s string) *VenueUpdateOne {
+	vuo.mutation.SetType(s)
+	return vuo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (vuo *VenueUpdateOne) SetNillableType(s *string) *VenueUpdateOne {
+	if s != nil {
+		vuo.SetType(*s)
+	}
+	return vuo
+}
+
+// ClearType clears the value of the "type" field.
+func (vuo *VenueUpdateOne) ClearType() *VenueUpdateOne {
+	vuo.mutation.ClearType()
+	return vuo
+}
+
+// SetClassify sets the "classify" field.
+func (vuo *VenueUpdateOne) SetClassify(i int64) *VenueUpdateOne {
+	vuo.mutation.ResetClassify()
+	vuo.mutation.SetClassify(i)
+	return vuo
+}
+
+// SetNillableClassify sets the "classify" field if the given value is not nil.
+func (vuo *VenueUpdateOne) SetNillableClassify(i *int64) *VenueUpdateOne {
+	if i != nil {
+		vuo.SetClassify(*i)
+	}
+	return vuo
+}
+
+// AddClassify adds i to the "classify" field.
+func (vuo *VenueUpdateOne) AddClassify(i int64) *VenueUpdateOne {
+	vuo.mutation.AddClassify(i)
+	return vuo
+}
+
+// ClearClassify clears the value of the "classify" field.
+func (vuo *VenueUpdateOne) ClearClassify() *VenueUpdateOne {
+	vuo.mutation.ClearClassify()
+	return vuo
+}
+
 // SetAddress sets the "address" field.
 func (vuo *VenueUpdateOne) SetAddress(s string) *VenueUpdateOne {
 	vuo.mutation.SetAddress(s)
@@ -940,26 +1157,6 @@ func (vuo *VenueUpdateOne) ClearEmail() *VenueUpdateOne {
 	return vuo
 }
 
-// SetInformation sets the "information" field.
-func (vuo *VenueUpdateOne) SetInformation(s string) *VenueUpdateOne {
-	vuo.mutation.SetInformation(s)
-	return vuo
-}
-
-// SetNillableInformation sets the "information" field if the given value is not nil.
-func (vuo *VenueUpdateOne) SetNillableInformation(s *string) *VenueUpdateOne {
-	if s != nil {
-		vuo.SetInformation(*s)
-	}
-	return vuo
-}
-
-// ClearInformation clears the value of the "information" field.
-func (vuo *VenueUpdateOne) ClearInformation() *VenueUpdateOne {
-	vuo.mutation.ClearInformation()
-	return vuo
-}
-
 // SetPic sets the "pic" field.
 func (vuo *VenueUpdateOne) SetPic(s string) *VenueUpdateOne {
 	vuo.mutation.SetPic(s)
@@ -977,6 +1174,46 @@ func (vuo *VenueUpdateOne) SetNillablePic(s *string) *VenueUpdateOne {
 // ClearPic clears the value of the "pic" field.
 func (vuo *VenueUpdateOne) ClearPic() *VenueUpdateOne {
 	vuo.mutation.ClearPic()
+	return vuo
+}
+
+// SetSeal sets the "seal" field.
+func (vuo *VenueUpdateOne) SetSeal(s string) *VenueUpdateOne {
+	vuo.mutation.SetSeal(s)
+	return vuo
+}
+
+// SetNillableSeal sets the "seal" field if the given value is not nil.
+func (vuo *VenueUpdateOne) SetNillableSeal(s *string) *VenueUpdateOne {
+	if s != nil {
+		vuo.SetSeal(*s)
+	}
+	return vuo
+}
+
+// ClearSeal clears the value of the "seal" field.
+func (vuo *VenueUpdateOne) ClearSeal() *VenueUpdateOne {
+	vuo.mutation.ClearSeal()
+	return vuo
+}
+
+// SetInformation sets the "information" field.
+func (vuo *VenueUpdateOne) SetInformation(s string) *VenueUpdateOne {
+	vuo.mutation.SetInformation(s)
+	return vuo
+}
+
+// SetNillableInformation sets the "information" field if the given value is not nil.
+func (vuo *VenueUpdateOne) SetNillableInformation(s *string) *VenueUpdateOne {
+	if s != nil {
+		vuo.SetInformation(*s)
+	}
+	return vuo
+}
+
+// ClearInformation clears the value of the "information" field.
+func (vuo *VenueUpdateOne) ClearInformation() *VenueUpdateOne {
+	vuo.mutation.ClearInformation()
 	return vuo
 }
 
@@ -1023,6 +1260,21 @@ func (vuo *VenueUpdateOne) AddVenueEntry(e ...*EntryLogs) *VenueUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return vuo.AddVenueEntryIDs(ids...)
+}
+
+// AddUserIDs adds the "users" edge to the User entity by IDs.
+func (vuo *VenueUpdateOne) AddUserIDs(ids ...int64) *VenueUpdateOne {
+	vuo.mutation.AddUserIDs(ids...)
+	return vuo
+}
+
+// AddUsers adds the "users" edges to the User entity.
+func (vuo *VenueUpdateOne) AddUsers(u ...*User) *VenueUpdateOne {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return vuo.AddUserIDs(ids...)
 }
 
 // Mutation returns the VenueMutation object of the builder.
@@ -1091,6 +1343,27 @@ func (vuo *VenueUpdateOne) RemoveVenueEntry(e ...*EntryLogs) *VenueUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return vuo.RemoveVenueEntryIDs(ids...)
+}
+
+// ClearUsers clears all "users" edges to the User entity.
+func (vuo *VenueUpdateOne) ClearUsers() *VenueUpdateOne {
+	vuo.mutation.ClearUsers()
+	return vuo
+}
+
+// RemoveUserIDs removes the "users" edge to User entities by IDs.
+func (vuo *VenueUpdateOne) RemoveUserIDs(ids ...int64) *VenueUpdateOne {
+	vuo.mutation.RemoveUserIDs(ids...)
+	return vuo
+}
+
+// RemoveUsers removes "users" edges to User entities.
+func (vuo *VenueUpdateOne) RemoveUsers(u ...*User) *VenueUpdateOne {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return vuo.RemoveUserIDs(ids...)
 }
 
 // Where appends a list predicates to the VenueUpdate builder.
@@ -1210,6 +1483,21 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 	if vuo.mutation.NameCleared() {
 		_spec.ClearField(venue.FieldName, field.TypeString)
 	}
+	if value, ok := vuo.mutation.GetType(); ok {
+		_spec.SetField(venue.FieldType, field.TypeString, value)
+	}
+	if vuo.mutation.TypeCleared() {
+		_spec.ClearField(venue.FieldType, field.TypeString)
+	}
+	if value, ok := vuo.mutation.Classify(); ok {
+		_spec.SetField(venue.FieldClassify, field.TypeInt64, value)
+	}
+	if value, ok := vuo.mutation.AddedClassify(); ok {
+		_spec.AddField(venue.FieldClassify, field.TypeInt64, value)
+	}
+	if vuo.mutation.ClassifyCleared() {
+		_spec.ClearField(venue.FieldClassify, field.TypeInt64)
+	}
 	if value, ok := vuo.mutation.Address(); ok {
 		_spec.SetField(venue.FieldAddress, field.TypeString, value)
 	}
@@ -1246,17 +1534,23 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 	if vuo.mutation.EmailCleared() {
 		_spec.ClearField(venue.FieldEmail, field.TypeString)
 	}
-	if value, ok := vuo.mutation.Information(); ok {
-		_spec.SetField(venue.FieldInformation, field.TypeString, value)
-	}
-	if vuo.mutation.InformationCleared() {
-		_spec.ClearField(venue.FieldInformation, field.TypeString)
-	}
 	if value, ok := vuo.mutation.Pic(); ok {
 		_spec.SetField(venue.FieldPic, field.TypeString, value)
 	}
 	if vuo.mutation.PicCleared() {
 		_spec.ClearField(venue.FieldPic, field.TypeString)
+	}
+	if value, ok := vuo.mutation.Seal(); ok {
+		_spec.SetField(venue.FieldSeal, field.TypeString, value)
+	}
+	if vuo.mutation.SealCleared() {
+		_spec.ClearField(venue.FieldSeal, field.TypeString)
+	}
+	if value, ok := vuo.mutation.Information(); ok {
+		_spec.SetField(venue.FieldInformation, field.TypeString, value)
+	}
+	if vuo.mutation.InformationCleared() {
+		_spec.ClearField(venue.FieldInformation, field.TypeString)
 	}
 	if vuo.mutation.PlacesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1386,6 +1680,51 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vuo.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   venue.UsersTable,
+			Columns: venue.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !vuo.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   venue.UsersTable,
+			Columns: venue.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   venue.UsersTable,
+			Columns: venue.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

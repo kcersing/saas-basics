@@ -55,6 +55,8 @@ type MemberProduct struct {
 	Count int64 `json:"count,omitempty"`
 	// 剩余次数
 	CountSurplus int64 `json:"count_surplus,omitempty"`
+	// 激活期限
+	Deadline int64 `json:"deadline,omitempty"`
 	// 生效时间
 	ValidityAt time.Time `json:"validity_at,omitempty"`
 	// 作废时间
@@ -116,7 +118,7 @@ func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberproduct.FieldPrice, memberproduct.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case memberproduct.FieldID, memberproduct.FieldDelete, memberproduct.FieldCreatedID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldVenueID, memberproduct.FieldOrderID, memberproduct.FieldDuration, memberproduct.FieldLength, memberproduct.FieldCount, memberproduct.FieldCountSurplus:
+		case memberproduct.FieldID, memberproduct.FieldDelete, memberproduct.FieldCreatedID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldVenueID, memberproduct.FieldOrderID, memberproduct.FieldDuration, memberproduct.FieldLength, memberproduct.FieldCount, memberproduct.FieldCountSurplus, memberproduct.FieldDeadline:
 			values[i] = new(sql.NullInt64)
 		case memberproduct.FieldSn, memberproduct.FieldType, memberproduct.FieldName:
 			values[i] = new(sql.NullString)
@@ -251,6 +253,12 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mp.CountSurplus = value.Int64
 			}
+		case memberproduct.FieldDeadline:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deadline", values[i])
+			} else if value.Valid {
+				mp.Deadline = value.Int64
+			}
 		case memberproduct.FieldValidityAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field validity_at", values[i])
@@ -367,6 +375,9 @@ func (mp *MemberProduct) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("count_surplus=")
 	builder.WriteString(fmt.Sprintf("%v", mp.CountSurplus))
+	builder.WriteString(", ")
+	builder.WriteString("deadline=")
+	builder.WriteString(fmt.Sprintf("%v", mp.Deadline))
 	builder.WriteString(", ")
 	builder.WriteString("validity_at=")
 	builder.WriteString(mp.ValidityAt.Format(time.ANSIC))
