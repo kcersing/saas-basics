@@ -26,7 +26,6 @@ func Register(r *server.Hertz) {
 			_bootcamp.POST("/info", append(_bootcampinfoMw(), bootcamp.BootcampInfo)...)
 			_bootcamp.POST("/list", append(_bootcamplistMw(), bootcamp.BootcampList)...)
 			_bootcamp.POST("/promotional-links", append(_promotionallinksMw(), bootcamp.PromotionalLinks)...)
-			_bootcamp.POST("/results-upload", append(_resultsuploadMw(), bootcamp.ResultsUpload)...)
 			_bootcamp.POST("/show", append(_updatebootcampshowMw(), bootcamp.UpdateBootcampShow)...)
 			_bootcamp.POST("/status", append(_updatebootcampstatusMw(), bootcamp.UpdateBootcampStatus)...)
 			_bootcamp.POST("/update", append(_updatebootcampMw(), bootcamp.UpdateBootcamp)...)

@@ -26,7 +26,6 @@ func Register(r *server.Hertz) {
 			_community.POST("/info", append(_communityinfoMw(), community.CommunityInfo)...)
 			_community.POST("/list", append(_communitylistMw(), community.CommunityList)...)
 			_community.POST("/promotional-links", append(_promotionallinksMw(), community.PromotionalLinks)...)
-			_community.POST("/results-upload", append(_resultsuploadMw(), community.ResultsUpload)...)
 			_community.POST("/show", append(_updatecommunityshowMw(), community.UpdateCommunityShow)...)
 			_community.POST("/status", append(_updatecommunitystatusMw(), community.UpdateCommunityStatus)...)
 			_community.POST("/update", append(_updatecommunityMw(), community.UpdateCommunity)...)

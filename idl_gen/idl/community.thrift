@@ -29,8 +29,6 @@ service CommunityService {
 
   base.NilResponse ParticipantListListExport(1: ParticipantListReq req) (api.post = "/service/community/participant/export")
 
-  base.NilResponse ResultsUpload(1: ResultsUploadReq req) (api.post = "/service/community/results-upload")
-
   base.NilResponse PromotionalLinks(1: base.IDReq req) (api.post = "/service/community/promotional-links")
 
   base.NilResponse DelCommunity(1: base.IDReq req) (api.post = "/service/community/del")
@@ -43,9 +41,6 @@ struct ParticipantFinishReq{
   2:  optional list<i64> memberId (api.raw = "memberId")
 }
 
-struct ResultsUploadReq{
-    1:  optional string pic="" (api.raw = "pic")
-}
 struct CommunityListReq{
     1:  optional i64 page=1 (api.raw = "page")
     2:  optional i64 pageSize=100 (api.raw = "pageSize")

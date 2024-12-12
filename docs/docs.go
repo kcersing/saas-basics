@@ -432,11 +432,741 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/bootcamp/create": {
+            "post": {
+                "description": "创建训练营 Description",
+                "summary": "创建训练营 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bootcamp.BootcampInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/del": {
+            "post": {
+                "description": "删除训练营 Description",
+                "summary": "删除训练营 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/info": {
+            "post": {
+                "description": "训练营信息 Description",
+                "summary": "训练营信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/list": {
+            "post": {
+                "description": "训练营列表 Description",
+                "summary": "训练营列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bootcamp.BootcampListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/participant/create": {
+            "post": {
+                "description": "创建训练营报名 Description",
+                "summary": "创建训练营报名 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bootcamp.ParticipantInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/participant/export": {
+            "post": {
+                "description": "训练营报名列表导出 Description",
+                "summary": "训练营报名列表导出 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bootcamp.ParticipantListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/participant/finish": {
+            "post": {
+                "description": "训练营报名完成 Description",
+                "summary": "训练营报名完成 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bootcamp.ParticipantFinishReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/participant/info": {
+            "post": {
+                "description": "训练营报名信息 Description",
+                "summary": "训练营报名信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/participant/list": {
+            "post": {
+                "description": "训练营报名列表 Description",
+                "summary": "训练营报名列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bootcamp.ParticipantListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/participant/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/bootcamp/participant/update": {
+            "post": {
+                "description": "更新训练营报名 Description",
+                "summary": "更新训练营报名 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bootcamp.ParticipantInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/promotional-links": {
+            "post": {
+                "description": "训练营推广链接 Description",
+                "summary": "训练营推广链接 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/show": {
+            "post": {
+                "description": "更新训练营展示状态 Description",
+                "summary": "更新训练营展示状态 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/status": {
+            "post": {
+                "description": "更新训练营状态 Description",
+                "summary": "更新训练营状态 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/bootcamp/update": {
+            "post": {
+                "description": "更新训练营 Description",
+                "summary": "更新训练营 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bootcamp.BootcampInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/captcha": {
             "post": {
                 "description": "获取验证码 Description",
                 "summary": "获取验证码 Summary",
                 "responses": {}
+            }
+        },
+        "/service/community/create": {
+            "post": {
+                "description": "创建运动社群 Description",
+                "summary": "创建运动社群 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contest.ContestInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/del": {
+            "post": {
+                "description": "删除运动社群 Description",
+                "summary": "删除运动社群 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/info": {
+            "post": {
+                "description": "运动社群信息 Description",
+                "summary": "运动社群信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/list": {
+            "post": {
+                "description": "运动社群列表 Description",
+                "summary": "运动社群列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/community.CommunityListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/participant/create": {
+            "post": {
+                "description": "创建运动社群报名 Description",
+                "summary": "创建运动社群报名 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/community.ParticipantInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/participant/export": {
+            "post": {
+                "description": "运动社群报名列表导出 Description",
+                "summary": "运动社群报名列表导出 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/community.ParticipantListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/participant/finish": {
+            "post": {
+                "description": "运动社群报名完成 Description",
+                "summary": "运动社群报名完成 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/community.ParticipantFinishReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/participant/info": {
+            "post": {
+                "description": "运动社群报名信息 Description",
+                "summary": "运动社群报名信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/participant/list": {
+            "post": {
+                "description": "运动社群报名列表 Description",
+                "summary": "运动社群报名列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/community.ParticipantListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/participant/status": {
+            "post": {
+                "description": "更新运动社群报名状态 Description",
+                "summary": "更新运动社群报名状态 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/participant/update": {
+            "post": {
+                "description": "更新运动社群报名 Description",
+                "summary": "更新运动社群报名 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/community.ParticipantInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/promotional-links": {
+            "post": {
+                "description": "训练营推广链接 Description",
+                "summary": "训练营推广链接 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/show": {
+            "post": {
+                "description": "更新运动社群展示状态 Description",
+                "summary": "更新运动社群展示状态 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/status": {
+            "post": {
+                "description": "更新运动社群状态 Description",
+                "summary": "更新运动社群状态 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/community/update": {
+            "post": {
+                "description": "更新运动社群 Description",
+                "summary": "更新运动社群 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/community.CommunityInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/contest/create": {
@@ -1688,6 +2418,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/order/list/export": {
+            "post": {
+                "description": "导出订单列表 Description",
+                "summary": "导出订单列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.ListOrderReq"
+                        }
+                    },
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/order/status": {
             "post": {
                 "description": "更新订单状态 Description",
@@ -2023,6 +2787,41 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/service/product/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/product/del": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/product/export": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/product/info": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/product/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/product/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/product/update": {
+            "post": {
+                "responses": {}
             }
         },
         "/service/role": {
@@ -2649,6 +3448,344 @@ const docTemplate = `{
                 }
             }
         },
+        "bootcamp.BootcampInfo": {
+            "type": "object",
+            "properties": {
+                "cancelTime": {
+                    "type": "integer"
+                },
+                "condition": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdId": {
+                    "type": "integer"
+                },
+                "createdName": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "endAt": {
+                    "type": "string"
+                },
+                "fee": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isCancel": {
+                    "type": "integer"
+                },
+                "isFee": {
+                    "type": "integer"
+                },
+                "isShow": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "pic": {
+                    "type": "string"
+                },
+                "signEndAt": {
+                    "type": "string"
+                },
+                "signFields": {
+                    "type": "string"
+                },
+                "signNumber": {
+                    "type": "integer"
+                },
+                "signStartAt": {
+                    "type": "string"
+                },
+                "sponsor": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "bootcamp.BootcampListReq": {
+            "type": "object",
+            "properties": {
+                "condition": {
+                    "type": "integer"
+                },
+                "endAt": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "signEndAt": {
+                    "type": "string"
+                },
+                "signStartAt": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "bootcamp.ParticipantFinishReq": {
+            "type": "object",
+            "properties": {
+                "bootcampId": {
+                    "type": "integer"
+                },
+                "memberId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "bootcamp.ParticipantInfo": {
+            "type": "object",
+            "properties": {
+                "bootcampId": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "device": {
+                    "type": "string"
+                },
+                "fee": {
+                    "type": "number"
+                },
+                "fields": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "orderSn": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "bootcamp.ParticipantListReq": {
+            "type": "object",
+            "properties": {
+                "bootcampId": {
+                    "type": "integer"
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "sn": {
+                    "type": "string"
+                }
+            }
+        },
+        "community.CommunityInfo": {
+            "type": "object",
+            "properties": {
+                "cancelTime": {
+                    "type": "integer"
+                },
+                "condition": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdId": {
+                    "description": "19:  optional i64 isFee=0 (api.raw = \"isFee\")",
+                    "type": "integer"
+                },
+                "createdName": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "endAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isCancel": {
+                    "description": "11:  optional double fee=0 (api.raw = \"fee\")",
+                    "type": "integer"
+                },
+                "isShow": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "pic": {
+                    "type": "string"
+                },
+                "signEndAt": {
+                    "type": "string"
+                },
+                "signFields": {
+                    "type": "string"
+                },
+                "signNumber": {
+                    "type": "integer"
+                },
+                "signStartAt": {
+                    "type": "string"
+                },
+                "sponsor": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "community.CommunityListReq": {
+            "type": "object",
+            "properties": {
+                "condition": {
+                    "type": "integer"
+                },
+                "endAt": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "signEndAt": {
+                    "type": "string"
+                },
+                "signStartAt": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "community.ParticipantFinishReq": {
+            "type": "object",
+            "properties": {
+                "communityId": {
+                    "type": "integer"
+                },
+                "memberId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "community.ParticipantInfo": {
+            "type": "object",
+            "properties": {
+                "communityId": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "device": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "orderSn": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "9:  optional double fee=0 (api.raw = \"fee\")",
+                    "type": "integer"
+                }
+            }
+        },
+        "community.ParticipantListReq": {
+            "type": "object",
+            "properties": {
+                "communityId": {
+                    "type": "integer"
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "sn": {
+                    "type": "string"
+                }
+            }
+        },
         "contest.ContestInfo": {
             "type": "object",
             "properties": {
@@ -2770,6 +3907,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "createdAt": {
+                    "type": "string"
+                },
+                "device": {
                     "type": "string"
                 },
                 "fee": {
@@ -3417,6 +4557,9 @@ const docTemplate = `{
                 "status": {
                     "type": "integer"
                 },
+                "type": {
+                    "type": "integer"
+                },
                 "userTags": {
                     "type": "array",
                     "items": {
@@ -3425,6 +4568,12 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -3490,6 +4639,9 @@ const docTemplate = `{
                 "addressDetail": {
                     "type": "string"
                 },
+                "classify": {
+                    "type": "integer"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -3514,8 +4666,14 @@ const docTemplate = `{
                 "pic": {
                     "type": "string"
                 },
+                "seal": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "integer"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
@@ -3545,11 +4703,20 @@ const docTemplate = `{
                 "UpdatedAt": {
                     "type": "string"
                 },
+                "classify": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "information": {
                     "type": "string"
+                },
+                "is_accessible": {
+                    "type": "integer"
+                },
+                "is_show": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"

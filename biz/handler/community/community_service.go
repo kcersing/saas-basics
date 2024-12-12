@@ -46,7 +46,7 @@ func CreateCommunity(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary		更新运动社群 Summary
 //	@Description	更新运动社群 Description
-//	@Param			request	body		community.ContestInfo	true	"query params"
+//	@Param			request	body		community.CommunityInfo	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
 // @router /service/community/update [POST]
@@ -336,29 +336,6 @@ func ParticipantListListExport(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, map[string]string{
 		"url": export,
 	}, 0, "")
-}
-
-// ResultsUpload .
-//
-//	@Summary		运动社群报名结果上传 Summary
-//
-//	@Description	运动社群报名结果上传 Description
-//	@Param			request	body		community.ResultsUploadReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//
-// @router /service/community/results-upload [POST]
-func ResultsUpload(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req community.ResultsUploadReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
 }
 
 // PromotionalLinks .

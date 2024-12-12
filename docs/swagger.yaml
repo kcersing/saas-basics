@@ -110,6 +110,229 @@ definitions:
       status:
         type: integer
     type: object
+  bootcamp.BootcampInfo:
+    properties:
+      cancelTime:
+        type: integer
+      condition:
+        type: integer
+      createdAt:
+        type: string
+      createdId:
+        type: integer
+      createdName:
+        type: string
+      detail:
+        type: string
+      endAt:
+        type: string
+      fee:
+        type: number
+      id:
+        type: integer
+      isCancel:
+        type: integer
+      isFee:
+        type: integer
+      isShow:
+        type: integer
+      name:
+        type: string
+      number:
+        type: integer
+      pic:
+        type: string
+      signEndAt:
+        type: string
+      signFields:
+        type: string
+      signNumber:
+        type: integer
+      signStartAt:
+        type: string
+      sponsor:
+        type: string
+      startAt:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  bootcamp.BootcampListReq:
+    properties:
+      condition:
+        type: integer
+      endAt:
+        type: string
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      signEndAt:
+        type: string
+      signStartAt:
+        type: string
+      startAt:
+        type: string
+    type: object
+  bootcamp.ParticipantFinishReq:
+    properties:
+      bootcampId:
+        type: integer
+      memberId:
+        items:
+          type: integer
+        type: array
+    type: object
+  bootcamp.ParticipantInfo:
+    properties:
+      bootcampId:
+        type: integer
+      createdAt:
+        type: string
+      device:
+        type: string
+      fee:
+        type: number
+      fields:
+        type: string
+      id:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      orderSn:
+        type: string
+      status:
+        type: integer
+    type: object
+  bootcamp.ParticipantListReq:
+    properties:
+      bootcampId:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      sn:
+        type: string
+    type: object
+  community.CommunityInfo:
+    properties:
+      cancelTime:
+        type: integer
+      condition:
+        type: integer
+      createdAt:
+        type: string
+      createdId:
+        description: '19:  optional i64 isFee=0 (api.raw = "isFee")'
+        type: integer
+      createdName:
+        type: string
+      detail:
+        type: string
+      endAt:
+        type: string
+      id:
+        type: integer
+      isCancel:
+        description: '11:  optional double fee=0 (api.raw = "fee")'
+        type: integer
+      isShow:
+        type: integer
+      name:
+        type: string
+      number:
+        type: integer
+      pic:
+        type: string
+      signEndAt:
+        type: string
+      signFields:
+        type: string
+      signNumber:
+        type: integer
+      signStartAt:
+        type: string
+      sponsor:
+        type: string
+      startAt:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  community.CommunityListReq:
+    properties:
+      condition:
+        type: integer
+      endAt:
+        type: string
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      signEndAt:
+        type: string
+      signStartAt:
+        type: string
+      startAt:
+        type: string
+    type: object
+  community.ParticipantFinishReq:
+    properties:
+      communityId:
+        type: integer
+      memberId:
+        items:
+          type: integer
+        type: array
+    type: object
+  community.ParticipantInfo:
+    properties:
+      communityId:
+        type: integer
+      createdAt:
+        type: string
+      device:
+        type: string
+      fields:
+        type: string
+      id:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      orderSn:
+        type: string
+      status:
+        description: '9:  optional double fee=0 (api.raw = "fee")'
+        type: integer
+    type: object
+  community.ParticipantListReq:
+    properties:
+      communityId:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      sn:
+        type: string
+    type: object
   contest.ContestInfo:
     properties:
       cancelTime:
@@ -190,6 +413,8 @@ definitions:
       contestId:
         type: integer
       createdAt:
+        type: string
+      device:
         type: string
       fee:
         type: number
@@ -613,12 +838,18 @@ definitions:
         type: integer
       status:
         type: integer
+      type:
+        type: integer
       userTags:
         items:
           type: integer
         type: array
       username:
         type: string
+      venueId:
+        items:
+          type: integer
+        type: array
     type: object
   user.UserListReq:
     properties:
@@ -661,6 +892,8 @@ definitions:
         type: string
       addressDetail:
         type: string
+      classify:
+        type: integer
       email:
         type: string
       id:
@@ -677,8 +910,12 @@ definitions:
         type: string
       pic:
         type: string
+      seal:
+        type: string
       status:
         type: integer
+      type:
+        type: string
     type: object
   venue.VenueListReq:
     properties:
@@ -697,10 +934,16 @@ definitions:
         type: string
       UpdatedAt:
         type: string
+      classify:
+        type: integer
       id:
         type: integer
       information:
         type: string
+      is_accessible:
+        type: integer
+      is_show:
+        type: integer
       name:
         type: string
       number:
@@ -993,11 +1236,478 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新Banner Summary
+  /service/bootcamp/create:
+    post:
+      description: 创建训练营 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bootcamp.BootcampInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建训练营 Summary
+  /service/bootcamp/del:
+    post:
+      description: 删除训练营 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除训练营 Summary
+  /service/bootcamp/info:
+    post:
+      description: 训练营信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 训练营信息 Summary
+  /service/bootcamp/list:
+    post:
+      description: 训练营列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bootcamp.BootcampListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 训练营列表 Summary
+  /service/bootcamp/participant/create:
+    post:
+      description: 创建训练营报名 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bootcamp.ParticipantInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建训练营报名 Summary
+  /service/bootcamp/participant/export:
+    post:
+      description: 训练营报名列表导出 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bootcamp.ParticipantListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 训练营报名列表导出 Summary
+  /service/bootcamp/participant/finish:
+    post:
+      description: 训练营报名完成 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bootcamp.ParticipantFinishReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 训练营报名完成 Summary
+  /service/bootcamp/participant/info:
+    post:
+      description: 训练营报名信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 训练营报名信息 Summary
+  /service/bootcamp/participant/list:
+    post:
+      description: 训练营报名列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bootcamp.ParticipantListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 训练营报名列表 Summary
+  /service/bootcamp/participant/status:
+    post:
+      responses: {}
+  /service/bootcamp/participant/update:
+    post:
+      description: 更新训练营报名 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bootcamp.ParticipantInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新训练营报名 Summary
+  /service/bootcamp/promotional-links:
+    post:
+      description: 训练营推广链接 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 训练营推广链接 Summary
+  /service/bootcamp/show:
+    post:
+      description: 更新训练营展示状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新训练营展示状态 Summary
+  /service/bootcamp/status:
+    post:
+      description: 更新训练营状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新训练营状态 Summary
+  /service/bootcamp/update:
+    post:
+      description: 更新训练营 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bootcamp.BootcampInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新训练营 Summary
   /service/captcha:
     post:
       description: 获取验证码 Description
       responses: {}
       summary: 获取验证码 Summary
+  /service/community/create:
+    post:
+      description: 创建运动社群 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contest.ContestInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建运动社群 Summary
+  /service/community/del:
+    post:
+      description: 删除运动社群 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除运动社群 Summary
+  /service/community/info:
+    post:
+      description: 运动社群信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 运动社群信息 Summary
+  /service/community/list:
+    post:
+      description: 运动社群列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/community.CommunityListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 运动社群列表 Summary
+  /service/community/participant/create:
+    post:
+      description: 创建运动社群报名 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/community.ParticipantInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建运动社群报名 Summary
+  /service/community/participant/export:
+    post:
+      description: 运动社群报名列表导出 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/community.ParticipantListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 运动社群报名列表导出 Summary
+  /service/community/participant/finish:
+    post:
+      description: 运动社群报名完成 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/community.ParticipantFinishReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 运动社群报名完成 Summary
+  /service/community/participant/info:
+    post:
+      description: 运动社群报名信息 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 运动社群报名信息 Summary
+  /service/community/participant/list:
+    post:
+      description: 运动社群报名列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/community.ParticipantListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 运动社群报名列表 Summary
+  /service/community/participant/status:
+    post:
+      description: 更新运动社群报名状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新运动社群报名状态 Summary
+  /service/community/participant/update:
+    post:
+      description: 更新运动社群报名 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/community.ParticipantInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新运动社群报名 Summary
+  /service/community/promotional-links:
+    post:
+      description: 训练营推广链接 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 训练营推广链接 Summary
+  /service/community/show:
+    post:
+      description: 更新运动社群展示状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新运动社群展示状态 Summary
+  /service/community/status:
+    post:
+      description: 更新运动社群状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新运动社群状态 Summary
+  /service/community/update:
+    post:
+      description: 更新运动社群 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/community.CommunityInfo'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新运动社群 Summary
   /service/contest/create:
     post:
       description: 创建比赛 Description
@@ -1797,6 +2507,28 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 获取订单列表 Summary
+  /service/order/list/export:
+    post:
+      description: 导出订单列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/order.ListOrderReq'
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 导出订单列表 Summary
   /service/order/status:
     post:
       description: 更新订单状态 Description
@@ -2013,6 +2745,27 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新场地 Summary
+  /service/product/create:
+    post:
+      responses: {}
+  /service/product/del:
+    post:
+      responses: {}
+  /service/product/export:
+    post:
+      responses: {}
+  /service/product/info:
+    post:
+      responses: {}
+  /service/product/list:
+    post:
+      responses: {}
+  /service/product/status:
+    post:
+      responses: {}
+  /service/product/update:
+    post:
+      responses: {}
   /service/role:
     get:
       description: 获取角色信息 Description

@@ -331,29 +331,6 @@ func ParticipantListListExport(ctx context.Context, c *app.RequestContext) {
 	}, 0, "")
 }
 
-// ResultsUpload .
-//
-//	@Summary		训练营报名结果上传 Summary
-//
-//	@Description	训练营报名结果上传 Description
-//	@Param			request	body		bootcamp.ResultsUploadReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//
-// @router /service/bootcamp/results-upload [POST]
-func ResultsUpload(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req bootcamp.ResultsUploadReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
 // PromotionalLinks .
 //
 //	@Summary		训练营推广链接 Summary
