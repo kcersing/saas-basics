@@ -73,9 +73,9 @@ struct ParticipantInfo{
     6:  optional string createdAt="" (api.raw = "createdAt")
 
     8:  optional string orderSn="" (api.raw = "orderSn")
-    9:  optional double fee=0 (api.raw = "fee")
+//    9:  optional double fee=0 (api.raw = "fee")
     10:  optional i64 status=1 (api.raw = "status")
-
+    11:  optional string device = "" (api.raw = "device")
 }
 
 struct CommunityInfo{
@@ -90,7 +90,7 @@ struct CommunityInfo{
     9:  optional string pic="" (api.raw = "pic")
 
     10: optional string sponsor="" (api.raw = "sponsor")
-    11:  optional double fee=0 (api.raw = "fee")
+//    11:  optional double fee=0 (api.raw = "fee")
     12:  optional i64 isCancel=0 (api.raw = "isCancel")
     13:  optional i64 cancelTime=0 (api.raw = "cancelTime")
     14:  optional string detail="" (api.raw = "detail")
@@ -99,7 +99,7 @@ struct CommunityInfo{
     17:  optional string updatedAt="" (api.raw = "updatedAt")
 
     18:  optional i64 condition=0 (api.raw = "condition")
-    19:  optional i64 isFee=0 (api.raw = "isFee")
+//    19:  optional i64 isFee=0 (api.raw = "isFee")
 
     20:  optional i64 createdId=0 (api.raw = "createdId")
     21:  optional string createdName="0" (api.raw = "createdName")

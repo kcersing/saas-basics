@@ -1415,15 +1415,16 @@ func (p *ParticipantListReq) String() string {
 }
 
 type ParticipantInfo struct {
-	ID          int64   `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	CommunityId int64   `thrift:"communityId,2,optional" form:"communityId" json:"communityId" query:"communityId"`
-	Fields      string  `thrift:"fields,3,optional" form:"fields" json:"fields" query:"fields"`
-	Name        string  `thrift:"name,4,optional" form:"name" json:"name" query:"name"`
-	Mobile      string  `thrift:"mobile,5,optional" form:"mobile" json:"mobile" query:"mobile"`
-	CreatedAt   string  `thrift:"createdAt,6,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
-	OrderSn     string  `thrift:"orderSn,8,optional" form:"orderSn" json:"orderSn" query:"orderSn"`
-	Fee         float64 `thrift:"fee,9,optional" form:"fee" json:"fee" query:"fee"`
-	Status      int64   `thrift:"status,10,optional" form:"status" json:"status" query:"status"`
+	ID          int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	CommunityId int64  `thrift:"communityId,2,optional" form:"communityId" json:"communityId" query:"communityId"`
+	Fields      string `thrift:"fields,3,optional" form:"fields" json:"fields" query:"fields"`
+	Name        string `thrift:"name,4,optional" form:"name" json:"name" query:"name"`
+	Mobile      string `thrift:"mobile,5,optional" form:"mobile" json:"mobile" query:"mobile"`
+	CreatedAt   string `thrift:"createdAt,6,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	OrderSn     string `thrift:"orderSn,8,optional" form:"orderSn" json:"orderSn" query:"orderSn"`
+	//    9:  optional double fee=0 (api.raw = "fee")
+	Status int64  `thrift:"status,10,optional" form:"status" json:"status" query:"status"`
+	Device string `thrift:"device,11,optional" form:"device" json:"device" query:"device"`
 }
 
 func NewParticipantInfo() *ParticipantInfo {
@@ -1436,8 +1437,8 @@ func NewParticipantInfo() *ParticipantInfo {
 		Mobile:      "",
 		CreatedAt:   "",
 		OrderSn:     "",
-		Fee:         0.0,
 		Status:      1,
+		Device:      "",
 	}
 }
 
@@ -1449,8 +1450,8 @@ func (p *ParticipantInfo) InitDefault() {
 	p.Mobile = ""
 	p.CreatedAt = ""
 	p.OrderSn = ""
-	p.Fee = 0.0
 	p.Status = 1
+	p.Device = ""
 }
 
 var ParticipantInfo_ID_DEFAULT int64 = 0
@@ -1516,15 +1517,6 @@ func (p *ParticipantInfo) GetOrderSn() (v string) {
 	return p.OrderSn
 }
 
-var ParticipantInfo_Fee_DEFAULT float64 = 0.0
-
-func (p *ParticipantInfo) GetFee() (v float64) {
-	if !p.IsSetFee() {
-		return ParticipantInfo_Fee_DEFAULT
-	}
-	return p.Fee
-}
-
 var ParticipantInfo_Status_DEFAULT int64 = 1
 
 func (p *ParticipantInfo) GetStatus() (v int64) {
@@ -1532,6 +1524,15 @@ func (p *ParticipantInfo) GetStatus() (v int64) {
 		return ParticipantInfo_Status_DEFAULT
 	}
 	return p.Status
+}
+
+var ParticipantInfo_Device_DEFAULT string = ""
+
+func (p *ParticipantInfo) GetDevice() (v string) {
+	if !p.IsSetDevice() {
+		return ParticipantInfo_Device_DEFAULT
+	}
+	return p.Device
 }
 
 var fieldIDToName_ParticipantInfo = map[int16]string{
@@ -1542,8 +1543,8 @@ var fieldIDToName_ParticipantInfo = map[int16]string{
 	5:  "mobile",
 	6:  "createdAt",
 	8:  "orderSn",
-	9:  "fee",
 	10: "status",
+	11: "device",
 }
 
 func (p *ParticipantInfo) IsSetID() bool {
@@ -1574,12 +1575,12 @@ func (p *ParticipantInfo) IsSetOrderSn() bool {
 	return p.OrderSn != ParticipantInfo_OrderSn_DEFAULT
 }
 
-func (p *ParticipantInfo) IsSetFee() bool {
-	return p.Fee != ParticipantInfo_Fee_DEFAULT
-}
-
 func (p *ParticipantInfo) IsSetStatus() bool {
 	return p.Status != ParticipantInfo_Status_DEFAULT
+}
+
+func (p *ParticipantInfo) IsSetDevice() bool {
+	return p.Device != ParticipantInfo_Device_DEFAULT
 }
 
 func (p *ParticipantInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -1657,17 +1658,17 @@ func (p *ParticipantInfo) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 9:
-			if fieldTypeId == thrift.DOUBLE {
-				if err = p.ReadField9(iprot); err != nil {
+		case 10:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField10(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 10:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField10(iprot); err != nil {
+		case 11:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField11(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1779,17 +1780,6 @@ func (p *ParticipantInfo) ReadField8(iprot thrift.TProtocol) error {
 	p.OrderSn = _field
 	return nil
 }
-func (p *ParticipantInfo) ReadField9(iprot thrift.TProtocol) error {
-
-	var _field float64
-	if v, err := iprot.ReadDouble(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Fee = _field
-	return nil
-}
 func (p *ParticipantInfo) ReadField10(iprot thrift.TProtocol) error {
 
 	var _field int64
@@ -1799,6 +1789,17 @@ func (p *ParticipantInfo) ReadField10(iprot thrift.TProtocol) error {
 		_field = v
 	}
 	p.Status = _field
+	return nil
+}
+func (p *ParticipantInfo) ReadField11(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Device = _field
 	return nil
 }
 
@@ -1836,12 +1837,12 @@ func (p *ParticipantInfo) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 8
 			goto WriteFieldError
 		}
-		if err = p.writeField9(oprot); err != nil {
-			fieldId = 9
-			goto WriteFieldError
-		}
 		if err = p.writeField10(oprot); err != nil {
 			fieldId = 10
+			goto WriteFieldError
+		}
+		if err = p.writeField11(oprot); err != nil {
+			fieldId = 11
 			goto WriteFieldError
 		}
 	}
@@ -1995,25 +1996,6 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
-func (p *ParticipantInfo) writeField9(oprot thrift.TProtocol) (err error) {
-	if p.IsSetFee() {
-		if err = oprot.WriteFieldBegin("fee", thrift.DOUBLE, 9); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteDouble(p.Fee); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
-}
-
 func (p *ParticipantInfo) writeField10(oprot thrift.TProtocol) (err error) {
 	if p.IsSetStatus() {
 		if err = oprot.WriteFieldBegin("status", thrift.I64, 10); err != nil {
@@ -2033,6 +2015,25 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
 }
 
+func (p *ParticipantInfo) writeField11(oprot thrift.TProtocol) (err error) {
+	if p.IsSetDevice() {
+		if err = oprot.WriteFieldBegin("device", thrift.STRING, 11); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Device); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 11 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 11 end error: ", p), err)
+}
+
 func (p *ParticipantInfo) String() string {
 	if p == nil {
 		return "<nil>"
@@ -2042,28 +2043,28 @@ func (p *ParticipantInfo) String() string {
 }
 
 type CommunityInfo struct {
-	ID          int64   `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	Name        string  `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
-	SignNumber  int64   `thrift:"signNumber,3,optional" form:"signNumber" json:"signNumber" query:"signNumber"`
-	SignStartAt string  `thrift:"signStartAt,4,optional" form:"signStartAt" json:"signStartAt" query:"signStartAt"`
-	SignEndAt   string  `thrift:"signEndAt,5,optional" form:"signEndAt" json:"signEndAt" query:"signEndAt"`
-	Number      int64   `thrift:"number,6,optional" form:"number" json:"number" query:"number"`
-	StartAt     string  `thrift:"startAt,7,optional" form:"startAt" json:"startAt" query:"startAt"`
-	EndAt       string  `thrift:"endAt,8,optional" form:"endAt" json:"endAt" query:"endAt"`
-	Pic         string  `thrift:"pic,9,optional" form:"pic" json:"pic" query:"pic"`
-	Sponsor     string  `thrift:"sponsor,10,optional" form:"sponsor" json:"sponsor" query:"sponsor"`
-	Fee         float64 `thrift:"fee,11,optional" form:"fee" json:"fee" query:"fee"`
-	IsCancel    int64   `thrift:"isCancel,12,optional" form:"isCancel" json:"isCancel" query:"isCancel"`
-	CancelTime  int64   `thrift:"cancelTime,13,optional" form:"cancelTime" json:"cancelTime" query:"cancelTime"`
-	Detail      string  `thrift:"detail,14,optional" form:"detail" json:"detail" query:"detail"`
-	SignFields  string  `thrift:"signFields,15,optional" form:"signFields" json:"signFields" query:"signFields"`
-	CreatedAt   string  `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
-	UpdatedAt   string  `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
-	Condition   int64   `thrift:"condition,18,optional" form:"condition" json:"condition" query:"condition"`
-	IsFee       int64   `thrift:"isFee,19,optional" form:"isFee" json:"isFee" query:"isFee"`
-	CreatedId   int64   `thrift:"createdId,20,optional" form:"createdId" json:"createdId" query:"createdId"`
-	CreatedName string  `thrift:"createdName,21,optional" form:"createdName" json:"createdName" query:"createdName"`
-	IsShow      int64   `thrift:"isShow,22,optional" form:"isShow" json:"isShow" query:"isShow"`
+	ID          int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	Name        string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	SignNumber  int64  `thrift:"signNumber,3,optional" form:"signNumber" json:"signNumber" query:"signNumber"`
+	SignStartAt string `thrift:"signStartAt,4,optional" form:"signStartAt" json:"signStartAt" query:"signStartAt"`
+	SignEndAt   string `thrift:"signEndAt,5,optional" form:"signEndAt" json:"signEndAt" query:"signEndAt"`
+	Number      int64  `thrift:"number,6,optional" form:"number" json:"number" query:"number"`
+	StartAt     string `thrift:"startAt,7,optional" form:"startAt" json:"startAt" query:"startAt"`
+	EndAt       string `thrift:"endAt,8,optional" form:"endAt" json:"endAt" query:"endAt"`
+	Pic         string `thrift:"pic,9,optional" form:"pic" json:"pic" query:"pic"`
+	Sponsor     string `thrift:"sponsor,10,optional" form:"sponsor" json:"sponsor" query:"sponsor"`
+	//    11:  optional double fee=0 (api.raw = "fee")
+	IsCancel   int64  `thrift:"isCancel,12,optional" form:"isCancel" json:"isCancel" query:"isCancel"`
+	CancelTime int64  `thrift:"cancelTime,13,optional" form:"cancelTime" json:"cancelTime" query:"cancelTime"`
+	Detail     string `thrift:"detail,14,optional" form:"detail" json:"detail" query:"detail"`
+	SignFields string `thrift:"signFields,15,optional" form:"signFields" json:"signFields" query:"signFields"`
+	CreatedAt  string `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt  string `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	Condition  int64  `thrift:"condition,18,optional" form:"condition" json:"condition" query:"condition"`
+	//    19:  optional i64 isFee=0 (api.raw = "isFee")
+	CreatedId   int64  `thrift:"createdId,20,optional" form:"createdId" json:"createdId" query:"createdId"`
+	CreatedName string `thrift:"createdName,21,optional" form:"createdName" json:"createdName" query:"createdName"`
+	IsShow      int64  `thrift:"isShow,22,optional" form:"isShow" json:"isShow" query:"isShow"`
 }
 
 func NewCommunityInfo() *CommunityInfo {
@@ -2079,7 +2080,6 @@ func NewCommunityInfo() *CommunityInfo {
 		EndAt:       "",
 		Pic:         "",
 		Sponsor:     "",
-		Fee:         0.0,
 		IsCancel:    0,
 		CancelTime:  0,
 		Detail:      "",
@@ -2087,7 +2087,6 @@ func NewCommunityInfo() *CommunityInfo {
 		CreatedAt:   "",
 		UpdatedAt:   "",
 		Condition:   0,
-		IsFee:       0,
 		CreatedId:   0,
 		CreatedName: "0",
 		IsShow:      1,
@@ -2105,7 +2104,6 @@ func (p *CommunityInfo) InitDefault() {
 	p.EndAt = ""
 	p.Pic = ""
 	p.Sponsor = ""
-	p.Fee = 0.0
 	p.IsCancel = 0
 	p.CancelTime = 0
 	p.Detail = ""
@@ -2113,7 +2111,6 @@ func (p *CommunityInfo) InitDefault() {
 	p.CreatedAt = ""
 	p.UpdatedAt = ""
 	p.Condition = 0
-	p.IsFee = 0
 	p.CreatedId = 0
 	p.CreatedName = "0"
 	p.IsShow = 1
@@ -2209,15 +2206,6 @@ func (p *CommunityInfo) GetSponsor() (v string) {
 	return p.Sponsor
 }
 
-var CommunityInfo_Fee_DEFAULT float64 = 0.0
-
-func (p *CommunityInfo) GetFee() (v float64) {
-	if !p.IsSetFee() {
-		return CommunityInfo_Fee_DEFAULT
-	}
-	return p.Fee
-}
-
 var CommunityInfo_IsCancel_DEFAULT int64 = 0
 
 func (p *CommunityInfo) GetIsCancel() (v int64) {
@@ -2281,15 +2269,6 @@ func (p *CommunityInfo) GetCondition() (v int64) {
 	return p.Condition
 }
 
-var CommunityInfo_IsFee_DEFAULT int64 = 0
-
-func (p *CommunityInfo) GetIsFee() (v int64) {
-	if !p.IsSetIsFee() {
-		return CommunityInfo_IsFee_DEFAULT
-	}
-	return p.IsFee
-}
-
 var CommunityInfo_CreatedId_DEFAULT int64 = 0
 
 func (p *CommunityInfo) GetCreatedId() (v int64) {
@@ -2328,7 +2307,6 @@ var fieldIDToName_CommunityInfo = map[int16]string{
 	8:  "endAt",
 	9:  "pic",
 	10: "sponsor",
-	11: "fee",
 	12: "isCancel",
 	13: "cancelTime",
 	14: "detail",
@@ -2336,7 +2314,6 @@ var fieldIDToName_CommunityInfo = map[int16]string{
 	16: "createdAt",
 	17: "updatedAt",
 	18: "condition",
-	19: "isFee",
 	20: "createdId",
 	21: "createdName",
 	22: "isShow",
@@ -2382,10 +2359,6 @@ func (p *CommunityInfo) IsSetSponsor() bool {
 	return p.Sponsor != CommunityInfo_Sponsor_DEFAULT
 }
 
-func (p *CommunityInfo) IsSetFee() bool {
-	return p.Fee != CommunityInfo_Fee_DEFAULT
-}
-
 func (p *CommunityInfo) IsSetIsCancel() bool {
 	return p.IsCancel != CommunityInfo_IsCancel_DEFAULT
 }
@@ -2412,10 +2385,6 @@ func (p *CommunityInfo) IsSetUpdatedAt() bool {
 
 func (p *CommunityInfo) IsSetCondition() bool {
 	return p.Condition != CommunityInfo_Condition_DEFAULT
-}
-
-func (p *CommunityInfo) IsSetIsFee() bool {
-	return p.IsFee != CommunityInfo_IsFee_DEFAULT
 }
 
 func (p *CommunityInfo) IsSetCreatedId() bool {
@@ -2529,14 +2498,6 @@ func (p *CommunityInfo) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 11:
-			if fieldTypeId == thrift.DOUBLE {
-				if err = p.ReadField11(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
 		case 12:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField12(iprot); err != nil {
@@ -2588,14 +2549,6 @@ func (p *CommunityInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 18:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField18(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 19:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField19(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2764,17 +2717,6 @@ func (p *CommunityInfo) ReadField10(iprot thrift.TProtocol) error {
 	p.Sponsor = _field
 	return nil
 }
-func (p *CommunityInfo) ReadField11(iprot thrift.TProtocol) error {
-
-	var _field float64
-	if v, err := iprot.ReadDouble(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Fee = _field
-	return nil
-}
 func (p *CommunityInfo) ReadField12(iprot thrift.TProtocol) error {
 
 	var _field int64
@@ -2850,17 +2792,6 @@ func (p *CommunityInfo) ReadField18(iprot thrift.TProtocol) error {
 		_field = v
 	}
 	p.Condition = _field
-	return nil
-}
-func (p *CommunityInfo) ReadField19(iprot thrift.TProtocol) error {
-
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.IsFee = _field
 	return nil
 }
 func (p *CommunityInfo) ReadField20(iprot thrift.TProtocol) error {
@@ -2943,10 +2874,6 @@ func (p *CommunityInfo) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 10
 			goto WriteFieldError
 		}
-		if err = p.writeField11(oprot); err != nil {
-			fieldId = 11
-			goto WriteFieldError
-		}
 		if err = p.writeField12(oprot); err != nil {
 			fieldId = 12
 			goto WriteFieldError
@@ -2973,10 +2900,6 @@ func (p *CommunityInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField18(oprot); err != nil {
 			fieldId = 18
-			goto WriteFieldError
-		}
-		if err = p.writeField19(oprot); err != nil {
-			fieldId = 19
 			goto WriteFieldError
 		}
 		if err = p.writeField20(oprot); err != nil {
@@ -3199,25 +3122,6 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
 }
 
-func (p *CommunityInfo) writeField11(oprot thrift.TProtocol) (err error) {
-	if p.IsSetFee() {
-		if err = oprot.WriteFieldBegin("fee", thrift.DOUBLE, 11); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteDouble(p.Fee); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 11 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 11 end error: ", p), err)
-}
-
 func (p *CommunityInfo) writeField12(oprot thrift.TProtocol) (err error) {
 	if p.IsSetIsCancel() {
 		if err = oprot.WriteFieldBegin("isCancel", thrift.I64, 12); err != nil {
@@ -3349,25 +3253,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
-}
-
-func (p *CommunityInfo) writeField19(oprot thrift.TProtocol) (err error) {
-	if p.IsSetIsFee() {
-		if err = oprot.WriteFieldBegin("isFee", thrift.I64, 19); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(p.IsFee); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 19 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 19 end error: ", p), err)
 }
 
 func (p *CommunityInfo) writeField20(oprot thrift.TProtocol) (err error) {
