@@ -27,7 +27,7 @@ service ContestService {
 
   base.NilResponse UpdateParticipantStatus(1: base.StatusCodeReq req) (api.post = "/service/participant/status")
 
-  base.NilResponse ParticipantListListExport(1: ParticipantListReq req) (api.post = "/service/participant/export")
+  base.NilResponse ParticipantListExport(1: ParticipantListReq req) (api.post = "/service/participant/export")
 
   base.NilResponse ResultsUpload(1: ResultsUploadReq req) (api.post = "/service/contest/results-upload")
 

@@ -46,8 +46,9 @@ type MemberContract struct {
 	Sign string `json:"sign,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberContractQuery when eager-loading is set.
-	Edges        MemberContractEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                                  MemberContractEdges `json:"edges"`
+	member_product_member_product_contents *int64
+	selectValues                           sql.SelectValues
 }
 
 // MemberContractEdges holds the relations/edges for other nodes in the graph.
@@ -109,6 +110,8 @@ func (*MemberContract) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case membercontract.FieldCreatedAt, membercontract.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case membercontract.ForeignKeys[0]: // member_product_member_product_contents
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -201,6 +204,13 @@ func (mc *MemberContract) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field sign", values[i])
 			} else if value.Valid {
 				mc.Sign = value.String
+			}
+		case membercontract.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field member_product_member_product_contents", value)
+			} else if value.Valid {
+				mc.member_product_member_product_contents = new(int64)
+				*mc.member_product_member_product_contents = int64(value.Int64)
 			}
 		default:
 			mc.selectValues.Set(columns[i], values[i])

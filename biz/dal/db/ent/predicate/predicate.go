@@ -60,6 +60,9 @@ type MemberDetails func(*sql.Selector)
 // MemberNote is the predicate function for membernote builders.
 type MemberNote func(*sql.Selector)
 
+// MemberProduct is the predicate function for memberproduct builders.
+type MemberProduct func(*sql.Selector)
+
 // MemberProfile is the predicate function for memberprofile builders.
 type MemberProfile func(*sql.Selector)
 
@@ -87,8 +90,20 @@ type OrderPay func(*sql.Selector)
 // OrderSales is the predicate function for ordersales builders.
 type OrderSales func(*sql.Selector)
 
+// Product is the predicate function for product builders.
+type Product func(*sql.Selector)
+
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)
+
+// Schedule is the predicate function for schedule builders.
+type Schedule func(*sql.Selector)
+
+// ScheduleCoach is the predicate function for schedulecoach builders.
+type ScheduleCoach func(*sql.Selector)
+
+// ScheduleMember is the predicate function for schedulemember builders.
+type ScheduleMember func(*sql.Selector)
 
 // Token is the predicate function for token builders.
 type Token func(*sql.Selector)

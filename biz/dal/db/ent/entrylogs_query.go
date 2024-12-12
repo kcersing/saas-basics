@@ -27,6 +27,7 @@ type EntryLogsQuery struct {
 	withVenues  *VenueQuery
 	withMembers *MemberQuery
 	withUsers   *UserQuery
+	withFKs     bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -440,6 +441,7 @@ func (elq *EntryLogsQuery) prepareQuery(ctx context.Context) error {
 func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EntryLogs, error) {
 	var (
 		nodes       = []*EntryLogs{}
+		withFKs     = elq.withFKs
 		_spec       = elq.querySpec()
 		loadedTypes = [3]bool{
 			elq.withVenues != nil,
@@ -447,6 +449,9 @@ func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*E
 			elq.withUsers != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, entrylogs.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*EntryLogs).scanValues(nil, columns)
 	}

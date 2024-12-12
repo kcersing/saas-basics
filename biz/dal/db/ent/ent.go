@@ -25,6 +25,7 @@ import (
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
@@ -34,7 +35,11 @@ import (
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/orderpay"
 	"saas/biz/dal/db/ent/ordersales"
+	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/role"
+	"saas/biz/dal/db/ent/schedule"
+	"saas/biz/dal/db/ent/schedulecoach"
+	"saas/biz/dal/db/ent/schedulemember"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
@@ -122,6 +127,7 @@ func checkColumn(table, column string) error {
 			membercontractcontent.Table: membercontractcontent.ValidColumn,
 			memberdetails.Table:         memberdetails.ValidColumn,
 			membernote.Table:            membernote.ValidColumn,
+			memberproduct.Table:         memberproduct.ValidColumn,
 			memberprofile.Table:         memberprofile.ValidColumn,
 			menu.Table:                  menu.ValidColumn,
 			menuparam.Table:             menuparam.ValidColumn,
@@ -131,7 +137,11 @@ func checkColumn(table, column string) error {
 			orderitem.Table:             orderitem.ValidColumn,
 			orderpay.Table:              orderpay.ValidColumn,
 			ordersales.Table:            ordersales.ValidColumn,
+			product.Table:               product.ValidColumn,
 			role.Table:                  role.ValidColumn,
+			schedule.Table:              schedule.ValidColumn,
+			schedulecoach.Table:         schedulecoach.ValidColumn,
+			schedulemember.Table:        schedulemember.ValidColumn,
 			token.Table:                 token.ValidColumn,
 			user.Table:                  user.ValidColumn,
 			venue.Table:                 venue.ValidColumn,

@@ -51,9 +51,6 @@ func (e EntryLogs) List(req *entry.EntryListReq) (list []*entry.EntryInfo, total
 	if req.MemberProductId > 0 {
 		predicates = append(predicates, entrylogs.MemberProductID(req.MemberProductId))
 	}
-	if req.MemberPropertyId > 0 {
-		predicates = append(predicates, entrylogs.MemberPropertyID(req.MemberPropertyId))
-	}
 
 	if req.UserId > 0 {
 		predicates = append(predicates, entrylogs.UserID(req.UserId))
@@ -87,13 +84,12 @@ func entEntryInfo(v *ent.EntryLogs) *entry.EntryInfo {
 	entryTime := v.EntryTime.Format(time.DateTime)
 	leavingTime := v.LeavingTime.Format(time.DateTime)
 	return &entry.EntryInfo{
-		Id:               v.ID,
-		EntryTime:        entryTime,
-		LeavingTime:      leavingTime,
-		MemberId:         v.MemberID,
-		MemberProductId:  v.MemberProductID,
-		MemberPropertyId: v.MemberPropertyID,
-		UserId:           v.UserID,
-		VenueId:          v.VenueID,
+		Id:              v.ID,
+		EntryTime:       entryTime,
+		LeavingTime:     leavingTime,
+		MemberId:        v.MemberID,
+		MemberProductId: v.MemberProductID,
+		UserId:          v.UserID,
+		VenueId:         v.VenueID,
 	}
 }

@@ -134,20 +134,6 @@ func (elc *EntryLogsCreate) SetNillableMemberProductID(i *int64) *EntryLogsCreat
 	return elc
 }
 
-// SetMemberPropertyID sets the "member_property_id" field.
-func (elc *EntryLogsCreate) SetMemberPropertyID(i int64) *EntryLogsCreate {
-	elc.mutation.SetMemberPropertyID(i)
-	return elc
-}
-
-// SetNillableMemberPropertyID sets the "member_property_id" field if the given value is not nil.
-func (elc *EntryLogsCreate) SetNillableMemberPropertyID(i *int64) *EntryLogsCreate {
-	if i != nil {
-		elc.SetMemberPropertyID(*i)
-	}
-	return elc
-}
-
 // SetEntryTime sets the "entry_time" field.
 func (elc *EntryLogsCreate) SetEntryTime(t time.Time) *EntryLogsCreate {
 	elc.mutation.SetEntryTime(t)
@@ -353,10 +339,6 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 	if value, ok := elc.mutation.MemberProductID(); ok {
 		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
 		_node.MemberProductID = value
-	}
-	if value, ok := elc.mutation.MemberPropertyID(); ok {
-		_spec.SetField(entrylogs.FieldMemberPropertyID, field.TypeInt64, value)
-		_node.MemberPropertyID = value
 	}
 	if value, ok := elc.mutation.EntryTime(); ok {
 		_spec.SetField(entrylogs.FieldEntryTime, field.TypeTime, value)

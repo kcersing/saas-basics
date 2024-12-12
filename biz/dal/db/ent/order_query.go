@@ -807,6 +807,7 @@ func (oq *OrderQuery) loadOrderContents(ctx context.Context, query *MemberContra
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(membercontract.FieldOrderID)
 	}

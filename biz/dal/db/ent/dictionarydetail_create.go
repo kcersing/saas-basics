@@ -150,6 +150,21 @@ func (ddc *DictionaryDetailCreate) AddUsers(u ...*User) *DictionaryDetailCreate 
 	return ddc.AddUserIDs(ids...)
 }
 
+// AddProductIDs adds the "products" edge to the User entity by IDs.
+func (ddc *DictionaryDetailCreate) AddProductIDs(ids ...int64) *DictionaryDetailCreate {
+	ddc.mutation.AddProductIDs(ids...)
+	return ddc
+}
+
+// AddProducts adds the "products" edges to the User entity.
+func (ddc *DictionaryDetailCreate) AddProducts(u ...*User) *DictionaryDetailCreate {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return ddc.AddProductIDs(ids...)
+}
+
 // Mutation returns the DictionaryDetailMutation object of the builder.
 func (ddc *DictionaryDetailCreate) Mutation() *DictionaryDetailMutation {
 	return ddc.mutation
@@ -305,6 +320,22 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 			Inverse: true,
 			Table:   dictionarydetail.UsersTable,
 			Columns: dictionarydetail.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ddc.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   dictionarydetail.ProductsTable,
+			Columns: dictionarydetail.ProductsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),

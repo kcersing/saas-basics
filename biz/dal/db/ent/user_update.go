@@ -228,6 +228,33 @@ func (uu *UserUpdate) SetNillableFunctions(s *string) *UserUpdate {
 	return uu
 }
 
+// SetType sets the "type" field.
+func (uu *UserUpdate) SetType(i int64) *UserUpdate {
+	uu.mutation.ResetType()
+	uu.mutation.SetType(i)
+	return uu
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableType(i *int64) *UserUpdate {
+	if i != nil {
+		uu.SetType(*i)
+	}
+	return uu
+}
+
+// AddType adds i to the "type" field.
+func (uu *UserUpdate) AddType(i int64) *UserUpdate {
+	uu.mutation.AddType(i)
+	return uu
+}
+
+// ClearType clears the value of the "type" field.
+func (uu *UserUpdate) ClearType() *UserUpdate {
+	uu.mutation.ClearType()
+	return uu
+}
+
 // SetJobTime sets the "job_time" field.
 func (uu *UserUpdate) SetJobTime(i int64) *UserUpdate {
 	uu.mutation.ResetJobTime()
@@ -594,6 +621,15 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.Functions(); ok {
 		_spec.SetField(user.FieldFunctions, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.GetType(); ok {
+		_spec.SetField(user.FieldType, field.TypeInt64, value)
+	}
+	if value, ok := uu.mutation.AddedType(); ok {
+		_spec.AddField(user.FieldType, field.TypeInt64, value)
+	}
+	if uu.mutation.TypeCleared() {
+		_spec.ClearField(user.FieldType, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.JobTime(); ok {
 		_spec.SetField(user.FieldJobTime, field.TypeInt64, value)
@@ -1014,6 +1050,33 @@ func (uuo *UserUpdateOne) SetNillableFunctions(s *string) *UserUpdateOne {
 	return uuo
 }
 
+// SetType sets the "type" field.
+func (uuo *UserUpdateOne) SetType(i int64) *UserUpdateOne {
+	uuo.mutation.ResetType()
+	uuo.mutation.SetType(i)
+	return uuo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableType(i *int64) *UserUpdateOne {
+	if i != nil {
+		uuo.SetType(*i)
+	}
+	return uuo
+}
+
+// AddType adds i to the "type" field.
+func (uuo *UserUpdateOne) AddType(i int64) *UserUpdateOne {
+	uuo.mutation.AddType(i)
+	return uuo
+}
+
+// ClearType clears the value of the "type" field.
+func (uuo *UserUpdateOne) ClearType() *UserUpdateOne {
+	uuo.mutation.ClearType()
+	return uuo
+}
+
 // SetJobTime sets the "job_time" field.
 func (uuo *UserUpdateOne) SetJobTime(i int64) *UserUpdateOne {
 	uuo.mutation.ResetJobTime()
@@ -1410,6 +1473,15 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Functions(); ok {
 		_spec.SetField(user.FieldFunctions, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.GetType(); ok {
+		_spec.SetField(user.FieldType, field.TypeInt64, value)
+	}
+	if value, ok := uuo.mutation.AddedType(); ok {
+		_spec.AddField(user.FieldType, field.TypeInt64, value)
+	}
+	if uuo.mutation.TypeCleared() {
+		_spec.ClearField(user.FieldType, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.JobTime(); ok {
 		_spec.SetField(user.FieldJobTime, field.TypeInt64, value)

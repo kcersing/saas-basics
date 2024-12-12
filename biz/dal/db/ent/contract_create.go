@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"saas/biz/dal/db/ent/contract"
+	"saas/biz/dal/db/ent/product"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -121,6 +122,21 @@ func (cc *ContractCreate) SetNillableContent(s *string) *ContractCreate {
 func (cc *ContractCreate) SetID(i int64) *ContractCreate {
 	cc.mutation.SetID(i)
 	return cc
+}
+
+// AddProductIDs adds the "products" edge to the Product entity by IDs.
+func (cc *ContractCreate) AddProductIDs(ids ...int64) *ContractCreate {
+	cc.mutation.AddProductIDs(ids...)
+	return cc
+}
+
+// AddProducts adds the "products" edges to the Product entity.
+func (cc *ContractCreate) AddProducts(p ...*Product) *ContractCreate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cc.AddProductIDs(ids...)
 }
 
 // Mutation returns the ContractMutation object of the builder.
@@ -241,6 +257,22 @@ func (cc *ContractCreate) createSpec() (*Contract, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Content(); ok {
 		_spec.SetField(contract.FieldContent, field.TypeString, value)
 		_node.Content = value
+	}
+	if nodes := cc.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   contract.ProductsTable,
+			Columns: contract.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

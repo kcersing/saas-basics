@@ -21,6 +21,7 @@ import (
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
@@ -30,7 +31,11 @@ import (
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/orderpay"
 	"saas/biz/dal/db/ent/ordersales"
+	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/role"
+	"saas/biz/dal/db/ent/schedule"
+	"saas/biz/dal/db/ent/schedulecoach"
+	"saas/biz/dal/db/ent/schedulemember"
 	"saas/biz/dal/db/ent/schema"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
@@ -687,6 +692,43 @@ func init() {
 	membernoteDescNote := membernoteFields[1].Descriptor()
 	// membernote.DefaultNote holds the default value on creation for the note field.
 	membernote.DefaultNote = membernoteDescNote.Default.(string)
+	memberproductMixin := schema.MemberProduct{}.Mixin()
+	memberproductMixinFields0 := memberproductMixin[0].Fields()
+	_ = memberproductMixinFields0
+	memberproductMixinFields1 := memberproductMixin[1].Fields()
+	_ = memberproductMixinFields1
+	memberproductFields := schema.MemberProduct{}.Fields()
+	_ = memberproductFields
+	// memberproductDescCreatedAt is the schema descriptor for created_at field.
+	memberproductDescCreatedAt := memberproductMixinFields0[1].Descriptor()
+	// memberproduct.DefaultCreatedAt holds the default value on creation for the created_at field.
+	memberproduct.DefaultCreatedAt = memberproductDescCreatedAt.Default.(func() time.Time)
+	// memberproductDescUpdatedAt is the schema descriptor for updated_at field.
+	memberproductDescUpdatedAt := memberproductMixinFields0[2].Descriptor()
+	// memberproduct.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	memberproduct.DefaultUpdatedAt = memberproductDescUpdatedAt.Default.(func() time.Time)
+	// memberproduct.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	memberproduct.UpdateDefaultUpdatedAt = memberproductDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// memberproductDescDelete is the schema descriptor for delete field.
+	memberproductDescDelete := memberproductMixinFields0[3].Descriptor()
+	// memberproduct.DefaultDelete holds the default value on creation for the delete field.
+	memberproduct.DefaultDelete = memberproductDescDelete.Default.(int64)
+	// memberproductDescCreatedID is the schema descriptor for created_id field.
+	memberproductDescCreatedID := memberproductMixinFields0[4].Descriptor()
+	// memberproduct.DefaultCreatedID holds the default value on creation for the created_id field.
+	memberproduct.DefaultCreatedID = memberproductDescCreatedID.Default.(int64)
+	// memberproductDescStatus is the schema descriptor for status field.
+	memberproductDescStatus := memberproductMixinFields1[0].Descriptor()
+	// memberproduct.DefaultStatus holds the default value on creation for the status field.
+	memberproduct.DefaultStatus = memberproductDescStatus.Default.(int64)
+	// memberproductDescCount is the schema descriptor for count field.
+	memberproductDescCount := memberproductFields[11].Descriptor()
+	// memberproduct.DefaultCount holds the default value on creation for the count field.
+	memberproduct.DefaultCount = memberproductDescCount.Default.(int64)
+	// memberproductDescCountSurplus is the schema descriptor for count_surplus field.
+	memberproductDescCountSurplus := memberproductFields[12].Descriptor()
+	// memberproduct.DefaultCountSurplus holds the default value on creation for the count_surplus field.
+	memberproduct.DefaultCountSurplus = memberproductDescCountSurplus.Default.(int64)
 	memberprofileMixin := schema.MemberProfile{}.Mixin()
 	memberprofileMixinFields0 := memberprofileMixin[0].Fields()
 	_ = memberprofileMixinFields0
@@ -982,6 +1024,35 @@ func init() {
 	ordersalesDescStatus := ordersalesMixinFields1[0].Descriptor()
 	// ordersales.DefaultStatus holds the default value on creation for the status field.
 	ordersales.DefaultStatus = ordersalesDescStatus.Default.(int64)
+	productMixin := schema.Product{}.Mixin()
+	productMixinFields0 := productMixin[0].Fields()
+	_ = productMixinFields0
+	productMixinFields1 := productMixin[1].Fields()
+	_ = productMixinFields1
+	productFields := schema.Product{}.Fields()
+	_ = productFields
+	// productDescCreatedAt is the schema descriptor for created_at field.
+	productDescCreatedAt := productMixinFields0[1].Descriptor()
+	// product.DefaultCreatedAt holds the default value on creation for the created_at field.
+	product.DefaultCreatedAt = productDescCreatedAt.Default.(func() time.Time)
+	// productDescUpdatedAt is the schema descriptor for updated_at field.
+	productDescUpdatedAt := productMixinFields0[2].Descriptor()
+	// product.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	product.DefaultUpdatedAt = productDescUpdatedAt.Default.(func() time.Time)
+	// product.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	product.UpdateDefaultUpdatedAt = productDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// productDescDelete is the schema descriptor for delete field.
+	productDescDelete := productMixinFields0[3].Descriptor()
+	// product.DefaultDelete holds the default value on creation for the delete field.
+	product.DefaultDelete = productDescDelete.Default.(int64)
+	// productDescCreatedID is the schema descriptor for created_id field.
+	productDescCreatedID := productMixinFields0[4].Descriptor()
+	// product.DefaultCreatedID holds the default value on creation for the created_id field.
+	product.DefaultCreatedID = productDescCreatedID.Default.(int64)
+	// productDescStatus is the schema descriptor for status field.
+	productDescStatus := productMixinFields1[0].Descriptor()
+	// product.DefaultStatus holds the default value on creation for the status field.
+	product.DefaultStatus = productDescStatus.Default.(int64)
 	roleMixin := schema.Role{}.Mixin()
 	roleMixinFields0 := roleMixin[0].Fields()
 	_ = roleMixinFields0
@@ -1027,6 +1098,129 @@ func init() {
 	roleDescApis := roleFields[5].Descriptor()
 	// role.DefaultApis holds the default value on creation for the apis field.
 	role.DefaultApis = roleDescApis.Default.([]int)
+	scheduleMixin := schema.Schedule{}.Mixin()
+	scheduleMixinFields0 := scheduleMixin[0].Fields()
+	_ = scheduleMixinFields0
+	scheduleMixinFields1 := scheduleMixin[1].Fields()
+	_ = scheduleMixinFields1
+	scheduleFields := schema.Schedule{}.Fields()
+	_ = scheduleFields
+	// scheduleDescCreatedAt is the schema descriptor for created_at field.
+	scheduleDescCreatedAt := scheduleMixinFields0[1].Descriptor()
+	// schedule.DefaultCreatedAt holds the default value on creation for the created_at field.
+	schedule.DefaultCreatedAt = scheduleDescCreatedAt.Default.(func() time.Time)
+	// scheduleDescUpdatedAt is the schema descriptor for updated_at field.
+	scheduleDescUpdatedAt := scheduleMixinFields0[2].Descriptor()
+	// schedule.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	schedule.DefaultUpdatedAt = scheduleDescUpdatedAt.Default.(func() time.Time)
+	// schedule.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	schedule.UpdateDefaultUpdatedAt = scheduleDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// scheduleDescDelete is the schema descriptor for delete field.
+	scheduleDescDelete := scheduleMixinFields0[3].Descriptor()
+	// schedule.DefaultDelete holds the default value on creation for the delete field.
+	schedule.DefaultDelete = scheduleDescDelete.Default.(int64)
+	// scheduleDescCreatedID is the schema descriptor for created_id field.
+	scheduleDescCreatedID := scheduleMixinFields0[4].Descriptor()
+	// schedule.DefaultCreatedID holds the default value on creation for the created_id field.
+	schedule.DefaultCreatedID = scheduleDescCreatedID.Default.(int64)
+	// scheduleDescStatus is the schema descriptor for status field.
+	scheduleDescStatus := scheduleMixinFields1[0].Descriptor()
+	// schedule.DefaultStatus holds the default value on creation for the status field.
+	schedule.DefaultStatus = scheduleDescStatus.Default.(int64)
+	// scheduleDescPrice is the schema descriptor for price field.
+	scheduleDescPrice := scheduleFields[11].Descriptor()
+	// schedule.DefaultPrice holds the default value on creation for the price field.
+	schedule.DefaultPrice = scheduleDescPrice.Default.(float64)
+	schedulecoachMixin := schema.ScheduleCoach{}.Mixin()
+	schedulecoachMixinFields0 := schedulecoachMixin[0].Fields()
+	_ = schedulecoachMixinFields0
+	schedulecoachMixinFields1 := schedulecoachMixin[1].Fields()
+	_ = schedulecoachMixinFields1
+	schedulecoachFields := schema.ScheduleCoach{}.Fields()
+	_ = schedulecoachFields
+	// schedulecoachDescCreatedAt is the schema descriptor for created_at field.
+	schedulecoachDescCreatedAt := schedulecoachMixinFields0[1].Descriptor()
+	// schedulecoach.DefaultCreatedAt holds the default value on creation for the created_at field.
+	schedulecoach.DefaultCreatedAt = schedulecoachDescCreatedAt.Default.(func() time.Time)
+	// schedulecoachDescUpdatedAt is the schema descriptor for updated_at field.
+	schedulecoachDescUpdatedAt := schedulecoachMixinFields0[2].Descriptor()
+	// schedulecoach.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	schedulecoach.DefaultUpdatedAt = schedulecoachDescUpdatedAt.Default.(func() time.Time)
+	// schedulecoach.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	schedulecoach.UpdateDefaultUpdatedAt = schedulecoachDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// schedulecoachDescDelete is the schema descriptor for delete field.
+	schedulecoachDescDelete := schedulecoachMixinFields0[3].Descriptor()
+	// schedulecoach.DefaultDelete holds the default value on creation for the delete field.
+	schedulecoach.DefaultDelete = schedulecoachDescDelete.Default.(int64)
+	// schedulecoachDescCreatedID is the schema descriptor for created_id field.
+	schedulecoachDescCreatedID := schedulecoachMixinFields0[4].Descriptor()
+	// schedulecoach.DefaultCreatedID holds the default value on creation for the created_id field.
+	schedulecoach.DefaultCreatedID = schedulecoachDescCreatedID.Default.(int64)
+	// schedulecoachDescStatus is the schema descriptor for status field.
+	schedulecoachDescStatus := schedulecoachMixinFields1[0].Descriptor()
+	// schedulecoach.DefaultStatus holds the default value on creation for the status field.
+	schedulecoach.DefaultStatus = schedulecoachDescStatus.Default.(int64)
+	// schedulecoachDescStartTime is the schema descriptor for start_time field.
+	schedulecoachDescStartTime := schedulecoachFields[5].Descriptor()
+	// schedulecoach.DefaultStartTime holds the default value on creation for the start_time field.
+	schedulecoach.DefaultStartTime = schedulecoachDescStartTime.Default.(func() time.Time)
+	// schedulecoachDescEndTime is the schema descriptor for end_time field.
+	schedulecoachDescEndTime := schedulecoachFields[6].Descriptor()
+	// schedulecoach.DefaultEndTime holds the default value on creation for the end_time field.
+	schedulecoach.DefaultEndTime = schedulecoachDescEndTime.Default.(func() time.Time)
+	// schedulecoachDescSignStartTime is the schema descriptor for sign_start_time field.
+	schedulecoachDescSignStartTime := schedulecoachFields[7].Descriptor()
+	// schedulecoach.DefaultSignStartTime holds the default value on creation for the sign_start_time field.
+	schedulecoach.DefaultSignStartTime = schedulecoachDescSignStartTime.Default.(func() time.Time)
+	// schedulecoachDescSignEndTime is the schema descriptor for sign_end_time field.
+	schedulecoachDescSignEndTime := schedulecoachFields[8].Descriptor()
+	// schedulecoach.DefaultSignEndTime holds the default value on creation for the sign_end_time field.
+	schedulecoach.DefaultSignEndTime = schedulecoachDescSignEndTime.Default.(func() time.Time)
+	schedulememberMixin := schema.ScheduleMember{}.Mixin()
+	schedulememberMixinFields0 := schedulememberMixin[0].Fields()
+	_ = schedulememberMixinFields0
+	schedulememberMixinFields1 := schedulememberMixin[1].Fields()
+	_ = schedulememberMixinFields1
+	schedulememberFields := schema.ScheduleMember{}.Fields()
+	_ = schedulememberFields
+	// schedulememberDescCreatedAt is the schema descriptor for created_at field.
+	schedulememberDescCreatedAt := schedulememberMixinFields0[1].Descriptor()
+	// schedulemember.DefaultCreatedAt holds the default value on creation for the created_at field.
+	schedulemember.DefaultCreatedAt = schedulememberDescCreatedAt.Default.(func() time.Time)
+	// schedulememberDescUpdatedAt is the schema descriptor for updated_at field.
+	schedulememberDescUpdatedAt := schedulememberMixinFields0[2].Descriptor()
+	// schedulemember.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	schedulemember.DefaultUpdatedAt = schedulememberDescUpdatedAt.Default.(func() time.Time)
+	// schedulemember.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	schedulemember.UpdateDefaultUpdatedAt = schedulememberDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// schedulememberDescDelete is the schema descriptor for delete field.
+	schedulememberDescDelete := schedulememberMixinFields0[3].Descriptor()
+	// schedulemember.DefaultDelete holds the default value on creation for the delete field.
+	schedulemember.DefaultDelete = schedulememberDescDelete.Default.(int64)
+	// schedulememberDescCreatedID is the schema descriptor for created_id field.
+	schedulememberDescCreatedID := schedulememberMixinFields0[4].Descriptor()
+	// schedulemember.DefaultCreatedID holds the default value on creation for the created_id field.
+	schedulemember.DefaultCreatedID = schedulememberDescCreatedID.Default.(int64)
+	// schedulememberDescStatus is the schema descriptor for status field.
+	schedulememberDescStatus := schedulememberMixinFields1[0].Descriptor()
+	// schedulemember.DefaultStatus holds the default value on creation for the status field.
+	schedulemember.DefaultStatus = schedulememberDescStatus.Default.(int64)
+	// schedulememberDescStartTime is the schema descriptor for start_time field.
+	schedulememberDescStartTime := schedulememberFields[6].Descriptor()
+	// schedulemember.DefaultStartTime holds the default value on creation for the start_time field.
+	schedulemember.DefaultStartTime = schedulememberDescStartTime.Default.(func() time.Time)
+	// schedulememberDescEndTime is the schema descriptor for end_time field.
+	schedulememberDescEndTime := schedulememberFields[7].Descriptor()
+	// schedulemember.DefaultEndTime holds the default value on creation for the end_time field.
+	schedulemember.DefaultEndTime = schedulememberDescEndTime.Default.(func() time.Time)
+	// schedulememberDescSignStartTime is the schema descriptor for sign_start_time field.
+	schedulememberDescSignStartTime := schedulememberFields[8].Descriptor()
+	// schedulemember.DefaultSignStartTime holds the default value on creation for the sign_start_time field.
+	schedulemember.DefaultSignStartTime = schedulememberDescSignStartTime.Default.(func() time.Time)
+	// schedulememberDescSignEndTime is the schema descriptor for sign_end_time field.
+	schedulememberDescSignEndTime := schedulememberFields[9].Descriptor()
+	// schedulemember.DefaultSignEndTime holds the default value on creation for the sign_end_time field.
+	schedulemember.DefaultSignEndTime = schedulememberDescSignEndTime.Default.(func() time.Time)
 	tokenMixin := schema.Token{}.Mixin()
 	tokenMixinFields0 := tokenMixin[0].Fields()
 	_ = tokenMixinFields0
@@ -1083,12 +1277,16 @@ func init() {
 	userDescGender := userFields[2].Descriptor()
 	// user.DefaultGender holds the default value on creation for the gender field.
 	user.DefaultGender = userDescGender.Default.(int64)
+	// userDescType is the schema descriptor for type field.
+	userDescType := userFields[6].Descriptor()
+	// user.DefaultType holds the default value on creation for the type field.
+	user.DefaultType = userDescType.Default.(int64)
 	// userDescJobTime is the schema descriptor for job_time field.
-	userDescJobTime := userFields[6].Descriptor()
+	userDescJobTime := userFields[7].Descriptor()
 	// user.DefaultJobTime holds the default value on creation for the job_time field.
 	user.DefaultJobTime = userDescJobTime.Default.(int64)
 	// userDescRoleID is the schema descriptor for role_id field.
-	userDescRoleID := userFields[7].Descriptor()
+	userDescRoleID := userFields[8].Descriptor()
 	// user.DefaultRoleID holds the default value on creation for the role_id field.
 	user.DefaultRoleID = userDescRoleID.Default.(int64)
 	venueMixin := schema.Venue{}.Mixin()

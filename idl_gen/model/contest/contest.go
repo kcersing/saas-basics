@@ -3517,7 +3517,7 @@ type ContestService interface {
 
 	UpdateParticipantStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
 
-	ParticipantListListExport(ctx context.Context, req *ParticipantListReq) (r *base.NilResponse, err error)
+	ParticipantListExport(ctx context.Context, req *ParticipantListReq) (r *base.NilResponse, err error)
 
 	ResultsUpload(ctx context.Context, req *ResultsUploadReq) (r *base.NilResponse, err error)
 
@@ -3653,11 +3653,11 @@ func (p *ContestServiceClient) UpdateParticipantStatus(ctx context.Context, req 
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ContestServiceClient) ParticipantListListExport(ctx context.Context, req *ParticipantListReq) (r *base.NilResponse, err error) {
-	var _args ContestServiceParticipantListListExportArgs
+func (p *ContestServiceClient) ParticipantListExport(ctx context.Context, req *ParticipantListReq) (r *base.NilResponse, err error) {
+	var _args ContestServiceParticipantListExportArgs
 	_args.Req = req
-	var _result ContestServiceParticipantListListExportResult
-	if err = p.Client_().Call(ctx, "ParticipantListListExport", &_args, &_result); err != nil {
+	var _result ContestServiceParticipantListExportResult
+	if err = p.Client_().Call(ctx, "ParticipantListExport", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -3730,7 +3730,7 @@ func NewContestServiceProcessor(handler ContestService) *ContestServiceProcessor
 	self.AddToProcessorMap("ContestParticipantInfo", &contestServiceProcessorContestParticipantInfo{handler: handler})
 	self.AddToProcessorMap("ParticipantListList", &contestServiceProcessorParticipantListList{handler: handler})
 	self.AddToProcessorMap("UpdateParticipantStatus", &contestServiceProcessorUpdateParticipantStatus{handler: handler})
-	self.AddToProcessorMap("ParticipantListListExport", &contestServiceProcessorParticipantListListExport{handler: handler})
+	self.AddToProcessorMap("ParticipantListExport", &contestServiceProcessorParticipantListExport{handler: handler})
 	self.AddToProcessorMap("ResultsUpload", &contestServiceProcessorResultsUpload{handler: handler})
 	self.AddToProcessorMap("PromotionalLinks", &contestServiceProcessorPromotionalLinks{handler: handler})
 	self.AddToProcessorMap("DelContest", &contestServiceProcessorDelContest{handler: handler})
@@ -4283,16 +4283,16 @@ func (p *contestServiceProcessorUpdateParticipantStatus) Process(ctx context.Con
 	return true, err
 }
 
-type contestServiceProcessorParticipantListListExport struct {
+type contestServiceProcessorParticipantListExport struct {
 	handler ContestService
 }
 
-func (p *contestServiceProcessorParticipantListListExport) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := ContestServiceParticipantListListExportArgs{}
+func (p *contestServiceProcessorParticipantListExport) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ContestServiceParticipantListExportArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("ParticipantListListExport", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("ParticipantListExport", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -4301,11 +4301,11 @@ func (p *contestServiceProcessorParticipantListListExport) Process(ctx context.C
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := ContestServiceParticipantListListExportResult{}
+	result := ContestServiceParticipantListExportResult{}
 	var retval *base.NilResponse
-	if retval, err2 = p.handler.ParticipantListListExport(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ParticipantListListExport: "+err2.Error())
-		oprot.WriteMessageBegin("ParticipantListListExport", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.ParticipantListExport(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ParticipantListExport: "+err2.Error())
+		oprot.WriteMessageBegin("ParticipantListExport", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -4313,7 +4313,7 @@ func (p *contestServiceProcessorParticipantListListExport) Process(ctx context.C
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("ParticipantListListExport", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("ParticipantListExport", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -7757,35 +7757,35 @@ func (p *ContestServiceUpdateParticipantStatusResult) String() string {
 
 }
 
-type ContestServiceParticipantListListExportArgs struct {
+type ContestServiceParticipantListExportArgs struct {
 	Req *ParticipantListReq `thrift:"req,1"`
 }
 
-func NewContestServiceParticipantListListExportArgs() *ContestServiceParticipantListListExportArgs {
-	return &ContestServiceParticipantListListExportArgs{}
+func NewContestServiceParticipantListExportArgs() *ContestServiceParticipantListExportArgs {
+	return &ContestServiceParticipantListExportArgs{}
 }
 
-func (p *ContestServiceParticipantListListExportArgs) InitDefault() {
+func (p *ContestServiceParticipantListExportArgs) InitDefault() {
 }
 
-var ContestServiceParticipantListListExportArgs_Req_DEFAULT *ParticipantListReq
+var ContestServiceParticipantListExportArgs_Req_DEFAULT *ParticipantListReq
 
-func (p *ContestServiceParticipantListListExportArgs) GetReq() (v *ParticipantListReq) {
+func (p *ContestServiceParticipantListExportArgs) GetReq() (v *ParticipantListReq) {
 	if !p.IsSetReq() {
-		return ContestServiceParticipantListListExportArgs_Req_DEFAULT
+		return ContestServiceParticipantListExportArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_ContestServiceParticipantListListExportArgs = map[int16]string{
+var fieldIDToName_ContestServiceParticipantListExportArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *ContestServiceParticipantListListExportArgs) IsSetReq() bool {
+func (p *ContestServiceParticipantListExportArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *ContestServiceParticipantListListExportArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *ContestServiceParticipantListExportArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -7831,7 +7831,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ContestServiceParticipantListListExportArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ContestServiceParticipantListExportArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -7841,7 +7841,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ContestServiceParticipantListListExportArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *ContestServiceParticipantListExportArgs) ReadField1(iprot thrift.TProtocol) error {
 	_field := NewParticipantListReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
@@ -7850,9 +7850,9 @@ func (p *ContestServiceParticipantListListExportArgs) ReadField1(iprot thrift.TP
 	return nil
 }
 
-func (p *ContestServiceParticipantListListExportArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *ContestServiceParticipantListExportArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ParticipantListListExport_args"); err != nil {
+	if err = oprot.WriteStructBegin("ParticipantListExport_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -7878,7 +7878,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ContestServiceParticipantListListExportArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ContestServiceParticipantListExportArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -7895,43 +7895,43 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *ContestServiceParticipantListListExportArgs) String() string {
+func (p *ContestServiceParticipantListExportArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ContestServiceParticipantListListExportArgs(%+v)", *p)
+	return fmt.Sprintf("ContestServiceParticipantListExportArgs(%+v)", *p)
 
 }
 
-type ContestServiceParticipantListListExportResult struct {
+type ContestServiceParticipantListExportResult struct {
 	Success *base.NilResponse `thrift:"success,0,optional"`
 }
 
-func NewContestServiceParticipantListListExportResult() *ContestServiceParticipantListListExportResult {
-	return &ContestServiceParticipantListListExportResult{}
+func NewContestServiceParticipantListExportResult() *ContestServiceParticipantListExportResult {
+	return &ContestServiceParticipantListExportResult{}
 }
 
-func (p *ContestServiceParticipantListListExportResult) InitDefault() {
+func (p *ContestServiceParticipantListExportResult) InitDefault() {
 }
 
-var ContestServiceParticipantListListExportResult_Success_DEFAULT *base.NilResponse
+var ContestServiceParticipantListExportResult_Success_DEFAULT *base.NilResponse
 
-func (p *ContestServiceParticipantListListExportResult) GetSuccess() (v *base.NilResponse) {
+func (p *ContestServiceParticipantListExportResult) GetSuccess() (v *base.NilResponse) {
 	if !p.IsSetSuccess() {
-		return ContestServiceParticipantListListExportResult_Success_DEFAULT
+		return ContestServiceParticipantListExportResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_ContestServiceParticipantListListExportResult = map[int16]string{
+var fieldIDToName_ContestServiceParticipantListExportResult = map[int16]string{
 	0: "success",
 }
 
-func (p *ContestServiceParticipantListListExportResult) IsSetSuccess() bool {
+func (p *ContestServiceParticipantListExportResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *ContestServiceParticipantListListExportResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *ContestServiceParticipantListExportResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -7977,7 +7977,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ContestServiceParticipantListListExportResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ContestServiceParticipantListExportResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -7987,7 +7987,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ContestServiceParticipantListListExportResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *ContestServiceParticipantListExportResult) ReadField0(iprot thrift.TProtocol) error {
 	_field := base.NewNilResponse()
 	if err := _field.Read(iprot); err != nil {
 		return err
@@ -7996,9 +7996,9 @@ func (p *ContestServiceParticipantListListExportResult) ReadField0(iprot thrift.
 	return nil
 }
 
-func (p *ContestServiceParticipantListListExportResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *ContestServiceParticipantListExportResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ParticipantListListExport_result"); err != nil {
+	if err = oprot.WriteStructBegin("ParticipantListExport_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -8024,7 +8024,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ContestServiceParticipantListListExportResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *ContestServiceParticipantListExportResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -8043,11 +8043,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *ContestServiceParticipantListListExportResult) String() string {
+func (p *ContestServiceParticipantListExportResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ContestServiceParticipantListListExportResult(%+v)", *p)
+	return fmt.Sprintf("ContestServiceParticipantListExportResult(%+v)", *p)
 
 }
 

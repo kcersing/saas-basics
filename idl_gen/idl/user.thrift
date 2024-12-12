@@ -72,6 +72,7 @@ struct CreateOrUpdateUserReq {
     15:  optional string detail="" (api.raw = "detail")
     16:  optional i64 jobTime=0 (api.raw = "jobTime")
     18: optional list<i64> userTags="" (api.raw = "userTags")
+    19:  optional i64 type=1 (api.raw = "type")
 }
 
 

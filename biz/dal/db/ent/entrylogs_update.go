@@ -184,33 +184,6 @@ func (elu *EntryLogsUpdate) ClearMemberProductID() *EntryLogsUpdate {
 	return elu
 }
 
-// SetMemberPropertyID sets the "member_property_id" field.
-func (elu *EntryLogsUpdate) SetMemberPropertyID(i int64) *EntryLogsUpdate {
-	elu.mutation.ResetMemberPropertyID()
-	elu.mutation.SetMemberPropertyID(i)
-	return elu
-}
-
-// SetNillableMemberPropertyID sets the "member_property_id" field if the given value is not nil.
-func (elu *EntryLogsUpdate) SetNillableMemberPropertyID(i *int64) *EntryLogsUpdate {
-	if i != nil {
-		elu.SetMemberPropertyID(*i)
-	}
-	return elu
-}
-
-// AddMemberPropertyID adds i to the "member_property_id" field.
-func (elu *EntryLogsUpdate) AddMemberPropertyID(i int64) *EntryLogsUpdate {
-	elu.mutation.AddMemberPropertyID(i)
-	return elu
-}
-
-// ClearMemberPropertyID clears the value of the "member_property_id" field.
-func (elu *EntryLogsUpdate) ClearMemberPropertyID() *EntryLogsUpdate {
-	elu.mutation.ClearMemberPropertyID()
-	return elu
-}
-
 // SetEntryTime sets the "entry_time" field.
 func (elu *EntryLogsUpdate) SetEntryTime(t time.Time) *EntryLogsUpdate {
 	elu.mutation.SetEntryTime(t)
@@ -411,15 +384,6 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if elu.mutation.MemberProductIDCleared() {
 		_spec.ClearField(entrylogs.FieldMemberProductID, field.TypeInt64)
-	}
-	if value, ok := elu.mutation.MemberPropertyID(); ok {
-		_spec.SetField(entrylogs.FieldMemberPropertyID, field.TypeInt64, value)
-	}
-	if value, ok := elu.mutation.AddedMemberPropertyID(); ok {
-		_spec.AddField(entrylogs.FieldMemberPropertyID, field.TypeInt64, value)
-	}
-	if elu.mutation.MemberPropertyIDCleared() {
-		_spec.ClearField(entrylogs.FieldMemberPropertyID, field.TypeInt64)
 	}
 	if value, ok := elu.mutation.EntryTime(); ok {
 		_spec.SetField(entrylogs.FieldEntryTime, field.TypeTime, value)
@@ -693,33 +657,6 @@ func (eluo *EntryLogsUpdateOne) ClearMemberProductID() *EntryLogsUpdateOne {
 	return eluo
 }
 
-// SetMemberPropertyID sets the "member_property_id" field.
-func (eluo *EntryLogsUpdateOne) SetMemberPropertyID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.ResetMemberPropertyID()
-	eluo.mutation.SetMemberPropertyID(i)
-	return eluo
-}
-
-// SetNillableMemberPropertyID sets the "member_property_id" field if the given value is not nil.
-func (eluo *EntryLogsUpdateOne) SetNillableMemberPropertyID(i *int64) *EntryLogsUpdateOne {
-	if i != nil {
-		eluo.SetMemberPropertyID(*i)
-	}
-	return eluo
-}
-
-// AddMemberPropertyID adds i to the "member_property_id" field.
-func (eluo *EntryLogsUpdateOne) AddMemberPropertyID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.AddMemberPropertyID(i)
-	return eluo
-}
-
-// ClearMemberPropertyID clears the value of the "member_property_id" field.
-func (eluo *EntryLogsUpdateOne) ClearMemberPropertyID() *EntryLogsUpdateOne {
-	eluo.mutation.ClearMemberPropertyID()
-	return eluo
-}
-
 // SetEntryTime sets the "entry_time" field.
 func (eluo *EntryLogsUpdateOne) SetEntryTime(t time.Time) *EntryLogsUpdateOne {
 	eluo.mutation.SetEntryTime(t)
@@ -950,15 +887,6 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 	}
 	if eluo.mutation.MemberProductIDCleared() {
 		_spec.ClearField(entrylogs.FieldMemberProductID, field.TypeInt64)
-	}
-	if value, ok := eluo.mutation.MemberPropertyID(); ok {
-		_spec.SetField(entrylogs.FieldMemberPropertyID, field.TypeInt64, value)
-	}
-	if value, ok := eluo.mutation.AddedMemberPropertyID(); ok {
-		_spec.AddField(entrylogs.FieldMemberPropertyID, field.TypeInt64, value)
-	}
-	if eluo.mutation.MemberPropertyIDCleared() {
-		_spec.ClearField(entrylogs.FieldMemberPropertyID, field.TypeInt64)
 	}
 	if value, ok := eluo.mutation.EntryTime(); ok {
 		_spec.SetField(entrylogs.FieldEntryTime, field.TypeTime, value)

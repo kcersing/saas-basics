@@ -28,6 +28,7 @@ type MemberContractQuery struct {
 	withContent *MemberContractContentQuery
 	withMember  *MemberQuery
 	withOrder   *OrderQuery
+	withFKs     bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -441,6 +442,7 @@ func (mcq *MemberContractQuery) prepareQuery(ctx context.Context) error {
 func (mcq *MemberContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MemberContract, error) {
 	var (
 		nodes       = []*MemberContract{}
+		withFKs     = mcq.withFKs
 		_spec       = mcq.querySpec()
 		loadedTypes = [3]bool{
 			mcq.withContent != nil,
@@ -448,6 +450,9 @@ func (mcq *MemberContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			mcq.withOrder != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, membercontract.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*MemberContract).scanValues(nil, columns)
 	}

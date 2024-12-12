@@ -37,16 +37,15 @@ type EntryLogs struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 用户产品id
 	MemberProductID int64 `json:"member_product_id,omitempty"`
-	// 属性id
-	MemberPropertyID int64 `json:"member_property_id,omitempty"`
 	// 进场时间
 	EntryTime time.Time `json:"entry_time,omitempty"`
 	// 离场时间
 	LeavingTime time.Time `json:"leaving_time,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EntryLogsQuery when eager-loading is set.
-	Edges        EntryLogsEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                               EntryLogsEdges `json:"edges"`
+	member_product_member_product_entry *int64
+	selectValues                        sql.SelectValues
 }
 
 // EntryLogsEdges holds the relations/edges for other nodes in the graph.
@@ -106,10 +105,12 @@ func (*EntryLogs) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case entrylogs.FieldID, entrylogs.FieldDelete, entrylogs.FieldCreatedID, entrylogs.FieldMemberID, entrylogs.FieldUserID, entrylogs.FieldVenueID, entrylogs.FieldMemberProductID, entrylogs.FieldMemberPropertyID:
+		case entrylogs.FieldID, entrylogs.FieldDelete, entrylogs.FieldCreatedID, entrylogs.FieldMemberID, entrylogs.FieldUserID, entrylogs.FieldVenueID, entrylogs.FieldMemberProductID:
 			values[i] = new(sql.NullInt64)
 		case entrylogs.FieldCreatedAt, entrylogs.FieldUpdatedAt, entrylogs.FieldEntryTime, entrylogs.FieldLeavingTime:
 			values[i] = new(sql.NullTime)
+		case entrylogs.ForeignKeys[0]: // member_product_member_product_entry
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -179,12 +180,6 @@ func (el *EntryLogs) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				el.MemberProductID = value.Int64
 			}
-		case entrylogs.FieldMemberPropertyID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field member_property_id", values[i])
-			} else if value.Valid {
-				el.MemberPropertyID = value.Int64
-			}
 		case entrylogs.FieldEntryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field entry_time", values[i])
@@ -196,6 +191,13 @@ func (el *EntryLogs) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field leaving_time", values[i])
 			} else if value.Valid {
 				el.LeavingTime = value.Time
+			}
+		case entrylogs.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field member_product_member_product_entry", value)
+			} else if value.Valid {
+				el.member_product_member_product_entry = new(int64)
+				*el.member_product_member_product_entry = int64(value.Int64)
 			}
 		default:
 			el.selectValues.Set(columns[i], values[i])
@@ -271,9 +273,6 @@ func (el *EntryLogs) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("member_product_id=")
 	builder.WriteString(fmt.Sprintf("%v", el.MemberProductID))
-	builder.WriteString(", ")
-	builder.WriteString("member_property_id=")
-	builder.WriteString(fmt.Sprintf("%v", el.MemberPropertyID))
 	builder.WriteString(", ")
 	builder.WriteString("entry_time=")
 	builder.WriteString(el.EntryTime.Format(time.ANSIC))

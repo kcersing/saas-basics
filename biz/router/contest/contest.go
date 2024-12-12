@@ -34,7 +34,7 @@ func Register(r *server.Hertz) {
 		{
 			_participant := _service.Group("/participant", _participantMw()...)
 			_participant.POST("/create", append(_createparticipantMw(), contest.CreateParticipant)...)
-			_participant.POST("/export", append(_participantlistlistexportMw(), contest.ParticipantListListExport)...)
+			_participant.POST("/export", append(_participantlistexportMw(), contest.ParticipantListExport)...)
 			_participant.POST("/finish", append(_participantfinishMw(), contest.ParticipantFinish)...)
 			_participant.POST("/info", append(_contestparticipantinfoMw(), contest.ContestParticipantInfo)...)
 			_participant.POST("/list", append(_participantlistlistMw(), contest.ParticipantListList)...)

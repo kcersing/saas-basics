@@ -4,10 +4,12 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/contract"
 	"saas/biz/dal/db/ent/predicate"
+	"saas/biz/dal/db/ent/product"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -17,10 +19,11 @@ import (
 // ContractQuery is the builder for querying Contract entities.
 type ContractQuery struct {
 	config
-	ctx        *QueryContext
-	order      []contract.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Contract
+	ctx          *QueryContext
+	order        []contract.OrderOption
+	inters       []Interceptor
+	predicates   []predicate.Contract
+	withProducts *ProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +58,28 @@ func (cq *ContractQuery) Unique(unique bool) *ContractQuery {
 func (cq *ContractQuery) Order(o ...contract.OrderOption) *ContractQuery {
 	cq.order = append(cq.order, o...)
 	return cq
+}
+
+// QueryProducts chains the current query on the "products" edge.
+func (cq *ContractQuery) QueryProducts() *ProductQuery {
+	query := (&ProductClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contract.Table, contract.FieldID, selector),
+			sqlgraph.To(product.Table, product.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, contract.ProductsTable, contract.ProductsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Contract entity from the query.
@@ -244,15 +269,27 @@ func (cq *ContractQuery) Clone() *ContractQuery {
 		return nil
 	}
 	return &ContractQuery{
-		config:     cq.config,
-		ctx:        cq.ctx.Clone(),
-		order:      append([]contract.OrderOption{}, cq.order...),
-		inters:     append([]Interceptor{}, cq.inters...),
-		predicates: append([]predicate.Contract{}, cq.predicates...),
+		config:       cq.config,
+		ctx:          cq.ctx.Clone(),
+		order:        append([]contract.OrderOption{}, cq.order...),
+		inters:       append([]Interceptor{}, cq.inters...),
+		predicates:   append([]predicate.Contract{}, cq.predicates...),
+		withProducts: cq.withProducts.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
 	}
+}
+
+// WithProducts tells the query-builder to eager-load the nodes that are connected to
+// the "products" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ContractQuery) WithProducts(opts ...func(*ProductQuery)) *ContractQuery {
+	query := (&ProductClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withProducts = query
+	return cq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,8 +368,11 @@ func (cq *ContractQuery) prepareQuery(ctx context.Context) error {
 
 func (cq *ContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Contract, error) {
 	var (
-		nodes = []*Contract{}
-		_spec = cq.querySpec()
+		nodes       = []*Contract{}
+		_spec       = cq.querySpec()
+		loadedTypes = [1]bool{
+			cq.withProducts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Contract).scanValues(nil, columns)
@@ -340,6 +380,7 @@ func (cq *ContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Con
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Contract{config: cq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +392,76 @@ func (cq *ContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Con
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := cq.withProducts; query != nil {
+		if err := cq.loadProducts(ctx, query, nodes,
+			func(n *Contract) { n.Edges.Products = []*Product{} },
+			func(n *Contract, e *Product) { n.Edges.Products = append(n.Edges.Products, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (cq *ContractQuery) loadProducts(ctx context.Context, query *ProductQuery, nodes []*Contract, init func(*Contract), assign func(*Contract, *Product)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int64]*Contract)
+	nids := make(map[int64]map[*Contract]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(contract.ProductsTable)
+		s.Join(joinT).On(s.C(product.FieldID), joinT.C(contract.ProductsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(contract.ProductsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(contract.ProductsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullInt64).Int64
+				inValue := values[1].(*sql.NullInt64).Int64
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Contract]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Product](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "products" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
 }
 
 func (cq *ContractQuery) sqlCount(ctx context.Context) (int, error) {

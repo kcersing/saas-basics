@@ -226,8 +226,6 @@ func (c Contest) UpdateContestShow(ID int64, status int64) error {
 }
 
 func (c Contest) DelContest(ID int64) error {
-	_, err := c.db.Contest.Update().
-		Where(contest2.IDEQ(ID)).SetDelete(1).Save(c.ctx)
-
+	_, err := c.db.Contest.Update().Where(contest2.IDEQ(ID)).SetDelete(1).Save(c.ctx)
 	return err
 }

@@ -146,6 +146,20 @@ func (uc *UserCreate) SetFunctions(s string) *UserCreate {
 	return uc
 }
 
+// SetType sets the "type" field.
+func (uc *UserCreate) SetType(i int64) *UserCreate {
+	uc.mutation.SetType(i)
+	return uc
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (uc *UserCreate) SetNillableType(i *int64) *UserCreate {
+	if i != nil {
+		uc.SetType(*i)
+	}
+	return uc
+}
+
 // SetJobTime sets the "job_time" field.
 func (uc *UserCreate) SetJobTime(i int64) *UserCreate {
 	uc.mutation.SetJobTime(i)
@@ -345,6 +359,10 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultGender
 		uc.mutation.SetGender(v)
 	}
+	if _, ok := uc.mutation.GetType(); !ok {
+		v := user.DefaultType
+		uc.mutation.SetType(v)
+	}
 	if _, ok := uc.mutation.JobTime(); !ok {
 		v := user.DefaultJobTime
 		uc.mutation.SetJobTime(v)
@@ -444,6 +462,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Functions(); ok {
 		_spec.SetField(user.FieldFunctions, field.TypeString, value)
 		_node.Functions = value
+	}
+	if value, ok := uc.mutation.GetType(); ok {
+		_spec.SetField(user.FieldType, field.TypeInt64, value)
+		_node.Type = value
 	}
 	if value, ok := uc.mutation.JobTime(); ok {
 		_spec.SetField(user.FieldJobTime, field.TypeInt64, value)

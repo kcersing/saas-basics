@@ -18,5 +18,5 @@ type Community interface {
 	ParticipantInfo(id int64) (resp *community.ParticipantInfo, err error)
 	ParticipantList(req community.ParticipantListReq) (resp []*community.ParticipantInfo, total int, err error)
 	UpdateParticipantStatus(ID int64, status int64) error
-	ParticipantListListExport(req community.ParticipantListReq) (string, error)
+	ParticipantListExport(req community.ParticipantListReq) (string, error)
 }

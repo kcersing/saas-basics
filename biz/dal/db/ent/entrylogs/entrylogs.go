@@ -30,8 +30,6 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldMemberProductID holds the string denoting the member_product_id field in the database.
 	FieldMemberProductID = "member_product_id"
-	// FieldMemberPropertyID holds the string denoting the member_property_id field in the database.
-	FieldMemberPropertyID = "member_property_id"
 	// FieldEntryTime holds the string denoting the entry_time field in the database.
 	FieldEntryTime = "entry_time"
 	// FieldLeavingTime holds the string denoting the leaving_time field in the database.
@@ -78,15 +76,25 @@ var Columns = []string{
 	FieldUserID,
 	FieldVenueID,
 	FieldMemberProductID,
-	FieldMemberPropertyID,
 	FieldEntryTime,
 	FieldLeavingTime,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "entry_logs"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"member_product_member_product_entry",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -156,11 +164,6 @@ func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 // ByMemberProductID orders the results by the member_product_id field.
 func ByMemberProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberProductID, opts...).ToFunc()
-}
-
-// ByMemberPropertyID orders the results by the member_property_id field.
-func ByMemberPropertyID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMemberPropertyID, opts...).ToFunc()
 }
 
 // ByEntryTime orders the results by the entry_time field.

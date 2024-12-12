@@ -95,11 +95,6 @@ func MemberProductID(v int64) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldEQ(FieldMemberProductID, v))
 }
 
-// MemberPropertyID applies equality check predicate on the "member_property_id" field. It's identical to MemberPropertyIDEQ.
-func MemberPropertyID(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldEQ(FieldMemberPropertyID, v))
-}
-
 // EntryTime applies equality check predicate on the "entry_time" field. It's identical to EntryTimeEQ.
 func EntryTime(v time.Time) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldEQ(FieldEntryTime, v))
@@ -448,56 +443,6 @@ func MemberProductIDIsNil() predicate.EntryLogs {
 // MemberProductIDNotNil applies the NotNil predicate on the "member_product_id" field.
 func MemberProductIDNotNil() predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldNotNull(FieldMemberProductID))
-}
-
-// MemberPropertyIDEQ applies the EQ predicate on the "member_property_id" field.
-func MemberPropertyIDEQ(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldEQ(FieldMemberPropertyID, v))
-}
-
-// MemberPropertyIDNEQ applies the NEQ predicate on the "member_property_id" field.
-func MemberPropertyIDNEQ(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldNEQ(FieldMemberPropertyID, v))
-}
-
-// MemberPropertyIDIn applies the In predicate on the "member_property_id" field.
-func MemberPropertyIDIn(vs ...int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldIn(FieldMemberPropertyID, vs...))
-}
-
-// MemberPropertyIDNotIn applies the NotIn predicate on the "member_property_id" field.
-func MemberPropertyIDNotIn(vs ...int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldNotIn(FieldMemberPropertyID, vs...))
-}
-
-// MemberPropertyIDGT applies the GT predicate on the "member_property_id" field.
-func MemberPropertyIDGT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGT(FieldMemberPropertyID, v))
-}
-
-// MemberPropertyIDGTE applies the GTE predicate on the "member_property_id" field.
-func MemberPropertyIDGTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGTE(FieldMemberPropertyID, v))
-}
-
-// MemberPropertyIDLT applies the LT predicate on the "member_property_id" field.
-func MemberPropertyIDLT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLT(FieldMemberPropertyID, v))
-}
-
-// MemberPropertyIDLTE applies the LTE predicate on the "member_property_id" field.
-func MemberPropertyIDLTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLTE(FieldMemberPropertyID, v))
-}
-
-// MemberPropertyIDIsNil applies the IsNil predicate on the "member_property_id" field.
-func MemberPropertyIDIsNil() predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldIsNull(FieldMemberPropertyID))
-}
-
-// MemberPropertyIDNotNil applies the NotNil predicate on the "member_property_id" field.
-func MemberPropertyIDNotNil() predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldNotNull(FieldMemberPropertyID))
 }
 
 // EntryTimeEQ applies the EQ predicate on the "entry_time" field.

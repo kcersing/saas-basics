@@ -2171,6 +2171,7 @@ type CreateOrUpdateUserReq struct {
 	Detail    string   `thrift:"detail,15,optional" form:"detail" json:"detail" query:"detail"`
 	JobTime   int64    `thrift:"jobTime,16,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
 	UserTags  []int64  `thrift:"userTags,18,optional" form:"userTags" json:"userTags" query:"userTags"`
+	Type      int64    `thrift:"type,19,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewCreateOrUpdateUserReq() *CreateOrUpdateUserReq {
@@ -2190,6 +2191,7 @@ func NewCreateOrUpdateUserReq() *CreateOrUpdateUserReq {
 		Detail:    "",
 		JobTime:   0,
 		UserTags:  []int64{},
+		Type:      1,
 	}
 }
 
@@ -2208,6 +2210,7 @@ func (p *CreateOrUpdateUserReq) InitDefault() {
 	p.Detail = ""
 	p.JobTime = 0
 	p.UserTags = []int64{}
+	p.Type = 1
 }
 
 var CreateOrUpdateUserReq_ID_DEFAULT int64 = 0
@@ -2336,6 +2339,15 @@ func (p *CreateOrUpdateUserReq) GetUserTags() (v []int64) {
 	return p.UserTags
 }
 
+var CreateOrUpdateUserReq_Type_DEFAULT int64 = 1
+
+func (p *CreateOrUpdateUserReq) GetType() (v int64) {
+	if !p.IsSetType() {
+		return CreateOrUpdateUserReq_Type_DEFAULT
+	}
+	return p.Type
+}
+
 var fieldIDToName_CreateOrUpdateUserReq = map[int16]string{
 	1:  "id",
 	2:  "avatar",
@@ -2351,6 +2363,7 @@ var fieldIDToName_CreateOrUpdateUserReq = map[int16]string{
 	15: "detail",
 	16: "jobTime",
 	18: "userTags",
+	19: "type",
 }
 
 func (p *CreateOrUpdateUserReq) IsSetID() bool {
@@ -2407,6 +2420,10 @@ func (p *CreateOrUpdateUserReq) IsSetJobTime() bool {
 
 func (p *CreateOrUpdateUserReq) IsSetUserTags() bool {
 	return p.UserTags != nil
+}
+
+func (p *CreateOrUpdateUserReq) IsSetType() bool {
+	return p.Type != CreateOrUpdateUserReq_Type_DEFAULT
 }
 
 func (p *CreateOrUpdateUserReq) Read(iprot thrift.TProtocol) (err error) {
@@ -2535,6 +2552,14 @@ func (p *CreateOrUpdateUserReq) Read(iprot thrift.TProtocol) (err error) {
 		case 18:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField18(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 19:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField19(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2747,6 +2772,17 @@ func (p *CreateOrUpdateUserReq) ReadField18(iprot thrift.TProtocol) error {
 	p.UserTags = _field
 	return nil
 }
+func (p *CreateOrUpdateUserReq) ReadField19(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Type = _field
+	return nil
+}
 
 func (p *CreateOrUpdateUserReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -2808,6 +2844,10 @@ func (p *CreateOrUpdateUserReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField18(oprot); err != nil {
 			fieldId = 18
+			goto WriteFieldError
+		}
+		if err = p.writeField19(oprot); err != nil {
+			fieldId = 19
 			goto WriteFieldError
 		}
 	}
@@ -3108,6 +3148,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateUserReq) writeField19(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.I64, 19); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 end error: ", p), err)
 }
 
 func (p *CreateOrUpdateUserReq) String() string {

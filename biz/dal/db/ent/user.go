@@ -41,6 +41,8 @@ type User struct {
 	Password string `json:"password,omitempty"`
 	// functions | 职能
 	Functions string `json:"functions,omitempty"`
+	// 账号类别1普通 2管理员
+	Type int64 `json:"type,omitempty"`
 	// job time | [1:全职;2:兼职;]
 	JobTime int64 `json:"job_time,omitempty"`
 	// role id | 角色ID
@@ -117,7 +119,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldDelete, user.FieldCreatedID, user.FieldStatus, user.FieldGender, user.FieldJobTime, user.FieldRoleID, user.FieldDefaultVenueID:
+		case user.FieldID, user.FieldDelete, user.FieldCreatedID, user.FieldStatus, user.FieldGender, user.FieldType, user.FieldJobTime, user.FieldRoleID, user.FieldDefaultVenueID:
 			values[i] = new(sql.NullInt64)
 		case user.FieldMobile, user.FieldName, user.FieldUsername, user.FieldPassword, user.FieldFunctions, user.FieldAvatar, user.FieldDetail:
 			values[i] = new(sql.NullString)
@@ -209,6 +211,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field functions", values[i])
 			} else if value.Valid {
 				u.Functions = value.String
+			}
+		case user.FieldType:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				u.Type = value.Int64
 			}
 		case user.FieldJobTime:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -328,6 +336,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("functions=")
 	builder.WriteString(u.Functions)
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", u.Type))
 	builder.WriteString(", ")
 	builder.WriteString("job_time=")
 	builder.WriteString(fmt.Sprintf("%v", u.JobTime))

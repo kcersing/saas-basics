@@ -18,5 +18,5 @@ type Bootcamp interface {
 	ParticipantInfo(id int64) (resp *bootcamp.ParticipantInfo, err error)
 	ParticipantList(req bootcamp.ParticipantListReq) (resp []*bootcamp.ParticipantInfo, total int, err error)
 	UpdateParticipantStatus(ID int64, status int64) error
-	ParticipantListListExport(req bootcamp.ParticipantListReq) (string, error)
+	ParticipantListExport(req bootcamp.ParticipantListReq) (string, error)
 }

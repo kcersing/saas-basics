@@ -48,6 +48,8 @@ type Tx struct {
 	MemberDetails *MemberDetailsClient
 	// MemberNote is the client for interacting with the MemberNote builders.
 	MemberNote *MemberNoteClient
+	// MemberProduct is the client for interacting with the MemberProduct builders.
+	MemberProduct *MemberProductClient
 	// MemberProfile is the client for interacting with the MemberProfile builders.
 	MemberProfile *MemberProfileClient
 	// Menu is the client for interacting with the Menu builders.
@@ -66,8 +68,16 @@ type Tx struct {
 	OrderPay *OrderPayClient
 	// OrderSales is the client for interacting with the OrderSales builders.
 	OrderSales *OrderSalesClient
+	// Product is the client for interacting with the Product builders.
+	Product *ProductClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
+	// Schedule is the client for interacting with the Schedule builders.
+	Schedule *ScheduleClient
+	// ScheduleCoach is the client for interacting with the ScheduleCoach builders.
+	ScheduleCoach *ScheduleCoachClient
+	// ScheduleMember is the client for interacting with the ScheduleMember builders.
+	ScheduleMember *ScheduleMemberClient
 	// Token is the client for interacting with the Token builders.
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
@@ -225,6 +235,7 @@ func (tx *Tx) init() {
 	tx.MemberContractContent = NewMemberContractContentClient(tx.config)
 	tx.MemberDetails = NewMemberDetailsClient(tx.config)
 	tx.MemberNote = NewMemberNoteClient(tx.config)
+	tx.MemberProduct = NewMemberProductClient(tx.config)
 	tx.MemberProfile = NewMemberProfileClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)
@@ -234,7 +245,11 @@ func (tx *Tx) init() {
 	tx.OrderItem = NewOrderItemClient(tx.config)
 	tx.OrderPay = NewOrderPayClient(tx.config)
 	tx.OrderSales = NewOrderSalesClient(tx.config)
+	tx.Product = NewProductClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
+	tx.Schedule = NewScheduleClient(tx.config)
+	tx.ScheduleCoach = NewScheduleCoachClient(tx.config)
+	tx.ScheduleMember = NewScheduleMemberClient(tx.config)
 	tx.Token = NewTokenClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.Venue = NewVenueClient(tx.config)

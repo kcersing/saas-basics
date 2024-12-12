@@ -110,6 +110,11 @@ func Functions(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldFunctions, v))
 }
 
+// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
+func Type(v int64) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldType, v))
+}
+
 // JobTime applies equality check predicate on the "job_time" field. It's identical to JobTimeEQ.
 func JobTime(v int64) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldJobTime, v))
@@ -768,6 +773,56 @@ func FunctionsEqualFold(v string) predicate.User {
 // FunctionsContainsFold applies the ContainsFold predicate on the "functions" field.
 func FunctionsContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldFunctions, v))
+}
+
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v int64) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v int64) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...int64) predicate.User {
+	return predicate.User(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...int64) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeGT applies the GT predicate on the "type" field.
+func TypeGT(v int64) predicate.User {
+	return predicate.User(sql.FieldGT(FieldType, v))
+}
+
+// TypeGTE applies the GTE predicate on the "type" field.
+func TypeGTE(v int64) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldType, v))
+}
+
+// TypeLT applies the LT predicate on the "type" field.
+func TypeLT(v int64) predicate.User {
+	return predicate.User(sql.FieldLT(FieldType, v))
+}
+
+// TypeLTE applies the LTE predicate on the "type" field.
+func TypeLTE(v int64) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldType, v))
+}
+
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldType))
 }
 
 // JobTimeEQ applies the EQ predicate on the "job_time" field.

@@ -363,33 +363,6 @@ func DelContest(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// ParticipantListListExport .
-//
-//	@Summary		导出比赛信息 Summary
-//	@Description	导出比赛信息 Description
-//	@Param			request	body		contest.ParticipantListReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//
-// @router /service/participant/export [POST]
-func ParticipantListListExport(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req contest.ParticipantListReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	export, err := service.NewContest(ctx, c).ParticipantListExport(req)
-	if err != nil {
-		utils.SendResponse(c, errno.DirtyData, nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, map[string]string{
-		"url": export,
-	}, 0, "")
-}
-
 // ParticipantFinish .
 //
 //	@Summary		参赛人确定比赛 Summary
@@ -409,4 +382,31 @@ func ParticipantFinish(ctx context.Context, c *app.RequestContext) {
 
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
+}
+
+// ParticipantListExport .
+//
+//	@Summary		导出比赛信息 Summary
+//	@Description	导出比赛信息 Description
+//	@Param			request	body		contest.ParticipantListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/participant/export [POST]
+func ParticipantListExport(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req contest.ParticipantListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	export, err := service.NewContest(ctx, c).ParticipantListExport(req)
+	if err != nil {
+		utils.SendResponse(c, errno.DirtyData, nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, map[string]string{
+		"url": export,
+	}, 0, "")
 }

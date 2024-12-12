@@ -21,7 +21,6 @@ func (EntryLogs) Fields() []ent.Field {
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 
 		field.Int64("member_product_id").Comment("用户产品id").Optional(),
-		field.Int64("member_property_id").Comment("属性id").Optional(),
 
 		field.Time("entry_time").
 			Comment("进场时间").

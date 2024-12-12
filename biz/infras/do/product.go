@@ -1,0 +1,15 @@
+package do
+
+import (
+	"saas/idl_gen/model/admin/product"
+)
+
+type Product interface {
+	CreateProduct(req product.ProductInfo) error
+	UpdateProduct(req product.ProductInfo) error
+	DeleteProduct(id int64) error
+	UpdateProductStatus(ID int64, status int64) error
+	ProductList(req *product.ProductListReq) (resp []*product.ProductInfo, total int, err error)
+	ProductInfo(id int64) error
+	ProductListExport(req *product.ProductListReq) (resp string, err error)
+}

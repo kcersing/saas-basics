@@ -16,8 +16,8 @@ type Order interface {
 	OrderListExport(req *order.ListOrderReq) (string, error)
 }
 type CreateParticipantOrderReq struct {
-	Member    *ent.Member
-	Device    string
-	ContestId int64
-	Fee       float64
+	Member *ent.Member
+	Device string
+	NodeId int64
+	Fee    float64
 }

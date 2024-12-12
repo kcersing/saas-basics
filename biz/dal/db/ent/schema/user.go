@@ -25,10 +25,11 @@ func (User) Fields() []ent.Field {
 		field.String("password").Comment("password | 密码"),
 
 		field.String("functions").Comment("functions | 职能"),
+		field.Int64("type").Default(1).Comment("账号类别1普通 2管理员").Optional(),
 
-		field.Int64("job_time").Default(0).Comment("job time | [1:全职;2:兼职;]").Optional(),
+		field.Int64("job_time").Default(1).Comment("job time | [1:全职;2:兼职;]").Optional(),
 
-		field.Int64("role_id").Optional().Default(2).Comment("role id | 角色ID"),
+		field.Int64("role_id").Optional().Default(0).Comment("role id | 角色ID"),
 
 		field.Int64("default_venue_id").Optional().Comment("登陆后默认场馆ID"),
 

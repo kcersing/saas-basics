@@ -44,6 +44,8 @@ const (
 	EdgeMemberNotes = "member_notes"
 	// EdgeMemberOrders holds the string denoting the member_orders edge name in mutations.
 	EdgeMemberOrders = "member_orders"
+	// EdgeMemberProducts holds the string denoting the member_products edge name in mutations.
+	EdgeMemberProducts = "member_products"
 	// EdgeMemberEntry holds the string denoting the member_entry edge name in mutations.
 	EdgeMemberEntry = "member_entry"
 	// EdgeMemberContents holds the string denoting the member_contents edge name in mutations.
@@ -84,6 +86,13 @@ const (
 	MemberOrdersInverseTable = "order"
 	// MemberOrdersColumn is the table column denoting the member_orders relation/edge.
 	MemberOrdersColumn = "member_id"
+	// MemberProductsTable is the table that holds the member_products relation/edge.
+	MemberProductsTable = "member_product"
+	// MemberProductsInverseTable is the table name for the MemberProduct entity.
+	// It exists in this package in order to avoid circular dependency with the "memberproduct" package.
+	MemberProductsInverseTable = "member_product"
+	// MemberProductsColumn is the table column denoting the member_products relation/edge.
+	MemberProductsColumn = "member_id"
 	// MemberEntryTable is the table that holds the member_entry relation/edge.
 	MemberEntryTable = "entry_logs"
 	// MemberEntryInverseTable is the table name for the EntryLogs entity.
@@ -291,6 +300,20 @@ func ByMemberOrders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByMemberProductsCount orders the results by member_products count.
+func ByMemberProductsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberProductsStep(), opts...)
+	}
+}
+
+// ByMemberProducts orders the results by member_products terms.
+func ByMemberProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMemberEntryCount orders the results by member_entry count.
 func ByMemberEntryCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -386,6 +409,13 @@ func newMemberOrdersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MemberOrdersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberOrdersTable, MemberOrdersColumn),
+	)
+}
+func newMemberProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberProductsTable, MemberProductsColumn),
 	)
 }
 func newMemberEntryStep() *sqlgraph.Step {

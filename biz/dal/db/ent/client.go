@@ -29,6 +29,7 @@ import (
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
@@ -38,7 +39,11 @@ import (
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/orderpay"
 	"saas/biz/dal/db/ent/ordersales"
+	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/role"
+	"saas/biz/dal/db/ent/schedule"
+	"saas/biz/dal/db/ent/schedulecoach"
+	"saas/biz/dal/db/ent/schedulemember"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
@@ -91,6 +96,8 @@ type Client struct {
 	MemberDetails *MemberDetailsClient
 	// MemberNote is the client for interacting with the MemberNote builders.
 	MemberNote *MemberNoteClient
+	// MemberProduct is the client for interacting with the MemberProduct builders.
+	MemberProduct *MemberProductClient
 	// MemberProfile is the client for interacting with the MemberProfile builders.
 	MemberProfile *MemberProfileClient
 	// Menu is the client for interacting with the Menu builders.
@@ -109,8 +116,16 @@ type Client struct {
 	OrderPay *OrderPayClient
 	// OrderSales is the client for interacting with the OrderSales builders.
 	OrderSales *OrderSalesClient
+	// Product is the client for interacting with the Product builders.
+	Product *ProductClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
+	// Schedule is the client for interacting with the Schedule builders.
+	Schedule *ScheduleClient
+	// ScheduleCoach is the client for interacting with the ScheduleCoach builders.
+	ScheduleCoach *ScheduleCoachClient
+	// ScheduleMember is the client for interacting with the ScheduleMember builders.
+	ScheduleMember *ScheduleMemberClient
 	// Token is the client for interacting with the Token builders.
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
@@ -148,6 +163,7 @@ func (c *Client) init() {
 	c.MemberContractContent = NewMemberContractContentClient(c.config)
 	c.MemberDetails = NewMemberDetailsClient(c.config)
 	c.MemberNote = NewMemberNoteClient(c.config)
+	c.MemberProduct = NewMemberProductClient(c.config)
 	c.MemberProfile = NewMemberProfileClient(c.config)
 	c.Menu = NewMenuClient(c.config)
 	c.MenuParam = NewMenuParamClient(c.config)
@@ -157,7 +173,11 @@ func (c *Client) init() {
 	c.OrderItem = NewOrderItemClient(c.config)
 	c.OrderPay = NewOrderPayClient(c.config)
 	c.OrderSales = NewOrderSalesClient(c.config)
+	c.Product = NewProductClient(c.config)
 	c.Role = NewRoleClient(c.config)
+	c.Schedule = NewScheduleClient(c.config)
+	c.ScheduleCoach = NewScheduleCoachClient(c.config)
+	c.ScheduleMember = NewScheduleMemberClient(c.config)
 	c.Token = NewTokenClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.Venue = NewVenueClient(c.config)
@@ -272,6 +292,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		MemberContractContent: NewMemberContractContentClient(cfg),
 		MemberDetails:         NewMemberDetailsClient(cfg),
 		MemberNote:            NewMemberNoteClient(cfg),
+		MemberProduct:         NewMemberProductClient(cfg),
 		MemberProfile:         NewMemberProfileClient(cfg),
 		Menu:                  NewMenuClient(cfg),
 		MenuParam:             NewMenuParamClient(cfg),
@@ -281,7 +302,11 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		OrderItem:             NewOrderItemClient(cfg),
 		OrderPay:              NewOrderPayClient(cfg),
 		OrderSales:            NewOrderSalesClient(cfg),
+		Product:               NewProductClient(cfg),
 		Role:                  NewRoleClient(cfg),
+		Schedule:              NewScheduleClient(cfg),
+		ScheduleCoach:         NewScheduleCoachClient(cfg),
+		ScheduleMember:        NewScheduleMemberClient(cfg),
 		Token:                 NewTokenClient(cfg),
 		User:                  NewUserClient(cfg),
 		Venue:                 NewVenueClient(cfg),
@@ -323,6 +348,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		MemberContractContent: NewMemberContractContentClient(cfg),
 		MemberDetails:         NewMemberDetailsClient(cfg),
 		MemberNote:            NewMemberNoteClient(cfg),
+		MemberProduct:         NewMemberProductClient(cfg),
 		MemberProfile:         NewMemberProfileClient(cfg),
 		Menu:                  NewMenuClient(cfg),
 		MenuParam:             NewMenuParamClient(cfg),
@@ -332,7 +358,11 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		OrderItem:             NewOrderItemClient(cfg),
 		OrderPay:              NewOrderPayClient(cfg),
 		OrderSales:            NewOrderSalesClient(cfg),
+		Product:               NewProductClient(cfg),
 		Role:                  NewRoleClient(cfg),
+		Schedule:              NewScheduleClient(cfg),
+		ScheduleCoach:         NewScheduleCoachClient(cfg),
+		ScheduleMember:        NewScheduleMemberClient(cfg),
 		Token:                 NewTokenClient(cfg),
 		User:                  NewUserClient(cfg),
 		Venue:                 NewVenueClient(cfg),
@@ -370,8 +400,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.CommunityParticipant, c.Contest, c.ContestParticipant, c.Contract,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
-		c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount,
-		c.OrderItem, c.OrderPay, c.OrderSales, c.Role, c.Token, c.User, c.Venue,
+		c.MemberProduct, c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order,
+		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.Role,
+		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Token, c.User, c.Venue,
 		c.VenuePlace,
 	} {
 		n.Use(hooks...)
@@ -386,8 +417,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.CommunityParticipant, c.Contest, c.ContestParticipant, c.Contract,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
-		c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount,
-		c.OrderItem, c.OrderPay, c.OrderSales, c.Role, c.Token, c.User, c.Venue,
+		c.MemberProduct, c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order,
+		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.Role,
+		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Token, c.User, c.Venue,
 		c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
@@ -433,6 +465,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.MemberDetails.mutate(ctx, m)
 	case *MemberNoteMutation:
 		return c.MemberNote.mutate(ctx, m)
+	case *MemberProductMutation:
+		return c.MemberProduct.mutate(ctx, m)
 	case *MemberProfileMutation:
 		return c.MemberProfile.mutate(ctx, m)
 	case *MenuMutation:
@@ -451,8 +485,16 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.OrderPay.mutate(ctx, m)
 	case *OrderSalesMutation:
 		return c.OrderSales.mutate(ctx, m)
+	case *ProductMutation:
+		return c.Product.mutate(ctx, m)
 	case *RoleMutation:
 		return c.Role.mutate(ctx, m)
+	case *ScheduleMutation:
+		return c.Schedule.mutate(ctx, m)
+	case *ScheduleCoachMutation:
+		return c.ScheduleCoach.mutate(ctx, m)
+	case *ScheduleMemberMutation:
+		return c.ScheduleMember.mutate(ctx, m)
 	case *TokenMutation:
 		return c.Token.mutate(ctx, m)
 	case *UserMutation:
@@ -1782,6 +1824,22 @@ func (c *ContractClient) GetX(ctx context.Context, id int64) *Contract {
 	return obj
 }
 
+// QueryProducts queries the products edge of a Contract.
+func (c *ContractClient) QueryProducts(co *Contract) *ProductQuery {
+	query := (&ProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contract.Table, contract.FieldID, id),
+			sqlgraph.To(product.Table, product.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, contract.ProductsTable, contract.ProductsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ContractClient) Hooks() []Hook {
 	return c.hooks.Contract
@@ -2089,6 +2147,22 @@ func (c *DictionaryDetailClient) QueryUsers(dd *DictionaryDetail) *UserQuery {
 			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.UsersTable, dictionarydetail.UsersPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProducts queries the products edge of a DictionaryDetail.
+func (c *DictionaryDetailClient) QueryProducts(dd *DictionaryDetail) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := dd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.ProductsTable, dictionarydetail.ProductsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
 		return fromV, nil
@@ -2600,6 +2674,22 @@ func (c *MemberClient) QueryMemberOrders(m *Member) *OrderQuery {
 			sqlgraph.From(member.Table, member.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberOrdersTable, member.MemberOrdersColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberProducts queries the member_products edge of a Member.
+func (c *MemberClient) QueryMemberProducts(m *Member) *MemberProductQuery {
+	query := (&MemberProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProductsTable, member.MemberProductsColumn),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
@@ -3337,6 +3427,187 @@ func (c *MemberNoteClient) mutate(ctx context.Context, m *MemberNoteMutation) (V
 		return (&MemberNoteDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown MemberNote mutation op: %q", m.Op())
+	}
+}
+
+// MemberProductClient is a client for the MemberProduct schema.
+type MemberProductClient struct {
+	config
+}
+
+// NewMemberProductClient returns a client for the MemberProduct from the given config.
+func NewMemberProductClient(c config) *MemberProductClient {
+	return &MemberProductClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `memberproduct.Hooks(f(g(h())))`.
+func (c *MemberProductClient) Use(hooks ...Hook) {
+	c.hooks.MemberProduct = append(c.hooks.MemberProduct, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `memberproduct.Intercept(f(g(h())))`.
+func (c *MemberProductClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemberProduct = append(c.inters.MemberProduct, interceptors...)
+}
+
+// Create returns a builder for creating a MemberProduct entity.
+func (c *MemberProductClient) Create() *MemberProductCreate {
+	mutation := newMemberProductMutation(c.config, OpCreate)
+	return &MemberProductCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemberProduct entities.
+func (c *MemberProductClient) CreateBulk(builders ...*MemberProductCreate) *MemberProductCreateBulk {
+	return &MemberProductCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberProductClient) MapCreateBulk(slice any, setFunc func(*MemberProductCreate, int)) *MemberProductCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberProductCreateBulk{err: fmt.Errorf("calling to MemberProductClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberProductCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberProductCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemberProduct.
+func (c *MemberProductClient) Update() *MemberProductUpdate {
+	mutation := newMemberProductMutation(c.config, OpUpdate)
+	return &MemberProductUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberProductClient) UpdateOne(mp *MemberProduct) *MemberProductUpdateOne {
+	mutation := newMemberProductMutation(c.config, OpUpdateOne, withMemberProduct(mp))
+	return &MemberProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberProductClient) UpdateOneID(id int64) *MemberProductUpdateOne {
+	mutation := newMemberProductMutation(c.config, OpUpdateOne, withMemberProductID(id))
+	return &MemberProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemberProduct.
+func (c *MemberProductClient) Delete() *MemberProductDelete {
+	mutation := newMemberProductMutation(c.config, OpDelete)
+	return &MemberProductDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberProductClient) DeleteOne(mp *MemberProduct) *MemberProductDeleteOne {
+	return c.DeleteOneID(mp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberProductClient) DeleteOneID(id int64) *MemberProductDeleteOne {
+	builder := c.Delete().Where(memberproduct.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberProductDeleteOne{builder}
+}
+
+// Query returns a query builder for MemberProduct.
+func (c *MemberProductClient) Query() *MemberProductQuery {
+	return &MemberProductQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemberProduct},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemberProduct entity by its id.
+func (c *MemberProductClient) Get(ctx context.Context, id int64) (*MemberProduct, error) {
+	return c.Query().Where(memberproduct.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberProductClient) GetX(ctx context.Context, id int64) *MemberProduct {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryMembers queries the members edge of a MemberProduct.
+func (c *MemberProductClient) QueryMembers(mp *MemberProduct) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproduct.MembersTable, memberproduct.MembersColumn),
+		)
+		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberProductEntry queries the member_product_entry edge of a MemberProduct.
+func (c *MemberProductClient) QueryMemberProductEntry(mp *MemberProduct) *EntryLogsQuery {
+	query := (&EntryLogsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
+			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductEntryTable, memberproduct.MemberProductEntryColumn),
+		)
+		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberProductContents queries the member_product_contents edge of a MemberProduct.
+func (c *MemberProductClient) QueryMemberProductContents(mp *MemberProduct) *MemberContractQuery {
+	query := (&MemberContractClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
+			sqlgraph.To(membercontract.Table, membercontract.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductContentsTable, memberproduct.MemberProductContentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemberProductClient) Hooks() []Hook {
+	return c.hooks.MemberProduct
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberProductClient) Interceptors() []Interceptor {
+	return c.inters.MemberProduct
+}
+
+func (c *MemberProductClient) mutate(ctx context.Context, m *MemberProductMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberProductCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberProductUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberProductDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemberProduct mutation op: %q", m.Op())
 	}
 }
 
@@ -4825,6 +5096,171 @@ func (c *OrderSalesClient) mutate(ctx context.Context, m *OrderSalesMutation) (V
 	}
 }
 
+// ProductClient is a client for the Product schema.
+type ProductClient struct {
+	config
+}
+
+// NewProductClient returns a client for the Product from the given config.
+func NewProductClient(c config) *ProductClient {
+	return &ProductClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `product.Hooks(f(g(h())))`.
+func (c *ProductClient) Use(hooks ...Hook) {
+	c.hooks.Product = append(c.hooks.Product, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `product.Intercept(f(g(h())))`.
+func (c *ProductClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Product = append(c.inters.Product, interceptors...)
+}
+
+// Create returns a builder for creating a Product entity.
+func (c *ProductClient) Create() *ProductCreate {
+	mutation := newProductMutation(c.config, OpCreate)
+	return &ProductCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Product entities.
+func (c *ProductClient) CreateBulk(builders ...*ProductCreate) *ProductCreateBulk {
+	return &ProductCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProductClient) MapCreateBulk(slice any, setFunc func(*ProductCreate, int)) *ProductCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProductCreateBulk{err: fmt.Errorf("calling to ProductClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProductCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProductCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Product.
+func (c *ProductClient) Update() *ProductUpdate {
+	mutation := newProductMutation(c.config, OpUpdate)
+	return &ProductUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProductClient) UpdateOne(pr *Product) *ProductUpdateOne {
+	mutation := newProductMutation(c.config, OpUpdateOne, withProduct(pr))
+	return &ProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProductClient) UpdateOneID(id int64) *ProductUpdateOne {
+	mutation := newProductMutation(c.config, OpUpdateOne, withProductID(id))
+	return &ProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Product.
+func (c *ProductClient) Delete() *ProductDelete {
+	mutation := newProductMutation(c.config, OpDelete)
+	return &ProductDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProductClient) DeleteOne(pr *Product) *ProductDeleteOne {
+	return c.DeleteOneID(pr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProductClient) DeleteOneID(id int64) *ProductDeleteOne {
+	builder := c.Delete().Where(product.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProductDeleteOne{builder}
+}
+
+// Query returns a query builder for Product.
+func (c *ProductClient) Query() *ProductQuery {
+	return &ProductQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProduct},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Product entity by its id.
+func (c *ProductClient) Get(ctx context.Context, id int64) (*Product, error) {
+	return c.Query().Where(product.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProductClient) GetX(ctx context.Context, id int64) *Product {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryTag queries the tag edge of a Product.
+func (c *ProductClient) QueryTag(pr *Product) *DictionaryDetailQuery {
+	query := (&DictionaryDetailClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(product.Table, product.FieldID, id),
+			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, product.TagTable, product.TagColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContracts queries the contracts edge of a Product.
+func (c *ProductClient) QueryContracts(pr *Product) *ContractQuery {
+	query := (&ContractClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(product.Table, product.FieldID, id),
+			sqlgraph.To(contract.Table, contract.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, product.ContractsTable, product.ContractsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ProductClient) Hooks() []Hook {
+	return c.hooks.Product
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProductClient) Interceptors() []Interceptor {
+	return c.inters.Product
+}
+
+func (c *ProductClient) mutate(ctx context.Context, m *ProductMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProductCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProductUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProductDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Product mutation op: %q", m.Op())
+	}
+}
+
 // RoleClient is a client for the Role schema.
 type RoleClient struct {
 	config
@@ -4971,6 +5407,469 @@ func (c *RoleClient) mutate(ctx context.Context, m *RoleMutation) (Value, error)
 		return (&RoleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Role mutation op: %q", m.Op())
+	}
+}
+
+// ScheduleClient is a client for the Schedule schema.
+type ScheduleClient struct {
+	config
+}
+
+// NewScheduleClient returns a client for the Schedule from the given config.
+func NewScheduleClient(c config) *ScheduleClient {
+	return &ScheduleClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `schedule.Hooks(f(g(h())))`.
+func (c *ScheduleClient) Use(hooks ...Hook) {
+	c.hooks.Schedule = append(c.hooks.Schedule, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `schedule.Intercept(f(g(h())))`.
+func (c *ScheduleClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Schedule = append(c.inters.Schedule, interceptors...)
+}
+
+// Create returns a builder for creating a Schedule entity.
+func (c *ScheduleClient) Create() *ScheduleCreate {
+	mutation := newScheduleMutation(c.config, OpCreate)
+	return &ScheduleCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Schedule entities.
+func (c *ScheduleClient) CreateBulk(builders ...*ScheduleCreate) *ScheduleCreateBulk {
+	return &ScheduleCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScheduleClient) MapCreateBulk(slice any, setFunc func(*ScheduleCreate, int)) *ScheduleCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScheduleCreateBulk{err: fmt.Errorf("calling to ScheduleClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScheduleCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScheduleCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Schedule.
+func (c *ScheduleClient) Update() *ScheduleUpdate {
+	mutation := newScheduleMutation(c.config, OpUpdate)
+	return &ScheduleUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScheduleClient) UpdateOne(s *Schedule) *ScheduleUpdateOne {
+	mutation := newScheduleMutation(c.config, OpUpdateOne, withSchedule(s))
+	return &ScheduleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScheduleClient) UpdateOneID(id int64) *ScheduleUpdateOne {
+	mutation := newScheduleMutation(c.config, OpUpdateOne, withScheduleID(id))
+	return &ScheduleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Schedule.
+func (c *ScheduleClient) Delete() *ScheduleDelete {
+	mutation := newScheduleMutation(c.config, OpDelete)
+	return &ScheduleDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScheduleClient) DeleteOne(s *Schedule) *ScheduleDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScheduleClient) DeleteOneID(id int64) *ScheduleDeleteOne {
+	builder := c.Delete().Where(schedule.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScheduleDeleteOne{builder}
+}
+
+// Query returns a query builder for Schedule.
+func (c *ScheduleClient) Query() *ScheduleQuery {
+	return &ScheduleQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSchedule},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Schedule entity by its id.
+func (c *ScheduleClient) Get(ctx context.Context, id int64) (*Schedule, error) {
+	return c.Query().Where(schedule.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScheduleClient) GetX(ctx context.Context, id int64) *Schedule {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryMembers queries the members edge of a Schedule.
+func (c *ScheduleClient) QueryMembers(s *Schedule) *ScheduleMemberQuery {
+	query := (&ScheduleMemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(schedule.Table, schedule.FieldID, id),
+			sqlgraph.To(schedulemember.Table, schedulemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, schedule.MembersTable, schedule.MembersColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCoachs queries the coachs edge of a Schedule.
+func (c *ScheduleClient) QueryCoachs(s *Schedule) *ScheduleCoachQuery {
+	query := (&ScheduleCoachClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(schedule.Table, schedule.FieldID, id),
+			sqlgraph.To(schedulecoach.Table, schedulecoach.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, schedule.CoachsTable, schedule.CoachsColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ScheduleClient) Hooks() []Hook {
+	return c.hooks.Schedule
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScheduleClient) Interceptors() []Interceptor {
+	return c.inters.Schedule
+}
+
+func (c *ScheduleClient) mutate(ctx context.Context, m *ScheduleMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScheduleCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScheduleUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScheduleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScheduleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Schedule mutation op: %q", m.Op())
+	}
+}
+
+// ScheduleCoachClient is a client for the ScheduleCoach schema.
+type ScheduleCoachClient struct {
+	config
+}
+
+// NewScheduleCoachClient returns a client for the ScheduleCoach from the given config.
+func NewScheduleCoachClient(c config) *ScheduleCoachClient {
+	return &ScheduleCoachClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `schedulecoach.Hooks(f(g(h())))`.
+func (c *ScheduleCoachClient) Use(hooks ...Hook) {
+	c.hooks.ScheduleCoach = append(c.hooks.ScheduleCoach, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `schedulecoach.Intercept(f(g(h())))`.
+func (c *ScheduleCoachClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ScheduleCoach = append(c.inters.ScheduleCoach, interceptors...)
+}
+
+// Create returns a builder for creating a ScheduleCoach entity.
+func (c *ScheduleCoachClient) Create() *ScheduleCoachCreate {
+	mutation := newScheduleCoachMutation(c.config, OpCreate)
+	return &ScheduleCoachCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ScheduleCoach entities.
+func (c *ScheduleCoachClient) CreateBulk(builders ...*ScheduleCoachCreate) *ScheduleCoachCreateBulk {
+	return &ScheduleCoachCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScheduleCoachClient) MapCreateBulk(slice any, setFunc func(*ScheduleCoachCreate, int)) *ScheduleCoachCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScheduleCoachCreateBulk{err: fmt.Errorf("calling to ScheduleCoachClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScheduleCoachCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScheduleCoachCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ScheduleCoach.
+func (c *ScheduleCoachClient) Update() *ScheduleCoachUpdate {
+	mutation := newScheduleCoachMutation(c.config, OpUpdate)
+	return &ScheduleCoachUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScheduleCoachClient) UpdateOne(sc *ScheduleCoach) *ScheduleCoachUpdateOne {
+	mutation := newScheduleCoachMutation(c.config, OpUpdateOne, withScheduleCoach(sc))
+	return &ScheduleCoachUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScheduleCoachClient) UpdateOneID(id int64) *ScheduleCoachUpdateOne {
+	mutation := newScheduleCoachMutation(c.config, OpUpdateOne, withScheduleCoachID(id))
+	return &ScheduleCoachUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ScheduleCoach.
+func (c *ScheduleCoachClient) Delete() *ScheduleCoachDelete {
+	mutation := newScheduleCoachMutation(c.config, OpDelete)
+	return &ScheduleCoachDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScheduleCoachClient) DeleteOne(sc *ScheduleCoach) *ScheduleCoachDeleteOne {
+	return c.DeleteOneID(sc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScheduleCoachClient) DeleteOneID(id int64) *ScheduleCoachDeleteOne {
+	builder := c.Delete().Where(schedulecoach.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScheduleCoachDeleteOne{builder}
+}
+
+// Query returns a query builder for ScheduleCoach.
+func (c *ScheduleCoachClient) Query() *ScheduleCoachQuery {
+	return &ScheduleCoachQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScheduleCoach},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ScheduleCoach entity by its id.
+func (c *ScheduleCoachClient) Get(ctx context.Context, id int64) (*ScheduleCoach, error) {
+	return c.Query().Where(schedulecoach.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScheduleCoachClient) GetX(ctx context.Context, id int64) *ScheduleCoach {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QuerySchedule queries the schedule edge of a ScheduleCoach.
+func (c *ScheduleCoachClient) QuerySchedule(sc *ScheduleCoach) *ScheduleQuery {
+	query := (&ScheduleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := sc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(schedulecoach.Table, schedulecoach.FieldID, id),
+			sqlgraph.To(schedule.Table, schedule.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, schedulecoach.ScheduleTable, schedulecoach.ScheduleColumn),
+		)
+		fromV = sqlgraph.Neighbors(sc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ScheduleCoachClient) Hooks() []Hook {
+	return c.hooks.ScheduleCoach
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScheduleCoachClient) Interceptors() []Interceptor {
+	return c.inters.ScheduleCoach
+}
+
+func (c *ScheduleCoachClient) mutate(ctx context.Context, m *ScheduleCoachMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScheduleCoachCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScheduleCoachUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScheduleCoachUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScheduleCoachDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ScheduleCoach mutation op: %q", m.Op())
+	}
+}
+
+// ScheduleMemberClient is a client for the ScheduleMember schema.
+type ScheduleMemberClient struct {
+	config
+}
+
+// NewScheduleMemberClient returns a client for the ScheduleMember from the given config.
+func NewScheduleMemberClient(c config) *ScheduleMemberClient {
+	return &ScheduleMemberClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `schedulemember.Hooks(f(g(h())))`.
+func (c *ScheduleMemberClient) Use(hooks ...Hook) {
+	c.hooks.ScheduleMember = append(c.hooks.ScheduleMember, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `schedulemember.Intercept(f(g(h())))`.
+func (c *ScheduleMemberClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ScheduleMember = append(c.inters.ScheduleMember, interceptors...)
+}
+
+// Create returns a builder for creating a ScheduleMember entity.
+func (c *ScheduleMemberClient) Create() *ScheduleMemberCreate {
+	mutation := newScheduleMemberMutation(c.config, OpCreate)
+	return &ScheduleMemberCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ScheduleMember entities.
+func (c *ScheduleMemberClient) CreateBulk(builders ...*ScheduleMemberCreate) *ScheduleMemberCreateBulk {
+	return &ScheduleMemberCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScheduleMemberClient) MapCreateBulk(slice any, setFunc func(*ScheduleMemberCreate, int)) *ScheduleMemberCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScheduleMemberCreateBulk{err: fmt.Errorf("calling to ScheduleMemberClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScheduleMemberCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScheduleMemberCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ScheduleMember.
+func (c *ScheduleMemberClient) Update() *ScheduleMemberUpdate {
+	mutation := newScheduleMemberMutation(c.config, OpUpdate)
+	return &ScheduleMemberUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScheduleMemberClient) UpdateOne(sm *ScheduleMember) *ScheduleMemberUpdateOne {
+	mutation := newScheduleMemberMutation(c.config, OpUpdateOne, withScheduleMember(sm))
+	return &ScheduleMemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScheduleMemberClient) UpdateOneID(id int64) *ScheduleMemberUpdateOne {
+	mutation := newScheduleMemberMutation(c.config, OpUpdateOne, withScheduleMemberID(id))
+	return &ScheduleMemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ScheduleMember.
+func (c *ScheduleMemberClient) Delete() *ScheduleMemberDelete {
+	mutation := newScheduleMemberMutation(c.config, OpDelete)
+	return &ScheduleMemberDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScheduleMemberClient) DeleteOne(sm *ScheduleMember) *ScheduleMemberDeleteOne {
+	return c.DeleteOneID(sm.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScheduleMemberClient) DeleteOneID(id int64) *ScheduleMemberDeleteOne {
+	builder := c.Delete().Where(schedulemember.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScheduleMemberDeleteOne{builder}
+}
+
+// Query returns a query builder for ScheduleMember.
+func (c *ScheduleMemberClient) Query() *ScheduleMemberQuery {
+	return &ScheduleMemberQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScheduleMember},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ScheduleMember entity by its id.
+func (c *ScheduleMemberClient) Get(ctx context.Context, id int64) (*ScheduleMember, error) {
+	return c.Query().Where(schedulemember.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScheduleMemberClient) GetX(ctx context.Context, id int64) *ScheduleMember {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QuerySchedule queries the schedule edge of a ScheduleMember.
+func (c *ScheduleMemberClient) QuerySchedule(sm *ScheduleMember) *ScheduleQuery {
+	query := (&ScheduleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := sm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(schedulemember.Table, schedulemember.FieldID, id),
+			sqlgraph.To(schedule.Table, schedule.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, schedulemember.ScheduleTable, schedulemember.ScheduleColumn),
+		)
+		fromV = sqlgraph.Neighbors(sm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ScheduleMemberClient) Hooks() []Hook {
+	return c.hooks.ScheduleMember
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScheduleMemberClient) Interceptors() []Interceptor {
+	return c.inters.ScheduleMember
+}
+
+func (c *ScheduleMemberClient) mutate(ctx context.Context, m *ScheduleMemberMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScheduleMemberCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScheduleMemberUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScheduleMemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScheduleMemberDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ScheduleMember mutation op: %q", m.Op())
 	}
 }
 
@@ -5656,14 +6555,16 @@ type (
 		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
 		Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail, EntryLogs,
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
-		MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount, OrderItem,
-		OrderPay, OrderSales, Role, Token, User, Venue, VenuePlace []ent.Hook
+		MemberProduct, MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount,
+		OrderItem, OrderPay, OrderSales, Product, Role, Schedule, ScheduleCoach,
+		ScheduleMember, Token, User, Venue, VenuePlace []ent.Hook
 	}
 	inters struct {
 		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
 		Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail, EntryLogs,
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
-		MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount, OrderItem,
-		OrderPay, OrderSales, Role, Token, User, Venue, VenuePlace []ent.Interceptor
+		MemberProduct, MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount,
+		OrderItem, OrderPay, OrderSales, Product, Role, Schedule, ScheduleCoach,
+		ScheduleMember, Token, User, Venue, VenuePlace []ent.Interceptor
 	}
 )

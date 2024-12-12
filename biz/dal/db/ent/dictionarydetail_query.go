@@ -26,6 +26,8 @@ type DictionaryDetailQuery struct {
 	predicates     []predicate.DictionaryDetail
 	withDictionary *DictionaryQuery
 	withUsers      *UserQuery
+	withProducts   *UserQuery
+	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -99,6 +101,28 @@ func (ddq *DictionaryDetailQuery) QueryUsers() *UserQuery {
 			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.UsersTable, dictionarydetail.UsersPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProducts chains the current query on the "products" edge.
+func (ddq *DictionaryDetailQuery) QueryProducts() *UserQuery {
+	query := (&UserClient{config: ddq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ddq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ddq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.ProductsTable, dictionarydetail.ProductsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
 		return fromU, nil
@@ -300,6 +324,7 @@ func (ddq *DictionaryDetailQuery) Clone() *DictionaryDetailQuery {
 		predicates:     append([]predicate.DictionaryDetail{}, ddq.predicates...),
 		withDictionary: ddq.withDictionary.Clone(),
 		withUsers:      ddq.withUsers.Clone(),
+		withProducts:   ddq.withProducts.Clone(),
 		// clone intermediate query.
 		sql:  ddq.sql.Clone(),
 		path: ddq.path,
@@ -325,6 +350,17 @@ func (ddq *DictionaryDetailQuery) WithUsers(opts ...func(*UserQuery)) *Dictionar
 		opt(query)
 	}
 	ddq.withUsers = query
+	return ddq
+}
+
+// WithProducts tells the query-builder to eager-load the nodes that are connected to
+// the "products" edge. The optional arguments are used to configure the query builder of the edge.
+func (ddq *DictionaryDetailQuery) WithProducts(opts ...func(*UserQuery)) *DictionaryDetailQuery {
+	query := (&UserClient{config: ddq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ddq.withProducts = query
 	return ddq
 }
 
@@ -405,12 +441,17 @@ func (ddq *DictionaryDetailQuery) prepareQuery(ctx context.Context) error {
 func (ddq *DictionaryDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DictionaryDetail, error) {
 	var (
 		nodes       = []*DictionaryDetail{}
+		withFKs     = ddq.withFKs
 		_spec       = ddq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			ddq.withDictionary != nil,
 			ddq.withUsers != nil,
+			ddq.withProducts != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, dictionarydetail.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DictionaryDetail).scanValues(nil, columns)
 	}
@@ -439,6 +480,13 @@ func (ddq *DictionaryDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		if err := ddq.loadUsers(ctx, query, nodes,
 			func(n *DictionaryDetail) { n.Edges.Users = []*User{} },
 			func(n *DictionaryDetail, e *User) { n.Edges.Users = append(n.Edges.Users, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ddq.withProducts; query != nil {
+		if err := ddq.loadProducts(ctx, query, nodes,
+			func(n *DictionaryDetail) { n.Edges.Products = []*User{} },
+			func(n *DictionaryDetail, e *User) { n.Edges.Products = append(n.Edges.Products, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -528,6 +576,67 @@ func (ddq *DictionaryDetailQuery) loadUsers(ctx context.Context, query *UserQuer
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "users" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (ddq *DictionaryDetailQuery) loadProducts(ctx context.Context, query *UserQuery, nodes []*DictionaryDetail, init func(*DictionaryDetail), assign func(*DictionaryDetail, *User)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int64]*DictionaryDetail)
+	nids := make(map[int64]map[*DictionaryDetail]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(dictionarydetail.ProductsTable)
+		s.Join(joinT).On(s.C(user.FieldID), joinT.C(dictionarydetail.ProductsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(dictionarydetail.ProductsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(dictionarydetail.ProductsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullInt64).Int64
+				inValue := values[1].(*sql.NullInt64).Int64
+				if nids[inValue] == nil {
+					nids[inValue] = map[*DictionaryDetail]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*User](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "products" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)

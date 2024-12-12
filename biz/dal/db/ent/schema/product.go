@@ -1,0 +1,60 @@
+package schema
+
+import (
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
+	"saas/biz/dal/db/ent/schema/mixins"
+)
+
+type Product struct {
+	ent.Schema
+}
+
+func (Product) Fields() []ent.Field {
+	return []ent.Field{
+		field.String("type").Comment("类型").Optional(),
+		field.String("name").Comment("商品名").Optional(),
+		field.Int64("stock").Comment("库存").Optional(),
+		field.Int64("deadline").Comment("激活期限").Optional(),
+		field.Int64("duration").Comment("有效期").Optional(),
+		field.Int64("length").Comment("单次时长").Optional(),
+		field.JSON("sales", [][]string{}).Comment("售卖信息[售价等]").Optional(),
+		field.Int64("is_sales").Comment("销售方式 1会员端").Optional(),
+		field.Time("sign_sales_at").Comment("开始售卖时间").Optional(),
+		field.Time("end_sales_at").Comment("结束售卖时间").Optional(),
+		field.String("pic").Comment("主图").Optional(),
+		field.Text("description").Comment("详情").Optional(),
+	}
+}
+
+func (Product) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixins.BaseMixin{},
+		mixins.StatusMixin{},
+	}
+}
+
+func (Product) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("tag", DictionaryDetail.Type),
+		edge.To("contracts", Contract.Type),
+	}
+}
+
+func (Product) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("id").
+			Unique(),
+	}
+}
+
+func (Product) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: "product", Options: "AUTO_INCREMENT = 100000"},
+		entsql.WithComments(true),
+	}
+}

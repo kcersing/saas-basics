@@ -19,7 +19,7 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 	}
 
 	var contestName string
-	contests, _ := o.db.Contest.Query().Where(contest.ID(req.ContestId)).First(o.ctx)
+	contests, _ := o.db.Contest.Query().Where(contest.ID(req.NodeId)).First(o.ctx)
 	if contests != nil {
 		contestName = contests.Name
 	}
@@ -68,7 +68,7 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 		tx.OrderItem.Create().
 			SetOrder(one).
 			SetName(contestName).
-			SetContestID(req.ContestId).
+			SetContestID(req.NodeId).
 			Save(o.ctx)
 		if err != nil {
 			err = errors.Wrap(err, "创建 Order Item 失败")
@@ -107,7 +107,7 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 }
 
 func (o Order) ContestStock(req do.CreateParticipantOrderReq) bool {
-	first, err := o.db.Contest.Query().Where(contest.ID(req.ContestId)).First(o.ctx)
+	first, err := o.db.Contest.Query().Where(contest.ID(req.NodeId)).First(o.ctx)
 	if err != nil {
 		return false
 	}

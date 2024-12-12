@@ -36,6 +36,8 @@ const (
 	FieldPassword = "password"
 	// FieldFunctions holds the string denoting the functions field in the database.
 	FieldFunctions = "functions"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// FieldJobTime holds the string denoting the job_time field in the database.
 	FieldJobTime = "job_time"
 	// FieldRoleID holds the string denoting the role_id field in the database.
@@ -98,6 +100,7 @@ var Columns = []string{
 	FieldUsername,
 	FieldPassword,
 	FieldFunctions,
+	FieldType,
 	FieldJobTime,
 	FieldRoleID,
 	FieldDefaultVenueID,
@@ -136,6 +139,8 @@ var (
 	DefaultStatus int64
 	// DefaultGender holds the default value on creation for the "gender" field.
 	DefaultGender int64
+	// DefaultType holds the default value on creation for the "type" field.
+	DefaultType int64
 	// DefaultJobTime holds the default value on creation for the "job_time" field.
 	DefaultJobTime int64
 	// DefaultRoleID holds the default value on creation for the "role_id" field.
@@ -203,6 +208,11 @@ func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 // ByFunctions orders the results by the functions field.
 func ByFunctions(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFunctions, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByJobTime orders the results by the job_time field.
