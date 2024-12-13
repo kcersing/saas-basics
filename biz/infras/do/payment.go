@@ -1,8 +1,14 @@
 package do
 
-import "saas/idl_gen/model/payment"
+import (
+	"github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/response"
+	"saas/idl_gen/model/payment"
+)
 
 type Payment interface {
-	WXPay(payment.WXPayReq) error
-	WXNotify(payment.WXNotifyReq) error
+	UnifyPay(req payment.PayReq) (interface{}, error)
+	QRPay(req payment.PayReq) (interface{}, error)
+	RefundOrder(req payment.RefundOrderReq) (*response.ResponseRefund, error)
+
+	Notify(req payment.NotifyReq) error
 }

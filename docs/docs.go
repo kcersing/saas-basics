@@ -2684,8 +2684,6 @@ const docTemplate = `{
         },
         "/service/payment/WXPay": {
             "post": {
-                "description": "WXPay.",
-                "summary": "WXPay.",
                 "responses": {}
             }
         },

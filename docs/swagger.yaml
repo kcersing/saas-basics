@@ -2742,9 +2742,7 @@ paths:
       responses: {}
   /service/payment/WXPay:
     post:
-      description: WXPay.
       responses: {}
-      summary: WXPay.
   /service/place/create:
     post:
       description: 创建场地 Description

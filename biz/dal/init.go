@@ -8,7 +8,6 @@ import (
 	"saas/biz/dal/db"
 	"saas/biz/dal/logger"
 	"saas/biz/dal/minio"
-	"saas/biz/dal/wechat"
 )
 
 func Init() {
@@ -23,7 +22,11 @@ func Init() {
 	data.NewInitDatabase().InitDatabaseDict()
 	data.NewInitDatabase().InsertDatabaseMenuData()
 	data.NewInitDatabase().InitDatabaseApi()
-	wechat.InitWXPaymentApp()
 
 	go minio.Init()
+
+	go func() {
+		//wechat.InitWXPaymentApp()
+		//wechat.InitMiniProgramApp()
+	}()
 }

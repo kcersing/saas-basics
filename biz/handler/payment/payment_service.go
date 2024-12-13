@@ -4,6 +4,7 @@ package payment
 
 import (
 	"context"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	base "saas/idl_gen/model/base"
@@ -11,12 +12,26 @@ import (
 )
 
 // WXPay .
-// @Summary  WXPay.
-// @Description WXPay.
 // @router /service/payment/WXPay [POST]
 func WXPay(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req payment.WXPayReq
+	var req payment.PayReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// WXQRPay .
+// @router /service/payment/WXQRPay [POST]
+func WXQRPay(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req payment.PayReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -32,7 +47,23 @@ func WXPay(ctx context.Context, c *app.RequestContext) {
 // @router /service/payment/WXNotify [POST]
 func WXNotify(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req payment.WXNotifyReq
+	var req payment.NotifyReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// WXRefundOrder .
+// @router /service/payment/WXRefundOrder [POST]
+func WXRefundOrder(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req payment.NotifyReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())

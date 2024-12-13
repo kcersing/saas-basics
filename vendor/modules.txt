@@ -34,58 +34,155 @@ entgo.io/ent/schema/edge
 entgo.io/ent/schema/field
 entgo.io/ent/schema/index
 entgo.io/ent/schema/mixin
-# github.com/ArtisanCloud/PowerLibs/v2 v2.0.49
-## explicit; go 1.17
-github.com/ArtisanCloud/PowerLibs/v2/cache
-github.com/ArtisanCloud/PowerLibs/v2/fmt
-github.com/ArtisanCloud/PowerLibs/v2/http/contract
-github.com/ArtisanCloud/PowerLibs/v2/http/drivers/gout
-github.com/ArtisanCloud/PowerLibs/v2/http/request
-github.com/ArtisanCloud/PowerLibs/v2/http/response
-github.com/ArtisanCloud/PowerLibs/v2/logger
-github.com/ArtisanCloud/PowerLibs/v2/logger/contract
-github.com/ArtisanCloud/PowerLibs/v2/logger/drivers/zap
-github.com/ArtisanCloud/PowerLibs/v2/object
-github.com/ArtisanCloud/PowerLibs/v2/security/encryption
-github.com/ArtisanCloud/PowerLibs/v2/security/sign
-# github.com/ArtisanCloud/PowerWeChat/v2 v2.0.40
-## explicit; go 1.17
-github.com/ArtisanCloud/PowerWeChat/v2/src/basicService/jssdk
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/contract
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/decorators
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/messages
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/models
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/power
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/providers
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/response
-github.com/ArtisanCloud/PowerWeChat/v2/src/kernel/support
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/base
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/bill
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/bill/response
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/jssdk
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/kernel
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/notify
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/notify/request
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/order
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/order/request
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/order/response
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/profitSharing
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/profitSharing/request
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/profitSharing/response
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/redpack
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/redpack/request
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/redpack/response
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/refund
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/refund/request
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/refund/response
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/reverse
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/reverse/response
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/sandbox
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer/request
-github.com/ArtisanCloud/PowerWeChat/v2/src/payment/transfer/response
+# github.com/ArtisanCloud/PowerLibs/v3 v3.2.6
+## explicit; go 1.23
+github.com/ArtisanCloud/PowerLibs/v3/cache
+github.com/ArtisanCloud/PowerLibs/v3/fmt
+github.com/ArtisanCloud/PowerLibs/v3/helper
+github.com/ArtisanCloud/PowerLibs/v3/http/contract
+github.com/ArtisanCloud/PowerLibs/v3/http/dataflow
+github.com/ArtisanCloud/PowerLibs/v3/http/drivers/http
+github.com/ArtisanCloud/PowerLibs/v3/http/helper
+github.com/ArtisanCloud/PowerLibs/v3/logger
+github.com/ArtisanCloud/PowerLibs/v3/logger/contract
+github.com/ArtisanCloud/PowerLibs/v3/logger/drivers
+github.com/ArtisanCloud/PowerLibs/v3/logger/drivers/zap
+github.com/ArtisanCloud/PowerLibs/v3/logger/lib
+github.com/ArtisanCloud/PowerLibs/v3/object
+github.com/ArtisanCloud/PowerLibs/v3/os
+github.com/ArtisanCloud/PowerLibs/v3/security/encryption
+github.com/ArtisanCloud/PowerLibs/v3/security/sign
+# github.com/ArtisanCloud/PowerWeChat/v3 v3.2.56
+## explicit; go 1.23
+github.com/ArtisanCloud/PowerWeChat/v3/src/basicService/jssdk
+github.com/ArtisanCloud/PowerWeChat/v3/src/basicService/subscribeMessage
+github.com/ArtisanCloud/PowerWeChat/v3/src/basicService/subscribeMessage/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/basicService/subscribeMessage/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/contract
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/decorators
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/messages
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/models
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/power
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/providers
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/support
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/auth
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/auth/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/base
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/base/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/base/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/customerServiceMessage
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/customerServiceMessage/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/customerServiceMessage/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/dataCube
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/dataCube/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/dataCube/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/express
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/express/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/image
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/image/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/immediateDelivery
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/immediateDelivery/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/industry/miniDrama/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/industry/miniDrama/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/industry/miniDrama/vod
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/internet
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/liveBroadcast
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/liveBroadcast/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/liveBroadcast/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/nearbyPoi
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/nearbyPoi/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/ocr
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/ocr/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/operation
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/operation/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/phoneNumber
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/phoneNumber/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/plugin
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/plugin/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/riskControl
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/riskControl/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/riskControl/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/search
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/search/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/security
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/security/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/server
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/serviceMarket
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/serviceMarket/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/serviceMarket/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/shortLink
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/shortLink/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/soter
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/soter/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/soter/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/uniformMessage
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/uniformMessage/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/updatableMessage
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/updatableMessage/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/updatableMessage/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/urlLink
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/urlLink/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/urlLink/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/urlScheme
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/urlScheme/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/urlScheme/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/virtualPayment
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/virtualPayment/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram/wxaCode
+github.com/ArtisanCloud/PowerWeChat/v3/src/officialAccount/device/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/officialAccount/server
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/apply4Sub
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/apply4Sub/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/apply4Sub/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/base
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/bill
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/bill/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/jssdk
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/kernel
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/merchant
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/merchant/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/merchant/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/merchantService
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/merchantService/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/merchantService/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/notify
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/notify/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/order
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/order/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/order/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/partner
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/partner/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/partner/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/payScore
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/payScore/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/payScore/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/profitSharing
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/profitSharing/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/profitSharing/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/redpack
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/redpack/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/redpack/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/reverse
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/reverse/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/sandbox
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/security
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/security/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/tax
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/tax/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/tax/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/transfer
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/transfer/request
+github.com/ArtisanCloud/PowerWeChat/v3/src/payment/transfer/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/work/media/response
+github.com/ArtisanCloud/PowerWeChat/v3/src/work/server/handlers
 # github.com/KyleBanks/depth v1.2.1
 ## explicit
 github.com/KyleBanks/depth
@@ -178,6 +275,9 @@ github.com/casbin/govaluate
 # github.com/cespare/xxhash/v2 v2.2.0
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
+# github.com/clbanning/mxj/v2 v2.7.0
+## explicit; go 1.15
+github.com/clbanning/mxj/v2
 # github.com/cloudwego/base64x v0.1.4
 ## explicit; go 1.16
 github.com/cloudwego/base64x
@@ -196,6 +296,7 @@ github.com/cloudwego/hertz/pkg/app/server/binding
 github.com/cloudwego/hertz/pkg/app/server/binding/internal/decoder
 github.com/cloudwego/hertz/pkg/app/server/registry
 github.com/cloudwego/hertz/pkg/app/server/render
+github.com/cloudwego/hertz/pkg/common/adaptor
 github.com/cloudwego/hertz/pkg/common/bytebufferpool
 github.com/cloudwego/hertz/pkg/common/compress
 github.com/cloudwego/hertz/pkg/common/config
@@ -304,28 +405,6 @@ github.com/go-openapi/spec
 # github.com/go-openapi/swag v0.22.4
 ## explicit; go 1.18
 github.com/go-openapi/swag
-# github.com/go-playground/locales v0.14.0
-## explicit; go 1.13
-github.com/go-playground/locales
-github.com/go-playground/locales/currency
-github.com/go-playground/locales/en
-# github.com/go-playground/universal-translator v0.18.0
-## explicit; go 1.13
-github.com/go-playground/universal-translator
-# github.com/go-playground/validator/v10 v10.11.1
-## explicit; go 1.13
-github.com/go-playground/validator/v10
-github.com/go-playground/validator/v10/translations/en
-# github.com/go-redis/redis/v8 v8.11.0
-## explicit; go 1.13
-github.com/go-redis/redis/v8
-github.com/go-redis/redis/v8/internal
-github.com/go-redis/redis/v8/internal/hashtag
-github.com/go-redis/redis/v8/internal/hscan
-github.com/go-redis/redis/v8/internal/pool
-github.com/go-redis/redis/v8/internal/proto
-github.com/go-redis/redis/v8/internal/rand
-github.com/go-redis/redis/v8/internal/util
 # github.com/go-sql-driver/mysql v1.7.1
 ## explicit; go 1.13
 github.com/go-sql-driver/mysql
@@ -365,20 +444,6 @@ github.com/google/uuid
 # github.com/gorilla/websocket v1.5.1
 ## explicit; go 1.20
 github.com/gorilla/websocket
-# github.com/guonaihong/gout v0.3.1
-## explicit; go 1.18
-github.com/guonaihong/gout
-github.com/guonaihong/gout/bench
-github.com/guonaihong/gout/color
-github.com/guonaihong/gout/core
-github.com/guonaihong/gout/dataflow
-github.com/guonaihong/gout/debug
-github.com/guonaihong/gout/decode
-github.com/guonaihong/gout/encode
-github.com/guonaihong/gout/export
-github.com/guonaihong/gout/filter
-github.com/guonaihong/gout/interface
-github.com/guonaihong/gout/setting
 # github.com/hashicorp/hcl v1.0.0
 ## explicit
 github.com/hashicorp/hcl
@@ -497,9 +562,6 @@ github.com/kr/pretty
 # github.com/kr/text v0.2.0
 ## explicit
 github.com/kr/text
-# github.com/leodido/go-urn v1.2.1
-## explicit; go 1.13
-github.com/leodido/go-urn
 # github.com/lib/pq v1.10.2
 ## explicit; go 1.13
 github.com/lib/pq
@@ -514,9 +576,6 @@ github.com/mailru/easyjson
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
-# github.com/mattn/go-isatty v0.0.17
-## explicit; go 1.15
-github.com/mattn/go-isatty
 # github.com/minio/md5-simd v1.1.2
 ## explicit; go 1.14
 github.com/minio/md5-simd
@@ -578,6 +637,16 @@ github.com/pelletier/go-toml/v2/unstable
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
+# github.com/redis/go-redis/v9 v9.0.3
+## explicit; go 1.18
+github.com/redis/go-redis/v9
+github.com/redis/go-redis/v9/internal
+github.com/redis/go-redis/v9/internal/hashtag
+github.com/redis/go-redis/v9/internal/hscan
+github.com/redis/go-redis/v9/internal/pool
+github.com/redis/go-redis/v9/internal/proto
+github.com/redis/go-redis/v9/internal/rand
+github.com/redis/go-redis/v9/internal/util
 # github.com/richardlehane/mscfb v1.0.4
 ## explicit
 github.com/richardlehane/mscfb
@@ -636,8 +705,6 @@ github.com/spf13/viper/internal/encoding/json
 github.com/spf13/viper/internal/encoding/toml
 github.com/spf13/viper/internal/encoding/yaml
 github.com/spf13/viper/internal/features
-# github.com/stretchr/testify v1.9.0
-## explicit; go 1.17
 # github.com/subosito/gotenv v1.6.0
 ## explicit; go 1.18
 github.com/subosito/gotenv
@@ -732,7 +799,6 @@ golang.org/x/crypto/internal/poly1305
 golang.org/x/crypto/md4
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/ripemd160
-golang.org/x/crypto/sha3
 # golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 ## explicit; go 1.20
 golang.org/x/exp/constraints
@@ -843,9 +909,6 @@ gopkg.in/ini.v1
 # gopkg.in/natefinch/lumberjack.v2 v2.2.1
 ## explicit; go 1.13
 gopkg.in/natefinch/lumberjack.v2
-# gopkg.in/yaml.v2 v2.4.0
-## explicit; go 1.15
-gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3

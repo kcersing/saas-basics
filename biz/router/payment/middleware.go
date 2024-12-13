@@ -40,3 +40,18 @@ func _serviceMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _wxrefundorderMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _wxqrpayMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _wxrefundnotifyMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

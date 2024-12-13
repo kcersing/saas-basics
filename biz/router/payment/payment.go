@@ -23,6 +23,8 @@ func Register(r *server.Hertz) {
 			_payment := _service.Group("/payment", _paymentMw()...)
 			_payment.POST("/WXNotify", append(_wxnotifyMw(), payment.WXNotify)...)
 			_payment.POST("/WXPay", append(_wxpayMw(), payment.WXPay)...)
+			_payment.POST("/WXQRPay", append(_wxqrpayMw(), payment.WXQRPay)...)
+			_payment.POST("/WXRefundOrder", append(_wxrefundorderMw(), payment.WXRefundOrder)...)
 		}
 	}
 }
