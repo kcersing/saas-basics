@@ -4,6 +4,9 @@ package product
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -12,38 +15,64 @@ import (
 )
 
 // CreateProduct .
+//
+//	@Summary		创建产品 Summary
+//	@Description	创建产品 Description
+//	@Param			request	body		product.CreateOrUpdateProductReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/product/create [POST]
 func CreateProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req product.ProductInfo
+	var req product.CreateOrUpdateProductReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewProduct(ctx, c).CreateProduct(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateProduct .
+//
+//	@Summary		更新产品 Summary
+//	@Description	更新产品 Description
+//	@Param			request	body		product.CreateOrUpdateProductReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/product/update [POST]
 func UpdateProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req product.ProductInfo
+	var req product.CreateOrUpdateProductReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewProduct(ctx, c).UpdateProduct(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // DeleteProduct .
+//
+//	@Summary		删除产品 Summary
+//	@Description	删除产品 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/product/del [POST]
 func DeleteProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -54,12 +83,22 @@ func DeleteProduct(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewProduct(ctx, c).DeleteProduct(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ProductList .
+//
+//	@Summary		获取产品列表 Summary
+//	@Description	获取产品列表 Description
+//	@Param			request	body		product.ProductListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/product/list [POST]
 func ProductList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -70,12 +109,22 @@ func ProductList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewProduct(ctx, c).ProductList(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // UpdateProductStatus .
+//
+//	@Summary		更新产品状态 Summary
+//	@Description	更新产品状态 Description
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/product/status [POST]
 func UpdateProductStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -86,12 +135,22 @@ func UpdateProductStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewProduct(ctx, c).UpdateProductStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ProductInfo .
+//
+//	@Summary		获取产品详情 Summary
+//	@Description	获取产品详情 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/product/info [POST]
 func ProductInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -102,12 +161,22 @@ func ProductInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewProduct(ctx, c).ProductInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }
 
 // ProductListExport .
+//
+//	@Summary		导出产品列表 Summary
+//	@Description	导出产品列表 Description
+//	@Param			request	body		product.ProductListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/product/export [POST]
 func ProductListExport(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -117,8 +186,12 @@ func ProductListExport(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	export, err := service.NewProduct(ctx, c).ProductListExport(&req)
+	if err != nil {
+		utils.SendResponse(c, errno.DirtyData, nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, map[string]string{
+		"url": export,
+	}, 0, "")
 }

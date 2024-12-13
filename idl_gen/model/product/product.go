@@ -2859,9 +2859,9 @@ func (p *ProductListReq) String() string {
 
 type ProductService interface {
 	// 添加商品
-	CreateProduct(ctx context.Context, req *ProductInfo) (r *base.NilResponse, err error)
+	CreateProduct(ctx context.Context, req *CreateOrUpdateProductReq) (r *base.NilResponse, err error)
 	// 编辑商品
-	UpdateProduct(ctx context.Context, req *ProductInfo) (r *base.NilResponse, err error)
+	UpdateProduct(ctx context.Context, req *CreateOrUpdateProductReq) (r *base.NilResponse, err error)
 	// 删除商品
 	DeleteProduct(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	// 商品列表
@@ -2900,7 +2900,7 @@ func (p *ProductServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
-func (p *ProductServiceClient) CreateProduct(ctx context.Context, req *ProductInfo) (r *base.NilResponse, err error) {
+func (p *ProductServiceClient) CreateProduct(ctx context.Context, req *CreateOrUpdateProductReq) (r *base.NilResponse, err error) {
 	var _args ProductServiceCreateProductArgs
 	_args.Req = req
 	var _result ProductServiceCreateProductResult
@@ -2909,7 +2909,7 @@ func (p *ProductServiceClient) CreateProduct(ctx context.Context, req *ProductIn
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ProductServiceClient) UpdateProduct(ctx context.Context, req *ProductInfo) (r *base.NilResponse, err error) {
+func (p *ProductServiceClient) UpdateProduct(ctx context.Context, req *CreateOrUpdateProductReq) (r *base.NilResponse, err error) {
 	var _args ProductServiceUpdateProductArgs
 	_args.Req = req
 	var _result ProductServiceUpdateProductResult
@@ -3348,7 +3348,7 @@ func (p *productServiceProcessorProductListExport) Process(ctx context.Context, 
 }
 
 type ProductServiceCreateProductArgs struct {
-	Req *ProductInfo `thrift:"req,1"`
+	Req *CreateOrUpdateProductReq `thrift:"req,1"`
 }
 
 func NewProductServiceCreateProductArgs() *ProductServiceCreateProductArgs {
@@ -3358,9 +3358,9 @@ func NewProductServiceCreateProductArgs() *ProductServiceCreateProductArgs {
 func (p *ProductServiceCreateProductArgs) InitDefault() {
 }
 
-var ProductServiceCreateProductArgs_Req_DEFAULT *ProductInfo
+var ProductServiceCreateProductArgs_Req_DEFAULT *CreateOrUpdateProductReq
 
-func (p *ProductServiceCreateProductArgs) GetReq() (v *ProductInfo) {
+func (p *ProductServiceCreateProductArgs) GetReq() (v *CreateOrUpdateProductReq) {
 	if !p.IsSetReq() {
 		return ProductServiceCreateProductArgs_Req_DEFAULT
 	}
@@ -3432,7 +3432,7 @@ ReadStructEndError:
 }
 
 func (p *ProductServiceCreateProductArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewProductInfo()
+	_field := NewCreateOrUpdateProductReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -3642,7 +3642,7 @@ func (p *ProductServiceCreateProductResult) String() string {
 }
 
 type ProductServiceUpdateProductArgs struct {
-	Req *ProductInfo `thrift:"req,1"`
+	Req *CreateOrUpdateProductReq `thrift:"req,1"`
 }
 
 func NewProductServiceUpdateProductArgs() *ProductServiceUpdateProductArgs {
@@ -3652,9 +3652,9 @@ func NewProductServiceUpdateProductArgs() *ProductServiceUpdateProductArgs {
 func (p *ProductServiceUpdateProductArgs) InitDefault() {
 }
 
-var ProductServiceUpdateProductArgs_Req_DEFAULT *ProductInfo
+var ProductServiceUpdateProductArgs_Req_DEFAULT *CreateOrUpdateProductReq
 
-func (p *ProductServiceUpdateProductArgs) GetReq() (v *ProductInfo) {
+func (p *ProductServiceUpdateProductArgs) GetReq() (v *CreateOrUpdateProductReq) {
 	if !p.IsSetReq() {
 		return ProductServiceUpdateProductArgs_Req_DEFAULT
 	}
@@ -3726,7 +3726,7 @@ ReadStructEndError:
 }
 
 func (p *ProductServiceUpdateProductArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewProductInfo()
+	_field := NewCreateOrUpdateProductReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}

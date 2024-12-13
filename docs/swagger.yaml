@@ -103,6 +103,13 @@ definitions:
       pageSize:
         type: integer
     type: object
+  base.Sales:
+    properties:
+      number:
+        type: integer
+      price:
+        type: number
+    type: object
   base.StatusCodeReq:
     properties:
       id:
@@ -779,6 +786,63 @@ definitions:
         type: array
     type: object
   order.UpdateOrderReq:
+    type: object
+  product.CreateOrUpdateProductReq:
+    properties:
+      contractId:
+        items:
+          type: integer
+        type: array
+      deadline:
+        type: integer
+      description:
+        type: string
+      duration:
+        type: integer
+      endSalesAt:
+        type: string
+      id:
+        type: integer
+      is_sales:
+        type: integer
+      length:
+        type: integer
+      name:
+        type: string
+      pic:
+        type: string
+      sales:
+        items:
+          $ref: '#/definitions/base.Sales'
+        type: array
+      signSalesAt:
+        type: string
+      status:
+        type: integer
+      stock:
+        type: integer
+      tagId:
+        items:
+          type: integer
+        type: array
+      type:
+        type: string
+    type: object
+  product.ProductListReq:
+    properties:
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        items:
+          type: integer
+        type: array
+      type:
+        description: 类型
+        type: string
     type: object
   token.TokenInfo:
     properties:
@@ -2747,25 +2811,116 @@ paths:
       summary: 更新场地 Summary
   /service/product/create:
     post:
-      responses: {}
+      description: 创建产品 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.CreateOrUpdateProductReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 创建产品 Summary
   /service/product/del:
     post:
-      responses: {}
+      description: 删除产品 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除产品 Summary
   /service/product/export:
     post:
-      responses: {}
+      description: 导出产品列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.ProductListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 导出产品列表 Summary
   /service/product/info:
     post:
-      responses: {}
+      description: 获取产品详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取产品详情 Summary
   /service/product/list:
     post:
-      responses: {}
+      description: 获取产品列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.ProductListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取产品列表 Summary
   /service/product/status:
     post:
-      responses: {}
+      description: 更新产品状态 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新产品状态 Summary
   /service/product/update:
     post:
-      responses: {}
+      description: 更新产品 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.CreateOrUpdateProductReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新产品 Summary
   /service/role:
     get:
       description: 获取角色信息 Description

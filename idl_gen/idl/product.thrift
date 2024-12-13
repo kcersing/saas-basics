@@ -59,9 +59,9 @@ struct ProductListReq {
 service ProductService {
 
     // 添加商品
-    base.NilResponse CreateProduct(1: ProductInfo req) (api.post = "/service/product/create")
+    base.NilResponse CreateProduct(1: CreateOrUpdateProductReq req) (api.post = "/service/product/create")
     // 编辑商品
-    base.NilResponse UpdateProduct(1: ProductInfo req) (api.post = "/service/product/update")
+    base.NilResponse UpdateProduct(1: CreateOrUpdateProductReq req) (api.post = "/service/product/update")
     // 删除商品
     base.NilResponse DeleteProduct(1: base.IDReq req) (api.post = "/service/product/del")
     // 商品列表
