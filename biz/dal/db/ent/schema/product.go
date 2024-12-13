@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"saas/biz/dal/db/ent/schema/mixins"
+	"saas/idl_gen/model/base"
 )
 
 type Product struct {
@@ -22,7 +23,7 @@ func (Product) Fields() []ent.Field {
 		field.Int64("deadline").Comment("激活期限").Optional(),
 		field.Int64("duration").Comment("有效期").Optional(),
 		field.Int64("length").Comment("单次时长").Optional(),
-		field.JSON("sales", [][]string{}).Comment("售卖信息[售价等]").Optional(),
+		field.JSON("sales", []*base.Sales{}).Comment("售卖信息[售价等]").Optional(),
 		field.Int64("is_sales").Comment("销售方式 1会员端").Optional(),
 		field.Time("sign_sales_at").Comment("开始售卖时间").Optional(),
 		field.Time("end_sales_at").Comment("结束售卖时间").Optional(),

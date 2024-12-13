@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
+	"saas/idl_gen/model/base"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -273,14 +274,14 @@ func (pu *ProductUpdate) ClearLength() *ProductUpdate {
 }
 
 // SetSales sets the "sales" field.
-func (pu *ProductUpdate) SetSales(s [][]string) *ProductUpdate {
-	pu.mutation.SetSales(s)
+func (pu *ProductUpdate) SetSales(b []*base.Sales) *ProductUpdate {
+	pu.mutation.SetSales(b)
 	return pu
 }
 
-// AppendSales appends s to the "sales" field.
-func (pu *ProductUpdate) AppendSales(s [][]string) *ProductUpdate {
-	pu.mutation.AppendSales(s)
+// AppendSales appends b to the "sales" field.
+func (pu *ProductUpdate) AppendSales(b []*base.Sales) *ProductUpdate {
+	pu.mutation.AppendSales(b)
 	return pu
 }
 
@@ -999,14 +1000,14 @@ func (puo *ProductUpdateOne) ClearLength() *ProductUpdateOne {
 }
 
 // SetSales sets the "sales" field.
-func (puo *ProductUpdateOne) SetSales(s [][]string) *ProductUpdateOne {
-	puo.mutation.SetSales(s)
+func (puo *ProductUpdateOne) SetSales(b []*base.Sales) *ProductUpdateOne {
+	puo.mutation.SetSales(b)
 	return puo
 }
 
-// AppendSales appends s to the "sales" field.
-func (puo *ProductUpdateOne) AppendSales(s [][]string) *ProductUpdateOne {
-	puo.mutation.AppendSales(s)
+// AppendSales appends b to the "sales" field.
+func (puo *ProductUpdateOne) AppendSales(b []*base.Sales) *ProductUpdateOne {
+	puo.mutation.AppendSales(b)
 	return puo
 }
 

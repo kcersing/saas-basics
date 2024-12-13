@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"saas/biz/dal/db/ent/product"
+	"saas/idl_gen/model/base"
 	"strings"
 	"time"
 
@@ -42,7 +43,7 @@ type Product struct {
 	// 单次时长
 	Length int64 `json:"length,omitempty"`
 	// 售卖信息[售价等]
-	Sales [][]string `json:"sales,omitempty"`
+	Sales []*base.Sales `json:"sales,omitempty"`
 	// 销售方式 1会员端
 	IsSales int64 `json:"is_sales,omitempty"`
 	// 开始售卖时间

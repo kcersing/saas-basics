@@ -44,6 +44,7 @@ import (
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/idl_gen/model/base"
 	"sync"
 	"time"
 
@@ -42416,8 +42417,8 @@ type ProductMutation struct {
 	addduration      *int64
 	length           *int64
 	addlength        *int64
-	sales            *[][]string
-	appendsales      [][]string
+	sales            *[]*base.Sales
+	appendsales      []*base.Sales
 	is_sales         *int64
 	addis_sales      *int64
 	sign_sales_at    *time.Time
@@ -43227,13 +43228,13 @@ func (m *ProductMutation) ResetLength() {
 }
 
 // SetSales sets the "sales" field.
-func (m *ProductMutation) SetSales(s [][]string) {
-	m.sales = &s
+func (m *ProductMutation) SetSales(b []*base.Sales) {
+	m.sales = &b
 	m.appendsales = nil
 }
 
 // Sales returns the value of the "sales" field in the mutation.
-func (m *ProductMutation) Sales() (r [][]string, exists bool) {
+func (m *ProductMutation) Sales() (r []*base.Sales, exists bool) {
 	v := m.sales
 	if v == nil {
 		return
@@ -43244,7 +43245,7 @@ func (m *ProductMutation) Sales() (r [][]string, exists bool) {
 // OldSales returns the old "sales" field's value of the Product entity.
 // If the Product object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductMutation) OldSales(ctx context.Context) (v [][]string, err error) {
+func (m *ProductMutation) OldSales(ctx context.Context) (v []*base.Sales, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldSales is only allowed on UpdateOne operations")
 	}
@@ -43258,13 +43259,13 @@ func (m *ProductMutation) OldSales(ctx context.Context) (v [][]string, err error
 	return oldValue.Sales, nil
 }
 
-// AppendSales adds s to the "sales" field.
-func (m *ProductMutation) AppendSales(s [][]string) {
-	m.appendsales = append(m.appendsales, s...)
+// AppendSales adds b to the "sales" field.
+func (m *ProductMutation) AppendSales(b []*base.Sales) {
+	m.appendsales = append(m.appendsales, b...)
 }
 
 // AppendedSales returns the list of values that were appended to the "sales" field in this mutation.
-func (m *ProductMutation) AppendedSales() ([][]string, bool) {
+func (m *ProductMutation) AppendedSales() ([]*base.Sales, bool) {
 	if len(m.appendsales) == 0 {
 		return nil, false
 	}
@@ -43923,7 +43924,7 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		m.SetLength(v)
 		return nil
 	case product.FieldSales:
-		v, ok := value.([][]string)
+		v, ok := value.([]*base.Sales)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

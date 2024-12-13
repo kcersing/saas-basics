@@ -10,173 +10,255 @@ import (
 )
 
 type ProductInfo struct {
-	ID          *int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	Name        *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
-	Pic         *string `thrift:"pic,3,optional" form:"pic" json:"pic" query:"pic"`
-	Description *string `thrift:"description,4,optional" form:"description" json:"description" query:"description"`
-	Stock       *int64  `thrift:"stock,5,optional" form:"stock" json:"stock" query:"stock"`
-	Status      *int64  `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
-	Duration    *int64  `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`
-	Length      *int64  `thrift:"length,8,optional" form:"length" json:"length" query:"length"`
-	Type        *string `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
-	Deadline    *string `thrift:"deadline,10,optional" form:"deadline" json:"deadline" query:"deadline"`
-	Sales       *string `thrift:"sales,11,optional" form:"sales" json:"sales" query:"sales"`
-	IsSales     *int64  `thrift:"is_sales,12,optional" form:"is_sales" json:"is_sales" query:"is_sales"`
-	SignSalesAt *string `thrift:"signSalesAt,13,optional" form:"signSalesAt" json:"signSalesAt" query:"signSalesAt"`
-	EndSalesAt  *string `thrift:"endSalesAt,14,optional" form:"endSalesAt" json:"endSalesAt" query:"endSalesAt"`
-	CreatedAt   *string `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
-	UpdatedAt   *string `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	ID          int64         `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	Name        string        `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	Pic         string        `thrift:"pic,3,optional" form:"pic" json:"pic" query:"pic"`
+	Description string        `thrift:"description,4,optional" form:"description" json:"description" query:"description"`
+	Stock       int64         `thrift:"stock,5,optional" form:"stock" json:"stock" query:"stock"`
+	Status      int64         `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
+	Duration    int64         `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`
+	Length      int64         `thrift:"length,8,optional" form:"length" json:"length" query:"length"`
+	Type        string        `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
+	Deadline    int64         `thrift:"deadline,10,optional" form:"deadline" json:"deadline" query:"deadline"`
+	Sales       []*base.Sales `thrift:"sales,11,optional" form:"sales" json:"sales" query:"sales"`
+	IsSales     int64         `thrift:"is_sales,12,optional" form:"is_sales" json:"is_sales" query:"is_sales"`
+	SignSalesAt string        `thrift:"signSalesAt,13,optional" form:"signSalesAt" json:"signSalesAt" query:"signSalesAt"`
+	EndSalesAt  string        `thrift:"endSalesAt,14,optional" form:"endSalesAt" json:"endSalesAt" query:"endSalesAt"`
+	CreatedAt   string        `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt   string        `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	Tags        []*base.List  `thrift:"tags,18,optional" form:"tags" json:"tags" query:"tags"`
+	Contracts   []*base.List  `thrift:"contracts,19,optional" form:"contracts" json:"contracts" query:"contracts"`
+	CreatedId   int64         `thrift:"createdId,20,optional" form:"createdId" json:"createdId" query:"createdId"`
+	CreatedName string        `thrift:"createdName,21,optional" form:"createdName" json:"createdName" query:"createdName"`
 }
 
 func NewProductInfo() *ProductInfo {
-	return &ProductInfo{}
+	return &ProductInfo{
+
+		ID:          0,
+		Name:        "",
+		Pic:         "",
+		Description: "",
+		Stock:       0,
+		Status:      0,
+		Duration:    0,
+		Length:      0,
+		Type:        "",
+		Deadline:    0,
+		Sales:       []*base.Sales{},
+		IsSales:     0,
+		SignSalesAt: "",
+		EndSalesAt:  "",
+		CreatedAt:   "",
+		UpdatedAt:   "",
+		Tags:        []*base.List{},
+		Contracts:   []*base.List{},
+		CreatedId:   0,
+		CreatedName: "",
+	}
 }
 
 func (p *ProductInfo) InitDefault() {
+	p.ID = 0
+	p.Name = ""
+	p.Pic = ""
+	p.Description = ""
+	p.Stock = 0
+	p.Status = 0
+	p.Duration = 0
+	p.Length = 0
+	p.Type = ""
+	p.Deadline = 0
+	p.Sales = []*base.Sales{}
+	p.IsSales = 0
+	p.SignSalesAt = ""
+	p.EndSalesAt = ""
+	p.CreatedAt = ""
+	p.UpdatedAt = ""
+	p.Tags = []*base.List{}
+	p.Contracts = []*base.List{}
+	p.CreatedId = 0
+	p.CreatedName = ""
 }
 
-var ProductInfo_ID_DEFAULT int64
+var ProductInfo_ID_DEFAULT int64 = 0
 
 func (p *ProductInfo) GetID() (v int64) {
 	if !p.IsSetID() {
 		return ProductInfo_ID_DEFAULT
 	}
-	return *p.ID
+	return p.ID
 }
 
-var ProductInfo_Name_DEFAULT string
+var ProductInfo_Name_DEFAULT string = ""
 
 func (p *ProductInfo) GetName() (v string) {
 	if !p.IsSetName() {
 		return ProductInfo_Name_DEFAULT
 	}
-	return *p.Name
+	return p.Name
 }
 
-var ProductInfo_Pic_DEFAULT string
+var ProductInfo_Pic_DEFAULT string = ""
 
 func (p *ProductInfo) GetPic() (v string) {
 	if !p.IsSetPic() {
 		return ProductInfo_Pic_DEFAULT
 	}
-	return *p.Pic
+	return p.Pic
 }
 
-var ProductInfo_Description_DEFAULT string
+var ProductInfo_Description_DEFAULT string = ""
 
 func (p *ProductInfo) GetDescription() (v string) {
 	if !p.IsSetDescription() {
 		return ProductInfo_Description_DEFAULT
 	}
-	return *p.Description
+	return p.Description
 }
 
-var ProductInfo_Stock_DEFAULT int64
+var ProductInfo_Stock_DEFAULT int64 = 0
 
 func (p *ProductInfo) GetStock() (v int64) {
 	if !p.IsSetStock() {
 		return ProductInfo_Stock_DEFAULT
 	}
-	return *p.Stock
+	return p.Stock
 }
 
-var ProductInfo_Status_DEFAULT int64
+var ProductInfo_Status_DEFAULT int64 = 0
 
 func (p *ProductInfo) GetStatus() (v int64) {
 	if !p.IsSetStatus() {
 		return ProductInfo_Status_DEFAULT
 	}
-	return *p.Status
+	return p.Status
 }
 
-var ProductInfo_Duration_DEFAULT int64
+var ProductInfo_Duration_DEFAULT int64 = 0
 
 func (p *ProductInfo) GetDuration() (v int64) {
 	if !p.IsSetDuration() {
 		return ProductInfo_Duration_DEFAULT
 	}
-	return *p.Duration
+	return p.Duration
 }
 
-var ProductInfo_Length_DEFAULT int64
+var ProductInfo_Length_DEFAULT int64 = 0
 
 func (p *ProductInfo) GetLength() (v int64) {
 	if !p.IsSetLength() {
 		return ProductInfo_Length_DEFAULT
 	}
-	return *p.Length
+	return p.Length
 }
 
-var ProductInfo_Type_DEFAULT string
+var ProductInfo_Type_DEFAULT string = ""
 
 func (p *ProductInfo) GetType() (v string) {
 	if !p.IsSetType() {
 		return ProductInfo_Type_DEFAULT
 	}
-	return *p.Type
+	return p.Type
 }
 
-var ProductInfo_Deadline_DEFAULT string
+var ProductInfo_Deadline_DEFAULT int64 = 0
 
-func (p *ProductInfo) GetDeadline() (v string) {
+func (p *ProductInfo) GetDeadline() (v int64) {
 	if !p.IsSetDeadline() {
 		return ProductInfo_Deadline_DEFAULT
 	}
-	return *p.Deadline
+	return p.Deadline
 }
 
-var ProductInfo_Sales_DEFAULT string
+var ProductInfo_Sales_DEFAULT []*base.Sales = []*base.Sales{}
 
-func (p *ProductInfo) GetSales() (v string) {
+func (p *ProductInfo) GetSales() (v []*base.Sales) {
 	if !p.IsSetSales() {
 		return ProductInfo_Sales_DEFAULT
 	}
-	return *p.Sales
+	return p.Sales
 }
 
-var ProductInfo_IsSales_DEFAULT int64
+var ProductInfo_IsSales_DEFAULT int64 = 0
 
 func (p *ProductInfo) GetIsSales() (v int64) {
 	if !p.IsSetIsSales() {
 		return ProductInfo_IsSales_DEFAULT
 	}
-	return *p.IsSales
+	return p.IsSales
 }
 
-var ProductInfo_SignSalesAt_DEFAULT string
+var ProductInfo_SignSalesAt_DEFAULT string = ""
 
 func (p *ProductInfo) GetSignSalesAt() (v string) {
 	if !p.IsSetSignSalesAt() {
 		return ProductInfo_SignSalesAt_DEFAULT
 	}
-	return *p.SignSalesAt
+	return p.SignSalesAt
 }
 
-var ProductInfo_EndSalesAt_DEFAULT string
+var ProductInfo_EndSalesAt_DEFAULT string = ""
 
 func (p *ProductInfo) GetEndSalesAt() (v string) {
 	if !p.IsSetEndSalesAt() {
 		return ProductInfo_EndSalesAt_DEFAULT
 	}
-	return *p.EndSalesAt
+	return p.EndSalesAt
 }
 
-var ProductInfo_CreatedAt_DEFAULT string
+var ProductInfo_CreatedAt_DEFAULT string = ""
 
 func (p *ProductInfo) GetCreatedAt() (v string) {
 	if !p.IsSetCreatedAt() {
 		return ProductInfo_CreatedAt_DEFAULT
 	}
-	return *p.CreatedAt
+	return p.CreatedAt
 }
 
-var ProductInfo_UpdatedAt_DEFAULT string
+var ProductInfo_UpdatedAt_DEFAULT string = ""
 
 func (p *ProductInfo) GetUpdatedAt() (v string) {
 	if !p.IsSetUpdatedAt() {
 		return ProductInfo_UpdatedAt_DEFAULT
 	}
-	return *p.UpdatedAt
+	return p.UpdatedAt
+}
+
+var ProductInfo_Tags_DEFAULT []*base.List = []*base.List{}
+
+func (p *ProductInfo) GetTags() (v []*base.List) {
+	if !p.IsSetTags() {
+		return ProductInfo_Tags_DEFAULT
+	}
+	return p.Tags
+}
+
+var ProductInfo_Contracts_DEFAULT []*base.List = []*base.List{}
+
+func (p *ProductInfo) GetContracts() (v []*base.List) {
+	if !p.IsSetContracts() {
+		return ProductInfo_Contracts_DEFAULT
+	}
+	return p.Contracts
+}
+
+var ProductInfo_CreatedId_DEFAULT int64 = 0
+
+func (p *ProductInfo) GetCreatedId() (v int64) {
+	if !p.IsSetCreatedId() {
+		return ProductInfo_CreatedId_DEFAULT
+	}
+	return p.CreatedId
+}
+
+var ProductInfo_CreatedName_DEFAULT string = ""
+
+func (p *ProductInfo) GetCreatedName() (v string) {
+	if !p.IsSetCreatedName() {
+		return ProductInfo_CreatedName_DEFAULT
+	}
+	return p.CreatedName
 }
 
 var fieldIDToName_ProductInfo = map[int16]string{
@@ -196,46 +278,50 @@ var fieldIDToName_ProductInfo = map[int16]string{
 	14: "endSalesAt",
 	16: "createdAt",
 	17: "updatedAt",
+	18: "tags",
+	19: "contracts",
+	20: "createdId",
+	21: "createdName",
 }
 
 func (p *ProductInfo) IsSetID() bool {
-	return p.ID != nil
+	return p.ID != ProductInfo_ID_DEFAULT
 }
 
 func (p *ProductInfo) IsSetName() bool {
-	return p.Name != nil
+	return p.Name != ProductInfo_Name_DEFAULT
 }
 
 func (p *ProductInfo) IsSetPic() bool {
-	return p.Pic != nil
+	return p.Pic != ProductInfo_Pic_DEFAULT
 }
 
 func (p *ProductInfo) IsSetDescription() bool {
-	return p.Description != nil
+	return p.Description != ProductInfo_Description_DEFAULT
 }
 
 func (p *ProductInfo) IsSetStock() bool {
-	return p.Stock != nil
+	return p.Stock != ProductInfo_Stock_DEFAULT
 }
 
 func (p *ProductInfo) IsSetStatus() bool {
-	return p.Status != nil
+	return p.Status != ProductInfo_Status_DEFAULT
 }
 
 func (p *ProductInfo) IsSetDuration() bool {
-	return p.Duration != nil
+	return p.Duration != ProductInfo_Duration_DEFAULT
 }
 
 func (p *ProductInfo) IsSetLength() bool {
-	return p.Length != nil
+	return p.Length != ProductInfo_Length_DEFAULT
 }
 
 func (p *ProductInfo) IsSetType() bool {
-	return p.Type != nil
+	return p.Type != ProductInfo_Type_DEFAULT
 }
 
 func (p *ProductInfo) IsSetDeadline() bool {
-	return p.Deadline != nil
+	return p.Deadline != ProductInfo_Deadline_DEFAULT
 }
 
 func (p *ProductInfo) IsSetSales() bool {
@@ -243,23 +329,39 @@ func (p *ProductInfo) IsSetSales() bool {
 }
 
 func (p *ProductInfo) IsSetIsSales() bool {
-	return p.IsSales != nil
+	return p.IsSales != ProductInfo_IsSales_DEFAULT
 }
 
 func (p *ProductInfo) IsSetSignSalesAt() bool {
-	return p.SignSalesAt != nil
+	return p.SignSalesAt != ProductInfo_SignSalesAt_DEFAULT
 }
 
 func (p *ProductInfo) IsSetEndSalesAt() bool {
-	return p.EndSalesAt != nil
+	return p.EndSalesAt != ProductInfo_EndSalesAt_DEFAULT
 }
 
 func (p *ProductInfo) IsSetCreatedAt() bool {
-	return p.CreatedAt != nil
+	return p.CreatedAt != ProductInfo_CreatedAt_DEFAULT
 }
 
 func (p *ProductInfo) IsSetUpdatedAt() bool {
-	return p.UpdatedAt != nil
+	return p.UpdatedAt != ProductInfo_UpdatedAt_DEFAULT
+}
+
+func (p *ProductInfo) IsSetTags() bool {
+	return p.Tags != nil
+}
+
+func (p *ProductInfo) IsSetContracts() bool {
+	return p.Contracts != nil
+}
+
+func (p *ProductInfo) IsSetCreatedId() bool {
+	return p.CreatedId != ProductInfo_CreatedId_DEFAULT
+}
+
+func (p *ProductInfo) IsSetCreatedName() bool {
+	return p.CreatedName != ProductInfo_CreatedName_DEFAULT
 }
 
 func (p *ProductInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -354,7 +456,7 @@ func (p *ProductInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 10:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField10(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -362,7 +464,7 @@ func (p *ProductInfo) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 11:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField11(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -409,6 +511,38 @@ func (p *ProductInfo) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
+		case 18:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField18(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 19:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField19(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 20:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField20(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 21:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField21(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -440,178 +574,258 @@ ReadStructEndError:
 
 func (p *ProductInfo) ReadField1(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.ID = _field
 	return nil
 }
 func (p *ProductInfo) ReadField2(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Name = _field
 	return nil
 }
 func (p *ProductInfo) ReadField3(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Pic = _field
 	return nil
 }
 func (p *ProductInfo) ReadField4(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Description = _field
 	return nil
 }
 func (p *ProductInfo) ReadField5(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Stock = _field
 	return nil
 }
 func (p *ProductInfo) ReadField6(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Status = _field
 	return nil
 }
 func (p *ProductInfo) ReadField7(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Duration = _field
 	return nil
 }
 func (p *ProductInfo) ReadField8(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Length = _field
 	return nil
 }
 func (p *ProductInfo) ReadField9(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Type = _field
 	return nil
 }
 func (p *ProductInfo) ReadField10(iprot thrift.TProtocol) error {
 
-	var _field *string
-	if v, err := iprot.ReadString(); err != nil {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Deadline = _field
 	return nil
 }
 func (p *ProductInfo) ReadField11(iprot thrift.TProtocol) error {
-
-	var _field *string
-	if v, err := iprot.ReadString(); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
 		return err
-	} else {
-		_field = &v
+	}
+	_field := make([]*base.Sales, 0, size)
+	values := make([]base.Sales, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
 	}
 	p.Sales = _field
 	return nil
 }
 func (p *ProductInfo) ReadField12(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.IsSales = _field
 	return nil
 }
 func (p *ProductInfo) ReadField13(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.SignSalesAt = _field
 	return nil
 }
 func (p *ProductInfo) ReadField14(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.EndSalesAt = _field
 	return nil
 }
 func (p *ProductInfo) ReadField16(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.CreatedAt = _field
 	return nil
 }
 func (p *ProductInfo) ReadField17(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.UpdatedAt = _field
+	return nil
+}
+func (p *ProductInfo) ReadField18(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*base.List, 0, size)
+	values := make([]base.List, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.Tags = _field
+	return nil
+}
+func (p *ProductInfo) ReadField19(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*base.List, 0, size)
+	values := make([]base.List, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.Contracts = _field
+	return nil
+}
+func (p *ProductInfo) ReadField20(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CreatedId = _field
+	return nil
+}
+func (p *ProductInfo) ReadField21(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CreatedName = _field
 	return nil
 }
 
@@ -685,6 +899,22 @@ func (p *ProductInfo) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 17
 			goto WriteFieldError
 		}
+		if err = p.writeField18(oprot); err != nil {
+			fieldId = 18
+			goto WriteFieldError
+		}
+		if err = p.writeField19(oprot); err != nil {
+			fieldId = 19
+			goto WriteFieldError
+		}
+		if err = p.writeField20(oprot); err != nil {
+			fieldId = 20
+			goto WriteFieldError
+		}
+		if err = p.writeField21(oprot); err != nil {
+			fieldId = 21
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -708,7 +938,7 @@ func (p *ProductInfo) writeField1(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.ID); err != nil {
+		if err := oprot.WriteI64(p.ID); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -727,7 +957,7 @@ func (p *ProductInfo) writeField2(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Name); err != nil {
+		if err := oprot.WriteString(p.Name); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -746,7 +976,7 @@ func (p *ProductInfo) writeField3(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("pic", thrift.STRING, 3); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Pic); err != nil {
+		if err := oprot.WriteString(p.Pic); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -765,7 +995,7 @@ func (p *ProductInfo) writeField4(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("description", thrift.STRING, 4); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Description); err != nil {
+		if err := oprot.WriteString(p.Description); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -784,7 +1014,7 @@ func (p *ProductInfo) writeField5(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("stock", thrift.I64, 5); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Stock); err != nil {
+		if err := oprot.WriteI64(p.Stock); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -803,7 +1033,7 @@ func (p *ProductInfo) writeField6(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("status", thrift.I64, 6); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Status); err != nil {
+		if err := oprot.WriteI64(p.Status); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -822,7 +1052,7 @@ func (p *ProductInfo) writeField7(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("duration", thrift.I64, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Duration); err != nil {
+		if err := oprot.WriteI64(p.Duration); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -841,7 +1071,7 @@ func (p *ProductInfo) writeField8(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("length", thrift.I64, 8); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Length); err != nil {
+		if err := oprot.WriteI64(p.Length); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -860,7 +1090,7 @@ func (p *ProductInfo) writeField9(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("type", thrift.STRING, 9); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Type); err != nil {
+		if err := oprot.WriteString(p.Type); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -876,10 +1106,10 @@ WriteFieldEndError:
 
 func (p *ProductInfo) writeField10(oprot thrift.TProtocol) (err error) {
 	if p.IsSetDeadline() {
-		if err = oprot.WriteFieldBegin("deadline", thrift.STRING, 10); err != nil {
+		if err = oprot.WriteFieldBegin("deadline", thrift.I64, 10); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Deadline); err != nil {
+		if err := oprot.WriteI64(p.Deadline); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -895,10 +1125,18 @@ WriteFieldEndError:
 
 func (p *ProductInfo) writeField11(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSales() {
-		if err = oprot.WriteFieldBegin("sales", thrift.STRING, 11); err != nil {
+		if err = oprot.WriteFieldBegin("sales", thrift.LIST, 11); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Sales); err != nil {
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Sales)); err != nil {
+			return err
+		}
+		for _, v := range p.Sales {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -917,7 +1155,7 @@ func (p *ProductInfo) writeField12(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("is_sales", thrift.I64, 12); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.IsSales); err != nil {
+		if err := oprot.WriteI64(p.IsSales); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -936,7 +1174,7 @@ func (p *ProductInfo) writeField13(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("signSalesAt", thrift.STRING, 13); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.SignSalesAt); err != nil {
+		if err := oprot.WriteString(p.SignSalesAt); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -955,7 +1193,7 @@ func (p *ProductInfo) writeField14(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("endSalesAt", thrift.STRING, 14); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.EndSalesAt); err != nil {
+		if err := oprot.WriteString(p.EndSalesAt); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -974,7 +1212,7 @@ func (p *ProductInfo) writeField16(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 16); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.CreatedAt); err != nil {
+		if err := oprot.WriteString(p.CreatedAt); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -993,7 +1231,7 @@ func (p *ProductInfo) writeField17(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 17); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.UpdatedAt); err != nil {
+		if err := oprot.WriteString(p.UpdatedAt); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1007,6 +1245,98 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
 }
 
+func (p *ProductInfo) writeField18(oprot thrift.TProtocol) (err error) {
+	if p.IsSetTags() {
+		if err = oprot.WriteFieldBegin("tags", thrift.LIST, 18); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Tags)); err != nil {
+			return err
+		}
+		for _, v := range p.Tags {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
+}
+
+func (p *ProductInfo) writeField19(oprot thrift.TProtocol) (err error) {
+	if p.IsSetContracts() {
+		if err = oprot.WriteFieldBegin("contracts", thrift.LIST, 19); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Contracts)); err != nil {
+			return err
+		}
+		for _, v := range p.Contracts {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 end error: ", p), err)
+}
+
+func (p *ProductInfo) writeField20(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreatedId() {
+		if err = oprot.WriteFieldBegin("createdId", thrift.I64, 20); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.CreatedId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 20 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 20 end error: ", p), err)
+}
+
+func (p *ProductInfo) writeField21(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreatedName() {
+		if err = oprot.WriteFieldBegin("createdName", thrift.STRING, 21); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.CreatedName); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 21 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 21 end error: ", p), err)
+}
+
 func (p *ProductInfo) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1016,22 +1346,22 @@ func (p *ProductInfo) String() string {
 }
 
 type CreateOrUpdateProductReq struct {
-	ID          int64   `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	Name        string  `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
-	Pic         string  `thrift:"pic,3,optional" form:"pic" json:"pic" query:"pic"`
-	Description string  `thrift:"description,4,optional" form:"description" json:"description" query:"description"`
-	Stock       int64   `thrift:"stock,5,optional" form:"stock" json:"stock" query:"stock"`
-	Status      int64   `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
-	Duration    int64   `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`
-	Length      int64   `thrift:"length,8,optional" form:"length" json:"length" query:"length"`
-	Type        string  `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
-	Deadline    string  `thrift:"deadline,10,optional" form:"deadline" json:"deadline" query:"deadline"`
-	Sales       string  `thrift:"sales,11,optional" form:"sales" json:"sales" query:"sales"`
-	IsSales     int64   `thrift:"is_sales,12,optional" form:"is_sales" json:"is_sales" query:"is_sales"`
-	SignSalesAt string  `thrift:"signSalesAt,13,optional" form:"signSalesAt" json:"signSalesAt" query:"signSalesAt"`
-	EndSalesAt  string  `thrift:"endSalesAt,14,optional" form:"endSalesAt" json:"endSalesAt" query:"endSalesAt"`
-	TagId       []int64 `thrift:"tagId,16,optional" form:"tagId" json:"tagId" query:"tagId"`
-	ContractId  []int64 `thrift:"contractId,17,optional" form:"contractId" json:"contractId" query:"contractId"`
+	ID          int64         `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	Name        string        `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	Pic         string        `thrift:"pic,3,optional" form:"pic" json:"pic" query:"pic"`
+	Description string        `thrift:"description,4,optional" form:"description" json:"description" query:"description"`
+	Stock       int64         `thrift:"stock,5,optional" form:"stock" json:"stock" query:"stock"`
+	Status      int64         `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
+	Duration    int64         `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`
+	Length      int64         `thrift:"length,8,optional" form:"length" json:"length" query:"length"`
+	Type        string        `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
+	Deadline    int64         `thrift:"deadline,10,optional" form:"deadline" json:"deadline" query:"deadline"`
+	Sales       []*base.Sales `thrift:"sales,11,optional" form:"sales" json:"sales" query:"sales"`
+	IsSales     int64         `thrift:"is_sales,12,optional" form:"is_sales" json:"is_sales" query:"is_sales"`
+	SignSalesAt string        `thrift:"signSalesAt,13,optional" form:"signSalesAt" json:"signSalesAt" query:"signSalesAt"`
+	EndSalesAt  string        `thrift:"endSalesAt,14,optional" form:"endSalesAt" json:"endSalesAt" query:"endSalesAt"`
+	TagId       []int64       `thrift:"tagId,16,optional" form:"tagId" json:"tagId" query:"tagId"`
+	ContractId  []int64       `thrift:"contractId,17,optional" form:"contractId" json:"contractId" query:"contractId"`
 }
 
 func NewCreateOrUpdateProductReq() *CreateOrUpdateProductReq {
@@ -1046,8 +1376,8 @@ func NewCreateOrUpdateProductReq() *CreateOrUpdateProductReq {
 		Duration:    0,
 		Length:      0,
 		Type:        "",
-		Deadline:    "",
-		Sales:       "",
+		Deadline:    0,
+		Sales:       []*base.Sales{},
 		IsSales:     1,
 		SignSalesAt: "",
 		EndSalesAt:  "",
@@ -1066,8 +1396,8 @@ func (p *CreateOrUpdateProductReq) InitDefault() {
 	p.Duration = 0
 	p.Length = 0
 	p.Type = ""
-	p.Deadline = ""
-	p.Sales = ""
+	p.Deadline = 0
+	p.Sales = []*base.Sales{}
 	p.IsSales = 1
 	p.SignSalesAt = ""
 	p.EndSalesAt = ""
@@ -1156,18 +1486,18 @@ func (p *CreateOrUpdateProductReq) GetType() (v string) {
 	return p.Type
 }
 
-var CreateOrUpdateProductReq_Deadline_DEFAULT string = ""
+var CreateOrUpdateProductReq_Deadline_DEFAULT int64 = 0
 
-func (p *CreateOrUpdateProductReq) GetDeadline() (v string) {
+func (p *CreateOrUpdateProductReq) GetDeadline() (v int64) {
 	if !p.IsSetDeadline() {
 		return CreateOrUpdateProductReq_Deadline_DEFAULT
 	}
 	return p.Deadline
 }
 
-var CreateOrUpdateProductReq_Sales_DEFAULT string = ""
+var CreateOrUpdateProductReq_Sales_DEFAULT []*base.Sales = []*base.Sales{}
 
-func (p *CreateOrUpdateProductReq) GetSales() (v string) {
+func (p *CreateOrUpdateProductReq) GetSales() (v []*base.Sales) {
 	if !p.IsSetSales() {
 		return CreateOrUpdateProductReq_Sales_DEFAULT
 	}
@@ -1279,7 +1609,7 @@ func (p *CreateOrUpdateProductReq) IsSetDeadline() bool {
 }
 
 func (p *CreateOrUpdateProductReq) IsSetSales() bool {
-	return p.Sales != CreateOrUpdateProductReq_Sales_DEFAULT
+	return p.Sales != nil
 }
 
 func (p *CreateOrUpdateProductReq) IsSetIsSales() bool {
@@ -1394,7 +1724,7 @@ func (p *CreateOrUpdateProductReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 10:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField10(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1402,7 +1732,7 @@ func (p *CreateOrUpdateProductReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 11:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField11(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1579,8 +1909,8 @@ func (p *CreateOrUpdateProductReq) ReadField9(iprot thrift.TProtocol) error {
 }
 func (p *CreateOrUpdateProductReq) ReadField10(iprot thrift.TProtocol) error {
 
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -1589,12 +1919,24 @@ func (p *CreateOrUpdateProductReq) ReadField10(iprot thrift.TProtocol) error {
 	return nil
 }
 func (p *CreateOrUpdateProductReq) ReadField11(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
 		return err
-	} else {
-		_field = v
+	}
+	_field := make([]*base.Sales, 0, size)
+	values := make([]base.Sales, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
 	}
 	p.Sales = _field
 	return nil
@@ -1940,10 +2282,10 @@ WriteFieldEndError:
 
 func (p *CreateOrUpdateProductReq) writeField10(oprot thrift.TProtocol) (err error) {
 	if p.IsSetDeadline() {
-		if err = oprot.WriteFieldBegin("deadline", thrift.STRING, 10); err != nil {
+		if err = oprot.WriteFieldBegin("deadline", thrift.I64, 10); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(p.Deadline); err != nil {
+		if err := oprot.WriteI64(p.Deadline); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1959,10 +2301,18 @@ WriteFieldEndError:
 
 func (p *CreateOrUpdateProductReq) writeField11(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSales() {
-		if err = oprot.WriteFieldBegin("sales", thrift.STRING, 11); err != nil {
+		if err = oprot.WriteFieldBegin("sales", thrift.LIST, 11); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(p.Sales); err != nil {
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Sales)); err != nil {
+			return err
+		}
+		for _, v := range p.Sales {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

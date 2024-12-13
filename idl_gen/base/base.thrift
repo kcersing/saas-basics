@@ -71,6 +71,14 @@ struct SysListResp {
     1: BaseResp resp
     2: optional list<SysList> extra
 }
+struct List {
+    1: optional i64 id= 0
+    2: optional string name =""
+}
+struct Sales {
+    1: optional i64 number = 0 (api.raw = "number")
+    2: optional double price =0 (api.raw = "price")
+}
 
 enum Err {
     Success            = 1,
@@ -95,3 +103,5 @@ enum Err {
     RecordAlreadyExist = 80001,
     DirtyData          = 80003,
 }
+
+

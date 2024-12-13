@@ -8,6 +8,7 @@ import (
 	"saas/biz/dal/db/ent/contract"
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/product"
+	"saas/idl_gen/model/base"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -176,8 +177,8 @@ func (pc *ProductCreate) SetNillableLength(i *int64) *ProductCreate {
 }
 
 // SetSales sets the "sales" field.
-func (pc *ProductCreate) SetSales(s [][]string) *ProductCreate {
-	pc.mutation.SetSales(s)
+func (pc *ProductCreate) SetSales(b []*base.Sales) *ProductCreate {
+	pc.mutation.SetSales(b)
 	return pc
 }
 
