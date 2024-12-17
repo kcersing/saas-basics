@@ -18,11 +18,11 @@ import (
 // MemberProfileQuery is the builder for querying MemberProfile entities.
 type MemberProfileQuery struct {
 	config
-	ctx         *QueryContext
-	order       []memberprofile.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.MemberProfile
-	withProfile *MemberQuery
+	ctx        *QueryContext
+	order      []memberprofile.OrderOption
+	inters     []Interceptor
+	predicates []predicate.MemberProfile
+	withMember *MemberQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -59,8 +59,8 @@ func (mpq *MemberProfileQuery) Order(o ...memberprofile.OrderOption) *MemberProf
 	return mpq
 }
 
-// QueryProfile chains the current query on the "profile" edge.
-func (mpq *MemberProfileQuery) QueryProfile() *MemberQuery {
+// QueryMember chains the current query on the "member" edge.
+func (mpq *MemberProfileQuery) QueryMember() *MemberQuery {
 	query := (&MemberClient{config: mpq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mpq.prepareQuery(ctx); err != nil {
@@ -73,7 +73,7 @@ func (mpq *MemberProfileQuery) QueryProfile() *MemberQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberprofile.Table, memberprofile.FieldID, selector),
 			sqlgraph.To(member.Table, member.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberprofile.ProfileTable, memberprofile.ProfileColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberprofile.MemberTable, memberprofile.MemberColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
@@ -268,26 +268,26 @@ func (mpq *MemberProfileQuery) Clone() *MemberProfileQuery {
 		return nil
 	}
 	return &MemberProfileQuery{
-		config:      mpq.config,
-		ctx:         mpq.ctx.Clone(),
-		order:       append([]memberprofile.OrderOption{}, mpq.order...),
-		inters:      append([]Interceptor{}, mpq.inters...),
-		predicates:  append([]predicate.MemberProfile{}, mpq.predicates...),
-		withProfile: mpq.withProfile.Clone(),
+		config:     mpq.config,
+		ctx:        mpq.ctx.Clone(),
+		order:      append([]memberprofile.OrderOption{}, mpq.order...),
+		inters:     append([]Interceptor{}, mpq.inters...),
+		predicates: append([]predicate.MemberProfile{}, mpq.predicates...),
+		withMember: mpq.withMember.Clone(),
 		// clone intermediate query.
 		sql:  mpq.sql.Clone(),
 		path: mpq.path,
 	}
 }
 
-// WithProfile tells the query-builder to eager-load the nodes that are connected to
-// the "profile" edge. The optional arguments are used to configure the query builder of the edge.
-func (mpq *MemberProfileQuery) WithProfile(opts ...func(*MemberQuery)) *MemberProfileQuery {
+// WithMember tells the query-builder to eager-load the nodes that are connected to
+// the "member" edge. The optional arguments are used to configure the query builder of the edge.
+func (mpq *MemberProfileQuery) WithMember(opts ...func(*MemberQuery)) *MemberProfileQuery {
 	query := (&MemberClient{config: mpq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mpq.withProfile = query
+	mpq.withMember = query
 	return mpq
 }
 
@@ -370,7 +370,7 @@ func (mpq *MemberProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*MemberProfile{}
 		_spec       = mpq.querySpec()
 		loadedTypes = [1]bool{
-			mpq.withProfile != nil,
+			mpq.withMember != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -391,16 +391,16 @@ func (mpq *MemberProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := mpq.withProfile; query != nil {
-		if err := mpq.loadProfile(ctx, query, nodes, nil,
-			func(n *MemberProfile, e *Member) { n.Edges.Profile = e }); err != nil {
+	if query := mpq.withMember; query != nil {
+		if err := mpq.loadMember(ctx, query, nodes, nil,
+			func(n *MemberProfile, e *Member) { n.Edges.Member = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (mpq *MemberProfileQuery) loadProfile(ctx context.Context, query *MemberQuery, nodes []*MemberProfile, init func(*MemberProfile), assign func(*MemberProfile, *Member)) error {
+func (mpq *MemberProfileQuery) loadMember(ctx context.Context, query *MemberQuery, nodes []*MemberProfile, init func(*MemberProfile), assign func(*MemberProfile, *Member)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*MemberProfile)
 	for i := range nodes {
@@ -455,7 +455,7 @@ func (mpq *MemberProfileQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if mpq.withProfile != nil {
+		if mpq.withMember != nil {
 			_spec.Node.AddColumnOnce(memberprofile.FieldMemberID)
 		}
 	}

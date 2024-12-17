@@ -28,8 +28,8 @@ const (
 	FieldPassword = "password"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldNickname holds the string denoting the nickname field in the database.
-	FieldNickname = "nickname"
+	// FieldUsername holds the string denoting the username field in the database.
+	FieldUsername = "username"
 	// FieldMobile holds the string denoting the mobile field in the database.
 	FieldMobile = "mobile"
 	// FieldAvatar holds the string denoting the avatar field in the database.
@@ -134,7 +134,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldPassword,
 	FieldName,
-	FieldNickname,
+	FieldUsername,
 	FieldMobile,
 	FieldAvatar,
 	FieldCondition,
@@ -224,9 +224,9 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByNickname orders the results by the nickname field.
-func ByNickname(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNickname, opts...).ToFunc()
+// ByUsername orders the results by the username field.
+func ByUsername(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUsername, opts...).ToFunc()
 }
 
 // ByMobile orders the results by the mobile field.

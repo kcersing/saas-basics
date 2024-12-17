@@ -23,20 +23,12 @@ func Register(r *server.Hertz) {
 			_member := _service.Group("/member", _memberMw()...)
 			_member.POST("/contract-list", append(_membercontractlistMw(), member.MemberContractList)...)
 			_member.POST("/create", append(_creatememberMw(), member.CreateMember)...)
+			_member.POST("/full-list", append(_memberfulllistMw(), member.MemberFullList)...)
 			_member.POST("/info", append(_memberinfoMw(), member.MemberInfo)...)
-			_member.POST("/list", append(_memberlistMw(), member.MemberList)...)
-			_member.POST("/node", append(_membernodeMw(), member.MemberNode)...)
-			_member.POST("/privacy", append(_memberprivacyMw(), member.MemberPrivacy)...)
-			_member.POST("/product-detail", append(_memberproductdetailMw(), member.MemberProductDetail)...)
-			_member.POST("/product-list", append(_memberproductlistMw(), member.MemberProductList)...)
-			_member.POST("/property-detail", append(_memberpropertydetailMw(), member.MemberPropertyDetail)...)
-			_member.POST("/property-list", append(_memberpropertylistMw(), member.MemberPropertyList)...)
-			_member.POST("/property-update", append(_memberpropertyupdateMw(), member.MemberPropertyUpdate)...)
-			_member.POST("/search", append(_membersearchMw(), member.MemberSearch)...)
-			_member.POST("/search-product", append(_memberproductsearchMw(), member.MemberProductSearch)...)
-			_member.POST("/search-property", append(_memberpropertysearchMw(), member.MemberPropertySearch)...)
+			_member.POST("/potential-list", append(_memberpotentiallistMw(), member.MemberPotentialList)...)
 			_member.POST("/status", append(_updatememberstatusMw(), member.UpdateMemberStatus)...)
 			_member.POST("/update", append(_updatememberMw(), member.UpdateMember)...)
+			_member.POST("/update-follow", append(_updatememberfollowMw(), member.UpdateMemberFollow)...)
 		}
 	}
 }

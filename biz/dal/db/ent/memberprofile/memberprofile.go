@@ -30,23 +30,31 @@ const (
 	FieldFatherName = "father_name"
 	// FieldMotherName holds the string denoting the mother_name field in the database.
 	FieldMotherName = "mother_name"
+	// FieldGender holds the string denoting the gender field in the database.
+	FieldGender = "gender"
+	// FieldBirthday holds the string denoting the birthday field in the database.
+	FieldBirthday = "birthday"
 	// FieldGrade holds the string denoting the grade field in the database.
 	FieldGrade = "grade"
+	// FieldEmail holds the string denoting the email field in the database.
+	FieldEmail = "email"
+	// FieldWecom holds the string denoting the wecom field in the database.
+	FieldWecom = "wecom"
 	// FieldIntention holds the string denoting the intention field in the database.
 	FieldIntention = "intention"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// EdgeProfile holds the string denoting the profile edge name in mutations.
-	EdgeProfile = "profile"
+	// EdgeMember holds the string denoting the member edge name in mutations.
+	EdgeMember = "member"
 	// Table holds the table name of the memberprofile in the database.
 	Table = "member_profile"
-	// ProfileTable is the table that holds the profile relation/edge.
-	ProfileTable = "member_profile"
-	// ProfileInverseTable is the table name for the Member entity.
+	// MemberTable is the table that holds the member relation/edge.
+	MemberTable = "member_profile"
+	// MemberInverseTable is the table name for the Member entity.
 	// It exists in this package in order to avoid circular dependency with the "member" package.
-	ProfileInverseTable = "member"
-	// ProfileColumn is the table column denoting the profile relation/edge.
-	ProfileColumn = "member_id"
+	MemberInverseTable = "member"
+	// MemberColumn is the table column denoting the member relation/edge.
+	MemberColumn = "member_id"
 )
 
 // Columns holds all SQL columns for memberprofile fields.
@@ -60,7 +68,11 @@ var Columns = []string{
 	FieldMobileAscription,
 	FieldFatherName,
 	FieldMotherName,
+	FieldGender,
+	FieldBirthday,
 	FieldGrade,
+	FieldEmail,
+	FieldWecom,
 	FieldIntention,
 	FieldSource,
 }
@@ -88,6 +100,8 @@ var (
 	DefaultCreatedID int64
 	// DefaultMobileAscription holds the default value on creation for the "mobile_ascription" field.
 	DefaultMobileAscription int64
+	// DefaultGender holds the default value on creation for the "gender" field.
+	DefaultGender int64
 	// DefaultGrade holds the default value on creation for the "grade" field.
 	DefaultGrade int64
 	// DefaultIntention holds the default value on creation for the "intention" field.
@@ -144,9 +158,29 @@ func ByMotherName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMotherName, opts...).ToFunc()
 }
 
+// ByGender orders the results by the gender field.
+func ByGender(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGender, opts...).ToFunc()
+}
+
+// ByBirthday orders the results by the birthday field.
+func ByBirthday(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBirthday, opts...).ToFunc()
+}
+
 // ByGrade orders the results by the grade field.
 func ByGrade(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGrade, opts...).ToFunc()
+}
+
+// ByEmail orders the results by the email field.
+func ByEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// ByWecom orders the results by the wecom field.
+func ByWecom(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWecom, opts...).ToFunc()
 }
 
 // ByIntention orders the results by the intention field.
@@ -159,16 +193,16 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
 }
 
-// ByProfileField orders the results by profile field.
-func ByProfileField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByMemberField orders the results by member field.
+func ByMemberField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProfileStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newMemberStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newProfileStep() *sqlgraph.Step {
+func newMemberStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProfileInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, ProfileTable, ProfileColumn),
+		sqlgraph.To(MemberInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MemberTable, MemberColumn),
 	)
 }

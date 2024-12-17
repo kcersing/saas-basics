@@ -574,28 +574,24 @@ definitions:
     type: object
   member.CreateOrUpdateMemberReq:
     properties:
-      Password:
-        type: string
-      avatar:
-        type: string
       birthday:
-        type: string
-      createId:
-        type: integer
-      email:
         type: string
       gender:
         type: string
+      grade:
+        type: integer
       id:
+        type: integer
+      intention:
         type: integer
       mobile:
         type: string
+      mobileAscription:
+        type: string
       name:
         type: string
-      status:
+      source:
         type: integer
-      wecom:
-        type: string
     type: object
   member.MemberContractListReq:
     properties:
@@ -621,60 +617,12 @@ definitions:
       pageSize:
         type: integer
     type: object
-  member.MemberProductListReq:
+  member.UpdateMemberFollowReq:
     properties:
+      followId:
+        type: integer
       memberId:
         type: integer
-      name:
-        type: string
-      page:
-        type: integer
-      pageSize:
-        type: integer
-      status:
-        type: integer
-      venueId:
-        type: integer
-    type: object
-  member.MemberProductSearchReq:
-    properties:
-      members:
-        items:
-          type: integer
-        type: array
-    type: object
-  member.MemberPropertyListReq:
-    properties:
-      memberId:
-        type: integer
-      memberProductId:
-        type: integer
-      name:
-        type: string
-      page:
-        type: integer
-      pageSize:
-        type: integer
-      status:
-        type: integer
-      type:
-        type: string
-      venueId:
-        type: integer
-    type: object
-  member.MemberPropertySearchReq:
-    properties:
-      memberProductIds:
-        items:
-          type: integer
-        type: array
-    type: object
-  member.MemberSearchReq:
-    properties:
-      option:
-        type: string
-      value:
-        type: string
     type: object
   menu.ApiInfo:
     properties:
@@ -2223,6 +2171,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 创建会员 Summary
+  /service/member/full-list:
+    post:
+      description: 会员列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员列表 Summary
   /service/member/info:
     post:
       description: 会员详情 Description
@@ -2239,9 +2203,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 会员详情 Summary
-  /service/member/list:
+  /service/member/potential-list:
     post:
-      description: 会员列表 Description
+      description: 潜在会员列表 Description
       parameters:
       - description: query params
         in: body
@@ -2254,167 +2218,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 会员列表 Summary
-  /service/member/node:
-    post:
-      description: 会员节点 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员节点 Summary
-  /service/member/privacy:
-    post:
-      description: 会员隐私 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员隐私 Summary
-  /service/member/product-detail:
-    post:
-      description: 会员产品详情 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员产品详情 Summary
-  /service/member/product-list:
-    post:
-      description: 会员产品列表 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/member.MemberProductListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员产品列表 Summary
-  /service/member/property-detail:
-    post:
-      description: 会员产品属性详情 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员产品属性详情 Summary
-  /service/member/property-list:
-    post:
-      description: 会员产品属性列表 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/member.MemberPropertyListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员产品属性列表 Summary
-  /service/member/property-update:
-    post:
-      description: 会员产品属性更新 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/member.MemberPropertyListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员产品属性更新 Summary
-  /service/member/search:
-    post:
-      description: 会员搜索 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/member.MemberSearchReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员搜索 Summary
-  /service/member/search-product:
-    post:
-      description: 会员产品搜索 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/member.MemberProductSearchReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员产品搜索 Summary
-  /service/member/search-property:
-    post:
-      description: 会员产品属性搜索 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/member.MemberPropertySearchReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员产品属性搜索 Summary
+      summary: 潜在会员列表 Summary
   /service/member/status:
     post:
       description: 更新会员状态 Description
@@ -2447,6 +2251,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新会员 Summary
+  /service/member/update-follow:
+    post:
+      description: 更新会员关注 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.UpdateMemberFollowReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新会员关注 Summary
   /service/menu:
     post:
       description: 删除菜单 Description
@@ -2741,6 +2561,12 @@ paths:
     post:
       responses: {}
   /service/payment/WXPay:
+    post:
+      responses: {}
+  /service/payment/WXQRPay:
+    post:
+      responses: {}
+  /service/payment/WXRefundOrder:
     post:
       responses: {}
   /service/place/create:

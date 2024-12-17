@@ -631,32 +631,28 @@ func init() {
 	memberdetailsDescCreatedID := memberdetailsMixinFields0[4].Descriptor()
 	// memberdetails.DefaultCreatedID holds the default value on creation for the created_id field.
 	memberdetails.DefaultCreatedID = memberdetailsDescCreatedID.Default.(int64)
-	// memberdetailsDescGender is the schema descriptor for gender field.
-	memberdetailsDescGender := memberdetailsFields[3].Descriptor()
-	// memberdetails.DefaultGender holds the default value on creation for the gender field.
-	memberdetails.DefaultGender = memberdetailsDescGender.Default.(int64)
 	// memberdetailsDescMoneySum is the schema descriptor for money_sum field.
-	memberdetailsDescMoneySum := memberdetailsFields[5].Descriptor()
+	memberdetailsDescMoneySum := memberdetailsFields[1].Descriptor()
 	// memberdetails.DefaultMoneySum holds the default value on creation for the money_sum field.
 	memberdetails.DefaultMoneySum = memberdetailsDescMoneySum.Default.(float64)
 	// memberdetailsDescProductID is the schema descriptor for product_id field.
-	memberdetailsDescProductID := memberdetailsFields[6].Descriptor()
+	memberdetailsDescProductID := memberdetailsFields[2].Descriptor()
 	// memberdetails.DefaultProductID holds the default value on creation for the product_id field.
 	memberdetails.DefaultProductID = memberdetailsDescProductID.Default.(int64)
 	// memberdetailsDescProductVenue is the schema descriptor for product_venue field.
-	memberdetailsDescProductVenue := memberdetailsFields[8].Descriptor()
+	memberdetailsDescProductVenue := memberdetailsFields[4].Descriptor()
 	// memberdetails.DefaultProductVenue holds the default value on creation for the product_venue field.
 	memberdetails.DefaultProductVenue = memberdetailsDescProductVenue.Default.(int64)
 	// memberdetailsDescEntrySum is the schema descriptor for entry_sum field.
-	memberdetailsDescEntrySum := memberdetailsFields[10].Descriptor()
+	memberdetailsDescEntrySum := memberdetailsFields[6].Descriptor()
 	// memberdetails.DefaultEntrySum holds the default value on creation for the entry_sum field.
 	memberdetails.DefaultEntrySum = memberdetailsDescEntrySum.Default.(int64)
 	// memberdetailsDescRelationUID is the schema descriptor for relation_uid field.
-	memberdetailsDescRelationUID := memberdetailsFields[14].Descriptor()
+	memberdetailsDescRelationUID := memberdetailsFields[10].Descriptor()
 	// memberdetails.DefaultRelationUID holds the default value on creation for the relation_uid field.
 	memberdetails.DefaultRelationUID = memberdetailsDescRelationUID.Default.(int64)
 	// memberdetailsDescRelationMid is the schema descriptor for relation_mid field.
-	memberdetailsDescRelationMid := memberdetailsFields[16].Descriptor()
+	memberdetailsDescRelationMid := memberdetailsFields[12].Descriptor()
 	// memberdetails.DefaultRelationMid holds the default value on creation for the relation_mid field.
 	memberdetails.DefaultRelationMid = memberdetailsDescRelationMid.Default.(int64)
 	membernoteMixin := schema.MemberNote{}.Mixin()
@@ -756,16 +752,20 @@ func init() {
 	memberprofileDescMobileAscription := memberprofileFields[1].Descriptor()
 	// memberprofile.DefaultMobileAscription holds the default value on creation for the mobile_ascription field.
 	memberprofile.DefaultMobileAscription = memberprofileDescMobileAscription.Default.(int64)
+	// memberprofileDescGender is the schema descriptor for gender field.
+	memberprofileDescGender := memberprofileFields[4].Descriptor()
+	// memberprofile.DefaultGender holds the default value on creation for the gender field.
+	memberprofile.DefaultGender = memberprofileDescGender.Default.(int64)
 	// memberprofileDescGrade is the schema descriptor for grade field.
-	memberprofileDescGrade := memberprofileFields[4].Descriptor()
+	memberprofileDescGrade := memberprofileFields[6].Descriptor()
 	// memberprofile.DefaultGrade holds the default value on creation for the grade field.
 	memberprofile.DefaultGrade = memberprofileDescGrade.Default.(int64)
 	// memberprofileDescIntention is the schema descriptor for intention field.
-	memberprofileDescIntention := memberprofileFields[5].Descriptor()
+	memberprofileDescIntention := memberprofileFields[9].Descriptor()
 	// memberprofile.DefaultIntention holds the default value on creation for the intention field.
 	memberprofile.DefaultIntention = memberprofileDescIntention.Default.(int64)
 	// memberprofileDescSource is the schema descriptor for source field.
-	memberprofileDescSource := memberprofileFields[6].Descriptor()
+	memberprofileDescSource := memberprofileFields[10].Descriptor()
 	// memberprofile.DefaultSource holds the default value on creation for the source field.
 	memberprofile.DefaultSource = memberprofileDescSource.Default.(int64)
 	menuMixin := schema.Menu{}.Mixin()

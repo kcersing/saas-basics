@@ -35,8 +35,16 @@ type MemberProfile struct {
 	FatherName string `json:"father_name,omitempty"`
 	// 母亲名称
 	MotherName string `json:"mother_name,omitempty"`
+	// 性别 | [1:女性;2:男性;3:保密]
+	Gender int64 `json:"gender,omitempty"`
+	// 出生日期
+	Birthday time.Time `json:"birthday,omitempty"`
 	// 年级
 	Grade int64 `json:"grade,omitempty"`
+	// email | 邮箱号
+	Email string `json:"email,omitempty"`
+	// wecom | 微信号
+	Wecom string `json:"wecom,omitempty"`
 	// 意向
 	Intention int64 `json:"intention,omitempty"`
 	// 来源
@@ -49,24 +57,24 @@ type MemberProfile struct {
 
 // MemberProfileEdges holds the relations/edges for other nodes in the graph.
 type MemberProfileEdges struct {
-	// Profile holds the value of the profile edge.
-	Profile *Member `json:"profile,omitempty"`
+	// Member holds the value of the member edge.
+	Member *Member `json:"member,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// ProfileOrErr returns the Profile value or an error if the edge
+// MemberOrErr returns the Member value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e MemberProfileEdges) ProfileOrErr() (*Member, error) {
+func (e MemberProfileEdges) MemberOrErr() (*Member, error) {
 	if e.loadedTypes[0] {
-		if e.Profile == nil {
+		if e.Member == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: member.Label}
 		}
-		return e.Profile, nil
+		return e.Member, nil
 	}
-	return nil, &NotLoadedError{edge: "profile"}
+	return nil, &NotLoadedError{edge: "member"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -74,11 +82,11 @@ func (*MemberProfile) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case memberprofile.FieldID, memberprofile.FieldDelete, memberprofile.FieldCreatedID, memberprofile.FieldMemberID, memberprofile.FieldMobileAscription, memberprofile.FieldGrade, memberprofile.FieldIntention, memberprofile.FieldSource:
+		case memberprofile.FieldID, memberprofile.FieldDelete, memberprofile.FieldCreatedID, memberprofile.FieldMemberID, memberprofile.FieldMobileAscription, memberprofile.FieldGender, memberprofile.FieldGrade, memberprofile.FieldIntention, memberprofile.FieldSource:
 			values[i] = new(sql.NullInt64)
-		case memberprofile.FieldFatherName, memberprofile.FieldMotherName:
+		case memberprofile.FieldFatherName, memberprofile.FieldMotherName, memberprofile.FieldEmail, memberprofile.FieldWecom:
 			values[i] = new(sql.NullString)
-		case memberprofile.FieldCreatedAt, memberprofile.FieldUpdatedAt:
+		case memberprofile.FieldCreatedAt, memberprofile.FieldUpdatedAt, memberprofile.FieldBirthday:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -149,11 +157,35 @@ func (mp *MemberProfile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mp.MotherName = value.String
 			}
+		case memberprofile.FieldGender:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field gender", values[i])
+			} else if value.Valid {
+				mp.Gender = value.Int64
+			}
+		case memberprofile.FieldBirthday:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field birthday", values[i])
+			} else if value.Valid {
+				mp.Birthday = value.Time
+			}
 		case memberprofile.FieldGrade:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field grade", values[i])
 			} else if value.Valid {
 				mp.Grade = value.Int64
+			}
+		case memberprofile.FieldEmail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email", values[i])
+			} else if value.Valid {
+				mp.Email = value.String
+			}
+		case memberprofile.FieldWecom:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field wecom", values[i])
+			} else if value.Valid {
+				mp.Wecom = value.String
 			}
 		case memberprofile.FieldIntention:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -180,9 +212,9 @@ func (mp *MemberProfile) Value(name string) (ent.Value, error) {
 	return mp.selectValues.Get(name)
 }
 
-// QueryProfile queries the "profile" edge of the MemberProfile entity.
-func (mp *MemberProfile) QueryProfile() *MemberQuery {
-	return NewMemberProfileClient(mp.config).QueryProfile(mp)
+// QueryMember queries the "member" edge of the MemberProfile entity.
+func (mp *MemberProfile) QueryMember() *MemberQuery {
+	return NewMemberProfileClient(mp.config).QueryMember(mp)
 }
 
 // Update returns a builder for updating this MemberProfile.
@@ -232,8 +264,20 @@ func (mp *MemberProfile) String() string {
 	builder.WriteString("mother_name=")
 	builder.WriteString(mp.MotherName)
 	builder.WriteString(", ")
+	builder.WriteString("gender=")
+	builder.WriteString(fmt.Sprintf("%v", mp.Gender))
+	builder.WriteString(", ")
+	builder.WriteString("birthday=")
+	builder.WriteString(mp.Birthday.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("grade=")
 	builder.WriteString(fmt.Sprintf("%v", mp.Grade))
+	builder.WriteString(", ")
+	builder.WriteString("email=")
+	builder.WriteString(mp.Email)
+	builder.WriteString(", ")
+	builder.WriteString("wecom=")
+	builder.WriteString(mp.Wecom)
 	builder.WriteString(", ")
 	builder.WriteString("intention=")
 	builder.WriteString(fmt.Sprintf("%v", mp.Intention))

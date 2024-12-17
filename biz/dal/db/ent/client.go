@@ -3240,15 +3240,15 @@ func (c *MemberDetailsClient) GetX(ctx context.Context, id int64) *MemberDetails
 	return obj
 }
 
-// QueryInfo queries the info edge of a MemberDetails.
-func (c *MemberDetailsClient) QueryInfo(md *MemberDetails) *MemberQuery {
+// QueryMember queries the member edge of a MemberDetails.
+func (c *MemberDetailsClient) QueryMember(md *MemberDetails) *MemberQuery {
 	query := (&MemberClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := md.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberdetails.Table, memberdetails.FieldID, id),
 			sqlgraph.To(member.Table, member.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberdetails.InfoTable, memberdetails.InfoColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberdetails.MemberTable, memberdetails.MemberColumn),
 		)
 		fromV = sqlgraph.Neighbors(md.driver.Dialect(), step)
 		return fromV, nil
@@ -3719,15 +3719,15 @@ func (c *MemberProfileClient) GetX(ctx context.Context, id int64) *MemberProfile
 	return obj
 }
 
-// QueryProfile queries the profile edge of a MemberProfile.
-func (c *MemberProfileClient) QueryProfile(mp *MemberProfile) *MemberQuery {
+// QueryMember queries the member edge of a MemberProfile.
+func (c *MemberProfileClient) QueryMember(mp *MemberProfile) *MemberQuery {
 	query := (&MemberClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mp.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberprofile.Table, memberprofile.FieldID, id),
 			sqlgraph.To(member.Table, member.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberprofile.ProfileTable, memberprofile.ProfileColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberprofile.MemberTable, memberprofile.MemberColumn),
 		)
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil

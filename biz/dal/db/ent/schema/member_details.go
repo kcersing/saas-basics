@@ -18,10 +18,6 @@ func (MemberDetails) Fields() []ent.Field {
 	return []ent.Field{
 
 		field.Int64("member_id").Comment("会员id").Optional(),
-		field.String("email").Optional().Comment("email | 邮箱号"),
-		field.String("wecom").Optional().Comment("wecom | 微信号"),
-		field.Int64("gender").Default(3).Comment("性别 | [0:女性;1:男性;3:保密]").Optional(),
-		field.Time("birthday").Comment("出生日期").Optional(),
 
 		field.Float("money_sum").Default(3).Comment("消费总金额").Optional(),
 
@@ -55,7 +51,7 @@ func (MemberDetails) Mixin() []ent.Mixin {
 
 func (MemberDetails) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("info", Member.Type).
+		edge.From("member", Member.Type).
 			Ref("member_details").
 			Field("member_id").
 			Unique(),

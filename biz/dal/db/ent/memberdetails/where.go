@@ -80,26 +80,6 @@ func MemberID(v int64) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldEQ(FieldMemberID, v))
 }
 
-// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
-func Email(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldEmail, v))
-}
-
-// Wecom applies equality check predicate on the "wecom" field. It's identical to WecomEQ.
-func Wecom(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldWecom, v))
-}
-
-// Gender applies equality check predicate on the "gender" field. It's identical to GenderEQ.
-func Gender(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldGender, v))
-}
-
-// Birthday applies equality check predicate on the "birthday" field. It's identical to BirthdayEQ.
-func Birthday(v time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldBirthday, v))
-}
-
 // MoneySum applies equality check predicate on the "money_sum" field. It's identical to MoneySumEQ.
 func MoneySum(v float64) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldEQ(FieldMoneySum, v))
@@ -393,256 +373,6 @@ func MemberIDIsNil() predicate.MemberDetails {
 // MemberIDNotNil applies the NotNil predicate on the "member_id" field.
 func MemberIDNotNil() predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldNotNull(FieldMemberID))
-}
-
-// EmailEQ applies the EQ predicate on the "email" field.
-func EmailEQ(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldEmail, v))
-}
-
-// EmailNEQ applies the NEQ predicate on the "email" field.
-func EmailNEQ(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNEQ(FieldEmail, v))
-}
-
-// EmailIn applies the In predicate on the "email" field.
-func EmailIn(vs ...string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIn(FieldEmail, vs...))
-}
-
-// EmailNotIn applies the NotIn predicate on the "email" field.
-func EmailNotIn(vs ...string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotIn(FieldEmail, vs...))
-}
-
-// EmailGT applies the GT predicate on the "email" field.
-func EmailGT(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGT(FieldEmail, v))
-}
-
-// EmailGTE applies the GTE predicate on the "email" field.
-func EmailGTE(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGTE(FieldEmail, v))
-}
-
-// EmailLT applies the LT predicate on the "email" field.
-func EmailLT(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLT(FieldEmail, v))
-}
-
-// EmailLTE applies the LTE predicate on the "email" field.
-func EmailLTE(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLTE(FieldEmail, v))
-}
-
-// EmailContains applies the Contains predicate on the "email" field.
-func EmailContains(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldContains(FieldEmail, v))
-}
-
-// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
-func EmailHasPrefix(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldHasPrefix(FieldEmail, v))
-}
-
-// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
-func EmailHasSuffix(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldHasSuffix(FieldEmail, v))
-}
-
-// EmailIsNil applies the IsNil predicate on the "email" field.
-func EmailIsNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIsNull(FieldEmail))
-}
-
-// EmailNotNil applies the NotNil predicate on the "email" field.
-func EmailNotNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotNull(FieldEmail))
-}
-
-// EmailEqualFold applies the EqualFold predicate on the "email" field.
-func EmailEqualFold(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEqualFold(FieldEmail, v))
-}
-
-// EmailContainsFold applies the ContainsFold predicate on the "email" field.
-func EmailContainsFold(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldContainsFold(FieldEmail, v))
-}
-
-// WecomEQ applies the EQ predicate on the "wecom" field.
-func WecomEQ(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldWecom, v))
-}
-
-// WecomNEQ applies the NEQ predicate on the "wecom" field.
-func WecomNEQ(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNEQ(FieldWecom, v))
-}
-
-// WecomIn applies the In predicate on the "wecom" field.
-func WecomIn(vs ...string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIn(FieldWecom, vs...))
-}
-
-// WecomNotIn applies the NotIn predicate on the "wecom" field.
-func WecomNotIn(vs ...string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotIn(FieldWecom, vs...))
-}
-
-// WecomGT applies the GT predicate on the "wecom" field.
-func WecomGT(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGT(FieldWecom, v))
-}
-
-// WecomGTE applies the GTE predicate on the "wecom" field.
-func WecomGTE(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGTE(FieldWecom, v))
-}
-
-// WecomLT applies the LT predicate on the "wecom" field.
-func WecomLT(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLT(FieldWecom, v))
-}
-
-// WecomLTE applies the LTE predicate on the "wecom" field.
-func WecomLTE(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLTE(FieldWecom, v))
-}
-
-// WecomContains applies the Contains predicate on the "wecom" field.
-func WecomContains(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldContains(FieldWecom, v))
-}
-
-// WecomHasPrefix applies the HasPrefix predicate on the "wecom" field.
-func WecomHasPrefix(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldHasPrefix(FieldWecom, v))
-}
-
-// WecomHasSuffix applies the HasSuffix predicate on the "wecom" field.
-func WecomHasSuffix(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldHasSuffix(FieldWecom, v))
-}
-
-// WecomIsNil applies the IsNil predicate on the "wecom" field.
-func WecomIsNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIsNull(FieldWecom))
-}
-
-// WecomNotNil applies the NotNil predicate on the "wecom" field.
-func WecomNotNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotNull(FieldWecom))
-}
-
-// WecomEqualFold applies the EqualFold predicate on the "wecom" field.
-func WecomEqualFold(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEqualFold(FieldWecom, v))
-}
-
-// WecomContainsFold applies the ContainsFold predicate on the "wecom" field.
-func WecomContainsFold(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldContainsFold(FieldWecom, v))
-}
-
-// GenderEQ applies the EQ predicate on the "gender" field.
-func GenderEQ(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldGender, v))
-}
-
-// GenderNEQ applies the NEQ predicate on the "gender" field.
-func GenderNEQ(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNEQ(FieldGender, v))
-}
-
-// GenderIn applies the In predicate on the "gender" field.
-func GenderIn(vs ...int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIn(FieldGender, vs...))
-}
-
-// GenderNotIn applies the NotIn predicate on the "gender" field.
-func GenderNotIn(vs ...int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotIn(FieldGender, vs...))
-}
-
-// GenderGT applies the GT predicate on the "gender" field.
-func GenderGT(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGT(FieldGender, v))
-}
-
-// GenderGTE applies the GTE predicate on the "gender" field.
-func GenderGTE(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGTE(FieldGender, v))
-}
-
-// GenderLT applies the LT predicate on the "gender" field.
-func GenderLT(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLT(FieldGender, v))
-}
-
-// GenderLTE applies the LTE predicate on the "gender" field.
-func GenderLTE(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLTE(FieldGender, v))
-}
-
-// GenderIsNil applies the IsNil predicate on the "gender" field.
-func GenderIsNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIsNull(FieldGender))
-}
-
-// GenderNotNil applies the NotNil predicate on the "gender" field.
-func GenderNotNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotNull(FieldGender))
-}
-
-// BirthdayEQ applies the EQ predicate on the "birthday" field.
-func BirthdayEQ(v time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldBirthday, v))
-}
-
-// BirthdayNEQ applies the NEQ predicate on the "birthday" field.
-func BirthdayNEQ(v time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNEQ(FieldBirthday, v))
-}
-
-// BirthdayIn applies the In predicate on the "birthday" field.
-func BirthdayIn(vs ...time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIn(FieldBirthday, vs...))
-}
-
-// BirthdayNotIn applies the NotIn predicate on the "birthday" field.
-func BirthdayNotIn(vs ...time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotIn(FieldBirthday, vs...))
-}
-
-// BirthdayGT applies the GT predicate on the "birthday" field.
-func BirthdayGT(v time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGT(FieldBirthday, v))
-}
-
-// BirthdayGTE applies the GTE predicate on the "birthday" field.
-func BirthdayGTE(v time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGTE(FieldBirthday, v))
-}
-
-// BirthdayLT applies the LT predicate on the "birthday" field.
-func BirthdayLT(v time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLT(FieldBirthday, v))
-}
-
-// BirthdayLTE applies the LTE predicate on the "birthday" field.
-func BirthdayLTE(v time.Time) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLTE(FieldBirthday, v))
-}
-
-// BirthdayIsNil applies the IsNil predicate on the "birthday" field.
-func BirthdayIsNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIsNull(FieldBirthday))
-}
-
-// BirthdayNotNil applies the NotNil predicate on the "birthday" field.
-func BirthdayNotNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotNull(FieldBirthday))
 }
 
 // MoneySumEQ applies the EQ predicate on the "money_sum" field.
@@ -1395,21 +1125,21 @@ func RelationMameContainsFold(v string) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldContainsFold(FieldRelationMame, v))
 }
 
-// HasInfo applies the HasEdge predicate on the "info" edge.
-func HasInfo() predicate.MemberDetails {
+// HasMember applies the HasEdge predicate on the "member" edge.
+func HasMember() predicate.MemberDetails {
 	return predicate.MemberDetails(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, InfoTable, InfoColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, MemberTable, MemberColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasInfoWith applies the HasEdge predicate on the "info" edge with a given conditions (other predicates).
-func HasInfoWith(preds ...predicate.Member) predicate.MemberDetails {
+// HasMemberWith applies the HasEdge predicate on the "member" edge with a given conditions (other predicates).
+func HasMemberWith(preds ...predicate.Member) predicate.MemberDetails {
 	return predicate.MemberDetails(func(s *sql.Selector) {
-		step := newInfoStep()
+		step := newMemberStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

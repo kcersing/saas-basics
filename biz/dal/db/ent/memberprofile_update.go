@@ -182,6 +182,53 @@ func (mpu *MemberProfileUpdate) ClearMotherName() *MemberProfileUpdate {
 	return mpu
 }
 
+// SetGender sets the "gender" field.
+func (mpu *MemberProfileUpdate) SetGender(i int64) *MemberProfileUpdate {
+	mpu.mutation.ResetGender()
+	mpu.mutation.SetGender(i)
+	return mpu
+}
+
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableGender(i *int64) *MemberProfileUpdate {
+	if i != nil {
+		mpu.SetGender(*i)
+	}
+	return mpu
+}
+
+// AddGender adds i to the "gender" field.
+func (mpu *MemberProfileUpdate) AddGender(i int64) *MemberProfileUpdate {
+	mpu.mutation.AddGender(i)
+	return mpu
+}
+
+// ClearGender clears the value of the "gender" field.
+func (mpu *MemberProfileUpdate) ClearGender() *MemberProfileUpdate {
+	mpu.mutation.ClearGender()
+	return mpu
+}
+
+// SetBirthday sets the "birthday" field.
+func (mpu *MemberProfileUpdate) SetBirthday(t time.Time) *MemberProfileUpdate {
+	mpu.mutation.SetBirthday(t)
+	return mpu
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableBirthday(t *time.Time) *MemberProfileUpdate {
+	if t != nil {
+		mpu.SetBirthday(*t)
+	}
+	return mpu
+}
+
+// ClearBirthday clears the value of the "birthday" field.
+func (mpu *MemberProfileUpdate) ClearBirthday() *MemberProfileUpdate {
+	mpu.mutation.ClearBirthday()
+	return mpu
+}
+
 // SetGrade sets the "grade" field.
 func (mpu *MemberProfileUpdate) SetGrade(i int64) *MemberProfileUpdate {
 	mpu.mutation.ResetGrade()
@@ -206,6 +253,46 @@ func (mpu *MemberProfileUpdate) AddGrade(i int64) *MemberProfileUpdate {
 // ClearGrade clears the value of the "grade" field.
 func (mpu *MemberProfileUpdate) ClearGrade() *MemberProfileUpdate {
 	mpu.mutation.ClearGrade()
+	return mpu
+}
+
+// SetEmail sets the "email" field.
+func (mpu *MemberProfileUpdate) SetEmail(s string) *MemberProfileUpdate {
+	mpu.mutation.SetEmail(s)
+	return mpu
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableEmail(s *string) *MemberProfileUpdate {
+	if s != nil {
+		mpu.SetEmail(*s)
+	}
+	return mpu
+}
+
+// ClearEmail clears the value of the "email" field.
+func (mpu *MemberProfileUpdate) ClearEmail() *MemberProfileUpdate {
+	mpu.mutation.ClearEmail()
+	return mpu
+}
+
+// SetWecom sets the "wecom" field.
+func (mpu *MemberProfileUpdate) SetWecom(s string) *MemberProfileUpdate {
+	mpu.mutation.SetWecom(s)
+	return mpu
+}
+
+// SetNillableWecom sets the "wecom" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableWecom(s *string) *MemberProfileUpdate {
+	if s != nil {
+		mpu.SetWecom(*s)
+	}
+	return mpu
+}
+
+// ClearWecom clears the value of the "wecom" field.
+func (mpu *MemberProfileUpdate) ClearWecom() *MemberProfileUpdate {
+	mpu.mutation.ClearWecom()
 	return mpu
 }
 
@@ -263,23 +350,9 @@ func (mpu *MemberProfileUpdate) ClearSource() *MemberProfileUpdate {
 	return mpu
 }
 
-// SetProfileID sets the "profile" edge to the Member entity by ID.
-func (mpu *MemberProfileUpdate) SetProfileID(id int64) *MemberProfileUpdate {
-	mpu.mutation.SetProfileID(id)
-	return mpu
-}
-
-// SetNillableProfileID sets the "profile" edge to the Member entity by ID if the given value is not nil.
-func (mpu *MemberProfileUpdate) SetNillableProfileID(id *int64) *MemberProfileUpdate {
-	if id != nil {
-		mpu = mpu.SetProfileID(*id)
-	}
-	return mpu
-}
-
-// SetProfile sets the "profile" edge to the Member entity.
-func (mpu *MemberProfileUpdate) SetProfile(m *Member) *MemberProfileUpdate {
-	return mpu.SetProfileID(m.ID)
+// SetMember sets the "member" edge to the Member entity.
+func (mpu *MemberProfileUpdate) SetMember(m *Member) *MemberProfileUpdate {
+	return mpu.SetMemberID(m.ID)
 }
 
 // Mutation returns the MemberProfileMutation object of the builder.
@@ -287,9 +360,9 @@ func (mpu *MemberProfileUpdate) Mutation() *MemberProfileMutation {
 	return mpu.mutation
 }
 
-// ClearProfile clears the "profile" edge to the Member entity.
-func (mpu *MemberProfileUpdate) ClearProfile() *MemberProfileUpdate {
-	mpu.mutation.ClearProfile()
+// ClearMember clears the "member" edge to the Member entity.
+func (mpu *MemberProfileUpdate) ClearMember() *MemberProfileUpdate {
+	mpu.mutation.ClearMember()
 	return mpu
 }
 
@@ -386,6 +459,21 @@ func (mpu *MemberProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mpu.mutation.MotherNameCleared() {
 		_spec.ClearField(memberprofile.FieldMotherName, field.TypeString)
 	}
+	if value, ok := mpu.mutation.Gender(); ok {
+		_spec.SetField(memberprofile.FieldGender, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedGender(); ok {
+		_spec.AddField(memberprofile.FieldGender, field.TypeInt64, value)
+	}
+	if mpu.mutation.GenderCleared() {
+		_spec.ClearField(memberprofile.FieldGender, field.TypeInt64)
+	}
+	if value, ok := mpu.mutation.Birthday(); ok {
+		_spec.SetField(memberprofile.FieldBirthday, field.TypeTime, value)
+	}
+	if mpu.mutation.BirthdayCleared() {
+		_spec.ClearField(memberprofile.FieldBirthday, field.TypeTime)
+	}
 	if value, ok := mpu.mutation.Grade(); ok {
 		_spec.SetField(memberprofile.FieldGrade, field.TypeInt64, value)
 	}
@@ -394,6 +482,18 @@ func (mpu *MemberProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mpu.mutation.GradeCleared() {
 		_spec.ClearField(memberprofile.FieldGrade, field.TypeInt64)
+	}
+	if value, ok := mpu.mutation.Email(); ok {
+		_spec.SetField(memberprofile.FieldEmail, field.TypeString, value)
+	}
+	if mpu.mutation.EmailCleared() {
+		_spec.ClearField(memberprofile.FieldEmail, field.TypeString)
+	}
+	if value, ok := mpu.mutation.Wecom(); ok {
+		_spec.SetField(memberprofile.FieldWecom, field.TypeString, value)
+	}
+	if mpu.mutation.WecomCleared() {
+		_spec.ClearField(memberprofile.FieldWecom, field.TypeString)
 	}
 	if value, ok := mpu.mutation.Intention(); ok {
 		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
@@ -413,12 +513,12 @@ func (mpu *MemberProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mpu.mutation.SourceCleared() {
 		_spec.ClearField(memberprofile.FieldSource, field.TypeInt64)
 	}
-	if mpu.mutation.ProfileCleared() {
+	if mpu.mutation.MemberCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberprofile.ProfileTable,
-			Columns: []string{memberprofile.ProfileColumn},
+			Table:   memberprofile.MemberTable,
+			Columns: []string{memberprofile.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -426,12 +526,12 @@ func (mpu *MemberProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mpu.mutation.ProfileIDs(); len(nodes) > 0 {
+	if nodes := mpu.mutation.MemberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberprofile.ProfileTable,
-			Columns: []string{memberprofile.ProfileColumn},
+			Table:   memberprofile.MemberTable,
+			Columns: []string{memberprofile.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -615,6 +715,53 @@ func (mpuo *MemberProfileUpdateOne) ClearMotherName() *MemberProfileUpdateOne {
 	return mpuo
 }
 
+// SetGender sets the "gender" field.
+func (mpuo *MemberProfileUpdateOne) SetGender(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.ResetGender()
+	mpuo.mutation.SetGender(i)
+	return mpuo
+}
+
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableGender(i *int64) *MemberProfileUpdateOne {
+	if i != nil {
+		mpuo.SetGender(*i)
+	}
+	return mpuo
+}
+
+// AddGender adds i to the "gender" field.
+func (mpuo *MemberProfileUpdateOne) AddGender(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.AddGender(i)
+	return mpuo
+}
+
+// ClearGender clears the value of the "gender" field.
+func (mpuo *MemberProfileUpdateOne) ClearGender() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearGender()
+	return mpuo
+}
+
+// SetBirthday sets the "birthday" field.
+func (mpuo *MemberProfileUpdateOne) SetBirthday(t time.Time) *MemberProfileUpdateOne {
+	mpuo.mutation.SetBirthday(t)
+	return mpuo
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableBirthday(t *time.Time) *MemberProfileUpdateOne {
+	if t != nil {
+		mpuo.SetBirthday(*t)
+	}
+	return mpuo
+}
+
+// ClearBirthday clears the value of the "birthday" field.
+func (mpuo *MemberProfileUpdateOne) ClearBirthday() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearBirthday()
+	return mpuo
+}
+
 // SetGrade sets the "grade" field.
 func (mpuo *MemberProfileUpdateOne) SetGrade(i int64) *MemberProfileUpdateOne {
 	mpuo.mutation.ResetGrade()
@@ -639,6 +786,46 @@ func (mpuo *MemberProfileUpdateOne) AddGrade(i int64) *MemberProfileUpdateOne {
 // ClearGrade clears the value of the "grade" field.
 func (mpuo *MemberProfileUpdateOne) ClearGrade() *MemberProfileUpdateOne {
 	mpuo.mutation.ClearGrade()
+	return mpuo
+}
+
+// SetEmail sets the "email" field.
+func (mpuo *MemberProfileUpdateOne) SetEmail(s string) *MemberProfileUpdateOne {
+	mpuo.mutation.SetEmail(s)
+	return mpuo
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableEmail(s *string) *MemberProfileUpdateOne {
+	if s != nil {
+		mpuo.SetEmail(*s)
+	}
+	return mpuo
+}
+
+// ClearEmail clears the value of the "email" field.
+func (mpuo *MemberProfileUpdateOne) ClearEmail() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearEmail()
+	return mpuo
+}
+
+// SetWecom sets the "wecom" field.
+func (mpuo *MemberProfileUpdateOne) SetWecom(s string) *MemberProfileUpdateOne {
+	mpuo.mutation.SetWecom(s)
+	return mpuo
+}
+
+// SetNillableWecom sets the "wecom" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableWecom(s *string) *MemberProfileUpdateOne {
+	if s != nil {
+		mpuo.SetWecom(*s)
+	}
+	return mpuo
+}
+
+// ClearWecom clears the value of the "wecom" field.
+func (mpuo *MemberProfileUpdateOne) ClearWecom() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearWecom()
 	return mpuo
 }
 
@@ -696,23 +883,9 @@ func (mpuo *MemberProfileUpdateOne) ClearSource() *MemberProfileUpdateOne {
 	return mpuo
 }
 
-// SetProfileID sets the "profile" edge to the Member entity by ID.
-func (mpuo *MemberProfileUpdateOne) SetProfileID(id int64) *MemberProfileUpdateOne {
-	mpuo.mutation.SetProfileID(id)
-	return mpuo
-}
-
-// SetNillableProfileID sets the "profile" edge to the Member entity by ID if the given value is not nil.
-func (mpuo *MemberProfileUpdateOne) SetNillableProfileID(id *int64) *MemberProfileUpdateOne {
-	if id != nil {
-		mpuo = mpuo.SetProfileID(*id)
-	}
-	return mpuo
-}
-
-// SetProfile sets the "profile" edge to the Member entity.
-func (mpuo *MemberProfileUpdateOne) SetProfile(m *Member) *MemberProfileUpdateOne {
-	return mpuo.SetProfileID(m.ID)
+// SetMember sets the "member" edge to the Member entity.
+func (mpuo *MemberProfileUpdateOne) SetMember(m *Member) *MemberProfileUpdateOne {
+	return mpuo.SetMemberID(m.ID)
 }
 
 // Mutation returns the MemberProfileMutation object of the builder.
@@ -720,9 +893,9 @@ func (mpuo *MemberProfileUpdateOne) Mutation() *MemberProfileMutation {
 	return mpuo.mutation
 }
 
-// ClearProfile clears the "profile" edge to the Member entity.
-func (mpuo *MemberProfileUpdateOne) ClearProfile() *MemberProfileUpdateOne {
-	mpuo.mutation.ClearProfile()
+// ClearMember clears the "member" edge to the Member entity.
+func (mpuo *MemberProfileUpdateOne) ClearMember() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearMember()
 	return mpuo
 }
 
@@ -849,6 +1022,21 @@ func (mpuo *MemberProfileUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	if mpuo.mutation.MotherNameCleared() {
 		_spec.ClearField(memberprofile.FieldMotherName, field.TypeString)
 	}
+	if value, ok := mpuo.mutation.Gender(); ok {
+		_spec.SetField(memberprofile.FieldGender, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedGender(); ok {
+		_spec.AddField(memberprofile.FieldGender, field.TypeInt64, value)
+	}
+	if mpuo.mutation.GenderCleared() {
+		_spec.ClearField(memberprofile.FieldGender, field.TypeInt64)
+	}
+	if value, ok := mpuo.mutation.Birthday(); ok {
+		_spec.SetField(memberprofile.FieldBirthday, field.TypeTime, value)
+	}
+	if mpuo.mutation.BirthdayCleared() {
+		_spec.ClearField(memberprofile.FieldBirthday, field.TypeTime)
+	}
 	if value, ok := mpuo.mutation.Grade(); ok {
 		_spec.SetField(memberprofile.FieldGrade, field.TypeInt64, value)
 	}
@@ -857,6 +1045,18 @@ func (mpuo *MemberProfileUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	}
 	if mpuo.mutation.GradeCleared() {
 		_spec.ClearField(memberprofile.FieldGrade, field.TypeInt64)
+	}
+	if value, ok := mpuo.mutation.Email(); ok {
+		_spec.SetField(memberprofile.FieldEmail, field.TypeString, value)
+	}
+	if mpuo.mutation.EmailCleared() {
+		_spec.ClearField(memberprofile.FieldEmail, field.TypeString)
+	}
+	if value, ok := mpuo.mutation.Wecom(); ok {
+		_spec.SetField(memberprofile.FieldWecom, field.TypeString, value)
+	}
+	if mpuo.mutation.WecomCleared() {
+		_spec.ClearField(memberprofile.FieldWecom, field.TypeString)
 	}
 	if value, ok := mpuo.mutation.Intention(); ok {
 		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
@@ -876,12 +1076,12 @@ func (mpuo *MemberProfileUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	if mpuo.mutation.SourceCleared() {
 		_spec.ClearField(memberprofile.FieldSource, field.TypeInt64)
 	}
-	if mpuo.mutation.ProfileCleared() {
+	if mpuo.mutation.MemberCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberprofile.ProfileTable,
-			Columns: []string{memberprofile.ProfileColumn},
+			Table:   memberprofile.MemberTable,
+			Columns: []string{memberprofile.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -889,12 +1089,12 @@ func (mpuo *MemberProfileUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mpuo.mutation.ProfileIDs(); len(nodes) > 0 {
+	if nodes := mpuo.mutation.MemberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberprofile.ProfileTable,
-			Columns: []string{memberprofile.ProfileColumn},
+			Table:   memberprofile.MemberTable,
+			Columns: []string{memberprofile.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),

@@ -22,7 +22,7 @@ type MemberDetailsQuery struct {
 	order      []memberdetails.OrderOption
 	inters     []Interceptor
 	predicates []predicate.MemberDetails
-	withInfo   *MemberQuery
+	withMember *MemberQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -59,8 +59,8 @@ func (mdq *MemberDetailsQuery) Order(o ...memberdetails.OrderOption) *MemberDeta
 	return mdq
 }
 
-// QueryInfo chains the current query on the "info" edge.
-func (mdq *MemberDetailsQuery) QueryInfo() *MemberQuery {
+// QueryMember chains the current query on the "member" edge.
+func (mdq *MemberDetailsQuery) QueryMember() *MemberQuery {
 	query := (&MemberClient{config: mdq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mdq.prepareQuery(ctx); err != nil {
@@ -73,7 +73,7 @@ func (mdq *MemberDetailsQuery) QueryInfo() *MemberQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberdetails.Table, memberdetails.FieldID, selector),
 			sqlgraph.To(member.Table, member.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberdetails.InfoTable, memberdetails.InfoColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberdetails.MemberTable, memberdetails.MemberColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mdq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,21 +273,21 @@ func (mdq *MemberDetailsQuery) Clone() *MemberDetailsQuery {
 		order:      append([]memberdetails.OrderOption{}, mdq.order...),
 		inters:     append([]Interceptor{}, mdq.inters...),
 		predicates: append([]predicate.MemberDetails{}, mdq.predicates...),
-		withInfo:   mdq.withInfo.Clone(),
+		withMember: mdq.withMember.Clone(),
 		// clone intermediate query.
 		sql:  mdq.sql.Clone(),
 		path: mdq.path,
 	}
 }
 
-// WithInfo tells the query-builder to eager-load the nodes that are connected to
-// the "info" edge. The optional arguments are used to configure the query builder of the edge.
-func (mdq *MemberDetailsQuery) WithInfo(opts ...func(*MemberQuery)) *MemberDetailsQuery {
+// WithMember tells the query-builder to eager-load the nodes that are connected to
+// the "member" edge. The optional arguments are used to configure the query builder of the edge.
+func (mdq *MemberDetailsQuery) WithMember(opts ...func(*MemberQuery)) *MemberDetailsQuery {
 	query := (&MemberClient{config: mdq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mdq.withInfo = query
+	mdq.withMember = query
 	return mdq
 }
 
@@ -370,7 +370,7 @@ func (mdq *MemberDetailsQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*MemberDetails{}
 		_spec       = mdq.querySpec()
 		loadedTypes = [1]bool{
-			mdq.withInfo != nil,
+			mdq.withMember != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -391,16 +391,16 @@ func (mdq *MemberDetailsQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := mdq.withInfo; query != nil {
-		if err := mdq.loadInfo(ctx, query, nodes, nil,
-			func(n *MemberDetails, e *Member) { n.Edges.Info = e }); err != nil {
+	if query := mdq.withMember; query != nil {
+		if err := mdq.loadMember(ctx, query, nodes, nil,
+			func(n *MemberDetails, e *Member) { n.Edges.Member = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (mdq *MemberDetailsQuery) loadInfo(ctx context.Context, query *MemberQuery, nodes []*MemberDetails, init func(*MemberDetails), assign func(*MemberDetails, *Member)) error {
+func (mdq *MemberDetailsQuery) loadMember(ctx context.Context, query *MemberQuery, nodes []*MemberDetails, init func(*MemberDetails), assign func(*MemberDetails, *Member)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*MemberDetails)
 	for i := range nodes {
@@ -455,7 +455,7 @@ func (mdq *MemberDetailsQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if mdq.withInfo != nil {
+		if mdq.withMember != nil {
 			_spec.Node.AddColumnOnce(memberdetails.FieldMemberID)
 		}
 	}

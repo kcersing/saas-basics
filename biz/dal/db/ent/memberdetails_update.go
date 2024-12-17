@@ -115,93 +115,6 @@ func (mdu *MemberDetailsUpdate) ClearMemberID() *MemberDetailsUpdate {
 	return mdu
 }
 
-// SetEmail sets the "email" field.
-func (mdu *MemberDetailsUpdate) SetEmail(s string) *MemberDetailsUpdate {
-	mdu.mutation.SetEmail(s)
-	return mdu
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableEmail(s *string) *MemberDetailsUpdate {
-	if s != nil {
-		mdu.SetEmail(*s)
-	}
-	return mdu
-}
-
-// ClearEmail clears the value of the "email" field.
-func (mdu *MemberDetailsUpdate) ClearEmail() *MemberDetailsUpdate {
-	mdu.mutation.ClearEmail()
-	return mdu
-}
-
-// SetWecom sets the "wecom" field.
-func (mdu *MemberDetailsUpdate) SetWecom(s string) *MemberDetailsUpdate {
-	mdu.mutation.SetWecom(s)
-	return mdu
-}
-
-// SetNillableWecom sets the "wecom" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableWecom(s *string) *MemberDetailsUpdate {
-	if s != nil {
-		mdu.SetWecom(*s)
-	}
-	return mdu
-}
-
-// ClearWecom clears the value of the "wecom" field.
-func (mdu *MemberDetailsUpdate) ClearWecom() *MemberDetailsUpdate {
-	mdu.mutation.ClearWecom()
-	return mdu
-}
-
-// SetGender sets the "gender" field.
-func (mdu *MemberDetailsUpdate) SetGender(i int64) *MemberDetailsUpdate {
-	mdu.mutation.ResetGender()
-	mdu.mutation.SetGender(i)
-	return mdu
-}
-
-// SetNillableGender sets the "gender" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableGender(i *int64) *MemberDetailsUpdate {
-	if i != nil {
-		mdu.SetGender(*i)
-	}
-	return mdu
-}
-
-// AddGender adds i to the "gender" field.
-func (mdu *MemberDetailsUpdate) AddGender(i int64) *MemberDetailsUpdate {
-	mdu.mutation.AddGender(i)
-	return mdu
-}
-
-// ClearGender clears the value of the "gender" field.
-func (mdu *MemberDetailsUpdate) ClearGender() *MemberDetailsUpdate {
-	mdu.mutation.ClearGender()
-	return mdu
-}
-
-// SetBirthday sets the "birthday" field.
-func (mdu *MemberDetailsUpdate) SetBirthday(t time.Time) *MemberDetailsUpdate {
-	mdu.mutation.SetBirthday(t)
-	return mdu
-}
-
-// SetNillableBirthday sets the "birthday" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableBirthday(t *time.Time) *MemberDetailsUpdate {
-	if t != nil {
-		mdu.SetBirthday(*t)
-	}
-	return mdu
-}
-
-// ClearBirthday clears the value of the "birthday" field.
-func (mdu *MemberDetailsUpdate) ClearBirthday() *MemberDetailsUpdate {
-	mdu.mutation.ClearBirthday()
-	return mdu
-}
-
 // SetMoneySum sets the "money_sum" field.
 func (mdu *MemberDetailsUpdate) SetMoneySum(f float64) *MemberDetailsUpdate {
 	mdu.mutation.ResetMoneySum()
@@ -504,23 +417,9 @@ func (mdu *MemberDetailsUpdate) ClearRelationMame() *MemberDetailsUpdate {
 	return mdu
 }
 
-// SetInfoID sets the "info" edge to the Member entity by ID.
-func (mdu *MemberDetailsUpdate) SetInfoID(id int64) *MemberDetailsUpdate {
-	mdu.mutation.SetInfoID(id)
-	return mdu
-}
-
-// SetNillableInfoID sets the "info" edge to the Member entity by ID if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableInfoID(id *int64) *MemberDetailsUpdate {
-	if id != nil {
-		mdu = mdu.SetInfoID(*id)
-	}
-	return mdu
-}
-
-// SetInfo sets the "info" edge to the Member entity.
-func (mdu *MemberDetailsUpdate) SetInfo(m *Member) *MemberDetailsUpdate {
-	return mdu.SetInfoID(m.ID)
+// SetMember sets the "member" edge to the Member entity.
+func (mdu *MemberDetailsUpdate) SetMember(m *Member) *MemberDetailsUpdate {
+	return mdu.SetMemberID(m.ID)
 }
 
 // Mutation returns the MemberDetailsMutation object of the builder.
@@ -528,9 +427,9 @@ func (mdu *MemberDetailsUpdate) Mutation() *MemberDetailsMutation {
 	return mdu.mutation
 }
 
-// ClearInfo clears the "info" edge to the Member entity.
-func (mdu *MemberDetailsUpdate) ClearInfo() *MemberDetailsUpdate {
-	mdu.mutation.ClearInfo()
+// ClearMember clears the "member" edge to the Member entity.
+func (mdu *MemberDetailsUpdate) ClearMember() *MemberDetailsUpdate {
+	mdu.mutation.ClearMember()
 	return mdu
 }
 
@@ -605,33 +504,6 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mdu.mutation.CreatedIDCleared() {
 		_spec.ClearField(memberdetails.FieldCreatedID, field.TypeInt64)
-	}
-	if value, ok := mdu.mutation.Email(); ok {
-		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)
-	}
-	if mdu.mutation.EmailCleared() {
-		_spec.ClearField(memberdetails.FieldEmail, field.TypeString)
-	}
-	if value, ok := mdu.mutation.Wecom(); ok {
-		_spec.SetField(memberdetails.FieldWecom, field.TypeString, value)
-	}
-	if mdu.mutation.WecomCleared() {
-		_spec.ClearField(memberdetails.FieldWecom, field.TypeString)
-	}
-	if value, ok := mdu.mutation.Gender(); ok {
-		_spec.SetField(memberdetails.FieldGender, field.TypeInt64, value)
-	}
-	if value, ok := mdu.mutation.AddedGender(); ok {
-		_spec.AddField(memberdetails.FieldGender, field.TypeInt64, value)
-	}
-	if mdu.mutation.GenderCleared() {
-		_spec.ClearField(memberdetails.FieldGender, field.TypeInt64)
-	}
-	if value, ok := mdu.mutation.Birthday(); ok {
-		_spec.SetField(memberdetails.FieldBirthday, field.TypeTime, value)
-	}
-	if mdu.mutation.BirthdayCleared() {
-		_spec.ClearField(memberdetails.FieldBirthday, field.TypeTime)
 	}
 	if value, ok := mdu.mutation.MoneySum(); ok {
 		_spec.SetField(memberdetails.FieldMoneySum, field.TypeFloat64, value)
@@ -729,12 +601,12 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mdu.mutation.RelationMameCleared() {
 		_spec.ClearField(memberdetails.FieldRelationMame, field.TypeString)
 	}
-	if mdu.mutation.InfoCleared() {
+	if mdu.mutation.MemberCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberdetails.InfoTable,
-			Columns: []string{memberdetails.InfoColumn},
+			Table:   memberdetails.MemberTable,
+			Columns: []string{memberdetails.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -742,12 +614,12 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mdu.mutation.InfoIDs(); len(nodes) > 0 {
+	if nodes := mdu.mutation.MemberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberdetails.InfoTable,
-			Columns: []string{memberdetails.InfoColumn},
+			Table:   memberdetails.MemberTable,
+			Columns: []string{memberdetails.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -861,93 +733,6 @@ func (mduo *MemberDetailsUpdateOne) SetNillableMemberID(i *int64) *MemberDetails
 // ClearMemberID clears the value of the "member_id" field.
 func (mduo *MemberDetailsUpdateOne) ClearMemberID() *MemberDetailsUpdateOne {
 	mduo.mutation.ClearMemberID()
-	return mduo
-}
-
-// SetEmail sets the "email" field.
-func (mduo *MemberDetailsUpdateOne) SetEmail(s string) *MemberDetailsUpdateOne {
-	mduo.mutation.SetEmail(s)
-	return mduo
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableEmail(s *string) *MemberDetailsUpdateOne {
-	if s != nil {
-		mduo.SetEmail(*s)
-	}
-	return mduo
-}
-
-// ClearEmail clears the value of the "email" field.
-func (mduo *MemberDetailsUpdateOne) ClearEmail() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearEmail()
-	return mduo
-}
-
-// SetWecom sets the "wecom" field.
-func (mduo *MemberDetailsUpdateOne) SetWecom(s string) *MemberDetailsUpdateOne {
-	mduo.mutation.SetWecom(s)
-	return mduo
-}
-
-// SetNillableWecom sets the "wecom" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableWecom(s *string) *MemberDetailsUpdateOne {
-	if s != nil {
-		mduo.SetWecom(*s)
-	}
-	return mduo
-}
-
-// ClearWecom clears the value of the "wecom" field.
-func (mduo *MemberDetailsUpdateOne) ClearWecom() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearWecom()
-	return mduo
-}
-
-// SetGender sets the "gender" field.
-func (mduo *MemberDetailsUpdateOne) SetGender(i int64) *MemberDetailsUpdateOne {
-	mduo.mutation.ResetGender()
-	mduo.mutation.SetGender(i)
-	return mduo
-}
-
-// SetNillableGender sets the "gender" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableGender(i *int64) *MemberDetailsUpdateOne {
-	if i != nil {
-		mduo.SetGender(*i)
-	}
-	return mduo
-}
-
-// AddGender adds i to the "gender" field.
-func (mduo *MemberDetailsUpdateOne) AddGender(i int64) *MemberDetailsUpdateOne {
-	mduo.mutation.AddGender(i)
-	return mduo
-}
-
-// ClearGender clears the value of the "gender" field.
-func (mduo *MemberDetailsUpdateOne) ClearGender() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearGender()
-	return mduo
-}
-
-// SetBirthday sets the "birthday" field.
-func (mduo *MemberDetailsUpdateOne) SetBirthday(t time.Time) *MemberDetailsUpdateOne {
-	mduo.mutation.SetBirthday(t)
-	return mduo
-}
-
-// SetNillableBirthday sets the "birthday" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableBirthday(t *time.Time) *MemberDetailsUpdateOne {
-	if t != nil {
-		mduo.SetBirthday(*t)
-	}
-	return mduo
-}
-
-// ClearBirthday clears the value of the "birthday" field.
-func (mduo *MemberDetailsUpdateOne) ClearBirthday() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearBirthday()
 	return mduo
 }
 
@@ -1253,23 +1038,9 @@ func (mduo *MemberDetailsUpdateOne) ClearRelationMame() *MemberDetailsUpdateOne 
 	return mduo
 }
 
-// SetInfoID sets the "info" edge to the Member entity by ID.
-func (mduo *MemberDetailsUpdateOne) SetInfoID(id int64) *MemberDetailsUpdateOne {
-	mduo.mutation.SetInfoID(id)
-	return mduo
-}
-
-// SetNillableInfoID sets the "info" edge to the Member entity by ID if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableInfoID(id *int64) *MemberDetailsUpdateOne {
-	if id != nil {
-		mduo = mduo.SetInfoID(*id)
-	}
-	return mduo
-}
-
-// SetInfo sets the "info" edge to the Member entity.
-func (mduo *MemberDetailsUpdateOne) SetInfo(m *Member) *MemberDetailsUpdateOne {
-	return mduo.SetInfoID(m.ID)
+// SetMember sets the "member" edge to the Member entity.
+func (mduo *MemberDetailsUpdateOne) SetMember(m *Member) *MemberDetailsUpdateOne {
+	return mduo.SetMemberID(m.ID)
 }
 
 // Mutation returns the MemberDetailsMutation object of the builder.
@@ -1277,9 +1048,9 @@ func (mduo *MemberDetailsUpdateOne) Mutation() *MemberDetailsMutation {
 	return mduo.mutation
 }
 
-// ClearInfo clears the "info" edge to the Member entity.
-func (mduo *MemberDetailsUpdateOne) ClearInfo() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearInfo()
+// ClearMember clears the "member" edge to the Member entity.
+func (mduo *MemberDetailsUpdateOne) ClearMember() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearMember()
 	return mduo
 }
 
@@ -1385,33 +1156,6 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	if mduo.mutation.CreatedIDCleared() {
 		_spec.ClearField(memberdetails.FieldCreatedID, field.TypeInt64)
 	}
-	if value, ok := mduo.mutation.Email(); ok {
-		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)
-	}
-	if mduo.mutation.EmailCleared() {
-		_spec.ClearField(memberdetails.FieldEmail, field.TypeString)
-	}
-	if value, ok := mduo.mutation.Wecom(); ok {
-		_spec.SetField(memberdetails.FieldWecom, field.TypeString, value)
-	}
-	if mduo.mutation.WecomCleared() {
-		_spec.ClearField(memberdetails.FieldWecom, field.TypeString)
-	}
-	if value, ok := mduo.mutation.Gender(); ok {
-		_spec.SetField(memberdetails.FieldGender, field.TypeInt64, value)
-	}
-	if value, ok := mduo.mutation.AddedGender(); ok {
-		_spec.AddField(memberdetails.FieldGender, field.TypeInt64, value)
-	}
-	if mduo.mutation.GenderCleared() {
-		_spec.ClearField(memberdetails.FieldGender, field.TypeInt64)
-	}
-	if value, ok := mduo.mutation.Birthday(); ok {
-		_spec.SetField(memberdetails.FieldBirthday, field.TypeTime, value)
-	}
-	if mduo.mutation.BirthdayCleared() {
-		_spec.ClearField(memberdetails.FieldBirthday, field.TypeTime)
-	}
 	if value, ok := mduo.mutation.MoneySum(); ok {
 		_spec.SetField(memberdetails.FieldMoneySum, field.TypeFloat64, value)
 	}
@@ -1508,12 +1252,12 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	if mduo.mutation.RelationMameCleared() {
 		_spec.ClearField(memberdetails.FieldRelationMame, field.TypeString)
 	}
-	if mduo.mutation.InfoCleared() {
+	if mduo.mutation.MemberCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberdetails.InfoTable,
-			Columns: []string{memberdetails.InfoColumn},
+			Table:   memberdetails.MemberTable,
+			Columns: []string{memberdetails.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
@@ -1521,12 +1265,12 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mduo.mutation.InfoIDs(); len(nodes) > 0 {
+	if nodes := mduo.mutation.MemberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberdetails.InfoTable,
-			Columns: []string{memberdetails.InfoColumn},
+			Table:   memberdetails.MemberTable,
+			Columns: []string{memberdetails.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),

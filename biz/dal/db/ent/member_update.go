@@ -171,23 +171,23 @@ func (mu *MemberUpdate) ClearName() *MemberUpdate {
 	return mu
 }
 
-// SetNickname sets the "nickname" field.
-func (mu *MemberUpdate) SetNickname(s string) *MemberUpdate {
-	mu.mutation.SetNickname(s)
+// SetUsername sets the "username" field.
+func (mu *MemberUpdate) SetUsername(s string) *MemberUpdate {
+	mu.mutation.SetUsername(s)
 	return mu
 }
 
-// SetNillableNickname sets the "nickname" field if the given value is not nil.
-func (mu *MemberUpdate) SetNillableNickname(s *string) *MemberUpdate {
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillableUsername(s *string) *MemberUpdate {
 	if s != nil {
-		mu.SetNickname(*s)
+		mu.SetUsername(*s)
 	}
 	return mu
 }
 
-// ClearNickname clears the value of the "nickname" field.
-func (mu *MemberUpdate) ClearNickname() *MemberUpdate {
-	mu.mutation.ClearNickname()
+// ClearUsername clears the value of the "username" field.
+func (mu *MemberUpdate) ClearUsername() *MemberUpdate {
+	mu.mutation.ClearUsername()
 	return mu
 }
 
@@ -716,11 +716,11 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if mu.mutation.NameCleared() {
 		_spec.ClearField(member.FieldName, field.TypeString)
 	}
-	if value, ok := mu.mutation.Nickname(); ok {
-		_spec.SetField(member.FieldNickname, field.TypeString, value)
+	if value, ok := mu.mutation.Username(); ok {
+		_spec.SetField(member.FieldUsername, field.TypeString, value)
 	}
-	if mu.mutation.NicknameCleared() {
-		_spec.ClearField(member.FieldNickname, field.TypeString)
+	if mu.mutation.UsernameCleared() {
+		_spec.ClearField(member.FieldUsername, field.TypeString)
 	}
 	if value, ok := mu.mutation.Mobile(); ok {
 		_spec.SetField(member.FieldMobile, field.TypeString, value)
@@ -1346,23 +1346,23 @@ func (muo *MemberUpdateOne) ClearName() *MemberUpdateOne {
 	return muo
 }
 
-// SetNickname sets the "nickname" field.
-func (muo *MemberUpdateOne) SetNickname(s string) *MemberUpdateOne {
-	muo.mutation.SetNickname(s)
+// SetUsername sets the "username" field.
+func (muo *MemberUpdateOne) SetUsername(s string) *MemberUpdateOne {
+	muo.mutation.SetUsername(s)
 	return muo
 }
 
-// SetNillableNickname sets the "nickname" field if the given value is not nil.
-func (muo *MemberUpdateOne) SetNillableNickname(s *string) *MemberUpdateOne {
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableUsername(s *string) *MemberUpdateOne {
 	if s != nil {
-		muo.SetNickname(*s)
+		muo.SetUsername(*s)
 	}
 	return muo
 }
 
-// ClearNickname clears the value of the "nickname" field.
-func (muo *MemberUpdateOne) ClearNickname() *MemberUpdateOne {
-	muo.mutation.ClearNickname()
+// ClearUsername clears the value of the "username" field.
+func (muo *MemberUpdateOne) ClearUsername() *MemberUpdateOne {
+	muo.mutation.ClearUsername()
 	return muo
 }
 
@@ -1921,11 +1921,11 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	if muo.mutation.NameCleared() {
 		_spec.ClearField(member.FieldName, field.TypeString)
 	}
-	if value, ok := muo.mutation.Nickname(); ok {
-		_spec.SetField(member.FieldNickname, field.TypeString, value)
+	if value, ok := muo.mutation.Username(); ok {
+		_spec.SetField(member.FieldUsername, field.TypeString, value)
 	}
-	if muo.mutation.NicknameCleared() {
-		_spec.ClearField(member.FieldNickname, field.TypeString)
+	if muo.mutation.UsernameCleared() {
+		_spec.ClearField(member.FieldUsername, field.TypeString)
 	}
 	if value, ok := muo.mutation.Mobile(); ok {
 		_spec.SetField(member.FieldMobile, field.TypeString, value)

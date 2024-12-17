@@ -32,13 +32,13 @@ type Member struct {
 	Password string `json:"password,omitempty"`
 	// name | 账号
 	Name string `json:"name,omitempty"`
-	// nickname | 姓名
-	Nickname string `json:"nickname,omitempty"`
+	// username
+	Username string `json:"username,omitempty"`
 	// mobile number | 手机号
 	Mobile string `json:"mobile,omitempty"`
 	// avatar | 头像路径
 	Avatar string `json:"avatar,omitempty"`
-	// 状态[0:潜在;1:正式;3:冻结;4:到期]
+	// 状态[1:潜在;2:正式]
 	Condition int64 `json:"condition,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberQuery when eager-loading is set.
@@ -170,7 +170,7 @@ func (*Member) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case member.FieldID, member.FieldDelete, member.FieldCreatedID, member.FieldStatus, member.FieldCondition:
 			values[i] = new(sql.NullInt64)
-		case member.FieldPassword, member.FieldName, member.FieldNickname, member.FieldMobile, member.FieldAvatar:
+		case member.FieldPassword, member.FieldName, member.FieldUsername, member.FieldMobile, member.FieldAvatar:
 			values[i] = new(sql.NullString)
 		case member.FieldCreatedAt, member.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -237,11 +237,11 @@ func (m *Member) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Name = value.String
 			}
-		case member.FieldNickname:
+		case member.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field nickname", values[i])
+				return fmt.Errorf("unexpected type %T for field username", values[i])
 			} else if value.Valid {
-				m.Nickname = value.String
+				m.Username = value.String
 			}
 		case member.FieldMobile:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -368,8 +368,8 @@ func (m *Member) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(m.Name)
 	builder.WriteString(", ")
-	builder.WriteString("nickname=")
-	builder.WriteString(m.Nickname)
+	builder.WriteString("username=")
+	builder.WriteString(m.Username)
 	builder.WriteString(", ")
 	builder.WriteString("mobile=")
 	builder.WriteString(m.Mobile)

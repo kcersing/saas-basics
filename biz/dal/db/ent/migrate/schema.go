@@ -447,10 +447,10 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "password", Type: field.TypeString, Nullable: true, Comment: "password | 密码"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 账号"},
-		{Name: "nickname", Type: field.TypeString, Unique: true, Nullable: true, Comment: "nickname | 姓名"},
+		{Name: "username", Type: field.TypeString, Unique: true, Nullable: true, Comment: "username "},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "mobile number | 手机号"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
-		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[0:潜在;1:正式;3:冻结;4:到期]", Default: 0},
+		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:潜在;2:正式]", Default: 1},
 	}
 	// MemberTable holds the schema information for the "member" table.
 	MemberTable = &schema.Table{
@@ -557,10 +557,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
-		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "email | 邮箱号"},
-		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
-		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [0:女性;1:男性;3:保密]", Default: 3},
-		{Name: "birthday", Type: field.TypeTime, Nullable: true, Comment: "出生日期"},
 		{Name: "money_sum", Type: field.TypeFloat64, Nullable: true, Comment: "消费总金额", Default: 3},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "首次的产品", Default: 0},
 		{Name: "product_name", Type: field.TypeString, Nullable: true, Comment: "首次的产品"},
@@ -584,7 +580,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_details_member_member_details",
-				Columns:    []*schema.Column{MemberDetailsColumns[22]},
+				Columns:    []*schema.Column{MemberDetailsColumns[18]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -593,7 +589,7 @@ var (
 			{
 				Name:    "memberdetails_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberDetailsColumns[22]},
+				Columns: []*schema.Column{MemberDetailsColumns[18]},
 			},
 		},
 	}
@@ -700,7 +696,11 @@ var (
 		{Name: "mobile_ascription", Type: field.TypeInt64, Nullable: true, Comment: "手机号归属", Default: 0},
 		{Name: "father_name", Type: field.TypeString, Nullable: true, Comment: "父亲名称"},
 		{Name: "mother_name", Type: field.TypeString, Nullable: true, Comment: "母亲名称"},
+		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [1:女性;2:男性;3:保密]", Default: 3},
+		{Name: "birthday", Type: field.TypeTime, Nullable: true, Comment: "出生日期"},
 		{Name: "grade", Type: field.TypeInt64, Nullable: true, Comment: "年级", Default: 0},
+		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "email | 邮箱号"},
+		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
 		{Name: "intention", Type: field.TypeInt64, Nullable: true, Comment: "意向", Default: 0},
 		{Name: "source", Type: field.TypeInt64, Nullable: true, Comment: "来源", Default: 0},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
@@ -713,7 +713,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_profile_member_member_profile",
-				Columns:    []*schema.Column{MemberProfileColumns[11]},
+				Columns:    []*schema.Column{MemberProfileColumns[15]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -722,7 +722,7 @@ var (
 			{
 				Name:    "memberprofile_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProfileColumns[11]},
+				Columns: []*schema.Column{MemberProfileColumns[15]},
 			},
 		},
 	}

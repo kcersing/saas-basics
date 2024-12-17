@@ -18,9 +18,10 @@ import (
 //
 //	@Summary		创建会员 Summary
 //	@Description	创建会员 Description
-//	@Param			request	body		member.CreateOrUpdateMemberReq	true	"query params"
+//	@Param			request	body		member.CreateOrUpdateMemberReq	true "query params"
 //	@Success		200		{object}	utils.Response
-//	@router			/service/member/create [POST]
+//
+// @router /service/member/create [POST]
 func CreateMember(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.CreateOrUpdateMemberReq
@@ -43,9 +44,10 @@ func CreateMember(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary		更新会员 Summary
 //	@Description	更新会员 Description
-//	@Param			request	body		member.CreateOrUpdateMemberReq	true	"query params"
+//	@Param			request	body		member.CreateOrUpdateMemberReq	true "query params"
 //	@Success		200		{object}	utils.Response
-//	@router			/service/member/update [POST]
+//
+// @router /service/member/update [POST]
 func UpdateMember(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.CreateOrUpdateMemberReq
@@ -68,9 +70,10 @@ func UpdateMember(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary		会员详情 Summary
 //	@Description	会员详情 Description
-//	@Param			request	body		base.IDReq	true	"query params"
+//	@Param			request	body		base.IDReq	true "query params"
 //	@Success		200		{object}	utils.Response
-//	@router			/service/member/info [POST]
+//
+// @router /service/member/info [POST]
 func MemberInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -80,7 +83,7 @@ func MemberInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	info, err := service.NewMember(ctx, c).MemberPrivacy(req.ID)
+	info, err := service.NewMember(ctx, c).MemberInfo(req.ID)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -89,39 +92,15 @@ func MemberInfo(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// MemberPrivacy .
-//
-//	@Summary		会员隐私 Summary
-//	@Description	会员隐私 Description
-//	@Param			request	body		base.IDReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/privacy [POST]
-func MemberPrivacy(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	info, err := service.NewMember(ctx, c).MemberPrivacy(req.ID)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, info, 0, "")
-	return
-}
-
-// MemberList .
+// MemberFullList .
 //
 //	@Summary		会员列表 Summary
 //	@Description	会员列表 Description
-//	@Param			request	body		member.MemberListReq	true	"query params"
+//	@Param			request	body		member.MemberListReq	true "query params"
 //	@Success		200		{object}	utils.Response
-//	@router			/service/member/list [POST]
-func MemberList(ctx context.Context, c *app.RequestContext) {
+//
+// @router /service/member/full-list [POST]
+func MemberFullList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberListReq
 	err = c.BindAndValidate(&req)
@@ -130,7 +109,33 @@ func MemberList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, total, err := service.NewMember(ctx, c).MemberList(req)
+	list, total, err := service.NewMember(ctx, c).MemberFullList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
+}
+
+// MemberPotentialList .
+//
+//	@Summary		潜在会员列表 Summary
+//	@Description	潜在会员列表 Description
+//	@Param			request	body		member.MemberListReq	true "query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/member/potential-list [POST]
+func MemberPotentialList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	list, total, err := service.NewMember(ctx, c).MemberPotentialList(req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -143,9 +148,10 @@ func MemberList(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary		更新会员状态 Summary
 //	@Description	更新会员状态 Description
-//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Param			request	body		base.StatusCodeReq	true "query params"
 //	@Success		200		{object}	utils.Response
-//	@router			/service/member/status [POST]
+//
+// @router /service/member/status [POST]
 func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.StatusCodeReq
@@ -164,53 +170,29 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// MemberSearch .
+// UpdateMemberFollow .
 //
-//	@Summary		会员搜索 Summary
-//	@Description	会员搜索 Description
-//	@Param			request	body		member.MemberSearchReq	true	"query params"
+//	@Summary		更新会员关注 Summary
+//	@Description	更新会员关注 Description
+//	@Param			request	body		member.UpdateMemberFollowReq	true "query params"
 //	@Success		200		{object}	utils.Response
-//	@router			/service/member/search [POST]
-func MemberSearch(ctx context.Context, c *app.RequestContext) {
+//
+// @router /service/member/update-follow [POST]
+func UpdateMemberFollow(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req member.MemberSearchReq
+	var req member.UpdateMemberFollowReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	info, err := service.NewMember(ctx, c).MemberSearch(req.Option, req.Value)
+	err = service.NewMember(ctx, c).UpdateMemberFollow(&req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	utils.SendResponse(c, errno.Success, info, 0, "")
-	return
-}
-
-// MemberNode .
-//
-//	@Summary		会员节点 Summary
-//	@Description	会员节点 Description
-//	@Param			request	body		base.IDReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/node [POST]
-func MemberNode(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	info, err := service.NewMember(ctx, c).MemberNode(req.ID)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, info, 0, "")
+	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
 
@@ -218,9 +200,10 @@ func MemberNode(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary		会员合同列表 Summary
 //	@Description	会员合同列表 Description
-//	@Param			request	body		member.MemberContractListReq	true	"query params"
+//	@Param			request	body		member.MemberContractListReq	true "query params"
 //	@Success		200		{object}	utils.Response
-//	@router			/service/member/contract-list [POST]
+//
+// @router /service/member/contract-list [POST]
 func MemberContractList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req member.MemberContractListReq
@@ -229,7 +212,6 @@ func MemberContractList(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
 	list, total, err := service.NewMember(ctx, c).ContractList(req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
@@ -237,151 +219,4 @@ func MemberContractList(ctx context.Context, c *app.RequestContext) {
 	}
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
 	return
-}
-
-// MemberProductList .
-//
-//	@Summary		会员产品列表 Summary
-//	@Description	会员产品列表 Description
-//	@Param			request	body		member.MemberProductListReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/product-list [POST]
-func MemberProductList(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req member.MemberProductListReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// MemberPropertyList .
-//
-//	@Summary		会员产品属性列表 Summary
-//	@Description	会员产品属性列表 Description
-//	@Param			request	body		member.MemberPropertyListReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/property-list [POST]
-func MemberPropertyList(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req member.MemberPropertyListReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// MemberProductDetail .
-//
-//	@Summary		会员产品详情 Summary
-//	@Description	会员产品详情 Description
-//	@Param			request	body		base.IDReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/product-detail [POST]
-func MemberProductDetail(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// MemberPropertyDetail .
-//
-//	@Summary		会员产品属性详情 Summary
-//	@Description	会员产品属性详情 Description
-//	@Param			request	body		base.IDReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/property-detail [POST]
-func MemberPropertyDetail(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// MemberPropertyUpdate .
-//
-//	@Summary		会员产品属性更新 Summary
-//	@Description	会员产品属性更新 Description
-//	@Param			request	body		member.MemberPropertyListReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/property-update [POST]
-func MemberPropertyUpdate(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req member.MemberPropertyListReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// MemberProductSearch .
-//
-//	@Summary		会员产品搜索 Summary
-//	@Description	会员产品搜索 Description
-//	@Param			request	body		member.MemberProductSearchReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/search-product [POST]
-func MemberProductSearch(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req member.MemberProductSearchReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// MemberPropertySearch .
-//
-//	@Summary		会员产品属性搜索 Summary
-//	@Description	会员产品属性搜索 Description
-//	@Param			request	body		member.MemberPropertySearchReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/member/search-property [POST]
-func MemberPropertySearch(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req member.MemberPropertySearchReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
 }

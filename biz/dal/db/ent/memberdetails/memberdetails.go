@@ -24,14 +24,6 @@ const (
 	FieldCreatedID = "created_id"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
-	// FieldEmail holds the string denoting the email field in the database.
-	FieldEmail = "email"
-	// FieldWecom holds the string denoting the wecom field in the database.
-	FieldWecom = "wecom"
-	// FieldGender holds the string denoting the gender field in the database.
-	FieldGender = "gender"
-	// FieldBirthday holds the string denoting the birthday field in the database.
-	FieldBirthday = "birthday"
 	// FieldMoneySum holds the string denoting the money_sum field in the database.
 	FieldMoneySum = "money_sum"
 	// FieldProductID holds the string denoting the product_id field in the database.
@@ -58,17 +50,17 @@ const (
 	FieldRelationMid = "relation_mid"
 	// FieldRelationMame holds the string denoting the relation_mame field in the database.
 	FieldRelationMame = "relation_mame"
-	// EdgeInfo holds the string denoting the info edge name in mutations.
-	EdgeInfo = "info"
+	// EdgeMember holds the string denoting the member edge name in mutations.
+	EdgeMember = "member"
 	// Table holds the table name of the memberdetails in the database.
 	Table = "member_details"
-	// InfoTable is the table that holds the info relation/edge.
-	InfoTable = "member_details"
-	// InfoInverseTable is the table name for the Member entity.
+	// MemberTable is the table that holds the member relation/edge.
+	MemberTable = "member_details"
+	// MemberInverseTable is the table name for the Member entity.
 	// It exists in this package in order to avoid circular dependency with the "member" package.
-	InfoInverseTable = "member"
-	// InfoColumn is the table column denoting the info relation/edge.
-	InfoColumn = "member_id"
+	MemberInverseTable = "member"
+	// MemberColumn is the table column denoting the member relation/edge.
+	MemberColumn = "member_id"
 )
 
 // Columns holds all SQL columns for memberdetails fields.
@@ -79,10 +71,6 @@ var Columns = []string{
 	FieldDelete,
 	FieldCreatedID,
 	FieldMemberID,
-	FieldEmail,
-	FieldWecom,
-	FieldGender,
-	FieldBirthday,
 	FieldMoneySum,
 	FieldProductID,
 	FieldProductName,
@@ -119,8 +107,6 @@ var (
 	DefaultDelete int64
 	// DefaultCreatedID holds the default value on creation for the "created_id" field.
 	DefaultCreatedID int64
-	// DefaultGender holds the default value on creation for the "gender" field.
-	DefaultGender int64
 	// DefaultMoneySum holds the default value on creation for the "money_sum" field.
 	DefaultMoneySum float64
 	// DefaultProductID holds the default value on creation for the "product_id" field.
@@ -166,26 +152,6 @@ func ByCreatedID(opts ...sql.OrderTermOption) OrderOption {
 // ByMemberID orders the results by the member_id field.
 func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
-}
-
-// ByEmail orders the results by the email field.
-func ByEmail(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmail, opts...).ToFunc()
-}
-
-// ByWecom orders the results by the wecom field.
-func ByWecom(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldWecom, opts...).ToFunc()
-}
-
-// ByGender orders the results by the gender field.
-func ByGender(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldGender, opts...).ToFunc()
-}
-
-// ByBirthday orders the results by the birthday field.
-func ByBirthday(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBirthday, opts...).ToFunc()
 }
 
 // ByMoneySum orders the results by the money_sum field.
@@ -253,16 +219,16 @@ func ByRelationMame(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelationMame, opts...).ToFunc()
 }
 
-// ByInfoField orders the results by info field.
-func ByInfoField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByMemberField orders the results by member field.
+func ByMemberField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInfoStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newMemberStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newInfoStep() *sqlgraph.Step {
+func newMemberStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InfoInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, InfoTable, InfoColumn),
+		sqlgraph.To(MemberInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MemberTable, MemberColumn),
 	)
 }

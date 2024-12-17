@@ -95,9 +95,29 @@ func MotherName(v string) predicate.MemberProfile {
 	return predicate.MemberProfile(sql.FieldEQ(FieldMotherName, v))
 }
 
+// Gender applies equality check predicate on the "gender" field. It's identical to GenderEQ.
+func Gender(v int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEQ(FieldGender, v))
+}
+
+// Birthday applies equality check predicate on the "birthday" field. It's identical to BirthdayEQ.
+func Birthday(v time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEQ(FieldBirthday, v))
+}
+
 // Grade applies equality check predicate on the "grade" field. It's identical to GradeEQ.
 func Grade(v int64) predicate.MemberProfile {
 	return predicate.MemberProfile(sql.FieldEQ(FieldGrade, v))
+}
+
+// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
+func Email(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEQ(FieldEmail, v))
+}
+
+// Wecom applies equality check predicate on the "wecom" field. It's identical to WecomEQ.
+func Wecom(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEQ(FieldWecom, v))
 }
 
 // Intention applies equality check predicate on the "intention" field. It's identical to IntentionEQ.
@@ -540,6 +560,106 @@ func MotherNameContainsFold(v string) predicate.MemberProfile {
 	return predicate.MemberProfile(sql.FieldContainsFold(FieldMotherName, v))
 }
 
+// GenderEQ applies the EQ predicate on the "gender" field.
+func GenderEQ(v int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEQ(FieldGender, v))
+}
+
+// GenderNEQ applies the NEQ predicate on the "gender" field.
+func GenderNEQ(v int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNEQ(FieldGender, v))
+}
+
+// GenderIn applies the In predicate on the "gender" field.
+func GenderIn(vs ...int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldIn(FieldGender, vs...))
+}
+
+// GenderNotIn applies the NotIn predicate on the "gender" field.
+func GenderNotIn(vs ...int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNotIn(FieldGender, vs...))
+}
+
+// GenderGT applies the GT predicate on the "gender" field.
+func GenderGT(v int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldGT(FieldGender, v))
+}
+
+// GenderGTE applies the GTE predicate on the "gender" field.
+func GenderGTE(v int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldGTE(FieldGender, v))
+}
+
+// GenderLT applies the LT predicate on the "gender" field.
+func GenderLT(v int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldLT(FieldGender, v))
+}
+
+// GenderLTE applies the LTE predicate on the "gender" field.
+func GenderLTE(v int64) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldLTE(FieldGender, v))
+}
+
+// GenderIsNil applies the IsNil predicate on the "gender" field.
+func GenderIsNil() predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldIsNull(FieldGender))
+}
+
+// GenderNotNil applies the NotNil predicate on the "gender" field.
+func GenderNotNil() predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNotNull(FieldGender))
+}
+
+// BirthdayEQ applies the EQ predicate on the "birthday" field.
+func BirthdayEQ(v time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEQ(FieldBirthday, v))
+}
+
+// BirthdayNEQ applies the NEQ predicate on the "birthday" field.
+func BirthdayNEQ(v time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNEQ(FieldBirthday, v))
+}
+
+// BirthdayIn applies the In predicate on the "birthday" field.
+func BirthdayIn(vs ...time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldIn(FieldBirthday, vs...))
+}
+
+// BirthdayNotIn applies the NotIn predicate on the "birthday" field.
+func BirthdayNotIn(vs ...time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNotIn(FieldBirthday, vs...))
+}
+
+// BirthdayGT applies the GT predicate on the "birthday" field.
+func BirthdayGT(v time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldGT(FieldBirthday, v))
+}
+
+// BirthdayGTE applies the GTE predicate on the "birthday" field.
+func BirthdayGTE(v time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldGTE(FieldBirthday, v))
+}
+
+// BirthdayLT applies the LT predicate on the "birthday" field.
+func BirthdayLT(v time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldLT(FieldBirthday, v))
+}
+
+// BirthdayLTE applies the LTE predicate on the "birthday" field.
+func BirthdayLTE(v time.Time) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldLTE(FieldBirthday, v))
+}
+
+// BirthdayIsNil applies the IsNil predicate on the "birthday" field.
+func BirthdayIsNil() predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldIsNull(FieldBirthday))
+}
+
+// BirthdayNotNil applies the NotNil predicate on the "birthday" field.
+func BirthdayNotNil() predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNotNull(FieldBirthday))
+}
+
 // GradeEQ applies the EQ predicate on the "grade" field.
 func GradeEQ(v int64) predicate.MemberProfile {
 	return predicate.MemberProfile(sql.FieldEQ(FieldGrade, v))
@@ -588,6 +708,156 @@ func GradeIsNil() predicate.MemberProfile {
 // GradeNotNil applies the NotNil predicate on the "grade" field.
 func GradeNotNil() predicate.MemberProfile {
 	return predicate.MemberProfile(sql.FieldNotNull(FieldGrade))
+}
+
+// EmailEQ applies the EQ predicate on the "email" field.
+func EmailEQ(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEQ(FieldEmail, v))
+}
+
+// EmailNEQ applies the NEQ predicate on the "email" field.
+func EmailNEQ(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNEQ(FieldEmail, v))
+}
+
+// EmailIn applies the In predicate on the "email" field.
+func EmailIn(vs ...string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldIn(FieldEmail, vs...))
+}
+
+// EmailNotIn applies the NotIn predicate on the "email" field.
+func EmailNotIn(vs ...string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNotIn(FieldEmail, vs...))
+}
+
+// EmailGT applies the GT predicate on the "email" field.
+func EmailGT(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldGT(FieldEmail, v))
+}
+
+// EmailGTE applies the GTE predicate on the "email" field.
+func EmailGTE(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldGTE(FieldEmail, v))
+}
+
+// EmailLT applies the LT predicate on the "email" field.
+func EmailLT(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldLT(FieldEmail, v))
+}
+
+// EmailLTE applies the LTE predicate on the "email" field.
+func EmailLTE(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldLTE(FieldEmail, v))
+}
+
+// EmailContains applies the Contains predicate on the "email" field.
+func EmailContains(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldContains(FieldEmail, v))
+}
+
+// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
+func EmailHasPrefix(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldHasPrefix(FieldEmail, v))
+}
+
+// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
+func EmailHasSuffix(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldHasSuffix(FieldEmail, v))
+}
+
+// EmailIsNil applies the IsNil predicate on the "email" field.
+func EmailIsNil() predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldIsNull(FieldEmail))
+}
+
+// EmailNotNil applies the NotNil predicate on the "email" field.
+func EmailNotNil() predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNotNull(FieldEmail))
+}
+
+// EmailEqualFold applies the EqualFold predicate on the "email" field.
+func EmailEqualFold(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEqualFold(FieldEmail, v))
+}
+
+// EmailContainsFold applies the ContainsFold predicate on the "email" field.
+func EmailContainsFold(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldContainsFold(FieldEmail, v))
+}
+
+// WecomEQ applies the EQ predicate on the "wecom" field.
+func WecomEQ(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEQ(FieldWecom, v))
+}
+
+// WecomNEQ applies the NEQ predicate on the "wecom" field.
+func WecomNEQ(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNEQ(FieldWecom, v))
+}
+
+// WecomIn applies the In predicate on the "wecom" field.
+func WecomIn(vs ...string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldIn(FieldWecom, vs...))
+}
+
+// WecomNotIn applies the NotIn predicate on the "wecom" field.
+func WecomNotIn(vs ...string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNotIn(FieldWecom, vs...))
+}
+
+// WecomGT applies the GT predicate on the "wecom" field.
+func WecomGT(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldGT(FieldWecom, v))
+}
+
+// WecomGTE applies the GTE predicate on the "wecom" field.
+func WecomGTE(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldGTE(FieldWecom, v))
+}
+
+// WecomLT applies the LT predicate on the "wecom" field.
+func WecomLT(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldLT(FieldWecom, v))
+}
+
+// WecomLTE applies the LTE predicate on the "wecom" field.
+func WecomLTE(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldLTE(FieldWecom, v))
+}
+
+// WecomContains applies the Contains predicate on the "wecom" field.
+func WecomContains(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldContains(FieldWecom, v))
+}
+
+// WecomHasPrefix applies the HasPrefix predicate on the "wecom" field.
+func WecomHasPrefix(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldHasPrefix(FieldWecom, v))
+}
+
+// WecomHasSuffix applies the HasSuffix predicate on the "wecom" field.
+func WecomHasSuffix(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldHasSuffix(FieldWecom, v))
+}
+
+// WecomIsNil applies the IsNil predicate on the "wecom" field.
+func WecomIsNil() predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldIsNull(FieldWecom))
+}
+
+// WecomNotNil applies the NotNil predicate on the "wecom" field.
+func WecomNotNil() predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldNotNull(FieldWecom))
+}
+
+// WecomEqualFold applies the EqualFold predicate on the "wecom" field.
+func WecomEqualFold(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldEqualFold(FieldWecom, v))
+}
+
+// WecomContainsFold applies the ContainsFold predicate on the "wecom" field.
+func WecomContainsFold(v string) predicate.MemberProfile {
+	return predicate.MemberProfile(sql.FieldContainsFold(FieldWecom, v))
 }
 
 // IntentionEQ applies the EQ predicate on the "intention" field.
@@ -690,21 +960,21 @@ func SourceNotNil() predicate.MemberProfile {
 	return predicate.MemberProfile(sql.FieldNotNull(FieldSource))
 }
 
-// HasProfile applies the HasEdge predicate on the "profile" edge.
-func HasProfile() predicate.MemberProfile {
+// HasMember applies the HasEdge predicate on the "member" edge.
+func HasMember() predicate.MemberProfile {
 	return predicate.MemberProfile(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ProfileTable, ProfileColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, MemberTable, MemberColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasProfileWith applies the HasEdge predicate on the "profile" edge with a given conditions (other predicates).
-func HasProfileWith(preds ...predicate.Member) predicate.MemberProfile {
+// HasMemberWith applies the HasEdge predicate on the "member" edge with a given conditions (other predicates).
+func HasMemberWith(preds ...predicate.Member) predicate.MemberProfile {
 	return predicate.MemberProfile(func(s *sql.Selector) {
-		step := newProfileStep()
+		step := newMemberStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

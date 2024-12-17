@@ -18,7 +18,7 @@ func (Member) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("password").Optional().Comment("password | 密码"),
 		field.String("name").Optional().Comment("name | 账号"),
-		field.String("nickname").Unique().Comment("nickname | 姓名").Optional(),
+		field.String("username").Unique().Comment("username ").Optional(),
 		field.String("mobile").Optional().Comment("mobile number | 手机号"),
 
 		field.String("avatar").
@@ -27,9 +27,9 @@ func (Member) Fields() []ent.Field {
 			Default("").
 			Comment("avatar | 头像路径"),
 		field.Int64("condition").
-			Default(0).
+			Default(1).
 			Optional().
-			Comment("状态[0:潜在;1:正式;3:冻结;4:到期]"),
+			Comment("状态[1:潜在;2:正式]"),
 	}
 }
 

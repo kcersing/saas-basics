@@ -127,16 +127,16 @@ func (mc *MemberCreate) SetNillableName(s *string) *MemberCreate {
 	return mc
 }
 
-// SetNickname sets the "nickname" field.
-func (mc *MemberCreate) SetNickname(s string) *MemberCreate {
-	mc.mutation.SetNickname(s)
+// SetUsername sets the "username" field.
+func (mc *MemberCreate) SetUsername(s string) *MemberCreate {
+	mc.mutation.SetUsername(s)
 	return mc
 }
 
-// SetNillableNickname sets the "nickname" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableNickname(s *string) *MemberCreate {
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableUsername(s *string) *MemberCreate {
 	if s != nil {
-		mc.SetNickname(*s)
+		mc.SetUsername(*s)
 	}
 	return mc
 }
@@ -466,9 +466,9 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		_spec.SetField(member.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := mc.mutation.Nickname(); ok {
-		_spec.SetField(member.FieldNickname, field.TypeString, value)
-		_node.Nickname = value
+	if value, ok := mc.mutation.Username(); ok {
+		_spec.SetField(member.FieldUsername, field.TypeString, value)
+		_node.Username = value
 	}
 	if value, ok := mc.mutation.Mobile(); ok {
 		_spec.SetField(member.FieldMobile, field.TypeString, value)

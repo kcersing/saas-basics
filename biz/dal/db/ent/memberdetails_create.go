@@ -90,62 +90,6 @@ func (mdc *MemberDetailsCreate) SetNillableMemberID(i *int64) *MemberDetailsCrea
 	return mdc
 }
 
-// SetEmail sets the "email" field.
-func (mdc *MemberDetailsCreate) SetEmail(s string) *MemberDetailsCreate {
-	mdc.mutation.SetEmail(s)
-	return mdc
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableEmail(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetEmail(*s)
-	}
-	return mdc
-}
-
-// SetWecom sets the "wecom" field.
-func (mdc *MemberDetailsCreate) SetWecom(s string) *MemberDetailsCreate {
-	mdc.mutation.SetWecom(s)
-	return mdc
-}
-
-// SetNillableWecom sets the "wecom" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableWecom(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetWecom(*s)
-	}
-	return mdc
-}
-
-// SetGender sets the "gender" field.
-func (mdc *MemberDetailsCreate) SetGender(i int64) *MemberDetailsCreate {
-	mdc.mutation.SetGender(i)
-	return mdc
-}
-
-// SetNillableGender sets the "gender" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableGender(i *int64) *MemberDetailsCreate {
-	if i != nil {
-		mdc.SetGender(*i)
-	}
-	return mdc
-}
-
-// SetBirthday sets the "birthday" field.
-func (mdc *MemberDetailsCreate) SetBirthday(t time.Time) *MemberDetailsCreate {
-	mdc.mutation.SetBirthday(t)
-	return mdc
-}
-
-// SetNillableBirthday sets the "birthday" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableBirthday(t *time.Time) *MemberDetailsCreate {
-	if t != nil {
-		mdc.SetBirthday(*t)
-	}
-	return mdc
-}
-
 // SetMoneySum sets the "money_sum" field.
 func (mdc *MemberDetailsCreate) SetMoneySum(f float64) *MemberDetailsCreate {
 	mdc.mutation.SetMoneySum(f)
@@ -334,23 +278,9 @@ func (mdc *MemberDetailsCreate) SetID(i int64) *MemberDetailsCreate {
 	return mdc
 }
 
-// SetInfoID sets the "info" edge to the Member entity by ID.
-func (mdc *MemberDetailsCreate) SetInfoID(id int64) *MemberDetailsCreate {
-	mdc.mutation.SetInfoID(id)
-	return mdc
-}
-
-// SetNillableInfoID sets the "info" edge to the Member entity by ID if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableInfoID(id *int64) *MemberDetailsCreate {
-	if id != nil {
-		mdc = mdc.SetInfoID(*id)
-	}
-	return mdc
-}
-
-// SetInfo sets the "info" edge to the Member entity.
-func (mdc *MemberDetailsCreate) SetInfo(m *Member) *MemberDetailsCreate {
-	return mdc.SetInfoID(m.ID)
+// SetMember sets the "member" edge to the Member entity.
+func (mdc *MemberDetailsCreate) SetMember(m *Member) *MemberDetailsCreate {
+	return mdc.SetMemberID(m.ID)
 }
 
 // Mutation returns the MemberDetailsMutation object of the builder.
@@ -403,10 +333,6 @@ func (mdc *MemberDetailsCreate) defaults() {
 	if _, ok := mdc.mutation.CreatedID(); !ok {
 		v := memberdetails.DefaultCreatedID
 		mdc.mutation.SetCreatedID(v)
-	}
-	if _, ok := mdc.mutation.Gender(); !ok {
-		v := memberdetails.DefaultGender
-		mdc.mutation.SetGender(v)
 	}
 	if _, ok := mdc.mutation.MoneySum(); !ok {
 		v := memberdetails.DefaultMoneySum
@@ -484,22 +410,6 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 		_spec.SetField(memberdetails.FieldCreatedID, field.TypeInt64, value)
 		_node.CreatedID = value
 	}
-	if value, ok := mdc.mutation.Email(); ok {
-		_spec.SetField(memberdetails.FieldEmail, field.TypeString, value)
-		_node.Email = value
-	}
-	if value, ok := mdc.mutation.Wecom(); ok {
-		_spec.SetField(memberdetails.FieldWecom, field.TypeString, value)
-		_node.Wecom = value
-	}
-	if value, ok := mdc.mutation.Gender(); ok {
-		_spec.SetField(memberdetails.FieldGender, field.TypeInt64, value)
-		_node.Gender = value
-	}
-	if value, ok := mdc.mutation.Birthday(); ok {
-		_spec.SetField(memberdetails.FieldBirthday, field.TypeTime, value)
-		_node.Birthday = value
-	}
 	if value, ok := mdc.mutation.MoneySum(); ok {
 		_spec.SetField(memberdetails.FieldMoneySum, field.TypeFloat64, value)
 		_node.MoneySum = value
@@ -552,12 +462,12 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 		_spec.SetField(memberdetails.FieldRelationMame, field.TypeString, value)
 		_node.RelationMame = value
 	}
-	if nodes := mdc.mutation.InfoIDs(); len(nodes) > 0 {
+	if nodes := mdc.mutation.MemberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberdetails.InfoTable,
-			Columns: []string{memberdetails.InfoColumn},
+			Table:   memberdetails.MemberTable,
+			Columns: []string{memberdetails.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),

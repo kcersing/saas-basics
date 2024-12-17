@@ -5,50 +5,99 @@ include "../base/base.thrift"
 // Create or update user information request | 创建或更新用户信息
 struct CreateOrUpdateMemberReq {
     1:  optional i64 id=0 (api.raw = "id")
-    2:  optional string avatar="" (api.raw = "avatar")
+    2:  optional string name="" (api.raw = "name")
+    3: optional string	mobileAscription="" (api.raw = "mobileAscription")
     4:  optional string mobile="" (api.raw = "mobile")
-    5:  optional string email="" (api.raw = "email")
-    6:  optional i64 status=1 (api.raw = "status")
-    7:  optional string name="" (api.raw = "name")
-    8:  optional string gender="" (api.raw = "gender")
-    9:  optional string wecom="" (api.raw = "wecom")
-    10: optional i64 createId=0 (api.raw = "createId")
-    11: optional string birthday="" (api.raw = "birthday")
-    12: optional string	Password="" (api.raw = "password")
+    5:  optional string gender="未知" (api.raw = "gender")
+    6:  optional string birthday="" (api.raw = "birthday")
+    7:  optional i64 source=0 (api.raw = "source")
+    8:  optional i64 grade=0 (api.raw = "grade")
+    9: optional i64  intention=0 (api.raw = "intention")
 }
 
 struct MemberInfo {
-     1: i64	Id  (api.raw = "id")
-     2:	string Name  (api.raw = "name")
-     3: i64 Condition (api.raw = "condition")
-     4: i64 Status    (api.raw = "status")
-     5:	string Nickname  (api.raw = "nickname")
-     6:	string Mobile    (api.raw = "mobile")
-     7:	string Email (api.raw = "email")
-     8:	string Avatar    (api.raw = "avatar")
-     9:	string Gender    (api.raw = "gender")
-     10: i64 Age   (api.raw = "age")
-     11: string Birthday  (api.raw = "birthday")
-        //微信号
-     12: string Wecom (api.raw = "wecom")
+     1:optional i64 id=0  (api.raw = "id")
+     2:optional	string name ="" (api.raw = "name")
+     3:optional i64 condition=0 (api.raw = "condition")
+     4:optional i64 status=0 (api.raw = "status")
+     5:optional	string username = "" (api.raw = "username")
+     6:optional	string mobile ="" (api.raw = "mobile")
+     7:optional	string avatar ="" (api.raw = "avatar")
+     8:optional string createdAt ="" (api.raw = "createdAt")
+     9:optional string updatedAt  =""(api.raw = "updatedAt")
+
+      10:optional string conditionName=""(api.raw = "conditionName")
+
+     250:optional MemberProfile profile={} (api.raw = "profile")
+     251:optional MemberDetails details={} (api.raw = "details")
+     252:optional MemberPrivacy privacy={} (api.raw = "privacy")
+}
+
+struct MemberProfile{
+    1:  optional i64 mobileAscription=0 (api.raw = "mobileAscription")
+    2:  optional string fatherName="" (api.raw = "fatherName")
+    3:  optional string motherName="" (api.raw = "motherName")
+    4:  optional i64 grade=0 (api.raw = "grade")
+    5:  optional i64 intention=0 (api.raw = "intention")
+    6:  optional i64 source=0 (api.raw = "source")
+    7:  optional string gradeName="" (api.raw = "gradeName")
+    8:  optional string intentionName="" (api.raw = "intentionName")
+    9:  optional string sourceName="" (api.raw = "sourceName")
+
+    10:	optional string email="" (api.raw = "email")
+    11:	optional string gender = "" (api.raw = "gender")
+    12: optional i64 age  =0 (api.raw = "age")
+    13: optional string wecom ="" (api.raw = "wecom")
+    14: optional string birthday=""   (api.raw = "birthday")
+
+     250:optional i64 id=0  (api.raw = "id")
+}
+
+struct MemberDetails {
+	 //消费总金额
+     2:optional double moneySum=0 (api.raw = "moneySum")
+     //首次的产品
+     3:optional i64 productId =0  (api.raw = "productId")
+     4:optional string productName =""(api.raw = "productName")
+     //首次消费场馆
+     5:optional i64 productVenue=0 (api.raw = "productVenue")
+     6:optional string productVenueName =""(api.raw = "productVenueName")
+     //进馆总次数
+     7:optional i64 entrySum=0 (api.raw = "entrySum")
+     //最后一次进馆时间
+     8:optional string entryLastTime="" (api.raw = "entryLastTime")
+     //进馆最后期限时间
+     9:optional string entryDeadlineTime =""(api.raw = "entryDeadlineTime")
+     //最后一次上课时间
+     10:optional string classLastTime="" (api.raw = "classLastTime")
+     //关联员工
+     11:optional i64 relationUid =0  (api.raw = "relationUid")
+     12:optional string relationUname="" (api.raw = "relationUname")
+     //关联会员
+     13:optional i64 relationMid=0   (api.raw = "relationMid")
+     14:optional string relationMname="" (api.raw = "relationMname")
+
 
 }
 
-struct MemberPrivacy{
+
+
+struct MemberPrivacy {
 	//身份证号
-     1: string	IdentityCard (api.raw = "identityCard")
+     1: string	identityCard (api.raw = "identityCard")
         //正面
-     2: string	FaceIdentityCard (api.raw = "faceIdentityCard")
+     2: string	faceIdentityCard (api.raw = "faceIdentityCard")
         //反面
-     3: string BackIdentityCard (api.raw = "backIdentityCard")
+     3: string backIdentityCard (api.raw = "backIdentityCard")
         //人脸照片
-     4: string FacePic (api.raw = "facePic")
+     4: string facePic (api.raw = "facePic")
         //特征值
-     5: string FaceEigenvalue (api.raw = "faceEigenvalue")
+     5: string faceEigenvalue (api.raw = "faceEigenvalue")
         //人脸更新时间
-     6: string FaceUpdateTime (api.raw = "faceUpdateTime")
-     7: string FacePicUpdatedTime (api.raw = "facePicUpdatedTime")
+     6: string faceUpdateTime (api.raw = "faceUpdateTime")
+     7: string facePicUpdatedTime (api.raw = "facePicUpdatedTime")
 }
+
 
 
 // Get user list request | 获取用户列表请求参数
@@ -62,33 +111,6 @@ struct MemberListReq {
 struct MemberSearchReq {
     1:  string value="" (api.raw = "value")
     2:  string option="" (api.raw = "option")
-}
-struct MemberNode {
-	//消费总金额
-     2: double MoneySum (api.raw = "moneySum")
-        //首次的产品
-     3: i64 ProductId   (api.raw = "productId")
-     4: i64 ProductName (api.raw = "productName")
-        //首次消费场馆
-     5: i64 ProductVenue (api.raw = "productVenue")
-     6: i64 ProductVenueName (api.raw = "productVenueName")
-        //进馆总次数
-     7: i64 EntrySum (api.raw = "entrySum")
-        //最后一次进馆时间
-     8: string EntryLastTime (api.raw = "entryLastTime")
-        //进馆最后期限时间
-     9: string EntryDeadlineTime (api.raw = "entryDeadlineTime")
-        //最后一次上课时间
-     10: string ClassLastTime (api.raw = "classLastTime")
-        //关联员工
-     11: i64 RelationUid   (api.raw = "relationUid")
-     12: i64 RelationUname (api.raw = "relationUname")
-        //关联会员
-     13: i64 RelationMid   (api.raw = "relationMid")
-     14: i64 RelationMname (api.raw = "relationMname")
-
-     15: string CreatedAt (api.raw = "createdAt")
-     16: string UpdatedAt (api.raw = "updatedAt")
 }
 
 struct MemberContractListReq{
@@ -114,6 +136,11 @@ struct MemberContractInfo{
 }
 
 
+struct UpdateMemberFollowReq{
+    1:  optional i64 memberId=0 (api.raw = "memberId")
+    2:  optional i64 followId=0 (api.raw = "followId")
+}
+
 
 
 service MemberService {
@@ -128,21 +155,18 @@ service MemberService {
   // 获取用户基本信息
   base.NilResponse MemberInfo(1: base.IDReq req) (api.post = "/service/member/info")
 
-  base.NilResponse memberPrivacy(1: base.IDReq req) (api.post = "/service/member/privacy")
+  // 获取用户列表
+  base.NilResponse MemberFullList(1: MemberListReq req) (api.post = "/service/member/full-list")
 
   // 获取用户列表
-  base.NilResponse MemberList(1: MemberListReq req) (api.post = "/service/member/list")
+  base.NilResponse MemberPotentialList(1: MemberListReq req) (api.post = "/service/member/potential-list")
 
   // 更新用户状态
   base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/member/status")
 
-  // 搜索会员
-  base.NilResponse MemberSearch(1: MemberSearchReq req) (api.post = "/service/member/search")
-
-  // 获取会员节点信息
-  base.NilResponse MemberNode(1: base.IDReq req) (api.post = "/service/member/node")
+  // 更新用户状态
+  base.NilResponse UpdateMemberFollow(1: UpdateMemberFollowReq req) (api.post = "/service/member/update-follow")
 
   base.NilResponse MemberContractList(1: MemberContractListReq req) (api.post = "/service/member/contract-list")
-
 
 }

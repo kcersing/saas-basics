@@ -1874,6 +1874,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/member/full-list": {
+            "post": {
+                "description": "会员列表 Description",
+                "summary": "会员列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/member.MemberListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/member/info": {
             "post": {
                 "description": "会员详情 Description",
@@ -1899,10 +1924,10 @@ const docTemplate = `{
                 }
             }
         },
-        "/service/member/list": {
+        "/service/member/potential-list": {
             "post": {
-                "description": "会员列表 Description",
-                "summary": "会员列表 Summary",
+                "description": "潜在会员列表 Description",
+                "summary": "潜在会员列表 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -1911,256 +1936,6 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/member.MemberListReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/node": {
-            "post": {
-                "description": "会员节点 Description",
-                "summary": "会员节点 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/privacy": {
-            "post": {
-                "description": "会员隐私 Description",
-                "summary": "会员隐私 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/product-detail": {
-            "post": {
-                "description": "会员产品详情 Description",
-                "summary": "会员产品详情 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/product-list": {
-            "post": {
-                "description": "会员产品列表 Description",
-                "summary": "会员产品列表 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/member.MemberProductListReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/property-detail": {
-            "post": {
-                "description": "会员产品属性详情 Description",
-                "summary": "会员产品属性详情 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/property-list": {
-            "post": {
-                "description": "会员产品属性列表 Description",
-                "summary": "会员产品属性列表 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/member.MemberPropertyListReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/property-update": {
-            "post": {
-                "description": "会员产品属性更新 Description",
-                "summary": "会员产品属性更新 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/member.MemberPropertyListReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/search": {
-            "post": {
-                "description": "会员搜索 Description",
-                "summary": "会员搜索 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/member.MemberSearchReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/search-product": {
-            "post": {
-                "description": "会员产品搜索 Description",
-                "summary": "会员产品搜索 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/member.MemberProductSearchReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/member/search-property": {
-            "post": {
-                "description": "会员产品属性搜索 Description",
-                "summary": "会员产品属性搜索 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/member.MemberPropertySearchReq"
                         }
                     }
                 ],
@@ -2211,6 +1986,31 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/member.CreateOrUpdateMemberReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/member/update-follow": {
+            "post": {
+                "description": "更新会员关注 Description",
+                "summary": "更新会员关注 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/member.UpdateMemberFollowReq"
                         }
                     }
                 ],
@@ -2683,6 +2483,16 @@ const docTemplate = `{
             }
         },
         "/service/payment/WXPay": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/payment/WXQRPay": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/payment/WXRefundOrder": {
             "post": {
                 "responses": {}
             }
@@ -4293,38 +4103,32 @@ const docTemplate = `{
         "member.CreateOrUpdateMemberReq": {
             "type": "object",
             "properties": {
-                "Password": {
-                    "type": "string"
-                },
-                "avatar": {
-                    "type": "string"
-                },
                 "birthday": {
-                    "type": "string"
-                },
-                "createId": {
-                    "type": "integer"
-                },
-                "email": {
                     "type": "string"
                 },
                 "gender": {
                     "type": "string"
                 },
+                "grade": {
+                    "type": "integer"
+                },
                 "id": {
+                    "type": "integer"
+                },
+                "intention": {
                     "type": "integer"
                 },
                 "mobile": {
                     "type": "string"
                 },
+                "mobileAscription": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
-                "status": {
+                "source": {
                     "type": "integer"
-                },
-                "wecom": {
-                    "type": "string"
                 }
             }
         },
@@ -4365,88 +4169,14 @@ const docTemplate = `{
                 }
             }
         },
-        "member.MemberProductListReq": {
+        "member.UpdateMemberFollowReq": {
             "type": "object",
             "properties": {
+                "followId": {
+                    "type": "integer"
+                },
                 "memberId": {
                     "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "integer"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "member.MemberProductSearchReq": {
-            "type": "object",
-            "properties": {
-                "members": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "member.MemberPropertyListReq": {
-            "type": "object",
-            "properties": {
-                "memberId": {
-                    "type": "integer"
-                },
-                "memberProductId": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "integer"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "member.MemberPropertySearchReq": {
-            "type": "object",
-            "properties": {
-                "memberProductIds": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "member.MemberSearchReq": {
-            "type": "object",
-            "properties": {
-                "option": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
                 }
             }
         },

@@ -4,21 +4,19 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
 	member2 "saas/biz/dal/db/ent/member"
-	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberdetails"
-	"saas/biz/dal/db/ent/predicate"
-	"saas/biz/dal/minio"
+	"saas/biz/dal/db/ent/memberprofile"
+	user2 "saas/biz/dal/db/ent/user"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/member"
 	"saas/pkg/encrypt"
-	"strconv"
+	"saas/pkg/enums"
 	"time"
 )
 
@@ -30,51 +28,20 @@ type Member struct {
 	cache *ristretto.Cache
 }
 
-func (m Member) ContractList(req member.MemberContractListReq) (resp []*member.MemberContractInfo, total int, err error) {
-	var predicates []predicate.MemberContract
-	if req.MemberId > 0 {
-		predicates = append(predicates, membercontract.MemberID(req.MemberId))
-	}
-	if req.VenueId > 0 {
-		predicates = append(predicates, membercontract.VenueID(req.VenueId))
-	}
-	if req.ContractId > 0 {
-		predicates = append(predicates, membercontract.ContractID(req.ContractId))
-	}
-	predicates = append(predicates, membercontract.Delete(0))
-	lists, err := m.db.MemberContract.Query().Where(predicates...).
-		Offset(int(req.Page-1) * int(req.PageSize)).
-		Limit(int(req.PageSize)).All(m.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "get Member Contract list failed")
-		return resp, total, err
+func (m Member) UpdateMemberFollow(req *member.UpdateMemberFollowReq) (err error) {
+
+	user, err := m.db.User.Query().Where(user2.IDEQ(req.FollowId)).First(m.ctx)
+	if user == nil {
+		return errors.New("未找到该员工")
 	}
 
-	for _, v := range lists {
-		resp = append(resp, m.entMemberContractInfo(*v))
-	}
-
-	return
-}
-
-func (m Member) entMemberContractInfo(v ent.MemberContract) *member.MemberContractInfo {
-	vInfo, _ := NewVenue(m.ctx, m.c).VenueInfo(v.VenueID)
-	first, _ := v.QueryContent().First(m.ctx)
-	mInfo, _ := v.QueryMember().First(m.ctx)
-	//mpInfo, _ := v.QueryMemberProduct().First(m.ctx)
-	return &member.MemberContractInfo{
-		Name:       &v.Name,
-		MemberId:   &v.MemberID,
-		MemberName: &mInfo.Name,
-		VenueId:    &v.VenueID,
-		VenueName:  &vInfo.Name,
-		//MemberProductId:   &v.MemberProductID,
-		//MemberProductName: nil,
-		ContractId: &v.ContractID,
-		Sign:       &v.Sign,
-		SignImg:    &first.SignImg,
-		Content:    &first.Content,
-	}
+	_, err = m.db.MemberDetails.
+		Update().
+		Where(memberdetails.MemberID(req.MemberId)).
+		SetRelationUID(req.FollowId).
+		SetRelationUname(user.Name).
+		Save(m.ctx)
+	return err
 }
 
 func NewMember(ctx context.Context, c *app.RequestContext) do.Member {
@@ -111,48 +78,43 @@ func NewMember(ctx context.Context, c *app.RequestContext) do.Member {
 
 func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 
-	parsedTime, _ := time.Parse(time.DateTime, req.Birthday)
+	birthday, _ := time.Parse(time.DateTime, req.Birthday)
 
-	var gender int64
-	if req.Gender == "女性" {
-		gender = 0
-	} else if req.Gender == "男性" {
-		gender = 1
-	} else {
-		gender = 2
-	}
+	var gender = enums.ReturnMemberGenderKey(req.Gender)
 
 	tx, err := m.db.Tx(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "starting a transaction:")
 	}
 
-	mer := tx.Member.Create().
-		SetAvatar(req.Avatar).
+	noe, err := tx.Member.Create().
 		SetMobile(req.Mobile).
-		SetNickname(req.Name).
-		SetStatus(req.Status).
+		SetUsername(req.Mobile).
 		SetName(req.Name).
-		SetCondition(0)
-
-	if req.Password != "" {
-		password, _ := encrypt.Crypt(req.Mobile)
-		mer.SetPassword(password)
-	}
-	noe, err := mer.Save(m.ctx)
+		SetCondition(1).
+		Save(m.ctx)
 
 	if err != nil {
 		err = rollback(tx, errors.Wrap(err, "create user failed"))
 		return err
 	}
 
+	_, err = tx.MemberProfile.Create().
+		SetMember(noe).
+		SetGrade(gender).
+		SetBirthday(birthday).
+		SetSource(req.Source).
+		SetGrade(req.Grade).
+		SetIntention(req.Intention).
+		Save(m.ctx)
+
+	if err != nil {
+		err = rollback(tx, errors.Wrap(err, "create Member Profile failed"))
+		return err
+	}
+
 	_, err = tx.MemberDetails.Create().
-		SetEmail(req.Email).
-		SetWecom(req.Wecom).
-		SetCreatedID(req.CreateId).
-		SetGender(gender).
-		SetBirthday(parsedTime).
-		SetInfo(noe).
+		SetMember(noe).
 		Save(m.ctx)
 
 	if err != nil {
@@ -177,33 +139,43 @@ func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 
 func (m Member) UpdateMember(req member.CreateOrUpdateMemberReq) error {
 
+	birthday, _ := time.Parse(time.DateTime, req.Birthday)
+
+	var gender = enums.ReturnMemberGenderKey(req.Gender)
+
 	tx, err := m.db.Tx(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "starting a transaction:")
 	}
-	up := tx.Member.Update().
+
+	//if req.Password != "" {
+	//	password, _ := encrypt.Crypt(req.Password)
+	//}
+
+	_, err = tx.Member.Update().
 		Where(member2.IDEQ(req.ID)).
-		SetAvatar(req.Avatar).
-		SetStatus(req.Status).
-		SetMobile(req.Mobile)
+		SetMobile(req.Mobile).
+		SetUsername(req.Mobile).
+		SetName(req.Name).
+		SetCondition(1).
+		Save(m.ctx)
 
-	if req.Password != "" {
-		password, _ := encrypt.Crypt(req.Password)
-		up.SetPassword(password)
-	}
-
-	_, err = up.Save(m.ctx)
 	if err != nil {
-		err = errors.Wrap(err, "create user failed")
+		err = rollback(tx, errors.Wrap(err, "create user failed"))
 		return err
 	}
 
-	_, err = tx.MemberDetails.Update().
-		Where(memberdetails.MemberIDEQ(req.ID)).
-		SetEmail(req.Email).
+	_, err = tx.MemberProfile.Update().
+		Where(memberprofile.MemberID(req.ID)).
+		SetGrade(gender).
+		SetBirthday(birthday).
+		SetSource(req.Source).
+		SetGrade(req.Grade).
+		SetIntention(req.Intention).
 		Save(m.ctx)
+
 	if err != nil {
-		err = errors.Wrap(err, "create user failed")
+		err = rollback(tx, errors.Wrap(err, "create Member Profile failed"))
 		return err
 	}
 
@@ -215,87 +187,8 @@ func (m Member) UpdateMember(req member.CreateOrUpdateMemberReq) error {
 }
 
 func (m Member) DeleteMember(id int64) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (m Member) MemberList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error) {
-	var predicates []predicate.Member
-	if req.Name != "" {
-		predicates = append(predicates, member2.NameEQ(req.Name))
-	}
-	predicates = append(predicates, member2.Delete(0))
-	lists, err := m.db.Member.Query().Where(predicates...).
-		Order(ent.Desc(member2.FieldID)).
-		Offset(int(req.Page-1) * int(req.PageSize)).
-		Limit(int(req.PageSize)).All(m.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "get Member list failed")
-		return resp, total, err
-	}
-
-	err = copier.Copy(&resp, &lists)
-	if err != nil {
-		err = errors.Wrap(err, "copy Member info failed")
-		return resp, 0, err
-	}
-
-	for i, v := range lists {
-		resp[i], _ = m.MemberInfo(v.ID)
-	}
-
-	total, _ = m.db.Member.Query().Where(predicates...).Count(m.ctx)
-	return
-}
-
-func (m Member) MemberInfo(id int64) (info *member.MemberInfo, err error) {
-
-	info = new(member.MemberInfo)
-
-	userInterface, exist := m.cache.Get("memberInfo" + strconv.Itoa(int(id)))
-	if exist {
-		if u, ok := userInterface.(*member.MemberInfo); ok {
-			return u, nil
-		}
-	}
-	memberEnt, err := m.db.Member.Query().Where(member2.IDEQ(id)).First(m.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "get member failed")
-		return info, err
-	}
-
-	info = m.entMemberInfo(*memberEnt)
-
-	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(info.Id)), &info, 1, 1*time.Hour)
-	return
-}
-
-func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
-	d, _ := m.db.MemberDetails.Query().Where(memberdetails.MemberIDEQ(v.ID)).First(m.ctx)
-
-	var gender string
-	if d.Gender == 0 {
-		gender = "女性"
-	} else if d.Gender == 1 {
-		gender = "男性"
-	} else {
-		gender = "保密"
-	}
-	var age int64
-	if !d.Birthday.IsZero() {
-		age = int64(time.Now().Sub(d.Birthday).Hours() / 24 / 365)
-	}
-	return &member.MemberInfo{
-		Gender:    gender,
-		Avatar:    minio.URLconvert(m.ctx, m.c, v.Avatar),
-		Name:      v.Name,
-		Mobile:    v.Mobile,
-		Id:        v.ID,
-		Nickname:  v.Nickname,
-		Condition: v.Condition,
-		Age:       age,
-		Birthday:  d.Birthday.Format(time.DateTime),
-	}
+	_, err := m.db.Member.Update().Where(member2.IDEQ(id)).SetDelete(1).Save(m.ctx)
+	return err
 }
 
 func (m Member) MemberSearch(option string, value string) (memberInfo *member.MemberInfo, err error) {
@@ -352,69 +245,4 @@ func (m Member) ChangePassword(ID int64, oldPassword, newPassword string) error 
 func (m Member) UpdateMemberStatus(ID int64, status int64) error {
 	_, err := m.db.Member.Update().Where(member2.IDEQ(ID)).SetStatus(status).Save(m.ctx)
 	return err
-}
-
-func (m Member) MemberPrivacy(ID int64) (info *member.MemberPrivacy, err error) {
-	//	faceFirst, err := m.db.Face.Query().Where(face.MemberIDEQ(id)).First(m.ctx)
-	//	if err != nil {
-	//		err = errors.Wrap(err, "get member face failed")
-	//		return info, err
-	//	} else {
-	//		info.IdentityCard = faceFirst.IdentityCard
-	//		info.FaceIdentityCard = faceFirst.FaceIdentityCard
-	//		info.BackIdentityCard = faceFirst.BackIdentityCard
-	//		info.FacePic = faceFirst.FacePic
-	//		info.FaceEigenvalue = faceFirst.FaceEigenvalue
-	//		info.FacePicUpdatedTime = faceFirst.FacePicUpdatedTime.Format(time.DateTime)
-	//	}
-	return
-}
-func (m Member) MemberNode(ID int64) (info *member.MemberNode, err error) {
-
-	memberNode, exist := m.cache.Get("memberNode" + strconv.Itoa(int(ID)))
-	if exist {
-		if u, ok := memberNode.(*member.MemberNode); ok {
-			return u, nil
-		}
-	}
-	memberEnt, err := m.db.Member.Query().Where(member2.IDEQ(ID)).First(m.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "get member failed")
-		return info, err
-	}
-	memberDetails, err := m.db.MemberDetails.Query().Where(memberdetails.MemberIDEQ(ID)).First(m.ctx)
-	if err != nil {
-		err = errors.Wrap(err, "get member Details failed")
-		return info, err
-	} else {
-
-	}
-	info.CreatedAt = memberEnt.CreatedAt.Format(time.DateTime)
-	//进馆最后期限时间
-	info.EntryDeadlineTime = memberDetails.EntryDeadlineTime.Format(time.DateTime)
-	//最后一次进馆时间
-	info.EntryLastTime = memberDetails.EntryLastTime.Format(time.DateTime)
-	//最后一次上课时间
-	info.ClassLastTime = memberDetails.ClassLastTime.Format(time.DateTime)
-
-	////消费总金额
-	info.MoneySum = memberDetails.MoneySum
-	////首次的产品
-	//info.ProductId = memberDetails.ProductId
-	//info.ProductName = memberDetails.MoneySu,,,m
-	//首次消费场馆
-	info.ProductVenue = memberDetails.ProductVenue
-	//info.ProductVenueName = memberDetails.MoneySum
-	//进馆总次数
-	info.EntrySum = memberDetails.EntrySum
-
-	//关联员工
-	info.RelationUid = memberDetails.CreatedID
-	//info.RelationUname = memberDetails.MoneySum
-	//关联会员
-	info.RelationMid = memberDetails.RelationMid
-	//info.RelationMname = memberDetails.MoneySum
-	info.CreatedAt = memberDetails.CreatedAt.String()
-	info.UpdatedAt = memberDetails.UpdatedAt.String()
-	return
 }

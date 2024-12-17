@@ -90,9 +90,9 @@ func Name(v string) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldName, v))
 }
 
-// Nickname applies equality check predicate on the "nickname" field. It's identical to NicknameEQ.
-func Nickname(v string) predicate.Member {
-	return predicate.Member(sql.FieldEQ(FieldNickname, v))
+// Username applies equality check predicate on the "username" field. It's identical to UsernameEQ.
+func Username(v string) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldUsername, v))
 }
 
 // Mobile applies equality check predicate on the "mobile" field. It's identical to MobileEQ.
@@ -510,79 +510,79 @@ func NameContainsFold(v string) predicate.Member {
 	return predicate.Member(sql.FieldContainsFold(FieldName, v))
 }
 
-// NicknameEQ applies the EQ predicate on the "nickname" field.
-func NicknameEQ(v string) predicate.Member {
-	return predicate.Member(sql.FieldEQ(FieldNickname, v))
+// UsernameEQ applies the EQ predicate on the "username" field.
+func UsernameEQ(v string) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldUsername, v))
 }
 
-// NicknameNEQ applies the NEQ predicate on the "nickname" field.
-func NicknameNEQ(v string) predicate.Member {
-	return predicate.Member(sql.FieldNEQ(FieldNickname, v))
+// UsernameNEQ applies the NEQ predicate on the "username" field.
+func UsernameNEQ(v string) predicate.Member {
+	return predicate.Member(sql.FieldNEQ(FieldUsername, v))
 }
 
-// NicknameIn applies the In predicate on the "nickname" field.
-func NicknameIn(vs ...string) predicate.Member {
-	return predicate.Member(sql.FieldIn(FieldNickname, vs...))
+// UsernameIn applies the In predicate on the "username" field.
+func UsernameIn(vs ...string) predicate.Member {
+	return predicate.Member(sql.FieldIn(FieldUsername, vs...))
 }
 
-// NicknameNotIn applies the NotIn predicate on the "nickname" field.
-func NicknameNotIn(vs ...string) predicate.Member {
-	return predicate.Member(sql.FieldNotIn(FieldNickname, vs...))
+// UsernameNotIn applies the NotIn predicate on the "username" field.
+func UsernameNotIn(vs ...string) predicate.Member {
+	return predicate.Member(sql.FieldNotIn(FieldUsername, vs...))
 }
 
-// NicknameGT applies the GT predicate on the "nickname" field.
-func NicknameGT(v string) predicate.Member {
-	return predicate.Member(sql.FieldGT(FieldNickname, v))
+// UsernameGT applies the GT predicate on the "username" field.
+func UsernameGT(v string) predicate.Member {
+	return predicate.Member(sql.FieldGT(FieldUsername, v))
 }
 
-// NicknameGTE applies the GTE predicate on the "nickname" field.
-func NicknameGTE(v string) predicate.Member {
-	return predicate.Member(sql.FieldGTE(FieldNickname, v))
+// UsernameGTE applies the GTE predicate on the "username" field.
+func UsernameGTE(v string) predicate.Member {
+	return predicate.Member(sql.FieldGTE(FieldUsername, v))
 }
 
-// NicknameLT applies the LT predicate on the "nickname" field.
-func NicknameLT(v string) predicate.Member {
-	return predicate.Member(sql.FieldLT(FieldNickname, v))
+// UsernameLT applies the LT predicate on the "username" field.
+func UsernameLT(v string) predicate.Member {
+	return predicate.Member(sql.FieldLT(FieldUsername, v))
 }
 
-// NicknameLTE applies the LTE predicate on the "nickname" field.
-func NicknameLTE(v string) predicate.Member {
-	return predicate.Member(sql.FieldLTE(FieldNickname, v))
+// UsernameLTE applies the LTE predicate on the "username" field.
+func UsernameLTE(v string) predicate.Member {
+	return predicate.Member(sql.FieldLTE(FieldUsername, v))
 }
 
-// NicknameContains applies the Contains predicate on the "nickname" field.
-func NicknameContains(v string) predicate.Member {
-	return predicate.Member(sql.FieldContains(FieldNickname, v))
+// UsernameContains applies the Contains predicate on the "username" field.
+func UsernameContains(v string) predicate.Member {
+	return predicate.Member(sql.FieldContains(FieldUsername, v))
 }
 
-// NicknameHasPrefix applies the HasPrefix predicate on the "nickname" field.
-func NicknameHasPrefix(v string) predicate.Member {
-	return predicate.Member(sql.FieldHasPrefix(FieldNickname, v))
+// UsernameHasPrefix applies the HasPrefix predicate on the "username" field.
+func UsernameHasPrefix(v string) predicate.Member {
+	return predicate.Member(sql.FieldHasPrefix(FieldUsername, v))
 }
 
-// NicknameHasSuffix applies the HasSuffix predicate on the "nickname" field.
-func NicknameHasSuffix(v string) predicate.Member {
-	return predicate.Member(sql.FieldHasSuffix(FieldNickname, v))
+// UsernameHasSuffix applies the HasSuffix predicate on the "username" field.
+func UsernameHasSuffix(v string) predicate.Member {
+	return predicate.Member(sql.FieldHasSuffix(FieldUsername, v))
 }
 
-// NicknameIsNil applies the IsNil predicate on the "nickname" field.
-func NicknameIsNil() predicate.Member {
-	return predicate.Member(sql.FieldIsNull(FieldNickname))
+// UsernameIsNil applies the IsNil predicate on the "username" field.
+func UsernameIsNil() predicate.Member {
+	return predicate.Member(sql.FieldIsNull(FieldUsername))
 }
 
-// NicknameNotNil applies the NotNil predicate on the "nickname" field.
-func NicknameNotNil() predicate.Member {
-	return predicate.Member(sql.FieldNotNull(FieldNickname))
+// UsernameNotNil applies the NotNil predicate on the "username" field.
+func UsernameNotNil() predicate.Member {
+	return predicate.Member(sql.FieldNotNull(FieldUsername))
 }
 
-// NicknameEqualFold applies the EqualFold predicate on the "nickname" field.
-func NicknameEqualFold(v string) predicate.Member {
-	return predicate.Member(sql.FieldEqualFold(FieldNickname, v))
+// UsernameEqualFold applies the EqualFold predicate on the "username" field.
+func UsernameEqualFold(v string) predicate.Member {
+	return predicate.Member(sql.FieldEqualFold(FieldUsername, v))
 }
 
-// NicknameContainsFold applies the ContainsFold predicate on the "nickname" field.
-func NicknameContainsFold(v string) predicate.Member {
-	return predicate.Member(sql.FieldContainsFold(FieldNickname, v))
+// UsernameContainsFold applies the ContainsFold predicate on the "username" field.
+func UsernameContainsFold(v string) predicate.Member {
+	return predicate.Member(sql.FieldContainsFold(FieldUsername, v))
 }
 
 // MobileEQ applies the EQ predicate on the "mobile" field.

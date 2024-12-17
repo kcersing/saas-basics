@@ -20,7 +20,12 @@ func (MemberProfile) Fields() []ent.Field {
 		field.Int64("mobile_ascription").Default(0).Optional().Comment("手机号归属"),
 		field.String("father_name").Comment("父亲名称").Optional(),
 		field.String("mother_name").Comment("母亲名称").Optional(),
+
+		field.Int64("gender").Default(3).Comment("性别 | [1:女性;2:男性;3:保密]").Optional(),
+		field.Time("birthday").Comment("出生日期").Optional(),
 		field.Int64("grade").Default(0).Comment("年级").Optional(),
+		field.String("email").Optional().Comment("email | 邮箱号"),
+		field.String("wecom").Optional().Comment("wecom | 微信号"),
 		field.Int64("intention").Default(0).Comment("意向").Optional(),
 		field.Int64("source").Default(0).Comment("来源").Optional(),
 	}
@@ -34,7 +39,7 @@ func (MemberProfile) Mixin() []ent.Mixin {
 
 func (MemberProfile) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("profile", Member.Type).
+		edge.From("member", Member.Type).
 			Ref("member_profile").
 			Field("member_id").
 			Unique(),

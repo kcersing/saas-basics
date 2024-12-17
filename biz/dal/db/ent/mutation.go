@@ -19519,7 +19519,7 @@ type MemberMutation struct {
 	addstatus                *int64
 	password                 *string
 	name                     *string
-	nickname                 *string
+	username                 *string
 	mobile                   *string
 	avatar                   *string
 	condition                *int64
@@ -20070,53 +20070,53 @@ func (m *MemberMutation) ResetName() {
 	delete(m.clearedFields, member.FieldName)
 }
 
-// SetNickname sets the "nickname" field.
-func (m *MemberMutation) SetNickname(s string) {
-	m.nickname = &s
+// SetUsername sets the "username" field.
+func (m *MemberMutation) SetUsername(s string) {
+	m.username = &s
 }
 
-// Nickname returns the value of the "nickname" field in the mutation.
-func (m *MemberMutation) Nickname() (r string, exists bool) {
-	v := m.nickname
+// Username returns the value of the "username" field in the mutation.
+func (m *MemberMutation) Username() (r string, exists bool) {
+	v := m.username
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldNickname returns the old "nickname" field's value of the Member entity.
+// OldUsername returns the old "username" field's value of the Member entity.
 // If the Member object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberMutation) OldNickname(ctx context.Context) (v string, err error) {
+func (m *MemberMutation) OldUsername(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNickname is only allowed on UpdateOne operations")
+		return v, errors.New("OldUsername is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNickname requires an ID field in the mutation")
+		return v, errors.New("OldUsername requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNickname: %w", err)
+		return v, fmt.Errorf("querying old value for OldUsername: %w", err)
 	}
-	return oldValue.Nickname, nil
+	return oldValue.Username, nil
 }
 
-// ClearNickname clears the value of the "nickname" field.
-func (m *MemberMutation) ClearNickname() {
-	m.nickname = nil
-	m.clearedFields[member.FieldNickname] = struct{}{}
+// ClearUsername clears the value of the "username" field.
+func (m *MemberMutation) ClearUsername() {
+	m.username = nil
+	m.clearedFields[member.FieldUsername] = struct{}{}
 }
 
-// NicknameCleared returns if the "nickname" field was cleared in this mutation.
-func (m *MemberMutation) NicknameCleared() bool {
-	_, ok := m.clearedFields[member.FieldNickname]
+// UsernameCleared returns if the "username" field was cleared in this mutation.
+func (m *MemberMutation) UsernameCleared() bool {
+	_, ok := m.clearedFields[member.FieldUsername]
 	return ok
 }
 
-// ResetNickname resets all changes to the "nickname" field.
-func (m *MemberMutation) ResetNickname() {
-	m.nickname = nil
-	delete(m.clearedFields, member.FieldNickname)
+// ResetUsername resets all changes to the "username" field.
+func (m *MemberMutation) ResetUsername() {
+	m.username = nil
+	delete(m.clearedFields, member.FieldUsername)
 }
 
 // SetMobile sets the "mobile" field.
@@ -20883,8 +20883,8 @@ func (m *MemberMutation) Fields() []string {
 	if m.name != nil {
 		fields = append(fields, member.FieldName)
 	}
-	if m.nickname != nil {
-		fields = append(fields, member.FieldNickname)
+	if m.username != nil {
+		fields = append(fields, member.FieldUsername)
 	}
 	if m.mobile != nil {
 		fields = append(fields, member.FieldMobile)
@@ -20917,8 +20917,8 @@ func (m *MemberMutation) Field(name string) (ent.Value, bool) {
 		return m.Password()
 	case member.FieldName:
 		return m.Name()
-	case member.FieldNickname:
-		return m.Nickname()
+	case member.FieldUsername:
+		return m.Username()
 	case member.FieldMobile:
 		return m.Mobile()
 	case member.FieldAvatar:
@@ -20948,8 +20948,8 @@ func (m *MemberMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldPassword(ctx)
 	case member.FieldName:
 		return m.OldName(ctx)
-	case member.FieldNickname:
-		return m.OldNickname(ctx)
+	case member.FieldUsername:
+		return m.OldUsername(ctx)
 	case member.FieldMobile:
 		return m.OldMobile(ctx)
 	case member.FieldAvatar:
@@ -21014,12 +21014,12 @@ func (m *MemberMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetName(v)
 		return nil
-	case member.FieldNickname:
+	case member.FieldUsername:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetNickname(v)
+		m.SetUsername(v)
 		return nil
 	case member.FieldMobile:
 		v, ok := value.(string)
@@ -21144,8 +21144,8 @@ func (m *MemberMutation) ClearedFields() []string {
 	if m.FieldCleared(member.FieldName) {
 		fields = append(fields, member.FieldName)
 	}
-	if m.FieldCleared(member.FieldNickname) {
-		fields = append(fields, member.FieldNickname)
+	if m.FieldCleared(member.FieldUsername) {
+		fields = append(fields, member.FieldUsername)
 	}
 	if m.FieldCleared(member.FieldMobile) {
 		fields = append(fields, member.FieldMobile)
@@ -21191,8 +21191,8 @@ func (m *MemberMutation) ClearField(name string) error {
 	case member.FieldName:
 		m.ClearName()
 		return nil
-	case member.FieldNickname:
-		m.ClearNickname()
+	case member.FieldUsername:
+		m.ClearUsername()
 		return nil
 	case member.FieldMobile:
 		m.ClearMobile()
@@ -21232,8 +21232,8 @@ func (m *MemberMutation) ResetField(name string) error {
 	case member.FieldName:
 		m.ResetName()
 		return nil
-	case member.FieldNickname:
-		m.ResetNickname()
+	case member.FieldUsername:
+		m.ResetUsername()
 		return nil
 	case member.FieldMobile:
 		m.ResetMobile()
@@ -24057,11 +24057,6 @@ type MemberDetailsMutation struct {
 	adddelete           *int64
 	created_id          *int64
 	addcreated_id       *int64
-	email               *string
-	wecom               *string
-	gender              *int64
-	addgender           *int64
-	birthday            *time.Time
 	money_sum           *float64
 	addmoney_sum        *float64
 	product_id          *int64
@@ -24082,8 +24077,8 @@ type MemberDetailsMutation struct {
 	addrelation_mid     *int64
 	relation_mame       *string
 	clearedFields       map[string]struct{}
-	info                *int64
-	clearedinfo         bool
+	member              *int64
+	clearedmember       bool
 	done                bool
 	oldValue            func(context.Context) (*MemberDetails, error)
 	predicates          []predicate.MemberDetails
@@ -24433,12 +24428,12 @@ func (m *MemberDetailsMutation) ResetCreatedID() {
 
 // SetMemberID sets the "member_id" field.
 func (m *MemberDetailsMutation) SetMemberID(i int64) {
-	m.info = &i
+	m.member = &i
 }
 
 // MemberID returns the value of the "member_id" field in the mutation.
 func (m *MemberDetailsMutation) MemberID() (r int64, exists bool) {
-	v := m.info
+	v := m.member
 	if v == nil {
 		return
 	}
@@ -24464,7 +24459,7 @@ func (m *MemberDetailsMutation) OldMemberID(ctx context.Context) (v int64, err e
 
 // ClearMemberID clears the value of the "member_id" field.
 func (m *MemberDetailsMutation) ClearMemberID() {
-	m.info = nil
+	m.member = nil
 	m.clearedFields[memberdetails.FieldMemberID] = struct{}{}
 }
 
@@ -24476,225 +24471,8 @@ func (m *MemberDetailsMutation) MemberIDCleared() bool {
 
 // ResetMemberID resets all changes to the "member_id" field.
 func (m *MemberDetailsMutation) ResetMemberID() {
-	m.info = nil
+	m.member = nil
 	delete(m.clearedFields, memberdetails.FieldMemberID)
-}
-
-// SetEmail sets the "email" field.
-func (m *MemberDetailsMutation) SetEmail(s string) {
-	m.email = &s
-}
-
-// Email returns the value of the "email" field in the mutation.
-func (m *MemberDetailsMutation) Email() (r string, exists bool) {
-	v := m.email
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldEmail returns the old "email" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldEmail(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEmail requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
-	}
-	return oldValue.Email, nil
-}
-
-// ClearEmail clears the value of the "email" field.
-func (m *MemberDetailsMutation) ClearEmail() {
-	m.email = nil
-	m.clearedFields[memberdetails.FieldEmail] = struct{}{}
-}
-
-// EmailCleared returns if the "email" field was cleared in this mutation.
-func (m *MemberDetailsMutation) EmailCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldEmail]
-	return ok
-}
-
-// ResetEmail resets all changes to the "email" field.
-func (m *MemberDetailsMutation) ResetEmail() {
-	m.email = nil
-	delete(m.clearedFields, memberdetails.FieldEmail)
-}
-
-// SetWecom sets the "wecom" field.
-func (m *MemberDetailsMutation) SetWecom(s string) {
-	m.wecom = &s
-}
-
-// Wecom returns the value of the "wecom" field in the mutation.
-func (m *MemberDetailsMutation) Wecom() (r string, exists bool) {
-	v := m.wecom
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldWecom returns the old "wecom" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldWecom(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldWecom is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldWecom requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldWecom: %w", err)
-	}
-	return oldValue.Wecom, nil
-}
-
-// ClearWecom clears the value of the "wecom" field.
-func (m *MemberDetailsMutation) ClearWecom() {
-	m.wecom = nil
-	m.clearedFields[memberdetails.FieldWecom] = struct{}{}
-}
-
-// WecomCleared returns if the "wecom" field was cleared in this mutation.
-func (m *MemberDetailsMutation) WecomCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldWecom]
-	return ok
-}
-
-// ResetWecom resets all changes to the "wecom" field.
-func (m *MemberDetailsMutation) ResetWecom() {
-	m.wecom = nil
-	delete(m.clearedFields, memberdetails.FieldWecom)
-}
-
-// SetGender sets the "gender" field.
-func (m *MemberDetailsMutation) SetGender(i int64) {
-	m.gender = &i
-	m.addgender = nil
-}
-
-// Gender returns the value of the "gender" field in the mutation.
-func (m *MemberDetailsMutation) Gender() (r int64, exists bool) {
-	v := m.gender
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldGender returns the old "gender" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldGender(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldGender is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldGender requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldGender: %w", err)
-	}
-	return oldValue.Gender, nil
-}
-
-// AddGender adds i to the "gender" field.
-func (m *MemberDetailsMutation) AddGender(i int64) {
-	if m.addgender != nil {
-		*m.addgender += i
-	} else {
-		m.addgender = &i
-	}
-}
-
-// AddedGender returns the value that was added to the "gender" field in this mutation.
-func (m *MemberDetailsMutation) AddedGender() (r int64, exists bool) {
-	v := m.addgender
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearGender clears the value of the "gender" field.
-func (m *MemberDetailsMutation) ClearGender() {
-	m.gender = nil
-	m.addgender = nil
-	m.clearedFields[memberdetails.FieldGender] = struct{}{}
-}
-
-// GenderCleared returns if the "gender" field was cleared in this mutation.
-func (m *MemberDetailsMutation) GenderCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldGender]
-	return ok
-}
-
-// ResetGender resets all changes to the "gender" field.
-func (m *MemberDetailsMutation) ResetGender() {
-	m.gender = nil
-	m.addgender = nil
-	delete(m.clearedFields, memberdetails.FieldGender)
-}
-
-// SetBirthday sets the "birthday" field.
-func (m *MemberDetailsMutation) SetBirthday(t time.Time) {
-	m.birthday = &t
-}
-
-// Birthday returns the value of the "birthday" field in the mutation.
-func (m *MemberDetailsMutation) Birthday() (r time.Time, exists bool) {
-	v := m.birthday
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldBirthday returns the old "birthday" field's value of the MemberDetails entity.
-// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberDetailsMutation) OldBirthday(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldBirthday is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldBirthday requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBirthday: %w", err)
-	}
-	return oldValue.Birthday, nil
-}
-
-// ClearBirthday clears the value of the "birthday" field.
-func (m *MemberDetailsMutation) ClearBirthday() {
-	m.birthday = nil
-	m.clearedFields[memberdetails.FieldBirthday] = struct{}{}
-}
-
-// BirthdayCleared returns if the "birthday" field was cleared in this mutation.
-func (m *MemberDetailsMutation) BirthdayCleared() bool {
-	_, ok := m.clearedFields[memberdetails.FieldBirthday]
-	return ok
-}
-
-// ResetBirthday resets all changes to the "birthday" field.
-func (m *MemberDetailsMutation) ResetBirthday() {
-	m.birthday = nil
-	delete(m.clearedFields, memberdetails.FieldBirthday)
 }
 
 // SetMoneySum sets the "money_sum" field.
@@ -25460,44 +25238,31 @@ func (m *MemberDetailsMutation) ResetRelationMame() {
 	delete(m.clearedFields, memberdetails.FieldRelationMame)
 }
 
-// SetInfoID sets the "info" edge to the Member entity by id.
-func (m *MemberDetailsMutation) SetInfoID(id int64) {
-	m.info = &id
-}
-
-// ClearInfo clears the "info" edge to the Member entity.
-func (m *MemberDetailsMutation) ClearInfo() {
-	m.clearedinfo = true
+// ClearMember clears the "member" edge to the Member entity.
+func (m *MemberDetailsMutation) ClearMember() {
+	m.clearedmember = true
 	m.clearedFields[memberdetails.FieldMemberID] = struct{}{}
 }
 
-// InfoCleared reports if the "info" edge to the Member entity was cleared.
-func (m *MemberDetailsMutation) InfoCleared() bool {
-	return m.MemberIDCleared() || m.clearedinfo
+// MemberCleared reports if the "member" edge to the Member entity was cleared.
+func (m *MemberDetailsMutation) MemberCleared() bool {
+	return m.MemberIDCleared() || m.clearedmember
 }
 
-// InfoID returns the "info" edge ID in the mutation.
-func (m *MemberDetailsMutation) InfoID() (id int64, exists bool) {
-	if m.info != nil {
-		return *m.info, true
-	}
-	return
-}
-
-// InfoIDs returns the "info" edge IDs in the mutation.
+// MemberIDs returns the "member" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// InfoID instead. It exists only for internal usage by the builders.
-func (m *MemberDetailsMutation) InfoIDs() (ids []int64) {
-	if id := m.info; id != nil {
+// MemberID instead. It exists only for internal usage by the builders.
+func (m *MemberDetailsMutation) MemberIDs() (ids []int64) {
+	if id := m.member; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetInfo resets all changes to the "info" edge.
-func (m *MemberDetailsMutation) ResetInfo() {
-	m.info = nil
-	m.clearedinfo = false
+// ResetMember resets all changes to the "member" edge.
+func (m *MemberDetailsMutation) ResetMember() {
+	m.member = nil
+	m.clearedmember = false
 }
 
 // Where appends a list predicates to the MemberDetailsMutation builder.
@@ -25534,7 +25299,7 @@ func (m *MemberDetailsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberDetailsMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, memberdetails.FieldCreatedAt)
 	}
@@ -25547,20 +25312,8 @@ func (m *MemberDetailsMutation) Fields() []string {
 	if m.created_id != nil {
 		fields = append(fields, memberdetails.FieldCreatedID)
 	}
-	if m.info != nil {
+	if m.member != nil {
 		fields = append(fields, memberdetails.FieldMemberID)
-	}
-	if m.email != nil {
-		fields = append(fields, memberdetails.FieldEmail)
-	}
-	if m.wecom != nil {
-		fields = append(fields, memberdetails.FieldWecom)
-	}
-	if m.gender != nil {
-		fields = append(fields, memberdetails.FieldGender)
-	}
-	if m.birthday != nil {
-		fields = append(fields, memberdetails.FieldBirthday)
 	}
 	if m.money_sum != nil {
 		fields = append(fields, memberdetails.FieldMoneySum)
@@ -25619,14 +25372,6 @@ func (m *MemberDetailsMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedID()
 	case memberdetails.FieldMemberID:
 		return m.MemberID()
-	case memberdetails.FieldEmail:
-		return m.Email()
-	case memberdetails.FieldWecom:
-		return m.Wecom()
-	case memberdetails.FieldGender:
-		return m.Gender()
-	case memberdetails.FieldBirthday:
-		return m.Birthday()
 	case memberdetails.FieldMoneySum:
 		return m.MoneySum()
 	case memberdetails.FieldProductID:
@@ -25672,14 +25417,6 @@ func (m *MemberDetailsMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldCreatedID(ctx)
 	case memberdetails.FieldMemberID:
 		return m.OldMemberID(ctx)
-	case memberdetails.FieldEmail:
-		return m.OldEmail(ctx)
-	case memberdetails.FieldWecom:
-		return m.OldWecom(ctx)
-	case memberdetails.FieldGender:
-		return m.OldGender(ctx)
-	case memberdetails.FieldBirthday:
-		return m.OldBirthday(ctx)
 	case memberdetails.FieldMoneySum:
 		return m.OldMoneySum(ctx)
 	case memberdetails.FieldProductID:
@@ -25749,34 +25486,6 @@ func (m *MemberDetailsMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMemberID(v)
-		return nil
-	case memberdetails.FieldEmail:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetEmail(v)
-		return nil
-	case memberdetails.FieldWecom:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetWecom(v)
-		return nil
-	case memberdetails.FieldGender:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetGender(v)
-		return nil
-	case memberdetails.FieldBirthday:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetBirthday(v)
 		return nil
 	case memberdetails.FieldMoneySum:
 		v, ok := value.(float64)
@@ -25883,9 +25592,6 @@ func (m *MemberDetailsMutation) AddedFields() []string {
 	if m.addcreated_id != nil {
 		fields = append(fields, memberdetails.FieldCreatedID)
 	}
-	if m.addgender != nil {
-		fields = append(fields, memberdetails.FieldGender)
-	}
 	if m.addmoney_sum != nil {
 		fields = append(fields, memberdetails.FieldMoneySum)
 	}
@@ -25916,8 +25622,6 @@ func (m *MemberDetailsMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedDelete()
 	case memberdetails.FieldCreatedID:
 		return m.AddedCreatedID()
-	case memberdetails.FieldGender:
-		return m.AddedGender()
 	case memberdetails.FieldMoneySum:
 		return m.AddedMoneySum()
 	case memberdetails.FieldProductID:
@@ -25952,13 +25656,6 @@ func (m *MemberDetailsMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreatedID(v)
-		return nil
-	case memberdetails.FieldGender:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddGender(v)
 		return nil
 	case memberdetails.FieldMoneySum:
 		v, ok := value.(float64)
@@ -26024,18 +25721,6 @@ func (m *MemberDetailsMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(memberdetails.FieldMemberID) {
 		fields = append(fields, memberdetails.FieldMemberID)
-	}
-	if m.FieldCleared(memberdetails.FieldEmail) {
-		fields = append(fields, memberdetails.FieldEmail)
-	}
-	if m.FieldCleared(memberdetails.FieldWecom) {
-		fields = append(fields, memberdetails.FieldWecom)
-	}
-	if m.FieldCleared(memberdetails.FieldGender) {
-		fields = append(fields, memberdetails.FieldGender)
-	}
-	if m.FieldCleared(memberdetails.FieldBirthday) {
-		fields = append(fields, memberdetails.FieldBirthday)
 	}
 	if m.FieldCleared(memberdetails.FieldMoneySum) {
 		fields = append(fields, memberdetails.FieldMoneySum)
@@ -26105,18 +25790,6 @@ func (m *MemberDetailsMutation) ClearField(name string) error {
 	case memberdetails.FieldMemberID:
 		m.ClearMemberID()
 		return nil
-	case memberdetails.FieldEmail:
-		m.ClearEmail()
-		return nil
-	case memberdetails.FieldWecom:
-		m.ClearWecom()
-		return nil
-	case memberdetails.FieldGender:
-		m.ClearGender()
-		return nil
-	case memberdetails.FieldBirthday:
-		m.ClearBirthday()
-		return nil
 	case memberdetails.FieldMoneySum:
 		m.ClearMoneySum()
 		return nil
@@ -26179,18 +25852,6 @@ func (m *MemberDetailsMutation) ResetField(name string) error {
 	case memberdetails.FieldMemberID:
 		m.ResetMemberID()
 		return nil
-	case memberdetails.FieldEmail:
-		m.ResetEmail()
-		return nil
-	case memberdetails.FieldWecom:
-		m.ResetWecom()
-		return nil
-	case memberdetails.FieldGender:
-		m.ResetGender()
-		return nil
-	case memberdetails.FieldBirthday:
-		m.ResetBirthday()
-		return nil
 	case memberdetails.FieldMoneySum:
 		m.ResetMoneySum()
 		return nil
@@ -26237,8 +25898,8 @@ func (m *MemberDetailsMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MemberDetailsMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.info != nil {
-		edges = append(edges, memberdetails.EdgeInfo)
+	if m.member != nil {
+		edges = append(edges, memberdetails.EdgeMember)
 	}
 	return edges
 }
@@ -26247,8 +25908,8 @@ func (m *MemberDetailsMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *MemberDetailsMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case memberdetails.EdgeInfo:
-		if id := m.info; id != nil {
+	case memberdetails.EdgeMember:
+		if id := m.member; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -26270,8 +25931,8 @@ func (m *MemberDetailsMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MemberDetailsMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedinfo {
-		edges = append(edges, memberdetails.EdgeInfo)
+	if m.clearedmember {
+		edges = append(edges, memberdetails.EdgeMember)
 	}
 	return edges
 }
@@ -26280,8 +25941,8 @@ func (m *MemberDetailsMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *MemberDetailsMutation) EdgeCleared(name string) bool {
 	switch name {
-	case memberdetails.EdgeInfo:
-		return m.clearedinfo
+	case memberdetails.EdgeMember:
+		return m.clearedmember
 	}
 	return false
 }
@@ -26290,8 +25951,8 @@ func (m *MemberDetailsMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *MemberDetailsMutation) ClearEdge(name string) error {
 	switch name {
-	case memberdetails.EdgeInfo:
-		m.ClearInfo()
+	case memberdetails.EdgeMember:
+		m.ClearMember()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberDetails unique edge %s", name)
@@ -26301,8 +25962,8 @@ func (m *MemberDetailsMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *MemberDetailsMutation) ResetEdge(name string) error {
 	switch name {
-	case memberdetails.EdgeInfo:
-		m.ResetInfo()
+	case memberdetails.EdgeMember:
+		m.ResetMember()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberDetails edge %s", name)
@@ -29782,15 +29443,20 @@ type MemberProfileMutation struct {
 	addmobile_ascription *int64
 	father_name          *string
 	mother_name          *string
+	gender               *int64
+	addgender            *int64
+	birthday             *time.Time
 	grade                *int64
 	addgrade             *int64
+	email                *string
+	wecom                *string
 	intention            *int64
 	addintention         *int64
 	source               *int64
 	addsource            *int64
 	clearedFields        map[string]struct{}
-	profile              *int64
-	clearedprofile       bool
+	member               *int64
+	clearedmember        bool
 	done                 bool
 	oldValue             func(context.Context) (*MemberProfile, error)
 	predicates           []predicate.MemberProfile
@@ -30140,12 +29806,12 @@ func (m *MemberProfileMutation) ResetCreatedID() {
 
 // SetMemberID sets the "member_id" field.
 func (m *MemberProfileMutation) SetMemberID(i int64) {
-	m.profile = &i
+	m.member = &i
 }
 
 // MemberID returns the value of the "member_id" field in the mutation.
 func (m *MemberProfileMutation) MemberID() (r int64, exists bool) {
-	v := m.profile
+	v := m.member
 	if v == nil {
 		return
 	}
@@ -30171,7 +29837,7 @@ func (m *MemberProfileMutation) OldMemberID(ctx context.Context) (v int64, err e
 
 // ClearMemberID clears the value of the "member_id" field.
 func (m *MemberProfileMutation) ClearMemberID() {
-	m.profile = nil
+	m.member = nil
 	m.clearedFields[memberprofile.FieldMemberID] = struct{}{}
 }
 
@@ -30183,7 +29849,7 @@ func (m *MemberProfileMutation) MemberIDCleared() bool {
 
 // ResetMemberID resets all changes to the "member_id" field.
 func (m *MemberProfileMutation) ResetMemberID() {
-	m.profile = nil
+	m.member = nil
 	delete(m.clearedFields, memberprofile.FieldMemberID)
 }
 
@@ -30355,6 +30021,125 @@ func (m *MemberProfileMutation) ResetMotherName() {
 	delete(m.clearedFields, memberprofile.FieldMotherName)
 }
 
+// SetGender sets the "gender" field.
+func (m *MemberProfileMutation) SetGender(i int64) {
+	m.gender = &i
+	m.addgender = nil
+}
+
+// Gender returns the value of the "gender" field in the mutation.
+func (m *MemberProfileMutation) Gender() (r int64, exists bool) {
+	v := m.gender
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGender returns the old "gender" field's value of the MemberProfile entity.
+// If the MemberProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberProfileMutation) OldGender(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGender is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGender requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGender: %w", err)
+	}
+	return oldValue.Gender, nil
+}
+
+// AddGender adds i to the "gender" field.
+func (m *MemberProfileMutation) AddGender(i int64) {
+	if m.addgender != nil {
+		*m.addgender += i
+	} else {
+		m.addgender = &i
+	}
+}
+
+// AddedGender returns the value that was added to the "gender" field in this mutation.
+func (m *MemberProfileMutation) AddedGender() (r int64, exists bool) {
+	v := m.addgender
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearGender clears the value of the "gender" field.
+func (m *MemberProfileMutation) ClearGender() {
+	m.gender = nil
+	m.addgender = nil
+	m.clearedFields[memberprofile.FieldGender] = struct{}{}
+}
+
+// GenderCleared returns if the "gender" field was cleared in this mutation.
+func (m *MemberProfileMutation) GenderCleared() bool {
+	_, ok := m.clearedFields[memberprofile.FieldGender]
+	return ok
+}
+
+// ResetGender resets all changes to the "gender" field.
+func (m *MemberProfileMutation) ResetGender() {
+	m.gender = nil
+	m.addgender = nil
+	delete(m.clearedFields, memberprofile.FieldGender)
+}
+
+// SetBirthday sets the "birthday" field.
+func (m *MemberProfileMutation) SetBirthday(t time.Time) {
+	m.birthday = &t
+}
+
+// Birthday returns the value of the "birthday" field in the mutation.
+func (m *MemberProfileMutation) Birthday() (r time.Time, exists bool) {
+	v := m.birthday
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBirthday returns the old "birthday" field's value of the MemberProfile entity.
+// If the MemberProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberProfileMutation) OldBirthday(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBirthday is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBirthday requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBirthday: %w", err)
+	}
+	return oldValue.Birthday, nil
+}
+
+// ClearBirthday clears the value of the "birthday" field.
+func (m *MemberProfileMutation) ClearBirthday() {
+	m.birthday = nil
+	m.clearedFields[memberprofile.FieldBirthday] = struct{}{}
+}
+
+// BirthdayCleared returns if the "birthday" field was cleared in this mutation.
+func (m *MemberProfileMutation) BirthdayCleared() bool {
+	_, ok := m.clearedFields[memberprofile.FieldBirthday]
+	return ok
+}
+
+// ResetBirthday resets all changes to the "birthday" field.
+func (m *MemberProfileMutation) ResetBirthday() {
+	m.birthday = nil
+	delete(m.clearedFields, memberprofile.FieldBirthday)
+}
+
 // SetGrade sets the "grade" field.
 func (m *MemberProfileMutation) SetGrade(i int64) {
 	m.grade = &i
@@ -30423,6 +30208,104 @@ func (m *MemberProfileMutation) ResetGrade() {
 	m.grade = nil
 	m.addgrade = nil
 	delete(m.clearedFields, memberprofile.FieldGrade)
+}
+
+// SetEmail sets the "email" field.
+func (m *MemberProfileMutation) SetEmail(s string) {
+	m.email = &s
+}
+
+// Email returns the value of the "email" field in the mutation.
+func (m *MemberProfileMutation) Email() (r string, exists bool) {
+	v := m.email
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmail returns the old "email" field's value of the MemberProfile entity.
+// If the MemberProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberProfileMutation) OldEmail(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmail requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
+	}
+	return oldValue.Email, nil
+}
+
+// ClearEmail clears the value of the "email" field.
+func (m *MemberProfileMutation) ClearEmail() {
+	m.email = nil
+	m.clearedFields[memberprofile.FieldEmail] = struct{}{}
+}
+
+// EmailCleared returns if the "email" field was cleared in this mutation.
+func (m *MemberProfileMutation) EmailCleared() bool {
+	_, ok := m.clearedFields[memberprofile.FieldEmail]
+	return ok
+}
+
+// ResetEmail resets all changes to the "email" field.
+func (m *MemberProfileMutation) ResetEmail() {
+	m.email = nil
+	delete(m.clearedFields, memberprofile.FieldEmail)
+}
+
+// SetWecom sets the "wecom" field.
+func (m *MemberProfileMutation) SetWecom(s string) {
+	m.wecom = &s
+}
+
+// Wecom returns the value of the "wecom" field in the mutation.
+func (m *MemberProfileMutation) Wecom() (r string, exists bool) {
+	v := m.wecom
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWecom returns the old "wecom" field's value of the MemberProfile entity.
+// If the MemberProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberProfileMutation) OldWecom(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWecom is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWecom requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWecom: %w", err)
+	}
+	return oldValue.Wecom, nil
+}
+
+// ClearWecom clears the value of the "wecom" field.
+func (m *MemberProfileMutation) ClearWecom() {
+	m.wecom = nil
+	m.clearedFields[memberprofile.FieldWecom] = struct{}{}
+}
+
+// WecomCleared returns if the "wecom" field was cleared in this mutation.
+func (m *MemberProfileMutation) WecomCleared() bool {
+	_, ok := m.clearedFields[memberprofile.FieldWecom]
+	return ok
+}
+
+// ResetWecom resets all changes to the "wecom" field.
+func (m *MemberProfileMutation) ResetWecom() {
+	m.wecom = nil
+	delete(m.clearedFields, memberprofile.FieldWecom)
 }
 
 // SetIntention sets the "intention" field.
@@ -30565,44 +30448,31 @@ func (m *MemberProfileMutation) ResetSource() {
 	delete(m.clearedFields, memberprofile.FieldSource)
 }
 
-// SetProfileID sets the "profile" edge to the Member entity by id.
-func (m *MemberProfileMutation) SetProfileID(id int64) {
-	m.profile = &id
-}
-
-// ClearProfile clears the "profile" edge to the Member entity.
-func (m *MemberProfileMutation) ClearProfile() {
-	m.clearedprofile = true
+// ClearMember clears the "member" edge to the Member entity.
+func (m *MemberProfileMutation) ClearMember() {
+	m.clearedmember = true
 	m.clearedFields[memberprofile.FieldMemberID] = struct{}{}
 }
 
-// ProfileCleared reports if the "profile" edge to the Member entity was cleared.
-func (m *MemberProfileMutation) ProfileCleared() bool {
-	return m.MemberIDCleared() || m.clearedprofile
+// MemberCleared reports if the "member" edge to the Member entity was cleared.
+func (m *MemberProfileMutation) MemberCleared() bool {
+	return m.MemberIDCleared() || m.clearedmember
 }
 
-// ProfileID returns the "profile" edge ID in the mutation.
-func (m *MemberProfileMutation) ProfileID() (id int64, exists bool) {
-	if m.profile != nil {
-		return *m.profile, true
-	}
-	return
-}
-
-// ProfileIDs returns the "profile" edge IDs in the mutation.
+// MemberIDs returns the "member" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ProfileID instead. It exists only for internal usage by the builders.
-func (m *MemberProfileMutation) ProfileIDs() (ids []int64) {
-	if id := m.profile; id != nil {
+// MemberID instead. It exists only for internal usage by the builders.
+func (m *MemberProfileMutation) MemberIDs() (ids []int64) {
+	if id := m.member; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetProfile resets all changes to the "profile" edge.
-func (m *MemberProfileMutation) ResetProfile() {
-	m.profile = nil
-	m.clearedprofile = false
+// ResetMember resets all changes to the "member" edge.
+func (m *MemberProfileMutation) ResetMember() {
+	m.member = nil
+	m.clearedmember = false
 }
 
 // Where appends a list predicates to the MemberProfileMutation builder.
@@ -30639,7 +30509,7 @@ func (m *MemberProfileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberProfileMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, memberprofile.FieldCreatedAt)
 	}
@@ -30652,7 +30522,7 @@ func (m *MemberProfileMutation) Fields() []string {
 	if m.created_id != nil {
 		fields = append(fields, memberprofile.FieldCreatedID)
 	}
-	if m.profile != nil {
+	if m.member != nil {
 		fields = append(fields, memberprofile.FieldMemberID)
 	}
 	if m.mobile_ascription != nil {
@@ -30664,8 +30534,20 @@ func (m *MemberProfileMutation) Fields() []string {
 	if m.mother_name != nil {
 		fields = append(fields, memberprofile.FieldMotherName)
 	}
+	if m.gender != nil {
+		fields = append(fields, memberprofile.FieldGender)
+	}
+	if m.birthday != nil {
+		fields = append(fields, memberprofile.FieldBirthday)
+	}
 	if m.grade != nil {
 		fields = append(fields, memberprofile.FieldGrade)
+	}
+	if m.email != nil {
+		fields = append(fields, memberprofile.FieldEmail)
+	}
+	if m.wecom != nil {
+		fields = append(fields, memberprofile.FieldWecom)
 	}
 	if m.intention != nil {
 		fields = append(fields, memberprofile.FieldIntention)
@@ -30697,8 +30579,16 @@ func (m *MemberProfileMutation) Field(name string) (ent.Value, bool) {
 		return m.FatherName()
 	case memberprofile.FieldMotherName:
 		return m.MotherName()
+	case memberprofile.FieldGender:
+		return m.Gender()
+	case memberprofile.FieldBirthday:
+		return m.Birthday()
 	case memberprofile.FieldGrade:
 		return m.Grade()
+	case memberprofile.FieldEmail:
+		return m.Email()
+	case memberprofile.FieldWecom:
+		return m.Wecom()
 	case memberprofile.FieldIntention:
 		return m.Intention()
 	case memberprofile.FieldSource:
@@ -30728,8 +30618,16 @@ func (m *MemberProfileMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldFatherName(ctx)
 	case memberprofile.FieldMotherName:
 		return m.OldMotherName(ctx)
+	case memberprofile.FieldGender:
+		return m.OldGender(ctx)
+	case memberprofile.FieldBirthday:
+		return m.OldBirthday(ctx)
 	case memberprofile.FieldGrade:
 		return m.OldGrade(ctx)
+	case memberprofile.FieldEmail:
+		return m.OldEmail(ctx)
+	case memberprofile.FieldWecom:
+		return m.OldWecom(ctx)
 	case memberprofile.FieldIntention:
 		return m.OldIntention(ctx)
 	case memberprofile.FieldSource:
@@ -30799,12 +30697,40 @@ func (m *MemberProfileMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMotherName(v)
 		return nil
+	case memberprofile.FieldGender:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGender(v)
+		return nil
+	case memberprofile.FieldBirthday:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBirthday(v)
+		return nil
 	case memberprofile.FieldGrade:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetGrade(v)
+		return nil
+	case memberprofile.FieldEmail:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmail(v)
+		return nil
+	case memberprofile.FieldWecom:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWecom(v)
 		return nil
 	case memberprofile.FieldIntention:
 		v, ok := value.(int64)
@@ -30837,6 +30763,9 @@ func (m *MemberProfileMutation) AddedFields() []string {
 	if m.addmobile_ascription != nil {
 		fields = append(fields, memberprofile.FieldMobileAscription)
 	}
+	if m.addgender != nil {
+		fields = append(fields, memberprofile.FieldGender)
+	}
 	if m.addgrade != nil {
 		fields = append(fields, memberprofile.FieldGrade)
 	}
@@ -30860,6 +30789,8 @@ func (m *MemberProfileMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedCreatedID()
 	case memberprofile.FieldMobileAscription:
 		return m.AddedMobileAscription()
+	case memberprofile.FieldGender:
+		return m.AddedGender()
 	case memberprofile.FieldGrade:
 		return m.AddedGrade()
 	case memberprofile.FieldIntention:
@@ -30895,6 +30826,13 @@ func (m *MemberProfileMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddMobileAscription(v)
+		return nil
+	case memberprofile.FieldGender:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddGender(v)
 		return nil
 	case memberprofile.FieldGrade:
 		v, ok := value.(int64)
@@ -30949,8 +30887,20 @@ func (m *MemberProfileMutation) ClearedFields() []string {
 	if m.FieldCleared(memberprofile.FieldMotherName) {
 		fields = append(fields, memberprofile.FieldMotherName)
 	}
+	if m.FieldCleared(memberprofile.FieldGender) {
+		fields = append(fields, memberprofile.FieldGender)
+	}
+	if m.FieldCleared(memberprofile.FieldBirthday) {
+		fields = append(fields, memberprofile.FieldBirthday)
+	}
 	if m.FieldCleared(memberprofile.FieldGrade) {
 		fields = append(fields, memberprofile.FieldGrade)
+	}
+	if m.FieldCleared(memberprofile.FieldEmail) {
+		fields = append(fields, memberprofile.FieldEmail)
+	}
+	if m.FieldCleared(memberprofile.FieldWecom) {
+		fields = append(fields, memberprofile.FieldWecom)
 	}
 	if m.FieldCleared(memberprofile.FieldIntention) {
 		fields = append(fields, memberprofile.FieldIntention)
@@ -30996,8 +30946,20 @@ func (m *MemberProfileMutation) ClearField(name string) error {
 	case memberprofile.FieldMotherName:
 		m.ClearMotherName()
 		return nil
+	case memberprofile.FieldGender:
+		m.ClearGender()
+		return nil
+	case memberprofile.FieldBirthday:
+		m.ClearBirthday()
+		return nil
 	case memberprofile.FieldGrade:
 		m.ClearGrade()
+		return nil
+	case memberprofile.FieldEmail:
+		m.ClearEmail()
+		return nil
+	case memberprofile.FieldWecom:
+		m.ClearWecom()
 		return nil
 	case memberprofile.FieldIntention:
 		m.ClearIntention()
@@ -31037,8 +30999,20 @@ func (m *MemberProfileMutation) ResetField(name string) error {
 	case memberprofile.FieldMotherName:
 		m.ResetMotherName()
 		return nil
+	case memberprofile.FieldGender:
+		m.ResetGender()
+		return nil
+	case memberprofile.FieldBirthday:
+		m.ResetBirthday()
+		return nil
 	case memberprofile.FieldGrade:
 		m.ResetGrade()
+		return nil
+	case memberprofile.FieldEmail:
+		m.ResetEmail()
+		return nil
+	case memberprofile.FieldWecom:
+		m.ResetWecom()
 		return nil
 	case memberprofile.FieldIntention:
 		m.ResetIntention()
@@ -31053,8 +31027,8 @@ func (m *MemberProfileMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MemberProfileMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.profile != nil {
-		edges = append(edges, memberprofile.EdgeProfile)
+	if m.member != nil {
+		edges = append(edges, memberprofile.EdgeMember)
 	}
 	return edges
 }
@@ -31063,8 +31037,8 @@ func (m *MemberProfileMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *MemberProfileMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case memberprofile.EdgeProfile:
-		if id := m.profile; id != nil {
+	case memberprofile.EdgeMember:
+		if id := m.member; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -31086,8 +31060,8 @@ func (m *MemberProfileMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MemberProfileMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedprofile {
-		edges = append(edges, memberprofile.EdgeProfile)
+	if m.clearedmember {
+		edges = append(edges, memberprofile.EdgeMember)
 	}
 	return edges
 }
@@ -31096,8 +31070,8 @@ func (m *MemberProfileMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *MemberProfileMutation) EdgeCleared(name string) bool {
 	switch name {
-	case memberprofile.EdgeProfile:
-		return m.clearedprofile
+	case memberprofile.EdgeMember:
+		return m.clearedmember
 	}
 	return false
 }
@@ -31106,8 +31080,8 @@ func (m *MemberProfileMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *MemberProfileMutation) ClearEdge(name string) error {
 	switch name {
-	case memberprofile.EdgeProfile:
-		m.ClearProfile()
+	case memberprofile.EdgeMember:
+		m.ClearMember()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberProfile unique edge %s", name)
@@ -31117,8 +31091,8 @@ func (m *MemberProfileMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *MemberProfileMutation) ResetEdge(name string) error {
 	switch name {
-	case memberprofile.EdgeProfile:
-		m.ResetProfile()
+	case memberprofile.EdgeMember:
+		m.ResetMember()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberProfile edge %s", name)

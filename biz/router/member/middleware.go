@@ -105,3 +105,18 @@ func _updatememberMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _memberfulllistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberpotentiallistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatememberfollowMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

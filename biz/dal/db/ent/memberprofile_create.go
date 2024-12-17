@@ -132,6 +132,34 @@ func (mpc *MemberProfileCreate) SetNillableMotherName(s *string) *MemberProfileC
 	return mpc
 }
 
+// SetGender sets the "gender" field.
+func (mpc *MemberProfileCreate) SetGender(i int64) *MemberProfileCreate {
+	mpc.mutation.SetGender(i)
+	return mpc
+}
+
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableGender(i *int64) *MemberProfileCreate {
+	if i != nil {
+		mpc.SetGender(*i)
+	}
+	return mpc
+}
+
+// SetBirthday sets the "birthday" field.
+func (mpc *MemberProfileCreate) SetBirthday(t time.Time) *MemberProfileCreate {
+	mpc.mutation.SetBirthday(t)
+	return mpc
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableBirthday(t *time.Time) *MemberProfileCreate {
+	if t != nil {
+		mpc.SetBirthday(*t)
+	}
+	return mpc
+}
+
 // SetGrade sets the "grade" field.
 func (mpc *MemberProfileCreate) SetGrade(i int64) *MemberProfileCreate {
 	mpc.mutation.SetGrade(i)
@@ -142,6 +170,34 @@ func (mpc *MemberProfileCreate) SetGrade(i int64) *MemberProfileCreate {
 func (mpc *MemberProfileCreate) SetNillableGrade(i *int64) *MemberProfileCreate {
 	if i != nil {
 		mpc.SetGrade(*i)
+	}
+	return mpc
+}
+
+// SetEmail sets the "email" field.
+func (mpc *MemberProfileCreate) SetEmail(s string) *MemberProfileCreate {
+	mpc.mutation.SetEmail(s)
+	return mpc
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableEmail(s *string) *MemberProfileCreate {
+	if s != nil {
+		mpc.SetEmail(*s)
+	}
+	return mpc
+}
+
+// SetWecom sets the "wecom" field.
+func (mpc *MemberProfileCreate) SetWecom(s string) *MemberProfileCreate {
+	mpc.mutation.SetWecom(s)
+	return mpc
+}
+
+// SetNillableWecom sets the "wecom" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableWecom(s *string) *MemberProfileCreate {
+	if s != nil {
+		mpc.SetWecom(*s)
 	}
 	return mpc
 }
@@ -180,23 +236,9 @@ func (mpc *MemberProfileCreate) SetID(i int64) *MemberProfileCreate {
 	return mpc
 }
 
-// SetProfileID sets the "profile" edge to the Member entity by ID.
-func (mpc *MemberProfileCreate) SetProfileID(id int64) *MemberProfileCreate {
-	mpc.mutation.SetProfileID(id)
-	return mpc
-}
-
-// SetNillableProfileID sets the "profile" edge to the Member entity by ID if the given value is not nil.
-func (mpc *MemberProfileCreate) SetNillableProfileID(id *int64) *MemberProfileCreate {
-	if id != nil {
-		mpc = mpc.SetProfileID(*id)
-	}
-	return mpc
-}
-
-// SetProfile sets the "profile" edge to the Member entity.
-func (mpc *MemberProfileCreate) SetProfile(m *Member) *MemberProfileCreate {
-	return mpc.SetProfileID(m.ID)
+// SetMember sets the "member" edge to the Member entity.
+func (mpc *MemberProfileCreate) SetMember(m *Member) *MemberProfileCreate {
+	return mpc.SetMemberID(m.ID)
 }
 
 // Mutation returns the MemberProfileMutation object of the builder.
@@ -253,6 +295,10 @@ func (mpc *MemberProfileCreate) defaults() {
 	if _, ok := mpc.mutation.MobileAscription(); !ok {
 		v := memberprofile.DefaultMobileAscription
 		mpc.mutation.SetMobileAscription(v)
+	}
+	if _, ok := mpc.mutation.Gender(); !ok {
+		v := memberprofile.DefaultGender
+		mpc.mutation.SetGender(v)
 	}
 	if _, ok := mpc.mutation.Grade(); !ok {
 		v := memberprofile.DefaultGrade
@@ -330,9 +376,25 @@ func (mpc *MemberProfileCreate) createSpec() (*MemberProfile, *sqlgraph.CreateSp
 		_spec.SetField(memberprofile.FieldMotherName, field.TypeString, value)
 		_node.MotherName = value
 	}
+	if value, ok := mpc.mutation.Gender(); ok {
+		_spec.SetField(memberprofile.FieldGender, field.TypeInt64, value)
+		_node.Gender = value
+	}
+	if value, ok := mpc.mutation.Birthday(); ok {
+		_spec.SetField(memberprofile.FieldBirthday, field.TypeTime, value)
+		_node.Birthday = value
+	}
 	if value, ok := mpc.mutation.Grade(); ok {
 		_spec.SetField(memberprofile.FieldGrade, field.TypeInt64, value)
 		_node.Grade = value
+	}
+	if value, ok := mpc.mutation.Email(); ok {
+		_spec.SetField(memberprofile.FieldEmail, field.TypeString, value)
+		_node.Email = value
+	}
+	if value, ok := mpc.mutation.Wecom(); ok {
+		_spec.SetField(memberprofile.FieldWecom, field.TypeString, value)
+		_node.Wecom = value
 	}
 	if value, ok := mpc.mutation.Intention(); ok {
 		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
@@ -342,12 +404,12 @@ func (mpc *MemberProfileCreate) createSpec() (*MemberProfile, *sqlgraph.CreateSp
 		_spec.SetField(memberprofile.FieldSource, field.TypeInt64, value)
 		_node.Source = value
 	}
-	if nodes := mpc.mutation.ProfileIDs(); len(nodes) > 0 {
+	if nodes := mpc.mutation.MemberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberprofile.ProfileTable,
-			Columns: []string{memberprofile.ProfileColumn},
+			Table:   memberprofile.MemberTable,
+			Columns: []string{memberprofile.MemberColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
