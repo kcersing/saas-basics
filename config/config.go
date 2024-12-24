@@ -17,6 +17,7 @@ type ServerConfig struct {
 	Minio          Minio            `mapstructure:"Minio" json:"Minio"`
 	Swagger        Swagger          `mapstructure:"Swagger" json:"Swagger"`
 	Wechat         Wechat           `mapstructure:"Wechat" json:"Wechat"`
+	SMS            SMS              `mapstructure:"SMS" json:"SMS"`
 }
 
 type MySQLConfig struct {
@@ -104,4 +105,11 @@ type MiniProgram struct {
 
 	AppKey  string `mapstructure:"app_key" yaml:"app_key"`
 	OfferID string `mapstructure:"offer_id" yaml:"offer_id"`
+}
+type SMS struct {
+	AliSms AliSms `mapstructure:"AliSms" yaml:"AliSms"`
+}
+type AliSms struct {
+	KeyId     string `mapstructure:"key_id" yaml:"key_id"`
+	KeySecret string `mapstructure:"key_secret" yaml:"key_secret"`
 }

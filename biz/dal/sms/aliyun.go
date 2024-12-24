@@ -6,16 +6,15 @@ import (
 	util "github.com/alibabacloud-go/tea-utils/v2/service"
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	config2 "saas/config"
 )
 
 // 使用AK&SK初始化账号Client
 func createAliyunClient() (_result *dysmsapi20170525.Client, _err error) {
 
-	var accessKeyId, accessKeySecret string
-
 	config := &openapi.Config{}
-	config.AccessKeyId = &accessKeyId
-	config.AccessKeySecret = &accessKeySecret
+	config.AccessKeyId = &config2.GlobalServerConfig.SMS.AliSms.KeyId
+	config.AccessKeySecret = &config2.GlobalServerConfig.SMS.AliSms.KeySecret
 	config.Endpoint = tea.String("dysmsapi.ap-southeast-1.aliyuncs.com")
 	_result = &dysmsapi20170525.Client{}
 	_result, _err = dysmsapi20170525.NewClient(config)
