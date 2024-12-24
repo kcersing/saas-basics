@@ -37,6 +37,7 @@ import (
 	"saas/biz/dal/db/ent/schedulecoach"
 	"saas/biz/dal/db/ent/schedulemember"
 	"saas/biz/dal/db/ent/schema"
+	"saas/biz/dal/db/ent/sms"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
@@ -1221,6 +1222,29 @@ func init() {
 	schedulememberDescSignEndTime := schedulememberFields[9].Descriptor()
 	// schedulemember.DefaultSignEndTime holds the default value on creation for the sign_end_time field.
 	schedulemember.DefaultSignEndTime = schedulememberDescSignEndTime.Default.(func() time.Time)
+	smsMixin := schema.Sms{}.Mixin()
+	smsMixinFields0 := smsMixin[0].Fields()
+	_ = smsMixinFields0
+	smsFields := schema.Sms{}.Fields()
+	_ = smsFields
+	// smsDescCreatedAt is the schema descriptor for created_at field.
+	smsDescCreatedAt := smsMixinFields0[1].Descriptor()
+	// sms.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sms.DefaultCreatedAt = smsDescCreatedAt.Default.(func() time.Time)
+	// smsDescUpdatedAt is the schema descriptor for updated_at field.
+	smsDescUpdatedAt := smsMixinFields0[2].Descriptor()
+	// sms.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sms.DefaultUpdatedAt = smsDescUpdatedAt.Default.(func() time.Time)
+	// sms.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sms.UpdateDefaultUpdatedAt = smsDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// smsDescDelete is the schema descriptor for delete field.
+	smsDescDelete := smsMixinFields0[3].Descriptor()
+	// sms.DefaultDelete holds the default value on creation for the delete field.
+	sms.DefaultDelete = smsDescDelete.Default.(int64)
+	// smsDescCreatedID is the schema descriptor for created_id field.
+	smsDescCreatedID := smsMixinFields0[4].Descriptor()
+	// sms.DefaultCreatedID holds the default value on creation for the created_id field.
+	sms.DefaultCreatedID = smsDescCreatedID.Default.(int64)
 	tokenMixin := schema.Token{}.Mixin()
 	tokenMixinFields0 := tokenMixin[0].Fields()
 	_ = tokenMixinFields0

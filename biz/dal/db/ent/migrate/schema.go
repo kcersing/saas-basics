@@ -1227,6 +1227,24 @@ var (
 			},
 		},
 	}
+	// SysSmsColumns holds the columns for the "sys_sms" table.
+	SysSmsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "mobile", Type: field.TypeString, Comment: "手机号"},
+		{Name: "biz_id", Type: field.TypeString, Comment: "BizId"},
+		{Name: "code", Type: field.TypeString, Comment: "内容"},
+		{Name: "template", Type: field.TypeString, Comment: "短信模板"},
+	}
+	// SysSmsTable holds the schema information for the "sys_sms" table.
+	SysSmsTable = &schema.Table{
+		Name:       "sys_sms",
+		Columns:    SysSmsColumns,
+		PrimaryKey: []*schema.Column{SysSmsColumns[0]},
+	}
 	// SysTokensColumns holds the columns for the "sys_tokens" table.
 	SysTokensColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -1575,6 +1593,7 @@ var (
 		ScheduleTable,
 		ScheduleCoachTable,
 		ScheduleMemberTable,
+		SysSmsTable,
 		SysTokensTable,
 		SysUsersTable,
 		VenueTable,
@@ -1734,6 +1753,9 @@ func init() {
 	ScheduleMemberTable.Annotation = &entsql.Annotation{
 		Table:   "schedule_member",
 		Options: "AUTO_INCREMENT = 100000",
+	}
+	SysSmsTable.Annotation = &entsql.Annotation{
+		Table: "sys_sms",
 	}
 	SysTokensTable.ForeignKeys[0].RefTable = SysUsersTable
 	SysTokensTable.Annotation = &entsql.Annotation{

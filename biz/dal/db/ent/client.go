@@ -44,6 +44,7 @@ import (
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
 	"saas/biz/dal/db/ent/schedulemember"
+	"saas/biz/dal/db/ent/sms"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
@@ -126,6 +127,8 @@ type Client struct {
 	ScheduleCoach *ScheduleCoachClient
 	// ScheduleMember is the client for interacting with the ScheduleMember builders.
 	ScheduleMember *ScheduleMemberClient
+	// Sms is the client for interacting with the Sms builders.
+	Sms *SmsClient
 	// Token is the client for interacting with the Token builders.
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
@@ -178,6 +181,7 @@ func (c *Client) init() {
 	c.Schedule = NewScheduleClient(c.config)
 	c.ScheduleCoach = NewScheduleCoachClient(c.config)
 	c.ScheduleMember = NewScheduleMemberClient(c.config)
+	c.Sms = NewSmsClient(c.config)
 	c.Token = NewTokenClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.Venue = NewVenueClient(c.config)
@@ -307,6 +311,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Schedule:              NewScheduleClient(cfg),
 		ScheduleCoach:         NewScheduleCoachClient(cfg),
 		ScheduleMember:        NewScheduleMemberClient(cfg),
+		Sms:                   NewSmsClient(cfg),
 		Token:                 NewTokenClient(cfg),
 		User:                  NewUserClient(cfg),
 		Venue:                 NewVenueClient(cfg),
@@ -363,6 +368,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Schedule:              NewScheduleClient(cfg),
 		ScheduleCoach:         NewScheduleCoachClient(cfg),
 		ScheduleMember:        NewScheduleMemberClient(cfg),
+		Sms:                   NewSmsClient(cfg),
 		Token:                 NewTokenClient(cfg),
 		User:                  NewUserClient(cfg),
 		Venue:                 NewVenueClient(cfg),
@@ -402,7 +408,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
 		c.MemberProduct, c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order,
 		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.Role,
-		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Token, c.User, c.Venue,
+		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Sms, c.Token, c.User, c.Venue,
 		c.VenuePlace,
 	} {
 		n.Use(hooks...)
@@ -419,7 +425,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
 		c.MemberProduct, c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order,
 		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.Role,
-		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Token, c.User, c.Venue,
+		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Sms, c.Token, c.User, c.Venue,
 		c.VenuePlace,
 	} {
 		n.Intercept(interceptors...)
@@ -495,6 +501,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ScheduleCoach.mutate(ctx, m)
 	case *ScheduleMemberMutation:
 		return c.ScheduleMember.mutate(ctx, m)
+	case *SmsMutation:
+		return c.Sms.mutate(ctx, m)
 	case *TokenMutation:
 		return c.Token.mutate(ctx, m)
 	case *UserMutation:
@@ -5873,6 +5881,139 @@ func (c *ScheduleMemberClient) mutate(ctx context.Context, m *ScheduleMemberMuta
 	}
 }
 
+// SmsClient is a client for the Sms schema.
+type SmsClient struct {
+	config
+}
+
+// NewSmsClient returns a client for the Sms from the given config.
+func NewSmsClient(c config) *SmsClient {
+	return &SmsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sms.Hooks(f(g(h())))`.
+func (c *SmsClient) Use(hooks ...Hook) {
+	c.hooks.Sms = append(c.hooks.Sms, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sms.Intercept(f(g(h())))`.
+func (c *SmsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Sms = append(c.inters.Sms, interceptors...)
+}
+
+// Create returns a builder for creating a Sms entity.
+func (c *SmsClient) Create() *SmsCreate {
+	mutation := newSmsMutation(c.config, OpCreate)
+	return &SmsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Sms entities.
+func (c *SmsClient) CreateBulk(builders ...*SmsCreate) *SmsCreateBulk {
+	return &SmsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SmsClient) MapCreateBulk(slice any, setFunc func(*SmsCreate, int)) *SmsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SmsCreateBulk{err: fmt.Errorf("calling to SmsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SmsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SmsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Sms.
+func (c *SmsClient) Update() *SmsUpdate {
+	mutation := newSmsMutation(c.config, OpUpdate)
+	return &SmsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SmsClient) UpdateOne(s *Sms) *SmsUpdateOne {
+	mutation := newSmsMutation(c.config, OpUpdateOne, withSms(s))
+	return &SmsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SmsClient) UpdateOneID(id int64) *SmsUpdateOne {
+	mutation := newSmsMutation(c.config, OpUpdateOne, withSmsID(id))
+	return &SmsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Sms.
+func (c *SmsClient) Delete() *SmsDelete {
+	mutation := newSmsMutation(c.config, OpDelete)
+	return &SmsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SmsClient) DeleteOne(s *Sms) *SmsDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SmsClient) DeleteOneID(id int64) *SmsDeleteOne {
+	builder := c.Delete().Where(sms.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SmsDeleteOne{builder}
+}
+
+// Query returns a query builder for Sms.
+func (c *SmsClient) Query() *SmsQuery {
+	return &SmsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSms},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Sms entity by its id.
+func (c *SmsClient) Get(ctx context.Context, id int64) (*Sms, error) {
+	return c.Query().Where(sms.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SmsClient) GetX(ctx context.Context, id int64) *Sms {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SmsClient) Hooks() []Hook {
+	return c.hooks.Sms
+}
+
+// Interceptors returns the client interceptors.
+func (c *SmsClient) Interceptors() []Interceptor {
+	return c.inters.Sms
+}
+
+func (c *SmsClient) mutate(ctx context.Context, m *SmsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SmsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SmsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SmsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SmsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Sms mutation op: %q", m.Op())
+	}
+}
+
 // TokenClient is a client for the Token schema.
 type TokenClient struct {
 	config
@@ -6589,7 +6730,7 @@ type (
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
 		MemberProduct, MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount,
 		OrderItem, OrderPay, OrderSales, Product, Role, Schedule, ScheduleCoach,
-		ScheduleMember, Token, User, Venue, VenuePlace []ent.Hook
+		ScheduleMember, Sms, Token, User, Venue, VenuePlace []ent.Hook
 	}
 	inters struct {
 		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
@@ -6597,6 +6738,6 @@ type (
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
 		MemberProduct, MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount,
 		OrderItem, OrderPay, OrderSales, Product, Role, Schedule, ScheduleCoach,
-		ScheduleMember, Token, User, Venue, VenuePlace []ent.Interceptor
+		ScheduleMember, Sms, Token, User, Venue, VenuePlace []ent.Interceptor
 	}
 )

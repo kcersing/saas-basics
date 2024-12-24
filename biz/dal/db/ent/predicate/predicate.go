@@ -105,6 +105,9 @@ type ScheduleCoach func(*sql.Selector)
 // ScheduleMember is the predicate function for schedulemember builders.
 type ScheduleMember func(*sql.Selector)
 
+// Sms is the predicate function for sms builders.
+type Sms func(*sql.Selector)
+
 // Token is the predicate function for token builders.
 type Token func(*sql.Selector)
 

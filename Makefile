@@ -50,10 +50,10 @@ gen-ent:
 	go generate ./biz/dal/db/ent
 	go run -mod=mod entgo.io/ent/cmd/ent generate --feature sql/modifier ./biz/dal/db/ent/schema
 
-cd /xingfufit/go/saas-basics/
-lsof -i :9039
-export PATH=$PATH:/usr/local/go/bin
-git pull
-go run .
-
+#cd /xingfufit/go/saas-basics/
+#lsof -i :9039
+#export PATH=$PATH:/usr/local/go/bin
+#git pull
+#go run .
+#
 

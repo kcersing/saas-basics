@@ -78,6 +78,8 @@ type Tx struct {
 	ScheduleCoach *ScheduleCoachClient
 	// ScheduleMember is the client for interacting with the ScheduleMember builders.
 	ScheduleMember *ScheduleMemberClient
+	// Sms is the client for interacting with the Sms builders.
+	Sms *SmsClient
 	// Token is the client for interacting with the Token builders.
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
@@ -250,6 +252,7 @@ func (tx *Tx) init() {
 	tx.Schedule = NewScheduleClient(tx.config)
 	tx.ScheduleCoach = NewScheduleCoachClient(tx.config)
 	tx.ScheduleMember = NewScheduleMemberClient(tx.config)
+	tx.Sms = NewSmsClient(tx.config)
 	tx.Token = NewTokenClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.Venue = NewVenueClient(tx.config)
