@@ -7,7 +7,7 @@ import (
 type Member interface {
 	CreateMember(req member.CreateOrUpdateMemberReq) error
 	UpdateMember(req member.CreateOrUpdateMemberReq) error
-	DeleteMember(id int64) error
+	DeleteMember(id []int64) error
 	MemberInfo(id int64) (info *member.MemberInfo, err error)
 
 	MemberFullList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error)

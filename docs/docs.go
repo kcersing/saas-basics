@@ -4237,7 +4237,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "memberId": {
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

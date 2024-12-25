@@ -37,7 +37,7 @@ func (m Member) UpdateMemberFollow(req *member.UpdateMemberFollowReq) (err error
 
 	_, err = m.db.MemberDetails.
 		Update().
-		Where(memberdetails.MemberID(req.MemberId)).
+		Where(memberdetails.MemberIDIn(req.MemberId...)).
 		SetRelationUID(req.FollowId).
 		SetRelationUname(user.Name).
 		Save(m.ctx)
@@ -165,8 +165,8 @@ func (m Member) UpdateMember(req member.CreateOrUpdateMemberReq) error {
 	return nil
 }
 
-func (m Member) DeleteMember(id int64) error {
-	_, err := m.db.Member.Update().Where(member2.IDEQ(id)).SetDelete(1).Save(m.ctx)
+func (m Member) DeleteMember(id []int64) error {
+	_, err := m.db.Member.Update().Where(member2.IDIn(id...)).SetDelete(1).Save(m.ctx)
 	return err
 }
 

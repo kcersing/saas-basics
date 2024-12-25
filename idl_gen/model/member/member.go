@@ -5826,26 +5826,26 @@ func (p *MemberContractInfo) String() string {
 }
 
 type UpdateMemberFollowReq struct {
-	MemberId int64 `thrift:"memberId,1,optional" form:"memberId" json:"memberId" query:"memberId"`
-	FollowId int64 `thrift:"followId,2,optional" form:"followId" json:"followId" query:"followId"`
+	MemberId []int64 `thrift:"memberId,1,optional" form:"memberId" json:"memberId" query:"memberId"`
+	FollowId int64   `thrift:"followId,2,optional" form:"followId" json:"followId" query:"followId"`
 }
 
 func NewUpdateMemberFollowReq() *UpdateMemberFollowReq {
 	return &UpdateMemberFollowReq{
 
-		MemberId: 0,
+		MemberId: []int64{},
 		FollowId: 0,
 	}
 }
 
 func (p *UpdateMemberFollowReq) InitDefault() {
-	p.MemberId = 0
+	p.MemberId = []int64{}
 	p.FollowId = 0
 }
 
-var UpdateMemberFollowReq_MemberId_DEFAULT int64 = 0
+var UpdateMemberFollowReq_MemberId_DEFAULT []int64 = []int64{}
 
-func (p *UpdateMemberFollowReq) GetMemberId() (v int64) {
+func (p *UpdateMemberFollowReq) GetMemberId() (v []int64) {
 	if !p.IsSetMemberId() {
 		return UpdateMemberFollowReq_MemberId_DEFAULT
 	}
@@ -5867,7 +5867,7 @@ var fieldIDToName_UpdateMemberFollowReq = map[int16]string{
 }
 
 func (p *UpdateMemberFollowReq) IsSetMemberId() bool {
-	return p.MemberId != UpdateMemberFollowReq_MemberId_DEFAULT
+	return p.MemberId != nil
 }
 
 func (p *UpdateMemberFollowReq) IsSetFollowId() bool {
@@ -5894,7 +5894,7 @@ func (p *UpdateMemberFollowReq) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -5939,12 +5939,24 @@ ReadStructEndError:
 }
 
 func (p *UpdateMemberFollowReq) ReadField1(iprot thrift.TProtocol) error {
-
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
 		return err
-	} else {
-		_field = v
+	}
+	_field := make([]int64, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem int64
+		if v, err := iprot.ReadI64(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
 	}
 	p.MemberId = _field
 	return nil
@@ -5996,10 +6008,18 @@ WriteStructEndError:
 
 func (p *UpdateMemberFollowReq) writeField1(oprot thrift.TProtocol) (err error) {
 	if p.IsSetMemberId() {
-		if err = oprot.WriteFieldBegin("memberId", thrift.I64, 1); err != nil {
+		if err = oprot.WriteFieldBegin("memberId", thrift.LIST, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(p.MemberId); err != nil {
+		if err := oprot.WriteListBegin(thrift.I64, len(p.MemberId)); err != nil {
+			return err
+		}
+		for _, v := range p.MemberId {
+			if err := oprot.WriteI64(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -6056,7 +6076,7 @@ type MemberService interface {
 
 	MemberPotentialListExport(ctx context.Context, req *MemberListReq) (r *base.NilResponse, err error)
 
-	DelMember(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
+	DelMember(ctx context.Context, req *base.Ids) (r *base.NilResponse, err error)
 	// 更新用户状态
 	UpdateMemberStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
 
@@ -6154,7 +6174,7 @@ func (p *MemberServiceClient) MemberPotentialListExport(ctx context.Context, req
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *MemberServiceClient) DelMember(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
+func (p *MemberServiceClient) DelMember(ctx context.Context, req *base.Ids) (r *base.NilResponse, err error) {
 	var _args MemberServiceDelMemberArgs
 	_args.Req = req
 	var _result MemberServiceDelMemberResult
@@ -8843,7 +8863,7 @@ func (p *MemberServiceMemberPotentialListExportResult) String() string {
 }
 
 type MemberServiceDelMemberArgs struct {
-	Req *base.IDReq `thrift:"req,1"`
+	Req *base.Ids `thrift:"req,1"`
 }
 
 func NewMemberServiceDelMemberArgs() *MemberServiceDelMemberArgs {
@@ -8853,9 +8873,9 @@ func NewMemberServiceDelMemberArgs() *MemberServiceDelMemberArgs {
 func (p *MemberServiceDelMemberArgs) InitDefault() {
 }
 
-var MemberServiceDelMemberArgs_Req_DEFAULT *base.IDReq
+var MemberServiceDelMemberArgs_Req_DEFAULT *base.Ids
 
-func (p *MemberServiceDelMemberArgs) GetReq() (v *base.IDReq) {
+func (p *MemberServiceDelMemberArgs) GetReq() (v *base.Ids) {
 	if !p.IsSetReq() {
 		return MemberServiceDelMemberArgs_Req_DEFAULT
 	}
@@ -8927,7 +8947,7 @@ ReadStructEndError:
 }
 
 func (p *MemberServiceDelMemberArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := base.NewIDReq()
+	_field := base.NewIds()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}

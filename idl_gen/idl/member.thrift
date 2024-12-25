@@ -144,7 +144,7 @@ struct MemberContractInfo{
 
 
 struct UpdateMemberFollowReq{
-    1:  optional i64 memberId=0 (api.raw = "memberId")
+    1:  optional list<i64> memberId=0 (api.raw = "memberId")
     2:  optional i64 followId=0 (api.raw = "followId")
 }
 
@@ -171,7 +171,7 @@ service MemberService {
 
   base.NilResponse MemberPotentialListExport(1: MemberListReq req) (api.post = "/service/member/potential-list/export")
 
-  base.NilResponse DelMember(1: base.IDReq req) (api.post = "/service/member/del")
+  base.NilResponse DelMember(1: base.Ids req) (api.post = "/service/member/del")
   // 更新用户状态
   base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/member/status")
 

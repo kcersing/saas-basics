@@ -639,7 +639,9 @@ definitions:
       followId:
         type: integer
       memberId:
-        type: integer
+        items:
+          type: integer
+        type: array
     type: object
   menu.ApiInfo:
     properties:

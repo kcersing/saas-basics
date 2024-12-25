@@ -263,14 +263,14 @@ func MemberPotentialListExport(ctx context.Context, c *app.RequestContext) {
 // @router /service/member/del [POST]
 func DelMember(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req base.IDReq
+	var req base.Ids
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	err = service.NewMember(ctx, c).DeleteMember(req.ID)
+	err = service.NewMember(ctx, c).DeleteMember(req.Ids)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
