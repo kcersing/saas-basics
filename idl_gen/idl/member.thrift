@@ -50,7 +50,7 @@ struct MemberProfile{
     13: optional string wecom ="" (api.raw = "wecom")
     14: optional string birthday=""   (api.raw = "birthday")
 
-     250:optional i64 id=0  (api.raw = "id")
+    250:optional i64 id=0  (api.raw = "id")
 }
 
 struct MemberDetails {

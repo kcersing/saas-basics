@@ -149,6 +149,7 @@ func (v Venue) List(req *venue.VenueListReq) (list []*venue.VenueInfo, total int
 	}
 
 	for _, ve := range venueList {
+
 		list = append(list, v.entVenueInfo(ve))
 	}
 
@@ -241,7 +242,6 @@ func (ve Venue) entVenueInfo(v *ent.Venue) *venue.VenueInfo {
 			}
 			dAll = append(dAll, contract)
 		}
-		return nil
 	}
 
 	return &venue.VenueInfo{
@@ -261,7 +261,6 @@ func (ve Venue) entVenueInfo(v *ent.Venue) *venue.VenueInfo {
 		Seal:         v.Seal,
 		ClassifyName: dAll,
 	}
-
 }
 
 func entVenuePlaceInfo(v *ent.VenuePlace) *venue.VenuePlaceInfo {
