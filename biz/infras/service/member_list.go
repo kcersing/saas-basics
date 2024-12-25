@@ -203,6 +203,8 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 		Condition:     v.Condition,
 		ConditionName: enums.ReturnMemberConditionValues(v.Condition),
 		Status:        v.Status,
+		CreatedAt:     v.CreatedAt.Format(time.DateTime),
+		UpdatedAt:     v.UpdatedAt.Format(time.DateTime),
 		Profile: &member.MemberProfile{
 			MobileAscription: p.MobileAscription,
 			FatherName:       p.FatherName,
