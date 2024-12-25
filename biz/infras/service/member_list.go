@@ -190,7 +190,7 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 			Gender:           gender,
 			Age:              age,
 			Wecom:            p.Wecom,
-			Birthday:         p.Birthday.Format(time.DateTime),
+			Birthday:         p.Birthday.Format(time.DateOnly),
 			ID:               p.ID,
 		},
 		Details: &member.MemberDetails{

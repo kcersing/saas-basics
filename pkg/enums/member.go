@@ -14,9 +14,9 @@ func ReturnMemberConditionValues(key int64) (values string) {
 func ReturnMemberGenderValues(key int64) (values string) {
 	switch key {
 	case 1:
-		values = "女性"
+		values = "女"
 	case 2:
-		values = "男性"
+		values = "男"
 	case 3:
 		values = "未知"
 	default:
@@ -26,9 +26,9 @@ func ReturnMemberGenderValues(key int64) (values string) {
 }
 func ReturnMemberGenderKey(values string) (key int64) {
 	switch values {
-	case "女性":
+	case "女":
 		key = 1
-	case "男性":
+	case "男":
 		key = 2
 	case "未知":
 		key = 3

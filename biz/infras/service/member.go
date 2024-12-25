@@ -78,7 +78,7 @@ func NewMember(ctx context.Context, c *app.RequestContext) do.Member {
 
 func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 
-	birthday, _ := time.Parse(time.DateTime, req.Birthday)
+	birthday, _ := time.Parse(time.DateOnly, req.Birthday)
 
 	var gender = enums.ReturnMemberGenderKey(req.Gender)
 
