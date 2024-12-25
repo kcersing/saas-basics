@@ -18,6 +18,8 @@ type Product struct {
 func (Product) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("type").Default("").Comment("类型").Optional(),
+		field.String("sub_type").Default("").Comment("次级类型").Optional(),
+
 		field.String("name").Default("").Comment("商品名").Optional(),
 		field.Int64("stock").Default(0).Comment("库存").Optional(),
 		field.Int64("deadline").Default(0).Comment("激活期限").Optional(),

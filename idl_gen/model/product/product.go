@@ -1426,6 +1426,24 @@ func (p *ProductInfo) String() string {
 
 }
 
+// field.String("type").Default("").Comment("类型").Optional(),
+// field.String("name").Default("").Comment("商品名").Optional(),
+// field.Int64("stock").Default(0).Comment("库存").Optional(),
+// field.Int64("deadline").Default(0).Comment("激活期限").Optional(),
+// field.Int64("duration").Default(0).Comment("有效期").Optional(),
+// field.Int64("length").Default(0).Comment("课程课时").Optional(),
+//
+// field.Float("price").Default(0).Comment("售价").Optional(),
+// field.Int64("times").Default(0).Comment("次数").Optional(),
+// field.Int64("is_lessons").Default(1).Comment("团课预约 1支持2不支持").Optional(),
+//
+// field.JSON("sales", []*base.Sales{}).Comment("售卖信息[售价等]").Optional(),
+// field.Int64("is_sales").Default(1).Comment("销售方式 1会员端").Optional(),
+//
+// field.Time("sign_sales_at").Comment("开始售卖时间").Optional(),
+// field.Time("end_sales_at").Comment("结束售卖时间").Optional(),
+// field.String("pic").Default("").Comment("主图").Optional(),
+// field.Text("description").Default("").Comment("详情").Optional(),
 type CreateOrUpdateProductReq struct {
 	ID int64 `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
 	/**商品名称*/
@@ -1442,7 +1460,7 @@ type CreateOrUpdateProductReq struct {
 	Duration int64 `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`
 	/**课程课时*/
 	Length int64 `thrift:"length,8,optional" form:"length" json:"length" query:"length"`
-	/**类别*/
+	/**类型*/
 	Type string `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
 	/**激活期限*/
 	Deadline int64 `thrift:"deadline,10,optional" form:"deadline" json:"deadline" query:"deadline"`
@@ -1462,6 +1480,8 @@ type CreateOrUpdateProductReq struct {
 	LessonsId []int64 `thrift:"lessonsId,18,optional" form:"lessonsId" json:"lessonsId" query:"lessonsId"`
 	/**团课预约 1支持2不支持*/
 	IsLessons []int64 `thrift:"isLessons,19,optional" form:"isLessons" json:"isLessons" query:"isLessons"`
+	/**次级类型*/
+	SubType string `thrift:"subType,20,optional" form:"subType" json:"subType" query:"subType"`
 }
 
 func NewCreateOrUpdateProductReq() *CreateOrUpdateProductReq {
@@ -1485,6 +1505,7 @@ func NewCreateOrUpdateProductReq() *CreateOrUpdateProductReq {
 		ContractId:  []int64{},
 		LessonsId:   []int64{},
 		IsLessons:   []int64{},
+		SubType:     "",
 	}
 }
 
@@ -1507,6 +1528,7 @@ func (p *CreateOrUpdateProductReq) InitDefault() {
 	p.ContractId = []int64{}
 	p.LessonsId = []int64{}
 	p.IsLessons = []int64{}
+	p.SubType = ""
 }
 
 var CreateOrUpdateProductReq_ID_DEFAULT int64 = 0
@@ -1671,6 +1693,15 @@ func (p *CreateOrUpdateProductReq) GetIsLessons() (v []int64) {
 	return p.IsLessons
 }
 
+var CreateOrUpdateProductReq_SubType_DEFAULT string = ""
+
+func (p *CreateOrUpdateProductReq) GetSubType() (v string) {
+	if !p.IsSetSubType() {
+		return CreateOrUpdateProductReq_SubType_DEFAULT
+	}
+	return p.SubType
+}
+
 var fieldIDToName_CreateOrUpdateProductReq = map[int16]string{
 	1:  "id",
 	2:  "name",
@@ -1690,6 +1721,7 @@ var fieldIDToName_CreateOrUpdateProductReq = map[int16]string{
 	17: "contractId",
 	18: "lessonsId",
 	19: "isLessons",
+	20: "subType",
 }
 
 func (p *CreateOrUpdateProductReq) IsSetID() bool {
@@ -1762,6 +1794,10 @@ func (p *CreateOrUpdateProductReq) IsSetLessonsId() bool {
 
 func (p *CreateOrUpdateProductReq) IsSetIsLessons() bool {
 	return p.IsLessons != nil
+}
+
+func (p *CreateOrUpdateProductReq) IsSetSubType() bool {
+	return p.SubType != CreateOrUpdateProductReq_SubType_DEFAULT
 }
 
 func (p *CreateOrUpdateProductReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1922,6 +1958,14 @@ func (p *CreateOrUpdateProductReq) Read(iprot thrift.TProtocol) (err error) {
 		case 19:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField19(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 20:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField20(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2214,6 +2258,17 @@ func (p *CreateOrUpdateProductReq) ReadField19(iprot thrift.TProtocol) error {
 	p.IsLessons = _field
 	return nil
 }
+func (p *CreateOrUpdateProductReq) ReadField20(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.SubType = _field
+	return nil
+}
 
 func (p *CreateOrUpdateProductReq) Write(oprot thrift.TProtocol) (err error) {
 
@@ -2292,6 +2347,10 @@ func (p *CreateOrUpdateProductReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField19(oprot); err != nil {
 			fieldId = 19
+			goto WriteFieldError
+		}
+		if err = p.writeField20(oprot); err != nil {
+			fieldId = 20
 			goto WriteFieldError
 		}
 	}
@@ -2694,6 +2753,25 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 19 end error: ", p), err)
 }
 
+func (p *CreateOrUpdateProductReq) writeField20(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSubType() {
+		if err = oprot.WriteFieldBegin("subType", thrift.STRING, 20); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.SubType); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 20 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 20 end error: ", p), err)
+}
+
 func (p *CreateOrUpdateProductReq) String() string {
 	if p == nil {
 		return "<nil>"
@@ -2709,6 +2787,8 @@ type ProductListReq struct {
 	Status   []int64 `thrift:"status,4,optional" form:"status" json:"status" query:"status"`
 	// 类型
 	Type string `thrift:"type,7,optional" form:"type" json:"type" query:"type"`
+	/**次级类型*/
+	SubType string `thrift:"subType,8,optional" form:"subType" json:"subType" query:"subType"`
 }
 
 func NewProductListReq() *ProductListReq {
@@ -2719,6 +2799,7 @@ func NewProductListReq() *ProductListReq {
 		Name:     "",
 		Status:   []int64{},
 		Type:     "",
+		SubType:  "",
 	}
 }
 
@@ -2728,6 +2809,7 @@ func (p *ProductListReq) InitDefault() {
 	p.Name = ""
 	p.Status = []int64{}
 	p.Type = ""
+	p.SubType = ""
 }
 
 var ProductListReq_Page_DEFAULT int64 = 1
@@ -2775,12 +2857,22 @@ func (p *ProductListReq) GetType() (v string) {
 	return p.Type
 }
 
+var ProductListReq_SubType_DEFAULT string = ""
+
+func (p *ProductListReq) GetSubType() (v string) {
+	if !p.IsSetSubType() {
+		return ProductListReq_SubType_DEFAULT
+	}
+	return p.SubType
+}
+
 var fieldIDToName_ProductListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
 	3: "name",
 	4: "status",
 	7: "type",
+	8: "subType",
 }
 
 func (p *ProductListReq) IsSetPage() bool {
@@ -2801,6 +2893,10 @@ func (p *ProductListReq) IsSetStatus() bool {
 
 func (p *ProductListReq) IsSetType() bool {
 	return p.Type != ProductListReq_Type_DEFAULT
+}
+
+func (p *ProductListReq) IsSetSubType() bool {
+	return p.SubType != ProductListReq_SubType_DEFAULT
 }
 
 func (p *ProductListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -2857,6 +2953,14 @@ func (p *ProductListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 7:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2958,6 +3062,17 @@ func (p *ProductListReq) ReadField7(iprot thrift.TProtocol) error {
 	p.Type = _field
 	return nil
 }
+func (p *ProductListReq) ReadField8(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.SubType = _field
+	return nil
+}
 
 func (p *ProductListReq) Write(oprot thrift.TProtocol) (err error) {
 
@@ -2984,6 +3099,10 @@ func (p *ProductListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField7(oprot); err != nil {
 			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
 			goto WriteFieldError
 		}
 	}
@@ -3105,6 +3224,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *ProductListReq) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSubType() {
+		if err = oprot.WriteFieldBegin("subType", thrift.STRING, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.SubType); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
 func (p *ProductListReq) String() string {

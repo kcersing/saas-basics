@@ -42,15 +42,15 @@ struct CreateOrUpdateProductReq {
     5: optional i64 stock =0 (api.raw = "stock")
     /**状态[1:正常,2:禁用]*/
     6: optional i64 status=0  (api.raw = "status")
-    /**有效期*/
+    /**有效期(卡期限/课单节期限)*/
     7: optional i64 duration =0 (api.raw = "duration")
-    /**课程课时*/
+    /**课程课时(课)*/
     8: optional i64 length=0  (api.raw = "length")
-    /**类别*/
+    /**类型 card:卡 course:课 coursePackage:课包 Lessons:团课 */
     9: optional string type ="" (api.raw = "type")
      /**激活期限*/
     10: optional i64 deadline=0 (api.raw = "deadline")
-    /**销售信息数组*/
+    /**销售信息数组(多个/课价格信息)*/
     11: optional list<base.Sales> sales = {} (api.raw = "sales")
     /**销售方式 1会员端*/
     12: optional i64 is_sales =1(api.raw = "isSales")
@@ -66,6 +66,12 @@ struct CreateOrUpdateProductReq {
     18: optional list<i64> lessonsId =0 (api.raw = "lessonsId")
     /**团课预约 1支持2不支持*/
     19: optional list<i64> isLessons =0 (api.raw = "isLessons")
+    /**次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包*/
+    20: optional string subType ="" (api.raw = "subType")
+    /**价格(单个/卡价格)*/
+    21: optional double price = 0 (api.raw = "price")
+    /**次数(次卡)*/
+    22:optional i64 times = 0 (api.raw = "times")
 }
 
 struct ProductListReq {
@@ -74,6 +80,8 @@ struct ProductListReq {
     3: optional string name ="" (api.raw = "name")
     4: optional list<i64> status=0 (api.raw = "status")
     7: optional string type="" (api.raw = "type") // 类型
+   /**次级类型*/
+    8: optional string subType ="" (api.raw = "subType")
 }
 
 service ProductService {

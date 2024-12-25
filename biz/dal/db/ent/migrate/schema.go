@@ -1048,6 +1048,7 @@ var (
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型", Default: ""},
+		{Name: "sub_type", Type: field.TypeString, Nullable: true, Comment: "次级类型", Default: ""},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "商品名", Default: ""},
 		{Name: "stock", Type: field.TypeInt64, Nullable: true, Comment: "库存", Default: 0},
 		{Name: "deadline", Type: field.TypeInt64, Nullable: true, Comment: "激活期限", Default: 0},

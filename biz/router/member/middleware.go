@@ -140,3 +140,8 @@ func _memberpotentiallistexportMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _delmemberMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

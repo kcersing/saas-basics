@@ -809,13 +809,16 @@ definitions:
       stock:
         description: '*库存'
         type: integer
+      subType:
+        description: '*次级类型'
+        type: string
       tagId:
         description: '*标签-数组'
         items:
           type: integer
         type: array
       type:
-        description: '*类别'
+        description: '*类型'
         type: string
     type: object
   product.ProductListReq:
@@ -830,6 +833,9 @@ definitions:
         items:
           type: integer
         type: array
+      subType:
+        description: '*次级类型'
+        type: string
       type:
         description: 类型
         type: string
@@ -2219,6 +2225,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 创建会员 Summary
+  /service/member/del:
+    post:
+      description: 删除会员 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除会员 Summary
   /service/member/full-list:
     post:
       description: 会员列表 Description
@@ -2307,7 +2329,7 @@ paths:
       summary: 更新会员 Summary
   /service/member/update-follow:
     post:
-      description: 更新会员关注 Description
+      description: 更新跟进人 Description
       parameters:
       - description: query params
         in: body
@@ -2320,7 +2342,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 更新会员关注 Summary
+      summary: 更新跟进人 Summary
   /service/menu:
     post:
       description: 删除菜单 Description

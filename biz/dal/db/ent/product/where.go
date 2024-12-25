@@ -85,6 +85,11 @@ func Type(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldType, v))
 }
 
+// SubType applies equality check predicate on the "sub_type" field. It's identical to SubTypeEQ.
+func SubType(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldSubType, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldName, v))
@@ -473,6 +478,81 @@ func TypeEqualFold(v string) predicate.Product {
 // TypeContainsFold applies the ContainsFold predicate on the "type" field.
 func TypeContainsFold(v string) predicate.Product {
 	return predicate.Product(sql.FieldContainsFold(FieldType, v))
+}
+
+// SubTypeEQ applies the EQ predicate on the "sub_type" field.
+func SubTypeEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldSubType, v))
+}
+
+// SubTypeNEQ applies the NEQ predicate on the "sub_type" field.
+func SubTypeNEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldSubType, v))
+}
+
+// SubTypeIn applies the In predicate on the "sub_type" field.
+func SubTypeIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldSubType, vs...))
+}
+
+// SubTypeNotIn applies the NotIn predicate on the "sub_type" field.
+func SubTypeNotIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldSubType, vs...))
+}
+
+// SubTypeGT applies the GT predicate on the "sub_type" field.
+func SubTypeGT(v string) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldSubType, v))
+}
+
+// SubTypeGTE applies the GTE predicate on the "sub_type" field.
+func SubTypeGTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldSubType, v))
+}
+
+// SubTypeLT applies the LT predicate on the "sub_type" field.
+func SubTypeLT(v string) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldSubType, v))
+}
+
+// SubTypeLTE applies the LTE predicate on the "sub_type" field.
+func SubTypeLTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldSubType, v))
+}
+
+// SubTypeContains applies the Contains predicate on the "sub_type" field.
+func SubTypeContains(v string) predicate.Product {
+	return predicate.Product(sql.FieldContains(FieldSubType, v))
+}
+
+// SubTypeHasPrefix applies the HasPrefix predicate on the "sub_type" field.
+func SubTypeHasPrefix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasPrefix(FieldSubType, v))
+}
+
+// SubTypeHasSuffix applies the HasSuffix predicate on the "sub_type" field.
+func SubTypeHasSuffix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasSuffix(FieldSubType, v))
+}
+
+// SubTypeIsNil applies the IsNil predicate on the "sub_type" field.
+func SubTypeIsNil() predicate.Product {
+	return predicate.Product(sql.FieldIsNull(FieldSubType))
+}
+
+// SubTypeNotNil applies the NotNil predicate on the "sub_type" field.
+func SubTypeNotNil() predicate.Product {
+	return predicate.Product(sql.FieldNotNull(FieldSubType))
+}
+
+// SubTypeEqualFold applies the EqualFold predicate on the "sub_type" field.
+func SubTypeEqualFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldEqualFold(FieldSubType, v))
+}
+
+// SubTypeContainsFold applies the ContainsFold predicate on the "sub_type" field.
+func SubTypeContainsFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldContainsFold(FieldSubType, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

@@ -145,6 +145,26 @@ func (pu *ProductUpdate) ClearType() *ProductUpdate {
 	return pu
 }
 
+// SetSubType sets the "sub_type" field.
+func (pu *ProductUpdate) SetSubType(s string) *ProductUpdate {
+	pu.mutation.SetSubType(s)
+	return pu
+}
+
+// SetNillableSubType sets the "sub_type" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableSubType(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetSubType(*s)
+	}
+	return pu
+}
+
+// ClearSubType clears the value of the "sub_type" field.
+func (pu *ProductUpdate) ClearSubType() *ProductUpdate {
+	pu.mutation.ClearSubType()
+	return pu
+}
+
 // SetName sets the "name" field.
 func (pu *ProductUpdate) SetName(s string) *ProductUpdate {
 	pu.mutation.SetName(s)
@@ -715,6 +735,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.TypeCleared() {
 		_spec.ClearField(product.FieldType, field.TypeString)
 	}
+	if value, ok := pu.mutation.SubType(); ok {
+		_spec.SetField(product.FieldSubType, field.TypeString, value)
+	}
+	if pu.mutation.SubTypeCleared() {
+		_spec.ClearField(product.FieldSubType, field.TypeString)
+	}
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)
 	}
@@ -1138,6 +1164,26 @@ func (puo *ProductUpdateOne) SetNillableType(s *string) *ProductUpdateOne {
 // ClearType clears the value of the "type" field.
 func (puo *ProductUpdateOne) ClearType() *ProductUpdateOne {
 	puo.mutation.ClearType()
+	return puo
+}
+
+// SetSubType sets the "sub_type" field.
+func (puo *ProductUpdateOne) SetSubType(s string) *ProductUpdateOne {
+	puo.mutation.SetSubType(s)
+	return puo
+}
+
+// SetNillableSubType sets the "sub_type" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableSubType(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetSubType(*s)
+	}
+	return puo
+}
+
+// ClearSubType clears the value of the "sub_type" field.
+func (puo *ProductUpdateOne) ClearSubType() *ProductUpdateOne {
+	puo.mutation.ClearSubType()
 	return puo
 }
 
@@ -1740,6 +1786,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if puo.mutation.TypeCleared() {
 		_spec.ClearField(product.FieldType, field.TypeString)
+	}
+	if value, ok := puo.mutation.SubType(); ok {
+		_spec.SetField(product.FieldSubType, field.TypeString, value)
+	}
+	if puo.mutation.SubTypeCleared() {
+		_spec.ClearField(product.FieldSubType, field.TypeString)
 	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)

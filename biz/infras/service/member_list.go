@@ -120,7 +120,7 @@ func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.Me
 	if req.Name != "" {
 		predicates = append(predicates, member2.NameEQ(req.Name))
 	}
-	
+
 	if req.Mobile != "" {
 		predicates = append(predicates, member2.MobileEQ(req.Mobile))
 	}

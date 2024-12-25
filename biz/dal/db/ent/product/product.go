@@ -26,6 +26,8 @@ const (
 	FieldStatus = "status"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
+	// FieldSubType holds the string denoting the sub_type field in the database.
+	FieldSubType = "sub_type"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldStock holds the string denoting the stock field in the database.
@@ -91,6 +93,7 @@ var Columns = []string{
 	FieldCreatedID,
 	FieldStatus,
 	FieldType,
+	FieldSubType,
 	FieldName,
 	FieldStock,
 	FieldDeadline,
@@ -144,6 +147,8 @@ var (
 	DefaultStatus int64
 	// DefaultType holds the default value on creation for the "type" field.
 	DefaultType string
+	// DefaultSubType holds the default value on creation for the "sub_type" field.
+	DefaultSubType string
 	// DefaultName holds the default value on creation for the "name" field.
 	DefaultName string
 	// DefaultStock holds the default value on creation for the "stock" field.
@@ -204,6 +209,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByType orders the results by the type field.
 func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
+// BySubType orders the results by the sub_type field.
+func BySubType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubType, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

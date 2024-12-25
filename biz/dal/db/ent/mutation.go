@@ -42384,6 +42384,7 @@ type ProductMutation struct {
 	status           *int64
 	addstatus        *int64
 	_type            *string
+	sub_type         *string
 	name             *string
 	stock            *int64
 	addstock         *int64
@@ -42884,6 +42885,55 @@ func (m *ProductMutation) TypeCleared() bool {
 func (m *ProductMutation) ResetType() {
 	m._type = nil
 	delete(m.clearedFields, product.FieldType)
+}
+
+// SetSubType sets the "sub_type" field.
+func (m *ProductMutation) SetSubType(s string) {
+	m.sub_type = &s
+}
+
+// SubType returns the value of the "sub_type" field in the mutation.
+func (m *ProductMutation) SubType() (r string, exists bool) {
+	v := m.sub_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubType returns the old "sub_type" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldSubType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubType: %w", err)
+	}
+	return oldValue.SubType, nil
+}
+
+// ClearSubType clears the value of the "sub_type" field.
+func (m *ProductMutation) ClearSubType() {
+	m.sub_type = nil
+	m.clearedFields[product.FieldSubType] = struct{}{}
+}
+
+// SubTypeCleared returns if the "sub_type" field was cleared in this mutation.
+func (m *ProductMutation) SubTypeCleared() bool {
+	_, ok := m.clearedFields[product.FieldSubType]
+	return ok
+}
+
+// ResetSubType resets all changes to the "sub_type" field.
+func (m *ProductMutation) ResetSubType() {
+	m.sub_type = nil
+	delete(m.clearedFields, product.FieldSubType)
 }
 
 // SetName sets the "name" field.
@@ -44006,7 +44056,7 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.created_at != nil {
 		fields = append(fields, product.FieldCreatedAt)
 	}
@@ -44024,6 +44074,9 @@ func (m *ProductMutation) Fields() []string {
 	}
 	if m._type != nil {
 		fields = append(fields, product.FieldType)
+	}
+	if m.sub_type != nil {
+		fields = append(fields, product.FieldSubType)
 	}
 	if m.name != nil {
 		fields = append(fields, product.FieldName)
@@ -44087,6 +44140,8 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case product.FieldType:
 		return m.GetType()
+	case product.FieldSubType:
+		return m.SubType()
 	case product.FieldName:
 		return m.Name()
 	case product.FieldStock:
@@ -44136,6 +44191,8 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldStatus(ctx)
 	case product.FieldType:
 		return m.OldType(ctx)
+	case product.FieldSubType:
+		return m.OldSubType(ctx)
 	case product.FieldName:
 		return m.OldName(ctx)
 	case product.FieldStock:
@@ -44214,6 +44271,13 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetType(v)
+		return nil
+	case product.FieldSubType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubType(v)
 		return nil
 	case product.FieldName:
 		v, ok := value.(string)
@@ -44496,6 +44560,9 @@ func (m *ProductMutation) ClearedFields() []string {
 	if m.FieldCleared(product.FieldType) {
 		fields = append(fields, product.FieldType)
 	}
+	if m.FieldCleared(product.FieldSubType) {
+		fields = append(fields, product.FieldSubType)
+	}
 	if m.FieldCleared(product.FieldName) {
 		fields = append(fields, product.FieldName)
 	}
@@ -44570,6 +44637,9 @@ func (m *ProductMutation) ClearField(name string) error {
 	case product.FieldType:
 		m.ClearType()
 		return nil
+	case product.FieldSubType:
+		m.ClearSubType()
+		return nil
 	case product.FieldName:
 		m.ClearName()
 		return nil
@@ -44637,6 +44707,9 @@ func (m *ProductMutation) ResetField(name string) error {
 		return nil
 	case product.FieldType:
 		m.ResetType()
+		return nil
+	case product.FieldSubType:
+		m.ResetSubType()
 		return nil
 	case product.FieldName:
 		m.ResetName()

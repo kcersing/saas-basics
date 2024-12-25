@@ -171,11 +171,10 @@ service MemberService {
 
   base.NilResponse MemberPotentialListExport(1: MemberListReq req) (api.post = "/service/member/potential-list/export")
 
-
+  base.NilResponse DelMember(1: base.IDReq req) (api.post = "/service/member/del")
   // 更新用户状态
   base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/member/status")
 
-  // 更新用户状态
   base.NilResponse UpdateMemberFollow(1: UpdateMemberFollowReq req) (api.post = "/service/member/update-follow")
 
   base.NilResponse MemberContractList(1: MemberContractListReq req) (api.post = "/service/member/contract-list")

@@ -23,6 +23,7 @@ func Register(r *server.Hertz) {
 			_member := _service.Group("/member", _memberMw()...)
 			_member.POST("/contract-list", append(_membercontractlistMw(), member.MemberContractList)...)
 			_member.POST("/create", append(_creatememberMw(), member.CreateMember)...)
+			_member.POST("/del", append(_delmemberMw(), member.DelMember)...)
 			_member.POST("/full-list", append(_memberfulllistMw(), member.MemberFullList)...)
 			_full_list := _member.Group("/full-list", _full_listMw()...)
 			_full_list.POST("/export", append(_memberfulllistexportMw(), member.MemberFullListExport)...)

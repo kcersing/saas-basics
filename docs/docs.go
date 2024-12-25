@@ -1874,6 +1874,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/member/del": {
+            "post": {
+                "description": "删除会员 Description",
+                "summary": "删除会员 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/member/full-list": {
             "post": {
                 "description": "会员列表 Description",
@@ -2011,8 +2036,8 @@ const docTemplate = `{
         },
         "/service/member/update-follow": {
             "post": {
-                "description": "更新会员关注 Description",
-                "summary": "更新会员关注 Summary",
+                "description": "更新跟进人 Description",
+                "summary": "更新跟进人 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -4462,6 +4487,10 @@ const docTemplate = `{
                     "description": "*库存",
                     "type": "integer"
                 },
+                "subType": {
+                    "description": "*次级类型",
+                    "type": "string"
+                },
                 "tagId": {
                     "description": "*标签-数组",
                     "type": "array",
@@ -4470,7 +4499,7 @@ const docTemplate = `{
                     }
                 },
                 "type": {
-                    "description": "*类别",
+                    "description": "*类型",
                     "type": "string"
                 }
             }
@@ -4492,6 +4521,10 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
+                },
+                "subType": {
+                    "description": "*次级类型",
+                    "type": "string"
                 },
                 "type": {
                     "description": "类型",

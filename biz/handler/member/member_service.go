@@ -172,8 +172,8 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 
 // UpdateMemberFollow .
 //
-//	@Summary		更新会员关注 Summary
-//	@Description	更新会员关注 Description
+//	@Summary		更新跟进人 Summary
+//	@Description	更新跟进人 Description
 //	@Param			request	body		member.UpdateMemberFollowReq	true "query params"
 //	@Success		200		{object}	utils.Response
 //
@@ -251,4 +251,30 @@ func MemberPotentialListExport(ctx context.Context, c *app.RequestContext) {
 	resp := new(base.NilResponse)
 
 	c.JSON(consts.StatusOK, resp)
+}
+
+// DelMember .
+//
+//	@Summary		删除会员 Summary
+//	@Description	删除会员 Description
+//	@Param			request	body		base.IDReq	true "query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/member/del [POST]
+func DelMember(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = service.NewMember(ctx, c).DeleteMember(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }

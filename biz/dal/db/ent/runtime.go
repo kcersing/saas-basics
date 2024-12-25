@@ -1058,48 +1058,52 @@ func init() {
 	productDescType := productFields[0].Descriptor()
 	// product.DefaultType holds the default value on creation for the type field.
 	product.DefaultType = productDescType.Default.(string)
+	// productDescSubType is the schema descriptor for sub_type field.
+	productDescSubType := productFields[1].Descriptor()
+	// product.DefaultSubType holds the default value on creation for the sub_type field.
+	product.DefaultSubType = productDescSubType.Default.(string)
 	// productDescName is the schema descriptor for name field.
-	productDescName := productFields[1].Descriptor()
+	productDescName := productFields[2].Descriptor()
 	// product.DefaultName holds the default value on creation for the name field.
 	product.DefaultName = productDescName.Default.(string)
 	// productDescStock is the schema descriptor for stock field.
-	productDescStock := productFields[2].Descriptor()
+	productDescStock := productFields[3].Descriptor()
 	// product.DefaultStock holds the default value on creation for the stock field.
 	product.DefaultStock = productDescStock.Default.(int64)
 	// productDescDeadline is the schema descriptor for deadline field.
-	productDescDeadline := productFields[3].Descriptor()
+	productDescDeadline := productFields[4].Descriptor()
 	// product.DefaultDeadline holds the default value on creation for the deadline field.
 	product.DefaultDeadline = productDescDeadline.Default.(int64)
 	// productDescDuration is the schema descriptor for duration field.
-	productDescDuration := productFields[4].Descriptor()
+	productDescDuration := productFields[5].Descriptor()
 	// product.DefaultDuration holds the default value on creation for the duration field.
 	product.DefaultDuration = productDescDuration.Default.(int64)
 	// productDescLength is the schema descriptor for length field.
-	productDescLength := productFields[5].Descriptor()
+	productDescLength := productFields[6].Descriptor()
 	// product.DefaultLength holds the default value on creation for the length field.
 	product.DefaultLength = productDescLength.Default.(int64)
 	// productDescPrice is the schema descriptor for price field.
-	productDescPrice := productFields[6].Descriptor()
+	productDescPrice := productFields[7].Descriptor()
 	// product.DefaultPrice holds the default value on creation for the price field.
 	product.DefaultPrice = productDescPrice.Default.(float64)
 	// productDescTimes is the schema descriptor for times field.
-	productDescTimes := productFields[7].Descriptor()
+	productDescTimes := productFields[8].Descriptor()
 	// product.DefaultTimes holds the default value on creation for the times field.
 	product.DefaultTimes = productDescTimes.Default.(int64)
 	// productDescIsLessons is the schema descriptor for is_lessons field.
-	productDescIsLessons := productFields[8].Descriptor()
+	productDescIsLessons := productFields[9].Descriptor()
 	// product.DefaultIsLessons holds the default value on creation for the is_lessons field.
 	product.DefaultIsLessons = productDescIsLessons.Default.(int64)
 	// productDescIsSales is the schema descriptor for is_sales field.
-	productDescIsSales := productFields[10].Descriptor()
+	productDescIsSales := productFields[11].Descriptor()
 	// product.DefaultIsSales holds the default value on creation for the is_sales field.
 	product.DefaultIsSales = productDescIsSales.Default.(int64)
 	// productDescPic is the schema descriptor for pic field.
-	productDescPic := productFields[13].Descriptor()
+	productDescPic := productFields[14].Descriptor()
 	// product.DefaultPic holds the default value on creation for the pic field.
 	product.DefaultPic = productDescPic.Default.(string)
 	// productDescDescription is the schema descriptor for description field.
-	productDescDescription := productFields[14].Descriptor()
+	productDescDescription := productFields[15].Descriptor()
 	// product.DefaultDescription holds the default value on creation for the description field.
 	product.DefaultDescription = productDescDescription.Default.(string)
 	roleMixin := schema.Role{}.Mixin()

@@ -106,6 +106,20 @@ func (pc *ProductCreate) SetNillableType(s *string) *ProductCreate {
 	return pc
 }
 
+// SetSubType sets the "sub_type" field.
+func (pc *ProductCreate) SetSubType(s string) *ProductCreate {
+	pc.mutation.SetSubType(s)
+	return pc
+}
+
+// SetNillableSubType sets the "sub_type" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableSubType(s *string) *ProductCreate {
+	if s != nil {
+		pc.SetSubType(*s)
+	}
+	return pc
+}
+
 // SetName sets the "name" field.
 func (pc *ProductCreate) SetName(s string) *ProductCreate {
 	pc.mutation.SetName(s)
@@ -419,6 +433,10 @@ func (pc *ProductCreate) defaults() {
 		v := product.DefaultType
 		pc.mutation.SetType(v)
 	}
+	if _, ok := pc.mutation.SubType(); !ok {
+		v := product.DefaultSubType
+		pc.mutation.SetSubType(v)
+	}
 	if _, ok := pc.mutation.Name(); !ok {
 		v := product.DefaultName
 		pc.mutation.SetName(v)
@@ -522,6 +540,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.GetType(); ok {
 		_spec.SetField(product.FieldType, field.TypeString, value)
 		_node.Type = value
+	}
+	if value, ok := pc.mutation.SubType(); ok {
+		_spec.SetField(product.FieldSubType, field.TypeString, value)
+		_node.SubType = value
 	}
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)

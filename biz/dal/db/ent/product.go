@@ -32,6 +32,8 @@ type Product struct {
 	Status int64 `json:"status,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
+	// 次级类型
+	SubType string `json:"sub_type,omitempty"`
 	// 商品名
 	Name string `json:"name,omitempty"`
 	// 库存
@@ -128,7 +130,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case product.FieldID, product.FieldDelete, product.FieldCreatedID, product.FieldStatus, product.FieldStock, product.FieldDeadline, product.FieldDuration, product.FieldLength, product.FieldTimes, product.FieldIsLessons, product.FieldIsSales:
 			values[i] = new(sql.NullInt64)
-		case product.FieldType, product.FieldName, product.FieldPic, product.FieldDescription:
+		case product.FieldType, product.FieldSubType, product.FieldName, product.FieldPic, product.FieldDescription:
 			values[i] = new(sql.NullString)
 		case product.FieldCreatedAt, product.FieldUpdatedAt, product.FieldSignSalesAt, product.FieldEndSalesAt:
 			values[i] = new(sql.NullTime)
@@ -188,6 +190,12 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
 				pr.Type = value.String
+			}
+		case product.FieldSubType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sub_type", values[i])
+			} else if value.Valid {
+				pr.SubType = value.String
 			}
 		case product.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -348,6 +356,9 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(pr.Type)
+	builder.WriteString(", ")
+	builder.WriteString("sub_type=")
+	builder.WriteString(pr.SubType)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(pr.Name)
