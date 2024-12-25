@@ -245,21 +245,23 @@ func (ve Venue) entVenueInfo(v *ent.Venue) *venue.VenueInfo {
 	}
 
 	return &venue.VenueInfo{
-		ID:        v.ID,
-		Name:      v.Name,
-		Address:   v.Address,
-		Pic:       v.Pic,
-		Mobile:    v.Mobile,
-		Latitude:  v.Latitude,
-		Longitude: v.Longitude,
-		Status:    v.Status,
-
-		CreatedAt:    createdAt,
-		UpdatedAt:    updatedAt,
-		Classify:     v.Classify,
-		Type:         v.Type,
-		Seal:         v.Seal,
-		ClassifyName: dAll,
+		ID:            v.ID,
+		Name:          v.Name,
+		Address:       v.Address,
+		Pic:           v.Pic,
+		Mobile:        v.Mobile,
+		Latitude:      v.Latitude,
+		Longitude:     v.Longitude,
+		Status:        v.Status,
+		Email:         v.Email,
+		AddressDetail: v.AddressDetail,
+		Information:   v.Information,
+		CreatedAt:     createdAt,
+		UpdatedAt:     updatedAt,
+		Classify:      v.Classify,
+		Type:          v.Type,
+		Seal:          v.Seal,
+		ClassifyName:  dAll,
 	}
 }
 
