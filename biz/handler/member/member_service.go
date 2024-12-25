@@ -220,3 +220,35 @@ func MemberContractList(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
 	return
 }
+
+// MemberFullListExport .
+// @router /service/member/full-list/export [POST]
+func MemberFullListExport(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// MemberPotentialListExport .
+// @router /service/member/potential-list/export [POST]
+func MemberPotentialListExport(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

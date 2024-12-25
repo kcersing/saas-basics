@@ -2,23 +2,23 @@ version: '3'
 
 services:
 
-#  #golang 服务
-#  golang:
-#    hostname: golang
-##    image: golang:latest  # 父镜像名称
-#    image: golang:latest
-#    volumes: # 挂载卷
-#      - /D/docker/src:/go
-##    ports: # 端口映射
-##      - "9039:9039"
-#    stdin_open: true
-#    tty: true
-#    restart: always
-#    privileged: true
-#    # command: 启动后运行的命令
-##    profiles:
-##      - dev
-##      - release
+  #golang 服务
+  golang:
+    hostname: golang
+#    image: golang:latest  # 父镜像名称
+    image: golang:latest
+    volumes: # 挂载卷
+      - /xingfufit/go/saas-basics:/go
+#    ports: # 端口映射
+#      - "9039:9039"
+    stdin_open: true
+    tty: true
+    restart: always
+    privileged: true
+    # command: 启动后运行的命令
+#    profiles:
+#      - dev
+#      - release
 
   minio:
     image: minio/minio

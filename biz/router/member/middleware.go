@@ -120,3 +120,23 @@ func _updatememberfollowMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _full_listMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberfulllistexportMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _potential_listMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberpotentiallistexportMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

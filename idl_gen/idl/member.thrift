@@ -168,6 +168,11 @@ service MemberService {
   // 获取用户列表
   base.NilResponse MemberPotentialList(1: MemberListReq req) (api.post = "/service/member/potential-list")
 
+  base.NilResponse MemberFullListExport(1: MemberListReq req) (api.post = "/service/member/full-list/export")
+
+  base.NilResponse MemberPotentialListExport(1: MemberListReq req) (api.post = "/service/member/potential-list/export")
+
+
   // 更新用户状态
   base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/member/status")
 
