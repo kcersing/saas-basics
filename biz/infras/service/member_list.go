@@ -179,19 +179,19 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 		age = int64(time.Now().Sub(p.Birthday).Hours() / 24 / 365)
 	}
 
-	var gradeName, intentionName, sourceName, CreatedName string
+	var gradeName, intentionName, sourceName, createdName string
 
 	if p.Grade > 0 {
 		gradeName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Grade)
 	}
 	if p.Intention > 0 {
-		gradeName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Intention)
+		intentionName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Intention)
 	}
 	if p.Source > 0 {
-		gradeName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Source)
+		sourceName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Source)
 	}
 	if v.CreatedID > 0 {
-		CreatedName = m.db.User.Query().Where(user2.IDEQ(v.CreatedID)).FirstX(m.ctx).Name
+		createdName = m.db.User.Query().Where(user2.IDEQ(v.CreatedID)).FirstX(m.ctx).Name
 	}
 
 	return &member.MemberInfo{
@@ -235,7 +235,7 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 			RelationMid:       d.RelationMid,
 			RelationMname:     d.RelationMame,
 			CreatedId:         v.CreatedID,
-			CreatedName:       CreatedName,
+			CreatedName:       createdName,
 		},
 	}
 

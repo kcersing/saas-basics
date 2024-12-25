@@ -152,7 +152,6 @@ struct UpdateMemberFollowReq{
 
 service MemberService {
 
-
   // 新增用户
   base.NilResponse CreateMember(1: CreateOrUpdateMemberReq req) (api.post = "/service/member/create")
 
