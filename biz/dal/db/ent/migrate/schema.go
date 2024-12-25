@@ -1489,23 +1489,23 @@ var (
 	// ProductLessonsColumns holds the columns for the "product_lessons" table.
 	ProductLessonsColumns = []*schema.Column{
 		{Name: "product_id", Type: field.TypeInt64},
-		{Name: "product_id", Type: field.TypeInt64},
+		{Name: "good_id", Type: field.TypeInt64},
 	}
 	// ProductLessonsTable holds the schema information for the "product_lessons" table.
 	ProductLessonsTable = &schema.Table{
 		Name:       "product_lessons",
 		Columns:    ProductLessonsColumns,
-		PrimaryKey: []*schema.Column{ProductLessonsColumns[0], ProductLessonsColumns[1], ProductLessonsColumns[0], ProductLessonsColumns[1]},
+		PrimaryKey: []*schema.Column{ProductLessonsColumns[0], ProductLessonsColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "product_lessons_product_id",
-				Columns:    []*schema.Column{ProductLessonsColumns[0], ProductLessonsColumns[1]},
+				Columns:    []*schema.Column{ProductLessonsColumns[0]},
 				RefColumns: []*schema.Column{ProductColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "product_lessons_product_id",
-				Columns:    []*schema.Column{ProductLessonsColumns[0], ProductLessonsColumns[1]},
+				Symbol:     "product_lessons_good_id",
+				Columns:    []*schema.Column{ProductLessonsColumns[1]},
 				RefColumns: []*schema.Column{ProductColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

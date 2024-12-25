@@ -50,8 +50,7 @@ func (Product) Edges() []ent.Edge {
 		edge.To("tag", DictionaryDetail.Type),
 		edge.To("contracts", Contract.Type),
 
-		edge.To("lessons", Product.Type).
-			From("products"),
+		edge.To("lessons", Product.Type).From("goods"),
 	}
 }
 

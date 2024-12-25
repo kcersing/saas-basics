@@ -5244,15 +5244,15 @@ func (c *ProductClient) QueryContracts(pr *Product) *ContractQuery {
 	return query
 }
 
-// QueryProducts queries the products edge of a Product.
-func (c *ProductClient) QueryProducts(pr *Product) *ProductQuery {
+// QueryGoods queries the goods edge of a Product.
+func (c *ProductClient) QueryGoods(pr *Product) *ProductQuery {
 	query := (&ProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(product.Table, product.FieldID, id),
 			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, product.ProductsTable, product.ProductsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, product.GoodsTable, product.GoodsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil

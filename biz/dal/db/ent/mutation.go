@@ -42414,9 +42414,9 @@ type ProductMutation struct {
 	contracts        map[int64]struct{}
 	removedcontracts map[int64]struct{}
 	clearedcontracts bool
-	products         map[int64]struct{}
-	removedproducts  map[int64]struct{}
-	clearedproducts  bool
+	goods            map[int64]struct{}
+	removedgoods     map[int64]struct{}
+	clearedgoods     bool
 	lessons          map[int64]struct{}
 	removedlessons   map[int64]struct{}
 	clearedlessons   bool
@@ -43864,58 +43864,58 @@ func (m *ProductMutation) ResetContracts() {
 	m.removedcontracts = nil
 }
 
-// AddProductIDs adds the "products" edge to the Product entity by ids.
-func (m *ProductMutation) AddProductIDs(ids ...int64) {
-	if m.products == nil {
-		m.products = make(map[int64]struct{})
+// AddGoodIDs adds the "goods" edge to the Product entity by ids.
+func (m *ProductMutation) AddGoodIDs(ids ...int64) {
+	if m.goods == nil {
+		m.goods = make(map[int64]struct{})
 	}
 	for i := range ids {
-		m.products[ids[i]] = struct{}{}
+		m.goods[ids[i]] = struct{}{}
 	}
 }
 
-// ClearProducts clears the "products" edge to the Product entity.
-func (m *ProductMutation) ClearProducts() {
-	m.clearedproducts = true
+// ClearGoods clears the "goods" edge to the Product entity.
+func (m *ProductMutation) ClearGoods() {
+	m.clearedgoods = true
 }
 
-// ProductsCleared reports if the "products" edge to the Product entity was cleared.
-func (m *ProductMutation) ProductsCleared() bool {
-	return m.clearedproducts
+// GoodsCleared reports if the "goods" edge to the Product entity was cleared.
+func (m *ProductMutation) GoodsCleared() bool {
+	return m.clearedgoods
 }
 
-// RemoveProductIDs removes the "products" edge to the Product entity by IDs.
-func (m *ProductMutation) RemoveProductIDs(ids ...int64) {
-	if m.removedproducts == nil {
-		m.removedproducts = make(map[int64]struct{})
+// RemoveGoodIDs removes the "goods" edge to the Product entity by IDs.
+func (m *ProductMutation) RemoveGoodIDs(ids ...int64) {
+	if m.removedgoods == nil {
+		m.removedgoods = make(map[int64]struct{})
 	}
 	for i := range ids {
-		delete(m.products, ids[i])
-		m.removedproducts[ids[i]] = struct{}{}
+		delete(m.goods, ids[i])
+		m.removedgoods[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedProducts returns the removed IDs of the "products" edge to the Product entity.
-func (m *ProductMutation) RemovedProductsIDs() (ids []int64) {
-	for id := range m.removedproducts {
+// RemovedGoods returns the removed IDs of the "goods" edge to the Product entity.
+func (m *ProductMutation) RemovedGoodsIDs() (ids []int64) {
+	for id := range m.removedgoods {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ProductsIDs returns the "products" edge IDs in the mutation.
-func (m *ProductMutation) ProductsIDs() (ids []int64) {
-	for id := range m.products {
+// GoodsIDs returns the "goods" edge IDs in the mutation.
+func (m *ProductMutation) GoodsIDs() (ids []int64) {
+	for id := range m.goods {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetProducts resets all changes to the "products" edge.
-func (m *ProductMutation) ResetProducts() {
-	m.products = nil
-	m.clearedproducts = false
-	m.removedproducts = nil
+// ResetGoods resets all changes to the "goods" edge.
+func (m *ProductMutation) ResetGoods() {
+	m.goods = nil
+	m.clearedgoods = false
+	m.removedgoods = nil
 }
 
 // AddLessonIDs adds the "lessons" edge to the Product entity by ids.
@@ -44693,8 +44693,8 @@ func (m *ProductMutation) AddedEdges() []string {
 	if m.contracts != nil {
 		edges = append(edges, product.EdgeContracts)
 	}
-	if m.products != nil {
-		edges = append(edges, product.EdgeProducts)
+	if m.goods != nil {
+		edges = append(edges, product.EdgeGoods)
 	}
 	if m.lessons != nil {
 		edges = append(edges, product.EdgeLessons)
@@ -44718,9 +44718,9 @@ func (m *ProductMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case product.EdgeProducts:
-		ids := make([]ent.Value, 0, len(m.products))
-		for id := range m.products {
+	case product.EdgeGoods:
+		ids := make([]ent.Value, 0, len(m.goods))
+		for id := range m.goods {
 			ids = append(ids, id)
 		}
 		return ids
@@ -44743,8 +44743,8 @@ func (m *ProductMutation) RemovedEdges() []string {
 	if m.removedcontracts != nil {
 		edges = append(edges, product.EdgeContracts)
 	}
-	if m.removedproducts != nil {
-		edges = append(edges, product.EdgeProducts)
+	if m.removedgoods != nil {
+		edges = append(edges, product.EdgeGoods)
 	}
 	if m.removedlessons != nil {
 		edges = append(edges, product.EdgeLessons)
@@ -44768,9 +44768,9 @@ func (m *ProductMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case product.EdgeProducts:
-		ids := make([]ent.Value, 0, len(m.removedproducts))
-		for id := range m.removedproducts {
+	case product.EdgeGoods:
+		ids := make([]ent.Value, 0, len(m.removedgoods))
+		for id := range m.removedgoods {
 			ids = append(ids, id)
 		}
 		return ids
@@ -44793,8 +44793,8 @@ func (m *ProductMutation) ClearedEdges() []string {
 	if m.clearedcontracts {
 		edges = append(edges, product.EdgeContracts)
 	}
-	if m.clearedproducts {
-		edges = append(edges, product.EdgeProducts)
+	if m.clearedgoods {
+		edges = append(edges, product.EdgeGoods)
 	}
 	if m.clearedlessons {
 		edges = append(edges, product.EdgeLessons)
@@ -44810,8 +44810,8 @@ func (m *ProductMutation) EdgeCleared(name string) bool {
 		return m.clearedtag
 	case product.EdgeContracts:
 		return m.clearedcontracts
-	case product.EdgeProducts:
-		return m.clearedproducts
+	case product.EdgeGoods:
+		return m.clearedgoods
 	case product.EdgeLessons:
 		return m.clearedlessons
 	}
@@ -44836,8 +44836,8 @@ func (m *ProductMutation) ResetEdge(name string) error {
 	case product.EdgeContracts:
 		m.ResetContracts()
 		return nil
-	case product.EdgeProducts:
-		m.ResetProducts()
+	case product.EdgeGoods:
+		m.ResetGoods()
 		return nil
 	case product.EdgeLessons:
 		m.ResetLessons()
