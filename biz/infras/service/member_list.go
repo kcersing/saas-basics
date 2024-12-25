@@ -157,6 +157,16 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 
 	var gradeName, intentionName, sourceName string
 
+	if p.Grade > 0 {
+		gradeName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Grade)
+	}
+	if p.Intention > 0 {
+		gradeName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Intention)
+	}
+	if p.Source > 0 {
+		gradeName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Source)
+	}
+
 	return &member.MemberInfo{
 		ID:            v.ID,
 		Name:          v.Name,

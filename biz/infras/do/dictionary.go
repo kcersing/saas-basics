@@ -12,4 +12,5 @@ type Dictionary interface {
 	DeleteDetail(id int64) error
 	DetailListByDict(req *dictionary.DetailListReq) (list []*dictionary.DictionaryDetail, total int64, err error)
 	DetailByDictNameAndKey(dictName, key string) (detail *dictionary.DictionaryDetail, err error)
+	GetDictionaryDetailTitle(id int64) string
 }

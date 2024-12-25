@@ -37,6 +37,14 @@ func NewDictionary(ctx context.Context, c *app.RequestContext) do.Dictionary {
 	}
 }
 
+func (d Dictionary) GetDictionaryDetailTitle(id int64) string {
+	first, _ := d.db.DictionaryDetail.Query().Where(dictionarydetail.IDEQ(id)).First(d.ctx)
+	if first != nil {
+		return first.Title
+	}
+	return ""
+}
+
 func (d Dictionary) Create(req *dictionary.DictionaryInfo) error {
 	// whether dictionary name exists
 	dictionaryExist, _ := d.db.Dictionary.Query().Where(dictionary2.Name(req.Name)).Exist(d.ctx)
