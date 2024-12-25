@@ -1885,7 +1885,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/base.IDReq"
+                            "$ref": "#/definitions/base.Ids"
                         }
                     }
                 ],

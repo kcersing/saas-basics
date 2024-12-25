@@ -2236,7 +2236,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/base.IDReq'
+          $ref: '#/definitions/base.Ids'
       responses:
         "200":
           description: OK

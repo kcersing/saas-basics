@@ -257,7 +257,7 @@ func MemberPotentialListExport(ctx context.Context, c *app.RequestContext) {
 //
 //	@Summary		删除会员 Summary
 //	@Description	删除会员 Description
-//	@Param			request	body		base.IDReq	true "query params"
+//	@Param			request	body		base.Ids	true "query params"
 //	@Success		200		{object}	utils.Response
 //
 // @router /service/member/del [POST]
