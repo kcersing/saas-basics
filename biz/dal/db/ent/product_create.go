@@ -176,6 +176,48 @@ func (pc *ProductCreate) SetNillableLength(i *int64) *ProductCreate {
 	return pc
 }
 
+// SetPrice sets the "price" field.
+func (pc *ProductCreate) SetPrice(f float64) *ProductCreate {
+	pc.mutation.SetPrice(f)
+	return pc
+}
+
+// SetNillablePrice sets the "price" field if the given value is not nil.
+func (pc *ProductCreate) SetNillablePrice(f *float64) *ProductCreate {
+	if f != nil {
+		pc.SetPrice(*f)
+	}
+	return pc
+}
+
+// SetTimes sets the "times" field.
+func (pc *ProductCreate) SetTimes(i int64) *ProductCreate {
+	pc.mutation.SetTimes(i)
+	return pc
+}
+
+// SetNillableTimes sets the "times" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableTimes(i *int64) *ProductCreate {
+	if i != nil {
+		pc.SetTimes(*i)
+	}
+	return pc
+}
+
+// SetIsLessons sets the "is_lessons" field.
+func (pc *ProductCreate) SetIsLessons(i int64) *ProductCreate {
+	pc.mutation.SetIsLessons(i)
+	return pc
+}
+
+// SetNillableIsLessons sets the "is_lessons" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableIsLessons(i *int64) *ProductCreate {
+	if i != nil {
+		pc.SetIsLessons(*i)
+	}
+	return pc
+}
+
 // SetSales sets the "sales" field.
 func (pc *ProductCreate) SetSales(b []*base.Sales) *ProductCreate {
 	pc.mutation.SetSales(b)
@@ -288,6 +330,36 @@ func (pc *ProductCreate) AddContracts(c ...*Contract) *ProductCreate {
 	return pc.AddContractIDs(ids...)
 }
 
+// AddProductIDs adds the "products" edge to the Product entity by IDs.
+func (pc *ProductCreate) AddProductIDs(ids ...int64) *ProductCreate {
+	pc.mutation.AddProductIDs(ids...)
+	return pc
+}
+
+// AddProducts adds the "products" edges to the Product entity.
+func (pc *ProductCreate) AddProducts(p ...*Product) *ProductCreate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddProductIDs(ids...)
+}
+
+// AddLessonIDs adds the "lessons" edge to the Product entity by IDs.
+func (pc *ProductCreate) AddLessonIDs(ids ...int64) *ProductCreate {
+	pc.mutation.AddLessonIDs(ids...)
+	return pc
+}
+
+// AddLessons adds the "lessons" edges to the Product entity.
+func (pc *ProductCreate) AddLessons(p ...*Product) *ProductCreate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddLessonIDs(ids...)
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (pc *ProductCreate) Mutation() *ProductMutation {
 	return pc.mutation
@@ -342,6 +414,54 @@ func (pc *ProductCreate) defaults() {
 	if _, ok := pc.mutation.Status(); !ok {
 		v := product.DefaultStatus
 		pc.mutation.SetStatus(v)
+	}
+	if _, ok := pc.mutation.GetType(); !ok {
+		v := product.DefaultType
+		pc.mutation.SetType(v)
+	}
+	if _, ok := pc.mutation.Name(); !ok {
+		v := product.DefaultName
+		pc.mutation.SetName(v)
+	}
+	if _, ok := pc.mutation.Stock(); !ok {
+		v := product.DefaultStock
+		pc.mutation.SetStock(v)
+	}
+	if _, ok := pc.mutation.Deadline(); !ok {
+		v := product.DefaultDeadline
+		pc.mutation.SetDeadline(v)
+	}
+	if _, ok := pc.mutation.Duration(); !ok {
+		v := product.DefaultDuration
+		pc.mutation.SetDuration(v)
+	}
+	if _, ok := pc.mutation.Length(); !ok {
+		v := product.DefaultLength
+		pc.mutation.SetLength(v)
+	}
+	if _, ok := pc.mutation.Price(); !ok {
+		v := product.DefaultPrice
+		pc.mutation.SetPrice(v)
+	}
+	if _, ok := pc.mutation.Times(); !ok {
+		v := product.DefaultTimes
+		pc.mutation.SetTimes(v)
+	}
+	if _, ok := pc.mutation.IsLessons(); !ok {
+		v := product.DefaultIsLessons
+		pc.mutation.SetIsLessons(v)
+	}
+	if _, ok := pc.mutation.IsSales(); !ok {
+		v := product.DefaultIsSales
+		pc.mutation.SetIsSales(v)
+	}
+	if _, ok := pc.mutation.Pic(); !ok {
+		v := product.DefaultPic
+		pc.mutation.SetPic(v)
+	}
+	if _, ok := pc.mutation.Description(); !ok {
+		v := product.DefaultDescription
+		pc.mutation.SetDescription(v)
 	}
 }
 
@@ -423,6 +543,18 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldLength, field.TypeInt64, value)
 		_node.Length = value
 	}
+	if value, ok := pc.mutation.Price(); ok {
+		_spec.SetField(product.FieldPrice, field.TypeFloat64, value)
+		_node.Price = value
+	}
+	if value, ok := pc.mutation.Times(); ok {
+		_spec.SetField(product.FieldTimes, field.TypeInt64, value)
+		_node.Times = value
+	}
+	if value, ok := pc.mutation.IsLessons(); ok {
+		_spec.SetField(product.FieldIsLessons, field.TypeInt64, value)
+		_node.IsLessons = value
+	}
 	if value, ok := pc.mutation.Sales(); ok {
 		_spec.SetField(product.FieldSales, field.TypeJSON, value)
 		_node.Sales = value
@@ -472,6 +604,38 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   product.ProductsTable,
+			Columns: product.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.LessonsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   product.LessonsTable,
+			Columns: product.LessonsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

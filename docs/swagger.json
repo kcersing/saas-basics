@@ -1888,6 +1888,11 @@
                 }
             }
         },
+        "/service/member/full-list/export": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/member/info": {
             "post": {
                 "description": "会员详情 Description",
@@ -1936,6 +1941,11 @@
                         }
                     }
                 }
+            }
+        },
+        "/service/member/potential-list/export": {
+            "post": {
+                "responses": {}
             }
         },
         "/service/member/status": {
@@ -4382,6 +4392,12 @@
                 "length": {
                     "type": "integer"
                 },
+                "lessonsId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "name": {
                     "type": "string"
                 },
@@ -4596,12 +4612,6 @@
         "venue.VenueInfo": {
             "type": "object",
             "properties": {
-                "CreatedAt": {
-                    "type": "string"
-                },
-                "UpdatedAt": {
-                    "type": "string"
-                },
                 "address": {
                     "type": "string"
                 },
@@ -4610,6 +4620,9 @@
                 },
                 "classify": {
                     "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
                 },
                 "email": {
                     "type": "string"
@@ -4643,6 +4656,9 @@
                 },
                 "type": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },
@@ -4666,14 +4682,11 @@
         "venue.VenuePlaceInfo": {
             "type": "object",
             "properties": {
-                "CreatedAt": {
-                    "type": "string"
-                },
-                "UpdatedAt": {
-                    "type": "string"
-                },
                 "classify": {
                     "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -4698,6 +4711,9 @@
                 },
                 "status": {
                     "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
                 },
                 "venueId": {
                     "type": "integer"

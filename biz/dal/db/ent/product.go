@@ -40,8 +40,14 @@ type Product struct {
 	Deadline int64 `json:"deadline,omitempty"`
 	// 有效期
 	Duration int64 `json:"duration,omitempty"`
-	// 单次时长
+	// 课程课时
 	Length int64 `json:"length,omitempty"`
+	// 售价
+	Price float64 `json:"price,omitempty"`
+	// 次数
+	Times int64 `json:"times,omitempty"`
+	// 团课预约 1支持2不支持
+	IsLessons int64 `json:"is_lessons,omitempty"`
 	// 售卖信息[售价等]
 	Sales []*base.Sales `json:"sales,omitempty"`
 	// 销售方式 1会员端
@@ -66,9 +72,13 @@ type ProductEdges struct {
 	Tag []*DictionaryDetail `json:"tag,omitempty"`
 	// Contracts holds the value of the contracts edge.
 	Contracts []*Contract `json:"contracts,omitempty"`
+	// Products holds the value of the products edge.
+	Products []*Product `json:"products,omitempty"`
+	// Lessons holds the value of the lessons edge.
+	Lessons []*Product `json:"lessons,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 }
 
 // TagOrErr returns the Tag value or an error if the edge
@@ -89,6 +99,24 @@ func (e ProductEdges) ContractsOrErr() ([]*Contract, error) {
 	return nil, &NotLoadedError{edge: "contracts"}
 }
 
+// ProductsOrErr returns the Products value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProductEdges) ProductsOrErr() ([]*Product, error) {
+	if e.loadedTypes[2] {
+		return e.Products, nil
+	}
+	return nil, &NotLoadedError{edge: "products"}
+}
+
+// LessonsOrErr returns the Lessons value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProductEdges) LessonsOrErr() ([]*Product, error) {
+	if e.loadedTypes[3] {
+		return e.Lessons, nil
+	}
+	return nil, &NotLoadedError{edge: "lessons"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Product) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -96,7 +124,9 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case product.FieldSales:
 			values[i] = new([]byte)
-		case product.FieldID, product.FieldDelete, product.FieldCreatedID, product.FieldStatus, product.FieldStock, product.FieldDeadline, product.FieldDuration, product.FieldLength, product.FieldIsSales:
+		case product.FieldPrice:
+			values[i] = new(sql.NullFloat64)
+		case product.FieldID, product.FieldDelete, product.FieldCreatedID, product.FieldStatus, product.FieldStock, product.FieldDeadline, product.FieldDuration, product.FieldLength, product.FieldTimes, product.FieldIsLessons, product.FieldIsSales:
 			values[i] = new(sql.NullInt64)
 		case product.FieldType, product.FieldName, product.FieldPic, product.FieldDescription:
 			values[i] = new(sql.NullString)
@@ -189,6 +219,24 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.Length = value.Int64
 			}
+		case product.FieldPrice:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field price", values[i])
+			} else if value.Valid {
+				pr.Price = value.Float64
+			}
+		case product.FieldTimes:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field times", values[i])
+			} else if value.Valid {
+				pr.Times = value.Int64
+			}
+		case product.FieldIsLessons:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_lessons", values[i])
+			} else if value.Valid {
+				pr.IsLessons = value.Int64
+			}
 		case product.FieldSales:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field sales", values[i])
@@ -250,6 +298,16 @@ func (pr *Product) QueryContracts() *ContractQuery {
 	return NewProductClient(pr.config).QueryContracts(pr)
 }
 
+// QueryProducts queries the "products" edge of the Product entity.
+func (pr *Product) QueryProducts() *ProductQuery {
+	return NewProductClient(pr.config).QueryProducts(pr)
+}
+
+// QueryLessons queries the "lessons" edge of the Product entity.
+func (pr *Product) QueryLessons() *ProductQuery {
+	return NewProductClient(pr.config).QueryLessons(pr)
+}
+
 // Update returns a builder for updating this Product.
 // Note that you need to call Product.Unwrap() before calling this method if this Product
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -305,6 +363,15 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("length=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Length))
+	builder.WriteString(", ")
+	builder.WriteString("price=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Price))
+	builder.WriteString(", ")
+	builder.WriteString("times=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Times))
+	builder.WriteString(", ")
+	builder.WriteString("is_lessons=")
+	builder.WriteString(fmt.Sprintf("%v", pr.IsLessons))
 	builder.WriteString(", ")
 	builder.WriteString("sales=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Sales))

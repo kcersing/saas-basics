@@ -16,6 +16,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 )
 
@@ -166,23 +167,14 @@ func (vu *VenueUpdate) ClearType() *VenueUpdate {
 }
 
 // SetClassify sets the "classify" field.
-func (vu *VenueUpdate) SetClassify(i int64) *VenueUpdate {
-	vu.mutation.ResetClassify()
+func (vu *VenueUpdate) SetClassify(i []int64) *VenueUpdate {
 	vu.mutation.SetClassify(i)
 	return vu
 }
 
-// SetNillableClassify sets the "classify" field if the given value is not nil.
-func (vu *VenueUpdate) SetNillableClassify(i *int64) *VenueUpdate {
-	if i != nil {
-		vu.SetClassify(*i)
-	}
-	return vu
-}
-
-// AddClassify adds i to the "classify" field.
-func (vu *VenueUpdate) AddClassify(i int64) *VenueUpdate {
-	vu.mutation.AddClassify(i)
+// AppendClassify appends i to the "classify" field.
+func (vu *VenueUpdate) AppendClassify(i []int64) *VenueUpdate {
+	vu.mutation.AppendClassify(i)
 	return vu
 }
 
@@ -615,13 +607,15 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(venue.FieldType, field.TypeString)
 	}
 	if value, ok := vu.mutation.Classify(); ok {
-		_spec.SetField(venue.FieldClassify, field.TypeInt64, value)
+		_spec.SetField(venue.FieldClassify, field.TypeJSON, value)
 	}
-	if value, ok := vu.mutation.AddedClassify(); ok {
-		_spec.AddField(venue.FieldClassify, field.TypeInt64, value)
+	if value, ok := vu.mutation.AppendedClassify(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, venue.FieldClassify, value)
+		})
 	}
 	if vu.mutation.ClassifyCleared() {
-		_spec.ClearField(venue.FieldClassify, field.TypeInt64)
+		_spec.ClearField(venue.FieldClassify, field.TypeJSON)
 	}
 	if value, ok := vu.mutation.Address(); ok {
 		_spec.SetField(venue.FieldAddress, field.TypeString, value)
@@ -1011,23 +1005,14 @@ func (vuo *VenueUpdateOne) ClearType() *VenueUpdateOne {
 }
 
 // SetClassify sets the "classify" field.
-func (vuo *VenueUpdateOne) SetClassify(i int64) *VenueUpdateOne {
-	vuo.mutation.ResetClassify()
+func (vuo *VenueUpdateOne) SetClassify(i []int64) *VenueUpdateOne {
 	vuo.mutation.SetClassify(i)
 	return vuo
 }
 
-// SetNillableClassify sets the "classify" field if the given value is not nil.
-func (vuo *VenueUpdateOne) SetNillableClassify(i *int64) *VenueUpdateOne {
-	if i != nil {
-		vuo.SetClassify(*i)
-	}
-	return vuo
-}
-
-// AddClassify adds i to the "classify" field.
-func (vuo *VenueUpdateOne) AddClassify(i int64) *VenueUpdateOne {
-	vuo.mutation.AddClassify(i)
+// AppendClassify appends i to the "classify" field.
+func (vuo *VenueUpdateOne) AppendClassify(i []int64) *VenueUpdateOne {
+	vuo.mutation.AppendClassify(i)
 	return vuo
 }
 
@@ -1490,13 +1475,15 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 		_spec.ClearField(venue.FieldType, field.TypeString)
 	}
 	if value, ok := vuo.mutation.Classify(); ok {
-		_spec.SetField(venue.FieldClassify, field.TypeInt64, value)
+		_spec.SetField(venue.FieldClassify, field.TypeJSON, value)
 	}
-	if value, ok := vuo.mutation.AddedClassify(); ok {
-		_spec.AddField(venue.FieldClassify, field.TypeInt64, value)
+	if value, ok := vuo.mutation.AppendedClassify(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, venue.FieldClassify, value)
+		})
 	}
 	if vuo.mutation.ClassifyCleared() {
-		_spec.ClearField(venue.FieldClassify, field.TypeInt64)
+		_spec.ClearField(venue.FieldClassify, field.TypeJSON)
 	}
 	if value, ok := vuo.mutation.Address(); ok {
 		_spec.SetField(venue.FieldAddress, field.TypeString, value)

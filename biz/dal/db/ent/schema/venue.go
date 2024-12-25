@@ -18,7 +18,7 @@ func (Venue) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").Comment("名称").Optional(),
 		field.String("type").Comment("类型").Optional(),
-		field.Int64("classify").Comment("分类").Optional(),
+		field.JSON("classify", []int64{}).Comment("分类").Optional(),
 		field.String("address").Comment("地址 省/市/区").Optional(),
 		field.String("address_detail").Comment("详细地址").Optional(),
 		field.String("latitude").Comment("维度").Optional(),

@@ -122,16 +122,8 @@ func (vc *VenueCreate) SetNillableType(s *string) *VenueCreate {
 }
 
 // SetClassify sets the "classify" field.
-func (vc *VenueCreate) SetClassify(i int64) *VenueCreate {
+func (vc *VenueCreate) SetClassify(i []int64) *VenueCreate {
 	vc.mutation.SetClassify(i)
-	return vc
-}
-
-// SetNillableClassify sets the "classify" field if the given value is not nil.
-func (vc *VenueCreate) SetNillableClassify(i *int64) *VenueCreate {
-	if i != nil {
-		vc.SetClassify(*i)
-	}
 	return vc
 }
 
@@ -447,7 +439,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 		_node.Type = value
 	}
 	if value, ok := vc.mutation.Classify(); ok {
-		_spec.SetField(venue.FieldClassify, field.TypeInt64, value)
+		_spec.SetField(venue.FieldClassify, field.TypeJSON, value)
 		_node.Classify = value
 	}
 	if value, ok := vc.mutation.Address(); ok {

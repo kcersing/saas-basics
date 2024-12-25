@@ -1899,6 +1899,11 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/member/full-list/export": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/member/info": {
             "post": {
                 "description": "会员详情 Description",
@@ -1947,6 +1952,11 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/service/member/potential-list/export": {
+            "post": {
+                "responses": {}
             }
         },
         "/service/member/status": {
@@ -4393,6 +4403,12 @@ const docTemplate = `{
                 "length": {
                     "type": "integer"
                 },
+                "lessonsId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "name": {
                     "type": "string"
                 },
@@ -4607,12 +4623,6 @@ const docTemplate = `{
         "venue.VenueInfo": {
             "type": "object",
             "properties": {
-                "CreatedAt": {
-                    "type": "string"
-                },
-                "UpdatedAt": {
-                    "type": "string"
-                },
                 "address": {
                     "type": "string"
                 },
@@ -4621,6 +4631,9 @@ const docTemplate = `{
                 },
                 "classify": {
                     "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
                 },
                 "email": {
                     "type": "string"
@@ -4654,6 +4667,9 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },
@@ -4677,14 +4693,11 @@ const docTemplate = `{
         "venue.VenuePlaceInfo": {
             "type": "object",
             "properties": {
-                "CreatedAt": {
-                    "type": "string"
-                },
-                "UpdatedAt": {
-                    "type": "string"
-                },
                 "classify": {
                     "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -4709,6 +4722,9 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
                 },
                 "venueId": {
                     "type": "integer"

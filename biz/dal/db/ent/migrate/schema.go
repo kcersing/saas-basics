@@ -566,8 +566,8 @@ var (
 		{Name: "entry_last_time", Type: field.TypeTime, Nullable: true, Comment: "最后一次进馆时间"},
 		{Name: "entry_deadline_time", Type: field.TypeTime, Nullable: true, Comment: "进馆最后期限时间"},
 		{Name: "class_last_time", Type: field.TypeTime, Nullable: true, Comment: "最后一次上课时间"},
-		{Name: "relation_uid", Type: field.TypeInt64, Nullable: true, Comment: "关联员工", Default: 0},
-		{Name: "relation_uname", Type: field.TypeString, Nullable: true, Comment: "关联员工"},
+		{Name: "relation_uid", Type: field.TypeInt64, Nullable: true, Comment: "跟进人员工", Default: 0},
+		{Name: "relation_uname", Type: field.TypeString, Nullable: true, Comment: "跟进人员工"},
 		{Name: "relation_mid", Type: field.TypeInt64, Nullable: true, Comment: "关联会员", Default: 0},
 		{Name: "relation_mame", Type: field.TypeString, Nullable: true, Comment: "关联会员"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
@@ -1047,18 +1047,21 @@ var (
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
-		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
-		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "商品名"},
-		{Name: "stock", Type: field.TypeInt64, Nullable: true, Comment: "库存"},
-		{Name: "deadline", Type: field.TypeInt64, Nullable: true, Comment: "激活期限"},
-		{Name: "duration", Type: field.TypeInt64, Nullable: true, Comment: "有效期"},
-		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "单次时长"},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型", Default: ""},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "商品名", Default: ""},
+		{Name: "stock", Type: field.TypeInt64, Nullable: true, Comment: "库存", Default: 0},
+		{Name: "deadline", Type: field.TypeInt64, Nullable: true, Comment: "激活期限", Default: 0},
+		{Name: "duration", Type: field.TypeInt64, Nullable: true, Comment: "有效期", Default: 0},
+		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "课程课时", Default: 0},
+		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "售价", Default: 0},
+		{Name: "times", Type: field.TypeInt64, Nullable: true, Comment: "次数", Default: 0},
+		{Name: "is_lessons", Type: field.TypeInt64, Nullable: true, Comment: "团课预约 1支持2不支持", Default: 1},
 		{Name: "sales", Type: field.TypeJSON, Nullable: true, Comment: "售卖信息[售价等]"},
-		{Name: "is_sales", Type: field.TypeInt64, Nullable: true, Comment: "销售方式 1会员端"},
+		{Name: "is_sales", Type: field.TypeInt64, Nullable: true, Comment: "销售方式 1会员端", Default: 1},
 		{Name: "sign_sales_at", Type: field.TypeTime, Nullable: true, Comment: "开始售卖时间"},
 		{Name: "end_sales_at", Type: field.TypeTime, Nullable: true, Comment: "结束售卖时间"},
-		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "主图"},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "详情"},
+		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "主图", Default: ""},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "详情", Default: ""},
 	}
 	// ProductTable holds the schema information for the "product" table.
 	ProductTable = &schema.Table{
@@ -1328,7 +1331,7 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "名称"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
-		{Name: "classify", Type: field.TypeInt64, Nullable: true, Comment: "分类"},
+		{Name: "classify", Type: field.TypeJSON, Nullable: true, Comment: "分类"},
 		{Name: "address", Type: field.TypeString, Nullable: true, Comment: "地址 省/市/区"},
 		{Name: "address_detail", Type: field.TypeString, Nullable: true, Comment: "详细地址"},
 		{Name: "latitude", Type: field.TypeString, Nullable: true, Comment: "维度"},
@@ -1483,6 +1486,31 @@ var (
 			},
 		},
 	}
+	// ProductLessonsColumns holds the columns for the "product_lessons" table.
+	ProductLessonsColumns = []*schema.Column{
+		{Name: "product_id", Type: field.TypeInt64},
+		{Name: "product_id", Type: field.TypeInt64},
+	}
+	// ProductLessonsTable holds the schema information for the "product_lessons" table.
+	ProductLessonsTable = &schema.Table{
+		Name:       "product_lessons",
+		Columns:    ProductLessonsColumns,
+		PrimaryKey: []*schema.Column{ProductLessonsColumns[0], ProductLessonsColumns[1], ProductLessonsColumns[0], ProductLessonsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "product_lessons_product_id",
+				Columns:    []*schema.Column{ProductLessonsColumns[0], ProductLessonsColumns[1]},
+				RefColumns: []*schema.Column{ProductColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "product_lessons_product_id",
+				Columns:    []*schema.Column{ProductLessonsColumns[0], ProductLessonsColumns[1]},
+				RefColumns: []*schema.Column{ProductColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RoleMenusColumns holds the columns for the "role_menus" table.
 	RoleMenusColumns = []*schema.Column{
 		{Name: "role_id", Type: field.TypeInt64},
@@ -1602,6 +1630,7 @@ var (
 		MemberMemberBootcampsTable,
 		MemberMemberCommunitysTable,
 		ProductContractsTable,
+		ProductLessonsTable,
 		RoleMenusTable,
 		UserTagTable,
 		UserVenuesTable,
@@ -1782,6 +1811,8 @@ func init() {
 	MemberMemberCommunitysTable.ForeignKeys[1].RefTable = CommunityParticipantTable
 	ProductContractsTable.ForeignKeys[0].RefTable = ProductTable
 	ProductContractsTable.ForeignKeys[1].RefTable = ContractsTable
+	ProductLessonsTable.ForeignKeys[0].RefTable = ProductTable
+	ProductLessonsTable.ForeignKeys[1].RefTable = ProductTable
 	RoleMenusTable.ForeignKeys[0].RefTable = SysRolesTable
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
 	UserTagTable.ForeignKeys[0].RefTable = SysUsersTable

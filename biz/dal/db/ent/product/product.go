@@ -36,6 +36,12 @@ const (
 	FieldDuration = "duration"
 	// FieldLength holds the string denoting the length field in the database.
 	FieldLength = "length"
+	// FieldPrice holds the string denoting the price field in the database.
+	FieldPrice = "price"
+	// FieldTimes holds the string denoting the times field in the database.
+	FieldTimes = "times"
+	// FieldIsLessons holds the string denoting the is_lessons field in the database.
+	FieldIsLessons = "is_lessons"
 	// FieldSales holds the string denoting the sales field in the database.
 	FieldSales = "sales"
 	// FieldIsSales holds the string denoting the is_sales field in the database.
@@ -52,6 +58,10 @@ const (
 	EdgeTag = "tag"
 	// EdgeContracts holds the string denoting the contracts edge name in mutations.
 	EdgeContracts = "contracts"
+	// EdgeProducts holds the string denoting the products edge name in mutations.
+	EdgeProducts = "products"
+	// EdgeLessons holds the string denoting the lessons edge name in mutations.
+	EdgeLessons = "lessons"
 	// Table holds the table name of the product in the database.
 	Table = "product"
 	// TagTable is the table that holds the tag relation/edge.
@@ -66,6 +76,10 @@ const (
 	// ContractsInverseTable is the table name for the Contract entity.
 	// It exists in this package in order to avoid circular dependency with the "contract" package.
 	ContractsInverseTable = "contracts"
+	// ProductsTable is the table that holds the products relation/edge. The primary key declared below.
+	ProductsTable = "product_lessons"
+	// LessonsTable is the table that holds the lessons relation/edge. The primary key declared below.
+	LessonsTable = "product_lessons"
 )
 
 // Columns holds all SQL columns for product fields.
@@ -82,6 +96,9 @@ var Columns = []string{
 	FieldDeadline,
 	FieldDuration,
 	FieldLength,
+	FieldPrice,
+	FieldTimes,
+	FieldIsLessons,
 	FieldSales,
 	FieldIsSales,
 	FieldSignSalesAt,
@@ -94,6 +111,12 @@ var (
 	// ContractsPrimaryKey and ContractsColumn2 are the table columns denoting the
 	// primary key for the contracts relation (M2M).
 	ContractsPrimaryKey = []string{"product_id", "contract_id"}
+	// ProductsPrimaryKey and ProductsColumn2 are the table columns denoting the
+	// primary key for the products relation (M2M).
+	ProductsPrimaryKey = []string{"product_id", "product_id"}
+	// LessonsPrimaryKey and LessonsColumn2 are the table columns denoting the
+	// primary key for the lessons relation (M2M).
+	LessonsPrimaryKey = []string{"product_id", "product_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -119,6 +142,30 @@ var (
 	DefaultCreatedID int64
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int64
+	// DefaultType holds the default value on creation for the "type" field.
+	DefaultType string
+	// DefaultName holds the default value on creation for the "name" field.
+	DefaultName string
+	// DefaultStock holds the default value on creation for the "stock" field.
+	DefaultStock int64
+	// DefaultDeadline holds the default value on creation for the "deadline" field.
+	DefaultDeadline int64
+	// DefaultDuration holds the default value on creation for the "duration" field.
+	DefaultDuration int64
+	// DefaultLength holds the default value on creation for the "length" field.
+	DefaultLength int64
+	// DefaultPrice holds the default value on creation for the "price" field.
+	DefaultPrice float64
+	// DefaultTimes holds the default value on creation for the "times" field.
+	DefaultTimes int64
+	// DefaultIsLessons holds the default value on creation for the "is_lessons" field.
+	DefaultIsLessons int64
+	// DefaultIsSales holds the default value on creation for the "is_sales" field.
+	DefaultIsSales int64
+	// DefaultPic holds the default value on creation for the "pic" field.
+	DefaultPic string
+	// DefaultDescription holds the default value on creation for the "description" field.
+	DefaultDescription string
 )
 
 // OrderOption defines the ordering options for the Product queries.
@@ -184,6 +231,21 @@ func ByLength(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLength, opts...).ToFunc()
 }
 
+// ByPrice orders the results by the price field.
+func ByPrice(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrice, opts...).ToFunc()
+}
+
+// ByTimes orders the results by the times field.
+func ByTimes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTimes, opts...).ToFunc()
+}
+
+// ByIsLessons orders the results by the is_lessons field.
+func ByIsLessons(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsLessons, opts...).ToFunc()
+}
+
 // ByIsSales orders the results by the is_sales field.
 func ByIsSales(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsSales, opts...).ToFunc()
@@ -236,6 +298,34 @@ func ByContracts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newContractsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByProductsCount orders the results by products count.
+func ByProductsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProductsStep(), opts...)
+	}
+}
+
+// ByProducts orders the results by products terms.
+func ByProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByLessonsCount orders the results by lessons count.
+func ByLessonsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newLessonsStep(), opts...)
+	}
+}
+
+// ByLessons orders the results by lessons terms.
+func ByLessons(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLessonsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTagStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -248,5 +338,19 @@ func newContractsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ContractsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ContractsTable, ContractsPrimaryKey...),
+	)
+}
+func newProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProductsTable, ProductsPrimaryKey...),
+	)
+}
+func newLessonsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, LessonsTable, LessonsPrimaryKey...),
 	)
 }

@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"saas/biz/dal/db/ent/venue"
 	"strings"
@@ -33,7 +34,7 @@ type Venue struct {
 	// 类型
 	Type string `json:"type,omitempty"`
 	// 分类
-	Classify int64 `json:"classify,omitempty"`
+	Classify []int64 `json:"classify,omitempty"`
 	// 地址 省/市/区
 	Address string `json:"address,omitempty"`
 	// 详细地址
@@ -114,7 +115,9 @@ func (*Venue) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case venue.FieldID, venue.FieldDelete, venue.FieldCreatedID, venue.FieldStatus, venue.FieldClassify:
+		case venue.FieldClassify:
+			values[i] = new([]byte)
+		case venue.FieldID, venue.FieldDelete, venue.FieldCreatedID, venue.FieldStatus:
 			values[i] = new(sql.NullInt64)
 		case venue.FieldName, venue.FieldType, venue.FieldAddress, venue.FieldAddressDetail, venue.FieldLatitude, venue.FieldLongitude, venue.FieldMobile, venue.FieldEmail, venue.FieldPic, venue.FieldSeal, venue.FieldInformation:
 			values[i] = new(sql.NullString)
@@ -184,10 +187,12 @@ func (v *Venue) assignValues(columns []string, values []any) error {
 				v.Type = value.String
 			}
 		case venue.FieldClassify:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field classify", values[i])
-			} else if value.Valid {
-				v.Classify = value.Int64
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &v.Classify); err != nil {
+					return fmt.Errorf("unmarshal field classify: %w", err)
+				}
 			}
 		case venue.FieldAddress:
 			if value, ok := values[i].(*sql.NullString); !ok {

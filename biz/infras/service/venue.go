@@ -6,10 +6,12 @@ import (
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/db"
+	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/venueplace"
 	"saas/biz/infras/do"
 	"saas/config"
+	"saas/idl_gen/model/base"
 	"saas/idl_gen/model/venue"
 
 	"saas/biz/dal/cache"
@@ -50,7 +52,7 @@ func (v Venue) VenueInfo(id int64) (info *venue.VenueInfo, err error) {
 		return info, err
 	}
 
-	info = entVenueInfo(one)
+	info = v.entVenueInfo(one)
 	//err = copier.CopyWithOption(info, one, copier.Option{IgnoreEmpty: true, DeepCopy: true})
 	//hlog.Info("err :", err)
 	//if err != nil {
@@ -147,7 +149,7 @@ func (v Venue) List(req *venue.VenueListReq) (list []*venue.VenueInfo, total int
 	}
 
 	for _, ve := range venueList {
-		list = append(list, entVenueInfo(ve))
+		list = append(list, v.entVenueInfo(ve))
 	}
 
 	total, _ = v.db.Venue.Query().Where(predicates...).Count(v.ctx)
@@ -225,9 +227,23 @@ func (v Venue) PlaceList(req *venue.VenuePlaceListReq) (list []*venue.VenuePlace
 	return
 }
 
-func entVenueInfo(v *ent.Venue) *venue.VenueInfo {
+func (ve Venue) entVenueInfo(v *ent.Venue) *venue.VenueInfo {
 	createdAt := v.CreatedAt.Format(time.DateTime)
 	updatedAt := v.UpdatedAt.Format(time.DateTime)
+
+	var dAll []*base.List
+	ddAll, _ := ve.db.DictionaryDetail.Query().Where(dictionarydetail.IDIn(v.Classify...)).All(ve.ctx)
+	if ddAll != nil {
+		for _, item := range ddAll {
+			contract := &base.List{
+				ID:   item.ID,
+				Name: item.Title,
+			}
+			dAll = append(dAll, contract)
+		}
+		return nil
+	}
+
 	return &venue.VenueInfo{
 		ID:        v.ID,
 		Name:      v.Name,
@@ -238,11 +254,12 @@ func entVenueInfo(v *ent.Venue) *venue.VenueInfo {
 		Longitude: v.Longitude,
 		Status:    v.Status,
 
-		CreatedAt: createdAt,
-		UpdatedAt: updatedAt,
-		Classify:  v.Classify,
-		Type:      v.Type,
-		Seal:      v.Seal,
+		CreatedAt:    createdAt,
+		UpdatedAt:    updatedAt,
+		Classify:     v.Classify,
+		Type:         v.Type,
+		Seal:         v.Seal,
+		ClassifyName: dAll,
 	}
 
 }

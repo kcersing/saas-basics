@@ -25,6 +25,8 @@ struct ProductInfo {
     19: optional list<base.List> contracts = {} (api.raw = "contracts")
     20: optional i64 createdId = 0 (api.raw = "createdId")
     21: optional string createdName = "" (api.raw = "createdName")
+    /**团课*/
+    22: optional list<base.List> lessons = {} (api.raw = "lessons")
 }
 
 
@@ -45,7 +47,7 @@ struct CreateOrUpdateProductReq {
     14: optional string endSalesAt ="" (api.raw = "endSalesAt")
     16: optional list<i64> tagId=0   (api.raw = "tagId")
     17: optional list<i64> contractId =0 (api.raw = "contractId")
-
+    18: optional list<i64> lessonsId =0 (api.raw = "lessonsId")
 }
 
 struct ProductListReq {

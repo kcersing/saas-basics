@@ -47,9 +47,9 @@ type MemberDetails struct {
 	EntryDeadlineTime time.Time `json:"entry_deadline_time,omitempty"`
 	// 最后一次上课时间
 	ClassLastTime time.Time `json:"class_last_time,omitempty"`
-	// 关联员工
+	// 跟进人员工
 	RelationUID int64 `json:"relation_uid,omitempty"`
-	// 关联员工
+	// 跟进人员工
 	RelationUname string `json:"relation_uname,omitempty"`
 	// 关联会员
 	RelationMid int64 `json:"relation_mid,omitempty"`

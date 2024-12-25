@@ -24,12 +24,13 @@ struct VenueInfo {
     8:  optional string pic =""(api.raw = "pic")
     9:  optional string information="" (api.raw = "information")
     10:  optional i64 status=1 (api.raw = "status")
-    11:  optional string CreatedAt="" (api.raw = "createdAt")
-    12:  optional string UpdatedAt="" (api.raw = "updatedAt")
+    11:  optional string createdAt="" (api.raw = "createdAt")
+    12:  optional string updatedAt="" (api.raw = "updatedAt")
     13:  optional string email =""(api.raw = "email")
     14:  optional string type =""(api.raw = "type")
-    15:  optional i64 classify =0(api.raw = "classify")
+    15:  optional list<i64> classify =0 (api.raw = "classify")
     16:  optional string seal =""(api.raw = "seal")
+    17:  optional list<base.List>  classifyName ="" (api.raw = "classifyName")
 }
 
 struct VenuePlaceInfo {
@@ -38,8 +39,8 @@ struct VenuePlaceInfo {
     3:  optional i64 venueId=0 (api.raw = "venueId")
     4:  optional string pic="" (api.raw = "pic")
     5:  optional i64 status=1 (api.raw = "status")
-    6:  optional string CreatedAt="" (api.raw = "createdAt")
-    7:  optional string UpdatedAt="" (api.raw = "updatedAt")
+    6:  optional string createdAt="" (api.raw = "createdAt")
+    7:  optional string updatedAt="" (api.raw = "updatedAt")
     8:  optional i64 number=0 (api.raw = "number")
     9:  optional string information="" (api.raw = "information")
     10:  optional i64 classify =0(api.raw = "classify")

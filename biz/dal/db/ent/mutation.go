@@ -42393,6 +42393,12 @@ type ProductMutation struct {
 	addduration      *int64
 	length           *int64
 	addlength        *int64
+	price            *float64
+	addprice         *float64
+	times            *int64
+	addtimes         *int64
+	is_lessons       *int64
+	addis_lessons    *int64
 	sales            *[]*base.Sales
 	appendsales      []*base.Sales
 	is_sales         *int64
@@ -42408,6 +42414,12 @@ type ProductMutation struct {
 	contracts        map[int64]struct{}
 	removedcontracts map[int64]struct{}
 	clearedcontracts bool
+	products         map[int64]struct{}
+	removedproducts  map[int64]struct{}
+	clearedproducts  bool
+	lessons          map[int64]struct{}
+	removedlessons   map[int64]struct{}
+	clearedlessons   bool
 	done             bool
 	oldValue         func(context.Context) (*Product, error)
 	predicates       []predicate.Product
@@ -43203,6 +43215,216 @@ func (m *ProductMutation) ResetLength() {
 	delete(m.clearedFields, product.FieldLength)
 }
 
+// SetPrice sets the "price" field.
+func (m *ProductMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *ProductMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *ProductMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *ProductMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearPrice clears the value of the "price" field.
+func (m *ProductMutation) ClearPrice() {
+	m.price = nil
+	m.addprice = nil
+	m.clearedFields[product.FieldPrice] = struct{}{}
+}
+
+// PriceCleared returns if the "price" field was cleared in this mutation.
+func (m *ProductMutation) PriceCleared() bool {
+	_, ok := m.clearedFields[product.FieldPrice]
+	return ok
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *ProductMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+	delete(m.clearedFields, product.FieldPrice)
+}
+
+// SetTimes sets the "times" field.
+func (m *ProductMutation) SetTimes(i int64) {
+	m.times = &i
+	m.addtimes = nil
+}
+
+// Times returns the value of the "times" field in the mutation.
+func (m *ProductMutation) Times() (r int64, exists bool) {
+	v := m.times
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimes returns the old "times" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldTimes(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimes: %w", err)
+	}
+	return oldValue.Times, nil
+}
+
+// AddTimes adds i to the "times" field.
+func (m *ProductMutation) AddTimes(i int64) {
+	if m.addtimes != nil {
+		*m.addtimes += i
+	} else {
+		m.addtimes = &i
+	}
+}
+
+// AddedTimes returns the value that was added to the "times" field in this mutation.
+func (m *ProductMutation) AddedTimes() (r int64, exists bool) {
+	v := m.addtimes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearTimes clears the value of the "times" field.
+func (m *ProductMutation) ClearTimes() {
+	m.times = nil
+	m.addtimes = nil
+	m.clearedFields[product.FieldTimes] = struct{}{}
+}
+
+// TimesCleared returns if the "times" field was cleared in this mutation.
+func (m *ProductMutation) TimesCleared() bool {
+	_, ok := m.clearedFields[product.FieldTimes]
+	return ok
+}
+
+// ResetTimes resets all changes to the "times" field.
+func (m *ProductMutation) ResetTimes() {
+	m.times = nil
+	m.addtimes = nil
+	delete(m.clearedFields, product.FieldTimes)
+}
+
+// SetIsLessons sets the "is_lessons" field.
+func (m *ProductMutation) SetIsLessons(i int64) {
+	m.is_lessons = &i
+	m.addis_lessons = nil
+}
+
+// IsLessons returns the value of the "is_lessons" field in the mutation.
+func (m *ProductMutation) IsLessons() (r int64, exists bool) {
+	v := m.is_lessons
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsLessons returns the old "is_lessons" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldIsLessons(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsLessons is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsLessons requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsLessons: %w", err)
+	}
+	return oldValue.IsLessons, nil
+}
+
+// AddIsLessons adds i to the "is_lessons" field.
+func (m *ProductMutation) AddIsLessons(i int64) {
+	if m.addis_lessons != nil {
+		*m.addis_lessons += i
+	} else {
+		m.addis_lessons = &i
+	}
+}
+
+// AddedIsLessons returns the value that was added to the "is_lessons" field in this mutation.
+func (m *ProductMutation) AddedIsLessons() (r int64, exists bool) {
+	v := m.addis_lessons
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsLessons clears the value of the "is_lessons" field.
+func (m *ProductMutation) ClearIsLessons() {
+	m.is_lessons = nil
+	m.addis_lessons = nil
+	m.clearedFields[product.FieldIsLessons] = struct{}{}
+}
+
+// IsLessonsCleared returns if the "is_lessons" field was cleared in this mutation.
+func (m *ProductMutation) IsLessonsCleared() bool {
+	_, ok := m.clearedFields[product.FieldIsLessons]
+	return ok
+}
+
+// ResetIsLessons resets all changes to the "is_lessons" field.
+func (m *ProductMutation) ResetIsLessons() {
+	m.is_lessons = nil
+	m.addis_lessons = nil
+	delete(m.clearedFields, product.FieldIsLessons)
+}
+
 // SetSales sets the "sales" field.
 func (m *ProductMutation) SetSales(b []*base.Sales) {
 	m.sales = &b
@@ -43642,6 +43864,114 @@ func (m *ProductMutation) ResetContracts() {
 	m.removedcontracts = nil
 }
 
+// AddProductIDs adds the "products" edge to the Product entity by ids.
+func (m *ProductMutation) AddProductIDs(ids ...int64) {
+	if m.products == nil {
+		m.products = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.products[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProducts clears the "products" edge to the Product entity.
+func (m *ProductMutation) ClearProducts() {
+	m.clearedproducts = true
+}
+
+// ProductsCleared reports if the "products" edge to the Product entity was cleared.
+func (m *ProductMutation) ProductsCleared() bool {
+	return m.clearedproducts
+}
+
+// RemoveProductIDs removes the "products" edge to the Product entity by IDs.
+func (m *ProductMutation) RemoveProductIDs(ids ...int64) {
+	if m.removedproducts == nil {
+		m.removedproducts = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.products, ids[i])
+		m.removedproducts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProducts returns the removed IDs of the "products" edge to the Product entity.
+func (m *ProductMutation) RemovedProductsIDs() (ids []int64) {
+	for id := range m.removedproducts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProductsIDs returns the "products" edge IDs in the mutation.
+func (m *ProductMutation) ProductsIDs() (ids []int64) {
+	for id := range m.products {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProducts resets all changes to the "products" edge.
+func (m *ProductMutation) ResetProducts() {
+	m.products = nil
+	m.clearedproducts = false
+	m.removedproducts = nil
+}
+
+// AddLessonIDs adds the "lessons" edge to the Product entity by ids.
+func (m *ProductMutation) AddLessonIDs(ids ...int64) {
+	if m.lessons == nil {
+		m.lessons = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.lessons[ids[i]] = struct{}{}
+	}
+}
+
+// ClearLessons clears the "lessons" edge to the Product entity.
+func (m *ProductMutation) ClearLessons() {
+	m.clearedlessons = true
+}
+
+// LessonsCleared reports if the "lessons" edge to the Product entity was cleared.
+func (m *ProductMutation) LessonsCleared() bool {
+	return m.clearedlessons
+}
+
+// RemoveLessonIDs removes the "lessons" edge to the Product entity by IDs.
+func (m *ProductMutation) RemoveLessonIDs(ids ...int64) {
+	if m.removedlessons == nil {
+		m.removedlessons = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.lessons, ids[i])
+		m.removedlessons[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedLessons returns the removed IDs of the "lessons" edge to the Product entity.
+func (m *ProductMutation) RemovedLessonsIDs() (ids []int64) {
+	for id := range m.removedlessons {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// LessonsIDs returns the "lessons" edge IDs in the mutation.
+func (m *ProductMutation) LessonsIDs() (ids []int64) {
+	for id := range m.lessons {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetLessons resets all changes to the "lessons" edge.
+func (m *ProductMutation) ResetLessons() {
+	m.lessons = nil
+	m.clearedlessons = false
+	m.removedlessons = nil
+}
+
 // Where appends a list predicates to the ProductMutation builder.
 func (m *ProductMutation) Where(ps ...predicate.Product) {
 	m.predicates = append(m.predicates, ps...)
@@ -43676,7 +44006,7 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 20)
 	if m.created_at != nil {
 		fields = append(fields, product.FieldCreatedAt)
 	}
@@ -43709,6 +44039,15 @@ func (m *ProductMutation) Fields() []string {
 	}
 	if m.length != nil {
 		fields = append(fields, product.FieldLength)
+	}
+	if m.price != nil {
+		fields = append(fields, product.FieldPrice)
+	}
+	if m.times != nil {
+		fields = append(fields, product.FieldTimes)
+	}
+	if m.is_lessons != nil {
+		fields = append(fields, product.FieldIsLessons)
 	}
 	if m.sales != nil {
 		fields = append(fields, product.FieldSales)
@@ -43758,6 +44097,12 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.Duration()
 	case product.FieldLength:
 		return m.Length()
+	case product.FieldPrice:
+		return m.Price()
+	case product.FieldTimes:
+		return m.Times()
+	case product.FieldIsLessons:
+		return m.IsLessons()
 	case product.FieldSales:
 		return m.Sales()
 	case product.FieldIsSales:
@@ -43801,6 +44146,12 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDuration(ctx)
 	case product.FieldLength:
 		return m.OldLength(ctx)
+	case product.FieldPrice:
+		return m.OldPrice(ctx)
+	case product.FieldTimes:
+		return m.OldTimes(ctx)
+	case product.FieldIsLessons:
+		return m.OldIsLessons(ctx)
 	case product.FieldSales:
 		return m.OldSales(ctx)
 	case product.FieldIsSales:
@@ -43899,6 +44250,27 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLength(v)
 		return nil
+	case product.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case product.FieldTimes:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimes(v)
+		return nil
+	case product.FieldIsLessons:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsLessons(v)
+		return nil
 	case product.FieldSales:
 		v, ok := value.([]*base.Sales)
 		if !ok {
@@ -43970,6 +44342,15 @@ func (m *ProductMutation) AddedFields() []string {
 	if m.addlength != nil {
 		fields = append(fields, product.FieldLength)
 	}
+	if m.addprice != nil {
+		fields = append(fields, product.FieldPrice)
+	}
+	if m.addtimes != nil {
+		fields = append(fields, product.FieldTimes)
+	}
+	if m.addis_lessons != nil {
+		fields = append(fields, product.FieldIsLessons)
+	}
 	if m.addis_sales != nil {
 		fields = append(fields, product.FieldIsSales)
 	}
@@ -43995,6 +44376,12 @@ func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedDuration()
 	case product.FieldLength:
 		return m.AddedLength()
+	case product.FieldPrice:
+		return m.AddedPrice()
+	case product.FieldTimes:
+		return m.AddedTimes()
+	case product.FieldIsLessons:
+		return m.AddedIsLessons()
 	case product.FieldIsSales:
 		return m.AddedIsSales()
 	}
@@ -44055,6 +44442,27 @@ func (m *ProductMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddLength(v)
 		return nil
+	case product.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	case product.FieldTimes:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTimes(v)
+		return nil
+	case product.FieldIsLessons:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsLessons(v)
+		return nil
 	case product.FieldIsSales:
 		v, ok := value.(int64)
 		if !ok {
@@ -44102,6 +44510,15 @@ func (m *ProductMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(product.FieldLength) {
 		fields = append(fields, product.FieldLength)
+	}
+	if m.FieldCleared(product.FieldPrice) {
+		fields = append(fields, product.FieldPrice)
+	}
+	if m.FieldCleared(product.FieldTimes) {
+		fields = append(fields, product.FieldTimes)
+	}
+	if m.FieldCleared(product.FieldIsLessons) {
+		fields = append(fields, product.FieldIsLessons)
 	}
 	if m.FieldCleared(product.FieldSales) {
 		fields = append(fields, product.FieldSales)
@@ -44168,6 +44585,15 @@ func (m *ProductMutation) ClearField(name string) error {
 	case product.FieldLength:
 		m.ClearLength()
 		return nil
+	case product.FieldPrice:
+		m.ClearPrice()
+		return nil
+	case product.FieldTimes:
+		m.ClearTimes()
+		return nil
+	case product.FieldIsLessons:
+		m.ClearIsLessons()
+		return nil
 	case product.FieldSales:
 		m.ClearSales()
 		return nil
@@ -44227,6 +44653,15 @@ func (m *ProductMutation) ResetField(name string) error {
 	case product.FieldLength:
 		m.ResetLength()
 		return nil
+	case product.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case product.FieldTimes:
+		m.ResetTimes()
+		return nil
+	case product.FieldIsLessons:
+		m.ResetIsLessons()
+		return nil
 	case product.FieldSales:
 		m.ResetSales()
 		return nil
@@ -44251,12 +44686,18 @@ func (m *ProductMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProductMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.tag != nil {
 		edges = append(edges, product.EdgeTag)
 	}
 	if m.contracts != nil {
 		edges = append(edges, product.EdgeContracts)
+	}
+	if m.products != nil {
+		edges = append(edges, product.EdgeProducts)
+	}
+	if m.lessons != nil {
+		edges = append(edges, product.EdgeLessons)
 	}
 	return edges
 }
@@ -44277,18 +44718,36 @@ func (m *ProductMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case product.EdgeProducts:
+		ids := make([]ent.Value, 0, len(m.products))
+		for id := range m.products {
+			ids = append(ids, id)
+		}
+		return ids
+	case product.EdgeLessons:
+		ids := make([]ent.Value, 0, len(m.lessons))
+		for id := range m.lessons {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProductMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.removedtag != nil {
 		edges = append(edges, product.EdgeTag)
 	}
 	if m.removedcontracts != nil {
 		edges = append(edges, product.EdgeContracts)
+	}
+	if m.removedproducts != nil {
+		edges = append(edges, product.EdgeProducts)
+	}
+	if m.removedlessons != nil {
+		edges = append(edges, product.EdgeLessons)
 	}
 	return edges
 }
@@ -44309,18 +44768,36 @@ func (m *ProductMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case product.EdgeProducts:
+		ids := make([]ent.Value, 0, len(m.removedproducts))
+		for id := range m.removedproducts {
+			ids = append(ids, id)
+		}
+		return ids
+	case product.EdgeLessons:
+		ids := make([]ent.Value, 0, len(m.removedlessons))
+		for id := range m.removedlessons {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProductMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.clearedtag {
 		edges = append(edges, product.EdgeTag)
 	}
 	if m.clearedcontracts {
 		edges = append(edges, product.EdgeContracts)
+	}
+	if m.clearedproducts {
+		edges = append(edges, product.EdgeProducts)
+	}
+	if m.clearedlessons {
+		edges = append(edges, product.EdgeLessons)
 	}
 	return edges
 }
@@ -44333,6 +44810,10 @@ func (m *ProductMutation) EdgeCleared(name string) bool {
 		return m.clearedtag
 	case product.EdgeContracts:
 		return m.clearedcontracts
+	case product.EdgeProducts:
+		return m.clearedproducts
+	case product.EdgeLessons:
+		return m.clearedlessons
 	}
 	return false
 }
@@ -44354,6 +44835,12 @@ func (m *ProductMutation) ResetEdge(name string) error {
 		return nil
 	case product.EdgeContracts:
 		m.ResetContracts()
+		return nil
+	case product.EdgeProducts:
+		m.ResetProducts()
+		return nil
+	case product.EdgeLessons:
+		m.ResetLessons()
 		return nil
 	}
 	return fmt.Errorf("unknown Product edge %s", name)
@@ -55253,8 +55740,8 @@ type VenueMutation struct {
 	addstatus           *int64
 	name                *string
 	_type               *string
-	classify            *int64
-	addclassify         *int64
+	classify            *[]int64
+	appendclassify      []int64
 	address             *string
 	address_detail      *string
 	latitude            *string
@@ -55793,13 +56280,13 @@ func (m *VenueMutation) ResetType() {
 }
 
 // SetClassify sets the "classify" field.
-func (m *VenueMutation) SetClassify(i int64) {
+func (m *VenueMutation) SetClassify(i []int64) {
 	m.classify = &i
-	m.addclassify = nil
+	m.appendclassify = nil
 }
 
 // Classify returns the value of the "classify" field in the mutation.
-func (m *VenueMutation) Classify() (r int64, exists bool) {
+func (m *VenueMutation) Classify() (r []int64, exists bool) {
 	v := m.classify
 	if v == nil {
 		return
@@ -55810,7 +56297,7 @@ func (m *VenueMutation) Classify() (r int64, exists bool) {
 // OldClassify returns the old "classify" field's value of the Venue entity.
 // If the Venue object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VenueMutation) OldClassify(ctx context.Context) (v int64, err error) {
+func (m *VenueMutation) OldClassify(ctx context.Context) (v []int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldClassify is only allowed on UpdateOne operations")
 	}
@@ -55824,28 +56311,23 @@ func (m *VenueMutation) OldClassify(ctx context.Context) (v int64, err error) {
 	return oldValue.Classify, nil
 }
 
-// AddClassify adds i to the "classify" field.
-func (m *VenueMutation) AddClassify(i int64) {
-	if m.addclassify != nil {
-		*m.addclassify += i
-	} else {
-		m.addclassify = &i
-	}
+// AppendClassify adds i to the "classify" field.
+func (m *VenueMutation) AppendClassify(i []int64) {
+	m.appendclassify = append(m.appendclassify, i...)
 }
 
-// AddedClassify returns the value that was added to the "classify" field in this mutation.
-func (m *VenueMutation) AddedClassify() (r int64, exists bool) {
-	v := m.addclassify
-	if v == nil {
-		return
+// AppendedClassify returns the list of values that were appended to the "classify" field in this mutation.
+func (m *VenueMutation) AppendedClassify() ([]int64, bool) {
+	if len(m.appendclassify) == 0 {
+		return nil, false
 	}
-	return *v, true
+	return m.appendclassify, true
 }
 
 // ClearClassify clears the value of the "classify" field.
 func (m *VenueMutation) ClearClassify() {
 	m.classify = nil
-	m.addclassify = nil
+	m.appendclassify = nil
 	m.clearedFields[venue.FieldClassify] = struct{}{}
 }
 
@@ -55858,7 +56340,7 @@ func (m *VenueMutation) ClassifyCleared() bool {
 // ResetClassify resets all changes to the "classify" field.
 func (m *VenueMutation) ResetClassify() {
 	m.classify = nil
-	m.addclassify = nil
+	m.appendclassify = nil
 	delete(m.clearedFields, venue.FieldClassify)
 }
 
@@ -56749,7 +57231,7 @@ func (m *VenueMutation) SetField(name string, value ent.Value) error {
 		m.SetType(v)
 		return nil
 	case venue.FieldClassify:
-		v, ok := value.(int64)
+		v, ok := value.([]int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -56835,9 +57317,6 @@ func (m *VenueMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, venue.FieldStatus)
 	}
-	if m.addclassify != nil {
-		fields = append(fields, venue.FieldClassify)
-	}
 	return fields
 }
 
@@ -56852,8 +57331,6 @@ func (m *VenueMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedCreatedID()
 	case venue.FieldStatus:
 		return m.AddedStatus()
-	case venue.FieldClassify:
-		return m.AddedClassify()
 	}
 	return nil, false
 }
@@ -56883,13 +57360,6 @@ func (m *VenueMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
-		return nil
-	case venue.FieldClassify:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddClassify(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Venue numeric field %s", name)

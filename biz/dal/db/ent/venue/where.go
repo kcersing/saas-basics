@@ -90,11 +90,6 @@ func Type(v string) predicate.Venue {
 	return predicate.Venue(sql.FieldEQ(FieldType, v))
 }
 
-// Classify applies equality check predicate on the "classify" field. It's identical to ClassifyEQ.
-func Classify(v int64) predicate.Venue {
-	return predicate.Venue(sql.FieldEQ(FieldClassify, v))
-}
-
 // Address applies equality check predicate on the "address" field. It's identical to AddressEQ.
 func Address(v string) predicate.Venue {
 	return predicate.Venue(sql.FieldEQ(FieldAddress, v))
@@ -538,46 +533,6 @@ func TypeEqualFold(v string) predicate.Venue {
 // TypeContainsFold applies the ContainsFold predicate on the "type" field.
 func TypeContainsFold(v string) predicate.Venue {
 	return predicate.Venue(sql.FieldContainsFold(FieldType, v))
-}
-
-// ClassifyEQ applies the EQ predicate on the "classify" field.
-func ClassifyEQ(v int64) predicate.Venue {
-	return predicate.Venue(sql.FieldEQ(FieldClassify, v))
-}
-
-// ClassifyNEQ applies the NEQ predicate on the "classify" field.
-func ClassifyNEQ(v int64) predicate.Venue {
-	return predicate.Venue(sql.FieldNEQ(FieldClassify, v))
-}
-
-// ClassifyIn applies the In predicate on the "classify" field.
-func ClassifyIn(vs ...int64) predicate.Venue {
-	return predicate.Venue(sql.FieldIn(FieldClassify, vs...))
-}
-
-// ClassifyNotIn applies the NotIn predicate on the "classify" field.
-func ClassifyNotIn(vs ...int64) predicate.Venue {
-	return predicate.Venue(sql.FieldNotIn(FieldClassify, vs...))
-}
-
-// ClassifyGT applies the GT predicate on the "classify" field.
-func ClassifyGT(v int64) predicate.Venue {
-	return predicate.Venue(sql.FieldGT(FieldClassify, v))
-}
-
-// ClassifyGTE applies the GTE predicate on the "classify" field.
-func ClassifyGTE(v int64) predicate.Venue {
-	return predicate.Venue(sql.FieldGTE(FieldClassify, v))
-}
-
-// ClassifyLT applies the LT predicate on the "classify" field.
-func ClassifyLT(v int64) predicate.Venue {
-	return predicate.Venue(sql.FieldLT(FieldClassify, v))
-}
-
-// ClassifyLTE applies the LTE predicate on the "classify" field.
-func ClassifyLTE(v int64) predicate.Venue {
-	return predicate.Venue(sql.FieldLTE(FieldClassify, v))
 }
 
 // ClassifyIsNil applies the IsNil predicate on the "classify" field.

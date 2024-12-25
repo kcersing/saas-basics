@@ -110,6 +110,21 @@ func Length(v int64) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldLength, v))
 }
 
+// Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
+func Price(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldPrice, v))
+}
+
+// Times applies equality check predicate on the "times" field. It's identical to TimesEQ.
+func Times(v int64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldTimes, v))
+}
+
+// IsLessons applies equality check predicate on the "is_lessons" field. It's identical to IsLessonsEQ.
+func IsLessons(v int64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldIsLessons, v))
+}
+
 // IsSales applies equality check predicate on the "is_sales" field. It's identical to IsSalesEQ.
 func IsSales(v int64) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldIsSales, v))
@@ -735,6 +750,156 @@ func LengthNotNil() predicate.Product {
 	return predicate.Product(sql.FieldNotNull(FieldLength))
 }
 
+// PriceEQ applies the EQ predicate on the "price" field.
+func PriceEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldPrice, v))
+}
+
+// PriceNEQ applies the NEQ predicate on the "price" field.
+func PriceNEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldPrice, v))
+}
+
+// PriceIn applies the In predicate on the "price" field.
+func PriceIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldPrice, vs...))
+}
+
+// PriceNotIn applies the NotIn predicate on the "price" field.
+func PriceNotIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldPrice, vs...))
+}
+
+// PriceGT applies the GT predicate on the "price" field.
+func PriceGT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldPrice, v))
+}
+
+// PriceGTE applies the GTE predicate on the "price" field.
+func PriceGTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldPrice, v))
+}
+
+// PriceLT applies the LT predicate on the "price" field.
+func PriceLT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldPrice, v))
+}
+
+// PriceLTE applies the LTE predicate on the "price" field.
+func PriceLTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldPrice, v))
+}
+
+// PriceIsNil applies the IsNil predicate on the "price" field.
+func PriceIsNil() predicate.Product {
+	return predicate.Product(sql.FieldIsNull(FieldPrice))
+}
+
+// PriceNotNil applies the NotNil predicate on the "price" field.
+func PriceNotNil() predicate.Product {
+	return predicate.Product(sql.FieldNotNull(FieldPrice))
+}
+
+// TimesEQ applies the EQ predicate on the "times" field.
+func TimesEQ(v int64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldTimes, v))
+}
+
+// TimesNEQ applies the NEQ predicate on the "times" field.
+func TimesNEQ(v int64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldTimes, v))
+}
+
+// TimesIn applies the In predicate on the "times" field.
+func TimesIn(vs ...int64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldTimes, vs...))
+}
+
+// TimesNotIn applies the NotIn predicate on the "times" field.
+func TimesNotIn(vs ...int64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldTimes, vs...))
+}
+
+// TimesGT applies the GT predicate on the "times" field.
+func TimesGT(v int64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldTimes, v))
+}
+
+// TimesGTE applies the GTE predicate on the "times" field.
+func TimesGTE(v int64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldTimes, v))
+}
+
+// TimesLT applies the LT predicate on the "times" field.
+func TimesLT(v int64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldTimes, v))
+}
+
+// TimesLTE applies the LTE predicate on the "times" field.
+func TimesLTE(v int64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldTimes, v))
+}
+
+// TimesIsNil applies the IsNil predicate on the "times" field.
+func TimesIsNil() predicate.Product {
+	return predicate.Product(sql.FieldIsNull(FieldTimes))
+}
+
+// TimesNotNil applies the NotNil predicate on the "times" field.
+func TimesNotNil() predicate.Product {
+	return predicate.Product(sql.FieldNotNull(FieldTimes))
+}
+
+// IsLessonsEQ applies the EQ predicate on the "is_lessons" field.
+func IsLessonsEQ(v int64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldIsLessons, v))
+}
+
+// IsLessonsNEQ applies the NEQ predicate on the "is_lessons" field.
+func IsLessonsNEQ(v int64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldIsLessons, v))
+}
+
+// IsLessonsIn applies the In predicate on the "is_lessons" field.
+func IsLessonsIn(vs ...int64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldIsLessons, vs...))
+}
+
+// IsLessonsNotIn applies the NotIn predicate on the "is_lessons" field.
+func IsLessonsNotIn(vs ...int64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldIsLessons, vs...))
+}
+
+// IsLessonsGT applies the GT predicate on the "is_lessons" field.
+func IsLessonsGT(v int64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldIsLessons, v))
+}
+
+// IsLessonsGTE applies the GTE predicate on the "is_lessons" field.
+func IsLessonsGTE(v int64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldIsLessons, v))
+}
+
+// IsLessonsLT applies the LT predicate on the "is_lessons" field.
+func IsLessonsLT(v int64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldIsLessons, v))
+}
+
+// IsLessonsLTE applies the LTE predicate on the "is_lessons" field.
+func IsLessonsLTE(v int64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldIsLessons, v))
+}
+
+// IsLessonsIsNil applies the IsNil predicate on the "is_lessons" field.
+func IsLessonsIsNil() predicate.Product {
+	return predicate.Product(sql.FieldIsNull(FieldIsLessons))
+}
+
+// IsLessonsNotNil applies the NotNil predicate on the "is_lessons" field.
+func IsLessonsNotNil() predicate.Product {
+	return predicate.Product(sql.FieldNotNull(FieldIsLessons))
+}
+
 // SalesIsNil applies the IsNil predicate on the "sales" field.
 func SalesIsNil() predicate.Product {
 	return predicate.Product(sql.FieldIsNull(FieldSales))
@@ -1083,6 +1248,52 @@ func HasContracts() predicate.Product {
 func HasContractsWith(preds ...predicate.Contract) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := newContractsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProducts applies the HasEdge predicate on the "products" edge.
+func HasProducts() predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProductsTable, ProductsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProductsWith applies the HasEdge predicate on the "products" edge with a given conditions (other predicates).
+func HasProductsWith(preds ...predicate.Product) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		step := newProductsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLessons applies the HasEdge predicate on the "lessons" edge.
+func HasLessons() predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, LessonsTable, LessonsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLessonsWith applies the HasEdge predicate on the "lessons" edge with a given conditions (other predicates).
+func HasLessonsWith(preds ...predicate.Product) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		step := newLessonsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

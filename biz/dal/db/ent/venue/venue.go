@@ -182,11 +182,6 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
-// ByClassify orders the results by the classify field.
-func ByClassify(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldClassify, opts...).ToFunc()
-}
-
 // ByAddress orders the results by the address field.
 func ByAddress(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAddress, opts...).ToFunc()
