@@ -120,6 +120,28 @@ func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.Me
 	if req.Name != "" {
 		predicates = append(predicates, member2.NameEQ(req.Name))
 	}
+	
+	if req.Mobile != "" {
+		predicates = append(predicates, member2.MobileEQ(req.Mobile))
+	}
+
+	if req.Source > 0 {
+		predicates = append(predicates, member2.HasMemberProfileWith(memberprofile.SourceEQ(req.Source)))
+	}
+	if req.Intention > 0 {
+		predicates = append(predicates, member2.HasMemberProfileWith(memberprofile.IntentionEQ(req.Intention)))
+	}
+	if req.CreatedId > 0 {
+		predicates = append(predicates, member2.CreatedIDEQ(req.CreatedId))
+	}
+	if req.StartCreatedAt != "" && req.EndCreatedAt != "" {
+		startAt, _ := time.Parse(time.DateTime, req.StartCreatedAt)
+		endAt, _ := time.Parse(time.DateTime, req.EndCreatedAt)
+
+		predicates = append(predicates, member2.CreatedAtGTE(startAt))
+		predicates = append(predicates, member2.CreatedAtLTE(endAt))
+	}
+
 	predicates = append(predicates, member2.Delete(0))
 	predicates = append(predicates, member2.Condition(1))
 	lists, err := m.db.Member.Query().Where(predicates...).
