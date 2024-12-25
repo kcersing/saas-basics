@@ -103,6 +103,7 @@ func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 		SetMember(noe).
 		SetGrade(gender).
 		SetBirthday(birthday).
+		SetMobileAscription(req.MobileAscription).
 		SetSource(req.Source).
 		SetGrade(req.Grade).
 		SetIntention(req.Intention).

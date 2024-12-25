@@ -13,7 +13,7 @@ import (
 type CreateOrUpdateMemberReq struct {
 	ID               int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
 	Name             string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
-	MobileAscription string `thrift:"mobileAscription,3,optional" form:"mobileAscription" json:"mobileAscription" query:"mobileAscription"`
+	MobileAscription int64  `thrift:"mobileAscription,3,optional" form:"mobileAscription" json:"mobileAscription" query:"mobileAscription"`
 	Mobile           string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
 	Gender           string `thrift:"gender,5,optional" form:"gender" json:"gender" query:"gender"`
 	Birthday         string `thrift:"birthday,6,optional" form:"birthday" json:"birthday" query:"birthday"`
@@ -27,7 +27,7 @@ func NewCreateOrUpdateMemberReq() *CreateOrUpdateMemberReq {
 
 		ID:               0,
 		Name:             "",
-		MobileAscription: "",
+		MobileAscription: 0,
 		Mobile:           "",
 		Gender:           "未知",
 		Birthday:         "",
@@ -40,7 +40,7 @@ func NewCreateOrUpdateMemberReq() *CreateOrUpdateMemberReq {
 func (p *CreateOrUpdateMemberReq) InitDefault() {
 	p.ID = 0
 	p.Name = ""
-	p.MobileAscription = ""
+	p.MobileAscription = 0
 	p.Mobile = ""
 	p.Gender = "未知"
 	p.Birthday = ""
@@ -67,9 +67,9 @@ func (p *CreateOrUpdateMemberReq) GetName() (v string) {
 	return p.Name
 }
 
-var CreateOrUpdateMemberReq_MobileAscription_DEFAULT string = ""
+var CreateOrUpdateMemberReq_MobileAscription_DEFAULT int64 = 0
 
-func (p *CreateOrUpdateMemberReq) GetMobileAscription() (v string) {
+func (p *CreateOrUpdateMemberReq) GetMobileAscription() (v int64) {
 	if !p.IsSetMobileAscription() {
 		return CreateOrUpdateMemberReq_MobileAscription_DEFAULT
 	}
@@ -214,7 +214,7 @@ func (p *CreateOrUpdateMemberReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -322,8 +322,8 @@ func (p *CreateOrUpdateMemberReq) ReadField2(iprot thrift.TProtocol) error {
 }
 func (p *CreateOrUpdateMemberReq) ReadField3(iprot thrift.TProtocol) error {
 
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -498,10 +498,10 @@ WriteFieldEndError:
 
 func (p *CreateOrUpdateMemberReq) writeField3(oprot thrift.TProtocol) (err error) {
 	if p.IsSetMobileAscription() {
-		if err = oprot.WriteFieldBegin("mobileAscription", thrift.STRING, 3); err != nil {
+		if err = oprot.WriteFieldBegin("mobileAscription", thrift.I64, 3); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(p.MobileAscription); err != nil {
+		if err := oprot.WriteI64(p.MobileAscription); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

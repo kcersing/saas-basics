@@ -6,7 +6,7 @@ include "../base/base.thrift"
 struct CreateOrUpdateMemberReq {
     1:  optional i64 id=0 (api.raw = "id")
     2:  optional string name="" (api.raw = "name")
-    3: optional string	mobileAscription="" (api.raw = "mobileAscription")
+    3: optional i64	mobileAscription=0 (api.raw = "mobileAscription")
     4:  optional string mobile="" (api.raw = "mobile")
     5:  optional string gender="未知" (api.raw = "gender")
     6:  optional string birthday="" (api.raw = "birthday")
