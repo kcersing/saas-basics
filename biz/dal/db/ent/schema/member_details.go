@@ -35,8 +35,8 @@ func (MemberDetails) Fields() []ent.Field {
 
 		field.Time("class_last_time").Optional().Comment("最后一次上课时间"),
 
-		field.Int64("relation_uid").Default(0).Comment("关联员工").Optional(),
-		field.String("relation_uname").Comment("关联员工").Optional(),
+		field.Int64("relation_uid").Default(0).Comment("跟进人员工").Optional(),
+		field.String("relation_uname").Comment("跟进人员工").Optional(),
 
 		field.Int64("relation_mid").Default(0).Comment("关联会员").Optional(),
 		field.String("relation_mame").Comment("关联会员").Optional(),

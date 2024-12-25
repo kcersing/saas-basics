@@ -108,6 +108,11 @@ struct MemberListReq {
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3:  optional string name = "" (api.raw = "name")
     4:  optional string mobile = "" (api.raw = "mobile")
+    5:  optional i64 source = 0 (api.raw = "source")
+    6:  optional i64 intention = 0 (api.raw = "intention")
+    7:  optional i64 createdId = 0 (api.raw = "createdId")
+    8:  optional string startCreatedAt = "" (api.raw = "startCreatedAt")
+    9:  optional string endCreatedAt = "" (api.raw = "endCreatedAt")
 }
 
 struct MemberSearchReq {

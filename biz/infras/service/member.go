@@ -54,28 +54,6 @@ func NewMember(ctx context.Context, c *app.RequestContext) do.Member {
 	}
 }
 
-//func (m Member) ProductSearch(members []int64) (info *do.ProductInfo, err error) {
-//	//m.db.MemberProduct.Query().Where(memberproduct.MemberIDIn(members...)).All(m.ctx)
-//	m.db.Debug().MemberProduct.Query().
-//		Modify(func(s *sql.Selector) {
-//			s.GroupBy(memberproduct.FieldProductID)
-//			s.Having(
-//				sql.In(
-//					memberproduct.FieldMemberID,
-//					members,
-//				),
-//			)
-//		}).
-//		All(m.ctx)
-//	return
-//}
-//
-//func (m Member) PropertySearch(memberProducts []int64) (info *do.PropertyInfo, err error) {
-//	m.db.MemberProductProperty.Query().Where(memberproductproperty.MemberProductIDIn(memberProducts...)).All(m.ctx)
-//
-//	return
-//}
-
 func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 
 	birthday, _ := time.Parse(time.DateOnly, req.Birthday)

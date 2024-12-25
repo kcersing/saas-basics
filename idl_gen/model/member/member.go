@@ -3886,19 +3886,29 @@ func (p *MemberPrivacy) String() string {
 
 // Get user list request | 获取用户列表请求参数
 type MemberListReq struct {
-	Page     int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	PageSize int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
-	Name     string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	Mobile   string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Page           int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize       int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Name           string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
+	Mobile         string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Source         int64  `thrift:"source,5,optional" form:"source" json:"source" query:"source"`
+	Intention      int64  `thrift:"intention,6,optional" form:"intention" json:"intention" query:"intention"`
+	CreatedId      int64  `thrift:"createdId,7,optional" form:"createdId" json:"createdId" query:"createdId"`
+	StartCreatedAt string `thrift:"startCreatedAt,8,optional" form:"startCreatedAt" json:"startCreatedAt" query:"startCreatedAt"`
+	EndCreatedAt   string `thrift:"endCreatedAt,9,optional" form:"endCreatedAt" json:"endCreatedAt" query:"endCreatedAt"`
 }
 
 func NewMemberListReq() *MemberListReq {
 	return &MemberListReq{
 
-		Page:     1,
-		PageSize: 100,
-		Name:     "",
-		Mobile:   "",
+		Page:           1,
+		PageSize:       100,
+		Name:           "",
+		Mobile:         "",
+		Source:         0,
+		Intention:      0,
+		CreatedId:      0,
+		StartCreatedAt: "",
+		EndCreatedAt:   "",
 	}
 }
 
@@ -3907,6 +3917,11 @@ func (p *MemberListReq) InitDefault() {
 	p.PageSize = 100
 	p.Name = ""
 	p.Mobile = ""
+	p.Source = 0
+	p.Intention = 0
+	p.CreatedId = 0
+	p.StartCreatedAt = ""
+	p.EndCreatedAt = ""
 }
 
 var MemberListReq_Page_DEFAULT int64 = 1
@@ -3945,11 +3960,61 @@ func (p *MemberListReq) GetMobile() (v string) {
 	return p.Mobile
 }
 
+var MemberListReq_Source_DEFAULT int64 = 0
+
+func (p *MemberListReq) GetSource() (v int64) {
+	if !p.IsSetSource() {
+		return MemberListReq_Source_DEFAULT
+	}
+	return p.Source
+}
+
+var MemberListReq_Intention_DEFAULT int64 = 0
+
+func (p *MemberListReq) GetIntention() (v int64) {
+	if !p.IsSetIntention() {
+		return MemberListReq_Intention_DEFAULT
+	}
+	return p.Intention
+}
+
+var MemberListReq_CreatedId_DEFAULT int64 = 0
+
+func (p *MemberListReq) GetCreatedId() (v int64) {
+	if !p.IsSetCreatedId() {
+		return MemberListReq_CreatedId_DEFAULT
+	}
+	return p.CreatedId
+}
+
+var MemberListReq_StartCreatedAt_DEFAULT string = ""
+
+func (p *MemberListReq) GetStartCreatedAt() (v string) {
+	if !p.IsSetStartCreatedAt() {
+		return MemberListReq_StartCreatedAt_DEFAULT
+	}
+	return p.StartCreatedAt
+}
+
+var MemberListReq_EndCreatedAt_DEFAULT string = ""
+
+func (p *MemberListReq) GetEndCreatedAt() (v string) {
+	if !p.IsSetEndCreatedAt() {
+		return MemberListReq_EndCreatedAt_DEFAULT
+	}
+	return p.EndCreatedAt
+}
+
 var fieldIDToName_MemberListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
 	3: "name",
 	4: "mobile",
+	5: "source",
+	6: "intention",
+	7: "createdId",
+	8: "startCreatedAt",
+	9: "endCreatedAt",
 }
 
 func (p *MemberListReq) IsSetPage() bool {
@@ -3966,6 +4031,26 @@ func (p *MemberListReq) IsSetName() bool {
 
 func (p *MemberListReq) IsSetMobile() bool {
 	return p.Mobile != MemberListReq_Mobile_DEFAULT
+}
+
+func (p *MemberListReq) IsSetSource() bool {
+	return p.Source != MemberListReq_Source_DEFAULT
+}
+
+func (p *MemberListReq) IsSetIntention() bool {
+	return p.Intention != MemberListReq_Intention_DEFAULT
+}
+
+func (p *MemberListReq) IsSetCreatedId() bool {
+	return p.CreatedId != MemberListReq_CreatedId_DEFAULT
+}
+
+func (p *MemberListReq) IsSetStartCreatedAt() bool {
+	return p.StartCreatedAt != MemberListReq_StartCreatedAt_DEFAULT
+}
+
+func (p *MemberListReq) IsSetEndCreatedAt() bool {
+	return p.EndCreatedAt != MemberListReq_EndCreatedAt_DEFAULT
 }
 
 func (p *MemberListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -4014,6 +4099,46 @@ func (p *MemberListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField6(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 7:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField9(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -4092,6 +4217,61 @@ func (p *MemberListReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Mobile = _field
 	return nil
 }
+func (p *MemberListReq) ReadField5(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Source = _field
+	return nil
+}
+func (p *MemberListReq) ReadField6(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Intention = _field
+	return nil
+}
+func (p *MemberListReq) ReadField7(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CreatedId = _field
+	return nil
+}
+func (p *MemberListReq) ReadField8(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.StartCreatedAt = _field
+	return nil
+}
+func (p *MemberListReq) ReadField9(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.EndCreatedAt = _field
+	return nil
+}
 
 func (p *MemberListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -4113,6 +4293,26 @@ func (p *MemberListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
+			goto WriteFieldError
+		}
+		if err = p.writeField7(oprot); err != nil {
+			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
 			goto WriteFieldError
 		}
 	}
@@ -4207,6 +4407,101 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *MemberListReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSource() {
+		if err = oprot.WriteFieldBegin("source", thrift.I64, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Source); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *MemberListReq) writeField6(oprot thrift.TProtocol) (err error) {
+	if p.IsSetIntention() {
+		if err = oprot.WriteFieldBegin("intention", thrift.I64, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Intention); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+}
+
+func (p *MemberListReq) writeField7(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreatedId() {
+		if err = oprot.WriteFieldBegin("createdId", thrift.I64, 7); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.CreatedId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *MemberListReq) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetStartCreatedAt() {
+		if err = oprot.WriteFieldBegin("startCreatedAt", thrift.STRING, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.StartCreatedAt); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *MemberListReq) writeField9(oprot thrift.TProtocol) (err error) {
+	if p.IsSetEndCreatedAt() {
+		if err = oprot.WriteFieldBegin("endCreatedAt", thrift.STRING, 9); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.EndCreatedAt); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
 }
 
 func (p *MemberListReq) String() string {

@@ -4155,6 +4155,15 @@ const docTemplate = `{
         "member.MemberListReq": {
             "type": "object",
             "properties": {
+                "createdId": {
+                    "type": "integer"
+                },
+                "endCreatedAt": {
+                    "type": "string"
+                },
+                "intention": {
+                    "type": "integer"
+                },
                 "mobile": {
                     "type": "string"
                 },
@@ -4166,6 +4175,12 @@ const docTemplate = `{
                 },
                 "pageSize": {
                     "type": "integer"
+                },
+                "source": {
+                    "type": "integer"
+                },
+                "startCreatedAt": {
+                    "type": "string"
                 }
             }
         },
