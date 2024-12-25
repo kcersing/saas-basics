@@ -7,6 +7,7 @@ import (
 	member2 "saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/predicate"
+	user2 "saas/biz/dal/db/ent/user"
 	"saas/biz/dal/minio"
 	"saas/idl_gen/model/member"
 	"saas/pkg/enums"
@@ -155,7 +156,7 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 		age = int64(time.Now().Sub(p.Birthday).Hours() / 24 / 365)
 	}
 
-	var gradeName, intentionName, sourceName string
+	var gradeName, intentionName, sourceName, CreatedName string
 
 	if p.Grade > 0 {
 		gradeName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Grade)
@@ -165,6 +166,9 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 	}
 	if p.Source > 0 {
 		gradeName = NewDictionary(m.ctx, m.c).GetDictionaryDetailTitle(p.Source)
+	}
+	if v.CreatedID > 0 {
+		CreatedName = m.db.User.Query().Where(user2.IDEQ(v.CreatedID)).FirstX(m.ctx).Name
 	}
 
 	return &member.MemberInfo{
@@ -207,6 +211,8 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 			RelationUname:     d.RelationUname,
 			RelationMid:       d.RelationMid,
 			RelationMname:     d.RelationMame,
+			CreatedId:         v.CreatedID,
+			CreatedName:       CreatedName,
 		},
 	}
 

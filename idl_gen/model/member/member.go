@@ -2495,6 +2495,8 @@ type MemberDetails struct {
 	//关联会员
 	RelationMid   int64  `thrift:"relationMid,13,optional" form:"relationMid" json:"relationMid" query:"relationMid"`
 	RelationMname string `thrift:"relationMname,14,optional" form:"relationMname" json:"relationMname" query:"relationMname"`
+	CreatedId     int64  `thrift:"CreatedId,15,optional" form:"CreatedId" json:"CreatedId" query:"CreatedId"`
+	CreatedName   string `thrift:"CreatedName,16,optional" form:"CreatedName" json:"CreatedName" query:"CreatedName"`
 }
 
 func NewMemberDetails() *MemberDetails {
@@ -2513,6 +2515,8 @@ func NewMemberDetails() *MemberDetails {
 		RelationUname:     "",
 		RelationMid:       0,
 		RelationMname:     "",
+		CreatedId:         0,
+		CreatedName:       "",
 	}
 }
 
@@ -2530,6 +2534,8 @@ func (p *MemberDetails) InitDefault() {
 	p.RelationUname = ""
 	p.RelationMid = 0
 	p.RelationMname = ""
+	p.CreatedId = 0
+	p.CreatedName = ""
 }
 
 var MemberDetails_MoneySum_DEFAULT float64 = 0.0
@@ -2649,6 +2655,24 @@ func (p *MemberDetails) GetRelationMname() (v string) {
 	return p.RelationMname
 }
 
+var MemberDetails_CreatedId_DEFAULT int64 = 0
+
+func (p *MemberDetails) GetCreatedId() (v int64) {
+	if !p.IsSetCreatedId() {
+		return MemberDetails_CreatedId_DEFAULT
+	}
+	return p.CreatedId
+}
+
+var MemberDetails_CreatedName_DEFAULT string = ""
+
+func (p *MemberDetails) GetCreatedName() (v string) {
+	if !p.IsSetCreatedName() {
+		return MemberDetails_CreatedName_DEFAULT
+	}
+	return p.CreatedName
+}
+
 var fieldIDToName_MemberDetails = map[int16]string{
 	2:  "moneySum",
 	3:  "productId",
@@ -2663,6 +2687,8 @@ var fieldIDToName_MemberDetails = map[int16]string{
 	12: "relationUname",
 	13: "relationMid",
 	14: "relationMname",
+	15: "CreatedId",
+	16: "CreatedName",
 }
 
 func (p *MemberDetails) IsSetMoneySum() bool {
@@ -2715,6 +2741,14 @@ func (p *MemberDetails) IsSetRelationMid() bool {
 
 func (p *MemberDetails) IsSetRelationMname() bool {
 	return p.RelationMname != MemberDetails_RelationMname_DEFAULT
+}
+
+func (p *MemberDetails) IsSetCreatedId() bool {
+	return p.CreatedId != MemberDetails_CreatedId_DEFAULT
+}
+
+func (p *MemberDetails) IsSetCreatedName() bool {
+	return p.CreatedName != MemberDetails_CreatedName_DEFAULT
 }
 
 func (p *MemberDetails) Read(iprot thrift.TProtocol) (err error) {
@@ -2835,6 +2869,22 @@ func (p *MemberDetails) Read(iprot thrift.TProtocol) (err error) {
 		case 14:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField14(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 15:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField15(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 16:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField16(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3012,6 +3062,28 @@ func (p *MemberDetails) ReadField14(iprot thrift.TProtocol) error {
 	p.RelationMname = _field
 	return nil
 }
+func (p *MemberDetails) ReadField15(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CreatedId = _field
+	return nil
+}
+func (p *MemberDetails) ReadField16(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CreatedName = _field
+	return nil
+}
 
 func (p *MemberDetails) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -3069,6 +3141,14 @@ func (p *MemberDetails) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField14(oprot); err != nil {
 			fieldId = 14
+			goto WriteFieldError
+		}
+		if err = p.writeField15(oprot); err != nil {
+			fieldId = 15
+			goto WriteFieldError
+		}
+		if err = p.writeField16(oprot); err != nil {
+			fieldId = 16
 			goto WriteFieldError
 		}
 	}
@@ -3334,6 +3414,44 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 14 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 14 end error: ", p), err)
+}
+
+func (p *MemberDetails) writeField15(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreatedId() {
+		if err = oprot.WriteFieldBegin("CreatedId", thrift.I64, 15); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.CreatedId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 15 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 15 end error: ", p), err)
+}
+
+func (p *MemberDetails) writeField16(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreatedName() {
+		if err = oprot.WriteFieldBegin("CreatedName", thrift.STRING, 16); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.CreatedName); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 16 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 16 end error: ", p), err)
 }
 
 func (p *MemberDetails) String() string {

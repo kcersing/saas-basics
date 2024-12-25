@@ -77,6 +77,8 @@ struct MemberDetails {
      13:optional i64 relationMid=0   (api.raw = "relationMid")
      14:optional string relationMname="" (api.raw = "relationMname")
 
+     15:optional i64 CreatedId=0   (api.raw = "createdId")
+     16:optional string CreatedName="" (api.raw = "createdName")
 
 }
 
