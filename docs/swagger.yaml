@@ -587,7 +587,7 @@ definitions:
       mobile:
         type: string
       mobileAscription:
-        type: string
+        type: integer
       name:
         type: string
       source:

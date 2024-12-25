@@ -4122,7 +4122,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "mobileAscription": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
