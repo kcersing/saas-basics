@@ -3384,6 +3384,17 @@ const docTemplate = `{
                 }
             }
         },
+        "base.List": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "base.PageInfoReq": {
             "type": "object",
             "properties": {
@@ -4377,66 +4388,89 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "contractId": {
+                    "description": "*合同-数组",
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
                 "deadline": {
+                    "description": "*激活期限",
                     "type": "integer"
                 },
                 "description": {
+                    "description": "*商品详情",
                     "type": "string"
                 },
                 "duration": {
+                    "description": "*有效期",
                     "type": "integer"
                 },
                 "endSalesAt": {
+                    "description": "*销售结束时间",
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
+                "isLessons": {
+                    "description": "*团课预约 1支持2不支持",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "is_sales": {
+                    "description": "*销售方式 1会员端",
                     "type": "integer"
                 },
                 "length": {
+                    "description": "*课程课时",
                     "type": "integer"
                 },
                 "lessonsId": {
+                    "description": "*团课-数组",
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
                 "name": {
+                    "description": "*商品名称",
                     "type": "string"
                 },
                 "pic": {
+                    "description": "*商品图片",
                     "type": "string"
                 },
                 "sales": {
+                    "description": "*销售信息数组",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/base.Sales"
                     }
                 },
                 "signSalesAt": {
+                    "description": "*销售开始时间",
                     "type": "string"
                 },
                 "status": {
+                    "description": "*状态[1:正常,2:禁用]",
                     "type": "integer"
                 },
                 "stock": {
+                    "description": "*库存",
                     "type": "integer"
                 },
                 "tagId": {
+                    "description": "*标签-数组",
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
                 "type": {
+                    "description": "*类别",
                     "type": "string"
                 }
             }
@@ -4630,7 +4664,16 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "classify": {
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "classifyName": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base.List"
+                    }
                 },
                 "createdAt": {
                     "type": "string"

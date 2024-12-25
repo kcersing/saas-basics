@@ -32,22 +32,40 @@ struct ProductInfo {
 
 struct CreateOrUpdateProductReq {
     1: optional i64 id =0 (api.raw = "id")
+    /**商品名称*/
     2: optional string name ="" (api.raw = "name")
+    /**商品图片*/
     3: optional string pic=""  (api.raw = "pic")
+    /**商品详情*/
     4: optional string description ="" (api.raw = "description")
+    /**库存*/
     5: optional i64 stock =0 (api.raw = "stock")
+    /**状态[1:正常,2:禁用]*/
     6: optional i64 status=0  (api.raw = "status")
+    /**有效期*/
     7: optional i64 duration =0 (api.raw = "duration")
+    /**课程课时*/
     8: optional i64 length=0  (api.raw = "length")
+    /**类别*/
     9: optional string type ="" (api.raw = "type")
+     /**激活期限*/
     10: optional i64 deadline=0 (api.raw = "deadline")
+    /**销售信息数组*/
     11: optional list<base.Sales> sales = {} (api.raw = "sales")
+    /**销售方式 1会员端*/
     12: optional i64 is_sales =1(api.raw = "isSales")
+    /**销售开始时间*/
     13: optional string signSalesAt ="" (api.raw = "signSalesAt")
+    /**销售结束时间*/
     14: optional string endSalesAt ="" (api.raw = "endSalesAt")
+    /**标签-数组*/
     16: optional list<i64> tagId=0   (api.raw = "tagId")
+    /**合同-数组*/
     17: optional list<i64> contractId =0 (api.raw = "contractId")
+    /**团课-数组*/
     18: optional list<i64> lessonsId =0 (api.raw = "lessonsId")
+    /**团课预约 1支持2不支持*/
+    19: optional list<i64> isLessons =0 (api.raw = "isLessons")
 }
 
 struct ProductListReq {
