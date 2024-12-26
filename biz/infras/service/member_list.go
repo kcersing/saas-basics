@@ -1,8 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
+	"github.com/xuri/excelize/v2"
 	"saas/biz/dal/db/ent"
 	member2 "saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
@@ -12,6 +14,7 @@ import (
 	"saas/biz/dal/minio"
 	"saas/idl_gen/model/member"
 	"saas/pkg/enums"
+	"saas/pkg/utils"
 	"strconv"
 	"time"
 )
@@ -114,6 +117,70 @@ func (m Member) MemberFullList(req member.MemberListReq) (resp []*member.MemberI
 	total, _ = m.db.Member.Query().Where(predicates...).Count(m.ctx)
 	return
 }
+func (m Member) MemberFullListExport(req member.MemberListReq) (string, error) {
+
+	exportFilePath, domain := utils.ExportFilePath("线索导出")
+
+	resp, total, _ := m.MemberPotentialList(req)
+
+	if total == 0 {
+		return "", errors.New("暂无数据")
+	}
+
+	f := excelize.NewFile()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	cell, err := excelize.CoordinatesToCellName(1, 1)
+	if err != nil {
+		return "", err
+	}
+	tale := []interface{}{
+		"学员姓名",
+		"手机号",
+		"来源",
+		"成为学员时间",
+		"性别",
+		"出生日期",
+		"年纪",
+	}
+
+	err = f.SetSheetRow("Sheet1", cell, &tale)
+	if err != nil {
+		return "", err
+	}
+
+	for idx, row := range resp {
+		cell, err := excelize.CoordinatesToCellName(1, idx+2)
+		if err != nil {
+			return "", err
+		}
+		r := []interface{}{
+			row.Name,
+			row.Mobile,
+			row.Profile.SourceName,
+			row.Details.FirstAt,
+			row.Profile.Gender,
+			row.Profile.Birthday,
+			row.Profile.GradeName,
+		}
+
+		err = f.SetSheetRow("Sheet1", cell, &r)
+		if err != nil {
+			fmt.Println(err)
+			return "", err
+		}
+	}
+
+	//Save spreadsheet by the given path.
+	if err := f.SaveAs(exportFilePath); err != nil {
+		fmt.Println(err)
+	}
+	return domain, nil
+}
 
 func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error) {
 	var predicates []predicate.Member
@@ -166,6 +233,78 @@ func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.Me
 	total, _ = m.db.Member.Query().Where(predicates...).Count(m.ctx)
 	return
 }
+
+func (m Member) MemberPotentialListExport(req member.MemberListReq) (string, error) {
+
+	exportFilePath, domain := utils.ExportFilePath("线索导出")
+
+	resp, total, _ := m.MemberPotentialList(req)
+
+	if total == 0 {
+		return "", errors.New("暂无数据")
+	}
+
+	f := excelize.NewFile()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	cell, err := excelize.CoordinatesToCellName(1, 1)
+	if err != nil {
+		return "", err
+	}
+	tale := []interface{}{
+		"学生姓名",
+		"手机号",
+		"来源",
+		"意向",
+		"添加时间",
+		"添加人",
+		"跟进人",
+		"性别",
+		"出生日期",
+		"年纪",
+	}
+
+	err = f.SetSheetRow("Sheet1", cell, &tale)
+	if err != nil {
+		return "", err
+	}
+
+	for idx, row := range resp {
+		cell, err := excelize.CoordinatesToCellName(1, idx+2)
+		if err != nil {
+			return "", err
+		}
+		r := []interface{}{
+			row.Name,
+			row.Mobile,
+			row.Profile.SourceName,
+			row.Profile.IntentionName,
+			row.CreatedAt,
+			row.Details.CreatedName,
+			row.Details.RelationUname,
+			row.Profile.Gender,
+			row.Profile.Birthday,
+			row.Profile.GradeName,
+		}
+
+		err = f.SetSheetRow("Sheet1", cell, &r)
+		if err != nil {
+			fmt.Println(err)
+			return "", err
+		}
+	}
+
+	//Save spreadsheet by the given path.
+	if err := f.SaveAs(exportFilePath); err != nil {
+		fmt.Println(err)
+	}
+	return domain, nil
+}
+
 func (m Member) MemberInfo(id int64) (info *member.MemberInfo, err error) {
 
 	info = new(member.MemberInfo)
@@ -260,6 +399,7 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 			RelationMname:     d.RelationMame,
 			CreatedId:         v.CreatedID,
 			CreatedName:       createdName,
+			FirstAt:           d.FirstTime.Format(time.DateTime),
 		},
 	}
 

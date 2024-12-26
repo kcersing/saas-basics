@@ -54,31 +54,33 @@ struct MemberProfile{
 }
 
 struct MemberDetails {
-	 //消费总金额
+	 /**消费总金额*/
      2:optional double moneySum=0 (api.raw = "moneySum")
-     //首次的产品
+     /**首次的产品*/
      3:optional i64 productId =0  (api.raw = "productId")
      4:optional string productName =""(api.raw = "productName")
-     //首次消费场馆
+     /**首次消费场馆*/
      5:optional i64 productVenue=0 (api.raw = "productVenue")
      6:optional string productVenueName =""(api.raw = "productVenueName")
-     //进馆总次数
+     /**进馆总次数*/
      7:optional i64 entrySum=0 (api.raw = "entrySum")
-     //最后一次进馆时间
+     /**最后一次进馆时间*/
      8:optional string entryLastTime="" (api.raw = "entryLastTime")
-     //进馆最后期限时间
+     /**进馆最后期限时间*/
      9:optional string entryDeadlineTime =""(api.raw = "entryDeadlineTime")
-     //最后一次上课时间
+     /**最后一次上课时间*/
      10:optional string classLastTime="" (api.raw = "classLastTime")
-     //关联员工
+     /**关联员工*/
      11:optional i64 relationUid =0  (api.raw = "relationUid")
      12:optional string relationUname="" (api.raw = "relationUname")
-     //关联会员
+     /**关联会员*/
      13:optional i64 relationMid=0   (api.raw = "relationMid")
      14:optional string relationMname="" (api.raw = "relationMname")
-
-     15:optional i64 CreatedId=0   (api.raw = "createdId")
-     16:optional string CreatedName="" (api.raw = "createdName")
+     /**创建人*/
+     15:optional i64 createdId=0   (api.raw = "createdId")
+     16:optional string createdName="" (api.raw = "createdName")
+     /**成为会员时间*/
+     19:optional string firstAt ="" (api.raw = "firstAt")
 
 }
 

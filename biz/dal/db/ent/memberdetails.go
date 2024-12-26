@@ -55,6 +55,8 @@ type MemberDetails struct {
 	RelationMid int64 `json:"relation_mid,omitempty"`
 	// 关联会员
 	RelationMame string `json:"relation_mame,omitempty"`
+	// 成为会员时间
+	FirstTime time.Time `json:"first_time,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberDetailsQuery when eager-loading is set.
 	Edges        MemberDetailsEdges `json:"edges"`
@@ -94,7 +96,7 @@ func (*MemberDetails) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case memberdetails.FieldProductName, memberdetails.FieldProductVenueName, memberdetails.FieldRelationUname, memberdetails.FieldRelationMame:
 			values[i] = new(sql.NullString)
-		case memberdetails.FieldCreatedAt, memberdetails.FieldUpdatedAt, memberdetails.FieldEntryLastTime, memberdetails.FieldEntryDeadlineTime, memberdetails.FieldClassLastTime:
+		case memberdetails.FieldCreatedAt, memberdetails.FieldUpdatedAt, memberdetails.FieldEntryLastTime, memberdetails.FieldEntryDeadlineTime, memberdetails.FieldClassLastTime, memberdetails.FieldFirstTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -225,6 +227,12 @@ func (md *MemberDetails) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				md.RelationMame = value.String
 			}
+		case memberdetails.FieldFirstTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field first_time", values[i])
+			} else if value.Valid {
+				md.FirstTime = value.Time
+			}
 		default:
 			md.selectValues.Set(columns[i], values[i])
 		}
@@ -319,6 +327,9 @@ func (md *MemberDetails) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("relation_mame=")
 	builder.WriteString(md.RelationMame)
+	builder.WriteString(", ")
+	builder.WriteString("first_time=")
+	builder.WriteString(md.FirstTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

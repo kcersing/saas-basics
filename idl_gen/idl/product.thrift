@@ -30,7 +30,7 @@ struct ProductInfo {
     /**团课*/
     22: optional list<base.List> lessons = {} (api.raw = "lessons")
     /**团课预约 1支持2不支持*/
-    23: optional list<i64> isLessons =0 (api.raw = "isLessons")
+    23: optional i64 isLessons =0 (api.raw = "isLessons")
     /**次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包*/
     24: optional string subType ="" (api.raw = "subType")
     /**价格(单个/卡价格)*/
@@ -75,7 +75,7 @@ struct CreateOrUpdateProductReq {
     /**团课-数组*/
     18: optional list<i64> lessonsId =0 (api.raw = "lessonsId")
     /**团课预约 1支持2不支持*/
-    19: optional list<i64> isLessons =0 (api.raw = "isLessons")
+    19: optional i64 isLessons =0 (api.raw = "isLessons")
     /**次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包*/
     20: optional string subType ="" (api.raw = "subType")
     /**价格(单个/卡价格)*/

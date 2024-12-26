@@ -52,6 +52,11 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 		SetCreatedID(createdId).
 		AddTagIDs(req.TagId...).
 		AddContractIDs(req.ContractId...).
+		AddLessonIDs(req.LessonsId...).
+		SetIsLessons(req.IsLessons).
+		SetSubType(req.SubType).
+		SetPrice(req.Price).
+		SetTimes(req.Times).
 		Save(p.ctx)
 
 	if err != nil {
@@ -88,6 +93,11 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 		SetCreatedID(createdId).
 		AddTagIDs(req.TagId...).
 		AddContractIDs(req.ContractId...).
+		AddLessonIDs(req.LessonsId...).
+		SetIsLessons(req.IsLessons).
+		SetSubType(req.SubType).
+		SetPrice(req.Price).
+		SetTimes(req.Times).
 		Save(p.ctx)
 
 	if err != nil {
@@ -160,7 +170,7 @@ func (p Product) ProductList(req *product.ProductListReq) (resp []*product.Produ
 }
 
 func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
-	var tags []*base.List
+	var tags, contracts, lessons []*base.List
 	tagAll, _ := v.QueryTags().All(p.ctx)
 	if tagAll != nil {
 		for _, item := range tagAll {
@@ -170,9 +180,8 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 			}
 			tags = append(tags, tag)
 		}
-		return nil
 	}
-	var contracts []*base.List
+
 	contractsAll, _ := v.QueryContracts().All(p.ctx)
 	if contractsAll != nil {
 		for _, item := range contractsAll {
@@ -182,7 +191,17 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 			}
 			contracts = append(contracts, contract)
 		}
-		return nil
+	}
+
+	lessonsAll, _ := v.QueryLessons().All(p.ctx)
+	if lessonsAll != nil {
+		for _, item := range lessonsAll {
+			lesson := &base.List{
+				ID:   item.ID,
+				Name: item.Name,
+			}
+			lessons = append(lessons, lesson)
+		}
 	}
 
 	var created string
@@ -213,6 +232,11 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 		CreatedName: created,
 		Tags:        tags,
 		Contracts:   contracts,
+		Lessons:     lessons,
+		IsLessons:   v.IsLessons,
+		SubType:     v.SubType,
+		Price:       v.Price,
+		Times:       v.Times,
 	}
 }
 

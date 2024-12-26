@@ -417,6 +417,26 @@ func (mdu *MemberDetailsUpdate) ClearRelationMame() *MemberDetailsUpdate {
 	return mdu
 }
 
+// SetFirstTime sets the "first_time" field.
+func (mdu *MemberDetailsUpdate) SetFirstTime(t time.Time) *MemberDetailsUpdate {
+	mdu.mutation.SetFirstTime(t)
+	return mdu
+}
+
+// SetNillableFirstTime sets the "first_time" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableFirstTime(t *time.Time) *MemberDetailsUpdate {
+	if t != nil {
+		mdu.SetFirstTime(*t)
+	}
+	return mdu
+}
+
+// ClearFirstTime clears the value of the "first_time" field.
+func (mdu *MemberDetailsUpdate) ClearFirstTime() *MemberDetailsUpdate {
+	mdu.mutation.ClearFirstTime()
+	return mdu
+}
+
 // SetMember sets the "member" edge to the Member entity.
 func (mdu *MemberDetailsUpdate) SetMember(m *Member) *MemberDetailsUpdate {
 	return mdu.SetMemberID(m.ID)
@@ -600,6 +620,12 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mdu.mutation.RelationMameCleared() {
 		_spec.ClearField(memberdetails.FieldRelationMame, field.TypeString)
+	}
+	if value, ok := mdu.mutation.FirstTime(); ok {
+		_spec.SetField(memberdetails.FieldFirstTime, field.TypeTime, value)
+	}
+	if mdu.mutation.FirstTimeCleared() {
+		_spec.ClearField(memberdetails.FieldFirstTime, field.TypeTime)
 	}
 	if mdu.mutation.MemberCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1038,6 +1064,26 @@ func (mduo *MemberDetailsUpdateOne) ClearRelationMame() *MemberDetailsUpdateOne 
 	return mduo
 }
 
+// SetFirstTime sets the "first_time" field.
+func (mduo *MemberDetailsUpdateOne) SetFirstTime(t time.Time) *MemberDetailsUpdateOne {
+	mduo.mutation.SetFirstTime(t)
+	return mduo
+}
+
+// SetNillableFirstTime sets the "first_time" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableFirstTime(t *time.Time) *MemberDetailsUpdateOne {
+	if t != nil {
+		mduo.SetFirstTime(*t)
+	}
+	return mduo
+}
+
+// ClearFirstTime clears the value of the "first_time" field.
+func (mduo *MemberDetailsUpdateOne) ClearFirstTime() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearFirstTime()
+	return mduo
+}
+
 // SetMember sets the "member" edge to the Member entity.
 func (mduo *MemberDetailsUpdateOne) SetMember(m *Member) *MemberDetailsUpdateOne {
 	return mduo.SetMemberID(m.ID)
@@ -1251,6 +1297,12 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	}
 	if mduo.mutation.RelationMameCleared() {
 		_spec.ClearField(memberdetails.FieldRelationMame, field.TypeString)
+	}
+	if value, ok := mduo.mutation.FirstTime(); ok {
+		_spec.SetField(memberdetails.FieldFirstTime, field.TypeTime, value)
+	}
+	if mduo.mutation.FirstTimeCleared() {
+		_spec.ClearField(memberdetails.FieldFirstTime, field.TypeTime)
 	}
 	if mduo.mutation.MemberCleared() {
 		edge := &sqlgraph.EdgeSpec{

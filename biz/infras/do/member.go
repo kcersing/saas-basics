@@ -13,6 +13,9 @@ type Member interface {
 	MemberFullList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error)
 	MemberPotentialList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error)
 
+	MemberFullListExport(req member.MemberListReq) (string, error)
+	MemberPotentialListExport(req member.MemberListReq) (string, error)
+
 	ChangePassword(ID int64, oldPassword, newPassword string) error
 
 	UpdateMemberStatus(ID int64, status int64) error

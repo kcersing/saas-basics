@@ -145,6 +145,11 @@ func RelationMame(v string) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldEQ(FieldRelationMame, v))
 }
 
+// FirstTime applies equality check predicate on the "first_time" field. It's identical to FirstTimeEQ.
+func FirstTime(v time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldEQ(FieldFirstTime, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldEQ(FieldCreatedAt, v))
@@ -1123,6 +1128,56 @@ func RelationMameEqualFold(v string) predicate.MemberDetails {
 // RelationMameContainsFold applies the ContainsFold predicate on the "relation_mame" field.
 func RelationMameContainsFold(v string) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldContainsFold(FieldRelationMame, v))
+}
+
+// FirstTimeEQ applies the EQ predicate on the "first_time" field.
+func FirstTimeEQ(v time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldEQ(FieldFirstTime, v))
+}
+
+// FirstTimeNEQ applies the NEQ predicate on the "first_time" field.
+func FirstTimeNEQ(v time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldNEQ(FieldFirstTime, v))
+}
+
+// FirstTimeIn applies the In predicate on the "first_time" field.
+func FirstTimeIn(vs ...time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldIn(FieldFirstTime, vs...))
+}
+
+// FirstTimeNotIn applies the NotIn predicate on the "first_time" field.
+func FirstTimeNotIn(vs ...time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldNotIn(FieldFirstTime, vs...))
+}
+
+// FirstTimeGT applies the GT predicate on the "first_time" field.
+func FirstTimeGT(v time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldGT(FieldFirstTime, v))
+}
+
+// FirstTimeGTE applies the GTE predicate on the "first_time" field.
+func FirstTimeGTE(v time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldGTE(FieldFirstTime, v))
+}
+
+// FirstTimeLT applies the LT predicate on the "first_time" field.
+func FirstTimeLT(v time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldLT(FieldFirstTime, v))
+}
+
+// FirstTimeLTE applies the LTE predicate on the "first_time" field.
+func FirstTimeLTE(v time.Time) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldLTE(FieldFirstTime, v))
+}
+
+// FirstTimeIsNil applies the IsNil predicate on the "first_time" field.
+func FirstTimeIsNil() predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldIsNull(FieldFirstTime))
+}
+
+// FirstTimeNotNil applies the NotNil predicate on the "first_time" field.
+func FirstTimeNotNil() predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldNotNull(FieldFirstTime))
 }
 
 // HasMember applies the HasEdge predicate on the "member" edge.

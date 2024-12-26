@@ -40,6 +40,8 @@ func (MemberDetails) Fields() []ent.Field {
 
 		field.Int64("relation_mid").Default(0).Comment("关联会员").Optional(),
 		field.String("relation_mame").Comment("关联会员").Optional(),
+
+		field.Time("first_time").Optional().Comment("成为会员时间"),
 	}
 }
 

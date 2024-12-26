@@ -24078,6 +24078,7 @@ type MemberDetailsMutation struct {
 	relation_mid        *int64
 	addrelation_mid     *int64
 	relation_mame       *string
+	first_time          *time.Time
 	clearedFields       map[string]struct{}
 	member              *int64
 	clearedmember       bool
@@ -25240,6 +25241,55 @@ func (m *MemberDetailsMutation) ResetRelationMame() {
 	delete(m.clearedFields, memberdetails.FieldRelationMame)
 }
 
+// SetFirstTime sets the "first_time" field.
+func (m *MemberDetailsMutation) SetFirstTime(t time.Time) {
+	m.first_time = &t
+}
+
+// FirstTime returns the value of the "first_time" field in the mutation.
+func (m *MemberDetailsMutation) FirstTime() (r time.Time, exists bool) {
+	v := m.first_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFirstTime returns the old "first_time" field's value of the MemberDetails entity.
+// If the MemberDetails object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberDetailsMutation) OldFirstTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFirstTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFirstTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFirstTime: %w", err)
+	}
+	return oldValue.FirstTime, nil
+}
+
+// ClearFirstTime clears the value of the "first_time" field.
+func (m *MemberDetailsMutation) ClearFirstTime() {
+	m.first_time = nil
+	m.clearedFields[memberdetails.FieldFirstTime] = struct{}{}
+}
+
+// FirstTimeCleared returns if the "first_time" field was cleared in this mutation.
+func (m *MemberDetailsMutation) FirstTimeCleared() bool {
+	_, ok := m.clearedFields[memberdetails.FieldFirstTime]
+	return ok
+}
+
+// ResetFirstTime resets all changes to the "first_time" field.
+func (m *MemberDetailsMutation) ResetFirstTime() {
+	m.first_time = nil
+	delete(m.clearedFields, memberdetails.FieldFirstTime)
+}
+
 // ClearMember clears the "member" edge to the Member entity.
 func (m *MemberDetailsMutation) ClearMember() {
 	m.clearedmember = true
@@ -25301,7 +25351,7 @@ func (m *MemberDetailsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberDetailsMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.created_at != nil {
 		fields = append(fields, memberdetails.FieldCreatedAt)
 	}
@@ -25356,6 +25406,9 @@ func (m *MemberDetailsMutation) Fields() []string {
 	if m.relation_mame != nil {
 		fields = append(fields, memberdetails.FieldRelationMame)
 	}
+	if m.first_time != nil {
+		fields = append(fields, memberdetails.FieldFirstTime)
+	}
 	return fields
 }
 
@@ -25400,6 +25453,8 @@ func (m *MemberDetailsMutation) Field(name string) (ent.Value, bool) {
 		return m.RelationMid()
 	case memberdetails.FieldRelationMame:
 		return m.RelationMame()
+	case memberdetails.FieldFirstTime:
+		return m.FirstTime()
 	}
 	return nil, false
 }
@@ -25445,6 +25500,8 @@ func (m *MemberDetailsMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldRelationMid(ctx)
 	case memberdetails.FieldRelationMame:
 		return m.OldRelationMame(ctx)
+	case memberdetails.FieldFirstTime:
+		return m.OldFirstTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown MemberDetails field %s", name)
 }
@@ -25579,6 +25636,13 @@ func (m *MemberDetailsMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRelationMame(v)
+		return nil
+	case memberdetails.FieldFirstTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFirstTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown MemberDetails field %s", name)
@@ -25763,6 +25827,9 @@ func (m *MemberDetailsMutation) ClearedFields() []string {
 	if m.FieldCleared(memberdetails.FieldRelationMame) {
 		fields = append(fields, memberdetails.FieldRelationMame)
 	}
+	if m.FieldCleared(memberdetails.FieldFirstTime) {
+		fields = append(fields, memberdetails.FieldFirstTime)
+	}
 	return fields
 }
 
@@ -25831,6 +25898,9 @@ func (m *MemberDetailsMutation) ClearField(name string) error {
 	case memberdetails.FieldRelationMame:
 		m.ClearRelationMame()
 		return nil
+	case memberdetails.FieldFirstTime:
+		m.ClearFirstTime()
+		return nil
 	}
 	return fmt.Errorf("unknown MemberDetails nullable field %s", name)
 }
@@ -25892,6 +25962,9 @@ func (m *MemberDetailsMutation) ResetField(name string) error {
 		return nil
 	case memberdetails.FieldRelationMame:
 		m.ResetRelationMame()
+		return nil
+	case memberdetails.FieldFirstTime:
+		m.ResetFirstTime()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberDetails field %s", name)
@@ -31134,6 +31207,7 @@ type MenuMutation struct {
 	active_menu     *string
 	affix           *bool
 	no_cache        *bool
+	_type           *string
 	clearedFields   map[string]struct{}
 	roles           map[int64]struct{}
 	removedroles    map[int64]struct{}
@@ -32480,6 +32554,55 @@ func (m *MenuMutation) ResetNoCache() {
 	delete(m.clearedFields, menu.FieldNoCache)
 }
 
+// SetType sets the "type" field.
+func (m *MenuMutation) SetType(s string) {
+	m._type = &s
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *MenuMutation) GetType() (r string, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Menu entity.
+// If the Menu object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MenuMutation) OldType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *MenuMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[menu.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *MenuMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[menu.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *MenuMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, menu.FieldType)
+}
+
 // AddRoleIDs adds the "roles" edge to the Role entity by ids.
 func (m *MenuMutation) AddRoleIDs(ids ...int64) {
 	if m.roles == nil {
@@ -32703,7 +32826,7 @@ func (m *MenuMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MenuMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 23)
 	if m.created_at != nil {
 		fields = append(fields, menu.FieldCreatedAt)
 	}
@@ -32770,6 +32893,9 @@ func (m *MenuMutation) Fields() []string {
 	if m.no_cache != nil {
 		fields = append(fields, menu.FieldNoCache)
 	}
+	if m._type != nil {
+		fields = append(fields, menu.FieldType)
+	}
 	return fields
 }
 
@@ -32822,6 +32948,8 @@ func (m *MenuMutation) Field(name string) (ent.Value, bool) {
 		return m.Affix()
 	case menu.FieldNoCache:
 		return m.NoCache()
+	case menu.FieldType:
+		return m.GetType()
 	}
 	return nil, false
 }
@@ -32875,6 +33003,8 @@ func (m *MenuMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAffix(ctx)
 	case menu.FieldNoCache:
 		return m.OldNoCache(ctx)
+	case menu.FieldType:
+		return m.OldType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Menu field %s", name)
 }
@@ -33037,6 +33167,13 @@ func (m *MenuMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNoCache(v)
+		return nil
+	case menu.FieldType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Menu field %s", name)
@@ -33221,6 +33358,9 @@ func (m *MenuMutation) ClearedFields() []string {
 	if m.FieldCleared(menu.FieldNoCache) {
 		fields = append(fields, menu.FieldNoCache)
 	}
+	if m.FieldCleared(menu.FieldType) {
+		fields = append(fields, menu.FieldType)
+	}
 	return fields
 }
 
@@ -33301,6 +33441,9 @@ func (m *MenuMutation) ClearField(name string) error {
 	case menu.FieldNoCache:
 		m.ClearNoCache()
 		return nil
+	case menu.FieldType:
+		m.ClearType()
+		return nil
 	}
 	return fmt.Errorf("unknown Menu nullable field %s", name)
 }
@@ -33374,6 +33517,9 @@ func (m *MenuMutation) ResetField(name string) error {
 		return nil
 	case menu.FieldNoCache:
 		m.ResetNoCache()
+		return nil
+	case menu.FieldType:
+		m.ResetType()
 		return nil
 	}
 	return fmt.Errorf("unknown Menu field %s", name)

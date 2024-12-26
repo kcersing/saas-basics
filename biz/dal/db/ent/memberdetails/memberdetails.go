@@ -50,6 +50,8 @@ const (
 	FieldRelationMid = "relation_mid"
 	// FieldRelationMame holds the string denoting the relation_mame field in the database.
 	FieldRelationMame = "relation_mame"
+	// FieldFirstTime holds the string denoting the first_time field in the database.
+	FieldFirstTime = "first_time"
 	// EdgeMember holds the string denoting the member edge name in mutations.
 	EdgeMember = "member"
 	// Table holds the table name of the memberdetails in the database.
@@ -84,6 +86,7 @@ var Columns = []string{
 	FieldRelationUname,
 	FieldRelationMid,
 	FieldRelationMame,
+	FieldFirstTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -217,6 +220,11 @@ func ByRelationMid(opts ...sql.OrderTermOption) OrderOption {
 // ByRelationMame orders the results by the relation_mame field.
 func ByRelationMame(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelationMame, opts...).ToFunc()
+}
+
+// ByFirstTime orders the results by the first_time field.
+func ByFirstTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFirstTime, opts...).ToFunc()
 }
 
 // ByMemberField orders the results by member field.

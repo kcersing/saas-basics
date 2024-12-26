@@ -563,6 +563,7 @@ var (
 		{Name: "relation_uname", Type: field.TypeString, Nullable: true, Comment: "跟进人员工"},
 		{Name: "relation_mid", Type: field.TypeInt64, Nullable: true, Comment: "关联会员", Default: 0},
 		{Name: "relation_mame", Type: field.TypeString, Nullable: true, Comment: "关联会员"},
+		{Name: "first_time", Type: field.TypeTime, Nullable: true, Comment: "成为会员时间"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 	}
 	// MemberDetailsTable holds the schema information for the "member_details" table.
@@ -573,7 +574,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_details_member_member_details",
-				Columns:    []*schema.Column{MemberDetailsColumns[18]},
+				Columns:    []*schema.Column{MemberDetailsColumns[19]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -582,7 +583,7 @@ var (
 			{
 				Name:    "memberdetails_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberDetailsColumns[18]},
+				Columns: []*schema.Column{MemberDetailsColumns[19]},
 			},
 		},
 	}
@@ -743,6 +744,7 @@ var (
 		{Name: "active_menu", Type: field.TypeString, Nullable: true, Comment: "set the active menu | 激活菜单", Default: ""},
 		{Name: "affix", Type: field.TypeBool, Nullable: true, Comment: "affix tab | Tab 固定", Default: false},
 		{Name: "no_cache", Type: field.TypeBool, Nullable: true, Comment: "do not keep alive the tab | 取消页面缓存", Default: false},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "type | 类型 数据字典menu_type", Default: ""},
 		{Name: "parent_id", Type: field.TypeInt64, Nullable: true, Comment: "parent menu ID | 父菜单ID"},
 	}
 	// SysMenusTable holds the schema information for the "sys_menus" table.
@@ -753,7 +755,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_menus_sys_menus_children",
-				Columns:    []*schema.Column{SysMenusColumns[22]},
+				Columns:    []*schema.Column{SysMenusColumns[23]},
 				RefColumns: []*schema.Column{SysMenusColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

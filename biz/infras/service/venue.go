@@ -149,7 +149,6 @@ func (v Venue) List(req *venue.VenueListReq) (list []*venue.VenueInfo, total int
 	}
 
 	for _, ve := range venueList {
-
 		list = append(list, v.entVenueInfo(ve))
 	}
 

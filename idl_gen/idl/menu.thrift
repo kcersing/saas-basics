@@ -58,6 +58,7 @@ service MenuService {
 struct MenuListReq{
     1:  optional i64 page=1 (api.raw = "page")
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    19:optional string type="" (api.raw = "type")
 }
 // API信息
 struct ApiInfo {
@@ -111,6 +112,7 @@ struct CreateOrUpdateMenuReq {
        17:optional  bool affix=true (api.raw = "affix" )
        18:optional  bool noCache=true (api.raw = "noCache" )
 
+   19:optional string type="" (api.raw = "type")
 }
 
 //更新菜单额外参数
@@ -148,7 +150,7 @@ struct MenuInfo {
 	    15: string createdAt (api.raw = "createdAt")
         16: string updatedAt (api.raw = "updatedAt")
         17:  string title (api.raw = "title" )
-
+        19:optional string type="" (api.raw = "type")
 }
 
 // MenuParam is the menu parameter structure.data stored at the table `sys_menu_params`

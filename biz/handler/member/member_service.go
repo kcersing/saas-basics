@@ -232,9 +232,14 @@ func MemberFullListExport(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	export, err := service.NewMember(ctx, c).MemberFullListExport(req)
+	if err != nil {
+		utils.SendResponse(c, errno.DirtyData, nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, map[string]string{
+		"url": export,
+	}, 0, "")
 }
 
 // MemberPotentialListExport .
@@ -248,9 +253,14 @@ func MemberPotentialListExport(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	export, err := service.NewMember(ctx, c).MemberPotentialListExport(req)
+	if err != nil {
+		utils.SendResponse(c, errno.DirtyData, nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, map[string]string{
+		"url": export,
+	}, 0, "")
 }
 
 // DelMember .

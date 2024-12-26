@@ -272,6 +272,20 @@ func (mdc *MemberDetailsCreate) SetNillableRelationMame(s *string) *MemberDetail
 	return mdc
 }
 
+// SetFirstTime sets the "first_time" field.
+func (mdc *MemberDetailsCreate) SetFirstTime(t time.Time) *MemberDetailsCreate {
+	mdc.mutation.SetFirstTime(t)
+	return mdc
+}
+
+// SetNillableFirstTime sets the "first_time" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableFirstTime(t *time.Time) *MemberDetailsCreate {
+	if t != nil {
+		mdc.SetFirstTime(*t)
+	}
+	return mdc
+}
+
 // SetID sets the "id" field.
 func (mdc *MemberDetailsCreate) SetID(i int64) *MemberDetailsCreate {
 	mdc.mutation.SetID(i)
@@ -461,6 +475,10 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 	if value, ok := mdc.mutation.RelationMame(); ok {
 		_spec.SetField(memberdetails.FieldRelationMame, field.TypeString, value)
 		_node.RelationMame = value
+	}
+	if value, ok := mdc.mutation.FirstTime(); ok {
+		_spec.SetField(memberdetails.FieldFirstTime, field.TypeTime, value)
+		_node.FirstTime = value
 	}
 	if nodes := mdc.mutation.MemberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

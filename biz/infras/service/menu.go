@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
 	menu2 "saas/biz/dal/db/ent/menu"
+	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/infras/do"
 	"saas/config"
@@ -86,6 +87,7 @@ func (m Menu) Create(menuReq *menu.CreateOrUpdateMenuReq) error {
 		SetActiveMenu(menuReq.ActiveMenu).
 		SetAffix(menuReq.Affix).
 		SetNoCache(menuReq.NoCache).
+		SetType(menuReq.Type).
 		Exec(m.ctx)
 
 	if err != nil {
@@ -131,6 +133,7 @@ func (m Menu) Update(menuReq *menu.CreateOrUpdateMenuReq) error {
 		SetActiveMenu(menuReq.ActiveMenu).
 		SetAffix(menuReq.Affix).
 		SetNoCache(menuReq.NoCache).
+		SetType(menuReq.Type).
 		Exec(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "update menu failed")
@@ -186,6 +189,7 @@ func entMenuInfo(menuEnt ent.Menu) *menu.MenuInfo {
 		NoCache:    menuEnt.NoCache,
 		Affix:      menuEnt.Affix,
 	}
+	m.Type = menuEnt.Title
 	return m
 }
 
@@ -211,8 +215,14 @@ func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfo, err error) {
 
 func (m Menu) List(req *menu.MenuListReq) (list []*menu.MenuInfo, total int, err error) {
 	// query menu list
+	var predicates []predicate.Menu
+	if req.Type != "" {
+		predicates = append(predicates, menu2.Type(req.Type))
+	}
+	predicates = append(predicates, menu2.Delete(0))
+
 	menus, err := m.db.Menu.Query().
-		Where(menu2.Delete(0)).
+		Where(predicates...).
 		Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
@@ -232,8 +242,14 @@ func (m Menu) MenuTree(req *menu.MenuListReq) (list []*base.Tree, err error) {
 		}
 	}
 
+	var predicates []predicate.Menu
+	if req.Type != "" {
+		predicates = append(predicates, menu2.Type(req.Type))
+	}
+	predicates = append(predicates, menu2.Delete(0))
+
 	menus, err := m.db.Menu.Query().
-		Where(menu2.Delete(0)).
+		Where(predicates...).
 		Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
