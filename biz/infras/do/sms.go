@@ -10,5 +10,5 @@ type Sms interface {
 
 	SendList(req sms.SmsSendListReq) (resp []*sms.SmsSend, total int, err error)
 	Info(id int64) (resp *sms.SmsInfo, err error)
-	Buy(req sms.SmsBuyReq) (resp string, err error)
+	Buy(req sms.SmsBuyReq) (resp interface{}, err error)
 }

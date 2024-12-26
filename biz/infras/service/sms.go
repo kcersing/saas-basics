@@ -11,6 +11,8 @@ import (
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/venuesms"
 	"saas/biz/dal/db/ent/venuesmslog"
+	"saas/biz/infras/do"
+	"saas/idl_gen/model/payment"
 	"saas/idl_gen/model/sms"
 	"time"
 )
@@ -23,9 +25,34 @@ type Sms struct {
 	cache *ristretto.Cache
 }
 
-func (s Sms) Buy(req sms.SmsBuyReq) (resp string, err error) {
-	//TODO implement me
-	return
+func (s Sms) Buy(req sms.SmsBuyReq) (resp interface{}, err error) {
+	var fee float64
+	if req.Number == 1000 {
+		fee = 180
+	} else if req.Number == 5000 {
+		fee = 400
+	} else if req.Number == 10000 {
+		fee = 700
+	} else {
+		return nil, errors.New("短信条数异常")
+	}
+
+	order, err := NewOrder(s.ctx, s.c).CreateSmsOrder(do.CreateSmsOrderReq{
+		VenueId: req.VenueId,
+		Number:  req.Number,
+		Fee:     fee,
+	})
+	if err != nil {
+		return nil, err
+	}
+	pay, err := NewWXPayment(s.ctx, s.c).QRPay(payment.PayReq{
+		OrderSn: order.OrderSn,
+		Total:   fee,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return pay, nil
 }
 
 func (s Sms) Info(id int64) (resp *sms.SmsInfo, err error) {

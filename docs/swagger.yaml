@@ -858,6 +858,14 @@ definitions:
         description: 类型
         type: string
     type: object
+  sms.SmsBuyReq:
+    properties:
+      number:
+        description: '*数量'
+        type: integer
+      venueId:
+        type: integer
+    type: object
   sms.SmsSendListReq:
     properties:
       mobile:
@@ -2951,7 +2959,20 @@ paths:
       summary: 更新角色 Summary
   /service/sms/buy:
     post:
-      responses: {}
+      description: 购买短信 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/sms.SmsBuyReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 购买短信 Summary
   /service/sms/info:
     post:
       description: 场馆短信详情 Description

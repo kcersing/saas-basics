@@ -2964,7 +2964,27 @@ const docTemplate = `{
         },
         "/service/sms/buy": {
             "post": {
-                "responses": {}
+                "description": "购买短信 Description",
+                "summary": "购买短信 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sms.SmsBuyReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/sms/info": {
@@ -4609,6 +4629,18 @@ const docTemplate = `{
                 "type": {
                     "description": "类型",
                     "type": "string"
+                }
+            }
+        },
+        "sms.SmsBuyReq": {
+            "type": "object",
+            "properties": {
+                "number": {
+                    "description": "*数量",
+                    "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

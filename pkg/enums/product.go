@@ -8,12 +8,12 @@ const (
 	CoursePackage = "coursePackage"
 	Contest       = "contest"
 	Bootcamp      = "bootcamp"
-
-	CourseOne  = "courseOne"
-	CourseMore = "courseMore"
-	CardTerm   = "cardTerm"
-	CardSub    = "cardSub"
-	Lessons    = "lessons"
+	Sms           = "Sms"
+	CourseOne     = "courseOne"
+	CourseMore    = "courseMore"
+	CardTerm      = "cardTerm"
+	CardSub       = "cardSub"
+	Lessons       = "lessons"
 )
 
 // ReturnProductTypeValues 获取产品类型
@@ -40,6 +40,8 @@ func ReturnProductTypeValues(key string) (values string) {
 		values = "期限卡"
 	case CardSub:
 		values = "次卡"
+	case Sms:
+		values = "短信"
 
 	default:
 		values = "类型异常"

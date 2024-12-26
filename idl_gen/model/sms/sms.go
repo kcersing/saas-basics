@@ -1579,20 +1579,20 @@ func (p *SmsInfo) String() string {
 type SmsBuyReq struct {
 	VenueId int64 `thrift:"venueId,1,optional" form:"venueId" json:"venueId" query:"venueId"`
 	/**数量*/
-	Number float64 `thrift:"number,2,optional" form:"number" json:"number" query:"number"`
+	Number int64 `thrift:"number,2,optional" form:"number" json:"number" query:"number"`
 }
 
 func NewSmsBuyReq() *SmsBuyReq {
 	return &SmsBuyReq{
 
 		VenueId: 0,
-		Number:  0.0,
+		Number:  0,
 	}
 }
 
 func (p *SmsBuyReq) InitDefault() {
 	p.VenueId = 0
-	p.Number = 0.0
+	p.Number = 0
 }
 
 var SmsBuyReq_VenueId_DEFAULT int64 = 0
@@ -1604,9 +1604,9 @@ func (p *SmsBuyReq) GetVenueId() (v int64) {
 	return p.VenueId
 }
 
-var SmsBuyReq_Number_DEFAULT float64 = 0.0
+var SmsBuyReq_Number_DEFAULT int64 = 0
 
-func (p *SmsBuyReq) GetNumber() (v float64) {
+func (p *SmsBuyReq) GetNumber() (v int64) {
 	if !p.IsSetNumber() {
 		return SmsBuyReq_Number_DEFAULT
 	}
@@ -1654,7 +1654,7 @@ func (p *SmsBuyReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 2:
-			if fieldTypeId == thrift.DOUBLE {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1703,8 +1703,8 @@ func (p *SmsBuyReq) ReadField1(iprot thrift.TProtocol) error {
 }
 func (p *SmsBuyReq) ReadField2(iprot thrift.TProtocol) error {
 
-	var _field float64
-	if v, err := iprot.ReadDouble(); err != nil {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -1766,10 +1766,10 @@ WriteFieldEndError:
 
 func (p *SmsBuyReq) writeField2(oprot thrift.TProtocol) (err error) {
 	if p.IsSetNumber() {
-		if err = oprot.WriteFieldBegin("number", thrift.DOUBLE, 2); err != nil {
+		if err = oprot.WriteFieldBegin("number", thrift.I64, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteDouble(p.Number); err != nil {
+		if err := oprot.WriteI64(p.Number); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

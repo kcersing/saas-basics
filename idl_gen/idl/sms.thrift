@@ -40,7 +40,7 @@ struct SmsInfo{
 struct SmsBuyReq{
   1: optional i64 venueId=0  (api.raw = "venueId")
   /**数量*/
-  2: optional double number=0  (api.raw = "number")
+  2: optional i64 number=0  (api.raw = "number")
 }
 
 service SmsService {

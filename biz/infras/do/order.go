@@ -10,14 +10,19 @@ type Order interface {
 	Update(req *order.UpdateOrderReq) error
 	List(req *order.ListOrderReq) (resp []*order.OrderInfo, total int, err error)
 	UpdateStatus(ID int64, status int64) error
+	OrderListExport(req *order.ListOrderReq) (string, error)
 
 	CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *order.OrderInfo, err error)
-
-	OrderListExport(req *order.ListOrderReq) (string, error)
+	CreateSmsOrder(req CreateSmsOrderReq) (orderOne *order.OrderInfo, err error)
 }
 type CreateParticipantOrderReq struct {
 	Member *ent.Member
 	Device string
 	NodeId int64
 	Fee    float64
+}
+type CreateSmsOrderReq struct {
+	VenueId int64
+	Number  int64
+	Fee     float64
 }

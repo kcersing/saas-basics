@@ -67,6 +67,12 @@ func SmsSendList(ctx context.Context, c *app.RequestContext) {
 }
 
 // SmsBuy .
+//
+//	@Summary		购买短信 Summary
+//	@Description	购买短信 Description
+//	@Param			request	body		sms.SmsBuyReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/sms/buy [POST]
 func SmsBuy(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -82,8 +88,6 @@ func SmsBuy(ctx context.Context, c *app.RequestContext) {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-	utils.SendResponse(c, errno.Success, map[string]string{
-		"pic": resp,
-	}, 0, "")
+	utils.SendResponse(c, errno.Success, resp, 0, "")
 	return
 }
