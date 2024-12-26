@@ -1148,21 +1148,21 @@ func HasTokenWith(preds ...predicate.Token) predicate.User {
 	})
 }
 
-// HasTag applies the HasEdge predicate on the "tag" edge.
-func HasTag() predicate.User {
+// HasTags applies the HasEdge predicate on the "tags" edge.
+func HasTags() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, TagTable, TagPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, TagsTable, TagsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasTagWith applies the HasEdge predicate on the "tag" edge with a given conditions (other predicates).
-func HasTagWith(preds ...predicate.DictionaryDetail) predicate.User {
+// HasTagsWith applies the HasEdge predicate on the "tags" edge with a given conditions (other predicates).
+func HasTagsWith(preds ...predicate.DictionaryDetail) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		step := newTagStep()
+		step := newTagsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -49,7 +49,8 @@ func (Product) Mixin() []ent.Mixin {
 
 func (Product) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("tag", DictionaryDetail.Type),
+		edge.To("tags", DictionaryDetail.Type),
+
 		edge.To("contracts", Contract.Type),
 
 		edge.To("lessons", Product.Type).From("goods"),

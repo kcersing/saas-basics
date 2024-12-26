@@ -256,14 +256,14 @@ func (uc *UserCreate) SetToken(t *Token) *UserCreate {
 	return uc.SetTokenID(t.ID)
 }
 
-// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by IDs.
+// AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
 func (uc *UserCreate) AddTagIDs(ids ...int64) *UserCreate {
 	uc.mutation.AddTagIDs(ids...)
 	return uc
 }
 
-// AddTag adds the "tag" edges to the DictionaryDetail entity.
-func (uc *UserCreate) AddTag(d ...*DictionaryDetail) *UserCreate {
+// AddTags adds the "tags" edges to the DictionaryDetail entity.
+func (uc *UserCreate) AddTags(d ...*DictionaryDetail) *UserCreate {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -519,12 +519,12 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := uc.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := uc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.TagTable,
-			Columns: user.TagPrimaryKey,
+			Table:   user.TagsTable,
+			Columns: user.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),

@@ -58,6 +58,8 @@ const (
 	FieldAffix = "affix"
 	// FieldNoCache holds the string denoting the no_cache field in the database.
 	FieldNoCache = "no_cache"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// EdgeRoles holds the string denoting the roles edge name in mutations.
 	EdgeRoles = "roles"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -115,6 +117,7 @@ var Columns = []string{
 	FieldActiveMenu,
 	FieldAffix,
 	FieldNoCache,
+	FieldType,
 }
 
 var (
@@ -168,6 +171,8 @@ var (
 	DefaultAffix bool
 	// DefaultNoCache holds the default value on creation for the "no_cache" field.
 	DefaultNoCache bool
+	// DefaultType holds the default value on creation for the "type" field.
+	DefaultType string
 )
 
 // OrderOption defines the ordering options for the Menu queries.
@@ -286,6 +291,11 @@ func ByAffix(opts ...sql.OrderTermOption) OrderOption {
 // ByNoCache orders the results by the no_cache field.
 func ByNoCache(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNoCache, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByRolesCount orders the results by roles count.

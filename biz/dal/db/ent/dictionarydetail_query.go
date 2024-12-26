@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/dictionary"
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/predicate"
+	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
 
 	"entgo.io/ent/dialect/sql"
@@ -26,8 +27,7 @@ type DictionaryDetailQuery struct {
 	predicates     []predicate.DictionaryDetail
 	withDictionary *DictionaryQuery
 	withUsers      *UserQuery
-	withProducts   *UserQuery
-	withFKs        bool
+	withProducts   *ProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -109,8 +109,8 @@ func (ddq *DictionaryDetailQuery) QueryUsers() *UserQuery {
 }
 
 // QueryProducts chains the current query on the "products" edge.
-func (ddq *DictionaryDetailQuery) QueryProducts() *UserQuery {
-	query := (&UserClient{config: ddq.config}).Query()
+func (ddq *DictionaryDetailQuery) QueryProducts() *ProductQuery {
+	query := (&ProductClient{config: ddq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ddq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -121,7 +121,7 @@ func (ddq *DictionaryDetailQuery) QueryProducts() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.ProductsTable, dictionarydetail.ProductsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
@@ -355,8 +355,8 @@ func (ddq *DictionaryDetailQuery) WithUsers(opts ...func(*UserQuery)) *Dictionar
 
 // WithProducts tells the query-builder to eager-load the nodes that are connected to
 // the "products" edge. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DictionaryDetailQuery) WithProducts(opts ...func(*UserQuery)) *DictionaryDetailQuery {
-	query := (&UserClient{config: ddq.config}).Query()
+func (ddq *DictionaryDetailQuery) WithProducts(opts ...func(*ProductQuery)) *DictionaryDetailQuery {
+	query := (&ProductClient{config: ddq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -441,7 +441,6 @@ func (ddq *DictionaryDetailQuery) prepareQuery(ctx context.Context) error {
 func (ddq *DictionaryDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DictionaryDetail, error) {
 	var (
 		nodes       = []*DictionaryDetail{}
-		withFKs     = ddq.withFKs
 		_spec       = ddq.querySpec()
 		loadedTypes = [3]bool{
 			ddq.withDictionary != nil,
@@ -449,9 +448,6 @@ func (ddq *DictionaryDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			ddq.withProducts != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, dictionarydetail.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DictionaryDetail).scanValues(nil, columns)
 	}
@@ -485,8 +481,8 @@ func (ddq *DictionaryDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	}
 	if query := ddq.withProducts; query != nil {
 		if err := ddq.loadProducts(ctx, query, nodes,
-			func(n *DictionaryDetail) { n.Edges.Products = []*User{} },
-			func(n *DictionaryDetail, e *User) { n.Edges.Products = append(n.Edges.Products, e) }); err != nil {
+			func(n *DictionaryDetail) { n.Edges.Products = []*Product{} },
+			func(n *DictionaryDetail, e *Product) { n.Edges.Products = append(n.Edges.Products, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -583,7 +579,7 @@ func (ddq *DictionaryDetailQuery) loadUsers(ctx context.Context, query *UserQuer
 	}
 	return nil
 }
-func (ddq *DictionaryDetailQuery) loadProducts(ctx context.Context, query *UserQuery, nodes []*DictionaryDetail, init func(*DictionaryDetail), assign func(*DictionaryDetail, *User)) error {
+func (ddq *DictionaryDetailQuery) loadProducts(ctx context.Context, query *ProductQuery, nodes []*DictionaryDetail, init func(*DictionaryDetail), assign func(*DictionaryDetail, *Product)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int64]*DictionaryDetail)
 	nids := make(map[int64]map[*DictionaryDetail]struct{})
@@ -596,7 +592,7 @@ func (ddq *DictionaryDetailQuery) loadProducts(ctx context.Context, query *UserQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(dictionarydetail.ProductsTable)
-		s.Join(joinT).On(s.C(user.FieldID), joinT.C(dictionarydetail.ProductsPrimaryKey[0]))
+		s.Join(joinT).On(s.C(product.FieldID), joinT.C(dictionarydetail.ProductsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(dictionarydetail.ProductsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
 		s.Select(joinT.C(dictionarydetail.ProductsPrimaryKey[1]))
@@ -629,7 +625,7 @@ func (ddq *DictionaryDetailQuery) loadProducts(ctx context.Context, query *UserQ
 			}
 		})
 	})
-	neighbors, err := withInterceptors[[]*User](ctx, query, qr, query.inters)
+	neighbors, err := withInterceptors[[]*Product](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}

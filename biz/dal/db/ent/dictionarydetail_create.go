@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/dictionary"
 	"saas/biz/dal/db/ent/dictionarydetail"
+	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
 	"time"
 
@@ -150,17 +151,17 @@ func (ddc *DictionaryDetailCreate) AddUsers(u ...*User) *DictionaryDetailCreate 
 	return ddc.AddUserIDs(ids...)
 }
 
-// AddProductIDs adds the "products" edge to the User entity by IDs.
+// AddProductIDs adds the "products" edge to the Product entity by IDs.
 func (ddc *DictionaryDetailCreate) AddProductIDs(ids ...int64) *DictionaryDetailCreate {
 	ddc.mutation.AddProductIDs(ids...)
 	return ddc
 }
 
-// AddProducts adds the "products" edges to the User entity.
-func (ddc *DictionaryDetailCreate) AddProducts(u ...*User) *DictionaryDetailCreate {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+// AddProducts adds the "products" edges to the Product entity.
+func (ddc *DictionaryDetailCreate) AddProducts(p ...*Product) *DictionaryDetailCreate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
 	return ddc.AddProductIDs(ids...)
 }
@@ -338,7 +339,7 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 			Columns: dictionarydetail.ProductsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

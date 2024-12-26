@@ -34,9 +34,9 @@ service MenuService {
 
 
   //获取菜单列表
-  base.NilResponse MenuLists(1: base.PageInfoReq req) (api.post = "/service/menu/list")
+  base.NilResponse MenuLists(1: MenuListReq req) (api.post = "/service/menu/list")
 
-  base.NilResponse MenuTree(1: base.PageInfoReq req) (api.post = "/service/menu/tree")
+  base.NilResponse MenuTree(1: MenuListReq req) (api.post = "/service/menu/tree")
 
 
   // 获取用户基本信息
@@ -55,7 +55,11 @@ service MenuService {
 //  base.NilResponse MenuParamListByMenuID(1: base.IDReq req) (api.post = "/service/menu/param/list")
 
 }
-
+struct MenuListReq{
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional string type = "admin" (api.raw = "type")
+}
 // API信息
 struct ApiInfo {
     1:  i64 id (api.raw = "id")
@@ -88,27 +92,28 @@ struct Meta {
 
 // 创建或更新菜单信息参数
 struct CreateOrUpdateMenuReq {
-    1:  i64 id =0(api.raw = "id" )
-    2:  string name="" (api.raw = "name" api.vd = "len($) > 0 && len($) < 33>")
-    3:  i64 parentId=0 (api.raw = "parentId")
-    4:  i64 level=0 (api.raw = "level")
-    5:  string path="" (api.raw = "path")
-    6:  string redirect="" (api.raw = "redirect")
-    7:  string component="" (api.raw = "component")
-    8:  i64 menuType=0 (api.raw = "menuType")
-    9:  bool hidden=true (api.raw = "hidden")
-    10:  i64 sort=0 (api.raw = "sort")
-    12:  i64 status=1 (api.raw = "status")
-    13:  string url="" (api.raw = "url")
+    1:optional  i64 id =0(api.raw = "id" )
+    2:optional  string name="" (api.raw = "name" api.vd = "len($) > 0 && len($) < 33>")
+    3:optional  i64 parentId=0 (api.raw = "parentId")
+    4:optional  i64 level=0 (api.raw = "level")
+    5:optional  string path="" (api.raw = "path")
+    6:optional  string redirect="" (api.raw = "redirect")
+    7:optional  string component="" (api.raw = "component")
+    8:optional  i64 menuType=0 (api.raw = "menuType")
+    9:optional  bool hidden=true (api.raw = "hidden")
+    10:optional  i64 sort=0 (api.raw = "sort")
+    12:optional  i64 status=1 (api.raw = "status")
+    13:optional  string url="" (api.raw = "url")
 
     //meta
-       14:  string title="" (api.raw = "title" )
-       15:  string icon="" (api.raw = "icon" )
-       16:  string activeMenu="" (api.raw = "activeMenu" )
-       17:  bool affix=true (api.raw = "affix" )
-       18:  bool noCache=true (api.raw = "noCache" )
+       14:optional  string title="" (api.raw = "title" )
+       15:optional  string icon="" (api.raw = "icon" )
+       16:optional  string activeMenu="" (api.raw = "activeMenu" )
+       17:optional  bool affix=true (api.raw = "affix" )
+       18:optional  bool noCache=true (api.raw = "noCache" )
 
-
+    /**类型*/
+    255:optional string type="" (api.raw = "type")
 }
 
 //更新菜单额外参数
@@ -146,6 +151,7 @@ struct MenuInfo {
 	    15: string createdAt (api.raw = "createdAt")
         16: string updatedAt (api.raw = "updatedAt")
         17:  string title (api.raw = "title" )
+        18:  string type (api.raw = "type" )
 
 }
 

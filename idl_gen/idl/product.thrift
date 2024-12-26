@@ -19,14 +19,24 @@ struct ProductInfo {
     12: optional i64 is_sales=0 (api.raw = "isSales")
     13: optional string signSalesAt = "" (api.raw = "signSalesAt")
     14: optional string endSalesAt = "" (api.raw = "endSalesAt")
-    16: optional string createdAt = ""  (api.raw = "updatedAt")
+    16: optional string createdAt = ""  (api.raw = "createdAt")
     17: optional string updatedAt = "" (api.raw = "updatedAt")
+    /**标签*/
     18: optional list<base.List> tags = {}  (api.raw = "tags")
+    /**合同*/
     19: optional list<base.List> contracts = {} (api.raw = "contracts")
     20: optional i64 createdId = 0 (api.raw = "createdId")
     21: optional string createdName = "" (api.raw = "createdName")
     /**团课*/
     22: optional list<base.List> lessons = {} (api.raw = "lessons")
+    /**团课预约 1支持2不支持*/
+    23: optional list<i64> isLessons =0 (api.raw = "isLessons")
+    /**次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包*/
+    24: optional string subType ="" (api.raw = "subType")
+    /**价格(单个/卡价格)*/
+    25: optional double price = 0 (api.raw = "price")
+    /**次数(次卡)*/
+    26:optional i64 times = 0 (api.raw = "times")
 }
 
 

@@ -28,7 +28,7 @@ type UserQuery struct {
 	inters            []Interceptor
 	predicates        []predicate.User
 	withToken         *TokenQuery
-	withTag           *DictionaryDetailQuery
+	withTags          *DictionaryDetailQuery
 	withCreatedOrders *OrderQuery
 	withUserEntry     *EntryLogsQuery
 	withVenues        *VenueQuery
@@ -90,8 +90,8 @@ func (uq *UserQuery) QueryToken() *TokenQuery {
 	return query
 }
 
-// QueryTag chains the current query on the "tag" edge.
-func (uq *UserQuery) QueryTag() *DictionaryDetailQuery {
+// QueryTags chains the current query on the "tags" edge.
+func (uq *UserQuery) QueryTags() *DictionaryDetailQuery {
 	query := (&DictionaryDetailClient{config: uq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := uq.prepareQuery(ctx); err != nil {
@@ -104,7 +104,7 @@ func (uq *UserQuery) QueryTag() *DictionaryDetailQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, user.TagTable, user.TagPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.TagsTable, user.TagsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -371,7 +371,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		inters:            append([]Interceptor{}, uq.inters...),
 		predicates:        append([]predicate.User{}, uq.predicates...),
 		withToken:         uq.withToken.Clone(),
-		withTag:           uq.withTag.Clone(),
+		withTags:          uq.withTags.Clone(),
 		withCreatedOrders: uq.withCreatedOrders.Clone(),
 		withUserEntry:     uq.withUserEntry.Clone(),
 		withVenues:        uq.withVenues.Clone(),
@@ -392,14 +392,14 @@ func (uq *UserQuery) WithToken(opts ...func(*TokenQuery)) *UserQuery {
 	return uq
 }
 
-// WithTag tells the query-builder to eager-load the nodes that are connected to
-// the "tag" edge. The optional arguments are used to configure the query builder of the edge.
-func (uq *UserQuery) WithTag(opts ...func(*DictionaryDetailQuery)) *UserQuery {
+// WithTags tells the query-builder to eager-load the nodes that are connected to
+// the "tags" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithTags(opts ...func(*DictionaryDetailQuery)) *UserQuery {
 	query := (&DictionaryDetailClient{config: uq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	uq.withTag = query
+	uq.withTags = query
 	return uq
 }
 
@@ -516,7 +516,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		_spec       = uq.querySpec()
 		loadedTypes = [5]bool{
 			uq.withToken != nil,
-			uq.withTag != nil,
+			uq.withTags != nil,
 			uq.withCreatedOrders != nil,
 			uq.withUserEntry != nil,
 			uq.withVenues != nil,
@@ -546,10 +546,10 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
-	if query := uq.withTag; query != nil {
-		if err := uq.loadTag(ctx, query, nodes,
-			func(n *User) { n.Edges.Tag = []*DictionaryDetail{} },
-			func(n *User, e *DictionaryDetail) { n.Edges.Tag = append(n.Edges.Tag, e) }); err != nil {
+	if query := uq.withTags; query != nil {
+		if err := uq.loadTags(ctx, query, nodes,
+			func(n *User) { n.Edges.Tags = []*DictionaryDetail{} },
+			func(n *User, e *DictionaryDetail) { n.Edges.Tags = append(n.Edges.Tags, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -605,7 +605,7 @@ func (uq *UserQuery) loadToken(ctx context.Context, query *TokenQuery, nodes []*
 	}
 	return nil
 }
-func (uq *UserQuery) loadTag(ctx context.Context, query *DictionaryDetailQuery, nodes []*User, init func(*User), assign func(*User, *DictionaryDetail)) error {
+func (uq *UserQuery) loadTags(ctx context.Context, query *DictionaryDetailQuery, nodes []*User, init func(*User), assign func(*User, *DictionaryDetail)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int64]*User)
 	nids := make(map[int64]map[*User]struct{})
@@ -617,11 +617,11 @@ func (uq *UserQuery) loadTag(ctx context.Context, query *DictionaryDetailQuery, 
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(user.TagTable)
-		s.Join(joinT).On(s.C(dictionarydetail.FieldID), joinT.C(user.TagPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(user.TagPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(user.TagsTable)
+		s.Join(joinT).On(s.C(dictionarydetail.FieldID), joinT.C(user.TagsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(user.TagsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(user.TagPrimaryKey[0]))
+		s.Select(joinT.C(user.TagsPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -658,7 +658,7 @@ func (uq *UserQuery) loadTag(ctx context.Context, query *DictionaryDetailQuery, 
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "tag" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "tags" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)

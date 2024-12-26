@@ -499,14 +499,14 @@ func (pu *ProductUpdate) ClearDescription() *ProductUpdate {
 	return pu
 }
 
-// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by IDs.
+// AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
 func (pu *ProductUpdate) AddTagIDs(ids ...int64) *ProductUpdate {
 	pu.mutation.AddTagIDs(ids...)
 	return pu
 }
 
-// AddTag adds the "tag" edges to the DictionaryDetail entity.
-func (pu *ProductUpdate) AddTag(d ...*DictionaryDetail) *ProductUpdate {
+// AddTags adds the "tags" edges to the DictionaryDetail entity.
+func (pu *ProductUpdate) AddTags(d ...*DictionaryDetail) *ProductUpdate {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -564,20 +564,20 @@ func (pu *ProductUpdate) Mutation() *ProductMutation {
 	return pu.mutation
 }
 
-// ClearTag clears all "tag" edges to the DictionaryDetail entity.
-func (pu *ProductUpdate) ClearTag() *ProductUpdate {
-	pu.mutation.ClearTag()
+// ClearTags clears all "tags" edges to the DictionaryDetail entity.
+func (pu *ProductUpdate) ClearTags() *ProductUpdate {
+	pu.mutation.ClearTags()
 	return pu
 }
 
-// RemoveTagIDs removes the "tag" edge to DictionaryDetail entities by IDs.
+// RemoveTagIDs removes the "tags" edge to DictionaryDetail entities by IDs.
 func (pu *ProductUpdate) RemoveTagIDs(ids ...int64) *ProductUpdate {
 	pu.mutation.RemoveTagIDs(ids...)
 	return pu
 }
 
-// RemoveTag removes "tag" edges to DictionaryDetail entities.
-func (pu *ProductUpdate) RemoveTag(d ...*DictionaryDetail) *ProductUpdate {
+// RemoveTags removes "tags" edges to DictionaryDetail entities.
+func (pu *ProductUpdate) RemoveTags(d ...*DictionaryDetail) *ProductUpdate {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -854,12 +854,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.DescriptionCleared() {
 		_spec.ClearField(product.FieldDescription, field.TypeString)
 	}
-	if pu.mutation.TagCleared() {
+	if pu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.TagTable,
-			Columns: []string{product.TagColumn},
+			Table:   product.TagsTable,
+			Columns: product.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -867,12 +867,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedTagIDs(); len(nodes) > 0 && !pu.mutation.TagCleared() {
+	if nodes := pu.mutation.RemovedTagsIDs(); len(nodes) > 0 && !pu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.TagTable,
-			Columns: []string{product.TagColumn},
+			Table:   product.TagsTable,
+			Columns: product.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -883,12 +883,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.TagTable,
-			Columns: []string{product.TagColumn},
+			Table:   product.TagsTable,
+			Columns: product.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -1521,14 +1521,14 @@ func (puo *ProductUpdateOne) ClearDescription() *ProductUpdateOne {
 	return puo
 }
 
-// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by IDs.
+// AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
 func (puo *ProductUpdateOne) AddTagIDs(ids ...int64) *ProductUpdateOne {
 	puo.mutation.AddTagIDs(ids...)
 	return puo
 }
 
-// AddTag adds the "tag" edges to the DictionaryDetail entity.
-func (puo *ProductUpdateOne) AddTag(d ...*DictionaryDetail) *ProductUpdateOne {
+// AddTags adds the "tags" edges to the DictionaryDetail entity.
+func (puo *ProductUpdateOne) AddTags(d ...*DictionaryDetail) *ProductUpdateOne {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -1586,20 +1586,20 @@ func (puo *ProductUpdateOne) Mutation() *ProductMutation {
 	return puo.mutation
 }
 
-// ClearTag clears all "tag" edges to the DictionaryDetail entity.
-func (puo *ProductUpdateOne) ClearTag() *ProductUpdateOne {
-	puo.mutation.ClearTag()
+// ClearTags clears all "tags" edges to the DictionaryDetail entity.
+func (puo *ProductUpdateOne) ClearTags() *ProductUpdateOne {
+	puo.mutation.ClearTags()
 	return puo
 }
 
-// RemoveTagIDs removes the "tag" edge to DictionaryDetail entities by IDs.
+// RemoveTagIDs removes the "tags" edge to DictionaryDetail entities by IDs.
 func (puo *ProductUpdateOne) RemoveTagIDs(ids ...int64) *ProductUpdateOne {
 	puo.mutation.RemoveTagIDs(ids...)
 	return puo
 }
 
-// RemoveTag removes "tag" edges to DictionaryDetail entities.
-func (puo *ProductUpdateOne) RemoveTag(d ...*DictionaryDetail) *ProductUpdateOne {
+// RemoveTags removes "tags" edges to DictionaryDetail entities.
+func (puo *ProductUpdateOne) RemoveTags(d ...*DictionaryDetail) *ProductUpdateOne {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -1906,12 +1906,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	if puo.mutation.DescriptionCleared() {
 		_spec.ClearField(product.FieldDescription, field.TypeString)
 	}
-	if puo.mutation.TagCleared() {
+	if puo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.TagTable,
-			Columns: []string{product.TagColumn},
+			Table:   product.TagsTable,
+			Columns: product.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -1919,12 +1919,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedTagIDs(); len(nodes) > 0 && !puo.mutation.TagCleared() {
+	if nodes := puo.mutation.RemovedTagsIDs(); len(nodes) > 0 && !puo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.TagTable,
-			Columns: []string{product.TagColumn},
+			Table:   product.TagsTable,
+			Columns: product.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -1935,12 +1935,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.TagTable,
-			Columns: []string{product.TagColumn},
+			Table:   product.TagsTable,
+			Columns: product.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),

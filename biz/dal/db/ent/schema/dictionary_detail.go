@@ -35,8 +35,8 @@ func (DictionaryDetail) Edges() []ent.Edge {
 			Field("dictionary_id").
 			Ref("dictionary_details").
 			Unique(),
-		edge.From("users", User.Type).Ref("tag"),
-		edge.From("products", User.Type).Ref("tag"),
+		edge.From("users", User.Type).Ref("tags"),
+		edge.From("products", Product.Type).Ref("tags"),
 	}
 }
 

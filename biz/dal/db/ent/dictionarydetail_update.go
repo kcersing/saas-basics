@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/db/ent/dictionary"
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/predicate"
+	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
 	"time"
 
@@ -205,17 +206,17 @@ func (ddu *DictionaryDetailUpdate) AddUsers(u ...*User) *DictionaryDetailUpdate 
 	return ddu.AddUserIDs(ids...)
 }
 
-// AddProductIDs adds the "products" edge to the User entity by IDs.
+// AddProductIDs adds the "products" edge to the Product entity by IDs.
 func (ddu *DictionaryDetailUpdate) AddProductIDs(ids ...int64) *DictionaryDetailUpdate {
 	ddu.mutation.AddProductIDs(ids...)
 	return ddu
 }
 
-// AddProducts adds the "products" edges to the User entity.
-func (ddu *DictionaryDetailUpdate) AddProducts(u ...*User) *DictionaryDetailUpdate {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+// AddProducts adds the "products" edges to the Product entity.
+func (ddu *DictionaryDetailUpdate) AddProducts(p ...*Product) *DictionaryDetailUpdate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
 	return ddu.AddProductIDs(ids...)
 }
@@ -252,23 +253,23 @@ func (ddu *DictionaryDetailUpdate) RemoveUsers(u ...*User) *DictionaryDetailUpda
 	return ddu.RemoveUserIDs(ids...)
 }
 
-// ClearProducts clears all "products" edges to the User entity.
+// ClearProducts clears all "products" edges to the Product entity.
 func (ddu *DictionaryDetailUpdate) ClearProducts() *DictionaryDetailUpdate {
 	ddu.mutation.ClearProducts()
 	return ddu
 }
 
-// RemoveProductIDs removes the "products" edge to User entities by IDs.
+// RemoveProductIDs removes the "products" edge to Product entities by IDs.
 func (ddu *DictionaryDetailUpdate) RemoveProductIDs(ids ...int64) *DictionaryDetailUpdate {
 	ddu.mutation.RemoveProductIDs(ids...)
 	return ddu
 }
 
-// RemoveProducts removes "products" edges to User entities.
-func (ddu *DictionaryDetailUpdate) RemoveProducts(u ...*User) *DictionaryDetailUpdate {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+// RemoveProducts removes "products" edges to Product entities.
+func (ddu *DictionaryDetailUpdate) RemoveProducts(p ...*Product) *DictionaryDetailUpdate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
 	return ddu.RemoveProductIDs(ids...)
 }
@@ -445,7 +446,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: dictionarydetail.ProductsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -458,7 +459,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: dictionarydetail.ProductsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -474,7 +475,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: dictionarydetail.ProductsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -677,17 +678,17 @@ func (dduo *DictionaryDetailUpdateOne) AddUsers(u ...*User) *DictionaryDetailUpd
 	return dduo.AddUserIDs(ids...)
 }
 
-// AddProductIDs adds the "products" edge to the User entity by IDs.
+// AddProductIDs adds the "products" edge to the Product entity by IDs.
 func (dduo *DictionaryDetailUpdateOne) AddProductIDs(ids ...int64) *DictionaryDetailUpdateOne {
 	dduo.mutation.AddProductIDs(ids...)
 	return dduo
 }
 
-// AddProducts adds the "products" edges to the User entity.
-func (dduo *DictionaryDetailUpdateOne) AddProducts(u ...*User) *DictionaryDetailUpdateOne {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+// AddProducts adds the "products" edges to the Product entity.
+func (dduo *DictionaryDetailUpdateOne) AddProducts(p ...*Product) *DictionaryDetailUpdateOne {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
 	return dduo.AddProductIDs(ids...)
 }
@@ -724,23 +725,23 @@ func (dduo *DictionaryDetailUpdateOne) RemoveUsers(u ...*User) *DictionaryDetail
 	return dduo.RemoveUserIDs(ids...)
 }
 
-// ClearProducts clears all "products" edges to the User entity.
+// ClearProducts clears all "products" edges to the Product entity.
 func (dduo *DictionaryDetailUpdateOne) ClearProducts() *DictionaryDetailUpdateOne {
 	dduo.mutation.ClearProducts()
 	return dduo
 }
 
-// RemoveProductIDs removes the "products" edge to User entities by IDs.
+// RemoveProductIDs removes the "products" edge to Product entities by IDs.
 func (dduo *DictionaryDetailUpdateOne) RemoveProductIDs(ids ...int64) *DictionaryDetailUpdateOne {
 	dduo.mutation.RemoveProductIDs(ids...)
 	return dduo
 }
 
-// RemoveProducts removes "products" edges to User entities.
-func (dduo *DictionaryDetailUpdateOne) RemoveProducts(u ...*User) *DictionaryDetailUpdateOne {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+// RemoveProducts removes "products" edges to Product entities.
+func (dduo *DictionaryDetailUpdateOne) RemoveProducts(p ...*Product) *DictionaryDetailUpdateOne {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
 	return dduo.RemoveProductIDs(ids...)
 }
@@ -947,7 +948,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 			Columns: dictionarydetail.ProductsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -960,7 +961,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 			Columns: dictionarydetail.ProductsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -976,7 +977,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 			Columns: dictionarydetail.ProductsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

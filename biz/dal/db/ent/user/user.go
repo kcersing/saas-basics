@@ -50,8 +50,8 @@ const (
 	FieldDetail = "detail"
 	// EdgeToken holds the string denoting the token edge name in mutations.
 	EdgeToken = "token"
-	// EdgeTag holds the string denoting the tag edge name in mutations.
-	EdgeTag = "tag"
+	// EdgeTags holds the string denoting the tags edge name in mutations.
+	EdgeTags = "tags"
 	// EdgeCreatedOrders holds the string denoting the created_orders edge name in mutations.
 	EdgeCreatedOrders = "created_orders"
 	// EdgeUserEntry holds the string denoting the user_entry edge name in mutations.
@@ -67,11 +67,11 @@ const (
 	TokenInverseTable = "sys_tokens"
 	// TokenColumn is the table column denoting the token relation/edge.
 	TokenColumn = "user_token"
-	// TagTable is the table that holds the tag relation/edge. The primary key declared below.
-	TagTable = "user_tag"
-	// TagInverseTable is the table name for the DictionaryDetail entity.
+	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
+	TagsTable = "user_tags"
+	// TagsInverseTable is the table name for the DictionaryDetail entity.
 	// It exists in this package in order to avoid circular dependency with the "dictionarydetail" package.
-	TagInverseTable = "sys_dictionary_details"
+	TagsInverseTable = "sys_dictionary_details"
 	// CreatedOrdersTable is the table that holds the created_orders relation/edge.
 	CreatedOrdersTable = "order"
 	// CreatedOrdersInverseTable is the table name for the Order entity.
@@ -116,9 +116,9 @@ var Columns = []string{
 }
 
 var (
-	// TagPrimaryKey and TagColumn2 are the table columns denoting the
-	// primary key for the tag relation (M2M).
-	TagPrimaryKey = []string{"user_id", "dictionary_detail_id"}
+	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
+	// primary key for the tags relation (M2M).
+	TagsPrimaryKey = []string{"user_id", "dictionary_detail_id"}
 	// VenuesPrimaryKey and VenuesColumn2 are the table columns denoting the
 	// primary key for the venues relation (M2M).
 	VenuesPrimaryKey = []string{"user_id", "venue_id"}
@@ -257,17 +257,17 @@ func ByTokenField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByTagCount orders the results by tag count.
-func ByTagCount(opts ...sql.OrderTermOption) OrderOption {
+// ByTagsCount orders the results by tags count.
+func ByTagsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTagStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newTagsStep(), opts...)
 	}
 }
 
-// ByTag orders the results by tag terms.
-func ByTag(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByTags orders the results by tags terms.
+func ByTags(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTagStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newTagsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -319,11 +319,11 @@ func newTokenStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2O, false, TokenTable, TokenColumn),
 	)
 }
-func newTagStep() *sqlgraph.Step {
+func newTagsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TagInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, TagTable, TagPrimaryKey...),
+		sqlgraph.To(TagsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, TagsTable, TagsPrimaryKey...),
 	)
 }
 func newCreatedOrdersStep() *sqlgraph.Step {

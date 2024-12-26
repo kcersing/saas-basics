@@ -2163,13 +2163,13 @@ func (c *DictionaryDetailClient) QueryUsers(dd *DictionaryDetail) *UserQuery {
 }
 
 // QueryProducts queries the products edge of a DictionaryDetail.
-func (c *DictionaryDetailClient) QueryProducts(dd *DictionaryDetail) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
+func (c *DictionaryDetailClient) QueryProducts(dd *DictionaryDetail) *ProductQuery {
+	query := (&ProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := dd.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(dictionarydetail.Table, dictionarydetail.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.ProductsTable, dictionarydetail.ProductsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
@@ -5212,15 +5212,15 @@ func (c *ProductClient) GetX(ctx context.Context, id int64) *Product {
 	return obj
 }
 
-// QueryTag queries the tag edge of a Product.
-func (c *ProductClient) QueryTag(pr *Product) *DictionaryDetailQuery {
+// QueryTags queries the tags edge of a Product.
+func (c *ProductClient) QueryTags(pr *Product) *DictionaryDetailQuery {
 	query := (&DictionaryDetailClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(product.Table, product.FieldID, id),
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, product.TagTable, product.TagColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, product.TagsTable, product.TagsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
@@ -6319,15 +6319,15 @@ func (c *UserClient) QueryToken(u *User) *TokenQuery {
 	return query
 }
 
-// QueryTag queries the tag edge of a User.
-func (c *UserClient) QueryTag(u *User) *DictionaryDetailQuery {
+// QueryTags queries the tags edge of a User.
+func (c *UserClient) QueryTags(u *User) *DictionaryDetailQuery {
 	query := (&DictionaryDetailClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, user.TagTable, user.TagPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.TagsTable, user.TagsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil

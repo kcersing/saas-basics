@@ -48,15 +48,15 @@ const (
 	// DictionaryColumn is the table column denoting the dictionary relation/edge.
 	DictionaryColumn = "dictionary_id"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
-	UsersTable = "user_tag"
+	UsersTable = "user_tags"
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "sys_users"
 	// ProductsTable is the table that holds the products relation/edge. The primary key declared below.
-	ProductsTable = "user_tag"
-	// ProductsInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	ProductsInverseTable = "sys_users"
+	ProductsTable = "product_tags"
+	// ProductsInverseTable is the table name for the Product entity.
+	// It exists in this package in order to avoid circular dependency with the "product" package.
+	ProductsInverseTable = "product"
 )
 
 // Columns holds all SQL columns for dictionarydetail fields.
@@ -73,30 +73,19 @@ var Columns = []string{
 	FieldDictionaryID,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "sys_dictionary_details"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"product_tag",
-}
-
 var (
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
 	UsersPrimaryKey = []string{"user_id", "dictionary_detail_id"}
 	// ProductsPrimaryKey and ProductsColumn2 are the table columns denoting the
 	// primary key for the products relation (M2M).
-	ProductsPrimaryKey = []string{"user_id", "dictionary_detail_id"}
+	ProductsPrimaryKey = []string{"product_id", "dictionary_detail_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}

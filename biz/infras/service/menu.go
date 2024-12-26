@@ -86,6 +86,7 @@ func (m Menu) Create(menuReq *menu.CreateOrUpdateMenuReq) error {
 		SetActiveMenu(menuReq.ActiveMenu).
 		SetAffix(menuReq.Affix).
 		SetNoCache(menuReq.NoCache).
+		SetType(menuReq.Type).
 		Exec(m.ctx)
 
 	if err != nil {
@@ -131,6 +132,7 @@ func (m Menu) Update(menuReq *menu.CreateOrUpdateMenuReq) error {
 		SetActiveMenu(menuReq.ActiveMenu).
 		SetAffix(menuReq.Affix).
 		SetNoCache(menuReq.NoCache).
+		SetType(menuReq.Type).
 		Exec(m.ctx)
 	if err != nil {
 		return errors.Wrap(err, "update menu failed")
@@ -186,6 +188,7 @@ func entMenuInfo(menuEnt ent.Menu) *menu.MenuInfo {
 		NoCache:    menuEnt.NoCache,
 		Affix:      menuEnt.Affix,
 	}
+	m.Type = menuEnt.Title
 	return m
 }
 
@@ -209,10 +212,10 @@ func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfo, err error) {
 	return
 }
 
-func (m Menu) List(req *base.PageInfoReq) (list []*menu.MenuInfo, total int, err error) {
+func (m Menu) List(req *menu.MenuListReq) (list []*menu.MenuInfo, total int, err error) {
 	// query menu list
 	menus, err := m.db.Menu.Query().
-		Where(menu2.Delete(0)).
+		Where(menu2.Delete(0), menu2.Type(req.Type)).
 		Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)
@@ -223,7 +226,7 @@ func (m Menu) List(req *base.PageInfoReq) (list []*menu.MenuInfo, total int, err
 	total, _ = m.db.Menu.Query().Count(m.ctx)
 	return
 }
-func (m Menu) MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error) {
+func (m Menu) MenuTree(req *menu.MenuListReq) (list []*base.Tree, err error) {
 
 	inter, exist := m.cache.Get("MenuTree")
 	if exist {
@@ -233,7 +236,7 @@ func (m Menu) MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error) {
 	}
 
 	menus, err := m.db.Menu.Query().
-		Where(menu2.Delete(0)).
+		Where(menu2.Delete(0), menu2.Type(req.Type)).
 		Order(ent.Asc(menu2.FieldSort)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(m.ctx)

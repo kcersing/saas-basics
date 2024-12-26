@@ -70,8 +70,8 @@ type Product struct {
 
 // ProductEdges holds the relations/edges for other nodes in the graph.
 type ProductEdges struct {
-	// Tag holds the value of the tag edge.
-	Tag []*DictionaryDetail `json:"tag,omitempty"`
+	// Tags holds the value of the tags edge.
+	Tags []*DictionaryDetail `json:"tags,omitempty"`
 	// Contracts holds the value of the contracts edge.
 	Contracts []*Contract `json:"contracts,omitempty"`
 	// Goods holds the value of the goods edge.
@@ -83,13 +83,13 @@ type ProductEdges struct {
 	loadedTypes [4]bool
 }
 
-// TagOrErr returns the Tag value or an error if the edge
+// TagsOrErr returns the Tags value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProductEdges) TagOrErr() ([]*DictionaryDetail, error) {
+func (e ProductEdges) TagsOrErr() ([]*DictionaryDetail, error) {
 	if e.loadedTypes[0] {
-		return e.Tag, nil
+		return e.Tags, nil
 	}
-	return nil, &NotLoadedError{edge: "tag"}
+	return nil, &NotLoadedError{edge: "tags"}
 }
 
 // ContractsOrErr returns the Contracts value or an error if the edge
@@ -296,9 +296,9 @@ func (pr *Product) Value(name string) (ent.Value, error) {
 	return pr.selectValues.Get(name)
 }
 
-// QueryTag queries the "tag" edge of the Product entity.
-func (pr *Product) QueryTag() *DictionaryDetailQuery {
-	return NewProductClient(pr.config).QueryTag(pr)
+// QueryTags queries the "tags" edge of the Product entity.
+func (pr *Product) QueryTags() *DictionaryDetailQuery {
+	return NewProductClient(pr.config).QueryTags(pr)
 }
 
 // QueryContracts queries the "contracts" edge of the Product entity.

@@ -11,6 +11,8 @@ struct VenueListReq {
     1:  optional i64 page=1 (api.raw = "page")
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3:  optional string name="" (api.raw = "name")
+    4:  optional string type =""(api.raw = "type")
+    5:  optional list<i64> classify =0 (api.raw = "classify")
     11:  optional i64 status=0 (api.raw = "status")
 }
 struct VenueInfo {
@@ -55,20 +57,21 @@ struct VenuePlaceInfo {
 
 service VenueService {
 
-    // 添加
+    // 添加场地
     base.NilResponse CreateVenuePlace(1: VenuePlaceInfo req) (api.post = "/service/place/create")
-    // 编辑
+    // 编辑场地
     base.NilResponse UpdateVenuePlace(1: VenuePlaceInfo req) (api.post = "/service/place/update")
-    // 删除
+    // 删除场地
     base.NilResponse UpdateVenuePlaceStatus(1: base.StatusCodeReq req) (api.post = "/service/place/status")
-    // 列表
+    // 场地列表
     base.NilResponse VenuePlaceList(1: VenuePlaceListReq req) (api.post = "/service/place/list")
 
-    // 添加
+    // 添加场馆
     base.NilResponse CreateVenue(1: VenueInfo req) (api.post = "/service/venue/create")
-    // 编辑
+    // 编辑场馆
     base.NilResponse UpdateVenue(1: VenueInfo req) (api.post = "/service/venue/update")
+    // 编辑场馆状态
     base.NilResponse UpdateVenueStatus(1: base.StatusCodeReq req) (api.post = "/service/venue/status")
-    // 列表
+    // 场馆列表
     base.NilResponse VenueList(1: VenueListReq req) (api.post = "/service/venue/list")
 }

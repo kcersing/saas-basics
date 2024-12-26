@@ -16345,7 +16345,7 @@ func (m *DictionaryDetailMutation) ResetUsers() {
 	m.removedusers = nil
 }
 
-// AddProductIDs adds the "products" edge to the User entity by ids.
+// AddProductIDs adds the "products" edge to the Product entity by ids.
 func (m *DictionaryDetailMutation) AddProductIDs(ids ...int64) {
 	if m.products == nil {
 		m.products = make(map[int64]struct{})
@@ -16355,17 +16355,17 @@ func (m *DictionaryDetailMutation) AddProductIDs(ids ...int64) {
 	}
 }
 
-// ClearProducts clears the "products" edge to the User entity.
+// ClearProducts clears the "products" edge to the Product entity.
 func (m *DictionaryDetailMutation) ClearProducts() {
 	m.clearedproducts = true
 }
 
-// ProductsCleared reports if the "products" edge to the User entity was cleared.
+// ProductsCleared reports if the "products" edge to the Product entity was cleared.
 func (m *DictionaryDetailMutation) ProductsCleared() bool {
 	return m.clearedproducts
 }
 
-// RemoveProductIDs removes the "products" edge to the User entity by IDs.
+// RemoveProductIDs removes the "products" edge to the Product entity by IDs.
 func (m *DictionaryDetailMutation) RemoveProductIDs(ids ...int64) {
 	if m.removedproducts == nil {
 		m.removedproducts = make(map[int64]struct{})
@@ -16376,7 +16376,7 @@ func (m *DictionaryDetailMutation) RemoveProductIDs(ids ...int64) {
 	}
 }
 
-// RemovedProducts returns the removed IDs of the "products" edge to the User entity.
+// RemovedProducts returns the removed IDs of the "products" edge to the Product entity.
 func (m *DictionaryDetailMutation) RemovedProductsIDs() (ids []int64) {
 	for id := range m.removedproducts {
 		ids = append(ids, id)
@@ -31134,6 +31134,7 @@ type MenuMutation struct {
 	active_menu     *string
 	affix           *bool
 	no_cache        *bool
+	_type           *string
 	clearedFields   map[string]struct{}
 	roles           map[int64]struct{}
 	removedroles    map[int64]struct{}
@@ -32480,6 +32481,55 @@ func (m *MenuMutation) ResetNoCache() {
 	delete(m.clearedFields, menu.FieldNoCache)
 }
 
+// SetType sets the "type" field.
+func (m *MenuMutation) SetType(s string) {
+	m._type = &s
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *MenuMutation) GetType() (r string, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Menu entity.
+// If the Menu object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MenuMutation) OldType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *MenuMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[menu.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *MenuMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[menu.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *MenuMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, menu.FieldType)
+}
+
 // AddRoleIDs adds the "roles" edge to the Role entity by ids.
 func (m *MenuMutation) AddRoleIDs(ids ...int64) {
 	if m.roles == nil {
@@ -32703,7 +32753,7 @@ func (m *MenuMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MenuMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 23)
 	if m.created_at != nil {
 		fields = append(fields, menu.FieldCreatedAt)
 	}
@@ -32770,6 +32820,9 @@ func (m *MenuMutation) Fields() []string {
 	if m.no_cache != nil {
 		fields = append(fields, menu.FieldNoCache)
 	}
+	if m._type != nil {
+		fields = append(fields, menu.FieldType)
+	}
 	return fields
 }
 
@@ -32822,6 +32875,8 @@ func (m *MenuMutation) Field(name string) (ent.Value, bool) {
 		return m.Affix()
 	case menu.FieldNoCache:
 		return m.NoCache()
+	case menu.FieldType:
+		return m.GetType()
 	}
 	return nil, false
 }
@@ -32875,6 +32930,8 @@ func (m *MenuMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAffix(ctx)
 	case menu.FieldNoCache:
 		return m.OldNoCache(ctx)
+	case menu.FieldType:
+		return m.OldType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Menu field %s", name)
 }
@@ -33037,6 +33094,13 @@ func (m *MenuMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNoCache(v)
+		return nil
+	case menu.FieldType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Menu field %s", name)
@@ -33221,6 +33285,9 @@ func (m *MenuMutation) ClearedFields() []string {
 	if m.FieldCleared(menu.FieldNoCache) {
 		fields = append(fields, menu.FieldNoCache)
 	}
+	if m.FieldCleared(menu.FieldType) {
+		fields = append(fields, menu.FieldType)
+	}
 	return fields
 }
 
@@ -33301,6 +33368,9 @@ func (m *MenuMutation) ClearField(name string) error {
 	case menu.FieldNoCache:
 		m.ClearNoCache()
 		return nil
+	case menu.FieldType:
+		m.ClearType()
+		return nil
 	}
 	return fmt.Errorf("unknown Menu nullable field %s", name)
 }
@@ -33374,6 +33444,9 @@ func (m *MenuMutation) ResetField(name string) error {
 		return nil
 	case menu.FieldNoCache:
 		m.ResetNoCache()
+		return nil
+	case menu.FieldType:
+		m.ResetType()
 		return nil
 	}
 	return fmt.Errorf("unknown Menu field %s", name)
@@ -42409,9 +42482,9 @@ type ProductMutation struct {
 	pic              *string
 	description      *string
 	clearedFields    map[string]struct{}
-	tag              map[int64]struct{}
-	removedtag       map[int64]struct{}
-	clearedtag       bool
+	tags             map[int64]struct{}
+	removedtags      map[int64]struct{}
+	clearedtags      bool
 	contracts        map[int64]struct{}
 	removedcontracts map[int64]struct{}
 	clearedcontracts bool
@@ -43806,58 +43879,58 @@ func (m *ProductMutation) ResetDescription() {
 	delete(m.clearedFields, product.FieldDescription)
 }
 
-// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by ids.
+// AddTagIDs adds the "tags" edge to the DictionaryDetail entity by ids.
 func (m *ProductMutation) AddTagIDs(ids ...int64) {
-	if m.tag == nil {
-		m.tag = make(map[int64]struct{})
+	if m.tags == nil {
+		m.tags = make(map[int64]struct{})
 	}
 	for i := range ids {
-		m.tag[ids[i]] = struct{}{}
+		m.tags[ids[i]] = struct{}{}
 	}
 }
 
-// ClearTag clears the "tag" edge to the DictionaryDetail entity.
-func (m *ProductMutation) ClearTag() {
-	m.clearedtag = true
+// ClearTags clears the "tags" edge to the DictionaryDetail entity.
+func (m *ProductMutation) ClearTags() {
+	m.clearedtags = true
 }
 
-// TagCleared reports if the "tag" edge to the DictionaryDetail entity was cleared.
-func (m *ProductMutation) TagCleared() bool {
-	return m.clearedtag
+// TagsCleared reports if the "tags" edge to the DictionaryDetail entity was cleared.
+func (m *ProductMutation) TagsCleared() bool {
+	return m.clearedtags
 }
 
-// RemoveTagIDs removes the "tag" edge to the DictionaryDetail entity by IDs.
+// RemoveTagIDs removes the "tags" edge to the DictionaryDetail entity by IDs.
 func (m *ProductMutation) RemoveTagIDs(ids ...int64) {
-	if m.removedtag == nil {
-		m.removedtag = make(map[int64]struct{})
+	if m.removedtags == nil {
+		m.removedtags = make(map[int64]struct{})
 	}
 	for i := range ids {
-		delete(m.tag, ids[i])
-		m.removedtag[ids[i]] = struct{}{}
+		delete(m.tags, ids[i])
+		m.removedtags[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedTag returns the removed IDs of the "tag" edge to the DictionaryDetail entity.
-func (m *ProductMutation) RemovedTagIDs() (ids []int64) {
-	for id := range m.removedtag {
+// RemovedTags returns the removed IDs of the "tags" edge to the DictionaryDetail entity.
+func (m *ProductMutation) RemovedTagsIDs() (ids []int64) {
+	for id := range m.removedtags {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// TagIDs returns the "tag" edge IDs in the mutation.
-func (m *ProductMutation) TagIDs() (ids []int64) {
-	for id := range m.tag {
+// TagsIDs returns the "tags" edge IDs in the mutation.
+func (m *ProductMutation) TagsIDs() (ids []int64) {
+	for id := range m.tags {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetTag resets all changes to the "tag" edge.
-func (m *ProductMutation) ResetTag() {
-	m.tag = nil
-	m.clearedtag = false
-	m.removedtag = nil
+// ResetTags resets all changes to the "tags" edge.
+func (m *ProductMutation) ResetTags() {
+	m.tags = nil
+	m.clearedtags = false
+	m.removedtags = nil
 }
 
 // AddContractIDs adds the "contracts" edge to the Contract entity by ids.
@@ -44760,8 +44833,8 @@ func (m *ProductMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProductMutation) AddedEdges() []string {
 	edges := make([]string, 0, 4)
-	if m.tag != nil {
-		edges = append(edges, product.EdgeTag)
+	if m.tags != nil {
+		edges = append(edges, product.EdgeTags)
 	}
 	if m.contracts != nil {
 		edges = append(edges, product.EdgeContracts)
@@ -44779,9 +44852,9 @@ func (m *ProductMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ProductMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case product.EdgeTag:
-		ids := make([]ent.Value, 0, len(m.tag))
-		for id := range m.tag {
+	case product.EdgeTags:
+		ids := make([]ent.Value, 0, len(m.tags))
+		for id := range m.tags {
 			ids = append(ids, id)
 		}
 		return ids
@@ -44810,8 +44883,8 @@ func (m *ProductMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProductMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 4)
-	if m.removedtag != nil {
-		edges = append(edges, product.EdgeTag)
+	if m.removedtags != nil {
+		edges = append(edges, product.EdgeTags)
 	}
 	if m.removedcontracts != nil {
 		edges = append(edges, product.EdgeContracts)
@@ -44829,9 +44902,9 @@ func (m *ProductMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *ProductMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case product.EdgeTag:
-		ids := make([]ent.Value, 0, len(m.removedtag))
-		for id := range m.removedtag {
+	case product.EdgeTags:
+		ids := make([]ent.Value, 0, len(m.removedtags))
+		for id := range m.removedtags {
 			ids = append(ids, id)
 		}
 		return ids
@@ -44860,8 +44933,8 @@ func (m *ProductMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProductMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 4)
-	if m.clearedtag {
-		edges = append(edges, product.EdgeTag)
+	if m.clearedtags {
+		edges = append(edges, product.EdgeTags)
 	}
 	if m.clearedcontracts {
 		edges = append(edges, product.EdgeContracts)
@@ -44879,8 +44952,8 @@ func (m *ProductMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ProductMutation) EdgeCleared(name string) bool {
 	switch name {
-	case product.EdgeTag:
-		return m.clearedtag
+	case product.EdgeTags:
+		return m.clearedtags
 	case product.EdgeContracts:
 		return m.clearedcontracts
 	case product.EdgeGoods:
@@ -44903,8 +44976,8 @@ func (m *ProductMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ProductMutation) ResetEdge(name string) error {
 	switch name {
-	case product.EdgeTag:
-		m.ResetTag()
+	case product.EdgeTags:
+		m.ResetTags()
 		return nil
 	case product.EdgeContracts:
 		m.ResetContracts()
@@ -53709,9 +53782,9 @@ type UserMutation struct {
 	clearedFields         map[string]struct{}
 	token                 *int64
 	clearedtoken          bool
-	tag                   map[int64]struct{}
-	removedtag            map[int64]struct{}
-	clearedtag            bool
+	tags                  map[int64]struct{}
+	removedtags           map[int64]struct{}
+	clearedtags           bool
 	created_orders        map[int64]struct{}
 	removedcreated_orders map[int64]struct{}
 	clearedcreated_orders bool
@@ -54818,58 +54891,58 @@ func (m *UserMutation) ResetToken() {
 	m.clearedtoken = false
 }
 
-// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by ids.
+// AddTagIDs adds the "tags" edge to the DictionaryDetail entity by ids.
 func (m *UserMutation) AddTagIDs(ids ...int64) {
-	if m.tag == nil {
-		m.tag = make(map[int64]struct{})
+	if m.tags == nil {
+		m.tags = make(map[int64]struct{})
 	}
 	for i := range ids {
-		m.tag[ids[i]] = struct{}{}
+		m.tags[ids[i]] = struct{}{}
 	}
 }
 
-// ClearTag clears the "tag" edge to the DictionaryDetail entity.
-func (m *UserMutation) ClearTag() {
-	m.clearedtag = true
+// ClearTags clears the "tags" edge to the DictionaryDetail entity.
+func (m *UserMutation) ClearTags() {
+	m.clearedtags = true
 }
 
-// TagCleared reports if the "tag" edge to the DictionaryDetail entity was cleared.
-func (m *UserMutation) TagCleared() bool {
-	return m.clearedtag
+// TagsCleared reports if the "tags" edge to the DictionaryDetail entity was cleared.
+func (m *UserMutation) TagsCleared() bool {
+	return m.clearedtags
 }
 
-// RemoveTagIDs removes the "tag" edge to the DictionaryDetail entity by IDs.
+// RemoveTagIDs removes the "tags" edge to the DictionaryDetail entity by IDs.
 func (m *UserMutation) RemoveTagIDs(ids ...int64) {
-	if m.removedtag == nil {
-		m.removedtag = make(map[int64]struct{})
+	if m.removedtags == nil {
+		m.removedtags = make(map[int64]struct{})
 	}
 	for i := range ids {
-		delete(m.tag, ids[i])
-		m.removedtag[ids[i]] = struct{}{}
+		delete(m.tags, ids[i])
+		m.removedtags[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedTag returns the removed IDs of the "tag" edge to the DictionaryDetail entity.
-func (m *UserMutation) RemovedTagIDs() (ids []int64) {
-	for id := range m.removedtag {
+// RemovedTags returns the removed IDs of the "tags" edge to the DictionaryDetail entity.
+func (m *UserMutation) RemovedTagsIDs() (ids []int64) {
+	for id := range m.removedtags {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// TagIDs returns the "tag" edge IDs in the mutation.
-func (m *UserMutation) TagIDs() (ids []int64) {
-	for id := range m.tag {
+// TagsIDs returns the "tags" edge IDs in the mutation.
+func (m *UserMutation) TagsIDs() (ids []int64) {
+	for id := range m.tags {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetTag resets all changes to the "tag" edge.
-func (m *UserMutation) ResetTag() {
-	m.tag = nil
-	m.clearedtag = false
-	m.removedtag = nil
+// ResetTags resets all changes to the "tags" edge.
+func (m *UserMutation) ResetTags() {
+	m.tags = nil
+	m.clearedtags = false
+	m.removedtags = nil
 }
 
 // AddCreatedOrderIDs adds the "created_orders" edge to the Order entity by ids.
@@ -55623,8 +55696,8 @@ func (m *UserMutation) AddedEdges() []string {
 	if m.token != nil {
 		edges = append(edges, user.EdgeToken)
 	}
-	if m.tag != nil {
-		edges = append(edges, user.EdgeTag)
+	if m.tags != nil {
+		edges = append(edges, user.EdgeTags)
 	}
 	if m.created_orders != nil {
 		edges = append(edges, user.EdgeCreatedOrders)
@@ -55646,9 +55719,9 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 		if id := m.token; id != nil {
 			return []ent.Value{*id}
 		}
-	case user.EdgeTag:
-		ids := make([]ent.Value, 0, len(m.tag))
-		for id := range m.tag {
+	case user.EdgeTags:
+		ids := make([]ent.Value, 0, len(m.tags))
+		for id := range m.tags {
 			ids = append(ids, id)
 		}
 		return ids
@@ -55677,8 +55750,8 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 5)
-	if m.removedtag != nil {
-		edges = append(edges, user.EdgeTag)
+	if m.removedtags != nil {
+		edges = append(edges, user.EdgeTags)
 	}
 	if m.removedcreated_orders != nil {
 		edges = append(edges, user.EdgeCreatedOrders)
@@ -55696,9 +55769,9 @@ func (m *UserMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case user.EdgeTag:
-		ids := make([]ent.Value, 0, len(m.removedtag))
-		for id := range m.removedtag {
+	case user.EdgeTags:
+		ids := make([]ent.Value, 0, len(m.removedtags))
+		for id := range m.removedtags {
 			ids = append(ids, id)
 		}
 		return ids
@@ -55730,8 +55803,8 @@ func (m *UserMutation) ClearedEdges() []string {
 	if m.clearedtoken {
 		edges = append(edges, user.EdgeToken)
 	}
-	if m.clearedtag {
-		edges = append(edges, user.EdgeTag)
+	if m.clearedtags {
+		edges = append(edges, user.EdgeTags)
 	}
 	if m.clearedcreated_orders {
 		edges = append(edges, user.EdgeCreatedOrders)
@@ -55751,8 +55824,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 	switch name {
 	case user.EdgeToken:
 		return m.clearedtoken
-	case user.EdgeTag:
-		return m.clearedtag
+	case user.EdgeTags:
+		return m.clearedtags
 	case user.EdgeCreatedOrders:
 		return m.clearedcreated_orders
 	case user.EdgeUserEntry:
@@ -55781,8 +55854,8 @@ func (m *UserMutation) ResetEdge(name string) error {
 	case user.EdgeToken:
 		m.ResetToken()
 		return nil
-	case user.EdgeTag:
-		m.ResetTag()
+	case user.EdgeTags:
+		m.ResetTags()
 		return nil
 	case user.EdgeCreatedOrders:
 		m.ResetCreatedOrders()

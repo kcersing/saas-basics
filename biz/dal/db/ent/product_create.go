@@ -314,14 +314,14 @@ func (pc *ProductCreate) SetID(i int64) *ProductCreate {
 	return pc
 }
 
-// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by IDs.
+// AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
 func (pc *ProductCreate) AddTagIDs(ids ...int64) *ProductCreate {
 	pc.mutation.AddTagIDs(ids...)
 	return pc
 }
 
-// AddTag adds the "tag" edges to the DictionaryDetail entity.
-func (pc *ProductCreate) AddTag(d ...*DictionaryDetail) *ProductCreate {
+// AddTags adds the "tags" edges to the DictionaryDetail entity.
+func (pc *ProductCreate) AddTags(d ...*DictionaryDetail) *ProductCreate {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -601,12 +601,12 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if nodes := pc.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   product.TagTable,
-			Columns: []string{product.TagColumn},
+			Table:   product.TagsTable,
+			Columns: product.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),

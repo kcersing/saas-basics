@@ -94,43 +94,16 @@ func ApiTree(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// MenuLists .
-//
-//	@Summary		获取菜单列表 Summary
-//	@Description	获取菜单列表 Description
-//	@Param			request	body		menu.ApiPageReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//	@router			/service/menu/list [POST]
-func MenuLists(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.PageInfoReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	menuTree, total, err := service.NewMenu(ctx, c).List(&req)
-	hlog.Info(menuTree)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-
-	utils.SendResponse(c, errno.Success, menuTree, int64(total), "")
-	return
-}
-
 // MenuTree .
 //
 //	@Summary		获取菜单树 Summary
 //	@Description	获取菜单树 Description
-//	@Param			request	body		menu.ApiPageReq	true	"query params"
+//	@Param			request	body		menu.MenuListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //	@router			/service/menu/tree [POST]
 func MenuTree(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req base.PageInfoReq
+	var req menu.MenuListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -339,5 +312,33 @@ func MenuInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}
+
+// MenuLists .
+//
+//	@Summary		获取菜单列表 Summary
+//	@Description	获取菜单列表 Description
+//	@Param			request	body		menu.MenuListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/menu/list [POST]
+func MenuLists(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req menu.MenuListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	menuTree, total, err := service.NewMenu(ctx, c).List(&req)
+	hlog.Info(menuTree)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, menuTree, int64(total), "")
 	return
 }

@@ -396,14 +396,14 @@ func (uu *UserUpdate) SetToken(t *Token) *UserUpdate {
 	return uu.SetTokenID(t.ID)
 }
 
-// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by IDs.
+// AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
 func (uu *UserUpdate) AddTagIDs(ids ...int64) *UserUpdate {
 	uu.mutation.AddTagIDs(ids...)
 	return uu
 }
 
-// AddTag adds the "tag" edges to the DictionaryDetail entity.
-func (uu *UserUpdate) AddTag(d ...*DictionaryDetail) *UserUpdate {
+// AddTags adds the "tags" edges to the DictionaryDetail entity.
+func (uu *UserUpdate) AddTags(d ...*DictionaryDetail) *UserUpdate {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -467,20 +467,20 @@ func (uu *UserUpdate) ClearToken() *UserUpdate {
 	return uu
 }
 
-// ClearTag clears all "tag" edges to the DictionaryDetail entity.
-func (uu *UserUpdate) ClearTag() *UserUpdate {
-	uu.mutation.ClearTag()
+// ClearTags clears all "tags" edges to the DictionaryDetail entity.
+func (uu *UserUpdate) ClearTags() *UserUpdate {
+	uu.mutation.ClearTags()
 	return uu
 }
 
-// RemoveTagIDs removes the "tag" edge to DictionaryDetail entities by IDs.
+// RemoveTagIDs removes the "tags" edge to DictionaryDetail entities by IDs.
 func (uu *UserUpdate) RemoveTagIDs(ids ...int64) *UserUpdate {
 	uu.mutation.RemoveTagIDs(ids...)
 	return uu
 }
 
-// RemoveTag removes "tag" edges to DictionaryDetail entities.
-func (uu *UserUpdate) RemoveTag(d ...*DictionaryDetail) *UserUpdate {
+// RemoveTags removes "tags" edges to DictionaryDetail entities.
+func (uu *UserUpdate) RemoveTags(d ...*DictionaryDetail) *UserUpdate {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -736,12 +736,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uu.mutation.TagCleared() {
+	if uu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.TagTable,
-			Columns: user.TagPrimaryKey,
+			Table:   user.TagsTable,
+			Columns: user.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -749,12 +749,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.RemovedTagIDs(); len(nodes) > 0 && !uu.mutation.TagCleared() {
+	if nodes := uu.mutation.RemovedTagsIDs(); len(nodes) > 0 && !uu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.TagTable,
-			Columns: user.TagPrimaryKey,
+			Table:   user.TagsTable,
+			Columns: user.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -765,12 +765,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.TagTable,
-			Columns: user.TagPrimaryKey,
+			Table:   user.TagsTable,
+			Columns: user.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -1299,14 +1299,14 @@ func (uuo *UserUpdateOne) SetToken(t *Token) *UserUpdateOne {
 	return uuo.SetTokenID(t.ID)
 }
 
-// AddTagIDs adds the "tag" edge to the DictionaryDetail entity by IDs.
+// AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
 func (uuo *UserUpdateOne) AddTagIDs(ids ...int64) *UserUpdateOne {
 	uuo.mutation.AddTagIDs(ids...)
 	return uuo
 }
 
-// AddTag adds the "tag" edges to the DictionaryDetail entity.
-func (uuo *UserUpdateOne) AddTag(d ...*DictionaryDetail) *UserUpdateOne {
+// AddTags adds the "tags" edges to the DictionaryDetail entity.
+func (uuo *UserUpdateOne) AddTags(d ...*DictionaryDetail) *UserUpdateOne {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -1370,20 +1370,20 @@ func (uuo *UserUpdateOne) ClearToken() *UserUpdateOne {
 	return uuo
 }
 
-// ClearTag clears all "tag" edges to the DictionaryDetail entity.
-func (uuo *UserUpdateOne) ClearTag() *UserUpdateOne {
-	uuo.mutation.ClearTag()
+// ClearTags clears all "tags" edges to the DictionaryDetail entity.
+func (uuo *UserUpdateOne) ClearTags() *UserUpdateOne {
+	uuo.mutation.ClearTags()
 	return uuo
 }
 
-// RemoveTagIDs removes the "tag" edge to DictionaryDetail entities by IDs.
+// RemoveTagIDs removes the "tags" edge to DictionaryDetail entities by IDs.
 func (uuo *UserUpdateOne) RemoveTagIDs(ids ...int64) *UserUpdateOne {
 	uuo.mutation.RemoveTagIDs(ids...)
 	return uuo
 }
 
-// RemoveTag removes "tag" edges to DictionaryDetail entities.
-func (uuo *UserUpdateOne) RemoveTag(d ...*DictionaryDetail) *UserUpdateOne {
+// RemoveTags removes "tags" edges to DictionaryDetail entities.
+func (uuo *UserUpdateOne) RemoveTags(d ...*DictionaryDetail) *UserUpdateOne {
 	ids := make([]int64, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
@@ -1669,12 +1669,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uuo.mutation.TagCleared() {
+	if uuo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.TagTable,
-			Columns: user.TagPrimaryKey,
+			Table:   user.TagsTable,
+			Columns: user.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -1682,12 +1682,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.RemovedTagIDs(); len(nodes) > 0 && !uuo.mutation.TagCleared() {
+	if nodes := uuo.mutation.RemovedTagsIDs(); len(nodes) > 0 && !uuo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.TagTable,
-			Columns: user.TagPrimaryKey,
+			Table:   user.TagsTable,
+			Columns: user.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
@@ -1698,12 +1698,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.TagTable,
-			Columns: user.TagPrimaryKey,
+			Table:   user.TagsTable,
+			Columns: user.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),

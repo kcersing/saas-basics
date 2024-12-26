@@ -491,6 +491,26 @@ func (mu *MenuUpdate) ClearNoCache() *MenuUpdate {
 	return mu
 }
 
+// SetType sets the "type" field.
+func (mu *MenuUpdate) SetType(s string) *MenuUpdate {
+	mu.mutation.SetType(s)
+	return mu
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (mu *MenuUpdate) SetNillableType(s *string) *MenuUpdate {
+	if s != nil {
+		mu.SetType(*s)
+	}
+	return mu
+}
+
+// ClearType clears the value of the "type" field.
+func (mu *MenuUpdate) ClearType() *MenuUpdate {
+	mu.mutation.ClearType()
+	return mu
+}
+
 // AddRoleIDs adds the "roles" edge to the Role entity by IDs.
 func (mu *MenuUpdate) AddRoleIDs(ids ...int64) *MenuUpdate {
 	mu.mutation.AddRoleIDs(ids...)
@@ -803,6 +823,12 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.NoCacheCleared() {
 		_spec.ClearField(menu.FieldNoCache, field.TypeBool)
+	}
+	if value, ok := mu.mutation.GetType(); ok {
+		_spec.SetField(menu.FieldType, field.TypeString, value)
+	}
+	if mu.mutation.TypeCleared() {
+		_spec.ClearField(menu.FieldType, field.TypeString)
 	}
 	if mu.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1449,6 +1475,26 @@ func (muo *MenuUpdateOne) ClearNoCache() *MenuUpdateOne {
 	return muo
 }
 
+// SetType sets the "type" field.
+func (muo *MenuUpdateOne) SetType(s string) *MenuUpdateOne {
+	muo.mutation.SetType(s)
+	return muo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (muo *MenuUpdateOne) SetNillableType(s *string) *MenuUpdateOne {
+	if s != nil {
+		muo.SetType(*s)
+	}
+	return muo
+}
+
+// ClearType clears the value of the "type" field.
+func (muo *MenuUpdateOne) ClearType() *MenuUpdateOne {
+	muo.mutation.ClearType()
+	return muo
+}
+
 // AddRoleIDs adds the "roles" edge to the Role entity by IDs.
 func (muo *MenuUpdateOne) AddRoleIDs(ids ...int64) *MenuUpdateOne {
 	muo.mutation.AddRoleIDs(ids...)
@@ -1791,6 +1837,12 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 	}
 	if muo.mutation.NoCacheCleared() {
 		_spec.ClearField(menu.FieldNoCache, field.TypeBool)
+	}
+	if value, ok := muo.mutation.GetType(); ok {
+		_spec.SetField(menu.FieldType, field.TypeString, value)
+	}
+	if muo.mutation.TypeCleared() {
+		_spec.ClearField(menu.FieldType, field.TypeString)
 	}
 	if muo.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{

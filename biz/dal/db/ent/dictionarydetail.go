@@ -40,7 +40,6 @@ type DictionaryDetail struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DictionaryDetailQuery when eager-loading is set.
 	Edges        DictionaryDetailEdges `json:"edges"`
-	product_tag  *int64
 	selectValues sql.SelectValues
 }
 
@@ -51,7 +50,7 @@ type DictionaryDetailEdges struct {
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
 	// Products holds the value of the products edge.
-	Products []*User `json:"products,omitempty"`
+	Products []*Product `json:"products,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [3]bool
@@ -81,7 +80,7 @@ func (e DictionaryDetailEdges) UsersOrErr() ([]*User, error) {
 
 // ProductsOrErr returns the Products value or an error if the edge
 // was not loaded in eager-loading.
-func (e DictionaryDetailEdges) ProductsOrErr() ([]*User, error) {
+func (e DictionaryDetailEdges) ProductsOrErr() ([]*Product, error) {
 	if e.loadedTypes[2] {
 		return e.Products, nil
 	}
@@ -99,8 +98,6 @@ func (*DictionaryDetail) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case dictionarydetail.FieldCreatedAt, dictionarydetail.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case dictionarydetail.ForeignKeys[0]: // product_tag
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -176,13 +173,6 @@ func (dd *DictionaryDetail) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				dd.DictionaryID = value.Int64
 			}
-		case dictionarydetail.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field product_tag", value)
-			} else if value.Valid {
-				dd.product_tag = new(int64)
-				*dd.product_tag = int64(value.Int64)
-			}
 		default:
 			dd.selectValues.Set(columns[i], values[i])
 		}
@@ -207,7 +197,7 @@ func (dd *DictionaryDetail) QueryUsers() *UserQuery {
 }
 
 // QueryProducts queries the "products" edge of the DictionaryDetail entity.
-func (dd *DictionaryDetail) QueryProducts() *UserQuery {
+func (dd *DictionaryDetail) QueryProducts() *ProductQuery {
 	return NewDictionaryDetailClient(dd.config).QueryProducts(dd)
 }
 

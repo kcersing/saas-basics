@@ -329,6 +329,20 @@ func (mc *MenuCreate) SetNillableNoCache(b *bool) *MenuCreate {
 	return mc
 }
 
+// SetType sets the "type" field.
+func (mc *MenuCreate) SetType(s string) *MenuCreate {
+	mc.mutation.SetType(s)
+	return mc
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (mc *MenuCreate) SetNillableType(s *string) *MenuCreate {
+	if s != nil {
+		mc.SetType(*s)
+	}
+	return mc
+}
+
 // SetID sets the "id" field.
 func (mc *MenuCreate) SetID(i int64) *MenuCreate {
 	mc.mutation.SetID(i)
@@ -484,6 +498,10 @@ func (mc *MenuCreate) defaults() {
 		v := menu.DefaultNoCache
 		mc.mutation.SetNoCache(v)
 	}
+	if _, ok := mc.mutation.GetType(); !ok {
+		v := menu.DefaultType
+		mc.mutation.SetType(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -603,6 +621,10 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.NoCache(); ok {
 		_spec.SetField(menu.FieldNoCache, field.TypeBool, value)
 		_node.NoCache = value
+	}
+	if value, ok := mc.mutation.GetType(); ok {
+		_spec.SetField(menu.FieldType, field.TypeString, value)
+		_node.Type = value
 	}
 	if nodes := mc.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

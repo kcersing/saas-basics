@@ -330,7 +330,6 @@ var (
 		{Name: "key", Type: field.TypeString, Comment: "key | 键"},
 		{Name: "value", Type: field.TypeString, Comment: "value | 值"},
 		{Name: "dictionary_id", Type: field.TypeInt64, Nullable: true, Comment: "Dictionary ID | 字典ID"},
-		{Name: "product_tag", Type: field.TypeInt64, Nullable: true},
 	}
 	// SysDictionaryDetailsTable holds the schema information for the "sys_dictionary_details" table.
 	SysDictionaryDetailsTable = &schema.Table{
@@ -342,12 +341,6 @@ var (
 				Symbol:     "sys_dictionary_details_sys_dictionaries_dictionary_details",
 				Columns:    []*schema.Column{SysDictionaryDetailsColumns[9]},
 				RefColumns: []*schema.Column{SysDictionariesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "sys_dictionary_details_product_tag",
-				Columns:    []*schema.Column{SysDictionaryDetailsColumns[10]},
-				RefColumns: []*schema.Column{ProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -750,6 +743,7 @@ var (
 		{Name: "active_menu", Type: field.TypeString, Nullable: true, Comment: "set the active menu | 激活菜单", Default: ""},
 		{Name: "affix", Type: field.TypeBool, Nullable: true, Comment: "affix tab | Tab 固定", Default: false},
 		{Name: "no_cache", Type: field.TypeBool, Nullable: true, Comment: "do not keep alive the tab | 取消页面缓存", Default: false},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "type | 类型 数据字典menu_type", Default: ""},
 		{Name: "parent_id", Type: field.TypeInt64, Nullable: true, Comment: "parent menu ID | 父菜单ID"},
 	}
 	// SysMenusTable holds the schema information for the "sys_menus" table.
@@ -760,7 +754,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_menus_sys_menus_children",
-				Columns:    []*schema.Column{SysMenusColumns[22]},
+				Columns:    []*schema.Column{SysMenusColumns[23]},
 				RefColumns: []*schema.Column{SysMenusColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1462,6 +1456,31 @@ var (
 			},
 		},
 	}
+	// ProductTagsColumns holds the columns for the "product_tags" table.
+	ProductTagsColumns = []*schema.Column{
+		{Name: "product_id", Type: field.TypeInt64},
+		{Name: "dictionary_detail_id", Type: field.TypeInt64},
+	}
+	// ProductTagsTable holds the schema information for the "product_tags" table.
+	ProductTagsTable = &schema.Table{
+		Name:       "product_tags",
+		Columns:    ProductTagsColumns,
+		PrimaryKey: []*schema.Column{ProductTagsColumns[0], ProductTagsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "product_tags_product_id",
+				Columns:    []*schema.Column{ProductTagsColumns[0]},
+				RefColumns: []*schema.Column{ProductColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "product_tags_dictionary_detail_id",
+				Columns:    []*schema.Column{ProductTagsColumns[1]},
+				RefColumns: []*schema.Column{SysDictionaryDetailsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ProductContractsColumns holds the columns for the "product_contracts" table.
 	ProductContractsColumns = []*schema.Column{
 		{Name: "product_id", Type: field.TypeInt64},
@@ -1537,26 +1556,26 @@ var (
 			},
 		},
 	}
-	// UserTagColumns holds the columns for the "user_tag" table.
-	UserTagColumns = []*schema.Column{
+	// UserTagsColumns holds the columns for the "user_tags" table.
+	UserTagsColumns = []*schema.Column{
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "dictionary_detail_id", Type: field.TypeInt64},
 	}
-	// UserTagTable holds the schema information for the "user_tag" table.
-	UserTagTable = &schema.Table{
-		Name:       "user_tag",
-		Columns:    UserTagColumns,
-		PrimaryKey: []*schema.Column{UserTagColumns[0], UserTagColumns[1]},
+	// UserTagsTable holds the schema information for the "user_tags" table.
+	UserTagsTable = &schema.Table{
+		Name:       "user_tags",
+		Columns:    UserTagsColumns,
+		PrimaryKey: []*schema.Column{UserTagsColumns[0], UserTagsColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "user_tag_user_id",
-				Columns:    []*schema.Column{UserTagColumns[0]},
+				Symbol:     "user_tags_user_id",
+				Columns:    []*schema.Column{UserTagsColumns[0]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "user_tag_dictionary_detail_id",
-				Columns:    []*schema.Column{UserTagColumns[1]},
+				Symbol:     "user_tags_dictionary_detail_id",
+				Columns:    []*schema.Column{UserTagsColumns[1]},
 				RefColumns: []*schema.Column{SysDictionaryDetailsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -1630,10 +1649,11 @@ var (
 		MemberMemberContestsTable,
 		MemberMemberBootcampsTable,
 		MemberMemberCommunitysTable,
+		ProductTagsTable,
 		ProductContractsTable,
 		ProductLessonsTable,
 		RoleMenusTable,
-		UserTagTable,
+		UserTagsTable,
 		UserVenuesTable,
 	}
 )
@@ -1674,7 +1694,6 @@ func init() {
 		Table: "sys_dictionaries",
 	}
 	SysDictionaryDetailsTable.ForeignKeys[0].RefTable = SysDictionariesTable
-	SysDictionaryDetailsTable.ForeignKeys[1].RefTable = ProductTable
 	SysDictionaryDetailsTable.Annotation = &entsql.Annotation{
 		Table: "sys_dictionary_details",
 	}
@@ -1810,14 +1829,16 @@ func init() {
 	MemberMemberBootcampsTable.ForeignKeys[1].RefTable = BootcampParticipantTable
 	MemberMemberCommunitysTable.ForeignKeys[0].RefTable = MemberTable
 	MemberMemberCommunitysTable.ForeignKeys[1].RefTable = CommunityParticipantTable
+	ProductTagsTable.ForeignKeys[0].RefTable = ProductTable
+	ProductTagsTable.ForeignKeys[1].RefTable = SysDictionaryDetailsTable
 	ProductContractsTable.ForeignKeys[0].RefTable = ProductTable
 	ProductContractsTable.ForeignKeys[1].RefTable = ContractsTable
 	ProductLessonsTable.ForeignKeys[0].RefTable = ProductTable
 	ProductLessonsTable.ForeignKeys[1].RefTable = ProductTable
 	RoleMenusTable.ForeignKeys[0].RefTable = SysRolesTable
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
-	UserTagTable.ForeignKeys[0].RefTable = SysUsersTable
-	UserTagTable.ForeignKeys[1].RefTable = SysDictionaryDetailsTable
+	UserTagsTable.ForeignKeys[0].RefTable = SysUsersTable
+	UserTagsTable.ForeignKeys[1].RefTable = SysDictionaryDetailsTable
 	UserVenuesTable.ForeignKeys[0].RefTable = SysUsersTable
 	UserVenuesTable.ForeignKeys[1].RefTable = VenueTable
 }

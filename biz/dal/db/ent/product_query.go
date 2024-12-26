@@ -24,7 +24,7 @@ type ProductQuery struct {
 	order         []product.OrderOption
 	inters        []Interceptor
 	predicates    []predicate.Product
-	withTag       *DictionaryDetailQuery
+	withTags      *DictionaryDetailQuery
 	withContracts *ContractQuery
 	withGoods     *ProductQuery
 	withLessons   *ProductQuery
@@ -64,8 +64,8 @@ func (pq *ProductQuery) Order(o ...product.OrderOption) *ProductQuery {
 	return pq
 }
 
-// QueryTag chains the current query on the "tag" edge.
-func (pq *ProductQuery) QueryTag() *DictionaryDetailQuery {
+// QueryTags chains the current query on the "tags" edge.
+func (pq *ProductQuery) QueryTags() *DictionaryDetailQuery {
 	query := (&DictionaryDetailClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -78,7 +78,7 @@ func (pq *ProductQuery) QueryTag() *DictionaryDetailQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(product.Table, product.FieldID, selector),
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, product.TagTable, product.TagColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, product.TagsTable, product.TagsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -344,7 +344,7 @@ func (pq *ProductQuery) Clone() *ProductQuery {
 		order:         append([]product.OrderOption{}, pq.order...),
 		inters:        append([]Interceptor{}, pq.inters...),
 		predicates:    append([]predicate.Product{}, pq.predicates...),
-		withTag:       pq.withTag.Clone(),
+		withTags:      pq.withTags.Clone(),
 		withContracts: pq.withContracts.Clone(),
 		withGoods:     pq.withGoods.Clone(),
 		withLessons:   pq.withLessons.Clone(),
@@ -354,14 +354,14 @@ func (pq *ProductQuery) Clone() *ProductQuery {
 	}
 }
 
-// WithTag tells the query-builder to eager-load the nodes that are connected to
-// the "tag" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProductQuery) WithTag(opts ...func(*DictionaryDetailQuery)) *ProductQuery {
+// WithTags tells the query-builder to eager-load the nodes that are connected to
+// the "tags" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProductQuery) WithTags(opts ...func(*DictionaryDetailQuery)) *ProductQuery {
 	query := (&DictionaryDetailClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withTag = query
+	pq.withTags = query
 	return pq
 }
 
@@ -477,7 +477,7 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 		nodes       = []*Product{}
 		_spec       = pq.querySpec()
 		loadedTypes = [4]bool{
-			pq.withTag != nil,
+			pq.withTags != nil,
 			pq.withContracts != nil,
 			pq.withGoods != nil,
 			pq.withLessons != nil,
@@ -501,10 +501,10 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pq.withTag; query != nil {
-		if err := pq.loadTag(ctx, query, nodes,
-			func(n *Product) { n.Edges.Tag = []*DictionaryDetail{} },
-			func(n *Product, e *DictionaryDetail) { n.Edges.Tag = append(n.Edges.Tag, e) }); err != nil {
+	if query := pq.withTags; query != nil {
+		if err := pq.loadTags(ctx, query, nodes,
+			func(n *Product) { n.Edges.Tags = []*DictionaryDetail{} },
+			func(n *Product, e *DictionaryDetail) { n.Edges.Tags = append(n.Edges.Tags, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -532,34 +532,64 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 	return nodes, nil
 }
 
-func (pq *ProductQuery) loadTag(ctx context.Context, query *DictionaryDetailQuery, nodes []*Product, init func(*Product), assign func(*Product, *DictionaryDetail)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int64]*Product)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+func (pq *ProductQuery) loadTags(ctx context.Context, query *DictionaryDetailQuery, nodes []*Product, init func(*Product), assign func(*Product, *DictionaryDetail)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int64]*Product)
+	nids := make(map[int64]map[*Product]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.DictionaryDetail(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(product.TagColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(product.TagsTable)
+		s.Join(joinT).On(s.C(dictionarydetail.FieldID), joinT.C(product.TagsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(product.TagsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(product.TagsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullInt64).Int64
+				inValue := values[1].(*sql.NullInt64).Int64
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Product]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*DictionaryDetail](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.product_tag
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "product_tag" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "product_tag" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "tags" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

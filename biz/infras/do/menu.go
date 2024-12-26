@@ -10,11 +10,11 @@ type Menu interface {
 	Update(menuReq *menu.CreateOrUpdateMenuReq) error
 	Delete(id int64) error
 	MenuRole(roleID int64) (list []*menu.MenuInfo, err error)
-	List(req *base.PageInfoReq) (list []*menu.MenuInfo, total int, err error)
+	List(req *menu.MenuListReq) (list []*menu.MenuInfo, total int, err error)
 
 	MenuInfo(id int64) (info *menu.MenuInfo, err error)
 
-	MenuTree(req *base.PageInfoReq) (list []*base.Tree, err error)
+	MenuTree(req *menu.MenuListReq) (list []*base.Tree, err error)
 
 	CreateMenuParam(req *menu.MenuParam) error
 	UpdateMenuParam(req *menu.MenuParam) error

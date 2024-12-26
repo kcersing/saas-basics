@@ -56,8 +56,8 @@ const (
 	FieldPic = "pic"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// EdgeTag holds the string denoting the tag edge name in mutations.
-	EdgeTag = "tag"
+	// EdgeTags holds the string denoting the tags edge name in mutations.
+	EdgeTags = "tags"
 	// EdgeContracts holds the string denoting the contracts edge name in mutations.
 	EdgeContracts = "contracts"
 	// EdgeGoods holds the string denoting the goods edge name in mutations.
@@ -66,13 +66,11 @@ const (
 	EdgeLessons = "lessons"
 	// Table holds the table name of the product in the database.
 	Table = "product"
-	// TagTable is the table that holds the tag relation/edge.
-	TagTable = "sys_dictionary_details"
-	// TagInverseTable is the table name for the DictionaryDetail entity.
+	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
+	TagsTable = "product_tags"
+	// TagsInverseTable is the table name for the DictionaryDetail entity.
 	// It exists in this package in order to avoid circular dependency with the "dictionarydetail" package.
-	TagInverseTable = "sys_dictionary_details"
-	// TagColumn is the table column denoting the tag relation/edge.
-	TagColumn = "product_tag"
+	TagsInverseTable = "sys_dictionary_details"
 	// ContractsTable is the table that holds the contracts relation/edge. The primary key declared below.
 	ContractsTable = "product_contracts"
 	// ContractsInverseTable is the table name for the Contract entity.
@@ -111,6 +109,9 @@ var Columns = []string{
 }
 
 var (
+	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
+	// primary key for the tags relation (M2M).
+	TagsPrimaryKey = []string{"product_id", "dictionary_detail_id"}
 	// ContractsPrimaryKey and ContractsColumn2 are the table columns denoting the
 	// primary key for the contracts relation (M2M).
 	ContractsPrimaryKey = []string{"product_id", "contract_id"}
@@ -281,17 +282,17 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
-// ByTagCount orders the results by tag count.
-func ByTagCount(opts ...sql.OrderTermOption) OrderOption {
+// ByTagsCount orders the results by tags count.
+func ByTagsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTagStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newTagsStep(), opts...)
 	}
 }
 
-// ByTag orders the results by tag terms.
-func ByTag(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByTags orders the results by tags terms.
+func ByTags(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTagStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newTagsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -336,11 +337,11 @@ func ByLessons(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newLessonsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newTagStep() *sqlgraph.Step {
+func newTagsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TagInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TagTable, TagColumn),
+		sqlgraph.To(TagsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, TagsTable, TagsPrimaryKey...),
 	)
 }
 func newContractsStep() *sqlgraph.Step {
