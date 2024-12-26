@@ -11,6 +11,7 @@ import (
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
+	"saas/biz/dal/db/ent/userscheduling"
 	"saas/biz/dal/db/ent/venue"
 	"time"
 
@@ -316,6 +317,21 @@ func (uc *UserCreate) AddVenues(v ...*Venue) *UserCreate {
 	return uc.AddVenueIDs(ids...)
 }
 
+// AddUserSchedulingIDs adds the "user_scheduling" edge to the UserScheduling entity by IDs.
+func (uc *UserCreate) AddUserSchedulingIDs(ids ...int64) *UserCreate {
+	uc.mutation.AddUserSchedulingIDs(ids...)
+	return uc
+}
+
+// AddUserScheduling adds the "user_scheduling" edges to the UserScheduling entity.
+func (uc *UserCreate) AddUserScheduling(u ...*UserScheduling) *UserCreate {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uc.AddUserSchedulingIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uc *UserCreate) Mutation() *UserMutation {
 	return uc.mutation
@@ -576,6 +592,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.UserSchedulingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserSchedulingTable,
+			Columns: []string{user.UserSchedulingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

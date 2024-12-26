@@ -111,6 +111,9 @@ type Token func(*sql.Selector)
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
 
+// UserScheduling is the predicate function for userscheduling builders.
+type UserScheduling func(*sql.Selector)
+
 // Venue is the predicate function for venue builders.
 type Venue func(*sql.Selector)
 

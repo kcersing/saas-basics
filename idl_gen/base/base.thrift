@@ -79,7 +79,9 @@ struct Sales {
     1: optional i64 number = 0 (api.raw = "number")
     2: optional double price =0 (api.raw = "price")
 }
+struct UserSchedulingDate {
 
+}
 enum Err {
     Success            = 1,
     NoRoute            = 0,

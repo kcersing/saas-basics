@@ -1299,6 +1299,31 @@ var (
 			},
 		},
 	}
+	// SysUserSchedulingColumns holds the columns for the "sys_user_scheduling" table.
+	SysUserSchedulingColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
+		{Name: "date", Type: field.TypeJSON, Nullable: true, Comment: "日期"},
+		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "員工id"},
+	}
+	// SysUserSchedulingTable holds the schema information for the "sys_user_scheduling" table.
+	SysUserSchedulingTable = &schema.Table{
+		Name:       "sys_user_scheduling",
+		Columns:    SysUserSchedulingColumns,
+		PrimaryKey: []*schema.Column{SysUserSchedulingColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sys_user_scheduling_sys_users_user_scheduling",
+				Columns:    []*schema.Column{SysUserSchedulingColumns[7]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// VenueColumns holds the columns for the "venue" table.
 	VenueColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -1681,6 +1706,7 @@ var (
 		ScheduleMemberTable,
 		SysTokensTable,
 		SysUsersTable,
+		SysUserSchedulingTable,
 		VenueTable,
 		VenuePlaceTable,
 		SysVenueSmsTable,
@@ -1848,6 +1874,11 @@ func init() {
 	}
 	SysUsersTable.Annotation = &entsql.Annotation{
 		Table:   "sys_users",
+		Options: "AUTO_INCREMENT = 100000",
+	}
+	SysUserSchedulingTable.ForeignKeys[0].RefTable = SysUsersTable
+	SysUserSchedulingTable.Annotation = &entsql.Annotation{
+		Table:   "sys_user_scheduling",
 		Options: "AUTO_INCREMENT = 100000",
 	}
 	VenueTable.Annotation = &entsql.Annotation{

@@ -12,6 +12,7 @@ import (
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
+	"saas/biz/dal/db/ent/userscheduling"
 	"saas/biz/dal/db/ent/venue"
 	"time"
 
@@ -456,6 +457,21 @@ func (uu *UserUpdate) AddVenues(v ...*Venue) *UserUpdate {
 	return uu.AddVenueIDs(ids...)
 }
 
+// AddUserSchedulingIDs adds the "user_scheduling" edge to the UserScheduling entity by IDs.
+func (uu *UserUpdate) AddUserSchedulingIDs(ids ...int64) *UserUpdate {
+	uu.mutation.AddUserSchedulingIDs(ids...)
+	return uu
+}
+
+// AddUserScheduling adds the "user_scheduling" edges to the UserScheduling entity.
+func (uu *UserUpdate) AddUserScheduling(u ...*UserScheduling) *UserUpdate {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uu.AddUserSchedulingIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -549,6 +565,27 @@ func (uu *UserUpdate) RemoveVenues(v ...*Venue) *UserUpdate {
 		ids[i] = v[i].ID
 	}
 	return uu.RemoveVenueIDs(ids...)
+}
+
+// ClearUserScheduling clears all "user_scheduling" edges to the UserScheduling entity.
+func (uu *UserUpdate) ClearUserScheduling() *UserUpdate {
+	uu.mutation.ClearUserScheduling()
+	return uu
+}
+
+// RemoveUserSchedulingIDs removes the "user_scheduling" edge to UserScheduling entities by IDs.
+func (uu *UserUpdate) RemoveUserSchedulingIDs(ids ...int64) *UserUpdate {
+	uu.mutation.RemoveUserSchedulingIDs(ids...)
+	return uu
+}
+
+// RemoveUserScheduling removes "user_scheduling" edges to UserScheduling entities.
+func (uu *UserUpdate) RemoveUserScheduling(u ...*UserScheduling) *UserUpdate {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uu.RemoveUserSchedulingIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -909,6 +946,51 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.UserSchedulingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserSchedulingTable,
+			Columns: []string{user.UserSchedulingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedUserSchedulingIDs(); len(nodes) > 0 && !uu.mutation.UserSchedulingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserSchedulingTable,
+			Columns: []string{user.UserSchedulingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.UserSchedulingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserSchedulingTable,
+			Columns: []string{user.UserSchedulingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1359,6 +1441,21 @@ func (uuo *UserUpdateOne) AddVenues(v ...*Venue) *UserUpdateOne {
 	return uuo.AddVenueIDs(ids...)
 }
 
+// AddUserSchedulingIDs adds the "user_scheduling" edge to the UserScheduling entity by IDs.
+func (uuo *UserUpdateOne) AddUserSchedulingIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.AddUserSchedulingIDs(ids...)
+	return uuo
+}
+
+// AddUserScheduling adds the "user_scheduling" edges to the UserScheduling entity.
+func (uuo *UserUpdateOne) AddUserScheduling(u ...*UserScheduling) *UserUpdateOne {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uuo.AddUserSchedulingIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
@@ -1452,6 +1549,27 @@ func (uuo *UserUpdateOne) RemoveVenues(v ...*Venue) *UserUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return uuo.RemoveVenueIDs(ids...)
+}
+
+// ClearUserScheduling clears all "user_scheduling" edges to the UserScheduling entity.
+func (uuo *UserUpdateOne) ClearUserScheduling() *UserUpdateOne {
+	uuo.mutation.ClearUserScheduling()
+	return uuo
+}
+
+// RemoveUserSchedulingIDs removes the "user_scheduling" edge to UserScheduling entities by IDs.
+func (uuo *UserUpdateOne) RemoveUserSchedulingIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.RemoveUserSchedulingIDs(ids...)
+	return uuo
+}
+
+// RemoveUserScheduling removes "user_scheduling" edges to UserScheduling entities.
+func (uuo *UserUpdateOne) RemoveUserScheduling(u ...*UserScheduling) *UserUpdateOne {
+	ids := make([]int64, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uuo.RemoveUserSchedulingIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -1842,6 +1960,51 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.UserSchedulingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserSchedulingTable,
+			Columns: []string{user.UserSchedulingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedUserSchedulingIDs(); len(nodes) > 0 && !uuo.mutation.UserSchedulingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserSchedulingTable,
+			Columns: []string{user.UserSchedulingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.UserSchedulingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserSchedulingTable,
+			Columns: []string{user.UserSchedulingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

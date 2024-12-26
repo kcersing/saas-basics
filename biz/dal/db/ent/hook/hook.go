@@ -428,6 +428,18 @@ func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
 }
 
+// The UserSchedulingFunc type is an adapter to allow the use of ordinary
+// function as UserScheduling mutator.
+type UserSchedulingFunc func(context.Context, *ent.UserSchedulingMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f UserSchedulingFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.UserSchedulingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserSchedulingMutation", m)
+}
+
 // The VenueFunc type is an adapter to allow the use of ordinary
 // function as Venue mutator.
 type VenueFunc func(context.Context, *ent.VenueMutation) (ent.Value, error)

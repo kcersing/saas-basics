@@ -71,9 +71,11 @@ type UserEdges struct {
 	UserEntry []*EntryLogs `json:"user_entry,omitempty"`
 	// Venues holds the value of the venues edge.
 	Venues []*Venue `json:"venues,omitempty"`
+	// UserScheduling holds the value of the user_scheduling edge.
+	UserScheduling []*UserScheduling `json:"user_scheduling,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 }
 
 // TokenOrErr returns the Token value or an error if the edge
@@ -123,6 +125,15 @@ func (e UserEdges) VenuesOrErr() ([]*Venue, error) {
 		return e.Venues, nil
 	}
 	return nil, &NotLoadedError{edge: "venues"}
+}
+
+// UserSchedulingOrErr returns the UserScheduling value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) UserSchedulingOrErr() ([]*UserScheduling, error) {
+	if e.loadedTypes[5] {
+		return e.UserScheduling, nil
+	}
+	return nil, &NotLoadedError{edge: "user_scheduling"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -295,6 +306,11 @@ func (u *User) QueryUserEntry() *EntryLogsQuery {
 // QueryVenues queries the "venues" edge of the User entity.
 func (u *User) QueryVenues() *VenueQuery {
 	return NewUserClient(u.config).QueryVenues(u)
+}
+
+// QueryUserScheduling queries the "user_scheduling" edge of the User entity.
+func (u *User) QueryUserScheduling() *UserSchedulingQuery {
+	return NewUserClient(u.config).QueryUserScheduling(u)
 }
 
 // Update returns a builder for updating this User.

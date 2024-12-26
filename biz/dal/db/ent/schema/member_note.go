@@ -38,7 +38,7 @@ func (MemberNote) Mixin() []ent.Mixin {
 func (MemberNote) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("notes", Member.Type).
-			Ref("member_notes").Unique().
+			Ref("member_notes").
 			Field("member_id").Unique(),
 	}
 }

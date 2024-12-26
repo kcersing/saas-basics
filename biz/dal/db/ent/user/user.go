@@ -58,6 +58,8 @@ const (
 	EdgeUserEntry = "user_entry"
 	// EdgeVenues holds the string denoting the venues edge name in mutations.
 	EdgeVenues = "venues"
+	// EdgeUserScheduling holds the string denoting the user_scheduling edge name in mutations.
+	EdgeUserScheduling = "user_scheduling"
 	// Table holds the table name of the user in the database.
 	Table = "sys_users"
 	// TokenTable is the table that holds the token relation/edge.
@@ -91,6 +93,13 @@ const (
 	// VenuesInverseTable is the table name for the Venue entity.
 	// It exists in this package in order to avoid circular dependency with the "venue" package.
 	VenuesInverseTable = "venue"
+	// UserSchedulingTable is the table that holds the user_scheduling relation/edge.
+	UserSchedulingTable = "sys_user_scheduling"
+	// UserSchedulingInverseTable is the table name for the UserScheduling entity.
+	// It exists in this package in order to avoid circular dependency with the "userscheduling" package.
+	UserSchedulingInverseTable = "sys_user_scheduling"
+	// UserSchedulingColumn is the table column denoting the user_scheduling relation/edge.
+	UserSchedulingColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -312,6 +321,20 @@ func ByVenues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newVenuesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByUserSchedulingCount orders the results by user_scheduling count.
+func ByUserSchedulingCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUserSchedulingStep(), opts...)
+	}
+}
+
+// ByUserScheduling orders the results by user_scheduling terms.
+func ByUserScheduling(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserSchedulingStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTokenStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -345,5 +368,12 @@ func newVenuesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VenuesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, VenuesTable, VenuesPrimaryKey...),
+	)
+}
+func newUserSchedulingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserSchedulingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, UserSchedulingTable, UserSchedulingColumn),
 	)
 }

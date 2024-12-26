@@ -46,6 +46,7 @@ import (
 	"saas/biz/dal/db/ent/schedulemember"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
+	"saas/biz/dal/db/ent/userscheduling"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
 	"saas/biz/dal/db/ent/venuesms"
@@ -132,6 +133,8 @@ type Client struct {
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserScheduling is the client for interacting with the UserScheduling builders.
+	UserScheduling *UserSchedulingClient
 	// Venue is the client for interacting with the Venue builders.
 	Venue *VenueClient
 	// VenuePlace is the client for interacting with the VenuePlace builders.
@@ -186,6 +189,7 @@ func (c *Client) init() {
 	c.ScheduleMember = NewScheduleMemberClient(c.config)
 	c.Token = NewTokenClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.UserScheduling = NewUserSchedulingClient(c.config)
 	c.Venue = NewVenueClient(c.config)
 	c.VenuePlace = NewVenuePlaceClient(c.config)
 	c.VenueSms = NewVenueSmsClient(c.config)
@@ -317,6 +321,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ScheduleMember:        NewScheduleMemberClient(cfg),
 		Token:                 NewTokenClient(cfg),
 		User:                  NewUserClient(cfg),
+		UserScheduling:        NewUserSchedulingClient(cfg),
 		Venue:                 NewVenueClient(cfg),
 		VenuePlace:            NewVenuePlaceClient(cfg),
 		VenueSms:              NewVenueSmsClient(cfg),
@@ -375,6 +380,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ScheduleMember:        NewScheduleMemberClient(cfg),
 		Token:                 NewTokenClient(cfg),
 		User:                  NewUserClient(cfg),
+		UserScheduling:        NewUserSchedulingClient(cfg),
 		Venue:                 NewVenueClient(cfg),
 		VenuePlace:            NewVenuePlaceClient(cfg),
 		VenueSms:              NewVenueSmsClient(cfg),
@@ -414,8 +420,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
 		c.MemberProduct, c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order,
 		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.Role,
-		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Token, c.User, c.Venue,
-		c.VenuePlace, c.VenueSms, c.VenueSmsLog,
+		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Token, c.User,
+		c.UserScheduling, c.Venue, c.VenuePlace, c.VenueSms, c.VenueSmsLog,
 	} {
 		n.Use(hooks...)
 	}
@@ -431,8 +437,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
 		c.MemberProduct, c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order,
 		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product, c.Role,
-		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Token, c.User, c.Venue,
-		c.VenuePlace, c.VenueSms, c.VenueSmsLog,
+		c.Schedule, c.ScheduleCoach, c.ScheduleMember, c.Token, c.User,
+		c.UserScheduling, c.Venue, c.VenuePlace, c.VenueSms, c.VenueSmsLog,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -511,6 +517,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Token.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
+	case *UserSchedulingMutation:
+		return c.UserScheduling.mutate(ctx, m)
 	case *VenueMutation:
 		return c.Venue.mutate(ctx, m)
 	case *VenuePlaceMutation:
@@ -6258,6 +6266,22 @@ func (c *UserClient) QueryVenues(u *User) *VenueQuery {
 	return query
 }
 
+// QueryUserScheduling queries the user_scheduling edge of a User.
+func (c *UserClient) QueryUserScheduling(u *User) *UserSchedulingQuery {
+	query := (&UserSchedulingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(userscheduling.Table, userscheduling.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.UserSchedulingTable, user.UserSchedulingColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
 	return c.hooks.User
@@ -6280,6 +6304,155 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 		return (&UserDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown User mutation op: %q", m.Op())
+	}
+}
+
+// UserSchedulingClient is a client for the UserScheduling schema.
+type UserSchedulingClient struct {
+	config
+}
+
+// NewUserSchedulingClient returns a client for the UserScheduling from the given config.
+func NewUserSchedulingClient(c config) *UserSchedulingClient {
+	return &UserSchedulingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `userscheduling.Hooks(f(g(h())))`.
+func (c *UserSchedulingClient) Use(hooks ...Hook) {
+	c.hooks.UserScheduling = append(c.hooks.UserScheduling, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `userscheduling.Intercept(f(g(h())))`.
+func (c *UserSchedulingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.UserScheduling = append(c.inters.UserScheduling, interceptors...)
+}
+
+// Create returns a builder for creating a UserScheduling entity.
+func (c *UserSchedulingClient) Create() *UserSchedulingCreate {
+	mutation := newUserSchedulingMutation(c.config, OpCreate)
+	return &UserSchedulingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UserScheduling entities.
+func (c *UserSchedulingClient) CreateBulk(builders ...*UserSchedulingCreate) *UserSchedulingCreateBulk {
+	return &UserSchedulingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UserSchedulingClient) MapCreateBulk(slice any, setFunc func(*UserSchedulingCreate, int)) *UserSchedulingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UserSchedulingCreateBulk{err: fmt.Errorf("calling to UserSchedulingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UserSchedulingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UserSchedulingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UserScheduling.
+func (c *UserSchedulingClient) Update() *UserSchedulingUpdate {
+	mutation := newUserSchedulingMutation(c.config, OpUpdate)
+	return &UserSchedulingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UserSchedulingClient) UpdateOne(us *UserScheduling) *UserSchedulingUpdateOne {
+	mutation := newUserSchedulingMutation(c.config, OpUpdateOne, withUserScheduling(us))
+	return &UserSchedulingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UserSchedulingClient) UpdateOneID(id int64) *UserSchedulingUpdateOne {
+	mutation := newUserSchedulingMutation(c.config, OpUpdateOne, withUserSchedulingID(id))
+	return &UserSchedulingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UserScheduling.
+func (c *UserSchedulingClient) Delete() *UserSchedulingDelete {
+	mutation := newUserSchedulingMutation(c.config, OpDelete)
+	return &UserSchedulingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UserSchedulingClient) DeleteOne(us *UserScheduling) *UserSchedulingDeleteOne {
+	return c.DeleteOneID(us.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UserSchedulingClient) DeleteOneID(id int64) *UserSchedulingDeleteOne {
+	builder := c.Delete().Where(userscheduling.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UserSchedulingDeleteOne{builder}
+}
+
+// Query returns a query builder for UserScheduling.
+func (c *UserSchedulingClient) Query() *UserSchedulingQuery {
+	return &UserSchedulingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUserScheduling},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a UserScheduling entity by its id.
+func (c *UserSchedulingClient) Get(ctx context.Context, id int64) (*UserScheduling, error) {
+	return c.Query().Where(userscheduling.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UserSchedulingClient) GetX(ctx context.Context, id int64) *UserScheduling {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUsers queries the users edge of a UserScheduling.
+func (c *UserSchedulingClient) QueryUsers(us *UserScheduling) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := us.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(userscheduling.Table, userscheduling.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, userscheduling.UsersTable, userscheduling.UsersColumn),
+		)
+		fromV = sqlgraph.Neighbors(us.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *UserSchedulingClient) Hooks() []Hook {
+	return c.hooks.UserScheduling
+}
+
+// Interceptors returns the client interceptors.
+func (c *UserSchedulingClient) Interceptors() []Interceptor {
+	return c.inters.UserScheduling
+}
+
+func (c *UserSchedulingClient) mutate(ctx context.Context, m *UserSchedulingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UserSchedulingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UserSchedulingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UserSchedulingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UserSchedulingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown UserScheduling mutation op: %q", m.Op())
 	}
 }
 
@@ -6967,7 +7140,7 @@ type (
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
 		MemberProduct, MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount,
 		OrderItem, OrderPay, OrderSales, Product, Role, Schedule, ScheduleCoach,
-		ScheduleMember, Token, User, Venue, VenuePlace, VenueSms,
+		ScheduleMember, Token, User, UserScheduling, Venue, VenuePlace, VenueSms,
 		VenueSmsLog []ent.Hook
 	}
 	inters struct {
@@ -6976,7 +7149,7 @@ type (
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
 		MemberProduct, MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount,
 		OrderItem, OrderPay, OrderSales, Product, Role, Schedule, ScheduleCoach,
-		ScheduleMember, Token, User, Venue, VenuePlace, VenueSms,
+		ScheduleMember, Token, User, UserScheduling, Venue, VenuePlace, VenueSms,
 		VenueSmsLog []ent.Interceptor
 	}
 )
