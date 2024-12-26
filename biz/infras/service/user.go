@@ -299,7 +299,7 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	info.JobTime = &userEnt.JobTime
 	info.DefaultVenueId = userEnt.DefaultVenueID
 
-	Tags, _ := userEnt.QueryTag().All(u.ctx)
+	Tags, _ := userEnt.QueryTags().All(u.ctx)
 	if len(Tags) > 0 {
 		for _, d := range Tags {
 			dd := dictionary.DictionaryDetail{

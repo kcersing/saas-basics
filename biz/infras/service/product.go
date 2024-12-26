@@ -161,7 +161,7 @@ func (p Product) ProductList(req *product.ProductListReq) (resp []*product.Produ
 
 func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 	var tags []*base.List
-	tagAll, _ := v.QueryTag().All(p.ctx)
+	tagAll, _ := v.QueryTags().All(p.ctx)
 	if tagAll != nil {
 		for _, item := range tagAll {
 			tag := &base.List{
