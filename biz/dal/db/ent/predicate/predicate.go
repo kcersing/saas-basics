@@ -105,9 +105,6 @@ type ScheduleCoach func(*sql.Selector)
 // ScheduleMember is the predicate function for schedulemember builders.
 type ScheduleMember func(*sql.Selector)
 
-// Sms is the predicate function for sms builders.
-type Sms func(*sql.Selector)
-
 // Token is the predicate function for token builders.
 type Token func(*sql.Selector)
 
@@ -119,3 +116,9 @@ type Venue func(*sql.Selector)
 
 // VenuePlace is the predicate function for venueplace builders.
 type VenuePlace func(*sql.Selector)
+
+// VenueSms is the predicate function for venuesms builders.
+type VenueSms func(*sql.Selector)
+
+// VenueSmsLog is the predicate function for venuesmslog builders.
+type VenueSmsLog func(*sql.Selector)

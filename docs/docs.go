@@ -2125,7 +2125,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/menu.ApiPageReq"
+                            "$ref": "#/definitions/menu.MenuListReq"
                         }
                     }
                 ],
@@ -2164,7 +2164,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/menu.ApiPageReq"
+                            "$ref": "#/definitions/menu.MenuListReq"
                         }
                     }
                 ],
@@ -2949,6 +2949,61 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/auth.RoleInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/sms/buy": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/sms/info": {
+            "post": {
+                "description": "场馆短信详情 Description",
+                "summary": "场馆短信详情 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/sms/send-list": {
+            "post": {
+                "description": "场馆短信发送记录 Description",
+                "summary": "场馆短信发送记录 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sms.SmsSendListReq"
                         }
                     }
                 ],
@@ -4345,7 +4400,24 @@ const docTemplate = `{
                     "description": "meta",
                     "type": "string"
                 },
+                "type": {
+                    "type": "string"
+                },
                 "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "menu.MenuListReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -4431,7 +4503,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "duration": {
-                    "description": "*有效期",
+                    "description": "*有效期(卡期限/课单节期限)",
                     "type": "integer"
                 },
                 "endSalesAt": {
@@ -4443,17 +4515,14 @@ const docTemplate = `{
                 },
                 "isLessons": {
                     "description": "*团课预约 1支持2不支持",
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "integer"
                 },
                 "is_sales": {
                     "description": "*销售方式 1会员端",
                     "type": "integer"
                 },
                 "length": {
-                    "description": "*课程课时",
+                    "description": "*课程课时(课)",
                     "type": "integer"
                 },
                 "lessonsId": {
@@ -4471,8 +4540,12 @@ const docTemplate = `{
                     "description": "*商品图片",
                     "type": "string"
                 },
+                "price": {
+                    "description": "*价格(单个/卡价格)",
+                    "type": "number"
+                },
                 "sales": {
-                    "description": "*销售信息数组",
+                    "description": "*销售信息数组(多个/课价格信息)",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/base.Sales"
@@ -4491,7 +4564,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "subType": {
-                    "description": "*次级类型",
+                    "description": "*次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包",
                     "type": "string"
                 },
                 "tagId": {
@@ -4501,8 +4574,12 @@ const docTemplate = `{
                         "type": "integer"
                     }
                 },
+                "times": {
+                    "description": "*次数(次卡)",
+                    "type": "integer"
+                },
                 "type": {
-                    "description": "*类型",
+                    "description": "*类型 card:卡 course:课 coursePackage:课包 Lessons:团课",
                     "type": "string"
                 }
             }
@@ -4532,6 +4609,23 @@ const docTemplate = `{
                 "type": {
                     "description": "类型",
                     "type": "string"
+                }
+            }
+        },
+        "sms.SmsSendListReq": {
+            "type": "object",
+            "properties": {
+                "mobile": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

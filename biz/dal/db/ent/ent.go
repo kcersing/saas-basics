@@ -40,11 +40,12 @@ import (
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
 	"saas/biz/dal/db/ent/schedulemember"
-	"saas/biz/dal/db/ent/sms"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/biz/dal/db/ent/venuesms"
+	"saas/biz/dal/db/ent/venuesmslog"
 	"sync"
 
 	"entgo.io/ent"
@@ -143,11 +144,12 @@ func checkColumn(table, column string) error {
 			schedule.Table:              schedule.ValidColumn,
 			schedulecoach.Table:         schedulecoach.ValidColumn,
 			schedulemember.Table:        schedulemember.ValidColumn,
-			sms.Table:                   sms.ValidColumn,
 			token.Table:                 token.ValidColumn,
 			user.Table:                  user.ValidColumn,
 			venue.Table:                 venue.ValidColumn,
 			venueplace.Table:            venueplace.ValidColumn,
+			venuesms.Table:              venuesms.ValidColumn,
+			venuesmslog.Table:           venuesmslog.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

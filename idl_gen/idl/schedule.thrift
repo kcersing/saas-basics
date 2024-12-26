@@ -4,17 +4,27 @@ include "../base/base.thrift"
 
 struct CreateOrUpdateScheduleReq {
     1:optional i64 id=0  (api.raw = "id")
-    2:optional string type=""  (api.raw = "type")
-    3:optional i64 propertyId=0   (api.raw = "propertyId")
+    /**类别[一对一:1;一对多:2团课:3]*/
+    2:optional i64 type=1  (api.raw = "type")
     4:optional i64 venueId =0  (api.raw = "venueId")
+    /**场地*/
     5:optional i64 placeId =0  (api.raw = "placeId")
+    /**人数*/
     6:optional i64 num=0   (api.raw = "num")
+    /**开始时间*/
     7:optional string startTime =""  (api.raw = "startTime")
+    /**价格*/
     8:optional double price=0   (api.raw = "price")
+    /**备注*/
     9:optional string remark =""   (api.raw = "remark")
+    /**教练ID*/
     10:optional i64 coachId =0  (api.raw = "coachId")
-    11:optional i64 memberId =0  (api.raw = "memberId")
-    12:optional i64 memberProductId =0  (api.raw = "memberProductId")
+    /**产品ID*/
+    11:optional i64 productId =0  (api.raw = "productId")
+     /**会员ID*/
+    13:optional i64 memberId =0  (api.raw = "memberId")
+    /**会员产品ID*/
+    14:optional i64 memberProductId =0  (api.raw = "memberProductId")
 }
 
 struct ListScheduleReq {
@@ -22,29 +32,28 @@ struct ListScheduleReq {
     2:  optional i64 pageSize = 100 (api.raw = "pageSize")
     3:  optional i64 member = 0 (api.raw = "member")
     4:  optional list<i64> coach = 0 (api.raw = "coach")
-    5:  optional list<i64> product = 0 (api.raw = "product")+
+    5:  optional list<i64> product = 0 (api.raw = "product")
     6:  optional i64 venueId = 0 (api.raw = "venueId")
-    7:  optional list<i64> property = 0 (api.raw = "property")
     8:  optional string startTime =""  (api.raw = "startTime")
-    9:  optional string type =""  (api.raw = "type")
+    9:  optional i64 type =1  (api.raw = "type")
 }
 struct ScheduleMemberReq {
     1:  optional i64 page = 1 (api.raw = "page")
     2:  optional i64 pageSize= 100 (api.raw = "pageSize")
     3:  optional i64 memberId = 0 (api.raw = "memberId")
     4:  optional i64 scheduleId = 0(api.raw = "scheduleId")
-    5:  optional string type =""  (api.raw = "type")
+    5:  optional i64 type =1  (api.raw = "type")
 }
 struct ScheduleCoachReq{
     1:  optional i64 page = 1 (api.raw = "page")
     2:  optional i64 pageSize = 100 (api.raw = "pageSize")
     3:  optional i64 coachId = 0 (api.raw = "coachId")
     4:  optional i64 scheduleId = 0(api.raw = "scheduleId")
-    5:  optional string type=""  (api.raw = "type")
+    5:  optional i64 type=1  (api.raw = "type")
 }
 
 struct SearchSubscribeByMemberReq{
-    1:  optional i64	propertyId=0  (api.raw = "propertyId")
+    1:  optional i64	memberProductId=0  (api.raw = "memberProductId")
     2:  optional string	mobile  ="" (api.raw = "mobile")
     3:  optional i64	venue  = 0  (api.raw = "venue")
 }

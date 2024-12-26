@@ -227,6 +227,7 @@ type SmsSendListReq struct {
 	Page     int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
 	PageSize int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
 	Mobile   string `thrift:"mobile,3,optional" form:"mobile" json:"mobile" query:"mobile"`
+	VenueId  int64  `thrift:"venueId,4,optional" form:"venueId" json:"venueId" query:"venueId"`
 }
 
 func NewSmsSendListReq() *SmsSendListReq {
@@ -235,6 +236,7 @@ func NewSmsSendListReq() *SmsSendListReq {
 		Page:     1,
 		PageSize: 100,
 		Mobile:   "",
+		VenueId:  0,
 	}
 }
 
@@ -242,6 +244,7 @@ func (p *SmsSendListReq) InitDefault() {
 	p.Page = 1
 	p.PageSize = 100
 	p.Mobile = ""
+	p.VenueId = 0
 }
 
 var SmsSendListReq_Page_DEFAULT int64 = 1
@@ -271,10 +274,20 @@ func (p *SmsSendListReq) GetMobile() (v string) {
 	return p.Mobile
 }
 
+var SmsSendListReq_VenueId_DEFAULT int64 = 0
+
+func (p *SmsSendListReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return SmsSendListReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
 var fieldIDToName_SmsSendListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
 	3: "mobile",
+	4: "venueId",
 }
 
 func (p *SmsSendListReq) IsSetPage() bool {
@@ -287,6 +300,10 @@ func (p *SmsSendListReq) IsSetPageSize() bool {
 
 func (p *SmsSendListReq) IsSetMobile() bool {
 	return p.Mobile != SmsSendListReq_Mobile_DEFAULT
+}
+
+func (p *SmsSendListReq) IsSetVenueId() bool {
+	return p.VenueId != SmsSendListReq_VenueId_DEFAULT
 }
 
 func (p *SmsSendListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -327,6 +344,14 @@ func (p *SmsSendListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 3:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -394,6 +419,17 @@ func (p *SmsSendListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Mobile = _field
 	return nil
 }
+func (p *SmsSendListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
 
 func (p *SmsSendListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -411,6 +447,10 @@ func (p *SmsSendListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -488,6 +528,25 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
+func (p *SmsSendListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
 func (p *SmsSendListReq) String() string {
 	if p == nil {
 		return "<nil>"
@@ -500,18 +559,27 @@ type SmsSend struct {
 	CreatedAt string `thrift:"createdAt,1,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
 	Status    int64  `thrift:"status,2,optional" form:"status" json:"status" query:"status"`
 	Mobile    string `thrift:"mobile,3,optional" form:"mobile" json:"mobile" query:"mobile"`
-	Name      string `thrift:"name,4,optional" form:"name" json:"name" query:"name"`
 	Code      string `thrift:"code,5,optional" form:"code" json:"code" query:"code"`
+	VenueId   int64  `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
+	BizId     string `thrift:"bizId,7,optional" form:"bizId" json:"bizId" query:"bizId"`
+	/**通知类型[1会员;2员工]*/
+	NotifyType int64  `thrift:"notifyType,8,optional" form:"notifyType" json:"notifyType" query:"notifyType"`
+	Content    string `thrift:"content,9,optional" form:"content" json:"content" query:"content"`
+	Templates  string `thrift:"templates,10,optional" form:"templates" json:"templates" query:"templates"`
 }
 
 func NewSmsSend() *SmsSend {
 	return &SmsSend{
 
-		CreatedAt: "",
-		Status:    0,
-		Mobile:    "",
-		Name:      "",
-		Code:      "",
+		CreatedAt:  "",
+		Status:     0,
+		Mobile:     "",
+		Code:       "",
+		VenueId:    0,
+		BizId:      "",
+		NotifyType: 1,
+		Content:    "",
+		Templates:  "",
 	}
 }
 
@@ -519,8 +587,12 @@ func (p *SmsSend) InitDefault() {
 	p.CreatedAt = ""
 	p.Status = 0
 	p.Mobile = ""
-	p.Name = ""
 	p.Code = ""
+	p.VenueId = 0
+	p.BizId = ""
+	p.NotifyType = 1
+	p.Content = ""
+	p.Templates = ""
 }
 
 var SmsSend_CreatedAt_DEFAULT string = ""
@@ -550,15 +622,6 @@ func (p *SmsSend) GetMobile() (v string) {
 	return p.Mobile
 }
 
-var SmsSend_Name_DEFAULT string = ""
-
-func (p *SmsSend) GetName() (v string) {
-	if !p.IsSetName() {
-		return SmsSend_Name_DEFAULT
-	}
-	return p.Name
-}
-
 var SmsSend_Code_DEFAULT string = ""
 
 func (p *SmsSend) GetCode() (v string) {
@@ -568,12 +631,61 @@ func (p *SmsSend) GetCode() (v string) {
 	return p.Code
 }
 
+var SmsSend_VenueId_DEFAULT int64 = 0
+
+func (p *SmsSend) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return SmsSend_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var SmsSend_BizId_DEFAULT string = ""
+
+func (p *SmsSend) GetBizId() (v string) {
+	if !p.IsSetBizId() {
+		return SmsSend_BizId_DEFAULT
+	}
+	return p.BizId
+}
+
+var SmsSend_NotifyType_DEFAULT int64 = 1
+
+func (p *SmsSend) GetNotifyType() (v int64) {
+	if !p.IsSetNotifyType() {
+		return SmsSend_NotifyType_DEFAULT
+	}
+	return p.NotifyType
+}
+
+var SmsSend_Content_DEFAULT string = ""
+
+func (p *SmsSend) GetContent() (v string) {
+	if !p.IsSetContent() {
+		return SmsSend_Content_DEFAULT
+	}
+	return p.Content
+}
+
+var SmsSend_Templates_DEFAULT string = ""
+
+func (p *SmsSend) GetTemplates() (v string) {
+	if !p.IsSetTemplates() {
+		return SmsSend_Templates_DEFAULT
+	}
+	return p.Templates
+}
+
 var fieldIDToName_SmsSend = map[int16]string{
-	1: "createdAt",
-	2: "status",
-	3: "mobile",
-	4: "name",
-	5: "code",
+	1:  "createdAt",
+	2:  "status",
+	3:  "mobile",
+	5:  "code",
+	6:  "venueId",
+	7:  "bizId",
+	8:  "notifyType",
+	9:  "content",
+	10: "templates",
 }
 
 func (p *SmsSend) IsSetCreatedAt() bool {
@@ -588,12 +700,28 @@ func (p *SmsSend) IsSetMobile() bool {
 	return p.Mobile != SmsSend_Mobile_DEFAULT
 }
 
-func (p *SmsSend) IsSetName() bool {
-	return p.Name != SmsSend_Name_DEFAULT
-}
-
 func (p *SmsSend) IsSetCode() bool {
 	return p.Code != SmsSend_Code_DEFAULT
+}
+
+func (p *SmsSend) IsSetVenueId() bool {
+	return p.VenueId != SmsSend_VenueId_DEFAULT
+}
+
+func (p *SmsSend) IsSetBizId() bool {
+	return p.BizId != SmsSend_BizId_DEFAULT
+}
+
+func (p *SmsSend) IsSetNotifyType() bool {
+	return p.NotifyType != SmsSend_NotifyType_DEFAULT
+}
+
+func (p *SmsSend) IsSetContent() bool {
+	return p.Content != SmsSend_Content_DEFAULT
+}
+
+func (p *SmsSend) IsSetTemplates() bool {
+	return p.Templates != SmsSend_Templates_DEFAULT
 }
 
 func (p *SmsSend) Read(iprot thrift.TProtocol) (err error) {
@@ -639,17 +767,49 @@ func (p *SmsSend) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 4:
+		case 5:
 			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField4(iprot); err != nil {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 5:
+		case 6:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField6(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 7:
 			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField5(iprot); err != nil {
+				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField9(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 10:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField10(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -717,17 +877,6 @@ func (p *SmsSend) ReadField3(iprot thrift.TProtocol) error {
 	p.Mobile = _field
 	return nil
 }
-func (p *SmsSend) ReadField4(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Name = _field
-	return nil
-}
 func (p *SmsSend) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field string
@@ -737,6 +886,61 @@ func (p *SmsSend) ReadField5(iprot thrift.TProtocol) error {
 		_field = v
 	}
 	p.Code = _field
+	return nil
+}
+func (p *SmsSend) ReadField6(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+func (p *SmsSend) ReadField7(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.BizId = _field
+	return nil
+}
+func (p *SmsSend) ReadField8(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.NotifyType = _field
+	return nil
+}
+func (p *SmsSend) ReadField9(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Content = _field
+	return nil
+}
+func (p *SmsSend) ReadField10(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Templates = _field
 	return nil
 }
 
@@ -758,12 +962,28 @@ func (p *SmsSend) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 3
 			goto WriteFieldError
 		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
-			goto WriteFieldError
-		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
+			goto WriteFieldError
+		}
+		if err = p.writeField7(oprot); err != nil {
+			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
+			goto WriteFieldError
+		}
+		if err = p.writeField10(oprot); err != nil {
+			fieldId = 10
 			goto WriteFieldError
 		}
 	}
@@ -841,25 +1061,6 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *SmsSend) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetName() {
-		if err = oprot.WriteFieldBegin("name", thrift.STRING, 4); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(p.Name); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
 func (p *SmsSend) writeField5(oprot thrift.TProtocol) (err error) {
 	if p.IsSetCode() {
 		if err = oprot.WriteFieldBegin("code", thrift.STRING, 5); err != nil {
@@ -879,6 +1080,101 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
+func (p *SmsSend) writeField6(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+}
+
+func (p *SmsSend) writeField7(oprot thrift.TProtocol) (err error) {
+	if p.IsSetBizId() {
+		if err = oprot.WriteFieldBegin("bizId", thrift.STRING, 7); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.BizId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *SmsSend) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetNotifyType() {
+		if err = oprot.WriteFieldBegin("notifyType", thrift.I64, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.NotifyType); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *SmsSend) writeField9(oprot thrift.TProtocol) (err error) {
+	if p.IsSetContent() {
+		if err = oprot.WriteFieldBegin("content", thrift.STRING, 9); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Content); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
+}
+
+func (p *SmsSend) writeField10(oprot thrift.TProtocol) (err error) {
+	if p.IsSetTemplates() {
+		if err = oprot.WriteFieldBegin("templates", thrift.STRING, 10); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Templates); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 10 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
+}
+
 func (p *SmsSend) String() string {
 	if p == nil {
 		return "<nil>"
@@ -887,11 +1183,619 @@ func (p *SmsSend) String() string {
 
 }
 
+type SmsInfo struct {
+	/**通知短信数量*/
+	NoticeCount int64 `thrift:"noticeCount,1,optional" form:"noticeCount" json:"noticeCount" query:"noticeCount"`
+	/**已用通知*/
+	UsedNotice int64  `thrift:"usedNotice,2,optional" form:"usedNotice" json:"usedNotice" query:"usedNotice"`
+	VenueId    int64  `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
+	CreatedAt  string `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt  string `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+}
+
+func NewSmsInfo() *SmsInfo {
+	return &SmsInfo{
+
+		NoticeCount: 0,
+		UsedNotice:  0,
+		VenueId:     0,
+		CreatedAt:   "",
+		UpdatedAt:   "",
+	}
+}
+
+func (p *SmsInfo) InitDefault() {
+	p.NoticeCount = 0
+	p.UsedNotice = 0
+	p.VenueId = 0
+	p.CreatedAt = ""
+	p.UpdatedAt = ""
+}
+
+var SmsInfo_NoticeCount_DEFAULT int64 = 0
+
+func (p *SmsInfo) GetNoticeCount() (v int64) {
+	if !p.IsSetNoticeCount() {
+		return SmsInfo_NoticeCount_DEFAULT
+	}
+	return p.NoticeCount
+}
+
+var SmsInfo_UsedNotice_DEFAULT int64 = 0
+
+func (p *SmsInfo) GetUsedNotice() (v int64) {
+	if !p.IsSetUsedNotice() {
+		return SmsInfo_UsedNotice_DEFAULT
+	}
+	return p.UsedNotice
+}
+
+var SmsInfo_VenueId_DEFAULT int64 = 0
+
+func (p *SmsInfo) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return SmsInfo_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var SmsInfo_CreatedAt_DEFAULT string = ""
+
+func (p *SmsInfo) GetCreatedAt() (v string) {
+	if !p.IsSetCreatedAt() {
+		return SmsInfo_CreatedAt_DEFAULT
+	}
+	return p.CreatedAt
+}
+
+var SmsInfo_UpdatedAt_DEFAULT string = ""
+
+func (p *SmsInfo) GetUpdatedAt() (v string) {
+	if !p.IsSetUpdatedAt() {
+		return SmsInfo_UpdatedAt_DEFAULT
+	}
+	return p.UpdatedAt
+}
+
+var fieldIDToName_SmsInfo = map[int16]string{
+	1:  "noticeCount",
+	2:  "usedNotice",
+	3:  "venueId",
+	16: "createdAt",
+	17: "updatedAt",
+}
+
+func (p *SmsInfo) IsSetNoticeCount() bool {
+	return p.NoticeCount != SmsInfo_NoticeCount_DEFAULT
+}
+
+func (p *SmsInfo) IsSetUsedNotice() bool {
+	return p.UsedNotice != SmsInfo_UsedNotice_DEFAULT
+}
+
+func (p *SmsInfo) IsSetVenueId() bool {
+	return p.VenueId != SmsInfo_VenueId_DEFAULT
+}
+
+func (p *SmsInfo) IsSetCreatedAt() bool {
+	return p.CreatedAt != SmsInfo_CreatedAt_DEFAULT
+}
+
+func (p *SmsInfo) IsSetUpdatedAt() bool {
+	return p.UpdatedAt != SmsInfo_UpdatedAt_DEFAULT
+}
+
+func (p *SmsInfo) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 16:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField16(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 17:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField17(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SmsInfo[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SmsInfo) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.NoticeCount = _field
+	return nil
+}
+func (p *SmsInfo) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.UsedNotice = _field
+	return nil
+}
+func (p *SmsInfo) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+func (p *SmsInfo) ReadField16(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CreatedAt = _field
+	return nil
+}
+func (p *SmsInfo) ReadField17(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.UpdatedAt = _field
+	return nil
+}
+
+func (p *SmsInfo) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("SmsInfo"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField16(oprot); err != nil {
+			fieldId = 16
+			goto WriteFieldError
+		}
+		if err = p.writeField17(oprot); err != nil {
+			fieldId = 17
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *SmsInfo) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetNoticeCount() {
+		if err = oprot.WriteFieldBegin("noticeCount", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.NoticeCount); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *SmsInfo) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetUsedNotice() {
+		if err = oprot.WriteFieldBegin("usedNotice", thrift.I64, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.UsedNotice); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *SmsInfo) writeField3(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *SmsInfo) writeField16(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreatedAt() {
+		if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 16); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.CreatedAt); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 16 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 16 end error: ", p), err)
+}
+
+func (p *SmsInfo) writeField17(oprot thrift.TProtocol) (err error) {
+	if p.IsSetUpdatedAt() {
+		if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 17); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.UpdatedAt); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 17 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
+}
+
+func (p *SmsInfo) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SmsInfo(%+v)", *p)
+
+}
+
+type SmsBuyReq struct {
+	VenueId int64 `thrift:"venueId,1,optional" form:"venueId" json:"venueId" query:"venueId"`
+	/**数量*/
+	Number float64 `thrift:"number,2,optional" form:"number" json:"number" query:"number"`
+}
+
+func NewSmsBuyReq() *SmsBuyReq {
+	return &SmsBuyReq{
+
+		VenueId: 0,
+		Number:  0.0,
+	}
+}
+
+func (p *SmsBuyReq) InitDefault() {
+	p.VenueId = 0
+	p.Number = 0.0
+}
+
+var SmsBuyReq_VenueId_DEFAULT int64 = 0
+
+func (p *SmsBuyReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return SmsBuyReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var SmsBuyReq_Number_DEFAULT float64 = 0.0
+
+func (p *SmsBuyReq) GetNumber() (v float64) {
+	if !p.IsSetNumber() {
+		return SmsBuyReq_Number_DEFAULT
+	}
+	return p.Number
+}
+
+var fieldIDToName_SmsBuyReq = map[int16]string{
+	1: "venueId",
+	2: "number",
+}
+
+func (p *SmsBuyReq) IsSetVenueId() bool {
+	return p.VenueId != SmsBuyReq_VenueId_DEFAULT
+}
+
+func (p *SmsBuyReq) IsSetNumber() bool {
+	return p.Number != SmsBuyReq_Number_DEFAULT
+}
+
+func (p *SmsBuyReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.DOUBLE {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SmsBuyReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SmsBuyReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+func (p *SmsBuyReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field float64
+	if v, err := iprot.ReadDouble(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Number = _field
+	return nil
+}
+
+func (p *SmsBuyReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("SmsBuyReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *SmsBuyReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *SmsBuyReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetNumber() {
+		if err = oprot.WriteFieldBegin("number", thrift.DOUBLE, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteDouble(p.Number); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *SmsBuyReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SmsBuyReq(%+v)", *p)
+
+}
+
 type SmsService interface {
 	/**订单记录*/
-	SmsInfo(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
+	SmsBuy(ctx context.Context, req *SmsBuyReq) (r *base.NilResponse, err error)
 	/**订单记录*/
-	SmsOrderList(ctx context.Context, req *SmsOrderListReq) (r *base.NilResponse, err error)
+	SmsInfo(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	/**发送记录*/
 	SmsSendList(ctx context.Context, req *SmsSendListReq) (r *base.NilResponse, err error)
 }
@@ -922,20 +1826,20 @@ func (p *SmsServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
+func (p *SmsServiceClient) SmsBuy(ctx context.Context, req *SmsBuyReq) (r *base.NilResponse, err error) {
+	var _args SmsServiceSmsBuyArgs
+	_args.Req = req
+	var _result SmsServiceSmsBuyResult
+	if err = p.Client_().Call(ctx, "SmsBuy", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
 func (p *SmsServiceClient) SmsInfo(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
 	var _args SmsServiceSmsInfoArgs
 	_args.Req = req
 	var _result SmsServiceSmsInfoResult
 	if err = p.Client_().Call(ctx, "SmsInfo", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-func (p *SmsServiceClient) SmsOrderList(ctx context.Context, req *SmsOrderListReq) (r *base.NilResponse, err error) {
-	var _args SmsServiceSmsOrderListArgs
-	_args.Req = req
-	var _result SmsServiceSmsOrderListResult
-	if err = p.Client_().Call(ctx, "SmsOrderList", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -970,8 +1874,8 @@ func (p *SmsServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunctio
 
 func NewSmsServiceProcessor(handler SmsService) *SmsServiceProcessor {
 	self := &SmsServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self.AddToProcessorMap("SmsBuy", &smsServiceProcessorSmsBuy{handler: handler})
 	self.AddToProcessorMap("SmsInfo", &smsServiceProcessorSmsInfo{handler: handler})
-	self.AddToProcessorMap("SmsOrderList", &smsServiceProcessorSmsOrderList{handler: handler})
 	self.AddToProcessorMap("SmsSendList", &smsServiceProcessorSmsSendList{handler: handler})
 	return self
 }
@@ -991,6 +1895,54 @@ func (p *SmsServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.T
 	oprot.WriteMessageEnd()
 	oprot.Flush(ctx)
 	return false, x
+}
+
+type smsServiceProcessorSmsBuy struct {
+	handler SmsService
+}
+
+func (p *smsServiceProcessorSmsBuy) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := SmsServiceSmsBuyArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("SmsBuy", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := SmsServiceSmsBuyResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.SmsBuy(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing SmsBuy: "+err2.Error())
+		oprot.WriteMessageBegin("SmsBuy", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("SmsBuy", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
 }
 
 type smsServiceProcessorSmsInfo struct {
@@ -1024,54 +1976,6 @@ func (p *smsServiceProcessorSmsInfo) Process(ctx context.Context, seqId int32, i
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("SmsInfo", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 = result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type smsServiceProcessorSmsOrderList struct {
-	handler SmsService
-}
-
-func (p *smsServiceProcessorSmsOrderList) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := SmsServiceSmsOrderListArgs{}
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("SmsOrderList", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return false, err
-	}
-
-	iprot.ReadMessageEnd()
-	var err2 error
-	result := SmsServiceSmsOrderListResult{}
-	var retval *base.NilResponse
-	if retval, err2 = p.handler.SmsOrderList(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing SmsOrderList: "+err2.Error())
-		oprot.WriteMessageBegin("SmsOrderList", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return true, err2
-	} else {
-		result.Success = retval
-	}
-	if err2 = oprot.WriteMessageBegin("SmsOrderList", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1135,6 +2039,300 @@ func (p *smsServiceProcessorSmsSendList) Process(ctx context.Context, seqId int3
 		return
 	}
 	return true, err
+}
+
+type SmsServiceSmsBuyArgs struct {
+	Req *SmsBuyReq `thrift:"req,1"`
+}
+
+func NewSmsServiceSmsBuyArgs() *SmsServiceSmsBuyArgs {
+	return &SmsServiceSmsBuyArgs{}
+}
+
+func (p *SmsServiceSmsBuyArgs) InitDefault() {
+}
+
+var SmsServiceSmsBuyArgs_Req_DEFAULT *SmsBuyReq
+
+func (p *SmsServiceSmsBuyArgs) GetReq() (v *SmsBuyReq) {
+	if !p.IsSetReq() {
+		return SmsServiceSmsBuyArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_SmsServiceSmsBuyArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *SmsServiceSmsBuyArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *SmsServiceSmsBuyArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SmsServiceSmsBuyArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SmsServiceSmsBuyArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewSmsBuyReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *SmsServiceSmsBuyArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("SmsBuy_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *SmsServiceSmsBuyArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *SmsServiceSmsBuyArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SmsServiceSmsBuyArgs(%+v)", *p)
+
+}
+
+type SmsServiceSmsBuyResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewSmsServiceSmsBuyResult() *SmsServiceSmsBuyResult {
+	return &SmsServiceSmsBuyResult{}
+}
+
+func (p *SmsServiceSmsBuyResult) InitDefault() {
+}
+
+var SmsServiceSmsBuyResult_Success_DEFAULT *base.NilResponse
+
+func (p *SmsServiceSmsBuyResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return SmsServiceSmsBuyResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_SmsServiceSmsBuyResult = map[int16]string{
+	0: "success",
+}
+
+func (p *SmsServiceSmsBuyResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *SmsServiceSmsBuyResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SmsServiceSmsBuyResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SmsServiceSmsBuyResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *SmsServiceSmsBuyResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("SmsBuy_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *SmsServiceSmsBuyResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *SmsServiceSmsBuyResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SmsServiceSmsBuyResult(%+v)", *p)
+
 }
 
 type SmsServiceSmsInfoArgs struct {
@@ -1428,300 +2626,6 @@ func (p *SmsServiceSmsInfoResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("SmsServiceSmsInfoResult(%+v)", *p)
-
-}
-
-type SmsServiceSmsOrderListArgs struct {
-	Req *SmsOrderListReq `thrift:"req,1"`
-}
-
-func NewSmsServiceSmsOrderListArgs() *SmsServiceSmsOrderListArgs {
-	return &SmsServiceSmsOrderListArgs{}
-}
-
-func (p *SmsServiceSmsOrderListArgs) InitDefault() {
-}
-
-var SmsServiceSmsOrderListArgs_Req_DEFAULT *SmsOrderListReq
-
-func (p *SmsServiceSmsOrderListArgs) GetReq() (v *SmsOrderListReq) {
-	if !p.IsSetReq() {
-		return SmsServiceSmsOrderListArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-var fieldIDToName_SmsServiceSmsOrderListArgs = map[int16]string{
-	1: "req",
-}
-
-func (p *SmsServiceSmsOrderListArgs) IsSetReq() bool {
-	return p.Req != nil
-}
-
-func (p *SmsServiceSmsOrderListArgs) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SmsServiceSmsOrderListArgs[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *SmsServiceSmsOrderListArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewSmsOrderListReq()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Req = _field
-	return nil
-}
-
-func (p *SmsServiceSmsOrderListArgs) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("SmsOrderList_args"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *SmsServiceSmsOrderListArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Req.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *SmsServiceSmsOrderListArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("SmsServiceSmsOrderListArgs(%+v)", *p)
-
-}
-
-type SmsServiceSmsOrderListResult struct {
-	Success *base.NilResponse `thrift:"success,0,optional"`
-}
-
-func NewSmsServiceSmsOrderListResult() *SmsServiceSmsOrderListResult {
-	return &SmsServiceSmsOrderListResult{}
-}
-
-func (p *SmsServiceSmsOrderListResult) InitDefault() {
-}
-
-var SmsServiceSmsOrderListResult_Success_DEFAULT *base.NilResponse
-
-func (p *SmsServiceSmsOrderListResult) GetSuccess() (v *base.NilResponse) {
-	if !p.IsSetSuccess() {
-		return SmsServiceSmsOrderListResult_Success_DEFAULT
-	}
-	return p.Success
-}
-
-var fieldIDToName_SmsServiceSmsOrderListResult = map[int16]string{
-	0: "success",
-}
-
-func (p *SmsServiceSmsOrderListResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *SmsServiceSmsOrderListResult) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 0:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField0(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SmsServiceSmsOrderListResult[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *SmsServiceSmsOrderListResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := base.NewNilResponse()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Success = _field
-	return nil
-}
-
-func (p *SmsServiceSmsOrderListResult) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("SmsOrderList_result"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField0(oprot); err != nil {
-			fieldId = 0
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *SmsServiceSmsOrderListResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := p.Success.Write(oprot); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
-}
-
-func (p *SmsServiceSmsOrderListResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("SmsServiceSmsOrderListResult(%+v)", *p)
 
 }
 

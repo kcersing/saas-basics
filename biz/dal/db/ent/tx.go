@@ -78,8 +78,6 @@ type Tx struct {
 	ScheduleCoach *ScheduleCoachClient
 	// ScheduleMember is the client for interacting with the ScheduleMember builders.
 	ScheduleMember *ScheduleMemberClient
-	// Sms is the client for interacting with the Sms builders.
-	Sms *SmsClient
 	// Token is the client for interacting with the Token builders.
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
@@ -88,6 +86,10 @@ type Tx struct {
 	Venue *VenueClient
 	// VenuePlace is the client for interacting with the VenuePlace builders.
 	VenuePlace *VenuePlaceClient
+	// VenueSms is the client for interacting with the VenueSms builders.
+	VenueSms *VenueSmsClient
+	// VenueSmsLog is the client for interacting with the VenueSmsLog builders.
+	VenueSmsLog *VenueSmsLogClient
 
 	// lazily loaded.
 	client     *Client
@@ -252,11 +254,12 @@ func (tx *Tx) init() {
 	tx.Schedule = NewScheduleClient(tx.config)
 	tx.ScheduleCoach = NewScheduleCoachClient(tx.config)
 	tx.ScheduleMember = NewScheduleMemberClient(tx.config)
-	tx.Sms = NewSmsClient(tx.config)
 	tx.Token = NewTokenClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.Venue = NewVenueClient(tx.config)
 	tx.VenuePlace = NewVenuePlaceClient(tx.config)
+	tx.VenueSms = NewVenueSmsClient(tx.config)
+	tx.VenueSmsLog = NewVenueSmsLogClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

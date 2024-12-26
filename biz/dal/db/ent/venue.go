@@ -69,9 +69,13 @@ type VenueEdges struct {
 	VenueEntry []*EntryLogs `json:"venue_entry,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
+	// Sms holds the value of the sms edge.
+	Sms []*VenueSms `json:"sms,omitempty"`
+	// Smslog holds the value of the smslog edge.
+	Smslog []*VenueSmsLog `json:"smslog,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 }
 
 // PlacesOrErr returns the Places value or an error if the edge
@@ -108,6 +112,24 @@ func (e VenueEdges) UsersOrErr() ([]*User, error) {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
+}
+
+// SmsOrErr returns the Sms value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) SmsOrErr() ([]*VenueSms, error) {
+	if e.loadedTypes[4] {
+		return e.Sms, nil
+	}
+	return nil, &NotLoadedError{edge: "sms"}
+}
+
+// SmslogOrErr returns the Smslog value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) SmslogOrErr() ([]*VenueSmsLog, error) {
+	if e.loadedTypes[5] {
+		return e.Smslog, nil
+	}
+	return nil, &NotLoadedError{edge: "smslog"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -279,6 +301,16 @@ func (v *Venue) QueryVenueEntry() *EntryLogsQuery {
 // QueryUsers queries the "users" edge of the Venue entity.
 func (v *Venue) QueryUsers() *UserQuery {
 	return NewVenueClient(v.config).QueryUsers(v)
+}
+
+// QuerySms queries the "sms" edge of the Venue entity.
+func (v *Venue) QuerySms() *VenueSmsQuery {
+	return NewVenueClient(v.config).QuerySms(v)
+}
+
+// QuerySmslog queries the "smslog" edge of the Venue entity.
+func (v *Venue) QuerySmslog() *VenueSmsLogQuery {
+	return NewVenueClient(v.config).QuerySmslog(v)
 }
 
 // Update returns a builder for updating this Venue.

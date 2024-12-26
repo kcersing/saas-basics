@@ -4,6 +4,9 @@ package sms
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -12,6 +15,12 @@ import (
 )
 
 // SmsInfo .
+//
+//	@Summary		场馆短信详情 Summary
+//	@Description	场馆短信详情 Description
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/sms/info [POST]
 func SmsInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -22,28 +31,22 @@ func SmsInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// SmsOrderList .
-// @router /service/sms/order-list [POST]
-func SmsOrderList(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req sms.SmsOrderListReq
-	err = c.BindAndValidate(&req)
+	info, err := service.NewAliyunSms(ctx, c).Info(req.ID)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }
 
 // SmsSendList .
+//
+//	@Summary		场馆短信发送记录 Summary
+//	@Description	场馆短信发送记录 Description
+//	@Param			request	body		sms.SmsSendListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/sms/send-list [POST]
 func SmsSendList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -54,7 +57,33 @@ func SmsSendList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
+	list, total, err := service.NewAliyunSms(ctx, c).SendList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
+}
 
-	c.JSON(consts.StatusOK, resp)
+// SmsBuy .
+// @router /service/sms/buy [POST]
+func SmsBuy(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req sms.SmsBuyReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp, err := service.NewAliyunSms(ctx, c).Buy(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, map[string]string{
+		"pic": resp,
+	}, 0, "")
+	return
 }

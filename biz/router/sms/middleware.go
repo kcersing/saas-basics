@@ -35,3 +35,8 @@ func _smssendlistMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _smsbuyMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

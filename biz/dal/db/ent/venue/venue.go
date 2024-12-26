@@ -56,6 +56,10 @@ const (
 	EdgeVenueEntry = "venue_entry"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
+	// EdgeSms holds the string denoting the sms edge name in mutations.
+	EdgeSms = "sms"
+	// EdgeSmslog holds the string denoting the smslog edge name in mutations.
+	EdgeSmslog = "smslog"
 	// Table holds the table name of the venue in the database.
 	Table = "venue"
 	// PlacesTable is the table that holds the places relation/edge.
@@ -84,6 +88,20 @@ const (
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "sys_users"
+	// SmsTable is the table that holds the sms relation/edge.
+	SmsTable = "sys_venue_sms"
+	// SmsInverseTable is the table name for the VenueSms entity.
+	// It exists in this package in order to avoid circular dependency with the "venuesms" package.
+	SmsInverseTable = "sys_venue_sms"
+	// SmsColumn is the table column denoting the sms relation/edge.
+	SmsColumn = "venue_id"
+	// SmslogTable is the table that holds the smslog relation/edge.
+	SmslogTable = "sys_venue_sms_log"
+	// SmslogInverseTable is the table name for the VenueSmsLog entity.
+	// It exists in this package in order to avoid circular dependency with the "venuesmslog" package.
+	SmslogInverseTable = "sys_venue_sms_log"
+	// SmslogColumn is the table column denoting the smslog relation/edge.
+	SmslogColumn = "venue_id"
 )
 
 // Columns holds all SQL columns for venue fields.
@@ -282,6 +300,34 @@ func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// BySmsCount orders the results by sms count.
+func BySmsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSmsStep(), opts...)
+	}
+}
+
+// BySms orders the results by sms terms.
+func BySms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSmsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySmslogCount orders the results by smslog count.
+func BySmslogCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSmslogStep(), opts...)
+	}
+}
+
+// BySmslog orders the results by smslog terms.
+func BySmslog(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSmslogStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newPlacesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -308,5 +354,19 @@ func newUsersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UsersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
+	)
+}
+func newSmsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SmsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SmsTable, SmsColumn),
+	)
+}
+func newSmslogStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SmslogInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SmslogTable, SmslogColumn),
 	)
 }

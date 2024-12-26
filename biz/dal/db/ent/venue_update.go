@@ -12,6 +12,8 @@ import (
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/biz/dal/db/ent/venuesms"
+	"saas/biz/dal/db/ent/venuesmslog"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -424,6 +426,36 @@ func (vu *VenueUpdate) AddUsers(u ...*User) *VenueUpdate {
 	return vu.AddUserIDs(ids...)
 }
 
+// AddSmIDs adds the "sms" edge to the VenueSms entity by IDs.
+func (vu *VenueUpdate) AddSmIDs(ids ...int64) *VenueUpdate {
+	vu.mutation.AddSmIDs(ids...)
+	return vu
+}
+
+// AddSms adds the "sms" edges to the VenueSms entity.
+func (vu *VenueUpdate) AddSms(v ...*VenueSms) *VenueUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vu.AddSmIDs(ids...)
+}
+
+// AddSmslogIDs adds the "smslog" edge to the VenueSmsLog entity by IDs.
+func (vu *VenueUpdate) AddSmslogIDs(ids ...int64) *VenueUpdate {
+	vu.mutation.AddSmslogIDs(ids...)
+	return vu
+}
+
+// AddSmslog adds the "smslog" edges to the VenueSmsLog entity.
+func (vu *VenueUpdate) AddSmslog(v ...*VenueSmsLog) *VenueUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vu.AddSmslogIDs(ids...)
+}
+
 // Mutation returns the VenueMutation object of the builder.
 func (vu *VenueUpdate) Mutation() *VenueMutation {
 	return vu.mutation
@@ -511,6 +543,48 @@ func (vu *VenueUpdate) RemoveUsers(u ...*User) *VenueUpdate {
 		ids[i] = u[i].ID
 	}
 	return vu.RemoveUserIDs(ids...)
+}
+
+// ClearSms clears all "sms" edges to the VenueSms entity.
+func (vu *VenueUpdate) ClearSms() *VenueUpdate {
+	vu.mutation.ClearSms()
+	return vu
+}
+
+// RemoveSmIDs removes the "sms" edge to VenueSms entities by IDs.
+func (vu *VenueUpdate) RemoveSmIDs(ids ...int64) *VenueUpdate {
+	vu.mutation.RemoveSmIDs(ids...)
+	return vu
+}
+
+// RemoveSms removes "sms" edges to VenueSms entities.
+func (vu *VenueUpdate) RemoveSms(v ...*VenueSms) *VenueUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vu.RemoveSmIDs(ids...)
+}
+
+// ClearSmslog clears all "smslog" edges to the VenueSmsLog entity.
+func (vu *VenueUpdate) ClearSmslog() *VenueUpdate {
+	vu.mutation.ClearSmslog()
+	return vu
+}
+
+// RemoveSmslogIDs removes the "smslog" edge to VenueSmsLog entities by IDs.
+func (vu *VenueUpdate) RemoveSmslogIDs(ids ...int64) *VenueUpdate {
+	vu.mutation.RemoveSmslogIDs(ids...)
+	return vu
+}
+
+// RemoveSmslog removes "smslog" edges to VenueSmsLog entities.
+func (vu *VenueUpdate) RemoveSmslog(v ...*VenueSmsLog) *VenueUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vu.RemoveSmslogIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -844,6 +918,96 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vu.mutation.SmsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmsTable,
+			Columns: []string{venue.SmsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.RemovedSmsIDs(); len(nodes) > 0 && !vu.mutation.SmsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmsTable,
+			Columns: []string{venue.SmsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.SmsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmsTable,
+			Columns: []string{venue.SmsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vu.mutation.SmslogCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmslogTable,
+			Columns: []string{venue.SmslogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.RemovedSmslogIDs(); len(nodes) > 0 && !vu.mutation.SmslogCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmslogTable,
+			Columns: []string{venue.SmslogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.SmslogIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmslogTable,
+			Columns: []string{venue.SmslogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1262,6 +1426,36 @@ func (vuo *VenueUpdateOne) AddUsers(u ...*User) *VenueUpdateOne {
 	return vuo.AddUserIDs(ids...)
 }
 
+// AddSmIDs adds the "sms" edge to the VenueSms entity by IDs.
+func (vuo *VenueUpdateOne) AddSmIDs(ids ...int64) *VenueUpdateOne {
+	vuo.mutation.AddSmIDs(ids...)
+	return vuo
+}
+
+// AddSms adds the "sms" edges to the VenueSms entity.
+func (vuo *VenueUpdateOne) AddSms(v ...*VenueSms) *VenueUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vuo.AddSmIDs(ids...)
+}
+
+// AddSmslogIDs adds the "smslog" edge to the VenueSmsLog entity by IDs.
+func (vuo *VenueUpdateOne) AddSmslogIDs(ids ...int64) *VenueUpdateOne {
+	vuo.mutation.AddSmslogIDs(ids...)
+	return vuo
+}
+
+// AddSmslog adds the "smslog" edges to the VenueSmsLog entity.
+func (vuo *VenueUpdateOne) AddSmslog(v ...*VenueSmsLog) *VenueUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vuo.AddSmslogIDs(ids...)
+}
+
 // Mutation returns the VenueMutation object of the builder.
 func (vuo *VenueUpdateOne) Mutation() *VenueMutation {
 	return vuo.mutation
@@ -1349,6 +1543,48 @@ func (vuo *VenueUpdateOne) RemoveUsers(u ...*User) *VenueUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return vuo.RemoveUserIDs(ids...)
+}
+
+// ClearSms clears all "sms" edges to the VenueSms entity.
+func (vuo *VenueUpdateOne) ClearSms() *VenueUpdateOne {
+	vuo.mutation.ClearSms()
+	return vuo
+}
+
+// RemoveSmIDs removes the "sms" edge to VenueSms entities by IDs.
+func (vuo *VenueUpdateOne) RemoveSmIDs(ids ...int64) *VenueUpdateOne {
+	vuo.mutation.RemoveSmIDs(ids...)
+	return vuo
+}
+
+// RemoveSms removes "sms" edges to VenueSms entities.
+func (vuo *VenueUpdateOne) RemoveSms(v ...*VenueSms) *VenueUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vuo.RemoveSmIDs(ids...)
+}
+
+// ClearSmslog clears all "smslog" edges to the VenueSmsLog entity.
+func (vuo *VenueUpdateOne) ClearSmslog() *VenueUpdateOne {
+	vuo.mutation.ClearSmslog()
+	return vuo
+}
+
+// RemoveSmslogIDs removes the "smslog" edge to VenueSmsLog entities by IDs.
+func (vuo *VenueUpdateOne) RemoveSmslogIDs(ids ...int64) *VenueUpdateOne {
+	vuo.mutation.RemoveSmslogIDs(ids...)
+	return vuo
+}
+
+// RemoveSmslog removes "smslog" edges to VenueSmsLog entities.
+func (vuo *VenueUpdateOne) RemoveSmslog(v ...*VenueSmsLog) *VenueUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vuo.RemoveSmslogIDs(ids...)
 }
 
 // Where appends a list predicates to the VenueUpdate builder.
@@ -1712,6 +1948,96 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vuo.mutation.SmsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmsTable,
+			Columns: []string{venue.SmsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.RemovedSmsIDs(); len(nodes) > 0 && !vuo.mutation.SmsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmsTable,
+			Columns: []string{venue.SmsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.SmsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmsTable,
+			Columns: []string{venue.SmsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vuo.mutation.SmslogCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmslogTable,
+			Columns: []string{venue.SmslogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.RemovedSmslogIDs(); len(nodes) > 0 && !vuo.mutation.SmslogCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmslogTable,
+			Columns: []string{venue.SmslogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.SmslogIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmslogTable,
+			Columns: []string{venue.SmslogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

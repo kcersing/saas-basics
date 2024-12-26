@@ -404,18 +404,6 @@ func (f ScheduleMemberFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Val
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ScheduleMemberMutation", m)
 }
 
-// The SmsFunc type is an adapter to allow the use of ordinary
-// function as Sms mutator.
-type SmsFunc func(context.Context, *ent.SmsMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f SmsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.SmsMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SmsMutation", m)
-}
-
 // The TokenFunc type is an adapter to allow the use of ordinary
 // function as Token mutator.
 type TokenFunc func(context.Context, *ent.TokenMutation) (ent.Value, error)
@@ -462,6 +450,30 @@ func (f VenuePlaceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VenuePlaceMutation", m)
+}
+
+// The VenueSmsFunc type is an adapter to allow the use of ordinary
+// function as VenueSms mutator.
+type VenueSmsFunc func(context.Context, *ent.VenueSmsMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VenueSmsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.VenueSmsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VenueSmsMutation", m)
+}
+
+// The VenueSmsLogFunc type is an adapter to allow the use of ordinary
+// function as VenueSmsLog mutator.
+type VenueSmsLogFunc func(context.Context, *ent.VenueSmsLogMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VenueSmsLogFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.VenueSmsLogMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VenueSmsLogMutation", m)
 }
 
 // Condition is a hook condition function.

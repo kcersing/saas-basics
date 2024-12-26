@@ -710,7 +710,18 @@ definitions:
       title:
         description: meta
         type: string
+      type:
+        type: string
       url:
+        type: string
+    type: object
+  menu.MenuListReq:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      type:
         type: string
     type: object
   order.ListOrderReq:
@@ -768,7 +779,7 @@ definitions:
         description: '*商品详情'
         type: string
       duration:
-        description: '*有效期'
+        description: '*有效期(卡期限/课单节期限)'
         type: integer
       endSalesAt:
         description: '*销售结束时间'
@@ -780,11 +791,9 @@ definitions:
         type: integer
       isLessons:
         description: '*团课预约 1支持2不支持'
-        items:
-          type: integer
-        type: array
+        type: integer
       length:
-        description: '*课程课时'
+        description: '*课程课时(课)'
         type: integer
       lessonsId:
         description: '*团课-数组'
@@ -797,8 +806,11 @@ definitions:
       pic:
         description: '*商品图片'
         type: string
+      price:
+        description: '*价格(单个/卡价格)'
+        type: number
       sales:
-        description: '*销售信息数组'
+        description: '*销售信息数组(多个/课价格信息)'
         items:
           $ref: '#/definitions/base.Sales'
         type: array
@@ -812,15 +824,19 @@ definitions:
         description: '*库存'
         type: integer
       subType:
-        description: '*次级类型'
+        description: '*次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡
+          lessons团课 coursePackage私教课包'
         type: string
       tagId:
         description: '*标签-数组'
         items:
           type: integer
         type: array
+      times:
+        description: '*次数(次卡)'
+        type: integer
       type:
-        description: '*类型'
+        description: '*类型 card:卡 course:课 coursePackage:课包 Lessons:团课'
         type: string
     type: object
   product.ProductListReq:
@@ -841,6 +857,17 @@ definitions:
       type:
         description: 类型
         type: string
+    type: object
+  sms.SmsSendListReq:
+    properties:
+      mobile:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      venueId:
+        type: integer
     type: object
   token.TokenInfo:
     properties:
@@ -2389,7 +2416,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/menu.ApiPageReq'
+          $ref: '#/definitions/menu.MenuListReq'
       responses:
         "200":
           description: OK
@@ -2414,7 +2441,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/menu.ApiPageReq'
+          $ref: '#/definitions/menu.MenuListReq'
       responses:
         "200":
           description: OK
@@ -2922,6 +2949,41 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新角色 Summary
+  /service/sms/buy:
+    post:
+      responses: {}
+  /service/sms/info:
+    post:
+      description: 场馆短信详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场馆短信详情 Summary
+  /service/sms/send-list:
+    post:
+      description: 场馆短信发送记录 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/sms.SmsSendListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场馆短信发送记录 Summary
   /service/token:
     post:
       description: 删除token Description

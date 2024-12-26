@@ -37,11 +37,12 @@ import (
 	"saas/biz/dal/db/ent/schedulecoach"
 	"saas/biz/dal/db/ent/schedulemember"
 	"saas/biz/dal/db/ent/schema"
-	"saas/biz/dal/db/ent/sms"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/biz/dal/db/ent/venuesms"
+	"saas/biz/dal/db/ent/venuesmslog"
 	"time"
 )
 
@@ -1278,29 +1279,6 @@ func init() {
 	schedulememberDescSignEndTime := schedulememberFields[9].Descriptor()
 	// schedulemember.DefaultSignEndTime holds the default value on creation for the sign_end_time field.
 	schedulemember.DefaultSignEndTime = schedulememberDescSignEndTime.Default.(func() time.Time)
-	smsMixin := schema.Sms{}.Mixin()
-	smsMixinFields0 := smsMixin[0].Fields()
-	_ = smsMixinFields0
-	smsFields := schema.Sms{}.Fields()
-	_ = smsFields
-	// smsDescCreatedAt is the schema descriptor for created_at field.
-	smsDescCreatedAt := smsMixinFields0[1].Descriptor()
-	// sms.DefaultCreatedAt holds the default value on creation for the created_at field.
-	sms.DefaultCreatedAt = smsDescCreatedAt.Default.(func() time.Time)
-	// smsDescUpdatedAt is the schema descriptor for updated_at field.
-	smsDescUpdatedAt := smsMixinFields0[2].Descriptor()
-	// sms.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	sms.DefaultUpdatedAt = smsDescUpdatedAt.Default.(func() time.Time)
-	// sms.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	sms.UpdateDefaultUpdatedAt = smsDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// smsDescDelete is the schema descriptor for delete field.
-	smsDescDelete := smsMixinFields0[3].Descriptor()
-	// sms.DefaultDelete holds the default value on creation for the delete field.
-	sms.DefaultDelete = smsDescDelete.Default.(int64)
-	// smsDescCreatedID is the schema descriptor for created_id field.
-	smsDescCreatedID := smsMixinFields0[4].Descriptor()
-	// sms.DefaultCreatedID holds the default value on creation for the created_id field.
-	sms.DefaultCreatedID = smsDescCreatedID.Default.(int64)
 	tokenMixin := schema.Token{}.Mixin()
 	tokenMixinFields0 := tokenMixin[0].Fields()
 	_ = tokenMixinFields0
@@ -1435,4 +1413,68 @@ func init() {
 	venueplaceDescIsAccessible := venueplaceFields[6].Descriptor()
 	// venueplace.DefaultIsAccessible holds the default value on creation for the is_accessible field.
 	venueplace.DefaultIsAccessible = venueplaceDescIsAccessible.Default.(int64)
+	venuesmsMixin := schema.VenueSms{}.Mixin()
+	venuesmsMixinFields0 := venuesmsMixin[0].Fields()
+	_ = venuesmsMixinFields0
+	venuesmsFields := schema.VenueSms{}.Fields()
+	_ = venuesmsFields
+	// venuesmsDescCreatedAt is the schema descriptor for created_at field.
+	venuesmsDescCreatedAt := venuesmsMixinFields0[1].Descriptor()
+	// venuesms.DefaultCreatedAt holds the default value on creation for the created_at field.
+	venuesms.DefaultCreatedAt = venuesmsDescCreatedAt.Default.(func() time.Time)
+	// venuesmsDescUpdatedAt is the schema descriptor for updated_at field.
+	venuesmsDescUpdatedAt := venuesmsMixinFields0[2].Descriptor()
+	// venuesms.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	venuesms.DefaultUpdatedAt = venuesmsDescUpdatedAt.Default.(func() time.Time)
+	// venuesms.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	venuesms.UpdateDefaultUpdatedAt = venuesmsDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// venuesmsDescDelete is the schema descriptor for delete field.
+	venuesmsDescDelete := venuesmsMixinFields0[3].Descriptor()
+	// venuesms.DefaultDelete holds the default value on creation for the delete field.
+	venuesms.DefaultDelete = venuesmsDescDelete.Default.(int64)
+	// venuesmsDescCreatedID is the schema descriptor for created_id field.
+	venuesmsDescCreatedID := venuesmsMixinFields0[4].Descriptor()
+	// venuesms.DefaultCreatedID holds the default value on creation for the created_id field.
+	venuesms.DefaultCreatedID = venuesmsDescCreatedID.Default.(int64)
+	// venuesmsDescVenueID is the schema descriptor for venue_id field.
+	venuesmsDescVenueID := venuesmsFields[0].Descriptor()
+	// venuesms.DefaultVenueID holds the default value on creation for the venue_id field.
+	venuesms.DefaultVenueID = venuesmsDescVenueID.Default.(int64)
+	// venuesmsDescNoticeCount is the schema descriptor for notice_count field.
+	venuesmsDescNoticeCount := venuesmsFields[1].Descriptor()
+	// venuesms.DefaultNoticeCount holds the default value on creation for the notice_count field.
+	venuesms.DefaultNoticeCount = venuesmsDescNoticeCount.Default.(int64)
+	// venuesmsDescUsedNotice is the schema descriptor for used_notice field.
+	venuesmsDescUsedNotice := venuesmsFields[2].Descriptor()
+	// venuesms.DefaultUsedNotice holds the default value on creation for the used_notice field.
+	venuesms.DefaultUsedNotice = venuesmsDescUsedNotice.Default.(int64)
+	venuesmslogMixin := schema.VenueSmsLog{}.Mixin()
+	venuesmslogMixinFields0 := venuesmslogMixin[0].Fields()
+	_ = venuesmslogMixinFields0
+	venuesmslogMixinFields1 := venuesmslogMixin[1].Fields()
+	_ = venuesmslogMixinFields1
+	venuesmslogFields := schema.VenueSmsLog{}.Fields()
+	_ = venuesmslogFields
+	// venuesmslogDescCreatedAt is the schema descriptor for created_at field.
+	venuesmslogDescCreatedAt := venuesmslogMixinFields0[1].Descriptor()
+	// venuesmslog.DefaultCreatedAt holds the default value on creation for the created_at field.
+	venuesmslog.DefaultCreatedAt = venuesmslogDescCreatedAt.Default.(func() time.Time)
+	// venuesmslogDescUpdatedAt is the schema descriptor for updated_at field.
+	venuesmslogDescUpdatedAt := venuesmslogMixinFields0[2].Descriptor()
+	// venuesmslog.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	venuesmslog.DefaultUpdatedAt = venuesmslogDescUpdatedAt.Default.(func() time.Time)
+	// venuesmslog.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	venuesmslog.UpdateDefaultUpdatedAt = venuesmslogDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// venuesmslogDescDelete is the schema descriptor for delete field.
+	venuesmslogDescDelete := venuesmslogMixinFields0[3].Descriptor()
+	// venuesmslog.DefaultDelete holds the default value on creation for the delete field.
+	venuesmslog.DefaultDelete = venuesmslogDescDelete.Default.(int64)
+	// venuesmslogDescCreatedID is the schema descriptor for created_id field.
+	venuesmslogDescCreatedID := venuesmslogMixinFields0[4].Descriptor()
+	// venuesmslog.DefaultCreatedID holds the default value on creation for the created_id field.
+	venuesmslog.DefaultCreatedID = venuesmslogDescCreatedID.Default.(int64)
+	// venuesmslogDescStatus is the schema descriptor for status field.
+	venuesmslogDescStatus := venuesmslogMixinFields1[0].Descriptor()
+	// venuesmslog.DefaultStatus holds the default value on creation for the status field.
+	venuesmslog.DefaultStatus = venuesmslogDescStatus.Default.(int64)
 }

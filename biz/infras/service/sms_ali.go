@@ -9,24 +9,14 @@ import (
 	dysmsapi20170525 "github.com/alibabacloud-go/dysmsapi-20170525/v4/client"
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/dgraph-io/ristretto"
 	"math/rand"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
-	"saas/biz/dal/db/ent"
 	"saas/biz/dal/sms"
 	"saas/biz/infras/do"
 	"saas/config"
 	"time"
 )
-
-type Sms struct {
-	ctx   context.Context
-	c     *app.RequestContext
-	salt  string
-	db    *ent.Client
-	cache *ristretto.Cache
-}
 
 func (s Sms) SendVerificationCode(mobile string) (err error) {
 
@@ -52,7 +42,7 @@ func (s Sms) SendVerificationCode(mobile string) (err error) {
 
 	go func() {
 		if bizId != "" {
-			s.db.Sms.Create().
+			s.db.VenueSmsLog.Create().
 				SetMobile(mobile).
 				SetCode(verifyCode).
 				SetBizID(bizId).

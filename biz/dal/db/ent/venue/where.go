@@ -1312,6 +1312,52 @@ func HasUsersWith(preds ...predicate.User) predicate.Venue {
 	})
 }
 
+// HasSms applies the HasEdge predicate on the "sms" edge.
+func HasSms() predicate.Venue {
+	return predicate.Venue(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SmsTable, SmsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSmsWith applies the HasEdge predicate on the "sms" edge with a given conditions (other predicates).
+func HasSmsWith(preds ...predicate.VenueSms) predicate.Venue {
+	return predicate.Venue(func(s *sql.Selector) {
+		step := newSmsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSmslog applies the HasEdge predicate on the "smslog" edge.
+func HasSmslog() predicate.Venue {
+	return predicate.Venue(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SmslogTable, SmslogColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSmslogWith applies the HasEdge predicate on the "smslog" edge with a given conditions (other predicates).
+func HasSmslogWith(preds ...predicate.VenueSmsLog) predicate.Venue {
+	return predicate.Venue(func(s *sql.Selector) {
+		step := newSmslogStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Venue) predicate.Venue {
 	return predicate.Venue(sql.AndPredicates(predicates...))

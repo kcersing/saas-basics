@@ -13,6 +13,8 @@ import (
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/biz/dal/db/ent/venuesms"
+	"saas/biz/dal/db/ent/venuesmslog"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -30,6 +32,8 @@ type VenueQuery struct {
 	withVenueOrders *OrderQuery
 	withVenueEntry  *EntryLogsQuery
 	withUsers       *UserQuery
+	withSms         *VenueSmsQuery
+	withSmslog      *VenueSmsLogQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -147,6 +151,50 @@ func (vq *VenueQuery) QueryUsers() *UserQuery {
 			sqlgraph.From(venue.Table, venue.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, venue.UsersTable, venue.UsersPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySms chains the current query on the "sms" edge.
+func (vq *VenueQuery) QuerySms() *VenueSmsQuery {
+	query := (&VenueSmsClient{config: vq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := vq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := vq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(venue.Table, venue.FieldID, selector),
+			sqlgraph.To(venuesms.Table, venuesms.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, venue.SmsTable, venue.SmsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySmslog chains the current query on the "smslog" edge.
+func (vq *VenueQuery) QuerySmslog() *VenueSmsLogQuery {
+	query := (&VenueSmsLogClient{config: vq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := vq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := vq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(venue.Table, venue.FieldID, selector),
+			sqlgraph.To(venuesmslog.Table, venuesmslog.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, venue.SmslogTable, venue.SmslogColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
@@ -350,6 +398,8 @@ func (vq *VenueQuery) Clone() *VenueQuery {
 		withVenueOrders: vq.withVenueOrders.Clone(),
 		withVenueEntry:  vq.withVenueEntry.Clone(),
 		withUsers:       vq.withUsers.Clone(),
+		withSms:         vq.withSms.Clone(),
+		withSmslog:      vq.withSmslog.Clone(),
 		// clone intermediate query.
 		sql:  vq.sql.Clone(),
 		path: vq.path,
@@ -397,6 +447,28 @@ func (vq *VenueQuery) WithUsers(opts ...func(*UserQuery)) *VenueQuery {
 		opt(query)
 	}
 	vq.withUsers = query
+	return vq
+}
+
+// WithSms tells the query-builder to eager-load the nodes that are connected to
+// the "sms" edge. The optional arguments are used to configure the query builder of the edge.
+func (vq *VenueQuery) WithSms(opts ...func(*VenueSmsQuery)) *VenueQuery {
+	query := (&VenueSmsClient{config: vq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	vq.withSms = query
+	return vq
+}
+
+// WithSmslog tells the query-builder to eager-load the nodes that are connected to
+// the "smslog" edge. The optional arguments are used to configure the query builder of the edge.
+func (vq *VenueQuery) WithSmslog(opts ...func(*VenueSmsLogQuery)) *VenueQuery {
+	query := (&VenueSmsLogClient{config: vq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	vq.withSmslog = query
 	return vq
 }
 
@@ -478,11 +550,13 @@ func (vq *VenueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Venue,
 	var (
 		nodes       = []*Venue{}
 		_spec       = vq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
 			vq.withPlaces != nil,
 			vq.withVenueOrders != nil,
 			vq.withVenueEntry != nil,
 			vq.withUsers != nil,
+			vq.withSms != nil,
+			vq.withSmslog != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -528,6 +602,20 @@ func (vq *VenueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Venue,
 		if err := vq.loadUsers(ctx, query, nodes,
 			func(n *Venue) { n.Edges.Users = []*User{} },
 			func(n *Venue, e *User) { n.Edges.Users = append(n.Edges.Users, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := vq.withSms; query != nil {
+		if err := vq.loadSms(ctx, query, nodes,
+			func(n *Venue) { n.Edges.Sms = []*VenueSms{} },
+			func(n *Venue, e *VenueSms) { n.Edges.Sms = append(n.Edges.Sms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := vq.withSmslog; query != nil {
+		if err := vq.loadSmslog(ctx, query, nodes,
+			func(n *Venue) { n.Edges.Smslog = []*VenueSmsLog{} },
+			func(n *Venue, e *VenueSmsLog) { n.Edges.Smslog = append(n.Edges.Smslog, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -683,6 +771,66 @@ func (vq *VenueQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (vq *VenueQuery) loadSms(ctx context.Context, query *VenueSmsQuery, nodes []*Venue, init func(*Venue), assign func(*Venue, *VenueSms)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Venue)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(venuesms.FieldVenueID)
+	}
+	query.Where(predicate.VenueSms(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(venue.SmsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.VenueID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "venue_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (vq *VenueQuery) loadSmslog(ctx context.Context, query *VenueSmsLogQuery, nodes []*Venue, init func(*Venue), assign func(*Venue, *VenueSmsLog)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Venue)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(venuesmslog.FieldVenueID)
+	}
+	query.Where(predicate.VenueSmsLog(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(venue.SmslogColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.VenueID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "venue_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

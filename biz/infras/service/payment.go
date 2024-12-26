@@ -35,9 +35,6 @@ type Payment struct {
 }
 
 func NewWXPayment(ctx context.Context, c *app.RequestContext) do.Payment {
-
-	//MiniProgramApp.Auth.Session(ctx, code)
-
 	return &Payment{
 		ctx:   ctx,
 		c:     c,

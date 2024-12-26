@@ -10,6 +10,8 @@ import (
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/biz/dal/db/ent/venuesms"
+	"saas/biz/dal/db/ent/venuesmslog"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -319,6 +321,36 @@ func (vc *VenueCreate) AddUsers(u ...*User) *VenueCreate {
 	return vc.AddUserIDs(ids...)
 }
 
+// AddSmIDs adds the "sms" edge to the VenueSms entity by IDs.
+func (vc *VenueCreate) AddSmIDs(ids ...int64) *VenueCreate {
+	vc.mutation.AddSmIDs(ids...)
+	return vc
+}
+
+// AddSms adds the "sms" edges to the VenueSms entity.
+func (vc *VenueCreate) AddSms(v ...*VenueSms) *VenueCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vc.AddSmIDs(ids...)
+}
+
+// AddSmslogIDs adds the "smslog" edge to the VenueSmsLog entity by IDs.
+func (vc *VenueCreate) AddSmslogIDs(ids ...int64) *VenueCreate {
+	vc.mutation.AddSmslogIDs(ids...)
+	return vc
+}
+
+// AddSmslog adds the "smslog" edges to the VenueSmsLog entity.
+func (vc *VenueCreate) AddSmslog(v ...*VenueSmsLog) *VenueCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vc.AddSmslogIDs(ids...)
+}
+
 // Mutation returns the VenueMutation object of the builder.
 func (vc *VenueCreate) Mutation() *VenueMutation {
 	return vc.mutation
@@ -535,6 +567,38 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vc.mutation.SmsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmsTable,
+			Columns: []string{venue.SmsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vc.mutation.SmslogIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   venue.SmslogTable,
+			Columns: []string{venue.SmslogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

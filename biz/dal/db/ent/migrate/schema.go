@@ -1226,24 +1226,6 @@ var (
 			},
 		},
 	}
-	// SysSmsColumns holds the columns for the "sys_sms" table.
-	SysSmsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
-		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
-		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
-		{Name: "mobile", Type: field.TypeString, Comment: "手机号"},
-		{Name: "biz_id", Type: field.TypeString, Comment: "BizId"},
-		{Name: "code", Type: field.TypeString, Comment: "内容"},
-		{Name: "template", Type: field.TypeString, Comment: "短信模板"},
-	}
-	// SysSmsTable holds the schema information for the "sys_sms" table.
-	SysSmsTable = &schema.Table{
-		Name:       "sys_sms",
-		Columns:    SysSmsColumns,
-		PrimaryKey: []*schema.Column{SysSmsColumns[0]},
-	}
 	// SysTokensColumns holds the columns for the "sys_tokens" table.
 	SysTokensColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -1379,6 +1361,61 @@ var (
 				Name:    "venueplace_venue_id",
 				Unique:  false,
 				Columns: []*schema.Column{VenuePlaceColumns[13]},
+			},
+		},
+	}
+	// SysVenueSmsColumns holds the columns for the "sys_venue_sms" table.
+	SysVenueSmsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "notice_count", Type: field.TypeInt64, Comment: "通知短信数量", Default: 0},
+		{Name: "used_notice", Type: field.TypeInt64, Comment: "已用通知", Default: 0},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id", Default: 0},
+	}
+	// SysVenueSmsTable holds the schema information for the "sys_venue_sms" table.
+	SysVenueSmsTable = &schema.Table{
+		Name:       "sys_venue_sms",
+		Columns:    SysVenueSmsColumns,
+		PrimaryKey: []*schema.Column{SysVenueSmsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sys_venue_sms_venue_sms",
+				Columns:    []*schema.Column{SysVenueSmsColumns[7]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// SysVenueSmsLogColumns holds the columns for the "sys_venue_sms_log" table.
+	SysVenueSmsLogColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
+		{Name: "mobile", Type: field.TypeString, Comment: "手机号"},
+		{Name: "biz_id", Type: field.TypeString, Comment: "BizId"},
+		{Name: "code", Type: field.TypeString, Comment: "验证码"},
+		{Name: "content", Type: field.TypeString, Comment: "内容"},
+		{Name: "notify_type", Type: field.TypeInt64, Nullable: true, Comment: "通知类型[1会员;2员工]"},
+		{Name: "template", Type: field.TypeString, Comment: "短信模板"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+	}
+	// SysVenueSmsLogTable holds the schema information for the "sys_venue_sms_log" table.
+	SysVenueSmsLogTable = &schema.Table{
+		Name:       "sys_venue_sms_log",
+		Columns:    SysVenueSmsLogColumns,
+		PrimaryKey: []*schema.Column{SysVenueSmsLogColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sys_venue_sms_log_venue_smslog",
+				Columns:    []*schema.Column{SysVenueSmsLogColumns[12]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -1642,11 +1679,12 @@ var (
 		ScheduleTable,
 		ScheduleCoachTable,
 		ScheduleMemberTable,
-		SysSmsTable,
 		SysTokensTable,
 		SysUsersTable,
 		VenueTable,
 		VenuePlaceTable,
+		SysVenueSmsTable,
+		SysVenueSmsLogTable,
 		MemberMemberContestsTable,
 		MemberMemberBootcampsTable,
 		MemberMemberCommunitysTable,
@@ -1804,9 +1842,6 @@ func init() {
 		Table:   "schedule_member",
 		Options: "AUTO_INCREMENT = 100000",
 	}
-	SysSmsTable.Annotation = &entsql.Annotation{
-		Table: "sys_sms",
-	}
 	SysTokensTable.ForeignKeys[0].RefTable = SysUsersTable
 	SysTokensTable.Annotation = &entsql.Annotation{
 		Table: "sys_tokens",
@@ -1823,6 +1858,14 @@ func init() {
 	VenuePlaceTable.Annotation = &entsql.Annotation{
 		Table:   "venue_place",
 		Options: "AUTO_INCREMENT = 100000",
+	}
+	SysVenueSmsTable.ForeignKeys[0].RefTable = VenueTable
+	SysVenueSmsTable.Annotation = &entsql.Annotation{
+		Table: "sys_venue_sms",
+	}
+	SysVenueSmsLogTable.ForeignKeys[0].RefTable = VenueTable
+	SysVenueSmsLogTable.Annotation = &entsql.Annotation{
+		Table: "sys_venue_sms_log",
 	}
 	MemberMemberContestsTable.ForeignKeys[0].RefTable = MemberTable
 	MemberMemberContestsTable.ForeignKeys[1].RefTable = ContestParticipantTable
