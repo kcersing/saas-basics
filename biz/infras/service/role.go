@@ -41,12 +41,12 @@ func NewRole(ctx context.Context, c *app.RequestContext) do.Role {
 
 func (r Role) Create(req *auth.RoleInfo) error {
 	roleEnt, err := r.db.Role.Create().
-		SetName(*req.Name).
-		SetValue(*req.Value).
-		SetDefaultRouter(*req.DefaultRouter).
-		SetStatus(*req.Status).
-		SetRemark(*req.Remark).
-		SetOrderNo(*req.OrderNo).
+		SetName(req.Name).
+		SetValue(req.Value).
+		SetDefaultRouter(req.DefaultRouter).
+		SetStatus(req.Status).
+		SetRemark(req.Remark).
+		SetOrderNo(req.OrderNo).
 		Save(r.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create Role failed")
@@ -59,13 +59,13 @@ func (r Role) Create(req *auth.RoleInfo) error {
 }
 
 func (r Role) Update(req *auth.RoleInfo) error {
-	roleEnt, err := r.db.Role.UpdateOneID(*req.Id).
-		SetName(*req.Name).
-		SetValue(*req.Value).
-		SetDefaultRouter(*req.DefaultRouter).
-		SetStatus(*req.Status).
-		SetRemark(*req.Remark).
-		SetOrderNo(*req.OrderNo).
+	roleEnt, err := r.db.Role.UpdateOneID(req.Id).
+		SetName(req.Name).
+		SetValue(req.Value).
+		SetDefaultRouter(req.DefaultRouter).
+		SetStatus(req.Status).
+		SetRemark(req.Remark).
+		SetOrderNo(req.OrderNo).
 		SetUpdatedAt(time.Now()).
 		Save(r.ctx)
 	if err != nil {
@@ -102,15 +102,15 @@ func entRoleInfo(entRole ent.Role) *auth.RoleInfo {
 	createdAt := entRole.CreatedAt.Format(time.DateTime)
 	updatedAt := entRole.UpdatedAt.Format(time.DateTime)
 	return &auth.RoleInfo{
-		Id:            &entRole.ID,
-		Name:          &entRole.Name,
-		Value:         &entRole.Value,
-		DefaultRouter: &entRole.DefaultRouter,
-		Status:        &entRole.Status,
-		Remark:        &entRole.Remark,
-		OrderNo:       &entRole.OrderNo,
-		CreatedAt:     &createdAt,
-		UpdatedAt:     &updatedAt,
+		Id:            entRole.ID,
+		Name:          entRole.Name,
+		Value:         entRole.Value,
+		DefaultRouter: entRole.DefaultRouter,
+		Status:        entRole.Status,
+		Remark:        entRole.Remark,
+		OrderNo:       entRole.OrderNo,
+		CreatedAt:     createdAt,
+		UpdatedAt:     updatedAt,
 	}
 }
 func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {

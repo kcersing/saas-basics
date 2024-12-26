@@ -56,17 +56,17 @@ struct MenuAuthInfoReq {
 
 //创建或更新角色信息参数
 struct RoleInfo {
-    1:  optional i64 Id (api.raw = "id")
-    2:  optional string name (api.raw = "name")
-    3:  optional string value (api.raw = "value")
-    4:  optional string defaultRouter (api.raw = "defaultRouter")
-    5:  optional i64 status (api.raw = "status")
-    6:  optional string remark  (api.raw = "remark")
-    7:  optional i64 orderNo (api.raw = "orderNo")
-    8:  optional string createdAt (api.raw = "createdAt")
-    9:  optional string updatedAt (api.raw = "updatedAt")
-    10: optional list<i64> Menus (api.raw = "menus")
-    11: optional list<i64> Apis (api.raw = "apis")
+    1:  optional i64 Id=0 (api.raw = "id")
+    2:  optional string name="" (api.raw = "name")
+    3:  optional string value="" (api.raw = "value")
+    4:  optional string defaultRouter="" (api.raw = "defaultRouter")
+    5:  optional i64 status=1 (api.raw = "status")
+    6:  optional string remark=""  (api.raw = "remark")
+    7:  optional i64 orderNo=0 (api.raw = "orderNo")
+    8:  optional string createdAt="" (api.raw = "createdAt")
+    9:  optional string updatedAt="" (api.raw = "updatedAt")
+    10: optional list<i64> Menus={} (api.raw = "menus")
+    11: optional list<i64> Apis={} (api.raw = "apis")
 }
 //日志列表请求数据
 struct LogsListReq {

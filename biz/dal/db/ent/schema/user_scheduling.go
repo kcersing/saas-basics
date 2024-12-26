@@ -4,9 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 	"saas/biz/dal/db/ent/schema/mixins"
 )
 
@@ -29,21 +27,11 @@ func (UserScheduling) Mixin() []ent.Mixin {
 }
 
 func (UserScheduling) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("token", Token.Type).Unique(),
-		edge.To("tags", DictionaryDetail.Type),
-		edge.To("created_orders", Order.Type),
-		edge.To("user_entry", EntryLogs.Type),
-		edge.To("venues", Venue.Type),
-		//edge.To("user_face", Face.Type),
-	}
+	return []ent.Edge{}
 }
 
 func (UserScheduling) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("username", "mobile").
-			Unique(),
-	}
+	return []ent.Index{}
 }
 
 func (UserScheduling) Annotations() []schema.Annotation {

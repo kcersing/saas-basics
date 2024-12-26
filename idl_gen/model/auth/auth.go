@@ -218,108 +218,132 @@ func (p *MenuAuthInfoReq) String() string {
 
 // 创建或更新角色信息参数
 type RoleInfo struct {
-	Id            *int64  `thrift:"Id,1,optional" form:"Id" json:"Id" query:"Id"`
-	Name          *string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
-	Value         *string `thrift:"value,3,optional" form:"value" json:"value" query:"value"`
-	DefaultRouter *string `thrift:"defaultRouter,4,optional" form:"defaultRouter" json:"defaultRouter" query:"defaultRouter"`
-	Status        *int64  `thrift:"status,5,optional" form:"status" json:"status" query:"status"`
-	Remark        *string `thrift:"remark,6,optional" form:"remark" json:"remark" query:"remark"`
-	OrderNo       *int64  `thrift:"orderNo,7,optional" form:"orderNo" json:"orderNo" query:"orderNo"`
-	CreatedAt     *string `thrift:"createdAt,8,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
-	UpdatedAt     *string `thrift:"updatedAt,9,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	Id            int64   `thrift:"Id,1,optional" form:"Id" json:"Id" query:"Id"`
+	Name          string  `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	Value         string  `thrift:"value,3,optional" form:"value" json:"value" query:"value"`
+	DefaultRouter string  `thrift:"defaultRouter,4,optional" form:"defaultRouter" json:"defaultRouter" query:"defaultRouter"`
+	Status        int64   `thrift:"status,5,optional" form:"status" json:"status" query:"status"`
+	Remark        string  `thrift:"remark,6,optional" form:"remark" json:"remark" query:"remark"`
+	OrderNo       int64   `thrift:"orderNo,7,optional" form:"orderNo" json:"orderNo" query:"orderNo"`
+	CreatedAt     string  `thrift:"createdAt,8,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt     string  `thrift:"updatedAt,9,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 	Menus         []int64 `thrift:"Menus,10,optional" form:"Menus" json:"Menus" query:"Menus"`
 	Apis          []int64 `thrift:"Apis,11,optional" form:"Apis" json:"Apis" query:"Apis"`
 }
 
 func NewRoleInfo() *RoleInfo {
-	return &RoleInfo{}
+	return &RoleInfo{
+
+		Id:            0,
+		Name:          "",
+		Value:         "",
+		DefaultRouter: "",
+		Status:        1,
+		Remark:        "",
+		OrderNo:       0,
+		CreatedAt:     "",
+		UpdatedAt:     "",
+		Menus:         []int64{},
+		Apis:          []int64{},
+	}
 }
 
 func (p *RoleInfo) InitDefault() {
+	p.Id = 0
+	p.Name = ""
+	p.Value = ""
+	p.DefaultRouter = ""
+	p.Status = 1
+	p.Remark = ""
+	p.OrderNo = 0
+	p.CreatedAt = ""
+	p.UpdatedAt = ""
+	p.Menus = []int64{}
+	p.Apis = []int64{}
 }
 
-var RoleInfo_Id_DEFAULT int64
+var RoleInfo_Id_DEFAULT int64 = 0
 
 func (p *RoleInfo) GetId() (v int64) {
 	if !p.IsSetId() {
 		return RoleInfo_Id_DEFAULT
 	}
-	return *p.Id
+	return p.Id
 }
 
-var RoleInfo_Name_DEFAULT string
+var RoleInfo_Name_DEFAULT string = ""
 
 func (p *RoleInfo) GetName() (v string) {
 	if !p.IsSetName() {
 		return RoleInfo_Name_DEFAULT
 	}
-	return *p.Name
+	return p.Name
 }
 
-var RoleInfo_Value_DEFAULT string
+var RoleInfo_Value_DEFAULT string = ""
 
 func (p *RoleInfo) GetValue() (v string) {
 	if !p.IsSetValue() {
 		return RoleInfo_Value_DEFAULT
 	}
-	return *p.Value
+	return p.Value
 }
 
-var RoleInfo_DefaultRouter_DEFAULT string
+var RoleInfo_DefaultRouter_DEFAULT string = ""
 
 func (p *RoleInfo) GetDefaultRouter() (v string) {
 	if !p.IsSetDefaultRouter() {
 		return RoleInfo_DefaultRouter_DEFAULT
 	}
-	return *p.DefaultRouter
+	return p.DefaultRouter
 }
 
-var RoleInfo_Status_DEFAULT int64
+var RoleInfo_Status_DEFAULT int64 = 1
 
 func (p *RoleInfo) GetStatus() (v int64) {
 	if !p.IsSetStatus() {
 		return RoleInfo_Status_DEFAULT
 	}
-	return *p.Status
+	return p.Status
 }
 
-var RoleInfo_Remark_DEFAULT string
+var RoleInfo_Remark_DEFAULT string = ""
 
 func (p *RoleInfo) GetRemark() (v string) {
 	if !p.IsSetRemark() {
 		return RoleInfo_Remark_DEFAULT
 	}
-	return *p.Remark
+	return p.Remark
 }
 
-var RoleInfo_OrderNo_DEFAULT int64
+var RoleInfo_OrderNo_DEFAULT int64 = 0
 
 func (p *RoleInfo) GetOrderNo() (v int64) {
 	if !p.IsSetOrderNo() {
 		return RoleInfo_OrderNo_DEFAULT
 	}
-	return *p.OrderNo
+	return p.OrderNo
 }
 
-var RoleInfo_CreatedAt_DEFAULT string
+var RoleInfo_CreatedAt_DEFAULT string = ""
 
 func (p *RoleInfo) GetCreatedAt() (v string) {
 	if !p.IsSetCreatedAt() {
 		return RoleInfo_CreatedAt_DEFAULT
 	}
-	return *p.CreatedAt
+	return p.CreatedAt
 }
 
-var RoleInfo_UpdatedAt_DEFAULT string
+var RoleInfo_UpdatedAt_DEFAULT string = ""
 
 func (p *RoleInfo) GetUpdatedAt() (v string) {
 	if !p.IsSetUpdatedAt() {
 		return RoleInfo_UpdatedAt_DEFAULT
 	}
-	return *p.UpdatedAt
+	return p.UpdatedAt
 }
 
-var RoleInfo_Menus_DEFAULT []int64
+var RoleInfo_Menus_DEFAULT []int64 = []int64{}
 
 func (p *RoleInfo) GetMenus() (v []int64) {
 	if !p.IsSetMenus() {
@@ -328,7 +352,7 @@ func (p *RoleInfo) GetMenus() (v []int64) {
 	return p.Menus
 }
 
-var RoleInfo_Apis_DEFAULT []int64
+var RoleInfo_Apis_DEFAULT []int64 = []int64{}
 
 func (p *RoleInfo) GetApis() (v []int64) {
 	if !p.IsSetApis() {
@@ -352,39 +376,39 @@ var fieldIDToName_RoleInfo = map[int16]string{
 }
 
 func (p *RoleInfo) IsSetId() bool {
-	return p.Id != nil
+	return p.Id != RoleInfo_Id_DEFAULT
 }
 
 func (p *RoleInfo) IsSetName() bool {
-	return p.Name != nil
+	return p.Name != RoleInfo_Name_DEFAULT
 }
 
 func (p *RoleInfo) IsSetValue() bool {
-	return p.Value != nil
+	return p.Value != RoleInfo_Value_DEFAULT
 }
 
 func (p *RoleInfo) IsSetDefaultRouter() bool {
-	return p.DefaultRouter != nil
+	return p.DefaultRouter != RoleInfo_DefaultRouter_DEFAULT
 }
 
 func (p *RoleInfo) IsSetStatus() bool {
-	return p.Status != nil
+	return p.Status != RoleInfo_Status_DEFAULT
 }
 
 func (p *RoleInfo) IsSetRemark() bool {
-	return p.Remark != nil
+	return p.Remark != RoleInfo_Remark_DEFAULT
 }
 
 func (p *RoleInfo) IsSetOrderNo() bool {
-	return p.OrderNo != nil
+	return p.OrderNo != RoleInfo_OrderNo_DEFAULT
 }
 
 func (p *RoleInfo) IsSetCreatedAt() bool {
-	return p.CreatedAt != nil
+	return p.CreatedAt != RoleInfo_CreatedAt_DEFAULT
 }
 
 func (p *RoleInfo) IsSetUpdatedAt() bool {
-	return p.UpdatedAt != nil
+	return p.UpdatedAt != RoleInfo_UpdatedAt_DEFAULT
 }
 
 func (p *RoleInfo) IsSetMenus() bool {
@@ -533,99 +557,99 @@ ReadStructEndError:
 
 func (p *RoleInfo) ReadField1(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Id = _field
 	return nil
 }
 func (p *RoleInfo) ReadField2(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Name = _field
 	return nil
 }
 func (p *RoleInfo) ReadField3(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Value = _field
 	return nil
 }
 func (p *RoleInfo) ReadField4(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.DefaultRouter = _field
 	return nil
 }
 func (p *RoleInfo) ReadField5(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Status = _field
 	return nil
 }
 func (p *RoleInfo) ReadField6(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Remark = _field
 	return nil
 }
 func (p *RoleInfo) ReadField7(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.OrderNo = _field
 	return nil
 }
 func (p *RoleInfo) ReadField8(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.CreatedAt = _field
 	return nil
 }
 func (p *RoleInfo) ReadField9(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.UpdatedAt = _field
 	return nil
@@ -750,7 +774,7 @@ func (p *RoleInfo) writeField1(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Id); err != nil {
+		if err := oprot.WriteI64(p.Id); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -769,7 +793,7 @@ func (p *RoleInfo) writeField2(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Name); err != nil {
+		if err := oprot.WriteString(p.Name); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -788,7 +812,7 @@ func (p *RoleInfo) writeField3(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("value", thrift.STRING, 3); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Value); err != nil {
+		if err := oprot.WriteString(p.Value); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -807,7 +831,7 @@ func (p *RoleInfo) writeField4(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("defaultRouter", thrift.STRING, 4); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.DefaultRouter); err != nil {
+		if err := oprot.WriteString(p.DefaultRouter); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -826,7 +850,7 @@ func (p *RoleInfo) writeField5(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("status", thrift.I64, 5); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.Status); err != nil {
+		if err := oprot.WriteI64(p.Status); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -845,7 +869,7 @@ func (p *RoleInfo) writeField6(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("remark", thrift.STRING, 6); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Remark); err != nil {
+		if err := oprot.WriteString(p.Remark); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -864,7 +888,7 @@ func (p *RoleInfo) writeField7(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("orderNo", thrift.I64, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.OrderNo); err != nil {
+		if err := oprot.WriteI64(p.OrderNo); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -883,7 +907,7 @@ func (p *RoleInfo) writeField8(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 8); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.CreatedAt); err != nil {
+		if err := oprot.WriteString(p.CreatedAt); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -902,7 +926,7 @@ func (p *RoleInfo) writeField9(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 9); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.UpdatedAt); err != nil {
+		if err := oprot.WriteString(p.UpdatedAt); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
