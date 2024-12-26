@@ -743,7 +743,6 @@ var (
 		{Name: "active_menu", Type: field.TypeString, Nullable: true, Comment: "set the active menu | 激活菜单", Default: ""},
 		{Name: "affix", Type: field.TypeBool, Nullable: true, Comment: "affix tab | Tab 固定", Default: false},
 		{Name: "no_cache", Type: field.TypeBool, Nullable: true, Comment: "do not keep alive the tab | 取消页面缓存", Default: false},
-		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "type | 类型 数据字典menu_type", Default: ""},
 		{Name: "parent_id", Type: field.TypeInt64, Nullable: true, Comment: "parent menu ID | 父菜单ID"},
 	}
 	// SysMenusTable holds the schema information for the "sys_menus" table.
@@ -754,7 +753,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_menus_sys_menus_children",
-				Columns:    []*schema.Column{SysMenusColumns[23]},
+				Columns:    []*schema.Column{SysMenusColumns[22]},
 				RefColumns: []*schema.Column{SysMenusColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

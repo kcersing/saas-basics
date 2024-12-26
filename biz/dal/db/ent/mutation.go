@@ -31134,7 +31134,6 @@ type MenuMutation struct {
 	active_menu     *string
 	affix           *bool
 	no_cache        *bool
-	_type           *string
 	clearedFields   map[string]struct{}
 	roles           map[int64]struct{}
 	removedroles    map[int64]struct{}
@@ -32481,55 +32480,6 @@ func (m *MenuMutation) ResetNoCache() {
 	delete(m.clearedFields, menu.FieldNoCache)
 }
 
-// SetType sets the "type" field.
-func (m *MenuMutation) SetType(s string) {
-	m._type = &s
-}
-
-// GetType returns the value of the "type" field in the mutation.
-func (m *MenuMutation) GetType() (r string, exists bool) {
-	v := m._type
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldType returns the old "type" field's value of the Menu entity.
-// If the Menu object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MenuMutation) OldType(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldType is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldType requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldType: %w", err)
-	}
-	return oldValue.Type, nil
-}
-
-// ClearType clears the value of the "type" field.
-func (m *MenuMutation) ClearType() {
-	m._type = nil
-	m.clearedFields[menu.FieldType] = struct{}{}
-}
-
-// TypeCleared returns if the "type" field was cleared in this mutation.
-func (m *MenuMutation) TypeCleared() bool {
-	_, ok := m.clearedFields[menu.FieldType]
-	return ok
-}
-
-// ResetType resets all changes to the "type" field.
-func (m *MenuMutation) ResetType() {
-	m._type = nil
-	delete(m.clearedFields, menu.FieldType)
-}
-
 // AddRoleIDs adds the "roles" edge to the Role entity by ids.
 func (m *MenuMutation) AddRoleIDs(ids ...int64) {
 	if m.roles == nil {
@@ -32753,7 +32703,7 @@ func (m *MenuMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MenuMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, menu.FieldCreatedAt)
 	}
@@ -32820,9 +32770,6 @@ func (m *MenuMutation) Fields() []string {
 	if m.no_cache != nil {
 		fields = append(fields, menu.FieldNoCache)
 	}
-	if m._type != nil {
-		fields = append(fields, menu.FieldType)
-	}
 	return fields
 }
 
@@ -32875,8 +32822,6 @@ func (m *MenuMutation) Field(name string) (ent.Value, bool) {
 		return m.Affix()
 	case menu.FieldNoCache:
 		return m.NoCache()
-	case menu.FieldType:
-		return m.GetType()
 	}
 	return nil, false
 }
@@ -32930,8 +32875,6 @@ func (m *MenuMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAffix(ctx)
 	case menu.FieldNoCache:
 		return m.OldNoCache(ctx)
-	case menu.FieldType:
-		return m.OldType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Menu field %s", name)
 }
@@ -33094,13 +33037,6 @@ func (m *MenuMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNoCache(v)
-		return nil
-	case menu.FieldType:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Menu field %s", name)
@@ -33285,9 +33221,6 @@ func (m *MenuMutation) ClearedFields() []string {
 	if m.FieldCleared(menu.FieldNoCache) {
 		fields = append(fields, menu.FieldNoCache)
 	}
-	if m.FieldCleared(menu.FieldType) {
-		fields = append(fields, menu.FieldType)
-	}
 	return fields
 }
 
@@ -33368,9 +33301,6 @@ func (m *MenuMutation) ClearField(name string) error {
 	case menu.FieldNoCache:
 		m.ClearNoCache()
 		return nil
-	case menu.FieldType:
-		m.ClearType()
-		return nil
 	}
 	return fmt.Errorf("unknown Menu nullable field %s", name)
 }
@@ -33444,9 +33374,6 @@ func (m *MenuMutation) ResetField(name string) error {
 		return nil
 	case menu.FieldNoCache:
 		m.ResetNoCache()
-		return nil
-	case menu.FieldType:
-		m.ResetType()
 		return nil
 	}
 	return fmt.Errorf("unknown Menu field %s", name)

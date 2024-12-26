@@ -62,8 +62,6 @@ type Menu struct {
 	Affix bool `json:"affix,omitempty"`
 	// do not keep alive the tab | 取消页面缓存
 	NoCache bool `json:"no_cache,omitempty"`
-	// type | 类型 数据字典menu_type
-	Type string `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MenuQuery when eager-loading is set.
 	Edges        MenuEdges `json:"edges"`
@@ -134,7 +132,7 @@ func (*Menu) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case menu.FieldID, menu.FieldDelete, menu.FieldCreatedID, menu.FieldStatus, menu.FieldParentID, menu.FieldSort, menu.FieldDisabled, menu.FieldLevel, menu.FieldMenuType:
 			values[i] = new(sql.NullInt64)
-		case menu.FieldPath, menu.FieldName, menu.FieldRedirect, menu.FieldComponent, menu.FieldURL, menu.FieldTitle, menu.FieldIcon, menu.FieldActiveMenu, menu.FieldType:
+		case menu.FieldPath, menu.FieldName, menu.FieldRedirect, menu.FieldComponent, menu.FieldURL, menu.FieldTitle, menu.FieldIcon, menu.FieldActiveMenu:
 			values[i] = new(sql.NullString)
 		case menu.FieldCreatedAt, menu.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -291,12 +289,6 @@ func (m *Menu) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.NoCache = value.Bool
 			}
-		case menu.FieldType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field type", values[i])
-			} else if value.Valid {
-				m.Type = value.String
-			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
 		}
@@ -418,9 +410,6 @@ func (m *Menu) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("no_cache=")
 	builder.WriteString(fmt.Sprintf("%v", m.NoCache))
-	builder.WriteString(", ")
-	builder.WriteString("type=")
-	builder.WriteString(m.Type)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -165,11 +165,6 @@ func NoCache(v bool) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldNoCache, v))
 }
 
-// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
-func Type(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldEQ(FieldType, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Menu {
 	return predicate.Menu(sql.FieldEQ(FieldCreatedAt, v))
@@ -1328,81 +1323,6 @@ func NoCacheIsNil() predicate.Menu {
 // NoCacheNotNil applies the NotNil predicate on the "no_cache" field.
 func NoCacheNotNil() predicate.Menu {
 	return predicate.Menu(sql.FieldNotNull(FieldNoCache))
-}
-
-// TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldEQ(FieldType, v))
-}
-
-// TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldNEQ(FieldType, v))
-}
-
-// TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...string) predicate.Menu {
-	return predicate.Menu(sql.FieldIn(FieldType, vs...))
-}
-
-// TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...string) predicate.Menu {
-	return predicate.Menu(sql.FieldNotIn(FieldType, vs...))
-}
-
-// TypeGT applies the GT predicate on the "type" field.
-func TypeGT(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldGT(FieldType, v))
-}
-
-// TypeGTE applies the GTE predicate on the "type" field.
-func TypeGTE(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldGTE(FieldType, v))
-}
-
-// TypeLT applies the LT predicate on the "type" field.
-func TypeLT(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldLT(FieldType, v))
-}
-
-// TypeLTE applies the LTE predicate on the "type" field.
-func TypeLTE(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldLTE(FieldType, v))
-}
-
-// TypeContains applies the Contains predicate on the "type" field.
-func TypeContains(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldContains(FieldType, v))
-}
-
-// TypeHasPrefix applies the HasPrefix predicate on the "type" field.
-func TypeHasPrefix(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldHasPrefix(FieldType, v))
-}
-
-// TypeHasSuffix applies the HasSuffix predicate on the "type" field.
-func TypeHasSuffix(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldHasSuffix(FieldType, v))
-}
-
-// TypeIsNil applies the IsNil predicate on the "type" field.
-func TypeIsNil() predicate.Menu {
-	return predicate.Menu(sql.FieldIsNull(FieldType))
-}
-
-// TypeNotNil applies the NotNil predicate on the "type" field.
-func TypeNotNil() predicate.Menu {
-	return predicate.Menu(sql.FieldNotNull(FieldType))
-}
-
-// TypeEqualFold applies the EqualFold predicate on the "type" field.
-func TypeEqualFold(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldEqualFold(FieldType, v))
-}
-
-// TypeContainsFold applies the ContainsFold predicate on the "type" field.
-func TypeContainsFold(v string) predicate.Menu {
-	return predicate.Menu(sql.FieldContainsFold(FieldType, v))
 }
 
 // HasRoles applies the HasEdge predicate on the "roles" edge.

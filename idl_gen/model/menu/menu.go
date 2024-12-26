@@ -10,9 +10,8 @@ import (
 )
 
 type MenuListReq struct {
-	Page     int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	PageSize int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
-	Type     string `thrift:"type,3,optional" form:"type" json:"type" query:"type"`
+	Page     int64 `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize int64 `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
 }
 
 func NewMenuListReq() *MenuListReq {
@@ -20,14 +19,12 @@ func NewMenuListReq() *MenuListReq {
 
 		Page:     1,
 		PageSize: 100,
-		Type:     "",
 	}
 }
 
 func (p *MenuListReq) InitDefault() {
 	p.Page = 1
 	p.PageSize = 100
-	p.Type = ""
 }
 
 var MenuListReq_Page_DEFAULT int64 = 1
@@ -48,19 +45,9 @@ func (p *MenuListReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
-var MenuListReq_Type_DEFAULT string = ""
-
-func (p *MenuListReq) GetType() (v string) {
-	if !p.IsSetType() {
-		return MenuListReq_Type_DEFAULT
-	}
-	return p.Type
-}
-
 var fieldIDToName_MenuListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
-	3: "type",
 }
 
 func (p *MenuListReq) IsSetPage() bool {
@@ -69,10 +56,6 @@ func (p *MenuListReq) IsSetPage() bool {
 
 func (p *MenuListReq) IsSetPageSize() bool {
 	return p.PageSize != MenuListReq_PageSize_DEFAULT
-}
-
-func (p *MenuListReq) IsSetType() bool {
-	return p.Type != MenuListReq_Type_DEFAULT
 }
 
 func (p *MenuListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -105,14 +88,6 @@ func (p *MenuListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 2:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 3:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -169,17 +144,6 @@ func (p *MenuListReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
-func (p *MenuListReq) ReadField3(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Type = _field
-	return nil
-}
 
 func (p *MenuListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -193,10 +157,6 @@ func (p *MenuListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
 			goto WriteFieldError
 		}
 	}
@@ -253,25 +213,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *MenuListReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if p.IsSetType() {
-		if err = oprot.WriteFieldBegin("type", thrift.STRING, 3); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(p.Type); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
 func (p *MenuListReq) String() string {
@@ -1451,8 +1392,6 @@ type CreateOrUpdateMenuReq struct {
 	ActiveMenu string `thrift:"activeMenu,16,optional" form:"activeMenu" json:"activeMenu" query:"activeMenu"`
 	Affix      bool   `thrift:"affix,17,optional" form:"affix" json:"affix" query:"affix"`
 	NoCache    bool   `thrift:"noCache,18,optional" form:"noCache" json:"noCache" query:"noCache"`
-	/**类型*/
-	Type string `thrift:"type,255,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewCreateOrUpdateMenuReq() *CreateOrUpdateMenuReq {
@@ -1475,7 +1414,6 @@ func NewCreateOrUpdateMenuReq() *CreateOrUpdateMenuReq {
 		ActiveMenu: "",
 		Affix:      true,
 		NoCache:    true,
-		Type:       "",
 	}
 }
 
@@ -1497,7 +1435,6 @@ func (p *CreateOrUpdateMenuReq) InitDefault() {
 	p.ActiveMenu = ""
 	p.Affix = true
 	p.NoCache = true
-	p.Type = ""
 }
 
 var CreateOrUpdateMenuReq_ID_DEFAULT int64 = 0
@@ -1653,34 +1590,24 @@ func (p *CreateOrUpdateMenuReq) GetNoCache() (v bool) {
 	return p.NoCache
 }
 
-var CreateOrUpdateMenuReq_Type_DEFAULT string = ""
-
-func (p *CreateOrUpdateMenuReq) GetType() (v string) {
-	if !p.IsSetType() {
-		return CreateOrUpdateMenuReq_Type_DEFAULT
-	}
-	return p.Type
-}
-
 var fieldIDToName_CreateOrUpdateMenuReq = map[int16]string{
-	1:   "id",
-	2:   "name",
-	3:   "parentId",
-	4:   "level",
-	5:   "path",
-	6:   "redirect",
-	7:   "component",
-	8:   "menuType",
-	9:   "hidden",
-	10:  "sort",
-	12:  "status",
-	13:  "url",
-	14:  "title",
-	15:  "icon",
-	16:  "activeMenu",
-	17:  "affix",
-	18:  "noCache",
-	255: "type",
+	1:  "id",
+	2:  "name",
+	3:  "parentId",
+	4:  "level",
+	5:  "path",
+	6:  "redirect",
+	7:  "component",
+	8:  "menuType",
+	9:  "hidden",
+	10: "sort",
+	12: "status",
+	13: "url",
+	14: "title",
+	15: "icon",
+	16: "activeMenu",
+	17: "affix",
+	18: "noCache",
 }
 
 func (p *CreateOrUpdateMenuReq) IsSetID() bool {
@@ -1749,10 +1676,6 @@ func (p *CreateOrUpdateMenuReq) IsSetAffix() bool {
 
 func (p *CreateOrUpdateMenuReq) IsSetNoCache() bool {
 	return p.NoCache != CreateOrUpdateMenuReq_NoCache_DEFAULT
-}
-
-func (p *CreateOrUpdateMenuReq) IsSetType() bool {
-	return p.Type != CreateOrUpdateMenuReq_Type_DEFAULT
 }
 
 func (p *CreateOrUpdateMenuReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1905,14 +1828,6 @@ func (p *CreateOrUpdateMenuReq) Read(iprot thrift.TProtocol) (err error) {
 		case 18:
 			if fieldTypeId == thrift.BOOL {
 				if err = p.ReadField18(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 255:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField255(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2134,17 +2049,6 @@ func (p *CreateOrUpdateMenuReq) ReadField18(iprot thrift.TProtocol) error {
 	p.NoCache = _field
 	return nil
 }
-func (p *CreateOrUpdateMenuReq) ReadField255(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Type = _field
-	return nil
-}
 
 func (p *CreateOrUpdateMenuReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -2218,10 +2122,6 @@ func (p *CreateOrUpdateMenuReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField18(oprot); err != nil {
 			fieldId = 18
-			goto WriteFieldError
-		}
-		if err = p.writeField255(oprot); err != nil {
-			fieldId = 255
 			goto WriteFieldError
 		}
 	}
@@ -2563,25 +2463,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
-}
-
-func (p *CreateOrUpdateMenuReq) writeField255(oprot thrift.TProtocol) (err error) {
-	if p.IsSetType() {
-		if err = oprot.WriteFieldBegin("type", thrift.STRING, 255); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(p.Type); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 255 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 255 end error: ", p), err)
 }
 
 func (p *CreateOrUpdateMenuReq) String() string {
@@ -3285,7 +3166,6 @@ type MenuInfo struct {
 	CreatedAt string      `thrift:"createdAt,15" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt string      `thrift:"updatedAt,16" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 	Title     string      `thrift:"title,17" form:"title" json:"title" query:"title"`
-	Type      string      `thrift:"type,18" form:"type" json:"type" query:"type"`
 }
 
 func NewMenuInfo() *MenuInfo {
@@ -3368,10 +3248,6 @@ func (p *MenuInfo) GetTitle() (v string) {
 	return p.Title
 }
 
-func (p *MenuInfo) GetType() (v string) {
-	return p.Type
-}
-
 var fieldIDToName_MenuInfo = map[int16]string{
 	1:  "id",
 	2:  "name",
@@ -3390,7 +3266,6 @@ var fieldIDToName_MenuInfo = map[int16]string{
 	15: "createdAt",
 	16: "updatedAt",
 	17: "title",
-	18: "type",
 }
 
 func (p *MenuInfo) IsSetMeta() bool {
@@ -3547,14 +3422,6 @@ func (p *MenuInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 17:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField17(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 18:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField18(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3785,17 +3652,6 @@ func (p *MenuInfo) ReadField17(iprot thrift.TProtocol) error {
 	p.Title = _field
 	return nil
 }
-func (p *MenuInfo) ReadField18(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Type = _field
-	return nil
-}
 
 func (p *MenuInfo) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -3869,10 +3725,6 @@ func (p *MenuInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField17(oprot); err != nil {
 			fieldId = 17
-			goto WriteFieldError
-		}
-		if err = p.writeField18(oprot); err != nil {
-			fieldId = 18
 			goto WriteFieldError
 		}
 	}
@@ -4188,23 +4040,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
-}
-
-func (p *MenuInfo) writeField18(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("type", thrift.STRING, 18); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Type); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
 }
 
 func (p *MenuInfo) String() string {
@@ -4657,7 +4492,7 @@ type MenuService interface {
 	//获取菜单列表
 	MenuLists(ctx context.Context, req *MenuListReq) (r *base.NilResponse, err error)
 
-	MenuTree(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error)
+	MenuTree(ctx context.Context, req *MenuListReq) (r *base.NilResponse, err error)
 	// 获取用户基本信息
 	MenuInfo(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 }
@@ -4786,7 +4621,7 @@ func (p *MenuServiceClient) MenuLists(ctx context.Context, req *MenuListReq) (r 
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *MenuServiceClient) MenuTree(ctx context.Context, req *base.PageInfoReq) (r *base.NilResponse, err error) {
+func (p *MenuServiceClient) MenuTree(ctx context.Context, req *MenuListReq) (r *base.NilResponse, err error) {
 	var _args MenuServiceMenuTreeArgs
 	_args.Req = req
 	var _result MenuServiceMenuTreeResult
@@ -8654,7 +8489,7 @@ func (p *MenuServiceMenuListsResult) String() string {
 }
 
 type MenuServiceMenuTreeArgs struct {
-	Req *base.PageInfoReq `thrift:"req,1"`
+	Req *MenuListReq `thrift:"req,1"`
 }
 
 func NewMenuServiceMenuTreeArgs() *MenuServiceMenuTreeArgs {
@@ -8664,9 +8499,9 @@ func NewMenuServiceMenuTreeArgs() *MenuServiceMenuTreeArgs {
 func (p *MenuServiceMenuTreeArgs) InitDefault() {
 }
 
-var MenuServiceMenuTreeArgs_Req_DEFAULT *base.PageInfoReq
+var MenuServiceMenuTreeArgs_Req_DEFAULT *MenuListReq
 
-func (p *MenuServiceMenuTreeArgs) GetReq() (v *base.PageInfoReq) {
+func (p *MenuServiceMenuTreeArgs) GetReq() (v *MenuListReq) {
 	if !p.IsSetReq() {
 		return MenuServiceMenuTreeArgs_Req_DEFAULT
 	}
@@ -8738,7 +8573,7 @@ ReadStructEndError:
 }
 
 func (p *MenuServiceMenuTreeArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := base.NewPageInfoReq()
+	_field := NewMenuListReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}

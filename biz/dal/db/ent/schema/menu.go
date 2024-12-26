@@ -37,8 +37,6 @@ func (Menu) Fields() []ent.Field {
 		field.String("active_menu").Optional().Default("").Comment("set the active menu | 激活菜单"),
 		field.Bool("affix").Optional().Default(false).Comment("affix tab | Tab 固定"),
 		field.Bool("no_cache").Optional().Default(false).Comment("do not keep alive the tab | 取消页面缓存"),
-
-		field.String("type").Optional().Default("").Comment("type | 类型 数据字典menu_type"),
 	}
 }
 

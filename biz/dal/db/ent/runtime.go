@@ -842,10 +842,6 @@ func init() {
 	menuDescNoCache := menuFields[16].Descriptor()
 	// menu.DefaultNoCache holds the default value on creation for the no_cache field.
 	menu.DefaultNoCache = menuDescNoCache.Default.(bool)
-	// menuDescType is the schema descriptor for type field.
-	menuDescType := menuFields[17].Descriptor()
-	// menu.DefaultType holds the default value on creation for the type field.
-	menu.DefaultType = menuDescType.Default.(string)
 	menuparamMixin := schema.MenuParam{}.Mixin()
 	menuparamMixinFields0 := menuparamMixin[0].Fields()
 	_ = menuparamMixinFields0
