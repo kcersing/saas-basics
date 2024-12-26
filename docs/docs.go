@@ -4784,10 +4784,10 @@ const docTemplate = `{
                 "information": {
                     "type": "string"
                 },
-                "is_accessible": {
+                "isAccessible": {
                     "type": "integer"
                 },
-                "is_show": {
+                "isShow": {
                     "type": "integer"
                 },
                 "name": {

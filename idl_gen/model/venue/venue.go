@@ -1823,8 +1823,8 @@ type VenuePlaceInfo struct {
 	Number       int64  `thrift:"number,8,optional" form:"number" json:"number" query:"number"`
 	Information  string `thrift:"information,9,optional" form:"information" json:"information" query:"information"`
 	Classify     int64  `thrift:"classify,10,optional" form:"classify" json:"classify" query:"classify"`
-	IsShow       int64  `thrift:"is_show,11,optional" form:"is_show" json:"is_show" query:"is_show"`
-	IsAccessible int64  `thrift:"is_accessible,12,optional" form:"is_accessible" json:"is_accessible" query:"is_accessible"`
+	IsShow       int64  `thrift:"isShow,11,optional" form:"isShow" json:"isShow" query:"isShow"`
+	IsAccessible int64  `thrift:"isAccessible,12,optional" form:"isAccessible" json:"isAccessible" query:"isAccessible"`
 }
 
 func NewVenuePlaceInfo() *VenuePlaceInfo {
@@ -1979,8 +1979,8 @@ var fieldIDToName_VenuePlaceInfo = map[int16]string{
 	8:  "number",
 	9:  "information",
 	10: "classify",
-	11: "is_show",
-	12: "is_accessible",
+	11: "isShow",
+	12: "isAccessible",
 }
 
 func (p *VenuePlaceInfo) IsSetID() bool {
@@ -2572,7 +2572,7 @@ WriteFieldEndError:
 
 func (p *VenuePlaceInfo) writeField11(oprot thrift.TProtocol) (err error) {
 	if p.IsSetIsShow() {
-		if err = oprot.WriteFieldBegin("is_show", thrift.I64, 11); err != nil {
+		if err = oprot.WriteFieldBegin("isShow", thrift.I64, 11); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(p.IsShow); err != nil {
@@ -2591,7 +2591,7 @@ WriteFieldEndError:
 
 func (p *VenuePlaceInfo) writeField12(oprot thrift.TProtocol) (err error) {
 	if p.IsSetIsAccessible() {
-		if err = oprot.WriteFieldBegin("is_accessible", thrift.I64, 12); err != nil {
+		if err = oprot.WriteFieldBegin("isAccessible", thrift.I64, 12); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(p.IsAccessible); err != nil {

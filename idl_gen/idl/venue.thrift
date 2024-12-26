@@ -41,11 +41,16 @@ struct VenuePlaceInfo {
     5:  optional i64 status=1 (api.raw = "status")
     6:  optional string createdAt="" (api.raw = "createdAt")
     7:  optional string updatedAt="" (api.raw = "updatedAt")
+    /**可容纳人数*/
     8:  optional i64 number=0 (api.raw = "number")
+    /**详情*/
     9:  optional string information="" (api.raw = "information")
+    /**分类*/
     10:  optional i64 classify =0(api.raw = "classify")
-    11:  optional i64 is_show=1 (api.raw = "is_show")
-    12:  optional i64 is_accessible=1 (api.raw = "is_accessible")
+    /**是否展示:1展示;2不展示*/
+    11:  optional i64 isShow=1 (api.raw = "isShow")
+    /**是否开放:1开放;2关闭*/
+    12:  optional i64 isAccessible=1 (api.raw = "isAccessible")
 }
 
 service VenueService {
