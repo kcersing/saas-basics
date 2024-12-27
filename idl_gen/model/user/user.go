@@ -3621,6 +3621,7 @@ type UserListReq struct {
 	Mobile   string `thrift:"mobile,6,optional" form:"mobile" json:"mobile" query:"mobile"`
 	RoleId   int64  `thrift:"roleId,7,optional" form:"roleId" json:"roleId" query:"roleId"`
 	Status   int64  `thrift:"status,8,optional" form:"status" json:"status" query:"status"`
+	Type     int64  `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewUserListReq() *UserListReq {
@@ -3633,6 +3634,7 @@ func NewUserListReq() *UserListReq {
 		Mobile:   "",
 		RoleId:   0,
 		Status:   0,
+		Type:     1,
 	}
 }
 
@@ -3644,6 +3646,7 @@ func (p *UserListReq) InitDefault() {
 	p.Mobile = ""
 	p.RoleId = 0
 	p.Status = 0
+	p.Type = 1
 }
 
 var UserListReq_Page_DEFAULT int64 = 1
@@ -3709,6 +3712,15 @@ func (p *UserListReq) GetStatus() (v int64) {
 	return p.Status
 }
 
+var UserListReq_Type_DEFAULT int64 = 1
+
+func (p *UserListReq) GetType() (v int64) {
+	if !p.IsSetType() {
+		return UserListReq_Type_DEFAULT
+	}
+	return p.Type
+}
+
 var fieldIDToName_UserListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
@@ -3717,6 +3729,7 @@ var fieldIDToName_UserListReq = map[int16]string{
 	6: "mobile",
 	7: "roleId",
 	8: "status",
+	9: "type",
 }
 
 func (p *UserListReq) IsSetPage() bool {
@@ -3745,6 +3758,10 @@ func (p *UserListReq) IsSetRoleId() bool {
 
 func (p *UserListReq) IsSetStatus() bool {
 	return p.Status != UserListReq_Status_DEFAULT
+}
+
+func (p *UserListReq) IsSetType() bool {
+	return p.Type != UserListReq_Type_DEFAULT
 }
 
 func (p *UserListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -3817,6 +3834,14 @@ func (p *UserListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 8:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField9(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3928,6 +3953,17 @@ func (p *UserListReq) ReadField8(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
+func (p *UserListReq) ReadField9(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Type = _field
+	return nil
+}
 
 func (p *UserListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -3961,6 +3997,10 @@ func (p *UserListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField8(oprot); err != nil {
 			fieldId = 8
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
 			goto WriteFieldError
 		}
 	}
@@ -4112,6 +4152,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *UserListReq) writeField9(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.I64, 9); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
 }
 
 func (p *UserListReq) String() string {
