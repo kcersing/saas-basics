@@ -62,8 +62,18 @@ struct MemberSubscribeReq{
     2:  optional i64 scheduleId =0 (api.raw = "scheduleId")
     3:  optional string remark ="" (api.raw = "remark")
 }
+struct UserTimePeriodReq{
+    /**时间如2024-05-16*/
+    1:  optional string date ="" (api.raw = "date")
+    /**时间段*/
+    2:  optional string period ="" (api.raw = "period")
+    3:  optional i64 userId =0 (api.raw = "userId")
+}
 
 service ScheduleService {
+
+    base.NilResponse UpdateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/create-user-time-period")
+
     base.NilResponse CreateSchedule(1: CreateOrUpdateScheduleReq req)  (api.post = "/service/schedule/create")
 
     base.NilResponse UpdateSchedule(1: CreateOrUpdateScheduleReq req) (api.post = "/service/schedule/update")

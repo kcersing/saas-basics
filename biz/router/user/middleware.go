@@ -55,3 +55,23 @@ func _loginMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _setuserroleMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updateuserstatusMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _user0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _changepasswordMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

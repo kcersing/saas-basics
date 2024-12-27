@@ -32,7 +32,9 @@ type UserScheduling struct {
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// 日期
-	Date base.UserSchedulingDate `json:"date,omitempty"`
+	Date time.Time `json:"date,omitempty"`
+	// 时间段
+	Period base.UserSchedulingDate `json:"period,omitempty"`
 	// 員工id
 	UserID int64 `json:"user_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -68,11 +70,11 @@ func (*UserScheduling) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case userscheduling.FieldDate:
+		case userscheduling.FieldPeriod:
 			values[i] = new([]byte)
 		case userscheduling.FieldID, userscheduling.FieldDelete, userscheduling.FieldCreatedID, userscheduling.FieldStatus, userscheduling.FieldUserID:
 			values[i] = new(sql.NullInt64)
-		case userscheduling.FieldCreatedAt, userscheduling.FieldUpdatedAt:
+		case userscheduling.FieldCreatedAt, userscheduling.FieldUpdatedAt, userscheduling.FieldDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -126,11 +128,17 @@ func (us *UserScheduling) assignValues(columns []string, values []any) error {
 				us.Status = value.Int64
 			}
 		case userscheduling.FieldDate:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field date", values[i])
+			} else if value.Valid {
+				us.Date = value.Time
+			}
+		case userscheduling.FieldPeriod:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field period", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &us.Date); err != nil {
-					return fmt.Errorf("unmarshal field date: %w", err)
+				if err := json.Unmarshal(*value, &us.Period); err != nil {
+					return fmt.Errorf("unmarshal field period: %w", err)
 				}
 			}
 		case userscheduling.FieldUserID:
@@ -196,7 +204,10 @@ func (us *UserScheduling) String() string {
 	builder.WriteString(fmt.Sprintf("%v", us.Status))
 	builder.WriteString(", ")
 	builder.WriteString("date=")
-	builder.WriteString(fmt.Sprintf("%v", us.Date))
+	builder.WriteString(us.Date.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("period=")
+	builder.WriteString(fmt.Sprintf("%v", us.Period))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(fmt.Sprintf("%v", us.UserID))

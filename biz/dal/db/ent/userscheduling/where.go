@@ -80,6 +80,11 @@ func Status(v int64) predicate.UserScheduling {
 	return predicate.UserScheduling(sql.FieldEQ(FieldStatus, v))
 }
 
+// Date applies equality check predicate on the "date" field. It's identical to DateEQ.
+func Date(v time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldEQ(FieldDate, v))
+}
+
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
 func UserID(v int64) predicate.UserScheduling {
 	return predicate.UserScheduling(sql.FieldEQ(FieldUserID, v))
@@ -335,6 +340,46 @@ func StatusNotNil() predicate.UserScheduling {
 	return predicate.UserScheduling(sql.FieldNotNull(FieldStatus))
 }
 
+// DateEQ applies the EQ predicate on the "date" field.
+func DateEQ(v time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldEQ(FieldDate, v))
+}
+
+// DateNEQ applies the NEQ predicate on the "date" field.
+func DateNEQ(v time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldNEQ(FieldDate, v))
+}
+
+// DateIn applies the In predicate on the "date" field.
+func DateIn(vs ...time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldIn(FieldDate, vs...))
+}
+
+// DateNotIn applies the NotIn predicate on the "date" field.
+func DateNotIn(vs ...time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldNotIn(FieldDate, vs...))
+}
+
+// DateGT applies the GT predicate on the "date" field.
+func DateGT(v time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldGT(FieldDate, v))
+}
+
+// DateGTE applies the GTE predicate on the "date" field.
+func DateGTE(v time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldGTE(FieldDate, v))
+}
+
+// DateLT applies the LT predicate on the "date" field.
+func DateLT(v time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldLT(FieldDate, v))
+}
+
+// DateLTE applies the LTE predicate on the "date" field.
+func DateLTE(v time.Time) predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldLTE(FieldDate, v))
+}
+
 // DateIsNil applies the IsNil predicate on the "date" field.
 func DateIsNil() predicate.UserScheduling {
 	return predicate.UserScheduling(sql.FieldIsNull(FieldDate))
@@ -343,6 +388,16 @@ func DateIsNil() predicate.UserScheduling {
 // DateNotNil applies the NotNil predicate on the "date" field.
 func DateNotNil() predicate.UserScheduling {
 	return predicate.UserScheduling(sql.FieldNotNull(FieldDate))
+}
+
+// PeriodIsNil applies the IsNil predicate on the "period" field.
+func PeriodIsNil() predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldIsNull(FieldPeriod))
+}
+
+// PeriodNotNil applies the NotNil predicate on the "period" field.
+func PeriodNotNil() predicate.UserScheduling {
+	return predicate.UserScheduling(sql.FieldNotNull(FieldPeriod))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.

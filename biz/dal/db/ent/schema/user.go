@@ -58,7 +58,7 @@ func (User) Edges() []ent.Edge {
 		edge.To("venues", Venue.Type),
 		//edge.To("user_face", Face.Type),
 
-		edge.To("user_scheduling", UserScheduling.Type),
+		edge.To("user_time_period", UserScheduling.Type),
 	}
 }
 

@@ -124,15 +124,15 @@ func (usu *UserSchedulingUpdate) ClearStatus() *UserSchedulingUpdate {
 }
 
 // SetDate sets the "date" field.
-func (usu *UserSchedulingUpdate) SetDate(bsd base.UserSchedulingDate) *UserSchedulingUpdate {
-	usu.mutation.SetDate(bsd)
+func (usu *UserSchedulingUpdate) SetDate(t time.Time) *UserSchedulingUpdate {
+	usu.mutation.SetDate(t)
 	return usu
 }
 
 // SetNillableDate sets the "date" field if the given value is not nil.
-func (usu *UserSchedulingUpdate) SetNillableDate(bsd *base.UserSchedulingDate) *UserSchedulingUpdate {
-	if bsd != nil {
-		usu.SetDate(*bsd)
+func (usu *UserSchedulingUpdate) SetNillableDate(t *time.Time) *UserSchedulingUpdate {
+	if t != nil {
+		usu.SetDate(*t)
 	}
 	return usu
 }
@@ -140,6 +140,26 @@ func (usu *UserSchedulingUpdate) SetNillableDate(bsd *base.UserSchedulingDate) *
 // ClearDate clears the value of the "date" field.
 func (usu *UserSchedulingUpdate) ClearDate() *UserSchedulingUpdate {
 	usu.mutation.ClearDate()
+	return usu
+}
+
+// SetPeriod sets the "period" field.
+func (usu *UserSchedulingUpdate) SetPeriod(bsd base.UserSchedulingDate) *UserSchedulingUpdate {
+	usu.mutation.SetPeriod(bsd)
+	return usu
+}
+
+// SetNillablePeriod sets the "period" field if the given value is not nil.
+func (usu *UserSchedulingUpdate) SetNillablePeriod(bsd *base.UserSchedulingDate) *UserSchedulingUpdate {
+	if bsd != nil {
+		usu.SetPeriod(*bsd)
+	}
+	return usu
+}
+
+// ClearPeriod clears the value of the "period" field.
+func (usu *UserSchedulingUpdate) ClearPeriod() *UserSchedulingUpdate {
+	usu.mutation.ClearPeriod()
 	return usu
 }
 
@@ -275,10 +295,16 @@ func (usu *UserSchedulingUpdate) sqlSave(ctx context.Context) (n int, err error)
 		_spec.ClearField(userscheduling.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := usu.mutation.Date(); ok {
-		_spec.SetField(userscheduling.FieldDate, field.TypeJSON, value)
+		_spec.SetField(userscheduling.FieldDate, field.TypeTime, value)
 	}
 	if usu.mutation.DateCleared() {
-		_spec.ClearField(userscheduling.FieldDate, field.TypeJSON)
+		_spec.ClearField(userscheduling.FieldDate, field.TypeTime)
+	}
+	if value, ok := usu.mutation.Period(); ok {
+		_spec.SetField(userscheduling.FieldPeriod, field.TypeJSON, value)
+	}
+	if usu.mutation.PeriodCleared() {
+		_spec.ClearField(userscheduling.FieldPeriod, field.TypeJSON)
 	}
 	if usu.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -423,15 +449,15 @@ func (usuo *UserSchedulingUpdateOne) ClearStatus() *UserSchedulingUpdateOne {
 }
 
 // SetDate sets the "date" field.
-func (usuo *UserSchedulingUpdateOne) SetDate(bsd base.UserSchedulingDate) *UserSchedulingUpdateOne {
-	usuo.mutation.SetDate(bsd)
+func (usuo *UserSchedulingUpdateOne) SetDate(t time.Time) *UserSchedulingUpdateOne {
+	usuo.mutation.SetDate(t)
 	return usuo
 }
 
 // SetNillableDate sets the "date" field if the given value is not nil.
-func (usuo *UserSchedulingUpdateOne) SetNillableDate(bsd *base.UserSchedulingDate) *UserSchedulingUpdateOne {
-	if bsd != nil {
-		usuo.SetDate(*bsd)
+func (usuo *UserSchedulingUpdateOne) SetNillableDate(t *time.Time) *UserSchedulingUpdateOne {
+	if t != nil {
+		usuo.SetDate(*t)
 	}
 	return usuo
 }
@@ -439,6 +465,26 @@ func (usuo *UserSchedulingUpdateOne) SetNillableDate(bsd *base.UserSchedulingDat
 // ClearDate clears the value of the "date" field.
 func (usuo *UserSchedulingUpdateOne) ClearDate() *UserSchedulingUpdateOne {
 	usuo.mutation.ClearDate()
+	return usuo
+}
+
+// SetPeriod sets the "period" field.
+func (usuo *UserSchedulingUpdateOne) SetPeriod(bsd base.UserSchedulingDate) *UserSchedulingUpdateOne {
+	usuo.mutation.SetPeriod(bsd)
+	return usuo
+}
+
+// SetNillablePeriod sets the "period" field if the given value is not nil.
+func (usuo *UserSchedulingUpdateOne) SetNillablePeriod(bsd *base.UserSchedulingDate) *UserSchedulingUpdateOne {
+	if bsd != nil {
+		usuo.SetPeriod(*bsd)
+	}
+	return usuo
+}
+
+// ClearPeriod clears the value of the "period" field.
+func (usuo *UserSchedulingUpdateOne) ClearPeriod() *UserSchedulingUpdateOne {
+	usuo.mutation.ClearPeriod()
 	return usuo
 }
 
@@ -604,10 +650,16 @@ func (usuo *UserSchedulingUpdateOne) sqlSave(ctx context.Context) (_node *UserSc
 		_spec.ClearField(userscheduling.FieldStatus, field.TypeInt64)
 	}
 	if value, ok := usuo.mutation.Date(); ok {
-		_spec.SetField(userscheduling.FieldDate, field.TypeJSON, value)
+		_spec.SetField(userscheduling.FieldDate, field.TypeTime, value)
 	}
 	if usuo.mutation.DateCleared() {
-		_spec.ClearField(userscheduling.FieldDate, field.TypeJSON)
+		_spec.ClearField(userscheduling.FieldDate, field.TypeTime)
+	}
+	if value, ok := usuo.mutation.Period(); ok {
+		_spec.SetField(userscheduling.FieldPeriod, field.TypeJSON, value)
+	}
+	if usuo.mutation.PeriodCleared() {
+		_spec.ClearField(userscheduling.FieldPeriod, field.TypeJSON)
 	}
 	if usuo.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -153,3 +153,75 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, info, 0, "")
 	return
 }
+
+// ChangePassword .
+// @Summary 修改密码
+// @Description 修改密码
+// @Param request body user.ChangePasswordReq true "query params"
+// @Success 200 {object} utils.Response
+// @router /service/user/change-password [POST]
+func ChangePassword(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req user.ChangePasswordReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = service.NewUser(ctx, c).ChangePassword(req.UserId, req.NewPassword)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
+
+// UpdateUserStatus .
+// @Summary 更新用户状态
+// @Description 更新用户状态
+// @Param request body base.StatusCodeReq true "query params"
+// @Success 200 {object} utils.Response
+// @router /service/user/status [POST]
+func UpdateUserStatus(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.StatusCodeReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = service.NewUser(ctx, c).UpdateUserStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}
+
+// SetUserRole .
+// @Summary 设置用户角色
+// @Description 设置用户角色
+// @Param request body user.SetUserRole true "query params"
+// @Success 200 {object} utils.Response
+// @router /service/user/set-role [POST]
+func SetUserRole(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req user.SetUserRole
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = service.NewUser(ctx, c).SetRole(req.UserId, req.RoleId)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}

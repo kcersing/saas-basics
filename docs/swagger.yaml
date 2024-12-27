@@ -907,8 +907,17 @@ definitions:
       username:
         type: string
     type: object
+  user.ChangePasswordReq:
+    properties:
+      newPassword:
+        type: string
+      userId:
+        type: integer
+    type: object
   user.CreateOrUpdateUserReq:
     properties:
+      DefaultVenueId:
+        type: integer
       avatar:
         type: string
       createId:
@@ -947,6 +956,13 @@ definitions:
         items:
           type: integer
         type: array
+    type: object
+  user.SetUserRole:
+    properties:
+      roleId:
+        type: integer
+      userId:
+        type: integer
     type: object
   user.UserListReq:
     properties:
@@ -2957,6 +2973,45 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新角色 Summary
+  /service/schedule/create:
+    post:
+      responses: {}
+  /service/schedule/create-user-time-period:
+    post:
+      responses: {}
+  /service/schedule/date-list:
+    post:
+      responses: {}
+  /service/schedule/info:
+    post:
+      responses: {}
+  /service/schedule/list:
+    post:
+      responses: {}
+  /service/schedule/member-subscribe:
+    post:
+      responses: {}
+  /service/schedule/schedule-coach-list:
+    post:
+      responses: {}
+  /service/schedule/schedule-coach-status:
+    post:
+      responses: {}
+  /service/schedule/schedule-member-list:
+    post:
+      responses: {}
+  /service/schedule/schedule-member-status:
+    post:
+      responses: {}
+  /service/schedule/search-subscribe-by-member:
+    post:
+      responses: {}
+  /service/schedule/status:
+    post:
+      responses: {}
+  /service/schedule/update:
+    post:
+      responses: {}
   /service/sms/buy:
     post:
       description: 购买短信 Description
@@ -3069,6 +3124,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 删除员工 Summary
+  /service/user/change-password:
+    post:
+      description: 修改密码
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.ChangePasswordReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 修改密码
   /service/user/create:
     post:
       description: 创建员工 Description
@@ -3114,6 +3185,38 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 获取员工列表 Summary
+  /service/user/set-role:
+    post:
+      description: 设置用户角色
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.SetUserRole'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 设置用户角色
+  /service/user/status:
+    post:
+      description: 更新用户状态
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.StatusCodeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 更新用户状态
   /service/user/update:
     post:
       description: 更新员工 Description

@@ -92,15 +92,29 @@ func (usc *UserSchedulingCreate) SetNillableStatus(i *int64) *UserSchedulingCrea
 }
 
 // SetDate sets the "date" field.
-func (usc *UserSchedulingCreate) SetDate(bsd base.UserSchedulingDate) *UserSchedulingCreate {
-	usc.mutation.SetDate(bsd)
+func (usc *UserSchedulingCreate) SetDate(t time.Time) *UserSchedulingCreate {
+	usc.mutation.SetDate(t)
 	return usc
 }
 
 // SetNillableDate sets the "date" field if the given value is not nil.
-func (usc *UserSchedulingCreate) SetNillableDate(bsd *base.UserSchedulingDate) *UserSchedulingCreate {
+func (usc *UserSchedulingCreate) SetNillableDate(t *time.Time) *UserSchedulingCreate {
+	if t != nil {
+		usc.SetDate(*t)
+	}
+	return usc
+}
+
+// SetPeriod sets the "period" field.
+func (usc *UserSchedulingCreate) SetPeriod(bsd base.UserSchedulingDate) *UserSchedulingCreate {
+	usc.mutation.SetPeriod(bsd)
+	return usc
+}
+
+// SetNillablePeriod sets the "period" field if the given value is not nil.
+func (usc *UserSchedulingCreate) SetNillablePeriod(bsd *base.UserSchedulingDate) *UserSchedulingCreate {
 	if bsd != nil {
-		usc.SetDate(*bsd)
+		usc.SetPeriod(*bsd)
 	}
 	return usc
 }
@@ -256,8 +270,12 @@ func (usc *UserSchedulingCreate) createSpec() (*UserScheduling, *sqlgraph.Create
 		_node.Status = value
 	}
 	if value, ok := usc.mutation.Date(); ok {
-		_spec.SetField(userscheduling.FieldDate, field.TypeJSON, value)
+		_spec.SetField(userscheduling.FieldDate, field.TypeTime, value)
 		_node.Date = value
+	}
+	if value, ok := usc.mutation.Period(); ok {
+		_spec.SetField(userscheduling.FieldPeriod, field.TypeJSON, value)
+		_node.Period = value
 	}
 	if nodes := usc.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -26,6 +26,8 @@ const (
 	FieldStatus = "status"
 	// FieldDate holds the string denoting the date field in the database.
 	FieldDate = "date"
+	// FieldPeriod holds the string denoting the period field in the database.
+	FieldPeriod = "period"
 	// FieldUserID holds the string denoting the user_id field in the database.
 	FieldUserID = "user_id"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
@@ -50,6 +52,7 @@ var Columns = []string{
 	FieldCreatedID,
 	FieldStatus,
 	FieldDate,
+	FieldPeriod,
 	FieldUserID,
 }
 
@@ -109,6 +112,11 @@ func ByCreatedID(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByDate orders the results by the date field.
+func ByDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDate, opts...).ToFunc()
 }
 
 // ByUserID orders the results by the user_id field.

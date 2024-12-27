@@ -80,6 +80,7 @@ struct CreateOrUpdateUserReq {
     19:  optional i64 type=1 (api.raw = "type")
     20: optional list<i64> venueId=0 (api.raw = "venueId")
 
+    254:optional i64 DefaultVenueId=0 (api.raw = "defaultVenueId")
 }
 
 
@@ -96,8 +97,8 @@ struct UserListReq {
 }
 
 struct SetUserRole{
-    1:  i64 userId (api.raw = "userId")
-    2:  optional i64 roleId (api.raw = "roleId")
+    1:  optional i64 userId=0 (api.raw = "userId")
+    2:  optional i64 roleId=0 (api.raw = "roleId")
 }
 
 struct SetDefaultVenueReq{
@@ -112,29 +113,29 @@ service UserService {
   // 注册
   //base.NilResponse Register(1: RegisterReq req) (api.post = "/service/register")
 
-  // 修改密码
-//  base.NilResponse ChangePassword(1: ChangePasswordReq req) (api.post = "/service/user/change-password")
+  /**修改密码*/
+ base.NilResponse ChangePassword(1: ChangePasswordReq req) (api.post = "/service/user/change-password")
 
-  // 新增用户
+  /**新增用户*/
   base.NilResponse CreateUser(1: CreateOrUpdateUserReq req) (api.post = "/service/user/create")
 
-  // 更新用户
+  /**更新用户*/
   base.NilResponse UpdateUser(1: CreateOrUpdateUserReq req) (api.post = "/service/user/update")
 
-  // 获取用户基本信息
+  /**获取用户基本信息*/
   base.NilResponse UserInfo(1: base.IDReq req)  (api.get = "/service/user/info")
 
-  // 获取用户列表
+  /**获取用户列表*/
   base.NilResponse UserList(1: UserListReq req) (api.post = "/service/user/list")
 
-  // 删除用户信息
+  /**删除用户信息*/
   base.NilResponse DeleteUser(1: base.IDReq req) (api.post = "/service/user")
 
-  // 更新用户状态
-//  base.NilResponse UpdateUserStatus(1: base.StatusCodeReq req) (api.post = "/service/user/status")
+  /**更新用户状态*/
+  base.NilResponse UpdateUserStatus(1: base.StatusCodeReq req) (api.post = "/service/user/status")
 
-  // 设置用户角色
-//  base.NilResponse SetUserRole(1: SetUserRole req) (api.post = "/service/user/set-role")
+  /**设置用户角色*/
+  base.NilResponse SetUserRole(1: SetUserRole req) (api.post = "/service/user/set-role")
 
   // 设置用户默认场馆
 //  base.NilResponse SetDefaultVenue(1: SetDefaultVenueReq req) (api.post = "/service/user/set-default-venue")

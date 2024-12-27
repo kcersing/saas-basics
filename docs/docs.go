@@ -2962,6 +2962,71 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/schedule/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/create-user-time-period": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/date-list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/info": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/member-subscribe": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/schedule-coach-list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/schedule-coach-status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/schedule-member-list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/schedule-member-status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/search-subscribe-by-member": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/status": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/update": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/sms/buy": {
             "post": {
                 "description": "购买短信 Description",
@@ -3137,6 +3202,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/user/change-password": {
+            "post": {
+                "description": "修改密码",
+                "summary": "修改密码",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.ChangePasswordReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/user/create": {
             "post": {
                 "description": "创建员工 Description",
@@ -3195,6 +3285,56 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/user.UserListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/user/set-role": {
+            "post": {
+                "description": "设置用户角色",
+                "summary": "设置用户角色",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.SetUserRole"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/user/status": {
+            "post": {
+                "description": "更新用户状态",
+                "summary": "更新用户状态",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
                         }
                     }
                 ],
@@ -4707,9 +4847,23 @@ const docTemplate = `{
                 }
             }
         },
+        "user.ChangePasswordReq": {
+            "type": "object",
+            "properties": {
+                "newPassword": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
         "user.CreateOrUpdateUserReq": {
             "type": "object",
             "properties": {
+                "DefaultVenueId": {
+                    "type": "integer"
+                },
                 "avatar": {
                     "type": "string"
                 },
@@ -4766,6 +4920,17 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
+                }
+            }
+        },
+        "user.SetUserRole": {
+            "type": "object",
+            "properties": {
+                "roleId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         },

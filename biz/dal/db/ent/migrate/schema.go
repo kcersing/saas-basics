@@ -1307,7 +1307,8 @@ var (
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
-		{Name: "date", Type: field.TypeJSON, Nullable: true, Comment: "日期"},
+		{Name: "date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
+		{Name: "period", Type: field.TypeJSON, Nullable: true, Comment: "时间段"},
 		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "員工id"},
 	}
 	// SysUserSchedulingTable holds the schema information for the "sys_user_scheduling" table.
@@ -1318,7 +1319,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_user_scheduling_sys_users_user_scheduling",
-				Columns:    []*schema.Column{SysUserSchedulingColumns[7]},
+				Columns:    []*schema.Column{SysUserSchedulingColumns[8]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
