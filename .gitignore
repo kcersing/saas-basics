@@ -36,5 +36,6 @@ _testmain.go
 dumped_hertz_remote_config.json
 saas
 /tmp
+/vendor
 config.yaml
 config_dev.yaml
