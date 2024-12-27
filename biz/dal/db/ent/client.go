@@ -5441,6 +5441,22 @@ func (c *RoleClient) QueryMenus(r *Role) *MenuQuery {
 	return query
 }
 
+// QueryUsers queries the users edge of a Role.
+func (c *RoleClient) QueryUsers(r *Role) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(role.Table, role.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, role.UsersTable, role.UsersPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *RoleClient) Hooks() []Hook {
 	return c.hooks.Role
@@ -6266,15 +6282,31 @@ func (c *UserClient) QueryVenues(u *User) *VenueQuery {
 	return query
 }
 
-// QueryUserScheduling queries the user_scheduling edge of a User.
-func (c *UserClient) QueryUserScheduling(u *User) *UserSchedulingQuery {
+// QueryRoles queries the roles edge of a User.
+func (c *UserClient) QueryRoles(u *User) *RoleQuery {
+	query := (&RoleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(role.Table, role.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.RolesTable, user.RolesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUserTimePeriod queries the user_time_period edge of a User.
+func (c *UserClient) QueryUserTimePeriod(u *User) *UserSchedulingQuery {
 	query := (&UserSchedulingClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(userscheduling.Table, userscheduling.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.UserSchedulingTable, user.UserSchedulingColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.UserTimePeriodTable, user.UserTimePeriodColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil

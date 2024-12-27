@@ -8,23 +8,22 @@ struct UserInfo {
 	3:string Username (api.raw = "username")
 	4:string Password (api.raw = "password")
 	5:string Name (api.raw = "name")
-	6:i64 RoleId (api.raw = "roleId")
 	7:string Mobile (api.raw = "mobile")
 	8:string Avatar (api.raw = "avatar")
 	9:string CreatedAt (api.raw = "createdAt")
 	10:string UpdatedAt  (api.raw = "updatedAt")
-	11:string RoleName (api.raw = "roleName")
-	14:string RoleValue (api.raw = "roleValue")
 	12: list<string> functions (api.raw = "functions")
 	13:string Gender (api.raw = "gender")
-//	14:i64 Age (api.raw = "age")
 	15:string Birthday (api.raw = "birthday")
     16:string Detail (api.raw = "detail")
     17:optional i64 jobTime (api.raw = "jobTime")
     18: list<dictionary.DictionaryDetail> userTags (api.raw = "userTags")
     19: list<Venues> venues (api.raw = "venues")
-	254:i64 DefaultVenueId (api.raw = "defaultVenueId")
+    20: optional i64 type=1 (api.raw = "type")
 
+    21:  list<UserRole> userRole (api.raw = "userRole")
+    22:  list<i64> userRoleIds (api.raw = "userRoleIds")
+    254:i64 DefaultVenueId (api.raw = "defaultVenueId")
 }
 struct Venues {
     1: i64 Id (api.raw = "id")
@@ -41,9 +40,14 @@ struct LoginReq {
 struct LoginResp{
     1:  i64 userId (api.raw = "userId")
     2:  string username (api.raw = "username")
-    3:  string roleName (api.raw = "roleName")
-    4:  string roleValue (api.raw = "roleValue")
-    5:  i64 roleId (api.raw = "roleId")
+    3:  list<UserRole> userRole (api.raw = "userRole")
+    4: list<i64> userRoleIds (api.raw = "userRoleIds")
+
+}
+struct UserRole{
+    1:optional  string name="" (api.raw = "name")
+    2:optional  string value="" (api.raw = "value")
+    3:optional  i64 id=0 (api.raw = "id")
 }
 
 // register request | 注册参数
@@ -69,7 +73,7 @@ struct CreateOrUpdateUserReq {
     6:  optional i64 status=1 (api.raw = "status")
     7:  optional string name="" (api.raw = "name")
     8:  optional string gender="" (api.raw = "gender")
-    9:  optional i64 roleId=0 (api.raw = "roleId")
+    9:  optional list<i64> roleId=0 (api.raw = "roleId")
     10: optional i64 createId=0 (api.raw = "createId")
     12: optional string password="" (api.raw = "password")
     13:  optional string username="" (api.raw = "username")
@@ -98,7 +102,7 @@ struct UserListReq {
 
 struct SetUserRole{
     1:  optional i64 userId=0 (api.raw = "userId")
-    2:  optional i64 roleId=0 (api.raw = "roleId")
+    2:  optional list<i64> roleId=0 (api.raw = "roleId")
 }
 
 struct SetDefaultVenueReq{

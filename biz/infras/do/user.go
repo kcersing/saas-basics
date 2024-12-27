@@ -13,6 +13,6 @@ type User interface {
 	ChangePassword(userID int64, newPassword string) error
 	UpdateUserStatus(id int64, status int64) error
 	DeleteUser(id int64) error
-	SetRole(id, roleID int64) error
+	SetRole(id int64, roleID []int64) error
 	SetDefaultVenue(id, venueId int64) error
 }

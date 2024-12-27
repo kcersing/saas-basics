@@ -6,7 +6,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/jwt"
-	"github.com/spf13/cast"
 	"saas/biz/infras/service"
 	"saas/config"
 	"saas/idl_gen/model/token"
@@ -62,10 +61,10 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				hlog.Error("get payloadMap error:", " claims data:", claims[identityKey])
 				return nil
 			}
-			hlog.Info("IdentityHandler")
-			hlog.Info(payloadMap)
-			c.Set("roleId", payloadMap["roleId"])
 			c.Set("userId", payloadMap["userId"])
+			c.Set("userRole", payloadMap["userRole"])
+			c.Set("userRoleIds", payloadMap["userRoleIds"])
+
 			return payloadMap
 		},
 		// Authenticator is used to validate the login data.
@@ -81,7 +80,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			username := loginVal.Username
 			password := loginVal.Password
 			res, err = service.NewLogin(ctx, c).Login(username, password)
-
+			hlog.Info(res)
 			if err != nil {
 				hlog.Error(err, "jwtLogin error")
 				return nil, err
@@ -99,8 +98,9 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			}
 
 			payLoadMap := make(map[string]interface{})
-			payLoadMap["roleId"] = strconv.Itoa(int(res.RoleId))
 			payLoadMap["userId"] = strconv.Itoa(int(res.UserId))
+			payLoadMap["userRole"] = res.UserRole
+			payLoadMap["userRoleIds"] = res.UserRoleIds
 			return payLoadMap, nil
 		},
 		// Authorizator is used to validate the authentication of the current request.
@@ -112,11 +112,14 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				hlog.Error("get payloadMap error:", " claims data:", data)
 				return false
 			}
-			roleId := payloadMap["roleId"].(string)
-			userId := payloadMap["userId"].(string)
 
-			hlog.Info("Authorizator")
-			hlog.Info(payloadMap)
+			roleIds := payloadMap["userRoleIds"].([]interface{})
+			var userRoleIds []int64
+			for _, v := range roleIds {
+				i := v.(float64)
+				userRoleIds = append(userRoleIds, int64(i))
+			}
+			userId := payloadMap["userId"].(string)
 
 			// check token is valid
 			userIdInt, err := strconv.Atoi(userId)
@@ -129,16 +132,16 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				return false
 			}
 			// check the role status
-			roleInfo, err := service.NewRole(ctx, c).RoleInfoByID(cast.ToInt64(roleId))
-			// if the role is not exist or the role is not active, return false
-			if err != nil {
-				hlog.Error(err, "role is not exist")
-				return false
-			}
-			if roleInfo.Status != 1 {
-				hlog.Error("role cache is not a valid *ent.Role or the role is not active")
-				return false
-			}
+			//roleInfo, err := service.NewRole(ctx, c).RoleInfoByID(cast.ToInt64(roleId))
+			//// if the role is not exist or the role is not active, return false
+			//if err != nil {
+			//	hlog.Error(err, "role is not exist")
+			//	return false
+			//}
+			//if roleInfo.Status != 1 {
+			//	hlog.Error("role cache is not a valid *ent.Role or the role is not active")
+			//	return false
+			//}
 
 			//sub := roleId
 			//check the permission

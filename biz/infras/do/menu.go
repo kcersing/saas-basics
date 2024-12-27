@@ -9,7 +9,7 @@ type Menu interface {
 	Create(menuReq *menu.CreateOrUpdateMenuReq) error
 	Update(menuReq *menu.CreateOrUpdateMenuReq) error
 	Delete(id int64) error
-	MenuRole(roleID int64) (list []*menu.MenuInfo, err error)
+	MenuRole(roleId []int64) (list []*menu.MenuInfo, err error)
 	List(req *menu.MenuListReq) (list []*menu.MenuInfo, total int, err error)
 
 	MenuInfo(id int64) (info *menu.MenuInfo, err error)

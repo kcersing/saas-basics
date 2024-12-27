@@ -40,8 +40,6 @@ const (
 	FieldType = "type"
 	// FieldJobTime holds the string denoting the job_time field in the database.
 	FieldJobTime = "job_time"
-	// FieldRoleID holds the string denoting the role_id field in the database.
-	FieldRoleID = "role_id"
 	// FieldDefaultVenueID holds the string denoting the default_venue_id field in the database.
 	FieldDefaultVenueID = "default_venue_id"
 	// FieldAvatar holds the string denoting the avatar field in the database.
@@ -58,8 +56,10 @@ const (
 	EdgeUserEntry = "user_entry"
 	// EdgeVenues holds the string denoting the venues edge name in mutations.
 	EdgeVenues = "venues"
-	// EdgeUserScheduling holds the string denoting the user_scheduling edge name in mutations.
-	EdgeUserScheduling = "user_scheduling"
+	// EdgeRoles holds the string denoting the roles edge name in mutations.
+	EdgeRoles = "roles"
+	// EdgeUserTimePeriod holds the string denoting the user_time_period edge name in mutations.
+	EdgeUserTimePeriod = "user_time_period"
 	// Table holds the table name of the user in the database.
 	Table = "sys_users"
 	// TokenTable is the table that holds the token relation/edge.
@@ -93,13 +93,18 @@ const (
 	// VenuesInverseTable is the table name for the Venue entity.
 	// It exists in this package in order to avoid circular dependency with the "venue" package.
 	VenuesInverseTable = "venue"
-	// UserSchedulingTable is the table that holds the user_scheduling relation/edge.
-	UserSchedulingTable = "sys_user_scheduling"
-	// UserSchedulingInverseTable is the table name for the UserScheduling entity.
+	// RolesTable is the table that holds the roles relation/edge. The primary key declared below.
+	RolesTable = "user_roles"
+	// RolesInverseTable is the table name for the Role entity.
+	// It exists in this package in order to avoid circular dependency with the "role" package.
+	RolesInverseTable = "sys_roles"
+	// UserTimePeriodTable is the table that holds the user_time_period relation/edge.
+	UserTimePeriodTable = "sys_user_time_period"
+	// UserTimePeriodInverseTable is the table name for the UserScheduling entity.
 	// It exists in this package in order to avoid circular dependency with the "userscheduling" package.
-	UserSchedulingInverseTable = "sys_user_scheduling"
-	// UserSchedulingColumn is the table column denoting the user_scheduling relation/edge.
-	UserSchedulingColumn = "user_id"
+	UserTimePeriodInverseTable = "sys_user_time_period"
+	// UserTimePeriodColumn is the table column denoting the user_time_period relation/edge.
+	UserTimePeriodColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -118,7 +123,6 @@ var Columns = []string{
 	FieldFunctions,
 	FieldType,
 	FieldJobTime,
-	FieldRoleID,
 	FieldDefaultVenueID,
 	FieldAvatar,
 	FieldDetail,
@@ -131,6 +135,9 @@ var (
 	// VenuesPrimaryKey and VenuesColumn2 are the table columns denoting the
 	// primary key for the venues relation (M2M).
 	VenuesPrimaryKey = []string{"user_id", "venue_id"}
+	// RolesPrimaryKey and RolesColumn2 are the table columns denoting the
+	// primary key for the roles relation (M2M).
+	RolesPrimaryKey = []string{"user_id", "role_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -162,8 +169,6 @@ var (
 	DefaultType int64
 	// DefaultJobTime holds the default value on creation for the "job_time" field.
 	DefaultJobTime int64
-	// DefaultRoleID holds the default value on creation for the "role_id" field.
-	DefaultRoleID int64
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -237,11 +242,6 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 // ByJobTime orders the results by the job_time field.
 func ByJobTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldJobTime, opts...).ToFunc()
-}
-
-// ByRoleID orders the results by the role_id field.
-func ByRoleID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRoleID, opts...).ToFunc()
 }
 
 // ByDefaultVenueID orders the results by the default_venue_id field.
@@ -322,17 +322,31 @@ func ByVenues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByUserSchedulingCount orders the results by user_scheduling count.
-func ByUserSchedulingCount(opts ...sql.OrderTermOption) OrderOption {
+// ByRolesCount orders the results by roles count.
+func ByRolesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUserSchedulingStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newRolesStep(), opts...)
 	}
 }
 
-// ByUserScheduling orders the results by user_scheduling terms.
-func ByUserScheduling(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByRoles orders the results by roles terms.
+func ByRoles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserSchedulingStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newRolesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByUserTimePeriodCount orders the results by user_time_period count.
+func ByUserTimePeriodCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUserTimePeriodStep(), opts...)
+	}
+}
+
+// ByUserTimePeriod orders the results by user_time_period terms.
+func ByUserTimePeriod(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserTimePeriodStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newTokenStep() *sqlgraph.Step {
@@ -370,10 +384,17 @@ func newVenuesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, VenuesTable, VenuesPrimaryKey...),
 	)
 }
-func newUserSchedulingStep() *sqlgraph.Step {
+func newRolesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserSchedulingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, UserSchedulingTable, UserSchedulingColumn),
+		sqlgraph.To(RolesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, RolesTable, RolesPrimaryKey...),
+	)
+}
+func newUserTimePeriodStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserTimePeriodInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, UserTimePeriodTable, UserTimePeriodColumn),
 	)
 }

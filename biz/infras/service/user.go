@@ -9,7 +9,6 @@ import (
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/predicate"
-	"saas/biz/dal/db/ent/role"
 	user2 "saas/biz/dal/db/ent/user"
 	"saas/biz/infras/do"
 	"saas/config"
@@ -53,10 +52,10 @@ func (u User) SetDefaultVenue(id, venueId int64) error {
 	return nil
 }
 
-func (u User) SetRole(id, roleID int64) error {
+func (u User) SetRole(id int64, roleID []int64) error {
 	_, err := u.db.User.Update().
 		Where(user2.IDEQ(id)).
-		SetRoleID(roleID).
+		AddRoleIDs(roleID...).
 		Save(u.ctx)
 
 	if err != nil {
@@ -126,7 +125,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		SetName(req.Name).
 		SetFunctions(functions).
 		SetGender(gender).
-		SetRoleID(req.RoleId).
+		AddRoleIDs(req.RoleId...).
 		SetDetail(req.Detail).
 		SetType(req.Type).
 		//SetTags().
@@ -182,7 +181,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		SetName(req.Name).
 		SetFunctions(functions).
 		SetGender(gender).
-		SetRoleID(req.RoleId).
+		AddRoleIDs(req.RoleId...).
 		SetDetail(req.Detail).
 		SetType(req.Type).
 		//SetTags().
@@ -236,9 +235,9 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 		predicates = append(predicates, user2.Status(req.Status))
 	}
 
-	if req.RoleId != 0 {
-		predicates = append(predicates, user2.RoleIDEQ(req.RoleId))
-	}
+	//if req.RoleId != 0 {
+	//	predicates = append(predicates, user2.RoleIDEQ(req.RoleId))
+	//}
 	if req.Type != 0 {
 		predicates = append(predicates, user2.TypeEQ(req.Type))
 	}
@@ -266,18 +265,11 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	info.Id = userEnt.ID
 	info.Status = userEnt.Status
 	info.Username = userEnt.Username
-
 	info.Name = userEnt.Name
-	info.RoleId = userEnt.RoleID
 	info.Mobile = userEnt.Mobile
 	info.CreatedAt = userEnt.CreatedAt.Format(time.DateTime)
 	info.UpdatedAt = userEnt.UpdatedAt.Format(time.DateTime)
-
-	roleInfo, _ := u.db.Role.Query().Where(role.IDEQ(info.RoleId)).First(u.ctx)
-	if roleInfo != nil {
-		info.RoleName = roleInfo.Name
-		info.RoleValue = roleInfo.Value
-	}
+	info.Type = userEnt.Type
 
 	if userEnt.Gender == 0 {
 		info.Gender = "女性"
@@ -315,6 +307,22 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 			}
 			info.UserTags = append(info.UserTags, &dd)
 		}
+	}
+
+	roles, _ := userEnt.QueryRoles().All(u.ctx)
+	if roles != nil {
+		var userRole []*user.UserRole
+		var userRoleIds []int64
+		for _, v := range roles {
+			userRole = append(userRole, &user.UserRole{
+				Name:  v.Name,
+				Value: v.Value,
+				ID:    v.ID,
+			})
+			userRoleIds = append(userRoleIds, v.ID)
+		}
+		info.UserRoleIds = userRoleIds
+		info.UserRole = userRole
 	}
 
 	return info

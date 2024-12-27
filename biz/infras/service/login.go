@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
@@ -13,8 +12,7 @@ import (
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/user"
-	"strconv"
-	"time"
+	"saas/pkg/encrypt"
 )
 
 type Login struct {
@@ -50,47 +48,20 @@ func (l *Login) Login(username, password string) (res *user.LoginResp, err error
 		return nil, err
 	}
 	//VerifyPassword
-	//if ok := encrypt.VerifyPassword(password, only.Password); !ok {
-	//	err = errors.New("wrong password")
-	//	return nil, err
-	//}
+	if ok := encrypt.VerifyPassword(password, only.Password); !ok {
+		err = errors.New("wrong password")
+		return nil, err
+	}
+
+	info, err := NewUser(l.ctx, l.c).Info(only.ID)
+	if err != nil {
+		return nil, err
+	}
 
 	res = new(user.LoginResp)
-	res.Username = username
-	res.UserId = only.ID
-	res.RoleId = only.RoleID
-	res.RoleName, res.RoleValue, err = l.getRoleInfo(only.RoleID)
-
+	res.Username = info.Username
+	res.UserId = info.Id
+	res.UserRole = info.UserRole
+	res.UserRoleIds = info.UserRoleIds
 	return res, err
-}
-
-func (l *Login) getRoleInfo(roleID int64) (roleName, roleValue string, err error) {
-	v, exist := l.cache.Get("roleData" + strconv.Itoa(int(roleID)))
-	if exist {
-		roleName = v.(*ent.Role).Name
-		roleValue = v.(*ent.Role).Value
-		return
-	}
-	roleData, err := l.db.Role.Query().All(context.Background())
-	if err != nil {
-		if ent.IsNotFound(err) {
-			err = errors.Wrap(err, "fail to find any roles")
-			return "", "", err
-		}
-		hlog.Error(err, "database error")
-		return "", "", err
-	}
-
-	for _, v := range roleData {
-		l.cache.SetWithTTL("roleData"+strconv.Itoa(int(v.ID)), v, 1, 1*time.Hour)
-		if v.ID == roleID {
-			roleName = v.Name
-			roleValue = v.Value
-		}
-	}
-	if roleName == "" || roleValue == "" {
-		err = errors.New("fail to find any role info")
-	}
-	return roleName, roleValue, err
-
 }

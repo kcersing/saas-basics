@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/order"
+	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/userscheduling"
@@ -176,20 +177,6 @@ func (uc *UserCreate) SetNillableJobTime(i *int64) *UserCreate {
 	return uc
 }
 
-// SetRoleID sets the "role_id" field.
-func (uc *UserCreate) SetRoleID(i int64) *UserCreate {
-	uc.mutation.SetRoleID(i)
-	return uc
-}
-
-// SetNillableRoleID sets the "role_id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableRoleID(i *int64) *UserCreate {
-	if i != nil {
-		uc.SetRoleID(*i)
-	}
-	return uc
-}
-
 // SetDefaultVenueID sets the "default_venue_id" field.
 func (uc *UserCreate) SetDefaultVenueID(i int64) *UserCreate {
 	uc.mutation.SetDefaultVenueID(i)
@@ -317,19 +304,34 @@ func (uc *UserCreate) AddVenues(v ...*Venue) *UserCreate {
 	return uc.AddVenueIDs(ids...)
 }
 
-// AddUserSchedulingIDs adds the "user_scheduling" edge to the UserScheduling entity by IDs.
-func (uc *UserCreate) AddUserSchedulingIDs(ids ...int64) *UserCreate {
-	uc.mutation.AddUserSchedulingIDs(ids...)
+// AddRoleIDs adds the "roles" edge to the Role entity by IDs.
+func (uc *UserCreate) AddRoleIDs(ids ...int64) *UserCreate {
+	uc.mutation.AddRoleIDs(ids...)
 	return uc
 }
 
-// AddUserScheduling adds the "user_scheduling" edges to the UserScheduling entity.
-func (uc *UserCreate) AddUserScheduling(u ...*UserScheduling) *UserCreate {
+// AddRoles adds the "roles" edges to the Role entity.
+func (uc *UserCreate) AddRoles(r ...*Role) *UserCreate {
+	ids := make([]int64, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uc.AddRoleIDs(ids...)
+}
+
+// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserScheduling entity by IDs.
+func (uc *UserCreate) AddUserTimePeriodIDs(ids ...int64) *UserCreate {
+	uc.mutation.AddUserTimePeriodIDs(ids...)
+	return uc
+}
+
+// AddUserTimePeriod adds the "user_time_period" edges to the UserScheduling entity.
+func (uc *UserCreate) AddUserTimePeriod(u ...*UserScheduling) *UserCreate {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return uc.AddUserSchedulingIDs(ids...)
+	return uc.AddUserTimePeriodIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -398,10 +400,6 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.JobTime(); !ok {
 		v := user.DefaultJobTime
 		uc.mutation.SetJobTime(v)
-	}
-	if _, ok := uc.mutation.RoleID(); !ok {
-		v := user.DefaultRoleID
-		uc.mutation.SetRoleID(v)
 	}
 }
 
@@ -503,10 +501,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldJobTime, field.TypeInt64, value)
 		_node.JobTime = value
 	}
-	if value, ok := uc.mutation.RoleID(); ok {
-		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
-		_node.RoleID = value
-	}
 	if value, ok := uc.mutation.DefaultVenueID(); ok {
 		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
 		_node.DefaultVenueID = value
@@ -599,12 +593,28 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := uc.mutation.UserSchedulingIDs(); len(nodes) > 0 {
+	if nodes := uc.mutation.RolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.RolesTable,
+			Columns: user.RolesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.UserTimePeriodIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.UserSchedulingTable,
-			Columns: []string{user.UserSchedulingColumn},
+			Table:   user.UserTimePeriodTable,
+			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),

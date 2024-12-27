@@ -120,11 +120,6 @@ func JobTime(v int64) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldJobTime, v))
 }
 
-// RoleID applies equality check predicate on the "role_id" field. It's identical to RoleIDEQ.
-func RoleID(v int64) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldRoleID, v))
-}
-
 // DefaultVenueID applies equality check predicate on the "default_venue_id" field. It's identical to DefaultVenueIDEQ.
 func DefaultVenueID(v int64) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldDefaultVenueID, v))
@@ -875,56 +870,6 @@ func JobTimeNotNil() predicate.User {
 	return predicate.User(sql.FieldNotNull(FieldJobTime))
 }
 
-// RoleIDEQ applies the EQ predicate on the "role_id" field.
-func RoleIDEQ(v int64) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldRoleID, v))
-}
-
-// RoleIDNEQ applies the NEQ predicate on the "role_id" field.
-func RoleIDNEQ(v int64) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldRoleID, v))
-}
-
-// RoleIDIn applies the In predicate on the "role_id" field.
-func RoleIDIn(vs ...int64) predicate.User {
-	return predicate.User(sql.FieldIn(FieldRoleID, vs...))
-}
-
-// RoleIDNotIn applies the NotIn predicate on the "role_id" field.
-func RoleIDNotIn(vs ...int64) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldRoleID, vs...))
-}
-
-// RoleIDGT applies the GT predicate on the "role_id" field.
-func RoleIDGT(v int64) predicate.User {
-	return predicate.User(sql.FieldGT(FieldRoleID, v))
-}
-
-// RoleIDGTE applies the GTE predicate on the "role_id" field.
-func RoleIDGTE(v int64) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldRoleID, v))
-}
-
-// RoleIDLT applies the LT predicate on the "role_id" field.
-func RoleIDLT(v int64) predicate.User {
-	return predicate.User(sql.FieldLT(FieldRoleID, v))
-}
-
-// RoleIDLTE applies the LTE predicate on the "role_id" field.
-func RoleIDLTE(v int64) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldRoleID, v))
-}
-
-// RoleIDIsNil applies the IsNil predicate on the "role_id" field.
-func RoleIDIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldRoleID))
-}
-
-// RoleIDNotNil applies the NotNil predicate on the "role_id" field.
-func RoleIDNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldRoleID))
-}
-
 // DefaultVenueIDEQ applies the EQ predicate on the "default_venue_id" field.
 func DefaultVenueIDEQ(v int64) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldDefaultVenueID, v))
@@ -1240,21 +1185,44 @@ func HasVenuesWith(preds ...predicate.Venue) predicate.User {
 	})
 }
 
-// HasUserScheduling applies the HasEdge predicate on the "user_scheduling" edge.
-func HasUserScheduling() predicate.User {
+// HasRoles applies the HasEdge predicate on the "roles" edge.
+func HasRoles() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, UserSchedulingTable, UserSchedulingColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, RolesTable, RolesPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasUserSchedulingWith applies the HasEdge predicate on the "user_scheduling" edge with a given conditions (other predicates).
-func HasUserSchedulingWith(preds ...predicate.UserScheduling) predicate.User {
+// HasRolesWith applies the HasEdge predicate on the "roles" edge with a given conditions (other predicates).
+func HasRolesWith(preds ...predicate.Role) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		step := newUserSchedulingStep()
+		step := newRolesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUserTimePeriod applies the HasEdge predicate on the "user_time_period" edge.
+func HasUserTimePeriod() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, UserTimePeriodTable, UserTimePeriodColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUserTimePeriodWith applies the HasEdge predicate on the "user_time_period" edge with a given conditions (other predicates).
+func HasUserTimePeriodWith(preds ...predicate.UserScheduling) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newUserTimePeriodStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

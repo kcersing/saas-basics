@@ -45,8 +45,6 @@ type User struct {
 	Type int64 `json:"type,omitempty"`
 	// job time | [1:全职;2:兼职;]
 	JobTime int64 `json:"job_time,omitempty"`
-	// role id | 角色ID
-	RoleID int64 `json:"role_id,omitempty"`
 	// 登陆后默认场馆ID
 	DefaultVenueID int64 `json:"default_venue_id,omitempty"`
 	// avatar | 头像路径
@@ -71,11 +69,13 @@ type UserEdges struct {
 	UserEntry []*EntryLogs `json:"user_entry,omitempty"`
 	// Venues holds the value of the venues edge.
 	Venues []*Venue `json:"venues,omitempty"`
-	// UserScheduling holds the value of the user_scheduling edge.
-	UserScheduling []*UserScheduling `json:"user_scheduling,omitempty"`
+	// Roles holds the value of the roles edge.
+	Roles []*Role `json:"roles,omitempty"`
+	// UserTimePeriod holds the value of the user_time_period edge.
+	UserTimePeriod []*UserScheduling `json:"user_time_period,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 }
 
 // TokenOrErr returns the Token value or an error if the edge
@@ -127,13 +127,22 @@ func (e UserEdges) VenuesOrErr() ([]*Venue, error) {
 	return nil, &NotLoadedError{edge: "venues"}
 }
 
-// UserSchedulingOrErr returns the UserScheduling value or an error if the edge
+// RolesOrErr returns the Roles value or an error if the edge
 // was not loaded in eager-loading.
-func (e UserEdges) UserSchedulingOrErr() ([]*UserScheduling, error) {
+func (e UserEdges) RolesOrErr() ([]*Role, error) {
 	if e.loadedTypes[5] {
-		return e.UserScheduling, nil
+		return e.Roles, nil
 	}
-	return nil, &NotLoadedError{edge: "user_scheduling"}
+	return nil, &NotLoadedError{edge: "roles"}
+}
+
+// UserTimePeriodOrErr returns the UserTimePeriod value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) UserTimePeriodOrErr() ([]*UserScheduling, error) {
+	if e.loadedTypes[6] {
+		return e.UserTimePeriod, nil
+	}
+	return nil, &NotLoadedError{edge: "user_time_period"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -141,7 +150,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldDelete, user.FieldCreatedID, user.FieldStatus, user.FieldGender, user.FieldType, user.FieldJobTime, user.FieldRoleID, user.FieldDefaultVenueID:
+		case user.FieldID, user.FieldDelete, user.FieldCreatedID, user.FieldStatus, user.FieldGender, user.FieldType, user.FieldJobTime, user.FieldDefaultVenueID:
 			values[i] = new(sql.NullInt64)
 		case user.FieldMobile, user.FieldName, user.FieldUsername, user.FieldPassword, user.FieldFunctions, user.FieldAvatar, user.FieldDetail:
 			values[i] = new(sql.NullString)
@@ -246,12 +255,6 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.JobTime = value.Int64
 			}
-		case user.FieldRoleID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field role_id", values[i])
-			} else if value.Valid {
-				u.RoleID = value.Int64
-			}
 		case user.FieldDefaultVenueID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field default_venue_id", values[i])
@@ -308,9 +311,14 @@ func (u *User) QueryVenues() *VenueQuery {
 	return NewUserClient(u.config).QueryVenues(u)
 }
 
-// QueryUserScheduling queries the "user_scheduling" edge of the User entity.
-func (u *User) QueryUserScheduling() *UserSchedulingQuery {
-	return NewUserClient(u.config).QueryUserScheduling(u)
+// QueryRoles queries the "roles" edge of the User entity.
+func (u *User) QueryRoles() *RoleQuery {
+	return NewUserClient(u.config).QueryRoles(u)
+}
+
+// QueryUserTimePeriod queries the "user_time_period" edge of the User entity.
+func (u *User) QueryUserTimePeriod() *UserSchedulingQuery {
+	return NewUserClient(u.config).QueryUserTimePeriod(u)
 }
 
 // Update returns a builder for updating this User.
@@ -374,9 +382,6 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("job_time=")
 	builder.WriteString(fmt.Sprintf("%v", u.JobTime))
-	builder.WriteString(", ")
-	builder.WriteString("role_id=")
-	builder.WriteString(fmt.Sprintf("%v", u.RoleID))
 	builder.WriteString(", ")
 	builder.WriteString("default_venue_id=")
 	builder.WriteString(fmt.Sprintf("%v", u.DefaultVenueID))

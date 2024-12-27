@@ -193,11 +193,11 @@ func entMenuInfo(menuEnt ent.Menu) *menu.MenuInfo {
 	return m
 }
 
-func (m Menu) MenuRole(roleID int64) (list []*menu.MenuInfo, err error) {
+func (m Menu) MenuRole(roleId []int64) (list []*menu.MenuInfo, err error) {
 
 	menus, err := m.db.Role.
 		Query().
-		Where(role.IDEQ(roleID)).
+		Where(role.IDIn(roleId...)).
 		QueryMenus().
 		Where(menu2.DisabledEQ(0)).
 		//WithChildren().

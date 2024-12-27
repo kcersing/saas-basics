@@ -4,16 +4,15 @@ package menu
 
 import (
 	"context"
-	"errors"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/pkg/errors"
 	"saas/biz/infras/service"
 	base "saas/idl_gen/model/base"
 	menu "saas/idl_gen/model/menu"
 	"saas/pkg/errno"
 	"saas/pkg/utils"
-	"strconv"
 )
 
 // MenuAuth .
@@ -129,17 +128,21 @@ func MenuTree(ctx context.Context, c *app.RequestContext) {
 //	@router			/service/menu/role [POST]
 func MenuRole(ctx context.Context, c *app.RequestContext) {
 
-	roleIdInterface, exist := c.Get("roleId")
+	roleIdInterface, exist := c.Get("userRoleIds")
+	hlog.Info(roleIdInterface)
 	if !exist || roleIdInterface == nil {
 		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
 		return
 	}
-	roleId, err := strconv.Atoi(roleIdInterface.(string))
-	if err != nil {
-		utils.SendResponse(c, errno.Unauthorized, nil, 0, "")
-		return
+
+	roleIds := roleIdInterface.([]interface{})
+	var roleId []int64
+	for _, v := range roleIds {
+		i := v.(float64)
+		roleId = append(roleId, int64(i))
 	}
-	menuTree, err := service.NewMenu(ctx, c).MenuRole(int64(roleId))
+
+	menuTree, err := service.NewMenu(ctx, c).MenuRole(roleId)
 	if err != nil {
 		utils.SendResponse(c, errors.New(err.Error()), nil, 0, "")
 		return

@@ -33,9 +33,9 @@ const (
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// Table holds the table name of the userscheduling in the database.
-	Table = "sys_user_scheduling"
+	Table = "sys_user_time_period"
 	// UsersTable is the table that holds the users relation/edge.
-	UsersTable = "sys_user_scheduling"
+	UsersTable = "sys_user_time_period"
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "sys_users"

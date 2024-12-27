@@ -29,8 +29,6 @@ func (User) Fields() []ent.Field {
 
 		field.Int64("job_time").Default(1).Comment("job time | [1:全职;2:兼职;]").Optional(),
 
-		field.Int64("role_id").Optional().Default(0).Comment("role id | 角色ID"),
-
 		field.Int64("default_venue_id").Optional().Comment("登陆后默认场馆ID"),
 
 		field.String("avatar").
@@ -57,7 +55,7 @@ func (User) Edges() []ent.Edge {
 		edge.To("user_entry", EntryLogs.Type),
 		edge.To("venues", Venue.Type),
 		//edge.To("user_face", Face.Type),
-
+		edge.To("roles", Role.Type),
 		edge.To("user_time_period", UserScheduling.Type),
 	}
 }

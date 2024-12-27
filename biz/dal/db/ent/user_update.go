@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
+	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/userscheduling"
@@ -284,33 +285,6 @@ func (uu *UserUpdate) ClearJobTime() *UserUpdate {
 	return uu
 }
 
-// SetRoleID sets the "role_id" field.
-func (uu *UserUpdate) SetRoleID(i int64) *UserUpdate {
-	uu.mutation.ResetRoleID()
-	uu.mutation.SetRoleID(i)
-	return uu
-}
-
-// SetNillableRoleID sets the "role_id" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableRoleID(i *int64) *UserUpdate {
-	if i != nil {
-		uu.SetRoleID(*i)
-	}
-	return uu
-}
-
-// AddRoleID adds i to the "role_id" field.
-func (uu *UserUpdate) AddRoleID(i int64) *UserUpdate {
-	uu.mutation.AddRoleID(i)
-	return uu
-}
-
-// ClearRoleID clears the value of the "role_id" field.
-func (uu *UserUpdate) ClearRoleID() *UserUpdate {
-	uu.mutation.ClearRoleID()
-	return uu
-}
-
 // SetDefaultVenueID sets the "default_venue_id" field.
 func (uu *UserUpdate) SetDefaultVenueID(i int64) *UserUpdate {
 	uu.mutation.ResetDefaultVenueID()
@@ -457,19 +431,34 @@ func (uu *UserUpdate) AddVenues(v ...*Venue) *UserUpdate {
 	return uu.AddVenueIDs(ids...)
 }
 
-// AddUserSchedulingIDs adds the "user_scheduling" edge to the UserScheduling entity by IDs.
-func (uu *UserUpdate) AddUserSchedulingIDs(ids ...int64) *UserUpdate {
-	uu.mutation.AddUserSchedulingIDs(ids...)
+// AddRoleIDs adds the "roles" edge to the Role entity by IDs.
+func (uu *UserUpdate) AddRoleIDs(ids ...int64) *UserUpdate {
+	uu.mutation.AddRoleIDs(ids...)
 	return uu
 }
 
-// AddUserScheduling adds the "user_scheduling" edges to the UserScheduling entity.
-func (uu *UserUpdate) AddUserScheduling(u ...*UserScheduling) *UserUpdate {
+// AddRoles adds the "roles" edges to the Role entity.
+func (uu *UserUpdate) AddRoles(r ...*Role) *UserUpdate {
+	ids := make([]int64, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uu.AddRoleIDs(ids...)
+}
+
+// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserScheduling entity by IDs.
+func (uu *UserUpdate) AddUserTimePeriodIDs(ids ...int64) *UserUpdate {
+	uu.mutation.AddUserTimePeriodIDs(ids...)
+	return uu
+}
+
+// AddUserTimePeriod adds the "user_time_period" edges to the UserScheduling entity.
+func (uu *UserUpdate) AddUserTimePeriod(u ...*UserScheduling) *UserUpdate {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return uu.AddUserSchedulingIDs(ids...)
+	return uu.AddUserTimePeriodIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -567,25 +556,46 @@ func (uu *UserUpdate) RemoveVenues(v ...*Venue) *UserUpdate {
 	return uu.RemoveVenueIDs(ids...)
 }
 
-// ClearUserScheduling clears all "user_scheduling" edges to the UserScheduling entity.
-func (uu *UserUpdate) ClearUserScheduling() *UserUpdate {
-	uu.mutation.ClearUserScheduling()
+// ClearRoles clears all "roles" edges to the Role entity.
+func (uu *UserUpdate) ClearRoles() *UserUpdate {
+	uu.mutation.ClearRoles()
 	return uu
 }
 
-// RemoveUserSchedulingIDs removes the "user_scheduling" edge to UserScheduling entities by IDs.
-func (uu *UserUpdate) RemoveUserSchedulingIDs(ids ...int64) *UserUpdate {
-	uu.mutation.RemoveUserSchedulingIDs(ids...)
+// RemoveRoleIDs removes the "roles" edge to Role entities by IDs.
+func (uu *UserUpdate) RemoveRoleIDs(ids ...int64) *UserUpdate {
+	uu.mutation.RemoveRoleIDs(ids...)
 	return uu
 }
 
-// RemoveUserScheduling removes "user_scheduling" edges to UserScheduling entities.
-func (uu *UserUpdate) RemoveUserScheduling(u ...*UserScheduling) *UserUpdate {
+// RemoveRoles removes "roles" edges to Role entities.
+func (uu *UserUpdate) RemoveRoles(r ...*Role) *UserUpdate {
+	ids := make([]int64, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uu.RemoveRoleIDs(ids...)
+}
+
+// ClearUserTimePeriod clears all "user_time_period" edges to the UserScheduling entity.
+func (uu *UserUpdate) ClearUserTimePeriod() *UserUpdate {
+	uu.mutation.ClearUserTimePeriod()
+	return uu
+}
+
+// RemoveUserTimePeriodIDs removes the "user_time_period" edge to UserScheduling entities by IDs.
+func (uu *UserUpdate) RemoveUserTimePeriodIDs(ids ...int64) *UserUpdate {
+	uu.mutation.RemoveUserTimePeriodIDs(ids...)
+	return uu
+}
+
+// RemoveUserTimePeriod removes "user_time_period" edges to UserScheduling entities.
+func (uu *UserUpdate) RemoveUserTimePeriod(u ...*UserScheduling) *UserUpdate {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return uu.RemoveUserSchedulingIDs(ids...)
+	return uu.RemoveUserTimePeriodIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -713,15 +723,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.JobTimeCleared() {
 		_spec.ClearField(user.FieldJobTime, field.TypeInt64)
-	}
-	if value, ok := uu.mutation.RoleID(); ok {
-		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
-	}
-	if value, ok := uu.mutation.AddedRoleID(); ok {
-		_spec.AddField(user.FieldRoleID, field.TypeInt64, value)
-	}
-	if uu.mutation.RoleIDCleared() {
-		_spec.ClearField(user.FieldRoleID, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.DefaultVenueID(); ok {
 		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
@@ -953,12 +954,57 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uu.mutation.UserSchedulingCleared() {
+	if uu.mutation.RolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.RolesTable,
+			Columns: user.RolesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedRolesIDs(); len(nodes) > 0 && !uu.mutation.RolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.RolesTable,
+			Columns: user.RolesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.RolesTable,
+			Columns: user.RolesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.UserTimePeriodCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.UserSchedulingTable,
-			Columns: []string{user.UserSchedulingColumn},
+			Table:   user.UserTimePeriodTable,
+			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
@@ -966,12 +1012,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.RemovedUserSchedulingIDs(); len(nodes) > 0 && !uu.mutation.UserSchedulingCleared() {
+	if nodes := uu.mutation.RemovedUserTimePeriodIDs(); len(nodes) > 0 && !uu.mutation.UserTimePeriodCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.UserSchedulingTable,
-			Columns: []string{user.UserSchedulingColumn},
+			Table:   user.UserTimePeriodTable,
+			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
@@ -982,12 +1028,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.UserSchedulingIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.UserTimePeriodIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.UserSchedulingTable,
-			Columns: []string{user.UserSchedulingColumn},
+			Table:   user.UserTimePeriodTable,
+			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
@@ -1268,33 +1314,6 @@ func (uuo *UserUpdateOne) ClearJobTime() *UserUpdateOne {
 	return uuo
 }
 
-// SetRoleID sets the "role_id" field.
-func (uuo *UserUpdateOne) SetRoleID(i int64) *UserUpdateOne {
-	uuo.mutation.ResetRoleID()
-	uuo.mutation.SetRoleID(i)
-	return uuo
-}
-
-// SetNillableRoleID sets the "role_id" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableRoleID(i *int64) *UserUpdateOne {
-	if i != nil {
-		uuo.SetRoleID(*i)
-	}
-	return uuo
-}
-
-// AddRoleID adds i to the "role_id" field.
-func (uuo *UserUpdateOne) AddRoleID(i int64) *UserUpdateOne {
-	uuo.mutation.AddRoleID(i)
-	return uuo
-}
-
-// ClearRoleID clears the value of the "role_id" field.
-func (uuo *UserUpdateOne) ClearRoleID() *UserUpdateOne {
-	uuo.mutation.ClearRoleID()
-	return uuo
-}
-
 // SetDefaultVenueID sets the "default_venue_id" field.
 func (uuo *UserUpdateOne) SetDefaultVenueID(i int64) *UserUpdateOne {
 	uuo.mutation.ResetDefaultVenueID()
@@ -1441,19 +1460,34 @@ func (uuo *UserUpdateOne) AddVenues(v ...*Venue) *UserUpdateOne {
 	return uuo.AddVenueIDs(ids...)
 }
 
-// AddUserSchedulingIDs adds the "user_scheduling" edge to the UserScheduling entity by IDs.
-func (uuo *UserUpdateOne) AddUserSchedulingIDs(ids ...int64) *UserUpdateOne {
-	uuo.mutation.AddUserSchedulingIDs(ids...)
+// AddRoleIDs adds the "roles" edge to the Role entity by IDs.
+func (uuo *UserUpdateOne) AddRoleIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.AddRoleIDs(ids...)
 	return uuo
 }
 
-// AddUserScheduling adds the "user_scheduling" edges to the UserScheduling entity.
-func (uuo *UserUpdateOne) AddUserScheduling(u ...*UserScheduling) *UserUpdateOne {
+// AddRoles adds the "roles" edges to the Role entity.
+func (uuo *UserUpdateOne) AddRoles(r ...*Role) *UserUpdateOne {
+	ids := make([]int64, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uuo.AddRoleIDs(ids...)
+}
+
+// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserScheduling entity by IDs.
+func (uuo *UserUpdateOne) AddUserTimePeriodIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.AddUserTimePeriodIDs(ids...)
+	return uuo
+}
+
+// AddUserTimePeriod adds the "user_time_period" edges to the UserScheduling entity.
+func (uuo *UserUpdateOne) AddUserTimePeriod(u ...*UserScheduling) *UserUpdateOne {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return uuo.AddUserSchedulingIDs(ids...)
+	return uuo.AddUserTimePeriodIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -1551,25 +1585,46 @@ func (uuo *UserUpdateOne) RemoveVenues(v ...*Venue) *UserUpdateOne {
 	return uuo.RemoveVenueIDs(ids...)
 }
 
-// ClearUserScheduling clears all "user_scheduling" edges to the UserScheduling entity.
-func (uuo *UserUpdateOne) ClearUserScheduling() *UserUpdateOne {
-	uuo.mutation.ClearUserScheduling()
+// ClearRoles clears all "roles" edges to the Role entity.
+func (uuo *UserUpdateOne) ClearRoles() *UserUpdateOne {
+	uuo.mutation.ClearRoles()
 	return uuo
 }
 
-// RemoveUserSchedulingIDs removes the "user_scheduling" edge to UserScheduling entities by IDs.
-func (uuo *UserUpdateOne) RemoveUserSchedulingIDs(ids ...int64) *UserUpdateOne {
-	uuo.mutation.RemoveUserSchedulingIDs(ids...)
+// RemoveRoleIDs removes the "roles" edge to Role entities by IDs.
+func (uuo *UserUpdateOne) RemoveRoleIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.RemoveRoleIDs(ids...)
 	return uuo
 }
 
-// RemoveUserScheduling removes "user_scheduling" edges to UserScheduling entities.
-func (uuo *UserUpdateOne) RemoveUserScheduling(u ...*UserScheduling) *UserUpdateOne {
+// RemoveRoles removes "roles" edges to Role entities.
+func (uuo *UserUpdateOne) RemoveRoles(r ...*Role) *UserUpdateOne {
+	ids := make([]int64, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uuo.RemoveRoleIDs(ids...)
+}
+
+// ClearUserTimePeriod clears all "user_time_period" edges to the UserScheduling entity.
+func (uuo *UserUpdateOne) ClearUserTimePeriod() *UserUpdateOne {
+	uuo.mutation.ClearUserTimePeriod()
+	return uuo
+}
+
+// RemoveUserTimePeriodIDs removes the "user_time_period" edge to UserScheduling entities by IDs.
+func (uuo *UserUpdateOne) RemoveUserTimePeriodIDs(ids ...int64) *UserUpdateOne {
+	uuo.mutation.RemoveUserTimePeriodIDs(ids...)
+	return uuo
+}
+
+// RemoveUserTimePeriod removes "user_time_period" edges to UserScheduling entities.
+func (uuo *UserUpdateOne) RemoveUserTimePeriod(u ...*UserScheduling) *UserUpdateOne {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return uuo.RemoveUserSchedulingIDs(ids...)
+	return uuo.RemoveUserTimePeriodIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -1727,15 +1782,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.JobTimeCleared() {
 		_spec.ClearField(user.FieldJobTime, field.TypeInt64)
-	}
-	if value, ok := uuo.mutation.RoleID(); ok {
-		_spec.SetField(user.FieldRoleID, field.TypeInt64, value)
-	}
-	if value, ok := uuo.mutation.AddedRoleID(); ok {
-		_spec.AddField(user.FieldRoleID, field.TypeInt64, value)
-	}
-	if uuo.mutation.RoleIDCleared() {
-		_spec.ClearField(user.FieldRoleID, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.DefaultVenueID(); ok {
 		_spec.SetField(user.FieldDefaultVenueID, field.TypeInt64, value)
@@ -1967,12 +2013,57 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uuo.mutation.UserSchedulingCleared() {
+	if uuo.mutation.RolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.RolesTable,
+			Columns: user.RolesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedRolesIDs(); len(nodes) > 0 && !uuo.mutation.RolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.RolesTable,
+			Columns: user.RolesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.RolesTable,
+			Columns: user.RolesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.UserTimePeriodCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.UserSchedulingTable,
-			Columns: []string{user.UserSchedulingColumn},
+			Table:   user.UserTimePeriodTable,
+			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
@@ -1980,12 +2071,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.RemovedUserSchedulingIDs(); len(nodes) > 0 && !uuo.mutation.UserSchedulingCleared() {
+	if nodes := uuo.mutation.RemovedUserTimePeriodIDs(); len(nodes) > 0 && !uuo.mutation.UserTimePeriodCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.UserSchedulingTable,
-			Columns: []string{user.UserSchedulingColumn},
+			Table:   user.UserTimePeriodTable,
+			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
@@ -1996,12 +2087,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.UserSchedulingIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.UserTimePeriodIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.UserSchedulingTable,
-			Columns: []string{user.UserSchedulingColumn},
+			Table:   user.UserTimePeriodTable,
+			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),

@@ -80,7 +80,7 @@ func (r Role) Update(req *auth.RoleInfo) error {
 
 func (r Role) Delete(id int64) error {
 	// whether role is used by user
-	exist, err := r.db.User.Query().Where(entuser.RoleIDEQ(id)).Exist(r.ctx)
+	exist, err := r.db.User.Query().Where(entuser.HasRolesWith(role.IDEQ(id))).Exist(r.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "query user - role failed")
 		return err

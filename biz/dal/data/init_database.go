@@ -169,8 +169,9 @@ func (I *InitDatabase) insertUserData(ctx context.Context) error {
 		SetPassword(password).
 		//SetEmail("idl@gmail.com").
 		SetMobile("12345678901").
-		//SetFunctions("{}").
-		SetRoleID(1),
+		AddRoleIDs([]int64{1}...),
+	//SetFunctions("{}").
+	//SetRoleID(1),
 	//SetWecom("idl"),
 	)
 

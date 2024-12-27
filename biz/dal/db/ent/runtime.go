@@ -1344,10 +1344,6 @@ func init() {
 	userDescJobTime := userFields[7].Descriptor()
 	// user.DefaultJobTime holds the default value on creation for the job_time field.
 	user.DefaultJobTime = userDescJobTime.Default.(int64)
-	// userDescRoleID is the schema descriptor for role_id field.
-	userDescRoleID := userFields[8].Descriptor()
-	// user.DefaultRoleID holds the default value on creation for the role_id field.
-	user.DefaultRoleID = userDescRoleID.Default.(int64)
 	userschedulingMixin := schema.UserScheduling{}.Mixin()
 	userschedulingMixinFields0 := userschedulingMixin[0].Fields()
 	_ = userschedulingMixinFields0

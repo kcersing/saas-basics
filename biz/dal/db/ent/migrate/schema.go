@@ -1281,7 +1281,6 @@ var (
 		{Name: "functions", Type: field.TypeString, Comment: "functions | 职能"},
 		{Name: "type", Type: field.TypeInt64, Nullable: true, Comment: "账号类别1普通 2管理员", Default: 1},
 		{Name: "job_time", Type: field.TypeInt64, Nullable: true, Comment: "job time | [1:全职;2:兼职;]", Default: 1},
-		{Name: "role_id", Type: field.TypeInt64, Nullable: true, Comment: "role id | 角色ID", Default: 0},
 		{Name: "default_venue_id", Type: field.TypeInt64, Nullable: true, Comment: "登陆后默认场馆ID"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "detail", Type: field.TypeString, Nullable: true, Comment: "详情"},
@@ -1299,8 +1298,8 @@ var (
 			},
 		},
 	}
-	// SysUserSchedulingColumns holds the columns for the "sys_user_scheduling" table.
-	SysUserSchedulingColumns = []*schema.Column{
+	// SysUserTimePeriodColumns holds the columns for the "sys_user_time_period" table.
+	SysUserTimePeriodColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
@@ -1311,15 +1310,15 @@ var (
 		{Name: "period", Type: field.TypeJSON, Nullable: true, Comment: "时间段"},
 		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "員工id"},
 	}
-	// SysUserSchedulingTable holds the schema information for the "sys_user_scheduling" table.
-	SysUserSchedulingTable = &schema.Table{
-		Name:       "sys_user_scheduling",
-		Columns:    SysUserSchedulingColumns,
-		PrimaryKey: []*schema.Column{SysUserSchedulingColumns[0]},
+	// SysUserTimePeriodTable holds the schema information for the "sys_user_time_period" table.
+	SysUserTimePeriodTable = &schema.Table{
+		Name:       "sys_user_time_period",
+		Columns:    SysUserTimePeriodColumns,
+		PrimaryKey: []*schema.Column{SysUserTimePeriodColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "sys_user_scheduling_sys_users_user_scheduling",
-				Columns:    []*schema.Column{SysUserSchedulingColumns[8]},
+				Symbol:     "sys_user_time_period_sys_users_user_time_period",
+				Columns:    []*schema.Column{SysUserTimePeriodColumns[8]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1670,6 +1669,31 @@ var (
 			},
 		},
 	}
+	// UserRolesColumns holds the columns for the "user_roles" table.
+	UserRolesColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeInt64},
+		{Name: "role_id", Type: field.TypeInt64},
+	}
+	// UserRolesTable holds the schema information for the "user_roles" table.
+	UserRolesTable = &schema.Table{
+		Name:       "user_roles",
+		Columns:    UserRolesColumns,
+		PrimaryKey: []*schema.Column{UserRolesColumns[0], UserRolesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_roles_user_id",
+				Columns:    []*schema.Column{UserRolesColumns[0]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_roles_role_id",
+				Columns:    []*schema.Column{UserRolesColumns[1]},
+				RefColumns: []*schema.Column{SysRolesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
@@ -1707,7 +1731,7 @@ var (
 		ScheduleMemberTable,
 		SysTokensTable,
 		SysUsersTable,
-		SysUserSchedulingTable,
+		SysUserTimePeriodTable,
 		VenueTable,
 		VenuePlaceTable,
 		SysVenueSmsTable,
@@ -1721,6 +1745,7 @@ var (
 		RoleMenusTable,
 		UserTagsTable,
 		UserVenuesTable,
+		UserRolesTable,
 	}
 )
 
@@ -1877,9 +1902,9 @@ func init() {
 		Table:   "sys_users",
 		Options: "AUTO_INCREMENT = 100000",
 	}
-	SysUserSchedulingTable.ForeignKeys[0].RefTable = SysUsersTable
-	SysUserSchedulingTable.Annotation = &entsql.Annotation{
-		Table:   "sys_user_scheduling",
+	SysUserTimePeriodTable.ForeignKeys[0].RefTable = SysUsersTable
+	SysUserTimePeriodTable.Annotation = &entsql.Annotation{
+		Table:   "sys_user_time_period",
 		Options: "AUTO_INCREMENT = 100000",
 	}
 	VenueTable.Annotation = &entsql.Annotation{
@@ -1917,4 +1942,6 @@ func init() {
 	UserTagsTable.ForeignKeys[1].RefTable = SysDictionaryDetailsTable
 	UserVenuesTable.ForeignKeys[0].RefTable = SysUsersTable
 	UserVenuesTable.ForeignKeys[1].RefTable = VenueTable
+	UserRolesTable.ForeignKeys[0].RefTable = SysUsersTable
+	UserRolesTable.ForeignKeys[1].RefTable = SysRolesTable
 }
