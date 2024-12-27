@@ -128,6 +128,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		SetGender(gender).
 		SetRoleID(req.RoleId).
 		SetDetail(req.Detail).
+		SetType(req.Type).
 		//SetTags().
 		Save(u.ctx)
 
@@ -183,7 +184,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		SetGender(gender).
 		SetRoleID(req.RoleId).
 		SetDetail(req.Detail).
-
+		SetType(req.Type).
 		//SetTags().
 		Save(u.ctx)
 
