@@ -18,11 +18,12 @@ import (
 // ProductCoursesQuery is the builder for querying ProductCourses entities.
 type ProductCoursesQuery struct {
 	config
-	ctx         *QueryContext
-	order       []productcourses.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.ProductCourses
-	withProduct *ProductQuery
+	ctx                *QueryContext
+	order              []productcourses.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.ProductCourses
+	withProductCourses *ProductQuery
+	withProductLessons *ProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -59,8 +60,8 @@ func (pcq *ProductCoursesQuery) Order(o ...productcourses.OrderOption) *ProductC
 	return pcq
 }
 
-// QueryProduct chains the current query on the "product" edge.
-func (pcq *ProductCoursesQuery) QueryProduct() *ProductQuery {
+// QueryProductCourses chains the current query on the "productCourses" edge.
+func (pcq *ProductCoursesQuery) QueryProductCourses() *ProductQuery {
 	query := (&ProductClient{config: pcq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pcq.prepareQuery(ctx); err != nil {
@@ -73,7 +74,29 @@ func (pcq *ProductCoursesQuery) QueryProduct() *ProductQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(productcourses.Table, productcourses.FieldID, selector),
 			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.ProductTable, productcourses.ProductColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.ProductCoursesTable, productcourses.ProductCoursesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProductLessons chains the current query on the "productLessons" edge.
+func (pcq *ProductCoursesQuery) QueryProductLessons() *ProductQuery {
+	query := (&ProductClient{config: pcq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pcq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pcq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(productcourses.Table, productcourses.FieldID, selector),
+			sqlgraph.To(product.Table, product.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.ProductLessonsTable, productcourses.ProductLessonsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
 		return fromU, nil
@@ -268,26 +291,38 @@ func (pcq *ProductCoursesQuery) Clone() *ProductCoursesQuery {
 		return nil
 	}
 	return &ProductCoursesQuery{
-		config:      pcq.config,
-		ctx:         pcq.ctx.Clone(),
-		order:       append([]productcourses.OrderOption{}, pcq.order...),
-		inters:      append([]Interceptor{}, pcq.inters...),
-		predicates:  append([]predicate.ProductCourses{}, pcq.predicates...),
-		withProduct: pcq.withProduct.Clone(),
+		config:             pcq.config,
+		ctx:                pcq.ctx.Clone(),
+		order:              append([]productcourses.OrderOption{}, pcq.order...),
+		inters:             append([]Interceptor{}, pcq.inters...),
+		predicates:         append([]predicate.ProductCourses{}, pcq.predicates...),
+		withProductCourses: pcq.withProductCourses.Clone(),
+		withProductLessons: pcq.withProductLessons.Clone(),
 		// clone intermediate query.
 		sql:  pcq.sql.Clone(),
 		path: pcq.path,
 	}
 }
 
-// WithProduct tells the query-builder to eager-load the nodes that are connected to
-// the "product" edge. The optional arguments are used to configure the query builder of the edge.
-func (pcq *ProductCoursesQuery) WithProduct(opts ...func(*ProductQuery)) *ProductCoursesQuery {
+// WithProductCourses tells the query-builder to eager-load the nodes that are connected to
+// the "productCourses" edge. The optional arguments are used to configure the query builder of the edge.
+func (pcq *ProductCoursesQuery) WithProductCourses(opts ...func(*ProductQuery)) *ProductCoursesQuery {
 	query := (&ProductClient{config: pcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pcq.withProduct = query
+	pcq.withProductCourses = query
+	return pcq
+}
+
+// WithProductLessons tells the query-builder to eager-load the nodes that are connected to
+// the "productLessons" edge. The optional arguments are used to configure the query builder of the edge.
+func (pcq *ProductCoursesQuery) WithProductLessons(opts ...func(*ProductQuery)) *ProductCoursesQuery {
+	query := (&ProductClient{config: pcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pcq.withProductLessons = query
 	return pcq
 }
 
@@ -369,8 +404,9 @@ func (pcq *ProductCoursesQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	var (
 		nodes       = []*ProductCourses{}
 		_spec       = pcq.querySpec()
-		loadedTypes = [1]bool{
-			pcq.withProduct != nil,
+		loadedTypes = [2]bool{
+			pcq.withProductCourses != nil,
+			pcq.withProductLessons != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -391,16 +427,51 @@ func (pcq *ProductCoursesQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pcq.withProduct; query != nil {
-		if err := pcq.loadProduct(ctx, query, nodes, nil,
-			func(n *ProductCourses, e *Product) { n.Edges.Product = e }); err != nil {
+	if query := pcq.withProductCourses; query != nil {
+		if err := pcq.loadProductCourses(ctx, query, nodes, nil,
+			func(n *ProductCourses, e *Product) { n.Edges.ProductCourses = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pcq.withProductLessons; query != nil {
+		if err := pcq.loadProductLessons(ctx, query, nodes, nil,
+			func(n *ProductCourses, e *Product) { n.Edges.ProductLessons = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (pcq *ProductCoursesQuery) loadProduct(ctx context.Context, query *ProductQuery, nodes []*ProductCourses, init func(*ProductCourses), assign func(*ProductCourses, *Product)) error {
+func (pcq *ProductCoursesQuery) loadProductCourses(ctx context.Context, query *ProductQuery, nodes []*ProductCourses, init func(*ProductCourses), assign func(*ProductCourses, *Product)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*ProductCourses)
+	for i := range nodes {
+		fk := nodes[i].ProductID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(product.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "product_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pcq *ProductCoursesQuery) loadProductLessons(ctx context.Context, query *ProductQuery, nodes []*ProductCourses, init func(*ProductCourses), assign func(*ProductCourses, *Product)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*ProductCourses)
 	for i := range nodes {
@@ -455,7 +526,10 @@ func (pcq *ProductCoursesQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if pcq.withProduct != nil {
+		if pcq.withProductCourses != nil {
+			_spec.Node.AddColumnOnce(productcourses.FieldProductID)
+		}
+		if pcq.withProductLessons != nil {
 			_spec.Node.AddColumnOnce(productcourses.FieldProductID)
 		}
 	}

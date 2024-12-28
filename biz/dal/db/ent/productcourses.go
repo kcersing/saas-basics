@@ -47,24 +47,39 @@ type ProductCourses struct {
 
 // ProductCoursesEdges holds the relations/edges for other nodes in the graph.
 type ProductCoursesEdges struct {
-	// Product holds the value of the product edge.
-	Product *Product `json:"product,omitempty"`
+	// ProductCourses holds the value of the productCourses edge.
+	ProductCourses *Product `json:"productCourses,omitempty"`
+	// ProductLessons holds the value of the productLessons edge.
+	ProductLessons *Product `json:"productLessons,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
-// ProductOrErr returns the Product value or an error if the edge
+// ProductCoursesOrErr returns the ProductCourses value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ProductCoursesEdges) ProductOrErr() (*Product, error) {
+func (e ProductCoursesEdges) ProductCoursesOrErr() (*Product, error) {
 	if e.loadedTypes[0] {
-		if e.Product == nil {
+		if e.ProductCourses == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: product.Label}
 		}
-		return e.Product, nil
+		return e.ProductCourses, nil
 	}
-	return nil, &NotLoadedError{edge: "product"}
+	return nil, &NotLoadedError{edge: "productCourses"}
+}
+
+// ProductLessonsOrErr returns the ProductLessons value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProductCoursesEdges) ProductLessonsOrErr() (*Product, error) {
+	if e.loadedTypes[1] {
+		if e.ProductLessons == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: product.Label}
+		}
+		return e.ProductLessons, nil
+	}
+	return nil, &NotLoadedError{edge: "productLessons"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -172,9 +187,14 @@ func (pc *ProductCourses) Value(name string) (ent.Value, error) {
 	return pc.selectValues.Get(name)
 }
 
-// QueryProduct queries the "product" edge of the ProductCourses entity.
-func (pc *ProductCourses) QueryProduct() *ProductQuery {
-	return NewProductCoursesClient(pc.config).QueryProduct(pc)
+// QueryProductCourses queries the "productCourses" edge of the ProductCourses entity.
+func (pc *ProductCourses) QueryProductCourses() *ProductQuery {
+	return NewProductCoursesClient(pc.config).QueryProductCourses(pc)
+}
+
+// QueryProductLessons queries the "productLessons" edge of the ProductCourses entity.
+func (pc *ProductCourses) QueryProductLessons() *ProductQuery {
+	return NewProductCoursesClient(pc.config).QueryProductLessons(pc)
 }
 
 // Update returns a builder for updating this ProductCourses.

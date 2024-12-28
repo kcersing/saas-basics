@@ -130,6 +130,11 @@ func IsLessons(v int64) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldIsLessons, v))
 }
 
+// IsCourse applies equality check predicate on the "is_course" field. It's identical to IsCourseEQ.
+func IsCourse(v int64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldIsCourse, v))
+}
+
 // IsSales applies equality check predicate on the "is_sales" field. It's identical to IsSalesEQ.
 func IsSales(v int64) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldIsSales, v))
@@ -980,6 +985,56 @@ func IsLessonsNotNil() predicate.Product {
 	return predicate.Product(sql.FieldNotNull(FieldIsLessons))
 }
 
+// IsCourseEQ applies the EQ predicate on the "is_course" field.
+func IsCourseEQ(v int64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldIsCourse, v))
+}
+
+// IsCourseNEQ applies the NEQ predicate on the "is_course" field.
+func IsCourseNEQ(v int64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldIsCourse, v))
+}
+
+// IsCourseIn applies the In predicate on the "is_course" field.
+func IsCourseIn(vs ...int64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldIsCourse, vs...))
+}
+
+// IsCourseNotIn applies the NotIn predicate on the "is_course" field.
+func IsCourseNotIn(vs ...int64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldIsCourse, vs...))
+}
+
+// IsCourseGT applies the GT predicate on the "is_course" field.
+func IsCourseGT(v int64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldIsCourse, v))
+}
+
+// IsCourseGTE applies the GTE predicate on the "is_course" field.
+func IsCourseGTE(v int64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldIsCourse, v))
+}
+
+// IsCourseLT applies the LT predicate on the "is_course" field.
+func IsCourseLT(v int64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldIsCourse, v))
+}
+
+// IsCourseLTE applies the LTE predicate on the "is_course" field.
+func IsCourseLTE(v int64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldIsCourse, v))
+}
+
+// IsCourseIsNil applies the IsNil predicate on the "is_course" field.
+func IsCourseIsNil() predicate.Product {
+	return predicate.Product(sql.FieldIsNull(FieldIsCourse))
+}
+
+// IsCourseNotNil applies the NotNil predicate on the "is_course" field.
+func IsCourseNotNil() predicate.Product {
+	return predicate.Product(sql.FieldNotNull(FieldIsCourse))
+}
+
 // SalesIsNil applies the IsNil predicate on the "sales" field.
 func SalesIsNil() predicate.Product {
 	return predicate.Product(sql.FieldIsNull(FieldSales))
@@ -1351,6 +1406,29 @@ func HasCourses() predicate.Product {
 func HasCoursesWith(preds ...predicate.ProductCourses) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := newCoursesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLessons applies the HasEdge predicate on the "lessons" edge.
+func HasLessons() predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, LessonsTable, LessonsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLessonsWith applies the HasEdge predicate on the "lessons" edge with a given conditions (other predicates).
+func HasLessonsWith(preds ...predicate.ProductCourses) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		step := newLessonsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

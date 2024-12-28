@@ -50,6 +50,8 @@ type Product struct {
 	Times int64 `json:"times,omitempty"`
 	// 团课预约 1支持2不支持
 	IsLessons int64 `json:"is_lessons,omitempty"`
+	// 課包 1支持2不支持
+	IsCourse int64 `json:"is_course,omitempty"`
 	// 售卖信息[售价等]
 	Sales []*base.Sales `json:"sales,omitempty"`
 	// 销售方式 1会员端
@@ -76,9 +78,11 @@ type ProductEdges struct {
 	Contracts []*Contract `json:"contracts,omitempty"`
 	// Courses holds the value of the courses edge.
 	Courses []*ProductCourses `json:"courses,omitempty"`
+	// Lessons holds the value of the lessons edge.
+	Lessons []*ProductCourses `json:"lessons,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // TagsOrErr returns the Tags value or an error if the edge
@@ -108,6 +112,15 @@ func (e ProductEdges) CoursesOrErr() ([]*ProductCourses, error) {
 	return nil, &NotLoadedError{edge: "courses"}
 }
 
+// LessonsOrErr returns the Lessons value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProductEdges) LessonsOrErr() ([]*ProductCourses, error) {
+	if e.loadedTypes[3] {
+		return e.Lessons, nil
+	}
+	return nil, &NotLoadedError{edge: "lessons"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Product) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -117,7 +130,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case product.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case product.FieldID, product.FieldDelete, product.FieldCreatedID, product.FieldStatus, product.FieldStock, product.FieldDeadline, product.FieldDuration, product.FieldLength, product.FieldTimes, product.FieldIsLessons, product.FieldIsSales:
+		case product.FieldID, product.FieldDelete, product.FieldCreatedID, product.FieldStatus, product.FieldStock, product.FieldDeadline, product.FieldDuration, product.FieldLength, product.FieldTimes, product.FieldIsLessons, product.FieldIsCourse, product.FieldIsSales:
 			values[i] = new(sql.NullInt64)
 		case product.FieldType, product.FieldSubType, product.FieldName, product.FieldPic, product.FieldDescription:
 			values[i] = new(sql.NullString)
@@ -234,6 +247,12 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.IsLessons = value.Int64
 			}
+		case product.FieldIsCourse:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_course", values[i])
+			} else if value.Valid {
+				pr.IsCourse = value.Int64
+			}
 		case product.FieldSales:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field sales", values[i])
@@ -298,6 +317,11 @@ func (pr *Product) QueryContracts() *ContractQuery {
 // QueryCourses queries the "courses" edge of the Product entity.
 func (pr *Product) QueryCourses() *ProductCoursesQuery {
 	return NewProductClient(pr.config).QueryCourses(pr)
+}
+
+// QueryLessons queries the "lessons" edge of the Product entity.
+func (pr *Product) QueryLessons() *ProductCoursesQuery {
+	return NewProductClient(pr.config).QueryLessons(pr)
 }
 
 // Update returns a builder for updating this Product.
@@ -367,6 +391,9 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_lessons=")
 	builder.WriteString(fmt.Sprintf("%v", pr.IsLessons))
+	builder.WriteString(", ")
+	builder.WriteString("is_course=")
+	builder.WriteString(fmt.Sprintf("%v", pr.IsCourse))
 	builder.WriteString(", ")
 	builder.WriteString("sales=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Sales))

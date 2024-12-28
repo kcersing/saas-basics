@@ -1101,16 +1101,20 @@ func init() {
 	productDescIsLessons := productFields[9].Descriptor()
 	// product.DefaultIsLessons holds the default value on creation for the is_lessons field.
 	product.DefaultIsLessons = productDescIsLessons.Default.(int64)
+	// productDescIsCourse is the schema descriptor for is_course field.
+	productDescIsCourse := productFields[10].Descriptor()
+	// product.DefaultIsCourse holds the default value on creation for the is_course field.
+	product.DefaultIsCourse = productDescIsCourse.Default.(int64)
 	// productDescIsSales is the schema descriptor for is_sales field.
-	productDescIsSales := productFields[11].Descriptor()
+	productDescIsSales := productFields[12].Descriptor()
 	// product.DefaultIsSales holds the default value on creation for the is_sales field.
 	product.DefaultIsSales = productDescIsSales.Default.(int64)
 	// productDescPic is the schema descriptor for pic field.
-	productDescPic := productFields[14].Descriptor()
+	productDescPic := productFields[15].Descriptor()
 	// product.DefaultPic holds the default value on creation for the pic field.
 	product.DefaultPic = productDescPic.Default.(string)
 	// productDescDescription is the schema descriptor for description field.
-	productDescDescription := productFields[15].Descriptor()
+	productDescDescription := productFields[16].Descriptor()
 	// product.DefaultDescription holds the default value on creation for the description field.
 	product.DefaultDescription = productDescDescription.Default.(string)
 	productcoursesMixin := schema.ProductCourses{}.Mixin()

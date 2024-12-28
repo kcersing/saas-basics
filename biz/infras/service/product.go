@@ -3,11 +3,14 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
+	"saas/biz/dal/db/ent/productcourses"
+
 	"saas/biz/dal/db/ent/predicate"
 	product2 "saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
@@ -30,11 +33,13 @@ type Product struct {
 func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 	var createdId int64
 	userId, exist := p.c.Get("userId")
+	hlog.Info(userId)
 	if !exist || userId == nil {
 		createdId = userId.(int64)
 	}
 	signSalesAt, _ := time.Parse(time.DateTime, req.SignSalesAt)
 	endSalesAt, _ := time.Parse(time.DateTime, req.EndSalesAt)
+
 	_, err := p.db.Product.Create().
 		SetName(req.Name).
 		SetPic(req.Pic).
@@ -52,16 +57,39 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 		SetCreatedID(createdId).
 		AddTagIDs(req.TagId...).
 		AddContractIDs(req.ContractId...).
-		AddCourseIDs(req.LessonsId...).
 		SetIsLessons(req.IsLessons).
 		SetSubType(req.SubType).
 		SetPrice(req.Price).
 		SetTimes(req.Times).
+		SetIsCourse(req.IsCourse).
 		Save(p.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "create Product failed")
 		return err
+	}
+	if len(req.Courses) > 0 {
+		go func() {
+			for _, v := range req.Courses {
+				p.db.ProductCourses.Create().
+					SetProductID(v.ID).
+					SetType(v.Type).
+					SetName(v.Name).
+					SetNumber(v.Number).
+					Save(p.ctx)
+			}
+		}()
+	}
+	if len(req.Lessons) > 0 {
+		go func() {
+			for _, v := range req.Lessons {
+				p.db.ProductCourses.Create().
+					SetProductID(v.ID).
+					SetType(v.Type).
+					SetName(v.Name).
+					Save(p.ctx)
+			}
+		}()
 	}
 
 	return nil
@@ -93,18 +121,42 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 		SetCreatedID(createdId).
 		AddTagIDs(req.TagId...).
 		AddContractIDs(req.ContractId...).
-		//AddLessonIDs(req.LessonsId...).
 		SetIsLessons(req.IsLessons).
 		SetSubType(req.SubType).
 		SetPrice(req.Price).
 		SetTimes(req.Times).
+		SetIsCourse(req.IsCourse).
 		Save(p.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "update Product failed")
 		return err
 	}
-
+	if len(req.Courses) > 0 {
+		p.db.ProductCourses.Delete().Where(productcourses.ProductIDEQ(req.ID)).Exec(p.ctx)
+		go func() {
+			for _, v := range req.Courses {
+				p.db.ProductCourses.Create().
+					SetProductID(v.ID).
+					SetType(v.Type).
+					SetName(v.Name).
+					SetNumber(v.Number).
+					Save(p.ctx)
+			}
+		}()
+	}
+	if len(req.Lessons) > 0 {
+		p.db.ProductCourses.Delete().Where(productcourses.ProductIDEQ(req.ID)).Exec(p.ctx)
+		go func() {
+			for _, v := range req.Lessons {
+				p.db.ProductCourses.Create().
+					SetProductID(v.ID).
+					SetType(v.Type).
+					SetName(v.Name).
+					Save(p.ctx)
+			}
+		}()
+	}
 	return nil
 }
 
@@ -170,7 +222,7 @@ func (p Product) ProductList(req *product.ProductListReq) (resp []*product.Produ
 }
 
 func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
-	var tags, contracts, lessons []*base.List
+	var tags, contracts []*base.List
 	tagAll, _ := v.QueryTags().All(p.ctx)
 	if tagAll != nil {
 		for _, item := range tagAll {
@@ -193,22 +245,39 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 		}
 	}
 
-	//lessonsAll, _ := v.QueryLessons().All(p.ctx)
-	//if lessonsAll != nil {
-	//	for _, item := range lessonsAll {
-	//		lesson := &base.List{
-	//			ID:   item.ID,
-	//			Name: item.Name,
-	//		}
-	//		lessons = append(lessons, lesson)
-	//	}
-	//}
-
 	var created string
 
 	first, _ := p.db.User.Query().Where(user.IDEQ(v.CreatedID)).First(p.ctx)
 	if first != nil {
 		created = first.Name
+	}
+
+	var courses, lessons []*base.CourseList
+	coursesAll, _ := v.QueryCourses().All(p.ctx)
+	if len(coursesAll) > 0 {
+		for _, ve := range coursesAll {
+			courses = append(courses, &base.CourseList{
+				ID:     ve.CoursesID,
+				Name:   ve.Name,
+				Type:   ve.Type,
+				Number: ve.Number,
+			},
+			)
+
+		}
+	}
+	lessonsAll, _ := v.QueryLessons().All(p.ctx)
+	if len(lessonsAll) > 0 {
+		for _, ve := range lessonsAll {
+			lessons = append(lessons, &base.CourseList{
+				ID:     ve.CoursesID,
+				Name:   ve.Name,
+				Type:   ve.Type,
+				Number: ve.Number,
+			},
+			)
+
+		}
 	}
 
 	return &product.ProductInfo{
@@ -232,11 +301,13 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 		CreatedName: created,
 		Tags:        tags,
 		Contracts:   contracts,
-		Lessons:     lessons,
-		IsLessons:   v.IsLessons,
-		SubType:     v.SubType,
-		Price:       v.Price,
-		Times:       v.Times,
+
+		IsLessons: v.IsLessons,
+		SubType:   v.SubType,
+		Price:     v.Price,
+		Times:     v.Times,
+		Courses:   courses,
+		Lessons:   lessons,
 	}
 }
 

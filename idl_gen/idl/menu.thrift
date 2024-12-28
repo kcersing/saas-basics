@@ -58,7 +58,7 @@ service MenuService {
 struct MenuListReq{
     1:  optional i64 page=1 (api.raw = "page")
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
-    19:optional string type="" (api.raw = "type")
+    19: optional string type="" (api.raw = "type")
 }
 // API信息
 struct ApiInfo {

@@ -1052,6 +1052,7 @@ var (
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "售价", Default: 0},
 		{Name: "times", Type: field.TypeInt64, Nullable: true, Comment: "次数", Default: 0},
 		{Name: "is_lessons", Type: field.TypeInt64, Nullable: true, Comment: "团课预约 1支持2不支持", Default: 1},
+		{Name: "is_course", Type: field.TypeInt64, Nullable: true, Comment: "課包 1支持2不支持", Default: 1},
 		{Name: "sales", Type: field.TypeJSON, Nullable: true, Comment: "售卖信息[售价等]"},
 		{Name: "is_sales", Type: field.TypeInt64, Nullable: true, Comment: "销售方式 1会员端", Default: 1},
 		{Name: "sign_sales_at", Type: field.TypeTime, Nullable: true, Comment: "开始售卖时间"},
@@ -1094,6 +1095,12 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "product_courses_product_courses",
+				Columns:    []*schema.Column{ProductCoursesColumns[10]},
+				RefColumns: []*schema.Column{ProductColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "product_courses_product_lessons",
 				Columns:    []*schema.Column{ProductCoursesColumns[10]},
 				RefColumns: []*schema.Column{ProductColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -1888,6 +1895,7 @@ func init() {
 		Options: "AUTO_INCREMENT = 100000",
 	}
 	ProductCoursesTable.ForeignKeys[0].RefTable = ProductTable
+	ProductCoursesTable.ForeignKeys[1].RefTable = ProductTable
 	ProductCoursesTable.Annotation = &entsql.Annotation{
 		Table:   "product_courses",
 		Options: "AUTO_INCREMENT = 100000",

@@ -34,8 +34,12 @@ func (ProductCourses) Mixin() []ent.Mixin {
 func (ProductCourses) Edges() []ent.Edge {
 	return []ent.Edge{
 
-		edge.From("product", Product.Type).
+		edge.From("productCourses", Product.Type).
 			Ref("courses").
+			Field("product_id").Unique(),
+
+		edge.From("productLessons", Product.Type).
+			Ref("lessons").
 			Field("product_id").Unique(),
 	}
 }

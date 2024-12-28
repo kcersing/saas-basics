@@ -34,17 +34,26 @@ const (
 	FieldProductID = "product_id"
 	// FieldCoursesID holds the string denoting the courses_id field in the database.
 	FieldCoursesID = "courses_id"
-	// EdgeProduct holds the string denoting the product edge name in mutations.
-	EdgeProduct = "product"
+	// EdgeProductCourses holds the string denoting the productcourses edge name in mutations.
+	EdgeProductCourses = "productCourses"
+	// EdgeProductLessons holds the string denoting the productlessons edge name in mutations.
+	EdgeProductLessons = "productLessons"
 	// Table holds the table name of the productcourses in the database.
 	Table = "product_courses"
-	// ProductTable is the table that holds the product relation/edge.
-	ProductTable = "product_courses"
-	// ProductInverseTable is the table name for the Product entity.
+	// ProductCoursesTable is the table that holds the productCourses relation/edge.
+	ProductCoursesTable = "product_courses"
+	// ProductCoursesInverseTable is the table name for the Product entity.
 	// It exists in this package in order to avoid circular dependency with the "product" package.
-	ProductInverseTable = "product"
-	// ProductColumn is the table column denoting the product relation/edge.
-	ProductColumn = "product_id"
+	ProductCoursesInverseTable = "product"
+	// ProductCoursesColumn is the table column denoting the productCourses relation/edge.
+	ProductCoursesColumn = "product_id"
+	// ProductLessonsTable is the table that holds the productLessons relation/edge.
+	ProductLessonsTable = "product_courses"
+	// ProductLessonsInverseTable is the table name for the Product entity.
+	// It exists in this package in order to avoid circular dependency with the "product" package.
+	ProductLessonsInverseTable = "product"
+	// ProductLessonsColumn is the table column denoting the productLessons relation/edge.
+	ProductLessonsColumn = "product_id"
 )
 
 // Columns holds all SQL columns for productcourses fields.
@@ -155,16 +164,30 @@ func ByCoursesID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCoursesID, opts...).ToFunc()
 }
 
-// ByProductField orders the results by product field.
-func ByProductField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByProductCoursesField orders the results by productCourses field.
+func ByProductCoursesField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProductStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newProductCoursesStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newProductStep() *sqlgraph.Step {
+
+// ByProductLessonsField orders the results by productLessons field.
+func ByProductLessonsField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProductLessonsStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newProductCoursesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProductInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, ProductTable, ProductColumn),
+		sqlgraph.To(ProductCoursesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ProductCoursesTable, ProductCoursesColumn),
+	)
+}
+func newProductLessonsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProductLessonsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ProductLessonsTable, ProductLessonsColumn),
 	)
 }

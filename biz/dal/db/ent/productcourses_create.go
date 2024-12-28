@@ -166,9 +166,42 @@ func (pcc *ProductCoursesCreate) SetID(i int64) *ProductCoursesCreate {
 	return pcc
 }
 
-// SetProduct sets the "product" edge to the Product entity.
-func (pcc *ProductCoursesCreate) SetProduct(p *Product) *ProductCoursesCreate {
-	return pcc.SetProductID(p.ID)
+// SetProductCoursesID sets the "productCourses" edge to the Product entity by ID.
+func (pcc *ProductCoursesCreate) SetProductCoursesID(id int64) *ProductCoursesCreate {
+	pcc.mutation.SetProductCoursesID(id)
+	return pcc
+}
+
+// SetNillableProductCoursesID sets the "productCourses" edge to the Product entity by ID if the given value is not nil.
+func (pcc *ProductCoursesCreate) SetNillableProductCoursesID(id *int64) *ProductCoursesCreate {
+	if id != nil {
+		pcc = pcc.SetProductCoursesID(*id)
+	}
+	return pcc
+}
+
+// SetProductCourses sets the "productCourses" edge to the Product entity.
+func (pcc *ProductCoursesCreate) SetProductCourses(p *Product) *ProductCoursesCreate {
+	return pcc.SetProductCoursesID(p.ID)
+}
+
+// SetProductLessonsID sets the "productLessons" edge to the Product entity by ID.
+func (pcc *ProductCoursesCreate) SetProductLessonsID(id int64) *ProductCoursesCreate {
+	pcc.mutation.SetProductLessonsID(id)
+	return pcc
+}
+
+// SetNillableProductLessonsID sets the "productLessons" edge to the Product entity by ID if the given value is not nil.
+func (pcc *ProductCoursesCreate) SetNillableProductLessonsID(id *int64) *ProductCoursesCreate {
+	if id != nil {
+		pcc = pcc.SetProductLessonsID(*id)
+	}
+	return pcc
+}
+
+// SetProductLessons sets the "productLessons" edge to the Product entity.
+func (pcc *ProductCoursesCreate) SetProductLessons(p *Product) *ProductCoursesCreate {
+	return pcc.SetProductLessonsID(p.ID)
 }
 
 // Mutation returns the ProductCoursesMutation object of the builder.
@@ -318,12 +351,29 @@ func (pcc *ProductCoursesCreate) createSpec() (*ProductCourses, *sqlgraph.Create
 		_spec.SetField(productcourses.FieldCoursesID, field.TypeInt64, value)
 		_node.CoursesID = value
 	}
-	if nodes := pcc.mutation.ProductIDs(); len(nodes) > 0 {
+	if nodes := pcc.mutation.ProductCoursesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductTable,
-			Columns: []string{productcourses.ProductColumn},
+			Table:   productcourses.ProductCoursesTable,
+			Columns: []string{productcourses.ProductCoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ProductID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pcc.mutation.ProductLessonsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   productcourses.ProductLessonsTable,
+			Columns: []string{productcourses.ProductLessonsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),

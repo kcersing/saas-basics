@@ -233,6 +233,20 @@ func (pc *ProductCreate) SetNillableIsLessons(i *int64) *ProductCreate {
 	return pc
 }
 
+// SetIsCourse sets the "is_course" field.
+func (pc *ProductCreate) SetIsCourse(i int64) *ProductCreate {
+	pc.mutation.SetIsCourse(i)
+	return pc
+}
+
+// SetNillableIsCourse sets the "is_course" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableIsCourse(i *int64) *ProductCreate {
+	if i != nil {
+		pc.SetIsCourse(*i)
+	}
+	return pc
+}
+
 // SetSales sets the "sales" field.
 func (pc *ProductCreate) SetSales(b []*base.Sales) *ProductCreate {
 	pc.mutation.SetSales(b)
@@ -360,6 +374,21 @@ func (pc *ProductCreate) AddCourses(p ...*ProductCourses) *ProductCreate {
 	return pc.AddCourseIDs(ids...)
 }
 
+// AddLessonIDs adds the "lessons" edge to the ProductCourses entity by IDs.
+func (pc *ProductCreate) AddLessonIDs(ids ...int64) *ProductCreate {
+	pc.mutation.AddLessonIDs(ids...)
+	return pc
+}
+
+// AddLessons adds the "lessons" edges to the ProductCourses entity.
+func (pc *ProductCreate) AddLessons(p ...*ProductCourses) *ProductCreate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddLessonIDs(ids...)
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (pc *ProductCreate) Mutation() *ProductMutation {
 	return pc.mutation
@@ -454,6 +483,10 @@ func (pc *ProductCreate) defaults() {
 	if _, ok := pc.mutation.IsLessons(); !ok {
 		v := product.DefaultIsLessons
 		pc.mutation.SetIsLessons(v)
+	}
+	if _, ok := pc.mutation.IsCourse(); !ok {
+		v := product.DefaultIsCourse
+		pc.mutation.SetIsCourse(v)
 	}
 	if _, ok := pc.mutation.IsSales(); !ok {
 		v := product.DefaultIsSales
@@ -563,6 +596,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldIsLessons, field.TypeInt64, value)
 		_node.IsLessons = value
 	}
+	if value, ok := pc.mutation.IsCourse(); ok {
+		_spec.SetField(product.FieldIsCourse, field.TypeInt64, value)
+		_node.IsCourse = value
+	}
 	if value, ok := pc.mutation.Sales(); ok {
 		_spec.SetField(product.FieldSales, field.TypeJSON, value)
 		_node.Sales = value
@@ -625,6 +662,22 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 			Inverse: false,
 			Table:   product.CoursesTable,
 			Columns: []string{product.CoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.LessonsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   product.LessonsTable,
+			Columns: []string{product.LessonsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),

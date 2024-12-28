@@ -42552,6 +42552,8 @@ type ProductMutation struct {
 	addtimes         *int64
 	is_lessons       *int64
 	addis_lessons    *int64
+	is_course        *int64
+	addis_course     *int64
 	sales            *[]*base.Sales
 	appendsales      []*base.Sales
 	is_sales         *int64
@@ -42570,6 +42572,9 @@ type ProductMutation struct {
 	courses          map[int64]struct{}
 	removedcourses   map[int64]struct{}
 	clearedcourses   bool
+	lessons          map[int64]struct{}
+	removedlessons   map[int64]struct{}
+	clearedlessons   bool
 	done             bool
 	oldValue         func(context.Context) (*Product, error)
 	predicates       []predicate.Product
@@ -43624,6 +43629,76 @@ func (m *ProductMutation) ResetIsLessons() {
 	delete(m.clearedFields, product.FieldIsLessons)
 }
 
+// SetIsCourse sets the "is_course" field.
+func (m *ProductMutation) SetIsCourse(i int64) {
+	m.is_course = &i
+	m.addis_course = nil
+}
+
+// IsCourse returns the value of the "is_course" field in the mutation.
+func (m *ProductMutation) IsCourse() (r int64, exists bool) {
+	v := m.is_course
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsCourse returns the old "is_course" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldIsCourse(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsCourse is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsCourse requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsCourse: %w", err)
+	}
+	return oldValue.IsCourse, nil
+}
+
+// AddIsCourse adds i to the "is_course" field.
+func (m *ProductMutation) AddIsCourse(i int64) {
+	if m.addis_course != nil {
+		*m.addis_course += i
+	} else {
+		m.addis_course = &i
+	}
+}
+
+// AddedIsCourse returns the value that was added to the "is_course" field in this mutation.
+func (m *ProductMutation) AddedIsCourse() (r int64, exists bool) {
+	v := m.addis_course
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsCourse clears the value of the "is_course" field.
+func (m *ProductMutation) ClearIsCourse() {
+	m.is_course = nil
+	m.addis_course = nil
+	m.clearedFields[product.FieldIsCourse] = struct{}{}
+}
+
+// IsCourseCleared returns if the "is_course" field was cleared in this mutation.
+func (m *ProductMutation) IsCourseCleared() bool {
+	_, ok := m.clearedFields[product.FieldIsCourse]
+	return ok
+}
+
+// ResetIsCourse resets all changes to the "is_course" field.
+func (m *ProductMutation) ResetIsCourse() {
+	m.is_course = nil
+	m.addis_course = nil
+	delete(m.clearedFields, product.FieldIsCourse)
+}
+
 // SetSales sets the "sales" field.
 func (m *ProductMutation) SetSales(b []*base.Sales) {
 	m.sales = &b
@@ -44117,6 +44192,60 @@ func (m *ProductMutation) ResetCourses() {
 	m.removedcourses = nil
 }
 
+// AddLessonIDs adds the "lessons" edge to the ProductCourses entity by ids.
+func (m *ProductMutation) AddLessonIDs(ids ...int64) {
+	if m.lessons == nil {
+		m.lessons = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.lessons[ids[i]] = struct{}{}
+	}
+}
+
+// ClearLessons clears the "lessons" edge to the ProductCourses entity.
+func (m *ProductMutation) ClearLessons() {
+	m.clearedlessons = true
+}
+
+// LessonsCleared reports if the "lessons" edge to the ProductCourses entity was cleared.
+func (m *ProductMutation) LessonsCleared() bool {
+	return m.clearedlessons
+}
+
+// RemoveLessonIDs removes the "lessons" edge to the ProductCourses entity by IDs.
+func (m *ProductMutation) RemoveLessonIDs(ids ...int64) {
+	if m.removedlessons == nil {
+		m.removedlessons = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.lessons, ids[i])
+		m.removedlessons[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedLessons returns the removed IDs of the "lessons" edge to the ProductCourses entity.
+func (m *ProductMutation) RemovedLessonsIDs() (ids []int64) {
+	for id := range m.removedlessons {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// LessonsIDs returns the "lessons" edge IDs in the mutation.
+func (m *ProductMutation) LessonsIDs() (ids []int64) {
+	for id := range m.lessons {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetLessons resets all changes to the "lessons" edge.
+func (m *ProductMutation) ResetLessons() {
+	m.lessons = nil
+	m.clearedlessons = false
+	m.removedlessons = nil
+}
+
 // Where appends a list predicates to the ProductMutation builder.
 func (m *ProductMutation) Where(ps ...predicate.Product) {
 	m.predicates = append(m.predicates, ps...)
@@ -44151,7 +44280,7 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, product.FieldCreatedAt)
 	}
@@ -44196,6 +44325,9 @@ func (m *ProductMutation) Fields() []string {
 	}
 	if m.is_lessons != nil {
 		fields = append(fields, product.FieldIsLessons)
+	}
+	if m.is_course != nil {
+		fields = append(fields, product.FieldIsCourse)
 	}
 	if m.sales != nil {
 		fields = append(fields, product.FieldSales)
@@ -44253,6 +44385,8 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.Times()
 	case product.FieldIsLessons:
 		return m.IsLessons()
+	case product.FieldIsCourse:
+		return m.IsCourse()
 	case product.FieldSales:
 		return m.Sales()
 	case product.FieldIsSales:
@@ -44304,6 +44438,8 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldTimes(ctx)
 	case product.FieldIsLessons:
 		return m.OldIsLessons(ctx)
+	case product.FieldIsCourse:
+		return m.OldIsCourse(ctx)
 	case product.FieldSales:
 		return m.OldSales(ctx)
 	case product.FieldIsSales:
@@ -44430,6 +44566,13 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsLessons(v)
 		return nil
+	case product.FieldIsCourse:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsCourse(v)
+		return nil
 	case product.FieldSales:
 		v, ok := value.([]*base.Sales)
 		if !ok {
@@ -44510,6 +44653,9 @@ func (m *ProductMutation) AddedFields() []string {
 	if m.addis_lessons != nil {
 		fields = append(fields, product.FieldIsLessons)
 	}
+	if m.addis_course != nil {
+		fields = append(fields, product.FieldIsCourse)
+	}
 	if m.addis_sales != nil {
 		fields = append(fields, product.FieldIsSales)
 	}
@@ -44541,6 +44687,8 @@ func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedTimes()
 	case product.FieldIsLessons:
 		return m.AddedIsLessons()
+	case product.FieldIsCourse:
+		return m.AddedIsCourse()
 	case product.FieldIsSales:
 		return m.AddedIsSales()
 	}
@@ -44622,6 +44770,13 @@ func (m *ProductMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddIsLessons(v)
 		return nil
+	case product.FieldIsCourse:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsCourse(v)
+		return nil
 	case product.FieldIsSales:
 		v, ok := value.(int64)
 		if !ok {
@@ -44681,6 +44836,9 @@ func (m *ProductMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(product.FieldIsLessons) {
 		fields = append(fields, product.FieldIsLessons)
+	}
+	if m.FieldCleared(product.FieldIsCourse) {
+		fields = append(fields, product.FieldIsCourse)
 	}
 	if m.FieldCleared(product.FieldSales) {
 		fields = append(fields, product.FieldSales)
@@ -44759,6 +44917,9 @@ func (m *ProductMutation) ClearField(name string) error {
 	case product.FieldIsLessons:
 		m.ClearIsLessons()
 		return nil
+	case product.FieldIsCourse:
+		m.ClearIsCourse()
+		return nil
 	case product.FieldSales:
 		m.ClearSales()
 		return nil
@@ -44830,6 +44991,9 @@ func (m *ProductMutation) ResetField(name string) error {
 	case product.FieldIsLessons:
 		m.ResetIsLessons()
 		return nil
+	case product.FieldIsCourse:
+		m.ResetIsCourse()
+		return nil
 	case product.FieldSales:
 		m.ResetSales()
 		return nil
@@ -44854,7 +45018,7 @@ func (m *ProductMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProductMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.tags != nil {
 		edges = append(edges, product.EdgeTags)
 	}
@@ -44863,6 +45027,9 @@ func (m *ProductMutation) AddedEdges() []string {
 	}
 	if m.courses != nil {
 		edges = append(edges, product.EdgeCourses)
+	}
+	if m.lessons != nil {
+		edges = append(edges, product.EdgeLessons)
 	}
 	return edges
 }
@@ -44889,13 +45056,19 @@ func (m *ProductMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case product.EdgeLessons:
+		ids := make([]ent.Value, 0, len(m.lessons))
+		for id := range m.lessons {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProductMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedtags != nil {
 		edges = append(edges, product.EdgeTags)
 	}
@@ -44904,6 +45077,9 @@ func (m *ProductMutation) RemovedEdges() []string {
 	}
 	if m.removedcourses != nil {
 		edges = append(edges, product.EdgeCourses)
+	}
+	if m.removedlessons != nil {
+		edges = append(edges, product.EdgeLessons)
 	}
 	return edges
 }
@@ -44930,13 +45106,19 @@ func (m *ProductMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case product.EdgeLessons:
+		ids := make([]ent.Value, 0, len(m.removedlessons))
+		for id := range m.removedlessons {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProductMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedtags {
 		edges = append(edges, product.EdgeTags)
 	}
@@ -44945,6 +45127,9 @@ func (m *ProductMutation) ClearedEdges() []string {
 	}
 	if m.clearedcourses {
 		edges = append(edges, product.EdgeCourses)
+	}
+	if m.clearedlessons {
+		edges = append(edges, product.EdgeLessons)
 	}
 	return edges
 }
@@ -44959,6 +45144,8 @@ func (m *ProductMutation) EdgeCleared(name string) bool {
 		return m.clearedcontracts
 	case product.EdgeCourses:
 		return m.clearedcourses
+	case product.EdgeLessons:
+		return m.clearedlessons
 	}
 	return false
 }
@@ -44984,6 +45171,9 @@ func (m *ProductMutation) ResetEdge(name string) error {
 	case product.EdgeCourses:
 		m.ResetCourses()
 		return nil
+	case product.EdgeLessons:
+		m.ResetLessons()
+		return nil
 	}
 	return fmt.Errorf("unknown Product edge %s", name)
 }
@@ -44991,29 +45181,31 @@ func (m *ProductMutation) ResetEdge(name string) error {
 // ProductCoursesMutation represents an operation that mutates the ProductCourses nodes in the graph.
 type ProductCoursesMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int64
-	created_at     *time.Time
-	updated_at     *time.Time
-	delete         *int64
-	adddelete      *int64
-	created_id     *int64
-	addcreated_id  *int64
-	status         *int64
-	addstatus      *int64
-	_type          *string
-	name           *string
-	number         *int64
-	addnumber      *int64
-	courses_id     *int64
-	addcourses_id  *int64
-	clearedFields  map[string]struct{}
-	product        *int64
-	clearedproduct bool
-	done           bool
-	oldValue       func(context.Context) (*ProductCourses, error)
-	predicates     []predicate.ProductCourses
+	op                    Op
+	typ                   string
+	id                    *int64
+	created_at            *time.Time
+	updated_at            *time.Time
+	delete                *int64
+	adddelete             *int64
+	created_id            *int64
+	addcreated_id         *int64
+	status                *int64
+	addstatus             *int64
+	_type                 *string
+	name                  *string
+	number                *int64
+	addnumber             *int64
+	courses_id            *int64
+	addcourses_id         *int64
+	clearedFields         map[string]struct{}
+	productCourses        *int64
+	clearedproductCourses bool
+	productLessons        *int64
+	clearedproductLessons bool
+	done                  bool
+	oldValue              func(context.Context) (*ProductCourses, error)
+	predicates            []predicate.ProductCourses
 }
 
 var _ ent.Mutation = (*ProductCoursesMutation)(nil)
@@ -45598,12 +45790,12 @@ func (m *ProductCoursesMutation) ResetNumber() {
 
 // SetProductID sets the "product_id" field.
 func (m *ProductCoursesMutation) SetProductID(i int64) {
-	m.product = &i
+	m.productLessons = &i
 }
 
 // ProductID returns the value of the "product_id" field in the mutation.
 func (m *ProductCoursesMutation) ProductID() (r int64, exists bool) {
-	v := m.product
+	v := m.productLessons
 	if v == nil {
 		return
 	}
@@ -45629,7 +45821,7 @@ func (m *ProductCoursesMutation) OldProductID(ctx context.Context) (v int64, err
 
 // ClearProductID clears the value of the "product_id" field.
 func (m *ProductCoursesMutation) ClearProductID() {
-	m.product = nil
+	m.productLessons = nil
 	m.clearedFields[productcourses.FieldProductID] = struct{}{}
 }
 
@@ -45641,7 +45833,7 @@ func (m *ProductCoursesMutation) ProductIDCleared() bool {
 
 // ResetProductID resets all changes to the "product_id" field.
 func (m *ProductCoursesMutation) ResetProductID() {
-	m.product = nil
+	m.productLessons = nil
 	delete(m.clearedFields, productcourses.FieldProductID)
 }
 
@@ -45715,31 +45907,84 @@ func (m *ProductCoursesMutation) ResetCoursesID() {
 	delete(m.clearedFields, productcourses.FieldCoursesID)
 }
 
-// ClearProduct clears the "product" edge to the Product entity.
-func (m *ProductCoursesMutation) ClearProduct() {
-	m.clearedproduct = true
+// SetProductCoursesID sets the "productCourses" edge to the Product entity by id.
+func (m *ProductCoursesMutation) SetProductCoursesID(id int64) {
+	m.productCourses = &id
+}
+
+// ClearProductCourses clears the "productCourses" edge to the Product entity.
+func (m *ProductCoursesMutation) ClearProductCourses() {
+	m.clearedproductCourses = true
 	m.clearedFields[productcourses.FieldProductID] = struct{}{}
 }
 
-// ProductCleared reports if the "product" edge to the Product entity was cleared.
-func (m *ProductCoursesMutation) ProductCleared() bool {
-	return m.ProductIDCleared() || m.clearedproduct
+// ProductCoursesCleared reports if the "productCourses" edge to the Product entity was cleared.
+func (m *ProductCoursesMutation) ProductCoursesCleared() bool {
+	return m.ProductIDCleared() || m.clearedproductCourses
 }
 
-// ProductIDs returns the "product" edge IDs in the mutation.
+// ProductCoursesID returns the "productCourses" edge ID in the mutation.
+func (m *ProductCoursesMutation) ProductCoursesID() (id int64, exists bool) {
+	if m.productCourses != nil {
+		return *m.productCourses, true
+	}
+	return
+}
+
+// ProductCoursesIDs returns the "productCourses" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ProductID instead. It exists only for internal usage by the builders.
-func (m *ProductCoursesMutation) ProductIDs() (ids []int64) {
-	if id := m.product; id != nil {
+// ProductCoursesID instead. It exists only for internal usage by the builders.
+func (m *ProductCoursesMutation) ProductCoursesIDs() (ids []int64) {
+	if id := m.productCourses; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetProduct resets all changes to the "product" edge.
-func (m *ProductCoursesMutation) ResetProduct() {
-	m.product = nil
-	m.clearedproduct = false
+// ResetProductCourses resets all changes to the "productCourses" edge.
+func (m *ProductCoursesMutation) ResetProductCourses() {
+	m.productCourses = nil
+	m.clearedproductCourses = false
+}
+
+// SetProductLessonsID sets the "productLessons" edge to the Product entity by id.
+func (m *ProductCoursesMutation) SetProductLessonsID(id int64) {
+	m.productLessons = &id
+}
+
+// ClearProductLessons clears the "productLessons" edge to the Product entity.
+func (m *ProductCoursesMutation) ClearProductLessons() {
+	m.clearedproductLessons = true
+	m.clearedFields[productcourses.FieldProductID] = struct{}{}
+}
+
+// ProductLessonsCleared reports if the "productLessons" edge to the Product entity was cleared.
+func (m *ProductCoursesMutation) ProductLessonsCleared() bool {
+	return m.ProductIDCleared() || m.clearedproductLessons
+}
+
+// ProductLessonsID returns the "productLessons" edge ID in the mutation.
+func (m *ProductCoursesMutation) ProductLessonsID() (id int64, exists bool) {
+	if m.productLessons != nil {
+		return *m.productLessons, true
+	}
+	return
+}
+
+// ProductLessonsIDs returns the "productLessons" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProductLessonsID instead. It exists only for internal usage by the builders.
+func (m *ProductCoursesMutation) ProductLessonsIDs() (ids []int64) {
+	if id := m.productLessons; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProductLessons resets all changes to the "productLessons" edge.
+func (m *ProductCoursesMutation) ResetProductLessons() {
+	m.productLessons = nil
+	m.clearedproductLessons = false
 }
 
 // Where appends a list predicates to the ProductCoursesMutation builder.
@@ -45801,7 +46046,7 @@ func (m *ProductCoursesMutation) Fields() []string {
 	if m.number != nil {
 		fields = append(fields, productcourses.FieldNumber)
 	}
-	if m.product != nil {
+	if m.productLessons != nil {
 		fields = append(fields, productcourses.FieldProductID)
 	}
 	if m.courses_id != nil {
@@ -46154,9 +46399,12 @@ func (m *ProductCoursesMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProductCoursesMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.product != nil {
-		edges = append(edges, productcourses.EdgeProduct)
+	edges := make([]string, 0, 2)
+	if m.productCourses != nil {
+		edges = append(edges, productcourses.EdgeProductCourses)
+	}
+	if m.productLessons != nil {
+		edges = append(edges, productcourses.EdgeProductLessons)
 	}
 	return edges
 }
@@ -46165,8 +46413,12 @@ func (m *ProductCoursesMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ProductCoursesMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case productcourses.EdgeProduct:
-		if id := m.product; id != nil {
+	case productcourses.EdgeProductCourses:
+		if id := m.productCourses; id != nil {
+			return []ent.Value{*id}
+		}
+	case productcourses.EdgeProductLessons:
+		if id := m.productLessons; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -46175,7 +46427,7 @@ func (m *ProductCoursesMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProductCoursesMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	return edges
 }
 
@@ -46187,9 +46439,12 @@ func (m *ProductCoursesMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProductCoursesMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedproduct {
-		edges = append(edges, productcourses.EdgeProduct)
+	edges := make([]string, 0, 2)
+	if m.clearedproductCourses {
+		edges = append(edges, productcourses.EdgeProductCourses)
+	}
+	if m.clearedproductLessons {
+		edges = append(edges, productcourses.EdgeProductLessons)
 	}
 	return edges
 }
@@ -46198,8 +46453,10 @@ func (m *ProductCoursesMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ProductCoursesMutation) EdgeCleared(name string) bool {
 	switch name {
-	case productcourses.EdgeProduct:
-		return m.clearedproduct
+	case productcourses.EdgeProductCourses:
+		return m.clearedproductCourses
+	case productcourses.EdgeProductLessons:
+		return m.clearedproductLessons
 	}
 	return false
 }
@@ -46208,8 +46465,11 @@ func (m *ProductCoursesMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *ProductCoursesMutation) ClearEdge(name string) error {
 	switch name {
-	case productcourses.EdgeProduct:
-		m.ClearProduct()
+	case productcourses.EdgeProductCourses:
+		m.ClearProductCourses()
+		return nil
+	case productcourses.EdgeProductLessons:
+		m.ClearProductLessons()
 		return nil
 	}
 	return fmt.Errorf("unknown ProductCourses unique edge %s", name)
@@ -46219,8 +46479,11 @@ func (m *ProductCoursesMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ProductCoursesMutation) ResetEdge(name string) error {
 	switch name {
-	case productcourses.EdgeProduct:
-		m.ResetProduct()
+	case productcourses.EdgeProductCourses:
+		m.ResetProductCourses()
+		return nil
+	case productcourses.EdgeProductLessons:
+		m.ResetProductLessons()
 		return nil
 	}
 	return fmt.Errorf("unknown ProductCourses edge %s", name)

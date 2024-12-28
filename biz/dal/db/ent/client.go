@@ -5286,6 +5286,22 @@ func (c *ProductClient) QueryCourses(pr *Product) *ProductCoursesQuery {
 	return query
 }
 
+// QueryLessons queries the lessons edge of a Product.
+func (c *ProductClient) QueryLessons(pr *Product) *ProductCoursesQuery {
+	query := (&ProductCoursesClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(product.Table, product.FieldID, id),
+			sqlgraph.To(productcourses.Table, productcourses.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, product.LessonsTable, product.LessonsColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProductClient) Hooks() []Hook {
 	return c.hooks.Product
@@ -5419,15 +5435,31 @@ func (c *ProductCoursesClient) GetX(ctx context.Context, id int64) *ProductCours
 	return obj
 }
 
-// QueryProduct queries the product edge of a ProductCourses.
-func (c *ProductCoursesClient) QueryProduct(pc *ProductCourses) *ProductQuery {
+// QueryProductCourses queries the productCourses edge of a ProductCourses.
+func (c *ProductCoursesClient) QueryProductCourses(pc *ProductCourses) *ProductQuery {
 	query := (&ProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(productcourses.Table, productcourses.FieldID, id),
 			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.ProductTable, productcourses.ProductColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.ProductCoursesTable, productcourses.ProductCoursesColumn),
+		)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProductLessons queries the productLessons edge of a ProductCourses.
+func (c *ProductCoursesClient) QueryProductLessons(pc *ProductCourses) *ProductQuery {
+	query := (&ProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(productcourses.Table, productcourses.FieldID, id),
+			sqlgraph.To(product.Table, product.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.ProductLessonsTable, productcourses.ProductLessonsColumn),
 		)
 		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil

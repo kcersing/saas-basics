@@ -44,6 +44,8 @@ const (
 	FieldTimes = "times"
 	// FieldIsLessons holds the string denoting the is_lessons field in the database.
 	FieldIsLessons = "is_lessons"
+	// FieldIsCourse holds the string denoting the is_course field in the database.
+	FieldIsCourse = "is_course"
 	// FieldSales holds the string denoting the sales field in the database.
 	FieldSales = "sales"
 	// FieldIsSales holds the string denoting the is_sales field in the database.
@@ -62,6 +64,8 @@ const (
 	EdgeContracts = "contracts"
 	// EdgeCourses holds the string denoting the courses edge name in mutations.
 	EdgeCourses = "courses"
+	// EdgeLessons holds the string denoting the lessons edge name in mutations.
+	EdgeLessons = "lessons"
 	// Table holds the table name of the product in the database.
 	Table = "product"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
@@ -81,6 +85,13 @@ const (
 	CoursesInverseTable = "product_courses"
 	// CoursesColumn is the table column denoting the courses relation/edge.
 	CoursesColumn = "product_id"
+	// LessonsTable is the table that holds the lessons relation/edge.
+	LessonsTable = "product_courses"
+	// LessonsInverseTable is the table name for the ProductCourses entity.
+	// It exists in this package in order to avoid circular dependency with the "productcourses" package.
+	LessonsInverseTable = "product_courses"
+	// LessonsColumn is the table column denoting the lessons relation/edge.
+	LessonsColumn = "product_id"
 )
 
 // Columns holds all SQL columns for product fields.
@@ -101,6 +112,7 @@ var Columns = []string{
 	FieldPrice,
 	FieldTimes,
 	FieldIsLessons,
+	FieldIsCourse,
 	FieldSales,
 	FieldIsSales,
 	FieldSignSalesAt,
@@ -161,6 +173,8 @@ var (
 	DefaultTimes int64
 	// DefaultIsLessons holds the default value on creation for the "is_lessons" field.
 	DefaultIsLessons int64
+	// DefaultIsCourse holds the default value on creation for the "is_course" field.
+	DefaultIsCourse int64
 	// DefaultIsSales holds the default value on creation for the "is_sales" field.
 	DefaultIsSales int64
 	// DefaultPic holds the default value on creation for the "pic" field.
@@ -252,6 +266,11 @@ func ByIsLessons(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsLessons, opts...).ToFunc()
 }
 
+// ByIsCourse orders the results by the is_course field.
+func ByIsCourse(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsCourse, opts...).ToFunc()
+}
+
 // ByIsSales orders the results by the is_sales field.
 func ByIsSales(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsSales, opts...).ToFunc()
@@ -318,6 +337,20 @@ func ByCourses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newCoursesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByLessonsCount orders the results by lessons count.
+func ByLessonsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newLessonsStep(), opts...)
+	}
+}
+
+// ByLessons orders the results by lessons terms.
+func ByLessons(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLessonsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTagsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -337,5 +370,12 @@ func newCoursesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CoursesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, CoursesTable, CoursesColumn),
+	)
+}
+func newLessonsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LessonsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, LessonsTable, LessonsColumn),
 	)
 }

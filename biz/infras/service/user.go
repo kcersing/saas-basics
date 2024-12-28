@@ -298,7 +298,6 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	Venues, _ := userEnt.QueryVenues().All(u.ctx)
 	if len(Venues) > 0 {
 		for _, ve := range Venues {
-
 			venues = append(venues, &user.Venues{
 				ID:   ve.ID,
 				Name: ve.Name,
