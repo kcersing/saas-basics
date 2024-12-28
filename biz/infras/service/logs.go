@@ -39,13 +39,13 @@ func (l Logs) Create(logsReq *auth.LogsInfo) error {
 	err := l.db.Logs.Create().
 		SetType(logsReq.Type).
 		SetMethod(logsReq.Method).
-		SetAPI(logsReq.Api).
+		SetAPI(logsReq.API).
 		SetSuccess(logsReq.Success).
 		SetReqContent(logsReq.ReqContent).
 		SetRespContent(logsReq.RespContent).
-		SetIP(logsReq.Ip).
+		SetIP(logsReq.IP).
 		SetUserAgent(logsReq.UserAgent).
-		SetOperator(logsReq.Operator).
+		SetOperator(logsReq.Operatorsr).
 		SetTime(int(logsReq.Time)).
 		Exec(l.ctx)
 	if err != nil {
@@ -66,8 +66,8 @@ func (l Logs) List(req *auth.LogsListReq) (list []*auth.LogsInfo, total int64, e
 	if req.API != "" {
 		predicates = append(predicates, logs.APIContains(req.API))
 	}
-	if req.Operators != "" {
-		predicates = append(predicates, logs.OperatorContains(req.Operators))
+	if req.Operatorsr != "" {
+		predicates = append(predicates, logs.OperatorContains(req.Operatorsr))
 	}
 	//if req.Success != nil {
 	//	predicates = append(predicates, logs.SuccessEQ(req.Success))
@@ -83,13 +83,13 @@ func (l Logs) List(req *auth.LogsListReq) (list []*auth.LogsInfo, total int64, e
 		list = append(list, &auth.LogsInfo{
 			Type:        v.Type,
 			Method:      v.Method,
-			Api:         v.API,
+			API:         v.API,
 			Success:     v.Success,
 			ReqContent:  v.ReqContent,
 			RespContent: v.RespContent,
-			Ip:          v.IP,
+			IP:          v.IP,
 			UserAgent:   v.UserAgent,
-			Operator:    v.Operator,
+			Operatorsr:  v.Operator,
 			Time:        int64(v.Time),
 			CreatedAt:   v.CreatedAt.Format(time.DateTime),
 			UpdatedAt:   v.UpdatedAt.Format(time.DateTime),

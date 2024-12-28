@@ -16,12 +16,12 @@ struct CreateOrUpdateContractReq {
 }
 
 struct ContractInfo{
-	1:i64 Id (api.raw = "id")
-	 2:string Name (api.raw = "name")
-	 3:i64 Status (api.raw = "status")
-	 4:string Content (api.raw = "content")
-	 5:string CreatedAt (api.raw = "createdAt")
-	 6:string UpdatedAt (api.raw = "updatedAt")
+	1:i64 id (api.raw = "id")
+	 2:string name (api.raw = "name")
+	 3:i64 status (api.raw = "status")
+	 4:string content (api.raw = "content")
+	 5:string createdAt (api.raw = "createdAt")
+	 6:string updatedAt (api.raw = "updatedAt")
 }
 
 service ContractService {

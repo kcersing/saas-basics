@@ -84,7 +84,7 @@ func entEntryInfo(v *ent.EntryLogs) *entry.EntryInfo {
 	entryTime := v.EntryTime.Format(time.DateTime)
 	leavingTime := v.LeavingTime.Format(time.DateTime)
 	return &entry.EntryInfo{
-		Id:              v.ID,
+		ID:              v.ID,
 		EntryTime:       entryTime,
 		LeavingTime:     leavingTime,
 		MemberId:        v.MemberID,

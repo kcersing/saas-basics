@@ -5,7 +5,7 @@ struct VenuePlaceListReq {
     1:  optional i64 page=1 (api.raw = "page")
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3:  optional string name = "" (api.raw = "name")
-    11:  optional i64 status = 0 (api.raw = "status")
+    11: optional i64 status = 0 (api.raw = "status")
 }
 struct VenueListReq {
     1:  optional i64 page=1 (api.raw = "page")
@@ -13,7 +13,7 @@ struct VenueListReq {
     3:  optional string name="" (api.raw = "name")
     4:  optional string type =""(api.raw = "type")
     5:  optional list<i64> classify =0 (api.raw = "classify")
-    11:  optional i64 status=0 (api.raw = "status")
+    11: optional i64 status=0 (api.raw = "status")
 }
 struct VenueInfo {
     1:  optional i64 id=0 (api.raw = "id")

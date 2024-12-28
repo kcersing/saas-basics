@@ -47,11 +47,11 @@ struct StatusCodeReq {
 }
 
 struct Tree {
-	1:string Title
-    2:string Value
-	3:string Key
-	4:string Method
-	5:list<Tree> Children
+	1:string title
+    2:string value
+	3:string key
+	4:string method
+	5:list<Tree> children
 }
 
 struct ListReq {
@@ -63,9 +63,9 @@ struct ListReq {
     6: optional i64 venue (api.raw = "venue" )
 }
 struct SysList  {
-    i64	Id
-    string	Name
-    string	Key
+    i64	id
+    string name
+    string key
 }
 struct SysListResp {
     1: BaseResp resp

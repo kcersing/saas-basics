@@ -49,14 +49,14 @@ service AuthService {
 
 // 菜单授权请求数据
 struct MenuAuthInfoReq {
-    1: i64 role_id (api.raw = "roleId")
-    2: list<i64> menu_ids (api.raw = "menuIds")
+    1: i64 roleId (api.raw = "roleId")
+    2: list<i64> menuIds (api.raw = "menuIds")
 }
 
 
 //创建或更新角色信息参数
 struct RoleInfo {
-    1:  optional i64 Id=0 (api.raw = "id")
+    1:  optional i64 id=0 (api.raw = "id")
     2:  optional string name="" (api.raw = "name")
     3:  optional string value="" (api.raw = "value")
     4:  optional string defaultRouter="" (api.raw = "defaultRouter")
@@ -65,8 +65,8 @@ struct RoleInfo {
     7:  optional i64 orderNo=0 (api.raw = "orderNo")
     8:  optional string createdAt="" (api.raw = "createdAt")
     9:  optional string updatedAt="" (api.raw = "updatedAt")
-    10: optional list<i64> Menus={} (api.raw = "menus")
-    11: optional list<i64> Apis={} (api.raw = "apis")
+    10: optional list<i64> menus={} (api.raw = "menus")
+    11: optional list<i64> apis={} (api.raw = "apis")
 }
 //日志列表请求数据
 struct LogsListReq {
@@ -76,35 +76,35 @@ struct LogsListReq {
     4:  optional string method = "" (api.raw = "method")
     5:  optional string api = "" (api.raw = "api")
     6:  optional string success = "" (api.raw = "success")
-    7:  optional string operators = "" (api.raw = "operators")
+    7:  optional string operatorsr = "" (api.raw = "operatorsr")
 }
 
 // authorization message
 // API授权数据
 struct ApiAuthInfo {
-    1:  string path (api.raw = "path")
-    2:  string method (api.raw = "method")
+    1: string path (api.raw = "path")
+    2: string method (api.raw = "method")
 }
 
 // 创建或更新API授权信息
 struct CreateOrUpdateApiAuthReq {
-    1:  i64 role_id (api.raw = "roleId")
+    1: i64 roleId (api.raw = "roleId")
 //    2:  ApiAuthInfo data (api.raw = "api_auth_info")
-    2:  list<i64> apis (api.raw = "apis")
+    2: list<i64> apis (api.raw = "apis")
 }
 
 struct LogsInfo {
-	1: string Type
-	2: string Method
-	3: string Api
-	4: bool Success
-	5: string ReqContent
-	6: string RespContent
-	7: string Ip
-	8: string UserAgent
-	9: string Operator
-	10: i64 Time
-	11: string CreatedAt
-	12: string UpdatedAt
+	1: string type
+	2: string method
+	3: string api
+	4: bool success
+	5: string reqContent
+	6: string respContent
+	7: string ip
+	8: string userAgent
+	9: string operatorsr
+	10: i64 time
+	11: string createdAt
+	12: string updatedAt
 }
 

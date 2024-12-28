@@ -2917,11 +2917,11 @@ func (p *CreateOrUpdateMenuParamReq) String() string {
 }
 
 type MenuInfoTree struct {
-	MenuInfo  *MenuInfo       `thrift:"MenuInfo,1" form:"MenuInfo" json:"MenuInfo" query:"MenuInfo"`
-	CreatedAt string          `thrift:"CreatedAt,2" form:"CreatedAt" json:"CreatedAt" query:"CreatedAt"`
-	UpdatedAt string          `thrift:"UpdatedAt,3" form:"UpdatedAt" json:"UpdatedAt" query:"UpdatedAt"`
-	Children  []*MenuInfoTree `thrift:"Children,4" form:"Children" json:"Children" query:"Children"`
-	Ignore    bool            `thrift:"Ignore,5" form:"Ignore" json:"Ignore" query:"Ignore"`
+	MenuInfo  *MenuInfo       `thrift:"menuInfo,1" form:"menuInfo" json:"menuInfo" query:"menuInfo"`
+	CreatedAt string          `thrift:"createdAt,2" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt string          `thrift:"updatedAt,3" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	Children  []*MenuInfoTree `thrift:"children,4" form:"children" json:"children" query:"children"`
+	Ignore    bool            `thrift:"ignore,5" form:"ignore" json:"ignore" query:"ignore"`
 }
 
 func NewMenuInfoTree() *MenuInfoTree {
@@ -2957,11 +2957,11 @@ func (p *MenuInfoTree) GetIgnore() (v bool) {
 }
 
 var fieldIDToName_MenuInfoTree = map[int16]string{
-	1: "MenuInfo",
-	2: "CreatedAt",
-	3: "UpdatedAt",
-	4: "Children",
-	5: "Ignore",
+	1: "menuInfo",
+	2: "createdAt",
+	3: "updatedAt",
+	4: "children",
+	5: "ignore",
 }
 
 func (p *MenuInfoTree) IsSetMenuInfo() bool {
@@ -3166,7 +3166,7 @@ WriteStructEndError:
 }
 
 func (p *MenuInfoTree) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MenuInfo", thrift.STRUCT, 1); err != nil {
+	if err = oprot.WriteFieldBegin("menuInfo", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := p.MenuInfo.Write(oprot); err != nil {
@@ -3183,7 +3183,7 @@ WriteFieldEndError:
 }
 
 func (p *MenuInfoTree) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CreatedAt", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CreatedAt); err != nil {
@@ -3200,7 +3200,7 @@ WriteFieldEndError:
 }
 
 func (p *MenuInfoTree) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("UpdatedAt", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.UpdatedAt); err != nil {
@@ -3217,7 +3217,7 @@ WriteFieldEndError:
 }
 
 func (p *MenuInfoTree) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Children", thrift.LIST, 4); err != nil {
+	if err = oprot.WriteFieldBegin("children", thrift.LIST, 4); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Children)); err != nil {
@@ -3242,7 +3242,7 @@ WriteFieldEndError:
 }
 
 func (p *MenuInfoTree) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Ignore", thrift.BOOL, 5); err != nil {
+	if err = oprot.WriteFieldBegin("ignore", thrift.BOOL, 5); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteBool(p.Ignore); err != nil {

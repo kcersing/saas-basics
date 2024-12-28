@@ -88,9 +88,9 @@ struct MemberDetails {
 
 struct MemberPrivacy {
 	//身份证号
-     1: string	identityCard (api.raw = "identityCard")
+     1: string identityCard (api.raw = "identityCard")
         //正面
-     2: string	faceIdentityCard (api.raw = "faceIdentityCard")
+     2: string faceIdentityCard (api.raw = "faceIdentityCard")
         //反面
      3: string backIdentityCard (api.raw = "backIdentityCard")
         //人脸照片

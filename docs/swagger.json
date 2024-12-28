@@ -4887,7 +4887,10 @@
                     "type": "string"
                 },
                 "roleId": {
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "status": {
                     "type": "integer"
@@ -4916,7 +4919,10 @@
             "type": "object",
             "properties": {
                 "roleId": {
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "userId": {
                     "type": "integer"
@@ -4945,6 +4951,9 @@
                     "type": "integer"
                 },
                 "status": {
+                    "type": "integer"
+                },
+                "type": {
                     "type": "integer"
                 }
             }

@@ -11,26 +11,26 @@ import (
 )
 
 type UserInfo struct {
-	Id             int64                          `thrift:"Id,1" form:"Id" json:"Id" query:"Id"`
-	Status         int64                          `thrift:"Status,2" form:"Status" json:"Status" query:"Status"`
-	Username       string                         `thrift:"Username,3" form:"Username" json:"Username" query:"Username"`
-	Password       string                         `thrift:"Password,4" form:"Password" json:"Password" query:"Password"`
-	Name           string                         `thrift:"Name,5" form:"Name" json:"Name" query:"Name"`
-	Mobile         string                         `thrift:"Mobile,7" form:"Mobile" json:"Mobile" query:"Mobile"`
-	Avatar         string                         `thrift:"Avatar,8" form:"Avatar" json:"Avatar" query:"Avatar"`
-	CreatedAt      string                         `thrift:"CreatedAt,9" form:"CreatedAt" json:"CreatedAt" query:"CreatedAt"`
-	UpdatedAt      string                         `thrift:"UpdatedAt,10" form:"UpdatedAt" json:"UpdatedAt" query:"UpdatedAt"`
+	ID             int64                          `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Status         int64                          `thrift:"status,2" form:"status" json:"status" query:"status"`
+	Username       string                         `thrift:"username,3" form:"username" json:"username" query:"username"`
+	Password       string                         `thrift:"password,4" form:"password" json:"password" query:"password"`
+	Name           string                         `thrift:"name,5" form:"name" json:"name" query:"name"`
+	Mobile         string                         `thrift:"mobile,7" form:"mobile" json:"mobile" query:"mobile"`
+	Avatar         string                         `thrift:"avatar,8" form:"avatar" json:"avatar" query:"avatar"`
+	CreatedAt      string                         `thrift:"createdAt,9" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt      string                         `thrift:"updatedAt,10" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 	Functions      []string                       `thrift:"functions,12" form:"functions" json:"functions" query:"functions"`
-	Gender         string                         `thrift:"Gender,13" form:"Gender" json:"Gender" query:"Gender"`
-	Birthday       string                         `thrift:"Birthday,15" form:"Birthday" json:"Birthday" query:"Birthday"`
-	Detail         string                         `thrift:"Detail,16" form:"Detail" json:"Detail" query:"Detail"`
+	Gender         string                         `thrift:"gender,13" form:"gender" json:"gender" query:"gender"`
+	Birthday       string                         `thrift:"birthday,15" form:"birthday" json:"birthday" query:"birthday"`
+	Detail         string                         `thrift:"detail,16" form:"detail" json:"detail" query:"detail"`
 	JobTime        *int64                         `thrift:"jobTime,17,optional" form:"jobTime" json:"jobTime" query:"jobTime"`
 	UserTags       []*dictionary.DictionaryDetail `thrift:"userTags,18" form:"userTags" json:"userTags" query:"userTags"`
 	Venues         []*Venues                      `thrift:"venues,19" form:"venues" json:"venues" query:"venues"`
 	Type           int64                          `thrift:"type,20,optional" form:"type" json:"type" query:"type"`
 	UserRole       []*UserRole                    `thrift:"userRole,21" form:"userRole" json:"userRole" query:"userRole"`
 	UserRoleIds    []int64                        `thrift:"userRoleIds,22" form:"userRoleIds" json:"userRoleIds" query:"userRoleIds"`
-	DefaultVenueId int64                          `thrift:"DefaultVenueId,254" form:"DefaultVenueId" json:"DefaultVenueId" query:"DefaultVenueId"`
+	DefaultVenueId int64                          `thrift:"defaultVenueId,254" form:"defaultVenueId" json:"defaultVenueId" query:"defaultVenueId"`
 }
 
 func NewUserInfo() *UserInfo {
@@ -44,8 +44,8 @@ func (p *UserInfo) InitDefault() {
 	p.Type = 1
 }
 
-func (p *UserInfo) GetId() (v int64) {
-	return p.Id
+func (p *UserInfo) GetID() (v int64) {
+	return p.ID
 }
 
 func (p *UserInfo) GetStatus() (v int64) {
@@ -135,26 +135,26 @@ func (p *UserInfo) GetDefaultVenueId() (v int64) {
 }
 
 var fieldIDToName_UserInfo = map[int16]string{
-	1:   "Id",
-	2:   "Status",
-	3:   "Username",
-	4:   "Password",
-	5:   "Name",
-	7:   "Mobile",
-	8:   "Avatar",
-	9:   "CreatedAt",
-	10:  "UpdatedAt",
+	1:   "id",
+	2:   "status",
+	3:   "username",
+	4:   "password",
+	5:   "name",
+	7:   "mobile",
+	8:   "avatar",
+	9:   "createdAt",
+	10:  "updatedAt",
 	12:  "functions",
-	13:  "Gender",
-	15:  "Birthday",
-	16:  "Detail",
+	13:  "gender",
+	15:  "birthday",
+	16:  "detail",
 	17:  "jobTime",
 	18:  "userTags",
 	19:  "venues",
 	20:  "type",
 	21:  "userRole",
 	22:  "userRoleIds",
-	254: "DefaultVenueId",
+	254: "defaultVenueId",
 }
 
 func (p *UserInfo) IsSetJobTime() bool {
@@ -381,7 +381,7 @@ func (p *UserInfo) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Id = _field
+	p.ID = _field
 	return nil
 }
 func (p *UserInfo) ReadField2(iprot thrift.TProtocol) error {
@@ -759,10 +759,10 @@ WriteStructEndError:
 }
 
 func (p *UserInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -776,7 +776,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Status", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.Status); err != nil {
@@ -793,7 +793,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Username", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("username", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Username); err != nil {
@@ -810,7 +810,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Password", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("password", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Password); err != nil {
@@ -827,7 +827,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Name", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("name", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Name); err != nil {
@@ -844,7 +844,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField7(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Mobile", thrift.STRING, 7); err != nil {
+	if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 7); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Mobile); err != nil {
@@ -861,7 +861,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField8(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Avatar", thrift.STRING, 8); err != nil {
+	if err = oprot.WriteFieldBegin("avatar", thrift.STRING, 8); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Avatar); err != nil {
@@ -878,7 +878,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField9(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CreatedAt", thrift.STRING, 9); err != nil {
+	if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 9); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CreatedAt); err != nil {
@@ -895,7 +895,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField10(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("UpdatedAt", thrift.STRING, 10); err != nil {
+	if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 10); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.UpdatedAt); err != nil {
@@ -937,7 +937,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField13(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Gender", thrift.STRING, 13); err != nil {
+	if err = oprot.WriteFieldBegin("gender", thrift.STRING, 13); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Gender); err != nil {
@@ -954,7 +954,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField15(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Birthday", thrift.STRING, 15); err != nil {
+	if err = oprot.WriteFieldBegin("birthday", thrift.STRING, 15); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Birthday); err != nil {
@@ -971,7 +971,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField16(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Detail", thrift.STRING, 16); err != nil {
+	if err = oprot.WriteFieldBegin("detail", thrift.STRING, 16); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Detail); err != nil {
@@ -1126,7 +1126,7 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField254(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("DefaultVenueId", thrift.I64, 254); err != nil {
+	if err = oprot.WriteFieldBegin("defaultVenueId", thrift.I64, 254); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.DefaultVenueId); err != nil {
@@ -1151,8 +1151,8 @@ func (p *UserInfo) String() string {
 }
 
 type Venues struct {
-	Id   int64  `thrift:"Id,1" form:"Id" json:"Id" query:"Id"`
-	Name string `thrift:"Name,2" form:"Name" json:"Name" query:"Name"`
+	ID   int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Name string `thrift:"name,2" form:"name" json:"name" query:"name"`
 }
 
 func NewVenues() *Venues {
@@ -1162,8 +1162,8 @@ func NewVenues() *Venues {
 func (p *Venues) InitDefault() {
 }
 
-func (p *Venues) GetId() (v int64) {
-	return p.Id
+func (p *Venues) GetID() (v int64) {
+	return p.ID
 }
 
 func (p *Venues) GetName() (v string) {
@@ -1171,8 +1171,8 @@ func (p *Venues) GetName() (v string) {
 }
 
 var fieldIDToName_Venues = map[int16]string{
-	1: "Id",
-	2: "Name",
+	1: "id",
+	2: "name",
 }
 
 func (p *Venues) Read(iprot thrift.TProtocol) (err error) {
@@ -1247,7 +1247,7 @@ func (p *Venues) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Id = _field
+	p.ID = _field
 	return nil
 }
 func (p *Venues) ReadField2(iprot thrift.TProtocol) error {
@@ -1295,10 +1295,10 @@ WriteStructEndError:
 }
 
 func (p *Venues) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1312,7 +1312,7 @@ WriteFieldEndError:
 }
 
 func (p *Venues) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Name", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Name); err != nil {
@@ -2791,7 +2791,7 @@ type CreateOrUpdateUserReq struct {
 	UserTags       []int64  `thrift:"userTags,18,optional" form:"userTags" json:"userTags" query:"userTags"`
 	Type           int64    `thrift:"type,19,optional" form:"type" json:"type" query:"type"`
 	VenueId        []int64  `thrift:"venueId,20,optional" form:"venueId" json:"venueId" query:"venueId"`
-	DefaultVenueId int64    `thrift:"DefaultVenueId,254,optional" form:"DefaultVenueId" json:"DefaultVenueId" query:"DefaultVenueId"`
+	DefaultVenueId int64    `thrift:"defaultVenueId,254,optional" form:"defaultVenueId" json:"defaultVenueId" query:"defaultVenueId"`
 }
 
 func NewCreateOrUpdateUserReq() *CreateOrUpdateUserReq {
@@ -3007,7 +3007,7 @@ var fieldIDToName_CreateOrUpdateUserReq = map[int16]string{
 	18:  "userTags",
 	19:  "type",
 	20:  "venueId",
-	254: "DefaultVenueId",
+	254: "defaultVenueId",
 }
 
 func (p *CreateOrUpdateUserReq) IsSetID() bool {
@@ -3928,7 +3928,7 @@ WriteFieldEndError:
 
 func (p *CreateOrUpdateUserReq) writeField254(oprot thrift.TProtocol) (err error) {
 	if p.IsSetDefaultVenueId() {
-		if err = oprot.WriteFieldBegin("DefaultVenueId", thrift.I64, 254); err != nil {
+		if err = oprot.WriteFieldBegin("defaultVenueId", thrift.I64, 254); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(p.DefaultVenueId); err != nil {

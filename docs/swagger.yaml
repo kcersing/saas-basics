@@ -941,7 +941,9 @@ definitions:
       password:
         type: string
       roleId:
-        type: integer
+        items:
+          type: integer
+        type: array
       status:
         type: integer
       type:
@@ -960,7 +962,9 @@ definitions:
   user.SetUserRole:
     properties:
       roleId:
-        type: integer
+        items:
+          type: integer
+        type: array
       userId:
         type: integer
     type: object
@@ -979,6 +983,8 @@ definitions:
       roleId:
         type: integer
       status:
+        type: integer
+      type:
         type: integer
     type: object
   utils.Response:

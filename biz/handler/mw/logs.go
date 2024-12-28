@@ -17,9 +17,9 @@ func LogMw() app.HandlerFunc {
 		var logs auth.LogsInfo
 		logs.Type = "Interface"
 		logs.Method = string(c.Request.Method())
-		logs.Api = string(c.Request.Path())
+		logs.API = string(c.Request.Path())
 		logs.UserAgent = string(c.Request.Header.UserAgent())
-		logs.Ip = c.ClientIP()
+		logs.IP = c.ClientIP()
 
 		reqBodyStr := string(c.Request.Body())
 		if len(reqBodyStr) > 200 {
@@ -61,7 +61,7 @@ func LogMw() app.HandlerFunc {
 			username = userInfo.Name
 		}
 
-		logs.Operator = username
+		logs.Operatorsr = username
 
 		err := service.NewLogs(ctx, c).Create(&logs)
 

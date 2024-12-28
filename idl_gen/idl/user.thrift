@@ -3,31 +3,31 @@ namespace go user
 include "../base/base.thrift"
 include "dictionary.thrift"
 struct UserInfo {
-	1:i64 Id (api.raw = "id")
-	2:i64 Status (api.raw = "status")
-	3:string Username (api.raw = "username")
-	4:string Password (api.raw = "password")
-	5:string Name (api.raw = "name")
-	7:string Mobile (api.raw = "mobile")
-	8:string Avatar (api.raw = "avatar")
-	9:string CreatedAt (api.raw = "createdAt")
-	10:string UpdatedAt  (api.raw = "updatedAt")
+	1:i64 id (api.raw = "id")
+	2:i64 status (api.raw = "status")
+	3:string username (api.raw = "username")
+	4:string password (api.raw = "password")
+	5:string name (api.raw = "name")
+	7:string mobile (api.raw = "mobile")
+	8:string avatar (api.raw = "avatar")
+	9:string createdAt (api.raw = "createdAt")
+	10:string updatedAt  (api.raw = "updatedAt")
 	12: list<string> functions (api.raw = "functions")
-	13:string Gender (api.raw = "gender")
-	15:string Birthday (api.raw = "birthday")
-    16:string Detail (api.raw = "detail")
+	13:string gender (api.raw = "gender")
+	15:string birthday (api.raw = "birthday")
+    16:string detail (api.raw = "detail")
     17:optional i64 jobTime (api.raw = "jobTime")
     18: list<dictionary.DictionaryDetail> userTags (api.raw = "userTags")
     19: list<Venues> venues (api.raw = "venues")
     20: optional i64 type=1 (api.raw = "type")
 
-    21:  list<UserRole> userRole (api.raw = "userRole")
-    22:  list<i64> userRoleIds (api.raw = "userRoleIds")
-    254:i64 DefaultVenueId (api.raw = "defaultVenueId")
+    21: list<UserRole> userRole (api.raw = "userRole")
+    22: list<i64> userRoleIds (api.raw = "userRoleIds")
+    254:i64 defaultVenueId (api.raw = "defaultVenueId")
 }
 struct Venues {
-    1: i64 Id (api.raw = "id")
-    2: string Name (api.raw = "name")
+    1: i64 id (api.raw = "id")
+    2: string name (api.raw = "name")
 }
 
 // login request | 登录参数
@@ -84,7 +84,7 @@ struct CreateOrUpdateUserReq {
     19:  optional i64 type=1 (api.raw = "type")
     20: optional list<i64> venueId=0 (api.raw = "venueId")
 
-    254:optional i64 DefaultVenueId=0 (api.raw = "defaultVenueId")
+    254:optional i64 defaultVenueId=0 (api.raw = "defaultVenueId")
 }
 
 

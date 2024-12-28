@@ -60,7 +60,7 @@ func (l *Login) Login(username, password string) (res *user.LoginResp, err error
 
 	res = new(user.LoginResp)
 	res.Username = info.Username
-	res.UserId = info.Id
+	res.UserId = info.ID
 	res.UserRole = info.UserRole
 	res.UserRoleIds = info.UserRoleIds
 	return res, err

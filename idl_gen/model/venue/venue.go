@@ -342,10 +342,12 @@ func (p *VenuePlaceListReq) String() string {
 }
 
 type VenueListReq struct {
-	Page     int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	PageSize int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
-	Name     string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	Status   int64  `thrift:"status,11,optional" form:"status" json:"status" query:"status"`
+	Page     int64   `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize int64   `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Name     string  `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
+	Type     string  `thrift:"type,4,optional" form:"type" json:"type" query:"type"`
+	Classify []int64 `thrift:"classify,5,optional" form:"classify" json:"classify" query:"classify"`
+	Status   int64   `thrift:"status,11,optional" form:"status" json:"status" query:"status"`
 }
 
 func NewVenueListReq() *VenueListReq {
@@ -354,6 +356,8 @@ func NewVenueListReq() *VenueListReq {
 		Page:     1,
 		PageSize: 100,
 		Name:     "",
+		Type:     "",
+		Classify: []int64{},
 		Status:   0,
 	}
 }
@@ -362,6 +366,8 @@ func (p *VenueListReq) InitDefault() {
 	p.Page = 1
 	p.PageSize = 100
 	p.Name = ""
+	p.Type = ""
+	p.Classify = []int64{}
 	p.Status = 0
 }
 
@@ -392,6 +398,24 @@ func (p *VenueListReq) GetName() (v string) {
 	return p.Name
 }
 
+var VenueListReq_Type_DEFAULT string = ""
+
+func (p *VenueListReq) GetType() (v string) {
+	if !p.IsSetType() {
+		return VenueListReq_Type_DEFAULT
+	}
+	return p.Type
+}
+
+var VenueListReq_Classify_DEFAULT []int64 = []int64{}
+
+func (p *VenueListReq) GetClassify() (v []int64) {
+	if !p.IsSetClassify() {
+		return VenueListReq_Classify_DEFAULT
+	}
+	return p.Classify
+}
+
 var VenueListReq_Status_DEFAULT int64 = 0
 
 func (p *VenueListReq) GetStatus() (v int64) {
@@ -405,6 +429,8 @@ var fieldIDToName_VenueListReq = map[int16]string{
 	1:  "page",
 	2:  "pageSize",
 	3:  "name",
+	4:  "type",
+	5:  "classify",
 	11: "status",
 }
 
@@ -418,6 +444,14 @@ func (p *VenueListReq) IsSetPageSize() bool {
 
 func (p *VenueListReq) IsSetName() bool {
 	return p.Name != VenueListReq_Name_DEFAULT
+}
+
+func (p *VenueListReq) IsSetType() bool {
+	return p.Type != VenueListReq_Type_DEFAULT
+}
+
+func (p *VenueListReq) IsSetClassify() bool {
+	return p.Classify != nil
 }
 
 func (p *VenueListReq) IsSetStatus() bool {
@@ -462,6 +496,22 @@ func (p *VenueListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 3:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -537,6 +587,40 @@ func (p *VenueListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
+func (p *VenueListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Type = _field
+	return nil
+}
+func (p *VenueListReq) ReadField5(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]int64, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem int64
+		if v, err := iprot.ReadI64(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.Classify = _field
+	return nil
+}
 func (p *VenueListReq) ReadField11(iprot thrift.TProtocol) error {
 
 	var _field int64
@@ -565,6 +649,14 @@ func (p *VenueListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 		if err = p.writeField11(oprot); err != nil {
@@ -644,6 +736,52 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *VenueListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *VenueListReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetClassify() {
+		if err = oprot.WriteFieldBegin("classify", thrift.LIST, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.I64, len(p.Classify)); err != nil {
+			return err
+		}
+		for _, v := range p.Classify {
+			if err := oprot.WriteI64(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *VenueListReq) writeField11(oprot thrift.TProtocol) (err error) {
@@ -1813,18 +1951,23 @@ func (p *VenueInfo) String() string {
 }
 
 type VenuePlaceInfo struct {
-	ID           int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	Name         string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
-	VenueId      int64  `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
-	Pic          string `thrift:"pic,4,optional" form:"pic" json:"pic" query:"pic"`
-	Status       int64  `thrift:"status,5,optional" form:"status" json:"status" query:"status"`
-	CreatedAt    string `thrift:"createdAt,6,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
-	UpdatedAt    string `thrift:"updatedAt,7,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
-	Number       int64  `thrift:"number,8,optional" form:"number" json:"number" query:"number"`
-	Information  string `thrift:"information,9,optional" form:"information" json:"information" query:"information"`
-	Classify     int64  `thrift:"classify,10,optional" form:"classify" json:"classify" query:"classify"`
-	IsShow       int64  `thrift:"isShow,11,optional" form:"isShow" json:"isShow" query:"isShow"`
-	IsAccessible int64  `thrift:"isAccessible,12,optional" form:"isAccessible" json:"isAccessible" query:"isAccessible"`
+	ID        int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	Name      string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	VenueId   int64  `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
+	Pic       string `thrift:"pic,4,optional" form:"pic" json:"pic" query:"pic"`
+	Status    int64  `thrift:"status,5,optional" form:"status" json:"status" query:"status"`
+	CreatedAt string `thrift:"createdAt,6,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt string `thrift:"updatedAt,7,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	/**可容纳人数*/
+	Number int64 `thrift:"number,8,optional" form:"number" json:"number" query:"number"`
+	/**详情*/
+	Information string `thrift:"information,9,optional" form:"information" json:"information" query:"information"`
+	/**分类*/
+	Classify int64 `thrift:"classify,10,optional" form:"classify" json:"classify" query:"classify"`
+	/**是否展示:1展示;2不展示*/
+	IsShow int64 `thrift:"isShow,11,optional" form:"isShow" json:"isShow" query:"isShow"`
+	/**是否开放:1开放;2关闭*/
+	IsAccessible int64 `thrift:"isAccessible,12,optional" form:"isAccessible" json:"isAccessible" query:"isAccessible"`
 }
 
 func NewVenuePlaceInfo() *VenuePlaceInfo {
@@ -2617,21 +2760,21 @@ func (p *VenuePlaceInfo) String() string {
 }
 
 type VenueService interface {
-	// 添加
+	// 添加场地
 	CreateVenuePlace(ctx context.Context, req *VenuePlaceInfo) (r *base.NilResponse, err error)
-	// 编辑
+	// 编辑场地
 	UpdateVenuePlace(ctx context.Context, req *VenuePlaceInfo) (r *base.NilResponse, err error)
-	// 删除
+	// 删除场地
 	UpdateVenuePlaceStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
-	// 列表
+	// 场地列表
 	VenuePlaceList(ctx context.Context, req *VenuePlaceListReq) (r *base.NilResponse, err error)
-	// 添加
+	// 添加场馆
 	CreateVenue(ctx context.Context, req *VenueInfo) (r *base.NilResponse, err error)
-	// 编辑
+	// 编辑场馆
 	UpdateVenue(ctx context.Context, req *VenueInfo) (r *base.NilResponse, err error)
-
+	// 编辑场馆状态
 	UpdateVenueStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
-	// 列表
+	// 场馆列表
 	VenueList(ctx context.Context, req *VenueListReq) (r *base.NilResponse, err error)
 }
 

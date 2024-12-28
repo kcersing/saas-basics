@@ -674,12 +674,12 @@ func (p *CreateOrUpdateContractReq) String() string {
 }
 
 type ContractInfo struct {
-	Id        int64  `thrift:"Id,1" form:"Id" json:"Id" query:"Id"`
-	Name      string `thrift:"Name,2" form:"Name" json:"Name" query:"Name"`
-	Status    int64  `thrift:"Status,3" form:"Status" json:"Status" query:"Status"`
-	Content   string `thrift:"Content,4" form:"Content" json:"Content" query:"Content"`
-	CreatedAt string `thrift:"CreatedAt,5" form:"CreatedAt" json:"CreatedAt" query:"CreatedAt"`
-	UpdatedAt string `thrift:"UpdatedAt,6" form:"UpdatedAt" json:"UpdatedAt" query:"UpdatedAt"`
+	ID        int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Name      string `thrift:"name,2" form:"name" json:"name" query:"name"`
+	Status    int64  `thrift:"status,3" form:"status" json:"status" query:"status"`
+	Content   string `thrift:"content,4" form:"content" json:"content" query:"content"`
+	CreatedAt string `thrift:"createdAt,5" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt string `thrift:"updatedAt,6" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 }
 
 func NewContractInfo() *ContractInfo {
@@ -689,8 +689,8 @@ func NewContractInfo() *ContractInfo {
 func (p *ContractInfo) InitDefault() {
 }
 
-func (p *ContractInfo) GetId() (v int64) {
-	return p.Id
+func (p *ContractInfo) GetID() (v int64) {
+	return p.ID
 }
 
 func (p *ContractInfo) GetName() (v string) {
@@ -714,12 +714,12 @@ func (p *ContractInfo) GetUpdatedAt() (v string) {
 }
 
 var fieldIDToName_ContractInfo = map[int16]string{
-	1: "Id",
-	2: "Name",
-	3: "Status",
-	4: "Content",
-	5: "CreatedAt",
-	6: "UpdatedAt",
+	1: "id",
+	2: "name",
+	3: "status",
+	4: "content",
+	5: "createdAt",
+	6: "updatedAt",
 }
 
 func (p *ContractInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -826,7 +826,7 @@ func (p *ContractInfo) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Id = _field
+	p.ID = _field
 	return nil
 }
 func (p *ContractInfo) ReadField2(iprot thrift.TProtocol) error {
@@ -934,10 +934,10 @@ WriteStructEndError:
 }
 
 func (p *ContractInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -951,7 +951,7 @@ WriteFieldEndError:
 }
 
 func (p *ContractInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Name", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Name); err != nil {
@@ -968,7 +968,7 @@ WriteFieldEndError:
 }
 
 func (p *ContractInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Status", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.Status); err != nil {
@@ -985,7 +985,7 @@ WriteFieldEndError:
 }
 
 func (p *ContractInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Content", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("content", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Content); err != nil {
@@ -1002,7 +1002,7 @@ WriteFieldEndError:
 }
 
 func (p *ContractInfo) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CreatedAt", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CreatedAt); err != nil {
@@ -1019,7 +1019,7 @@ WriteFieldEndError:
 }
 
 func (p *ContractInfo) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("UpdatedAt", thrift.STRING, 6); err != nil {
+	if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 6); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.UpdatedAt); err != nil {

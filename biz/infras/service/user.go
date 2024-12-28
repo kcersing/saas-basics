@@ -262,7 +262,7 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	info = new(user.UserInfo)
 
-	info.Id = userEnt.ID
+	info.ID = userEnt.ID
 	info.Status = userEnt.Status
 	info.Username = userEnt.Username
 	info.Name = userEnt.Name

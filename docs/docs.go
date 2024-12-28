@@ -4898,7 +4898,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "roleId": {
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "status": {
                     "type": "integer"
@@ -4927,7 +4930,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "roleId": {
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "userId": {
                     "type": "integer"
@@ -4956,6 +4962,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
+                    "type": "integer"
+                },
+                "type": {
                     "type": "integer"
                 }
             }

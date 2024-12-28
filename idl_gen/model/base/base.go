@@ -1430,11 +1430,11 @@ func (p *StatusCodeReq) String() string {
 }
 
 type Tree struct {
-	Title    string  `thrift:"Title,1" form:"Title" json:"Title" query:"Title"`
-	Value    string  `thrift:"Value,2" form:"Value" json:"Value" query:"Value"`
-	Key      string  `thrift:"Key,3" form:"Key" json:"Key" query:"Key"`
-	Method   string  `thrift:"Method,4" form:"Method" json:"Method" query:"Method"`
-	Children []*Tree `thrift:"Children,5" form:"Children" json:"Children" query:"Children"`
+	Title    string  `thrift:"title,1" form:"title" json:"title" query:"title"`
+	Value    string  `thrift:"value,2" form:"value" json:"value" query:"value"`
+	Key      string  `thrift:"key,3" form:"key" json:"key" query:"key"`
+	Method   string  `thrift:"method,4" form:"method" json:"method" query:"method"`
+	Children []*Tree `thrift:"children,5" form:"children" json:"children" query:"children"`
 }
 
 func NewTree() *Tree {
@@ -1465,11 +1465,11 @@ func (p *Tree) GetChildren() (v []*Tree) {
 }
 
 var fieldIDToName_Tree = map[int16]string{
-	1: "Title",
-	2: "Value",
-	3: "Key",
-	4: "Method",
-	5: "Children",
+	1: "title",
+	2: "value",
+	3: "key",
+	4: "method",
+	5: "children",
 }
 
 func (p *Tree) Read(iprot thrift.TProtocol) (err error) {
@@ -1673,7 +1673,7 @@ WriteStructEndError:
 }
 
 func (p *Tree) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Title", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("title", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Title); err != nil {
@@ -1690,7 +1690,7 @@ WriteFieldEndError:
 }
 
 func (p *Tree) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Value", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("value", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Value); err != nil {
@@ -1707,7 +1707,7 @@ WriteFieldEndError:
 }
 
 func (p *Tree) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Key", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("key", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Key); err != nil {
@@ -1724,7 +1724,7 @@ WriteFieldEndError:
 }
 
 func (p *Tree) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Method", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("method", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Method); err != nil {
@@ -1741,7 +1741,7 @@ WriteFieldEndError:
 }
 
 func (p *Tree) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Children", thrift.LIST, 5); err != nil {
+	if err = oprot.WriteFieldBegin("children", thrift.LIST, 5); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Children)); err != nil {
@@ -2210,9 +2210,9 @@ func (p *ListReq) String() string {
 }
 
 type SysList struct {
-	Id   int64  `thrift:"Id,1" form:"Id" json:"Id" query:"Id"`
-	Name string `thrift:"Name,2" form:"Name" json:"Name" query:"Name"`
-	Key  string `thrift:"Key,3" form:"Key" json:"Key" query:"Key"`
+	ID   int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Name string `thrift:"name,2" form:"name" json:"name" query:"name"`
+	Key  string `thrift:"key,3" form:"key" json:"key" query:"key"`
 }
 
 func NewSysList() *SysList {
@@ -2222,8 +2222,8 @@ func NewSysList() *SysList {
 func (p *SysList) InitDefault() {
 }
 
-func (p *SysList) GetId() (v int64) {
-	return p.Id
+func (p *SysList) GetID() (v int64) {
+	return p.ID
 }
 
 func (p *SysList) GetName() (v string) {
@@ -2235,9 +2235,9 @@ func (p *SysList) GetKey() (v string) {
 }
 
 var fieldIDToName_SysList = map[int16]string{
-	1: "Id",
-	2: "Name",
-	3: "Key",
+	1: "id",
+	2: "name",
+	3: "key",
 }
 
 func (p *SysList) Read(iprot thrift.TProtocol) (err error) {
@@ -2320,7 +2320,7 @@ func (p *SysList) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Id = _field
+	p.ID = _field
 	return nil
 }
 func (p *SysList) ReadField2(iprot thrift.TProtocol) error {
@@ -2383,10 +2383,10 @@ WriteStructEndError:
 }
 
 func (p *SysList) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2400,7 +2400,7 @@ WriteFieldEndError:
 }
 
 func (p *SysList) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Name", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Name); err != nil {
@@ -2417,7 +2417,7 @@ WriteFieldEndError:
 }
 
 func (p *SysList) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Key", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("key", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Key); err != nil {

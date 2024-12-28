@@ -54,7 +54,7 @@ func (c Contract) Info(id int64) (info *contract.ContractInfo, err error) {
 	}
 	info = entContractInfo(one)
 
-	c.cache.SetWithTTL("contractInfo"+strconv.Itoa(int(info.Id)), &info, 1, 1*time.Hour)
+	c.cache.SetWithTTL("contractInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
 	return
 }
 
@@ -115,7 +115,7 @@ func (c Contract) List(req *contract.ContractListReq) (list []*contract.Contract
 func entContractInfo(v *ent.Contract) *contract.ContractInfo {
 
 	return &contract.ContractInfo{
-		Id:        v.ID,
+		ID:        v.ID,
 		Name:      v.Name,
 		Content:   v.Content,
 		Status:    v.Status,

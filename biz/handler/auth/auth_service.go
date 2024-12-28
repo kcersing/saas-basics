@@ -131,7 +131,7 @@ func CreateMenuAuth(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	err = service.NewAuth(ctx, c).UpdateMenuAuth(req.RoleID, req.MenuIds)
+	err = service.NewAuth(ctx, c).UpdateMenuAuth(req.RoleId, req.MenuIds)
 	if err != nil {
 
 	}
@@ -154,7 +154,7 @@ func UpdateMenuAuth(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-	err = service.NewAuth(ctx, c).UpdateMenuAuth(req.RoleID, req.MenuIds)
+	err = service.NewAuth(ctx, c).UpdateMenuAuth(req.RoleId, req.MenuIds)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -231,7 +231,7 @@ func CreateAuth(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	err = service.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), req.Apis)
+	err = service.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleId, 10), req.Apis)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
@@ -256,7 +256,7 @@ func UpdateAuth(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-	err = service.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleID, 10), req.Apis)
+	err = service.NewAuth(ctx, c).UpdateApiAuth(strconv.FormatInt(req.RoleId, 10), req.Apis)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return
