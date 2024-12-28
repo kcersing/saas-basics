@@ -60,10 +60,8 @@ const (
 	EdgeTags = "tags"
 	// EdgeContracts holds the string denoting the contracts edge name in mutations.
 	EdgeContracts = "contracts"
-	// EdgeGoods holds the string denoting the goods edge name in mutations.
-	EdgeGoods = "goods"
-	// EdgeLessons holds the string denoting the lessons edge name in mutations.
-	EdgeLessons = "lessons"
+	// EdgeCourses holds the string denoting the courses edge name in mutations.
+	EdgeCourses = "courses"
 	// Table holds the table name of the product in the database.
 	Table = "product"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
@@ -76,10 +74,13 @@ const (
 	// ContractsInverseTable is the table name for the Contract entity.
 	// It exists in this package in order to avoid circular dependency with the "contract" package.
 	ContractsInverseTable = "contracts"
-	// GoodsTable is the table that holds the goods relation/edge. The primary key declared below.
-	GoodsTable = "product_lessons"
-	// LessonsTable is the table that holds the lessons relation/edge. The primary key declared below.
-	LessonsTable = "product_lessons"
+	// CoursesTable is the table that holds the courses relation/edge.
+	CoursesTable = "product_courses"
+	// CoursesInverseTable is the table name for the ProductCourses entity.
+	// It exists in this package in order to avoid circular dependency with the "productcourses" package.
+	CoursesInverseTable = "product_courses"
+	// CoursesColumn is the table column denoting the courses relation/edge.
+	CoursesColumn = "product_id"
 )
 
 // Columns holds all SQL columns for product fields.
@@ -115,12 +116,6 @@ var (
 	// ContractsPrimaryKey and ContractsColumn2 are the table columns denoting the
 	// primary key for the contracts relation (M2M).
 	ContractsPrimaryKey = []string{"product_id", "contract_id"}
-	// GoodsPrimaryKey and GoodsColumn2 are the table columns denoting the
-	// primary key for the goods relation (M2M).
-	GoodsPrimaryKey = []string{"product_id", "good_id"}
-	// LessonsPrimaryKey and LessonsColumn2 are the table columns denoting the
-	// primary key for the lessons relation (M2M).
-	LessonsPrimaryKey = []string{"product_id", "good_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -310,31 +305,17 @@ func ByContracts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByGoodsCount orders the results by goods count.
-func ByGoodsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByCoursesCount orders the results by courses count.
+func ByCoursesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newGoodsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newCoursesStep(), opts...)
 	}
 }
 
-// ByGoods orders the results by goods terms.
-func ByGoods(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByCourses orders the results by courses terms.
+func ByCourses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newGoodsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByLessonsCount orders the results by lessons count.
-func ByLessonsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newLessonsStep(), opts...)
-	}
-}
-
-// ByLessons orders the results by lessons terms.
-func ByLessons(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newLessonsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newCoursesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newTagsStep() *sqlgraph.Step {
@@ -351,17 +332,10 @@ func newContractsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ContractsTable, ContractsPrimaryKey...),
 	)
 }
-func newGoodsStep() *sqlgraph.Step {
+func newCoursesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(Table, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, GoodsTable, GoodsPrimaryKey...),
-	)
-}
-func newLessonsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(Table, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, LessonsTable, LessonsPrimaryKey...),
+		sqlgraph.To(CoursesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CoursesTable, CoursesColumn),
 	)
 }

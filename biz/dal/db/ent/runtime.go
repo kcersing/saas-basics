@@ -32,6 +32,7 @@ import (
 	"saas/biz/dal/db/ent/orderpay"
 	"saas/biz/dal/db/ent/ordersales"
 	"saas/biz/dal/db/ent/product"
+	"saas/biz/dal/db/ent/productcourses"
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
@@ -1112,6 +1113,55 @@ func init() {
 	productDescDescription := productFields[15].Descriptor()
 	// product.DefaultDescription holds the default value on creation for the description field.
 	product.DefaultDescription = productDescDescription.Default.(string)
+	productcoursesMixin := schema.ProductCourses{}.Mixin()
+	productcoursesMixinFields0 := productcoursesMixin[0].Fields()
+	_ = productcoursesMixinFields0
+	productcoursesMixinFields1 := productcoursesMixin[1].Fields()
+	_ = productcoursesMixinFields1
+	productcoursesFields := schema.ProductCourses{}.Fields()
+	_ = productcoursesFields
+	// productcoursesDescCreatedAt is the schema descriptor for created_at field.
+	productcoursesDescCreatedAt := productcoursesMixinFields0[1].Descriptor()
+	// productcourses.DefaultCreatedAt holds the default value on creation for the created_at field.
+	productcourses.DefaultCreatedAt = productcoursesDescCreatedAt.Default.(func() time.Time)
+	// productcoursesDescUpdatedAt is the schema descriptor for updated_at field.
+	productcoursesDescUpdatedAt := productcoursesMixinFields0[2].Descriptor()
+	// productcourses.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	productcourses.DefaultUpdatedAt = productcoursesDescUpdatedAt.Default.(func() time.Time)
+	// productcourses.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	productcourses.UpdateDefaultUpdatedAt = productcoursesDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// productcoursesDescDelete is the schema descriptor for delete field.
+	productcoursesDescDelete := productcoursesMixinFields0[3].Descriptor()
+	// productcourses.DefaultDelete holds the default value on creation for the delete field.
+	productcourses.DefaultDelete = productcoursesDescDelete.Default.(int64)
+	// productcoursesDescCreatedID is the schema descriptor for created_id field.
+	productcoursesDescCreatedID := productcoursesMixinFields0[4].Descriptor()
+	// productcourses.DefaultCreatedID holds the default value on creation for the created_id field.
+	productcourses.DefaultCreatedID = productcoursesDescCreatedID.Default.(int64)
+	// productcoursesDescStatus is the schema descriptor for status field.
+	productcoursesDescStatus := productcoursesMixinFields1[0].Descriptor()
+	// productcourses.DefaultStatus holds the default value on creation for the status field.
+	productcourses.DefaultStatus = productcoursesDescStatus.Default.(int64)
+	// productcoursesDescType is the schema descriptor for type field.
+	productcoursesDescType := productcoursesFields[0].Descriptor()
+	// productcourses.DefaultType holds the default value on creation for the type field.
+	productcourses.DefaultType = productcoursesDescType.Default.(string)
+	// productcoursesDescName is the schema descriptor for name field.
+	productcoursesDescName := productcoursesFields[1].Descriptor()
+	// productcourses.DefaultName holds the default value on creation for the name field.
+	productcourses.DefaultName = productcoursesDescName.Default.(string)
+	// productcoursesDescNumber is the schema descriptor for number field.
+	productcoursesDescNumber := productcoursesFields[2].Descriptor()
+	// productcourses.DefaultNumber holds the default value on creation for the number field.
+	productcourses.DefaultNumber = productcoursesDescNumber.Default.(int64)
+	// productcoursesDescProductID is the schema descriptor for product_id field.
+	productcoursesDescProductID := productcoursesFields[3].Descriptor()
+	// productcourses.DefaultProductID holds the default value on creation for the product_id field.
+	productcourses.DefaultProductID = productcoursesDescProductID.Default.(int64)
+	// productcoursesDescCoursesID is the schema descriptor for courses_id field.
+	productcoursesDescCoursesID := productcoursesFields[4].Descriptor()
+	// productcourses.DefaultCoursesID holds the default value on creation for the courses_id field.
+	productcourses.DefaultCoursesID = productcoursesDescCoursesID.Default.(int64)
 	roleMixin := schema.Role{}.Mixin()
 	roleMixinFields0 := roleMixin[0].Fields()
 	_ = roleMixinFields0

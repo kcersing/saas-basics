@@ -108,25 +108,34 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			//obj := string(c.URI().Path())
 			//act := string(c.Method())
 			payloadMap, ok := data.(map[string]interface{})
+			hlog.Info(payloadMap)
 			if !ok {
 				hlog.Error("get payloadMap error:", " claims data:", data)
 				return false
 			}
-
-			roleIds := payloadMap["userRoleIds"].([]interface{})
 			var userRoleIds []int64
-			for _, v := range roleIds {
-				i := v.(float64)
-				userRoleIds = append(userRoleIds, int64(i))
+			if payloadMap["userRoleIds"] != "" {
+				roleIds := payloadMap["userRoleIds"].([]interface{})
+				for _, v := range roleIds {
+					i := v.(float64)
+					userRoleIds = append(userRoleIds, int64(i))
+				}
+			} else {
+				hlog.Error("暂无角色", err)
+				return false
+			}
+			if payloadMap["userId"] == "" {
+				hlog.Error("暂无角色", err)
+				return false
 			}
 			userId := payloadMap["userId"].(string)
-
 			// check token is valid
 			userIdInt, err := strconv.Atoi(userId)
 			if err != nil {
 				hlog.Error("get payloadMap error:", err)
 				return false
 			}
+
 			existToken := service.NewToken(ctx, c).IsExistByUserID(int64(userIdInt))
 			if !existToken {
 				return false

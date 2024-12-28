@@ -11,6 +11,7 @@ import (
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
+	"saas/biz/dal/db/ent/productcourses"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -26,8 +27,7 @@ type ProductQuery struct {
 	predicates    []predicate.Product
 	withTags      *DictionaryDetailQuery
 	withContracts *ContractQuery
-	withGoods     *ProductQuery
-	withLessons   *ProductQuery
+	withCourses   *ProductCoursesQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -108,9 +108,9 @@ func (pq *ProductQuery) QueryContracts() *ContractQuery {
 	return query
 }
 
-// QueryGoods chains the current query on the "goods" edge.
-func (pq *ProductQuery) QueryGoods() *ProductQuery {
-	query := (&ProductClient{config: pq.config}).Query()
+// QueryCourses chains the current query on the "courses" edge.
+func (pq *ProductQuery) QueryCourses() *ProductCoursesQuery {
+	query := (&ProductCoursesClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -121,30 +121,8 @@ func (pq *ProductQuery) QueryGoods() *ProductQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(product.Table, product.FieldID, selector),
-			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, product.GoodsTable, product.GoodsPrimaryKey...),
-		)
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryLessons chains the current query on the "lessons" edge.
-func (pq *ProductQuery) QueryLessons() *ProductQuery {
-	query := (&ProductClient{config: pq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := pq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(product.Table, product.FieldID, selector),
-			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, product.LessonsTable, product.LessonsPrimaryKey...),
+			sqlgraph.To(productcourses.Table, productcourses.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, product.CoursesTable, product.CoursesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -346,8 +324,7 @@ func (pq *ProductQuery) Clone() *ProductQuery {
 		predicates:    append([]predicate.Product{}, pq.predicates...),
 		withTags:      pq.withTags.Clone(),
 		withContracts: pq.withContracts.Clone(),
-		withGoods:     pq.withGoods.Clone(),
-		withLessons:   pq.withLessons.Clone(),
+		withCourses:   pq.withCourses.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
@@ -376,25 +353,14 @@ func (pq *ProductQuery) WithContracts(opts ...func(*ContractQuery)) *ProductQuer
 	return pq
 }
 
-// WithGoods tells the query-builder to eager-load the nodes that are connected to
-// the "goods" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProductQuery) WithGoods(opts ...func(*ProductQuery)) *ProductQuery {
-	query := (&ProductClient{config: pq.config}).Query()
+// WithCourses tells the query-builder to eager-load the nodes that are connected to
+// the "courses" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProductQuery) WithCourses(opts ...func(*ProductCoursesQuery)) *ProductQuery {
+	query := (&ProductCoursesClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withGoods = query
-	return pq
-}
-
-// WithLessons tells the query-builder to eager-load the nodes that are connected to
-// the "lessons" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProductQuery) WithLessons(opts ...func(*ProductQuery)) *ProductQuery {
-	query := (&ProductClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	pq.withLessons = query
+	pq.withCourses = query
 	return pq
 }
 
@@ -476,11 +442,10 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 	var (
 		nodes       = []*Product{}
 		_spec       = pq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [3]bool{
 			pq.withTags != nil,
 			pq.withContracts != nil,
-			pq.withGoods != nil,
-			pq.withLessons != nil,
+			pq.withCourses != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -515,17 +480,10 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 			return nil, err
 		}
 	}
-	if query := pq.withGoods; query != nil {
-		if err := pq.loadGoods(ctx, query, nodes,
-			func(n *Product) { n.Edges.Goods = []*Product{} },
-			func(n *Product, e *Product) { n.Edges.Goods = append(n.Edges.Goods, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := pq.withLessons; query != nil {
-		if err := pq.loadLessons(ctx, query, nodes,
-			func(n *Product) { n.Edges.Lessons = []*Product{} },
-			func(n *Product, e *Product) { n.Edges.Lessons = append(n.Edges.Lessons, e) }); err != nil {
+	if query := pq.withCourses; query != nil {
+		if err := pq.loadCourses(ctx, query, nodes,
+			func(n *Product) { n.Edges.Courses = []*ProductCourses{} },
+			func(n *Product, e *ProductCourses) { n.Edges.Courses = append(n.Edges.Courses, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -654,125 +612,33 @@ func (pq *ProductQuery) loadContracts(ctx context.Context, query *ContractQuery,
 	}
 	return nil
 }
-func (pq *ProductQuery) loadGoods(ctx context.Context, query *ProductQuery, nodes []*Product, init func(*Product), assign func(*Product, *Product)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int64]*Product)
-	nids := make(map[int64]map[*Product]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
+func (pq *ProductQuery) loadCourses(ctx context.Context, query *ProductCoursesQuery, nodes []*Product, init func(*Product), assign func(*Product, *ProductCourses)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Product)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
 		if init != nil {
-			init(node)
+			init(nodes[i])
 		}
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(product.GoodsTable)
-		s.Join(joinT).On(s.C(product.FieldID), joinT.C(product.GoodsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(product.GoodsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(product.GoodsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(productcourses.FieldProductID)
 	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullInt64).Int64
-				inValue := values[1].(*sql.NullInt64).Int64
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Product]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Product](ctx, query, qr, query.inters)
+	query.Where(predicate.ProductCourses(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(product.CoursesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		fk := n.ProductID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected "goods" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "product_id" returned %v for node %v`, fk, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (pq *ProductQuery) loadLessons(ctx context.Context, query *ProductQuery, nodes []*Product, init func(*Product), assign func(*Product, *Product)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int64]*Product)
-	nids := make(map[int64]map[*Product]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(product.LessonsTable)
-		s.Join(joinT).On(s.C(product.FieldID), joinT.C(product.LessonsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(product.LessonsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(product.LessonsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullInt64).Int64
-				inValue := values[1].(*sql.NullInt64).Int64
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Product]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Product](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "lessons" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
+		assign(node, n)
 	}
 	return nil
 }

@@ -2,8 +2,6 @@ namespace go product
 
 include "../base/base.thrift"
 
-
-
 struct ProductInfo {
     1: optional i64 id=0  (api.raw = "id")
     2: optional string name  = ""(api.raw = "name")
@@ -16,7 +14,7 @@ struct ProductInfo {
     9: optional string type = "" (api.raw = "type")
     10: optional i64 deadline=0 (api.raw = "deadline")
     11: optional list<base.Sales> sales = {} (api.raw = "sales")
-    12: optional i64 is_sales=0 (api.raw = "isSales")
+    12: optional i64 isSales=0 (api.raw = "isSales")
     13: optional string signSalesAt = "" (api.raw = "signSalesAt")
     14: optional string endSalesAt = "" (api.raw = "endSalesAt")
     16: optional string createdAt = ""  (api.raw = "createdAt")
@@ -28,7 +26,7 @@ struct ProductInfo {
     20: optional i64 createdId = 0 (api.raw = "createdId")
     21: optional string createdName = "" (api.raw = "createdName")
     /**团课*/
-    22: optional list<base.List> lessons = {} (api.raw = "lessons")
+    22: optional list<base.CourseList> lessons =0 (api.raw = "lessons")
     /**团课预约 1支持2不支持*/
     23: optional i64 isLessons =0 (api.raw = "isLessons")
     /**次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包*/
@@ -37,6 +35,11 @@ struct ProductInfo {
     25: optional double price = 0 (api.raw = "price")
     /**次数(次卡)*/
     26:optional i64 times = 0 (api.raw = "times")
+
+     /**课程 1支持2不支持*/
+     27: optional i64 isCourse =0 (api.raw = "isCourse")
+     /**课程-数组*/
+     28: optional list<base.CourseList> courses = {}  (api.raw = "courses")
 }
 
 
@@ -73,7 +76,7 @@ struct CreateOrUpdateProductReq {
     /**合同-数组*/
     17: optional list<i64> contractId =0 (api.raw = "contractId")
     /**团课-数组*/
-    18: optional list<i64> lessonsId =0 (api.raw = "lessonsId")
+    18: optional list<base.CourseList> lessons =0 (api.raw = "lessons")
     /**团课预约 1支持2不支持*/
     19: optional i64 isLessons =0 (api.raw = "isLessons")
     /**次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包*/
@@ -82,6 +85,12 @@ struct CreateOrUpdateProductReq {
     21: optional double price = 0 (api.raw = "price")
     /**次数(次卡)*/
     22:optional i64 times = 0 (api.raw = "times")
+
+    /**课程 1支持2不支持*/
+    23: optional i64 isCourse =0 (api.raw = "isCourse")
+    /**课程-数组*/
+    24: optional list<base.CourseList> courses = {}  (api.raw = "courses")
+
 }
 
 struct ProductListReq {

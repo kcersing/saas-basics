@@ -8,6 +8,7 @@ import (
 	"saas/biz/dal/db/ent/contract"
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/product"
+	"saas/biz/dal/db/ent/productcourses"
 	"saas/idl_gen/model/base"
 	"time"
 
@@ -344,34 +345,19 @@ func (pc *ProductCreate) AddContracts(c ...*Contract) *ProductCreate {
 	return pc.AddContractIDs(ids...)
 }
 
-// AddGoodIDs adds the "goods" edge to the Product entity by IDs.
-func (pc *ProductCreate) AddGoodIDs(ids ...int64) *ProductCreate {
-	pc.mutation.AddGoodIDs(ids...)
+// AddCourseIDs adds the "courses" edge to the ProductCourses entity by IDs.
+func (pc *ProductCreate) AddCourseIDs(ids ...int64) *ProductCreate {
+	pc.mutation.AddCourseIDs(ids...)
 	return pc
 }
 
-// AddGoods adds the "goods" edges to the Product entity.
-func (pc *ProductCreate) AddGoods(p ...*Product) *ProductCreate {
+// AddCourses adds the "courses" edges to the ProductCourses entity.
+func (pc *ProductCreate) AddCourses(p ...*ProductCourses) *ProductCreate {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return pc.AddGoodIDs(ids...)
-}
-
-// AddLessonIDs adds the "lessons" edge to the Product entity by IDs.
-func (pc *ProductCreate) AddLessonIDs(ids ...int64) *ProductCreate {
-	pc.mutation.AddLessonIDs(ids...)
-	return pc
-}
-
-// AddLessons adds the "lessons" edges to the Product entity.
-func (pc *ProductCreate) AddLessons(p ...*Product) *ProductCreate {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pc.AddLessonIDs(ids...)
+	return pc.AddCourseIDs(ids...)
 }
 
 // Mutation returns the ProductMutation object of the builder.
@@ -633,31 +619,15 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.GoodsIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.CoursesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   product.GoodsTable,
-			Columns: product.GoodsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.LessonsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   product.LessonsTable,
-			Columns: product.LessonsPrimaryKey,
+			Table:   product.CoursesTable,
+			Columns: []string{product.CoursesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

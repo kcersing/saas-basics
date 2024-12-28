@@ -52,7 +52,7 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 		SetCreatedID(createdId).
 		AddTagIDs(req.TagId...).
 		AddContractIDs(req.ContractId...).
-		AddLessonIDs(req.LessonsId...).
+		AddCourseIDs(req.LessonsId...).
 		SetIsLessons(req.IsLessons).
 		SetSubType(req.SubType).
 		SetPrice(req.Price).
@@ -93,7 +93,7 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 		SetCreatedID(createdId).
 		AddTagIDs(req.TagId...).
 		AddContractIDs(req.ContractId...).
-		AddLessonIDs(req.LessonsId...).
+		//AddLessonIDs(req.LessonsId...).
 		SetIsLessons(req.IsLessons).
 		SetSubType(req.SubType).
 		SetPrice(req.Price).
@@ -193,16 +193,16 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 		}
 	}
 
-	lessonsAll, _ := v.QueryLessons().All(p.ctx)
-	if lessonsAll != nil {
-		for _, item := range lessonsAll {
-			lesson := &base.List{
-				ID:   item.ID,
-				Name: item.Name,
-			}
-			lessons = append(lessons, lesson)
-		}
-	}
+	//lessonsAll, _ := v.QueryLessons().All(p.ctx)
+	//if lessonsAll != nil {
+	//	for _, item := range lessonsAll {
+	//		lesson := &base.List{
+	//			ID:   item.ID,
+	//			Name: item.Name,
+	//		}
+	//		lessons = append(lessons, lesson)
+	//	}
+	//}
 
 	var created string
 

@@ -1336,44 +1336,21 @@ func HasContractsWith(preds ...predicate.Contract) predicate.Product {
 	})
 }
 
-// HasGoods applies the HasEdge predicate on the "goods" edge.
-func HasGoods() predicate.Product {
+// HasCourses applies the HasEdge predicate on the "courses" edge.
+func HasCourses() predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, GoodsTable, GoodsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, CoursesTable, CoursesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasGoodsWith applies the HasEdge predicate on the "goods" edge with a given conditions (other predicates).
-func HasGoodsWith(preds ...predicate.Product) predicate.Product {
+// HasCoursesWith applies the HasEdge predicate on the "courses" edge with a given conditions (other predicates).
+func HasCoursesWith(preds ...predicate.ProductCourses) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
-		step := newGoodsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasLessons applies the HasEdge predicate on the "lessons" edge.
-func HasLessons() predicate.Product {
-	return predicate.Product(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, LessonsTable, LessonsPrimaryKey...),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasLessonsWith applies the HasEdge predicate on the "lessons" edge with a given conditions (other predicates).
-func HasLessonsWith(preds ...predicate.Product) predicate.Product {
-	return predicate.Product(func(s *sql.Selector) {
-		step := newLessonsStep()
+		step := newCoursesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

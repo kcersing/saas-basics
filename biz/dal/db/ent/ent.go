@@ -36,6 +36,7 @@ import (
 	"saas/biz/dal/db/ent/orderpay"
 	"saas/biz/dal/db/ent/ordersales"
 	"saas/biz/dal/db/ent/product"
+	"saas/biz/dal/db/ent/productcourses"
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
@@ -141,6 +142,7 @@ func checkColumn(table, column string) error {
 			orderpay.Table:              orderpay.ValidColumn,
 			ordersales.Table:            ordersales.ValidColumn,
 			product.Table:               product.ValidColumn,
+			productcourses.Table:        productcourses.ValidColumn,
 			role.Table:                  role.ValidColumn,
 			schedule.Table:              schedule.ValidColumn,
 			schedulecoach.Table:         schedulecoach.ValidColumn,

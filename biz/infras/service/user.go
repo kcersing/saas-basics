@@ -294,18 +294,30 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	info.Detail = userEnt.Detail
 	info.JobTime = &userEnt.JobTime
 	info.DefaultVenueId = userEnt.DefaultVenueID
+	var venues []*user.Venues
+	Venues, _ := userEnt.QueryVenues().All(u.ctx)
+	if len(Venues) > 0 {
+		for _, ve := range Venues {
 
+			venues = append(venues, &user.Venues{
+				ID:   ve.ID,
+				Name: ve.Name,
+			})
+
+		}
+	}
+	info.Venues = venues
 	Tags, _ := userEnt.QueryTags().All(u.ctx)
 	if len(Tags) > 0 {
 		for _, d := range Tags {
-			dd := dictionary.DictionaryDetail{
+
+			info.UserTags = append(info.UserTags, &dictionary.DictionaryDetail{
 				ID:     d.ID,
 				Title:  d.Title,
 				Key:    d.Key,
 				Value:  d.Value,
 				Status: d.Status,
-			}
-			info.UserTags = append(info.UserTags, &dd)
+			})
 		}
 	}
 

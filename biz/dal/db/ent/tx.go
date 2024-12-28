@@ -70,6 +70,8 @@ type Tx struct {
 	OrderSales *OrderSalesClient
 	// Product is the client for interacting with the Product builders.
 	Product *ProductClient
+	// ProductCourses is the client for interacting with the ProductCourses builders.
+	ProductCourses *ProductCoursesClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 	// Schedule is the client for interacting with the Schedule builders.
@@ -252,6 +254,7 @@ func (tx *Tx) init() {
 	tx.OrderPay = NewOrderPayClient(tx.config)
 	tx.OrderSales = NewOrderSalesClient(tx.config)
 	tx.Product = NewProductClient(tx.config)
+	tx.ProductCourses = NewProductCoursesClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
 	tx.Schedule = NewScheduleClient(tx.config)
 	tx.ScheduleCoach = NewScheduleCoachClient(tx.config)

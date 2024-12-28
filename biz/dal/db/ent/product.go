@@ -74,13 +74,11 @@ type ProductEdges struct {
 	Tags []*DictionaryDetail `json:"tags,omitempty"`
 	// Contracts holds the value of the contracts edge.
 	Contracts []*Contract `json:"contracts,omitempty"`
-	// Goods holds the value of the goods edge.
-	Goods []*Product `json:"goods,omitempty"`
-	// Lessons holds the value of the lessons edge.
-	Lessons []*Product `json:"lessons,omitempty"`
+	// Courses holds the value of the courses edge.
+	Courses []*ProductCourses `json:"courses,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [3]bool
 }
 
 // TagsOrErr returns the Tags value or an error if the edge
@@ -101,22 +99,13 @@ func (e ProductEdges) ContractsOrErr() ([]*Contract, error) {
 	return nil, &NotLoadedError{edge: "contracts"}
 }
 
-// GoodsOrErr returns the Goods value or an error if the edge
+// CoursesOrErr returns the Courses value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProductEdges) GoodsOrErr() ([]*Product, error) {
+func (e ProductEdges) CoursesOrErr() ([]*ProductCourses, error) {
 	if e.loadedTypes[2] {
-		return e.Goods, nil
+		return e.Courses, nil
 	}
-	return nil, &NotLoadedError{edge: "goods"}
-}
-
-// LessonsOrErr returns the Lessons value or an error if the edge
-// was not loaded in eager-loading.
-func (e ProductEdges) LessonsOrErr() ([]*Product, error) {
-	if e.loadedTypes[3] {
-		return e.Lessons, nil
-	}
-	return nil, &NotLoadedError{edge: "lessons"}
+	return nil, &NotLoadedError{edge: "courses"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -306,14 +295,9 @@ func (pr *Product) QueryContracts() *ContractQuery {
 	return NewProductClient(pr.config).QueryContracts(pr)
 }
 
-// QueryGoods queries the "goods" edge of the Product entity.
-func (pr *Product) QueryGoods() *ProductQuery {
-	return NewProductClient(pr.config).QueryGoods(pr)
-}
-
-// QueryLessons queries the "lessons" edge of the Product entity.
-func (pr *Product) QueryLessons() *ProductQuery {
-	return NewProductClient(pr.config).QueryLessons(pr)
+// QueryCourses queries the "courses" edge of the Product entity.
+func (pr *Product) QueryCourses() *ProductCoursesQuery {
+	return NewProductClient(pr.config).QueryCourses(pr)
 }
 
 // Update returns a builder for updating this Product.

@@ -1072,6 +1072,41 @@ var (
 			},
 		},
 	}
+	// ProductCoursesColumns holds the columns for the "product_courses" table.
+	ProductCoursesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型", Default: ""},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "课名", Default: ""},
+		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "节数", Default: 0},
+		{Name: "courses_id", Type: field.TypeInt64, Nullable: true, Comment: "课名称", Default: 0},
+		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品名称", Default: 0},
+	}
+	// ProductCoursesTable holds the schema information for the "product_courses" table.
+	ProductCoursesTable = &schema.Table{
+		Name:       "product_courses",
+		Columns:    ProductCoursesColumns,
+		PrimaryKey: []*schema.Column{ProductCoursesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "product_courses_product_courses",
+				Columns:    []*schema.Column{ProductCoursesColumns[10]},
+				RefColumns: []*schema.Column{ProductColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "productcourses_id",
+				Unique:  true,
+				Columns: []*schema.Column{ProductCoursesColumns[0]},
+			},
+		},
+	}
 	// SysRolesColumns holds the columns for the "sys_roles" table.
 	SysRolesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -1569,31 +1604,6 @@ var (
 			},
 		},
 	}
-	// ProductLessonsColumns holds the columns for the "product_lessons" table.
-	ProductLessonsColumns = []*schema.Column{
-		{Name: "product_id", Type: field.TypeInt64},
-		{Name: "good_id", Type: field.TypeInt64},
-	}
-	// ProductLessonsTable holds the schema information for the "product_lessons" table.
-	ProductLessonsTable = &schema.Table{
-		Name:       "product_lessons",
-		Columns:    ProductLessonsColumns,
-		PrimaryKey: []*schema.Column{ProductLessonsColumns[0], ProductLessonsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "product_lessons_product_id",
-				Columns:    []*schema.Column{ProductLessonsColumns[0]},
-				RefColumns: []*schema.Column{ProductColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "product_lessons_good_id",
-				Columns:    []*schema.Column{ProductLessonsColumns[1]},
-				RefColumns: []*schema.Column{ProductColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// RoleMenusColumns holds the columns for the "role_menus" table.
 	RoleMenusColumns = []*schema.Column{
 		{Name: "role_id", Type: field.TypeInt64},
@@ -1725,6 +1735,7 @@ var (
 		OrderPayTable,
 		OrderSalesTable,
 		ProductTable,
+		ProductCoursesTable,
 		SysRolesTable,
 		ScheduleTable,
 		ScheduleCoachTable,
@@ -1741,7 +1752,6 @@ var (
 		MemberMemberCommunitysTable,
 		ProductTagsTable,
 		ProductContractsTable,
-		ProductLessonsTable,
 		RoleMenusTable,
 		UserTagsTable,
 		UserVenuesTable,
@@ -1877,6 +1887,11 @@ func init() {
 		Table:   "product",
 		Options: "AUTO_INCREMENT = 100000",
 	}
+	ProductCoursesTable.ForeignKeys[0].RefTable = ProductTable
+	ProductCoursesTable.Annotation = &entsql.Annotation{
+		Table:   "product_courses",
+		Options: "AUTO_INCREMENT = 100000",
+	}
 	SysRolesTable.Annotation = &entsql.Annotation{
 		Table: "sys_roles",
 	}
@@ -1934,8 +1949,6 @@ func init() {
 	ProductTagsTable.ForeignKeys[1].RefTable = SysDictionaryDetailsTable
 	ProductContractsTable.ForeignKeys[0].RefTable = ProductTable
 	ProductContractsTable.ForeignKeys[1].RefTable = ContractsTable
-	ProductLessonsTable.ForeignKeys[0].RefTable = ProductTable
-	ProductLessonsTable.ForeignKeys[1].RefTable = ProductTable
 	RoleMenusTable.ForeignKeys[0].RefTable = SysRolesTable
 	RoleMenusTable.ForeignKeys[1].RefTable = SysMenusTable
 	UserTagsTable.ForeignKeys[0].RefTable = SysUsersTable

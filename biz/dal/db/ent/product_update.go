@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
+	"saas/biz/dal/db/ent/productcourses"
 	"saas/idl_gen/model/base"
 	"time"
 
@@ -529,34 +530,19 @@ func (pu *ProductUpdate) AddContracts(c ...*Contract) *ProductUpdate {
 	return pu.AddContractIDs(ids...)
 }
 
-// AddGoodIDs adds the "goods" edge to the Product entity by IDs.
-func (pu *ProductUpdate) AddGoodIDs(ids ...int64) *ProductUpdate {
-	pu.mutation.AddGoodIDs(ids...)
+// AddCourseIDs adds the "courses" edge to the ProductCourses entity by IDs.
+func (pu *ProductUpdate) AddCourseIDs(ids ...int64) *ProductUpdate {
+	pu.mutation.AddCourseIDs(ids...)
 	return pu
 }
 
-// AddGoods adds the "goods" edges to the Product entity.
-func (pu *ProductUpdate) AddGoods(p ...*Product) *ProductUpdate {
+// AddCourses adds the "courses" edges to the ProductCourses entity.
+func (pu *ProductUpdate) AddCourses(p ...*ProductCourses) *ProductUpdate {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return pu.AddGoodIDs(ids...)
-}
-
-// AddLessonIDs adds the "lessons" edge to the Product entity by IDs.
-func (pu *ProductUpdate) AddLessonIDs(ids ...int64) *ProductUpdate {
-	pu.mutation.AddLessonIDs(ids...)
-	return pu
-}
-
-// AddLessons adds the "lessons" edges to the Product entity.
-func (pu *ProductUpdate) AddLessons(p ...*Product) *ProductUpdate {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pu.AddLessonIDs(ids...)
+	return pu.AddCourseIDs(ids...)
 }
 
 // Mutation returns the ProductMutation object of the builder.
@@ -606,46 +592,25 @@ func (pu *ProductUpdate) RemoveContracts(c ...*Contract) *ProductUpdate {
 	return pu.RemoveContractIDs(ids...)
 }
 
-// ClearGoods clears all "goods" edges to the Product entity.
-func (pu *ProductUpdate) ClearGoods() *ProductUpdate {
-	pu.mutation.ClearGoods()
+// ClearCourses clears all "courses" edges to the ProductCourses entity.
+func (pu *ProductUpdate) ClearCourses() *ProductUpdate {
+	pu.mutation.ClearCourses()
 	return pu
 }
 
-// RemoveGoodIDs removes the "goods" edge to Product entities by IDs.
-func (pu *ProductUpdate) RemoveGoodIDs(ids ...int64) *ProductUpdate {
-	pu.mutation.RemoveGoodIDs(ids...)
+// RemoveCourseIDs removes the "courses" edge to ProductCourses entities by IDs.
+func (pu *ProductUpdate) RemoveCourseIDs(ids ...int64) *ProductUpdate {
+	pu.mutation.RemoveCourseIDs(ids...)
 	return pu
 }
 
-// RemoveGoods removes "goods" edges to Product entities.
-func (pu *ProductUpdate) RemoveGoods(p ...*Product) *ProductUpdate {
+// RemoveCourses removes "courses" edges to ProductCourses entities.
+func (pu *ProductUpdate) RemoveCourses(p ...*ProductCourses) *ProductUpdate {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return pu.RemoveGoodIDs(ids...)
-}
-
-// ClearLessons clears all "lessons" edges to the Product entity.
-func (pu *ProductUpdate) ClearLessons() *ProductUpdate {
-	pu.mutation.ClearLessons()
-	return pu
-}
-
-// RemoveLessonIDs removes the "lessons" edge to Product entities by IDs.
-func (pu *ProductUpdate) RemoveLessonIDs(ids ...int64) *ProductUpdate {
-	pu.mutation.RemoveLessonIDs(ids...)
-	return pu
-}
-
-// RemoveLessons removes "lessons" edges to Product entities.
-func (pu *ProductUpdate) RemoveLessons(p ...*Product) *ProductUpdate {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pu.RemoveLessonIDs(ids...)
+	return pu.RemoveCourseIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -944,28 +909,28 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.GoodsCleared() {
+	if pu.mutation.CoursesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   product.GoodsTable,
-			Columns: product.GoodsPrimaryKey,
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   product.CoursesTable,
+			Columns: []string{product.CoursesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedGoodsIDs(); len(nodes) > 0 && !pu.mutation.GoodsCleared() {
+	if nodes := pu.mutation.RemovedCoursesIDs(); len(nodes) > 0 && !pu.mutation.CoursesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   product.GoodsTable,
-			Columns: product.GoodsPrimaryKey,
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   product.CoursesTable,
+			Columns: []string{product.CoursesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -973,60 +938,15 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.GoodsIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.CoursesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   product.GoodsTable,
-			Columns: product.GoodsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if pu.mutation.LessonsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   product.LessonsTable,
-			Columns: product.LessonsPrimaryKey,
+			Table:   product.CoursesTable,
+			Columns: []string{product.CoursesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.RemovedLessonsIDs(); len(nodes) > 0 && !pu.mutation.LessonsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   product.LessonsTable,
-			Columns: product.LessonsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.LessonsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   product.LessonsTable,
-			Columns: product.LessonsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1551,34 +1471,19 @@ func (puo *ProductUpdateOne) AddContracts(c ...*Contract) *ProductUpdateOne {
 	return puo.AddContractIDs(ids...)
 }
 
-// AddGoodIDs adds the "goods" edge to the Product entity by IDs.
-func (puo *ProductUpdateOne) AddGoodIDs(ids ...int64) *ProductUpdateOne {
-	puo.mutation.AddGoodIDs(ids...)
+// AddCourseIDs adds the "courses" edge to the ProductCourses entity by IDs.
+func (puo *ProductUpdateOne) AddCourseIDs(ids ...int64) *ProductUpdateOne {
+	puo.mutation.AddCourseIDs(ids...)
 	return puo
 }
 
-// AddGoods adds the "goods" edges to the Product entity.
-func (puo *ProductUpdateOne) AddGoods(p ...*Product) *ProductUpdateOne {
+// AddCourses adds the "courses" edges to the ProductCourses entity.
+func (puo *ProductUpdateOne) AddCourses(p ...*ProductCourses) *ProductUpdateOne {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return puo.AddGoodIDs(ids...)
-}
-
-// AddLessonIDs adds the "lessons" edge to the Product entity by IDs.
-func (puo *ProductUpdateOne) AddLessonIDs(ids ...int64) *ProductUpdateOne {
-	puo.mutation.AddLessonIDs(ids...)
-	return puo
-}
-
-// AddLessons adds the "lessons" edges to the Product entity.
-func (puo *ProductUpdateOne) AddLessons(p ...*Product) *ProductUpdateOne {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return puo.AddLessonIDs(ids...)
+	return puo.AddCourseIDs(ids...)
 }
 
 // Mutation returns the ProductMutation object of the builder.
@@ -1628,46 +1533,25 @@ func (puo *ProductUpdateOne) RemoveContracts(c ...*Contract) *ProductUpdateOne {
 	return puo.RemoveContractIDs(ids...)
 }
 
-// ClearGoods clears all "goods" edges to the Product entity.
-func (puo *ProductUpdateOne) ClearGoods() *ProductUpdateOne {
-	puo.mutation.ClearGoods()
+// ClearCourses clears all "courses" edges to the ProductCourses entity.
+func (puo *ProductUpdateOne) ClearCourses() *ProductUpdateOne {
+	puo.mutation.ClearCourses()
 	return puo
 }
 
-// RemoveGoodIDs removes the "goods" edge to Product entities by IDs.
-func (puo *ProductUpdateOne) RemoveGoodIDs(ids ...int64) *ProductUpdateOne {
-	puo.mutation.RemoveGoodIDs(ids...)
+// RemoveCourseIDs removes the "courses" edge to ProductCourses entities by IDs.
+func (puo *ProductUpdateOne) RemoveCourseIDs(ids ...int64) *ProductUpdateOne {
+	puo.mutation.RemoveCourseIDs(ids...)
 	return puo
 }
 
-// RemoveGoods removes "goods" edges to Product entities.
-func (puo *ProductUpdateOne) RemoveGoods(p ...*Product) *ProductUpdateOne {
+// RemoveCourses removes "courses" edges to ProductCourses entities.
+func (puo *ProductUpdateOne) RemoveCourses(p ...*ProductCourses) *ProductUpdateOne {
 	ids := make([]int64, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return puo.RemoveGoodIDs(ids...)
-}
-
-// ClearLessons clears all "lessons" edges to the Product entity.
-func (puo *ProductUpdateOne) ClearLessons() *ProductUpdateOne {
-	puo.mutation.ClearLessons()
-	return puo
-}
-
-// RemoveLessonIDs removes the "lessons" edge to Product entities by IDs.
-func (puo *ProductUpdateOne) RemoveLessonIDs(ids ...int64) *ProductUpdateOne {
-	puo.mutation.RemoveLessonIDs(ids...)
-	return puo
-}
-
-// RemoveLessons removes "lessons" edges to Product entities.
-func (puo *ProductUpdateOne) RemoveLessons(p ...*Product) *ProductUpdateOne {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return puo.RemoveLessonIDs(ids...)
+	return puo.RemoveCourseIDs(ids...)
 }
 
 // Where appends a list predicates to the ProductUpdate builder.
@@ -1996,28 +1880,28 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.GoodsCleared() {
+	if puo.mutation.CoursesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   product.GoodsTable,
-			Columns: product.GoodsPrimaryKey,
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   product.CoursesTable,
+			Columns: []string{product.CoursesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedGoodsIDs(); len(nodes) > 0 && !puo.mutation.GoodsCleared() {
+	if nodes := puo.mutation.RemovedCoursesIDs(); len(nodes) > 0 && !puo.mutation.CoursesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   product.GoodsTable,
-			Columns: product.GoodsPrimaryKey,
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   product.CoursesTable,
+			Columns: []string{product.CoursesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -2025,60 +1909,15 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.GoodsIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.CoursesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   product.GoodsTable,
-			Columns: product.GoodsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if puo.mutation.LessonsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   product.LessonsTable,
-			Columns: product.LessonsPrimaryKey,
+			Table:   product.CoursesTable,
+			Columns: []string{product.CoursesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.RemovedLessonsIDs(); len(nodes) > 0 && !puo.mutation.LessonsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   product.LessonsTable,
-			Columns: product.LessonsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.LessonsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   product.LessonsTable,
-			Columns: product.LessonsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

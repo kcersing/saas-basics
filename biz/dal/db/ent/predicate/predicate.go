@@ -93,6 +93,9 @@ type OrderSales func(*sql.Selector)
 // Product is the predicate function for product builders.
 type Product func(*sql.Selector)
 
+// ProductCourses is the predicate function for productcourses builders.
+type ProductCourses func(*sql.Selector)
+
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)
 
