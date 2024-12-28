@@ -154,11 +154,7 @@ func (a Auth) MenuAuth(roleID int64) (roleMenu auth.RoleMenu, err error) {
 				roleMenu.MenuIds = append(roleMenu.MenuIds, v.ID)
 			}
 		}
-
 	}
-
-	hlog.Info([]int64{roleID})
 	roleMenu.MenuInfo, _ = NewMenu(a.ctx, a.c).MenuRole([]int64{roleID})
-
 	return
 }

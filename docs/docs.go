@@ -3485,7 +3485,7 @@ const docTemplate = `{
                         "type": "integer"
                     }
                 },
-                "role_id": {
+                "roleId": {
                     "type": "integer"
                 }
             }
@@ -3499,7 +3499,7 @@ const docTemplate = `{
                 "method": {
                     "type": "string"
                 },
-                "operators": {
+                "operatorsr": {
                     "type": "string"
                 },
                 "page": {
@@ -3519,13 +3519,13 @@ const docTemplate = `{
         "auth.MenuAuthInfoReq": {
             "type": "object",
             "properties": {
-                "menu_ids": {
+                "menuIds": {
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
-                "role_id": {
+                "roleId": {
                     "type": "integer"
                 }
             }
@@ -3533,16 +3533,7 @@ const docTemplate = `{
         "auth.RoleInfo": {
             "type": "object",
             "properties": {
-                "Apis": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "Id": {
-                    "type": "integer"
-                },
-                "Menus": {
+                "apis": {
                     "type": "array",
                     "items": {
                         "type": "integer"
@@ -3553,6 +3544,15 @@ const docTemplate = `{
                 },
                 "defaultRouter": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "menus": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "name": {
                     "type": "string"
@@ -3602,6 +3602,23 @@ const docTemplate = `{
                 },
                 "pageSize": {
                     "type": "integer"
+                }
+            }
+        },
+        "base.CourseList": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
@@ -4306,25 +4323,22 @@ const docTemplate = `{
         "entry.CreateEntry": {
             "type": "object",
             "properties": {
-                "EntryTime": {
+                "entryTime": {
                     "type": "string"
                 },
-                "LeavingTime": {
+                "leavingTime": {
                     "type": "string"
                 },
-                "MemberId": {
+                "memberId": {
                     "type": "integer"
                 },
-                "MemberProductId": {
+                "memberProductId": {
                     "type": "integer"
                 },
-                "MemberPropertyId": {
+                "userId": {
                     "type": "integer"
                 },
-                "UserId": {
-                    "type": "integer"
-                },
-                "VenueId": {
+                "venueId": {
                     "type": "integer"
                 }
             }
@@ -4342,9 +4356,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "memberProductId": {
-                    "type": "integer"
-                },
-                "memberPropertyId": {
                     "type": "integer"
                 },
                 "page": {
@@ -4654,6 +4665,13 @@ const docTemplate = `{
                         "type": "integer"
                     }
                 },
+                "courses": {
+                    "description": "*课程-数组",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base.CourseList"
+                    }
+                },
                 "deadline": {
                     "description": "*激活期限",
                     "type": "integer"
@@ -4673,6 +4691,10 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "isCourse": {
+                    "description": "*课程 1支持2不支持",
+                    "type": "integer"
+                },
                 "isLessons": {
                     "description": "*团课预约 1支持2不支持",
                     "type": "integer"
@@ -4685,11 +4707,11 @@ const docTemplate = `{
                     "description": "*课程课时(课)",
                     "type": "integer"
                 },
-                "lessonsId": {
+                "lessons": {
                     "description": "*团课-数组",
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "$ref": "#/definitions/base.CourseList"
                     }
                 },
                 "name": {
@@ -4861,13 +4883,13 @@ const docTemplate = `{
         "user.CreateOrUpdateUserReq": {
             "type": "object",
             "properties": {
-                "DefaultVenueId": {
-                    "type": "integer"
-                },
                 "avatar": {
                     "type": "string"
                 },
                 "createId": {
+                    "type": "integer"
+                },
+                "defaultVenueId": {
                     "type": "integer"
                 },
                 "detail": {
@@ -5055,6 +5077,12 @@ const docTemplate = `{
         "venue.VenueListReq": {
             "type": "object",
             "properties": {
+                "classify": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "name": {
                     "type": "string"
                 },
@@ -5066,6 +5094,9 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
@@ -5073,6 +5104,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "classify": {
+                    "description": "*分类",
                     "type": "integer"
                 },
                 "createdAt": {
@@ -5082,18 +5114,22 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "information": {
+                    "description": "*详情",
                     "type": "string"
                 },
                 "isAccessible": {
+                    "description": "*是否开放:1开放;2关闭",
                     "type": "integer"
                 },
                 "isShow": {
+                    "description": "*是否展示:1展示;2不展示",
                     "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 },
                 "number": {
+                    "description": "*可容纳人数",
                     "type": "integer"
                 },
                 "pic": {
