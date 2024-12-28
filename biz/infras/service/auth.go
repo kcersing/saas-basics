@@ -145,12 +145,20 @@ func (a Auth) UpdateMenuAuth(roleID int64, menuIDs []int64) error {
 	return tx.Commit()
 }
 
-func (a Auth) MenuAuth(roleID int64) (menuIDs []int64, err error) {
+func (a Auth) MenuAuth(roleID int64) (roleMenu auth.RoleMenu, err error) {
+
 	menus, err := a.db.Role.Query().Where(role.IDEQ(roleID)).QueryMenus().All(a.ctx)
-	for _, v := range menus {
-		if v.ID != 1 {
-			menuIDs = append(menuIDs, v.ID)
+	if len(menus) > 0 {
+		for _, v := range menus {
+			if v.ID != 1 {
+				roleMenu.MenuIds = append(roleMenu.MenuIds, v.ID)
+			}
 		}
+
 	}
+
+	hlog.Info([]int64{roleID})
+	roleMenu.MenuInfo, _ = NewMenu(a.ctx, a.c).MenuRole([]int64{roleID})
+
 	return
 }

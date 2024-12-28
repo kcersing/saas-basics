@@ -1,7 +1,7 @@
 namespace go auth
 
 include "../base/base.thrift"
-
+include "menu.thrift"
 // authorization service
 service AuthService {
   // Create role information | 创建角色
@@ -52,7 +52,10 @@ struct MenuAuthInfoReq {
     1: i64 roleId (api.raw = "roleId")
     2: list<i64> menuIds (api.raw = "menuIds")
 }
-
+struct RoleMenu {
+    1: list<i64> menuIds (api.raw = "menuIds")
+    2: list<menu.MenuInfo> menuInfo (api.raw = "menuInfo")
+}
 
 //创建或更新角色信息参数
 struct RoleInfo {

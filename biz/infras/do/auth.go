@@ -6,7 +6,7 @@ import (
 
 type Auth interface {
 	ApiAuth(roleIDStr string) (infos []*auth.ApiAuthInfo, err error)
-	MenuAuth(roleID int64) (menuIDs []int64, err error)
+	MenuAuth(roleID int64) (roleMenu auth.RoleMenu, err error)
 
 	UpdateApiAuth(roleIDStr string, apis []int64) error
 	UpdateMenuAuth(roleID int64, menuIDs []int64) error
