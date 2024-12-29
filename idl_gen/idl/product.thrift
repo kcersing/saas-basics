@@ -66,7 +66,7 @@ struct CreateOrUpdateProductReq {
     /**销售信息数组(多个/课价格信息)*/
     11: optional list<base.Sales> sales = {} (api.raw = "sales")
     /**销售方式 1会员端*/
-    12: optional i64 is_sales =1(api.raw = "isSales")
+    12: optional i64 isSales = 0 (api.raw = "isSales")
     /**销售开始时间*/
     13: optional string signSalesAt ="" (api.raw = "signSalesAt")
     /**销售结束时间*/
