@@ -798,14 +798,14 @@ definitions:
         type: string
       id:
         type: integer
-      is_sales:
-        description: '*销售方式 1会员端'
-        type: integer
       isCourse:
         description: '*课程 课程 1不限2指定'
         type: integer
       isLessons:
         description: '*团课预约 1支持2不支持'
+        type: integer
+      isSales:
+        description: '*销售方式 1会员端'
         type: integer
       length:
         description: '*课程课时(课)'
@@ -833,7 +833,7 @@ definitions:
         description: '*销售开始时间'
         type: string
       status:
-        description: '*状态[1:正常,2:禁用]'
+        description: '*状态[1:未上架上架,2:上架]'
         type: integer
       stock:
         description: '*库存'

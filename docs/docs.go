@@ -4749,7 +4749,7 @@ const docTemplate = `{
                     "description": "*团课预约 1支持2不支持",
                     "type": "integer"
                 },
-                "is_sales": {
+                "isSales": {
                     "description": "*销售方式 1会员端",
                     "type": "integer"
                 },
@@ -4788,7 +4788,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "description": "*状态[1:正常,2:禁用]",
+                    "description": "*状态[1:未上架上架,2:上架]",
                     "type": "integer"
                 },
                 "stock": {
