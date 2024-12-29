@@ -306,8 +306,10 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 		SubType:   v.SubType,
 		Price:     v.Price,
 		Times:     v.Times,
-		Courses:   courses,
-		Lessons:   lessons,
+
+		IsCourse: v.IsCourse,
+		Courses:  courses,
+		Lessons:  lessons,
 	}
 }
 
