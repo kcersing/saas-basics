@@ -213,3 +213,53 @@ func VenueList(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
 	return
 }
+
+// VenuePlaceInfo .
+//
+// @Summary 场地信息 Summary
+// @Description 场地信息 Description
+// @Param request body base.IDReq true "query params"
+// @Success 200 {object} utils.Response
+// @router /service/place/info [POST]
+func VenuePlaceInfo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	info, err := service.NewVenue(ctx, c).PlaceInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}
+
+// VenueInfo .
+//
+// @Summary 场馆信息 Summary
+// @Description 场馆信息 Description
+// @Param request body base.IDReq true "query params"
+// @Success 200 {object} utils.Response
+// @router /service/venue/info [POST]
+func VenueInfo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	info, err := service.NewVenue(ctx, c).VenueInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}

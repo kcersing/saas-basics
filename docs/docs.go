@@ -2557,6 +2557,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/place/info": {
+            "post": {
+                "description": "场地信息 Description",
+                "summary": "场地信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/place/list": {
             "post": {
                 "description": "场地列表 Description",
@@ -3385,6 +3410,31 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/venue.VenueInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/venue/info": {
+            "post": {
+                "description": "场馆信息 Description",
+                "summary": "场馆信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
                         }
                     }
                 ],

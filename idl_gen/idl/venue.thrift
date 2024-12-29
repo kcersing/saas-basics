@@ -57,21 +57,24 @@ struct VenuePlaceInfo {
 
 service VenueService {
 
-    // 添加场地
+    /**添加场地*/
     base.NilResponse CreateVenuePlace(1: VenuePlaceInfo req) (api.post = "/service/place/create")
-    // 编辑场地
+    /**编辑场地*/
     base.NilResponse UpdateVenuePlace(1: VenuePlaceInfo req) (api.post = "/service/place/update")
-    // 删除场地
+    /**删除场地*/
     base.NilResponse UpdateVenuePlaceStatus(1: base.StatusCodeReq req) (api.post = "/service/place/status")
-    // 场地列表
+    /**场地列表*/
     base.NilResponse VenuePlaceList(1: VenuePlaceListReq req) (api.post = "/service/place/list")
-
-    // 添加场馆
+     /**场地詳情*/
+    base.NilResponse VenuePlaceInfo(1: base.IDReq  req) (api.post = "/service/place/info")
+    /**添加场馆*/
     base.NilResponse CreateVenue(1: VenueInfo req) (api.post = "/service/venue/create")
-    // 编辑场馆
+    /**编辑场馆*/
     base.NilResponse UpdateVenue(1: VenueInfo req) (api.post = "/service/venue/update")
-    // 编辑场馆状态
+    /**编辑场馆状态*/
     base.NilResponse UpdateVenueStatus(1: base.StatusCodeReq req) (api.post = "/service/venue/status")
-    // 场馆列表
+    /**场馆列表*/
     base.NilResponse VenueList(1: VenueListReq req) (api.post = "/service/venue/list")
+    /**场馆詳情*/
+    base.NilResponse VenueInfo(1: base.IDReq  req) (api.post = "/service/venue/info")
 }

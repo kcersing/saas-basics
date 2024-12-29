@@ -70,3 +70,13 @@ func _updatevenueMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _venueplaceinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _venueinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
