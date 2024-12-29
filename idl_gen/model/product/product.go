@@ -1818,7 +1818,7 @@ type CreateOrUpdateProductReq struct {
 	Description string `thrift:"description,4,optional" form:"description" json:"description" query:"description"`
 	/**库存*/
 	Stock int64 `thrift:"stock,5,optional" form:"stock" json:"stock" query:"stock"`
-	/**状态[1:正常,2:禁用]*/
+	/**状态[1:未上架上架,2:上架]*/
 	Status int64 `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
 	/**有效期(卡期限/课单节期限)*/
 	Duration int64 `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`
@@ -1864,7 +1864,7 @@ func NewCreateOrUpdateProductReq() *CreateOrUpdateProductReq {
 		Pic:         "",
 		Description: "",
 		Stock:       0,
-		Status:      0,
+		Status:      1,
 		Duration:    0,
 		Length:      0,
 		Type:        "",
@@ -1891,7 +1891,7 @@ func (p *CreateOrUpdateProductReq) InitDefault() {
 	p.Pic = ""
 	p.Description = ""
 	p.Stock = 0
-	p.Status = 0
+	p.Status = 1
 	p.Duration = 0
 	p.Length = 0
 	p.Type = ""
@@ -1956,7 +1956,7 @@ func (p *CreateOrUpdateProductReq) GetStock() (v int64) {
 	return p.Stock
 }
 
-var CreateOrUpdateProductReq_Status_DEFAULT int64 = 0
+var CreateOrUpdateProductReq_Status_DEFAULT int64 = 1
 
 func (p *CreateOrUpdateProductReq) GetStatus() (v int64) {
 	if !p.IsSetStatus() {

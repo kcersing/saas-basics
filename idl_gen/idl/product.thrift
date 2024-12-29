@@ -53,8 +53,8 @@ struct CreateOrUpdateProductReq {
     4: optional string description ="" (api.raw = "description")
     /**库存*/
     5: optional i64 stock =0 (api.raw = "stock")
-    /**状态[1:正常,2:禁用]*/
-    6: optional i64 status=0  (api.raw = "status")
+    /**状态[1:未上架上架,2:上架]*/
+    6: optional i64 status=1  (api.raw = "status")
     /**有效期(卡期限/课单节期限)*/
     7: optional i64 duration =0 (api.raw = "duration")
     /**课程课时(课)*/
