@@ -114,6 +114,7 @@ func entRoleInfo(entRole ent.Role) *auth.RoleInfo {
 		OrderNo:       entRole.OrderNo,
 		CreatedAt:     createdAt,
 		UpdatedAt:     updatedAt,
+		VenueId:       entRole.VenueID,
 	}
 }
 func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
