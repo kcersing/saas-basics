@@ -73,9 +73,11 @@ type VenueEdges struct {
 	Sms []*VenueSms `json:"sms,omitempty"`
 	// Smslog holds the value of the smslog edge.
 	Smslog []*VenueSmsLog `json:"smslog,omitempty"`
+	// Roles holds the value of the roles edge.
+	Roles []*Role `json:"roles,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 }
 
 // PlacesOrErr returns the Places value or an error if the edge
@@ -130,6 +132,15 @@ func (e VenueEdges) SmslogOrErr() ([]*VenueSmsLog, error) {
 		return e.Smslog, nil
 	}
 	return nil, &NotLoadedError{edge: "smslog"}
+}
+
+// RolesOrErr returns the Roles value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenueEdges) RolesOrErr() ([]*Role, error) {
+	if e.loadedTypes[6] {
+		return e.Roles, nil
+	}
+	return nil, &NotLoadedError{edge: "roles"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -311,6 +322,11 @@ func (v *Venue) QuerySms() *VenueSmsQuery {
 // QuerySmslog queries the "smslog" edge of the Venue entity.
 func (v *Venue) QuerySmslog() *VenueSmsLogQuery {
 	return NewVenueClient(v.config).QuerySmslog(v)
+}
+
+// QueryRoles queries the "roles" edge of the Venue entity.
+func (v *Venue) QueryRoles() *RoleQuery {
+	return NewVenueClient(v.config).QueryRoles(v)
 }
 
 // Update returns a builder for updating this Venue.

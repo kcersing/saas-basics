@@ -63,6 +63,8 @@ definitions:
         type: string
       value:
         type: string
+      venueId:
+        type: integer
     type: object
   banner.BannerInfo:
     properties:
@@ -119,6 +121,8 @@ definitions:
       page:
         type: integer
       pageSize:
+        type: integer
+      venueId:
         type: integer
     type: object
   base.Sales:

@@ -49,6 +49,7 @@ func (Venue) Edges() []ent.Edge {
 
 		edge.To("sms", VenueSms.Type),
 		edge.To("smslog", VenueSmsLog.Type),
+		edge.To("roles", Role.Type),
 	}
 }
 

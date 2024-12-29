@@ -1128,6 +1128,7 @@ var (
 		{Name: "remark", Type: field.TypeString, Comment: "remark | 备注", Default: ""},
 		{Name: "order_no", Type: field.TypeInt64, Comment: "order number | 排序编号", Default: 0},
 		{Name: "apis", Type: field.TypeJSON, Comment: "接口权限列表 | 接口权限列表"},
+		{Name: "venue_id", Type: field.TypeInt64, Comment: "场馆ID", Default: 0},
 	}
 	// SysRolesTable holds the schema information for the "sys_roles" table.
 	SysRolesTable = &schema.Table{
@@ -1711,6 +1712,31 @@ var (
 			},
 		},
 	}
+	// VenueRolesColumns holds the columns for the "venue_roles" table.
+	VenueRolesColumns = []*schema.Column{
+		{Name: "venue_id", Type: field.TypeInt64},
+		{Name: "role_id", Type: field.TypeInt64},
+	}
+	// VenueRolesTable holds the schema information for the "venue_roles" table.
+	VenueRolesTable = &schema.Table{
+		Name:       "venue_roles",
+		Columns:    VenueRolesColumns,
+		PrimaryKey: []*schema.Column{VenueRolesColumns[0], VenueRolesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "venue_roles_venue_id",
+				Columns:    []*schema.Column{VenueRolesColumns[0]},
+				RefColumns: []*schema.Column{VenueColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "venue_roles_role_id",
+				Columns:    []*schema.Column{VenueRolesColumns[1]},
+				RefColumns: []*schema.Column{SysRolesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
@@ -1763,6 +1789,7 @@ var (
 		UserTagsTable,
 		UserVenuesTable,
 		UserRolesTable,
+		VenueRolesTable,
 	}
 )
 
@@ -1965,4 +1992,6 @@ func init() {
 	UserVenuesTable.ForeignKeys[1].RefTable = VenueTable
 	UserRolesTable.ForeignKeys[0].RefTable = SysUsersTable
 	UserRolesTable.ForeignKeys[1].RefTable = SysRolesTable
+	VenueRolesTable.ForeignKeys[0].RefTable = VenueTable
+	VenueRolesTable.ForeignKeys[1].RefTable = SysRolesTable
 }

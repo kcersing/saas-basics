@@ -1058,8 +1058,9 @@ func (p *Ids) String() string {
 }
 
 type PageInfoReq struct {
-	Page     int64 `thrift:"page,1" form:"page" json:"page" query:"page"`
-	PageSize int64 `thrift:"pageSize,2" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Page     int64 `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize int64 `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	VenueId  int64 `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
 }
 
 func NewPageInfoReq() *PageInfoReq {
@@ -1067,25 +1068,59 @@ func NewPageInfoReq() *PageInfoReq {
 
 		Page:     1,
 		PageSize: 100,
+		VenueId:  0,
 	}
 }
 
 func (p *PageInfoReq) InitDefault() {
 	p.Page = 1
 	p.PageSize = 100
+	p.VenueId = 0
 }
 
+var PageInfoReq_Page_DEFAULT int64 = 1
+
 func (p *PageInfoReq) GetPage() (v int64) {
+	if !p.IsSetPage() {
+		return PageInfoReq_Page_DEFAULT
+	}
 	return p.Page
 }
 
+var PageInfoReq_PageSize_DEFAULT int64 = 100
+
 func (p *PageInfoReq) GetPageSize() (v int64) {
+	if !p.IsSetPageSize() {
+		return PageInfoReq_PageSize_DEFAULT
+	}
 	return p.PageSize
+}
+
+var PageInfoReq_VenueId_DEFAULT int64 = 0
+
+func (p *PageInfoReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return PageInfoReq_VenueId_DEFAULT
+	}
+	return p.VenueId
 }
 
 var fieldIDToName_PageInfoReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
+	3: "venueId",
+}
+
+func (p *PageInfoReq) IsSetPage() bool {
+	return p.Page != PageInfoReq_Page_DEFAULT
+}
+
+func (p *PageInfoReq) IsSetPageSize() bool {
+	return p.PageSize != PageInfoReq_PageSize_DEFAULT
+}
+
+func (p *PageInfoReq) IsSetVenueId() bool {
+	return p.VenueId != PageInfoReq_VenueId_DEFAULT
 }
 
 func (p *PageInfoReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1118,6 +1153,14 @@ func (p *PageInfoReq) Read(iprot thrift.TProtocol) (err error) {
 		case 2:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1174,6 +1217,17 @@ func (p *PageInfoReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
+func (p *PageInfoReq) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
 
 func (p *PageInfoReq) Write(oprot thrift.TProtocol) (err error) {
 
@@ -1188,6 +1242,10 @@ func (p *PageInfoReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
 			goto WriteFieldError
 		}
 	}
@@ -1209,14 +1267,16 @@ WriteStructEndError:
 }
 
 func (p *PageInfoReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Page); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPage() {
+		if err = oprot.WriteFieldBegin("page", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Page); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
@@ -1226,20 +1286,41 @@ WriteFieldEndError:
 }
 
 func (p *PageInfoReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+	if p.IsSetPageSize() {
+		if err = oprot.WriteFieldBegin("pageSize", thrift.I64, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.PageSize); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *PageInfoReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
 func (p *PageInfoReq) String() string {

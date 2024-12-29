@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent/menu"
+	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/infras/do"
 	"saas/config"
@@ -47,6 +48,7 @@ func (r Role) Create(req *auth.RoleInfo) error {
 		SetStatus(req.Status).
 		SetRemark(req.Remark).
 		SetOrderNo(req.OrderNo).
+		SetVenueID(req.VenueId).
 		Save(r.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "create Role failed")
@@ -67,6 +69,7 @@ func (r Role) Update(req *auth.RoleInfo) error {
 		SetRemark(req.Remark).
 		SetOrderNo(req.OrderNo).
 		SetUpdatedAt(time.Now()).
+		SetVenueID(req.VenueId).
 		Save(r.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "update Role failed")
@@ -133,6 +136,11 @@ func (r Role) RoleInfoByID(ID int64) (roleInfo *auth.RoleInfo, err error) {
 }
 
 func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total int64, err error) {
+
+	var predicates []predicate.Role
+	if req.VenueId > 0 {
+		predicates = append(predicates, role.VenueIDEQ(req.VenueId))
+	}
 
 	roleEntList, err := r.db.Role.Query().
 		Where(role.Delete(0)).

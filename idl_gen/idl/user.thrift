@@ -98,6 +98,7 @@ struct UserListReq {
     7:  optional i64 roleId=0 (api.raw = "roleId")
     8:  optional i64 status=0 (api.raw = "status")
     9:  optional i64 type=1 (api.raw = "type")
+    10:optional i64 venueId=0 (api.raw = "venueId")
 }
 
 struct SetUserRole{

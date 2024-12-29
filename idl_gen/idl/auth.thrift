@@ -70,6 +70,8 @@ struct RoleInfo {
     9:  optional string updatedAt="" (api.raw = "updatedAt")
     10: optional list<i64> menus={} (api.raw = "menus")
     11: optional list<i64> apis={} (api.raw = "apis")
+
+    12:optional i64 venueId=0 (api.raw = "venueId")
 }
 //日志列表请求数据
 struct LogsListReq {

@@ -46511,6 +46511,8 @@ type RoleMutation struct {
 	addorder_no    *int64
 	apis           *[]int
 	appendapis     []int
+	venue_id       *int64
+	addvenue_id    *int64
 	clearedFields  map[string]struct{}
 	menus          map[int64]struct{}
 	removedmenus   map[int64]struct{}
@@ -46518,6 +46520,9 @@ type RoleMutation struct {
 	users          map[int64]struct{}
 	removedusers   map[int64]struct{}
 	clearedusers   bool
+	venues         map[int64]struct{}
+	removedvenues  map[int64]struct{}
+	clearedvenues  bool
 	done           bool
 	oldValue       func(context.Context) (*Role, error)
 	predicates     []predicate.Role
@@ -47186,6 +47191,62 @@ func (m *RoleMutation) ResetApis() {
 	m.appendapis = nil
 }
 
+// SetVenueID sets the "venue_id" field.
+func (m *RoleMutation) SetVenueID(i int64) {
+	m.venue_id = &i
+	m.addvenue_id = nil
+}
+
+// VenueID returns the value of the "venue_id" field in the mutation.
+func (m *RoleMutation) VenueID() (r int64, exists bool) {
+	v := m.venue_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVenueID returns the old "venue_id" field's value of the Role entity.
+// If the Role object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RoleMutation) OldVenueID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVenueID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVenueID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVenueID: %w", err)
+	}
+	return oldValue.VenueID, nil
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (m *RoleMutation) AddVenueID(i int64) {
+	if m.addvenue_id != nil {
+		*m.addvenue_id += i
+	} else {
+		m.addvenue_id = &i
+	}
+}
+
+// AddedVenueID returns the value that was added to the "venue_id" field in this mutation.
+func (m *RoleMutation) AddedVenueID() (r int64, exists bool) {
+	v := m.addvenue_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetVenueID resets all changes to the "venue_id" field.
+func (m *RoleMutation) ResetVenueID() {
+	m.venue_id = nil
+	m.addvenue_id = nil
+}
+
 // AddMenuIDs adds the "menus" edge to the Menu entity by ids.
 func (m *RoleMutation) AddMenuIDs(ids ...int64) {
 	if m.menus == nil {
@@ -47294,6 +47355,60 @@ func (m *RoleMutation) ResetUsers() {
 	m.removedusers = nil
 }
 
+// AddVenueIDs adds the "venues" edge to the Venue entity by ids.
+func (m *RoleMutation) AddVenueIDs(ids ...int64) {
+	if m.venues == nil {
+		m.venues = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.venues[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVenues clears the "venues" edge to the Venue entity.
+func (m *RoleMutation) ClearVenues() {
+	m.clearedvenues = true
+}
+
+// VenuesCleared reports if the "venues" edge to the Venue entity was cleared.
+func (m *RoleMutation) VenuesCleared() bool {
+	return m.clearedvenues
+}
+
+// RemoveVenueIDs removes the "venues" edge to the Venue entity by IDs.
+func (m *RoleMutation) RemoveVenueIDs(ids ...int64) {
+	if m.removedvenues == nil {
+		m.removedvenues = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.venues, ids[i])
+		m.removedvenues[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVenues returns the removed IDs of the "venues" edge to the Venue entity.
+func (m *RoleMutation) RemovedVenuesIDs() (ids []int64) {
+	for id := range m.removedvenues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VenuesIDs returns the "venues" edge IDs in the mutation.
+func (m *RoleMutation) VenuesIDs() (ids []int64) {
+	for id := range m.venues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVenues resets all changes to the "venues" edge.
+func (m *RoleMutation) ResetVenues() {
+	m.venues = nil
+	m.clearedvenues = false
+	m.removedvenues = nil
+}
+
 // Where appends a list predicates to the RoleMutation builder.
 func (m *RoleMutation) Where(ps ...predicate.Role) {
 	m.predicates = append(m.predicates, ps...)
@@ -47328,7 +47443,7 @@ func (m *RoleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RoleMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, role.FieldCreatedAt)
 	}
@@ -47362,6 +47477,9 @@ func (m *RoleMutation) Fields() []string {
 	if m.apis != nil {
 		fields = append(fields, role.FieldApis)
 	}
+	if m.venue_id != nil {
+		fields = append(fields, role.FieldVenueID)
+	}
 	return fields
 }
 
@@ -47392,6 +47510,8 @@ func (m *RoleMutation) Field(name string) (ent.Value, bool) {
 		return m.OrderNo()
 	case role.FieldApis:
 		return m.Apis()
+	case role.FieldVenueID:
+		return m.VenueID()
 	}
 	return nil, false
 }
@@ -47423,6 +47543,8 @@ func (m *RoleMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldOrderNo(ctx)
 	case role.FieldApis:
 		return m.OldApis(ctx)
+	case role.FieldVenueID:
+		return m.OldVenueID(ctx)
 	}
 	return nil, fmt.Errorf("unknown Role field %s", name)
 }
@@ -47509,6 +47631,13 @@ func (m *RoleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetApis(v)
 		return nil
+	case role.FieldVenueID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVenueID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Role field %s", name)
 }
@@ -47529,6 +47658,9 @@ func (m *RoleMutation) AddedFields() []string {
 	if m.addorder_no != nil {
 		fields = append(fields, role.FieldOrderNo)
 	}
+	if m.addvenue_id != nil {
+		fields = append(fields, role.FieldVenueID)
+	}
 	return fields
 }
 
@@ -47545,6 +47677,8 @@ func (m *RoleMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedStatus()
 	case role.FieldOrderNo:
 		return m.AddedOrderNo()
+	case role.FieldVenueID:
+		return m.AddedVenueID()
 	}
 	return nil, false
 }
@@ -47581,6 +47715,13 @@ func (m *RoleMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddOrderNo(v)
+		return nil
+	case role.FieldVenueID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddVenueID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Role numeric field %s", name)
@@ -47675,18 +47816,24 @@ func (m *RoleMutation) ResetField(name string) error {
 	case role.FieldApis:
 		m.ResetApis()
 		return nil
+	case role.FieldVenueID:
+		m.ResetVenueID()
+		return nil
 	}
 	return fmt.Errorf("unknown Role field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RoleMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.menus != nil {
 		edges = append(edges, role.EdgeMenus)
 	}
 	if m.users != nil {
 		edges = append(edges, role.EdgeUsers)
+	}
+	if m.venues != nil {
+		edges = append(edges, role.EdgeVenues)
 	}
 	return edges
 }
@@ -47707,18 +47854,27 @@ func (m *RoleMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case role.EdgeVenues:
+		ids := make([]ent.Value, 0, len(m.venues))
+		for id := range m.venues {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RoleMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedmenus != nil {
 		edges = append(edges, role.EdgeMenus)
 	}
 	if m.removedusers != nil {
 		edges = append(edges, role.EdgeUsers)
+	}
+	if m.removedvenues != nil {
+		edges = append(edges, role.EdgeVenues)
 	}
 	return edges
 }
@@ -47739,18 +47895,27 @@ func (m *RoleMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case role.EdgeVenues:
+		ids := make([]ent.Value, 0, len(m.removedvenues))
+		for id := range m.removedvenues {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RoleMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedmenus {
 		edges = append(edges, role.EdgeMenus)
 	}
 	if m.clearedusers {
 		edges = append(edges, role.EdgeUsers)
+	}
+	if m.clearedvenues {
+		edges = append(edges, role.EdgeVenues)
 	}
 	return edges
 }
@@ -47763,6 +47928,8 @@ func (m *RoleMutation) EdgeCleared(name string) bool {
 		return m.clearedmenus
 	case role.EdgeUsers:
 		return m.clearedusers
+	case role.EdgeVenues:
+		return m.clearedvenues
 	}
 	return false
 }
@@ -47784,6 +47951,9 @@ func (m *RoleMutation) ResetEdge(name string) error {
 		return nil
 	case role.EdgeUsers:
 		m.ResetUsers()
+		return nil
+	case role.EdgeVenues:
+		m.ResetVenues()
 		return nil
 	}
 	return fmt.Errorf("unknown Role edge %s", name)
@@ -57732,6 +57902,9 @@ type VenueMutation struct {
 	smslog              map[int64]struct{}
 	removedsmslog       map[int64]struct{}
 	clearedsmslog       bool
+	roles               map[int64]struct{}
+	removedroles        map[int64]struct{}
+	clearedroles        bool
 	done                bool
 	oldValue            func(context.Context) (*Venue, error)
 	predicates          []predicate.Venue
@@ -59077,6 +59250,60 @@ func (m *VenueMutation) ResetSmslog() {
 	m.removedsmslog = nil
 }
 
+// AddRoleIDs adds the "roles" edge to the Role entity by ids.
+func (m *VenueMutation) AddRoleIDs(ids ...int64) {
+	if m.roles == nil {
+		m.roles = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.roles[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRoles clears the "roles" edge to the Role entity.
+func (m *VenueMutation) ClearRoles() {
+	m.clearedroles = true
+}
+
+// RolesCleared reports if the "roles" edge to the Role entity was cleared.
+func (m *VenueMutation) RolesCleared() bool {
+	return m.clearedroles
+}
+
+// RemoveRoleIDs removes the "roles" edge to the Role entity by IDs.
+func (m *VenueMutation) RemoveRoleIDs(ids ...int64) {
+	if m.removedroles == nil {
+		m.removedroles = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.roles, ids[i])
+		m.removedroles[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRoles returns the removed IDs of the "roles" edge to the Role entity.
+func (m *VenueMutation) RemovedRolesIDs() (ids []int64) {
+	for id := range m.removedroles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RolesIDs returns the "roles" edge IDs in the mutation.
+func (m *VenueMutation) RolesIDs() (ids []int64) {
+	for id := range m.roles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRoles resets all changes to the "roles" edge.
+func (m *VenueMutation) ResetRoles() {
+	m.roles = nil
+	m.clearedroles = false
+	m.removedroles = nil
+}
+
 // Where appends a list predicates to the VenueMutation builder.
 func (m *VenueMutation) Where(ps ...predicate.Venue) {
 	m.predicates = append(m.predicates, ps...)
@@ -59626,7 +59853,7 @@ func (m *VenueMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VenueMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.places != nil {
 		edges = append(edges, venue.EdgePlaces)
 	}
@@ -59644,6 +59871,9 @@ func (m *VenueMutation) AddedEdges() []string {
 	}
 	if m.smslog != nil {
 		edges = append(edges, venue.EdgeSmslog)
+	}
+	if m.roles != nil {
+		edges = append(edges, venue.EdgeRoles)
 	}
 	return edges
 }
@@ -59688,13 +59918,19 @@ func (m *VenueMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case venue.EdgeRoles:
+		ids := make([]ent.Value, 0, len(m.roles))
+		for id := range m.roles {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VenueMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedplaces != nil {
 		edges = append(edges, venue.EdgePlaces)
 	}
@@ -59712,6 +59948,9 @@ func (m *VenueMutation) RemovedEdges() []string {
 	}
 	if m.removedsmslog != nil {
 		edges = append(edges, venue.EdgeSmslog)
+	}
+	if m.removedroles != nil {
+		edges = append(edges, venue.EdgeRoles)
 	}
 	return edges
 }
@@ -59756,13 +59995,19 @@ func (m *VenueMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case venue.EdgeRoles:
+		ids := make([]ent.Value, 0, len(m.removedroles))
+		for id := range m.removedroles {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VenueMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedplaces {
 		edges = append(edges, venue.EdgePlaces)
 	}
@@ -59780,6 +60025,9 @@ func (m *VenueMutation) ClearedEdges() []string {
 	}
 	if m.clearedsmslog {
 		edges = append(edges, venue.EdgeSmslog)
+	}
+	if m.clearedroles {
+		edges = append(edges, venue.EdgeRoles)
 	}
 	return edges
 }
@@ -59800,6 +60048,8 @@ func (m *VenueMutation) EdgeCleared(name string) bool {
 		return m.clearedsms
 	case venue.EdgeSmslog:
 		return m.clearedsmslog
+	case venue.EdgeRoles:
+		return m.clearedroles
 	}
 	return false
 }
@@ -59833,6 +60083,9 @@ func (m *VenueMutation) ResetEdge(name string) error {
 		return nil
 	case venue.EdgeSmslog:
 		m.ResetSmslog()
+		return nil
+	case venue.EdgeRoles:
+		m.ResetRoles()
 		return nil
 	}
 	return fmt.Errorf("unknown Venue edge %s", name)

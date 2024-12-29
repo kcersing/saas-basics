@@ -1211,6 +1211,10 @@ func init() {
 	roleDescApis := roleFields[5].Descriptor()
 	// role.DefaultApis holds the default value on creation for the apis field.
 	role.DefaultApis = roleDescApis.Default.([]int)
+	// roleDescVenueID is the schema descriptor for venue_id field.
+	roleDescVenueID := roleFields[6].Descriptor()
+	// role.DefaultVenueID holds the default value on creation for the venue_id field.
+	role.DefaultVenueID = roleDescVenueID.Default.(int64)
 	scheduleMixin := schema.Schedule{}.Mixin()
 	scheduleMixinFields0 := scheduleMixin[0].Fields()
 	_ = scheduleMixinFields0

@@ -458,6 +458,7 @@ type RoleInfo struct {
 	UpdatedAt     string  `thrift:"updatedAt,9,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 	Menus         []int64 `thrift:"menus,10,optional" form:"menus" json:"menus" query:"menus"`
 	Apis          []int64 `thrift:"apis,11,optional" form:"apis" json:"apis" query:"apis"`
+	VenueId       int64   `thrift:"venueId,12,optional" form:"venueId" json:"venueId" query:"venueId"`
 }
 
 func NewRoleInfo() *RoleInfo {
@@ -474,6 +475,7 @@ func NewRoleInfo() *RoleInfo {
 		UpdatedAt:     "",
 		Menus:         []int64{},
 		Apis:          []int64{},
+		VenueId:       0,
 	}
 }
 
@@ -489,6 +491,7 @@ func (p *RoleInfo) InitDefault() {
 	p.UpdatedAt = ""
 	p.Menus = []int64{}
 	p.Apis = []int64{}
+	p.VenueId = 0
 }
 
 var RoleInfo_ID_DEFAULT int64 = 0
@@ -590,6 +593,15 @@ func (p *RoleInfo) GetApis() (v []int64) {
 	return p.Apis
 }
 
+var RoleInfo_VenueId_DEFAULT int64 = 0
+
+func (p *RoleInfo) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return RoleInfo_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
 var fieldIDToName_RoleInfo = map[int16]string{
 	1:  "id",
 	2:  "name",
@@ -602,6 +614,7 @@ var fieldIDToName_RoleInfo = map[int16]string{
 	9:  "updatedAt",
 	10: "menus",
 	11: "apis",
+	12: "venueId",
 }
 
 func (p *RoleInfo) IsSetID() bool {
@@ -646,6 +659,10 @@ func (p *RoleInfo) IsSetMenus() bool {
 
 func (p *RoleInfo) IsSetApis() bool {
 	return p.Apis != nil
+}
+
+func (p *RoleInfo) IsSetVenueId() bool {
+	return p.VenueId != RoleInfo_VenueId_DEFAULT
 }
 
 func (p *RoleInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -750,6 +767,14 @@ func (p *RoleInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 11:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField11(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 12:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField12(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -929,6 +954,17 @@ func (p *RoleInfo) ReadField11(iprot thrift.TProtocol) error {
 	p.Apis = _field
 	return nil
 }
+func (p *RoleInfo) ReadField12(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
 
 func (p *RoleInfo) Write(oprot thrift.TProtocol) (err error) {
 
@@ -979,6 +1015,10 @@ func (p *RoleInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField11(oprot); err != nil {
 			fieldId = 11
+			goto WriteFieldError
+		}
+		if err = p.writeField12(oprot); err != nil {
+			fieldId = 12
 			goto WriteFieldError
 		}
 	}
@@ -1222,6 +1262,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 11 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 11 end error: ", p), err)
+}
+
+func (p *RoleInfo) writeField12(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 12); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 12 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 12 end error: ", p), err)
 }
 
 func (p *RoleInfo) String() string {

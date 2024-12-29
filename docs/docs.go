@@ -3621,6 +3621,9 @@ const docTemplate = `{
                 },
                 "value": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -3709,6 +3712,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "pageSize": {
+                    "type": "integer"
+                },
+                "venueId": {
                     "type": "integer"
                 }
             }

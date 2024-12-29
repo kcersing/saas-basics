@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/user"
+	"saas/biz/dal/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -213,6 +214,27 @@ func (ru *RoleUpdate) AppendApis(i []int) *RoleUpdate {
 	return ru
 }
 
+// SetVenueID sets the "venue_id" field.
+func (ru *RoleUpdate) SetVenueID(i int64) *RoleUpdate {
+	ru.mutation.ResetVenueID()
+	ru.mutation.SetVenueID(i)
+	return ru
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (ru *RoleUpdate) SetNillableVenueID(i *int64) *RoleUpdate {
+	if i != nil {
+		ru.SetVenueID(*i)
+	}
+	return ru
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (ru *RoleUpdate) AddVenueID(i int64) *RoleUpdate {
+	ru.mutation.AddVenueID(i)
+	return ru
+}
+
 // AddMenuIDs adds the "menus" edge to the Menu entity by IDs.
 func (ru *RoleUpdate) AddMenuIDs(ids ...int64) *RoleUpdate {
 	ru.mutation.AddMenuIDs(ids...)
@@ -241,6 +263,21 @@ func (ru *RoleUpdate) AddUsers(u ...*User) *RoleUpdate {
 		ids[i] = u[i].ID
 	}
 	return ru.AddUserIDs(ids...)
+}
+
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (ru *RoleUpdate) AddVenueIDs(ids ...int64) *RoleUpdate {
+	ru.mutation.AddVenueIDs(ids...)
+	return ru
+}
+
+// AddVenues adds the "venues" edges to the Venue entity.
+func (ru *RoleUpdate) AddVenues(v ...*Venue) *RoleUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ru.AddVenueIDs(ids...)
 }
 
 // Mutation returns the RoleMutation object of the builder.
@@ -288,6 +325,27 @@ func (ru *RoleUpdate) RemoveUsers(u ...*User) *RoleUpdate {
 		ids[i] = u[i].ID
 	}
 	return ru.RemoveUserIDs(ids...)
+}
+
+// ClearVenues clears all "venues" edges to the Venue entity.
+func (ru *RoleUpdate) ClearVenues() *RoleUpdate {
+	ru.mutation.ClearVenues()
+	return ru
+}
+
+// RemoveVenueIDs removes the "venues" edge to Venue entities by IDs.
+func (ru *RoleUpdate) RemoveVenueIDs(ids ...int64) *RoleUpdate {
+	ru.mutation.RemoveVenueIDs(ids...)
+	return ru
+}
+
+// RemoveVenues removes "venues" edges to Venue entities.
+func (ru *RoleUpdate) RemoveVenues(v ...*Venue) *RoleUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ru.RemoveVenueIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -397,6 +455,12 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			sqljson.Append(u, role.FieldApis, value)
 		})
 	}
+	if value, ok := ru.mutation.VenueID(); ok {
+		_spec.SetField(role.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := ru.mutation.AddedVenueID(); ok {
+		_spec.AddField(role.FieldVenueID, field.TypeInt64, value)
+	}
 	if ru.mutation.MenusCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -480,6 +544,51 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   role.VenuesTable,
+			Columns: role.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedVenuesIDs(); len(nodes) > 0 && !ru.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   role.VenuesTable,
+			Columns: role.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   role.VenuesTable,
+			Columns: role.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -689,6 +798,27 @@ func (ruo *RoleUpdateOne) AppendApis(i []int) *RoleUpdateOne {
 	return ruo
 }
 
+// SetVenueID sets the "venue_id" field.
+func (ruo *RoleUpdateOne) SetVenueID(i int64) *RoleUpdateOne {
+	ruo.mutation.ResetVenueID()
+	ruo.mutation.SetVenueID(i)
+	return ruo
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (ruo *RoleUpdateOne) SetNillableVenueID(i *int64) *RoleUpdateOne {
+	if i != nil {
+		ruo.SetVenueID(*i)
+	}
+	return ruo
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (ruo *RoleUpdateOne) AddVenueID(i int64) *RoleUpdateOne {
+	ruo.mutation.AddVenueID(i)
+	return ruo
+}
+
 // AddMenuIDs adds the "menus" edge to the Menu entity by IDs.
 func (ruo *RoleUpdateOne) AddMenuIDs(ids ...int64) *RoleUpdateOne {
 	ruo.mutation.AddMenuIDs(ids...)
@@ -717,6 +847,21 @@ func (ruo *RoleUpdateOne) AddUsers(u ...*User) *RoleUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return ruo.AddUserIDs(ids...)
+}
+
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (ruo *RoleUpdateOne) AddVenueIDs(ids ...int64) *RoleUpdateOne {
+	ruo.mutation.AddVenueIDs(ids...)
+	return ruo
+}
+
+// AddVenues adds the "venues" edges to the Venue entity.
+func (ruo *RoleUpdateOne) AddVenues(v ...*Venue) *RoleUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ruo.AddVenueIDs(ids...)
 }
 
 // Mutation returns the RoleMutation object of the builder.
@@ -764,6 +909,27 @@ func (ruo *RoleUpdateOne) RemoveUsers(u ...*User) *RoleUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return ruo.RemoveUserIDs(ids...)
+}
+
+// ClearVenues clears all "venues" edges to the Venue entity.
+func (ruo *RoleUpdateOne) ClearVenues() *RoleUpdateOne {
+	ruo.mutation.ClearVenues()
+	return ruo
+}
+
+// RemoveVenueIDs removes the "venues" edge to Venue entities by IDs.
+func (ruo *RoleUpdateOne) RemoveVenueIDs(ids ...int64) *RoleUpdateOne {
+	ruo.mutation.RemoveVenueIDs(ids...)
+	return ruo
+}
+
+// RemoveVenues removes "venues" edges to Venue entities.
+func (ruo *RoleUpdateOne) RemoveVenues(v ...*Venue) *RoleUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ruo.RemoveVenueIDs(ids...)
 }
 
 // Where appends a list predicates to the RoleUpdate builder.
@@ -903,6 +1069,12 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			sqljson.Append(u, role.FieldApis, value)
 		})
 	}
+	if value, ok := ruo.mutation.VenueID(); ok {
+		_spec.SetField(role.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := ruo.mutation.AddedVenueID(); ok {
+		_spec.AddField(role.FieldVenueID, field.TypeInt64, value)
+	}
 	if ruo.mutation.MenusCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -986,6 +1158,51 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   role.VenuesTable,
+			Columns: role.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedVenuesIDs(); len(nodes) > 0 && !ruo.mutation.VenuesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   role.VenuesTable,
+			Columns: role.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   role.VenuesTable,
+			Columns: role.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

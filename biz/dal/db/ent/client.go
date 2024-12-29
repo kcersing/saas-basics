@@ -5632,6 +5632,22 @@ func (c *RoleClient) QueryUsers(r *Role) *UserQuery {
 	return query
 }
 
+// QueryVenues queries the venues edge of a Role.
+func (c *RoleClient) QueryVenues(r *Role) *VenueQuery {
+	query := (&VenueClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(role.Table, role.FieldID, id),
+			sqlgraph.To(venue.Table, venue.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, role.VenuesTable, role.VenuesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *RoleClient) Hooks() []Hook {
 	return c.hooks.Role
@@ -6860,6 +6876,22 @@ func (c *VenueClient) QuerySmslog(v *Venue) *VenueSmsLogQuery {
 			sqlgraph.From(venue.Table, venue.FieldID, id),
 			sqlgraph.To(venuesmslog.Table, venuesmslog.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.SmslogTable, venue.SmslogColumn),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRoles queries the roles edge of a Venue.
+func (c *VenueClient) QueryRoles(v *Venue) *RoleQuery {
+	query := (&RoleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(venue.Table, venue.FieldID, id),
+			sqlgraph.To(role.Table, role.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, venue.RolesTable, venue.RolesPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil

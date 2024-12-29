@@ -41,6 +41,8 @@ type Role struct {
 	OrderNo int64 `json:"order_no,omitempty"`
 	// 接口权限列表 | 接口权限列表
 	Apis []int `json:"apis,omitempty"`
+	// 场馆ID
+	VenueID int64 `json:"venue_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RoleQuery when eager-loading is set.
 	Edges        RoleEdges `json:"edges"`
@@ -53,9 +55,11 @@ type RoleEdges struct {
 	Menus []*Menu `json:"menus,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
+	// Venues holds the value of the venues edge.
+	Venues []*Venue `json:"venues,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // MenusOrErr returns the Menus value or an error if the edge
@@ -76,6 +80,15 @@ func (e RoleEdges) UsersOrErr() ([]*User, error) {
 	return nil, &NotLoadedError{edge: "users"}
 }
 
+// VenuesOrErr returns the Venues value or an error if the edge
+// was not loaded in eager-loading.
+func (e RoleEdges) VenuesOrErr() ([]*Venue, error) {
+	if e.loadedTypes[2] {
+		return e.Venues, nil
+	}
+	return nil, &NotLoadedError{edge: "venues"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Role) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -83,7 +96,7 @@ func (*Role) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case role.FieldApis:
 			values[i] = new([]byte)
-		case role.FieldID, role.FieldDelete, role.FieldCreatedID, role.FieldStatus, role.FieldOrderNo:
+		case role.FieldID, role.FieldDelete, role.FieldCreatedID, role.FieldStatus, role.FieldOrderNo, role.FieldVenueID:
 			values[i] = new(sql.NullInt64)
 		case role.FieldName, role.FieldValue, role.FieldDefaultRouter, role.FieldRemark:
 			values[i] = new(sql.NullString)
@@ -178,6 +191,12 @@ func (r *Role) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field apis: %w", err)
 				}
 			}
+		case role.FieldVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
+			} else if value.Valid {
+				r.VenueID = value.Int64
+			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
 		}
@@ -199,6 +218,11 @@ func (r *Role) QueryMenus() *MenuQuery {
 // QueryUsers queries the "users" edge of the Role entity.
 func (r *Role) QueryUsers() *UserQuery {
 	return NewRoleClient(r.config).QueryUsers(r)
+}
+
+// QueryVenues queries the "venues" edge of the Role entity.
+func (r *Role) QueryVenues() *VenueQuery {
+	return NewRoleClient(r.config).QueryVenues(r)
 }
 
 // Update returns a builder for updating this Role.
@@ -256,6 +280,9 @@ func (r *Role) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("apis=")
 	builder.WriteString(fmt.Sprintf("%v", r.Apis))
+	builder.WriteString(", ")
+	builder.WriteString("venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", r.VenueID))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -24,6 +24,7 @@ func (Role) Fields() []ent.Field {
 		field.Ints("apis").Default([]int{}).
 			//SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Comment("接口权限列表 | 接口权限列表"),
+		field.Int64("venue_id").Default(0).Comment("场馆ID"),
 	}
 }
 
@@ -38,6 +39,8 @@ func (Role) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("menus", Menu.Type),
 		edge.From("users", User.Type).Ref("roles"),
+
+		edge.From("venues", Venue.Type).Ref("roles"),
 	}
 }
 

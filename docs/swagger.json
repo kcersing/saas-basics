@@ -3610,6 +3610,9 @@
                 },
                 "value": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -3698,6 +3701,9 @@
                     "type": "integer"
                 },
                 "pageSize": {
+                    "type": "integer"
+                },
+                "venueId": {
                     "type": "integer"
                 }
             }

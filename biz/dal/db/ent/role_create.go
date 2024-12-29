@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/user"
+	"saas/biz/dal/db/ent/venue"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -152,6 +153,20 @@ func (rc *RoleCreate) SetApis(i []int) *RoleCreate {
 	return rc
 }
 
+// SetVenueID sets the "venue_id" field.
+func (rc *RoleCreate) SetVenueID(i int64) *RoleCreate {
+	rc.mutation.SetVenueID(i)
+	return rc
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (rc *RoleCreate) SetNillableVenueID(i *int64) *RoleCreate {
+	if i != nil {
+		rc.SetVenueID(*i)
+	}
+	return rc
+}
+
 // SetID sets the "id" field.
 func (rc *RoleCreate) SetID(i int64) *RoleCreate {
 	rc.mutation.SetID(i)
@@ -186,6 +201,21 @@ func (rc *RoleCreate) AddUsers(u ...*User) *RoleCreate {
 		ids[i] = u[i].ID
 	}
 	return rc.AddUserIDs(ids...)
+}
+
+// AddVenueIDs adds the "venues" edge to the Venue entity by IDs.
+func (rc *RoleCreate) AddVenueIDs(ids ...int64) *RoleCreate {
+	rc.mutation.AddVenueIDs(ids...)
+	return rc
+}
+
+// AddVenues adds the "venues" edges to the Venue entity.
+func (rc *RoleCreate) AddVenues(v ...*Venue) *RoleCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return rc.AddVenueIDs(ids...)
 }
 
 // Mutation returns the RoleMutation object of the builder.
@@ -259,6 +289,10 @@ func (rc *RoleCreate) defaults() {
 		v := role.DefaultApis
 		rc.mutation.SetApis(v)
 	}
+	if _, ok := rc.mutation.VenueID(); !ok {
+		v := role.DefaultVenueID
+		rc.mutation.SetVenueID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -280,6 +314,9 @@ func (rc *RoleCreate) check() error {
 	}
 	if _, ok := rc.mutation.Apis(); !ok {
 		return &ValidationError{Name: "apis", err: errors.New(`ent: missing required field "Role.apis"`)}
+	}
+	if _, ok := rc.mutation.VenueID(); !ok {
+		return &ValidationError{Name: "venue_id", err: errors.New(`ent: missing required field "Role.venue_id"`)}
 	}
 	return nil
 }
@@ -357,6 +394,10 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_spec.SetField(role.FieldApis, field.TypeJSON, value)
 		_node.Apis = value
 	}
+	if value, ok := rc.mutation.VenueID(); ok {
+		_spec.SetField(role.FieldVenueID, field.TypeInt64, value)
+		_node.VenueID = value
+	}
 	if nodes := rc.mutation.MenusIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -382,6 +423,22 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.VenuesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   role.VenuesTable,
+			Columns: role.VenuesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
