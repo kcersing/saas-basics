@@ -1818,7 +1818,7 @@ type CreateOrUpdateProductReq struct {
 	Description string `thrift:"description,4,optional" form:"description" json:"description" query:"description"`
 	/**库存*/
 	Stock int64 `thrift:"stock,5,optional" form:"stock" json:"stock" query:"stock"`
-	/**状态[1:未上架上架,2:上架]*/
+	/**状态[1:未上架,2:上架]*/
 	Status int64 `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
 	/**有效期(卡期限/课单节期限)*/
 	Duration int64 `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`

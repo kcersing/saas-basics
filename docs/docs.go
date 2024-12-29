@@ -4788,7 +4788,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "description": "*状态[1:未上架上架,2:上架]",
+                    "description": "*状态[1:未上架,2:上架]",
                     "type": "integer"
                 },
                 "stock": {
