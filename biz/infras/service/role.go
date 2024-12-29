@@ -141,9 +141,9 @@ func (r Role) List(req *base.PageInfoReq) (roleInfoList []*auth.RoleInfo, total 
 	if req.VenueId > 0 {
 		predicates = append(predicates, role.VenueIDEQ(req.VenueId))
 	}
-
+	predicates = append(predicates, role.Delete(0))
 	roleEntList, err := r.db.Role.Query().
-		Where(role.Delete(0)).
+		Where(predicates...).
 		Order(ent.Asc(role.FieldOrderNo)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(r.ctx)
