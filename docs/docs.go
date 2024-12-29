@@ -4742,7 +4742,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "isCourse": {
-                    "description": "*课程 1支持2不支持",
+                    "description": "*课程 课程 1不限2指定",
                     "type": "integer"
                 },
                 "isLessons": {

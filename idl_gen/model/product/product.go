@@ -42,7 +42,7 @@ type ProductInfo struct {
 	Price float64 `thrift:"price,25,optional" form:"price" json:"price" query:"price"`
 	/**次数(次卡)*/
 	Times int64 `thrift:"times,26,optional" form:"times" json:"times" query:"times"`
-	/**课程 1支持2不支持*/
+	/**课程 课程 1不限2指定*/
 	IsCourse int64 `thrift:"isCourse,27,optional" form:"isCourse" json:"isCourse" query:"isCourse"`
 	/**课程-数组*/
 	Courses []*base.CourseList `thrift:"courses,28,optional" form:"courses" json:"courses" query:"courses"`
@@ -1850,7 +1850,7 @@ type CreateOrUpdateProductReq struct {
 	Price float64 `thrift:"price,21,optional" form:"price" json:"price" query:"price"`
 	/**次数(次卡)*/
 	Times int64 `thrift:"times,22,optional" form:"times" json:"times" query:"times"`
-	/**课程 1支持2不支持*/
+	/**课程 课程 1不限2指定*/
 	IsCourse int64 `thrift:"isCourse,23,optional" form:"isCourse" json:"isCourse" query:"isCourse"`
 	/**课程-数组*/
 	Courses []*base.CourseList `thrift:"courses,24,optional" form:"courses" json:"courses" query:"courses"`

@@ -802,7 +802,7 @@ definitions:
         description: '*销售方式 1会员端'
         type: integer
       isCourse:
-        description: '*课程 1支持2不支持'
+        description: '*课程 课程 1不限2指定'
         type: integer
       isLessons:
         description: '*团课预约 1支持2不支持'
