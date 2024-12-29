@@ -1831,7 +1831,7 @@ type CreateOrUpdateProductReq struct {
 	/**销售信息数组(多个/课价格信息)*/
 	Sales []*base.Sales `thrift:"sales,11,optional" form:"sales" json:"sales" query:"sales"`
 	/**销售方式 1会员端*/
-	IsSales int64 `thrift:"is_sales,12,optional" form:"is_sales" json:"is_sales" query:"is_sales"`
+	IsSales int64 `thrift:"isSales,12,optional" form:"isSales" json:"isSales" query:"isSales"`
 	/**销售开始时间*/
 	SignSalesAt string `thrift:"signSalesAt,13,optional" form:"signSalesAt" json:"signSalesAt" query:"signSalesAt"`
 	/**销售结束时间*/
@@ -1870,7 +1870,7 @@ func NewCreateOrUpdateProductReq() *CreateOrUpdateProductReq {
 		Type:        "",
 		Deadline:    0,
 		Sales:       []*base.Sales{},
-		IsSales:     1,
+		IsSales:     0,
 		SignSalesAt: "",
 		EndSalesAt:  "",
 		TagId:       []int64{},
@@ -1897,7 +1897,7 @@ func (p *CreateOrUpdateProductReq) InitDefault() {
 	p.Type = ""
 	p.Deadline = 0
 	p.Sales = []*base.Sales{}
-	p.IsSales = 1
+	p.IsSales = 0
 	p.SignSalesAt = ""
 	p.EndSalesAt = ""
 	p.TagId = []int64{}
@@ -2010,7 +2010,7 @@ func (p *CreateOrUpdateProductReq) GetSales() (v []*base.Sales) {
 	return p.Sales
 }
 
-var CreateOrUpdateProductReq_IsSales_DEFAULT int64 = 1
+var CreateOrUpdateProductReq_IsSales_DEFAULT int64 = 0
 
 func (p *CreateOrUpdateProductReq) GetIsSales() (v int64) {
 	if !p.IsSetIsSales() {
@@ -2130,7 +2130,7 @@ var fieldIDToName_CreateOrUpdateProductReq = map[int16]string{
 	9:  "type",
 	10: "deadline",
 	11: "sales",
-	12: "is_sales",
+	12: "isSales",
 	13: "signSalesAt",
 	14: "endSalesAt",
 	16: "tagId",
@@ -3118,7 +3118,7 @@ WriteFieldEndError:
 
 func (p *CreateOrUpdateProductReq) writeField12(oprot thrift.TProtocol) (err error) {
 	if p.IsSetIsSales() {
-		if err = oprot.WriteFieldBegin("is_sales", thrift.I64, 12); err != nil {
+		if err = oprot.WriteFieldBegin("isSales", thrift.I64, 12); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteI64(p.IsSales); err != nil {
