@@ -37,8 +37,11 @@ func (b Bootcamp) CreateBootcamp(req bootcamp.BootcampInfo) error {
 
 	var createdId int64
 	userId, exist := b.c.Get("userId")
-	if !exist || userId == nil {
-		createdId = userId.(int64)
+	if exist || userId != nil {
+		uId, ok := userId.(string)
+		if ok {
+			createdId, _ = strconv.ParseInt(uId, 10, 64)
+		}
 	}
 	_, err := b.db.Bootcamp.Create().
 		SetName(req.Name).

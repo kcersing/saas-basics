@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
@@ -33,9 +32,11 @@ type Product struct {
 func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 	var createdId int64
 	userId, exist := p.c.Get("userId")
-	hlog.Info(userId)
-	if !exist || userId == nil {
-		createdId = userId.(int64)
+	if exist || userId != nil {
+		uId, ok := userId.(string)
+		if ok {
+			createdId, _ = strconv.ParseInt(uId, 10, 64)
+		}
 	}
 	signSalesAt, _ := time.Parse(time.DateTime, req.SignSalesAt)
 	endSalesAt, _ := time.Parse(time.DateTime, req.EndSalesAt)
@@ -96,11 +97,11 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 }
 
 func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
-	var createdId int64
-	userId, exist := p.c.Get("userId")
-	if !exist || userId == nil {
-		createdId = userId.(int64)
-	}
+	//var createdId int64
+	//userId, exist := p.c.Get("userId")
+	//	if exist || userId != nil {
+	//	createdId = userId.(int64)
+	//}
 	signSalesAt, _ := time.Parse(time.DateTime, req.SignSalesAt)
 	endSalesAt, _ := time.Parse(time.DateTime, req.EndSalesAt)
 	_, err := p.db.Product.Update().
@@ -118,7 +119,7 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 		SetIsSales(req.IsSales).
 		SetSignSalesAt(signSalesAt).
 		SetEndSalesAt(endSalesAt).
-		SetCreatedID(createdId).
+		//SetCreatedID(createdId).
 		AddTagIDs(req.TagId...).
 		AddContractIDs(req.ContractId...).
 		SetIsLessons(req.IsLessons).

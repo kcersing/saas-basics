@@ -39,8 +39,11 @@ func (c Community) CreateCommunity(req community.CommunityInfo) error {
 
 	var createdId int64
 	userId, exist := c.c.Get("userId")
-	if !exist || userId == nil {
-		createdId = userId.(int64)
+	if exist || userId != nil {
+		uId, ok := userId.(string)
+		if ok {
+			createdId, _ = strconv.ParseInt(uId, 10, 64)
+		}
 	}
 	_, err := c.db.Community.Create().
 		SetName(req.Name).
