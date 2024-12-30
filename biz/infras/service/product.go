@@ -203,7 +203,9 @@ func (p Product) ProductList(req *product.ProductListReq) (resp []*product.Produ
 	if req.Type != "" {
 		predicates = append(predicates, product2.TypeEQ(req.Type))
 	}
-
+	if req.SubType != "" {
+		predicates = append(predicates, product2.SubTypeEQ(req.SubType))
+	}
 	predicates = append(predicates, product2.Delete(0))
 	lists, err := p.db.Product.Query().Where(predicates...).
 		Order(ent.Desc(product2.FieldID)).
