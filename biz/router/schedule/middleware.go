@@ -120,3 +120,48 @@ func _schedulememberinfoMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _createschedulecoursMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createschedulelessonsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createscheduleusertimeperiodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _schedulecoachlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _schedulememberlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createschedulecourseMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createmembersubscribelessonsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _scheduleinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updateschedulecoachstatusMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

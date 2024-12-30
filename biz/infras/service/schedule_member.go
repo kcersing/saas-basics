@@ -2,17 +2,7 @@ package service
 
 import "saas/idl_gen/model/schedule"
 
-func (s Schedule) CreateScheduleMember(req schedule.MemberSubscribeReq) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Schedule) UpdateScheduleMember(req schedule.MemberSubscribeReq) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Schedule) DeleteScheduleMember(id int64) error {
+func (s Schedule) CreateMemberSubscribeLessons(req schedule.MemberSubscribeReq) error {
 	//TODO implement me
 	panic("implement me")
 }
@@ -28,11 +18,6 @@ func (s Schedule) UpdateScheduleMemberStatus(ID int64, status int64) error {
 }
 
 func (s Schedule) ScheduleMemberInfo(ID int64) (roleInfo *schedule.ScheduleMemberInfo, err error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*schedule.ScheduleCoachInfo, total int, err error) {
 	//TODO implement me
 	panic("implement me")
 }

@@ -91,30 +91,40 @@ struct ScheduleCoachInfo{
 	27:string remark                     (api.raw = "remark")
 	28:string mRemark                    (api.raw = "mRemark")
 }
-struct CreateOrUpdateScheduleReq {
+struct CreateOrUpdateScheduleCourseReq {
     1:optional i64 id=0  (api.raw = "id")
-    /**类别[一对一:1;一对多:2团课:3]*/
-    2:optional i64 type=1  (api.raw = "type")
-    4:optional i64 venueId =0  (api.raw = "venueId")
-    /**场地*/
-    5:optional i64 placeId =0  (api.raw = "placeId")
-    /**人数*/
-    6:optional i64 num=0   (api.raw = "num")
+    /**类别[一对一:courseOne;一对多:courseMore]*/
+    2:optional string type=""  (api.raw = "type")
+     /**场馆*/
+    3:optional i64 venueId =0  (api.raw = "venueId")
+    /**会员ID*/
+    4:optional i64 memberId =0  (api.raw = "memberId")
+     /**会员IDs*/
+    5:optional list<i64> memberIds =0  (api.raw = "memberIds")
     /**开始时间*/
-    7:optional string startTime =""  (api.raw = "startTime")
-    /**价格*/
-    8:optional double price=0   (api.raw = "price")
-    /**备注*/
-    9:optional string remark =""   (api.raw = "remark")
+    6:optional string startTime =""  (api.raw = "startTime")
     /**教练ID*/
-    10:optional i64 coachId =0  (api.raw = "coachId")
+    7:optional i64 coachId =0  (api.raw = "coachId")
     /**产品ID*/
-    11:optional i64 productId =0  (api.raw = "productId")
-     /**会员ID*/
-    13:optional i64 memberId =0  (api.raw = "memberId")
+    8:optional i64 productId =0  (api.raw = "productId")
     /**会员产品ID*/
-    14:optional i64 memberProductId =0  (api.raw = "memberProductId")
+    9:optional i64 memberProductId =0  (api.raw = "memberProductId")
 }
+struct CreateOrUpdateScheduleLessonsReq {
+    /**产品*/
+    1:optional i64 productId =0  (api.raw = "productId")
+     /**上课时间*/
+    2:optional string startTime =""  (api.raw = "startTime")
+     /**教练*/
+    3:optional i64 coachId =0  (api.raw = "coachId")
+     /**场馆*/
+    4:optional i64 venueId =0  (api.raw = "venueId")
+    /**教室*/
+    5:optional i64 placeId =0  (api.raw = "placeId")
+
+    255:optional i64 id=0  (api.raw = "id")
+}
+
 
 
 struct ScheduleListReq {
@@ -162,32 +172,35 @@ struct UserTimePeriodReq{
 }
 
 service ScheduleService {
+    /**添加教练时间段*/
+    base.NilResponse CreateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/create-user-time-period")
+    /**更新教练时间段*/
+    base.NilResponse UpdateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/update-user-time-period")
+    /**约私教课*/
+    base.NilResponse CreateScheduleCourse(1: CreateOrUpdateScheduleCourseReq req)  (api.post = "/service/schedule/create-cours")
+    /**排团教课*/
+    base.NilResponse CreateScheduleLessons(1: CreateOrUpdateScheduleLessonsReq req) (api.post = "/service/schedule/create-lessons")
 
-    base.NilResponse UpdateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/create-user-time-period")
-
-    base.NilResponse CreateSchedule(1: CreateOrUpdateScheduleReq req)  (api.post = "/service/schedule/create")
-
-    base.NilResponse UpdateSchedule(1: CreateOrUpdateScheduleReq req) (api.post = "/service/schedule/update")
-
+    // base.NilResponse UpdateScheduleLessons(1: CreateOrUpdateScheduleLessonsReq req) (api.post = "/service/schedule/update-lessons")
     base.NilResponse UpdateScheduleStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/status")
-
+    /**课程列表*/
     base.NilResponse ScheduleList(1: ScheduleListReq req )(api.post = "/service/schedule/list")
-
+    /**按时间-课程列表*/
     base.NilResponse ScheduleDateList(1: ScheduleListReq req )(api.post = "/service/schedule/date-list")
 
-    base.NilResponse GetScheduleInfo(1: base.IDReq req) (api.post = "/service/schedule/info")
+    base.NilResponse ScheduleInfo(1: base.IDReq req) (api.post = "/service/schedule/info")
+    /**会员约团教课*/
+    base.NilResponse CreateMemberSubscribeLessons(1: MemberSubscribeReq req) (api.post = "/service/schedule/create-member-subscribe-lessons")
 
-
-
-    base.NilResponse  CreateMemberSubscribe(1: MemberSubscribeReq req) (api.post = "/service/schedule/create-member-subscribe")
-    base.NilResponse GetScheduleMemberList(1: ScheduleMemberListReq req) (api.post = "/service/schedule/schedule-member-list")
-//    base.NilResponse SearchSubscribeByMember(1: SearchSubscribeByMemberReq req) (api.post = "/service/schedule/search-subscribe-by-member")
+    /**会员课程列表*/
+    base.NilResponse ScheduleMemberList(1: ScheduleMemberListReq req) (api.post = "/service/schedule/schedule-member-list")
+    //base.NilResponse SearchSubscribeByMember(1: SearchSubscribeByMemberReq req) (api.post = "/service/schedule/search-subscribe-by-member")
     base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/schedule-member-status")
     base.NilResponse ScheduleMemberInfo(1: base.IDReq req) (api.post = "/service/schedule/schedule-member-info")
 
-
-    base.NilResponse GetScheduleCoachList(1: ScheduleCoachListReq req) (api.post = "/service/schedule/schedule-coach-list")
-    base.NilResponse UpdateCoachStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/schedule-coach-status")
+    /**教练课程列表*/
+    base.NilResponse ScheduleCoachList(1: ScheduleCoachListReq req) (api.post = "/service/schedule/schedule-coach-list")
+    base.NilResponse UpdateScheduleCoachStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/schedule-coach-status")
     base.NilResponse ScheduleCoachInfo(1: base.IDReq req) (api.post = "/service/schedule/schedule-coach-info")
 
 
