@@ -168,7 +168,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 	//parsedTime, _ := time.Parse(time.DateTime, req.Birthday)
 
 	//password, _ := encrypt.Crypt(req.Password)
-
+	u.db.User.Update().Where(user2.IDEQ(req.ID)).ClearRoles().Save(u.ctx)
 	functions := strings.Join(req.Functions, ",")
 	//*req.UserTags...
 	_, err := u.db.User.Update().
