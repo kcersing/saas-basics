@@ -10,31 +10,31 @@ import (
 )
 
 type ScheduleInfo struct {
-	Id                int64                 `thrift:"Id,1" form:"Id" json:"Id" query:"Id"`
-	Type              string                `thrift:"Type,2" form:"Type" json:"Type" query:"Type"`
-	VenueId           int64                 `thrift:"VenueId,4" form:"VenueId" json:"VenueId" query:"VenueId"`
-	PlaceID           int64                 `thrift:"PlaceID,5" form:"PlaceID" json:"PlaceID" query:"PlaceID"`
-	Num               int64                 `thrift:"Num,6" form:"Num" json:"Num" query:"Num"`
-	NumSurplus        int64                 `thrift:"NumSurplus,7" form:"NumSurplus" json:"NumSurplus" query:"NumSurplus"`
-	Date              string                `thrift:"Date,8" form:"Date" json:"Date" query:"Date"`
-	StartTime         string                `thrift:"StartTime,9" form:"StartTime" json:"StartTime" query:"StartTime"`
-	EndTime           string                `thrift:"EndTime,10" form:"EndTime" json:"EndTime" query:"EndTime"`
-	Price             float64               `thrift:"Price,11" form:"Price" json:"Price" query:"Price"`
-	Name              string                `thrift:"Name,12" form:"Name" json:"Name" query:"Name"`
-	Remark            string                `thrift:"Remark,13" form:"Remark" json:"Remark" query:"Remark"`
-	CoachID           int64                 `thrift:"CoachID,14" form:"CoachID" json:"CoachID" query:"CoachID"`
-	MemberID          int64                 `thrift:"MemberID,15" form:"MemberID" json:"MemberID" query:"MemberID"`
-	MemberProductID   int64                 `thrift:"MemberProductID,16" form:"MemberProductID" json:"MemberProductID" query:"MemberProductID"`
-	Status            int64                 `thrift:"Status,18" form:"Status" json:"Status" query:"Status"`
-	VenueName         string                `thrift:"VenueName,20" form:"VenueName" json:"VenueName" query:"VenueName"`
-	PlaceName         string                `thrift:"PlaceName,21" form:"PlaceName" json:"PlaceName" query:"PlaceName"`
-	CoachName         string                `thrift:"CoachName,22" form:"CoachName" json:"CoachName" query:"CoachName"`
-	MemberName        string                `thrift:"MemberName,23" form:"MemberName" json:"MemberName" query:"MemberName"`
-	MemberProductName string                `thrift:"MemberProductName,24" form:"MemberProductName" json:"MemberProductName" query:"MemberProductName"`
-	ScheduleMember    []*ScheduleMemberInfo `thrift:"ScheduleMember,26" form:"ScheduleMember" json:"ScheduleMember" query:"ScheduleMember"`
-	ScheduleCoach     []*ScheduleCoachInfo  `thrift:"ScheduleCoach,27" form:"ScheduleCoach" json:"ScheduleCoach" query:"ScheduleCoach"`
-	CreatedAt         string                `thrift:"CreatedAt,28" form:"CreatedAt" json:"CreatedAt" query:"CreatedAt"`
-	UpdatedAt         string                `thrift:"UpdatedAt,29" form:"UpdatedAt" json:"UpdatedAt" query:"UpdatedAt"`
+	ID                 int64                 `thrift:"id,1" form:"id" json:"id" query:"id"`
+	Type               string                `thrift:"type,2" form:"type" json:"type" query:"type"`
+	VenueId            int64                 `thrift:"venueId,4" form:"venueId" json:"venueId" query:"venueId"`
+	PlaceId            int64                 `thrift:"placeId,5" form:"placeId" json:"placeId" query:"placeId"`
+	Num                int64                 `thrift:"num,6" form:"num" json:"num" query:"num"`
+	NumSurplus         int64                 `thrift:"numSurplus,7" form:"numSurplus" json:"numSurplus" query:"numSurplus"`
+	Date               string                `thrift:"date,8" form:"date" json:"date" query:"date"`
+	StartTime          string                `thrift:"startTime,9" form:"startTime" json:"startTime" query:"startTime"`
+	EndTime            string                `thrift:"endTime,10" form:"endTime" json:"endTime" query:"endTime"`
+	Price              float64               `thrift:"price,11" form:"price" json:"price" query:"price"`
+	Name               string                `thrift:"name,12" form:"name" json:"name" query:"name"`
+	Remark             string                `thrift:"remark,13" form:"remark" json:"remark" query:"remark"`
+	CoachId            int64                 `thrift:"coachId,14" form:"coachId" json:"coachId" query:"coachId"`
+	MemberId           int64                 `thrift:"memberId,15" form:"memberId" json:"memberId" query:"memberId"`
+	MemberProductId    int64                 `thrift:"memberProductId,16" form:"memberProductId" json:"memberProductId" query:"memberProductId"`
+	Status             int64                 `thrift:"status,18" form:"status" json:"status" query:"status"`
+	VenueName          string                `thrift:"venueName,20" form:"venueName" json:"venueName" query:"venueName"`
+	PlaceName          string                `thrift:"placeName,21" form:"placeName" json:"placeName" query:"placeName"`
+	CoachName          string                `thrift:"coachName,22" form:"coachName" json:"coachName" query:"coachName"`
+	MemberName         string                `thrift:"memberName,23" form:"memberName" json:"memberName" query:"memberName"`
+	MemberProductName  string                `thrift:"memberProductName,24" form:"memberProductName" json:"memberProductName" query:"memberProductName"`
+	MemberCourseRecord []*ScheduleMemberInfo `thrift:"memberCourseRecord,26" form:"memberCourseRecord" json:"memberCourseRecord" query:"memberCourseRecord"`
+	CoachCourseRecord  []*ScheduleCoachInfo  `thrift:"coachCourseRecord,27" form:"coachCourseRecord" json:"coachCourseRecord" query:"coachCourseRecord"`
+	CreatedAt          string                `thrift:"createdAt,28" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt          string                `thrift:"updatedAt,29" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 }
 
 func NewScheduleInfo() *ScheduleInfo {
@@ -44,8 +44,8 @@ func NewScheduleInfo() *ScheduleInfo {
 func (p *ScheduleInfo) InitDefault() {
 }
 
-func (p *ScheduleInfo) GetId() (v int64) {
-	return p.Id
+func (p *ScheduleInfo) GetID() (v int64) {
+	return p.ID
 }
 
 func (p *ScheduleInfo) GetType() (v string) {
@@ -56,8 +56,8 @@ func (p *ScheduleInfo) GetVenueId() (v int64) {
 	return p.VenueId
 }
 
-func (p *ScheduleInfo) GetPlaceID() (v int64) {
-	return p.PlaceID
+func (p *ScheduleInfo) GetPlaceId() (v int64) {
+	return p.PlaceId
 }
 
 func (p *ScheduleInfo) GetNum() (v int64) {
@@ -92,16 +92,16 @@ func (p *ScheduleInfo) GetRemark() (v string) {
 	return p.Remark
 }
 
-func (p *ScheduleInfo) GetCoachID() (v int64) {
-	return p.CoachID
+func (p *ScheduleInfo) GetCoachId() (v int64) {
+	return p.CoachId
 }
 
-func (p *ScheduleInfo) GetMemberID() (v int64) {
-	return p.MemberID
+func (p *ScheduleInfo) GetMemberId() (v int64) {
+	return p.MemberId
 }
 
-func (p *ScheduleInfo) GetMemberProductID() (v int64) {
-	return p.MemberProductID
+func (p *ScheduleInfo) GetMemberProductId() (v int64) {
+	return p.MemberProductId
 }
 
 func (p *ScheduleInfo) GetStatus() (v int64) {
@@ -128,12 +128,12 @@ func (p *ScheduleInfo) GetMemberProductName() (v string) {
 	return p.MemberProductName
 }
 
-func (p *ScheduleInfo) GetScheduleMember() (v []*ScheduleMemberInfo) {
-	return p.ScheduleMember
+func (p *ScheduleInfo) GetMemberCourseRecord() (v []*ScheduleMemberInfo) {
+	return p.MemberCourseRecord
 }
 
-func (p *ScheduleInfo) GetScheduleCoach() (v []*ScheduleCoachInfo) {
-	return p.ScheduleCoach
+func (p *ScheduleInfo) GetCoachCourseRecord() (v []*ScheduleCoachInfo) {
+	return p.CoachCourseRecord
 }
 
 func (p *ScheduleInfo) GetCreatedAt() (v string) {
@@ -145,31 +145,31 @@ func (p *ScheduleInfo) GetUpdatedAt() (v string) {
 }
 
 var fieldIDToName_ScheduleInfo = map[int16]string{
-	1:  "Id",
-	2:  "Type",
-	4:  "VenueId",
-	5:  "PlaceID",
-	6:  "Num",
-	7:  "NumSurplus",
-	8:  "Date",
-	9:  "StartTime",
-	10: "EndTime",
-	11: "Price",
-	12: "Name",
-	13: "Remark",
-	14: "CoachID",
-	15: "MemberID",
-	16: "MemberProductID",
-	18: "Status",
-	20: "VenueName",
-	21: "PlaceName",
-	22: "CoachName",
-	23: "MemberName",
-	24: "MemberProductName",
-	26: "ScheduleMember",
-	27: "ScheduleCoach",
-	28: "CreatedAt",
-	29: "UpdatedAt",
+	1:  "id",
+	2:  "type",
+	4:  "venueId",
+	5:  "placeId",
+	6:  "num",
+	7:  "numSurplus",
+	8:  "date",
+	9:  "startTime",
+	10: "endTime",
+	11: "price",
+	12: "name",
+	13: "remark",
+	14: "coachId",
+	15: "memberId",
+	16: "memberProductId",
+	18: "status",
+	20: "venueName",
+	21: "placeName",
+	22: "coachName",
+	23: "memberName",
+	24: "memberProductName",
+	26: "memberCourseRecord",
+	27: "coachCourseRecord",
+	28: "createdAt",
+	29: "updatedAt",
 }
 
 func (p *ScheduleInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -428,7 +428,7 @@ func (p *ScheduleInfo) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Id = _field
+	p.ID = _field
 	return nil
 }
 func (p *ScheduleInfo) ReadField2(iprot thrift.TProtocol) error {
@@ -461,7 +461,7 @@ func (p *ScheduleInfo) ReadField5(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PlaceID = _field
+	p.PlaceId = _field
 	return nil
 }
 func (p *ScheduleInfo) ReadField6(iprot thrift.TProtocol) error {
@@ -560,7 +560,7 @@ func (p *ScheduleInfo) ReadField14(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.CoachID = _field
+	p.CoachId = _field
 	return nil
 }
 func (p *ScheduleInfo) ReadField15(iprot thrift.TProtocol) error {
@@ -571,7 +571,7 @@ func (p *ScheduleInfo) ReadField15(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.MemberID = _field
+	p.MemberId = _field
 	return nil
 }
 func (p *ScheduleInfo) ReadField16(iprot thrift.TProtocol) error {
@@ -582,7 +582,7 @@ func (p *ScheduleInfo) ReadField16(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.MemberProductID = _field
+	p.MemberProductId = _field
 	return nil
 }
 func (p *ScheduleInfo) ReadField18(iprot thrift.TProtocol) error {
@@ -671,7 +671,7 @@ func (p *ScheduleInfo) ReadField26(iprot thrift.TProtocol) error {
 	if err := iprot.ReadListEnd(); err != nil {
 		return err
 	}
-	p.ScheduleMember = _field
+	p.MemberCourseRecord = _field
 	return nil
 }
 func (p *ScheduleInfo) ReadField27(iprot thrift.TProtocol) error {
@@ -694,7 +694,7 @@ func (p *ScheduleInfo) ReadField27(iprot thrift.TProtocol) error {
 	if err := iprot.ReadListEnd(); err != nil {
 		return err
 	}
-	p.ScheduleCoach = _field
+	p.CoachCourseRecord = _field
 	return nil
 }
 func (p *ScheduleInfo) ReadField28(iprot thrift.TProtocol) error {
@@ -845,10 +845,10 @@ WriteStructEndError:
 }
 
 func (p *ScheduleInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -862,7 +862,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Type", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("type", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Type); err != nil {
@@ -879,7 +879,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("VenueId", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("venueId", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.VenueId); err != nil {
@@ -896,10 +896,10 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("PlaceID", thrift.I64, 5); err != nil {
+	if err = oprot.WriteFieldBegin("placeId", thrift.I64, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PlaceID); err != nil {
+	if err := oprot.WriteI64(p.PlaceId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -913,7 +913,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Num", thrift.I64, 6); err != nil {
+	if err = oprot.WriteFieldBegin("num", thrift.I64, 6); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.Num); err != nil {
@@ -930,7 +930,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField7(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("NumSurplus", thrift.I64, 7); err != nil {
+	if err = oprot.WriteFieldBegin("numSurplus", thrift.I64, 7); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.NumSurplus); err != nil {
@@ -947,7 +947,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField8(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Date", thrift.STRING, 8); err != nil {
+	if err = oprot.WriteFieldBegin("date", thrift.STRING, 8); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Date); err != nil {
@@ -964,7 +964,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField9(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("StartTime", thrift.STRING, 9); err != nil {
+	if err = oprot.WriteFieldBegin("startTime", thrift.STRING, 9); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.StartTime); err != nil {
@@ -981,7 +981,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField10(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("EndTime", thrift.STRING, 10); err != nil {
+	if err = oprot.WriteFieldBegin("endTime", thrift.STRING, 10); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.EndTime); err != nil {
@@ -998,7 +998,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField11(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Price", thrift.DOUBLE, 11); err != nil {
+	if err = oprot.WriteFieldBegin("price", thrift.DOUBLE, 11); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteDouble(p.Price); err != nil {
@@ -1015,7 +1015,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField12(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Name", thrift.STRING, 12); err != nil {
+	if err = oprot.WriteFieldBegin("name", thrift.STRING, 12); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Name); err != nil {
@@ -1032,7 +1032,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField13(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Remark", thrift.STRING, 13); err != nil {
+	if err = oprot.WriteFieldBegin("remark", thrift.STRING, 13); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Remark); err != nil {
@@ -1049,10 +1049,10 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField14(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CoachID", thrift.I64, 14); err != nil {
+	if err = oprot.WriteFieldBegin("coachId", thrift.I64, 14); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.CoachID); err != nil {
+	if err := oprot.WriteI64(p.CoachId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1066,10 +1066,10 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField15(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberID", thrift.I64, 15); err != nil {
+	if err = oprot.WriteFieldBegin("memberId", thrift.I64, 15); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.MemberID); err != nil {
+	if err := oprot.WriteI64(p.MemberId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1083,10 +1083,10 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField16(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberProductID", thrift.I64, 16); err != nil {
+	if err = oprot.WriteFieldBegin("memberProductId", thrift.I64, 16); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.MemberProductID); err != nil {
+	if err := oprot.WriteI64(p.MemberProductId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1100,7 +1100,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField18(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Status", thrift.I64, 18); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 18); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.Status); err != nil {
@@ -1117,7 +1117,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField20(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("VenueName", thrift.STRING, 20); err != nil {
+	if err = oprot.WriteFieldBegin("venueName", thrift.STRING, 20); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.VenueName); err != nil {
@@ -1134,7 +1134,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField21(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("PlaceName", thrift.STRING, 21); err != nil {
+	if err = oprot.WriteFieldBegin("placeName", thrift.STRING, 21); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.PlaceName); err != nil {
@@ -1151,7 +1151,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField22(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CoachName", thrift.STRING, 22); err != nil {
+	if err = oprot.WriteFieldBegin("coachName", thrift.STRING, 22); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CoachName); err != nil {
@@ -1168,7 +1168,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField23(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberName", thrift.STRING, 23); err != nil {
+	if err = oprot.WriteFieldBegin("memberName", thrift.STRING, 23); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.MemberName); err != nil {
@@ -1185,7 +1185,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField24(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberProductName", thrift.STRING, 24); err != nil {
+	if err = oprot.WriteFieldBegin("memberProductName", thrift.STRING, 24); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.MemberProductName); err != nil {
@@ -1202,13 +1202,13 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField26(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ScheduleMember", thrift.LIST, 26); err != nil {
+	if err = oprot.WriteFieldBegin("memberCourseRecord", thrift.LIST, 26); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.ScheduleMember)); err != nil {
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.MemberCourseRecord)); err != nil {
 		return err
 	}
-	for _, v := range p.ScheduleMember {
+	for _, v := range p.MemberCourseRecord {
 		if err := v.Write(oprot); err != nil {
 			return err
 		}
@@ -1227,13 +1227,13 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField27(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ScheduleCoach", thrift.LIST, 27); err != nil {
+	if err = oprot.WriteFieldBegin("coachCourseRecord", thrift.LIST, 27); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.ScheduleCoach)); err != nil {
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.CoachCourseRecord)); err != nil {
 		return err
 	}
-	for _, v := range p.ScheduleCoach {
+	for _, v := range p.CoachCourseRecord {
 		if err := v.Write(oprot); err != nil {
 			return err
 		}
@@ -1252,7 +1252,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField28(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CreatedAt", thrift.STRING, 28); err != nil {
+	if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 28); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CreatedAt); err != nil {
@@ -1269,7 +1269,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleInfo) writeField29(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("UpdatedAt", thrift.STRING, 29); err != nil {
+	if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 29); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.UpdatedAt); err != nil {
@@ -1294,28 +1294,28 @@ func (p *ScheduleInfo) String() string {
 }
 
 type ScheduleMemberInfo struct {
-	Id                  int64  `thrift:"Id,1" form:"Id" json:"Id" query:"Id"`
-	MemberId            int64  `thrift:"MemberId,2" form:"MemberId" json:"MemberId" query:"MemberId"`
-	VenueId             int64  `thrift:"VenueId,3" form:"VenueId" json:"VenueId" query:"VenueId"`
-	PlaceID             int64  `thrift:"PlaceID,4" form:"PlaceID" json:"PlaceID" query:"PlaceID"`
-	ScheduleId          int64  `thrift:"ScheduleId,6" form:"ScheduleId" json:"ScheduleId" query:"ScheduleId"`
-	ScheduleName        string `thrift:"ScheduleName,7" form:"ScheduleName" json:"ScheduleName" query:"ScheduleName"`
-	Type                string `thrift:"Type,8" form:"Type" json:"Type" query:"Type"`
-	CreatedAt           string `thrift:"CreatedAt,9" form:"CreatedAt" json:"CreatedAt" query:"CreatedAt"`
-	UpdatedAt           string `thrift:"UpdatedAt,10" form:"UpdatedAt" json:"UpdatedAt" query:"UpdatedAt"`
-	StartTime           string `thrift:"StartTime,11" form:"StartTime" json:"StartTime" query:"StartTime"`
-	EndTime             string `thrift:"EndTime,12" form:"EndTime" json:"EndTime" query:"EndTime"`
-	SignStartTime       string `thrift:"SignStartTime,13" form:"SignStartTime" json:"SignStartTime" query:"SignStartTime"`
-	SignEndTime         string `thrift:"SignEndTime,14" form:"SignEndTime" json:"SignEndTime" query:"SignEndTime"`
-	Status              int64  `thrift:"Status,15" form:"Status" json:"Status" query:"Status"`
-	MemberProductId     int64  `thrift:"MemberProductId,16" form:"MemberProductId" json:"MemberProductId" query:"MemberProductId"`
-	MemberProductItemId int64  `thrift:"MemberProductItemId,17" form:"MemberProductItemId" json:"MemberProductItemId" query:"MemberProductItemId"`
-	VenueName           string `thrift:"VenueName,18" form:"VenueName" json:"VenueName" query:"VenueName"`
-	MemberName          string `thrift:"MemberName,19" form:"MemberName" json:"MemberName" query:"MemberName"`
-	MemberProductName   string `thrift:"MemberProductName,20" form:"MemberProductName" json:"MemberProductName" query:"MemberProductName"`
-	Gender              string `thrift:"Gender,22" form:"Gender" json:"Gender" query:"Gender"`
-	Birthday            int64  `thrift:"Birthday,23" form:"Birthday" json:"Birthday" query:"Birthday"`
-	Mobile              string `thrift:"Mobile,24" form:"Mobile" json:"Mobile" query:"Mobile"`
+	ID                  int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
+	MemberId            int64  `thrift:"memberId,2" form:"memberId" json:"memberId" query:"memberId"`
+	VenueId             int64  `thrift:"venueId,3" form:"venueId" json:"venueId" query:"venueId"`
+	PlaceID             int64  `thrift:"placeID,4" form:"placeID" json:"placeID" query:"placeID"`
+	ScheduleId          int64  `thrift:"scheduleId,6" form:"scheduleId" json:"scheduleId" query:"scheduleId"`
+	ScheduleName        string `thrift:"scheduleName,7" form:"scheduleName" json:"scheduleName" query:"scheduleName"`
+	Type                string `thrift:"type,8" form:"type" json:"type" query:"type"`
+	CreatedAt           string `thrift:"createdAt,9" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt           string `thrift:"updatedAt,10" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	StartTime           string `thrift:"startTime,11" form:"startTime" json:"startTime" query:"startTime"`
+	EndTime             string `thrift:"endTime,12" form:"endTime" json:"endTime" query:"endTime"`
+	SignStartTime       string `thrift:"signStartTime,13" form:"signStartTime" json:"signStartTime" query:"signStartTime"`
+	SignEndTime         string `thrift:"signEndTime,14" form:"signEndTime" json:"signEndTime" query:"signEndTime"`
+	Status              int64  `thrift:"status,15" form:"status" json:"status" query:"status"`
+	MemberProductId     int64  `thrift:"memberProductId,16" form:"memberProductId" json:"memberProductId" query:"memberProductId"`
+	MemberProductItemId int64  `thrift:"memberProductItemId,17" form:"memberProductItemId" json:"memberProductItemId" query:"memberProductItemId"`
+	VenueName           string `thrift:"venueName,18" form:"venueName" json:"venueName" query:"venueName"`
+	MemberName          string `thrift:"memberName,19" form:"memberName" json:"memberName" query:"memberName"`
+	MemberProductName   string `thrift:"memberProductName,20" form:"memberProductName" json:"memberProductName" query:"memberProductName"`
+	Gender              string `thrift:"gender,22" form:"gender" json:"gender" query:"gender"`
+	Birthday            int64  `thrift:"birthday,23" form:"birthday" json:"birthday" query:"birthday"`
+	Mobile              string `thrift:"mobile,24" form:"mobile" json:"mobile" query:"mobile"`
 }
 
 func NewScheduleMemberInfo() *ScheduleMemberInfo {
@@ -1325,8 +1325,8 @@ func NewScheduleMemberInfo() *ScheduleMemberInfo {
 func (p *ScheduleMemberInfo) InitDefault() {
 }
 
-func (p *ScheduleMemberInfo) GetId() (v int64) {
-	return p.Id
+func (p *ScheduleMemberInfo) GetID() (v int64) {
+	return p.ID
 }
 
 func (p *ScheduleMemberInfo) GetMemberId() (v int64) {
@@ -1414,28 +1414,28 @@ func (p *ScheduleMemberInfo) GetMobile() (v string) {
 }
 
 var fieldIDToName_ScheduleMemberInfo = map[int16]string{
-	1:  "Id",
-	2:  "MemberId",
-	3:  "VenueId",
-	4:  "PlaceID",
-	6:  "ScheduleId",
-	7:  "ScheduleName",
-	8:  "Type",
-	9:  "CreatedAt",
-	10: "UpdatedAt",
-	11: "StartTime",
-	12: "EndTime",
-	13: "SignStartTime",
-	14: "SignEndTime",
-	15: "Status",
-	16: "MemberProductId",
-	17: "MemberProductItemId",
-	18: "VenueName",
-	19: "MemberName",
-	20: "MemberProductName",
-	22: "Gender",
-	23: "Birthday",
-	24: "Mobile",
+	1:  "id",
+	2:  "memberId",
+	3:  "venueId",
+	4:  "placeID",
+	6:  "scheduleId",
+	7:  "scheduleName",
+	8:  "type",
+	9:  "createdAt",
+	10: "updatedAt",
+	11: "startTime",
+	12: "endTime",
+	13: "signStartTime",
+	14: "signEndTime",
+	15: "status",
+	16: "memberProductId",
+	17: "memberProductItemId",
+	18: "venueName",
+	19: "memberName",
+	20: "memberProductName",
+	22: "gender",
+	23: "birthday",
+	24: "mobile",
 }
 
 func (p *ScheduleMemberInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -1670,7 +1670,7 @@ func (p *ScheduleMemberInfo) ReadField1(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Id = _field
+	p.ID = _field
 	return nil
 }
 func (p *ScheduleMemberInfo) ReadField2(iprot thrift.TProtocol) error {
@@ -2018,10 +2018,10 @@ WriteStructEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2035,7 +2035,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberId", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("memberId", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.MemberId); err != nil {
@@ -2052,7 +2052,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("VenueId", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("venueId", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.VenueId); err != nil {
@@ -2069,7 +2069,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("PlaceID", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("placeID", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.PlaceID); err != nil {
@@ -2086,7 +2086,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ScheduleId", thrift.I64, 6); err != nil {
+	if err = oprot.WriteFieldBegin("scheduleId", thrift.I64, 6); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.ScheduleId); err != nil {
@@ -2103,7 +2103,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField7(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ScheduleName", thrift.STRING, 7); err != nil {
+	if err = oprot.WriteFieldBegin("scheduleName", thrift.STRING, 7); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.ScheduleName); err != nil {
@@ -2120,7 +2120,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField8(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Type", thrift.STRING, 8); err != nil {
+	if err = oprot.WriteFieldBegin("type", thrift.STRING, 8); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Type); err != nil {
@@ -2137,7 +2137,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField9(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CreatedAt", thrift.STRING, 9); err != nil {
+	if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 9); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CreatedAt); err != nil {
@@ -2154,7 +2154,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField10(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("UpdatedAt", thrift.STRING, 10); err != nil {
+	if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 10); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.UpdatedAt); err != nil {
@@ -2171,7 +2171,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField11(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("StartTime", thrift.STRING, 11); err != nil {
+	if err = oprot.WriteFieldBegin("startTime", thrift.STRING, 11); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.StartTime); err != nil {
@@ -2188,7 +2188,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField12(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("EndTime", thrift.STRING, 12); err != nil {
+	if err = oprot.WriteFieldBegin("endTime", thrift.STRING, 12); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.EndTime); err != nil {
@@ -2205,7 +2205,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField13(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("SignStartTime", thrift.STRING, 13); err != nil {
+	if err = oprot.WriteFieldBegin("signStartTime", thrift.STRING, 13); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.SignStartTime); err != nil {
@@ -2222,7 +2222,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField14(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("SignEndTime", thrift.STRING, 14); err != nil {
+	if err = oprot.WriteFieldBegin("signEndTime", thrift.STRING, 14); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.SignEndTime); err != nil {
@@ -2239,7 +2239,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField15(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Status", thrift.I64, 15); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 15); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.Status); err != nil {
@@ -2256,7 +2256,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField16(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberProductId", thrift.I64, 16); err != nil {
+	if err = oprot.WriteFieldBegin("memberProductId", thrift.I64, 16); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.MemberProductId); err != nil {
@@ -2273,7 +2273,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField17(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberProductItemId", thrift.I64, 17); err != nil {
+	if err = oprot.WriteFieldBegin("memberProductItemId", thrift.I64, 17); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.MemberProductItemId); err != nil {
@@ -2290,7 +2290,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField18(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("VenueName", thrift.STRING, 18); err != nil {
+	if err = oprot.WriteFieldBegin("venueName", thrift.STRING, 18); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.VenueName); err != nil {
@@ -2307,7 +2307,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField19(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberName", thrift.STRING, 19); err != nil {
+	if err = oprot.WriteFieldBegin("memberName", thrift.STRING, 19); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.MemberName); err != nil {
@@ -2324,7 +2324,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField20(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberProductName", thrift.STRING, 20); err != nil {
+	if err = oprot.WriteFieldBegin("memberProductName", thrift.STRING, 20); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.MemberProductName); err != nil {
@@ -2341,7 +2341,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField22(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Gender", thrift.STRING, 22); err != nil {
+	if err = oprot.WriteFieldBegin("gender", thrift.STRING, 22); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Gender); err != nil {
@@ -2358,7 +2358,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField23(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Birthday", thrift.I64, 23); err != nil {
+	if err = oprot.WriteFieldBegin("birthday", thrift.I64, 23); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.Birthday); err != nil {
@@ -2375,7 +2375,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleMemberInfo) writeField24(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Mobile", thrift.STRING, 24); err != nil {
+	if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 24); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Mobile); err != nil {
@@ -2400,33 +2400,33 @@ func (p *ScheduleMemberInfo) String() string {
 }
 
 type ScheduleCoachInfo struct {
-	ID                int64  `thrift:"ID,1" form:"ID" json:"ID" query:"ID"`
-	CoachId           int64  `thrift:"CoachId,2" form:"CoachId" json:"CoachId" query:"CoachId"`
-	VenueId           int64  `thrift:"VenueId,3" form:"VenueId" json:"VenueId" query:"VenueId"`
-	PlaceID           int64  `thrift:"PlaceID,4" form:"PlaceID" json:"PlaceID" query:"PlaceID"`
-	ProductId         int64  `thrift:"ProductId,5" form:"ProductId" json:"ProductId" query:"ProductId"`
-	ScheduleId        int64  `thrift:"ScheduleId,6" form:"ScheduleId" json:"ScheduleId" query:"ScheduleId"`
-	Type              string `thrift:"Type,7" form:"Type" json:"Type" query:"Type"`
-	CreatedAt         string `thrift:"CreatedAt,8" form:"CreatedAt" json:"CreatedAt" query:"CreatedAt"`
-	UpdatedAt         string `thrift:"UpdatedAt,9" form:"UpdatedAt" json:"UpdatedAt" query:"UpdatedAt"`
-	Date              string `thrift:"Date,10" form:"Date" json:"Date" query:"Date"`
-	StartTime         string `thrift:"StartTime,11" form:"StartTime" json:"StartTime" query:"StartTime"`
-	EndTime           string `thrift:"EndTime,12" form:"EndTime" json:"EndTime" query:"EndTime"`
-	SignStartTime     string `thrift:"SignStartTime,13" form:"SignStartTime" json:"SignStartTime" query:"SignStartTime"`
-	SignEndTime       string `thrift:"SignEndTime,14" form:"SignEndTime" json:"SignEndTime" query:"SignEndTime"`
-	Status            int64  `thrift:"Status,15" form:"Status" json:"Status" query:"Status"`
-	ScheduleName      string `thrift:"ScheduleName,16" form:"ScheduleName" json:"ScheduleName" query:"ScheduleName"`
-	ProductName       string `thrift:"ProductName,17" form:"ProductName" json:"ProductName" query:"ProductName"`
-	VenueName         string `thrift:"VenueName,18" form:"VenueName" json:"VenueName" query:"VenueName"`
-	PlaceName         string `thrift:"PlaceName,19" form:"PlaceName" json:"PlaceName" query:"PlaceName"`
-	CoachName         string `thrift:"CoachName,20" form:"CoachName" json:"CoachName" query:"CoachName"`
-	CoachAvatar       string `thrift:"CoachAvatar,21" form:"CoachAvatar" json:"CoachAvatar" query:"CoachAvatar"`
-	Mobile            string `thrift:"Mobile,22" form:"Mobile" json:"Mobile" query:"Mobile"`
-	MemberName        string `thrift:"MemberName,23" form:"MemberName" json:"MemberName" query:"MemberName"`
-	MemberAvatar      string `thrift:"MemberAvatar,24" form:"MemberAvatar" json:"MemberAvatar" query:"MemberAvatar"`
-	MemberProductName string `thrift:"MemberProductName,25" form:"MemberProductName" json:"MemberProductName" query:"MemberProductName"`
-	Remark            string `thrift:"Remark,27" form:"Remark" json:"Remark" query:"Remark"`
-	MRemark           string `thrift:"MRemark,28" form:"MRemark" json:"MRemark" query:"MRemark"`
+	ID                int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
+	CoachId           int64  `thrift:"coachId,2" form:"coachId" json:"coachId" query:"coachId"`
+	VenueId           int64  `thrift:"venueId,3" form:"venueId" json:"venueId" query:"venueId"`
+	PlaceId           int64  `thrift:"placeId,4" form:"placeId" json:"placeId" query:"placeId"`
+	ProductId         int64  `thrift:"productId,5" form:"productId" json:"productId" query:"productId"`
+	ScheduleId        int64  `thrift:"scheduleId,6" form:"scheduleId" json:"scheduleId" query:"scheduleId"`
+	Type              string `thrift:"type,7" form:"type" json:"type" query:"type"`
+	CreatedAt         string `thrift:"createdAt,8" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt         string `thrift:"updatedAt,9" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	Date              string `thrift:"date,10" form:"date" json:"date" query:"date"`
+	StartTime         string `thrift:"startTime,11" form:"startTime" json:"startTime" query:"startTime"`
+	EndTime           string `thrift:"endTime,12" form:"endTime" json:"endTime" query:"endTime"`
+	SignStartTime     string `thrift:"signStartTime,13" form:"signStartTime" json:"signStartTime" query:"signStartTime"`
+	SignEndTime       string `thrift:"signEndTime,14" form:"signEndTime" json:"signEndTime" query:"signEndTime"`
+	Status            int64  `thrift:"status,15" form:"status" json:"status" query:"status"`
+	ScheduleName      string `thrift:"scheduleName,16" form:"scheduleName" json:"scheduleName" query:"scheduleName"`
+	ProductName       string `thrift:"productName,17" form:"productName" json:"productName" query:"productName"`
+	VenueName         string `thrift:"venueName,18" form:"venueName" json:"venueName" query:"venueName"`
+	PlaceName         string `thrift:"placeName,19" form:"placeName" json:"placeName" query:"placeName"`
+	CoachName         string `thrift:"coachName,20" form:"coachName" json:"coachName" query:"coachName"`
+	CoachAvatar       string `thrift:"coachAvatar,21" form:"coachAvatar" json:"coachAvatar" query:"coachAvatar"`
+	Mobile            string `thrift:"mobile,22" form:"mobile" json:"mobile" query:"mobile"`
+	MemberName        string `thrift:"memberName,23" form:"memberName" json:"memberName" query:"memberName"`
+	MemberAvatar      string `thrift:"memberAvatar,24" form:"memberAvatar" json:"memberAvatar" query:"memberAvatar"`
+	MemberProductName string `thrift:"memberProductName,25" form:"memberProductName" json:"memberProductName" query:"memberProductName"`
+	Remark            string `thrift:"remark,27" form:"remark" json:"remark" query:"remark"`
+	MRemark           string `thrift:"mRemark,28" form:"mRemark" json:"mRemark" query:"mRemark"`
 }
 
 func NewScheduleCoachInfo() *ScheduleCoachInfo {
@@ -2448,8 +2448,8 @@ func (p *ScheduleCoachInfo) GetVenueId() (v int64) {
 	return p.VenueId
 }
 
-func (p *ScheduleCoachInfo) GetPlaceID() (v int64) {
-	return p.PlaceID
+func (p *ScheduleCoachInfo) GetPlaceId() (v int64) {
+	return p.PlaceId
 }
 
 func (p *ScheduleCoachInfo) GetProductId() (v int64) {
@@ -2545,33 +2545,33 @@ func (p *ScheduleCoachInfo) GetMRemark() (v string) {
 }
 
 var fieldIDToName_ScheduleCoachInfo = map[int16]string{
-	1:  "ID",
-	2:  "CoachId",
-	3:  "VenueId",
-	4:  "PlaceID",
-	5:  "ProductId",
-	6:  "ScheduleId",
-	7:  "Type",
-	8:  "CreatedAt",
-	9:  "UpdatedAt",
-	10: "Date",
-	11: "StartTime",
-	12: "EndTime",
-	13: "SignStartTime",
-	14: "SignEndTime",
-	15: "Status",
-	16: "ScheduleName",
-	17: "ProductName",
-	18: "VenueName",
-	19: "PlaceName",
-	20: "CoachName",
-	21: "CoachAvatar",
-	22: "Mobile",
-	23: "MemberName",
-	24: "MemberAvatar",
-	25: "MemberProductName",
-	27: "Remark",
-	28: "MRemark",
+	1:  "id",
+	2:  "coachId",
+	3:  "venueId",
+	4:  "placeId",
+	5:  "productId",
+	6:  "scheduleId",
+	7:  "type",
+	8:  "createdAt",
+	9:  "updatedAt",
+	10: "date",
+	11: "startTime",
+	12: "endTime",
+	13: "signStartTime",
+	14: "signEndTime",
+	15: "status",
+	16: "scheduleName",
+	17: "productName",
+	18: "venueName",
+	19: "placeName",
+	20: "coachName",
+	21: "coachAvatar",
+	22: "mobile",
+	23: "memberName",
+	24: "memberAvatar",
+	25: "memberProductName",
+	27: "remark",
+	28: "mRemark",
 }
 
 func (p *ScheduleCoachInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -2879,7 +2879,7 @@ func (p *ScheduleCoachInfo) ReadField4(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PlaceID = _field
+	p.PlaceId = _field
 	return nil
 }
 func (p *ScheduleCoachInfo) ReadField5(iprot thrift.TProtocol) error {
@@ -3269,7 +3269,7 @@ WriteStructEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ID", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.ID); err != nil {
@@ -3286,7 +3286,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CoachId", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("coachId", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.CoachId); err != nil {
@@ -3303,7 +3303,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("VenueId", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("venueId", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.VenueId); err != nil {
@@ -3320,10 +3320,10 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("PlaceID", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("placeId", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PlaceID); err != nil {
+	if err := oprot.WriteI64(p.PlaceId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3337,7 +3337,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ProductId", thrift.I64, 5); err != nil {
+	if err = oprot.WriteFieldBegin("productId", thrift.I64, 5); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.ProductId); err != nil {
@@ -3354,7 +3354,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ScheduleId", thrift.I64, 6); err != nil {
+	if err = oprot.WriteFieldBegin("scheduleId", thrift.I64, 6); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.ScheduleId); err != nil {
@@ -3371,7 +3371,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField7(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Type", thrift.STRING, 7); err != nil {
+	if err = oprot.WriteFieldBegin("type", thrift.STRING, 7); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Type); err != nil {
@@ -3388,7 +3388,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField8(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CreatedAt", thrift.STRING, 8); err != nil {
+	if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 8); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CreatedAt); err != nil {
@@ -3405,7 +3405,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField9(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("UpdatedAt", thrift.STRING, 9); err != nil {
+	if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 9); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.UpdatedAt); err != nil {
@@ -3422,7 +3422,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField10(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Date", thrift.STRING, 10); err != nil {
+	if err = oprot.WriteFieldBegin("date", thrift.STRING, 10); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Date); err != nil {
@@ -3439,7 +3439,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField11(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("StartTime", thrift.STRING, 11); err != nil {
+	if err = oprot.WriteFieldBegin("startTime", thrift.STRING, 11); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.StartTime); err != nil {
@@ -3456,7 +3456,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField12(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("EndTime", thrift.STRING, 12); err != nil {
+	if err = oprot.WriteFieldBegin("endTime", thrift.STRING, 12); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.EndTime); err != nil {
@@ -3473,7 +3473,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField13(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("SignStartTime", thrift.STRING, 13); err != nil {
+	if err = oprot.WriteFieldBegin("signStartTime", thrift.STRING, 13); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.SignStartTime); err != nil {
@@ -3490,7 +3490,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField14(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("SignEndTime", thrift.STRING, 14); err != nil {
+	if err = oprot.WriteFieldBegin("signEndTime", thrift.STRING, 14); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.SignEndTime); err != nil {
@@ -3507,7 +3507,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField15(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Status", thrift.I64, 15); err != nil {
+	if err = oprot.WriteFieldBegin("status", thrift.I64, 15); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.Status); err != nil {
@@ -3524,7 +3524,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField16(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ScheduleName", thrift.STRING, 16); err != nil {
+	if err = oprot.WriteFieldBegin("scheduleName", thrift.STRING, 16); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.ScheduleName); err != nil {
@@ -3541,7 +3541,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField17(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("ProductName", thrift.STRING, 17); err != nil {
+	if err = oprot.WriteFieldBegin("productName", thrift.STRING, 17); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.ProductName); err != nil {
@@ -3558,7 +3558,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField18(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("VenueName", thrift.STRING, 18); err != nil {
+	if err = oprot.WriteFieldBegin("venueName", thrift.STRING, 18); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.VenueName); err != nil {
@@ -3575,7 +3575,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField19(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("PlaceName", thrift.STRING, 19); err != nil {
+	if err = oprot.WriteFieldBegin("placeName", thrift.STRING, 19); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.PlaceName); err != nil {
@@ -3592,7 +3592,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField20(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CoachName", thrift.STRING, 20); err != nil {
+	if err = oprot.WriteFieldBegin("coachName", thrift.STRING, 20); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CoachName); err != nil {
@@ -3609,7 +3609,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField21(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("CoachAvatar", thrift.STRING, 21); err != nil {
+	if err = oprot.WriteFieldBegin("coachAvatar", thrift.STRING, 21); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.CoachAvatar); err != nil {
@@ -3626,7 +3626,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField22(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Mobile", thrift.STRING, 22); err != nil {
+	if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 22); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Mobile); err != nil {
@@ -3643,7 +3643,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField23(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberName", thrift.STRING, 23); err != nil {
+	if err = oprot.WriteFieldBegin("memberName", thrift.STRING, 23); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.MemberName); err != nil {
@@ -3660,7 +3660,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField24(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberAvatar", thrift.STRING, 24); err != nil {
+	if err = oprot.WriteFieldBegin("memberAvatar", thrift.STRING, 24); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.MemberAvatar); err != nil {
@@ -3677,7 +3677,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField25(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MemberProductName", thrift.STRING, 25); err != nil {
+	if err = oprot.WriteFieldBegin("memberProductName", thrift.STRING, 25); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.MemberProductName); err != nil {
@@ -3694,7 +3694,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField27(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Remark", thrift.STRING, 27); err != nil {
+	if err = oprot.WriteFieldBegin("remark", thrift.STRING, 27); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.Remark); err != nil {
@@ -3711,7 +3711,7 @@ WriteFieldEndError:
 }
 
 func (p *ScheduleCoachInfo) writeField28(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("MRemark", thrift.STRING, 28); err != nil {
+	if err = oprot.WriteFieldBegin("mRemark", thrift.STRING, 28); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteString(p.MRemark); err != nil {

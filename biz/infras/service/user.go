@@ -115,7 +115,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 	if err != nil {
 		return errors.Wrap(err, "starting a transaction:")
 	}
-	one, err := tx.User.Create().
+	_, err = tx.User.Create().
 		SetAvatar(req.Avatar).
 		SetMobile(req.Mobile).
 		SetJobTime(req.JobTime).
@@ -128,7 +128,8 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		AddRoleIDs(req.RoleId...).
 		SetDetail(req.Detail).
 		SetType(req.Type).
-		//SetTags().
+		AddTagIDs(req.UserTags...).
+		AddVenueIDs(req.VenueId...).
 		Save(u.ctx)
 
 	if err != nil {
@@ -136,10 +137,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		return err
 	}
 	//	err = tx.Role.UpdateOneID(roleID).AddMenuIDs(menuIDs...).Exec(a.ctx)
-	tx.User.UpdateOneID(one.ID).
-		AddTagIDs(req.UserTags...).
-		AddVenueIDs(req.VenueId...).
-		Exec(u.ctx)
+
 	//_, err = tx.Face.Create().
 	//	SetUserFaces(noe).
 	//	Save(u.ctx)
@@ -184,17 +182,15 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		AddRoleIDs(req.RoleId...).
 		SetDetail(req.Detail).
 		SetType(req.Type).
-		//SetTags().
+		AddTagIDs(req.UserTags...).
+		AddVenueIDs(req.VenueId...).
 		Save(u.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "update user failed")
 		return err
 	}
-	u.db.User.UpdateOneID(req.ID).
-		AddTagIDs(req.UserTags...).
-		AddVenueIDs(req.VenueId...).
-		Exec(u.ctx)
+
 	return nil
 }
 
