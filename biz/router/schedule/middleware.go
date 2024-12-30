@@ -85,3 +85,38 @@ func _updatescheduleMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _scheduledatelistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getscheduleinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _schedulelistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createmembersubscribeMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updateschedulestatusMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _schedulecoachinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _schedulememberinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

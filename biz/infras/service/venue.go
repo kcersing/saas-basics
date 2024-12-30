@@ -139,6 +139,9 @@ func (v Venue) List(req *venue.VenueListReq) (list []*venue.VenueInfo, total int
 	if req.Name != "" {
 		predicates = append(predicates, venue2.NameEQ(req.Name))
 	}
+	if req.Status > 0 {
+		predicates = append(predicates, venue2.StatusEQ(req.Status))
+	}
 	predicates = append(predicates, venue2.Delete(0))
 	venueList, err := v.db.Venue.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -208,6 +211,9 @@ func (v Venue) PlaceList(req *venue.VenuePlaceListReq) (list []*venue.VenuePlace
 
 	if req.Name != "" {
 		predicates = append(predicates, venueplace.NameEQ(req.Name))
+	}
+	if req.Status > 0 {
+		predicates = append(predicates, venueplace.StatusEQ(req.Status))
 	}
 	predicates = append(predicates, venueplace.Delete(0))
 	l, err := v.db.VenuePlace.Query().Where(predicates...).
