@@ -2,15 +2,19 @@ package service
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/biz/infras/do"
 	"saas/idl_gen/model/schedule"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourseReq) error {
@@ -81,99 +85,94 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 	}
 
 	if req.MemberId != 0 {
-		m, err := tx.Member.Query().
-			Where(member.ID(req.MemberId)).
-			First(s.ctx)
+		err = NewSchedule(s.ctx, s.c).CreateScheduleMemberCourse(do.CreateScheduleMemberCourse{
+			One:       one,
+			Type:      req.Type,
+			VenueId:   req.VenueId,
+			StartTime: startTime,
+			MemberId:  req.MemberId,
+			ProductId: req.MemberProductId,
+		})
 		if err != nil {
-			err = errors.Wrap(err, "未查询到该会员")
-			return rollback(tx, err)
+			return err
 		}
+		if len(req.MemberIds) > 0 {
 
-		if (first.CountSurplus - 1) < 0 {
-			err = errors.Wrap(err, "该会员课程不足")
-			return rollback(tx, err)
 		}
-
-		_, err = tx.ScheduleMember.Create().
-			SetSchedule(one).
-			SetType(req.Type).
-			SetMemberID(req.MemberId).
-			SetVenueID(req.VenueId).
-			SetStartTime(startTime).
-			SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
-			SetMemberProductID(req.MemberProductId).
-			SetStatus(0).
-			SetMemberName(m.Name).
-			SetMemberProductName(first.Name).
-			Save(s.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "create Course Record Coach failed")
-			return rollback(tx, err)
-		}
-
-		_, err = tx.MemberProduct.
-			Update().
-			Where(memberproduct.IDEQ(req.MemberProductId)).
-			AddCountSurplus(-1).
-			Save(s.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "Member Product Item failed")
-			return rollback(tx, err)
-		}
-
 	}
-	if len(req.MemberIds) > 0 {
 
-	}
 	if err = tx.Commit(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s Schedule) CreateScheduleMemberCourse(req schedule.CreateOrUpdateScheduleLessonsReq) {
+func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) error {
 	m, err := s.db.Member.Query().
 		Where(member.ID(req.MemberId)).
 		First(s.ctx)
 	if err != nil {
+		hlog.Error("未查询到该会员:", req)
 		err = errors.Wrap(err, "未查询到该会员")
-
+		return err
 	}
-	memberProduct, err := s.db.MemberProduct.Query().
-		Where(memberproduct.ProductID(req.ProductId), memberproduct.CountSurplusGT(0)).
-		First(s.ctx)
+
+	var memberProduct *ent.MemberProduct
+	if req.MemberProductId != 0 {
+		memberProduct, err = s.db.MemberProduct.Query().
+			Where(memberproduct.ID(req.MemberProductId)).
+			First(s.ctx)
+		if err != nil {
+			return err
+		}
+	} else {
+		memberProduct, err = s.db.MemberProduct.Query().
+			Where(memberproduct.ProductID(req.ProductId), memberproduct.CountSurplusGT(0)).
+			First(s.ctx)
+		if err != nil {
+			return err
+		}
+	}
+	if memberProduct == nil {
+		hlog.Error("未查询到该会员课程:", req)
+		err = errors.Wrap(err, "未查询到该会员课程")
+		return err
+	}
 
 	if (memberProduct.CountSurplus - 1) < 0 {
+		hlog.Error("该会员课程不足:", req)
 		err = errors.Wrap(err, "该会员课程不足")
-
+		return err
 	}
 
 	_, err = s.db.ScheduleMember.Create().
-		SetSchedule(one).
+		SetSchedule(req.One).
 		SetType(req.Type).
 		SetMemberID(req.MemberId).
 		SetVenueID(req.VenueId).
-		SetStartTime(startTime).
-		SetEndTime(startTime.Add(time.Duration(memberProduct.Length) * time.Minute)).
+		SetStartTime(req.StartTime).
+		SetEndTime(req.StartTime.Add(time.Duration(memberProduct.Length) * time.Minute)).
 		SetMemberProductID(memberProduct.ID).
 		SetStatus(0).
 		SetMemberName(m.Name).
 		SetMemberProductName(memberProduct.Name).
 		Save(s.ctx)
 	if err != nil {
-		err = errors.Wrap(err, "create Course Record Coach failed")
-
+		hlog.Error("无法创建会员课程:", req)
+		err = errors.Wrap(err, "无法创建会员课程")
+		return err
 	}
-
 	_, err = s.db.MemberProduct.
 		Update().
 		Where(memberproduct.IDEQ(memberProduct.ID)).
 		AddCountSurplus(-1).
 		Save(s.ctx)
 	if err != nil {
-		err = errors.Wrap(err, "Member Product Item failed")
-
+		hlog.Error("无法会员课程节数异常:", req)
+		err = errors.Wrap(err, "无法会员课程节数异常")
+		return err
 	}
+	return nil
 }
 
 func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLessonsReq) error {

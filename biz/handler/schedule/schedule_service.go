@@ -43,11 +43,11 @@ func UpdateScheduleUserTimePeriod(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// CreateScheduleCours .
+// CreateScheduleCourse .
 // @router /service/schedule/create-cours [POST]
-func CreateScheduleCours(ctx context.Context, c *app.RequestContext) {
+func CreateScheduleCourse(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req schedule.CreateOrUpdateScheduleCoursReq
+	var req schedule.CreateOrUpdateScheduleCourseReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -123,9 +123,9 @@ func ScheduleDateList(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// GetScheduleInfo .
+// ScheduleInfo .
 // @router /service/schedule/info [POST]
-func GetScheduleInfo(ctx context.Context, c *app.RequestContext) {
+func ScheduleInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
 	err = c.BindAndValidate(&req)
@@ -139,9 +139,9 @@ func GetScheduleInfo(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// CreateMemberSubscribe .
-// @router /service/schedule/create-member-subscribe [POST]
-func CreateMemberSubscribe(ctx context.Context, c *app.RequestContext) {
+// CreateMemberSubscribeLessons .
+// @router /service/schedule/create-member-subscribe-lessons [POST]
+func CreateMemberSubscribeLessons(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req schedule.MemberSubscribeReq
 	err = c.BindAndValidate(&req)
@@ -219,9 +219,9 @@ func ScheduleCoachList(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// UpdateCoachStatus .
+// UpdateScheduleCoachStatus .
 // @router /service/schedule/schedule-coach-status [POST]
-func UpdateCoachStatus(ctx context.Context, c *app.RequestContext) {
+func UpdateScheduleCoachStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.StatusCodeReq
 	err = c.BindAndValidate(&req)
@@ -240,70 +240,6 @@ func UpdateCoachStatus(ctx context.Context, c *app.RequestContext) {
 func ScheduleCoachInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// CreateScheduleCourse .
-// @router /service/schedule/create-cours [POST]
-func CreateScheduleCourse(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req schedule.CreateOrUpdateScheduleCourseReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// ScheduleInfo .
-// @router /service/schedule/info [POST]
-func ScheduleInfo(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// CreateMemberSubscribeLessons .
-// @router /service/schedule/create-member-subscribe-lessons [POST]
-func CreateMemberSubscribeLessons(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req schedule.MemberSubscribeReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// UpdateScheduleCoachStatus .
-// @router /service/schedule/schedule-coach-status [POST]
-func UpdateScheduleCoachStatus(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.StatusCodeReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
