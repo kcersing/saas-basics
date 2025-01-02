@@ -80,9 +80,11 @@ type ProductEdges struct {
 	Courses []*ProductCourses `json:"courses,omitempty"`
 	// Lessons holds the value of the lessons edge.
 	Lessons []*ProductCourses `json:"lessons,omitempty"`
+	// Products holds the value of the products edge.
+	Products []*VenuePlace `json:"products,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 }
 
 // TagsOrErr returns the Tags value or an error if the edge
@@ -119,6 +121,15 @@ func (e ProductEdges) LessonsOrErr() ([]*ProductCourses, error) {
 		return e.Lessons, nil
 	}
 	return nil, &NotLoadedError{edge: "lessons"}
+}
+
+// ProductsOrErr returns the Products value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProductEdges) ProductsOrErr() ([]*VenuePlace, error) {
+	if e.loadedTypes[4] {
+		return e.Products, nil
+	}
+	return nil, &NotLoadedError{edge: "products"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -322,6 +333,11 @@ func (pr *Product) QueryCourses() *ProductCoursesQuery {
 // QueryLessons queries the "lessons" edge of the Product entity.
 func (pr *Product) QueryLessons() *ProductCoursesQuery {
 	return NewProductClient(pr.config).QueryLessons(pr)
+}
+
+// QueryProducts queries the "products" edge of the Product entity.
+func (pr *Product) QueryProducts() *VenuePlaceQuery {
+	return NewProductClient(pr.config).QueryProducts(pr)
 }
 
 // Update returns a builder for updating this Product.

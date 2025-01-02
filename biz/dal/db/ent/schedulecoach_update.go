@@ -176,6 +176,33 @@ func (scu *ScheduleCoachUpdate) ClearCoachID() *ScheduleCoachUpdate {
 	return scu
 }
 
+// SetPlaceID sets the "place_id" field.
+func (scu *ScheduleCoachUpdate) SetPlaceID(i int64) *ScheduleCoachUpdate {
+	scu.mutation.ResetPlaceID()
+	scu.mutation.SetPlaceID(i)
+	return scu
+}
+
+// SetNillablePlaceID sets the "place_id" field if the given value is not nil.
+func (scu *ScheduleCoachUpdate) SetNillablePlaceID(i *int64) *ScheduleCoachUpdate {
+	if i != nil {
+		scu.SetPlaceID(*i)
+	}
+	return scu
+}
+
+// AddPlaceID adds i to the "place_id" field.
+func (scu *ScheduleCoachUpdate) AddPlaceID(i int64) *ScheduleCoachUpdate {
+	scu.mutation.AddPlaceID(i)
+	return scu
+}
+
+// ClearPlaceID clears the value of the "place_id" field.
+func (scu *ScheduleCoachUpdate) ClearPlaceID() *ScheduleCoachUpdate {
+	scu.mutation.ClearPlaceID()
+	return scu
+}
+
 // SetScheduleID sets the "schedule_id" field.
 func (scu *ScheduleCoachUpdate) SetScheduleID(i int64) *ScheduleCoachUpdate {
 	scu.mutation.SetScheduleID(i)
@@ -193,6 +220,33 @@ func (scu *ScheduleCoachUpdate) SetNillableScheduleID(i *int64) *ScheduleCoachUp
 // ClearScheduleID clears the value of the "schedule_id" field.
 func (scu *ScheduleCoachUpdate) ClearScheduleID() *ScheduleCoachUpdate {
 	scu.mutation.ClearScheduleID()
+	return scu
+}
+
+// SetProductID sets the "product_id" field.
+func (scu *ScheduleCoachUpdate) SetProductID(i int64) *ScheduleCoachUpdate {
+	scu.mutation.ResetProductID()
+	scu.mutation.SetProductID(i)
+	return scu
+}
+
+// SetNillableProductID sets the "product_id" field if the given value is not nil.
+func (scu *ScheduleCoachUpdate) SetNillableProductID(i *int64) *ScheduleCoachUpdate {
+	if i != nil {
+		scu.SetProductID(*i)
+	}
+	return scu
+}
+
+// AddProductID adds i to the "product_id" field.
+func (scu *ScheduleCoachUpdate) AddProductID(i int64) *ScheduleCoachUpdate {
+	scu.mutation.AddProductID(i)
+	return scu
+}
+
+// ClearProductID clears the value of the "product_id" field.
+func (scu *ScheduleCoachUpdate) ClearProductID() *ScheduleCoachUpdate {
+	scu.mutation.ClearProductID()
 	return scu
 }
 
@@ -451,6 +505,24 @@ func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if scu.mutation.CoachIDCleared() {
 		_spec.ClearField(schedulecoach.FieldCoachID, field.TypeInt64)
 	}
+	if value, ok := scu.mutation.PlaceID(); ok {
+		_spec.SetField(schedulecoach.FieldPlaceID, field.TypeInt64, value)
+	}
+	if value, ok := scu.mutation.AddedPlaceID(); ok {
+		_spec.AddField(schedulecoach.FieldPlaceID, field.TypeInt64, value)
+	}
+	if scu.mutation.PlaceIDCleared() {
+		_spec.ClearField(schedulecoach.FieldPlaceID, field.TypeInt64)
+	}
+	if value, ok := scu.mutation.ProductID(); ok {
+		_spec.SetField(schedulecoach.FieldProductID, field.TypeInt64, value)
+	}
+	if value, ok := scu.mutation.AddedProductID(); ok {
+		_spec.AddField(schedulecoach.FieldProductID, field.TypeInt64, value)
+	}
+	if scu.mutation.ProductIDCleared() {
+		_spec.ClearField(schedulecoach.FieldProductID, field.TypeInt64)
+	}
 	if value, ok := scu.mutation.ScheduleName(); ok {
 		_spec.SetField(schedulecoach.FieldScheduleName, field.TypeString, value)
 	}
@@ -689,6 +761,33 @@ func (scuo *ScheduleCoachUpdateOne) ClearCoachID() *ScheduleCoachUpdateOne {
 	return scuo
 }
 
+// SetPlaceID sets the "place_id" field.
+func (scuo *ScheduleCoachUpdateOne) SetPlaceID(i int64) *ScheduleCoachUpdateOne {
+	scuo.mutation.ResetPlaceID()
+	scuo.mutation.SetPlaceID(i)
+	return scuo
+}
+
+// SetNillablePlaceID sets the "place_id" field if the given value is not nil.
+func (scuo *ScheduleCoachUpdateOne) SetNillablePlaceID(i *int64) *ScheduleCoachUpdateOne {
+	if i != nil {
+		scuo.SetPlaceID(*i)
+	}
+	return scuo
+}
+
+// AddPlaceID adds i to the "place_id" field.
+func (scuo *ScheduleCoachUpdateOne) AddPlaceID(i int64) *ScheduleCoachUpdateOne {
+	scuo.mutation.AddPlaceID(i)
+	return scuo
+}
+
+// ClearPlaceID clears the value of the "place_id" field.
+func (scuo *ScheduleCoachUpdateOne) ClearPlaceID() *ScheduleCoachUpdateOne {
+	scuo.mutation.ClearPlaceID()
+	return scuo
+}
+
 // SetScheduleID sets the "schedule_id" field.
 func (scuo *ScheduleCoachUpdateOne) SetScheduleID(i int64) *ScheduleCoachUpdateOne {
 	scuo.mutation.SetScheduleID(i)
@@ -706,6 +805,33 @@ func (scuo *ScheduleCoachUpdateOne) SetNillableScheduleID(i *int64) *ScheduleCoa
 // ClearScheduleID clears the value of the "schedule_id" field.
 func (scuo *ScheduleCoachUpdateOne) ClearScheduleID() *ScheduleCoachUpdateOne {
 	scuo.mutation.ClearScheduleID()
+	return scuo
+}
+
+// SetProductID sets the "product_id" field.
+func (scuo *ScheduleCoachUpdateOne) SetProductID(i int64) *ScheduleCoachUpdateOne {
+	scuo.mutation.ResetProductID()
+	scuo.mutation.SetProductID(i)
+	return scuo
+}
+
+// SetNillableProductID sets the "product_id" field if the given value is not nil.
+func (scuo *ScheduleCoachUpdateOne) SetNillableProductID(i *int64) *ScheduleCoachUpdateOne {
+	if i != nil {
+		scuo.SetProductID(*i)
+	}
+	return scuo
+}
+
+// AddProductID adds i to the "product_id" field.
+func (scuo *ScheduleCoachUpdateOne) AddProductID(i int64) *ScheduleCoachUpdateOne {
+	scuo.mutation.AddProductID(i)
+	return scuo
+}
+
+// ClearProductID clears the value of the "product_id" field.
+func (scuo *ScheduleCoachUpdateOne) ClearProductID() *ScheduleCoachUpdateOne {
+	scuo.mutation.ClearProductID()
 	return scuo
 }
 
@@ -993,6 +1119,24 @@ func (scuo *ScheduleCoachUpdateOne) sqlSave(ctx context.Context) (_node *Schedul
 	}
 	if scuo.mutation.CoachIDCleared() {
 		_spec.ClearField(schedulecoach.FieldCoachID, field.TypeInt64)
+	}
+	if value, ok := scuo.mutation.PlaceID(); ok {
+		_spec.SetField(schedulecoach.FieldPlaceID, field.TypeInt64, value)
+	}
+	if value, ok := scuo.mutation.AddedPlaceID(); ok {
+		_spec.AddField(schedulecoach.FieldPlaceID, field.TypeInt64, value)
+	}
+	if scuo.mutation.PlaceIDCleared() {
+		_spec.ClearField(schedulecoach.FieldPlaceID, field.TypeInt64)
+	}
+	if value, ok := scuo.mutation.ProductID(); ok {
+		_spec.SetField(schedulecoach.FieldProductID, field.TypeInt64, value)
+	}
+	if value, ok := scuo.mutation.AddedProductID(); ok {
+		_spec.AddField(schedulecoach.FieldProductID, field.TypeInt64, value)
+	}
+	if scuo.mutation.ProductIDCleared() {
+		_spec.ClearField(schedulecoach.FieldProductID, field.TypeInt64)
 	}
 	if value, ok := scuo.mutation.ScheduleName(); ok {
 		_spec.SetField(schedulecoach.FieldScheduleName, field.TypeString, value)

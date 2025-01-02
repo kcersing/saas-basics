@@ -66,6 +66,8 @@ const (
 	EdgeCourses = "courses"
 	// EdgeLessons holds the string denoting the lessons edge name in mutations.
 	EdgeLessons = "lessons"
+	// EdgeProducts holds the string denoting the products edge name in mutations.
+	EdgeProducts = "products"
 	// Table holds the table name of the product in the database.
 	Table = "product"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
@@ -92,6 +94,11 @@ const (
 	LessonsInverseTable = "product_courses"
 	// LessonsColumn is the table column denoting the lessons relation/edge.
 	LessonsColumn = "product_id"
+	// ProductsTable is the table that holds the products relation/edge. The primary key declared below.
+	ProductsTable = "venue_place_products"
+	// ProductsInverseTable is the table name for the VenuePlace entity.
+	// It exists in this package in order to avoid circular dependency with the "venueplace" package.
+	ProductsInverseTable = "venue_place"
 )
 
 // Columns holds all SQL columns for product fields.
@@ -128,6 +135,9 @@ var (
 	// ContractsPrimaryKey and ContractsColumn2 are the table columns denoting the
 	// primary key for the contracts relation (M2M).
 	ContractsPrimaryKey = []string{"product_id", "contract_id"}
+	// ProductsPrimaryKey and ProductsColumn2 are the table columns denoting the
+	// primary key for the products relation (M2M).
+	ProductsPrimaryKey = []string{"venue_place_id", "product_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -351,6 +361,20 @@ func ByLessons(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newLessonsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByProductsCount orders the results by products count.
+func ByProductsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProductsStep(), opts...)
+	}
+}
+
+// ByProducts orders the results by products terms.
+func ByProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTagsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -377,5 +401,12 @@ func newLessonsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LessonsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, LessonsTable, LessonsColumn),
+	)
+}
+func newProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProductsTable, ProductsPrimaryKey...),
 	)
 }

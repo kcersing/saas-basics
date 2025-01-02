@@ -46,4 +46,5 @@ type CreateScheduleMemberCourse struct {
 	ProductId       int64
 	Type            string
 	One             *ent.Schedule
+	PlaceId         int64
 }

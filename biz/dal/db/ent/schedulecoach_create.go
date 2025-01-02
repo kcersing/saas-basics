@@ -118,6 +118,20 @@ func (scc *ScheduleCoachCreate) SetNillableCoachID(i *int64) *ScheduleCoachCreat
 	return scc
 }
 
+// SetPlaceID sets the "place_id" field.
+func (scc *ScheduleCoachCreate) SetPlaceID(i int64) *ScheduleCoachCreate {
+	scc.mutation.SetPlaceID(i)
+	return scc
+}
+
+// SetNillablePlaceID sets the "place_id" field if the given value is not nil.
+func (scc *ScheduleCoachCreate) SetNillablePlaceID(i *int64) *ScheduleCoachCreate {
+	if i != nil {
+		scc.SetPlaceID(*i)
+	}
+	return scc
+}
+
 // SetScheduleID sets the "schedule_id" field.
 func (scc *ScheduleCoachCreate) SetScheduleID(i int64) *ScheduleCoachCreate {
 	scc.mutation.SetScheduleID(i)
@@ -128,6 +142,20 @@ func (scc *ScheduleCoachCreate) SetScheduleID(i int64) *ScheduleCoachCreate {
 func (scc *ScheduleCoachCreate) SetNillableScheduleID(i *int64) *ScheduleCoachCreate {
 	if i != nil {
 		scc.SetScheduleID(*i)
+	}
+	return scc
+}
+
+// SetProductID sets the "product_id" field.
+func (scc *ScheduleCoachCreate) SetProductID(i int64) *ScheduleCoachCreate {
+	scc.mutation.SetProductID(i)
+	return scc
+}
+
+// SetNillableProductID sets the "product_id" field if the given value is not nil.
+func (scc *ScheduleCoachCreate) SetNillableProductID(i *int64) *ScheduleCoachCreate {
+	if i != nil {
+		scc.SetProductID(*i)
 	}
 	return scc
 }
@@ -375,6 +403,14 @@ func (scc *ScheduleCoachCreate) createSpec() (*ScheduleCoach, *sqlgraph.CreateSp
 	if value, ok := scc.mutation.CoachID(); ok {
 		_spec.SetField(schedulecoach.FieldCoachID, field.TypeInt64, value)
 		_node.CoachID = value
+	}
+	if value, ok := scc.mutation.PlaceID(); ok {
+		_spec.SetField(schedulecoach.FieldPlaceID, field.TypeInt64, value)
+		_node.PlaceID = value
+	}
+	if value, ok := scc.mutation.ProductID(); ok {
+		_spec.SetField(schedulecoach.FieldProductID, field.TypeInt64, value)
+		_node.ProductID = value
 	}
 	if value, ok := scc.mutation.ScheduleName(); ok {
 		_spec.SetField(schedulecoach.FieldScheduleName, field.TypeString, value)

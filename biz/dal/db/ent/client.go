@@ -5302,6 +5302,22 @@ func (c *ProductClient) QueryLessons(pr *Product) *ProductCoursesQuery {
 	return query
 }
 
+// QueryProducts queries the products edge of a Product.
+func (c *ProductClient) QueryProducts(pr *Product) *VenuePlaceQuery {
+	query := (&VenuePlaceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(product.Table, product.FieldID, id),
+			sqlgraph.To(venueplace.Table, venueplace.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, product.ProductsTable, product.ProductsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProductClient) Hooks() []Hook {
 	return c.hooks.Product
@@ -7041,6 +7057,22 @@ func (c *VenuePlaceClient) QueryVenue(vp *VenuePlace) *VenueQuery {
 			sqlgraph.From(venueplace.Table, venueplace.FieldID, id),
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, venueplace.VenueTable, venueplace.VenueColumn),
+		)
+		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProducts queries the products edge of a VenuePlace.
+func (c *VenuePlaceClient) QueryProducts(vp *VenuePlace) *ProductQuery {
+	query := (&ProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(venueplace.Table, venueplace.FieldID, id),
+			sqlgraph.To(product.Table, product.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, venueplace.ProductsTable, venueplace.ProductsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
 		return fromV, nil

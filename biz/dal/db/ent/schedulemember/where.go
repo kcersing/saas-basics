@@ -85,6 +85,11 @@ func VenueID(v int64) predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldEQ(FieldVenueID, v))
 }
 
+// PlaceID applies equality check predicate on the "place_id" field. It's identical to PlaceIDEQ.
+func PlaceID(v int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldPlaceID, v))
+}
+
 // ScheduleID applies equality check predicate on the "schedule_id" field. It's identical to ScheduleIDEQ.
 func ScheduleID(v int64) predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldEQ(FieldScheduleID, v))
@@ -443,6 +448,56 @@ func VenueIDIsNil() predicate.ScheduleMember {
 // VenueIDNotNil applies the NotNil predicate on the "venue_id" field.
 func VenueIDNotNil() predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldNotNull(FieldVenueID))
+}
+
+// PlaceIDEQ applies the EQ predicate on the "place_id" field.
+func PlaceIDEQ(v int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldPlaceID, v))
+}
+
+// PlaceIDNEQ applies the NEQ predicate on the "place_id" field.
+func PlaceIDNEQ(v int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNEQ(FieldPlaceID, v))
+}
+
+// PlaceIDIn applies the In predicate on the "place_id" field.
+func PlaceIDIn(vs ...int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIn(FieldPlaceID, vs...))
+}
+
+// PlaceIDNotIn applies the NotIn predicate on the "place_id" field.
+func PlaceIDNotIn(vs ...int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotIn(FieldPlaceID, vs...))
+}
+
+// PlaceIDGT applies the GT predicate on the "place_id" field.
+func PlaceIDGT(v int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGT(FieldPlaceID, v))
+}
+
+// PlaceIDGTE applies the GTE predicate on the "place_id" field.
+func PlaceIDGTE(v int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGTE(FieldPlaceID, v))
+}
+
+// PlaceIDLT applies the LT predicate on the "place_id" field.
+func PlaceIDLT(v int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLT(FieldPlaceID, v))
+}
+
+// PlaceIDLTE applies the LTE predicate on the "place_id" field.
+func PlaceIDLTE(v int64) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLTE(FieldPlaceID, v))
+}
+
+// PlaceIDIsNil applies the IsNil predicate on the "place_id" field.
+func PlaceIDIsNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIsNull(FieldPlaceID))
+}
+
+// PlaceIDNotNil applies the NotNil predicate on the "place_id" field.
+func PlaceIDNotNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotNull(FieldPlaceID))
 }
 
 // ScheduleIDEQ applies the EQ predicate on the "schedule_id" field.
@@ -923,6 +978,16 @@ func SignEndTimeIsNil() predicate.ScheduleMember {
 // SignEndTimeNotNil applies the NotNil predicate on the "sign_end_time" field.
 func SignEndTimeNotNil() predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldNotNull(FieldSignEndTime))
+}
+
+// SeatIsNil applies the IsNil predicate on the "seat" field.
+func SeatIsNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIsNull(FieldSeat))
+}
+
+// SeatNotNil applies the NotNil predicate on the "seat" field.
+func SeatNotNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotNull(FieldSeat))
 }
 
 // MemberNameEQ applies the EQ predicate on the "member_name" field.

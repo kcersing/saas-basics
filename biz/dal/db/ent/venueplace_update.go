@@ -7,12 +7,15 @@ import (
 	"errors"
 	"fmt"
 	"saas/biz/dal/db/ent/predicate"
+	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/idl_gen/model/base"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 )
 
@@ -310,9 +313,42 @@ func (vpu *VenuePlaceUpdate) ClearInformation() *VenuePlaceUpdate {
 	return vpu
 }
 
+// SetSeat sets the "seat" field.
+func (vpu *VenuePlaceUpdate) SetSeat(b []*base.Seat) *VenuePlaceUpdate {
+	vpu.mutation.SetSeat(b)
+	return vpu
+}
+
+// AppendSeat appends b to the "seat" field.
+func (vpu *VenuePlaceUpdate) AppendSeat(b []*base.Seat) *VenuePlaceUpdate {
+	vpu.mutation.AppendSeat(b)
+	return vpu
+}
+
+// ClearSeat clears the value of the "seat" field.
+func (vpu *VenuePlaceUpdate) ClearSeat() *VenuePlaceUpdate {
+	vpu.mutation.ClearSeat()
+	return vpu
+}
+
 // SetVenue sets the "venue" edge to the Venue entity.
 func (vpu *VenuePlaceUpdate) SetVenue(v *Venue) *VenuePlaceUpdate {
 	return vpu.SetVenueID(v.ID)
+}
+
+// AddProductIDs adds the "products" edge to the Product entity by IDs.
+func (vpu *VenuePlaceUpdate) AddProductIDs(ids ...int64) *VenuePlaceUpdate {
+	vpu.mutation.AddProductIDs(ids...)
+	return vpu
+}
+
+// AddProducts adds the "products" edges to the Product entity.
+func (vpu *VenuePlaceUpdate) AddProducts(p ...*Product) *VenuePlaceUpdate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpu.AddProductIDs(ids...)
 }
 
 // Mutation returns the VenuePlaceMutation object of the builder.
@@ -324,6 +360,27 @@ func (vpu *VenuePlaceUpdate) Mutation() *VenuePlaceMutation {
 func (vpu *VenuePlaceUpdate) ClearVenue() *VenuePlaceUpdate {
 	vpu.mutation.ClearVenue()
 	return vpu
+}
+
+// ClearProducts clears all "products" edges to the Product entity.
+func (vpu *VenuePlaceUpdate) ClearProducts() *VenuePlaceUpdate {
+	vpu.mutation.ClearProducts()
+	return vpu
+}
+
+// RemoveProductIDs removes the "products" edge to Product entities by IDs.
+func (vpu *VenuePlaceUpdate) RemoveProductIDs(ids ...int64) *VenuePlaceUpdate {
+	vpu.mutation.RemoveProductIDs(ids...)
+	return vpu
+}
+
+// RemoveProducts removes "products" edges to Product entities.
+func (vpu *VenuePlaceUpdate) RemoveProducts(p ...*Product) *VenuePlaceUpdate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpu.RemoveProductIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -461,6 +518,17 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if vpu.mutation.InformationCleared() {
 		_spec.ClearField(venueplace.FieldInformation, field.TypeString)
 	}
+	if value, ok := vpu.mutation.Seat(); ok {
+		_spec.SetField(venueplace.FieldSeat, field.TypeJSON, value)
+	}
+	if value, ok := vpu.mutation.AppendedSeat(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, venueplace.FieldSeat, value)
+		})
+	}
+	if vpu.mutation.SeatCleared() {
+		_spec.ClearField(venueplace.FieldSeat, field.TypeJSON)
+	}
 	if vpu.mutation.VenueCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -483,6 +551,51 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vpu.mutation.ProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   venueplace.ProductsTable,
+			Columns: venueplace.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpu.mutation.RemovedProductsIDs(); len(nodes) > 0 && !vpu.mutation.ProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   venueplace.ProductsTable,
+			Columns: venueplace.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpu.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   venueplace.ProductsTable,
+			Columns: venueplace.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -791,9 +904,42 @@ func (vpuo *VenuePlaceUpdateOne) ClearInformation() *VenuePlaceUpdateOne {
 	return vpuo
 }
 
+// SetSeat sets the "seat" field.
+func (vpuo *VenuePlaceUpdateOne) SetSeat(b []*base.Seat) *VenuePlaceUpdateOne {
+	vpuo.mutation.SetSeat(b)
+	return vpuo
+}
+
+// AppendSeat appends b to the "seat" field.
+func (vpuo *VenuePlaceUpdateOne) AppendSeat(b []*base.Seat) *VenuePlaceUpdateOne {
+	vpuo.mutation.AppendSeat(b)
+	return vpuo
+}
+
+// ClearSeat clears the value of the "seat" field.
+func (vpuo *VenuePlaceUpdateOne) ClearSeat() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearSeat()
+	return vpuo
+}
+
 // SetVenue sets the "venue" edge to the Venue entity.
 func (vpuo *VenuePlaceUpdateOne) SetVenue(v *Venue) *VenuePlaceUpdateOne {
 	return vpuo.SetVenueID(v.ID)
+}
+
+// AddProductIDs adds the "products" edge to the Product entity by IDs.
+func (vpuo *VenuePlaceUpdateOne) AddProductIDs(ids ...int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.AddProductIDs(ids...)
+	return vpuo
+}
+
+// AddProducts adds the "products" edges to the Product entity.
+func (vpuo *VenuePlaceUpdateOne) AddProducts(p ...*Product) *VenuePlaceUpdateOne {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpuo.AddProductIDs(ids...)
 }
 
 // Mutation returns the VenuePlaceMutation object of the builder.
@@ -805,6 +951,27 @@ func (vpuo *VenuePlaceUpdateOne) Mutation() *VenuePlaceMutation {
 func (vpuo *VenuePlaceUpdateOne) ClearVenue() *VenuePlaceUpdateOne {
 	vpuo.mutation.ClearVenue()
 	return vpuo
+}
+
+// ClearProducts clears all "products" edges to the Product entity.
+func (vpuo *VenuePlaceUpdateOne) ClearProducts() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearProducts()
+	return vpuo
+}
+
+// RemoveProductIDs removes the "products" edge to Product entities by IDs.
+func (vpuo *VenuePlaceUpdateOne) RemoveProductIDs(ids ...int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.RemoveProductIDs(ids...)
+	return vpuo
+}
+
+// RemoveProducts removes "products" edges to Product entities.
+func (vpuo *VenuePlaceUpdateOne) RemoveProducts(p ...*Product) *VenuePlaceUpdateOne {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpuo.RemoveProductIDs(ids...)
 }
 
 // Where appends a list predicates to the VenuePlaceUpdate builder.
@@ -972,6 +1139,17 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 	if vpuo.mutation.InformationCleared() {
 		_spec.ClearField(venueplace.FieldInformation, field.TypeString)
 	}
+	if value, ok := vpuo.mutation.Seat(); ok {
+		_spec.SetField(venueplace.FieldSeat, field.TypeJSON, value)
+	}
+	if value, ok := vpuo.mutation.AppendedSeat(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, venueplace.FieldSeat, value)
+		})
+	}
+	if vpuo.mutation.SeatCleared() {
+		_spec.ClearField(venueplace.FieldSeat, field.TypeJSON)
+	}
 	if vpuo.mutation.VenueCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -994,6 +1172,51 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vpuo.mutation.ProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   venueplace.ProductsTable,
+			Columns: venueplace.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpuo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !vpuo.mutation.ProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   venueplace.ProductsTable,
+			Columns: venueplace.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpuo.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   venueplace.ProductsTable,
+			Columns: venueplace.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

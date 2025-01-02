@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/productcourses"
+	"saas/biz/dal/db/ent/venueplace"
 	"saas/idl_gen/model/base"
 	"time"
 
@@ -389,6 +390,21 @@ func (pc *ProductCreate) AddLessons(p ...*ProductCourses) *ProductCreate {
 	return pc.AddLessonIDs(ids...)
 }
 
+// AddProductIDs adds the "products" edge to the VenuePlace entity by IDs.
+func (pc *ProductCreate) AddProductIDs(ids ...int64) *ProductCreate {
+	pc.mutation.AddProductIDs(ids...)
+	return pc
+}
+
+// AddProducts adds the "products" edges to the VenuePlace entity.
+func (pc *ProductCreate) AddProducts(v ...*VenuePlace) *ProductCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return pc.AddProductIDs(ids...)
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (pc *ProductCreate) Mutation() *ProductMutation {
 	return pc.mutation
@@ -681,6 +697,22 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   product.ProductsTable,
+			Columns: product.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

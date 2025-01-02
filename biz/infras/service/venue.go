@@ -274,6 +274,19 @@ func entVenuePlaceInfo(v *ent.VenuePlace) *venue.VenuePlaceInfo {
 
 	createdAt := v.CreatedAt.Format(time.DateTime)
 	updatedAt := v.UpdatedAt.Format(time.DateTime)
+	var products []*base.List
+	var productIds []int64
+	productAll, _ := v.QueryProducts().All(context.Background())
+	if len(productAll) > 0 {
+		for _, p := range productAll {
+			products = append(products, &base.List{
+				ID:   p.ID,
+				Name: p.Name,
+			})
+			productIds = append(productIds, p.ID)
+		}
+	}
+
 	return &venue.VenuePlaceInfo{
 		ID:           v.ID,
 		Name:         v.Name,
@@ -287,6 +300,9 @@ func entVenuePlaceInfo(v *ent.VenuePlace) *venue.VenuePlaceInfo {
 		Classify:     v.Classify,
 		IsShow:       v.IsShow,
 		IsAccessible: v.IsAccessible,
+		Seat:         v.Seat,
+		Products:     products,
+		ProductIds:   productIds,
 	}
 }
 

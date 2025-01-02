@@ -3,6 +3,7 @@
 package schedulemember
 
 import (
+	"saas/idl_gen/model/base"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -26,6 +27,8 @@ const (
 	FieldStatus = "status"
 	// FieldVenueID holds the string denoting the venue_id field in the database.
 	FieldVenueID = "venue_id"
+	// FieldPlaceID holds the string denoting the place_id field in the database.
+	FieldPlaceID = "place_id"
 	// FieldScheduleID holds the string denoting the schedule_id field in the database.
 	FieldScheduleID = "schedule_id"
 	// FieldScheduleName holds the string denoting the schedule_name field in the database.
@@ -44,6 +47,8 @@ const (
 	FieldSignStartTime = "sign_start_time"
 	// FieldSignEndTime holds the string denoting the sign_end_time field in the database.
 	FieldSignEndTime = "sign_end_time"
+	// FieldSeat holds the string denoting the seat field in the database.
+	FieldSeat = "seat"
 	// FieldMemberName holds the string denoting the member_name field in the database.
 	FieldMemberName = "member_name"
 	// FieldMemberProductName holds the string denoting the member_product_name field in the database.
@@ -72,6 +77,7 @@ var Columns = []string{
 	FieldCreatedID,
 	FieldStatus,
 	FieldVenueID,
+	FieldPlaceID,
 	FieldScheduleID,
 	FieldScheduleName,
 	FieldMemberID,
@@ -81,6 +87,7 @@ var Columns = []string{
 	FieldEndTime,
 	FieldSignStartTime,
 	FieldSignEndTime,
+	FieldSeat,
 	FieldMemberName,
 	FieldMemberProductName,
 	FieldRemark,
@@ -117,6 +124,8 @@ var (
 	DefaultSignStartTime func() time.Time
 	// DefaultSignEndTime holds the default value on creation for the "sign_end_time" field.
 	DefaultSignEndTime func() time.Time
+	// DefaultSeat holds the default value on creation for the "seat" field.
+	DefaultSeat base.Seat
 )
 
 // OrderOption defines the ordering options for the ScheduleMember queries.
@@ -155,6 +164,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByVenueID orders the results by the venue_id field.
 func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
+}
+
+// ByPlaceID orders the results by the place_id field.
+func ByPlaceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlaceID, opts...).ToFunc()
 }
 
 // ByScheduleID orders the results by the schedule_id field.

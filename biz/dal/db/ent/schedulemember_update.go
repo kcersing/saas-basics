@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
+	"saas/idl_gen/model/base"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -146,6 +147,33 @@ func (smu *ScheduleMemberUpdate) AddVenueID(i int64) *ScheduleMemberUpdate {
 // ClearVenueID clears the value of the "venue_id" field.
 func (smu *ScheduleMemberUpdate) ClearVenueID() *ScheduleMemberUpdate {
 	smu.mutation.ClearVenueID()
+	return smu
+}
+
+// SetPlaceID sets the "place_id" field.
+func (smu *ScheduleMemberUpdate) SetPlaceID(i int64) *ScheduleMemberUpdate {
+	smu.mutation.ResetPlaceID()
+	smu.mutation.SetPlaceID(i)
+	return smu
+}
+
+// SetNillablePlaceID sets the "place_id" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillablePlaceID(i *int64) *ScheduleMemberUpdate {
+	if i != nil {
+		smu.SetPlaceID(*i)
+	}
+	return smu
+}
+
+// AddPlaceID adds i to the "place_id" field.
+func (smu *ScheduleMemberUpdate) AddPlaceID(i int64) *ScheduleMemberUpdate {
+	smu.mutation.AddPlaceID(i)
+	return smu
+}
+
+// ClearPlaceID clears the value of the "place_id" field.
+func (smu *ScheduleMemberUpdate) ClearPlaceID() *ScheduleMemberUpdate {
+	smu.mutation.ClearPlaceID()
 	return smu
 }
 
@@ -343,6 +371,26 @@ func (smu *ScheduleMemberUpdate) ClearSignEndTime() *ScheduleMemberUpdate {
 	return smu
 }
 
+// SetSeat sets the "seat" field.
+func (smu *ScheduleMemberUpdate) SetSeat(b base.Seat) *ScheduleMemberUpdate {
+	smu.mutation.SetSeat(b)
+	return smu
+}
+
+// SetNillableSeat sets the "seat" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableSeat(b *base.Seat) *ScheduleMemberUpdate {
+	if b != nil {
+		smu.SetSeat(*b)
+	}
+	return smu
+}
+
+// ClearSeat clears the value of the "seat" field.
+func (smu *ScheduleMemberUpdate) ClearSeat() *ScheduleMemberUpdate {
+	smu.mutation.ClearSeat()
+	return smu
+}
+
 // SetMemberName sets the "member_name" field.
 func (smu *ScheduleMemberUpdate) SetMemberName(s string) *ScheduleMemberUpdate {
 	smu.mutation.SetMemberName(s)
@@ -509,6 +557,15 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if smu.mutation.VenueIDCleared() {
 		_spec.ClearField(schedulemember.FieldVenueID, field.TypeInt64)
 	}
+	if value, ok := smu.mutation.PlaceID(); ok {
+		_spec.SetField(schedulemember.FieldPlaceID, field.TypeInt64, value)
+	}
+	if value, ok := smu.mutation.AddedPlaceID(); ok {
+		_spec.AddField(schedulemember.FieldPlaceID, field.TypeInt64, value)
+	}
+	if smu.mutation.PlaceIDCleared() {
+		_spec.ClearField(schedulemember.FieldPlaceID, field.TypeInt64)
+	}
 	if value, ok := smu.mutation.ScheduleName(); ok {
 		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
 	}
@@ -562,6 +619,12 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if smu.mutation.SignEndTimeCleared() {
 		_spec.ClearField(schedulemember.FieldSignEndTime, field.TypeTime)
+	}
+	if value, ok := smu.mutation.Seat(); ok {
+		_spec.SetField(schedulemember.FieldSeat, field.TypeJSON, value)
+	}
+	if smu.mutation.SeatCleared() {
+		_spec.ClearField(schedulemember.FieldSeat, field.TypeJSON)
 	}
 	if value, ok := smu.mutation.MemberName(); ok {
 		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)
@@ -747,6 +810,33 @@ func (smuo *ScheduleMemberUpdateOne) AddVenueID(i int64) *ScheduleMemberUpdateOn
 // ClearVenueID clears the value of the "venue_id" field.
 func (smuo *ScheduleMemberUpdateOne) ClearVenueID() *ScheduleMemberUpdateOne {
 	smuo.mutation.ClearVenueID()
+	return smuo
+}
+
+// SetPlaceID sets the "place_id" field.
+func (smuo *ScheduleMemberUpdateOne) SetPlaceID(i int64) *ScheduleMemberUpdateOne {
+	smuo.mutation.ResetPlaceID()
+	smuo.mutation.SetPlaceID(i)
+	return smuo
+}
+
+// SetNillablePlaceID sets the "place_id" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillablePlaceID(i *int64) *ScheduleMemberUpdateOne {
+	if i != nil {
+		smuo.SetPlaceID(*i)
+	}
+	return smuo
+}
+
+// AddPlaceID adds i to the "place_id" field.
+func (smuo *ScheduleMemberUpdateOne) AddPlaceID(i int64) *ScheduleMemberUpdateOne {
+	smuo.mutation.AddPlaceID(i)
+	return smuo
+}
+
+// ClearPlaceID clears the value of the "place_id" field.
+func (smuo *ScheduleMemberUpdateOne) ClearPlaceID() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearPlaceID()
 	return smuo
 }
 
@@ -941,6 +1031,26 @@ func (smuo *ScheduleMemberUpdateOne) SetNillableSignEndTime(t *time.Time) *Sched
 // ClearSignEndTime clears the value of the "sign_end_time" field.
 func (smuo *ScheduleMemberUpdateOne) ClearSignEndTime() *ScheduleMemberUpdateOne {
 	smuo.mutation.ClearSignEndTime()
+	return smuo
+}
+
+// SetSeat sets the "seat" field.
+func (smuo *ScheduleMemberUpdateOne) SetSeat(b base.Seat) *ScheduleMemberUpdateOne {
+	smuo.mutation.SetSeat(b)
+	return smuo
+}
+
+// SetNillableSeat sets the "seat" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableSeat(b *base.Seat) *ScheduleMemberUpdateOne {
+	if b != nil {
+		smuo.SetSeat(*b)
+	}
+	return smuo
+}
+
+// ClearSeat clears the value of the "seat" field.
+func (smuo *ScheduleMemberUpdateOne) ClearSeat() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearSeat()
 	return smuo
 }
 
@@ -1140,6 +1250,15 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	if smuo.mutation.VenueIDCleared() {
 		_spec.ClearField(schedulemember.FieldVenueID, field.TypeInt64)
 	}
+	if value, ok := smuo.mutation.PlaceID(); ok {
+		_spec.SetField(schedulemember.FieldPlaceID, field.TypeInt64, value)
+	}
+	if value, ok := smuo.mutation.AddedPlaceID(); ok {
+		_spec.AddField(schedulemember.FieldPlaceID, field.TypeInt64, value)
+	}
+	if smuo.mutation.PlaceIDCleared() {
+		_spec.ClearField(schedulemember.FieldPlaceID, field.TypeInt64)
+	}
 	if value, ok := smuo.mutation.ScheduleName(); ok {
 		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
 	}
@@ -1193,6 +1312,12 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	}
 	if smuo.mutation.SignEndTimeCleared() {
 		_spec.ClearField(schedulemember.FieldSignEndTime, field.TypeTime)
+	}
+	if value, ok := smuo.mutation.Seat(); ok {
+		_spec.SetField(schedulemember.FieldSeat, field.TypeJSON, value)
+	}
+	if smuo.mutation.SeatCleared() {
+		_spec.ClearField(schedulemember.FieldSeat, field.TypeJSON)
 	}
 	if value, ok := smuo.mutation.MemberName(); ok {
 		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)

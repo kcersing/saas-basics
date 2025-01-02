@@ -3,9 +3,11 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
+	"saas/idl_gen/model/base"
 	"strings"
 	"time"
 
@@ -31,6 +33,8 @@ type ScheduleMember struct {
 	Status int64 `json:"status,omitempty"`
 	// 场馆id
 	VenueID int64 `json:"venue_id,omitempty"`
+	// 场地ID
+	PlaceID int64 `json:"place_id,omitempty"`
 	// 课程ID
 	ScheduleID int64 `json:"schedule_id,omitempty"`
 	// 课程名称
@@ -49,6 +53,8 @@ type ScheduleMember struct {
 	SignStartTime time.Time `json:"sign_start_time,omitempty"`
 	// 下课签到时间
 	SignEndTime time.Time `json:"sign_end_time,omitempty"`
+	// 座位
+	Seat base.Seat `json:"seat,omitempty"`
 	// 会员名称
 	MemberName string `json:"member_name,omitempty"`
 	// 会员产品名称
@@ -88,7 +94,9 @@ func (*ScheduleMember) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case schedulemember.FieldID, schedulemember.FieldDelete, schedulemember.FieldCreatedID, schedulemember.FieldStatus, schedulemember.FieldVenueID, schedulemember.FieldScheduleID, schedulemember.FieldMemberID, schedulemember.FieldMemberProductID:
+		case schedulemember.FieldSeat:
+			values[i] = new([]byte)
+		case schedulemember.FieldID, schedulemember.FieldDelete, schedulemember.FieldCreatedID, schedulemember.FieldStatus, schedulemember.FieldVenueID, schedulemember.FieldPlaceID, schedulemember.FieldScheduleID, schedulemember.FieldMemberID, schedulemember.FieldMemberProductID:
 			values[i] = new(sql.NullInt64)
 		case schedulemember.FieldScheduleName, schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldRemark:
 			values[i] = new(sql.NullString)
@@ -151,6 +159,12 @@ func (sm *ScheduleMember) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sm.VenueID = value.Int64
 			}
+		case schedulemember.FieldPlaceID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field place_id", values[i])
+			} else if value.Valid {
+				sm.PlaceID = value.Int64
+			}
 		case schedulemember.FieldScheduleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field schedule_id", values[i])
@@ -204,6 +218,14 @@ func (sm *ScheduleMember) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field sign_end_time", values[i])
 			} else if value.Valid {
 				sm.SignEndTime = value.Time
+			}
+		case schedulemember.FieldSeat:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field seat", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &sm.Seat); err != nil {
+					return fmt.Errorf("unmarshal field seat: %w", err)
+				}
 			}
 		case schedulemember.FieldMemberName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -282,6 +304,9 @@ func (sm *ScheduleMember) String() string {
 	builder.WriteString("venue_id=")
 	builder.WriteString(fmt.Sprintf("%v", sm.VenueID))
 	builder.WriteString(", ")
+	builder.WriteString("place_id=")
+	builder.WriteString(fmt.Sprintf("%v", sm.PlaceID))
+	builder.WriteString(", ")
 	builder.WriteString("schedule_id=")
 	builder.WriteString(fmt.Sprintf("%v", sm.ScheduleID))
 	builder.WriteString(", ")
@@ -308,6 +333,9 @@ func (sm *ScheduleMember) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sign_end_time=")
 	builder.WriteString(sm.SignEndTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("seat=")
+	builder.WriteString(fmt.Sprintf("%v", sm.Seat))
 	builder.WriteString(", ")
 	builder.WriteString("member_name=")
 	builder.WriteString(sm.MemberName)

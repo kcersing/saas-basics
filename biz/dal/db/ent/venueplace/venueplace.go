@@ -3,6 +3,7 @@
 package venueplace
 
 import (
+	"saas/idl_gen/model/base"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -40,8 +41,12 @@ const (
 	FieldIsAccessible = "is_accessible"
 	// FieldInformation holds the string denoting the information field in the database.
 	FieldInformation = "information"
+	// FieldSeat holds the string denoting the seat field in the database.
+	FieldSeat = "seat"
 	// EdgeVenue holds the string denoting the venue edge name in mutations.
 	EdgeVenue = "venue"
+	// EdgeProducts holds the string denoting the products edge name in mutations.
+	EdgeProducts = "products"
 	// Table holds the table name of the venueplace in the database.
 	Table = "venue_place"
 	// VenueTable is the table that holds the venue relation/edge.
@@ -51,6 +56,11 @@ const (
 	VenueInverseTable = "venue"
 	// VenueColumn is the table column denoting the venue relation/edge.
 	VenueColumn = "venue_id"
+	// ProductsTable is the table that holds the products relation/edge. The primary key declared below.
+	ProductsTable = "venue_place_products"
+	// ProductsInverseTable is the table name for the Product entity.
+	// It exists in this package in order to avoid circular dependency with the "product" package.
+	ProductsInverseTable = "product"
 )
 
 // Columns holds all SQL columns for venueplace fields.
@@ -69,7 +79,14 @@ var Columns = []string{
 	FieldIsShow,
 	FieldIsAccessible,
 	FieldInformation,
+	FieldSeat,
 }
+
+var (
+	// ProductsPrimaryKey and ProductsColumn2 are the table columns denoting the
+	// primary key for the products relation (M2M).
+	ProductsPrimaryKey = []string{"venue_place_id", "product_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -98,6 +115,8 @@ var (
 	DefaultIsShow int64
 	// DefaultIsAccessible holds the default value on creation for the "is_accessible" field.
 	DefaultIsAccessible int64
+	// DefaultSeat holds the default value on creation for the "seat" field.
+	DefaultSeat []*base.Seat
 )
 
 // OrderOption defines the ordering options for the VenuePlace queries.
@@ -179,10 +198,31 @@ func ByVenueField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newVenueStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByProductsCount orders the results by products count.
+func ByProductsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProductsStep(), opts...)
+	}
+}
+
+// ByProducts orders the results by products terms.
+func ByProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newVenueStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VenueInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, VenueTable, VenueColumn),
+	)
+}
+func newProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ProductsTable, ProductsPrimaryKey...),
 	)
 }

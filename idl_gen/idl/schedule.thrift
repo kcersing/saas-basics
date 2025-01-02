@@ -16,18 +16,18 @@ struct ScheduleInfo {
 	10:string endTime                   (api.raw = "endTime")
 	11:double price                     (api.raw = "price")
 	12:string name                      (api.raw = "name")
-	13:string remark                    (api.raw = "remark")
-	14:i64 coachId                      (api.raw = "coachId")
-	15:i64 memberId                     (api.raw = "memberId")
-	16:i64 memberProductId              (api.raw = "memberProductId")
+//	13:string remark                    (api.raw = "remark")
+//	14:i64 coachId                      (api.raw = "coachId")
+//	15:i64 memberId                     (api.raw = "memberId")
+//	16:i64 memberProductId              (api.raw = "memberProductId")
 
 	18:i64 status                       (api.raw = "status")
 
 	20:string venueName                   (api.raw = "venueName")
 	21:string placeName                   (api.raw = "placeName")
-	22:string coachName                   (api.raw = "coachName")
-	23:string memberName                  (api.raw = "memberName")
-	24:string memberProductName           (api.raw = "memberProductName")
+//	22:string coachName                   (api.raw = "coachName")
+//	23:string memberName                  (api.raw = "memberName")
+//	24:string memberProductName           (api.raw = "memberProductName")
 
 	26:list<ScheduleMemberInfo> memberCourseRecord (api.raw = "memberCourseRecord")
 	27:list<ScheduleCoachInfo> coachCourseRecord  (api.raw = "coachCourseRecord")
@@ -39,7 +39,8 @@ struct ScheduleMemberInfo {
 	1:i64 id                    (api.raw = "id")
 	2:i64 memberId              (api.raw = "memberId")
 	3:i64 venueId               (api.raw = "venueId")
-	4:i64 placeID               (api.raw = "placeId")
+	4:i64 placeId               (api.raw = "placeId")
+
 	6:i64 scheduleId            (api.raw = "scheduleId")
 	7:string scheduleName         (api.raw = "scheduleName")
 	8:string type                 (api.raw = "type")
@@ -51,13 +52,13 @@ struct ScheduleMemberInfo {
 	14:string signEndTime          (api.raw = "signEndTime")
 	15:i64 status                (api.raw = "status")
 	16:i64 memberProductId       (api.raw = "memberProductId")
-	17:i64 memberProductItemId   (api.raw = "memberProductItemId")
 
+	17:string placeName                  (api.raw = "placeName")
 	18:string venueName                  (api.raw = "venueName")
 	19:string memberName                 (api.raw = "memberName")
 	20:string memberProductName          (api.raw = "memberProductName")
-	22:string gender                     (api.raw = "gender")
-	23:i64 birthday                    (api.raw = "birthday")
+//	22:string gender                     (api.raw = "gender")
+//	23:i64 birthday                    (api.raw = "birthday")
 	24:string mobile                     (api.raw = "mobile")
 }
 struct ScheduleCoachInfo{
@@ -70,7 +71,7 @@ struct ScheduleCoachInfo{
 	7:string type           (api.raw = "type")
 	8:string createdAt      (api.raw = "createdAt")
 	9:string updatedAt      (api.raw = "updatedAt")
-	10:string date           (api.raw = "date")
+// 	10:string date           (api.raw = "date")
 	11:string startTime      (api.raw = "startTime")
 	12:string endTime        (api.raw = "endTime")
 	13:string signStartTime  (api.raw = "signStartTime")
@@ -78,18 +79,21 @@ struct ScheduleCoachInfo{
 	15:i64 status          (api.raw = "status")
 
 	16:string scheduleName  (api.raw = "scheduleName")
-	17:string productName  (api.raw = "productName")
-	18:string venueName     (api.raw = "venueName")
-	19:string placeName     (api.raw = "placeName")
+//	17:string productName  (api.raw = "productName")
+//	18:string venueName     (api.raw = "venueName")
+//	19:string placeName     (api.raw = "placeName")
 	20:string coachName     (api.raw = "coachName")
-	21:string coachAvatar   (api.raw = "coachAvatar")
+//	21:string coachAvatar   (api.raw = "coachAvatar")
 
-	22:string mobile                     (api.raw = "mobile")
-	23:string memberName                 (api.raw = "memberName")
-	24:string memberAvatar               (api.raw = "memberAvatar")
-	25:string memberProductName          (api.raw = "memberProductName")
-	27:string remark                     (api.raw = "remark")
-	28:string mRemark                    (api.raw = "mRemark")
+
+
+
+//	22:string mobile                     (api.raw = "mobile")
+//	23:string memberName                 (api.raw = "memberName")
+//	24:string memberAvatar               (api.raw = "memberAvatar")
+//	25:string memberProductName          (api.raw = "memberProductName")
+//	27:string remark                     (api.raw = "remark")
+//	28:string mRemark                    (api.raw = "mRemark")
 }
 struct CreateOrUpdateScheduleCourseReq {
     1:optional i64 id=0  (api.raw = "id")
@@ -158,9 +162,11 @@ struct ScheduleCoachListReq{
 //    3:  optional i64	venue  = 0  (api.raw = "venue")
 //}
 struct MemberSubscribeReq{
-    1:  optional list<i64> memberProductId =0 (api.raw = "memberProductId")
+    1:  optional i64 memberProductId =0 (api.raw = "memberProductId")
     2:  optional i64 scheduleId =0 (api.raw = "scheduleId")
-    3:  optional string remark ="" (api.raw = "remark")
+//    3:  optional string remark ="" (api.raw = "remark")
+    4:  optional i64 memberId =0 (api.raw = "memberId")
+    5:  optional base.Seat seat ={} (api.raw = "seat")
 }
 
 struct UserTimePeriodReq{

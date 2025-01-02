@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
+	"saas/idl_gen/model/base"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -100,6 +101,20 @@ func (smc *ScheduleMemberCreate) SetVenueID(i int64) *ScheduleMemberCreate {
 func (smc *ScheduleMemberCreate) SetNillableVenueID(i *int64) *ScheduleMemberCreate {
 	if i != nil {
 		smc.SetVenueID(*i)
+	}
+	return smc
+}
+
+// SetPlaceID sets the "place_id" field.
+func (smc *ScheduleMemberCreate) SetPlaceID(i int64) *ScheduleMemberCreate {
+	smc.mutation.SetPlaceID(i)
+	return smc
+}
+
+// SetNillablePlaceID sets the "place_id" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillablePlaceID(i *int64) *ScheduleMemberCreate {
+	if i != nil {
+		smc.SetPlaceID(*i)
 	}
 	return smc
 }
@@ -230,6 +245,20 @@ func (smc *ScheduleMemberCreate) SetNillableSignEndTime(t *time.Time) *ScheduleM
 	return smc
 }
 
+// SetSeat sets the "seat" field.
+func (smc *ScheduleMemberCreate) SetSeat(b base.Seat) *ScheduleMemberCreate {
+	smc.mutation.SetSeat(b)
+	return smc
+}
+
+// SetNillableSeat sets the "seat" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableSeat(b *base.Seat) *ScheduleMemberCreate {
+	if b != nil {
+		smc.SetSeat(*b)
+	}
+	return smc
+}
+
 // SetMemberName sets the "member_name" field.
 func (smc *ScheduleMemberCreate) SetMemberName(s string) *ScheduleMemberCreate {
 	smc.mutation.SetMemberName(s)
@@ -354,6 +383,10 @@ func (smc *ScheduleMemberCreate) defaults() {
 		v := schedulemember.DefaultSignEndTime()
 		smc.mutation.SetSignEndTime(v)
 	}
+	if _, ok := smc.mutation.Seat(); !ok {
+		v := schedulemember.DefaultSeat
+		smc.mutation.SetSeat(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -414,6 +447,10 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 		_spec.SetField(schedulemember.FieldVenueID, field.TypeInt64, value)
 		_node.VenueID = value
 	}
+	if value, ok := smc.mutation.PlaceID(); ok {
+		_spec.SetField(schedulemember.FieldPlaceID, field.TypeInt64, value)
+		_node.PlaceID = value
+	}
 	if value, ok := smc.mutation.ScheduleName(); ok {
 		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
 		_node.ScheduleName = value
@@ -445,6 +482,10 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 	if value, ok := smc.mutation.SignEndTime(); ok {
 		_spec.SetField(schedulemember.FieldSignEndTime, field.TypeTime, value)
 		_node.SignEndTime = value
+	}
+	if value, ok := smc.mutation.Seat(); ok {
+		_spec.SetField(schedulemember.FieldSeat, field.TypeJSON, value)
+		_node.Seat = value
 	}
 	if value, ok := smc.mutation.MemberName(); ok {
 		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)

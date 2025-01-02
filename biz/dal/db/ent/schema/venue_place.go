@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"saas/biz/dal/db/ent/schema/mixins"
+	"saas/idl_gen/model/base"
 )
 
 type VenuePlace struct {
@@ -29,6 +30,8 @@ func (VenuePlace) Fields() []ent.Field {
 		field.Int64("is_show").Default(1).Comment("是否展示:1展示;2不展示").Optional(),
 		field.Int64("is_accessible").Default(1).Comment("是否展示;1开放;2关闭").Optional(),
 		field.String("information").Comment("详情").Optional(),
+
+		field.JSON("seat", []*base.Seat{}).Default([]*base.Seat{}).Comment("座位").Optional(),
 	}
 }
 
@@ -41,8 +44,9 @@ func (VenuePlace) Mixin() []ent.Mixin {
 
 func (VenuePlace) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("venue", Venue.Type).
-			Ref("places").Field("venue_id").Unique(),
+		edge.From("venue", Venue.Type).Ref("places").Field("venue_id").Unique(),
+
+		edge.To("products", Product.Type),
 	}
 }
 

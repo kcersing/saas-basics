@@ -1176,6 +1176,8 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "coach_id", Type: field.TypeInt64, Nullable: true, Comment: "教练ID"},
+		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
+		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "课程"},
 		{Name: "schedule_name", Type: field.TypeString, Nullable: true, Comment: "课程名称"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
@@ -1193,7 +1195,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_coach_schedule_coachs",
-				Columns:    []*schema.Column{ScheduleCoachColumns[15]},
+				Columns:    []*schema.Column{ScheduleCoachColumns[17]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1212,7 +1214,7 @@ var (
 			{
 				Name:    "schedulecoach_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleCoachColumns[15]},
+				Columns: []*schema.Column{ScheduleCoachColumns[17]},
 			},
 		},
 	}
@@ -1225,6 +1227,7 @@ var (
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
 		{Name: "schedule_name", Type: field.TypeString, Nullable: true, Comment: "课程名称"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员购买课ID"},
@@ -1233,6 +1236,7 @@ var (
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "结束时间"},
 		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
 		{Name: "sign_end_time", Type: field.TypeTime, Nullable: true, Comment: "下课签到时间"},
+		{Name: "seat", Type: field.TypeJSON, Nullable: true, Comment: "座位"},
 		{Name: "member_name", Type: field.TypeString, Nullable: true, Comment: "会员名称"},
 		{Name: "member_product_name", Type: field.TypeString, Nullable: true, Comment: "会员产品名称"},
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
@@ -1246,7 +1250,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_member_schedule_members",
-				Columns:    []*schema.Column{ScheduleMemberColumns[18]},
+				Columns:    []*schema.Column{ScheduleMemberColumns[20]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1260,12 +1264,12 @@ var (
 			{
 				Name:    "schedulemember_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleMemberColumns[8]},
+				Columns: []*schema.Column{ScheduleMemberColumns[9]},
 			},
 			{
 				Name:    "schedulemember_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleMemberColumns[18]},
+				Columns: []*schema.Column{ScheduleMemberColumns[20]},
 			},
 		},
 	}
@@ -1409,6 +1413,7 @@ var (
 		{Name: "is_show", Type: field.TypeInt64, Nullable: true, Comment: "是否展示:1展示;2不展示", Default: 1},
 		{Name: "is_accessible", Type: field.TypeInt64, Nullable: true, Comment: "是否展示;1开放;2关闭", Default: 1},
 		{Name: "information", Type: field.TypeString, Nullable: true, Comment: "详情"},
+		{Name: "seat", Type: field.TypeJSON, Nullable: true, Comment: "座位"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 	}
 	// VenuePlaceTable holds the schema information for the "venue_place" table.
@@ -1419,7 +1424,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "venue_place_venue_places",
-				Columns:    []*schema.Column{VenuePlaceColumns[13]},
+				Columns:    []*schema.Column{VenuePlaceColumns[14]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1428,7 +1433,7 @@ var (
 			{
 				Name:    "venueplace_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{VenuePlaceColumns[13]},
+				Columns: []*schema.Column{VenuePlaceColumns[14]},
 			},
 		},
 	}
@@ -1737,6 +1742,31 @@ var (
 			},
 		},
 	}
+	// VenuePlaceProductsColumns holds the columns for the "venue_place_products" table.
+	VenuePlaceProductsColumns = []*schema.Column{
+		{Name: "venue_place_id", Type: field.TypeInt64},
+		{Name: "product_id", Type: field.TypeInt64},
+	}
+	// VenuePlaceProductsTable holds the schema information for the "venue_place_products" table.
+	VenuePlaceProductsTable = &schema.Table{
+		Name:       "venue_place_products",
+		Columns:    VenuePlaceProductsColumns,
+		PrimaryKey: []*schema.Column{VenuePlaceProductsColumns[0], VenuePlaceProductsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "venue_place_products_venue_place_id",
+				Columns:    []*schema.Column{VenuePlaceProductsColumns[0]},
+				RefColumns: []*schema.Column{VenuePlaceColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "venue_place_products_product_id",
+				Columns:    []*schema.Column{VenuePlaceProductsColumns[1]},
+				RefColumns: []*schema.Column{ProductColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		SysApisTable,
@@ -1790,6 +1820,7 @@ var (
 		UserVenuesTable,
 		UserRolesTable,
 		VenueRolesTable,
+		VenuePlaceProductsTable,
 	}
 )
 
@@ -1994,4 +2025,6 @@ func init() {
 	UserRolesTable.ForeignKeys[1].RefTable = SysRolesTable
 	VenueRolesTable.ForeignKeys[0].RefTable = VenueTable
 	VenueRolesTable.ForeignKeys[1].RefTable = SysRolesTable
+	VenuePlaceProductsTable.ForeignKeys[0].RefTable = VenuePlaceTable
+	VenuePlaceProductsTable.ForeignKeys[1].RefTable = ProductTable
 }

@@ -3,9 +3,11 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/idl_gen/model/base"
 	"strings"
 	"time"
 
@@ -45,6 +47,8 @@ type VenuePlace struct {
 	IsAccessible int64 `json:"is_accessible,omitempty"`
 	// 详情
 	Information string `json:"information,omitempty"`
+	// 座位
+	Seat []*base.Seat `json:"seat,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VenuePlaceQuery when eager-loading is set.
 	Edges        VenuePlaceEdges `json:"edges"`
@@ -55,9 +59,11 @@ type VenuePlace struct {
 type VenuePlaceEdges struct {
 	// Venue holds the value of the venue edge.
 	Venue *Venue `json:"venue,omitempty"`
+	// Products holds the value of the products edge.
+	Products []*Product `json:"products,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // VenueOrErr returns the Venue value or an error if the edge
@@ -73,11 +79,22 @@ func (e VenuePlaceEdges) VenueOrErr() (*Venue, error) {
 	return nil, &NotLoadedError{edge: "venue"}
 }
 
+// ProductsOrErr returns the Products value or an error if the edge
+// was not loaded in eager-loading.
+func (e VenuePlaceEdges) ProductsOrErr() ([]*Product, error) {
+	if e.loadedTypes[1] {
+		return e.Products, nil
+	}
+	return nil, &NotLoadedError{edge: "products"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*VenuePlace) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case venueplace.FieldSeat:
+			values[i] = new([]byte)
 		case venueplace.FieldID, venueplace.FieldDelete, venueplace.FieldCreatedID, venueplace.FieldStatus, venueplace.FieldClassify, venueplace.FieldVenueID, venueplace.FieldNumber, venueplace.FieldIsShow, venueplace.FieldIsAccessible:
 			values[i] = new(sql.NullInt64)
 		case venueplace.FieldName, venueplace.FieldPic, venueplace.FieldInformation:
@@ -183,6 +200,14 @@ func (vp *VenuePlace) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				vp.Information = value.String
 			}
+		case venueplace.FieldSeat:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field seat", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &vp.Seat); err != nil {
+					return fmt.Errorf("unmarshal field seat: %w", err)
+				}
+			}
 		default:
 			vp.selectValues.Set(columns[i], values[i])
 		}
@@ -199,6 +224,11 @@ func (vp *VenuePlace) Value(name string) (ent.Value, error) {
 // QueryVenue queries the "venue" edge of the VenuePlace entity.
 func (vp *VenuePlace) QueryVenue() *VenueQuery {
 	return NewVenuePlaceClient(vp.config).QueryVenue(vp)
+}
+
+// QueryProducts queries the "products" edge of the VenuePlace entity.
+func (vp *VenuePlace) QueryProducts() *ProductQuery {
+	return NewVenuePlaceClient(vp.config).QueryProducts(vp)
 }
 
 // Update returns a builder for updating this VenuePlace.
@@ -262,6 +292,9 @@ func (vp *VenuePlace) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("information=")
 	builder.WriteString(vp.Information)
+	builder.WriteString(", ")
+	builder.WriteString("seat=")
+	builder.WriteString(fmt.Sprintf("%v", vp.Seat))
 	builder.WriteByte(')')
 	return builder.String()
 }

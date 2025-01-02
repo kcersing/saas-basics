@@ -54,10 +54,12 @@ struct VenuePlaceInfo {
     /**是否开放:1开放;2关闭*/
     12: optional i64 isAccessible=1 (api.raw = "isAccessible")
     /**关联卡种*/
-    13: optional list<i64> cards=0 (api.raw = "cards")
+    13: optional list<i64> productIds=0 (api.raw = "productIds")
+    14: optional list<base.List> products=0 (api.raw = "products")
     /**关联座位*/
-    14: optional list<i64> seat=0 (api.raw = "seat")
+    15: optional list<base.Seat> seat=0 (api.raw = "seat")
 }
+
 
 service VenueService {
 

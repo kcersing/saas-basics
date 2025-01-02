@@ -28,8 +28,12 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldCoachID holds the string denoting the coach_id field in the database.
 	FieldCoachID = "coach_id"
+	// FieldPlaceID holds the string denoting the place_id field in the database.
+	FieldPlaceID = "place_id"
 	// FieldScheduleID holds the string denoting the schedule_id field in the database.
 	FieldScheduleID = "schedule_id"
+	// FieldProductID holds the string denoting the product_id field in the database.
+	FieldProductID = "product_id"
 	// FieldScheduleName holds the string denoting the schedule_name field in the database.
 	FieldScheduleName = "schedule_name"
 	// FieldType holds the string denoting the type field in the database.
@@ -67,7 +71,9 @@ var Columns = []string{
 	FieldStatus,
 	FieldVenueID,
 	FieldCoachID,
+	FieldPlaceID,
 	FieldScheduleID,
+	FieldProductID,
 	FieldScheduleName,
 	FieldType,
 	FieldStartTime,
@@ -153,9 +159,19 @@ func ByCoachID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCoachID, opts...).ToFunc()
 }
 
+// ByPlaceID orders the results by the place_id field.
+func ByPlaceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlaceID, opts...).ToFunc()
+}
+
 // ByScheduleID orders the results by the schedule_id field.
 func ByScheduleID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScheduleID, opts...).ToFunc()
+}
+
+// ByProductID orders the results by the product_id field.
+func ByProductID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProductID, opts...).ToFunc()
 }
 
 // ByScheduleName orders the results by the schedule_name field.

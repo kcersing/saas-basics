@@ -29,7 +29,9 @@ func (ScheduleCoach) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("coach_id").Comment("教练ID").Optional(),
+		field.Int64("place_id").Comment("场地ID").Optional(),
 		field.Int64("schedule_id").Comment("课程ID").Optional(),
+		field.Int64("product_id").Comment("课程").Optional(),
 		field.String("schedule_name").Comment("课程名称").Optional(),
 		field.String("type").Comment("类型").Optional(),
 		field.Time("start_time").Default(time.Now).Comment("开始时间").Optional(),
@@ -50,9 +52,7 @@ func (ScheduleCoach) Mixin() []ent.Mixin {
 
 func (ScheduleCoach) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("schedule", Schedule.Type).
-			Ref("coachs").Unique().
-			Field("schedule_id"),
+		edge.From("schedule", Schedule.Type).Ref("coachs").Unique().Field("schedule_id"),
 	}
 }
 

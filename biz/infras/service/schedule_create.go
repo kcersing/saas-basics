@@ -149,6 +149,7 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 		SetSchedule(req.One).
 		SetType(req.Type).
 		SetMemberID(req.MemberId).
+		SetPlaceID(req.PlaceId).
 		SetVenueID(req.VenueId).
 		SetStartTime(req.StartTime).
 		SetEndTime(req.StartTime.Add(time.Duration(memberProduct.Length) * time.Minute)).
@@ -192,32 +193,30 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 		return rollback(tx, err)
 	}
 
-	venueName := ""
-	if req.VenueId != 0 {
-		ven, err := s.db.Venue.Query().
-			Where(venue.ID(req.VenueId)).
-			First(s.ctx)
-		if err == nil {
-			venueName = ven.Name
-		}
+	var venueName, placeName string
+
+	ven, err := s.db.Venue.Query().
+		Where(venue.ID(req.VenueId)).
+		First(s.ctx)
+	if err != nil {
+		return rollback(tx, err)
 	}
-	placeName := ""
-	if req.PlaceId != 0 {
-		place, err := s.db.VenuePlace.Query().
-			Where(venueplace.ID(req.PlaceId)).
-			First(s.ctx)
-		if err == nil {
-			placeName = place.Name
-		}
+	venueName = ven.Name
+	place, err := s.db.VenuePlace.Query().
+		Where(venueplace.ID(req.PlaceId)).
+		First(s.ctx)
+	if err != nil {
+		return rollback(tx, err)
 	}
+	placeName = place.Name
 
 	one, err := tx.Schedule.Create().
 		SetType("lessons").
 		SetStatus(1).
 		SetVenueID(req.VenueId).
 		SetPlaceID(req.PlaceId).
-		//SetNum(req.Num).
-		//SetNumSurplus(req.Num).
+		SetNum(place.Number).
+		SetNumSurplus(place.Number).
 		SetDate(startTime.Format(time.DateOnly)).
 		SetStartTime(startTime).
 		SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
@@ -234,32 +233,29 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 		return rollback(tx, err)
 	}
 
-	if req.CoachId != 0 {
+	u, err := tx.User.Query().
+		Where(user.ID(req.CoachId)).
+		First(s.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "未查询到该员工")
+		return rollback(tx, err)
+	}
 
-		u, err := tx.User.Query().
-			Where(user.ID(req.CoachId)).
-			First(s.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "未查询到该员工")
-			return rollback(tx, err)
-		}
-
-		_, err = tx.ScheduleCoach.Create().
-			SetSchedule(one).
-			SetScheduleName(one.Name).
-			SetType("lessons").
-			SetVenueID(req.VenueId).
-			SetCoachID(req.CoachId).
-			SetStartTime(startTime).
-			SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
-			SetStatus(1).
-			SetCoachName(u.Name).
-			Save(s.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "create Course Record Coach failed")
-			return rollback(tx, err)
-		}
-
+	_, err = tx.ScheduleCoach.Create().
+		SetSchedule(one).
+		SetScheduleName(one.Name).
+		SetType("lessons").
+		SetVenueID(req.VenueId).
+		SetCoachID(req.CoachId).
+		SetStartTime(startTime).
+		SetPlaceID(req.PlaceId).
+		SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
+		SetStatus(1).
+		SetCoachName(u.Name).
+		Save(s.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "create Course Record Coach failed")
+		return rollback(tx, err)
 	}
 
 	if err = tx.Commit(); err != nil {

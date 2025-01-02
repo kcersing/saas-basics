@@ -33,8 +33,12 @@ type ScheduleCoach struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 教练ID
 	CoachID int64 `json:"coach_id,omitempty"`
+	// 场地ID
+	PlaceID int64 `json:"place_id,omitempty"`
 	// 课程ID
 	ScheduleID int64 `json:"schedule_id,omitempty"`
+	// 课程
+	ProductID int64 `json:"product_id,omitempty"`
 	// 课程名称
 	ScheduleName string `json:"schedule_name,omitempty"`
 	// 类型
@@ -82,7 +86,7 @@ func (*ScheduleCoach) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case schedulecoach.FieldID, schedulecoach.FieldDelete, schedulecoach.FieldCreatedID, schedulecoach.FieldStatus, schedulecoach.FieldVenueID, schedulecoach.FieldCoachID, schedulecoach.FieldScheduleID:
+		case schedulecoach.FieldID, schedulecoach.FieldDelete, schedulecoach.FieldCreatedID, schedulecoach.FieldStatus, schedulecoach.FieldVenueID, schedulecoach.FieldCoachID, schedulecoach.FieldPlaceID, schedulecoach.FieldScheduleID, schedulecoach.FieldProductID:
 			values[i] = new(sql.NullInt64)
 		case schedulecoach.FieldScheduleName, schedulecoach.FieldType, schedulecoach.FieldCoachName:
 			values[i] = new(sql.NullString)
@@ -151,11 +155,23 @@ func (sc *ScheduleCoach) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sc.CoachID = value.Int64
 			}
+		case schedulecoach.FieldPlaceID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field place_id", values[i])
+			} else if value.Valid {
+				sc.PlaceID = value.Int64
+			}
 		case schedulecoach.FieldScheduleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field schedule_id", values[i])
 			} else if value.Valid {
 				sc.ScheduleID = value.Int64
+			}
+		case schedulecoach.FieldProductID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field product_id", values[i])
+			} else if value.Valid {
+				sc.ProductID = value.Int64
 			}
 		case schedulecoach.FieldScheduleName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -261,8 +277,14 @@ func (sc *ScheduleCoach) String() string {
 	builder.WriteString("coach_id=")
 	builder.WriteString(fmt.Sprintf("%v", sc.CoachID))
 	builder.WriteString(", ")
+	builder.WriteString("place_id=")
+	builder.WriteString(fmt.Sprintf("%v", sc.PlaceID))
+	builder.WriteString(", ")
 	builder.WriteString("schedule_id=")
 	builder.WriteString(fmt.Sprintf("%v", sc.ScheduleID))
+	builder.WriteString(", ")
+	builder.WriteString("product_id=")
+	builder.WriteString(fmt.Sprintf("%v", sc.ProductID))
 	builder.WriteString(", ")
 	builder.WriteString("schedule_name=")
 	builder.WriteString(sc.ScheduleName)

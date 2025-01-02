@@ -5,8 +5,10 @@ package ent
 import (
 	"context"
 	"fmt"
+	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
+	"saas/idl_gen/model/base"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -202,6 +204,12 @@ func (vpc *VenuePlaceCreate) SetNillableInformation(s *string) *VenuePlaceCreate
 	return vpc
 }
 
+// SetSeat sets the "seat" field.
+func (vpc *VenuePlaceCreate) SetSeat(b []*base.Seat) *VenuePlaceCreate {
+	vpc.mutation.SetSeat(b)
+	return vpc
+}
+
 // SetID sets the "id" field.
 func (vpc *VenuePlaceCreate) SetID(i int64) *VenuePlaceCreate {
 	vpc.mutation.SetID(i)
@@ -211,6 +219,21 @@ func (vpc *VenuePlaceCreate) SetID(i int64) *VenuePlaceCreate {
 // SetVenue sets the "venue" edge to the Venue entity.
 func (vpc *VenuePlaceCreate) SetVenue(v *Venue) *VenuePlaceCreate {
 	return vpc.SetVenueID(v.ID)
+}
+
+// AddProductIDs adds the "products" edge to the Product entity by IDs.
+func (vpc *VenuePlaceCreate) AddProductIDs(ids ...int64) *VenuePlaceCreate {
+	vpc.mutation.AddProductIDs(ids...)
+	return vpc
+}
+
+// AddProducts adds the "products" edges to the Product entity.
+func (vpc *VenuePlaceCreate) AddProducts(p ...*Product) *VenuePlaceCreate {
+	ids := make([]int64, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpc.AddProductIDs(ids...)
 }
 
 // Mutation returns the VenuePlaceMutation object of the builder.
@@ -275,6 +298,10 @@ func (vpc *VenuePlaceCreate) defaults() {
 	if _, ok := vpc.mutation.IsAccessible(); !ok {
 		v := venueplace.DefaultIsAccessible
 		vpc.mutation.SetIsAccessible(v)
+	}
+	if _, ok := vpc.mutation.Seat(); !ok {
+		v := venueplace.DefaultSeat
+		vpc.mutation.SetSeat(v)
 	}
 }
 
@@ -360,6 +387,10 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)
 		_node.Information = value
 	}
+	if value, ok := vpc.mutation.Seat(); ok {
+		_spec.SetField(venueplace.FieldSeat, field.TypeJSON, value)
+		_node.Seat = value
+	}
 	if nodes := vpc.mutation.VenueIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -375,6 +406,22 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.VenueID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vpc.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   venueplace.ProductsTable,
+			Columns: venueplace.ProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -8,6 +8,7 @@
         <method importPath="saas/pkg/db/ent" receiver="*ContestParticipantQuery" name="First" />
         <method importPath="saas/biz/dal/db/ent" receiver="*MemberQuery" name="First" />
         <method importPath="saas/biz/dal/db/ent" receiver="*MemberProductQuery" name="First" />
+        <method importPath="saas/biz/dal/db/ent" receiver="*ScheduleCoachQuery" name="First" />
       </methods>
     </inspection_tool>
   </profile>

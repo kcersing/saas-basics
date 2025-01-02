@@ -53,6 +53,8 @@ func (Product) Edges() []ent.Edge {
 		edge.To("contracts", Contract.Type),
 		edge.To("courses", ProductCourses.Type),
 		edge.To("lessons", ProductCourses.Type),
+
+		edge.From("products", VenuePlace.Type).Ref("products"),
 	}
 }
 

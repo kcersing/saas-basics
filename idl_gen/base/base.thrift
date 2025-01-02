@@ -86,6 +86,15 @@ struct Sales {
     1: optional i64 number = 0 (api.raw = "number")
     2: optional double price =0 (api.raw = "price")
 }
+
+struct Seat{
+    /**编号*/
+    1: optional i64 num = 0 (api.raw = "num" )
+    2: optional i64 x =0 (api.raw = "x" )
+    3: optional i64 y =0 (api.raw = "y" )
+}
+
+
 struct UserSchedulingDate {
 
 }

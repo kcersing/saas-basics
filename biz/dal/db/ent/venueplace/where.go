@@ -825,6 +825,16 @@ func InformationContainsFold(v string) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldContainsFold(FieldInformation, v))
 }
 
+// SeatIsNil applies the IsNil predicate on the "seat" field.
+func SeatIsNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIsNull(FieldSeat))
+}
+
+// SeatNotNil applies the NotNil predicate on the "seat" field.
+func SeatNotNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotNull(FieldSeat))
+}
+
 // HasVenue applies the HasEdge predicate on the "venue" edge.
 func HasVenue() predicate.VenuePlace {
 	return predicate.VenuePlace(func(s *sql.Selector) {
@@ -840,6 +850,29 @@ func HasVenue() predicate.VenuePlace {
 func HasVenueWith(preds ...predicate.Venue) predicate.VenuePlace {
 	return predicate.VenuePlace(func(s *sql.Selector) {
 		step := newVenueStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProducts applies the HasEdge predicate on the "products" edge.
+func HasProducts() predicate.VenuePlace {
+	return predicate.VenuePlace(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ProductsTable, ProductsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProductsWith applies the HasEdge predicate on the "products" edge with a given conditions (other predicates).
+func HasProductsWith(preds ...predicate.Product) predicate.VenuePlace {
+	return predicate.VenuePlace(func(s *sql.Selector) {
+		step := newProductsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
