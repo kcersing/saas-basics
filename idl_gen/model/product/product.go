@@ -3388,9 +3388,9 @@ type ProductListReq struct {
 	Name     string  `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
 	Status   []int64 `thrift:"status,4,optional" form:"status" json:"status" query:"status"`
 	// 类型
-	Type string `thrift:"type,7,optional" form:"type" json:"type" query:"type"`
+	Type []string `thrift:"type,7,optional" form:"type" json:"type" query:"type"`
 	/**次级类型*/
-	SubType string `thrift:"subType,8,optional" form:"subType" json:"subType" query:"subType"`
+	SubType []string `thrift:"subType,8,optional" form:"subType" json:"subType" query:"subType"`
 }
 
 func NewProductListReq() *ProductListReq {
@@ -3400,8 +3400,8 @@ func NewProductListReq() *ProductListReq {
 		PageSize: 100,
 		Name:     "",
 		Status:   []int64{},
-		Type:     "",
-		SubType:  "",
+		Type:     []string{},
+		SubType:  []string{},
 	}
 }
 
@@ -3410,8 +3410,8 @@ func (p *ProductListReq) InitDefault() {
 	p.PageSize = 100
 	p.Name = ""
 	p.Status = []int64{}
-	p.Type = ""
-	p.SubType = ""
+	p.Type = []string{}
+	p.SubType = []string{}
 }
 
 var ProductListReq_Page_DEFAULT int64 = 1
@@ -3450,18 +3450,18 @@ func (p *ProductListReq) GetStatus() (v []int64) {
 	return p.Status
 }
 
-var ProductListReq_Type_DEFAULT string = ""
+var ProductListReq_Type_DEFAULT []string = []string{}
 
-func (p *ProductListReq) GetType() (v string) {
+func (p *ProductListReq) GetType() (v []string) {
 	if !p.IsSetType() {
 		return ProductListReq_Type_DEFAULT
 	}
 	return p.Type
 }
 
-var ProductListReq_SubType_DEFAULT string = ""
+var ProductListReq_SubType_DEFAULT []string = []string{}
 
-func (p *ProductListReq) GetSubType() (v string) {
+func (p *ProductListReq) GetSubType() (v []string) {
 	if !p.IsSetSubType() {
 		return ProductListReq_SubType_DEFAULT
 	}
@@ -3494,11 +3494,11 @@ func (p *ProductListReq) IsSetStatus() bool {
 }
 
 func (p *ProductListReq) IsSetType() bool {
-	return p.Type != ProductListReq_Type_DEFAULT
+	return p.Type != nil
 }
 
 func (p *ProductListReq) IsSetSubType() bool {
-	return p.SubType != ProductListReq_SubType_DEFAULT
+	return p.SubType != nil
 }
 
 func (p *ProductListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -3553,7 +3553,7 @@ func (p *ProductListReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 7:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField7(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -3561,7 +3561,7 @@ func (p *ProductListReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 8:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -3654,23 +3654,47 @@ func (p *ProductListReq) ReadField4(iprot thrift.TProtocol) error {
 	return nil
 }
 func (p *ProductListReq) ReadField7(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
 		return err
-	} else {
-		_field = v
+	}
+	_field := make([]string, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem string
+		if v, err := iprot.ReadString(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
 	}
 	p.Type = _field
 	return nil
 }
 func (p *ProductListReq) ReadField8(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
 		return err
-	} else {
-		_field = v
+	}
+	_field := make([]string, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem string
+		if v, err := iprot.ReadString(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
 	}
 	p.SubType = _field
 	return nil
@@ -3810,10 +3834,18 @@ WriteFieldEndError:
 
 func (p *ProductListReq) writeField7(oprot thrift.TProtocol) (err error) {
 	if p.IsSetType() {
-		if err = oprot.WriteFieldBegin("type", thrift.STRING, 7); err != nil {
+		if err = oprot.WriteFieldBegin("type", thrift.LIST, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(p.Type); err != nil {
+		if err := oprot.WriteListBegin(thrift.STRING, len(p.Type)); err != nil {
+			return err
+		}
+		for _, v := range p.Type {
+			if err := oprot.WriteString(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -3829,10 +3861,18 @@ WriteFieldEndError:
 
 func (p *ProductListReq) writeField8(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSubType() {
-		if err = oprot.WriteFieldBegin("subType", thrift.STRING, 8); err != nil {
+		if err = oprot.WriteFieldBegin("subType", thrift.LIST, 8); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(p.SubType); err != nil {
+		if err := oprot.WriteListBegin(thrift.STRING, len(p.SubType)); err != nil {
+			return err
+		}
+		for _, v := range p.SubType {
+			if err := oprot.WriteString(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

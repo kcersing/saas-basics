@@ -200,11 +200,11 @@ func (p Product) ProductList(req *product.ProductListReq) (resp []*product.Produ
 		predicates = append(predicates, product2.StatusIn(req.Status...))
 	}
 
-	if req.Type != "" {
-		predicates = append(predicates, product2.TypeEQ(req.Type))
+	if len(req.Type) > 0 {
+		predicates = append(predicates, product2.TypeIn(req.Type...))
 	}
-	if req.SubType != "" {
-		predicates = append(predicates, product2.SubTypeEQ(req.SubType))
+	if len(req.SubType) > 0 {
+		predicates = append(predicates, product2.SubTypeIn(req.SubType...))
 	}
 	predicates = append(predicates, product2.Delete(0))
 	lists, err := p.db.Product.Query().Where(predicates...).

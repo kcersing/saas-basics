@@ -98,9 +98,9 @@ struct ProductListReq {
     2: optional i64 pageSize=100 (api.raw = "pageSize")
     3: optional string name ="" (api.raw = "name")
     4: optional list<i64> status=0 (api.raw = "status")
-    7: optional string type="" (api.raw = "type") // 类型
+    7: optional list<string> type="" (api.raw = "type") // 类型
    /**次级类型*/
-    8: optional string subType ="" (api.raw = "subType")
+    8: optional list<string> subType ="" (api.raw = "subType")
 }
 
 service ProductService {
