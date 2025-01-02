@@ -132,6 +132,16 @@ definitions:
       price:
         type: number
     type: object
+  base.Seat:
+    properties:
+      num:
+        description: '*编号'
+        type: integer
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
   base.StatusCodeReq:
     properties:
       id:
@@ -872,10 +882,14 @@ definitions:
         type: array
       subType:
         description: '*次级类型'
-        type: string
+        items:
+          type: string
+        type: array
       type:
         description: 类型
-        type: string
+        items:
+          type: string
+        type: array
     type: object
   sms.SmsBuyReq:
     properties:
@@ -1103,6 +1117,20 @@ definitions:
         type: integer
       pic:
         type: string
+      productIds:
+        description: '*关联卡种'
+        items:
+          type: integer
+        type: array
+      products:
+        items:
+          $ref: '#/definitions/base.List'
+        type: array
+      seat:
+        description: '*关联座位'
+        items:
+          $ref: '#/definitions/base.Seat'
+        type: array
       status:
         type: integer
       updatedAt:
@@ -3025,7 +3053,13 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新角色 Summary
-  /service/schedule/create:
+  /service/schedule/create-cours:
+    post:
+      responses: {}
+  /service/schedule/create-lessons:
+    post:
+      responses: {}
+  /service/schedule/create-member-subscribe-lessons:
     post:
       responses: {}
   /service/schedule/create-user-time-period:
@@ -3040,7 +3074,7 @@ paths:
   /service/schedule/list:
     post:
       responses: {}
-  /service/schedule/member-subscribe:
+  /service/schedule/schedule-coach-info:
     post:
       responses: {}
   /service/schedule/schedule-coach-list:
@@ -3049,19 +3083,19 @@ paths:
   /service/schedule/schedule-coach-status:
     post:
       responses: {}
+  /service/schedule/schedule-member-info:
+    post:
+      responses: {}
   /service/schedule/schedule-member-list:
     post:
       responses: {}
   /service/schedule/schedule-member-status:
     post:
       responses: {}
-  /service/schedule/search-subscribe-by-member:
-    post:
-      responses: {}
   /service/schedule/status:
     post:
       responses: {}
-  /service/schedule/update:
+  /service/schedule/update-user-time-period:
     post:
       responses: {}
   /service/sms/buy:

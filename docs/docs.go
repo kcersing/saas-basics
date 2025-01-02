@@ -2987,7 +2987,17 @@ const docTemplate = `{
                 }
             }
         },
-        "/service/schedule/create": {
+        "/service/schedule/create-cours": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/create-lessons": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/schedule/create-member-subscribe-lessons": {
             "post": {
                 "responses": {}
             }
@@ -3012,7 +3022,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/service/schedule/member-subscribe": {
+        "/service/schedule/schedule-coach-info": {
             "post": {
                 "responses": {}
             }
@@ -3027,6 +3037,11 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/service/schedule/schedule-member-info": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/schedule/schedule-member-list": {
             "post": {
                 "responses": {}
@@ -3037,17 +3052,12 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/service/schedule/search-subscribe-by-member": {
-            "post": {
-                "responses": {}
-            }
-        },
         "/service/schedule/status": {
             "post": {
                 "responses": {}
             }
         },
-        "/service/schedule/update": {
+        "/service/schedule/update-user-time-period": {
             "post": {
                 "responses": {}
             }
@@ -3727,6 +3737,21 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "number"
+                }
+            }
+        },
+        "base.Seat": {
+            "type": "object",
+            "properties": {
+                "num": {
+                    "description": "*编号",
+                    "type": "integer"
+                },
+                "x": {
+                    "type": "integer"
+                },
+                "y": {
+                    "type": "integer"
                 }
             }
         },
@@ -4842,11 +4867,17 @@ const docTemplate = `{
                 },
                 "subType": {
                     "description": "*次级类型",
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "type": {
                     "description": "类型",
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -5190,6 +5221,26 @@ const docTemplate = `{
                 },
                 "pic": {
                     "type": "string"
+                },
+                "productIds": {
+                    "description": "*关联卡种",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base.List"
+                    }
+                },
+                "seat": {
+                    "description": "*关联座位",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base.Seat"
+                    }
                 },
                 "status": {
                     "type": "integer"
