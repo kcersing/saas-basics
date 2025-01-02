@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
@@ -41,7 +42,7 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 	signSalesAt, _ := time.Parse(time.DateTime, req.SignSalesAt)
 	endSalesAt, _ := time.Parse(time.DateTime, req.EndSalesAt)
 
-	_, err := p.db.Product.Create().
+	mol, err := p.db.Product.Create().
 		SetName(req.Name).
 		SetPic(req.Pic).
 		SetDescription(req.Description).
@@ -73,7 +74,8 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 		go func() {
 			for _, v := range req.Courses {
 				p.db.ProductCourses.Create().
-					SetProductID(v.ID).
+					SetProductID(mol.ID).
+					SetCoursesID(v.ID).
 					SetType(v.Type).
 					SetName(v.Name).
 					SetNumber(v.Number).
@@ -81,11 +83,15 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 			}
 		}()
 	}
+	hlog.Info("Lessons")
+	hlog.Info(req.Lessons)
 	if len(req.Lessons) > 0 {
+
 		go func() {
 			for _, v := range req.Lessons {
 				p.db.ProductCourses.Create().
-					SetProductID(v.ID).
+					SetProductID(mol.ID).
+					SetCoursesID(v.ID).
 					SetType(v.Type).
 					SetName(v.Name).
 					Save(p.ctx)
@@ -104,7 +110,7 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 	//}
 	signSalesAt, _ := time.Parse(time.DateTime, req.SignSalesAt)
 	endSalesAt, _ := time.Parse(time.DateTime, req.EndSalesAt)
-	_, err := p.db.Product.Update().
+	mol, err := p.db.Product.Update().
 		Where(product2.IDEQ(req.ID)).
 		SetName(req.Name).
 		SetPic(req.Pic).
@@ -138,7 +144,8 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 		go func() {
 			for _, v := range req.Courses {
 				p.db.ProductCourses.Create().
-					SetProductID(v.ID).
+					SetProductID(req.ID).
+					SetCoursesID(v.ID).
 					SetType(v.Type).
 					SetName(v.Name).
 					SetNumber(v.Number).
@@ -151,7 +158,8 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 		go func() {
 			for _, v := range req.Lessons {
 				p.db.ProductCourses.Create().
-					SetProductID(v.ID).
+					SetProductID(req.ID).
+					SetCoursesID(v.ID).
 					SetType(v.Type).
 					SetName(v.Name).
 					Save(p.ctx)
