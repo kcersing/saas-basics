@@ -110,7 +110,7 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 	//}
 	signSalesAt, _ := time.Parse(time.DateTime, req.SignSalesAt)
 	endSalesAt, _ := time.Parse(time.DateTime, req.EndSalesAt)
-	mol, err := p.db.Product.Update().
+	_, err := p.db.Product.Update().
 		Where(product2.IDEQ(req.ID)).
 		SetName(req.Name).
 		SetPic(req.Pic).
