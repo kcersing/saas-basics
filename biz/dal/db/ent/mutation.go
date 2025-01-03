@@ -60597,8 +60597,8 @@ type VenuePlaceMutation struct {
 	is_booking       *int64
 	addis_booking    *int64
 	information      *string
-	seat             *[]*base.Seat
-	appendseat       []*base.Seat
+	seat             *[][]*base.Seat
+	appendseat       [][]*base.Seat
 	clearedFields    map[string]struct{}
 	venue            *int64
 	clearedvenue     bool
@@ -61639,13 +61639,13 @@ func (m *VenuePlaceMutation) ResetInformation() {
 }
 
 // SetSeat sets the "seat" field.
-func (m *VenuePlaceMutation) SetSeat(b []*base.Seat) {
+func (m *VenuePlaceMutation) SetSeat(b [][]*base.Seat) {
 	m.seat = &b
 	m.appendseat = nil
 }
 
 // Seat returns the value of the "seat" field in the mutation.
-func (m *VenuePlaceMutation) Seat() (r []*base.Seat, exists bool) {
+func (m *VenuePlaceMutation) Seat() (r [][]*base.Seat, exists bool) {
 	v := m.seat
 	if v == nil {
 		return
@@ -61656,7 +61656,7 @@ func (m *VenuePlaceMutation) Seat() (r []*base.Seat, exists bool) {
 // OldSeat returns the old "seat" field's value of the VenuePlace entity.
 // If the VenuePlace object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VenuePlaceMutation) OldSeat(ctx context.Context) (v []*base.Seat, err error) {
+func (m *VenuePlaceMutation) OldSeat(ctx context.Context) (v [][]*base.Seat, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldSeat is only allowed on UpdateOne operations")
 	}
@@ -61671,12 +61671,12 @@ func (m *VenuePlaceMutation) OldSeat(ctx context.Context) (v []*base.Seat, err e
 }
 
 // AppendSeat adds b to the "seat" field.
-func (m *VenuePlaceMutation) AppendSeat(b []*base.Seat) {
+func (m *VenuePlaceMutation) AppendSeat(b [][]*base.Seat) {
 	m.appendseat = append(m.appendseat, b...)
 }
 
 // AppendedSeat returns the list of values that were appended to the "seat" field in this mutation.
-func (m *VenuePlaceMutation) AppendedSeat() ([]*base.Seat, bool) {
+func (m *VenuePlaceMutation) AppendedSeat() ([][]*base.Seat, bool) {
 	if len(m.appendseat) == 0 {
 		return nil, false
 	}
@@ -62063,7 +62063,7 @@ func (m *VenuePlaceMutation) SetField(name string, value ent.Value) error {
 		m.SetInformation(v)
 		return nil
 	case venueplace.FieldSeat:
-		v, ok := value.([]*base.Seat)
+		v, ok := value.([][]*base.Seat)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

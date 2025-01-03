@@ -1509,7 +1509,7 @@ func init() {
 	// venueplaceDescSeat is the schema descriptor for seat field.
 	venueplaceDescSeat := venueplaceFields[10].Descriptor()
 	// venueplace.DefaultSeat holds the default value on creation for the seat field.
-	venueplace.DefaultSeat = venueplaceDescSeat.Default.([]*base.Seat)
+	venueplace.DefaultSeat = venueplaceDescSeat.Default.([][]*base.Seat)
 	venuesmsMixin := schema.VenueSms{}.Mixin()
 	venuesmsMixinFields0 := venuesmsMixin[0].Fields()
 	_ = venuesmsMixinFields0

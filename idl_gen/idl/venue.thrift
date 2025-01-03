@@ -58,7 +58,7 @@ struct VenuePlaceInfo {
     13: optional list<i64> productIds=0 (api.raw = "productIds")
     14: optional list<base.List> products=0 (api.raw = "products")
     /**关联座位*/
-    15: optional list<base.Seat> seat=0 (api.raw = "seat")
+    15: optional list<list<base.Seat>> seat=0 (api.raw = "seat")
     /**是否预约:1可预约;2不可*/
     16: optional i64 isBooking=1 (api.raw = "isBooking")
     /**类型:1球场;2场地*/

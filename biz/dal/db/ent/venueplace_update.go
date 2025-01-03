@@ -368,13 +368,13 @@ func (vpu *VenuePlaceUpdate) ClearInformation() *VenuePlaceUpdate {
 }
 
 // SetSeat sets the "seat" field.
-func (vpu *VenuePlaceUpdate) SetSeat(b []*base.Seat) *VenuePlaceUpdate {
+func (vpu *VenuePlaceUpdate) SetSeat(b [][]*base.Seat) *VenuePlaceUpdate {
 	vpu.mutation.SetSeat(b)
 	return vpu
 }
 
 // AppendSeat appends b to the "seat" field.
-func (vpu *VenuePlaceUpdate) AppendSeat(b []*base.Seat) *VenuePlaceUpdate {
+func (vpu *VenuePlaceUpdate) AppendSeat(b [][]*base.Seat) *VenuePlaceUpdate {
 	vpu.mutation.AppendSeat(b)
 	return vpu
 }
@@ -1031,13 +1031,13 @@ func (vpuo *VenuePlaceUpdateOne) ClearInformation() *VenuePlaceUpdateOne {
 }
 
 // SetSeat sets the "seat" field.
-func (vpuo *VenuePlaceUpdateOne) SetSeat(b []*base.Seat) *VenuePlaceUpdateOne {
+func (vpuo *VenuePlaceUpdateOne) SetSeat(b [][]*base.Seat) *VenuePlaceUpdateOne {
 	vpuo.mutation.SetSeat(b)
 	return vpuo
 }
 
 // AppendSeat appends b to the "seat" field.
-func (vpuo *VenuePlaceUpdateOne) AppendSeat(b []*base.Seat) *VenuePlaceUpdateOne {
+func (vpuo *VenuePlaceUpdateOne) AppendSeat(b [][]*base.Seat) *VenuePlaceUpdateOne {
 	vpuo.mutation.AppendSeat(b)
 	return vpuo
 }

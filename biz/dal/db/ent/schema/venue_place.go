@@ -32,7 +32,7 @@ func (VenuePlace) Fields() []ent.Field {
 		field.Int64("is_booking").Default(1).Comment("是否预约:1可预约;2不可").Optional(),
 		field.String("information").Comment("详情").Optional(),
 
-		field.JSON("seat", []*base.Seat{}).Default([]*base.Seat{}).Comment("座位").Optional(),
+		field.JSON("seat", [][]*base.Seat{}).Default([][]*base.Seat{}).Comment("座位").Optional(),
 	}
 }
 

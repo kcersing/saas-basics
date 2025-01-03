@@ -2031,7 +2031,7 @@ type VenuePlaceInfo struct {
 	ProductIds []int64      `thrift:"productIds,13,optional" form:"productIds" json:"productIds" query:"productIds"`
 	Products   []*base.List `thrift:"products,14,optional" form:"products" json:"products" query:"products"`
 	/**关联座位*/
-	Seat []*base.Seat `thrift:"seat,15,optional" form:"seat" json:"seat" query:"seat"`
+	Seat [][]*base.Seat `thrift:"seat,15,optional" form:"seat" json:"seat" query:"seat"`
 	/**是否预约:1可预约;2不可*/
 	IsBooking int64 `thrift:"isBooking,16,optional" form:"isBooking" json:"isBooking" query:"isBooking"`
 	/**类型:1球场;2场地*/
@@ -2055,7 +2055,7 @@ func NewVenuePlaceInfo() *VenuePlaceInfo {
 		IsAccessible: 1,
 		ProductIds:   []int64{},
 		Products:     []*base.List{},
-		Seat:         []*base.Seat{},
+		Seat:         [][]*base.Seat{},
 		IsBooking:    1,
 		Type:         1,
 	}
@@ -2076,7 +2076,7 @@ func (p *VenuePlaceInfo) InitDefault() {
 	p.IsAccessible = 1
 	p.ProductIds = []int64{}
 	p.Products = []*base.List{}
-	p.Seat = []*base.Seat{}
+	p.Seat = [][]*base.Seat{}
 	p.IsBooking = 1
 	p.Type = 1
 }
@@ -2207,9 +2207,9 @@ func (p *VenuePlaceInfo) GetProducts() (v []*base.List) {
 	return p.Products
 }
 
-var VenuePlaceInfo_Seat_DEFAULT []*base.Seat = []*base.Seat{}
+var VenuePlaceInfo_Seat_DEFAULT [][]*base.Seat = [][]*base.Seat{}
 
-func (p *VenuePlaceInfo) GetSeat() (v []*base.Seat) {
+func (p *VenuePlaceInfo) GetSeat() (v [][]*base.Seat) {
 	if !p.IsSetSeat() {
 		return VenuePlaceInfo_Seat_DEFAULT
 	}
@@ -2689,13 +2689,25 @@ func (p *VenuePlaceInfo) ReadField15(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	_field := make([]*base.Seat, 0, size)
-	values := make([]base.Seat, size)
+	_field := make([][]*base.Seat, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := &values[i]
-		_elem.InitDefault()
+		_, size, err := iprot.ReadListBegin()
+		if err != nil {
+			return err
+		}
+		_elem := make([]*base.Seat, 0, size)
+		values := make([]base.Seat, size)
+		for i := 0; i < size; i++ {
+			_elem1 := &values[i]
+			_elem1.InitDefault()
 
-		if err := _elem.Read(iprot); err != nil {
+			if err := _elem1.Read(iprot); err != nil {
+				return err
+			}
+
+			_elem = append(_elem, _elem1)
+		}
+		if err := iprot.ReadListEnd(); err != nil {
 			return err
 		}
 
@@ -3109,11 +3121,19 @@ func (p *VenuePlaceInfo) writeField15(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("seat", thrift.LIST, 15); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Seat)); err != nil {
+		if err := oprot.WriteListBegin(thrift.LIST, len(p.Seat)); err != nil {
 			return err
 		}
 		for _, v := range p.Seat {
-			if err := v.Write(oprot); err != nil {
+			if err := oprot.WriteListBegin(thrift.STRUCT, len(v)); err != nil {
+				return err
+			}
+			for _, v := range v {
+				if err := v.Write(oprot); err != nil {
+					return err
+				}
+			}
+			if err := oprot.WriteListEnd(); err != nil {
 				return err
 			}
 		}

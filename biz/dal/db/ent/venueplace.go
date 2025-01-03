@@ -52,7 +52,7 @@ type VenuePlace struct {
 	// 详情
 	Information string `json:"information,omitempty"`
 	// 座位
-	Seat []*base.Seat `json:"seat,omitempty"`
+	Seat [][]*base.Seat `json:"seat,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VenuePlaceQuery when eager-loading is set.
 	Edges        VenuePlaceEdges `json:"edges"`

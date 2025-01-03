@@ -124,7 +124,7 @@ var (
 	// DefaultIsBooking holds the default value on creation for the "is_booking" field.
 	DefaultIsBooking int64
 	// DefaultSeat holds the default value on creation for the "seat" field.
-	DefaultSeat []*base.Seat
+	DefaultSeat [][]*base.Seat
 )
 
 // OrderOption defines the ordering options for the VenuePlace queries.

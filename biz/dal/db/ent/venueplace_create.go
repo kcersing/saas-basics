@@ -233,7 +233,7 @@ func (vpc *VenuePlaceCreate) SetNillableInformation(s *string) *VenuePlaceCreate
 }
 
 // SetSeat sets the "seat" field.
-func (vpc *VenuePlaceCreate) SetSeat(b []*base.Seat) *VenuePlaceCreate {
+func (vpc *VenuePlaceCreate) SetSeat(b [][]*base.Seat) *VenuePlaceCreate {
 	vpc.mutation.SetSeat(b)
 	return vpc
 }
