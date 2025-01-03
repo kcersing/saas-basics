@@ -39,6 +39,12 @@ func (s Schedule) entScheduleMemberInfo(req *ent.ScheduleMember) (info *schedule
 		MemberProductName: req.MemberProductName,
 
 		Mobile: member.Mobile,
+
+		Date:            req.SignStartTime.Format(time.DateOnly),
+		MemberProductSn: "",
+		CoachId:         0,
+		CoachName:       "",
+		Seat:            &req.Seat,
 	}
 }
 func (s Schedule) entScheduleCoachInfo(req *ent.ScheduleCoach) (info *schedule.ScheduleCoachInfo) {

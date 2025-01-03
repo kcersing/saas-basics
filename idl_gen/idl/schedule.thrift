@@ -29,18 +29,21 @@ struct ScheduleInfo {
 //	23:string memberName                  (api.raw = "memberName")
 //	24:string memberProductName           (api.raw = "memberProductName")
 
+
+    25:list<base.Seat> seats  (api.raw = "seats")
 	26:list<ScheduleMemberInfo> memberCourseRecord (api.raw = "memberCourseRecord")
 	27:list<ScheduleCoachInfo> coachCourseRecord  (api.raw = "coachCourseRecord")
 
 	28:string createdAt  (api.raw = "createdAt")
 	29:string updatedAt  (api.raw = "updatedAt")
+
     }
 struct ScheduleMemberInfo {
 	1:i64 id                    (api.raw = "id")
 	2:i64 memberId              (api.raw = "memberId")
 	3:i64 venueId               (api.raw = "venueId")
 	4:i64 placeId               (api.raw = "placeId")
-
+  	5:string date           (api.raw = "date")
 	6:i64 scheduleId            (api.raw = "scheduleId")
 	7:string scheduleName         (api.raw = "scheduleName")
 	8:string type                 (api.raw = "type")
@@ -57,9 +60,11 @@ struct ScheduleMemberInfo {
 	18:string venueName                  (api.raw = "venueName")
 	19:string memberName                 (api.raw = "memberName")
 	20:string memberProductName          (api.raw = "memberProductName")
-//	22:string gender                     (api.raw = "gender")
-//	23:i64 birthday                    (api.raw = "birthday")
+	21:string  memberProductSn          (api.raw = "memberProductSn")
+    22:i64 coachId         (api.raw = "coachId")
+	23:string coachName     (api.raw = "coachName")
 	24:string mobile                     (api.raw = "mobile")
+	25: base.Seat seat  (api.raw = "seat")
 }
 struct ScheduleCoachInfo{
 	1:i64 id              (api.raw = "id")
