@@ -1502,8 +1502,12 @@ func init() {
 	venueplaceDescIsAccessible := venueplaceFields[6].Descriptor()
 	// venueplace.DefaultIsAccessible holds the default value on creation for the is_accessible field.
 	venueplace.DefaultIsAccessible = venueplaceDescIsAccessible.Default.(int64)
+	// venueplaceDescIsBooking is the schema descriptor for is_booking field.
+	venueplaceDescIsBooking := venueplaceFields[7].Descriptor()
+	// venueplace.DefaultIsBooking holds the default value on creation for the is_booking field.
+	venueplace.DefaultIsBooking = venueplaceDescIsBooking.Default.(int64)
 	// venueplaceDescSeat is the schema descriptor for seat field.
-	venueplaceDescSeat := venueplaceFields[8].Descriptor()
+	venueplaceDescSeat := venueplaceFields[9].Descriptor()
 	// venueplace.DefaultSeat holds the default value on creation for the seat field.
 	venueplace.DefaultSeat = venueplaceDescSeat.Default.([]*base.Seat)
 	venuesmsMixin := schema.VenueSms{}.Mixin()

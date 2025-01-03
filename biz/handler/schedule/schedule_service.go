@@ -4,6 +4,9 @@ package schedule
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -12,6 +15,13 @@ import (
 )
 
 // CreateScheduleUserTimePeriod .
+//
+// @Summary 添加教练值班时间段
+// @Description 添加教练值班时间段
+//
+//	@Param			request	body		schedule.UserTimePeriodReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/create-user-time-period [POST]
 func CreateScheduleUserTimePeriod(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -22,12 +32,23 @@ func CreateScheduleUserTimePeriod(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewSchedule(ctx, c).CreateScheduleUserTimePeriod(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateScheduleUserTimePeriod .
+//
+// @Summary 更新教练值班时间段
+// @Description 更新教练值班时间段
+//
+//	@Param			request	body		schedule.UserTimePeriodReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/update-user-time-period [POST]
 func UpdateScheduleUserTimePeriod(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -38,12 +59,23 @@ func UpdateScheduleUserTimePeriod(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewSchedule(ctx, c).UpdateScheduleUserTimePeriod(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // CreateScheduleCourse .
+//
+// @Summary 会员约课-私教课
+// @Description 会员约课-私教课
+//
+//	@Param			request	body		schedule.CreateOrUpdateScheduleCourseReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/create-cours [POST]
 func CreateScheduleCourse(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -54,12 +86,23 @@ func CreateScheduleCourse(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewSchedule(ctx, c).CreateScheduleCourse(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // CreateScheduleLessons .
+//
+// @Summary 添加课程-团课
+// @Description 添加课程-团课
+//
+//	@Param			request	body		schedule.CreateOrUpdateScheduleLessonsReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/create-lessons [POST]
 func CreateScheduleLessons(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -69,13 +112,23 @@ func CreateScheduleLessons(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewSchedule(ctx, c).CreateScheduleLessons(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // UpdateScheduleStatus .
+//
+// @Summary 更新课程状态
+// @Description 更新课程状态
+//
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/status [POST]
 func UpdateScheduleStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -85,13 +138,23 @@ func UpdateScheduleStatus(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewSchedule(ctx, c).UpdateScheduleStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ScheduleList .
+//
+// @Summary 课程列表
+// @Description 课程列表
+//
+//	@Param			request	body		schedule.ScheduleListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/list [POST]
 func ScheduleList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -102,12 +165,23 @@ func ScheduleList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewSchedule(ctx, c).ScheduleList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // ScheduleDateList .
+//
+// @Summary 课程日期列表
+// @Description 课程日期列表
+//
+//	@Param			request	body		schedule.ScheduleListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/date-list [POST]
 func ScheduleDateList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -118,12 +192,23 @@ func ScheduleDateList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewSchedule(ctx, c).ScheduleDateList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // ScheduleInfo .
+//
+// @Summary 课程详情
+// @Description 课程详情
+//
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/info [POST]
 func ScheduleInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -134,12 +219,23 @@ func ScheduleInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewSchedule(ctx, c).ScheduleInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }
 
 // CreateMemberSubscribeLessons .
+//
+// @Summary 会员约课-团课
+// @Description 会员约课-团课
+//
+//	@Param			request	body		schedule.MemberSubscribeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/create-member-subscribe-lessons [POST]
 func CreateMemberSubscribeLessons(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -150,12 +246,23 @@ func CreateMemberSubscribeLessons(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewSchedule(ctx, c).CreateMemberSubscribeLessons(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ScheduleMemberList .
+//
+// @Summary 会员约课列表
+// @Description 会员约课列表
+//
+//	@Param			request	body		schedule.ScheduleMemberListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/schedule-member-list [POST]
 func ScheduleMemberList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -166,12 +273,23 @@ func ScheduleMemberList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewSchedule(ctx, c).ScheduleMemberList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // UpdateMemberStatus .
+//
+// @Summary 更新会员约课上课状态
+// @Description 更新会员约课上课状态
+//
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/schedule-member-status [POST]
 func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -182,12 +300,23 @@ func UpdateMemberStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewSchedule(ctx, c).UpdateScheduleMemberStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ScheduleMemberInfo .
+//
+// @Summary 会员约课上课详情
+// @Description 会员约课上课详情
+//
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/schedule-member-info [POST]
 func ScheduleMemberInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -198,12 +327,23 @@ func ScheduleMemberInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewSchedule(ctx, c).ScheduleMemberInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }
 
 // ScheduleCoachList .
+//
+// @Summary 教练约课上课列表
+// @Description 教练约课上课列表
+//
+//	@Param			request	body		schedule.ScheduleCoachListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/schedule-coach-list [POST]
 func ScheduleCoachList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -214,12 +354,23 @@ func ScheduleCoachList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewSchedule(ctx, c).ScheduleCoachList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }
 
 // UpdateScheduleCoachStatus .
+//
+// @Summary 更新教练约课上课状态
+// @Description 更新教练约课上课状态
+//
+//	@Param			request	body		base.StatusCodeReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/schedule-coach-status [POST]
 func UpdateScheduleCoachStatus(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -230,12 +381,23 @@ func UpdateScheduleCoachStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewSchedule(ctx, c).UpdateScheduleCoachStatus(req.ID, req.Status)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
 }
 
 // ScheduleCoachInfo .
+//
+// @Summary 教练约课上课详情
+// @Description 教练约课上课详情
+//
+//	@Param			request	body		base.IDReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/schedule-coach-info [POST]
 func ScheduleCoachInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -245,8 +407,11 @@ func ScheduleCoachInfo(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewSchedule(ctx, c).ScheduleCoachInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }

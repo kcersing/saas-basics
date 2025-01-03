@@ -39,6 +39,8 @@ const (
 	FieldIsShow = "is_show"
 	// FieldIsAccessible holds the string denoting the is_accessible field in the database.
 	FieldIsAccessible = "is_accessible"
+	// FieldIsBooking holds the string denoting the is_booking field in the database.
+	FieldIsBooking = "is_booking"
 	// FieldInformation holds the string denoting the information field in the database.
 	FieldInformation = "information"
 	// FieldSeat holds the string denoting the seat field in the database.
@@ -78,6 +80,7 @@ var Columns = []string{
 	FieldNumber,
 	FieldIsShow,
 	FieldIsAccessible,
+	FieldIsBooking,
 	FieldInformation,
 	FieldSeat,
 }
@@ -115,6 +118,8 @@ var (
 	DefaultIsShow int64
 	// DefaultIsAccessible holds the default value on creation for the "is_accessible" field.
 	DefaultIsAccessible int64
+	// DefaultIsBooking holds the default value on creation for the "is_booking" field.
+	DefaultIsBooking int64
 	// DefaultSeat holds the default value on creation for the "seat" field.
 	DefaultSeat []*base.Seat
 )
@@ -185,6 +190,11 @@ func ByIsShow(opts ...sql.OrderTermOption) OrderOption {
 // ByIsAccessible orders the results by the is_accessible field.
 func ByIsAccessible(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsAccessible, opts...).ToFunc()
+}
+
+// ByIsBooking orders the results by the is_booking field.
+func ByIsBooking(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsBooking, opts...).ToFunc()
 }
 
 // ByInformation orders the results by the information field.

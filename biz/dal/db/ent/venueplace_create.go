@@ -190,6 +190,20 @@ func (vpc *VenuePlaceCreate) SetNillableIsAccessible(i *int64) *VenuePlaceCreate
 	return vpc
 }
 
+// SetIsBooking sets the "is_booking" field.
+func (vpc *VenuePlaceCreate) SetIsBooking(i int64) *VenuePlaceCreate {
+	vpc.mutation.SetIsBooking(i)
+	return vpc
+}
+
+// SetNillableIsBooking sets the "is_booking" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableIsBooking(i *int64) *VenuePlaceCreate {
+	if i != nil {
+		vpc.SetIsBooking(*i)
+	}
+	return vpc
+}
+
 // SetInformation sets the "information" field.
 func (vpc *VenuePlaceCreate) SetInformation(s string) *VenuePlaceCreate {
 	vpc.mutation.SetInformation(s)
@@ -299,6 +313,10 @@ func (vpc *VenuePlaceCreate) defaults() {
 		v := venueplace.DefaultIsAccessible
 		vpc.mutation.SetIsAccessible(v)
 	}
+	if _, ok := vpc.mutation.IsBooking(); !ok {
+		v := venueplace.DefaultIsBooking
+		vpc.mutation.SetIsBooking(v)
+	}
 	if _, ok := vpc.mutation.Seat(); !ok {
 		v := venueplace.DefaultSeat
 		vpc.mutation.SetSeat(v)
@@ -382,6 +400,10 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 	if value, ok := vpc.mutation.IsAccessible(); ok {
 		_spec.SetField(venueplace.FieldIsAccessible, field.TypeInt64, value)
 		_node.IsAccessible = value
+	}
+	if value, ok := vpc.mutation.IsBooking(); ok {
+		_spec.SetField(venueplace.FieldIsBooking, field.TypeInt64, value)
+		_node.IsBooking = value
 	}
 	if value, ok := vpc.mutation.Information(); ok {
 		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)

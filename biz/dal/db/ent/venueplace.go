@@ -45,6 +45,8 @@ type VenuePlace struct {
 	IsShow int64 `json:"is_show,omitempty"`
 	// 是否展示;1开放;2关闭
 	IsAccessible int64 `json:"is_accessible,omitempty"`
+	// 是否预约:1可预约;2不可
+	IsBooking int64 `json:"is_booking,omitempty"`
 	// 详情
 	Information string `json:"information,omitempty"`
 	// 座位
@@ -95,7 +97,7 @@ func (*VenuePlace) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case venueplace.FieldSeat:
 			values[i] = new([]byte)
-		case venueplace.FieldID, venueplace.FieldDelete, venueplace.FieldCreatedID, venueplace.FieldStatus, venueplace.FieldClassify, venueplace.FieldVenueID, venueplace.FieldNumber, venueplace.FieldIsShow, venueplace.FieldIsAccessible:
+		case venueplace.FieldID, venueplace.FieldDelete, venueplace.FieldCreatedID, venueplace.FieldStatus, venueplace.FieldClassify, venueplace.FieldVenueID, venueplace.FieldNumber, venueplace.FieldIsShow, venueplace.FieldIsAccessible, venueplace.FieldIsBooking:
 			values[i] = new(sql.NullInt64)
 		case venueplace.FieldName, venueplace.FieldPic, venueplace.FieldInformation:
 			values[i] = new(sql.NullString)
@@ -194,6 +196,12 @@ func (vp *VenuePlace) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				vp.IsAccessible = value.Int64
 			}
+		case venueplace.FieldIsBooking:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_booking", values[i])
+			} else if value.Valid {
+				vp.IsBooking = value.Int64
+			}
 		case venueplace.FieldInformation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field information", values[i])
@@ -289,6 +297,9 @@ func (vp *VenuePlace) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_accessible=")
 	builder.WriteString(fmt.Sprintf("%v", vp.IsAccessible))
+	builder.WriteString(", ")
+	builder.WriteString("is_booking=")
+	builder.WriteString(fmt.Sprintf("%v", vp.IsBooking))
 	builder.WriteString(", ")
 	builder.WriteString("information=")
 	builder.WriteString(vp.Information)

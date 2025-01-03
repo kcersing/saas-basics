@@ -1412,6 +1412,7 @@ var (
 		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "可容纳人数"},
 		{Name: "is_show", Type: field.TypeInt64, Nullable: true, Comment: "是否展示:1展示;2不展示", Default: 1},
 		{Name: "is_accessible", Type: field.TypeInt64, Nullable: true, Comment: "是否展示;1开放;2关闭", Default: 1},
+		{Name: "is_booking", Type: field.TypeInt64, Nullable: true, Comment: "是否预约:1可预约;2不可", Default: 1},
 		{Name: "information", Type: field.TypeString, Nullable: true, Comment: "详情"},
 		{Name: "seat", Type: field.TypeJSON, Nullable: true, Comment: "座位"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
@@ -1424,7 +1425,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "venue_place_venue_places",
-				Columns:    []*schema.Column{VenuePlaceColumns[14]},
+				Columns:    []*schema.Column{VenuePlaceColumns[15]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1433,7 +1434,7 @@ var (
 			{
 				Name:    "venueplace_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{VenuePlaceColumns[14]},
+				Columns: []*schema.Column{VenuePlaceColumns[15]},
 			},
 		},
 	}

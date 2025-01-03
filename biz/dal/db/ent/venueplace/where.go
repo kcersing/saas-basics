@@ -115,6 +115,11 @@ func IsAccessible(v int64) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldIsAccessible, v))
 }
 
+// IsBooking applies equality check predicate on the "is_booking" field. It's identical to IsBookingEQ.
+func IsBooking(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldIsBooking, v))
+}
+
 // Information applies equality check predicate on the "information" field. It's identical to InformationEQ.
 func Information(v string) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldInformation, v))
@@ -748,6 +753,56 @@ func IsAccessibleIsNil() predicate.VenuePlace {
 // IsAccessibleNotNil applies the NotNil predicate on the "is_accessible" field.
 func IsAccessibleNotNil() predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldNotNull(FieldIsAccessible))
+}
+
+// IsBookingEQ applies the EQ predicate on the "is_booking" field.
+func IsBookingEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldIsBooking, v))
+}
+
+// IsBookingNEQ applies the NEQ predicate on the "is_booking" field.
+func IsBookingNEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNEQ(FieldIsBooking, v))
+}
+
+// IsBookingIn applies the In predicate on the "is_booking" field.
+func IsBookingIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIn(FieldIsBooking, vs...))
+}
+
+// IsBookingNotIn applies the NotIn predicate on the "is_booking" field.
+func IsBookingNotIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotIn(FieldIsBooking, vs...))
+}
+
+// IsBookingGT applies the GT predicate on the "is_booking" field.
+func IsBookingGT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGT(FieldIsBooking, v))
+}
+
+// IsBookingGTE applies the GTE predicate on the "is_booking" field.
+func IsBookingGTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGTE(FieldIsBooking, v))
+}
+
+// IsBookingLT applies the LT predicate on the "is_booking" field.
+func IsBookingLT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLT(FieldIsBooking, v))
+}
+
+// IsBookingLTE applies the LTE predicate on the "is_booking" field.
+func IsBookingLTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLTE(FieldIsBooking, v))
+}
+
+// IsBookingIsNil applies the IsNil predicate on the "is_booking" field.
+func IsBookingIsNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIsNull(FieldIsBooking))
+}
+
+// IsBookingNotNil applies the NotNil predicate on the "is_booking" field.
+func IsBookingNotNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotNull(FieldIsBooking))
 }
 
 // InformationEQ applies the EQ predicate on the "information" field.

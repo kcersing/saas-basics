@@ -293,6 +293,33 @@ func (vpu *VenuePlaceUpdate) ClearIsAccessible() *VenuePlaceUpdate {
 	return vpu
 }
 
+// SetIsBooking sets the "is_booking" field.
+func (vpu *VenuePlaceUpdate) SetIsBooking(i int64) *VenuePlaceUpdate {
+	vpu.mutation.ResetIsBooking()
+	vpu.mutation.SetIsBooking(i)
+	return vpu
+}
+
+// SetNillableIsBooking sets the "is_booking" field if the given value is not nil.
+func (vpu *VenuePlaceUpdate) SetNillableIsBooking(i *int64) *VenuePlaceUpdate {
+	if i != nil {
+		vpu.SetIsBooking(*i)
+	}
+	return vpu
+}
+
+// AddIsBooking adds i to the "is_booking" field.
+func (vpu *VenuePlaceUpdate) AddIsBooking(i int64) *VenuePlaceUpdate {
+	vpu.mutation.AddIsBooking(i)
+	return vpu
+}
+
+// ClearIsBooking clears the value of the "is_booking" field.
+func (vpu *VenuePlaceUpdate) ClearIsBooking() *VenuePlaceUpdate {
+	vpu.mutation.ClearIsBooking()
+	return vpu
+}
+
 // SetInformation sets the "information" field.
 func (vpu *VenuePlaceUpdate) SetInformation(s string) *VenuePlaceUpdate {
 	vpu.mutation.SetInformation(s)
@@ -511,6 +538,15 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vpu.mutation.IsAccessibleCleared() {
 		_spec.ClearField(venueplace.FieldIsAccessible, field.TypeInt64)
+	}
+	if value, ok := vpu.mutation.IsBooking(); ok {
+		_spec.SetField(venueplace.FieldIsBooking, field.TypeInt64, value)
+	}
+	if value, ok := vpu.mutation.AddedIsBooking(); ok {
+		_spec.AddField(venueplace.FieldIsBooking, field.TypeInt64, value)
+	}
+	if vpu.mutation.IsBookingCleared() {
+		_spec.ClearField(venueplace.FieldIsBooking, field.TypeInt64)
 	}
 	if value, ok := vpu.mutation.Information(); ok {
 		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)
@@ -884,6 +920,33 @@ func (vpuo *VenuePlaceUpdateOne) ClearIsAccessible() *VenuePlaceUpdateOne {
 	return vpuo
 }
 
+// SetIsBooking sets the "is_booking" field.
+func (vpuo *VenuePlaceUpdateOne) SetIsBooking(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.ResetIsBooking()
+	vpuo.mutation.SetIsBooking(i)
+	return vpuo
+}
+
+// SetNillableIsBooking sets the "is_booking" field if the given value is not nil.
+func (vpuo *VenuePlaceUpdateOne) SetNillableIsBooking(i *int64) *VenuePlaceUpdateOne {
+	if i != nil {
+		vpuo.SetIsBooking(*i)
+	}
+	return vpuo
+}
+
+// AddIsBooking adds i to the "is_booking" field.
+func (vpuo *VenuePlaceUpdateOne) AddIsBooking(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.AddIsBooking(i)
+	return vpuo
+}
+
+// ClearIsBooking clears the value of the "is_booking" field.
+func (vpuo *VenuePlaceUpdateOne) ClearIsBooking() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearIsBooking()
+	return vpuo
+}
+
 // SetInformation sets the "information" field.
 func (vpuo *VenuePlaceUpdateOne) SetInformation(s string) *VenuePlaceUpdateOne {
 	vpuo.mutation.SetInformation(s)
@@ -1132,6 +1195,15 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 	}
 	if vpuo.mutation.IsAccessibleCleared() {
 		_spec.ClearField(venueplace.FieldIsAccessible, field.TypeInt64)
+	}
+	if value, ok := vpuo.mutation.IsBooking(); ok {
+		_spec.SetField(venueplace.FieldIsBooking, field.TypeInt64, value)
+	}
+	if value, ok := vpuo.mutation.AddedIsBooking(); ok {
+		_spec.AddField(venueplace.FieldIsBooking, field.TypeInt64, value)
+	}
+	if vpuo.mutation.IsBookingCleared() {
+		_spec.ClearField(venueplace.FieldIsBooking, field.TypeInt64)
 	}
 	if value, ok := vpuo.mutation.Information(); ok {
 		_spec.SetField(venueplace.FieldInformation, field.TypeString, value)

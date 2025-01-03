@@ -174,6 +174,7 @@ func (v Venue) CreatePlace(req *venue.VenuePlaceInfo) error {
 		SetClassify(req.Classify).
 		SetIsShow(req.IsShow).
 		SetIsAccessible(req.IsAccessible).
+		SetIsBooking(req.IsBooking).
 		Save(v.ctx)
 
 	if err != nil {
@@ -196,6 +197,7 @@ func (v Venue) UpdatePlace(req *venue.VenuePlaceInfo) error {
 		SetClassify(req.Classify).
 		SetIsShow(req.IsShow).
 		SetIsAccessible(req.IsAccessible).
+		SetIsBooking(req.IsBooking).
 		Save(v.ctx)
 
 	if err != nil {
@@ -303,6 +305,7 @@ func entVenuePlaceInfo(v *ent.VenuePlace) *venue.VenuePlaceInfo {
 		Seat:         v.Seat,
 		Products:     products,
 		ProductIds:   productIds,
+		IsBooking:    v.IsBooking,
 	}
 }
 

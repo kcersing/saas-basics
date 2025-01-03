@@ -2976,69 +2976,379 @@
                 }
             }
         },
-        "/service/schedule/create": {
+        "/service/schedule/create-cours": {
             "post": {
-                "responses": {}
+                "description": "会员约课-私教课",
+                "summary": "会员约课-私教课",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.CreateOrUpdateScheduleCourseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/schedule/create-lessons": {
+            "post": {
+                "description": "添加课程-团课",
+                "summary": "添加课程-团课",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.CreateOrUpdateScheduleLessonsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/schedule/create-member-subscribe-lessons": {
+            "post": {
+                "description": "会员约课-团课",
+                "summary": "会员约课-团课",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.MemberSubscribeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/create-user-time-period": {
             "post": {
-                "responses": {}
+                "description": "添加教练值班时间段",
+                "summary": "添加教练值班时间段",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.UserTimePeriodReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/date-list": {
             "post": {
-                "responses": {}
+                "description": "课程日期列表",
+                "summary": "课程日期列表",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.ScheduleListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/info": {
             "post": {
-                "responses": {}
+                "description": "课程详情",
+                "summary": "课程详情",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/list": {
             "post": {
-                "responses": {}
+                "description": "课程列表",
+                "summary": "课程列表",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.ScheduleListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
-        "/service/schedule/member-subscribe": {
+        "/service/schedule/schedule-coach-info": {
             "post": {
-                "responses": {}
+                "description": "教练约课上课详情",
+                "summary": "教练约课上课详情",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/schedule-coach-list": {
             "post": {
-                "responses": {}
+                "description": "教练约课上课列表",
+                "summary": "教练约课上课列表",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.ScheduleCoachListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/schedule-coach-status": {
             "post": {
-                "responses": {}
+                "description": "更新教练约课上课状态",
+                "summary": "更新教练约课上课状态",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/schedule/schedule-member-info": {
+            "post": {
+                "description": "会员约课上课详情",
+                "summary": "会员约课上课详情",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/schedule-member-list": {
             "post": {
-                "responses": {}
+                "description": "会员约课列表",
+                "summary": "会员约课列表",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.ScheduleMemberListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/schedule-member-status": {
             "post": {
-                "responses": {}
-            }
-        },
-        "/service/schedule/search-subscribe-by-member": {
-            "post": {
-                "responses": {}
+                "description": "更新会员约课上课状态",
+                "summary": "更新会员约课上课状态",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/status": {
             "post": {
-                "responses": {}
+                "description": "更新课程状态",
+                "summary": "更新课程状态",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.StatusCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
-        "/service/schedule/update": {
+        "/service/schedule/update-user-time-period": {
             "post": {
-                "responses": {}
+                "description": "更新教练值班时间段",
+                "summary": "更新教练值班时间段",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.UserTimePeriodReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/sms/buy": {
@@ -3716,6 +4026,21 @@
                 },
                 "price": {
                     "type": "number"
+                }
+            }
+        },
+        "base.Seat": {
+            "type": "object",
+            "properties": {
+                "num": {
+                    "description": "*编号",
+                    "type": "integer"
+                },
+                "x": {
+                    "type": "integer"
+                },
+                "y": {
+                    "type": "integer"
                 }
             }
         },
@@ -4831,11 +5156,197 @@
                 },
                 "subType": {
                     "description": "*次级类型",
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "type": {
                     "description": "类型",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "schedule.CreateOrUpdateScheduleCourseReq": {
+            "type": "object",
+            "properties": {
+                "coachId": {
+                    "description": "*教练ID",
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "memberId": {
+                    "description": "*会员ID",
+                    "type": "integer"
+                },
+                "memberIds": {
+                    "description": "*会员IDs",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "memberProductId": {
+                    "description": "*会员产品ID",
+                    "type": "integer"
+                },
+                "productId": {
+                    "description": "*产品ID",
+                    "type": "integer"
+                },
+                "startTime": {
+                    "description": "*开始时间",
                     "type": "string"
+                },
+                "type": {
+                    "description": "*类别[一对一:courseOne;一对多:courseMore]",
+                    "type": "string"
+                },
+                "venueId": {
+                    "description": "*场馆",
+                    "type": "integer"
+                }
+            }
+        },
+        "schedule.CreateOrUpdateScheduleLessonsReq": {
+            "type": "object",
+            "properties": {
+                "coachId": {
+                    "description": "*教练",
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "placeId": {
+                    "description": "*教室",
+                    "type": "integer"
+                },
+                "productId": {
+                    "description": "*产品",
+                    "type": "integer"
+                },
+                "startTime": {
+                    "description": "*上课时间",
+                    "type": "string"
+                },
+                "venueId": {
+                    "description": "*场馆",
+                    "type": "integer"
+                }
+            }
+        },
+        "schedule.MemberSubscribeReq": {
+            "type": "object",
+            "properties": {
+                "memberId": {
+                    "description": "3:  optional string remark =\"\" (api.raw = \"remark\")",
+                    "type": "integer"
+                },
+                "memberProductId": {
+                    "type": "integer"
+                },
+                "scheduleId": {
+                    "type": "integer"
+                },
+                "seat": {
+                    "$ref": "#/definitions/base.Seat"
+                }
+            }
+        },
+        "schedule.ScheduleCoachListReq": {
+            "type": "object",
+            "properties": {
+                "coachId": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "scheduleId": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
+        "schedule.ScheduleListReq": {
+            "type": "object",
+            "properties": {
+                "coach": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "member": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "product": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "schedule.ScheduleMemberListReq": {
+            "type": "object",
+            "properties": {
+                "memberId": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "scheduleId": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
+        "schedule.UserTimePeriodReq": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "description": "*时间如2024-05-16",
+                    "type": "string"
+                },
+                "period": {
+                    "description": "*时间段",
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         },
@@ -5166,6 +5677,10 @@
                     "description": "*是否开放:1开放;2关闭",
                     "type": "integer"
                 },
+                "isBooking": {
+                    "description": "*是否预约:1可预约;2不可",
+                    "type": "integer"
+                },
                 "isShow": {
                     "description": "*是否展示:1展示;2不展示",
                     "type": "integer"
@@ -5179,6 +5694,26 @@
                 },
                 "pic": {
                     "type": "string"
+                },
+                "productIds": {
+                    "description": "*关联卡种",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base.List"
+                    }
+                },
+                "seat": {
+                    "description": "*关联座位",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base.Seat"
+                    }
                 },
                 "status": {
                     "type": "integer"
