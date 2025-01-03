@@ -239,6 +239,33 @@ func (vpu *VenuePlaceUpdate) ClearNumber() *VenuePlaceUpdate {
 	return vpu
 }
 
+// SetType sets the "type" field.
+func (vpu *VenuePlaceUpdate) SetType(i int64) *VenuePlaceUpdate {
+	vpu.mutation.ResetType()
+	vpu.mutation.SetType(i)
+	return vpu
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (vpu *VenuePlaceUpdate) SetNillableType(i *int64) *VenuePlaceUpdate {
+	if i != nil {
+		vpu.SetType(*i)
+	}
+	return vpu
+}
+
+// AddType adds i to the "type" field.
+func (vpu *VenuePlaceUpdate) AddType(i int64) *VenuePlaceUpdate {
+	vpu.mutation.AddType(i)
+	return vpu
+}
+
+// ClearType clears the value of the "type" field.
+func (vpu *VenuePlaceUpdate) ClearType() *VenuePlaceUpdate {
+	vpu.mutation.ClearType()
+	return vpu
+}
+
 // SetIsShow sets the "is_show" field.
 func (vpu *VenuePlaceUpdate) SetIsShow(i int64) *VenuePlaceUpdate {
 	vpu.mutation.ResetIsShow()
@@ -520,6 +547,15 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vpu.mutation.NumberCleared() {
 		_spec.ClearField(venueplace.FieldNumber, field.TypeInt64)
+	}
+	if value, ok := vpu.mutation.GetType(); ok {
+		_spec.SetField(venueplace.FieldType, field.TypeInt64, value)
+	}
+	if value, ok := vpu.mutation.AddedType(); ok {
+		_spec.AddField(venueplace.FieldType, field.TypeInt64, value)
+	}
+	if vpu.mutation.TypeCleared() {
+		_spec.ClearField(venueplace.FieldType, field.TypeInt64)
 	}
 	if value, ok := vpu.mutation.IsShow(); ok {
 		_spec.SetField(venueplace.FieldIsShow, field.TypeInt64, value)
@@ -866,6 +902,33 @@ func (vpuo *VenuePlaceUpdateOne) ClearNumber() *VenuePlaceUpdateOne {
 	return vpuo
 }
 
+// SetType sets the "type" field.
+func (vpuo *VenuePlaceUpdateOne) SetType(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.ResetType()
+	vpuo.mutation.SetType(i)
+	return vpuo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (vpuo *VenuePlaceUpdateOne) SetNillableType(i *int64) *VenuePlaceUpdateOne {
+	if i != nil {
+		vpuo.SetType(*i)
+	}
+	return vpuo
+}
+
+// AddType adds i to the "type" field.
+func (vpuo *VenuePlaceUpdateOne) AddType(i int64) *VenuePlaceUpdateOne {
+	vpuo.mutation.AddType(i)
+	return vpuo
+}
+
+// ClearType clears the value of the "type" field.
+func (vpuo *VenuePlaceUpdateOne) ClearType() *VenuePlaceUpdateOne {
+	vpuo.mutation.ClearType()
+	return vpuo
+}
+
 // SetIsShow sets the "is_show" field.
 func (vpuo *VenuePlaceUpdateOne) SetIsShow(i int64) *VenuePlaceUpdateOne {
 	vpuo.mutation.ResetIsShow()
@@ -1177,6 +1240,15 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 	}
 	if vpuo.mutation.NumberCleared() {
 		_spec.ClearField(venueplace.FieldNumber, field.TypeInt64)
+	}
+	if value, ok := vpuo.mutation.GetType(); ok {
+		_spec.SetField(venueplace.FieldType, field.TypeInt64, value)
+	}
+	if value, ok := vpuo.mutation.AddedType(); ok {
+		_spec.AddField(venueplace.FieldType, field.TypeInt64, value)
+	}
+	if vpuo.mutation.TypeCleared() {
+		_spec.ClearField(venueplace.FieldType, field.TypeInt64)
 	}
 	if value, ok := vpuo.mutation.IsShow(); ok {
 		_spec.SetField(venueplace.FieldIsShow, field.TypeInt64, value)

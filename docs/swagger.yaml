@@ -1259,6 +1259,9 @@ definitions:
         type: array
       status:
         type: integer
+      type:
+        description: '*类型:1球场;2场地'
+        type: integer
       updatedAt:
         type: string
       venueId:
@@ -1273,6 +1276,8 @@ definitions:
       pageSize:
         type: integer
       status:
+        type: integer
+      type:
         type: integer
     type: object
 info:

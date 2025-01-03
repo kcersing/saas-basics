@@ -105,6 +105,11 @@ func Number(v int64) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldNumber, v))
 }
 
+// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
+func Type(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldType, v))
+}
+
 // IsShow applies equality check predicate on the "is_show" field. It's identical to IsShowEQ.
 func IsShow(v int64) predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldEQ(FieldIsShow, v))
@@ -653,6 +658,56 @@ func NumberIsNil() predicate.VenuePlace {
 // NumberNotNil applies the NotNil predicate on the "number" field.
 func NumberNotNil() predicate.VenuePlace {
 	return predicate.VenuePlace(sql.FieldNotNull(FieldNumber))
+}
+
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeGT applies the GT predicate on the "type" field.
+func TypeGT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGT(FieldType, v))
+}
+
+// TypeGTE applies the GTE predicate on the "type" field.
+func TypeGTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldGTE(FieldType, v))
+}
+
+// TypeLT applies the LT predicate on the "type" field.
+func TypeLT(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLT(FieldType, v))
+}
+
+// TypeLTE applies the LTE predicate on the "type" field.
+func TypeLTE(v int64) predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldLTE(FieldType, v))
+}
+
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.VenuePlace {
+	return predicate.VenuePlace(sql.FieldNotNull(FieldType))
 }
 
 // IsShowEQ applies the EQ predicate on the "is_show" field.

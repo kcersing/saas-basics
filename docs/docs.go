@@ -5729,6 +5729,10 @@ const docTemplate = `{
                 "status": {
                     "type": "integer"
                 },
+                "type": {
+                    "description": "*类型:1球场;2场地",
+                    "type": "integer"
+                },
                 "updatedAt": {
                     "type": "string"
                 },
@@ -5750,6 +5754,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
+                    "type": "integer"
+                },
+                "type": {
                     "type": "integer"
                 }
             }

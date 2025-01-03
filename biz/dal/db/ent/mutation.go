@@ -60588,6 +60588,8 @@ type VenuePlaceMutation struct {
 	pic              *string
 	number           *int64
 	addnumber        *int64
+	_type            *int64
+	add_type         *int64
 	is_show          *int64
 	addis_show       *int64
 	is_accessible    *int64
@@ -61307,6 +61309,76 @@ func (m *VenuePlaceMutation) ResetNumber() {
 	delete(m.clearedFields, venueplace.FieldNumber)
 }
 
+// SetType sets the "type" field.
+func (m *VenuePlaceMutation) SetType(i int64) {
+	m._type = &i
+	m.add_type = nil
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *VenuePlaceMutation) GetType() (r int64, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the VenuePlace entity.
+// If the VenuePlace object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VenuePlaceMutation) OldType(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// AddType adds i to the "type" field.
+func (m *VenuePlaceMutation) AddType(i int64) {
+	if m.add_type != nil {
+		*m.add_type += i
+	} else {
+		m.add_type = &i
+	}
+}
+
+// AddedType returns the value that was added to the "type" field in this mutation.
+func (m *VenuePlaceMutation) AddedType() (r int64, exists bool) {
+	v := m.add_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearType clears the value of the "type" field.
+func (m *VenuePlaceMutation) ClearType() {
+	m._type = nil
+	m.add_type = nil
+	m.clearedFields[venueplace.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *VenuePlaceMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[venueplace.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *VenuePlaceMutation) ResetType() {
+	m._type = nil
+	m.add_type = nil
+	delete(m.clearedFields, venueplace.FieldType)
+}
+
 // SetIsShow sets the "is_show" field.
 func (m *VenuePlaceMutation) SetIsShow(i int64) {
 	m.is_show = &i
@@ -61746,7 +61818,7 @@ func (m *VenuePlaceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VenuePlaceMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, venueplace.FieldCreatedAt)
 	}
@@ -61776,6 +61848,9 @@ func (m *VenuePlaceMutation) Fields() []string {
 	}
 	if m.number != nil {
 		fields = append(fields, venueplace.FieldNumber)
+	}
+	if m._type != nil {
+		fields = append(fields, venueplace.FieldType)
 	}
 	if m.is_show != nil {
 		fields = append(fields, venueplace.FieldIsShow)
@@ -61820,6 +61895,8 @@ func (m *VenuePlaceMutation) Field(name string) (ent.Value, bool) {
 		return m.VenueID()
 	case venueplace.FieldNumber:
 		return m.Number()
+	case venueplace.FieldType:
+		return m.GetType()
 	case venueplace.FieldIsShow:
 		return m.IsShow()
 	case venueplace.FieldIsAccessible:
@@ -61859,6 +61936,8 @@ func (m *VenuePlaceMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldVenueID(ctx)
 	case venueplace.FieldNumber:
 		return m.OldNumber(ctx)
+	case venueplace.FieldType:
+		return m.OldType(ctx)
 	case venueplace.FieldIsShow:
 		return m.OldIsShow(ctx)
 	case venueplace.FieldIsAccessible:
@@ -61948,6 +62027,13 @@ func (m *VenuePlaceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetNumber(v)
 		return nil
+	case venueplace.FieldType:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
 	case venueplace.FieldIsShow:
 		v, ok := value.(int64)
 		if !ok {
@@ -62006,6 +62092,9 @@ func (m *VenuePlaceMutation) AddedFields() []string {
 	if m.addnumber != nil {
 		fields = append(fields, venueplace.FieldNumber)
 	}
+	if m.add_type != nil {
+		fields = append(fields, venueplace.FieldType)
+	}
 	if m.addis_show != nil {
 		fields = append(fields, venueplace.FieldIsShow)
 	}
@@ -62033,6 +62122,8 @@ func (m *VenuePlaceMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedClassify()
 	case venueplace.FieldNumber:
 		return m.AddedNumber()
+	case venueplace.FieldType:
+		return m.AddedType()
 	case venueplace.FieldIsShow:
 		return m.AddedIsShow()
 	case venueplace.FieldIsAccessible:
@@ -62082,6 +62173,13 @@ func (m *VenuePlaceMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddNumber(v)
+		return nil
+	case venueplace.FieldType:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddType(v)
 		return nil
 	case venueplace.FieldIsShow:
 		v, ok := value.(int64)
@@ -62142,6 +62240,9 @@ func (m *VenuePlaceMutation) ClearedFields() []string {
 	if m.FieldCleared(venueplace.FieldNumber) {
 		fields = append(fields, venueplace.FieldNumber)
 	}
+	if m.FieldCleared(venueplace.FieldType) {
+		fields = append(fields, venueplace.FieldType)
+	}
 	if m.FieldCleared(venueplace.FieldIsShow) {
 		fields = append(fields, venueplace.FieldIsShow)
 	}
@@ -62201,6 +62302,9 @@ func (m *VenuePlaceMutation) ClearField(name string) error {
 	case venueplace.FieldNumber:
 		m.ClearNumber()
 		return nil
+	case venueplace.FieldType:
+		m.ClearType()
+		return nil
 	case venueplace.FieldIsShow:
 		m.ClearIsShow()
 		return nil
@@ -62253,6 +62357,9 @@ func (m *VenuePlaceMutation) ResetField(name string) error {
 		return nil
 	case venueplace.FieldNumber:
 		m.ResetNumber()
+		return nil
+	case venueplace.FieldType:
+		m.ResetType()
 		return nil
 	case venueplace.FieldIsShow:
 		m.ResetIsShow()

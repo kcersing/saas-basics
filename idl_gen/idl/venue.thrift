@@ -5,6 +5,7 @@ struct VenuePlaceListReq {
     1:  optional i64 page=1 (api.raw = "page")
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3:  optional string name = "" (api.raw = "name")
+    4:  optional i64 type =1 (api.raw = "type")
     11: optional i64 status = 0 (api.raw = "status")
 }
 struct VenueListReq {
@@ -58,8 +59,10 @@ struct VenuePlaceInfo {
     14: optional list<base.List> products=0 (api.raw = "products")
     /**关联座位*/
     15: optional list<base.Seat> seat=0 (api.raw = "seat")
-     /**是否预约:1可预约;2不可*/
+    /**是否预约:1可预约;2不可*/
     16: optional i64 isBooking=1 (api.raw = "isBooking")
+    /**类型:1球场;2场地*/
+    17: optional i64 type=1 (api.raw = "type")
 }
 
 

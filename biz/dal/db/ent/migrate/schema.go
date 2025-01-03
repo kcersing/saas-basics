@@ -1410,6 +1410,7 @@ var (
 		{Name: "classify", Type: field.TypeInt64, Nullable: true, Comment: "分类"},
 		{Name: "pic", Type: field.TypeString, Nullable: true, Comment: "pic | 照片", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "可容纳人数"},
+		{Name: "type", Type: field.TypeInt64, Nullable: true, Comment: "球场1 场地2"},
 		{Name: "is_show", Type: field.TypeInt64, Nullable: true, Comment: "是否展示:1展示;2不展示", Default: 1},
 		{Name: "is_accessible", Type: field.TypeInt64, Nullable: true, Comment: "是否展示;1开放;2关闭", Default: 1},
 		{Name: "is_booking", Type: field.TypeInt64, Nullable: true, Comment: "是否预约:1可预约;2不可", Default: 1},
@@ -1425,7 +1426,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "venue_place_venue_places",
-				Columns:    []*schema.Column{VenuePlaceColumns[15]},
+				Columns:    []*schema.Column{VenuePlaceColumns[16]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1434,7 +1435,7 @@ var (
 			{
 				Name:    "venueplace_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{VenuePlaceColumns[15]},
+				Columns: []*schema.Column{VenuePlaceColumns[16]},
 			},
 		},
 	}

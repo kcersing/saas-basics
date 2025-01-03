@@ -162,6 +162,20 @@ func (vpc *VenuePlaceCreate) SetNillableNumber(i *int64) *VenuePlaceCreate {
 	return vpc
 }
 
+// SetType sets the "type" field.
+func (vpc *VenuePlaceCreate) SetType(i int64) *VenuePlaceCreate {
+	vpc.mutation.SetType(i)
+	return vpc
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (vpc *VenuePlaceCreate) SetNillableType(i *int64) *VenuePlaceCreate {
+	if i != nil {
+		vpc.SetType(*i)
+	}
+	return vpc
+}
+
 // SetIsShow sets the "is_show" field.
 func (vpc *VenuePlaceCreate) SetIsShow(i int64) *VenuePlaceCreate {
 	vpc.mutation.SetIsShow(i)
@@ -392,6 +406,10 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 	if value, ok := vpc.mutation.Number(); ok {
 		_spec.SetField(venueplace.FieldNumber, field.TypeInt64, value)
 		_node.Number = value
+	}
+	if value, ok := vpc.mutation.GetType(); ok {
+		_spec.SetField(venueplace.FieldType, field.TypeInt64, value)
+		_node.Type = value
 	}
 	if value, ok := vpc.mutation.IsShow(); ok {
 		_spec.SetField(venueplace.FieldIsShow, field.TypeInt64, value)

@@ -13,6 +13,7 @@ type VenuePlaceListReq struct {
 	Page     int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
 	PageSize int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
 	Name     string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
+	Type     int64  `thrift:"type,4,optional" form:"type" json:"type" query:"type"`
 	Status   int64  `thrift:"status,11,optional" form:"status" json:"status" query:"status"`
 }
 
@@ -22,6 +23,7 @@ func NewVenuePlaceListReq() *VenuePlaceListReq {
 		Page:     1,
 		PageSize: 100,
 		Name:     "",
+		Type:     1,
 		Status:   0,
 	}
 }
@@ -30,6 +32,7 @@ func (p *VenuePlaceListReq) InitDefault() {
 	p.Page = 1
 	p.PageSize = 100
 	p.Name = ""
+	p.Type = 1
 	p.Status = 0
 }
 
@@ -60,6 +63,15 @@ func (p *VenuePlaceListReq) GetName() (v string) {
 	return p.Name
 }
 
+var VenuePlaceListReq_Type_DEFAULT int64 = 1
+
+func (p *VenuePlaceListReq) GetType() (v int64) {
+	if !p.IsSetType() {
+		return VenuePlaceListReq_Type_DEFAULT
+	}
+	return p.Type
+}
+
 var VenuePlaceListReq_Status_DEFAULT int64 = 0
 
 func (p *VenuePlaceListReq) GetStatus() (v int64) {
@@ -73,6 +85,7 @@ var fieldIDToName_VenuePlaceListReq = map[int16]string{
 	1:  "page",
 	2:  "pageSize",
 	3:  "name",
+	4:  "type",
 	11: "status",
 }
 
@@ -86,6 +99,10 @@ func (p *VenuePlaceListReq) IsSetPageSize() bool {
 
 func (p *VenuePlaceListReq) IsSetName() bool {
 	return p.Name != VenuePlaceListReq_Name_DEFAULT
+}
+
+func (p *VenuePlaceListReq) IsSetType() bool {
+	return p.Type != VenuePlaceListReq_Type_DEFAULT
 }
 
 func (p *VenuePlaceListReq) IsSetStatus() bool {
@@ -130,6 +147,14 @@ func (p *VenuePlaceListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 3:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -205,6 +230,17 @@ func (p *VenuePlaceListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
+func (p *VenuePlaceListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Type = _field
+	return nil
+}
 func (p *VenuePlaceListReq) ReadField11(iprot thrift.TProtocol) error {
 
 	var _field int64
@@ -233,6 +269,10 @@ func (p *VenuePlaceListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 		if err = p.writeField11(oprot); err != nil {
@@ -312,6 +352,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *VenuePlaceListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *VenuePlaceListReq) writeField11(oprot thrift.TProtocol) (err error) {
@@ -1975,6 +2034,8 @@ type VenuePlaceInfo struct {
 	Seat []*base.Seat `thrift:"seat,15,optional" form:"seat" json:"seat" query:"seat"`
 	/**是否预约:1可预约;2不可*/
 	IsBooking int64 `thrift:"isBooking,16,optional" form:"isBooking" json:"isBooking" query:"isBooking"`
+	/**类型:1球场;2场地*/
+	Type int64 `thrift:"type,17,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewVenuePlaceInfo() *VenuePlaceInfo {
@@ -1996,6 +2057,7 @@ func NewVenuePlaceInfo() *VenuePlaceInfo {
 		Products:     []*base.List{},
 		Seat:         []*base.Seat{},
 		IsBooking:    1,
+		Type:         1,
 	}
 }
 
@@ -2016,6 +2078,7 @@ func (p *VenuePlaceInfo) InitDefault() {
 	p.Products = []*base.List{}
 	p.Seat = []*base.Seat{}
 	p.IsBooking = 1
+	p.Type = 1
 }
 
 var VenuePlaceInfo_ID_DEFAULT int64 = 0
@@ -2162,6 +2225,15 @@ func (p *VenuePlaceInfo) GetIsBooking() (v int64) {
 	return p.IsBooking
 }
 
+var VenuePlaceInfo_Type_DEFAULT int64 = 1
+
+func (p *VenuePlaceInfo) GetType() (v int64) {
+	if !p.IsSetType() {
+		return VenuePlaceInfo_Type_DEFAULT
+	}
+	return p.Type
+}
+
 var fieldIDToName_VenuePlaceInfo = map[int16]string{
 	1:  "id",
 	2:  "name",
@@ -2179,6 +2251,7 @@ var fieldIDToName_VenuePlaceInfo = map[int16]string{
 	14: "products",
 	15: "seat",
 	16: "isBooking",
+	17: "type",
 }
 
 func (p *VenuePlaceInfo) IsSetID() bool {
@@ -2243,6 +2316,10 @@ func (p *VenuePlaceInfo) IsSetSeat() bool {
 
 func (p *VenuePlaceInfo) IsSetIsBooking() bool {
 	return p.IsBooking != VenuePlaceInfo_IsBooking_DEFAULT
+}
+
+func (p *VenuePlaceInfo) IsSetType() bool {
+	return p.Type != VenuePlaceInfo_Type_DEFAULT
 }
 
 func (p *VenuePlaceInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -2387,6 +2464,14 @@ func (p *VenuePlaceInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 16:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField16(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 17:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField17(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2633,6 +2718,17 @@ func (p *VenuePlaceInfo) ReadField16(iprot thrift.TProtocol) error {
 	p.IsBooking = _field
 	return nil
 }
+func (p *VenuePlaceInfo) ReadField17(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Type = _field
+	return nil
+}
 
 func (p *VenuePlaceInfo) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -2702,6 +2798,10 @@ func (p *VenuePlaceInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField16(oprot); err != nil {
 			fieldId = 16
+			goto WriteFieldError
+		}
+		if err = p.writeField17(oprot); err != nil {
+			fieldId = 17
 			goto WriteFieldError
 		}
 	}
@@ -3048,6 +3148,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 16 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 16 end error: ", p), err)
+}
+
+func (p *VenuePlaceInfo) writeField17(oprot thrift.TProtocol) (err error) {
+	if p.IsSetType() {
+		if err = oprot.WriteFieldBegin("type", thrift.I64, 17); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Type); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 17 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
 }
 
 func (p *VenuePlaceInfo) String() string {

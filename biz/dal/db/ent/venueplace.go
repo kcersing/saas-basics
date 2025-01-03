@@ -41,6 +41,8 @@ type VenuePlace struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 可容纳人数
 	Number int64 `json:"number,omitempty"`
+	// 球场1 场地2
+	Type int64 `json:"type,omitempty"`
 	// 是否展示:1展示;2不展示
 	IsShow int64 `json:"is_show,omitempty"`
 	// 是否展示;1开放;2关闭
@@ -97,7 +99,7 @@ func (*VenuePlace) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case venueplace.FieldSeat:
 			values[i] = new([]byte)
-		case venueplace.FieldID, venueplace.FieldDelete, venueplace.FieldCreatedID, venueplace.FieldStatus, venueplace.FieldClassify, venueplace.FieldVenueID, venueplace.FieldNumber, venueplace.FieldIsShow, venueplace.FieldIsAccessible, venueplace.FieldIsBooking:
+		case venueplace.FieldID, venueplace.FieldDelete, venueplace.FieldCreatedID, venueplace.FieldStatus, venueplace.FieldClassify, venueplace.FieldVenueID, venueplace.FieldNumber, venueplace.FieldType, venueplace.FieldIsShow, venueplace.FieldIsAccessible, venueplace.FieldIsBooking:
 			values[i] = new(sql.NullInt64)
 		case venueplace.FieldName, venueplace.FieldPic, venueplace.FieldInformation:
 			values[i] = new(sql.NullString)
@@ -183,6 +185,12 @@ func (vp *VenuePlace) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field number", values[i])
 			} else if value.Valid {
 				vp.Number = value.Int64
+			}
+		case venueplace.FieldType:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				vp.Type = value.Int64
 			}
 		case venueplace.FieldIsShow:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -291,6 +299,9 @@ func (vp *VenuePlace) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("number=")
 	builder.WriteString(fmt.Sprintf("%v", vp.Number))
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", vp.Type))
 	builder.WriteString(", ")
 	builder.WriteString("is_show=")
 	builder.WriteString(fmt.Sprintf("%v", vp.IsShow))

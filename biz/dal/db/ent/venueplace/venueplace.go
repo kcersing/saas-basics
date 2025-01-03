@@ -35,6 +35,8 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldNumber holds the string denoting the number field in the database.
 	FieldNumber = "number"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// FieldIsShow holds the string denoting the is_show field in the database.
 	FieldIsShow = "is_show"
 	// FieldIsAccessible holds the string denoting the is_accessible field in the database.
@@ -78,6 +80,7 @@ var Columns = []string{
 	FieldPic,
 	FieldVenueID,
 	FieldNumber,
+	FieldType,
 	FieldIsShow,
 	FieldIsAccessible,
 	FieldIsBooking,
@@ -180,6 +183,11 @@ func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
 // ByNumber orders the results by the number field.
 func ByNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNumber, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByIsShow orders the results by the is_show field.

@@ -26,7 +26,7 @@ func (VenuePlace) Fields() []ent.Field {
 			Comment("pic | 照片"),
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("number").Comment("可容纳人数").Optional(),
-
+		field.Int64("type").Comment("球场1 场地2").Optional(),
 		field.Int64("is_show").Default(1).Comment("是否展示:1展示;2不展示").Optional(),
 		field.Int64("is_accessible").Default(1).Comment("是否展示;1开放;2关闭").Optional(),
 		field.Int64("is_booking").Default(1).Comment("是否预约:1可预约;2不可").Optional(),
