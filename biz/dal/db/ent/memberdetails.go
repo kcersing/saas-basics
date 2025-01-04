@@ -29,16 +29,14 @@ type MemberDetails struct {
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
+	// 场馆id
+	VenueID int64 `json:"venue_id,omitempty"`
 	// 消费总金额
 	MoneySum float64 `json:"money_sum,omitempty"`
 	// 首次的产品
 	ProductID int64 `json:"product_id,omitempty"`
 	// 首次的产品
 	ProductName string `json:"product_name,omitempty"`
-	// 首次消费场馆
-	ProductVenue int64 `json:"product_venue,omitempty"`
-	// 首次消费场馆
-	ProductVenueName string `json:"product_venue_name,omitempty"`
 	// 进馆总次数
 	EntrySum int64 `json:"entry_sum,omitempty"`
 	// 最后一次进馆时间
@@ -92,9 +90,9 @@ func (*MemberDetails) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberdetails.FieldMoneySum:
 			values[i] = new(sql.NullFloat64)
-		case memberdetails.FieldID, memberdetails.FieldDelete, memberdetails.FieldCreatedID, memberdetails.FieldMemberID, memberdetails.FieldProductID, memberdetails.FieldProductVenue, memberdetails.FieldEntrySum, memberdetails.FieldRelationUID, memberdetails.FieldRelationMid:
+		case memberdetails.FieldID, memberdetails.FieldDelete, memberdetails.FieldCreatedID, memberdetails.FieldMemberID, memberdetails.FieldVenueID, memberdetails.FieldProductID, memberdetails.FieldEntrySum, memberdetails.FieldRelationUID, memberdetails.FieldRelationMid:
 			values[i] = new(sql.NullInt64)
-		case memberdetails.FieldProductName, memberdetails.FieldProductVenueName, memberdetails.FieldRelationUname, memberdetails.FieldRelationMame:
+		case memberdetails.FieldProductName, memberdetails.FieldRelationUname, memberdetails.FieldRelationMame:
 			values[i] = new(sql.NullString)
 		case memberdetails.FieldCreatedAt, memberdetails.FieldUpdatedAt, memberdetails.FieldEntryLastTime, memberdetails.FieldEntryDeadlineTime, memberdetails.FieldClassLastTime, memberdetails.FieldFirstTime:
 			values[i] = new(sql.NullTime)
@@ -149,6 +147,12 @@ func (md *MemberDetails) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				md.MemberID = value.Int64
 			}
+		case memberdetails.FieldVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
+			} else if value.Valid {
+				md.VenueID = value.Int64
+			}
 		case memberdetails.FieldMoneySum:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field money_sum", values[i])
@@ -166,18 +170,6 @@ func (md *MemberDetails) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field product_name", values[i])
 			} else if value.Valid {
 				md.ProductName = value.String
-			}
-		case memberdetails.FieldProductVenue:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field product_venue", values[i])
-			} else if value.Valid {
-				md.ProductVenue = value.Int64
-			}
-		case memberdetails.FieldProductVenueName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field product_venue_name", values[i])
-			} else if value.Valid {
-				md.ProductVenueName = value.String
 			}
 		case memberdetails.FieldEntrySum:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -289,6 +281,9 @@ func (md *MemberDetails) String() string {
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", md.MemberID))
 	builder.WriteString(", ")
+	builder.WriteString("venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", md.VenueID))
+	builder.WriteString(", ")
 	builder.WriteString("money_sum=")
 	builder.WriteString(fmt.Sprintf("%v", md.MoneySum))
 	builder.WriteString(", ")
@@ -297,12 +292,6 @@ func (md *MemberDetails) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("product_name=")
 	builder.WriteString(md.ProductName)
-	builder.WriteString(", ")
-	builder.WriteString("product_venue=")
-	builder.WriteString(fmt.Sprintf("%v", md.ProductVenue))
-	builder.WriteString(", ")
-	builder.WriteString("product_venue_name=")
-	builder.WriteString(md.ProductVenueName)
 	builder.WriteString(", ")
 	builder.WriteString("entry_sum=")
 	builder.WriteString(fmt.Sprintf("%v", md.EntrySum))

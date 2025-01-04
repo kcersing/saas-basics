@@ -405,6 +405,7 @@ type ContestListReq struct {
 	StartAt     string `thrift:"startAt,6,optional" form:"startAt" json:"startAt" query:"startAt"`
 	EndAt       string `thrift:"endAt,7,optional" form:"endAt" json:"endAt" query:"endAt"`
 	Condition   int64  `thrift:"condition,8,optional" form:"condition" json:"condition" query:"condition"`
+	VenueId     int64  `thrift:"venueId,9,optional" form:"venueId" json:"venueId" query:"venueId"`
 }
 
 func NewContestListReq() *ContestListReq {
@@ -418,6 +419,7 @@ func NewContestListReq() *ContestListReq {
 		StartAt:     "",
 		EndAt:       "",
 		Condition:   0,
+		VenueId:     0,
 	}
 }
 
@@ -430,6 +432,7 @@ func (p *ContestListReq) InitDefault() {
 	p.StartAt = ""
 	p.EndAt = ""
 	p.Condition = 0
+	p.VenueId = 0
 }
 
 var ContestListReq_Page_DEFAULT int64 = 1
@@ -504,6 +507,15 @@ func (p *ContestListReq) GetCondition() (v int64) {
 	return p.Condition
 }
 
+var ContestListReq_VenueId_DEFAULT int64 = 0
+
+func (p *ContestListReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return ContestListReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
 var fieldIDToName_ContestListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
@@ -513,6 +525,7 @@ var fieldIDToName_ContestListReq = map[int16]string{
 	6: "startAt",
 	7: "endAt",
 	8: "condition",
+	9: "venueId",
 }
 
 func (p *ContestListReq) IsSetPage() bool {
@@ -545,6 +558,10 @@ func (p *ContestListReq) IsSetEndAt() bool {
 
 func (p *ContestListReq) IsSetCondition() bool {
 	return p.Condition != ContestListReq_Condition_DEFAULT
+}
+
+func (p *ContestListReq) IsSetVenueId() bool {
+	return p.VenueId != ContestListReq_VenueId_DEFAULT
 }
 
 func (p *ContestListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -625,6 +642,14 @@ func (p *ContestListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 8:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField9(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -747,6 +772,17 @@ func (p *ContestListReq) ReadField8(iprot thrift.TProtocol) error {
 	p.Condition = _field
 	return nil
 }
+func (p *ContestListReq) ReadField9(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
 
 func (p *ContestListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -784,6 +820,10 @@ func (p *ContestListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField8(oprot); err != nil {
 			fieldId = 8
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
 			goto WriteFieldError
 		}
 	}
@@ -954,6 +994,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *ContestListReq) writeField9(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 9); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
 }
 
 func (p *ContestListReq) String() string {

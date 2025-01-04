@@ -142,6 +142,33 @@ func (mnu *MemberNoteUpdate) ClearMemberID() *MemberNoteUpdate {
 	return mnu
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mnu *MemberNoteUpdate) SetVenueID(i int64) *MemberNoteUpdate {
+	mnu.mutation.ResetVenueID()
+	mnu.mutation.SetVenueID(i)
+	return mnu
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mnu *MemberNoteUpdate) SetNillableVenueID(i *int64) *MemberNoteUpdate {
+	if i != nil {
+		mnu.SetVenueID(*i)
+	}
+	return mnu
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mnu *MemberNoteUpdate) AddVenueID(i int64) *MemberNoteUpdate {
+	mnu.mutation.AddVenueID(i)
+	return mnu
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mnu *MemberNoteUpdate) ClearVenueID() *MemberNoteUpdate {
+	mnu.mutation.ClearVenueID()
+	return mnu
+}
+
 // SetNote sets the "note" field.
 func (mnu *MemberNoteUpdate) SetNote(s string) *MemberNoteUpdate {
 	mnu.mutation.SetNote(s)
@@ -272,6 +299,15 @@ func (mnu *MemberNoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mnu.mutation.StatusCleared() {
 		_spec.ClearField(membernote.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := mnu.mutation.VenueID(); ok {
+		_spec.SetField(membernote.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mnu.mutation.AddedVenueID(); ok {
+		_spec.AddField(membernote.FieldVenueID, field.TypeInt64, value)
+	}
+	if mnu.mutation.VenueIDCleared() {
+		_spec.ClearField(membernote.FieldVenueID, field.TypeInt64)
 	}
 	if value, ok := mnu.mutation.Note(); ok {
 		_spec.SetField(membernote.FieldNote, field.TypeString, value)
@@ -441,6 +477,33 @@ func (mnuo *MemberNoteUpdateOne) ClearMemberID() *MemberNoteUpdateOne {
 	return mnuo
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mnuo *MemberNoteUpdateOne) SetVenueID(i int64) *MemberNoteUpdateOne {
+	mnuo.mutation.ResetVenueID()
+	mnuo.mutation.SetVenueID(i)
+	return mnuo
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mnuo *MemberNoteUpdateOne) SetNillableVenueID(i *int64) *MemberNoteUpdateOne {
+	if i != nil {
+		mnuo.SetVenueID(*i)
+	}
+	return mnuo
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mnuo *MemberNoteUpdateOne) AddVenueID(i int64) *MemberNoteUpdateOne {
+	mnuo.mutation.AddVenueID(i)
+	return mnuo
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mnuo *MemberNoteUpdateOne) ClearVenueID() *MemberNoteUpdateOne {
+	mnuo.mutation.ClearVenueID()
+	return mnuo
+}
+
 // SetNote sets the "note" field.
 func (mnuo *MemberNoteUpdateOne) SetNote(s string) *MemberNoteUpdateOne {
 	mnuo.mutation.SetNote(s)
@@ -601,6 +664,15 @@ func (mnuo *MemberNoteUpdateOne) sqlSave(ctx context.Context) (_node *MemberNote
 	}
 	if mnuo.mutation.StatusCleared() {
 		_spec.ClearField(membernote.FieldStatus, field.TypeInt64)
+	}
+	if value, ok := mnuo.mutation.VenueID(); ok {
+		_spec.SetField(membernote.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mnuo.mutation.AddedVenueID(); ok {
+		_spec.AddField(membernote.FieldVenueID, field.TypeInt64, value)
+	}
+	if mnuo.mutation.VenueIDCleared() {
+		_spec.ClearField(membernote.FieldVenueID, field.TypeInt64)
 	}
 	if value, ok := mnuo.mutation.Note(); ok {
 		_spec.SetField(membernote.FieldNote, field.TypeString, value)

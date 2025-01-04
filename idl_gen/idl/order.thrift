@@ -4,12 +4,24 @@ include "../base/base.thrift"
 
 service OrderService {
 
+    base.NilResponse Buy(1: BuyReq req) (api.post = "/service/order/buy")
     base.NilResponse Update(1: UpdateOrderReq req) (api.post = "/service/order/update")
     base.NilResponse UpdateStatus(1: base.StatusCodeReq req) (api.post = "/service/order/status")
     base.NilResponse ListOrder(1: ListOrderReq req )(api.post = "/service/order/list") // 订单列表
     base.NilResponse GetOrderById(1: base.IDReq req) (api.get = "/service/order/info") // 订单详情
     base.NilResponse OrderListExport(1: ListOrderReq req) (api.post = "/service/order/list/export")
 }
+struct BuyReq{
+    1: optional i64 venueId=0 (api.raw = "venueId")
+    2: optional i64 productId=0 (api.raw = "productId")
+    3: optional i64 memberId=0 (api.raw = "memberId")
+    /**数量 默认1*/
+    4: optional i64 number=1 (api.raw = "number")
+    /**金额*/
+    5: optional double fee=0 (api.raw = "fee")
+    6: optional string device="" (api.raw = "device")
+}
+
 struct ListOrderReq {
     1: optional i64 page=1 (api.raw = "page")
     2: optional i64 pageSize=100 (api.raw = "pageSize")
@@ -25,6 +37,7 @@ struct ListOrderReq {
     12: optional string nature="" (api.raw = "nature")
     13: optional string name ="" (api.raw = "name ")
     14: optional string member_name="" (api.raw = "member_name")
+
 }
 struct OrderInfo {
     1:  optional i64 id=0 (api.raw = "id")

@@ -13,12 +13,13 @@ struct CreateOrUpdateMemberReq {
     7:  optional i64 source=0 (api.raw = "source")
     8:  optional i64 grade=0 (api.raw = "grade")
     9: optional i64  intention=0 (api.raw = "intention")
+    10: optional i64 venueId =0  (api.raw = "venueId")
 }
 
 struct MemberInfo {
      1:optional i64 id=0  (api.raw = "id")
      2:optional	string name ="" (api.raw = "name")
-     3:optional i64 condition=0 (api.raw = "condition")
+
      4:optional i64 status=0 (api.raw = "status")
      5:optional	string username = "" (api.raw = "username")
      6:optional	string mobile ="" (api.raw = "mobile")
@@ -26,7 +27,6 @@ struct MemberInfo {
      8:optional string createdAt ="" (api.raw = "createdAt")
      9:optional string updatedAt  =""(api.raw = "updatedAt")
 
-      10:optional string conditionName=""(api.raw = "conditionName")
 
      250:optional MemberProfile profile={} (api.raw = "profile")
      251:optional MemberDetails details={} (api.raw = "details")
@@ -51,6 +51,9 @@ struct MemberProfile{
     14: optional string birthday=""   (api.raw = "birthday")
 
     250:optional i64 id=0  (api.raw = "id")
+
+    15:optional i64 condition=0 (api.raw = "condition")
+    16:optional string conditionName=""(api.raw = "conditionName")
 }
 
 struct MemberDetails {

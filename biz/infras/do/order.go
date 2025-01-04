@@ -14,6 +14,8 @@ type Order interface {
 
 	CreateParticipantOrder(req CreateParticipantOrderReq) (orderOne *order.OrderInfo, err error)
 	CreateSmsOrder(req CreateSmsOrderReq) (orderOne *order.OrderInfo, err error)
+
+	Buy(req *order.BuyReq) (orderOne *order.OrderInfo, err error)
 }
 type CreateParticipantOrderReq struct {
 	Member *ent.Member

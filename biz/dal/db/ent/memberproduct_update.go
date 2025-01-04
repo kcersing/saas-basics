@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberproduct"
+	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -161,6 +162,26 @@ func (mpu *MemberProductUpdate) SetNillableType(s *string) *MemberProductUpdate 
 // ClearType clears the value of the "type" field.
 func (mpu *MemberProductUpdate) ClearType() *MemberProductUpdate {
 	mpu.mutation.ClearType()
+	return mpu
+}
+
+// SetSubType sets the "sub_type" field.
+func (mpu *MemberProductUpdate) SetSubType(s string) *MemberProductUpdate {
+	mpu.mutation.SetSubType(s)
+	return mpu
+}
+
+// SetNillableSubType sets the "sub_type" field if the given value is not nil.
+func (mpu *MemberProductUpdate) SetNillableSubType(s *string) *MemberProductUpdate {
+	if s != nil {
+		mpu.SetSubType(*s)
+	}
+	return mpu
+}
+
+// ClearSubType clears the value of the "sub_type" field.
+func (mpu *MemberProductUpdate) ClearSubType() *MemberProductUpdate {
+	mpu.mutation.ClearSubType()
 	return mpu
 }
 
@@ -563,6 +584,36 @@ func (mpu *MemberProductUpdate) AddMemberProductContents(m ...*MemberContract) *
 	return mpu.AddMemberProductContentIDs(ids...)
 }
 
+// AddMemberCourseIDs adds the "memberCourses" edge to the MemberProductCourses entity by IDs.
+func (mpu *MemberProductUpdate) AddMemberCourseIDs(ids ...int64) *MemberProductUpdate {
+	mpu.mutation.AddMemberCourseIDs(ids...)
+	return mpu
+}
+
+// AddMemberCourses adds the "memberCourses" edges to the MemberProductCourses entity.
+func (mpu *MemberProductUpdate) AddMemberCourses(m ...*MemberProductCourses) *MemberProductUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpu.AddMemberCourseIDs(ids...)
+}
+
+// AddMemberLessonIDs adds the "memberLessons" edge to the MemberProductCourses entity by IDs.
+func (mpu *MemberProductUpdate) AddMemberLessonIDs(ids ...int64) *MemberProductUpdate {
+	mpu.mutation.AddMemberLessonIDs(ids...)
+	return mpu
+}
+
+// AddMemberLessons adds the "memberLessons" edges to the MemberProductCourses entity.
+func (mpu *MemberProductUpdate) AddMemberLessons(m ...*MemberProductCourses) *MemberProductUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpu.AddMemberLessonIDs(ids...)
+}
+
 // Mutation returns the MemberProductMutation object of the builder.
 func (mpu *MemberProductUpdate) Mutation() *MemberProductMutation {
 	return mpu.mutation
@@ -614,6 +665,48 @@ func (mpu *MemberProductUpdate) RemoveMemberProductContents(m ...*MemberContract
 		ids[i] = m[i].ID
 	}
 	return mpu.RemoveMemberProductContentIDs(ids...)
+}
+
+// ClearMemberCourses clears all "memberCourses" edges to the MemberProductCourses entity.
+func (mpu *MemberProductUpdate) ClearMemberCourses() *MemberProductUpdate {
+	mpu.mutation.ClearMemberCourses()
+	return mpu
+}
+
+// RemoveMemberCourseIDs removes the "memberCourses" edge to MemberProductCourses entities by IDs.
+func (mpu *MemberProductUpdate) RemoveMemberCourseIDs(ids ...int64) *MemberProductUpdate {
+	mpu.mutation.RemoveMemberCourseIDs(ids...)
+	return mpu
+}
+
+// RemoveMemberCourses removes "memberCourses" edges to MemberProductCourses entities.
+func (mpu *MemberProductUpdate) RemoveMemberCourses(m ...*MemberProductCourses) *MemberProductUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpu.RemoveMemberCourseIDs(ids...)
+}
+
+// ClearMemberLessons clears all "memberLessons" edges to the MemberProductCourses entity.
+func (mpu *MemberProductUpdate) ClearMemberLessons() *MemberProductUpdate {
+	mpu.mutation.ClearMemberLessons()
+	return mpu
+}
+
+// RemoveMemberLessonIDs removes the "memberLessons" edge to MemberProductCourses entities by IDs.
+func (mpu *MemberProductUpdate) RemoveMemberLessonIDs(ids ...int64) *MemberProductUpdate {
+	mpu.mutation.RemoveMemberLessonIDs(ids...)
+	return mpu
+}
+
+// RemoveMemberLessons removes "memberLessons" edges to MemberProductCourses entities.
+func (mpu *MemberProductUpdate) RemoveMemberLessons(m ...*MemberProductCourses) *MemberProductUpdate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpu.RemoveMemberLessonIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -708,6 +801,12 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mpu.mutation.TypeCleared() {
 		_spec.ClearField(memberproduct.FieldType, field.TypeString)
+	}
+	if value, ok := mpu.mutation.SubType(); ok {
+		_spec.SetField(memberproduct.FieldSubType, field.TypeString, value)
+	}
+	if mpu.mutation.SubTypeCleared() {
+		_spec.ClearField(memberproduct.FieldSubType, field.TypeString)
 	}
 	if value, ok := mpu.mutation.ProductID(); ok {
 		_spec.SetField(memberproduct.FieldProductID, field.TypeInt64, value)
@@ -936,6 +1035,96 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if mpu.mutation.MemberCoursesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberCoursesTable,
+			Columns: []string{memberproduct.MemberCoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpu.mutation.RemovedMemberCoursesIDs(); len(nodes) > 0 && !mpu.mutation.MemberCoursesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberCoursesTable,
+			Columns: []string{memberproduct.MemberCoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpu.mutation.MemberCoursesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberCoursesTable,
+			Columns: []string{memberproduct.MemberCoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mpu.mutation.MemberLessonsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberLessonsTable,
+			Columns: []string{memberproduct.MemberLessonsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpu.mutation.RemovedMemberLessonsIDs(); len(nodes) > 0 && !mpu.mutation.MemberLessonsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberLessonsTable,
+			Columns: []string{memberproduct.MemberLessonsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpu.mutation.MemberLessonsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberLessonsTable,
+			Columns: []string{memberproduct.MemberLessonsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, mpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{memberproduct.Label}
@@ -1086,6 +1275,26 @@ func (mpuo *MemberProductUpdateOne) SetNillableType(s *string) *MemberProductUpd
 // ClearType clears the value of the "type" field.
 func (mpuo *MemberProductUpdateOne) ClearType() *MemberProductUpdateOne {
 	mpuo.mutation.ClearType()
+	return mpuo
+}
+
+// SetSubType sets the "sub_type" field.
+func (mpuo *MemberProductUpdateOne) SetSubType(s string) *MemberProductUpdateOne {
+	mpuo.mutation.SetSubType(s)
+	return mpuo
+}
+
+// SetNillableSubType sets the "sub_type" field if the given value is not nil.
+func (mpuo *MemberProductUpdateOne) SetNillableSubType(s *string) *MemberProductUpdateOne {
+	if s != nil {
+		mpuo.SetSubType(*s)
+	}
+	return mpuo
+}
+
+// ClearSubType clears the value of the "sub_type" field.
+func (mpuo *MemberProductUpdateOne) ClearSubType() *MemberProductUpdateOne {
+	mpuo.mutation.ClearSubType()
 	return mpuo
 }
 
@@ -1488,6 +1697,36 @@ func (mpuo *MemberProductUpdateOne) AddMemberProductContents(m ...*MemberContrac
 	return mpuo.AddMemberProductContentIDs(ids...)
 }
 
+// AddMemberCourseIDs adds the "memberCourses" edge to the MemberProductCourses entity by IDs.
+func (mpuo *MemberProductUpdateOne) AddMemberCourseIDs(ids ...int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddMemberCourseIDs(ids...)
+	return mpuo
+}
+
+// AddMemberCourses adds the "memberCourses" edges to the MemberProductCourses entity.
+func (mpuo *MemberProductUpdateOne) AddMemberCourses(m ...*MemberProductCourses) *MemberProductUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpuo.AddMemberCourseIDs(ids...)
+}
+
+// AddMemberLessonIDs adds the "memberLessons" edge to the MemberProductCourses entity by IDs.
+func (mpuo *MemberProductUpdateOne) AddMemberLessonIDs(ids ...int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddMemberLessonIDs(ids...)
+	return mpuo
+}
+
+// AddMemberLessons adds the "memberLessons" edges to the MemberProductCourses entity.
+func (mpuo *MemberProductUpdateOne) AddMemberLessons(m ...*MemberProductCourses) *MemberProductUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpuo.AddMemberLessonIDs(ids...)
+}
+
 // Mutation returns the MemberProductMutation object of the builder.
 func (mpuo *MemberProductUpdateOne) Mutation() *MemberProductMutation {
 	return mpuo.mutation
@@ -1539,6 +1778,48 @@ func (mpuo *MemberProductUpdateOne) RemoveMemberProductContents(m ...*MemberCont
 		ids[i] = m[i].ID
 	}
 	return mpuo.RemoveMemberProductContentIDs(ids...)
+}
+
+// ClearMemberCourses clears all "memberCourses" edges to the MemberProductCourses entity.
+func (mpuo *MemberProductUpdateOne) ClearMemberCourses() *MemberProductUpdateOne {
+	mpuo.mutation.ClearMemberCourses()
+	return mpuo
+}
+
+// RemoveMemberCourseIDs removes the "memberCourses" edge to MemberProductCourses entities by IDs.
+func (mpuo *MemberProductUpdateOne) RemoveMemberCourseIDs(ids ...int64) *MemberProductUpdateOne {
+	mpuo.mutation.RemoveMemberCourseIDs(ids...)
+	return mpuo
+}
+
+// RemoveMemberCourses removes "memberCourses" edges to MemberProductCourses entities.
+func (mpuo *MemberProductUpdateOne) RemoveMemberCourses(m ...*MemberProductCourses) *MemberProductUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpuo.RemoveMemberCourseIDs(ids...)
+}
+
+// ClearMemberLessons clears all "memberLessons" edges to the MemberProductCourses entity.
+func (mpuo *MemberProductUpdateOne) ClearMemberLessons() *MemberProductUpdateOne {
+	mpuo.mutation.ClearMemberLessons()
+	return mpuo
+}
+
+// RemoveMemberLessonIDs removes the "memberLessons" edge to MemberProductCourses entities by IDs.
+func (mpuo *MemberProductUpdateOne) RemoveMemberLessonIDs(ids ...int64) *MemberProductUpdateOne {
+	mpuo.mutation.RemoveMemberLessonIDs(ids...)
+	return mpuo
+}
+
+// RemoveMemberLessons removes "memberLessons" edges to MemberProductCourses entities.
+func (mpuo *MemberProductUpdateOne) RemoveMemberLessons(m ...*MemberProductCourses) *MemberProductUpdateOne {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpuo.RemoveMemberLessonIDs(ids...)
 }
 
 // Where appends a list predicates to the MemberProductUpdate builder.
@@ -1663,6 +1944,12 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	}
 	if mpuo.mutation.TypeCleared() {
 		_spec.ClearField(memberproduct.FieldType, field.TypeString)
+	}
+	if value, ok := mpuo.mutation.SubType(); ok {
+		_spec.SetField(memberproduct.FieldSubType, field.TypeString, value)
+	}
+	if mpuo.mutation.SubTypeCleared() {
+		_spec.ClearField(memberproduct.FieldSubType, field.TypeString)
 	}
 	if value, ok := mpuo.mutation.ProductID(); ok {
 		_spec.SetField(memberproduct.FieldProductID, field.TypeInt64, value)
@@ -1884,6 +2171,96 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mpuo.mutation.MemberCoursesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberCoursesTable,
+			Columns: []string{memberproduct.MemberCoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpuo.mutation.RemovedMemberCoursesIDs(); len(nodes) > 0 && !mpuo.mutation.MemberCoursesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberCoursesTable,
+			Columns: []string{memberproduct.MemberCoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpuo.mutation.MemberCoursesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberCoursesTable,
+			Columns: []string{memberproduct.MemberCoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if mpuo.mutation.MemberLessonsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberLessonsTable,
+			Columns: []string{memberproduct.MemberLessonsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpuo.mutation.RemovedMemberLessonsIDs(); len(nodes) > 0 && !mpuo.mutation.MemberLessonsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberLessonsTable,
+			Columns: []string{memberproduct.MemberLessonsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mpuo.mutation.MemberLessonsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberLessonsTable,
+			Columns: []string{memberproduct.MemberLessonsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

@@ -11,6 +11,7 @@ import (
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberproduct"
+	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -28,6 +29,8 @@ type MemberProductQuery struct {
 	withMembers               *MemberQuery
 	withMemberProductEntry    *EntryLogsQuery
 	withMemberProductContents *MemberContractQuery
+	withMemberCourses         *MemberProductCoursesQuery
+	withMemberLessons         *MemberProductCoursesQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -123,6 +126,50 @@ func (mpq *MemberProductQuery) QueryMemberProductContents() *MemberContractQuery
 			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, selector),
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductContentsTable, memberproduct.MemberProductContentsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberCourses chains the current query on the "memberCourses" edge.
+func (mpq *MemberProductQuery) QueryMemberCourses() *MemberProductCoursesQuery {
+	query := (&MemberProductCoursesClient{config: mpq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mpq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mpq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, selector),
+			sqlgraph.To(memberproductcourses.Table, memberproductcourses.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberCoursesTable, memberproduct.MemberCoursesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberLessons chains the current query on the "memberLessons" edge.
+func (mpq *MemberProductQuery) QueryMemberLessons() *MemberProductCoursesQuery {
+	query := (&MemberProductCoursesClient{config: mpq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mpq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mpq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, selector),
+			sqlgraph.To(memberproductcourses.Table, memberproductcourses.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberLessonsTable, memberproduct.MemberLessonsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
@@ -325,6 +372,8 @@ func (mpq *MemberProductQuery) Clone() *MemberProductQuery {
 		withMembers:               mpq.withMembers.Clone(),
 		withMemberProductEntry:    mpq.withMemberProductEntry.Clone(),
 		withMemberProductContents: mpq.withMemberProductContents.Clone(),
+		withMemberCourses:         mpq.withMemberCourses.Clone(),
+		withMemberLessons:         mpq.withMemberLessons.Clone(),
 		// clone intermediate query.
 		sql:  mpq.sql.Clone(),
 		path: mpq.path,
@@ -361,6 +410,28 @@ func (mpq *MemberProductQuery) WithMemberProductContents(opts ...func(*MemberCon
 		opt(query)
 	}
 	mpq.withMemberProductContents = query
+	return mpq
+}
+
+// WithMemberCourses tells the query-builder to eager-load the nodes that are connected to
+// the "memberCourses" edge. The optional arguments are used to configure the query builder of the edge.
+func (mpq *MemberProductQuery) WithMemberCourses(opts ...func(*MemberProductCoursesQuery)) *MemberProductQuery {
+	query := (&MemberProductCoursesClient{config: mpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mpq.withMemberCourses = query
+	return mpq
+}
+
+// WithMemberLessons tells the query-builder to eager-load the nodes that are connected to
+// the "memberLessons" edge. The optional arguments are used to configure the query builder of the edge.
+func (mpq *MemberProductQuery) WithMemberLessons(opts ...func(*MemberProductCoursesQuery)) *MemberProductQuery {
+	query := (&MemberProductCoursesClient{config: mpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mpq.withMemberLessons = query
 	return mpq
 }
 
@@ -442,10 +513,12 @@ func (mpq *MemberProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*MemberProduct{}
 		_spec       = mpq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
 			mpq.withMembers != nil,
 			mpq.withMemberProductEntry != nil,
 			mpq.withMemberProductContents != nil,
+			mpq.withMemberCourses != nil,
+			mpq.withMemberLessons != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -486,6 +559,24 @@ func (mpq *MemberProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			func(n *MemberProduct) { n.Edges.MemberProductContents = []*MemberContract{} },
 			func(n *MemberProduct, e *MemberContract) {
 				n.Edges.MemberProductContents = append(n.Edges.MemberProductContents, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := mpq.withMemberCourses; query != nil {
+		if err := mpq.loadMemberCourses(ctx, query, nodes,
+			func(n *MemberProduct) { n.Edges.MemberCourses = []*MemberProductCourses{} },
+			func(n *MemberProduct, e *MemberProductCourses) {
+				n.Edges.MemberCourses = append(n.Edges.MemberCourses, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := mpq.withMemberLessons; query != nil {
+		if err := mpq.loadMemberLessons(ctx, query, nodes,
+			func(n *MemberProduct) { n.Edges.MemberLessons = []*MemberProductCourses{} },
+			func(n *MemberProduct, e *MemberProductCourses) {
+				n.Edges.MemberLessons = append(n.Edges.MemberLessons, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -579,6 +670,66 @@ func (mpq *MemberProductQuery) loadMemberProductContents(ctx context.Context, qu
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "member_product_member_product_contents" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (mpq *MemberProductQuery) loadMemberCourses(ctx context.Context, query *MemberProductCoursesQuery, nodes []*MemberProduct, init func(*MemberProduct), assign func(*MemberProduct, *MemberProductCourses)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*MemberProduct)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(memberproductcourses.FieldMemberProductID)
+	}
+	query.Where(predicate.MemberProductCourses(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(memberproduct.MemberCoursesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.MemberProductID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_product_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (mpq *MemberProductQuery) loadMemberLessons(ctx context.Context, query *MemberProductCoursesQuery, nodes []*MemberProduct, init func(*MemberProduct), assign func(*MemberProduct, *MemberProductCourses)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*MemberProduct)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(memberproductcourses.FieldMemberProductID)
+	}
+	query.Where(predicate.MemberProductCourses(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(memberproduct.MemberLessonsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.MemberProductID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_product_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

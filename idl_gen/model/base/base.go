@@ -1860,7 +1860,7 @@ type ListReq struct {
 	Type    string `thrift:"type,3,optional" form:"type" json:"type" query:"type"`
 	Mobile  string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
 	VenueId int64  `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
-	SubType int64  `thrift:"subType,7,optional" form:"subType" json:"subType" query:"subType"`
+	SubType string `thrift:"subType,7,optional" form:"subType" json:"subType" query:"subType"`
 }
 
 func NewListReq() *ListReq {
@@ -1870,7 +1870,7 @@ func NewListReq() *ListReq {
 		Type:    "",
 		Mobile:  "",
 		VenueId: 0,
-		SubType: 0,
+		SubType: "",
 	}
 }
 
@@ -1879,7 +1879,7 @@ func (p *ListReq) InitDefault() {
 	p.Type = ""
 	p.Mobile = ""
 	p.VenueId = 0
-	p.SubType = 0
+	p.SubType = ""
 }
 
 var ListReq_Name_DEFAULT string = ""
@@ -1918,9 +1918,9 @@ func (p *ListReq) GetVenueId() (v int64) {
 	return p.VenueId
 }
 
-var ListReq_SubType_DEFAULT int64 = 0
+var ListReq_SubType_DEFAULT string = ""
 
-func (p *ListReq) GetSubType() (v int64) {
+func (p *ListReq) GetSubType() (v string) {
 	if !p.IsSetSubType() {
 		return ListReq_SubType_DEFAULT
 	}
@@ -2007,7 +2007,7 @@ func (p *ListReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 7:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField7(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2089,8 +2089,8 @@ func (p *ListReq) ReadField6(iprot thrift.TProtocol) error {
 }
 func (p *ListReq) ReadField7(iprot thrift.TProtocol) error {
 
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -2221,10 +2221,10 @@ WriteFieldEndError:
 
 func (p *ListReq) writeField7(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSubType() {
-		if err = oprot.WriteFieldBegin("subType", thrift.I64, 7); err != nil {
+		if err = oprot.WriteFieldBegin("subType", thrift.STRING, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(p.SubType); err != nil {
+		if err := oprot.WriteString(p.SubType); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {

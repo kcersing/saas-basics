@@ -116,6 +116,33 @@ func (oiu *OrderItemUpdate) ClearOrderID() *OrderItemUpdate {
 	return oiu
 }
 
+// SetNumber sets the "number" field.
+func (oiu *OrderItemUpdate) SetNumber(i int64) *OrderItemUpdate {
+	oiu.mutation.ResetNumber()
+	oiu.mutation.SetNumber(i)
+	return oiu
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (oiu *OrderItemUpdate) SetNillableNumber(i *int64) *OrderItemUpdate {
+	if i != nil {
+		oiu.SetNumber(*i)
+	}
+	return oiu
+}
+
+// AddNumber adds i to the "number" field.
+func (oiu *OrderItemUpdate) AddNumber(i int64) *OrderItemUpdate {
+	oiu.mutation.AddNumber(i)
+	return oiu
+}
+
+// ClearNumber clears the value of the "number" field.
+func (oiu *OrderItemUpdate) ClearNumber() *OrderItemUpdate {
+	oiu.mutation.ClearNumber()
+	return oiu
+}
+
 // SetProductID sets the "product_id" field.
 func (oiu *OrderItemUpdate) SetProductID(i int64) *OrderItemUpdate {
 	oiu.mutation.ResetProductID()
@@ -350,6 +377,15 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if oiu.mutation.CreatedIDCleared() {
 		_spec.ClearField(orderitem.FieldCreatedID, field.TypeInt64)
 	}
+	if value, ok := oiu.mutation.Number(); ok {
+		_spec.SetField(orderitem.FieldNumber, field.TypeInt64, value)
+	}
+	if value, ok := oiu.mutation.AddedNumber(); ok {
+		_spec.AddField(orderitem.FieldNumber, field.TypeInt64, value)
+	}
+	if oiu.mutation.NumberCleared() {
+		_spec.ClearField(orderitem.FieldNumber, field.TypeInt64)
+	}
 	if value, ok := oiu.mutation.ProductID(); ok {
 		_spec.SetField(orderitem.FieldProductID, field.TypeInt64, value)
 	}
@@ -535,6 +571,33 @@ func (oiuo *OrderItemUpdateOne) SetNillableOrderID(i *int64) *OrderItemUpdateOne
 // ClearOrderID clears the value of the "order_id" field.
 func (oiuo *OrderItemUpdateOne) ClearOrderID() *OrderItemUpdateOne {
 	oiuo.mutation.ClearOrderID()
+	return oiuo
+}
+
+// SetNumber sets the "number" field.
+func (oiuo *OrderItemUpdateOne) SetNumber(i int64) *OrderItemUpdateOne {
+	oiuo.mutation.ResetNumber()
+	oiuo.mutation.SetNumber(i)
+	return oiuo
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (oiuo *OrderItemUpdateOne) SetNillableNumber(i *int64) *OrderItemUpdateOne {
+	if i != nil {
+		oiuo.SetNumber(*i)
+	}
+	return oiuo
+}
+
+// AddNumber adds i to the "number" field.
+func (oiuo *OrderItemUpdateOne) AddNumber(i int64) *OrderItemUpdateOne {
+	oiuo.mutation.AddNumber(i)
+	return oiuo
+}
+
+// ClearNumber clears the value of the "number" field.
+func (oiuo *OrderItemUpdateOne) ClearNumber() *OrderItemUpdateOne {
+	oiuo.mutation.ClearNumber()
 	return oiuo
 }
 
@@ -801,6 +864,15 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 	}
 	if oiuo.mutation.CreatedIDCleared() {
 		_spec.ClearField(orderitem.FieldCreatedID, field.TypeInt64)
+	}
+	if value, ok := oiuo.mutation.Number(); ok {
+		_spec.SetField(orderitem.FieldNumber, field.TypeInt64, value)
+	}
+	if value, ok := oiuo.mutation.AddedNumber(); ok {
+		_spec.AddField(orderitem.FieldNumber, field.TypeInt64, value)
+	}
+	if oiuo.mutation.NumberCleared() {
+		_spec.ClearField(orderitem.FieldNumber, field.TypeInt64)
 	}
 	if value, ok := oiuo.mutation.ProductID(); ok {
 		_spec.SetField(orderitem.FieldProductID, field.TypeInt64, value)

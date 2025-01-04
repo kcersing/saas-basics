@@ -8,6 +8,7 @@ import (
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
 	member2 "saas/biz/dal/db/ent/member"
+	memberprofile2 "saas/biz/dal/db/ent/memberprofile"
 	order2 "saas/biz/dal/db/ent/order"
 	"saas/biz/infras/do"
 	"saas/config"
@@ -52,9 +53,9 @@ func (o Order) entOrderInfo(v *ent.Order) *order.OrderInfo {
 
 	var memberName, memberMobile string
 	m, _ := o.db.Member.Query().Where(member2.IDEQ(v.MemberID)).First(o.ctx)
-
+	mpr, _ := o.db.MemberProfile.Query().Where(memberprofile2.IDEQ(v.MemberID)).First(o.ctx)
 	if m != nil {
-		memberName = m.Name
+		memberName = mpr.Name
 		memberMobile = m.Mobile
 	}
 

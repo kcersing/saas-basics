@@ -31,6 +31,8 @@ type MemberNote struct {
 	Status int64 `json:"status,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
+	// 场馆id
+	VenueID int64 `json:"venue_id,omitempty"`
 	// 内部备注
 	Note string `json:"note,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -66,7 +68,7 @@ func (*MemberNote) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case membernote.FieldID, membernote.FieldDelete, membernote.FieldCreatedID, membernote.FieldStatus, membernote.FieldMemberID:
+		case membernote.FieldID, membernote.FieldDelete, membernote.FieldCreatedID, membernote.FieldStatus, membernote.FieldMemberID, membernote.FieldVenueID:
 			values[i] = new(sql.NullInt64)
 		case membernote.FieldNote:
 			values[i] = new(sql.NullString)
@@ -128,6 +130,12 @@ func (mn *MemberNote) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field member_id", values[i])
 			} else if value.Valid {
 				mn.MemberID = value.Int64
+			}
+		case membernote.FieldVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
+			} else if value.Valid {
+				mn.VenueID = value.Int64
 			}
 		case membernote.FieldNote:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -193,6 +201,9 @@ func (mn *MemberNote) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", mn.MemberID))
+	builder.WriteString(", ")
+	builder.WriteString("venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", mn.VenueID))
 	builder.WriteString(", ")
 	builder.WriteString("note=")
 	builder.WriteString(mn.Note)

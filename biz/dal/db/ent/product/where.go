@@ -90,6 +90,11 @@ func SubType(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldSubType, v))
 }
 
+// VenueID applies equality check predicate on the "venue_id" field. It's identical to VenueIDEQ.
+func VenueID(v int64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldVenueID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldName, v))
@@ -558,6 +563,56 @@ func SubTypeEqualFold(v string) predicate.Product {
 // SubTypeContainsFold applies the ContainsFold predicate on the "sub_type" field.
 func SubTypeContainsFold(v string) predicate.Product {
 	return predicate.Product(sql.FieldContainsFold(FieldSubType, v))
+}
+
+// VenueIDEQ applies the EQ predicate on the "venue_id" field.
+func VenueIDEQ(v int64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldVenueID, v))
+}
+
+// VenueIDNEQ applies the NEQ predicate on the "venue_id" field.
+func VenueIDNEQ(v int64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldVenueID, v))
+}
+
+// VenueIDIn applies the In predicate on the "venue_id" field.
+func VenueIDIn(vs ...int64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldVenueID, vs...))
+}
+
+// VenueIDNotIn applies the NotIn predicate on the "venue_id" field.
+func VenueIDNotIn(vs ...int64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldVenueID, vs...))
+}
+
+// VenueIDGT applies the GT predicate on the "venue_id" field.
+func VenueIDGT(v int64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldVenueID, v))
+}
+
+// VenueIDGTE applies the GTE predicate on the "venue_id" field.
+func VenueIDGTE(v int64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldVenueID, v))
+}
+
+// VenueIDLT applies the LT predicate on the "venue_id" field.
+func VenueIDLT(v int64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldVenueID, v))
+}
+
+// VenueIDLTE applies the LTE predicate on the "venue_id" field.
+func VenueIDLTE(v int64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldVenueID, v))
+}
+
+// VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
+func VenueIDIsNil() predicate.Product {
+	return predicate.Product(sql.FieldIsNull(FieldVenueID))
+}
+
+// VenueIDNotNil applies the NotNil predicate on the "venue_id" field.
+func VenueIDNotNil() predicate.Product {
+	return predicate.Product(sql.FieldNotNull(FieldVenueID))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

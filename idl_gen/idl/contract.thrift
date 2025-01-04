@@ -7,12 +7,14 @@ struct ContractListReq {
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3: optional string name = "" (api.raw = "name")
     4: optional string status = ""(api.raw = "status")
+    5:  optional i64 venueId=0 (api.raw = "venueId")
 }
 struct CreateOrUpdateContractReq {
     1:  optional i64 id=0 (api.raw = "id")
     2:  optional string name="" (api.raw = "name")
     3:  optional i64 status=1 (api.raw = "status")
     4:  optional string content="" (api.raw = "content")
+    6:  optional i64 venueId=0 (api.raw = "venueId")
 }
 
 struct ContractInfo{

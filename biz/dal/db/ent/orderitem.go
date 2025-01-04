@@ -30,6 +30,8 @@ type OrderItem struct {
 	CreatedID int64 `json:"created_id,omitempty"`
 	// 订单id
 	OrderID int64 `json:"order_id,omitempty"`
+	// 数量
+	Number int64 `json:"number,omitempty"`
 	// 产品id
 	ProductID int64 `json:"product_id,omitempty"`
 	// 关联会员产品id
@@ -77,7 +79,7 @@ func (*OrderItem) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case orderitem.FieldData:
 			values[i] = new([]byte)
-		case orderitem.FieldID, orderitem.FieldDelete, orderitem.FieldCreatedID, orderitem.FieldOrderID, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID, orderitem.FieldContestID, orderitem.FieldBootcampID:
+		case orderitem.FieldID, orderitem.FieldDelete, orderitem.FieldCreatedID, orderitem.FieldOrderID, orderitem.FieldNumber, orderitem.FieldProductID, orderitem.FieldRelatedUserProductID, orderitem.FieldContestID, orderitem.FieldBootcampID:
 			values[i] = new(sql.NullInt64)
 		case orderitem.FieldName:
 			values[i] = new(sql.NullString)
@@ -133,6 +135,12 @@ func (oi *OrderItem) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field order_id", values[i])
 			} else if value.Valid {
 				oi.OrderID = value.Int64
+			}
+		case orderitem.FieldNumber:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field number", values[i])
+			} else if value.Valid {
+				oi.Number = value.Int64
 			}
 		case orderitem.FieldProductID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -227,6 +235,9 @@ func (oi *OrderItem) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("order_id=")
 	builder.WriteString(fmt.Sprintf("%v", oi.OrderID))
+	builder.WriteString(", ")
+	builder.WriteString("number=")
+	builder.WriteString(fmt.Sprintf("%v", oi.Number))
 	builder.WriteString(", ")
 	builder.WriteString("product_id=")
 	builder.WriteString(fmt.Sprintf("%v", oi.ProductID))

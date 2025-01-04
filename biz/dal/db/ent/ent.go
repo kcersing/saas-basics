@@ -26,6 +26,7 @@ import (
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/memberproduct"
+	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
@@ -132,6 +133,7 @@ func checkColumn(table, column string) error {
 			memberdetails.Table:         memberdetails.ValidColumn,
 			membernote.Table:            membernote.ValidColumn,
 			memberproduct.Table:         memberproduct.ValidColumn,
+			memberproductcourses.Table:  memberproductcourses.ValidColumn,
 			memberprofile.Table:         memberprofile.ValidColumn,
 			menu.Table:                  menu.ValidColumn,
 			menuparam.Table:             menuparam.ValidColumn,

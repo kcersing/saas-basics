@@ -151,26 +151,6 @@ func (mu *MemberUpdate) ClearPassword() *MemberUpdate {
 	return mu
 }
 
-// SetName sets the "name" field.
-func (mu *MemberUpdate) SetName(s string) *MemberUpdate {
-	mu.mutation.SetName(s)
-	return mu
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (mu *MemberUpdate) SetNillableName(s *string) *MemberUpdate {
-	if s != nil {
-		mu.SetName(*s)
-	}
-	return mu
-}
-
-// ClearName clears the value of the "name" field.
-func (mu *MemberUpdate) ClearName() *MemberUpdate {
-	mu.mutation.ClearName()
-	return mu
-}
-
 // SetUsername sets the "username" field.
 func (mu *MemberUpdate) SetUsername(s string) *MemberUpdate {
 	mu.mutation.SetUsername(s)
@@ -228,33 +208,6 @@ func (mu *MemberUpdate) SetNillableAvatar(s *string) *MemberUpdate {
 // ClearAvatar clears the value of the "avatar" field.
 func (mu *MemberUpdate) ClearAvatar() *MemberUpdate {
 	mu.mutation.ClearAvatar()
-	return mu
-}
-
-// SetCondition sets the "condition" field.
-func (mu *MemberUpdate) SetCondition(i int64) *MemberUpdate {
-	mu.mutation.ResetCondition()
-	mu.mutation.SetCondition(i)
-	return mu
-}
-
-// SetNillableCondition sets the "condition" field if the given value is not nil.
-func (mu *MemberUpdate) SetNillableCondition(i *int64) *MemberUpdate {
-	if i != nil {
-		mu.SetCondition(*i)
-	}
-	return mu
-}
-
-// AddCondition adds i to the "condition" field.
-func (mu *MemberUpdate) AddCondition(i int64) *MemberUpdate {
-	mu.mutation.AddCondition(i)
-	return mu
-}
-
-// ClearCondition clears the value of the "condition" field.
-func (mu *MemberUpdate) ClearCondition() *MemberUpdate {
-	mu.mutation.ClearCondition()
 	return mu
 }
 
@@ -710,12 +663,6 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if mu.mutation.PasswordCleared() {
 		_spec.ClearField(member.FieldPassword, field.TypeString)
 	}
-	if value, ok := mu.mutation.Name(); ok {
-		_spec.SetField(member.FieldName, field.TypeString, value)
-	}
-	if mu.mutation.NameCleared() {
-		_spec.ClearField(member.FieldName, field.TypeString)
-	}
 	if value, ok := mu.mutation.Username(); ok {
 		_spec.SetField(member.FieldUsername, field.TypeString, value)
 	}
@@ -733,15 +680,6 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.AvatarCleared() {
 		_spec.ClearField(member.FieldAvatar, field.TypeString)
-	}
-	if value, ok := mu.mutation.Condition(); ok {
-		_spec.SetField(member.FieldCondition, field.TypeInt64, value)
-	}
-	if value, ok := mu.mutation.AddedCondition(); ok {
-		_spec.AddField(member.FieldCondition, field.TypeInt64, value)
-	}
-	if mu.mutation.ConditionCleared() {
-		_spec.ClearField(member.FieldCondition, field.TypeInt64)
 	}
 	if mu.mutation.MemberProfileCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1326,26 +1264,6 @@ func (muo *MemberUpdateOne) ClearPassword() *MemberUpdateOne {
 	return muo
 }
 
-// SetName sets the "name" field.
-func (muo *MemberUpdateOne) SetName(s string) *MemberUpdateOne {
-	muo.mutation.SetName(s)
-	return muo
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (muo *MemberUpdateOne) SetNillableName(s *string) *MemberUpdateOne {
-	if s != nil {
-		muo.SetName(*s)
-	}
-	return muo
-}
-
-// ClearName clears the value of the "name" field.
-func (muo *MemberUpdateOne) ClearName() *MemberUpdateOne {
-	muo.mutation.ClearName()
-	return muo
-}
-
 // SetUsername sets the "username" field.
 func (muo *MemberUpdateOne) SetUsername(s string) *MemberUpdateOne {
 	muo.mutation.SetUsername(s)
@@ -1403,33 +1321,6 @@ func (muo *MemberUpdateOne) SetNillableAvatar(s *string) *MemberUpdateOne {
 // ClearAvatar clears the value of the "avatar" field.
 func (muo *MemberUpdateOne) ClearAvatar() *MemberUpdateOne {
 	muo.mutation.ClearAvatar()
-	return muo
-}
-
-// SetCondition sets the "condition" field.
-func (muo *MemberUpdateOne) SetCondition(i int64) *MemberUpdateOne {
-	muo.mutation.ResetCondition()
-	muo.mutation.SetCondition(i)
-	return muo
-}
-
-// SetNillableCondition sets the "condition" field if the given value is not nil.
-func (muo *MemberUpdateOne) SetNillableCondition(i *int64) *MemberUpdateOne {
-	if i != nil {
-		muo.SetCondition(*i)
-	}
-	return muo
-}
-
-// AddCondition adds i to the "condition" field.
-func (muo *MemberUpdateOne) AddCondition(i int64) *MemberUpdateOne {
-	muo.mutation.AddCondition(i)
-	return muo
-}
-
-// ClearCondition clears the value of the "condition" field.
-func (muo *MemberUpdateOne) ClearCondition() *MemberUpdateOne {
-	muo.mutation.ClearCondition()
 	return muo
 }
 
@@ -1915,12 +1806,6 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	if muo.mutation.PasswordCleared() {
 		_spec.ClearField(member.FieldPassword, field.TypeString)
 	}
-	if value, ok := muo.mutation.Name(); ok {
-		_spec.SetField(member.FieldName, field.TypeString, value)
-	}
-	if muo.mutation.NameCleared() {
-		_spec.ClearField(member.FieldName, field.TypeString)
-	}
 	if value, ok := muo.mutation.Username(); ok {
 		_spec.SetField(member.FieldUsername, field.TypeString, value)
 	}
@@ -1938,15 +1823,6 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	}
 	if muo.mutation.AvatarCleared() {
 		_spec.ClearField(member.FieldAvatar, field.TypeString)
-	}
-	if value, ok := muo.mutation.Condition(); ok {
-		_spec.SetField(member.FieldCondition, field.TypeInt64, value)
-	}
-	if value, ok := muo.mutation.AddedCondition(); ok {
-		_spec.AddField(member.FieldCondition, field.TypeInt64, value)
-	}
-	if muo.mutation.ConditionCleared() {
-		_spec.ClearField(member.FieldCondition, field.TypeInt64)
 	}
 	if muo.mutation.MemberProfileCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -50,6 +50,8 @@ type Tx struct {
 	MemberNote *MemberNoteClient
 	// MemberProduct is the client for interacting with the MemberProduct builders.
 	MemberProduct *MemberProductClient
+	// MemberProductCourses is the client for interacting with the MemberProductCourses builders.
+	MemberProductCourses *MemberProductCoursesClient
 	// MemberProfile is the client for interacting with the MemberProfile builders.
 	MemberProfile *MemberProfileClient
 	// Menu is the client for interacting with the Menu builders.
@@ -244,6 +246,7 @@ func (tx *Tx) init() {
 	tx.MemberDetails = NewMemberDetailsClient(tx.config)
 	tx.MemberNote = NewMemberNoteClient(tx.config)
 	tx.MemberProduct = NewMemberProductClient(tx.config)
+	tx.MemberProductCourses = NewMemberProductCoursesClient(tx.config)
 	tx.MemberProfile = NewMemberProfileClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.MenuParam = NewMenuParamClient(tx.config)

@@ -19,7 +19,7 @@ func (MemberNote) Fields() []ent.Field {
 	return []ent.Field{
 
 		field.Int64("member_id").Comment("会员id").Optional(),
-
+		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.String("note").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Optional().

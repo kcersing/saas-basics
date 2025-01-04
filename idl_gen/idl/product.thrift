@@ -90,7 +90,7 @@ struct CreateOrUpdateProductReq {
     23: optional i64 isCourse =0 (api.raw = "isCourse")
     /**课程-数组*/
     24: optional list<base.CourseList> courses = {}  (api.raw = "courses")
-
+    25: optional i64 venueId =0  (api.raw = "venueId")
 }
 
 struct ProductListReq {
@@ -101,6 +101,7 @@ struct ProductListReq {
     7: optional list<string> type="" (api.raw = "type") // 类型
    /**次级类型*/
     8: optional list<string> subType ="" (api.raw = "subType")
+    9: optional i64 venueId =0  (api.raw = "venueId")
 }
 
 service ProductService {

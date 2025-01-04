@@ -27,8 +27,18 @@ type MemberProfile struct {
 	Delete int64 `json:"delete,omitempty"`
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
+	// 意向
+	Intention int64 `json:"intention,omitempty"`
+	// 来源
+	Source int64 `json:"source,omitempty"`
+	// name | 名称
+	Name string `json:"name,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
+	// 场馆id
+	VenueID int64 `json:"venue_id,omitempty"`
+	// 状态[1:潜在;2:正式]
+	Condition int64 `json:"condition,omitempty"`
 	// 手机号归属
 	MobileAscription int64 `json:"mobile_ascription,omitempty"`
 	// 父亲名称
@@ -45,10 +55,6 @@ type MemberProfile struct {
 	Email string `json:"email,omitempty"`
 	// wecom | 微信号
 	Wecom string `json:"wecom,omitempty"`
-	// 意向
-	Intention int64 `json:"intention,omitempty"`
-	// 来源
-	Source int64 `json:"source,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberProfileQuery when eager-loading is set.
 	Edges        MemberProfileEdges `json:"edges"`
@@ -82,9 +88,9 @@ func (*MemberProfile) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case memberprofile.FieldID, memberprofile.FieldDelete, memberprofile.FieldCreatedID, memberprofile.FieldMemberID, memberprofile.FieldMobileAscription, memberprofile.FieldGender, memberprofile.FieldGrade, memberprofile.FieldIntention, memberprofile.FieldSource:
+		case memberprofile.FieldID, memberprofile.FieldDelete, memberprofile.FieldCreatedID, memberprofile.FieldIntention, memberprofile.FieldSource, memberprofile.FieldMemberID, memberprofile.FieldVenueID, memberprofile.FieldCondition, memberprofile.FieldMobileAscription, memberprofile.FieldGender, memberprofile.FieldGrade:
 			values[i] = new(sql.NullInt64)
-		case memberprofile.FieldFatherName, memberprofile.FieldMotherName, memberprofile.FieldEmail, memberprofile.FieldWecom:
+		case memberprofile.FieldName, memberprofile.FieldFatherName, memberprofile.FieldMotherName, memberprofile.FieldEmail, memberprofile.FieldWecom:
 			values[i] = new(sql.NullString)
 		case memberprofile.FieldCreatedAt, memberprofile.FieldUpdatedAt, memberprofile.FieldBirthday:
 			values[i] = new(sql.NullTime)
@@ -133,11 +139,41 @@ func (mp *MemberProfile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mp.CreatedID = value.Int64
 			}
+		case memberprofile.FieldIntention:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field intention", values[i])
+			} else if value.Valid {
+				mp.Intention = value.Int64
+			}
+		case memberprofile.FieldSource:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value.Valid {
+				mp.Source = value.Int64
+			}
+		case memberprofile.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				mp.Name = value.String
+			}
 		case memberprofile.FieldMemberID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field member_id", values[i])
 			} else if value.Valid {
 				mp.MemberID = value.Int64
+			}
+		case memberprofile.FieldVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
+			} else if value.Valid {
+				mp.VenueID = value.Int64
+			}
+		case memberprofile.FieldCondition:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field condition", values[i])
+			} else if value.Valid {
+				mp.Condition = value.Int64
 			}
 		case memberprofile.FieldMobileAscription:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -186,18 +222,6 @@ func (mp *MemberProfile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field wecom", values[i])
 			} else if value.Valid {
 				mp.Wecom = value.String
-			}
-		case memberprofile.FieldIntention:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field intention", values[i])
-			} else if value.Valid {
-				mp.Intention = value.Int64
-			}
-		case memberprofile.FieldSource:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field source", values[i])
-			} else if value.Valid {
-				mp.Source = value.Int64
 			}
 		default:
 			mp.selectValues.Set(columns[i], values[i])
@@ -252,8 +276,23 @@ func (mp *MemberProfile) String() string {
 	builder.WriteString("created_id=")
 	builder.WriteString(fmt.Sprintf("%v", mp.CreatedID))
 	builder.WriteString(", ")
+	builder.WriteString("intention=")
+	builder.WriteString(fmt.Sprintf("%v", mp.Intention))
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(fmt.Sprintf("%v", mp.Source))
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(mp.Name)
+	builder.WriteString(", ")
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", mp.MemberID))
+	builder.WriteString(", ")
+	builder.WriteString("venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", mp.VenueID))
+	builder.WriteString(", ")
+	builder.WriteString("condition=")
+	builder.WriteString(fmt.Sprintf("%v", mp.Condition))
 	builder.WriteString(", ")
 	builder.WriteString("mobile_ascription=")
 	builder.WriteString(fmt.Sprintf("%v", mp.MobileAscription))
@@ -278,12 +317,6 @@ func (mp *MemberProfile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("wecom=")
 	builder.WriteString(mp.Wecom)
-	builder.WriteString(", ")
-	builder.WriteString("intention=")
-	builder.WriteString(fmt.Sprintf("%v", mp.Intention))
-	builder.WriteString(", ")
-	builder.WriteString("source=")
-	builder.WriteString(fmt.Sprintf("%v", mp.Source))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -236,6 +236,18 @@ func (f MemberProductFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Valu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberProductMutation", m)
 }
 
+// The MemberProductCoursesFunc type is an adapter to allow the use of ordinary
+// function as MemberProductCourses mutator.
+type MemberProductCoursesFunc func(context.Context, *ent.MemberProductCoursesMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemberProductCoursesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemberProductCoursesMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberProductCoursesMutation", m)
+}
+
 // The MemberProfileFunc type is an adapter to allow the use of ordinary
 // function as MemberProfile mutator.
 type MemberProfileFunc func(context.Context, *ent.MemberProfileMutation) (ent.Value, error)

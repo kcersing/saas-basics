@@ -19,6 +19,8 @@ func (MemberProduct) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("sn").Comment("编号").Optional(),
 		field.String("type").Comment("类型").Optional(),
+		field.String("sub_type").Default("").Comment("次级类型").Optional(),
+
 		field.Int64("member_id").Comment("会员id").Optional(),
 		field.Int64("product_id").Comment("产品ID").Optional(),
 		field.Int64("venue_id").Comment("场馆ID").Optional(),
@@ -49,6 +51,9 @@ func (MemberProduct) Edges() []ent.Edge {
 
 		edge.To("member_product_entry", EntryLogs.Type),
 		edge.To("member_product_contents", MemberContract.Type),
+
+		edge.To("memberCourses", MemberProductCourses.Type),
+		edge.To("memberLessons", MemberProductCourses.Type),
 	}
 }
 

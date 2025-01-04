@@ -77,6 +77,12 @@ func (s Sys) ProductList(req base.ListReq) (list []do.SysList, total int64, err 
 	if req.Name != "" {
 		predicates = append(predicates, product.NameEQ(req.Name))
 	}
+	if req.Type != "" {
+		predicates = append(predicates, product.TypeEQ(req.Type))
+	}
+	if req.SubType != "" {
+		predicates = append(predicates, product.SubTypeEQ(req.SubType))
+	}
 	lists, err := s.db.Product.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
@@ -99,7 +105,9 @@ func (s Sys) VenueList(req base.ListReq) (list []do.SysList, total int64, err er
 	if req.Name != "" {
 		predicates = append(predicates, venue2.Name(req.Name))
 	}
-
+	if req.Type != "" {
+		predicates = append(predicates, venue2.Type(req.Type))
+	}
 	lists, err := s.db.Venue.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
@@ -127,6 +135,9 @@ func (s Sys) MemberList(req base.ListReq) (list []do.SysList, total int64, err e
 		predicates = append(predicates, member.Mobile(req.Mobile))
 	}
 
+	//if req.VenueId > 0 {
+	//	predicates = append(predicates, member.VenueID(req.VenueId))
+	//}
 	lists, err := s.db.Debug().Member.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
@@ -151,6 +162,8 @@ func (s Sys) ContractList(req base.ListReq) (list []do.SysList, total int64, err
 		predicates = append(predicates, contract.Name(req.Name))
 	}
 
+	predicates = append(predicates, contract.VenueID(req.VenueId))
+
 	lists, err := s.db.Contract.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
@@ -173,7 +186,7 @@ func (s Sys) StaffList(req base.ListReq) (list []do.SysList, total int64, err er
 	if req.Name != "" {
 		predicates = append(predicates, user2.Name(req.Name))
 	}
-
+	predicates = append(predicates, user2.VenueID(req.VenueId))
 	lists, err := s.db.User.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {

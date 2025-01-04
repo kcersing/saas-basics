@@ -80,6 +80,11 @@ func MemberID(v int64) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldEQ(FieldMemberID, v))
 }
 
+// VenueID applies equality check predicate on the "venue_id" field. It's identical to VenueIDEQ.
+func VenueID(v int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldEQ(FieldVenueID, v))
+}
+
 // MoneySum applies equality check predicate on the "money_sum" field. It's identical to MoneySumEQ.
 func MoneySum(v float64) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldEQ(FieldMoneySum, v))
@@ -93,16 +98,6 @@ func ProductID(v int64) predicate.MemberDetails {
 // ProductName applies equality check predicate on the "product_name" field. It's identical to ProductNameEQ.
 func ProductName(v string) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldEQ(FieldProductName, v))
-}
-
-// ProductVenue applies equality check predicate on the "product_venue" field. It's identical to ProductVenueEQ.
-func ProductVenue(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldProductVenue, v))
-}
-
-// ProductVenueName applies equality check predicate on the "product_venue_name" field. It's identical to ProductVenueNameEQ.
-func ProductVenueName(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldProductVenueName, v))
 }
 
 // EntrySum applies equality check predicate on the "entry_sum" field. It's identical to EntrySumEQ.
@@ -380,6 +375,56 @@ func MemberIDNotNil() predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldNotNull(FieldMemberID))
 }
 
+// VenueIDEQ applies the EQ predicate on the "venue_id" field.
+func VenueIDEQ(v int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldEQ(FieldVenueID, v))
+}
+
+// VenueIDNEQ applies the NEQ predicate on the "venue_id" field.
+func VenueIDNEQ(v int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldNEQ(FieldVenueID, v))
+}
+
+// VenueIDIn applies the In predicate on the "venue_id" field.
+func VenueIDIn(vs ...int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldIn(FieldVenueID, vs...))
+}
+
+// VenueIDNotIn applies the NotIn predicate on the "venue_id" field.
+func VenueIDNotIn(vs ...int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldNotIn(FieldVenueID, vs...))
+}
+
+// VenueIDGT applies the GT predicate on the "venue_id" field.
+func VenueIDGT(v int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldGT(FieldVenueID, v))
+}
+
+// VenueIDGTE applies the GTE predicate on the "venue_id" field.
+func VenueIDGTE(v int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldGTE(FieldVenueID, v))
+}
+
+// VenueIDLT applies the LT predicate on the "venue_id" field.
+func VenueIDLT(v int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldLT(FieldVenueID, v))
+}
+
+// VenueIDLTE applies the LTE predicate on the "venue_id" field.
+func VenueIDLTE(v int64) predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldLTE(FieldVenueID, v))
+}
+
+// VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
+func VenueIDIsNil() predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldIsNull(FieldVenueID))
+}
+
+// VenueIDNotNil applies the NotNil predicate on the "venue_id" field.
+func VenueIDNotNil() predicate.MemberDetails {
+	return predicate.MemberDetails(sql.FieldNotNull(FieldVenueID))
+}
+
 // MoneySumEQ applies the EQ predicate on the "money_sum" field.
 func MoneySumEQ(v float64) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldEQ(FieldMoneySum, v))
@@ -553,131 +598,6 @@ func ProductNameEqualFold(v string) predicate.MemberDetails {
 // ProductNameContainsFold applies the ContainsFold predicate on the "product_name" field.
 func ProductNameContainsFold(v string) predicate.MemberDetails {
 	return predicate.MemberDetails(sql.FieldContainsFold(FieldProductName, v))
-}
-
-// ProductVenueEQ applies the EQ predicate on the "product_venue" field.
-func ProductVenueEQ(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldProductVenue, v))
-}
-
-// ProductVenueNEQ applies the NEQ predicate on the "product_venue" field.
-func ProductVenueNEQ(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNEQ(FieldProductVenue, v))
-}
-
-// ProductVenueIn applies the In predicate on the "product_venue" field.
-func ProductVenueIn(vs ...int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIn(FieldProductVenue, vs...))
-}
-
-// ProductVenueNotIn applies the NotIn predicate on the "product_venue" field.
-func ProductVenueNotIn(vs ...int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotIn(FieldProductVenue, vs...))
-}
-
-// ProductVenueGT applies the GT predicate on the "product_venue" field.
-func ProductVenueGT(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGT(FieldProductVenue, v))
-}
-
-// ProductVenueGTE applies the GTE predicate on the "product_venue" field.
-func ProductVenueGTE(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGTE(FieldProductVenue, v))
-}
-
-// ProductVenueLT applies the LT predicate on the "product_venue" field.
-func ProductVenueLT(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLT(FieldProductVenue, v))
-}
-
-// ProductVenueLTE applies the LTE predicate on the "product_venue" field.
-func ProductVenueLTE(v int64) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLTE(FieldProductVenue, v))
-}
-
-// ProductVenueIsNil applies the IsNil predicate on the "product_venue" field.
-func ProductVenueIsNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIsNull(FieldProductVenue))
-}
-
-// ProductVenueNotNil applies the NotNil predicate on the "product_venue" field.
-func ProductVenueNotNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotNull(FieldProductVenue))
-}
-
-// ProductVenueNameEQ applies the EQ predicate on the "product_venue_name" field.
-func ProductVenueNameEQ(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEQ(FieldProductVenueName, v))
-}
-
-// ProductVenueNameNEQ applies the NEQ predicate on the "product_venue_name" field.
-func ProductVenueNameNEQ(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNEQ(FieldProductVenueName, v))
-}
-
-// ProductVenueNameIn applies the In predicate on the "product_venue_name" field.
-func ProductVenueNameIn(vs ...string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIn(FieldProductVenueName, vs...))
-}
-
-// ProductVenueNameNotIn applies the NotIn predicate on the "product_venue_name" field.
-func ProductVenueNameNotIn(vs ...string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotIn(FieldProductVenueName, vs...))
-}
-
-// ProductVenueNameGT applies the GT predicate on the "product_venue_name" field.
-func ProductVenueNameGT(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGT(FieldProductVenueName, v))
-}
-
-// ProductVenueNameGTE applies the GTE predicate on the "product_venue_name" field.
-func ProductVenueNameGTE(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldGTE(FieldProductVenueName, v))
-}
-
-// ProductVenueNameLT applies the LT predicate on the "product_venue_name" field.
-func ProductVenueNameLT(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLT(FieldProductVenueName, v))
-}
-
-// ProductVenueNameLTE applies the LTE predicate on the "product_venue_name" field.
-func ProductVenueNameLTE(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldLTE(FieldProductVenueName, v))
-}
-
-// ProductVenueNameContains applies the Contains predicate on the "product_venue_name" field.
-func ProductVenueNameContains(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldContains(FieldProductVenueName, v))
-}
-
-// ProductVenueNameHasPrefix applies the HasPrefix predicate on the "product_venue_name" field.
-func ProductVenueNameHasPrefix(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldHasPrefix(FieldProductVenueName, v))
-}
-
-// ProductVenueNameHasSuffix applies the HasSuffix predicate on the "product_venue_name" field.
-func ProductVenueNameHasSuffix(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldHasSuffix(FieldProductVenueName, v))
-}
-
-// ProductVenueNameIsNil applies the IsNil predicate on the "product_venue_name" field.
-func ProductVenueNameIsNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldIsNull(FieldProductVenueName))
-}
-
-// ProductVenueNameNotNil applies the NotNil predicate on the "product_venue_name" field.
-func ProductVenueNameNotNil() predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldNotNull(FieldProductVenueName))
-}
-
-// ProductVenueNameEqualFold applies the EqualFold predicate on the "product_venue_name" field.
-func ProductVenueNameEqualFold(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldEqualFold(FieldProductVenueName, v))
-}
-
-// ProductVenueNameContainsFold applies the ContainsFold predicate on the "product_venue_name" field.
-func ProductVenueNameContainsFold(v string) predicate.MemberDetails {
-	return predicate.MemberDetails(sql.FieldContainsFold(FieldProductVenueName, v))
 }
 
 // EntrySumEQ applies the EQ predicate on the "entry_sum" field.

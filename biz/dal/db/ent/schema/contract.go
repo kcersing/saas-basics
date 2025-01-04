@@ -17,6 +17,7 @@ func (Contract) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").Optional().Comment("name | 名称"),
 		field.String("content").Optional().Comment("content | 内容"),
+		field.Int64("venue_id").Comment("场馆id").Optional(),
 	}
 }
 

@@ -30,16 +30,12 @@ type Member struct {
 	Status int64 `json:"status,omitempty"`
 	// password | 密码
 	Password string `json:"password,omitempty"`
-	// name | 账号
-	Name string `json:"name,omitempty"`
-	// username
+	// 账号
 	Username string `json:"username,omitempty"`
 	// mobile number | 手机号
 	Mobile string `json:"mobile,omitempty"`
 	// avatar | 头像路径
 	Avatar string `json:"avatar,omitempty"`
-	// 状态[1:潜在;2:正式]
-	Condition int64 `json:"condition,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberQuery when eager-loading is set.
 	Edges        MemberEdges `json:"edges"`
@@ -168,9 +164,9 @@ func (*Member) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case member.FieldID, member.FieldDelete, member.FieldCreatedID, member.FieldStatus, member.FieldCondition:
+		case member.FieldID, member.FieldDelete, member.FieldCreatedID, member.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case member.FieldPassword, member.FieldName, member.FieldUsername, member.FieldMobile, member.FieldAvatar:
+		case member.FieldPassword, member.FieldUsername, member.FieldMobile, member.FieldAvatar:
 			values[i] = new(sql.NullString)
 		case member.FieldCreatedAt, member.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -231,12 +227,6 @@ func (m *Member) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Password = value.String
 			}
-		case member.FieldName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
-			} else if value.Valid {
-				m.Name = value.String
-			}
 		case member.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field username", values[i])
@@ -254,12 +244,6 @@ func (m *Member) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field avatar", values[i])
 			} else if value.Valid {
 				m.Avatar = value.String
-			}
-		case member.FieldCondition:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field condition", values[i])
-			} else if value.Valid {
-				m.Condition = value.Int64
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -365,9 +349,6 @@ func (m *Member) String() string {
 	builder.WriteString("password=")
 	builder.WriteString(m.Password)
 	builder.WriteString(", ")
-	builder.WriteString("name=")
-	builder.WriteString(m.Name)
-	builder.WriteString(", ")
 	builder.WriteString("username=")
 	builder.WriteString(m.Username)
 	builder.WriteString(", ")
@@ -376,9 +357,6 @@ func (m *Member) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("avatar=")
 	builder.WriteString(m.Avatar)
-	builder.WriteString(", ")
-	builder.WriteString("condition=")
-	builder.WriteString(fmt.Sprintf("%v", m.Condition))
 	builder.WriteByte(')')
 	return builder.String()
 }

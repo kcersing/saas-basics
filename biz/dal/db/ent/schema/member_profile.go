@@ -16,7 +16,16 @@ type MemberProfile struct {
 
 func (MemberProfile) Fields() []ent.Field {
 	return []ent.Field{
+
+		field.Int64("intention").Default(0).Comment("意向").Optional(),
+		field.Int64("source").Default(0).Comment("来源").Optional(),
+		field.String("name").Optional().Comment("name | 名称"),
 		field.Int64("member_id").Comment("会员id").Optional(),
+		field.Int64("venue_id").Comment("场馆id").Optional(),
+		field.Int64("condition").
+			Default(1).
+			Optional().
+			Comment("状态[1:潜在;2:正式]"),
 		field.Int64("mobile_ascription").Default(0).Optional().Comment("手机号归属"),
 		field.String("father_name").Comment("父亲名称").Optional(),
 		field.String("mother_name").Comment("母亲名称").Optional(),
@@ -26,8 +35,6 @@ func (MemberProfile) Fields() []ent.Field {
 		field.Int64("grade").Default(0).Comment("年级").Optional(),
 		field.String("email").Optional().Comment("email | 邮箱号"),
 		field.String("wecom").Optional().Comment("wecom | 微信号"),
-		field.Int64("intention").Default(0).Comment("意向").Optional(),
-		field.Int64("source").Default(0).Comment("来源").Optional(),
 	}
 }
 

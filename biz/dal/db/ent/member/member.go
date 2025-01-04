@@ -26,16 +26,12 @@ const (
 	FieldStatus = "status"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
 	// FieldUsername holds the string denoting the username field in the database.
 	FieldUsername = "username"
 	// FieldMobile holds the string denoting the mobile field in the database.
 	FieldMobile = "mobile"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
-	// FieldCondition holds the string denoting the condition field in the database.
-	FieldCondition = "condition"
 	// EdgeMemberProfile holds the string denoting the member_profile edge name in mutations.
 	EdgeMemberProfile = "member_profile"
 	// EdgeMemberDetails holds the string denoting the member_details edge name in mutations.
@@ -133,11 +129,9 @@ var Columns = []string{
 	FieldCreatedID,
 	FieldStatus,
 	FieldPassword,
-	FieldName,
 	FieldUsername,
 	FieldMobile,
 	FieldAvatar,
-	FieldCondition,
 }
 
 var (
@@ -177,8 +171,6 @@ var (
 	DefaultStatus int64
 	// DefaultAvatar holds the default value on creation for the "avatar" field.
 	DefaultAvatar string
-	// DefaultCondition holds the default value on creation for the "condition" field.
-	DefaultCondition int64
 )
 
 // OrderOption defines the ordering options for the Member queries.
@@ -219,11 +211,6 @@ func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
-}
-
 // ByUsername orders the results by the username field.
 func ByUsername(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUsername, opts...).ToFunc()
@@ -237,11 +224,6 @@ func ByMobile(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatar orders the results by the avatar field.
 func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatar, opts...).ToFunc()
-}
-
-// ByCondition orders the results by the condition field.
-func ByCondition(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCondition, opts...).ToFunc()
 }
 
 // ByMemberProfileCount orders the results by member_profile count.

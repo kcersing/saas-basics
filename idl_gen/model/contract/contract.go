@@ -14,6 +14,7 @@ type ContractListReq struct {
 	PageSize int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
 	Name     string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
 	Status   string `thrift:"status,4,optional" form:"status" json:"status" query:"status"`
+	VenueId  int64  `thrift:"venueId,5,optional" form:"venueId" json:"venueId" query:"venueId"`
 }
 
 func NewContractListReq() *ContractListReq {
@@ -23,6 +24,7 @@ func NewContractListReq() *ContractListReq {
 		PageSize: 100,
 		Name:     "",
 		Status:   "",
+		VenueId:  0,
 	}
 }
 
@@ -31,6 +33,7 @@ func (p *ContractListReq) InitDefault() {
 	p.PageSize = 100
 	p.Name = ""
 	p.Status = ""
+	p.VenueId = 0
 }
 
 var ContractListReq_Page_DEFAULT int64 = 1
@@ -69,11 +72,21 @@ func (p *ContractListReq) GetStatus() (v string) {
 	return p.Status
 }
 
+var ContractListReq_VenueId_DEFAULT int64 = 0
+
+func (p *ContractListReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return ContractListReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
 var fieldIDToName_ContractListReq = map[int16]string{
 	1: "page",
 	2: "pageSize",
 	3: "name",
 	4: "status",
+	5: "venueId",
 }
 
 func (p *ContractListReq) IsSetPage() bool {
@@ -90,6 +103,10 @@ func (p *ContractListReq) IsSetName() bool {
 
 func (p *ContractListReq) IsSetStatus() bool {
 	return p.Status != ContractListReq_Status_DEFAULT
+}
+
+func (p *ContractListReq) IsSetVenueId() bool {
+	return p.VenueId != ContractListReq_VenueId_DEFAULT
 }
 
 func (p *ContractListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -138,6 +155,14 @@ func (p *ContractListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -216,6 +241,17 @@ func (p *ContractListReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
+func (p *ContractListReq) ReadField5(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
 
 func (p *ContractListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -237,6 +273,10 @@ func (p *ContractListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -333,6 +373,25 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
+func (p *ContractListReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 5); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
 func (p *ContractListReq) String() string {
 	if p == nil {
 		return "<nil>"
@@ -346,6 +405,7 @@ type CreateOrUpdateContractReq struct {
 	Name    string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
 	Status  int64  `thrift:"status,3,optional" form:"status" json:"status" query:"status"`
 	Content string `thrift:"content,4,optional" form:"content" json:"content" query:"content"`
+	VenueId int64  `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
 }
 
 func NewCreateOrUpdateContractReq() *CreateOrUpdateContractReq {
@@ -355,6 +415,7 @@ func NewCreateOrUpdateContractReq() *CreateOrUpdateContractReq {
 		Name:    "",
 		Status:  1,
 		Content: "",
+		VenueId: 0,
 	}
 }
 
@@ -363,6 +424,7 @@ func (p *CreateOrUpdateContractReq) InitDefault() {
 	p.Name = ""
 	p.Status = 1
 	p.Content = ""
+	p.VenueId = 0
 }
 
 var CreateOrUpdateContractReq_ID_DEFAULT int64 = 0
@@ -401,11 +463,21 @@ func (p *CreateOrUpdateContractReq) GetContent() (v string) {
 	return p.Content
 }
 
+var CreateOrUpdateContractReq_VenueId_DEFAULT int64 = 0
+
+func (p *CreateOrUpdateContractReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return CreateOrUpdateContractReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
 var fieldIDToName_CreateOrUpdateContractReq = map[int16]string{
 	1: "id",
 	2: "name",
 	3: "status",
 	4: "content",
+	6: "venueId",
 }
 
 func (p *CreateOrUpdateContractReq) IsSetID() bool {
@@ -422,6 +494,10 @@ func (p *CreateOrUpdateContractReq) IsSetStatus() bool {
 
 func (p *CreateOrUpdateContractReq) IsSetContent() bool {
 	return p.Content != CreateOrUpdateContractReq_Content_DEFAULT
+}
+
+func (p *CreateOrUpdateContractReq) IsSetVenueId() bool {
+	return p.VenueId != CreateOrUpdateContractReq_VenueId_DEFAULT
 }
 
 func (p *CreateOrUpdateContractReq) Read(iprot thrift.TProtocol) (err error) {
@@ -470,6 +546,14 @@ func (p *CreateOrUpdateContractReq) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -548,6 +632,17 @@ func (p *CreateOrUpdateContractReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Content = _field
 	return nil
 }
+func (p *CreateOrUpdateContractReq) ReadField6(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
 
 func (p *CreateOrUpdateContractReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -569,6 +664,10 @@ func (p *CreateOrUpdateContractReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
 			goto WriteFieldError
 		}
 	}
@@ -663,6 +762,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *CreateOrUpdateContractReq) writeField6(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
 func (p *CreateOrUpdateContractReq) String() string {

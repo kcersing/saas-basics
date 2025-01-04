@@ -18,6 +18,7 @@ type OrderItem struct {
 func (OrderItem) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("order_id").Comment("订单id").Optional(),
+		field.Int64("number").Default(1).Comment("数量").Optional(),
 		field.Int64("product_id").Comment("产品id").Optional(),
 		field.Int64("related_user_product_id").Default(0).Comment("关联会员产品id").Optional(),
 		field.Int64("contest_id").Comment("赛事id").Optional(),

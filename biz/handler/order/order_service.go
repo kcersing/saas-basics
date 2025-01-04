@@ -137,3 +137,19 @@ func OrderListExport(ctx context.Context, c *app.RequestContext) {
 		"url": export,
 	}, 0, "")
 }
+
+// Buy .
+// @router /service/order/buy [POST]
+func Buy(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.BuyReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

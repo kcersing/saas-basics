@@ -113,20 +113,6 @@ func (mc *MemberCreate) SetNillablePassword(s *string) *MemberCreate {
 	return mc
 }
 
-// SetName sets the "name" field.
-func (mc *MemberCreate) SetName(s string) *MemberCreate {
-	mc.mutation.SetName(s)
-	return mc
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableName(s *string) *MemberCreate {
-	if s != nil {
-		mc.SetName(*s)
-	}
-	return mc
-}
-
 // SetUsername sets the "username" field.
 func (mc *MemberCreate) SetUsername(s string) *MemberCreate {
 	mc.mutation.SetUsername(s)
@@ -165,20 +151,6 @@ func (mc *MemberCreate) SetAvatar(s string) *MemberCreate {
 func (mc *MemberCreate) SetNillableAvatar(s *string) *MemberCreate {
 	if s != nil {
 		mc.SetAvatar(*s)
-	}
-	return mc
-}
-
-// SetCondition sets the "condition" field.
-func (mc *MemberCreate) SetCondition(i int64) *MemberCreate {
-	mc.mutation.SetCondition(i)
-	return mc
-}
-
-// SetNillableCondition sets the "condition" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableCondition(i *int64) *MemberCreate {
-	if i != nil {
-		mc.SetCondition(*i)
 	}
 	return mc
 }
@@ -398,10 +370,6 @@ func (mc *MemberCreate) defaults() {
 		v := member.DefaultAvatar
 		mc.mutation.SetAvatar(v)
 	}
-	if _, ok := mc.mutation.Condition(); !ok {
-		v := member.DefaultCondition
-		mc.mutation.SetCondition(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -462,10 +430,6 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		_spec.SetField(member.FieldPassword, field.TypeString, value)
 		_node.Password = value
 	}
-	if value, ok := mc.mutation.Name(); ok {
-		_spec.SetField(member.FieldName, field.TypeString, value)
-		_node.Name = value
-	}
 	if value, ok := mc.mutation.Username(); ok {
 		_spec.SetField(member.FieldUsername, field.TypeString, value)
 		_node.Username = value
@@ -477,10 +441,6 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Avatar(); ok {
 		_spec.SetField(member.FieldAvatar, field.TypeString, value)
 		_node.Avatar = value
-	}
-	if value, ok := mc.mutation.Condition(); ok {
-		_spec.SetField(member.FieldCondition, field.TypeInt64, value)
-		_node.Condition = value
 	}
 	if nodes := mc.mutation.MemberProfileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

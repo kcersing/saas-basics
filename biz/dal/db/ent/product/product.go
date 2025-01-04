@@ -28,6 +28,8 @@ const (
 	FieldType = "type"
 	// FieldSubType holds the string denoting the sub_type field in the database.
 	FieldSubType = "sub_type"
+	// FieldVenueID holds the string denoting the venue_id field in the database.
+	FieldVenueID = "venue_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldStock holds the string denoting the stock field in the database.
@@ -111,6 +113,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldType,
 	FieldSubType,
+	FieldVenueID,
 	FieldName,
 	FieldStock,
 	FieldDeadline,
@@ -234,6 +237,11 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 // BySubType orders the results by the sub_type field.
 func BySubType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubType, opts...).ToFunc()
+}
+
+// ByVenueID orders the results by the venue_id field.
+func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

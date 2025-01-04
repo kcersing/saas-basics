@@ -90,6 +90,11 @@ func Content(v string) predicate.Contract {
 	return predicate.Contract(sql.FieldEQ(FieldContent, v))
 }
 
+// VenueID applies equality check predicate on the "venue_id" field. It's identical to VenueIDEQ.
+func VenueID(v int64) predicate.Contract {
+	return predicate.Contract(sql.FieldEQ(FieldVenueID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Contract {
 	return predicate.Contract(sql.FieldEQ(FieldCreatedAt, v))
@@ -488,6 +493,56 @@ func ContentEqualFold(v string) predicate.Contract {
 // ContentContainsFold applies the ContainsFold predicate on the "content" field.
 func ContentContainsFold(v string) predicate.Contract {
 	return predicate.Contract(sql.FieldContainsFold(FieldContent, v))
+}
+
+// VenueIDEQ applies the EQ predicate on the "venue_id" field.
+func VenueIDEQ(v int64) predicate.Contract {
+	return predicate.Contract(sql.FieldEQ(FieldVenueID, v))
+}
+
+// VenueIDNEQ applies the NEQ predicate on the "venue_id" field.
+func VenueIDNEQ(v int64) predicate.Contract {
+	return predicate.Contract(sql.FieldNEQ(FieldVenueID, v))
+}
+
+// VenueIDIn applies the In predicate on the "venue_id" field.
+func VenueIDIn(vs ...int64) predicate.Contract {
+	return predicate.Contract(sql.FieldIn(FieldVenueID, vs...))
+}
+
+// VenueIDNotIn applies the NotIn predicate on the "venue_id" field.
+func VenueIDNotIn(vs ...int64) predicate.Contract {
+	return predicate.Contract(sql.FieldNotIn(FieldVenueID, vs...))
+}
+
+// VenueIDGT applies the GT predicate on the "venue_id" field.
+func VenueIDGT(v int64) predicate.Contract {
+	return predicate.Contract(sql.FieldGT(FieldVenueID, v))
+}
+
+// VenueIDGTE applies the GTE predicate on the "venue_id" field.
+func VenueIDGTE(v int64) predicate.Contract {
+	return predicate.Contract(sql.FieldGTE(FieldVenueID, v))
+}
+
+// VenueIDLT applies the LT predicate on the "venue_id" field.
+func VenueIDLT(v int64) predicate.Contract {
+	return predicate.Contract(sql.FieldLT(FieldVenueID, v))
+}
+
+// VenueIDLTE applies the LTE predicate on the "venue_id" field.
+func VenueIDLTE(v int64) predicate.Contract {
+	return predicate.Contract(sql.FieldLTE(FieldVenueID, v))
+}
+
+// VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
+func VenueIDIsNil() predicate.Contract {
+	return predicate.Contract(sql.FieldIsNull(FieldVenueID))
+}
+
+// VenueIDNotNil applies the NotNil predicate on the "venue_id" field.
+func VenueIDNotNil() predicate.Contract {
+	return predicate.Contract(sql.FieldNotNull(FieldVenueID))
 }
 
 // HasProducts applies the HasEdge predicate on the "products" edge.

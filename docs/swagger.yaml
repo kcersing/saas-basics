@@ -123,7 +123,7 @@ definitions:
       name:
         type: string
       subType:
-        type: integer
+        type: string
       type:
         description: '2: optional i64 dictionaryId=0 (api.raw = "dictionaryId" )'
         type: string
@@ -451,6 +451,8 @@ definitions:
         type: string
       startAt:
         type: string
+      venueId:
+        type: integer
     type: object
   contest.ParticipantFinishReq:
     properties:
@@ -514,6 +516,8 @@ definitions:
         type: integer
       status:
         type: string
+      venueId:
+        type: integer
     type: object
   contract.CreateOrUpdateContractReq:
     properties:
@@ -524,6 +528,8 @@ definitions:
       name:
         type: string
       status:
+        type: integer
+      venueId:
         type: integer
     type: object
   dictionary.DetailListReq:
@@ -633,6 +639,8 @@ definitions:
       name:
         type: string
       source:
+        type: integer
+      venueId:
         type: integer
     type: object
   member.MemberContractListReq:
@@ -881,6 +889,8 @@ definitions:
       type:
         description: '*类型 card:卡 course:课 coursePackage:课包 Lessons:团课'
         type: string
+      venueId:
+        type: integer
     type: object
   product.ProductListReq:
     properties:
@@ -904,6 +914,8 @@ definitions:
         items:
           type: string
         type: array
+      venueId:
+        type: integer
     type: object
   schedule.CreateOrUpdateScheduleCourseReq:
     properties:
@@ -2699,6 +2711,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新菜单 Summary
+  /service/order/buy:
+    post:
+      responses: {}
   /service/order/info:
     get:
       description: 获取订单详情 Description

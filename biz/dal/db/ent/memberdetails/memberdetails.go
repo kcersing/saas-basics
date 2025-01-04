@@ -24,16 +24,14 @@ const (
 	FieldCreatedID = "created_id"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
+	// FieldVenueID holds the string denoting the venue_id field in the database.
+	FieldVenueID = "venue_id"
 	// FieldMoneySum holds the string denoting the money_sum field in the database.
 	FieldMoneySum = "money_sum"
 	// FieldProductID holds the string denoting the product_id field in the database.
 	FieldProductID = "product_id"
 	// FieldProductName holds the string denoting the product_name field in the database.
 	FieldProductName = "product_name"
-	// FieldProductVenue holds the string denoting the product_venue field in the database.
-	FieldProductVenue = "product_venue"
-	// FieldProductVenueName holds the string denoting the product_venue_name field in the database.
-	FieldProductVenueName = "product_venue_name"
 	// FieldEntrySum holds the string denoting the entry_sum field in the database.
 	FieldEntrySum = "entry_sum"
 	// FieldEntryLastTime holds the string denoting the entry_last_time field in the database.
@@ -73,11 +71,10 @@ var Columns = []string{
 	FieldDelete,
 	FieldCreatedID,
 	FieldMemberID,
+	FieldVenueID,
 	FieldMoneySum,
 	FieldProductID,
 	FieldProductName,
-	FieldProductVenue,
-	FieldProductVenueName,
 	FieldEntrySum,
 	FieldEntryLastTime,
 	FieldEntryDeadlineTime,
@@ -114,8 +111,6 @@ var (
 	DefaultMoneySum float64
 	// DefaultProductID holds the default value on creation for the "product_id" field.
 	DefaultProductID int64
-	// DefaultProductVenue holds the default value on creation for the "product_venue" field.
-	DefaultProductVenue int64
 	// DefaultEntrySum holds the default value on creation for the "entry_sum" field.
 	DefaultEntrySum int64
 	// DefaultRelationUID holds the default value on creation for the "relation_uid" field.
@@ -157,6 +152,11 @@ func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
 }
 
+// ByVenueID orders the results by the venue_id field.
+func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
+}
+
 // ByMoneySum orders the results by the money_sum field.
 func ByMoneySum(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMoneySum, opts...).ToFunc()
@@ -170,16 +170,6 @@ func ByProductID(opts ...sql.OrderTermOption) OrderOption {
 // ByProductName orders the results by the product_name field.
 func ByProductName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductName, opts...).ToFunc()
-}
-
-// ByProductVenue orders the results by the product_venue field.
-func ByProductVenue(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProductVenue, opts...).ToFunc()
-}
-
-// ByProductVenueName orders the results by the product_venue_name field.
-func ByProductVenueName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProductVenueName, opts...).ToFunc()
 }
 
 // ByEntrySum orders the results by the entry_sum field.

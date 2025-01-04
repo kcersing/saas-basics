@@ -24,6 +24,8 @@ const (
 	FieldCreatedID = "created_id"
 	// FieldOrderID holds the string denoting the order_id field in the database.
 	FieldOrderID = "order_id"
+	// FieldNumber holds the string denoting the number field in the database.
+	FieldNumber = "number"
 	// FieldProductID holds the string denoting the product_id field in the database.
 	FieldProductID = "product_id"
 	// FieldRelatedUserProductID holds the string denoting the related_user_product_id field in the database.
@@ -57,6 +59,7 @@ var Columns = []string{
 	FieldDelete,
 	FieldCreatedID,
 	FieldOrderID,
+	FieldNumber,
 	FieldProductID,
 	FieldRelatedUserProductID,
 	FieldContestID,
@@ -86,6 +89,8 @@ var (
 	DefaultDelete int64
 	// DefaultCreatedID holds the default value on creation for the "created_id" field.
 	DefaultCreatedID int64
+	// DefaultNumber holds the default value on creation for the "number" field.
+	DefaultNumber int64
 	// DefaultRelatedUserProductID holds the default value on creation for the "related_user_product_id" field.
 	DefaultRelatedUserProductID int64
 )
@@ -121,6 +126,11 @@ func ByCreatedID(opts ...sql.OrderTermOption) OrderOption {
 // ByOrderID orders the results by the order_id field.
 func ByOrderID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrderID, opts...).ToFunc()
+}
+
+// ByNumber orders the results by the number field.
+func ByNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumber, opts...).ToFunc()
 }
 
 // ByProductID orders the results by the product_id field.

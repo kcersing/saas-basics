@@ -32,6 +32,8 @@ type Contract struct {
 	Name string `json:"name,omitempty"`
 	// content | 内容
 	Content string `json:"content,omitempty"`
+	// 场馆id
+	VenueID int64 `json:"venue_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ContractQuery when eager-loading is set.
 	Edges        ContractEdges `json:"edges"`
@@ -61,7 +63,7 @@ func (*Contract) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case contract.FieldID, contract.FieldDelete, contract.FieldCreatedID, contract.FieldStatus:
+		case contract.FieldID, contract.FieldDelete, contract.FieldCreatedID, contract.FieldStatus, contract.FieldVenueID:
 			values[i] = new(sql.NullInt64)
 		case contract.FieldName, contract.FieldContent:
 			values[i] = new(sql.NullString)
@@ -130,6 +132,12 @@ func (c *Contract) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Content = value.String
 			}
+		case contract.FieldVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
+			} else if value.Valid {
+				c.VenueID = value.Int64
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -191,6 +199,9 @@ func (c *Contract) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("content=")
 	builder.WriteString(c.Content)
+	builder.WriteString(", ")
+	builder.WriteString("venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", c.VenueID))
 	builder.WriteByte(')')
 	return builder.String()
 }

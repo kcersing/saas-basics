@@ -20,7 +20,7 @@ func (User) Fields() []ent.Field {
 		field.String("mobile").Unique().Comment("mobile number | 手机号"),
 		field.String("name").Optional().Comment("name | 姓名"),
 		field.Int64("gender").Default(3).Comment("性别 | [0:女性;1:男性;3:保密]").Optional(),
-
+		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.String("username").Unique().Comment("user's login name | 登录名"),
 		field.String("password").Comment("password | 密码"),
 

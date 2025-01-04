@@ -115,6 +115,33 @@ func (mdu *MemberDetailsUpdate) ClearMemberID() *MemberDetailsUpdate {
 	return mdu
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mdu *MemberDetailsUpdate) SetVenueID(i int64) *MemberDetailsUpdate {
+	mdu.mutation.ResetVenueID()
+	mdu.mutation.SetVenueID(i)
+	return mdu
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mdu *MemberDetailsUpdate) SetNillableVenueID(i *int64) *MemberDetailsUpdate {
+	if i != nil {
+		mdu.SetVenueID(*i)
+	}
+	return mdu
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mdu *MemberDetailsUpdate) AddVenueID(i int64) *MemberDetailsUpdate {
+	mdu.mutation.AddVenueID(i)
+	return mdu
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mdu *MemberDetailsUpdate) ClearVenueID() *MemberDetailsUpdate {
+	mdu.mutation.ClearVenueID()
+	return mdu
+}
+
 // SetMoneySum sets the "money_sum" field.
 func (mdu *MemberDetailsUpdate) SetMoneySum(f float64) *MemberDetailsUpdate {
 	mdu.mutation.ResetMoneySum()
@@ -186,53 +213,6 @@ func (mdu *MemberDetailsUpdate) SetNillableProductName(s *string) *MemberDetails
 // ClearProductName clears the value of the "product_name" field.
 func (mdu *MemberDetailsUpdate) ClearProductName() *MemberDetailsUpdate {
 	mdu.mutation.ClearProductName()
-	return mdu
-}
-
-// SetProductVenue sets the "product_venue" field.
-func (mdu *MemberDetailsUpdate) SetProductVenue(i int64) *MemberDetailsUpdate {
-	mdu.mutation.ResetProductVenue()
-	mdu.mutation.SetProductVenue(i)
-	return mdu
-}
-
-// SetNillableProductVenue sets the "product_venue" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableProductVenue(i *int64) *MemberDetailsUpdate {
-	if i != nil {
-		mdu.SetProductVenue(*i)
-	}
-	return mdu
-}
-
-// AddProductVenue adds i to the "product_venue" field.
-func (mdu *MemberDetailsUpdate) AddProductVenue(i int64) *MemberDetailsUpdate {
-	mdu.mutation.AddProductVenue(i)
-	return mdu
-}
-
-// ClearProductVenue clears the value of the "product_venue" field.
-func (mdu *MemberDetailsUpdate) ClearProductVenue() *MemberDetailsUpdate {
-	mdu.mutation.ClearProductVenue()
-	return mdu
-}
-
-// SetProductVenueName sets the "product_venue_name" field.
-func (mdu *MemberDetailsUpdate) SetProductVenueName(s string) *MemberDetailsUpdate {
-	mdu.mutation.SetProductVenueName(s)
-	return mdu
-}
-
-// SetNillableProductVenueName sets the "product_venue_name" field if the given value is not nil.
-func (mdu *MemberDetailsUpdate) SetNillableProductVenueName(s *string) *MemberDetailsUpdate {
-	if s != nil {
-		mdu.SetProductVenueName(*s)
-	}
-	return mdu
-}
-
-// ClearProductVenueName clears the value of the "product_venue_name" field.
-func (mdu *MemberDetailsUpdate) ClearProductVenueName() *MemberDetailsUpdate {
-	mdu.mutation.ClearProductVenueName()
 	return mdu
 }
 
@@ -525,6 +505,15 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mdu.mutation.CreatedIDCleared() {
 		_spec.ClearField(memberdetails.FieldCreatedID, field.TypeInt64)
 	}
+	if value, ok := mdu.mutation.VenueID(); ok {
+		_spec.SetField(memberdetails.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mdu.mutation.AddedVenueID(); ok {
+		_spec.AddField(memberdetails.FieldVenueID, field.TypeInt64, value)
+	}
+	if mdu.mutation.VenueIDCleared() {
+		_spec.ClearField(memberdetails.FieldVenueID, field.TypeInt64)
+	}
 	if value, ok := mdu.mutation.MoneySum(); ok {
 		_spec.SetField(memberdetails.FieldMoneySum, field.TypeFloat64, value)
 	}
@@ -548,21 +537,6 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mdu.mutation.ProductNameCleared() {
 		_spec.ClearField(memberdetails.FieldProductName, field.TypeString)
-	}
-	if value, ok := mdu.mutation.ProductVenue(); ok {
-		_spec.SetField(memberdetails.FieldProductVenue, field.TypeInt64, value)
-	}
-	if value, ok := mdu.mutation.AddedProductVenue(); ok {
-		_spec.AddField(memberdetails.FieldProductVenue, field.TypeInt64, value)
-	}
-	if mdu.mutation.ProductVenueCleared() {
-		_spec.ClearField(memberdetails.FieldProductVenue, field.TypeInt64)
-	}
-	if value, ok := mdu.mutation.ProductVenueName(); ok {
-		_spec.SetField(memberdetails.FieldProductVenueName, field.TypeString, value)
-	}
-	if mdu.mutation.ProductVenueNameCleared() {
-		_spec.ClearField(memberdetails.FieldProductVenueName, field.TypeString)
 	}
 	if value, ok := mdu.mutation.EntrySum(); ok {
 		_spec.SetField(memberdetails.FieldEntrySum, field.TypeInt64, value)
@@ -762,6 +736,33 @@ func (mduo *MemberDetailsUpdateOne) ClearMemberID() *MemberDetailsUpdateOne {
 	return mduo
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mduo *MemberDetailsUpdateOne) SetVenueID(i int64) *MemberDetailsUpdateOne {
+	mduo.mutation.ResetVenueID()
+	mduo.mutation.SetVenueID(i)
+	return mduo
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mduo *MemberDetailsUpdateOne) SetNillableVenueID(i *int64) *MemberDetailsUpdateOne {
+	if i != nil {
+		mduo.SetVenueID(*i)
+	}
+	return mduo
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mduo *MemberDetailsUpdateOne) AddVenueID(i int64) *MemberDetailsUpdateOne {
+	mduo.mutation.AddVenueID(i)
+	return mduo
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mduo *MemberDetailsUpdateOne) ClearVenueID() *MemberDetailsUpdateOne {
+	mduo.mutation.ClearVenueID()
+	return mduo
+}
+
 // SetMoneySum sets the "money_sum" field.
 func (mduo *MemberDetailsUpdateOne) SetMoneySum(f float64) *MemberDetailsUpdateOne {
 	mduo.mutation.ResetMoneySum()
@@ -833,53 +834,6 @@ func (mduo *MemberDetailsUpdateOne) SetNillableProductName(s *string) *MemberDet
 // ClearProductName clears the value of the "product_name" field.
 func (mduo *MemberDetailsUpdateOne) ClearProductName() *MemberDetailsUpdateOne {
 	mduo.mutation.ClearProductName()
-	return mduo
-}
-
-// SetProductVenue sets the "product_venue" field.
-func (mduo *MemberDetailsUpdateOne) SetProductVenue(i int64) *MemberDetailsUpdateOne {
-	mduo.mutation.ResetProductVenue()
-	mduo.mutation.SetProductVenue(i)
-	return mduo
-}
-
-// SetNillableProductVenue sets the "product_venue" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableProductVenue(i *int64) *MemberDetailsUpdateOne {
-	if i != nil {
-		mduo.SetProductVenue(*i)
-	}
-	return mduo
-}
-
-// AddProductVenue adds i to the "product_venue" field.
-func (mduo *MemberDetailsUpdateOne) AddProductVenue(i int64) *MemberDetailsUpdateOne {
-	mduo.mutation.AddProductVenue(i)
-	return mduo
-}
-
-// ClearProductVenue clears the value of the "product_venue" field.
-func (mduo *MemberDetailsUpdateOne) ClearProductVenue() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearProductVenue()
-	return mduo
-}
-
-// SetProductVenueName sets the "product_venue_name" field.
-func (mduo *MemberDetailsUpdateOne) SetProductVenueName(s string) *MemberDetailsUpdateOne {
-	mduo.mutation.SetProductVenueName(s)
-	return mduo
-}
-
-// SetNillableProductVenueName sets the "product_venue_name" field if the given value is not nil.
-func (mduo *MemberDetailsUpdateOne) SetNillableProductVenueName(s *string) *MemberDetailsUpdateOne {
-	if s != nil {
-		mduo.SetProductVenueName(*s)
-	}
-	return mduo
-}
-
-// ClearProductVenueName clears the value of the "product_venue_name" field.
-func (mduo *MemberDetailsUpdateOne) ClearProductVenueName() *MemberDetailsUpdateOne {
-	mduo.mutation.ClearProductVenueName()
 	return mduo
 }
 
@@ -1202,6 +1156,15 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	if mduo.mutation.CreatedIDCleared() {
 		_spec.ClearField(memberdetails.FieldCreatedID, field.TypeInt64)
 	}
+	if value, ok := mduo.mutation.VenueID(); ok {
+		_spec.SetField(memberdetails.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mduo.mutation.AddedVenueID(); ok {
+		_spec.AddField(memberdetails.FieldVenueID, field.TypeInt64, value)
+	}
+	if mduo.mutation.VenueIDCleared() {
+		_spec.ClearField(memberdetails.FieldVenueID, field.TypeInt64)
+	}
 	if value, ok := mduo.mutation.MoneySum(); ok {
 		_spec.SetField(memberdetails.FieldMoneySum, field.TypeFloat64, value)
 	}
@@ -1225,21 +1188,6 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 	}
 	if mduo.mutation.ProductNameCleared() {
 		_spec.ClearField(memberdetails.FieldProductName, field.TypeString)
-	}
-	if value, ok := mduo.mutation.ProductVenue(); ok {
-		_spec.SetField(memberdetails.FieldProductVenue, field.TypeInt64, value)
-	}
-	if value, ok := mduo.mutation.AddedProductVenue(); ok {
-		_spec.AddField(memberdetails.FieldProductVenue, field.TypeInt64, value)
-	}
-	if mduo.mutation.ProductVenueCleared() {
-		_spec.ClearField(memberdetails.FieldProductVenue, field.TypeInt64)
-	}
-	if value, ok := mduo.mutation.ProductVenueName(); ok {
-		_spec.SetField(memberdetails.FieldProductVenueName, field.TypeString, value)
-	}
-	if mduo.mutation.ProductVenueNameCleared() {
-		_spec.ClearField(memberdetails.FieldProductVenueName, field.TypeString)
 	}
 	if value, ok := mduo.mutation.EntrySum(); ok {
 		_spec.SetField(memberdetails.FieldEntrySum, field.TypeInt64, value)

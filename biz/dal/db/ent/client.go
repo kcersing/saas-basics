@@ -30,6 +30,7 @@ import (
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/memberproduct"
+	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
@@ -102,6 +103,8 @@ type Client struct {
 	MemberNote *MemberNoteClient
 	// MemberProduct is the client for interacting with the MemberProduct builders.
 	MemberProduct *MemberProductClient
+	// MemberProductCourses is the client for interacting with the MemberProductCourses builders.
+	MemberProductCourses *MemberProductCoursesClient
 	// MemberProfile is the client for interacting with the MemberProfile builders.
 	MemberProfile *MemberProfileClient
 	// Menu is the client for interacting with the Menu builders.
@@ -176,6 +179,7 @@ func (c *Client) init() {
 	c.MemberDetails = NewMemberDetailsClient(c.config)
 	c.MemberNote = NewMemberNoteClient(c.config)
 	c.MemberProduct = NewMemberProductClient(c.config)
+	c.MemberProductCourses = NewMemberProductCoursesClient(c.config)
 	c.MemberProfile = NewMemberProfileClient(c.config)
 	c.Menu = NewMenuClient(c.config)
 	c.MenuParam = NewMenuParamClient(c.config)
@@ -309,6 +313,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		MemberDetails:         NewMemberDetailsClient(cfg),
 		MemberNote:            NewMemberNoteClient(cfg),
 		MemberProduct:         NewMemberProductClient(cfg),
+		MemberProductCourses:  NewMemberProductCoursesClient(cfg),
 		MemberProfile:         NewMemberProfileClient(cfg),
 		Menu:                  NewMenuClient(cfg),
 		MenuParam:             NewMenuParamClient(cfg),
@@ -369,6 +374,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		MemberDetails:         NewMemberDetailsClient(cfg),
 		MemberNote:            NewMemberNoteClient(cfg),
 		MemberProduct:         NewMemberProductClient(cfg),
+		MemberProductCourses:  NewMemberProductCoursesClient(cfg),
 		MemberProfile:         NewMemberProfileClient(cfg),
 		Menu:                  NewMenuClient(cfg),
 		MenuParam:             NewMenuParamClient(cfg),
@@ -424,11 +430,11 @@ func (c *Client) Use(hooks ...Hook) {
 		c.CommunityParticipant, c.Contest, c.ContestParticipant, c.Contract,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
-		c.MemberProduct, c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order,
-		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product,
-		c.ProductCourses, c.Role, c.Schedule, c.ScheduleCoach, c.ScheduleMember,
-		c.Token, c.User, c.UserScheduling, c.Venue, c.VenuePlace, c.VenueSms,
-		c.VenueSmsLog,
+		c.MemberProduct, c.MemberProductCourses, c.MemberProfile, c.Menu, c.MenuParam,
+		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
+		c.Product, c.ProductCourses, c.Role, c.Schedule, c.ScheduleCoach,
+		c.ScheduleMember, c.Token, c.User, c.UserScheduling, c.Venue, c.VenuePlace,
+		c.VenueSms, c.VenueSmsLog,
 	} {
 		n.Use(hooks...)
 	}
@@ -442,11 +448,11 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.CommunityParticipant, c.Contest, c.ContestParticipant, c.Contract,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
-		c.MemberProduct, c.MemberProfile, c.Menu, c.MenuParam, c.Messages, c.Order,
-		c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales, c.Product,
-		c.ProductCourses, c.Role, c.Schedule, c.ScheduleCoach, c.ScheduleMember,
-		c.Token, c.User, c.UserScheduling, c.Venue, c.VenuePlace, c.VenueSms,
-		c.VenueSmsLog,
+		c.MemberProduct, c.MemberProductCourses, c.MemberProfile, c.Menu, c.MenuParam,
+		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
+		c.Product, c.ProductCourses, c.Role, c.Schedule, c.ScheduleCoach,
+		c.ScheduleMember, c.Token, c.User, c.UserScheduling, c.Venue, c.VenuePlace,
+		c.VenueSms, c.VenueSmsLog,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -493,6 +499,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.MemberNote.mutate(ctx, m)
 	case *MemberProductMutation:
 		return c.MemberProduct.mutate(ctx, m)
+	case *MemberProductCoursesMutation:
+		return c.MemberProductCourses.mutate(ctx, m)
 	case *MemberProfileMutation:
 		return c.MemberProfile.mutate(ctx, m)
 	case *MenuMutation:
@@ -3620,6 +3628,38 @@ func (c *MemberProductClient) QueryMemberProductContents(mp *MemberProduct) *Mem
 	return query
 }
 
+// QueryMemberCourses queries the memberCourses edge of a MemberProduct.
+func (c *MemberProductClient) QueryMemberCourses(mp *MemberProduct) *MemberProductCoursesQuery {
+	query := (&MemberProductCoursesClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
+			sqlgraph.To(memberproductcourses.Table, memberproductcourses.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberCoursesTable, memberproduct.MemberCoursesColumn),
+		)
+		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberLessons queries the memberLessons edge of a MemberProduct.
+func (c *MemberProductClient) QueryMemberLessons(mp *MemberProduct) *MemberProductCoursesQuery {
+	query := (&MemberProductCoursesClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproduct.Table, memberproduct.FieldID, id),
+			sqlgraph.To(memberproductcourses.Table, memberproductcourses.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberLessonsTable, memberproduct.MemberLessonsColumn),
+		)
+		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *MemberProductClient) Hooks() []Hook {
 	return c.hooks.MemberProduct
@@ -3642,6 +3682,171 @@ func (c *MemberProductClient) mutate(ctx context.Context, m *MemberProductMutati
 		return (&MemberProductDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown MemberProduct mutation op: %q", m.Op())
+	}
+}
+
+// MemberProductCoursesClient is a client for the MemberProductCourses schema.
+type MemberProductCoursesClient struct {
+	config
+}
+
+// NewMemberProductCoursesClient returns a client for the MemberProductCourses from the given config.
+func NewMemberProductCoursesClient(c config) *MemberProductCoursesClient {
+	return &MemberProductCoursesClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `memberproductcourses.Hooks(f(g(h())))`.
+func (c *MemberProductCoursesClient) Use(hooks ...Hook) {
+	c.hooks.MemberProductCourses = append(c.hooks.MemberProductCourses, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `memberproductcourses.Intercept(f(g(h())))`.
+func (c *MemberProductCoursesClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemberProductCourses = append(c.inters.MemberProductCourses, interceptors...)
+}
+
+// Create returns a builder for creating a MemberProductCourses entity.
+func (c *MemberProductCoursesClient) Create() *MemberProductCoursesCreate {
+	mutation := newMemberProductCoursesMutation(c.config, OpCreate)
+	return &MemberProductCoursesCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemberProductCourses entities.
+func (c *MemberProductCoursesClient) CreateBulk(builders ...*MemberProductCoursesCreate) *MemberProductCoursesCreateBulk {
+	return &MemberProductCoursesCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberProductCoursesClient) MapCreateBulk(slice any, setFunc func(*MemberProductCoursesCreate, int)) *MemberProductCoursesCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberProductCoursesCreateBulk{err: fmt.Errorf("calling to MemberProductCoursesClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberProductCoursesCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberProductCoursesCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemberProductCourses.
+func (c *MemberProductCoursesClient) Update() *MemberProductCoursesUpdate {
+	mutation := newMemberProductCoursesMutation(c.config, OpUpdate)
+	return &MemberProductCoursesUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberProductCoursesClient) UpdateOne(mpc *MemberProductCourses) *MemberProductCoursesUpdateOne {
+	mutation := newMemberProductCoursesMutation(c.config, OpUpdateOne, withMemberProductCourses(mpc))
+	return &MemberProductCoursesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberProductCoursesClient) UpdateOneID(id int64) *MemberProductCoursesUpdateOne {
+	mutation := newMemberProductCoursesMutation(c.config, OpUpdateOne, withMemberProductCoursesID(id))
+	return &MemberProductCoursesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemberProductCourses.
+func (c *MemberProductCoursesClient) Delete() *MemberProductCoursesDelete {
+	mutation := newMemberProductCoursesMutation(c.config, OpDelete)
+	return &MemberProductCoursesDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberProductCoursesClient) DeleteOne(mpc *MemberProductCourses) *MemberProductCoursesDeleteOne {
+	return c.DeleteOneID(mpc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberProductCoursesClient) DeleteOneID(id int64) *MemberProductCoursesDeleteOne {
+	builder := c.Delete().Where(memberproductcourses.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberProductCoursesDeleteOne{builder}
+}
+
+// Query returns a query builder for MemberProductCourses.
+func (c *MemberProductCoursesClient) Query() *MemberProductCoursesQuery {
+	return &MemberProductCoursesQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemberProductCourses},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemberProductCourses entity by its id.
+func (c *MemberProductCoursesClient) Get(ctx context.Context, id int64) (*MemberProductCourses, error) {
+	return c.Query().Where(memberproductcourses.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberProductCoursesClient) GetX(ctx context.Context, id int64) *MemberProductCourses {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryProductCourses queries the productCourses edge of a MemberProductCourses.
+func (c *MemberProductCoursesClient) QueryProductCourses(mpc *MemberProductCourses) *MemberProductQuery {
+	query := (&MemberProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mpc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproductcourses.Table, memberproductcourses.FieldID, id),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.ProductCoursesTable, memberproductcourses.ProductCoursesColumn),
+		)
+		fromV = sqlgraph.Neighbors(mpc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProductLessons queries the productLessons edge of a MemberProductCourses.
+func (c *MemberProductCoursesClient) QueryProductLessons(mpc *MemberProductCourses) *MemberProductQuery {
+	query := (&MemberProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mpc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memberproductcourses.Table, memberproductcourses.FieldID, id),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.ProductLessonsTable, memberproductcourses.ProductLessonsColumn),
+		)
+		fromV = sqlgraph.Neighbors(mpc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemberProductCoursesClient) Hooks() []Hook {
+	return c.hooks.MemberProductCourses
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberProductCoursesClient) Interceptors() []Interceptor {
+	return c.inters.MemberProductCourses
+}
+
+func (c *MemberProductCoursesClient) mutate(ctx context.Context, m *MemberProductCoursesMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberProductCoursesCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberProductCoursesUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberProductCoursesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberProductCoursesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemberProductCourses mutation op: %q", m.Op())
 	}
 }
 
@@ -7409,18 +7614,18 @@ type (
 		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
 		Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail, EntryLogs,
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
-		MemberProduct, MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount,
-		OrderItem, OrderPay, OrderSales, Product, ProductCourses, Role, Schedule,
-		ScheduleCoach, ScheduleMember, Token, User, UserScheduling, Venue, VenuePlace,
-		VenueSms, VenueSmsLog []ent.Hook
+		MemberProduct, MemberProductCourses, MemberProfile, Menu, MenuParam, Messages,
+		Order, OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductCourses,
+		Role, Schedule, ScheduleCoach, ScheduleMember, Token, User, UserScheduling,
+		Venue, VenuePlace, VenueSms, VenueSmsLog []ent.Hook
 	}
 	inters struct {
 		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
 		Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail, EntryLogs,
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
-		MemberProduct, MemberProfile, Menu, MenuParam, Messages, Order, OrderAmount,
-		OrderItem, OrderPay, OrderSales, Product, ProductCourses, Role, Schedule,
-		ScheduleCoach, ScheduleMember, Token, User, UserScheduling, Venue, VenuePlace,
-		VenueSms, VenueSmsLog []ent.Interceptor
+		MemberProduct, MemberProductCourses, MemberProfile, Menu, MenuParam, Messages,
+		Order, OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductCourses,
+		Role, Schedule, ScheduleCoach, ScheduleMember, Token, User, UserScheduling,
+		Venue, VenuePlace, VenueSms, VenueSmsLog []ent.Interceptor
 	}
 )

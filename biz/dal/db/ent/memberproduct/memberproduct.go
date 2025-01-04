@@ -28,6 +28,8 @@ const (
 	FieldSn = "sn"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
+	// FieldSubType holds the string denoting the sub_type field in the database.
+	FieldSubType = "sub_type"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
 	// FieldProductID holds the string denoting the product_id field in the database.
@@ -62,6 +64,10 @@ const (
 	EdgeMemberProductEntry = "member_product_entry"
 	// EdgeMemberProductContents holds the string denoting the member_product_contents edge name in mutations.
 	EdgeMemberProductContents = "member_product_contents"
+	// EdgeMemberCourses holds the string denoting the membercourses edge name in mutations.
+	EdgeMemberCourses = "memberCourses"
+	// EdgeMemberLessons holds the string denoting the memberlessons edge name in mutations.
+	EdgeMemberLessons = "memberLessons"
 	// Table holds the table name of the memberproduct in the database.
 	Table = "member_product"
 	// MembersTable is the table that holds the members relation/edge.
@@ -85,6 +91,20 @@ const (
 	MemberProductContentsInverseTable = "member_contract"
 	// MemberProductContentsColumn is the table column denoting the member_product_contents relation/edge.
 	MemberProductContentsColumn = "member_product_member_product_contents"
+	// MemberCoursesTable is the table that holds the memberCourses relation/edge.
+	MemberCoursesTable = "member_product_courses"
+	// MemberCoursesInverseTable is the table name for the MemberProductCourses entity.
+	// It exists in this package in order to avoid circular dependency with the "memberproductcourses" package.
+	MemberCoursesInverseTable = "member_product_courses"
+	// MemberCoursesColumn is the table column denoting the memberCourses relation/edge.
+	MemberCoursesColumn = "member_product_id"
+	// MemberLessonsTable is the table that holds the memberLessons relation/edge.
+	MemberLessonsTable = "member_product_courses"
+	// MemberLessonsInverseTable is the table name for the MemberProductCourses entity.
+	// It exists in this package in order to avoid circular dependency with the "memberproductcourses" package.
+	MemberLessonsInverseTable = "member_product_courses"
+	// MemberLessonsColumn is the table column denoting the memberLessons relation/edge.
+	MemberLessonsColumn = "member_product_id"
 )
 
 // Columns holds all SQL columns for memberproduct fields.
@@ -97,6 +117,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldSn,
 	FieldType,
+	FieldSubType,
 	FieldMemberID,
 	FieldProductID,
 	FieldVenueID,
@@ -136,6 +157,8 @@ var (
 	DefaultCreatedID int64
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int64
+	// DefaultSubType holds the default value on creation for the "sub_type" field.
+	DefaultSubType string
 	// DefaultCount holds the default value on creation for the "count" field.
 	DefaultCount int64
 	// DefaultCountSurplus holds the default value on creation for the "count_surplus" field.
@@ -183,6 +206,11 @@ func BySn(opts ...sql.OrderTermOption) OrderOption {
 // ByType orders the results by the type field.
 func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
+// BySubType orders the results by the sub_type field.
+func BySubType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubType, opts...).ToFunc()
 }
 
 // ByMemberID orders the results by the member_id field.
@@ -289,6 +317,34 @@ func ByMemberProductContents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOp
 		sqlgraph.OrderByNeighborTerms(s, newMemberProductContentsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMemberCoursesCount orders the results by memberCourses count.
+func ByMemberCoursesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberCoursesStep(), opts...)
+	}
+}
+
+// ByMemberCourses orders the results by memberCourses terms.
+func ByMemberCourses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberCoursesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMemberLessonsCount orders the results by memberLessons count.
+func ByMemberLessonsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemberLessonsStep(), opts...)
+	}
+}
+
+// ByMemberLessons orders the results by memberLessons terms.
+func ByMemberLessons(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberLessonsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newMembersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -308,5 +364,19 @@ func newMemberProductContentsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MemberProductContentsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MemberProductContentsTable, MemberProductContentsColumn),
+	)
+}
+func newMemberCoursesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberCoursesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberCoursesTable, MemberCoursesColumn),
+	)
+}
+func newMemberLessonsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberLessonsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemberLessonsTable, MemberLessonsColumn),
 	)
 }

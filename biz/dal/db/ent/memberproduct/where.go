@@ -90,6 +90,11 @@ func Type(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldType, v))
 }
 
+// SubType applies equality check predicate on the "sub_type" field. It's identical to SubTypeEQ.
+func SubType(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldSubType, v))
+}
+
 // MemberID applies equality check predicate on the "member_id" field. It's identical to MemberIDEQ.
 func MemberID(v int64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldMemberID, v))
@@ -558,6 +563,81 @@ func TypeEqualFold(v string) predicate.MemberProduct {
 // TypeContainsFold applies the ContainsFold predicate on the "type" field.
 func TypeContainsFold(v string) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldContainsFold(FieldType, v))
+}
+
+// SubTypeEQ applies the EQ predicate on the "sub_type" field.
+func SubTypeEQ(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldSubType, v))
+}
+
+// SubTypeNEQ applies the NEQ predicate on the "sub_type" field.
+func SubTypeNEQ(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNEQ(FieldSubType, v))
+}
+
+// SubTypeIn applies the In predicate on the "sub_type" field.
+func SubTypeIn(vs ...string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIn(FieldSubType, vs...))
+}
+
+// SubTypeNotIn applies the NotIn predicate on the "sub_type" field.
+func SubTypeNotIn(vs ...string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotIn(FieldSubType, vs...))
+}
+
+// SubTypeGT applies the GT predicate on the "sub_type" field.
+func SubTypeGT(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGT(FieldSubType, v))
+}
+
+// SubTypeGTE applies the GTE predicate on the "sub_type" field.
+func SubTypeGTE(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGTE(FieldSubType, v))
+}
+
+// SubTypeLT applies the LT predicate on the "sub_type" field.
+func SubTypeLT(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLT(FieldSubType, v))
+}
+
+// SubTypeLTE applies the LTE predicate on the "sub_type" field.
+func SubTypeLTE(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLTE(FieldSubType, v))
+}
+
+// SubTypeContains applies the Contains predicate on the "sub_type" field.
+func SubTypeContains(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldContains(FieldSubType, v))
+}
+
+// SubTypeHasPrefix applies the HasPrefix predicate on the "sub_type" field.
+func SubTypeHasPrefix(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldHasPrefix(FieldSubType, v))
+}
+
+// SubTypeHasSuffix applies the HasSuffix predicate on the "sub_type" field.
+func SubTypeHasSuffix(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldHasSuffix(FieldSubType, v))
+}
+
+// SubTypeIsNil applies the IsNil predicate on the "sub_type" field.
+func SubTypeIsNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIsNull(FieldSubType))
+}
+
+// SubTypeNotNil applies the NotNil predicate on the "sub_type" field.
+func SubTypeNotNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotNull(FieldSubType))
+}
+
+// SubTypeEqualFold applies the EqualFold predicate on the "sub_type" field.
+func SubTypeEqualFold(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEqualFold(FieldSubType, v))
+}
+
+// SubTypeContainsFold applies the ContainsFold predicate on the "sub_type" field.
+func SubTypeContainsFold(v string) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldContainsFold(FieldSubType, v))
 }
 
 // MemberIDEQ applies the EQ predicate on the "member_id" field.
@@ -1326,6 +1406,52 @@ func HasMemberProductContents() predicate.MemberProduct {
 func HasMemberProductContentsWith(preds ...predicate.MemberContract) predicate.MemberProduct {
 	return predicate.MemberProduct(func(s *sql.Selector) {
 		step := newMemberProductContentsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMemberCourses applies the HasEdge predicate on the "memberCourses" edge.
+func HasMemberCourses() predicate.MemberProduct {
+	return predicate.MemberProduct(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MemberCoursesTable, MemberCoursesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberCoursesWith applies the HasEdge predicate on the "memberCourses" edge with a given conditions (other predicates).
+func HasMemberCoursesWith(preds ...predicate.MemberProductCourses) predicate.MemberProduct {
+	return predicate.MemberProduct(func(s *sql.Selector) {
+		step := newMemberCoursesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMemberLessons applies the HasEdge predicate on the "memberLessons" edge.
+func HasMemberLessons() predicate.MemberProduct {
+	return predicate.MemberProduct(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MemberLessonsTable, MemberLessonsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberLessonsWith applies the HasEdge predicate on the "memberLessons" edge with a given conditions (other predicates).
+func HasMemberLessonsWith(preds ...predicate.MemberProductCourses) predicate.MemberProduct {
+	return predicate.MemberProduct(func(s *sql.Selector) {
+		step := newMemberLessonsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

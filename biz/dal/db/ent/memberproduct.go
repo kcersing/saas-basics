@@ -33,6 +33,8 @@ type MemberProduct struct {
 	Sn string `json:"sn,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
+	// 次级类型
+	SubType string `json:"sub_type,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
 	// 产品ID
@@ -75,9 +77,13 @@ type MemberProductEdges struct {
 	MemberProductEntry []*EntryLogs `json:"member_product_entry,omitempty"`
 	// MemberProductContents holds the value of the member_product_contents edge.
 	MemberProductContents []*MemberContract `json:"member_product_contents,omitempty"`
+	// MemberCourses holds the value of the memberCourses edge.
+	MemberCourses []*MemberProductCourses `json:"memberCourses,omitempty"`
+	// MemberLessons holds the value of the memberLessons edge.
+	MemberLessons []*MemberProductCourses `json:"memberLessons,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 }
 
 // MembersOrErr returns the Members value or an error if the edge
@@ -111,6 +117,24 @@ func (e MemberProductEdges) MemberProductContentsOrErr() ([]*MemberContract, err
 	return nil, &NotLoadedError{edge: "member_product_contents"}
 }
 
+// MemberCoursesOrErr returns the MemberCourses value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberProductEdges) MemberCoursesOrErr() ([]*MemberProductCourses, error) {
+	if e.loadedTypes[3] {
+		return e.MemberCourses, nil
+	}
+	return nil, &NotLoadedError{edge: "memberCourses"}
+}
+
+// MemberLessonsOrErr returns the MemberLessons value or an error if the edge
+// was not loaded in eager-loading.
+func (e MemberProductEdges) MemberLessonsOrErr() ([]*MemberProductCourses, error) {
+	if e.loadedTypes[4] {
+		return e.MemberLessons, nil
+	}
+	return nil, &NotLoadedError{edge: "memberLessons"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -120,7 +144,7 @@ func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case memberproduct.FieldID, memberproduct.FieldDelete, memberproduct.FieldCreatedID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldVenueID, memberproduct.FieldOrderID, memberproduct.FieldDuration, memberproduct.FieldLength, memberproduct.FieldCount, memberproduct.FieldCountSurplus, memberproduct.FieldDeadline:
 			values[i] = new(sql.NullInt64)
-		case memberproduct.FieldSn, memberproduct.FieldType, memberproduct.FieldName:
+		case memberproduct.FieldSn, memberproduct.FieldType, memberproduct.FieldSubType, memberproduct.FieldName:
 			values[i] = new(sql.NullString)
 		case memberproduct.FieldCreatedAt, memberproduct.FieldUpdatedAt, memberproduct.FieldValidityAt, memberproduct.FieldCancelAt:
 			values[i] = new(sql.NullTime)
@@ -186,6 +210,12 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
 				mp.Type = value.String
+			}
+		case memberproduct.FieldSubType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sub_type", values[i])
+			} else if value.Valid {
+				mp.SubType = value.String
 			}
 		case memberproduct.FieldMemberID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -299,6 +329,16 @@ func (mp *MemberProduct) QueryMemberProductContents() *MemberContractQuery {
 	return NewMemberProductClient(mp.config).QueryMemberProductContents(mp)
 }
 
+// QueryMemberCourses queries the "memberCourses" edge of the MemberProduct entity.
+func (mp *MemberProduct) QueryMemberCourses() *MemberProductCoursesQuery {
+	return NewMemberProductClient(mp.config).QueryMemberCourses(mp)
+}
+
+// QueryMemberLessons queries the "memberLessons" edge of the MemberProduct entity.
+func (mp *MemberProduct) QueryMemberLessons() *MemberProductCoursesQuery {
+	return NewMemberProductClient(mp.config).QueryMemberLessons(mp)
+}
+
 // Update returns a builder for updating this MemberProduct.
 // Note that you need to call MemberProduct.Unwrap() before calling this method if this MemberProduct
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -342,6 +382,9 @@ func (mp *MemberProduct) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(mp.Type)
+	builder.WriteString(", ")
+	builder.WriteString("sub_type=")
+	builder.WriteString(mp.SubType)
 	builder.WriteString(", ")
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", mp.MemberID))

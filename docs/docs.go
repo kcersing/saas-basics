@@ -2203,6 +2203,11 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/order/buy": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/order/info": {
             "get": {
                 "description": "获取订单详情 Description",
@@ -4243,7 +4248,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "subType": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "type": {
                     "description": "2: optional i64 dictionaryId=0 (api.raw = \"dictionaryId\" )",
@@ -4740,6 +4745,9 @@ const docTemplate = `{
                 },
                 "startAt": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -4837,6 +4845,9 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -4853,6 +4864,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
+                    "type": "integer"
+                },
+                "venueId": {
                     "type": "integer"
                 }
             }
@@ -5020,6 +5034,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "source": {
+                    "type": "integer"
+                },
+                "venueId": {
                     "type": "integer"
                 }
             }
@@ -5383,6 +5400,9 @@ const docTemplate = `{
                 "type": {
                     "description": "*类型 card:卡 course:课 coursePackage:课包 Lessons:团课",
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -5417,6 +5437,9 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

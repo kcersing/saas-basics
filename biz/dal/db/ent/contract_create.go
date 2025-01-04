@@ -118,6 +118,20 @@ func (cc *ContractCreate) SetNillableContent(s *string) *ContractCreate {
 	return cc
 }
 
+// SetVenueID sets the "venue_id" field.
+func (cc *ContractCreate) SetVenueID(i int64) *ContractCreate {
+	cc.mutation.SetVenueID(i)
+	return cc
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (cc *ContractCreate) SetNillableVenueID(i *int64) *ContractCreate {
+	if i != nil {
+		cc.SetVenueID(*i)
+	}
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *ContractCreate) SetID(i int64) *ContractCreate {
 	cc.mutation.SetID(i)
@@ -257,6 +271,10 @@ func (cc *ContractCreate) createSpec() (*Contract, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Content(); ok {
 		_spec.SetField(contract.FieldContent, field.TypeString, value)
 		_node.Content = value
+	}
+	if value, ok := cc.mutation.VenueID(); ok {
+		_spec.SetField(contract.FieldVenueID, field.TypeInt64, value)
+		_node.VenueID = value
 	}
 	if nodes := cc.mutation.ProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

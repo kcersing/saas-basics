@@ -18,14 +18,14 @@ func (MemberDetails) Fields() []ent.Field {
 	return []ent.Field{
 
 		field.Int64("member_id").Comment("会员id").Optional(),
-
+		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Float("money_sum").Default(3).Comment("消费总金额").Optional(),
 
 		field.Int64("product_id").Default(0).Comment("首次的产品").Optional(),
 		field.String("product_name").Comment("首次的产品").Optional(),
 
-		field.Int64("product_venue").Default(0).Comment("首次消费场馆").Optional(),
-		field.String("product_venue_name").Comment("首次消费场馆").Optional(),
+		//field.Int64("product_venue").Default(0).Comment("首次消费场馆").Optional(),
+		//field.String("product_venue_name").Comment("首次消费场馆").Optional(),
 
 		field.Int64("entry_sum").Default(0).Comment("进馆总次数").Optional(),
 

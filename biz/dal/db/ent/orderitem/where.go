@@ -80,6 +80,11 @@ func OrderID(v int64) predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldEQ(FieldOrderID, v))
 }
 
+// Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
+func Number(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldEQ(FieldNumber, v))
+}
+
 // ProductID applies equality check predicate on the "product_id" field. It's identical to ProductIDEQ.
 func ProductID(v int64) predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldEQ(FieldProductID, v))
@@ -333,6 +338,56 @@ func OrderIDIsNil() predicate.OrderItem {
 // OrderIDNotNil applies the NotNil predicate on the "order_id" field.
 func OrderIDNotNil() predicate.OrderItem {
 	return predicate.OrderItem(sql.FieldNotNull(FieldOrderID))
+}
+
+// NumberEQ applies the EQ predicate on the "number" field.
+func NumberEQ(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldEQ(FieldNumber, v))
+}
+
+// NumberNEQ applies the NEQ predicate on the "number" field.
+func NumberNEQ(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNEQ(FieldNumber, v))
+}
+
+// NumberIn applies the In predicate on the "number" field.
+func NumberIn(vs ...int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldIn(FieldNumber, vs...))
+}
+
+// NumberNotIn applies the NotIn predicate on the "number" field.
+func NumberNotIn(vs ...int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNotIn(FieldNumber, vs...))
+}
+
+// NumberGT applies the GT predicate on the "number" field.
+func NumberGT(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldGT(FieldNumber, v))
+}
+
+// NumberGTE applies the GTE predicate on the "number" field.
+func NumberGTE(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldGTE(FieldNumber, v))
+}
+
+// NumberLT applies the LT predicate on the "number" field.
+func NumberLT(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldLT(FieldNumber, v))
+}
+
+// NumberLTE applies the LTE predicate on the "number" field.
+func NumberLTE(v int64) predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldLTE(FieldNumber, v))
+}
+
+// NumberIsNil applies the IsNil predicate on the "number" field.
+func NumberIsNil() predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldIsNull(FieldNumber))
+}
+
+// NumberNotNil applies the NotNil predicate on the "number" field.
+func NumberNotNil() predicate.OrderItem {
+	return predicate.OrderItem(sql.FieldNotNull(FieldNumber))
 }
 
 // ProductIDEQ applies the EQ predicate on the "product_id" field.

@@ -162,6 +162,33 @@ func (cu *ContractUpdate) ClearContent() *ContractUpdate {
 	return cu
 }
 
+// SetVenueID sets the "venue_id" field.
+func (cu *ContractUpdate) SetVenueID(i int64) *ContractUpdate {
+	cu.mutation.ResetVenueID()
+	cu.mutation.SetVenueID(i)
+	return cu
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (cu *ContractUpdate) SetNillableVenueID(i *int64) *ContractUpdate {
+	if i != nil {
+		cu.SetVenueID(*i)
+	}
+	return cu
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (cu *ContractUpdate) AddVenueID(i int64) *ContractUpdate {
+	cu.mutation.AddVenueID(i)
+	return cu
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (cu *ContractUpdate) ClearVenueID() *ContractUpdate {
+	cu.mutation.ClearVenueID()
+	return cu
+}
+
 // AddProductIDs adds the "products" edge to the Product entity by IDs.
 func (cu *ContractUpdate) AddProductIDs(ids ...int64) *ContractUpdate {
 	cu.mutation.AddProductIDs(ids...)
@@ -295,6 +322,15 @@ func (cu *ContractUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.ContentCleared() {
 		_spec.ClearField(contract.FieldContent, field.TypeString)
+	}
+	if value, ok := cu.mutation.VenueID(); ok {
+		_spec.SetField(contract.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := cu.mutation.AddedVenueID(); ok {
+		_spec.AddField(contract.FieldVenueID, field.TypeInt64, value)
+	}
+	if cu.mutation.VenueIDCleared() {
+		_spec.ClearField(contract.FieldVenueID, field.TypeInt64)
 	}
 	if cu.mutation.ProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -494,6 +530,33 @@ func (cuo *ContractUpdateOne) ClearContent() *ContractUpdateOne {
 	return cuo
 }
 
+// SetVenueID sets the "venue_id" field.
+func (cuo *ContractUpdateOne) SetVenueID(i int64) *ContractUpdateOne {
+	cuo.mutation.ResetVenueID()
+	cuo.mutation.SetVenueID(i)
+	return cuo
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (cuo *ContractUpdateOne) SetNillableVenueID(i *int64) *ContractUpdateOne {
+	if i != nil {
+		cuo.SetVenueID(*i)
+	}
+	return cuo
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (cuo *ContractUpdateOne) AddVenueID(i int64) *ContractUpdateOne {
+	cuo.mutation.AddVenueID(i)
+	return cuo
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (cuo *ContractUpdateOne) ClearVenueID() *ContractUpdateOne {
+	cuo.mutation.ClearVenueID()
+	return cuo
+}
+
 // AddProductIDs adds the "products" edge to the Product entity by IDs.
 func (cuo *ContractUpdateOne) AddProductIDs(ids ...int64) *ContractUpdateOne {
 	cuo.mutation.AddProductIDs(ids...)
@@ -657,6 +720,15 @@ func (cuo *ContractUpdateOne) sqlSave(ctx context.Context) (_node *Contract, err
 	}
 	if cuo.mutation.ContentCleared() {
 		_spec.ClearField(contract.FieldContent, field.TypeString)
+	}
+	if value, ok := cuo.mutation.VenueID(); ok {
+		_spec.SetField(contract.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := cuo.mutation.AddedVenueID(); ok {
+		_spec.AddField(contract.FieldVenueID, field.TypeInt64, value)
+	}
+	if cuo.mutation.VenueIDCleared() {
+		_spec.ClearField(contract.FieldVenueID, field.TypeInt64)
 	}
 	if cuo.mutation.ProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{

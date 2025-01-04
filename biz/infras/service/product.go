@@ -64,6 +64,7 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 		SetPrice(req.Price).
 		SetTimes(req.Times).
 		SetIsCourse(req.IsCourse).
+		SetVenueID(req.VenueId).
 		Save(p.ctx)
 
 	if err != nil {

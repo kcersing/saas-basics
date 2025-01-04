@@ -68,8 +68,6 @@ func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 	noe, err := tx.Member.Create().
 		SetMobile(req.Mobile).
 		SetUsername(req.Mobile).
-		SetName(req.Name).
-		SetCondition(1).
 		Save(m.ctx)
 
 	if err != nil {
@@ -79,11 +77,14 @@ func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 
 	_, err = tx.MemberProfile.Create().
 		SetMember(noe).
+		SetName(req.Name).
+		SetCondition(1).
 		SetGrade(gender).
 		SetBirthday(birthday).
 		SetMobileAscription(req.MobileAscription).
 		SetSource(req.Source).
 		SetGrade(req.Grade).
+		SetVenueID(req.VenueId).
 		SetIntention(req.Intention).
 		Save(m.ctx)
 
@@ -94,6 +95,7 @@ func (m Member) CreateMember(req member.CreateOrUpdateMemberReq) error {
 
 	_, err = tx.MemberDetails.Create().
 		SetMember(noe).
+		SetVenueID(req.VenueId).
 		Save(m.ctx)
 
 	if err != nil {
@@ -135,8 +137,6 @@ func (m Member) UpdateMember(req member.CreateOrUpdateMemberReq) error {
 		Where(member2.IDEQ(req.ID)).
 		SetMobile(req.Mobile).
 		SetUsername(req.Mobile).
-		SetName(req.Name).
-		SetCondition(1).
 		Save(m.ctx)
 
 	if err != nil {
@@ -151,6 +151,8 @@ func (m Member) UpdateMember(req member.CreateOrUpdateMemberReq) error {
 		SetSource(req.Source).
 		SetGrade(req.Grade).
 		SetIntention(req.Intention).
+		SetCondition(1).
+		SetVenueID(req.VenueId).
 		Save(m.ctx)
 
 	if err != nil {

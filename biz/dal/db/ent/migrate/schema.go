@@ -293,6 +293,7 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 名称"},
 		{Name: "content", Type: field.TypeString, Nullable: true, Comment: "content | 内容"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 	}
 	// ContractsTable holds the schema information for the "contracts" table.
 	ContractsTable = &schema.Table{
@@ -439,11 +440,9 @@ var (
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "password", Type: field.TypeString, Nullable: true, Comment: "password | 密码"},
-		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 账号"},
-		{Name: "username", Type: field.TypeString, Unique: true, Nullable: true, Comment: "username "},
+		{Name: "username", Type: field.TypeString, Unique: true, Nullable: true, Comment: "账号 "},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "mobile number | 手机号"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "avatar | 头像路径", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
-		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:潜在;2:正式]", Default: 1},
 	}
 	// MemberTable holds the schema information for the "member" table.
 	MemberTable = &schema.Table{
@@ -550,11 +549,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "money_sum", Type: field.TypeFloat64, Nullable: true, Comment: "消费总金额", Default: 3},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "首次的产品", Default: 0},
 		{Name: "product_name", Type: field.TypeString, Nullable: true, Comment: "首次的产品"},
-		{Name: "product_venue", Type: field.TypeInt64, Nullable: true, Comment: "首次消费场馆", Default: 0},
-		{Name: "product_venue_name", Type: field.TypeString, Nullable: true, Comment: "首次消费场馆"},
 		{Name: "entry_sum", Type: field.TypeInt64, Nullable: true, Comment: "进馆总次数", Default: 0},
 		{Name: "entry_last_time", Type: field.TypeTime, Nullable: true, Comment: "最后一次进馆时间"},
 		{Name: "entry_deadline_time", Type: field.TypeTime, Nullable: true, Comment: "进馆最后期限时间"},
@@ -574,7 +572,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_details_member_member_details",
-				Columns:    []*schema.Column{MemberDetailsColumns[19]},
+				Columns:    []*schema.Column{MemberDetailsColumns[18]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -583,7 +581,7 @@ var (
 			{
 				Name:    "memberdetails_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberDetailsColumns[19]},
+				Columns: []*schema.Column{MemberDetailsColumns[18]},
 			},
 		},
 	}
@@ -595,6 +593,7 @@ var (
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "note", Type: field.TypeString, Nullable: true, Comment: "内部备注", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 	}
@@ -606,7 +605,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_note_member_member_notes",
-				Columns:    []*schema.Column{MemberNoteColumns[7]},
+				Columns:    []*schema.Column{MemberNoteColumns[8]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -615,7 +614,7 @@ var (
 			{
 				Name:    "membernote_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberNoteColumns[7]},
+				Columns: []*schema.Column{MemberNoteColumns[8]},
 			},
 		},
 	}
@@ -629,6 +628,7 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "sn", Type: field.TypeString, Nullable: true, Comment: "编号"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
+		{Name: "sub_type", Type: field.TypeString, Nullable: true, Comment: "次级类型", Default: ""},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品ID"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆ID"},
 		{Name: "order_id", Type: field.TypeInt64, Nullable: true, Comment: "订单ID"},
@@ -652,7 +652,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_member_member_products",
-				Columns:    []*schema.Column{MemberProductColumns[21]},
+				Columns:    []*schema.Column{MemberProductColumns[22]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -661,22 +661,63 @@ var (
 			{
 				Name:    "memberproduct_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[9]},
+				Columns: []*schema.Column{MemberProductColumns[10]},
 			},
 			{
 				Name:    "memberproduct_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[21]},
+				Columns: []*schema.Column{MemberProductColumns[22]},
 			},
 			{
 				Name:    "memberproduct_product_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[8]},
+				Columns: []*schema.Column{MemberProductColumns[9]},
 			},
 			{
 				Name:    "memberproduct_order_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[10]},
+				Columns: []*schema.Column{MemberProductColumns[11]},
+			},
+		},
+	}
+	// MemberProductCoursesColumns holds the columns for the "member_product_courses" table.
+	MemberProductCoursesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
+		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型", Default: ""},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "课名", Default: ""},
+		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "节数", Default: 0},
+		{Name: "courses_id", Type: field.TypeInt64, Nullable: true, Comment: "课名称", Default: 0},
+		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品名称", Default: 0},
+	}
+	// MemberProductCoursesTable holds the schema information for the "member_product_courses" table.
+	MemberProductCoursesTable = &schema.Table{
+		Name:       "member_product_courses",
+		Columns:    MemberProductCoursesColumns,
+		PrimaryKey: []*schema.Column{MemberProductCoursesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "member_product_courses_member_product_memberCourses",
+				Columns:    []*schema.Column{MemberProductCoursesColumns[10]},
+				RefColumns: []*schema.Column{MemberProductColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "member_product_courses_member_product_memberLessons",
+				Columns:    []*schema.Column{MemberProductCoursesColumns[10]},
+				RefColumns: []*schema.Column{MemberProductColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "memberproductcourses_id",
+				Unique:  true,
+				Columns: []*schema.Column{MemberProductCoursesColumns[0]},
 			},
 		},
 	}
@@ -687,6 +728,11 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "intention", Type: field.TypeInt64, Nullable: true, Comment: "意向", Default: 0},
+		{Name: "source", Type: field.TypeInt64, Nullable: true, Comment: "来源", Default: 0},
+		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 名称"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
+		{Name: "condition", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:潜在;2:正式]", Default: 1},
 		{Name: "mobile_ascription", Type: field.TypeInt64, Nullable: true, Comment: "手机号归属", Default: 0},
 		{Name: "father_name", Type: field.TypeString, Nullable: true, Comment: "父亲名称"},
 		{Name: "mother_name", Type: field.TypeString, Nullable: true, Comment: "母亲名称"},
@@ -695,8 +741,6 @@ var (
 		{Name: "grade", Type: field.TypeInt64, Nullable: true, Comment: "年级", Default: 0},
 		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "email | 邮箱号"},
 		{Name: "wecom", Type: field.TypeString, Nullable: true, Comment: "wecom | 微信号"},
-		{Name: "intention", Type: field.TypeInt64, Nullable: true, Comment: "意向", Default: 0},
-		{Name: "source", Type: field.TypeInt64, Nullable: true, Comment: "来源", Default: 0},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 	}
 	// MemberProfileTable holds the schema information for the "member_profile" table.
@@ -707,7 +751,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_profile_member_member_profile",
-				Columns:    []*schema.Column{MemberProfileColumns[15]},
+				Columns:    []*schema.Column{MemberProfileColumns[18]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -716,7 +760,7 @@ var (
 			{
 				Name:    "memberprofile_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProfileColumns[15]},
+				Columns: []*schema.Column{MemberProfileColumns[18]},
 			},
 		},
 	}
@@ -918,6 +962,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "数量", Default: 1},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品id"},
 		{Name: "related_user_product_id", Type: field.TypeInt64, Nullable: true, Comment: "关联会员产品id", Default: 0},
 		{Name: "contest_id", Type: field.TypeInt64, Nullable: true, Comment: "赛事id"},
@@ -934,7 +979,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_item_order_item",
-				Columns:    []*schema.Column{OrderItemColumns[11]},
+				Columns:    []*schema.Column{OrderItemColumns[12]},
 				RefColumns: []*schema.Column{OrderColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -943,12 +988,12 @@ var (
 			{
 				Name:    "orderitem_order_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderItemColumns[11]},
+				Columns: []*schema.Column{OrderItemColumns[12]},
 			},
 			{
 				Name:    "orderitem_product_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderItemColumns[5]},
+				Columns: []*schema.Column{OrderItemColumns[6]},
 			},
 		},
 	}
@@ -1044,6 +1089,7 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型", Default: ""},
 		{Name: "sub_type", Type: field.TypeString, Nullable: true, Comment: "次级类型", Default: ""},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "商品名", Default: ""},
 		{Name: "stock", Type: field.TypeInt64, Nullable: true, Comment: "库存", Default: 0},
 		{Name: "deadline", Type: field.TypeInt64, Nullable: true, Comment: "激活期限", Default: 0},
@@ -1323,6 +1369,7 @@ var (
 		{Name: "mobile", Type: field.TypeString, Unique: true, Comment: "mobile number | 手机号"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 姓名"},
 		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [0:女性;1:男性;3:保密]", Default: 3},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "username", Type: field.TypeString, Unique: true, Comment: "user's login name | 登录名"},
 		{Name: "password", Type: field.TypeString, Comment: "password | 密码"},
 		{Name: "functions", Type: field.TypeString, Comment: "functions | 职能"},
@@ -1341,7 +1388,7 @@ var (
 			{
 				Name:    "user_username_mobile",
 				Unique:  true,
-				Columns: []*schema.Column{SysUsersColumns[9], SysUsersColumns[6]},
+				Columns: []*schema.Column{SysUsersColumns[10], SysUsersColumns[6]},
 			},
 		},
 	}
@@ -1790,6 +1837,7 @@ var (
 		MemberDetailsTable,
 		MemberNoteTable,
 		MemberProductTable,
+		MemberProductCoursesTable,
 		MemberProfileTable,
 		SysMenusTable,
 		SysMenuParamsTable,
@@ -1905,6 +1953,12 @@ func init() {
 	MemberProductTable.ForeignKeys[0].RefTable = MemberTable
 	MemberProductTable.Annotation = &entsql.Annotation{
 		Table:   "member_product",
+		Options: "AUTO_INCREMENT = 100000",
+	}
+	MemberProductCoursesTable.ForeignKeys[0].RefTable = MemberProductTable
+	MemberProductCoursesTable.ForeignKeys[1].RefTable = MemberProductTable
+	MemberProductCoursesTable.Annotation = &entsql.Annotation{
+		Table:   "member_product_courses",
 		Options: "AUTO_INCREMENT = 100000",
 	}
 	MemberProfileTable.ForeignKeys[0].RefTable = MemberTable

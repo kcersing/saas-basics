@@ -90,6 +90,20 @@ func (oic *OrderItemCreate) SetNillableOrderID(i *int64) *OrderItemCreate {
 	return oic
 }
 
+// SetNumber sets the "number" field.
+func (oic *OrderItemCreate) SetNumber(i int64) *OrderItemCreate {
+	oic.mutation.SetNumber(i)
+	return oic
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (oic *OrderItemCreate) SetNillableNumber(i *int64) *OrderItemCreate {
+	if i != nil {
+		oic.SetNumber(*i)
+	}
+	return oic
+}
+
 // SetProductID sets the "product_id" field.
 func (oic *OrderItemCreate) SetProductID(i int64) *OrderItemCreate {
 	oic.mutation.SetProductID(i)
@@ -228,6 +242,10 @@ func (oic *OrderItemCreate) defaults() {
 		v := orderitem.DefaultCreatedID
 		oic.mutation.SetCreatedID(v)
 	}
+	if _, ok := oic.mutation.Number(); !ok {
+		v := orderitem.DefaultNumber
+		oic.mutation.SetNumber(v)
+	}
 	if _, ok := oic.mutation.RelatedUserProductID(); !ok {
 		v := orderitem.DefaultRelatedUserProductID
 		oic.mutation.SetRelatedUserProductID(v)
@@ -283,6 +301,10 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 	if value, ok := oic.mutation.CreatedID(); ok {
 		_spec.SetField(orderitem.FieldCreatedID, field.TypeInt64, value)
 		_node.CreatedID = value
+	}
+	if value, ok := oic.mutation.Number(); ok {
+		_spec.SetField(orderitem.FieldNumber, field.TypeInt64, value)
+		_node.Number = value
 	}
 	if value, ok := oic.mutation.ProductID(); ok {
 		_spec.SetField(orderitem.FieldProductID, field.TypeInt64, value)

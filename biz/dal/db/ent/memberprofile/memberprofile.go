@@ -22,8 +22,18 @@ const (
 	FieldDelete = "delete"
 	// FieldCreatedID holds the string denoting the created_id field in the database.
 	FieldCreatedID = "created_id"
+	// FieldIntention holds the string denoting the intention field in the database.
+	FieldIntention = "intention"
+	// FieldSource holds the string denoting the source field in the database.
+	FieldSource = "source"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
+	// FieldVenueID holds the string denoting the venue_id field in the database.
+	FieldVenueID = "venue_id"
+	// FieldCondition holds the string denoting the condition field in the database.
+	FieldCondition = "condition"
 	// FieldMobileAscription holds the string denoting the mobile_ascription field in the database.
 	FieldMobileAscription = "mobile_ascription"
 	// FieldFatherName holds the string denoting the father_name field in the database.
@@ -40,10 +50,6 @@ const (
 	FieldEmail = "email"
 	// FieldWecom holds the string denoting the wecom field in the database.
 	FieldWecom = "wecom"
-	// FieldIntention holds the string denoting the intention field in the database.
-	FieldIntention = "intention"
-	// FieldSource holds the string denoting the source field in the database.
-	FieldSource = "source"
 	// EdgeMember holds the string denoting the member edge name in mutations.
 	EdgeMember = "member"
 	// Table holds the table name of the memberprofile in the database.
@@ -64,7 +70,12 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldDelete,
 	FieldCreatedID,
+	FieldIntention,
+	FieldSource,
+	FieldName,
 	FieldMemberID,
+	FieldVenueID,
+	FieldCondition,
 	FieldMobileAscription,
 	FieldFatherName,
 	FieldMotherName,
@@ -73,8 +84,6 @@ var Columns = []string{
 	FieldGrade,
 	FieldEmail,
 	FieldWecom,
-	FieldIntention,
-	FieldSource,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -98,16 +107,18 @@ var (
 	DefaultDelete int64
 	// DefaultCreatedID holds the default value on creation for the "created_id" field.
 	DefaultCreatedID int64
+	// DefaultIntention holds the default value on creation for the "intention" field.
+	DefaultIntention int64
+	// DefaultSource holds the default value on creation for the "source" field.
+	DefaultSource int64
+	// DefaultCondition holds the default value on creation for the "condition" field.
+	DefaultCondition int64
 	// DefaultMobileAscription holds the default value on creation for the "mobile_ascription" field.
 	DefaultMobileAscription int64
 	// DefaultGender holds the default value on creation for the "gender" field.
 	DefaultGender int64
 	// DefaultGrade holds the default value on creation for the "grade" field.
 	DefaultGrade int64
-	// DefaultIntention holds the default value on creation for the "intention" field.
-	DefaultIntention int64
-	// DefaultSource holds the default value on creation for the "source" field.
-	DefaultSource int64
 )
 
 // OrderOption defines the ordering options for the MemberProfile queries.
@@ -138,9 +149,34 @@ func ByCreatedID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedID, opts...).ToFunc()
 }
 
+// ByIntention orders the results by the intention field.
+func ByIntention(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntention, opts...).ToFunc()
+}
+
+// BySource orders the results by the source field.
+func BySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
 // ByMemberID orders the results by the member_id field.
 func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
+}
+
+// ByVenueID orders the results by the venue_id field.
+func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
+}
+
+// ByCondition orders the results by the condition field.
+func ByCondition(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCondition, opts...).ToFunc()
 }
 
 // ByMobileAscription orders the results by the mobile_ascription field.
@@ -181,16 +217,6 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 // ByWecom orders the results by the wecom field.
 func ByWecom(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWecom, opts...).ToFunc()
-}
-
-// ByIntention orders the results by the intention field.
-func ByIntention(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIntention, opts...).ToFunc()
-}
-
-// BySource orders the results by the source field.
-func BySource(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSource, opts...).ToFunc()
 }
 
 // ByMemberField orders the results by member field.

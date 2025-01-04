@@ -2192,6 +2192,11 @@
                 }
             }
         },
+        "/service/order/buy": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/order/info": {
             "get": {
                 "description": "获取订单详情 Description",
@@ -4232,7 +4237,7 @@
                     "type": "string"
                 },
                 "subType": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "type": {
                     "description": "2: optional i64 dictionaryId=0 (api.raw = \"dictionaryId\" )",
@@ -4729,6 +4734,9 @@
                 },
                 "startAt": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -4826,6 +4834,9 @@
                 },
                 "status": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -4842,6 +4853,9 @@
                     "type": "string"
                 },
                 "status": {
+                    "type": "integer"
+                },
+                "venueId": {
                     "type": "integer"
                 }
             }
@@ -5009,6 +5023,9 @@
                     "type": "string"
                 },
                 "source": {
+                    "type": "integer"
+                },
+                "venueId": {
                     "type": "integer"
                 }
             }
@@ -5372,6 +5389,9 @@
                 "type": {
                     "description": "*类型 card:卡 course:课 coursePackage:课包 Lessons:团课",
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -5406,6 +5426,9 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

@@ -63,6 +63,9 @@ type MemberNote func(*sql.Selector)
 // MemberProduct is the predicate function for memberproduct builders.
 type MemberProduct func(*sql.Selector)
 
+// MemberProductCourses is the predicate function for memberproductcourses builders.
+type MemberProductCourses func(*sql.Selector)
+
 // MemberProfile is the predicate function for memberprofile builders.
 type MemberProfile func(*sql.Selector)
 

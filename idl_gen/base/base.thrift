@@ -61,7 +61,7 @@ struct ListReq {
     3: optional string type="" (api.raw = "type" )
     4: optional string mobile="" (api.raw = "mobile" )
     6: optional i64 venueId=0 (api.raw = "venueId" )
-    7: optional i64 subType=0 (api.raw = "subType" )
+    7: optional string subType="" (api.raw = "subType" )
 }
 struct SysList  {
     i64	id

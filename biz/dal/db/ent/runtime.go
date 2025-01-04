@@ -22,6 +22,7 @@ import (
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/memberproduct"
+	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
@@ -554,13 +555,9 @@ func init() {
 	// member.DefaultStatus holds the default value on creation for the status field.
 	member.DefaultStatus = memberDescStatus.Default.(int64)
 	// memberDescAvatar is the schema descriptor for avatar field.
-	memberDescAvatar := memberFields[4].Descriptor()
+	memberDescAvatar := memberFields[3].Descriptor()
 	// member.DefaultAvatar holds the default value on creation for the avatar field.
 	member.DefaultAvatar = memberDescAvatar.Default.(string)
-	// memberDescCondition is the schema descriptor for condition field.
-	memberDescCondition := memberFields[5].Descriptor()
-	// member.DefaultCondition holds the default value on creation for the condition field.
-	member.DefaultCondition = memberDescCondition.Default.(int64)
 	membercontractMixin := schema.MemberContract{}.Mixin()
 	membercontractMixinFields0 := membercontractMixin[0].Fields()
 	_ = membercontractMixinFields0
@@ -637,27 +634,23 @@ func init() {
 	// memberdetails.DefaultCreatedID holds the default value on creation for the created_id field.
 	memberdetails.DefaultCreatedID = memberdetailsDescCreatedID.Default.(int64)
 	// memberdetailsDescMoneySum is the schema descriptor for money_sum field.
-	memberdetailsDescMoneySum := memberdetailsFields[1].Descriptor()
+	memberdetailsDescMoneySum := memberdetailsFields[2].Descriptor()
 	// memberdetails.DefaultMoneySum holds the default value on creation for the money_sum field.
 	memberdetails.DefaultMoneySum = memberdetailsDescMoneySum.Default.(float64)
 	// memberdetailsDescProductID is the schema descriptor for product_id field.
-	memberdetailsDescProductID := memberdetailsFields[2].Descriptor()
+	memberdetailsDescProductID := memberdetailsFields[3].Descriptor()
 	// memberdetails.DefaultProductID holds the default value on creation for the product_id field.
 	memberdetails.DefaultProductID = memberdetailsDescProductID.Default.(int64)
-	// memberdetailsDescProductVenue is the schema descriptor for product_venue field.
-	memberdetailsDescProductVenue := memberdetailsFields[4].Descriptor()
-	// memberdetails.DefaultProductVenue holds the default value on creation for the product_venue field.
-	memberdetails.DefaultProductVenue = memberdetailsDescProductVenue.Default.(int64)
 	// memberdetailsDescEntrySum is the schema descriptor for entry_sum field.
-	memberdetailsDescEntrySum := memberdetailsFields[6].Descriptor()
+	memberdetailsDescEntrySum := memberdetailsFields[5].Descriptor()
 	// memberdetails.DefaultEntrySum holds the default value on creation for the entry_sum field.
 	memberdetails.DefaultEntrySum = memberdetailsDescEntrySum.Default.(int64)
 	// memberdetailsDescRelationUID is the schema descriptor for relation_uid field.
-	memberdetailsDescRelationUID := memberdetailsFields[10].Descriptor()
+	memberdetailsDescRelationUID := memberdetailsFields[9].Descriptor()
 	// memberdetails.DefaultRelationUID holds the default value on creation for the relation_uid field.
 	memberdetails.DefaultRelationUID = memberdetailsDescRelationUID.Default.(int64)
 	// memberdetailsDescRelationMid is the schema descriptor for relation_mid field.
-	memberdetailsDescRelationMid := memberdetailsFields[12].Descriptor()
+	memberdetailsDescRelationMid := memberdetailsFields[11].Descriptor()
 	// memberdetails.DefaultRelationMid holds the default value on creation for the relation_mid field.
 	memberdetails.DefaultRelationMid = memberdetailsDescRelationMid.Default.(int64)
 	membernoteMixin := schema.MemberNote{}.Mixin()
@@ -690,7 +683,7 @@ func init() {
 	// membernote.DefaultStatus holds the default value on creation for the status field.
 	membernote.DefaultStatus = membernoteDescStatus.Default.(int64)
 	// membernoteDescNote is the schema descriptor for note field.
-	membernoteDescNote := membernoteFields[1].Descriptor()
+	membernoteDescNote := membernoteFields[2].Descriptor()
 	// membernote.DefaultNote holds the default value on creation for the note field.
 	membernote.DefaultNote = membernoteDescNote.Default.(string)
 	memberproductMixin := schema.MemberProduct{}.Mixin()
@@ -722,14 +715,67 @@ func init() {
 	memberproductDescStatus := memberproductMixinFields1[0].Descriptor()
 	// memberproduct.DefaultStatus holds the default value on creation for the status field.
 	memberproduct.DefaultStatus = memberproductDescStatus.Default.(int64)
+	// memberproductDescSubType is the schema descriptor for sub_type field.
+	memberproductDescSubType := memberproductFields[2].Descriptor()
+	// memberproduct.DefaultSubType holds the default value on creation for the sub_type field.
+	memberproduct.DefaultSubType = memberproductDescSubType.Default.(string)
 	// memberproductDescCount is the schema descriptor for count field.
-	memberproductDescCount := memberproductFields[11].Descriptor()
+	memberproductDescCount := memberproductFields[12].Descriptor()
 	// memberproduct.DefaultCount holds the default value on creation for the count field.
 	memberproduct.DefaultCount = memberproductDescCount.Default.(int64)
 	// memberproductDescCountSurplus is the schema descriptor for count_surplus field.
-	memberproductDescCountSurplus := memberproductFields[12].Descriptor()
+	memberproductDescCountSurplus := memberproductFields[13].Descriptor()
 	// memberproduct.DefaultCountSurplus holds the default value on creation for the count_surplus field.
 	memberproduct.DefaultCountSurplus = memberproductDescCountSurplus.Default.(int64)
+	memberproductcoursesMixin := schema.MemberProductCourses{}.Mixin()
+	memberproductcoursesMixinFields0 := memberproductcoursesMixin[0].Fields()
+	_ = memberproductcoursesMixinFields0
+	memberproductcoursesMixinFields1 := memberproductcoursesMixin[1].Fields()
+	_ = memberproductcoursesMixinFields1
+	memberproductcoursesFields := schema.MemberProductCourses{}.Fields()
+	_ = memberproductcoursesFields
+	// memberproductcoursesDescCreatedAt is the schema descriptor for created_at field.
+	memberproductcoursesDescCreatedAt := memberproductcoursesMixinFields0[1].Descriptor()
+	// memberproductcourses.DefaultCreatedAt holds the default value on creation for the created_at field.
+	memberproductcourses.DefaultCreatedAt = memberproductcoursesDescCreatedAt.Default.(func() time.Time)
+	// memberproductcoursesDescUpdatedAt is the schema descriptor for updated_at field.
+	memberproductcoursesDescUpdatedAt := memberproductcoursesMixinFields0[2].Descriptor()
+	// memberproductcourses.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	memberproductcourses.DefaultUpdatedAt = memberproductcoursesDescUpdatedAt.Default.(func() time.Time)
+	// memberproductcourses.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	memberproductcourses.UpdateDefaultUpdatedAt = memberproductcoursesDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// memberproductcoursesDescDelete is the schema descriptor for delete field.
+	memberproductcoursesDescDelete := memberproductcoursesMixinFields0[3].Descriptor()
+	// memberproductcourses.DefaultDelete holds the default value on creation for the delete field.
+	memberproductcourses.DefaultDelete = memberproductcoursesDescDelete.Default.(int64)
+	// memberproductcoursesDescCreatedID is the schema descriptor for created_id field.
+	memberproductcoursesDescCreatedID := memberproductcoursesMixinFields0[4].Descriptor()
+	// memberproductcourses.DefaultCreatedID holds the default value on creation for the created_id field.
+	memberproductcourses.DefaultCreatedID = memberproductcoursesDescCreatedID.Default.(int64)
+	// memberproductcoursesDescStatus is the schema descriptor for status field.
+	memberproductcoursesDescStatus := memberproductcoursesMixinFields1[0].Descriptor()
+	// memberproductcourses.DefaultStatus holds the default value on creation for the status field.
+	memberproductcourses.DefaultStatus = memberproductcoursesDescStatus.Default.(int64)
+	// memberproductcoursesDescType is the schema descriptor for type field.
+	memberproductcoursesDescType := memberproductcoursesFields[0].Descriptor()
+	// memberproductcourses.DefaultType holds the default value on creation for the type field.
+	memberproductcourses.DefaultType = memberproductcoursesDescType.Default.(string)
+	// memberproductcoursesDescName is the schema descriptor for name field.
+	memberproductcoursesDescName := memberproductcoursesFields[1].Descriptor()
+	// memberproductcourses.DefaultName holds the default value on creation for the name field.
+	memberproductcourses.DefaultName = memberproductcoursesDescName.Default.(string)
+	// memberproductcoursesDescNumber is the schema descriptor for number field.
+	memberproductcoursesDescNumber := memberproductcoursesFields[2].Descriptor()
+	// memberproductcourses.DefaultNumber holds the default value on creation for the number field.
+	memberproductcourses.DefaultNumber = memberproductcoursesDescNumber.Default.(int64)
+	// memberproductcoursesDescMemberProductID is the schema descriptor for member_product_id field.
+	memberproductcoursesDescMemberProductID := memberproductcoursesFields[3].Descriptor()
+	// memberproductcourses.DefaultMemberProductID holds the default value on creation for the member_product_id field.
+	memberproductcourses.DefaultMemberProductID = memberproductcoursesDescMemberProductID.Default.(int64)
+	// memberproductcoursesDescCoursesID is the schema descriptor for courses_id field.
+	memberproductcoursesDescCoursesID := memberproductcoursesFields[4].Descriptor()
+	// memberproductcourses.DefaultCoursesID holds the default value on creation for the courses_id field.
+	memberproductcourses.DefaultCoursesID = memberproductcoursesDescCoursesID.Default.(int64)
 	memberprofileMixin := schema.MemberProfile{}.Mixin()
 	memberprofileMixinFields0 := memberprofileMixin[0].Fields()
 	_ = memberprofileMixinFields0
@@ -753,26 +799,30 @@ func init() {
 	memberprofileDescCreatedID := memberprofileMixinFields0[4].Descriptor()
 	// memberprofile.DefaultCreatedID holds the default value on creation for the created_id field.
 	memberprofile.DefaultCreatedID = memberprofileDescCreatedID.Default.(int64)
-	// memberprofileDescMobileAscription is the schema descriptor for mobile_ascription field.
-	memberprofileDescMobileAscription := memberprofileFields[1].Descriptor()
-	// memberprofile.DefaultMobileAscription holds the default value on creation for the mobile_ascription field.
-	memberprofile.DefaultMobileAscription = memberprofileDescMobileAscription.Default.(int64)
-	// memberprofileDescGender is the schema descriptor for gender field.
-	memberprofileDescGender := memberprofileFields[4].Descriptor()
-	// memberprofile.DefaultGender holds the default value on creation for the gender field.
-	memberprofile.DefaultGender = memberprofileDescGender.Default.(int64)
-	// memberprofileDescGrade is the schema descriptor for grade field.
-	memberprofileDescGrade := memberprofileFields[6].Descriptor()
-	// memberprofile.DefaultGrade holds the default value on creation for the grade field.
-	memberprofile.DefaultGrade = memberprofileDescGrade.Default.(int64)
 	// memberprofileDescIntention is the schema descriptor for intention field.
-	memberprofileDescIntention := memberprofileFields[9].Descriptor()
+	memberprofileDescIntention := memberprofileFields[0].Descriptor()
 	// memberprofile.DefaultIntention holds the default value on creation for the intention field.
 	memberprofile.DefaultIntention = memberprofileDescIntention.Default.(int64)
 	// memberprofileDescSource is the schema descriptor for source field.
-	memberprofileDescSource := memberprofileFields[10].Descriptor()
+	memberprofileDescSource := memberprofileFields[1].Descriptor()
 	// memberprofile.DefaultSource holds the default value on creation for the source field.
 	memberprofile.DefaultSource = memberprofileDescSource.Default.(int64)
+	// memberprofileDescCondition is the schema descriptor for condition field.
+	memberprofileDescCondition := memberprofileFields[5].Descriptor()
+	// memberprofile.DefaultCondition holds the default value on creation for the condition field.
+	memberprofile.DefaultCondition = memberprofileDescCondition.Default.(int64)
+	// memberprofileDescMobileAscription is the schema descriptor for mobile_ascription field.
+	memberprofileDescMobileAscription := memberprofileFields[6].Descriptor()
+	// memberprofile.DefaultMobileAscription holds the default value on creation for the mobile_ascription field.
+	memberprofile.DefaultMobileAscription = memberprofileDescMobileAscription.Default.(int64)
+	// memberprofileDescGender is the schema descriptor for gender field.
+	memberprofileDescGender := memberprofileFields[9].Descriptor()
+	// memberprofile.DefaultGender holds the default value on creation for the gender field.
+	memberprofile.DefaultGender = memberprofileDescGender.Default.(int64)
+	// memberprofileDescGrade is the schema descriptor for grade field.
+	memberprofileDescGrade := memberprofileFields[11].Descriptor()
+	// memberprofile.DefaultGrade holds the default value on creation for the grade field.
+	memberprofile.DefaultGrade = memberprofileDescGrade.Default.(int64)
 	menuMixin := schema.Menu{}.Mixin()
 	menuMixinFields0 := menuMixin[0].Fields()
 	_ = menuMixinFields0
@@ -977,8 +1027,12 @@ func init() {
 	orderitemDescCreatedID := orderitemMixinFields0[4].Descriptor()
 	// orderitem.DefaultCreatedID holds the default value on creation for the created_id field.
 	orderitem.DefaultCreatedID = orderitemDescCreatedID.Default.(int64)
+	// orderitemDescNumber is the schema descriptor for number field.
+	orderitemDescNumber := orderitemFields[1].Descriptor()
+	// orderitem.DefaultNumber holds the default value on creation for the number field.
+	orderitem.DefaultNumber = orderitemDescNumber.Default.(int64)
 	// orderitemDescRelatedUserProductID is the schema descriptor for related_user_product_id field.
-	orderitemDescRelatedUserProductID := orderitemFields[2].Descriptor()
+	orderitemDescRelatedUserProductID := orderitemFields[3].Descriptor()
 	// orderitem.DefaultRelatedUserProductID holds the default value on creation for the related_user_product_id field.
 	orderitem.DefaultRelatedUserProductID = orderitemDescRelatedUserProductID.Default.(int64)
 	orderpayMixin := schema.OrderPay{}.Mixin()
@@ -1071,51 +1125,51 @@ func init() {
 	// product.DefaultSubType holds the default value on creation for the sub_type field.
 	product.DefaultSubType = productDescSubType.Default.(string)
 	// productDescName is the schema descriptor for name field.
-	productDescName := productFields[2].Descriptor()
+	productDescName := productFields[3].Descriptor()
 	// product.DefaultName holds the default value on creation for the name field.
 	product.DefaultName = productDescName.Default.(string)
 	// productDescStock is the schema descriptor for stock field.
-	productDescStock := productFields[3].Descriptor()
+	productDescStock := productFields[4].Descriptor()
 	// product.DefaultStock holds the default value on creation for the stock field.
 	product.DefaultStock = productDescStock.Default.(int64)
 	// productDescDeadline is the schema descriptor for deadline field.
-	productDescDeadline := productFields[4].Descriptor()
+	productDescDeadline := productFields[5].Descriptor()
 	// product.DefaultDeadline holds the default value on creation for the deadline field.
 	product.DefaultDeadline = productDescDeadline.Default.(int64)
 	// productDescDuration is the schema descriptor for duration field.
-	productDescDuration := productFields[5].Descriptor()
+	productDescDuration := productFields[6].Descriptor()
 	// product.DefaultDuration holds the default value on creation for the duration field.
 	product.DefaultDuration = productDescDuration.Default.(int64)
 	// productDescLength is the schema descriptor for length field.
-	productDescLength := productFields[6].Descriptor()
+	productDescLength := productFields[7].Descriptor()
 	// product.DefaultLength holds the default value on creation for the length field.
 	product.DefaultLength = productDescLength.Default.(int64)
 	// productDescPrice is the schema descriptor for price field.
-	productDescPrice := productFields[7].Descriptor()
+	productDescPrice := productFields[8].Descriptor()
 	// product.DefaultPrice holds the default value on creation for the price field.
 	product.DefaultPrice = productDescPrice.Default.(float64)
 	// productDescTimes is the schema descriptor for times field.
-	productDescTimes := productFields[8].Descriptor()
+	productDescTimes := productFields[9].Descriptor()
 	// product.DefaultTimes holds the default value on creation for the times field.
 	product.DefaultTimes = productDescTimes.Default.(int64)
 	// productDescIsLessons is the schema descriptor for is_lessons field.
-	productDescIsLessons := productFields[9].Descriptor()
+	productDescIsLessons := productFields[10].Descriptor()
 	// product.DefaultIsLessons holds the default value on creation for the is_lessons field.
 	product.DefaultIsLessons = productDescIsLessons.Default.(int64)
 	// productDescIsCourse is the schema descriptor for is_course field.
-	productDescIsCourse := productFields[10].Descriptor()
+	productDescIsCourse := productFields[11].Descriptor()
 	// product.DefaultIsCourse holds the default value on creation for the is_course field.
 	product.DefaultIsCourse = productDescIsCourse.Default.(int64)
 	// productDescIsSales is the schema descriptor for is_sales field.
-	productDescIsSales := productFields[12].Descriptor()
+	productDescIsSales := productFields[13].Descriptor()
 	// product.DefaultIsSales holds the default value on creation for the is_sales field.
 	product.DefaultIsSales = productDescIsSales.Default.(int64)
 	// productDescPic is the schema descriptor for pic field.
-	productDescPic := productFields[15].Descriptor()
+	productDescPic := productFields[16].Descriptor()
 	// product.DefaultPic holds the default value on creation for the pic field.
 	product.DefaultPic = productDescPic.Default.(string)
 	// productDescDescription is the schema descriptor for description field.
-	productDescDescription := productFields[16].Descriptor()
+	productDescDescription := productFields[17].Descriptor()
 	// product.DefaultDescription holds the default value on creation for the description field.
 	product.DefaultDescription = productDescDescription.Default.(string)
 	productcoursesMixin := schema.ProductCourses{}.Mixin()
@@ -1400,11 +1454,11 @@ func init() {
 	// user.DefaultGender holds the default value on creation for the gender field.
 	user.DefaultGender = userDescGender.Default.(int64)
 	// userDescType is the schema descriptor for type field.
-	userDescType := userFields[6].Descriptor()
+	userDescType := userFields[7].Descriptor()
 	// user.DefaultType holds the default value on creation for the type field.
 	user.DefaultType = userDescType.Default.(int64)
 	// userDescJobTime is the schema descriptor for job_time field.
-	userDescJobTime := userFields[7].Descriptor()
+	userDescJobTime := userFields[8].Descriptor()
 	// user.DefaultJobTime holds the default value on creation for the job_time field.
 	user.DefaultJobTime = userDescJobTime.Default.(int64)
 	userschedulingMixin := schema.UserScheduling{}.Mixin()

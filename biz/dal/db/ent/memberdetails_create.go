@@ -90,6 +90,20 @@ func (mdc *MemberDetailsCreate) SetNillableMemberID(i *int64) *MemberDetailsCrea
 	return mdc
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mdc *MemberDetailsCreate) SetVenueID(i int64) *MemberDetailsCreate {
+	mdc.mutation.SetVenueID(i)
+	return mdc
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mdc *MemberDetailsCreate) SetNillableVenueID(i *int64) *MemberDetailsCreate {
+	if i != nil {
+		mdc.SetVenueID(*i)
+	}
+	return mdc
+}
+
 // SetMoneySum sets the "money_sum" field.
 func (mdc *MemberDetailsCreate) SetMoneySum(f float64) *MemberDetailsCreate {
 	mdc.mutation.SetMoneySum(f)
@@ -128,34 +142,6 @@ func (mdc *MemberDetailsCreate) SetProductName(s string) *MemberDetailsCreate {
 func (mdc *MemberDetailsCreate) SetNillableProductName(s *string) *MemberDetailsCreate {
 	if s != nil {
 		mdc.SetProductName(*s)
-	}
-	return mdc
-}
-
-// SetProductVenue sets the "product_venue" field.
-func (mdc *MemberDetailsCreate) SetProductVenue(i int64) *MemberDetailsCreate {
-	mdc.mutation.SetProductVenue(i)
-	return mdc
-}
-
-// SetNillableProductVenue sets the "product_venue" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableProductVenue(i *int64) *MemberDetailsCreate {
-	if i != nil {
-		mdc.SetProductVenue(*i)
-	}
-	return mdc
-}
-
-// SetProductVenueName sets the "product_venue_name" field.
-func (mdc *MemberDetailsCreate) SetProductVenueName(s string) *MemberDetailsCreate {
-	mdc.mutation.SetProductVenueName(s)
-	return mdc
-}
-
-// SetNillableProductVenueName sets the "product_venue_name" field if the given value is not nil.
-func (mdc *MemberDetailsCreate) SetNillableProductVenueName(s *string) *MemberDetailsCreate {
-	if s != nil {
-		mdc.SetProductVenueName(*s)
 	}
 	return mdc
 }
@@ -356,10 +342,6 @@ func (mdc *MemberDetailsCreate) defaults() {
 		v := memberdetails.DefaultProductID
 		mdc.mutation.SetProductID(v)
 	}
-	if _, ok := mdc.mutation.ProductVenue(); !ok {
-		v := memberdetails.DefaultProductVenue
-		mdc.mutation.SetProductVenue(v)
-	}
 	if _, ok := mdc.mutation.EntrySum(); !ok {
 		v := memberdetails.DefaultEntrySum
 		mdc.mutation.SetEntrySum(v)
@@ -424,6 +406,10 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 		_spec.SetField(memberdetails.FieldCreatedID, field.TypeInt64, value)
 		_node.CreatedID = value
 	}
+	if value, ok := mdc.mutation.VenueID(); ok {
+		_spec.SetField(memberdetails.FieldVenueID, field.TypeInt64, value)
+		_node.VenueID = value
+	}
 	if value, ok := mdc.mutation.MoneySum(); ok {
 		_spec.SetField(memberdetails.FieldMoneySum, field.TypeFloat64, value)
 		_node.MoneySum = value
@@ -435,14 +421,6 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 	if value, ok := mdc.mutation.ProductName(); ok {
 		_spec.SetField(memberdetails.FieldProductName, field.TypeString, value)
 		_node.ProductName = value
-	}
-	if value, ok := mdc.mutation.ProductVenue(); ok {
-		_spec.SetField(memberdetails.FieldProductVenue, field.TypeInt64, value)
-		_node.ProductVenue = value
-	}
-	if value, ok := mdc.mutation.ProductVenueName(); ok {
-		_spec.SetField(memberdetails.FieldProductVenueName, field.TypeString, value)
-		_node.ProductVenueName = value
 	}
 	if value, ok := mdc.mutation.EntrySum(); ok {
 		_spec.SetField(memberdetails.FieldEntrySum, field.TypeInt64, value)

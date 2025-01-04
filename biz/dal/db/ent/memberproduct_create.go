@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberproduct"
+	"saas/biz/dal/db/ent/memberproductcourses"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -116,6 +117,20 @@ func (mpc *MemberProductCreate) SetType(s string) *MemberProductCreate {
 func (mpc *MemberProductCreate) SetNillableType(s *string) *MemberProductCreate {
 	if s != nil {
 		mpc.SetType(*s)
+	}
+	return mpc
+}
+
+// SetSubType sets the "sub_type" field.
+func (mpc *MemberProductCreate) SetSubType(s string) *MemberProductCreate {
+	mpc.mutation.SetSubType(s)
+	return mpc
+}
+
+// SetNillableSubType sets the "sub_type" field if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableSubType(s *string) *MemberProductCreate {
+	if s != nil {
+		mpc.SetSubType(*s)
 	}
 	return mpc
 }
@@ -371,6 +386,36 @@ func (mpc *MemberProductCreate) AddMemberProductContents(m ...*MemberContract) *
 	return mpc.AddMemberProductContentIDs(ids...)
 }
 
+// AddMemberCourseIDs adds the "memberCourses" edge to the MemberProductCourses entity by IDs.
+func (mpc *MemberProductCreate) AddMemberCourseIDs(ids ...int64) *MemberProductCreate {
+	mpc.mutation.AddMemberCourseIDs(ids...)
+	return mpc
+}
+
+// AddMemberCourses adds the "memberCourses" edges to the MemberProductCourses entity.
+func (mpc *MemberProductCreate) AddMemberCourses(m ...*MemberProductCourses) *MemberProductCreate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpc.AddMemberCourseIDs(ids...)
+}
+
+// AddMemberLessonIDs adds the "memberLessons" edge to the MemberProductCourses entity by IDs.
+func (mpc *MemberProductCreate) AddMemberLessonIDs(ids ...int64) *MemberProductCreate {
+	mpc.mutation.AddMemberLessonIDs(ids...)
+	return mpc
+}
+
+// AddMemberLessons adds the "memberLessons" edges to the MemberProductCourses entity.
+func (mpc *MemberProductCreate) AddMemberLessons(m ...*MemberProductCourses) *MemberProductCreate {
+	ids := make([]int64, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return mpc.AddMemberLessonIDs(ids...)
+}
+
 // Mutation returns the MemberProductMutation object of the builder.
 func (mpc *MemberProductCreate) Mutation() *MemberProductMutation {
 	return mpc.mutation
@@ -425,6 +470,10 @@ func (mpc *MemberProductCreate) defaults() {
 	if _, ok := mpc.mutation.Status(); !ok {
 		v := memberproduct.DefaultStatus
 		mpc.mutation.SetStatus(v)
+	}
+	if _, ok := mpc.mutation.SubType(); !ok {
+		v := memberproduct.DefaultSubType
+		mpc.mutation.SetSubType(v)
 	}
 	if _, ok := mpc.mutation.Count(); !ok {
 		v := memberproduct.DefaultCount
@@ -497,6 +546,10 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 	if value, ok := mpc.mutation.GetType(); ok {
 		_spec.SetField(memberproduct.FieldType, field.TypeString, value)
 		_node.Type = value
+	}
+	if value, ok := mpc.mutation.SubType(); ok {
+		_spec.SetField(memberproduct.FieldSubType, field.TypeString, value)
+		_node.SubType = value
 	}
 	if value, ok := mpc.mutation.ProductID(); ok {
 		_spec.SetField(memberproduct.FieldProductID, field.TypeInt64, value)
@@ -592,6 +645,38 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mpc.mutation.MemberCoursesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberCoursesTable,
+			Columns: []string{memberproduct.MemberCoursesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mpc.mutation.MemberLessonsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   memberproduct.MemberLessonsTable,
+			Columns: []string{memberproduct.MemberLessonsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

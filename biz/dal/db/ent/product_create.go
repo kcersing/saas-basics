@@ -122,6 +122,20 @@ func (pc *ProductCreate) SetNillableSubType(s *string) *ProductCreate {
 	return pc
 }
 
+// SetVenueID sets the "venue_id" field.
+func (pc *ProductCreate) SetVenueID(i int64) *ProductCreate {
+	pc.mutation.SetVenueID(i)
+	return pc
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableVenueID(i *int64) *ProductCreate {
+	if i != nil {
+		pc.SetVenueID(*i)
+	}
+	return pc
+}
+
 // SetName sets the "name" field.
 func (pc *ProductCreate) SetName(s string) *ProductCreate {
 	pc.mutation.SetName(s)
@@ -579,6 +593,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.SubType(); ok {
 		_spec.SetField(product.FieldSubType, field.TypeString, value)
 		_node.SubType = value
+	}
+	if value, ok := pc.mutation.VenueID(); ok {
+		_spec.SetField(product.FieldVenueID, field.TypeInt64, value)
+		_node.VenueID = value
 	}
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)

@@ -95,6 +95,80 @@ func (mpu *MemberProfileUpdate) ClearCreatedID() *MemberProfileUpdate {
 	return mpu
 }
 
+// SetIntention sets the "intention" field.
+func (mpu *MemberProfileUpdate) SetIntention(i int64) *MemberProfileUpdate {
+	mpu.mutation.ResetIntention()
+	mpu.mutation.SetIntention(i)
+	return mpu
+}
+
+// SetNillableIntention sets the "intention" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableIntention(i *int64) *MemberProfileUpdate {
+	if i != nil {
+		mpu.SetIntention(*i)
+	}
+	return mpu
+}
+
+// AddIntention adds i to the "intention" field.
+func (mpu *MemberProfileUpdate) AddIntention(i int64) *MemberProfileUpdate {
+	mpu.mutation.AddIntention(i)
+	return mpu
+}
+
+// ClearIntention clears the value of the "intention" field.
+func (mpu *MemberProfileUpdate) ClearIntention() *MemberProfileUpdate {
+	mpu.mutation.ClearIntention()
+	return mpu
+}
+
+// SetSource sets the "source" field.
+func (mpu *MemberProfileUpdate) SetSource(i int64) *MemberProfileUpdate {
+	mpu.mutation.ResetSource()
+	mpu.mutation.SetSource(i)
+	return mpu
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableSource(i *int64) *MemberProfileUpdate {
+	if i != nil {
+		mpu.SetSource(*i)
+	}
+	return mpu
+}
+
+// AddSource adds i to the "source" field.
+func (mpu *MemberProfileUpdate) AddSource(i int64) *MemberProfileUpdate {
+	mpu.mutation.AddSource(i)
+	return mpu
+}
+
+// ClearSource clears the value of the "source" field.
+func (mpu *MemberProfileUpdate) ClearSource() *MemberProfileUpdate {
+	mpu.mutation.ClearSource()
+	return mpu
+}
+
+// SetName sets the "name" field.
+func (mpu *MemberProfileUpdate) SetName(s string) *MemberProfileUpdate {
+	mpu.mutation.SetName(s)
+	return mpu
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableName(s *string) *MemberProfileUpdate {
+	if s != nil {
+		mpu.SetName(*s)
+	}
+	return mpu
+}
+
+// ClearName clears the value of the "name" field.
+func (mpu *MemberProfileUpdate) ClearName() *MemberProfileUpdate {
+	mpu.mutation.ClearName()
+	return mpu
+}
+
 // SetMemberID sets the "member_id" field.
 func (mpu *MemberProfileUpdate) SetMemberID(i int64) *MemberProfileUpdate {
 	mpu.mutation.SetMemberID(i)
@@ -112,6 +186,60 @@ func (mpu *MemberProfileUpdate) SetNillableMemberID(i *int64) *MemberProfileUpda
 // ClearMemberID clears the value of the "member_id" field.
 func (mpu *MemberProfileUpdate) ClearMemberID() *MemberProfileUpdate {
 	mpu.mutation.ClearMemberID()
+	return mpu
+}
+
+// SetVenueID sets the "venue_id" field.
+func (mpu *MemberProfileUpdate) SetVenueID(i int64) *MemberProfileUpdate {
+	mpu.mutation.ResetVenueID()
+	mpu.mutation.SetVenueID(i)
+	return mpu
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableVenueID(i *int64) *MemberProfileUpdate {
+	if i != nil {
+		mpu.SetVenueID(*i)
+	}
+	return mpu
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mpu *MemberProfileUpdate) AddVenueID(i int64) *MemberProfileUpdate {
+	mpu.mutation.AddVenueID(i)
+	return mpu
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mpu *MemberProfileUpdate) ClearVenueID() *MemberProfileUpdate {
+	mpu.mutation.ClearVenueID()
+	return mpu
+}
+
+// SetCondition sets the "condition" field.
+func (mpu *MemberProfileUpdate) SetCondition(i int64) *MemberProfileUpdate {
+	mpu.mutation.ResetCondition()
+	mpu.mutation.SetCondition(i)
+	return mpu
+}
+
+// SetNillableCondition sets the "condition" field if the given value is not nil.
+func (mpu *MemberProfileUpdate) SetNillableCondition(i *int64) *MemberProfileUpdate {
+	if i != nil {
+		mpu.SetCondition(*i)
+	}
+	return mpu
+}
+
+// AddCondition adds i to the "condition" field.
+func (mpu *MemberProfileUpdate) AddCondition(i int64) *MemberProfileUpdate {
+	mpu.mutation.AddCondition(i)
+	return mpu
+}
+
+// ClearCondition clears the value of the "condition" field.
+func (mpu *MemberProfileUpdate) ClearCondition() *MemberProfileUpdate {
+	mpu.mutation.ClearCondition()
 	return mpu
 }
 
@@ -296,60 +424,6 @@ func (mpu *MemberProfileUpdate) ClearWecom() *MemberProfileUpdate {
 	return mpu
 }
 
-// SetIntention sets the "intention" field.
-func (mpu *MemberProfileUpdate) SetIntention(i int64) *MemberProfileUpdate {
-	mpu.mutation.ResetIntention()
-	mpu.mutation.SetIntention(i)
-	return mpu
-}
-
-// SetNillableIntention sets the "intention" field if the given value is not nil.
-func (mpu *MemberProfileUpdate) SetNillableIntention(i *int64) *MemberProfileUpdate {
-	if i != nil {
-		mpu.SetIntention(*i)
-	}
-	return mpu
-}
-
-// AddIntention adds i to the "intention" field.
-func (mpu *MemberProfileUpdate) AddIntention(i int64) *MemberProfileUpdate {
-	mpu.mutation.AddIntention(i)
-	return mpu
-}
-
-// ClearIntention clears the value of the "intention" field.
-func (mpu *MemberProfileUpdate) ClearIntention() *MemberProfileUpdate {
-	mpu.mutation.ClearIntention()
-	return mpu
-}
-
-// SetSource sets the "source" field.
-func (mpu *MemberProfileUpdate) SetSource(i int64) *MemberProfileUpdate {
-	mpu.mutation.ResetSource()
-	mpu.mutation.SetSource(i)
-	return mpu
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (mpu *MemberProfileUpdate) SetNillableSource(i *int64) *MemberProfileUpdate {
-	if i != nil {
-		mpu.SetSource(*i)
-	}
-	return mpu
-}
-
-// AddSource adds i to the "source" field.
-func (mpu *MemberProfileUpdate) AddSource(i int64) *MemberProfileUpdate {
-	mpu.mutation.AddSource(i)
-	return mpu
-}
-
-// ClearSource clears the value of the "source" field.
-func (mpu *MemberProfileUpdate) ClearSource() *MemberProfileUpdate {
-	mpu.mutation.ClearSource()
-	return mpu
-}
-
 // SetMember sets the "member" edge to the Member entity.
 func (mpu *MemberProfileUpdate) SetMember(m *Member) *MemberProfileUpdate {
 	return mpu.SetMemberID(m.ID)
@@ -438,6 +512,48 @@ func (mpu *MemberProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mpu.mutation.CreatedIDCleared() {
 		_spec.ClearField(memberprofile.FieldCreatedID, field.TypeInt64)
 	}
+	if value, ok := mpu.mutation.Intention(); ok {
+		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedIntention(); ok {
+		_spec.AddField(memberprofile.FieldIntention, field.TypeInt64, value)
+	}
+	if mpu.mutation.IntentionCleared() {
+		_spec.ClearField(memberprofile.FieldIntention, field.TypeInt64)
+	}
+	if value, ok := mpu.mutation.Source(); ok {
+		_spec.SetField(memberprofile.FieldSource, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedSource(); ok {
+		_spec.AddField(memberprofile.FieldSource, field.TypeInt64, value)
+	}
+	if mpu.mutation.SourceCleared() {
+		_spec.ClearField(memberprofile.FieldSource, field.TypeInt64)
+	}
+	if value, ok := mpu.mutation.Name(); ok {
+		_spec.SetField(memberprofile.FieldName, field.TypeString, value)
+	}
+	if mpu.mutation.NameCleared() {
+		_spec.ClearField(memberprofile.FieldName, field.TypeString)
+	}
+	if value, ok := mpu.mutation.VenueID(); ok {
+		_spec.SetField(memberprofile.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedVenueID(); ok {
+		_spec.AddField(memberprofile.FieldVenueID, field.TypeInt64, value)
+	}
+	if mpu.mutation.VenueIDCleared() {
+		_spec.ClearField(memberprofile.FieldVenueID, field.TypeInt64)
+	}
+	if value, ok := mpu.mutation.Condition(); ok {
+		_spec.SetField(memberprofile.FieldCondition, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedCondition(); ok {
+		_spec.AddField(memberprofile.FieldCondition, field.TypeInt64, value)
+	}
+	if mpu.mutation.ConditionCleared() {
+		_spec.ClearField(memberprofile.FieldCondition, field.TypeInt64)
+	}
 	if value, ok := mpu.mutation.MobileAscription(); ok {
 		_spec.SetField(memberprofile.FieldMobileAscription, field.TypeInt64, value)
 	}
@@ -494,24 +610,6 @@ func (mpu *MemberProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mpu.mutation.WecomCleared() {
 		_spec.ClearField(memberprofile.FieldWecom, field.TypeString)
-	}
-	if value, ok := mpu.mutation.Intention(); ok {
-		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
-	}
-	if value, ok := mpu.mutation.AddedIntention(); ok {
-		_spec.AddField(memberprofile.FieldIntention, field.TypeInt64, value)
-	}
-	if mpu.mutation.IntentionCleared() {
-		_spec.ClearField(memberprofile.FieldIntention, field.TypeInt64)
-	}
-	if value, ok := mpu.mutation.Source(); ok {
-		_spec.SetField(memberprofile.FieldSource, field.TypeInt64, value)
-	}
-	if value, ok := mpu.mutation.AddedSource(); ok {
-		_spec.AddField(memberprofile.FieldSource, field.TypeInt64, value)
-	}
-	if mpu.mutation.SourceCleared() {
-		_spec.ClearField(memberprofile.FieldSource, field.TypeInt64)
 	}
 	if mpu.mutation.MemberCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -628,6 +726,80 @@ func (mpuo *MemberProfileUpdateOne) ClearCreatedID() *MemberProfileUpdateOne {
 	return mpuo
 }
 
+// SetIntention sets the "intention" field.
+func (mpuo *MemberProfileUpdateOne) SetIntention(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.ResetIntention()
+	mpuo.mutation.SetIntention(i)
+	return mpuo
+}
+
+// SetNillableIntention sets the "intention" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableIntention(i *int64) *MemberProfileUpdateOne {
+	if i != nil {
+		mpuo.SetIntention(*i)
+	}
+	return mpuo
+}
+
+// AddIntention adds i to the "intention" field.
+func (mpuo *MemberProfileUpdateOne) AddIntention(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.AddIntention(i)
+	return mpuo
+}
+
+// ClearIntention clears the value of the "intention" field.
+func (mpuo *MemberProfileUpdateOne) ClearIntention() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearIntention()
+	return mpuo
+}
+
+// SetSource sets the "source" field.
+func (mpuo *MemberProfileUpdateOne) SetSource(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.ResetSource()
+	mpuo.mutation.SetSource(i)
+	return mpuo
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableSource(i *int64) *MemberProfileUpdateOne {
+	if i != nil {
+		mpuo.SetSource(*i)
+	}
+	return mpuo
+}
+
+// AddSource adds i to the "source" field.
+func (mpuo *MemberProfileUpdateOne) AddSource(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.AddSource(i)
+	return mpuo
+}
+
+// ClearSource clears the value of the "source" field.
+func (mpuo *MemberProfileUpdateOne) ClearSource() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearSource()
+	return mpuo
+}
+
+// SetName sets the "name" field.
+func (mpuo *MemberProfileUpdateOne) SetName(s string) *MemberProfileUpdateOne {
+	mpuo.mutation.SetName(s)
+	return mpuo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableName(s *string) *MemberProfileUpdateOne {
+	if s != nil {
+		mpuo.SetName(*s)
+	}
+	return mpuo
+}
+
+// ClearName clears the value of the "name" field.
+func (mpuo *MemberProfileUpdateOne) ClearName() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearName()
+	return mpuo
+}
+
 // SetMemberID sets the "member_id" field.
 func (mpuo *MemberProfileUpdateOne) SetMemberID(i int64) *MemberProfileUpdateOne {
 	mpuo.mutation.SetMemberID(i)
@@ -645,6 +817,60 @@ func (mpuo *MemberProfileUpdateOne) SetNillableMemberID(i *int64) *MemberProfile
 // ClearMemberID clears the value of the "member_id" field.
 func (mpuo *MemberProfileUpdateOne) ClearMemberID() *MemberProfileUpdateOne {
 	mpuo.mutation.ClearMemberID()
+	return mpuo
+}
+
+// SetVenueID sets the "venue_id" field.
+func (mpuo *MemberProfileUpdateOne) SetVenueID(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.ResetVenueID()
+	mpuo.mutation.SetVenueID(i)
+	return mpuo
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableVenueID(i *int64) *MemberProfileUpdateOne {
+	if i != nil {
+		mpuo.SetVenueID(*i)
+	}
+	return mpuo
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (mpuo *MemberProfileUpdateOne) AddVenueID(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.AddVenueID(i)
+	return mpuo
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (mpuo *MemberProfileUpdateOne) ClearVenueID() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearVenueID()
+	return mpuo
+}
+
+// SetCondition sets the "condition" field.
+func (mpuo *MemberProfileUpdateOne) SetCondition(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.ResetCondition()
+	mpuo.mutation.SetCondition(i)
+	return mpuo
+}
+
+// SetNillableCondition sets the "condition" field if the given value is not nil.
+func (mpuo *MemberProfileUpdateOne) SetNillableCondition(i *int64) *MemberProfileUpdateOne {
+	if i != nil {
+		mpuo.SetCondition(*i)
+	}
+	return mpuo
+}
+
+// AddCondition adds i to the "condition" field.
+func (mpuo *MemberProfileUpdateOne) AddCondition(i int64) *MemberProfileUpdateOne {
+	mpuo.mutation.AddCondition(i)
+	return mpuo
+}
+
+// ClearCondition clears the value of the "condition" field.
+func (mpuo *MemberProfileUpdateOne) ClearCondition() *MemberProfileUpdateOne {
+	mpuo.mutation.ClearCondition()
 	return mpuo
 }
 
@@ -829,60 +1055,6 @@ func (mpuo *MemberProfileUpdateOne) ClearWecom() *MemberProfileUpdateOne {
 	return mpuo
 }
 
-// SetIntention sets the "intention" field.
-func (mpuo *MemberProfileUpdateOne) SetIntention(i int64) *MemberProfileUpdateOne {
-	mpuo.mutation.ResetIntention()
-	mpuo.mutation.SetIntention(i)
-	return mpuo
-}
-
-// SetNillableIntention sets the "intention" field if the given value is not nil.
-func (mpuo *MemberProfileUpdateOne) SetNillableIntention(i *int64) *MemberProfileUpdateOne {
-	if i != nil {
-		mpuo.SetIntention(*i)
-	}
-	return mpuo
-}
-
-// AddIntention adds i to the "intention" field.
-func (mpuo *MemberProfileUpdateOne) AddIntention(i int64) *MemberProfileUpdateOne {
-	mpuo.mutation.AddIntention(i)
-	return mpuo
-}
-
-// ClearIntention clears the value of the "intention" field.
-func (mpuo *MemberProfileUpdateOne) ClearIntention() *MemberProfileUpdateOne {
-	mpuo.mutation.ClearIntention()
-	return mpuo
-}
-
-// SetSource sets the "source" field.
-func (mpuo *MemberProfileUpdateOne) SetSource(i int64) *MemberProfileUpdateOne {
-	mpuo.mutation.ResetSource()
-	mpuo.mutation.SetSource(i)
-	return mpuo
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (mpuo *MemberProfileUpdateOne) SetNillableSource(i *int64) *MemberProfileUpdateOne {
-	if i != nil {
-		mpuo.SetSource(*i)
-	}
-	return mpuo
-}
-
-// AddSource adds i to the "source" field.
-func (mpuo *MemberProfileUpdateOne) AddSource(i int64) *MemberProfileUpdateOne {
-	mpuo.mutation.AddSource(i)
-	return mpuo
-}
-
-// ClearSource clears the value of the "source" field.
-func (mpuo *MemberProfileUpdateOne) ClearSource() *MemberProfileUpdateOne {
-	mpuo.mutation.ClearSource()
-	return mpuo
-}
-
 // SetMember sets the "member" edge to the Member entity.
 func (mpuo *MemberProfileUpdateOne) SetMember(m *Member) *MemberProfileUpdateOne {
 	return mpuo.SetMemberID(m.ID)
@@ -1001,6 +1173,48 @@ func (mpuo *MemberProfileUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	if mpuo.mutation.CreatedIDCleared() {
 		_spec.ClearField(memberprofile.FieldCreatedID, field.TypeInt64)
 	}
+	if value, ok := mpuo.mutation.Intention(); ok {
+		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedIntention(); ok {
+		_spec.AddField(memberprofile.FieldIntention, field.TypeInt64, value)
+	}
+	if mpuo.mutation.IntentionCleared() {
+		_spec.ClearField(memberprofile.FieldIntention, field.TypeInt64)
+	}
+	if value, ok := mpuo.mutation.Source(); ok {
+		_spec.SetField(memberprofile.FieldSource, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedSource(); ok {
+		_spec.AddField(memberprofile.FieldSource, field.TypeInt64, value)
+	}
+	if mpuo.mutation.SourceCleared() {
+		_spec.ClearField(memberprofile.FieldSource, field.TypeInt64)
+	}
+	if value, ok := mpuo.mutation.Name(); ok {
+		_spec.SetField(memberprofile.FieldName, field.TypeString, value)
+	}
+	if mpuo.mutation.NameCleared() {
+		_spec.ClearField(memberprofile.FieldName, field.TypeString)
+	}
+	if value, ok := mpuo.mutation.VenueID(); ok {
+		_spec.SetField(memberprofile.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedVenueID(); ok {
+		_spec.AddField(memberprofile.FieldVenueID, field.TypeInt64, value)
+	}
+	if mpuo.mutation.VenueIDCleared() {
+		_spec.ClearField(memberprofile.FieldVenueID, field.TypeInt64)
+	}
+	if value, ok := mpuo.mutation.Condition(); ok {
+		_spec.SetField(memberprofile.FieldCondition, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedCondition(); ok {
+		_spec.AddField(memberprofile.FieldCondition, field.TypeInt64, value)
+	}
+	if mpuo.mutation.ConditionCleared() {
+		_spec.ClearField(memberprofile.FieldCondition, field.TypeInt64)
+	}
 	if value, ok := mpuo.mutation.MobileAscription(); ok {
 		_spec.SetField(memberprofile.FieldMobileAscription, field.TypeInt64, value)
 	}
@@ -1057,24 +1271,6 @@ func (mpuo *MemberProfileUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	}
 	if mpuo.mutation.WecomCleared() {
 		_spec.ClearField(memberprofile.FieldWecom, field.TypeString)
-	}
-	if value, ok := mpuo.mutation.Intention(); ok {
-		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
-	}
-	if value, ok := mpuo.mutation.AddedIntention(); ok {
-		_spec.AddField(memberprofile.FieldIntention, field.TypeInt64, value)
-	}
-	if mpuo.mutation.IntentionCleared() {
-		_spec.ClearField(memberprofile.FieldIntention, field.TypeInt64)
-	}
-	if value, ok := mpuo.mutation.Source(); ok {
-		_spec.SetField(memberprofile.FieldSource, field.TypeInt64, value)
-	}
-	if value, ok := mpuo.mutation.AddedSource(); ok {
-		_spec.AddField(memberprofile.FieldSource, field.TypeInt64, value)
-	}
-	if mpuo.mutation.SourceCleared() {
-		_spec.ClearField(memberprofile.FieldSource, field.TypeInt64)
 	}
 	if mpuo.mutation.MemberCleared() {
 		edge := &sqlgraph.EdgeSpec{

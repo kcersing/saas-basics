@@ -76,6 +76,48 @@ func (mpc *MemberProfileCreate) SetNillableCreatedID(i *int64) *MemberProfileCre
 	return mpc
 }
 
+// SetIntention sets the "intention" field.
+func (mpc *MemberProfileCreate) SetIntention(i int64) *MemberProfileCreate {
+	mpc.mutation.SetIntention(i)
+	return mpc
+}
+
+// SetNillableIntention sets the "intention" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableIntention(i *int64) *MemberProfileCreate {
+	if i != nil {
+		mpc.SetIntention(*i)
+	}
+	return mpc
+}
+
+// SetSource sets the "source" field.
+func (mpc *MemberProfileCreate) SetSource(i int64) *MemberProfileCreate {
+	mpc.mutation.SetSource(i)
+	return mpc
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableSource(i *int64) *MemberProfileCreate {
+	if i != nil {
+		mpc.SetSource(*i)
+	}
+	return mpc
+}
+
+// SetName sets the "name" field.
+func (mpc *MemberProfileCreate) SetName(s string) *MemberProfileCreate {
+	mpc.mutation.SetName(s)
+	return mpc
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableName(s *string) *MemberProfileCreate {
+	if s != nil {
+		mpc.SetName(*s)
+	}
+	return mpc
+}
+
 // SetMemberID sets the "member_id" field.
 func (mpc *MemberProfileCreate) SetMemberID(i int64) *MemberProfileCreate {
 	mpc.mutation.SetMemberID(i)
@@ -86,6 +128,34 @@ func (mpc *MemberProfileCreate) SetMemberID(i int64) *MemberProfileCreate {
 func (mpc *MemberProfileCreate) SetNillableMemberID(i *int64) *MemberProfileCreate {
 	if i != nil {
 		mpc.SetMemberID(*i)
+	}
+	return mpc
+}
+
+// SetVenueID sets the "venue_id" field.
+func (mpc *MemberProfileCreate) SetVenueID(i int64) *MemberProfileCreate {
+	mpc.mutation.SetVenueID(i)
+	return mpc
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableVenueID(i *int64) *MemberProfileCreate {
+	if i != nil {
+		mpc.SetVenueID(*i)
+	}
+	return mpc
+}
+
+// SetCondition sets the "condition" field.
+func (mpc *MemberProfileCreate) SetCondition(i int64) *MemberProfileCreate {
+	mpc.mutation.SetCondition(i)
+	return mpc
+}
+
+// SetNillableCondition sets the "condition" field if the given value is not nil.
+func (mpc *MemberProfileCreate) SetNillableCondition(i *int64) *MemberProfileCreate {
+	if i != nil {
+		mpc.SetCondition(*i)
 	}
 	return mpc
 }
@@ -202,34 +272,6 @@ func (mpc *MemberProfileCreate) SetNillableWecom(s *string) *MemberProfileCreate
 	return mpc
 }
 
-// SetIntention sets the "intention" field.
-func (mpc *MemberProfileCreate) SetIntention(i int64) *MemberProfileCreate {
-	mpc.mutation.SetIntention(i)
-	return mpc
-}
-
-// SetNillableIntention sets the "intention" field if the given value is not nil.
-func (mpc *MemberProfileCreate) SetNillableIntention(i *int64) *MemberProfileCreate {
-	if i != nil {
-		mpc.SetIntention(*i)
-	}
-	return mpc
-}
-
-// SetSource sets the "source" field.
-func (mpc *MemberProfileCreate) SetSource(i int64) *MemberProfileCreate {
-	mpc.mutation.SetSource(i)
-	return mpc
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (mpc *MemberProfileCreate) SetNillableSource(i *int64) *MemberProfileCreate {
-	if i != nil {
-		mpc.SetSource(*i)
-	}
-	return mpc
-}
-
 // SetID sets the "id" field.
 func (mpc *MemberProfileCreate) SetID(i int64) *MemberProfileCreate {
 	mpc.mutation.SetID(i)
@@ -292,6 +334,18 @@ func (mpc *MemberProfileCreate) defaults() {
 		v := memberprofile.DefaultCreatedID
 		mpc.mutation.SetCreatedID(v)
 	}
+	if _, ok := mpc.mutation.Intention(); !ok {
+		v := memberprofile.DefaultIntention
+		mpc.mutation.SetIntention(v)
+	}
+	if _, ok := mpc.mutation.Source(); !ok {
+		v := memberprofile.DefaultSource
+		mpc.mutation.SetSource(v)
+	}
+	if _, ok := mpc.mutation.Condition(); !ok {
+		v := memberprofile.DefaultCondition
+		mpc.mutation.SetCondition(v)
+	}
 	if _, ok := mpc.mutation.MobileAscription(); !ok {
 		v := memberprofile.DefaultMobileAscription
 		mpc.mutation.SetMobileAscription(v)
@@ -303,14 +357,6 @@ func (mpc *MemberProfileCreate) defaults() {
 	if _, ok := mpc.mutation.Grade(); !ok {
 		v := memberprofile.DefaultGrade
 		mpc.mutation.SetGrade(v)
-	}
-	if _, ok := mpc.mutation.Intention(); !ok {
-		v := memberprofile.DefaultIntention
-		mpc.mutation.SetIntention(v)
-	}
-	if _, ok := mpc.mutation.Source(); !ok {
-		v := memberprofile.DefaultSource
-		mpc.mutation.SetSource(v)
 	}
 }
 
@@ -364,6 +410,26 @@ func (mpc *MemberProfileCreate) createSpec() (*MemberProfile, *sqlgraph.CreateSp
 		_spec.SetField(memberprofile.FieldCreatedID, field.TypeInt64, value)
 		_node.CreatedID = value
 	}
+	if value, ok := mpc.mutation.Intention(); ok {
+		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
+		_node.Intention = value
+	}
+	if value, ok := mpc.mutation.Source(); ok {
+		_spec.SetField(memberprofile.FieldSource, field.TypeInt64, value)
+		_node.Source = value
+	}
+	if value, ok := mpc.mutation.Name(); ok {
+		_spec.SetField(memberprofile.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
+	if value, ok := mpc.mutation.VenueID(); ok {
+		_spec.SetField(memberprofile.FieldVenueID, field.TypeInt64, value)
+		_node.VenueID = value
+	}
+	if value, ok := mpc.mutation.Condition(); ok {
+		_spec.SetField(memberprofile.FieldCondition, field.TypeInt64, value)
+		_node.Condition = value
+	}
 	if value, ok := mpc.mutation.MobileAscription(); ok {
 		_spec.SetField(memberprofile.FieldMobileAscription, field.TypeInt64, value)
 		_node.MobileAscription = value
@@ -395,14 +461,6 @@ func (mpc *MemberProfileCreate) createSpec() (*MemberProfile, *sqlgraph.CreateSp
 	if value, ok := mpc.mutation.Wecom(); ok {
 		_spec.SetField(memberprofile.FieldWecom, field.TypeString, value)
 		_node.Wecom = value
-	}
-	if value, ok := mpc.mutation.Intention(); ok {
-		_spec.SetField(memberprofile.FieldIntention, field.TypeInt64, value)
-		_node.Intention = value
-	}
-	if value, ok := mpc.mutation.Source(); ok {
-		_spec.SetField(memberprofile.FieldSource, field.TypeInt64, value)
-		_node.Source = value
 	}
 	if nodes := mpc.mutation.MemberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

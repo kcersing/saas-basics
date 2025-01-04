@@ -28,6 +28,8 @@ const (
 	FieldName = "name"
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
+	// FieldVenueID holds the string denoting the venue_id field in the database.
+	FieldVenueID = "venue_id"
 	// EdgeProducts holds the string denoting the products edge name in mutations.
 	EdgeProducts = "products"
 	// Table holds the table name of the contract in the database.
@@ -49,6 +51,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldName,
 	FieldContent,
+	FieldVenueID,
 }
 
 var (
@@ -123,6 +126,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByContent orders the results by the content field.
 func ByContent(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContent, opts...).ToFunc()
+}
+
+// ByVenueID orders the results by the venue_id field.
+func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
 }
 
 // ByProductsCount orders the results by products count.

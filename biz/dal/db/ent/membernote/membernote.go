@@ -26,6 +26,8 @@ const (
 	FieldStatus = "status"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
+	// FieldVenueID holds the string denoting the venue_id field in the database.
+	FieldVenueID = "venue_id"
 	// FieldNote holds the string denoting the note field in the database.
 	FieldNote = "note"
 	// EdgeNotes holds the string denoting the notes edge name in mutations.
@@ -50,6 +52,7 @@ var Columns = []string{
 	FieldCreatedID,
 	FieldStatus,
 	FieldMemberID,
+	FieldVenueID,
 	FieldNote,
 }
 
@@ -116,6 +119,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByMemberID orders the results by the member_id field.
 func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
+}
+
+// ByVenueID orders the results by the venue_id field.
+func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
 }
 
 // ByNote orders the results by the note field.

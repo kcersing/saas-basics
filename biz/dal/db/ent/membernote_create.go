@@ -104,6 +104,20 @@ func (mnc *MemberNoteCreate) SetNillableMemberID(i *int64) *MemberNoteCreate {
 	return mnc
 }
 
+// SetVenueID sets the "venue_id" field.
+func (mnc *MemberNoteCreate) SetVenueID(i int64) *MemberNoteCreate {
+	mnc.mutation.SetVenueID(i)
+	return mnc
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (mnc *MemberNoteCreate) SetNillableVenueID(i *int64) *MemberNoteCreate {
+	if i != nil {
+		mnc.SetVenueID(*i)
+	}
+	return mnc
+}
+
 // SetNote sets the "note" field.
 func (mnc *MemberNoteCreate) SetNote(s string) *MemberNoteCreate {
 	mnc.mutation.SetNote(s)
@@ -257,6 +271,10 @@ func (mnc *MemberNoteCreate) createSpec() (*MemberNote, *sqlgraph.CreateSpec) {
 	if value, ok := mnc.mutation.Status(); ok {
 		_spec.SetField(membernote.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
+	}
+	if value, ok := mnc.mutation.VenueID(); ok {
+		_spec.SetField(membernote.FieldVenueID, field.TypeInt64, value)
+		_node.VenueID = value
 	}
 	if value, ok := mnc.mutation.Note(); ok {
 		_spec.SetField(membernote.FieldNote, field.TypeString, value)

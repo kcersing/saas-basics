@@ -189,6 +189,33 @@ func (uu *UserUpdate) ClearGender() *UserUpdate {
 	return uu
 }
 
+// SetVenueID sets the "venue_id" field.
+func (uu *UserUpdate) SetVenueID(i int64) *UserUpdate {
+	uu.mutation.ResetVenueID()
+	uu.mutation.SetVenueID(i)
+	return uu
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableVenueID(i *int64) *UserUpdate {
+	if i != nil {
+		uu.SetVenueID(*i)
+	}
+	return uu
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (uu *UserUpdate) AddVenueID(i int64) *UserUpdate {
+	uu.mutation.AddVenueID(i)
+	return uu
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (uu *UserUpdate) ClearVenueID() *UserUpdate {
+	uu.mutation.ClearVenueID()
+	return uu
+}
+
 // SetUsername sets the "username" field.
 func (uu *UserUpdate) SetUsername(s string) *UserUpdate {
 	uu.mutation.SetUsername(s)
@@ -696,6 +723,15 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.GenderCleared() {
 		_spec.ClearField(user.FieldGender, field.TypeInt64)
+	}
+	if value, ok := uu.mutation.VenueID(); ok {
+		_spec.SetField(user.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := uu.mutation.AddedVenueID(); ok {
+		_spec.AddField(user.FieldVenueID, field.TypeInt64, value)
+	}
+	if uu.mutation.VenueIDCleared() {
+		_spec.ClearField(user.FieldVenueID, field.TypeInt64)
 	}
 	if value, ok := uu.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
@@ -1215,6 +1251,33 @@ func (uuo *UserUpdateOne) AddGender(i int64) *UserUpdateOne {
 // ClearGender clears the value of the "gender" field.
 func (uuo *UserUpdateOne) ClearGender() *UserUpdateOne {
 	uuo.mutation.ClearGender()
+	return uuo
+}
+
+// SetVenueID sets the "venue_id" field.
+func (uuo *UserUpdateOne) SetVenueID(i int64) *UserUpdateOne {
+	uuo.mutation.ResetVenueID()
+	uuo.mutation.SetVenueID(i)
+	return uuo
+}
+
+// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableVenueID(i *int64) *UserUpdateOne {
+	if i != nil {
+		uuo.SetVenueID(*i)
+	}
+	return uuo
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (uuo *UserUpdateOne) AddVenueID(i int64) *UserUpdateOne {
+	uuo.mutation.AddVenueID(i)
+	return uuo
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (uuo *UserUpdateOne) ClearVenueID() *UserUpdateOne {
+	uuo.mutation.ClearVenueID()
 	return uuo
 }
 
@@ -1755,6 +1818,15 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.GenderCleared() {
 		_spec.ClearField(user.FieldGender, field.TypeInt64)
+	}
+	if value, ok := uuo.mutation.VenueID(); ok {
+		_spec.SetField(user.FieldVenueID, field.TypeInt64, value)
+	}
+	if value, ok := uuo.mutation.AddedVenueID(); ok {
+		_spec.AddField(user.FieldVenueID, field.TypeInt64, value)
+	}
+	if uuo.mutation.VenueIDCleared() {
+		_spec.ClearField(user.FieldVenueID, field.TypeInt64)
 	}
 	if value, ok := uuo.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
