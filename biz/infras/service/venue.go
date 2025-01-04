@@ -5,18 +5,17 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
+	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
+	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/predicate"
+	venue2 "saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/base"
 	"saas/idl_gen/model/venue"
-
-	"saas/biz/dal/cache"
-	"saas/biz/dal/db/ent"
-	venue2 "saas/biz/dal/db/ent/venue"
 	"strconv"
 	"time"
 )
@@ -27,6 +26,11 @@ type Venue struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+}
+
+func (v Venue) VenueDel(id int64) (err error) {
+	_, err = v.db.Venue.Update().Where(venue2.IDEQ(id)).SetDelete(1).Save(v.ctx)
+	return err
 }
 
 func NewVenue(ctx context.Context, c *app.RequestContext) do.Venue {

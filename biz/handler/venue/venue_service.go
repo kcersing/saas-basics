@@ -263,3 +263,45 @@ func VenueInfo(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, info, 0, "")
 	return
 }
+
+// DeleteVenue .
+//
+// @Summary 删除场馆 Summary
+// @Description 删除场馆 Description
+// @Param request body base.IDReq true "query params"
+// @Success 200 {object} utils.Response
+// @router /service/venue/delete [POST]
+func DeleteVenue(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// DeletePlace .
+//
+// @Summary 删除场地 Summary
+// @Description 删除场地 Description
+// @Param request body base.IDReq true "query params"
+// @Success 200 {object} utils.Response
+// @router /service/user/place/delete [POST]
+func DeletePlace(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

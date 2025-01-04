@@ -88,4 +88,10 @@ service VenueService {
     base.NilResponse VenueList(1: VenueListReq req) (api.post = "/service/venue/list")
     /**场馆詳情*/
     base.NilResponse VenueInfo(1: base.IDReq  req) (api.post = "/service/venue/info")
+
+    /**删除场馆信息*/
+    base.NilResponse DeleteVenue(1: base.IDReq req) (api.post = "/service/venue/delete")
+
+    /**删除场地信息*/
+    base.NilResponse DeletePlace(1: base.IDReq req) (api.post = "/service/user/place/delete")
 }

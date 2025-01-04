@@ -28,8 +28,16 @@ func Register(r *server.Hertz) {
 			_place.POST("/update", append(_updatevenueplaceMw(), venue.UpdateVenuePlace)...)
 		}
 		{
+			_user := _service.Group("/user", _userMw()...)
+			{
+				_place0 := _user.Group("/place", _place0Mw()...)
+				_place0.POST("/delete", append(_deleteplaceMw(), venue.DeletePlace)...)
+			}
+		}
+		{
 			_venue := _service.Group("/venue", _venueMw()...)
 			_venue.POST("/create", append(_createvenueMw(), venue.CreateVenue)...)
+			_venue.POST("/delete", append(_deletevenueMw(), venue.DeleteVenue)...)
 			_venue.POST("/info", append(_venueinfoMw(), venue.VenueInfo)...)
 			_venue.POST("/list", append(_venuelistMw(), venue.VenueList)...)
 			_venue.POST("/status", append(_updatevenuestatusMw(), venue.UpdateVenueStatus)...)

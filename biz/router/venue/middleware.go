@@ -80,3 +80,23 @@ func _venueinfoMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _userMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _place0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deleteplaceMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deletevenueMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

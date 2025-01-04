@@ -56,12 +56,12 @@ struct Tree {
 }
 
 struct ListReq {
-    1: optional string name (api.raw = "name")
-    2: optional i64 dictionaryId (api.raw = "dictionaryId" )
-    3: optional string type (api.raw = "type" )
-    4: optional string mobile (api.raw = "mobile" )
-    5: optional i64 product (api.raw = "product" )
-    6: optional i64 venue (api.raw = "venue" )
+    1: optional string name="" (api.raw = "name")
+    2: optional i64 dictionaryId=0 (api.raw = "dictionaryId" )
+    3: optional string type="" (api.raw = "type" )
+    4: optional string mobile="" (api.raw = "mobile" )
+    6: optional i64 venueId=0 (api.raw = "venueId" )
+    7: optional i64 subType=0 (api.raw = "subType" )
 }
 struct SysList  {
     i64	id

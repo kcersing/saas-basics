@@ -15,4 +15,7 @@ type Venue interface {
 
 	VenueInfo(id int64) (info *venue.VenueInfo, err error)
 	PlaceInfo(id int64) (info *venue.VenuePlaceInfo, err error)
+
+	VenueDel(id int64) (err error)
+	PlaceDel(id int64) (err error)
 }

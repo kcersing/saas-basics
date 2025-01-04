@@ -116,6 +116,19 @@ definitions:
       name:
         type: string
     type: object
+  base.ListReq:
+    properties:
+      dictionaryId:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      venueId:
+        type: integer
+    type: object
   base.PageInfoReq:
     properties:
       page:
@@ -1255,7 +1268,9 @@ definitions:
       seat:
         description: '*关联座位'
         items:
-          $ref: '#/definitions/base.Seat'
+          items:
+            $ref: '#/definitions/base.Seat'
+          type: array
         type: array
       status:
         type: integer
@@ -1298,6 +1313,96 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 上传文件 Summary
+  /api/sys/contract/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 合同列表
+  /api/sys/member/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员列表
+  /api/sys/place/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场地列表
+  /api/sys/product/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 产品列表
+  /api/sys/role/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 角色列表
+  /api/sys/venue/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场馆列表
   /ping:
     get:
       description: ping Description
@@ -3472,6 +3577,21 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 场馆短信发送记录 Summary
+  /service/sys/staff/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 员工列表
   /service/token:
     post:
       description: 删除token Description
@@ -3597,6 +3717,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 获取员工列表 Summary
+  /service/user/place/delete:
+    post:
+      description: 删除场地 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除场地 Summary
   /service/user/set-role:
     post:
       description: 设置用户角色
@@ -3661,6 +3797,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 创建场馆 Summary
+  /service/venue/delete:
+    post:
+      description: 删除场馆 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 删除场馆 Summary
   /service/venue/info:
     post:
       description: 场馆信息 Description

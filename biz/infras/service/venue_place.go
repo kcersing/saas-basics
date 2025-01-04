@@ -62,6 +62,10 @@ func (v Venue) UpdatePlace(req *venue.VenuePlaceInfo) error {
 
 	return nil
 }
+func (v Venue) PlaceDel(id int64) (err error) {
+	_, err = v.db.VenuePlace.Update().Where(venueplace.IDEQ(id)).SetDelete(1).Save(v.ctx)
+	return err
+}
 
 func (v Venue) PlaceList(req *venue.VenuePlaceListReq) (list []*venue.VenuePlaceInfo, total int, err error) {
 	var predicates []predicate.VenuePlace
@@ -71,6 +75,9 @@ func (v Venue) PlaceList(req *venue.VenuePlaceListReq) (list []*venue.VenuePlace
 	}
 	if req.Status > 0 {
 		predicates = append(predicates, venueplace.StatusEQ(req.Status))
+	}
+	if req.Type > 0 {
+		predicates = append(predicates, venueplace.TypeEQ(req.Type))
 	}
 	predicates = append(predicates, venueplace.Delete(0))
 	l, err := v.db.VenuePlace.Query().Where(predicates...).
