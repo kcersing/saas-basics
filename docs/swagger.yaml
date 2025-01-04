@@ -124,6 +124,8 @@ definitions:
         type: string
       name:
         type: string
+      subType:
+        type: integer
       type:
         type: string
       venueId:
@@ -1313,96 +1315,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 上传文件 Summary
-  /api/sys/contract/list:
-    post:
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.ListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 合同列表
-  /api/sys/member/list:
-    post:
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.ListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员列表
-  /api/sys/place/list:
-    post:
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.ListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 场地列表
-  /api/sys/product/list:
-    post:
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.ListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 产品列表
-  /api/sys/role/list:
-    post:
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.ListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 角色列表
-  /api/sys/venue/list:
-    post:
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.ListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 场馆列表
   /ping:
     get:
       description: ping Description
@@ -3577,6 +3489,81 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 场馆短信发送记录 Summary
+  /service/sys/contract/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 合同列表
+  /service/sys/member/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员列表
+  /service/sys/place/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场地列表
+  /service/sys/product/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 产品列表
+  /service/sys/role/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 角色列表
   /service/sys/staff/list:
     post:
       parameters:
@@ -3592,6 +3579,21 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 员工列表
+  /service/sys/venue/list:
+    post:
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.ListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场馆列表
   /service/token:
     post:
       description: 删除token Description

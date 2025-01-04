@@ -19,7 +19,7 @@ import (
 //	@Param			request	body		base.ListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /api/sys/product/list [POST]
+// @router /service/sys/product/list [POST]
 func ProductList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.ListReq
@@ -45,7 +45,7 @@ func ProductList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.ListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /api/sys/venue/list [POST]
+// @router /service/sys/venue/list [POST]
 func VenueList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.ListReq
@@ -71,7 +71,7 @@ func VenueList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.ListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /api/sys/member/list [POST]
+// @router /service/sys/member/list [POST]
 func MemberList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.ListReq
@@ -97,7 +97,7 @@ func MemberList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.ListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /api/sys/contract/list [POST]
+// @router /service/sys/contract/list [POST]
 func ContractList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.ListReq
@@ -149,7 +149,7 @@ func StaffList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.ListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /api/sys/place/list [POST]
+// @router /service/sys/place/list [POST]
 func PlaceList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.ListReq
@@ -175,7 +175,7 @@ func PlaceList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.ListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /api/sys/role/list [POST]
+// @router /service/sys/role/list [POST]
 func RoleList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.ListReq

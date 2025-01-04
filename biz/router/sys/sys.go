@@ -18,9 +18,9 @@ func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
 	{
-		_api := root.Group("/api", _apiMw()...)
+		_service := root.Group("/service", _serviceMw()...)
 		{
-			_sys := _api.Group("/sys", _sysMw()...)
+			_sys := _service.Group("/sys", _sysMw()...)
 			{
 				_contract := _sys.Group("/contract", _contractMw()...)
 				_contract.POST("/list", append(_contractlistMw(), sys.ContractList)...)
@@ -42,18 +42,12 @@ func Register(r *server.Hertz) {
 				_role.POST("/list", append(_rolelistMw(), sys.RoleList)...)
 			}
 			{
+				_staff := _sys.Group("/staff", _staffMw()...)
+				_staff.POST("/list", append(_stafflistMw(), sys.StaffList)...)
+			}
+			{
 				_venue := _sys.Group("/venue", _venueMw()...)
 				_venue.POST("/list", append(_venuelistMw(), sys.VenueList)...)
-			}
-		}
-	}
-	{
-		_service := root.Group("/service", _serviceMw()...)
-		{
-			_sys0 := _service.Group("/sys", _sys0Mw()...)
-			{
-				_staff := _sys0.Group("/staff", _staffMw()...)
-				_staff.POST("/list", append(_stafflistMw(), sys.StaffList)...)
 			}
 		}
 	}
