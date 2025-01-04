@@ -118,8 +118,6 @@ definitions:
     type: object
   base.ListReq:
     properties:
-      dictionaryId:
-        type: integer
       mobile:
         type: string
       name:
@@ -127,6 +125,7 @@ definitions:
       subType:
         type: integer
       type:
+        description: '2: optional i64 dictionaryId=0 (api.raw = "dictionaryId" )'
         type: string
       venueId:
         type: integer

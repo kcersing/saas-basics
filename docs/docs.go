@@ -4236,9 +4236,6 @@ const docTemplate = `{
         "base.ListReq": {
             "type": "object",
             "properties": {
-                "dictionaryId": {
-                    "type": "integer"
-                },
                 "mobile": {
                     "type": "string"
                 },
@@ -4249,6 +4246,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type": {
+                    "description": "2: optional i64 dictionaryId=0 (api.raw = \"dictionaryId\" )",
                     "type": "string"
                 },
                 "venueId": {

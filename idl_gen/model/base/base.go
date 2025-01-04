@@ -1855,29 +1855,27 @@ func (p *Tree) String() string {
 }
 
 type ListReq struct {
-	Name         string `thrift:"name,1,optional" form:"name" json:"name" query:"name"`
-	DictionaryId int64  `thrift:"dictionaryId,2,optional" form:"dictionaryId" json:"dictionaryId" query:"dictionaryId"`
-	Type         string `thrift:"type,3,optional" form:"type" json:"type" query:"type"`
-	Mobile       string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
-	VenueId      int64  `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
-	SubType      int64  `thrift:"subType,7,optional" form:"subType" json:"subType" query:"subType"`
+	Name string `thrift:"name,1,optional" form:"name" json:"name" query:"name"`
+	//    2: optional i64 dictionaryId=0 (api.raw = "dictionaryId" )
+	Type    string `thrift:"type,3,optional" form:"type" json:"type" query:"type"`
+	Mobile  string `thrift:"mobile,4,optional" form:"mobile" json:"mobile" query:"mobile"`
+	VenueId int64  `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
+	SubType int64  `thrift:"subType,7,optional" form:"subType" json:"subType" query:"subType"`
 }
 
 func NewListReq() *ListReq {
 	return &ListReq{
 
-		Name:         "",
-		DictionaryId: 0,
-		Type:         "",
-		Mobile:       "",
-		VenueId:      0,
-		SubType:      0,
+		Name:    "",
+		Type:    "",
+		Mobile:  "",
+		VenueId: 0,
+		SubType: 0,
 	}
 }
 
 func (p *ListReq) InitDefault() {
 	p.Name = ""
-	p.DictionaryId = 0
 	p.Type = ""
 	p.Mobile = ""
 	p.VenueId = 0
@@ -1891,15 +1889,6 @@ func (p *ListReq) GetName() (v string) {
 		return ListReq_Name_DEFAULT
 	}
 	return p.Name
-}
-
-var ListReq_DictionaryId_DEFAULT int64 = 0
-
-func (p *ListReq) GetDictionaryId() (v int64) {
-	if !p.IsSetDictionaryId() {
-		return ListReq_DictionaryId_DEFAULT
-	}
-	return p.DictionaryId
 }
 
 var ListReq_Type_DEFAULT string = ""
@@ -1940,7 +1929,6 @@ func (p *ListReq) GetSubType() (v int64) {
 
 var fieldIDToName_ListReq = map[int16]string{
 	1: "name",
-	2: "dictionaryId",
 	3: "type",
 	4: "mobile",
 	6: "venueId",
@@ -1949,10 +1937,6 @@ var fieldIDToName_ListReq = map[int16]string{
 
 func (p *ListReq) IsSetName() bool {
 	return p.Name != ListReq_Name_DEFAULT
-}
-
-func (p *ListReq) IsSetDictionaryId() bool {
-	return p.DictionaryId != ListReq_DictionaryId_DEFAULT
 }
 
 func (p *ListReq) IsSetType() bool {
@@ -1993,14 +1977,6 @@ func (p *ListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 1:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 2:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2078,17 +2054,6 @@ func (p *ListReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *ListReq) ReadField2(iprot thrift.TProtocol) error {
-
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.DictionaryId = _field
-	return nil
-}
 func (p *ListReq) ReadField3(iprot thrift.TProtocol) error {
 
 	var _field string
@@ -2144,10 +2109,6 @@ func (p *ListReq) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 1
 			goto WriteFieldError
 		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
 			goto WriteFieldError
@@ -2199,25 +2160,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *ListReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetDictionaryId() {
-		if err = oprot.WriteFieldBegin("dictionaryId", thrift.I64, 2); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(p.DictionaryId); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *ListReq) writeField3(oprot thrift.TProtocol) (err error) {
