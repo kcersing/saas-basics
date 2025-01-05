@@ -1,11 +1,13 @@
 package do
 
-import "saas/biz/dal/db/ent"
+import (
+	"saas/biz/dal/db/ent"
+)
 
 type MemberProduct interface {
 	CreateMemberProduct(req CreateMemberProductReq) error
 	//UpdateMemberProduct(req member.CreateOrUpdateMemberReq) error
-	//MemberProductInfo(id int64) (info *member.MemberInfo, err error)
+	//MemberProductInfo(id int64) (info *mem, err error)
 	//MemberProductList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error)
 }
 

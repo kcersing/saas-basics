@@ -1,4 +1,4 @@
-namespace go memberProduct
+namespace go member_product
 
 include "../base/base.thrift"
 

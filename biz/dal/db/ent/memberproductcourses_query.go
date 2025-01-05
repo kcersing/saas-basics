@@ -18,12 +18,12 @@ import (
 // MemberProductCoursesQuery is the builder for querying MemberProductCourses entities.
 type MemberProductCoursesQuery struct {
 	config
-	ctx                *QueryContext
-	order              []memberproductcourses.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.MemberProductCourses
-	withProductCourses *MemberProductQuery
-	withProductLessons *MemberProductQuery
+	ctx        *QueryContext
+	order      []memberproductcourses.OrderOption
+	inters     []Interceptor
+	predicates []predicate.MemberProductCourses
+	withNodeC  *MemberProductQuery
+	withNodeL  *MemberProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -60,8 +60,8 @@ func (mpcq *MemberProductCoursesQuery) Order(o ...memberproductcourses.OrderOpti
 	return mpcq
 }
 
-// QueryProductCourses chains the current query on the "productCourses" edge.
-func (mpcq *MemberProductCoursesQuery) QueryProductCourses() *MemberProductQuery {
+// QueryNodeC chains the current query on the "nodeC" edge.
+func (mpcq *MemberProductCoursesQuery) QueryNodeC() *MemberProductQuery {
 	query := (&MemberProductClient{config: mpcq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mpcq.prepareQuery(ctx); err != nil {
@@ -74,7 +74,7 @@ func (mpcq *MemberProductCoursesQuery) QueryProductCourses() *MemberProductQuery
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberproductcourses.Table, memberproductcourses.FieldID, selector),
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.ProductCoursesTable, memberproductcourses.ProductCoursesColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.NodeCTable, memberproductcourses.NodeCColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mpcq.driver.Dialect(), step)
 		return fromU, nil
@@ -82,8 +82,8 @@ func (mpcq *MemberProductCoursesQuery) QueryProductCourses() *MemberProductQuery
 	return query
 }
 
-// QueryProductLessons chains the current query on the "productLessons" edge.
-func (mpcq *MemberProductCoursesQuery) QueryProductLessons() *MemberProductQuery {
+// QueryNodeL chains the current query on the "nodeL" edge.
+func (mpcq *MemberProductCoursesQuery) QueryNodeL() *MemberProductQuery {
 	query := (&MemberProductClient{config: mpcq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mpcq.prepareQuery(ctx); err != nil {
@@ -96,7 +96,7 @@ func (mpcq *MemberProductCoursesQuery) QueryProductLessons() *MemberProductQuery
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberproductcourses.Table, memberproductcourses.FieldID, selector),
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.ProductLessonsTable, memberproductcourses.ProductLessonsColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.NodeLTable, memberproductcourses.NodeLColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mpcq.driver.Dialect(), step)
 		return fromU, nil
@@ -291,38 +291,38 @@ func (mpcq *MemberProductCoursesQuery) Clone() *MemberProductCoursesQuery {
 		return nil
 	}
 	return &MemberProductCoursesQuery{
-		config:             mpcq.config,
-		ctx:                mpcq.ctx.Clone(),
-		order:              append([]memberproductcourses.OrderOption{}, mpcq.order...),
-		inters:             append([]Interceptor{}, mpcq.inters...),
-		predicates:         append([]predicate.MemberProductCourses{}, mpcq.predicates...),
-		withProductCourses: mpcq.withProductCourses.Clone(),
-		withProductLessons: mpcq.withProductLessons.Clone(),
+		config:     mpcq.config,
+		ctx:        mpcq.ctx.Clone(),
+		order:      append([]memberproductcourses.OrderOption{}, mpcq.order...),
+		inters:     append([]Interceptor{}, mpcq.inters...),
+		predicates: append([]predicate.MemberProductCourses{}, mpcq.predicates...),
+		withNodeC:  mpcq.withNodeC.Clone(),
+		withNodeL:  mpcq.withNodeL.Clone(),
 		// clone intermediate query.
 		sql:  mpcq.sql.Clone(),
 		path: mpcq.path,
 	}
 }
 
-// WithProductCourses tells the query-builder to eager-load the nodes that are connected to
-// the "productCourses" edge. The optional arguments are used to configure the query builder of the edge.
-func (mpcq *MemberProductCoursesQuery) WithProductCourses(opts ...func(*MemberProductQuery)) *MemberProductCoursesQuery {
+// WithNodeC tells the query-builder to eager-load the nodes that are connected to
+// the "nodeC" edge. The optional arguments are used to configure the query builder of the edge.
+func (mpcq *MemberProductCoursesQuery) WithNodeC(opts ...func(*MemberProductQuery)) *MemberProductCoursesQuery {
 	query := (&MemberProductClient{config: mpcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mpcq.withProductCourses = query
+	mpcq.withNodeC = query
 	return mpcq
 }
 
-// WithProductLessons tells the query-builder to eager-load the nodes that are connected to
-// the "productLessons" edge. The optional arguments are used to configure the query builder of the edge.
-func (mpcq *MemberProductCoursesQuery) WithProductLessons(opts ...func(*MemberProductQuery)) *MemberProductCoursesQuery {
+// WithNodeL tells the query-builder to eager-load the nodes that are connected to
+// the "nodeL" edge. The optional arguments are used to configure the query builder of the edge.
+func (mpcq *MemberProductCoursesQuery) WithNodeL(opts ...func(*MemberProductQuery)) *MemberProductCoursesQuery {
 	query := (&MemberProductClient{config: mpcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mpcq.withProductLessons = query
+	mpcq.withNodeL = query
 	return mpcq
 }
 
@@ -405,8 +405,8 @@ func (mpcq *MemberProductCoursesQuery) sqlAll(ctx context.Context, hooks ...quer
 		nodes       = []*MemberProductCourses{}
 		_spec       = mpcq.querySpec()
 		loadedTypes = [2]bool{
-			mpcq.withProductCourses != nil,
-			mpcq.withProductLessons != nil,
+			mpcq.withNodeC != nil,
+			mpcq.withNodeL != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -427,22 +427,22 @@ func (mpcq *MemberProductCoursesQuery) sqlAll(ctx context.Context, hooks ...quer
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := mpcq.withProductCourses; query != nil {
-		if err := mpcq.loadProductCourses(ctx, query, nodes, nil,
-			func(n *MemberProductCourses, e *MemberProduct) { n.Edges.ProductCourses = e }); err != nil {
+	if query := mpcq.withNodeC; query != nil {
+		if err := mpcq.loadNodeC(ctx, query, nodes, nil,
+			func(n *MemberProductCourses, e *MemberProduct) { n.Edges.NodeC = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := mpcq.withProductLessons; query != nil {
-		if err := mpcq.loadProductLessons(ctx, query, nodes, nil,
-			func(n *MemberProductCourses, e *MemberProduct) { n.Edges.ProductLessons = e }); err != nil {
+	if query := mpcq.withNodeL; query != nil {
+		if err := mpcq.loadNodeL(ctx, query, nodes, nil,
+			func(n *MemberProductCourses, e *MemberProduct) { n.Edges.NodeL = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (mpcq *MemberProductCoursesQuery) loadProductCourses(ctx context.Context, query *MemberProductQuery, nodes []*MemberProductCourses, init func(*MemberProductCourses), assign func(*MemberProductCourses, *MemberProduct)) error {
+func (mpcq *MemberProductCoursesQuery) loadNodeC(ctx context.Context, query *MemberProductQuery, nodes []*MemberProductCourses, init func(*MemberProductCourses), assign func(*MemberProductCourses, *MemberProduct)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*MemberProductCourses)
 	for i := range nodes {
@@ -471,7 +471,7 @@ func (mpcq *MemberProductCoursesQuery) loadProductCourses(ctx context.Context, q
 	}
 	return nil
 }
-func (mpcq *MemberProductCoursesQuery) loadProductLessons(ctx context.Context, query *MemberProductQuery, nodes []*MemberProductCourses, init func(*MemberProductCourses), assign func(*MemberProductCourses, *MemberProduct)) error {
+func (mpcq *MemberProductCoursesQuery) loadNodeL(ctx context.Context, query *MemberProductQuery, nodes []*MemberProductCourses, init func(*MemberProductCourses), assign func(*MemberProductCourses, *MemberProduct)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*MemberProductCourses)
 	for i := range nodes {
@@ -526,10 +526,10 @@ func (mpcq *MemberProductCoursesQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if mpcq.withProductCourses != nil {
+		if mpcq.withNodeC != nil {
 			_spec.Node.AddColumnOnce(memberproductcourses.FieldMemberProductID)
 		}
-		if mpcq.withProductLessons != nil {
+		if mpcq.withNodeL != nil {
 			_spec.Node.AddColumnOnce(memberproductcourses.FieldMemberProductID)
 		}
 	}

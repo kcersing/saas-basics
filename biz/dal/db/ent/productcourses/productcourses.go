@@ -34,26 +34,26 @@ const (
 	FieldProductID = "product_id"
 	// FieldCoursesID holds the string denoting the courses_id field in the database.
 	FieldCoursesID = "courses_id"
-	// EdgeProductCourses holds the string denoting the productcourses edge name in mutations.
-	EdgeProductCourses = "productCourses"
-	// EdgeProductLessons holds the string denoting the productlessons edge name in mutations.
-	EdgeProductLessons = "productLessons"
+	// EdgeNodeC holds the string denoting the nodec edge name in mutations.
+	EdgeNodeC = "nodeC"
+	// EdgeNodeL holds the string denoting the nodel edge name in mutations.
+	EdgeNodeL = "nodeL"
 	// Table holds the table name of the productcourses in the database.
 	Table = "product_courses"
-	// ProductCoursesTable is the table that holds the productCourses relation/edge.
-	ProductCoursesTable = "product_courses"
-	// ProductCoursesInverseTable is the table name for the Product entity.
+	// NodeCTable is the table that holds the nodeC relation/edge.
+	NodeCTable = "product_courses"
+	// NodeCInverseTable is the table name for the Product entity.
 	// It exists in this package in order to avoid circular dependency with the "product" package.
-	ProductCoursesInverseTable = "product"
-	// ProductCoursesColumn is the table column denoting the productCourses relation/edge.
-	ProductCoursesColumn = "product_id"
-	// ProductLessonsTable is the table that holds the productLessons relation/edge.
-	ProductLessonsTable = "product_courses"
-	// ProductLessonsInverseTable is the table name for the Product entity.
+	NodeCInverseTable = "product"
+	// NodeCColumn is the table column denoting the nodeC relation/edge.
+	NodeCColumn = "product_id"
+	// NodeLTable is the table that holds the nodeL relation/edge.
+	NodeLTable = "product_courses"
+	// NodeLInverseTable is the table name for the Product entity.
 	// It exists in this package in order to avoid circular dependency with the "product" package.
-	ProductLessonsInverseTable = "product"
-	// ProductLessonsColumn is the table column denoting the productLessons relation/edge.
-	ProductLessonsColumn = "product_id"
+	NodeLInverseTable = "product"
+	// NodeLColumn is the table column denoting the nodeL relation/edge.
+	NodeLColumn = "product_id"
 )
 
 // Columns holds all SQL columns for productcourses fields.
@@ -164,30 +164,30 @@ func ByCoursesID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCoursesID, opts...).ToFunc()
 }
 
-// ByProductCoursesField orders the results by productCourses field.
-func ByProductCoursesField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByNodeCField orders the results by nodeC field.
+func ByNodeCField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProductCoursesStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newNodeCStep(), sql.OrderByField(field, opts...))
 	}
 }
 
-// ByProductLessonsField orders the results by productLessons field.
-func ByProductLessonsField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByNodeLField orders the results by nodeL field.
+func ByNodeLField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProductLessonsStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newNodeLStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newProductCoursesStep() *sqlgraph.Step {
+func newNodeCStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProductCoursesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, ProductCoursesTable, ProductCoursesColumn),
+		sqlgraph.To(NodeCInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, NodeCTable, NodeCColumn),
 	)
 }
-func newProductLessonsStep() *sqlgraph.Step {
+func newNodeLStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProductLessonsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, ProductLessonsTable, ProductLessonsColumn),
+		sqlgraph.To(NodeLInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, NodeLTable, NodeLColumn),
 	)
 }

@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/contract"
 	"saas/biz/dal/db/ent/member"
+	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	user2 "saas/biz/dal/db/ent/user"
@@ -18,6 +19,7 @@ import (
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/base"
+	"saas/idl_gen/model/sys"
 )
 
 type Sys struct {
@@ -38,7 +40,7 @@ func (s Sys) RoleList(req base.ListReq) (list []do.SysList, total int64, err err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
-			ID:   v.ID,
+			Id:   v.ID,
 			Name: v.Remark,
 		})
 	}
@@ -62,7 +64,7 @@ func (s Sys) PlaceList(req base.ListReq) (list []do.SysList, total int64, err er
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
-			ID:   v.ID,
+			Id:   v.ID,
 			Name: v.Name,
 		})
 	}
@@ -71,7 +73,7 @@ func (s Sys) PlaceList(req base.ListReq) (list []do.SysList, total int64, err er
 	return
 }
 
-func (s Sys) ProductList(req base.ListReq) (list []do.SysList, total int64, err error) {
+func (s Sys) ProductList(req sys.SysProductListReq) (list []do.SysProductList, total int64, err error) {
 	var predicates []predicate.Product
 
 	if req.Name != "" {
@@ -90,9 +92,10 @@ func (s Sys) ProductList(req base.ListReq) (list []do.SysList, total int64, err 
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
-			Name: v.Name,
+		list = append(list, do.SysProductList{
+			Id:     v.ID,
+			Name:   v.Name,
+			Length: v.Length,
 		})
 	}
 	total = int64(len(list))
@@ -116,7 +119,7 @@ func (s Sys) VenueList(req base.ListReq) (list []do.SysList, total int64, err er
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
-			ID:   v.ID,
+			Id:   v.ID,
 			Name: v.Name,
 		})
 	}
@@ -129,27 +132,31 @@ func (s Sys) MemberList(req base.ListReq) (list []do.SysList, total int64, err e
 	var predicates []predicate.Member
 
 	if req.Name != "" {
-		predicates = append(predicates, member.Name(req.Name))
+		predicates = append(predicates, member.HasMemberProfileWith(memberprofile.Name(req.Name)))
 	}
 	if req.Mobile != "" {
 		predicates = append(predicates, member.Mobile(req.Mobile))
 	}
 
-	//if req.VenueId > 0 {
-	//	predicates = append(predicates, member.VenueID(req.VenueId))
-	//}
-	lists, err := s.db.Debug().Member.Query().Where(predicates...).All(s.ctx)
+	if req.VenueId > 0 {
+		predicates = append(predicates, member.HasMemberProfileWith(memberprofile.VenueID(req.VenueId)))
+	}
+	lists, err := s.db.Member.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
 		return nil, 0, err
 	}
 	for _, v := range lists {
-		list = append(list, do.SysList{
-			ID:   v.ID,
-			Name: v.Name,
-			Key:  v.Mobile,
-		})
+		pro, _ := v.QueryMemberProfile().First(s.ctx)
+		if pro != nil {
+			list = append(list, do.SysList{
+				Id:   v.ID,
+				Name: pro.Name,
+				Key:  v.Mobile,
+			})
+		}
+
 	}
 	total = int64(len(list))
 	return
@@ -172,7 +179,7 @@ func (s Sys) ContractList(req base.ListReq) (list []do.SysList, total int64, err
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
-			ID:   v.ID,
+			Id:   v.ID,
 			Name: v.Name,
 		})
 	}
@@ -195,7 +202,7 @@ func (s Sys) StaffList(req base.ListReq) (list []do.SysList, total int64, err er
 	}
 	for _, v := range lists {
 		list = append(list, do.SysList{
-			ID:   v.ID,
+			Id:   v.ID,
 			Name: v.Name,
 		})
 	}

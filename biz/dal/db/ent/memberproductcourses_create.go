@@ -166,42 +166,42 @@ func (mpcc *MemberProductCoursesCreate) SetID(i int64) *MemberProductCoursesCrea
 	return mpcc
 }
 
-// SetProductCoursesID sets the "productCourses" edge to the MemberProduct entity by ID.
-func (mpcc *MemberProductCoursesCreate) SetProductCoursesID(id int64) *MemberProductCoursesCreate {
-	mpcc.mutation.SetProductCoursesID(id)
+// SetNodeCID sets the "nodeC" edge to the MemberProduct entity by ID.
+func (mpcc *MemberProductCoursesCreate) SetNodeCID(id int64) *MemberProductCoursesCreate {
+	mpcc.mutation.SetNodeCID(id)
 	return mpcc
 }
 
-// SetNillableProductCoursesID sets the "productCourses" edge to the MemberProduct entity by ID if the given value is not nil.
-func (mpcc *MemberProductCoursesCreate) SetNillableProductCoursesID(id *int64) *MemberProductCoursesCreate {
+// SetNillableNodeCID sets the "nodeC" edge to the MemberProduct entity by ID if the given value is not nil.
+func (mpcc *MemberProductCoursesCreate) SetNillableNodeCID(id *int64) *MemberProductCoursesCreate {
 	if id != nil {
-		mpcc = mpcc.SetProductCoursesID(*id)
+		mpcc = mpcc.SetNodeCID(*id)
 	}
 	return mpcc
 }
 
-// SetProductCourses sets the "productCourses" edge to the MemberProduct entity.
-func (mpcc *MemberProductCoursesCreate) SetProductCourses(m *MemberProduct) *MemberProductCoursesCreate {
-	return mpcc.SetProductCoursesID(m.ID)
+// SetNodeC sets the "nodeC" edge to the MemberProduct entity.
+func (mpcc *MemberProductCoursesCreate) SetNodeC(m *MemberProduct) *MemberProductCoursesCreate {
+	return mpcc.SetNodeCID(m.ID)
 }
 
-// SetProductLessonsID sets the "productLessons" edge to the MemberProduct entity by ID.
-func (mpcc *MemberProductCoursesCreate) SetProductLessonsID(id int64) *MemberProductCoursesCreate {
-	mpcc.mutation.SetProductLessonsID(id)
+// SetNodeLID sets the "nodeL" edge to the MemberProduct entity by ID.
+func (mpcc *MemberProductCoursesCreate) SetNodeLID(id int64) *MemberProductCoursesCreate {
+	mpcc.mutation.SetNodeLID(id)
 	return mpcc
 }
 
-// SetNillableProductLessonsID sets the "productLessons" edge to the MemberProduct entity by ID if the given value is not nil.
-func (mpcc *MemberProductCoursesCreate) SetNillableProductLessonsID(id *int64) *MemberProductCoursesCreate {
+// SetNillableNodeLID sets the "nodeL" edge to the MemberProduct entity by ID if the given value is not nil.
+func (mpcc *MemberProductCoursesCreate) SetNillableNodeLID(id *int64) *MemberProductCoursesCreate {
 	if id != nil {
-		mpcc = mpcc.SetProductLessonsID(*id)
+		mpcc = mpcc.SetNodeLID(*id)
 	}
 	return mpcc
 }
 
-// SetProductLessons sets the "productLessons" edge to the MemberProduct entity.
-func (mpcc *MemberProductCoursesCreate) SetProductLessons(m *MemberProduct) *MemberProductCoursesCreate {
-	return mpcc.SetProductLessonsID(m.ID)
+// SetNodeL sets the "nodeL" edge to the MemberProduct entity.
+func (mpcc *MemberProductCoursesCreate) SetNodeL(m *MemberProduct) *MemberProductCoursesCreate {
+	return mpcc.SetNodeLID(m.ID)
 }
 
 // Mutation returns the MemberProductCoursesMutation object of the builder.
@@ -351,12 +351,12 @@ func (mpcc *MemberProductCoursesCreate) createSpec() (*MemberProductCourses, *sq
 		_spec.SetField(memberproductcourses.FieldCoursesID, field.TypeInt64, value)
 		_node.CoursesID = value
 	}
-	if nodes := mpcc.mutation.ProductCoursesIDs(); len(nodes) > 0 {
+	if nodes := mpcc.mutation.NodeCIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductCoursesTable,
-			Columns: []string{memberproductcourses.ProductCoursesColumn},
+			Table:   memberproductcourses.NodeCTable,
+			Columns: []string{memberproductcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
@@ -368,12 +368,12 @@ func (mpcc *MemberProductCoursesCreate) createSpec() (*MemberProductCourses, *sq
 		_node.MemberProductID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mpcc.mutation.ProductLessonsIDs(); len(nodes) > 0 {
+	if nodes := mpcc.mutation.NodeLIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductLessonsTable,
-			Columns: []string{memberproductcourses.ProductLessonsColumn},
+			Table:   memberproductcourses.NodeLTable,
+			Columns: []string{memberproductcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),

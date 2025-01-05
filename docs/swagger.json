@@ -3505,26 +3505,7 @@
         },
         "/service/sys/product/list": {
             "post": {
-                "summary": "产品列表",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.ListReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/service/sys/role/list": {

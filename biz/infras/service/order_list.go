@@ -22,9 +22,9 @@ func (o Order) List(req *order.ListOrderReq) (resp []*order.OrderInfo, total int
 	if req.Mobile != "" {
 		predicates = append(predicates, order2.HasOrderMembersWith(member.MobileEQ(req.Mobile)))
 	}
-	if req.MemberName != "" {
-		predicates = append(predicates, order2.HasOrderMembersWith(member.NameEQ(req.MemberName)))
-	}
+	//if req.MemberName != "" {
+	//	predicates = append(predicates, order2.HasOrderMembersWith(member.NameEQ(req.MemberName)))
+	//}
 	if req.Name != "" {
 		predicates = append(predicates, order2.HasItemWith(orderitem.NameEQ(req.Name)))
 	}

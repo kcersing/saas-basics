@@ -24,7 +24,8 @@ func (c Community) CreateParticipantMember(req community.ParticipantInfo) (membe
 	member, err = c.db.Member.Query().Where(member2.Mobile(req.Mobile)).First(c.ctx)
 
 	if member == nil {
-		member, err = c.db.Member.Create().SetName(req.Name).SetMobile(req.Mobile).Save(c.ctx)
+		member, err = c.db.Member.Create().SetMobile(req.Mobile).Save(c.ctx)
+		//SetName(req.Name).
 		hlog.Info(err)
 		if err != nil {
 			return nil, err

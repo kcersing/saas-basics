@@ -11,33 +11,8 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	base "saas/idl_gen/model/base"
+	sys "saas/idl_gen/model/sys"
 )
-
-// ProductList .
-// @Summary 产品列表
-//
-//	@Param			request	body		base.ListReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//
-// @router /service/sys/product/list [POST]
-func ProductList(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.ListReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	list, total, err := service.NewSys(ctx, c).ProductList(req)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-
-	utils.SendResponse(c, errno.Success, list, total, "")
-	return
-}
 
 // VenueList .
 // @Summary 场馆列表
@@ -186,6 +161,27 @@ func RoleList(ctx context.Context, c *app.RequestContext) {
 	}
 
 	list, total, err := service.NewSys(ctx, c).RoleList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+
+	utils.SendResponse(c, errno.Success, list, total, "")
+	return
+}
+
+// ProductList .
+// @router /service/sys/product/list [POST]
+func ProductList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req sys.SysProductListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	list, total, err := service.NewSys(ctx, c).ProductList(req)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

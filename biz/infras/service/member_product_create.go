@@ -1,8 +1,8 @@
 package service
 
 import (
-	member2 "saas/biz/dal/db/ent/member"
 	product2 "saas/biz/dal/db/ent/product"
+	"saas/biz/dal/db/ent/productcourses"
 	"saas/biz/infras/do"
 	"saas/pkg/utils"
 )
@@ -10,8 +10,6 @@ import (
 func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error {
 
 	product, _ := m.db.Product.Query().Where(product2.ID(req.ProductId)).First(m.ctx)
-
-	member, _ := m.db.Member.Query().Where(member2.ID(req.MemberId)).First(m.ctx)
 
 	price := float64(req.OrderAmount.Total) / float64(req.OrderItem.Number)
 	mp, err := m.db.MemberProduct.
@@ -38,5 +36,22 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 	if err != nil {
 		return err
 	}
+
+	all, _ := m.db.ProductCourses.Query().Where(productcourses.ProductID(req.ProductId)).All(m.ctx)
+
+	if all != nil {
+		go func() {
+			for _, v := range all {
+				m.db.MemberProductCourses.Create().
+					SetMemberProductID(mp.ID).
+					SetName(v.Name).
+					SetType(v.Type).
+					SetNumber(v.Number).
+					SetCoursesID(v.ID).
+					Save(m.ctx)
+			}
+		}()
+	}
+
 	return err
 }

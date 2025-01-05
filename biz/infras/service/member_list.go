@@ -49,7 +49,7 @@ func (m Member) ContractList(req member.MemberContractListReq) (resp []*member.M
 func (m Member) entMemberContractInfo(v ent.MemberContract) *member.MemberContractInfo {
 	vInfo, _ := NewVenue(m.ctx, m.c).VenueInfo(v.VenueID)
 	first, _ := v.QueryContent().First(m.ctx)
-	mInfo, _ := v.QueryMember().First(m.ctx)
+	mInfo, _ := m.db.MemberProfile.Query().Where(memberprofile.MemberID(v.MemberID)).First(m.ctx)
 	//mpInfo, _ := v.QueryMemberProduct().First(m.ctx)
 	return &member.MemberContractInfo{
 		Name:       &v.Name,
@@ -69,7 +69,7 @@ func (m Member) entMemberContractInfo(v ent.MemberContract) *member.MemberContra
 func (m Member) MemberFullList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error) {
 	var predicates []predicate.Member
 	if req.Name != "" {
-		predicates = append(predicates, member2.NameEQ(req.Name))
+		predicates = append(predicates, member2.HasMemberProfileWith(memberprofile.Name(req.Name)))
 	}
 
 	if req.Mobile != "" {
@@ -94,7 +94,7 @@ func (m Member) MemberFullList(req member.MemberListReq) (resp []*member.MemberI
 	}
 
 	predicates = append(predicates, member2.Delete(0))
-	predicates = append(predicates, member2.Condition(2))
+	predicates = append(predicates, member2.HasMemberProfileWith(memberprofile.Condition(2)))
 	lists, err := m.db.Member.Query().Where(predicates...).
 		Order(ent.Desc(member2.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -185,7 +185,7 @@ func (m Member) MemberFullListExport(req member.MemberListReq) (string, error) {
 func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error) {
 	var predicates []predicate.Member
 	if req.Name != "" {
-		predicates = append(predicates, member2.NameEQ(req.Name))
+		predicates = append(predicates, member2.HasMemberProfileWith(memberprofile.NameEQ(req.Name)))
 	}
 
 	if req.Mobile != "" {
@@ -210,7 +210,7 @@ func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.Me
 	}
 
 	predicates = append(predicates, member2.Delete(0))
-	predicates = append(predicates, member2.Condition(1))
+	predicates = append(predicates, member2.HasMemberProfileWith(memberprofile.Condition(1)))
 	lists, err := m.db.Member.Query().Where(predicates...).
 		Order(ent.Desc(member2.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
@@ -356,17 +356,18 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 	}
 
 	return &member.MemberInfo{
-		ID:            v.ID,
-		Name:          v.Name,
-		Username:      v.Username,
-		Mobile:        v.Mobile,
-		Avatar:        minio.URLconvert(m.ctx, m.c, v.Avatar),
-		Condition:     v.Condition,
-		ConditionName: enums.ReturnMemberConditionValues(v.Condition),
-		Status:        v.Status,
-		CreatedAt:     v.CreatedAt.Format(time.DateTime),
-		UpdatedAt:     v.UpdatedAt.Format(time.DateTime),
+		ID:       v.ID,
+		Name:     p.Name,
+		Username: v.Username,
+		Mobile:   v.Mobile,
+		Avatar:   minio.URLconvert(m.ctx, m.c, v.Avatar),
+
+		Status:    v.Status,
+		CreatedAt: v.CreatedAt.Format(time.DateTime),
+		UpdatedAt: v.UpdatedAt.Format(time.DateTime),
 		Profile: &member.MemberProfile{
+			Condition:        p.Condition,
+			ConditionName:    enums.ReturnMemberConditionValues(p.Condition),
 			MobileAscription: p.MobileAscription,
 			FatherName:       p.FatherName,
 			MotherName:       p.MotherName,
@@ -384,11 +385,10 @@ func (m Member) entMemberInfo(v ent.Member) *member.MemberInfo {
 			ID:               p.ID,
 		},
 		Details: &member.MemberDetails{
-			MoneySum:          d.MoneySum,
-			ProductId:         d.ProductID,
-			ProductName:       d.ProductName,
-			ProductVenue:      d.ProductVenue,
-			ProductVenueName:  d.ProductVenueName,
+			MoneySum:    d.MoneySum,
+			ProductId:   d.ProductID,
+			ProductName: d.ProductName,
+
 			EntrySum:          d.EntrySum,
 			EntryLastTime:     d.EntryLastTime.Format(time.DateTime),
 			EntryDeadlineTime: d.EntryDeadlineTime.Format(time.DateTime),

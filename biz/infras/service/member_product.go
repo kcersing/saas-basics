@@ -9,6 +9,7 @@ import (
 	"saas/biz/dal/db/ent"
 	"saas/biz/infras/do"
 	"saas/config"
+	"saas/idl_gen/model/member"
 )
 
 type MemberProduct struct {
@@ -17,6 +18,26 @@ type MemberProduct struct {
 	salt  string
 	db    *ent.Client
 	cache *ristretto.Cache
+}
+
+func (m MemberProduct) UpdateMemberProduct(req member.CreateOrUpdateMemberReq) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MemberProduct) MemberProductInfo(id int64) (info *member.MemberInfo, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MemberProduct) entMemberInfo(req *ent.MemberProduct) (info *member.MemberInfo, err error) {
+
+	return info, err
+}
+
+func (m MemberProduct) MemberProductList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewMemberProduct(ctx context.Context, c *app.RequestContext) do.MemberProduct {

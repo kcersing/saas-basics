@@ -3793,15 +3793,15 @@ func (c *MemberProductCoursesClient) GetX(ctx context.Context, id int64) *Member
 	return obj
 }
 
-// QueryProductCourses queries the productCourses edge of a MemberProductCourses.
-func (c *MemberProductCoursesClient) QueryProductCourses(mpc *MemberProductCourses) *MemberProductQuery {
+// QueryNodeC queries the nodeC edge of a MemberProductCourses.
+func (c *MemberProductCoursesClient) QueryNodeC(mpc *MemberProductCourses) *MemberProductQuery {
 	query := (&MemberProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mpc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberproductcourses.Table, memberproductcourses.FieldID, id),
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.ProductCoursesTable, memberproductcourses.ProductCoursesColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.NodeCTable, memberproductcourses.NodeCColumn),
 		)
 		fromV = sqlgraph.Neighbors(mpc.driver.Dialect(), step)
 		return fromV, nil
@@ -3809,15 +3809,15 @@ func (c *MemberProductCoursesClient) QueryProductCourses(mpc *MemberProductCours
 	return query
 }
 
-// QueryProductLessons queries the productLessons edge of a MemberProductCourses.
-func (c *MemberProductCoursesClient) QueryProductLessons(mpc *MemberProductCourses) *MemberProductQuery {
+// QueryNodeL queries the nodeL edge of a MemberProductCourses.
+func (c *MemberProductCoursesClient) QueryNodeL(mpc *MemberProductCourses) *MemberProductQuery {
 	query := (&MemberProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mpc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(memberproductcourses.Table, memberproductcourses.FieldID, id),
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.ProductLessonsTable, memberproductcourses.ProductLessonsColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.NodeLTable, memberproductcourses.NodeLColumn),
 		)
 		fromV = sqlgraph.Neighbors(mpc.driver.Dialect(), step)
 		return fromV, nil
@@ -5656,15 +5656,15 @@ func (c *ProductCoursesClient) GetX(ctx context.Context, id int64) *ProductCours
 	return obj
 }
 
-// QueryProductCourses queries the productCourses edge of a ProductCourses.
-func (c *ProductCoursesClient) QueryProductCourses(pc *ProductCourses) *ProductQuery {
+// QueryNodeC queries the nodeC edge of a ProductCourses.
+func (c *ProductCoursesClient) QueryNodeC(pc *ProductCourses) *ProductQuery {
 	query := (&ProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(productcourses.Table, productcourses.FieldID, id),
 			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.ProductCoursesTable, productcourses.ProductCoursesColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.NodeCTable, productcourses.NodeCColumn),
 		)
 		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
@@ -5672,15 +5672,15 @@ func (c *ProductCoursesClient) QueryProductCourses(pc *ProductCourses) *ProductQ
 	return query
 }
 
-// QueryProductLessons queries the productLessons edge of a ProductCourses.
-func (c *ProductCoursesClient) QueryProductLessons(pc *ProductCourses) *ProductQuery {
+// QueryNodeL queries the nodeL edge of a ProductCourses.
+func (c *ProductCoursesClient) QueryNodeL(pc *ProductCourses) *ProductQuery {
 	query := (&ProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(productcourses.Table, productcourses.FieldID, id),
 			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.ProductLessonsTable, productcourses.ProductLessonsColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.NodeLTable, productcourses.NodeLColumn),
 		)
 		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil

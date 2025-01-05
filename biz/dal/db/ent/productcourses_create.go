@@ -166,42 +166,42 @@ func (pcc *ProductCoursesCreate) SetID(i int64) *ProductCoursesCreate {
 	return pcc
 }
 
-// SetProductCoursesID sets the "productCourses" edge to the Product entity by ID.
-func (pcc *ProductCoursesCreate) SetProductCoursesID(id int64) *ProductCoursesCreate {
-	pcc.mutation.SetProductCoursesID(id)
+// SetNodeCID sets the "nodeC" edge to the Product entity by ID.
+func (pcc *ProductCoursesCreate) SetNodeCID(id int64) *ProductCoursesCreate {
+	pcc.mutation.SetNodeCID(id)
 	return pcc
 }
 
-// SetNillableProductCoursesID sets the "productCourses" edge to the Product entity by ID if the given value is not nil.
-func (pcc *ProductCoursesCreate) SetNillableProductCoursesID(id *int64) *ProductCoursesCreate {
+// SetNillableNodeCID sets the "nodeC" edge to the Product entity by ID if the given value is not nil.
+func (pcc *ProductCoursesCreate) SetNillableNodeCID(id *int64) *ProductCoursesCreate {
 	if id != nil {
-		pcc = pcc.SetProductCoursesID(*id)
+		pcc = pcc.SetNodeCID(*id)
 	}
 	return pcc
 }
 
-// SetProductCourses sets the "productCourses" edge to the Product entity.
-func (pcc *ProductCoursesCreate) SetProductCourses(p *Product) *ProductCoursesCreate {
-	return pcc.SetProductCoursesID(p.ID)
+// SetNodeC sets the "nodeC" edge to the Product entity.
+func (pcc *ProductCoursesCreate) SetNodeC(p *Product) *ProductCoursesCreate {
+	return pcc.SetNodeCID(p.ID)
 }
 
-// SetProductLessonsID sets the "productLessons" edge to the Product entity by ID.
-func (pcc *ProductCoursesCreate) SetProductLessonsID(id int64) *ProductCoursesCreate {
-	pcc.mutation.SetProductLessonsID(id)
+// SetNodeLID sets the "nodeL" edge to the Product entity by ID.
+func (pcc *ProductCoursesCreate) SetNodeLID(id int64) *ProductCoursesCreate {
+	pcc.mutation.SetNodeLID(id)
 	return pcc
 }
 
-// SetNillableProductLessonsID sets the "productLessons" edge to the Product entity by ID if the given value is not nil.
-func (pcc *ProductCoursesCreate) SetNillableProductLessonsID(id *int64) *ProductCoursesCreate {
+// SetNillableNodeLID sets the "nodeL" edge to the Product entity by ID if the given value is not nil.
+func (pcc *ProductCoursesCreate) SetNillableNodeLID(id *int64) *ProductCoursesCreate {
 	if id != nil {
-		pcc = pcc.SetProductLessonsID(*id)
+		pcc = pcc.SetNodeLID(*id)
 	}
 	return pcc
 }
 
-// SetProductLessons sets the "productLessons" edge to the Product entity.
-func (pcc *ProductCoursesCreate) SetProductLessons(p *Product) *ProductCoursesCreate {
-	return pcc.SetProductLessonsID(p.ID)
+// SetNodeL sets the "nodeL" edge to the Product entity.
+func (pcc *ProductCoursesCreate) SetNodeL(p *Product) *ProductCoursesCreate {
+	return pcc.SetNodeLID(p.ID)
 }
 
 // Mutation returns the ProductCoursesMutation object of the builder.
@@ -351,12 +351,12 @@ func (pcc *ProductCoursesCreate) createSpec() (*ProductCourses, *sqlgraph.Create
 		_spec.SetField(productcourses.FieldCoursesID, field.TypeInt64, value)
 		_node.CoursesID = value
 	}
-	if nodes := pcc.mutation.ProductCoursesIDs(); len(nodes) > 0 {
+	if nodes := pcc.mutation.NodeCIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductCoursesTable,
-			Columns: []string{productcourses.ProductCoursesColumn},
+			Table:   productcourses.NodeCTable,
+			Columns: []string{productcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
@@ -368,12 +368,12 @@ func (pcc *ProductCoursesCreate) createSpec() (*ProductCourses, *sqlgraph.Create
 		_node.ProductID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pcc.mutation.ProductLessonsIDs(); len(nodes) > 0 {
+	if nodes := pcc.mutation.NodeLIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductLessonsTable,
-			Columns: []string{productcourses.ProductLessonsColumn},
+			Table:   productcourses.NodeLTable,
+			Columns: []string{productcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),

@@ -3,8 +3,8 @@ package service
 import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
-	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/memberproduct"
+	"saas/biz/dal/db/ent/memberprofile"
 	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/idl_gen/model/schedule"
 )
@@ -26,8 +26,8 @@ func (s Schedule) CreateMemberSubscribeLessons(req schedule.MemberSubscribeReq) 
 		err = errors.Wrap(err, "未查询到该会员")
 		return err
 	}
-	m, err := s.db.Member.Query().
-		Where(member.ID(req.MemberId)).
+	m, err := s.db.MemberProfile.Query().
+		Where(memberprofile.MemberIDEQ(req.MemberId)).
 		First(s.ctx)
 	if err != nil {
 		hlog.Error("未查询到该会员:", req)

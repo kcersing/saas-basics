@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"saas/biz/dal/db/ent"
-	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/memberproduct"
+	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
@@ -108,8 +108,8 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 }
 
 func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) error {
-	m, err := s.db.Member.Query().
-		Where(member.ID(req.MemberId)).
+	m, err := s.db.MemberProfile.Query().
+		Where(memberprofile.MemberID(req.MemberId)).
 		First(s.ctx)
 	if err != nil {
 		hlog.Error("未查询到该会员:", req)

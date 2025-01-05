@@ -1,9 +1,12 @@
 package do
 
-import "saas/idl_gen/model/base"
+import (
+	"saas/idl_gen/model/base"
+	"saas/idl_gen/model/sys"
+)
 
 type Sys interface {
-	ProductList(req base.ListReq) (list []SysList, total int64, err error)
+	ProductList(req sys.SysProductListReq) (list []SysProductList, total int64, err error)
 	VenueList(req base.ListReq) (list []SysList, total int64, err error)
 	MemberList(req base.ListReq) (list []SysList, total int64, err error)
 	ContractList(req base.ListReq) (list []SysList, total int64, err error)
@@ -12,7 +15,12 @@ type Sys interface {
 	RoleList(req base.ListReq) (list []SysList, total int64, err error)
 }
 type SysList struct {
-	ID   int64  `json:"id"`
+	Id   int64  `json:"id"`
 	Name string `json:"name"`
 	Key  string `json:"key"`
+}
+type SysProductList struct {
+	Id     int64  `json:"id"`
+	Name   string `json:"name"`
+	Length int64  `json:"Length"`
 }

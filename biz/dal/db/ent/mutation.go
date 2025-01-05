@@ -29713,31 +29713,31 @@ func (m *MemberProductMutation) ResetEdge(name string) error {
 // MemberProductCoursesMutation represents an operation that mutates the MemberProductCourses nodes in the graph.
 type MemberProductCoursesMutation struct {
 	config
-	op                    Op
-	typ                   string
-	id                    *int64
-	created_at            *time.Time
-	updated_at            *time.Time
-	delete                *int64
-	adddelete             *int64
-	created_id            *int64
-	addcreated_id         *int64
-	status                *int64
-	addstatus             *int64
-	_type                 *string
-	name                  *string
-	number                *int64
-	addnumber             *int64
-	courses_id            *int64
-	addcourses_id         *int64
-	clearedFields         map[string]struct{}
-	productCourses        *int64
-	clearedproductCourses bool
-	productLessons        *int64
-	clearedproductLessons bool
-	done                  bool
-	oldValue              func(context.Context) (*MemberProductCourses, error)
-	predicates            []predicate.MemberProductCourses
+	op            Op
+	typ           string
+	id            *int64
+	created_at    *time.Time
+	updated_at    *time.Time
+	delete        *int64
+	adddelete     *int64
+	created_id    *int64
+	addcreated_id *int64
+	status        *int64
+	addstatus     *int64
+	_type         *string
+	name          *string
+	number        *int64
+	addnumber     *int64
+	courses_id    *int64
+	addcourses_id *int64
+	clearedFields map[string]struct{}
+	nodeC         *int64
+	clearednodeC  bool
+	nodeL         *int64
+	clearednodeL  bool
+	done          bool
+	oldValue      func(context.Context) (*MemberProductCourses, error)
+	predicates    []predicate.MemberProductCourses
 }
 
 var _ ent.Mutation = (*MemberProductCoursesMutation)(nil)
@@ -30322,12 +30322,12 @@ func (m *MemberProductCoursesMutation) ResetNumber() {
 
 // SetMemberProductID sets the "member_product_id" field.
 func (m *MemberProductCoursesMutation) SetMemberProductID(i int64) {
-	m.productLessons = &i
+	m.nodeL = &i
 }
 
 // MemberProductID returns the value of the "member_product_id" field in the mutation.
 func (m *MemberProductCoursesMutation) MemberProductID() (r int64, exists bool) {
-	v := m.productLessons
+	v := m.nodeL
 	if v == nil {
 		return
 	}
@@ -30353,7 +30353,7 @@ func (m *MemberProductCoursesMutation) OldMemberProductID(ctx context.Context) (
 
 // ClearMemberProductID clears the value of the "member_product_id" field.
 func (m *MemberProductCoursesMutation) ClearMemberProductID() {
-	m.productLessons = nil
+	m.nodeL = nil
 	m.clearedFields[memberproductcourses.FieldMemberProductID] = struct{}{}
 }
 
@@ -30365,7 +30365,7 @@ func (m *MemberProductCoursesMutation) MemberProductIDCleared() bool {
 
 // ResetMemberProductID resets all changes to the "member_product_id" field.
 func (m *MemberProductCoursesMutation) ResetMemberProductID() {
-	m.productLessons = nil
+	m.nodeL = nil
 	delete(m.clearedFields, memberproductcourses.FieldMemberProductID)
 }
 
@@ -30439,84 +30439,84 @@ func (m *MemberProductCoursesMutation) ResetCoursesID() {
 	delete(m.clearedFields, memberproductcourses.FieldCoursesID)
 }
 
-// SetProductCoursesID sets the "productCourses" edge to the MemberProduct entity by id.
-func (m *MemberProductCoursesMutation) SetProductCoursesID(id int64) {
-	m.productCourses = &id
+// SetNodeCID sets the "nodeC" edge to the MemberProduct entity by id.
+func (m *MemberProductCoursesMutation) SetNodeCID(id int64) {
+	m.nodeC = &id
 }
 
-// ClearProductCourses clears the "productCourses" edge to the MemberProduct entity.
-func (m *MemberProductCoursesMutation) ClearProductCourses() {
-	m.clearedproductCourses = true
+// ClearNodeC clears the "nodeC" edge to the MemberProduct entity.
+func (m *MemberProductCoursesMutation) ClearNodeC() {
+	m.clearednodeC = true
 	m.clearedFields[memberproductcourses.FieldMemberProductID] = struct{}{}
 }
 
-// ProductCoursesCleared reports if the "productCourses" edge to the MemberProduct entity was cleared.
-func (m *MemberProductCoursesMutation) ProductCoursesCleared() bool {
-	return m.MemberProductIDCleared() || m.clearedproductCourses
+// NodeCCleared reports if the "nodeC" edge to the MemberProduct entity was cleared.
+func (m *MemberProductCoursesMutation) NodeCCleared() bool {
+	return m.MemberProductIDCleared() || m.clearednodeC
 }
 
-// ProductCoursesID returns the "productCourses" edge ID in the mutation.
-func (m *MemberProductCoursesMutation) ProductCoursesID() (id int64, exists bool) {
-	if m.productCourses != nil {
-		return *m.productCourses, true
+// NodeCID returns the "nodeC" edge ID in the mutation.
+func (m *MemberProductCoursesMutation) NodeCID() (id int64, exists bool) {
+	if m.nodeC != nil {
+		return *m.nodeC, true
 	}
 	return
 }
 
-// ProductCoursesIDs returns the "productCourses" edge IDs in the mutation.
+// NodeCIDs returns the "nodeC" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ProductCoursesID instead. It exists only for internal usage by the builders.
-func (m *MemberProductCoursesMutation) ProductCoursesIDs() (ids []int64) {
-	if id := m.productCourses; id != nil {
+// NodeCID instead. It exists only for internal usage by the builders.
+func (m *MemberProductCoursesMutation) NodeCIDs() (ids []int64) {
+	if id := m.nodeC; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetProductCourses resets all changes to the "productCourses" edge.
-func (m *MemberProductCoursesMutation) ResetProductCourses() {
-	m.productCourses = nil
-	m.clearedproductCourses = false
+// ResetNodeC resets all changes to the "nodeC" edge.
+func (m *MemberProductCoursesMutation) ResetNodeC() {
+	m.nodeC = nil
+	m.clearednodeC = false
 }
 
-// SetProductLessonsID sets the "productLessons" edge to the MemberProduct entity by id.
-func (m *MemberProductCoursesMutation) SetProductLessonsID(id int64) {
-	m.productLessons = &id
+// SetNodeLID sets the "nodeL" edge to the MemberProduct entity by id.
+func (m *MemberProductCoursesMutation) SetNodeLID(id int64) {
+	m.nodeL = &id
 }
 
-// ClearProductLessons clears the "productLessons" edge to the MemberProduct entity.
-func (m *MemberProductCoursesMutation) ClearProductLessons() {
-	m.clearedproductLessons = true
+// ClearNodeL clears the "nodeL" edge to the MemberProduct entity.
+func (m *MemberProductCoursesMutation) ClearNodeL() {
+	m.clearednodeL = true
 	m.clearedFields[memberproductcourses.FieldMemberProductID] = struct{}{}
 }
 
-// ProductLessonsCleared reports if the "productLessons" edge to the MemberProduct entity was cleared.
-func (m *MemberProductCoursesMutation) ProductLessonsCleared() bool {
-	return m.MemberProductIDCleared() || m.clearedproductLessons
+// NodeLCleared reports if the "nodeL" edge to the MemberProduct entity was cleared.
+func (m *MemberProductCoursesMutation) NodeLCleared() bool {
+	return m.MemberProductIDCleared() || m.clearednodeL
 }
 
-// ProductLessonsID returns the "productLessons" edge ID in the mutation.
-func (m *MemberProductCoursesMutation) ProductLessonsID() (id int64, exists bool) {
-	if m.productLessons != nil {
-		return *m.productLessons, true
+// NodeLID returns the "nodeL" edge ID in the mutation.
+func (m *MemberProductCoursesMutation) NodeLID() (id int64, exists bool) {
+	if m.nodeL != nil {
+		return *m.nodeL, true
 	}
 	return
 }
 
-// ProductLessonsIDs returns the "productLessons" edge IDs in the mutation.
+// NodeLIDs returns the "nodeL" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ProductLessonsID instead. It exists only for internal usage by the builders.
-func (m *MemberProductCoursesMutation) ProductLessonsIDs() (ids []int64) {
-	if id := m.productLessons; id != nil {
+// NodeLID instead. It exists only for internal usage by the builders.
+func (m *MemberProductCoursesMutation) NodeLIDs() (ids []int64) {
+	if id := m.nodeL; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetProductLessons resets all changes to the "productLessons" edge.
-func (m *MemberProductCoursesMutation) ResetProductLessons() {
-	m.productLessons = nil
-	m.clearedproductLessons = false
+// ResetNodeL resets all changes to the "nodeL" edge.
+func (m *MemberProductCoursesMutation) ResetNodeL() {
+	m.nodeL = nil
+	m.clearednodeL = false
 }
 
 // Where appends a list predicates to the MemberProductCoursesMutation builder.
@@ -30578,7 +30578,7 @@ func (m *MemberProductCoursesMutation) Fields() []string {
 	if m.number != nil {
 		fields = append(fields, memberproductcourses.FieldNumber)
 	}
-	if m.productLessons != nil {
+	if m.nodeL != nil {
 		fields = append(fields, memberproductcourses.FieldMemberProductID)
 	}
 	if m.courses_id != nil {
@@ -30932,11 +30932,11 @@ func (m *MemberProductCoursesMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MemberProductCoursesMutation) AddedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.productCourses != nil {
-		edges = append(edges, memberproductcourses.EdgeProductCourses)
+	if m.nodeC != nil {
+		edges = append(edges, memberproductcourses.EdgeNodeC)
 	}
-	if m.productLessons != nil {
-		edges = append(edges, memberproductcourses.EdgeProductLessons)
+	if m.nodeL != nil {
+		edges = append(edges, memberproductcourses.EdgeNodeL)
 	}
 	return edges
 }
@@ -30945,12 +30945,12 @@ func (m *MemberProductCoursesMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *MemberProductCoursesMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case memberproductcourses.EdgeProductCourses:
-		if id := m.productCourses; id != nil {
+	case memberproductcourses.EdgeNodeC:
+		if id := m.nodeC; id != nil {
 			return []ent.Value{*id}
 		}
-	case memberproductcourses.EdgeProductLessons:
-		if id := m.productLessons; id != nil {
+	case memberproductcourses.EdgeNodeL:
+		if id := m.nodeL; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -30972,11 +30972,11 @@ func (m *MemberProductCoursesMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MemberProductCoursesMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.clearedproductCourses {
-		edges = append(edges, memberproductcourses.EdgeProductCourses)
+	if m.clearednodeC {
+		edges = append(edges, memberproductcourses.EdgeNodeC)
 	}
-	if m.clearedproductLessons {
-		edges = append(edges, memberproductcourses.EdgeProductLessons)
+	if m.clearednodeL {
+		edges = append(edges, memberproductcourses.EdgeNodeL)
 	}
 	return edges
 }
@@ -30985,10 +30985,10 @@ func (m *MemberProductCoursesMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *MemberProductCoursesMutation) EdgeCleared(name string) bool {
 	switch name {
-	case memberproductcourses.EdgeProductCourses:
-		return m.clearedproductCourses
-	case memberproductcourses.EdgeProductLessons:
-		return m.clearedproductLessons
+	case memberproductcourses.EdgeNodeC:
+		return m.clearednodeC
+	case memberproductcourses.EdgeNodeL:
+		return m.clearednodeL
 	}
 	return false
 }
@@ -30997,11 +30997,11 @@ func (m *MemberProductCoursesMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *MemberProductCoursesMutation) ClearEdge(name string) error {
 	switch name {
-	case memberproductcourses.EdgeProductCourses:
-		m.ClearProductCourses()
+	case memberproductcourses.EdgeNodeC:
+		m.ClearNodeC()
 		return nil
-	case memberproductcourses.EdgeProductLessons:
-		m.ClearProductLessons()
+	case memberproductcourses.EdgeNodeL:
+		m.ClearNodeL()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberProductCourses unique edge %s", name)
@@ -31011,11 +31011,11 @@ func (m *MemberProductCoursesMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *MemberProductCoursesMutation) ResetEdge(name string) error {
 	switch name {
-	case memberproductcourses.EdgeProductCourses:
-		m.ResetProductCourses()
+	case memberproductcourses.EdgeNodeC:
+		m.ResetNodeC()
 		return nil
-	case memberproductcourses.EdgeProductLessons:
-		m.ResetProductLessons()
+	case memberproductcourses.EdgeNodeL:
+		m.ResetNodeL()
 		return nil
 	}
 	return fmt.Errorf("unknown MemberProductCourses edge %s", name)
@@ -47278,31 +47278,31 @@ func (m *ProductMutation) ResetEdge(name string) error {
 // ProductCoursesMutation represents an operation that mutates the ProductCourses nodes in the graph.
 type ProductCoursesMutation struct {
 	config
-	op                    Op
-	typ                   string
-	id                    *int64
-	created_at            *time.Time
-	updated_at            *time.Time
-	delete                *int64
-	adddelete             *int64
-	created_id            *int64
-	addcreated_id         *int64
-	status                *int64
-	addstatus             *int64
-	_type                 *string
-	name                  *string
-	number                *int64
-	addnumber             *int64
-	courses_id            *int64
-	addcourses_id         *int64
-	clearedFields         map[string]struct{}
-	productCourses        *int64
-	clearedproductCourses bool
-	productLessons        *int64
-	clearedproductLessons bool
-	done                  bool
-	oldValue              func(context.Context) (*ProductCourses, error)
-	predicates            []predicate.ProductCourses
+	op            Op
+	typ           string
+	id            *int64
+	created_at    *time.Time
+	updated_at    *time.Time
+	delete        *int64
+	adddelete     *int64
+	created_id    *int64
+	addcreated_id *int64
+	status        *int64
+	addstatus     *int64
+	_type         *string
+	name          *string
+	number        *int64
+	addnumber     *int64
+	courses_id    *int64
+	addcourses_id *int64
+	clearedFields map[string]struct{}
+	nodeC         *int64
+	clearednodeC  bool
+	nodeL         *int64
+	clearednodeL  bool
+	done          bool
+	oldValue      func(context.Context) (*ProductCourses, error)
+	predicates    []predicate.ProductCourses
 }
 
 var _ ent.Mutation = (*ProductCoursesMutation)(nil)
@@ -47887,12 +47887,12 @@ func (m *ProductCoursesMutation) ResetNumber() {
 
 // SetProductID sets the "product_id" field.
 func (m *ProductCoursesMutation) SetProductID(i int64) {
-	m.productLessons = &i
+	m.nodeL = &i
 }
 
 // ProductID returns the value of the "product_id" field in the mutation.
 func (m *ProductCoursesMutation) ProductID() (r int64, exists bool) {
-	v := m.productLessons
+	v := m.nodeL
 	if v == nil {
 		return
 	}
@@ -47918,7 +47918,7 @@ func (m *ProductCoursesMutation) OldProductID(ctx context.Context) (v int64, err
 
 // ClearProductID clears the value of the "product_id" field.
 func (m *ProductCoursesMutation) ClearProductID() {
-	m.productLessons = nil
+	m.nodeL = nil
 	m.clearedFields[productcourses.FieldProductID] = struct{}{}
 }
 
@@ -47930,7 +47930,7 @@ func (m *ProductCoursesMutation) ProductIDCleared() bool {
 
 // ResetProductID resets all changes to the "product_id" field.
 func (m *ProductCoursesMutation) ResetProductID() {
-	m.productLessons = nil
+	m.nodeL = nil
 	delete(m.clearedFields, productcourses.FieldProductID)
 }
 
@@ -48004,84 +48004,84 @@ func (m *ProductCoursesMutation) ResetCoursesID() {
 	delete(m.clearedFields, productcourses.FieldCoursesID)
 }
 
-// SetProductCoursesID sets the "productCourses" edge to the Product entity by id.
-func (m *ProductCoursesMutation) SetProductCoursesID(id int64) {
-	m.productCourses = &id
+// SetNodeCID sets the "nodeC" edge to the Product entity by id.
+func (m *ProductCoursesMutation) SetNodeCID(id int64) {
+	m.nodeC = &id
 }
 
-// ClearProductCourses clears the "productCourses" edge to the Product entity.
-func (m *ProductCoursesMutation) ClearProductCourses() {
-	m.clearedproductCourses = true
+// ClearNodeC clears the "nodeC" edge to the Product entity.
+func (m *ProductCoursesMutation) ClearNodeC() {
+	m.clearednodeC = true
 	m.clearedFields[productcourses.FieldProductID] = struct{}{}
 }
 
-// ProductCoursesCleared reports if the "productCourses" edge to the Product entity was cleared.
-func (m *ProductCoursesMutation) ProductCoursesCleared() bool {
-	return m.ProductIDCleared() || m.clearedproductCourses
+// NodeCCleared reports if the "nodeC" edge to the Product entity was cleared.
+func (m *ProductCoursesMutation) NodeCCleared() bool {
+	return m.ProductIDCleared() || m.clearednodeC
 }
 
-// ProductCoursesID returns the "productCourses" edge ID in the mutation.
-func (m *ProductCoursesMutation) ProductCoursesID() (id int64, exists bool) {
-	if m.productCourses != nil {
-		return *m.productCourses, true
+// NodeCID returns the "nodeC" edge ID in the mutation.
+func (m *ProductCoursesMutation) NodeCID() (id int64, exists bool) {
+	if m.nodeC != nil {
+		return *m.nodeC, true
 	}
 	return
 }
 
-// ProductCoursesIDs returns the "productCourses" edge IDs in the mutation.
+// NodeCIDs returns the "nodeC" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ProductCoursesID instead. It exists only for internal usage by the builders.
-func (m *ProductCoursesMutation) ProductCoursesIDs() (ids []int64) {
-	if id := m.productCourses; id != nil {
+// NodeCID instead. It exists only for internal usage by the builders.
+func (m *ProductCoursesMutation) NodeCIDs() (ids []int64) {
+	if id := m.nodeC; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetProductCourses resets all changes to the "productCourses" edge.
-func (m *ProductCoursesMutation) ResetProductCourses() {
-	m.productCourses = nil
-	m.clearedproductCourses = false
+// ResetNodeC resets all changes to the "nodeC" edge.
+func (m *ProductCoursesMutation) ResetNodeC() {
+	m.nodeC = nil
+	m.clearednodeC = false
 }
 
-// SetProductLessonsID sets the "productLessons" edge to the Product entity by id.
-func (m *ProductCoursesMutation) SetProductLessonsID(id int64) {
-	m.productLessons = &id
+// SetNodeLID sets the "nodeL" edge to the Product entity by id.
+func (m *ProductCoursesMutation) SetNodeLID(id int64) {
+	m.nodeL = &id
 }
 
-// ClearProductLessons clears the "productLessons" edge to the Product entity.
-func (m *ProductCoursesMutation) ClearProductLessons() {
-	m.clearedproductLessons = true
+// ClearNodeL clears the "nodeL" edge to the Product entity.
+func (m *ProductCoursesMutation) ClearNodeL() {
+	m.clearednodeL = true
 	m.clearedFields[productcourses.FieldProductID] = struct{}{}
 }
 
-// ProductLessonsCleared reports if the "productLessons" edge to the Product entity was cleared.
-func (m *ProductCoursesMutation) ProductLessonsCleared() bool {
-	return m.ProductIDCleared() || m.clearedproductLessons
+// NodeLCleared reports if the "nodeL" edge to the Product entity was cleared.
+func (m *ProductCoursesMutation) NodeLCleared() bool {
+	return m.ProductIDCleared() || m.clearednodeL
 }
 
-// ProductLessonsID returns the "productLessons" edge ID in the mutation.
-func (m *ProductCoursesMutation) ProductLessonsID() (id int64, exists bool) {
-	if m.productLessons != nil {
-		return *m.productLessons, true
+// NodeLID returns the "nodeL" edge ID in the mutation.
+func (m *ProductCoursesMutation) NodeLID() (id int64, exists bool) {
+	if m.nodeL != nil {
+		return *m.nodeL, true
 	}
 	return
 }
 
-// ProductLessonsIDs returns the "productLessons" edge IDs in the mutation.
+// NodeLIDs returns the "nodeL" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ProductLessonsID instead. It exists only for internal usage by the builders.
-func (m *ProductCoursesMutation) ProductLessonsIDs() (ids []int64) {
-	if id := m.productLessons; id != nil {
+// NodeLID instead. It exists only for internal usage by the builders.
+func (m *ProductCoursesMutation) NodeLIDs() (ids []int64) {
+	if id := m.nodeL; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetProductLessons resets all changes to the "productLessons" edge.
-func (m *ProductCoursesMutation) ResetProductLessons() {
-	m.productLessons = nil
-	m.clearedproductLessons = false
+// ResetNodeL resets all changes to the "nodeL" edge.
+func (m *ProductCoursesMutation) ResetNodeL() {
+	m.nodeL = nil
+	m.clearednodeL = false
 }
 
 // Where appends a list predicates to the ProductCoursesMutation builder.
@@ -48143,7 +48143,7 @@ func (m *ProductCoursesMutation) Fields() []string {
 	if m.number != nil {
 		fields = append(fields, productcourses.FieldNumber)
 	}
-	if m.productLessons != nil {
+	if m.nodeL != nil {
 		fields = append(fields, productcourses.FieldProductID)
 	}
 	if m.courses_id != nil {
@@ -48497,11 +48497,11 @@ func (m *ProductCoursesMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProductCoursesMutation) AddedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.productCourses != nil {
-		edges = append(edges, productcourses.EdgeProductCourses)
+	if m.nodeC != nil {
+		edges = append(edges, productcourses.EdgeNodeC)
 	}
-	if m.productLessons != nil {
-		edges = append(edges, productcourses.EdgeProductLessons)
+	if m.nodeL != nil {
+		edges = append(edges, productcourses.EdgeNodeL)
 	}
 	return edges
 }
@@ -48510,12 +48510,12 @@ func (m *ProductCoursesMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ProductCoursesMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case productcourses.EdgeProductCourses:
-		if id := m.productCourses; id != nil {
+	case productcourses.EdgeNodeC:
+		if id := m.nodeC; id != nil {
 			return []ent.Value{*id}
 		}
-	case productcourses.EdgeProductLessons:
-		if id := m.productLessons; id != nil {
+	case productcourses.EdgeNodeL:
+		if id := m.nodeL; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -48537,11 +48537,11 @@ func (m *ProductCoursesMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProductCoursesMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.clearedproductCourses {
-		edges = append(edges, productcourses.EdgeProductCourses)
+	if m.clearednodeC {
+		edges = append(edges, productcourses.EdgeNodeC)
 	}
-	if m.clearedproductLessons {
-		edges = append(edges, productcourses.EdgeProductLessons)
+	if m.clearednodeL {
+		edges = append(edges, productcourses.EdgeNodeL)
 	}
 	return edges
 }
@@ -48550,10 +48550,10 @@ func (m *ProductCoursesMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ProductCoursesMutation) EdgeCleared(name string) bool {
 	switch name {
-	case productcourses.EdgeProductCourses:
-		return m.clearedproductCourses
-	case productcourses.EdgeProductLessons:
-		return m.clearedproductLessons
+	case productcourses.EdgeNodeC:
+		return m.clearednodeC
+	case productcourses.EdgeNodeL:
+		return m.clearednodeL
 	}
 	return false
 }
@@ -48562,11 +48562,11 @@ func (m *ProductCoursesMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *ProductCoursesMutation) ClearEdge(name string) error {
 	switch name {
-	case productcourses.EdgeProductCourses:
-		m.ClearProductCourses()
+	case productcourses.EdgeNodeC:
+		m.ClearNodeC()
 		return nil
-	case productcourses.EdgeProductLessons:
-		m.ClearProductLessons()
+	case productcourses.EdgeNodeL:
+		m.ClearNodeL()
 		return nil
 	}
 	return fmt.Errorf("unknown ProductCourses unique edge %s", name)
@@ -48576,11 +48576,11 @@ func (m *ProductCoursesMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ProductCoursesMutation) ResetEdge(name string) error {
 	switch name {
-	case productcourses.EdgeProductCourses:
-		m.ResetProductCourses()
+	case productcourses.EdgeNodeC:
+		m.ResetNodeC()
 		return nil
-	case productcourses.EdgeProductLessons:
-		m.ResetProductLessons()
+	case productcourses.EdgeNodeL:
+		m.ResetNodeL()
 		return nil
 	}
 	return fmt.Errorf("unknown ProductCourses edge %s", name)

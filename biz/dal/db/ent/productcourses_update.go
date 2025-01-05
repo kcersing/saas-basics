@@ -236,42 +236,42 @@ func (pcu *ProductCoursesUpdate) ClearCoursesID() *ProductCoursesUpdate {
 	return pcu
 }
 
-// SetProductCoursesID sets the "productCourses" edge to the Product entity by ID.
-func (pcu *ProductCoursesUpdate) SetProductCoursesID(id int64) *ProductCoursesUpdate {
-	pcu.mutation.SetProductCoursesID(id)
+// SetNodeCID sets the "nodeC" edge to the Product entity by ID.
+func (pcu *ProductCoursesUpdate) SetNodeCID(id int64) *ProductCoursesUpdate {
+	pcu.mutation.SetNodeCID(id)
 	return pcu
 }
 
-// SetNillableProductCoursesID sets the "productCourses" edge to the Product entity by ID if the given value is not nil.
-func (pcu *ProductCoursesUpdate) SetNillableProductCoursesID(id *int64) *ProductCoursesUpdate {
+// SetNillableNodeCID sets the "nodeC" edge to the Product entity by ID if the given value is not nil.
+func (pcu *ProductCoursesUpdate) SetNillableNodeCID(id *int64) *ProductCoursesUpdate {
 	if id != nil {
-		pcu = pcu.SetProductCoursesID(*id)
+		pcu = pcu.SetNodeCID(*id)
 	}
 	return pcu
 }
 
-// SetProductCourses sets the "productCourses" edge to the Product entity.
-func (pcu *ProductCoursesUpdate) SetProductCourses(p *Product) *ProductCoursesUpdate {
-	return pcu.SetProductCoursesID(p.ID)
+// SetNodeC sets the "nodeC" edge to the Product entity.
+func (pcu *ProductCoursesUpdate) SetNodeC(p *Product) *ProductCoursesUpdate {
+	return pcu.SetNodeCID(p.ID)
 }
 
-// SetProductLessonsID sets the "productLessons" edge to the Product entity by ID.
-func (pcu *ProductCoursesUpdate) SetProductLessonsID(id int64) *ProductCoursesUpdate {
-	pcu.mutation.SetProductLessonsID(id)
+// SetNodeLID sets the "nodeL" edge to the Product entity by ID.
+func (pcu *ProductCoursesUpdate) SetNodeLID(id int64) *ProductCoursesUpdate {
+	pcu.mutation.SetNodeLID(id)
 	return pcu
 }
 
-// SetNillableProductLessonsID sets the "productLessons" edge to the Product entity by ID if the given value is not nil.
-func (pcu *ProductCoursesUpdate) SetNillableProductLessonsID(id *int64) *ProductCoursesUpdate {
+// SetNillableNodeLID sets the "nodeL" edge to the Product entity by ID if the given value is not nil.
+func (pcu *ProductCoursesUpdate) SetNillableNodeLID(id *int64) *ProductCoursesUpdate {
 	if id != nil {
-		pcu = pcu.SetProductLessonsID(*id)
+		pcu = pcu.SetNodeLID(*id)
 	}
 	return pcu
 }
 
-// SetProductLessons sets the "productLessons" edge to the Product entity.
-func (pcu *ProductCoursesUpdate) SetProductLessons(p *Product) *ProductCoursesUpdate {
-	return pcu.SetProductLessonsID(p.ID)
+// SetNodeL sets the "nodeL" edge to the Product entity.
+func (pcu *ProductCoursesUpdate) SetNodeL(p *Product) *ProductCoursesUpdate {
+	return pcu.SetNodeLID(p.ID)
 }
 
 // Mutation returns the ProductCoursesMutation object of the builder.
@@ -279,15 +279,15 @@ func (pcu *ProductCoursesUpdate) Mutation() *ProductCoursesMutation {
 	return pcu.mutation
 }
 
-// ClearProductCourses clears the "productCourses" edge to the Product entity.
-func (pcu *ProductCoursesUpdate) ClearProductCourses() *ProductCoursesUpdate {
-	pcu.mutation.ClearProductCourses()
+// ClearNodeC clears the "nodeC" edge to the Product entity.
+func (pcu *ProductCoursesUpdate) ClearNodeC() *ProductCoursesUpdate {
+	pcu.mutation.ClearNodeC()
 	return pcu
 }
 
-// ClearProductLessons clears the "productLessons" edge to the Product entity.
-func (pcu *ProductCoursesUpdate) ClearProductLessons() *ProductCoursesUpdate {
-	pcu.mutation.ClearProductLessons()
+// ClearNodeL clears the "nodeL" edge to the Product entity.
+func (pcu *ProductCoursesUpdate) ClearNodeL() *ProductCoursesUpdate {
+	pcu.mutation.ClearNodeL()
 	return pcu
 }
 
@@ -402,12 +402,12 @@ func (pcu *ProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if pcu.mutation.CoursesIDCleared() {
 		_spec.ClearField(productcourses.FieldCoursesID, field.TypeInt64)
 	}
-	if pcu.mutation.ProductCoursesCleared() {
+	if pcu.mutation.NodeCCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductCoursesTable,
-			Columns: []string{productcourses.ProductCoursesColumn},
+			Table:   productcourses.NodeCTable,
+			Columns: []string{productcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
@@ -415,12 +415,12 @@ func (pcu *ProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pcu.mutation.ProductCoursesIDs(); len(nodes) > 0 {
+	if nodes := pcu.mutation.NodeCIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductCoursesTable,
-			Columns: []string{productcourses.ProductCoursesColumn},
+			Table:   productcourses.NodeCTable,
+			Columns: []string{productcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
@@ -431,12 +431,12 @@ func (pcu *ProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pcu.mutation.ProductLessonsCleared() {
+	if pcu.mutation.NodeLCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductLessonsTable,
-			Columns: []string{productcourses.ProductLessonsColumn},
+			Table:   productcourses.NodeLTable,
+			Columns: []string{productcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
@@ -444,12 +444,12 @@ func (pcu *ProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pcu.mutation.ProductLessonsIDs(); len(nodes) > 0 {
+	if nodes := pcu.mutation.NodeLIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductLessonsTable,
-			Columns: []string{productcourses.ProductLessonsColumn},
+			Table:   productcourses.NodeLTable,
+			Columns: []string{productcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
@@ -687,42 +687,42 @@ func (pcuo *ProductCoursesUpdateOne) ClearCoursesID() *ProductCoursesUpdateOne {
 	return pcuo
 }
 
-// SetProductCoursesID sets the "productCourses" edge to the Product entity by ID.
-func (pcuo *ProductCoursesUpdateOne) SetProductCoursesID(id int64) *ProductCoursesUpdateOne {
-	pcuo.mutation.SetProductCoursesID(id)
+// SetNodeCID sets the "nodeC" edge to the Product entity by ID.
+func (pcuo *ProductCoursesUpdateOne) SetNodeCID(id int64) *ProductCoursesUpdateOne {
+	pcuo.mutation.SetNodeCID(id)
 	return pcuo
 }
 
-// SetNillableProductCoursesID sets the "productCourses" edge to the Product entity by ID if the given value is not nil.
-func (pcuo *ProductCoursesUpdateOne) SetNillableProductCoursesID(id *int64) *ProductCoursesUpdateOne {
+// SetNillableNodeCID sets the "nodeC" edge to the Product entity by ID if the given value is not nil.
+func (pcuo *ProductCoursesUpdateOne) SetNillableNodeCID(id *int64) *ProductCoursesUpdateOne {
 	if id != nil {
-		pcuo = pcuo.SetProductCoursesID(*id)
+		pcuo = pcuo.SetNodeCID(*id)
 	}
 	return pcuo
 }
 
-// SetProductCourses sets the "productCourses" edge to the Product entity.
-func (pcuo *ProductCoursesUpdateOne) SetProductCourses(p *Product) *ProductCoursesUpdateOne {
-	return pcuo.SetProductCoursesID(p.ID)
+// SetNodeC sets the "nodeC" edge to the Product entity.
+func (pcuo *ProductCoursesUpdateOne) SetNodeC(p *Product) *ProductCoursesUpdateOne {
+	return pcuo.SetNodeCID(p.ID)
 }
 
-// SetProductLessonsID sets the "productLessons" edge to the Product entity by ID.
-func (pcuo *ProductCoursesUpdateOne) SetProductLessonsID(id int64) *ProductCoursesUpdateOne {
-	pcuo.mutation.SetProductLessonsID(id)
+// SetNodeLID sets the "nodeL" edge to the Product entity by ID.
+func (pcuo *ProductCoursesUpdateOne) SetNodeLID(id int64) *ProductCoursesUpdateOne {
+	pcuo.mutation.SetNodeLID(id)
 	return pcuo
 }
 
-// SetNillableProductLessonsID sets the "productLessons" edge to the Product entity by ID if the given value is not nil.
-func (pcuo *ProductCoursesUpdateOne) SetNillableProductLessonsID(id *int64) *ProductCoursesUpdateOne {
+// SetNillableNodeLID sets the "nodeL" edge to the Product entity by ID if the given value is not nil.
+func (pcuo *ProductCoursesUpdateOne) SetNillableNodeLID(id *int64) *ProductCoursesUpdateOne {
 	if id != nil {
-		pcuo = pcuo.SetProductLessonsID(*id)
+		pcuo = pcuo.SetNodeLID(*id)
 	}
 	return pcuo
 }
 
-// SetProductLessons sets the "productLessons" edge to the Product entity.
-func (pcuo *ProductCoursesUpdateOne) SetProductLessons(p *Product) *ProductCoursesUpdateOne {
-	return pcuo.SetProductLessonsID(p.ID)
+// SetNodeL sets the "nodeL" edge to the Product entity.
+func (pcuo *ProductCoursesUpdateOne) SetNodeL(p *Product) *ProductCoursesUpdateOne {
+	return pcuo.SetNodeLID(p.ID)
 }
 
 // Mutation returns the ProductCoursesMutation object of the builder.
@@ -730,15 +730,15 @@ func (pcuo *ProductCoursesUpdateOne) Mutation() *ProductCoursesMutation {
 	return pcuo.mutation
 }
 
-// ClearProductCourses clears the "productCourses" edge to the Product entity.
-func (pcuo *ProductCoursesUpdateOne) ClearProductCourses() *ProductCoursesUpdateOne {
-	pcuo.mutation.ClearProductCourses()
+// ClearNodeC clears the "nodeC" edge to the Product entity.
+func (pcuo *ProductCoursesUpdateOne) ClearNodeC() *ProductCoursesUpdateOne {
+	pcuo.mutation.ClearNodeC()
 	return pcuo
 }
 
-// ClearProductLessons clears the "productLessons" edge to the Product entity.
-func (pcuo *ProductCoursesUpdateOne) ClearProductLessons() *ProductCoursesUpdateOne {
-	pcuo.mutation.ClearProductLessons()
+// ClearNodeL clears the "nodeL" edge to the Product entity.
+func (pcuo *ProductCoursesUpdateOne) ClearNodeL() *ProductCoursesUpdateOne {
+	pcuo.mutation.ClearNodeL()
 	return pcuo
 }
 
@@ -883,12 +883,12 @@ func (pcuo *ProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node *Produc
 	if pcuo.mutation.CoursesIDCleared() {
 		_spec.ClearField(productcourses.FieldCoursesID, field.TypeInt64)
 	}
-	if pcuo.mutation.ProductCoursesCleared() {
+	if pcuo.mutation.NodeCCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductCoursesTable,
-			Columns: []string{productcourses.ProductCoursesColumn},
+			Table:   productcourses.NodeCTable,
+			Columns: []string{productcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
@@ -896,12 +896,12 @@ func (pcuo *ProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node *Produc
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pcuo.mutation.ProductCoursesIDs(); len(nodes) > 0 {
+	if nodes := pcuo.mutation.NodeCIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductCoursesTable,
-			Columns: []string{productcourses.ProductCoursesColumn},
+			Table:   productcourses.NodeCTable,
+			Columns: []string{productcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
@@ -912,12 +912,12 @@ func (pcuo *ProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node *Produc
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pcuo.mutation.ProductLessonsCleared() {
+	if pcuo.mutation.NodeLCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductLessonsTable,
-			Columns: []string{productcourses.ProductLessonsColumn},
+			Table:   productcourses.NodeLTable,
+			Columns: []string{productcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
@@ -925,12 +925,12 @@ func (pcuo *ProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node *Produc
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pcuo.mutation.ProductLessonsIDs(); len(nodes) > 0 {
+	if nodes := pcuo.mutation.NodeLIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   productcourses.ProductLessonsTable,
-			Columns: []string{productcourses.ProductLessonsColumn},
+			Table:   productcourses.NodeLTable,
+			Columns: []string{productcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),

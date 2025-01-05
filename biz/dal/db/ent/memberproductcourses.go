@@ -47,39 +47,39 @@ type MemberProductCourses struct {
 
 // MemberProductCoursesEdges holds the relations/edges for other nodes in the graph.
 type MemberProductCoursesEdges struct {
-	// ProductCourses holds the value of the productCourses edge.
-	ProductCourses *MemberProduct `json:"productCourses,omitempty"`
-	// ProductLessons holds the value of the productLessons edge.
-	ProductLessons *MemberProduct `json:"productLessons,omitempty"`
+	// NodeC holds the value of the nodeC edge.
+	NodeC *MemberProduct `json:"nodeC,omitempty"`
+	// NodeL holds the value of the nodeL edge.
+	NodeL *MemberProduct `json:"nodeL,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [2]bool
 }
 
-// ProductCoursesOrErr returns the ProductCourses value or an error if the edge
+// NodeCOrErr returns the NodeC value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e MemberProductCoursesEdges) ProductCoursesOrErr() (*MemberProduct, error) {
+func (e MemberProductCoursesEdges) NodeCOrErr() (*MemberProduct, error) {
 	if e.loadedTypes[0] {
-		if e.ProductCourses == nil {
+		if e.NodeC == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: memberproduct.Label}
 		}
-		return e.ProductCourses, nil
+		return e.NodeC, nil
 	}
-	return nil, &NotLoadedError{edge: "productCourses"}
+	return nil, &NotLoadedError{edge: "nodeC"}
 }
 
-// ProductLessonsOrErr returns the ProductLessons value or an error if the edge
+// NodeLOrErr returns the NodeL value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e MemberProductCoursesEdges) ProductLessonsOrErr() (*MemberProduct, error) {
+func (e MemberProductCoursesEdges) NodeLOrErr() (*MemberProduct, error) {
 	if e.loadedTypes[1] {
-		if e.ProductLessons == nil {
+		if e.NodeL == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: memberproduct.Label}
 		}
-		return e.ProductLessons, nil
+		return e.NodeL, nil
 	}
-	return nil, &NotLoadedError{edge: "productLessons"}
+	return nil, &NotLoadedError{edge: "nodeL"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -187,14 +187,14 @@ func (mpc *MemberProductCourses) Value(name string) (ent.Value, error) {
 	return mpc.selectValues.Get(name)
 }
 
-// QueryProductCourses queries the "productCourses" edge of the MemberProductCourses entity.
-func (mpc *MemberProductCourses) QueryProductCourses() *MemberProductQuery {
-	return NewMemberProductCoursesClient(mpc.config).QueryProductCourses(mpc)
+// QueryNodeC queries the "nodeC" edge of the MemberProductCourses entity.
+func (mpc *MemberProductCourses) QueryNodeC() *MemberProductQuery {
+	return NewMemberProductCoursesClient(mpc.config).QueryNodeC(mpc)
 }
 
-// QueryProductLessons queries the "productLessons" edge of the MemberProductCourses entity.
-func (mpc *MemberProductCourses) QueryProductLessons() *MemberProductQuery {
-	return NewMemberProductCoursesClient(mpc.config).QueryProductLessons(mpc)
+// QueryNodeL queries the "nodeL" edge of the MemberProductCourses entity.
+func (mpc *MemberProductCourses) QueryNodeL() *MemberProductQuery {
+	return NewMemberProductCoursesClient(mpc.config).QueryNodeL(mpc)
 }
 
 // Update returns a builder for updating this MemberProductCourses.

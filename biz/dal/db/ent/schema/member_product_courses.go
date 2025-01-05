@@ -34,11 +34,11 @@ func (MemberProductCourses) Mixin() []ent.Mixin {
 func (MemberProductCourses) Edges() []ent.Edge {
 	return []ent.Edge{
 
-		edge.From("productCourses", MemberProduct.Type).
+		edge.From("nodeC", MemberProduct.Type).
 			Ref("memberCourses").
 			Field("member_product_id").Unique(),
 
-		edge.From("productLessons", MemberProduct.Type).
+		edge.From("nodeL", MemberProduct.Type).
 			Ref("memberLessons").
 			Field("member_product_id").Unique(),
 	}

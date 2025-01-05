@@ -236,42 +236,42 @@ func (mpcu *MemberProductCoursesUpdate) ClearCoursesID() *MemberProductCoursesUp
 	return mpcu
 }
 
-// SetProductCoursesID sets the "productCourses" edge to the MemberProduct entity by ID.
-func (mpcu *MemberProductCoursesUpdate) SetProductCoursesID(id int64) *MemberProductCoursesUpdate {
-	mpcu.mutation.SetProductCoursesID(id)
+// SetNodeCID sets the "nodeC" edge to the MemberProduct entity by ID.
+func (mpcu *MemberProductCoursesUpdate) SetNodeCID(id int64) *MemberProductCoursesUpdate {
+	mpcu.mutation.SetNodeCID(id)
 	return mpcu
 }
 
-// SetNillableProductCoursesID sets the "productCourses" edge to the MemberProduct entity by ID if the given value is not nil.
-func (mpcu *MemberProductCoursesUpdate) SetNillableProductCoursesID(id *int64) *MemberProductCoursesUpdate {
+// SetNillableNodeCID sets the "nodeC" edge to the MemberProduct entity by ID if the given value is not nil.
+func (mpcu *MemberProductCoursesUpdate) SetNillableNodeCID(id *int64) *MemberProductCoursesUpdate {
 	if id != nil {
-		mpcu = mpcu.SetProductCoursesID(*id)
+		mpcu = mpcu.SetNodeCID(*id)
 	}
 	return mpcu
 }
 
-// SetProductCourses sets the "productCourses" edge to the MemberProduct entity.
-func (mpcu *MemberProductCoursesUpdate) SetProductCourses(m *MemberProduct) *MemberProductCoursesUpdate {
-	return mpcu.SetProductCoursesID(m.ID)
+// SetNodeC sets the "nodeC" edge to the MemberProduct entity.
+func (mpcu *MemberProductCoursesUpdate) SetNodeC(m *MemberProduct) *MemberProductCoursesUpdate {
+	return mpcu.SetNodeCID(m.ID)
 }
 
-// SetProductLessonsID sets the "productLessons" edge to the MemberProduct entity by ID.
-func (mpcu *MemberProductCoursesUpdate) SetProductLessonsID(id int64) *MemberProductCoursesUpdate {
-	mpcu.mutation.SetProductLessonsID(id)
+// SetNodeLID sets the "nodeL" edge to the MemberProduct entity by ID.
+func (mpcu *MemberProductCoursesUpdate) SetNodeLID(id int64) *MemberProductCoursesUpdate {
+	mpcu.mutation.SetNodeLID(id)
 	return mpcu
 }
 
-// SetNillableProductLessonsID sets the "productLessons" edge to the MemberProduct entity by ID if the given value is not nil.
-func (mpcu *MemberProductCoursesUpdate) SetNillableProductLessonsID(id *int64) *MemberProductCoursesUpdate {
+// SetNillableNodeLID sets the "nodeL" edge to the MemberProduct entity by ID if the given value is not nil.
+func (mpcu *MemberProductCoursesUpdate) SetNillableNodeLID(id *int64) *MemberProductCoursesUpdate {
 	if id != nil {
-		mpcu = mpcu.SetProductLessonsID(*id)
+		mpcu = mpcu.SetNodeLID(*id)
 	}
 	return mpcu
 }
 
-// SetProductLessons sets the "productLessons" edge to the MemberProduct entity.
-func (mpcu *MemberProductCoursesUpdate) SetProductLessons(m *MemberProduct) *MemberProductCoursesUpdate {
-	return mpcu.SetProductLessonsID(m.ID)
+// SetNodeL sets the "nodeL" edge to the MemberProduct entity.
+func (mpcu *MemberProductCoursesUpdate) SetNodeL(m *MemberProduct) *MemberProductCoursesUpdate {
+	return mpcu.SetNodeLID(m.ID)
 }
 
 // Mutation returns the MemberProductCoursesMutation object of the builder.
@@ -279,15 +279,15 @@ func (mpcu *MemberProductCoursesUpdate) Mutation() *MemberProductCoursesMutation
 	return mpcu.mutation
 }
 
-// ClearProductCourses clears the "productCourses" edge to the MemberProduct entity.
-func (mpcu *MemberProductCoursesUpdate) ClearProductCourses() *MemberProductCoursesUpdate {
-	mpcu.mutation.ClearProductCourses()
+// ClearNodeC clears the "nodeC" edge to the MemberProduct entity.
+func (mpcu *MemberProductCoursesUpdate) ClearNodeC() *MemberProductCoursesUpdate {
+	mpcu.mutation.ClearNodeC()
 	return mpcu
 }
 
-// ClearProductLessons clears the "productLessons" edge to the MemberProduct entity.
-func (mpcu *MemberProductCoursesUpdate) ClearProductLessons() *MemberProductCoursesUpdate {
-	mpcu.mutation.ClearProductLessons()
+// ClearNodeL clears the "nodeL" edge to the MemberProduct entity.
+func (mpcu *MemberProductCoursesUpdate) ClearNodeL() *MemberProductCoursesUpdate {
+	mpcu.mutation.ClearNodeL()
 	return mpcu
 }
 
@@ -402,12 +402,12 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 	if mpcu.mutation.CoursesIDCleared() {
 		_spec.ClearField(memberproductcourses.FieldCoursesID, field.TypeInt64)
 	}
-	if mpcu.mutation.ProductCoursesCleared() {
+	if mpcu.mutation.NodeCCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductCoursesTable,
-			Columns: []string{memberproductcourses.ProductCoursesColumn},
+			Table:   memberproductcourses.NodeCTable,
+			Columns: []string{memberproductcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
@@ -415,12 +415,12 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mpcu.mutation.ProductCoursesIDs(); len(nodes) > 0 {
+	if nodes := mpcu.mutation.NodeCIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductCoursesTable,
-			Columns: []string{memberproductcourses.ProductCoursesColumn},
+			Table:   memberproductcourses.NodeCTable,
+			Columns: []string{memberproductcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
@@ -431,12 +431,12 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mpcu.mutation.ProductLessonsCleared() {
+	if mpcu.mutation.NodeLCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductLessonsTable,
-			Columns: []string{memberproductcourses.ProductLessonsColumn},
+			Table:   memberproductcourses.NodeLTable,
+			Columns: []string{memberproductcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
@@ -444,12 +444,12 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mpcu.mutation.ProductLessonsIDs(); len(nodes) > 0 {
+	if nodes := mpcu.mutation.NodeLIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductLessonsTable,
-			Columns: []string{memberproductcourses.ProductLessonsColumn},
+			Table:   memberproductcourses.NodeLTable,
+			Columns: []string{memberproductcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
@@ -687,42 +687,42 @@ func (mpcuo *MemberProductCoursesUpdateOne) ClearCoursesID() *MemberProductCours
 	return mpcuo
 }
 
-// SetProductCoursesID sets the "productCourses" edge to the MemberProduct entity by ID.
-func (mpcuo *MemberProductCoursesUpdateOne) SetProductCoursesID(id int64) *MemberProductCoursesUpdateOne {
-	mpcuo.mutation.SetProductCoursesID(id)
+// SetNodeCID sets the "nodeC" edge to the MemberProduct entity by ID.
+func (mpcuo *MemberProductCoursesUpdateOne) SetNodeCID(id int64) *MemberProductCoursesUpdateOne {
+	mpcuo.mutation.SetNodeCID(id)
 	return mpcuo
 }
 
-// SetNillableProductCoursesID sets the "productCourses" edge to the MemberProduct entity by ID if the given value is not nil.
-func (mpcuo *MemberProductCoursesUpdateOne) SetNillableProductCoursesID(id *int64) *MemberProductCoursesUpdateOne {
+// SetNillableNodeCID sets the "nodeC" edge to the MemberProduct entity by ID if the given value is not nil.
+func (mpcuo *MemberProductCoursesUpdateOne) SetNillableNodeCID(id *int64) *MemberProductCoursesUpdateOne {
 	if id != nil {
-		mpcuo = mpcuo.SetProductCoursesID(*id)
+		mpcuo = mpcuo.SetNodeCID(*id)
 	}
 	return mpcuo
 }
 
-// SetProductCourses sets the "productCourses" edge to the MemberProduct entity.
-func (mpcuo *MemberProductCoursesUpdateOne) SetProductCourses(m *MemberProduct) *MemberProductCoursesUpdateOne {
-	return mpcuo.SetProductCoursesID(m.ID)
+// SetNodeC sets the "nodeC" edge to the MemberProduct entity.
+func (mpcuo *MemberProductCoursesUpdateOne) SetNodeC(m *MemberProduct) *MemberProductCoursesUpdateOne {
+	return mpcuo.SetNodeCID(m.ID)
 }
 
-// SetProductLessonsID sets the "productLessons" edge to the MemberProduct entity by ID.
-func (mpcuo *MemberProductCoursesUpdateOne) SetProductLessonsID(id int64) *MemberProductCoursesUpdateOne {
-	mpcuo.mutation.SetProductLessonsID(id)
+// SetNodeLID sets the "nodeL" edge to the MemberProduct entity by ID.
+func (mpcuo *MemberProductCoursesUpdateOne) SetNodeLID(id int64) *MemberProductCoursesUpdateOne {
+	mpcuo.mutation.SetNodeLID(id)
 	return mpcuo
 }
 
-// SetNillableProductLessonsID sets the "productLessons" edge to the MemberProduct entity by ID if the given value is not nil.
-func (mpcuo *MemberProductCoursesUpdateOne) SetNillableProductLessonsID(id *int64) *MemberProductCoursesUpdateOne {
+// SetNillableNodeLID sets the "nodeL" edge to the MemberProduct entity by ID if the given value is not nil.
+func (mpcuo *MemberProductCoursesUpdateOne) SetNillableNodeLID(id *int64) *MemberProductCoursesUpdateOne {
 	if id != nil {
-		mpcuo = mpcuo.SetProductLessonsID(*id)
+		mpcuo = mpcuo.SetNodeLID(*id)
 	}
 	return mpcuo
 }
 
-// SetProductLessons sets the "productLessons" edge to the MemberProduct entity.
-func (mpcuo *MemberProductCoursesUpdateOne) SetProductLessons(m *MemberProduct) *MemberProductCoursesUpdateOne {
-	return mpcuo.SetProductLessonsID(m.ID)
+// SetNodeL sets the "nodeL" edge to the MemberProduct entity.
+func (mpcuo *MemberProductCoursesUpdateOne) SetNodeL(m *MemberProduct) *MemberProductCoursesUpdateOne {
+	return mpcuo.SetNodeLID(m.ID)
 }
 
 // Mutation returns the MemberProductCoursesMutation object of the builder.
@@ -730,15 +730,15 @@ func (mpcuo *MemberProductCoursesUpdateOne) Mutation() *MemberProductCoursesMuta
 	return mpcuo.mutation
 }
 
-// ClearProductCourses clears the "productCourses" edge to the MemberProduct entity.
-func (mpcuo *MemberProductCoursesUpdateOne) ClearProductCourses() *MemberProductCoursesUpdateOne {
-	mpcuo.mutation.ClearProductCourses()
+// ClearNodeC clears the "nodeC" edge to the MemberProduct entity.
+func (mpcuo *MemberProductCoursesUpdateOne) ClearNodeC() *MemberProductCoursesUpdateOne {
+	mpcuo.mutation.ClearNodeC()
 	return mpcuo
 }
 
-// ClearProductLessons clears the "productLessons" edge to the MemberProduct entity.
-func (mpcuo *MemberProductCoursesUpdateOne) ClearProductLessons() *MemberProductCoursesUpdateOne {
-	mpcuo.mutation.ClearProductLessons()
+// ClearNodeL clears the "nodeL" edge to the MemberProduct entity.
+func (mpcuo *MemberProductCoursesUpdateOne) ClearNodeL() *MemberProductCoursesUpdateOne {
+	mpcuo.mutation.ClearNodeL()
 	return mpcuo
 }
 
@@ -883,12 +883,12 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 	if mpcuo.mutation.CoursesIDCleared() {
 		_spec.ClearField(memberproductcourses.FieldCoursesID, field.TypeInt64)
 	}
-	if mpcuo.mutation.ProductCoursesCleared() {
+	if mpcuo.mutation.NodeCCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductCoursesTable,
-			Columns: []string{memberproductcourses.ProductCoursesColumn},
+			Table:   memberproductcourses.NodeCTable,
+			Columns: []string{memberproductcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
@@ -896,12 +896,12 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mpcuo.mutation.ProductCoursesIDs(); len(nodes) > 0 {
+	if nodes := mpcuo.mutation.NodeCIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductCoursesTable,
-			Columns: []string{memberproductcourses.ProductCoursesColumn},
+			Table:   memberproductcourses.NodeCTable,
+			Columns: []string{memberproductcourses.NodeCColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
@@ -912,12 +912,12 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mpcuo.mutation.ProductLessonsCleared() {
+	if mpcuo.mutation.NodeLCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductLessonsTable,
-			Columns: []string{memberproductcourses.ProductLessonsColumn},
+			Table:   memberproductcourses.NodeLTable,
+			Columns: []string{memberproductcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
@@ -925,12 +925,12 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mpcuo.mutation.ProductLessonsIDs(); len(nodes) > 0 {
+	if nodes := mpcuo.mutation.NodeLIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   memberproductcourses.ProductLessonsTable,
-			Columns: []string{memberproductcourses.ProductLessonsColumn},
+			Table:   memberproductcourses.NodeLTable,
+			Columns: []string{memberproductcourses.NodeLColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),

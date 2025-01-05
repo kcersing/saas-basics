@@ -3550,19 +3550,7 @@ paths:
       summary: 场地列表
   /service/sys/product/list:
     post:
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.ListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 产品列表
+      responses: {}
   /service/sys/role/list:
     post:
       parameters:

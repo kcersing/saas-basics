@@ -635,21 +635,21 @@ func CoursesIDNotNil() predicate.ProductCourses {
 	return predicate.ProductCourses(sql.FieldNotNull(FieldCoursesID))
 }
 
-// HasProductCourses applies the HasEdge predicate on the "productCourses" edge.
-func HasProductCourses() predicate.ProductCourses {
+// HasNodeC applies the HasEdge predicate on the "nodeC" edge.
+func HasNodeC() predicate.ProductCourses {
 	return predicate.ProductCourses(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ProductCoursesTable, ProductCoursesColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, NodeCTable, NodeCColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasProductCoursesWith applies the HasEdge predicate on the "productCourses" edge with a given conditions (other predicates).
-func HasProductCoursesWith(preds ...predicate.Product) predicate.ProductCourses {
+// HasNodeCWith applies the HasEdge predicate on the "nodeC" edge with a given conditions (other predicates).
+func HasNodeCWith(preds ...predicate.Product) predicate.ProductCourses {
 	return predicate.ProductCourses(func(s *sql.Selector) {
-		step := newProductCoursesStep()
+		step := newNodeCStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -658,21 +658,21 @@ func HasProductCoursesWith(preds ...predicate.Product) predicate.ProductCourses 
 	})
 }
 
-// HasProductLessons applies the HasEdge predicate on the "productLessons" edge.
-func HasProductLessons() predicate.ProductCourses {
+// HasNodeL applies the HasEdge predicate on the "nodeL" edge.
+func HasNodeL() predicate.ProductCourses {
 	return predicate.ProductCourses(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ProductLessonsTable, ProductLessonsColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, NodeLTable, NodeLColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasProductLessonsWith applies the HasEdge predicate on the "productLessons" edge with a given conditions (other predicates).
-func HasProductLessonsWith(preds ...predicate.Product) predicate.ProductCourses {
+// HasNodeLWith applies the HasEdge predicate on the "nodeL" edge with a given conditions (other predicates).
+func HasNodeLWith(preds ...predicate.Product) predicate.ProductCourses {
 	return predicate.ProductCourses(func(s *sql.Selector) {
-		step := newProductLessonsStep()
+		step := newNodeLStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
