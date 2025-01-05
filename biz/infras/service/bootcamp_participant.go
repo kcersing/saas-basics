@@ -23,7 +23,8 @@ func (b Bootcamp) CreateParticipantMember(req bootcamp.ParticipantInfo) (member 
 	member, err = b.db.Member.Query().Where(member2.Mobile(req.Mobile)).First(b.ctx)
 
 	if member == nil {
-		member, err = b.db.Member.Create().SetName(req.Name).SetMobile(req.Mobile).Save(b.ctx)
+		member, err = b.db.Member.Create().SetMobile(req.Mobile).Save(b.ctx)
+		//.SetName(req.Name)
 		hlog.Info(err)
 		if err != nil {
 			return nil, err
