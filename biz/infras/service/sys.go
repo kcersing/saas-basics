@@ -232,7 +232,7 @@ func (s Sys) StaffList(req sys.SysStaffListReq) (list []do.SysStaffList, total i
 		predicates = append(predicates, user2.Name(req.Name))
 	}
 	if req.VenueId > 0 {
-		predicates = append(predicates, user2.VenueID(req.VenueId))
+		predicates = append(predicates, user2.DefaultVenueID(req.VenueId))
 	}
 	if len(req.TagId) > 0 {
 		predicates = append(predicates, user2.HasTagsWith(dictionarydetail.IDIn(req.TagId...)))

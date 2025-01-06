@@ -130,6 +130,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		SetType(req.Type).
 		AddTagIDs(req.UserTags...).
 		AddVenueIDs(req.VenueId...).
+		SetDefaultVenueID(req.DefaultVenueId).
 		Save(u.ctx)
 
 	if err != nil {
@@ -184,6 +185,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		SetType(req.Type).
 		AddTagIDs(req.UserTags...).
 		AddVenueIDs(req.VenueId...).
+		SetDefaultVenueID(req.DefaultVenueId).
 		Save(u.ctx)
 
 	if err != nil {

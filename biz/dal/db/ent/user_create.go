@@ -131,20 +131,6 @@ func (uc *UserCreate) SetNillableGender(i *int64) *UserCreate {
 	return uc
 }
 
-// SetVenueID sets the "venue_id" field.
-func (uc *UserCreate) SetVenueID(i int64) *UserCreate {
-	uc.mutation.SetVenueID(i)
-	return uc
-}
-
-// SetNillableVenueID sets the "venue_id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableVenueID(i *int64) *UserCreate {
-	if i != nil {
-		uc.SetVenueID(*i)
-	}
-	return uc
-}
-
 // SetUsername sets the "username" field.
 func (uc *UserCreate) SetUsername(s string) *UserCreate {
 	uc.mutation.SetUsername(s)
@@ -494,10 +480,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Gender(); ok {
 		_spec.SetField(user.FieldGender, field.TypeInt64, value)
 		_node.Gender = value
-	}
-	if value, ok := uc.mutation.VenueID(); ok {
-		_spec.SetField(user.FieldVenueID, field.TypeInt64, value)
-		_node.VenueID = value
 	}
 	if value, ok := uc.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)

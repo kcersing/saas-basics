@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
@@ -84,10 +83,8 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 			}
 		}()
 	}
-	hlog.Info("Lessons")
-	hlog.Info(req.Lessons)
-	if len(req.Lessons) > 0 {
 
+	if len(req.Lessons) > 0 {
 		go func() {
 			for _, v := range req.Lessons {
 				p.db.ProductCourses.Create().

@@ -57147,8 +57147,6 @@ type UserMutation struct {
 	name                    *string
 	gender                  *int64
 	addgender               *int64
-	venue_id                *int64
-	addvenue_id             *int64
 	username                *string
 	password                *string
 	functions               *string
@@ -57751,76 +57749,6 @@ func (m *UserMutation) ResetGender() {
 	m.gender = nil
 	m.addgender = nil
 	delete(m.clearedFields, user.FieldGender)
-}
-
-// SetVenueID sets the "venue_id" field.
-func (m *UserMutation) SetVenueID(i int64) {
-	m.venue_id = &i
-	m.addvenue_id = nil
-}
-
-// VenueID returns the value of the "venue_id" field in the mutation.
-func (m *UserMutation) VenueID() (r int64, exists bool) {
-	v := m.venue_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldVenueID returns the old "venue_id" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldVenueID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldVenueID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldVenueID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldVenueID: %w", err)
-	}
-	return oldValue.VenueID, nil
-}
-
-// AddVenueID adds i to the "venue_id" field.
-func (m *UserMutation) AddVenueID(i int64) {
-	if m.addvenue_id != nil {
-		*m.addvenue_id += i
-	} else {
-		m.addvenue_id = &i
-	}
-}
-
-// AddedVenueID returns the value that was added to the "venue_id" field in this mutation.
-func (m *UserMutation) AddedVenueID() (r int64, exists bool) {
-	v := m.addvenue_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearVenueID clears the value of the "venue_id" field.
-func (m *UserMutation) ClearVenueID() {
-	m.venue_id = nil
-	m.addvenue_id = nil
-	m.clearedFields[user.FieldVenueID] = struct{}{}
-}
-
-// VenueIDCleared returns if the "venue_id" field was cleared in this mutation.
-func (m *UserMutation) VenueIDCleared() bool {
-	_, ok := m.clearedFields[user.FieldVenueID]
-	return ok
-}
-
-// ResetVenueID resets all changes to the "venue_id" field.
-func (m *UserMutation) ResetVenueID() {
-	m.venue_id = nil
-	m.addvenue_id = nil
-	delete(m.clearedFields, user.FieldVenueID)
 }
 
 // SetUsername sets the "username" field.
@@ -58636,7 +58564,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, user.FieldCreatedAt)
 	}
@@ -58660,9 +58588,6 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.gender != nil {
 		fields = append(fields, user.FieldGender)
-	}
-	if m.venue_id != nil {
-		fields = append(fields, user.FieldVenueID)
 	}
 	if m.username != nil {
 		fields = append(fields, user.FieldUsername)
@@ -58712,8 +58637,6 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case user.FieldGender:
 		return m.Gender()
-	case user.FieldVenueID:
-		return m.VenueID()
 	case user.FieldUsername:
 		return m.Username()
 	case user.FieldPassword:
@@ -58755,8 +58678,6 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldName(ctx)
 	case user.FieldGender:
 		return m.OldGender(ctx)
-	case user.FieldVenueID:
-		return m.OldVenueID(ctx)
 	case user.FieldUsername:
 		return m.OldUsername(ctx)
 	case user.FieldPassword:
@@ -58838,13 +58759,6 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetGender(v)
 		return nil
-	case user.FieldVenueID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetVenueID(v)
-		return nil
 	case user.FieldUsername:
 		v, ok := value.(string)
 		if !ok {
@@ -58921,9 +58835,6 @@ func (m *UserMutation) AddedFields() []string {
 	if m.addgender != nil {
 		fields = append(fields, user.FieldGender)
 	}
-	if m.addvenue_id != nil {
-		fields = append(fields, user.FieldVenueID)
-	}
 	if m.add_type != nil {
 		fields = append(fields, user.FieldType)
 	}
@@ -58949,8 +58860,6 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedStatus()
 	case user.FieldGender:
 		return m.AddedGender()
-	case user.FieldVenueID:
-		return m.AddedVenueID()
 	case user.FieldType:
 		return m.AddedType()
 	case user.FieldJobTime:
@@ -58993,13 +58902,6 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddGender(v)
-		return nil
-	case user.FieldVenueID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddVenueID(v)
 		return nil
 	case user.FieldType:
 		v, ok := value.(int64)
@@ -59051,9 +58953,6 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldGender) {
 		fields = append(fields, user.FieldGender)
 	}
-	if m.FieldCleared(user.FieldVenueID) {
-		fields = append(fields, user.FieldVenueID)
-	}
 	if m.FieldCleared(user.FieldType) {
 		fields = append(fields, user.FieldType)
 	}
@@ -59104,9 +59003,6 @@ func (m *UserMutation) ClearField(name string) error {
 	case user.FieldGender:
 		m.ClearGender()
 		return nil
-	case user.FieldVenueID:
-		m.ClearVenueID()
-		return nil
 	case user.FieldType:
 		m.ClearType()
 		return nil
@@ -59153,9 +59049,6 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldGender:
 		m.ResetGender()
-		return nil
-	case user.FieldVenueID:
-		m.ResetVenueID()
 		return nil
 	case user.FieldUsername:
 		m.ResetUsername()

@@ -145,3 +145,8 @@ func _delmemberMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _memberproductinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

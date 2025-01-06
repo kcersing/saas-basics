@@ -1369,7 +1369,6 @@ var (
 		{Name: "mobile", Type: field.TypeString, Unique: true, Comment: "mobile number | 手机号"},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "name | 姓名"},
 		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [0:女性;1:男性;3:保密]", Default: 3},
-		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "username", Type: field.TypeString, Unique: true, Comment: "user's login name | 登录名"},
 		{Name: "password", Type: field.TypeString, Comment: "password | 密码"},
 		{Name: "functions", Type: field.TypeString, Comment: "functions | 职能"},
@@ -1388,7 +1387,7 @@ var (
 			{
 				Name:    "user_username_mobile",
 				Unique:  true,
-				Columns: []*schema.Column{SysUsersColumns[10], SysUsersColumns[6]},
+				Columns: []*schema.Column{SysUsersColumns[9], SysUsersColumns[6]},
 			},
 		},
 	}

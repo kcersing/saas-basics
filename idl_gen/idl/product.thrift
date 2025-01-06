@@ -26,7 +26,7 @@ struct ProductInfo {
     20: optional i64 createdId = 0 (api.raw = "createdId")
     21: optional string createdName = "" (api.raw = "createdName")
     /**团课*/
-    22: optional list<base.CourseList> lessons =0 (api.raw = "lessons")
+    22: optional list<base.CourseList> lessons = {} (api.raw = "lessons")
     /**团课预约 1支持2不支持*/
     23: optional i64 isLessons =0 (api.raw = "isLessons")
     /**次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包*/
@@ -40,6 +40,7 @@ struct ProductInfo {
      27: optional i64 isCourse =0 (api.raw = "isCourse")
      /**课程-数组*/
      28: optional list<base.CourseList> courses = {}  (api.raw = "courses")
+
 }
 
 

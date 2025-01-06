@@ -95,11 +95,6 @@ func Gender(v int64) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldGender, v))
 }
 
-// VenueID applies equality check predicate on the "venue_id" field. It's identical to VenueIDEQ.
-func VenueID(v int64) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldVenueID, v))
-}
-
 // Username applies equality check predicate on the "username" field. It's identical to UsernameEQ.
 func Username(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldUsername, v))
@@ -578,56 +573,6 @@ func GenderIsNil() predicate.User {
 // GenderNotNil applies the NotNil predicate on the "gender" field.
 func GenderNotNil() predicate.User {
 	return predicate.User(sql.FieldNotNull(FieldGender))
-}
-
-// VenueIDEQ applies the EQ predicate on the "venue_id" field.
-func VenueIDEQ(v int64) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldVenueID, v))
-}
-
-// VenueIDNEQ applies the NEQ predicate on the "venue_id" field.
-func VenueIDNEQ(v int64) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldVenueID, v))
-}
-
-// VenueIDIn applies the In predicate on the "venue_id" field.
-func VenueIDIn(vs ...int64) predicate.User {
-	return predicate.User(sql.FieldIn(FieldVenueID, vs...))
-}
-
-// VenueIDNotIn applies the NotIn predicate on the "venue_id" field.
-func VenueIDNotIn(vs ...int64) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldVenueID, vs...))
-}
-
-// VenueIDGT applies the GT predicate on the "venue_id" field.
-func VenueIDGT(v int64) predicate.User {
-	return predicate.User(sql.FieldGT(FieldVenueID, v))
-}
-
-// VenueIDGTE applies the GTE predicate on the "venue_id" field.
-func VenueIDGTE(v int64) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldVenueID, v))
-}
-
-// VenueIDLT applies the LT predicate on the "venue_id" field.
-func VenueIDLT(v int64) predicate.User {
-	return predicate.User(sql.FieldLT(FieldVenueID, v))
-}
-
-// VenueIDLTE applies the LTE predicate on the "venue_id" field.
-func VenueIDLTE(v int64) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldVenueID, v))
-}
-
-// VenueIDIsNil applies the IsNil predicate on the "venue_id" field.
-func VenueIDIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldVenueID))
-}
-
-// VenueIDNotNil applies the NotNil predicate on the "venue_id" field.
-func VenueIDNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldVenueID))
 }
 
 // UsernameEQ applies the EQ predicate on the "username" field.

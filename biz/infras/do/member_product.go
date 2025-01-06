@@ -2,13 +2,14 @@ package do
 
 import (
 	"saas/biz/dal/db/ent"
+	memberProduct "saas/idl_gen/model/member/memberProduct"
 )
 
 type MemberProduct interface {
 	CreateMemberProduct(req CreateMemberProductReq) error
 	//UpdateMemberProduct(req member.CreateOrUpdateMemberReq) error
-	//MemberProductInfo(id int64) (info *mem, err error)
-	//MemberProductList(req member.MemberListReq) (resp []*member.MemberInfo, total int, err error)
+	MemberProductInfo(id int64) (info *memberProduct.MemberProductInfo, err error)
+	MemberProductList(req memberProduct.MemberProductListReq) (resp []*memberProduct.MemberProductInfo, total int, err error)
 }
 
 type CreateMemberProductReq struct {

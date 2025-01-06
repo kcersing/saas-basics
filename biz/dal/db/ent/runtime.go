@@ -1454,11 +1454,11 @@ func init() {
 	// user.DefaultGender holds the default value on creation for the gender field.
 	user.DefaultGender = userDescGender.Default.(int64)
 	// userDescType is the schema descriptor for type field.
-	userDescType := userFields[7].Descriptor()
+	userDescType := userFields[6].Descriptor()
 	// user.DefaultType holds the default value on creation for the type field.
 	user.DefaultType = userDescType.Default.(int64)
 	// userDescJobTime is the schema descriptor for job_time field.
-	userDescJobTime := userFields[8].Descriptor()
+	userDescJobTime := userFields[7].Descriptor()
 	// user.DefaultJobTime holds the default value on creation for the job_time field.
 	user.DefaultJobTime = userDescJobTime.Default.(int64)
 	userschedulingMixin := schema.UserScheduling{}.Mixin()

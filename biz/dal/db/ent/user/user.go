@@ -30,8 +30,6 @@ const (
 	FieldName = "name"
 	// FieldGender holds the string denoting the gender field in the database.
 	FieldGender = "gender"
-	// FieldVenueID holds the string denoting the venue_id field in the database.
-	FieldVenueID = "venue_id"
 	// FieldUsername holds the string denoting the username field in the database.
 	FieldUsername = "username"
 	// FieldPassword holds the string denoting the password field in the database.
@@ -120,7 +118,6 @@ var Columns = []string{
 	FieldMobile,
 	FieldName,
 	FieldGender,
-	FieldVenueID,
 	FieldUsername,
 	FieldPassword,
 	FieldFunctions,
@@ -220,11 +217,6 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByGender orders the results by the gender field.
 func ByGender(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGender, opts...).ToFunc()
-}
-
-// ByVenueID orders the results by the venue_id field.
-func ByVenueID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldVenueID, opts...).ToFunc()
 }
 
 // ByUsername orders the results by the username field.
