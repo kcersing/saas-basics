@@ -1371,7 +1371,7 @@ var (
 		{Name: "gender", Type: field.TypeInt64, Nullable: true, Comment: "性别 | [0:女性;1:男性;3:保密]", Default: 3},
 		{Name: "username", Type: field.TypeString, Unique: true, Comment: "user's login name | 登录名"},
 		{Name: "password", Type: field.TypeString, Comment: "password | 密码"},
-		{Name: "functions", Type: field.TypeString, Comment: "functions | 职能"},
+		{Name: "functions", Type: field.TypeJSON, Comment: "functions | 职能"},
 		{Name: "type", Type: field.TypeInt64, Nullable: true, Comment: "账号类别1普通 2管理员", Default: 1},
 		{Name: "job_time", Type: field.TypeInt64, Nullable: true, Comment: "job time | [1:全职;2:兼职;]", Default: 1},
 		{Name: "default_venue_id", Type: field.TypeInt64, Nullable: true, Comment: "登陆后默认场馆ID"},

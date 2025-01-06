@@ -15,7 +15,6 @@ import (
 	"saas/idl_gen/model/dictionary"
 	"saas/idl_gen/model/user"
 	"saas/pkg/encrypt"
-	"strings"
 	"time"
 )
 
@@ -109,7 +108,6 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		gender = 2
 	}
 	//parsedTime, _ := time.Parse(time.DateTime, req.Birthday)
-	functions := strings.Join(req.Functions, ",")
 
 	tx, err := u.db.Tx(u.ctx)
 	if err != nil {
@@ -123,7 +121,7 @@ func (u User) Create(req user.CreateOrUpdateUserReq) error {
 		SetUsername(req.Username).
 		SetPassword(password).
 		SetName(req.Name).
-		SetFunctions(functions).
+		SetFunctions(req.Functions).
 		SetGender(gender).
 		AddRoleIDs(req.RoleId...).
 		SetDetail(req.Detail).
@@ -168,7 +166,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 
 	//password, _ := encrypt.Crypt(req.Password)
 	u.db.User.Update().Where(user2.IDEQ(req.ID)).ClearRoles().Save(u.ctx)
-	functions := strings.Join(req.Functions, ",")
+
 	//*req.UserTags...
 	_, err := u.db.User.Update().
 		Where(user2.IDEQ(req.ID)).
@@ -178,7 +176,7 @@ func (u User) Update(req user.CreateOrUpdateUserReq) error {
 		SetStatus(req.Status).
 		SetUsername(req.Username).
 		SetName(req.Name).
-		SetFunctions(functions).
+		SetFunctions(req.Functions).
 		SetGender(gender).
 		AddRoleIDs(req.RoleId...).
 		SetDetail(req.Detail).
@@ -277,7 +275,7 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 		info.Gender = "保密"
 	}
 
-	info.Functions = strings.Split(userEnt.Functions, ",")
+	info.Functions = userEnt.Functions
 
 	var gender string
 	if userEnt.Gender == 0 {

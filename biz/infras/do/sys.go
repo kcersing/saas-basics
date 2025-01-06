@@ -27,9 +27,10 @@ type SysProductList struct {
 }
 
 type SysStaffList struct {
-	Id   int64  `json:"id"`
-	Name string `json:"name"`
-	Tags []int  `json:"tags"`
+	Id        int64    `json:"id"`
+	Name      string   `json:"name"`
+	Tags      []int    `json:"tags"`
+	Functions []string `json:"functions"`
 }
 type SysMemberList struct {
 	Id     int64  `json:"id"`

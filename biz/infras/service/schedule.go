@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
@@ -53,27 +52,10 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 		err = errors.Wrap(err, "get Schedule list failed")
 		return resp, total, err
 	}
+	for _, v := range lists {
 
-	err = copier.Copy(&resp, &lists)
-	if err != nil {
-		err = errors.Wrap(err, "copy Schedule info failed")
-		return resp, 0, err
-	}
+		resp = append(resp, s.entScheduleInfo(v))
 
-	for i, v := range lists {
-		resp[i].StartTime = v.StartTime.Format("15:04")
-		resp[i].EndTime = v.EndTime.Format("15:04")
-
-		//coach, _ := v.QueryCoachs().First(s.ctx)
-		//resp[i].CoachID = coach.CoachID
-		//resp[i].CoachName = coach.CoachName
-		//
-		//if v.Type == "course" {
-		//	member, _ := v.QueryMembers().First(s.ctx)
-		//	resp[i].MemberName = member.MemberName
-		//	resp[i].MemberProductName = member.MemberProductName
-		//	resp[i].MemberProductPropertyName = member.MemberProductPropertyName
-		//}
 	}
 
 	total, _ = s.db.Schedule.Query().Where(predicates...).Count(s.ctx)

@@ -105,11 +105,6 @@ func Password(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldPassword, v))
 }
 
-// Functions applies equality check predicate on the "functions" field. It's identical to FunctionsEQ.
-func Functions(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldFunctions, v))
-}
-
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
 func Type(v int64) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldType, v))
@@ -703,71 +698,6 @@ func PasswordEqualFold(v string) predicate.User {
 // PasswordContainsFold applies the ContainsFold predicate on the "password" field.
 func PasswordContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldPassword, v))
-}
-
-// FunctionsEQ applies the EQ predicate on the "functions" field.
-func FunctionsEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldFunctions, v))
-}
-
-// FunctionsNEQ applies the NEQ predicate on the "functions" field.
-func FunctionsNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldFunctions, v))
-}
-
-// FunctionsIn applies the In predicate on the "functions" field.
-func FunctionsIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldFunctions, vs...))
-}
-
-// FunctionsNotIn applies the NotIn predicate on the "functions" field.
-func FunctionsNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldFunctions, vs...))
-}
-
-// FunctionsGT applies the GT predicate on the "functions" field.
-func FunctionsGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldFunctions, v))
-}
-
-// FunctionsGTE applies the GTE predicate on the "functions" field.
-func FunctionsGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldFunctions, v))
-}
-
-// FunctionsLT applies the LT predicate on the "functions" field.
-func FunctionsLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldFunctions, v))
-}
-
-// FunctionsLTE applies the LTE predicate on the "functions" field.
-func FunctionsLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldFunctions, v))
-}
-
-// FunctionsContains applies the Contains predicate on the "functions" field.
-func FunctionsContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldFunctions, v))
-}
-
-// FunctionsHasPrefix applies the HasPrefix predicate on the "functions" field.
-func FunctionsHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldFunctions, v))
-}
-
-// FunctionsHasSuffix applies the HasSuffix predicate on the "functions" field.
-func FunctionsHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldFunctions, v))
-}
-
-// FunctionsEqualFold applies the EqualFold predicate on the "functions" field.
-func FunctionsEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldFunctions, v))
-}
-
-// FunctionsContainsFold applies the ContainsFold predicate on the "functions" field.
-func FunctionsContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldFunctions, v))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.

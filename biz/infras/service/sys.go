@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
@@ -237,12 +239,19 @@ func (s Sys) StaffList(req sys.SysStaffListReq) (list []do.SysStaffList, total i
 	if len(req.TagId) > 0 {
 		predicates = append(predicates, user2.HasTagsWith(dictionarydetail.IDIn(req.TagId...)))
 	}
-	if req.Functions != "" {
-		predicates = append(predicates, user2.Functions(req.Functions))
+	if len(req.Functions) > 0 {
+		var a []any
+		for _, v := range req.Functions {
+			a = append(a, v)
+		}
+		predicates = append(predicates,
+			func(s *sql.Selector) {
+				s.Where(sqljson.ValueContains(user2.FieldFunctions, a))
+			})
 	}
 	predicates = append(predicates, user2.Type(1))
 	predicates = append(predicates, user2.Delete(0))
-	lists, err := s.db.User.Query().Where(predicates...).All(s.ctx)
+	lists, err := s.db.Debug().User.Query().Where(predicates...).All(s.ctx)
 
 	if err != nil {
 		err = errors.Wrap(err, "get product list failed")
@@ -252,9 +261,10 @@ func (s Sys) StaffList(req sys.SysStaffListReq) (list []do.SysStaffList, total i
 		tags, _ := v.QueryTags().Select("id").Ints(s.ctx)
 
 		list = append(list, do.SysStaffList{
-			Id:   v.ID,
-			Name: v.Name,
-			Tags: tags,
+			Id:        v.ID,
+			Name:      v.Name,
+			Tags:      tags,
+			Functions: v.Functions,
 		})
 	}
 	total = int64(len(list))

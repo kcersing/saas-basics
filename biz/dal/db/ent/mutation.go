@@ -57149,7 +57149,8 @@ type UserMutation struct {
 	addgender               *int64
 	username                *string
 	password                *string
-	functions               *string
+	functions               *[]string
+	appendfunctions         []string
 	_type                   *int64
 	add_type                *int64
 	job_time                *int64
@@ -57824,12 +57825,13 @@ func (m *UserMutation) ResetPassword() {
 }
 
 // SetFunctions sets the "functions" field.
-func (m *UserMutation) SetFunctions(s string) {
+func (m *UserMutation) SetFunctions(s []string) {
 	m.functions = &s
+	m.appendfunctions = nil
 }
 
 // Functions returns the value of the "functions" field in the mutation.
-func (m *UserMutation) Functions() (r string, exists bool) {
+func (m *UserMutation) Functions() (r []string, exists bool) {
 	v := m.functions
 	if v == nil {
 		return
@@ -57840,7 +57842,7 @@ func (m *UserMutation) Functions() (r string, exists bool) {
 // OldFunctions returns the old "functions" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldFunctions(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldFunctions(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldFunctions is only allowed on UpdateOne operations")
 	}
@@ -57854,9 +57856,23 @@ func (m *UserMutation) OldFunctions(ctx context.Context) (v string, err error) {
 	return oldValue.Functions, nil
 }
 
+// AppendFunctions adds s to the "functions" field.
+func (m *UserMutation) AppendFunctions(s []string) {
+	m.appendfunctions = append(m.appendfunctions, s...)
+}
+
+// AppendedFunctions returns the list of values that were appended to the "functions" field in this mutation.
+func (m *UserMutation) AppendedFunctions() ([]string, bool) {
+	if len(m.appendfunctions) == 0 {
+		return nil, false
+	}
+	return m.appendfunctions, true
+}
+
 // ResetFunctions resets all changes to the "functions" field.
 func (m *UserMutation) ResetFunctions() {
 	m.functions = nil
+	m.appendfunctions = nil
 }
 
 // SetType sets the "type" field.
@@ -58774,7 +58790,7 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		m.SetPassword(v)
 		return nil
 	case user.FieldFunctions:
-		v, ok := value.(string)
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

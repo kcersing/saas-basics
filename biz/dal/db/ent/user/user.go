@@ -229,11 +229,6 @@ func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
 }
 
-// ByFunctions orders the results by the functions field.
-func ByFunctions(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFunctions, opts...).ToFunc()
-}
-
 // ByType orders the results by the type field.
 func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()

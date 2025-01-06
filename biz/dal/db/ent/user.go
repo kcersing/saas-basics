@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
@@ -40,7 +41,7 @@ type User struct {
 	// password | 密码
 	Password string `json:"password,omitempty"`
 	// functions | 职能
-	Functions string `json:"functions,omitempty"`
+	Functions []string `json:"functions,omitempty"`
 	// 账号类别1普通 2管理员
 	Type int64 `json:"type,omitempty"`
 	// job time | [1:全职;2:兼职;]
@@ -150,9 +151,11 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case user.FieldFunctions:
+			values[i] = new([]byte)
 		case user.FieldID, user.FieldDelete, user.FieldCreatedID, user.FieldStatus, user.FieldGender, user.FieldType, user.FieldJobTime, user.FieldDefaultVenueID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldMobile, user.FieldName, user.FieldUsername, user.FieldPassword, user.FieldFunctions, user.FieldAvatar, user.FieldDetail:
+		case user.FieldMobile, user.FieldName, user.FieldUsername, user.FieldPassword, user.FieldAvatar, user.FieldDetail:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -238,10 +241,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 				u.Password = value.String
 			}
 		case user.FieldFunctions:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field functions", values[i])
-			} else if value.Valid {
-				u.Functions = value.String
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &u.Functions); err != nil {
+					return fmt.Errorf("unmarshal field functions: %w", err)
+				}
 			}
 		case user.FieldType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -375,7 +380,7 @@ func (u *User) String() string {
 	builder.WriteString(u.Password)
 	builder.WriteString(", ")
 	builder.WriteString("functions=")
-	builder.WriteString(u.Functions)
+	builder.WriteString(fmt.Sprintf("%v", u.Functions))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(fmt.Sprintf("%v", u.Type))

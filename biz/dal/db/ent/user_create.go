@@ -144,7 +144,7 @@ func (uc *UserCreate) SetPassword(s string) *UserCreate {
 }
 
 // SetFunctions sets the "functions" field.
-func (uc *UserCreate) SetFunctions(s string) *UserCreate {
+func (uc *UserCreate) SetFunctions(s []string) *UserCreate {
 	uc.mutation.SetFunctions(s)
 	return uc
 }
@@ -490,7 +490,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.Password = value
 	}
 	if value, ok := uc.mutation.Functions(); ok {
-		_spec.SetField(user.FieldFunctions, field.TypeString, value)
+		_spec.SetField(user.FieldFunctions, field.TypeJSON, value)
 		_node.Functions = value
 	}
 	if value, ok := uc.mutation.GetType(); ok {

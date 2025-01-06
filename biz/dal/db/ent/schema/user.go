@@ -24,7 +24,7 @@ func (User) Fields() []ent.Field {
 		field.String("username").Unique().Comment("user's login name | 登录名"),
 		field.String("password").Comment("password | 密码"),
 
-		field.String("functions").Comment("functions | 职能"),
+		field.JSON("functions", []string{}).Comment("functions | 职能"),
 		field.Int64("type").Default(1).Comment("账号类别1普通 2管理员").Optional(),
 
 		field.Int64("job_time").Default(1).Comment("job time | [1:全职;2:兼职;]").Optional(),

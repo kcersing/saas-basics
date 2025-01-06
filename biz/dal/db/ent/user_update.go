@@ -19,6 +19,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 )
 
@@ -218,16 +219,14 @@ func (uu *UserUpdate) SetNillablePassword(s *string) *UserUpdate {
 }
 
 // SetFunctions sets the "functions" field.
-func (uu *UserUpdate) SetFunctions(s string) *UserUpdate {
+func (uu *UserUpdate) SetFunctions(s []string) *UserUpdate {
 	uu.mutation.SetFunctions(s)
 	return uu
 }
 
-// SetNillableFunctions sets the "functions" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableFunctions(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetFunctions(*s)
-	}
+// AppendFunctions appends s to the "functions" field.
+func (uu *UserUpdate) AppendFunctions(s []string) *UserUpdate {
+	uu.mutation.AppendFunctions(s)
 	return uu
 }
 
@@ -704,7 +703,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Functions(); ok {
-		_spec.SetField(user.FieldFunctions, field.TypeString, value)
+		_spec.SetField(user.FieldFunctions, field.TypeJSON, value)
+	}
+	if value, ok := uu.mutation.AppendedFunctions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, user.FieldFunctions, value)
+		})
 	}
 	if value, ok := uu.mutation.GetType(); ok {
 		_spec.SetField(user.FieldType, field.TypeInt64, value)
@@ -1247,16 +1251,14 @@ func (uuo *UserUpdateOne) SetNillablePassword(s *string) *UserUpdateOne {
 }
 
 // SetFunctions sets the "functions" field.
-func (uuo *UserUpdateOne) SetFunctions(s string) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetFunctions(s []string) *UserUpdateOne {
 	uuo.mutation.SetFunctions(s)
 	return uuo
 }
 
-// SetNillableFunctions sets the "functions" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableFunctions(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetFunctions(*s)
-	}
+// AppendFunctions appends s to the "functions" field.
+func (uuo *UserUpdateOne) AppendFunctions(s []string) *UserUpdateOne {
+	uuo.mutation.AppendFunctions(s)
 	return uuo
 }
 
@@ -1763,7 +1765,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Functions(); ok {
-		_spec.SetField(user.FieldFunctions, field.TypeString, value)
+		_spec.SetField(user.FieldFunctions, field.TypeJSON, value)
+	}
+	if value, ok := uuo.mutation.AppendedFunctions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, user.FieldFunctions, value)
+		})
 	}
 	if value, ok := uuo.mutation.GetType(); ok {
 		_spec.SetField(user.FieldType, field.TypeInt64, value)

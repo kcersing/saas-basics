@@ -13,7 +13,7 @@ struct SysProductListReq {
 struct SysStaffListReq {
     1: optional string name="" (api.raw = "name")
     /**职能*/
-    3: optional string functions="" (api.raw = "functions" )
+    3: optional list<string> functions="" (api.raw = "functions")
     6: optional i64 venueId=0 (api.raw = "venueId" )
     /**标签*/
     5: optional list<i64> tagId=0 (api.raw = "tagId" )

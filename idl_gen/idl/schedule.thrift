@@ -29,8 +29,7 @@ struct ScheduleInfo {
 //	23:string memberName                  (api.raw = "memberName")
 //	24:string memberProductName           (api.raw = "memberProductName")
 
-
-    25:list<base.Seat> seats  (api.raw = "seats")
+    25:list<list<base.Seat>> seats  (api.raw = "seats")
 	26:list<ScheduleMemberInfo> memberCourseRecord (api.raw = "memberCourseRecord")
 	27:list<ScheduleCoachInfo> coachCourseRecord  (api.raw = "coachCourseRecord")
 

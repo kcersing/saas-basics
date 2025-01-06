@@ -3,6 +3,8 @@ package service
 import (
 	"saas/biz/dal/db/ent"
 	member2 "saas/biz/dal/db/ent/member"
+	"saas/biz/dal/db/ent/venueplace"
+	"saas/idl_gen/model/base"
 	"time"
 
 	"saas/idl_gen/model/schedule"
@@ -77,7 +79,11 @@ func (s Schedule) entScheduleCoachInfo(req *ent.ScheduleCoach) (info *schedule.S
 }
 
 func (s Schedule) entScheduleInfo(req *ent.Schedule) (info *schedule.ScheduleInfo) {
-	//coach, _ := req.QueryCoachs().First(s.ctx)
+	var seat [][]*base.Seat
+	seats, _ := s.db.VenuePlace.Query().Where(venueplace.IDEQ(req.PlaceID)).First(s.ctx)
+	if seats != nil {
+		seat = seats.Seat
+	}
 	return &schedule.ScheduleInfo{
 		ID:         req.ID,
 		Type:       req.Type,
@@ -88,8 +94,8 @@ func (s Schedule) entScheduleInfo(req *ent.Schedule) (info *schedule.ScheduleInf
 		Date:       req.Date,
 		StartTime:  req.StartTime.Format(time.DateTime),
 		EndTime:    req.EndTime.Format(time.DateTime),
-
-		Name: req.Name,
+		Seats:      seat,
+		Name:       req.Name,
 		//CoachId: coach.CoachID,
 		//Price:              0,
 		//MemberId:           0,
