@@ -237,6 +237,9 @@ func (s Sys) StaffList(req sys.SysStaffListReq) (list []do.SysStaffList, total i
 	if len(req.TagId) > 0 {
 		predicates = append(predicates, user2.HasTagsWith(dictionarydetail.IDIn(req.TagId...)))
 	}
+	if req.Functions != "" {
+		predicates = append(predicates, user2.Functions(req.Functions))
+	}
 	predicates = append(predicates, user2.Type(1))
 	predicates = append(predicates, user2.Delete(0))
 	lists, err := s.db.User.Query().Where(predicates...).All(s.ctx)
