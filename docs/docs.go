@@ -3476,7 +3476,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/base.ListReq"
+                            "$ref": "#/definitions/sys.SysMemberListReq"
                         }
                     }
                 ],
@@ -3500,7 +3500,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/base.ListReq"
+                            "$ref": "#/definitions/sys.SysPlaceListReq"
                         }
                     }
                 ],
@@ -3516,7 +3516,26 @@ const docTemplate = `{
         },
         "/service/sys/product/list": {
             "post": {
-                "responses": {}
+                "summary": "产品列表",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sys.SysProductListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/sys/role/list": {
@@ -3553,7 +3572,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/base.ListReq"
+                            "$ref": "#/definitions/sys.SysStaffListReq"
                         }
                     }
                 ],
@@ -5627,6 +5646,97 @@ const docTemplate = `{
                 },
                 "pageSize": {
                     "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "sys.SysMemberListReq": {
+            "type": "object",
+            "properties": {
+                "condition": {
+                    "description": "*状态[1:潜在会员;2:正式会员]",
+                    "type": "integer"
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "productId": {
+                    "description": "*产品id 查询拥有此项产品的会员",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "sys.SysPlaceListReq": {
+            "type": "object",
+            "properties": {
+                "classify": {
+                    "description": "*对应数据字典值",
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "productId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "type": {
+                    "description": "*类型 1场馆 2场地",
+                    "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "sys.SysProductListReq": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "subType": {
+                    "description": "*次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡 lessons团课 coursePackage私教课包",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "*类型 card:卡 course:课 coursePackage:课包 Lessons:团课",
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "sys.SysStaffListReq": {
+            "type": "object",
+            "properties": {
+                "functions": {
+                    "description": "*职能",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tagId": {
+                    "description": "*标签",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "venueId": {
                     "type": "integer"

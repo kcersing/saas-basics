@@ -43,13 +43,13 @@ func VenueList(ctx context.Context, c *app.RequestContext) {
 // MemberList .
 // @Summary 会员列表
 //
-//	@Param			request	body		base.ListReq	true	"query params"
+//	@Param			request	body		sys.SysMemberListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
 // @router /service/sys/member/list [POST]
 func MemberList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req base.ListReq
+	var req sys.SysMemberListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -95,13 +95,13 @@ func ContractList(ctx context.Context, c *app.RequestContext) {
 // StaffList .
 // @Summary 员工列表
 //
-//	@Param			request	body		base.ListReq	true	"query params"
+//	@Param			request	body		sys.SysStaffListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
 // @router /service/sys/staff/list [POST]
 func StaffList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req base.ListReq
+	var req sys.SysStaffListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -121,13 +121,13 @@ func StaffList(ctx context.Context, c *app.RequestContext) {
 // PlaceList .
 // @Summary 场地列表
 //
-//	@Param			request	body		base.ListReq	true	"query params"
+//	@Param			request	body		sys.SysPlaceListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
 // @router /service/sys/place/list [POST]
 func PlaceList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req base.ListReq
+	var req sys.SysPlaceListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -171,6 +171,11 @@ func RoleList(ctx context.Context, c *app.RequestContext) {
 }
 
 // ProductList .
+// @Summary 产品列表
+//
+//	@Param			request	body		sys.SysProductListReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/sys/product/list [POST]
 func ProductList(ctx context.Context, c *app.RequestContext) {
 	var err error

@@ -1059,6 +1059,69 @@ definitions:
       venueId:
         type: integer
     type: object
+  sys.SysMemberListReq:
+    properties:
+      condition:
+        description: '*状态[1:潜在会员;2:正式会员]'
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      productId:
+        description: '*产品id 查询拥有此项产品的会员'
+        items:
+          type: integer
+        type: array
+      venueId:
+        type: integer
+    type: object
+  sys.SysPlaceListReq:
+    properties:
+      classify:
+        description: '*对应数据字典值'
+        type: integer
+      name:
+        type: string
+      productId:
+        items:
+          type: integer
+        type: array
+      type:
+        description: '*类型 1场馆 2场地'
+        type: integer
+      venueId:
+        type: integer
+    type: object
+  sys.SysProductListReq:
+    properties:
+      name:
+        type: string
+      subType:
+        description: '*次级类型courseOne一对一私教课 courseMore一对多私教课 cardTerm期限卡 cardSub次卡
+          lessons团课 coursePackage私教课包'
+        type: string
+      type:
+        description: '*类型 card:卡 course:课 coursePackage:课包 Lessons:团课'
+        type: string
+      venueId:
+        type: integer
+    type: object
+  sys.SysStaffListReq:
+    properties:
+      functions:
+        description: '*职能'
+        type: string
+      name:
+        type: string
+      tagId:
+        description: '*标签'
+        items:
+          type: integer
+        type: array
+      venueId:
+        type: integer
+    type: object
   token.TokenInfo:
     properties:
       createdAt:
@@ -3526,7 +3589,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/base.ListReq'
+          $ref: '#/definitions/sys.SysMemberListReq'
       responses:
         "200":
           description: OK
@@ -3541,7 +3604,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/base.ListReq'
+          $ref: '#/definitions/sys.SysPlaceListReq'
       responses:
         "200":
           description: OK
@@ -3550,7 +3613,19 @@ paths:
       summary: 场地列表
   /service/sys/product/list:
     post:
-      responses: {}
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/sys.SysProductListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 产品列表
   /service/sys/role/list:
     post:
       parameters:
@@ -3574,7 +3649,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/base.ListReq'
+          $ref: '#/definitions/sys.SysStaffListReq'
       responses:
         "200":
           description: OK
