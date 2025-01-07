@@ -18,7 +18,11 @@ import (
 )
 
 func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourseReq) error {
-	startTime, _ := time.Parse(time.DateTime, req.StartTime)
+	startTime, err := time.Parse(time.DateTime, req.StartTime)
+	if err != nil {
+		return errors.New("日期类型传值错误")
+	}
+
 	tx, err := s.db.Tx(s.ctx)
 	if err != nil {
 		return fmt.Errorf("starting a transaction: %w", err)
@@ -179,7 +183,7 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLessonsReq) error {
 
 	// 解析字符串到 time.Time 类型
-	startTime, err := time.Parse(time.DateTime, req.StartTime+":00")
+	startTime, err := time.Parse(time.DateTime, req.StartTime)
 
 	if err != nil {
 		return errors.New("日期类型传值错误")
