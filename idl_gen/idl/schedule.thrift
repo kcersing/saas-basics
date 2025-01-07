@@ -190,6 +190,8 @@ service ScheduleService {
     base.NilResponse CreateScheduleCourse(1: CreateOrUpdateScheduleCourseReq req)  (api.post = "/service/schedule/create-cours")
     /**排团教课*/
     base.NilResponse CreateScheduleLessons(1: CreateOrUpdateScheduleLessonsReq req) (api.post = "/service/schedule/create-lessons")
+   /**团教课发布*/
+    base.NilResponse ScheduleLessonsPublish(1: base.Ids req) (api.post = "/service/schedule/lessons-publish")
 
     // base.NilResponse UpdateScheduleLessons(1: CreateOrUpdateScheduleLessonsReq req) (api.post = "/service/schedule/update-lessons")
     base.NilResponse UpdateScheduleStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/status")

@@ -415,3 +415,30 @@ func ScheduleCoachInfo(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, info, 0, "")
 	return
 }
+
+// ScheduleLessonsPublish .
+//
+// @Summary 发布课程
+// @Description 发布课程
+//
+//	@Param			request	body		base.Ids	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/schedule/lessons-publish [POST]
+func ScheduleLessonsPublish(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.Ids
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = service.NewSchedule(ctx, c).ScheduleLessonsPublish(req.Ids)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}

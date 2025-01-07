@@ -3382,6 +3382,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 课程详情
+  /service/schedule/lessons-publish:
+    post:
+      description: 发布课程
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.Ids'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 发布课程
   /service/schedule/list:
     post:
       description: 课程列表

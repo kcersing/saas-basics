@@ -27,6 +27,16 @@ type Schedule struct {
 	cache *ristretto.Cache
 }
 
+func (s Schedule) ScheduleLessonsPublish(ids []int64) error {
+	_, err := s.db.Schedule.Update().
+		Where(schedule2.IDIn(ids...)).
+		SetStatus(2).Save(s.ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s Schedule) DeleteSchedule(id int64) error {
 	_, err := s.db.Schedule.Update().Where(schedule2.IDEQ(id)).SetDelete(1).Save(s.ctx)
 	return err

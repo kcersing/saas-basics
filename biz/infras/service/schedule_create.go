@@ -46,7 +46,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 	one, err := tx.Schedule.Create().
 		SetType(req.Type).
 		SetName(first.Name).
-		SetStatus(1).
+		SetStatus(2).
 		SetVenueID(req.VenueId).
 		SetProductID(req.ProductId).
 		SetLength(first.Length).

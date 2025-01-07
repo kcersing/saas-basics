@@ -6404,6 +6404,8 @@ type ScheduleService interface {
 	CreateScheduleCourse(ctx context.Context, req *CreateOrUpdateScheduleCourseReq) (r *base.NilResponse, err error)
 	/**排团教课*/
 	CreateScheduleLessons(ctx context.Context, req *CreateOrUpdateScheduleLessonsReq) (r *base.NilResponse, err error)
+	/**团教课发布*/
+	ScheduleLessonsPublish(ctx context.Context, req *base.Ids) (r *base.NilResponse, err error)
 	// base.NilResponse UpdateScheduleLessons(1: CreateOrUpdateScheduleLessonsReq req) (api.post = "/service/schedule/update-lessons")
 	UpdateScheduleStatus(ctx context.Context, req *base.StatusCodeReq) (r *base.NilResponse, err error)
 	/**课程列表*/
@@ -6486,6 +6488,15 @@ func (p *ScheduleServiceClient) CreateScheduleLessons(ctx context.Context, req *
 	_args.Req = req
 	var _result ScheduleServiceCreateScheduleLessonsResult
 	if err = p.Client_().Call(ctx, "CreateScheduleLessons", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *ScheduleServiceClient) ScheduleLessonsPublish(ctx context.Context, req *base.Ids) (r *base.NilResponse, err error) {
+	var _args ScheduleServiceScheduleLessonsPublishArgs
+	_args.Req = req
+	var _result ScheduleServiceScheduleLessonsPublishResult
+	if err = p.Client_().Call(ctx, "ScheduleLessonsPublish", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -6614,6 +6625,7 @@ func NewScheduleServiceProcessor(handler ScheduleService) *ScheduleServiceProces
 	self.AddToProcessorMap("UpdateScheduleUserTimePeriod", &scheduleServiceProcessorUpdateScheduleUserTimePeriod{handler: handler})
 	self.AddToProcessorMap("CreateScheduleCourse", &scheduleServiceProcessorCreateScheduleCourse{handler: handler})
 	self.AddToProcessorMap("CreateScheduleLessons", &scheduleServiceProcessorCreateScheduleLessons{handler: handler})
+	self.AddToProcessorMap("ScheduleLessonsPublish", &scheduleServiceProcessorScheduleLessonsPublish{handler: handler})
 	self.AddToProcessorMap("UpdateScheduleStatus", &scheduleServiceProcessorUpdateScheduleStatus{handler: handler})
 	self.AddToProcessorMap("ScheduleList", &scheduleServiceProcessorScheduleList{handler: handler})
 	self.AddToProcessorMap("ScheduleDateList", &scheduleServiceProcessorScheduleDateList{handler: handler})
@@ -6820,6 +6832,54 @@ func (p *scheduleServiceProcessorCreateScheduleLessons) Process(ctx context.Cont
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("CreateScheduleLessons", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type scheduleServiceProcessorScheduleLessonsPublish struct {
+	handler ScheduleService
+}
+
+func (p *scheduleServiceProcessorScheduleLessonsPublish) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ScheduleServiceScheduleLessonsPublishArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("ScheduleLessonsPublish", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := ScheduleServiceScheduleLessonsPublishResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.ScheduleLessonsPublish(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ScheduleLessonsPublish: "+err2.Error())
+		oprot.WriteMessageBegin("ScheduleLessonsPublish", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("ScheduleLessonsPublish", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -8538,6 +8598,300 @@ func (p *ScheduleServiceCreateScheduleLessonsResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ScheduleServiceCreateScheduleLessonsResult(%+v)", *p)
+
+}
+
+type ScheduleServiceScheduleLessonsPublishArgs struct {
+	Req *base.Ids `thrift:"req,1"`
+}
+
+func NewScheduleServiceScheduleLessonsPublishArgs() *ScheduleServiceScheduleLessonsPublishArgs {
+	return &ScheduleServiceScheduleLessonsPublishArgs{}
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishArgs) InitDefault() {
+}
+
+var ScheduleServiceScheduleLessonsPublishArgs_Req_DEFAULT *base.Ids
+
+func (p *ScheduleServiceScheduleLessonsPublishArgs) GetReq() (v *base.Ids) {
+	if !p.IsSetReq() {
+		return ScheduleServiceScheduleLessonsPublishArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_ScheduleServiceScheduleLessonsPublishArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleLessonsPublishArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := base.NewIds()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ScheduleLessonsPublish_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ScheduleServiceScheduleLessonsPublishArgs(%+v)", *p)
+
+}
+
+type ScheduleServiceScheduleLessonsPublishResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewScheduleServiceScheduleLessonsPublishResult() *ScheduleServiceScheduleLessonsPublishResult {
+	return &ScheduleServiceScheduleLessonsPublishResult{}
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishResult) InitDefault() {
+}
+
+var ScheduleServiceScheduleLessonsPublishResult_Success_DEFAULT *base.NilResponse
+
+func (p *ScheduleServiceScheduleLessonsPublishResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return ScheduleServiceScheduleLessonsPublishResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_ScheduleServiceScheduleLessonsPublishResult = map[int16]string{
+	0: "success",
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceScheduleLessonsPublishResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ScheduleLessonsPublish_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *ScheduleServiceScheduleLessonsPublishResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ScheduleServiceScheduleLessonsPublishResult(%+v)", *p)
 
 }
 

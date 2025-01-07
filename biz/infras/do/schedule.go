@@ -20,6 +20,7 @@ type Schedule interface {
 	UpdateScheduleStatus(ID int64, status int64) error
 	ScheduleInfo(ID int64) (resp *schedule.ScheduleInfo, err error)
 
+	ScheduleLessonsPublish(ids []int64) error
 	CreateMemberSubscribeLessons(req schedule.MemberSubscribeReq) error
 	//UpdateScheduleMember(req schedule.MemberSubscribeReq) error
 	//DeleteScheduleMember(id int64) error

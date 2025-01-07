@@ -3141,6 +3141,31 @@
                 }
             }
         },
+        "/service/schedule/lessons-publish": {
+            "post": {
+                "description": "发布课程",
+                "summary": "发布课程",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.Ids"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/schedule/list": {
             "post": {
                 "description": "课程列表",

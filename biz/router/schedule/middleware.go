@@ -165,3 +165,8 @@ func _updateschedulecoachstatusMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _schedulelessonspublishMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
