@@ -7,7 +7,7 @@ service PaymentService {
     base.NilResponse WXPay(1: PayReq req) (api.post = "/service/payment/WXPay") // 微信小程序支付
     base.NilResponse WXQRPay(1: PayReq req) (api.post = "/service/payment/WXQRPay") // 微信小程序支付
     base.NilResponse WXNotify(1: NotifyReq req) (api.post = "/service/payment/WXNotify") // 回调
-    base.NilResponse WXRefundOrder(1: NotifyReq req) (api.post = "/service/payment/WXRefundOrder") // 退款
+    base.NilResponse WXRefundOrder(1: RefundOrderReq req) (api.post = "/service/payment/WXRefundOrder") // 退款
 
 }
 

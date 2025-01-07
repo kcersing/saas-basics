@@ -107,11 +107,8 @@ func (p Payment) QRPay(req payment.PayReq) (interface{}, error) {
 }
 
 // Notify 回调
-func (p Payment) Notify(req payment.NotifyReq) error {
-	return nil
-}
 
-func (p Payment) CallbackWXNotify(c interface{}) {
+func (p Payment) Notify(c interface{}) {
 	//rs, err := PaymentApp.Order.QueryByOutTradeNumber("商户系统的内部订单号 [out_trade_no]")
 	//rs, err := PaymentApp.Order.QueryByTransactionId("微信支付订单号 [transaction_id]")
 	//_, err := services.PaymentApp.HandlePaidNotify(c.Request, func(chat-bot *power.HashMap, content *power.HashMap, fail string) interface{} {
@@ -126,7 +123,7 @@ func (p Payment) CallbackWXNotify(c interface{}) {
 		hlog.Info(err)
 		return
 	}
-
+	hlog.Info(req)
 	res, err := wechat.PaymentWechatApp.HandlePaidNotify(req,
 		func(message *request.RequestNotify, transaction *models.Transaction, fail func(message string)) interface{} {
 

@@ -4,10 +4,12 @@ package payment
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	base "saas/idl_gen/model/base"
 	payment "saas/idl_gen/model/payment"
 )
 
@@ -22,9 +24,13 @@ func WXPay(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	o, err := service.NewWXPayment(ctx, c).UnifyPay(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, o, 0, "")
+	return
 }
 
 // WXQRPay .
@@ -38,9 +44,13 @@ func WXQRPay(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	o, err := service.NewWXPayment(ctx, c).QRPay(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, o, 0, "")
+	return
 }
 
 // WXNotify .
@@ -53,24 +63,27 @@ func WXNotify(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	service.NewWXPayment(ctx, c).Notify(req)
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	return
 }
 
 // WXRefundOrder .
 // @router /service/payment/WXRefundOrder [POST]
 func WXRefundOrder(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req payment.NotifyReq
+	var req payment.RefundOrderReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	o, err := service.NewWXPayment(ctx, c).RefundOrder(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, o, 0, "")
+	return
 }

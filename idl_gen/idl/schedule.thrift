@@ -20,7 +20,7 @@ struct ScheduleInfo {
 	14:i64 coachId                      (api.raw = "coachId")
 //	15:i64 memberId                     (api.raw = "memberId")
 //	16:i64 memberProductId              (api.raw = "memberProductId")
-
+    /**状态 是 1未发布 2发布 3取消*/
 	18:i64 status                       (api.raw = "status")
 
 	20:string venueName                   (api.raw = "venueName")

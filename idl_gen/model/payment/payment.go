@@ -1232,7 +1232,7 @@ type PaymentService interface {
 
 	WXNotify(ctx context.Context, req *NotifyReq) (r *base.NilResponse, err error)
 
-	WXRefundOrder(ctx context.Context, req *NotifyReq) (r *base.NilResponse, err error)
+	WXRefundOrder(ctx context.Context, req *RefundOrderReq) (r *base.NilResponse, err error)
 }
 
 type PaymentServiceClient struct {
@@ -1288,7 +1288,7 @@ func (p *PaymentServiceClient) WXNotify(ctx context.Context, req *NotifyReq) (r 
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *PaymentServiceClient) WXRefundOrder(ctx context.Context, req *NotifyReq) (r *base.NilResponse, err error) {
+func (p *PaymentServiceClient) WXRefundOrder(ctx context.Context, req *RefundOrderReq) (r *base.NilResponse, err error) {
 	var _args PaymentServiceWXRefundOrderArgs
 	_args.Req = req
 	var _result PaymentServiceWXRefundOrderResult
@@ -2417,7 +2417,7 @@ func (p *PaymentServiceWXNotifyResult) String() string {
 }
 
 type PaymentServiceWXRefundOrderArgs struct {
-	Req *NotifyReq `thrift:"req,1"`
+	Req *RefundOrderReq `thrift:"req,1"`
 }
 
 func NewPaymentServiceWXRefundOrderArgs() *PaymentServiceWXRefundOrderArgs {
@@ -2427,9 +2427,9 @@ func NewPaymentServiceWXRefundOrderArgs() *PaymentServiceWXRefundOrderArgs {
 func (p *PaymentServiceWXRefundOrderArgs) InitDefault() {
 }
 
-var PaymentServiceWXRefundOrderArgs_Req_DEFAULT *NotifyReq
+var PaymentServiceWXRefundOrderArgs_Req_DEFAULT *RefundOrderReq
 
-func (p *PaymentServiceWXRefundOrderArgs) GetReq() (v *NotifyReq) {
+func (p *PaymentServiceWXRefundOrderArgs) GetReq() (v *RefundOrderReq) {
 	if !p.IsSetReq() {
 		return PaymentServiceWXRefundOrderArgs_Req_DEFAULT
 	}
@@ -2501,7 +2501,7 @@ ReadStructEndError:
 }
 
 func (p *PaymentServiceWXRefundOrderArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewNotifyReq()
+	_field := NewRefundOrderReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}

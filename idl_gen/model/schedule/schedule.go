@@ -25,6 +25,7 @@ type ScheduleInfo struct {
 	CoachId int64 `thrift:"coachId,14" form:"coachId" json:"coachId" query:"coachId"`
 	//	15:i64 memberId                     (api.raw = "memberId")
 	//	16:i64 memberProductId              (api.raw = "memberProductId")
+	/**状态 是 1未发布 2发布 3取消*/
 	Status    int64  `thrift:"status,18" form:"status" json:"status" query:"status"`
 	VenueName string `thrift:"venueName,20" form:"venueName" json:"venueName" query:"venueName"`
 	PlaceName string `thrift:"placeName,21" form:"placeName" json:"placeName" query:"placeName"`
