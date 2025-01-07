@@ -19,7 +19,8 @@ struct BuyReq{
     4: optional i64 number=1 (api.raw = "number")
     /**金额*/
     5: optional double fee=0 (api.raw = "fee")
-    6: optional string device="" (api.raw = "device")
+    /**来源 [pc电脑端;wxc微信小程序] 默认wxc */
+    6: optional string device="wxc" (api.raw = "device")
 }
 
 struct ListOrderReq {
