@@ -27,6 +27,7 @@ type ScheduleInfo struct {
 	//	16:i64 memberProductId              (api.raw = "memberProductId")
 	/**状态 是 1未发布 2发布 3取消*/
 	Status    int64  `thrift:"status,18" form:"status" json:"status" query:"status"`
+	ProductId int64  `thrift:"productId,19" form:"productId" json:"productId" query:"productId"`
 	VenueName string `thrift:"venueName,20" form:"venueName" json:"venueName" query:"venueName"`
 	PlaceName string `thrift:"placeName,21" form:"placeName" json:"placeName" query:"placeName"`
 	CoachName string `thrift:"coachName,22" form:"coachName" json:"coachName" query:"coachName"`
@@ -98,6 +99,10 @@ func (p *ScheduleInfo) GetStatus() (v int64) {
 	return p.Status
 }
 
+func (p *ScheduleInfo) GetProductId() (v int64) {
+	return p.ProductId
+}
+
 func (p *ScheduleInfo) GetVenueName() (v string) {
 	return p.VenueName
 }
@@ -144,6 +149,7 @@ var fieldIDToName_ScheduleInfo = map[int16]string{
 	12: "name",
 	14: "coachId",
 	18: "status",
+	19: "productId",
 	20: "venueName",
 	21: "placeName",
 	22: "coachName",
@@ -272,6 +278,14 @@ func (p *ScheduleInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 18:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField18(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 19:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField19(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -513,6 +527,17 @@ func (p *ScheduleInfo) ReadField18(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
+func (p *ScheduleInfo) ReadField19(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.ProductId = _field
+	return nil
+}
 func (p *ScheduleInfo) ReadField20(iprot thrift.TProtocol) error {
 
 	var _field string
@@ -706,6 +731,10 @@ func (p *ScheduleInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField18(oprot); err != nil {
 			fieldId = 18
+			goto WriteFieldError
+		}
+		if err = p.writeField19(oprot); err != nil {
+			fieldId = 19
 			goto WriteFieldError
 		}
 		if err = p.writeField20(oprot); err != nil {
@@ -977,6 +1006,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 18 end error: ", p), err)
+}
+
+func (p *ScheduleInfo) writeField19(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("productId", thrift.I64, 19); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.ProductId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 19 end error: ", p), err)
 }
 
 func (p *ScheduleInfo) writeField20(oprot thrift.TProtocol) (err error) {

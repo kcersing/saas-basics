@@ -125,8 +125,8 @@ func (s Schedule) entScheduleInfo(req *ent.Schedule) (info *schedule.ScheduleInf
 		//MemberProductId:    0,
 		//MemberName:         "",
 		//MemberProductName:  "",
-		CoachName: coach.CoachName,
-
+		CoachName:          coach.CoachName,
+		ProductId:          req.ProductID,
 		Status:             req.Status,
 		VenueName:          req.VenueName,
 		PlaceName:          req.PlaceName,

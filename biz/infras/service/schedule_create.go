@@ -45,13 +45,16 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 	}
 	one, err := tx.Schedule.Create().
 		SetType(req.Type).
+		SetName(first.Name).
 		SetStatus(1).
 		SetVenueID(req.VenueId).
+		SetProductID(req.ProductId).
+		SetLength(first.Length).
+		//SetPlaceID(req.PlaceId)
+		//SetNum(req.Num).
 		SetDate(startTime.Format(time.DateOnly)).
 		SetStartTime(startTime).
 		SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
-		SetLength(first.Length).
-		SetName(first.Name).
 		SetVenueName(venueName).
 		Save(s.ctx)
 
@@ -221,8 +224,10 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 
 	one, err := tx.Schedule.Create().
 		SetType("lessons").
+		SetName(first.Name).
 		SetStatus(1).
 		SetVenueID(req.VenueId).
+		SetProductID(req.ProductId).
 		SetPlaceID(req.PlaceId).
 		SetNum(place.Number).
 		SetNumSurplus(place.Number).
@@ -232,7 +237,6 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 		//SetPrice(req.Price).
 		//SetRemark(req.Remark).
 		SetLength(first.Length).
-		SetName(first.Name).
 		SetVenueName(venueName).
 		SetPlaceName(placeName).
 		Save(s.ctx)
