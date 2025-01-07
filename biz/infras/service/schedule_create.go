@@ -162,7 +162,7 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 		SetStartTime(req.StartTime).
 		SetEndTime(req.StartTime.Add(time.Duration(memberProduct.Length) * time.Minute)).
 		SetMemberProductID(memberProduct.ID).
-		SetStatus(0).
+		SetStatus(1).
 		SetMemberName(m.Name).
 		SetMemberProductName(memberProduct.Name).
 		Save(s.ctx)

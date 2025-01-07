@@ -85,6 +85,7 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 func (s Schedule) ScheduleDateList(req schedule.ScheduleListReq) (map[string][]*schedule.ScheduleInfo, int, error) {
 	req.Page = 1
 	req.PageSize = 1000
+	req.Status = []int64{1, 2, 3, 4}
 	lists, total, err := s.ScheduleList(req)
 	m := make(map[string][]*schedule.ScheduleInfo)
 	for _, v := range lists {

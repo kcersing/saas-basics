@@ -9,7 +9,6 @@ import (
 	"saas/pkg/enums"
 	"saas/pkg/utils"
 	"strconv"
-	"sync"
 )
 
 func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOne *order.OrderInfo, err error) {
@@ -24,18 +23,7 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 		contestName = contests.Name
 	}
 
-	errChan := make(chan error, 2)
-	defer close(errChan)
-	var wg sync.WaitGroup
-	wg.Add(2)
-
-	tx, err := o.db.Tx(o.ctx)
-
-	if err != nil {
-		return nil, errors.Wrap(err, "starting a transaction:")
-	}
-
-	orderTx := tx.Order.
+	orderTx := o.db.Order.
 		Create().
 		SetOrderSn(utils.CreateCn()).
 		SetOrderMembers(req.Member).
@@ -61,47 +49,30 @@ func (o Order) CreateParticipantOrder(req do.CreateParticipantOrderReq) (orderOn
 		SetDevice(req.Device).Save(o.ctx)
 
 	if err != nil {
-		return nil, rollback(tx, errors.Wrap(err, "创建 Order 失败"))
+		return nil, errors.Wrap(err, "创建 Order 失败")
 	}
 
-	go func() {
-		tx.OrderItem.Create().
-			SetOrder(one).
-			SetName(contestName).
-			SetContestID(req.NodeId).
-			Save(o.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "创建 Order Item 失败")
-			errChan <- err
-		}
+	_, err = o.db.OrderItem.Create().
+		SetOrder(one).
+		SetName(contestName).
+		SetContestID(req.NodeId).
+		Save(o.ctx)
 
-		wg.Done()
-	}()
-
-	go func() {
-		tx.OrderAmount.Create().
-			SetOrder(one).
-			SetTotal(req.Fee).
-			SetResidue(req.Fee).
-			Save(o.ctx)
-		if err != nil {
-			err = errors.Wrap(err, "创建Order Amount失败")
-			errChan <- err
-		}
-
-		wg.Done()
-	}()
-
-	wg.Wait()
-	select {
-	case result := <-errChan:
-		return nil, rollback(tx, result)
-	default:
-	}
-
-	if err = tx.Commit(); err != nil {
+	if err != nil {
+		err = errors.Wrap(err, "创建 Order Item 失败")
 		return nil, err
 	}
+
+	_, err = o.db.OrderAmount.Create().
+		SetOrder(one).
+		SetTotal(req.Fee).
+		SetResidue(req.Fee).
+		Save(o.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "创建Order Amount失败")
+		return nil, err
+	}
+
 	orderOne = o.entOrderInfo(one)
 	return orderOne, nil
 }

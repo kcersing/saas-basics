@@ -142,6 +142,7 @@ struct ScheduleListReq {
     4:  optional list<i64> coach = 0 (api.raw = "coach")
     5:  optional list<i64> product = 0 (api.raw = "product")
     6:  optional i64 venueId = 0 (api.raw = "venueId")
+    7:  optional list<i64> status = 0 (api.raw = "status")
     8:  optional string startTime =""  (api.raw = "startTime")
     9:  optional i64 type =1  (api.raw = "type")
 }

@@ -30,6 +30,8 @@ func (o Order) Buy(req *order.BuyReq) (orderOne *order.OrderInfo, err error) {
 		SetDevice(req.Device).
 		SetVenueID(req.VenueId).
 		SetProductType(product.Type).
+		SetDevice(req.Device).
+		SetStatus(1).
 		SetNature(enums.Buy)
 
 	userId, exist := o.c.Get("userId")
@@ -44,10 +46,7 @@ func (o Order) Buy(req *order.BuyReq) (orderOne *order.OrderInfo, err error) {
 		}
 	}
 
-	one, err := orderTx.
-		SetStatus(0).
-		SetNature(enums.Buy).
-		SetDevice(req.Device).Save(o.ctx)
+	one, err := orderTx.Save(o.ctx)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "创建 Order 失败")

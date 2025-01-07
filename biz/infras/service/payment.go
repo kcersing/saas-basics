@@ -9,6 +9,7 @@ import (
 	request3 "github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/request"
 	"github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/response"
 	"log"
+	order2 "saas/biz/dal/db/ent/order"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -135,6 +136,30 @@ func (p Payment) Notify(c interface{}) {
 			}
 
 			if transaction.OutTradeNo != "" {
+
+				order, err := p.db.Order.Query().Where(order2.OrderSn(transaction.OutTradeNo)).First(p.ctx)
+				if err != nil {
+					hlog.Info(transaction.OutTradeNo + "订单不存在")
+				}
+
+				p.db.Order.UpdateOne(order).SetCompletionAt(time.Now()).Save(p.ctx)
+
+				amount, _ := order.QueryAmount().First(p.ctx)
+
+				p.db.OrderAmount.UpdateOne(amount).
+					SetActual(0).
+					Save(p.ctx)
+				fee := transaction.Amount.Total * 100
+				p.db.OrderPay.Create().
+					SetOrder(order).
+					SetPay(float64(fee)).
+					SetPayAt(time.Now()).
+					SetPayWay("wxPay").
+					SetPaySn(transaction.OutTradeNo).
+					SetPrepayID(transaction.TransactionID).
+					//SetPayExtra(transaction).
+					Save(p.ctx)
+
 				// 这里对照自有数据库里面的订单做查询以及支付状态改变
 				log.Printf("订单号：%s 支付成功", transaction.OutTradeNo)
 			} else {
