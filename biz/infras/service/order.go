@@ -53,8 +53,8 @@ func (o Order) entOrderInfo(v *ent.Order) *order.OrderInfo {
 
 	var memberName, memberMobile string
 	m, _ := o.db.Member.Query().Where(member2.IDEQ(v.MemberID)).First(o.ctx)
-	mpr, _ := o.db.MemberProfile.Query().Where(memberprofile2.IDEQ(v.MemberID)).First(o.ctx)
-	if m != nil {
+	mpr, _ := o.db.MemberProfile.Query().Where(memberprofile2.MemberIDEQ(v.MemberID)).First(o.ctx)
+	if mpr != nil && m != nil {
 		memberName = mpr.Name
 		memberMobile = m.Mobile
 	}
