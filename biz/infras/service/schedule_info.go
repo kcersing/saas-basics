@@ -1,8 +1,10 @@
 package service
 
 import (
+	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent"
 	member2 "saas/biz/dal/db/ent/member"
+	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/venueplace"
 	"saas/idl_gen/model/base"
 	"time"
@@ -10,9 +12,29 @@ import (
 	"saas/idl_gen/model/schedule"
 )
 
-func (s Schedule) ScheduleInfo(ID int64) (roleInfo *schedule.ScheduleInfo, err error) {
-	//TODO implement me
-	panic("implement me")
+func (s Schedule) ScheduleInfo(ID int64) (resp *schedule.ScheduleInfo, err error) {
+	one, err := s.db.Schedule.Query().Where(schedule2.IDEQ(ID)).First(s.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get venue failed")
+		return resp, err
+	}
+	resp = s.entScheduleInfo(one)
+
+	coachAll, _ := one.QueryCoachs().All(s.ctx)
+	if coachAll != nil {
+		for _, v := range coachAll {
+			resp.CoachCourseRecord = append(resp.CoachCourseRecord, s.entScheduleCoachInfo(v))
+		}
+	}
+
+	memberAll, _ := one.QueryMembers().All(s.ctx)
+	if memberAll != nil {
+		for _, v := range memberAll {
+			resp.MemberCourseRecord = append(resp.MemberCourseRecord, s.entScheduleMemberInfo(v))
+		}
+	}
+
+	return
 }
 
 func (s Schedule) entScheduleMemberInfo(req *ent.ScheduleMember) (info *schedule.ScheduleMemberInfo) {
@@ -28,10 +50,10 @@ func (s Schedule) entScheduleMemberInfo(req *ent.ScheduleMember) (info *schedule
 		Type:            req.Type,
 		CreatedAt:       req.CreatedAt.Format(time.DateTime),
 		UpdatedAt:       req.UpdatedAt.Format(time.DateTime),
-		StartTime:       req.SignStartTime.Format(time.DateTime),
-		EndTime:         req.EndTime.Format(time.DateTime),
-		SignStartTime:   req.SignStartTime.Format(time.DateTime),
-		SignEndTime:     req.SignEndTime.Format(time.DateTime),
+		StartTime:       req.SignStartTime.Format("15:04"),
+		EndTime:         req.EndTime.Format("15:04"),
+		SignStartTime:   req.SignStartTime.Format("15:04"),
+		SignEndTime:     req.SignEndTime.Format("15:04"),
 		Status:          req.Status,
 		MemberProductId: req.MemberProductID,
 
@@ -61,10 +83,10 @@ func (s Schedule) entScheduleCoachInfo(req *ent.ScheduleCoach) (info *schedule.S
 		CreatedAt:  req.CreatedAt.Format(time.DateTime),
 		UpdatedAt:  req.UpdatedAt.Format(time.DateTime),
 
-		StartTime:     req.StartTime.Format(time.DateTime),
-		EndTime:       req.EndTime.Format(time.DateTime),
-		SignStartTime: req.SignStartTime.Format(time.DateTime),
-		SignEndTime:   req.SignEndTime.Format(time.DateTime),
+		StartTime:     req.StartTime.Format("15:04"),
+		EndTime:       req.EndTime.Format("15:04"),
+		SignStartTime: req.SignStartTime.Format("15:04"),
+		SignEndTime:   req.SignEndTime.Format("15:04"),
 		Status:        req.Status,
 		ScheduleName:  req.ScheduleName,
 		CoachName:     req.CoachName,
@@ -84,6 +106,7 @@ func (s Schedule) entScheduleInfo(req *ent.Schedule) (info *schedule.ScheduleInf
 	if seats != nil {
 		seat = seats.Seat
 	}
+	coach, _ := req.QueryCoachs().First(s.ctx)
 	return &schedule.ScheduleInfo{
 		ID:         req.ID,
 		Type:       req.Type,
@@ -92,17 +115,17 @@ func (s Schedule) entScheduleInfo(req *ent.Schedule) (info *schedule.ScheduleInf
 		Num:        req.Num,
 		NumSurplus: req.NumSurplus,
 		Date:       req.Date,
-		StartTime:  req.StartTime.Format(time.DateTime),
-		EndTime:    req.EndTime.Format(time.DateTime),
+		StartTime:  req.StartTime.Format("15:04"),
+		EndTime:    req.EndTime.Format("15:04"),
 		Seats:      seat,
 		Name:       req.Name,
-		//CoachId: coach.CoachID,
+		CoachId:    coach.CoachID,
 		//Price:              0,
 		//MemberId:           0,
 		//MemberProductId:    0,
 		//MemberName:         "",
 		//MemberProductName:  "",
-		//CoachName: coach.CoachName,
+		CoachName: coach.CoachName,
 
 		Status:             req.Status,
 		VenueName:          req.VenueName,

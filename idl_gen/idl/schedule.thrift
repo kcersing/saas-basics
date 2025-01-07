@@ -17,7 +17,7 @@ struct ScheduleInfo {
 	11:double price                     (api.raw = "price")
 	12:string name                      (api.raw = "name")
 //	13:string remark                    (api.raw = "remark")
-//	14:i64 coachId                      (api.raw = "coachId")
+	14:i64 coachId                      (api.raw = "coachId")
 //	15:i64 memberId                     (api.raw = "memberId")
 //	16:i64 memberProductId              (api.raw = "memberProductId")
 
@@ -25,7 +25,7 @@ struct ScheduleInfo {
 
 	20:string venueName                   (api.raw = "venueName")
 	21:string placeName                   (api.raw = "placeName")
-//	22:string coachName                   (api.raw = "coachName")
+	22:string coachName                   (api.raw = "coachName")
 //	23:string memberName                  (api.raw = "memberName")
 //	24:string memberProductName           (api.raw = "memberProductName")
 

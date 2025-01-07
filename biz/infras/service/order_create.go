@@ -23,9 +23,9 @@ func (o Order) Buy(req *order.BuyReq) (orderOne *order.OrderInfo, err error) {
 		productName = product.Name
 	}
 
-	member, err := o.db.Member.Query().Where(member2.ID(req.MemberId)).First(o.ctx)
-	if err != nil {
-		return nil, err
+	ok, err := o.db.Member.Query().Where(member2.ID(req.MemberId)).Exist(o.ctx)
+	if !ok {
+		return nil, errors.New("未找到会员信息")
 	}
 	errChan := make(chan error, 2)
 	defer close(errChan)
@@ -41,7 +41,7 @@ func (o Order) Buy(req *order.BuyReq) (orderOne *order.OrderInfo, err error) {
 	orderTx := tx.Order.
 		Create().
 		SetOrderSn(utils.CreateCn()).
-		SetOrderMembers(member).
+		SetMemberID(req.MemberId).
 		SetDevice(req.Device).
 		SetVenueID(req.VenueId).
 		SetProductType(enums.Contest).
