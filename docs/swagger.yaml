@@ -1111,7 +1111,9 @@ definitions:
     properties:
       functions:
         description: '*职能'
-        type: string
+        items:
+          type: string
+        type: array
       name:
         type: string
       tagId:
@@ -2632,6 +2634,12 @@ paths:
             $ref: '#/definitions/utils.Response'
       summary: 潜在会员列表 Summary
   /service/member/potential-list/export:
+    post:
+      responses: {}
+  /service/member/product-info:
+    post:
+      responses: {}
+  /service/member/product-list:
     post:
       responses: {}
   /service/member/status:

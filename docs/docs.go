@@ -1984,6 +1984,16 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/service/member/product-info": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/product-list": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/member/status": {
             "post": {
                 "description": "更新会员状态 Description",
@@ -5726,7 +5736,10 @@ const docTemplate = `{
             "properties": {
                 "functions": {
                     "description": "*职能",
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "name": {
                     "type": "string"
