@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/predicate"
 	schedule2 "saas/biz/dal/db/ent/schedule"
+	"saas/biz/dal/db/ent/schedulecoach"
 	"time"
 
 	"saas/biz/infras/do"
@@ -40,6 +41,15 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 		predicates = append(predicates, schedule2.StartTimeGTE(startTime))
 		//小于
 		predicates = append(predicates, schedule2.EndTimeLTE(startTime.Add(7*24*time.Hour)))
+	}
+	if req.VenueId > 0 {
+		predicates = append(predicates, schedule2.VenueID(req.VenueId))
+	}
+	if len(req.Coach) > 0 {
+		predicates = append(predicates, schedule2.HasCoachsWith(schedulecoach.CoachIDIn(req.Coach...)))
+	}
+	if len(req.Product) > 0 {
+		predicates = append(predicates, schedule2.ProductIDIn(req.Product...))
 	}
 	if req.VenueId > 0 {
 		predicates = append(predicates, schedule2.VenueID(req.VenueId))
