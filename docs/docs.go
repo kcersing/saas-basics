@@ -4308,6 +4308,28 @@ const docTemplate = `{
                 }
             }
         },
+        "base.Period": {
+            "type": "object",
+            "properties": {
+                "day": {
+                    "$ref": "#/definitions/base.PeriodTime"
+                }
+            }
+        },
+        "base.PeriodTime": {
+            "type": "object",
+            "properties": {
+                "endTime": {
+                    "type": "string"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "base.Sales": {
             "type": "object",
             "properties": {
@@ -5614,6 +5636,12 @@ const docTemplate = `{
                 "startTime": {
                     "type": "string"
                 },
+                "status": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "type": {
                     "type": "integer"
                 },
@@ -5645,16 +5673,26 @@ const docTemplate = `{
         "schedule.UserTimePeriodReq": {
             "type": "object",
             "properties": {
-                "date": {
-                    "description": "*时间如2024-05-16",
+                "endDate": {
                     "type": "string"
                 },
                 "period": {
                     "description": "*时间段",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/base.Period"
+                        }
+                    ]
+                },
+                "startDate": {
+                    "description": "*时间如2024-05-16",
                     "type": "string"
                 },
                 "userId": {
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

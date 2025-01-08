@@ -176,11 +176,13 @@ struct MemberSubscribeReq{
 
 struct UserTimePeriodReq{
     /**时间如2024-05-16*/
-    1:  optional string date ="" (api.raw = "date")
+    1:  optional string startDate ="" (api.raw = "startDate")
+    2:  optional string endDate ="" (api.raw = "endDate")
     /**时间段*/
-    2:  optional string period ="" (api.raw = "period")
-    3:  optional i64 userId =0 (api.raw = "userId")
+    3:  optional base.Period period = {} (api.raw = "period")
+    4:  optional list<i64> userId = {} (api.raw = "userId")
 }
+
 
 service ScheduleService {
     /**添加教练时间段*/

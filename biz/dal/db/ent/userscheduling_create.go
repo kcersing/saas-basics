@@ -91,30 +91,44 @@ func (usc *UserSchedulingCreate) SetNillableStatus(i *int64) *UserSchedulingCrea
 	return usc
 }
 
-// SetDate sets the "date" field.
-func (usc *UserSchedulingCreate) SetDate(t time.Time) *UserSchedulingCreate {
-	usc.mutation.SetDate(t)
+// SetStartDate sets the "start_date" field.
+func (usc *UserSchedulingCreate) SetStartDate(t time.Time) *UserSchedulingCreate {
+	usc.mutation.SetStartDate(t)
 	return usc
 }
 
-// SetNillableDate sets the "date" field if the given value is not nil.
-func (usc *UserSchedulingCreate) SetNillableDate(t *time.Time) *UserSchedulingCreate {
+// SetNillableStartDate sets the "start_date" field if the given value is not nil.
+func (usc *UserSchedulingCreate) SetNillableStartDate(t *time.Time) *UserSchedulingCreate {
 	if t != nil {
-		usc.SetDate(*t)
+		usc.SetStartDate(*t)
+	}
+	return usc
+}
+
+// SetEndDate sets the "end_date" field.
+func (usc *UserSchedulingCreate) SetEndDate(t time.Time) *UserSchedulingCreate {
+	usc.mutation.SetEndDate(t)
+	return usc
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (usc *UserSchedulingCreate) SetNillableEndDate(t *time.Time) *UserSchedulingCreate {
+	if t != nil {
+		usc.SetEndDate(*t)
 	}
 	return usc
 }
 
 // SetPeriod sets the "period" field.
-func (usc *UserSchedulingCreate) SetPeriod(bsd base.UserSchedulingDate) *UserSchedulingCreate {
-	usc.mutation.SetPeriod(bsd)
+func (usc *UserSchedulingCreate) SetPeriod(b base.Period) *UserSchedulingCreate {
+	usc.mutation.SetPeriod(b)
 	return usc
 }
 
 // SetNillablePeriod sets the "period" field if the given value is not nil.
-func (usc *UserSchedulingCreate) SetNillablePeriod(bsd *base.UserSchedulingDate) *UserSchedulingCreate {
-	if bsd != nil {
-		usc.SetPeriod(*bsd)
+func (usc *UserSchedulingCreate) SetNillablePeriod(b *base.Period) *UserSchedulingCreate {
+	if b != nil {
+		usc.SetPeriod(*b)
 	}
 	return usc
 }
@@ -269,9 +283,13 @@ func (usc *UserSchedulingCreate) createSpec() (*UserScheduling, *sqlgraph.Create
 		_spec.SetField(userscheduling.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
-	if value, ok := usc.mutation.Date(); ok {
-		_spec.SetField(userscheduling.FieldDate, field.TypeTime, value)
-		_node.Date = value
+	if value, ok := usc.mutation.StartDate(); ok {
+		_spec.SetField(userscheduling.FieldStartDate, field.TypeTime, value)
+		_node.StartDate = value
+	}
+	if value, ok := usc.mutation.EndDate(); ok {
+		_spec.SetField(userscheduling.FieldEndDate, field.TypeTime, value)
+		_node.EndDate = value
 	}
 	if value, ok := usc.mutation.Period(); ok {
 		_spec.SetField(userscheduling.FieldPeriod, field.TypeJSON, value)

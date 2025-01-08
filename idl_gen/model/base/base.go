@@ -3735,19 +3735,39 @@ func (p *Seat) String() string {
 
 }
 
-type UserSchedulingDate struct {
+type Period struct {
+	Day *PeriodTime `thrift:"day,1,optional" form:"day" json:"day" query:"day"`
 }
 
-func NewUserSchedulingDate() *UserSchedulingDate {
-	return &UserSchedulingDate{}
+func NewPeriod() *Period {
+	return &Period{
+
+		Day: &PeriodTime{},
+	}
 }
 
-func (p *UserSchedulingDate) InitDefault() {
+func (p *Period) InitDefault() {
+	p.Day = &PeriodTime{}
 }
 
-var fieldIDToName_UserSchedulingDate = map[int16]string{}
+var Period_Day_DEFAULT *PeriodTime = &PeriodTime{}
 
-func (p *UserSchedulingDate) Read(iprot thrift.TProtocol) (err error) {
+func (p *Period) GetDay() (v *PeriodTime) {
+	if !p.IsSetDay() {
+		return Period_Day_DEFAULT
+	}
+	return p.Day
+}
+
+var fieldIDToName_Period = map[int16]string{
+	1: "day",
+}
+
+func (p *Period) IsSetDay() bool {
+	return p.Day != nil
+}
+
+func (p *Period) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -3764,8 +3784,20 @@ func (p *UserSchedulingDate) Read(iprot thrift.TProtocol) (err error) {
 		if fieldTypeId == thrift.STOP {
 			break
 		}
-		if err = iprot.Skip(fieldTypeId); err != nil {
-			goto SkipFieldTypeError
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		}
 		if err = iprot.ReadFieldEnd(); err != nil {
 			goto ReadFieldEndError
@@ -3780,8 +3812,10 @@ ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-SkipFieldTypeError:
-	return thrift.PrependError(fmt.Sprintf("%T skip field type %d error", p, fieldTypeId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Period[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
 ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
@@ -3789,11 +3823,25 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserSchedulingDate) Write(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteStructBegin("UserSchedulingDate"); err != nil {
+func (p *Period) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewPeriodTime()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Day = _field
+	return nil
+}
+
+func (p *Period) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("Period"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -3804,16 +3852,310 @@ func (p *UserSchedulingDate) Write(oprot thrift.TProtocol) (err error) {
 	return nil
 WriteStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
 WriteFieldStopError:
 	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
 WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserSchedulingDate) String() string {
+func (p *Period) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetDay() {
+		if err = oprot.WriteFieldBegin("day", thrift.STRUCT, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Day.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *Period) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserSchedulingDate(%+v)", *p)
+	return fmt.Sprintf("Period(%+v)", *p)
+
+}
+
+type PeriodTime struct {
+	StartTime string `thrift:"startTime,1,optional" form:"startTime" json:"startTime" query:"startTime"`
+	EndTime   string `thrift:"endTime,2,optional" form:"endTime" json:"endTime" query:"endTime"`
+	Status    string `thrift:"status,3,optional" form:"status" json:"status" query:"status"`
+}
+
+func NewPeriodTime() *PeriodTime {
+	return &PeriodTime{
+
+		StartTime: "",
+		EndTime:   "",
+		Status:    "",
+	}
+}
+
+func (p *PeriodTime) InitDefault() {
+	p.StartTime = ""
+	p.EndTime = ""
+	p.Status = ""
+}
+
+var PeriodTime_StartTime_DEFAULT string = ""
+
+func (p *PeriodTime) GetStartTime() (v string) {
+	if !p.IsSetStartTime() {
+		return PeriodTime_StartTime_DEFAULT
+	}
+	return p.StartTime
+}
+
+var PeriodTime_EndTime_DEFAULT string = ""
+
+func (p *PeriodTime) GetEndTime() (v string) {
+	if !p.IsSetEndTime() {
+		return PeriodTime_EndTime_DEFAULT
+	}
+	return p.EndTime
+}
+
+var PeriodTime_Status_DEFAULT string = ""
+
+func (p *PeriodTime) GetStatus() (v string) {
+	if !p.IsSetStatus() {
+		return PeriodTime_Status_DEFAULT
+	}
+	return p.Status
+}
+
+var fieldIDToName_PeriodTime = map[int16]string{
+	1: "startTime",
+	2: "endTime",
+	3: "status",
+}
+
+func (p *PeriodTime) IsSetStartTime() bool {
+	return p.StartTime != PeriodTime_StartTime_DEFAULT
+}
+
+func (p *PeriodTime) IsSetEndTime() bool {
+	return p.EndTime != PeriodTime_EndTime_DEFAULT
+}
+
+func (p *PeriodTime) IsSetStatus() bool {
+	return p.Status != PeriodTime_Status_DEFAULT
+}
+
+func (p *PeriodTime) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_PeriodTime[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *PeriodTime) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.StartTime = _field
+	return nil
+}
+func (p *PeriodTime) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.EndTime = _field
+	return nil
+}
+func (p *PeriodTime) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Status = _field
+	return nil
+}
+
+func (p *PeriodTime) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PeriodTime"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *PeriodTime) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetStartTime() {
+		if err = oprot.WriteFieldBegin("startTime", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.StartTime); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *PeriodTime) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetEndTime() {
+		if err = oprot.WriteFieldBegin("endTime", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.EndTime); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *PeriodTime) writeField3(oprot thrift.TProtocol) (err error) {
+	if p.IsSetStatus() {
+		if err = oprot.WriteFieldBegin("status", thrift.STRING, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Status); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *PeriodTime) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("PeriodTime(%+v)", *p)
 
 }

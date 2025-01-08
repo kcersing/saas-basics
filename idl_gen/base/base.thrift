@@ -94,10 +94,15 @@ struct Seat{
     3: optional i64 y =0 (api.raw = "y" )
 }
 
-
-struct UserSchedulingDate {
-
+struct Period{
+    1 :optional PeriodTime day={} (api.raw = "date")
 }
+struct PeriodTime{
+    1:  optional string startTime ="" (api.raw = "startTime")
+    2:  optional string endTime ="" (api.raw = "endTime")
+    3:  optional string status ="" (api.raw = "status")
+}
+
 enum Err {
     Success            = 1,
     NoRoute            = 0,

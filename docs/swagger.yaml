@@ -139,6 +139,20 @@ definitions:
       venueId:
         type: integer
     type: object
+  base.Period:
+    properties:
+      day:
+        $ref: '#/definitions/base.PeriodTime'
+    type: object
+  base.PeriodTime:
+    properties:
+      endTime:
+        type: string
+      startTime:
+        type: string
+      status:
+        type: string
+    type: object
   base.Sales:
     properties:
       number:
@@ -1011,6 +1025,10 @@ definitions:
         type: array
       startTime:
         type: string
+      status:
+        items:
+          type: integer
+        type: array
       type:
         type: integer
       venueId:
@@ -1031,14 +1049,19 @@ definitions:
     type: object
   schedule.UserTimePeriodReq:
     properties:
-      date:
-        description: '*时间如2024-05-16'
+      endDate:
         type: string
       period:
+        allOf:
+        - $ref: '#/definitions/base.Period'
         description: '*时间段'
+      startDate:
+        description: '*时间如2024-05-16'
         type: string
       userId:
-        type: integer
+        items:
+          type: integer
+        type: array
     type: object
   sms.SmsBuyReq:
     properties:

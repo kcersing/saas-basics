@@ -16,8 +16,9 @@ type UserScheduling struct {
 
 func (UserScheduling) Fields() []ent.Field {
 	return []ent.Field{
-		field.Time("date").Comment("日期").Optional(),
-		field.JSON("period", base.UserSchedulingDate{}).Comment("时间段").Optional(),
+		field.Time("start_date").Comment("日期").Optional(),
+		field.Time("end_date").Comment("日期").Optional(),
+		field.JSON("period", base.Period{}).Comment("时间段").Optional(),
 		field.Int64("user_id").Comment("員工id").Optional(),
 	}
 }

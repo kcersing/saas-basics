@@ -59340,8 +59340,9 @@ type UserSchedulingMutation struct {
 	addcreated_id *int64
 	status        *int64
 	addstatus     *int64
-	date          *time.Time
-	period        *base.UserSchedulingDate
+	start_date    *time.Time
+	end_date      *time.Time
+	period        *base.Period
 	clearedFields map[string]struct{}
 	users         *int64
 	clearedusers  bool
@@ -59762,62 +59763,111 @@ func (m *UserSchedulingMutation) ResetStatus() {
 	delete(m.clearedFields, userscheduling.FieldStatus)
 }
 
-// SetDate sets the "date" field.
-func (m *UserSchedulingMutation) SetDate(t time.Time) {
-	m.date = &t
+// SetStartDate sets the "start_date" field.
+func (m *UserSchedulingMutation) SetStartDate(t time.Time) {
+	m.start_date = &t
 }
 
-// Date returns the value of the "date" field in the mutation.
-func (m *UserSchedulingMutation) Date() (r time.Time, exists bool) {
-	v := m.date
+// StartDate returns the value of the "start_date" field in the mutation.
+func (m *UserSchedulingMutation) StartDate() (r time.Time, exists bool) {
+	v := m.start_date
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDate returns the old "date" field's value of the UserScheduling entity.
+// OldStartDate returns the old "start_date" field's value of the UserScheduling entity.
 // If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldDate(ctx context.Context) (v time.Time, err error) {
+func (m *UserSchedulingMutation) OldStartDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDate is only allowed on UpdateOne operations")
+		return v, errors.New("OldStartDate is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDate requires an ID field in the mutation")
+		return v, errors.New("OldStartDate requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDate: %w", err)
+		return v, fmt.Errorf("querying old value for OldStartDate: %w", err)
 	}
-	return oldValue.Date, nil
+	return oldValue.StartDate, nil
 }
 
-// ClearDate clears the value of the "date" field.
-func (m *UserSchedulingMutation) ClearDate() {
-	m.date = nil
-	m.clearedFields[userscheduling.FieldDate] = struct{}{}
+// ClearStartDate clears the value of the "start_date" field.
+func (m *UserSchedulingMutation) ClearStartDate() {
+	m.start_date = nil
+	m.clearedFields[userscheduling.FieldStartDate] = struct{}{}
 }
 
-// DateCleared returns if the "date" field was cleared in this mutation.
-func (m *UserSchedulingMutation) DateCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldDate]
+// StartDateCleared returns if the "start_date" field was cleared in this mutation.
+func (m *UserSchedulingMutation) StartDateCleared() bool {
+	_, ok := m.clearedFields[userscheduling.FieldStartDate]
 	return ok
 }
 
-// ResetDate resets all changes to the "date" field.
-func (m *UserSchedulingMutation) ResetDate() {
-	m.date = nil
-	delete(m.clearedFields, userscheduling.FieldDate)
+// ResetStartDate resets all changes to the "start_date" field.
+func (m *UserSchedulingMutation) ResetStartDate() {
+	m.start_date = nil
+	delete(m.clearedFields, userscheduling.FieldStartDate)
+}
+
+// SetEndDate sets the "end_date" field.
+func (m *UserSchedulingMutation) SetEndDate(t time.Time) {
+	m.end_date = &t
+}
+
+// EndDate returns the value of the "end_date" field in the mutation.
+func (m *UserSchedulingMutation) EndDate() (r time.Time, exists bool) {
+	v := m.end_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEndDate returns the old "end_date" field's value of the UserScheduling entity.
+// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserSchedulingMutation) OldEndDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEndDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEndDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEndDate: %w", err)
+	}
+	return oldValue.EndDate, nil
+}
+
+// ClearEndDate clears the value of the "end_date" field.
+func (m *UserSchedulingMutation) ClearEndDate() {
+	m.end_date = nil
+	m.clearedFields[userscheduling.FieldEndDate] = struct{}{}
+}
+
+// EndDateCleared returns if the "end_date" field was cleared in this mutation.
+func (m *UserSchedulingMutation) EndDateCleared() bool {
+	_, ok := m.clearedFields[userscheduling.FieldEndDate]
+	return ok
+}
+
+// ResetEndDate resets all changes to the "end_date" field.
+func (m *UserSchedulingMutation) ResetEndDate() {
+	m.end_date = nil
+	delete(m.clearedFields, userscheduling.FieldEndDate)
 }
 
 // SetPeriod sets the "period" field.
-func (m *UserSchedulingMutation) SetPeriod(bsd base.UserSchedulingDate) {
-	m.period = &bsd
+func (m *UserSchedulingMutation) SetPeriod(b base.Period) {
+	m.period = &b
 }
 
 // Period returns the value of the "period" field in the mutation.
-func (m *UserSchedulingMutation) Period() (r base.UserSchedulingDate, exists bool) {
+func (m *UserSchedulingMutation) Period() (r base.Period, exists bool) {
 	v := m.period
 	if v == nil {
 		return
@@ -59828,7 +59878,7 @@ func (m *UserSchedulingMutation) Period() (r base.UserSchedulingDate, exists boo
 // OldPeriod returns the old "period" field's value of the UserScheduling entity.
 // If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldPeriod(ctx context.Context) (v base.UserSchedulingDate, err error) {
+func (m *UserSchedulingMutation) OldPeriod(ctx context.Context) (v base.Period, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPeriod is only allowed on UpdateOne operations")
 	}
@@ -59983,7 +60033,7 @@ func (m *UserSchedulingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserSchedulingMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, userscheduling.FieldCreatedAt)
 	}
@@ -59999,8 +60049,11 @@ func (m *UserSchedulingMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, userscheduling.FieldStatus)
 	}
-	if m.date != nil {
-		fields = append(fields, userscheduling.FieldDate)
+	if m.start_date != nil {
+		fields = append(fields, userscheduling.FieldStartDate)
+	}
+	if m.end_date != nil {
+		fields = append(fields, userscheduling.FieldEndDate)
 	}
 	if m.period != nil {
 		fields = append(fields, userscheduling.FieldPeriod)
@@ -60026,8 +60079,10 @@ func (m *UserSchedulingMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedID()
 	case userscheduling.FieldStatus:
 		return m.Status()
-	case userscheduling.FieldDate:
-		return m.Date()
+	case userscheduling.FieldStartDate:
+		return m.StartDate()
+	case userscheduling.FieldEndDate:
+		return m.EndDate()
 	case userscheduling.FieldPeriod:
 		return m.Period()
 	case userscheduling.FieldUserID:
@@ -60051,8 +60106,10 @@ func (m *UserSchedulingMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldCreatedID(ctx)
 	case userscheduling.FieldStatus:
 		return m.OldStatus(ctx)
-	case userscheduling.FieldDate:
-		return m.OldDate(ctx)
+	case userscheduling.FieldStartDate:
+		return m.OldStartDate(ctx)
+	case userscheduling.FieldEndDate:
+		return m.OldEndDate(ctx)
 	case userscheduling.FieldPeriod:
 		return m.OldPeriod(ctx)
 	case userscheduling.FieldUserID:
@@ -60101,15 +60158,22 @@ func (m *UserSchedulingMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case userscheduling.FieldDate:
+	case userscheduling.FieldStartDate:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDate(v)
+		m.SetStartDate(v)
+		return nil
+	case userscheduling.FieldEndDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEndDate(v)
 		return nil
 	case userscheduling.FieldPeriod:
-		v, ok := value.(base.UserSchedulingDate)
+		v, ok := value.(base.Period)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -60206,8 +60270,11 @@ func (m *UserSchedulingMutation) ClearedFields() []string {
 	if m.FieldCleared(userscheduling.FieldStatus) {
 		fields = append(fields, userscheduling.FieldStatus)
 	}
-	if m.FieldCleared(userscheduling.FieldDate) {
-		fields = append(fields, userscheduling.FieldDate)
+	if m.FieldCleared(userscheduling.FieldStartDate) {
+		fields = append(fields, userscheduling.FieldStartDate)
+	}
+	if m.FieldCleared(userscheduling.FieldEndDate) {
+		fields = append(fields, userscheduling.FieldEndDate)
 	}
 	if m.FieldCleared(userscheduling.FieldPeriod) {
 		fields = append(fields, userscheduling.FieldPeriod)
@@ -60244,8 +60311,11 @@ func (m *UserSchedulingMutation) ClearField(name string) error {
 	case userscheduling.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case userscheduling.FieldDate:
-		m.ClearDate()
+	case userscheduling.FieldStartDate:
+		m.ClearStartDate()
+		return nil
+	case userscheduling.FieldEndDate:
+		m.ClearEndDate()
 		return nil
 	case userscheduling.FieldPeriod:
 		m.ClearPeriod()
@@ -60276,8 +60346,11 @@ func (m *UserSchedulingMutation) ResetField(name string) error {
 	case userscheduling.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case userscheduling.FieldDate:
-		m.ResetDate()
+	case userscheduling.FieldStartDate:
+		m.ResetStartDate()
+		return nil
+	case userscheduling.FieldEndDate:
+		m.ResetEndDate()
 		return nil
 	case userscheduling.FieldPeriod:
 		m.ResetPeriod()

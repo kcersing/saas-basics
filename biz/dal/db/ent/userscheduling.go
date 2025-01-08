@@ -32,9 +32,11 @@ type UserScheduling struct {
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// 日期
-	Date time.Time `json:"date,omitempty"`
+	StartDate time.Time `json:"start_date,omitempty"`
+	// 日期
+	EndDate time.Time `json:"end_date,omitempty"`
 	// 时间段
-	Period base.UserSchedulingDate `json:"period,omitempty"`
+	Period base.Period `json:"period,omitempty"`
 	// 員工id
 	UserID int64 `json:"user_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -74,7 +76,7 @@ func (*UserScheduling) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case userscheduling.FieldID, userscheduling.FieldDelete, userscheduling.FieldCreatedID, userscheduling.FieldStatus, userscheduling.FieldUserID:
 			values[i] = new(sql.NullInt64)
-		case userscheduling.FieldCreatedAt, userscheduling.FieldUpdatedAt, userscheduling.FieldDate:
+		case userscheduling.FieldCreatedAt, userscheduling.FieldUpdatedAt, userscheduling.FieldStartDate, userscheduling.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -127,11 +129,17 @@ func (us *UserScheduling) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				us.Status = value.Int64
 			}
-		case userscheduling.FieldDate:
+		case userscheduling.FieldStartDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field date", values[i])
+				return fmt.Errorf("unexpected type %T for field start_date", values[i])
 			} else if value.Valid {
-				us.Date = value.Time
+				us.StartDate = value.Time
+			}
+		case userscheduling.FieldEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field end_date", values[i])
+			} else if value.Valid {
+				us.EndDate = value.Time
 			}
 		case userscheduling.FieldPeriod:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -203,8 +211,11 @@ func (us *UserScheduling) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", us.Status))
 	builder.WriteString(", ")
-	builder.WriteString("date=")
-	builder.WriteString(us.Date.Format(time.ANSIC))
+	builder.WriteString("start_date=")
+	builder.WriteString(us.StartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("end_date=")
+	builder.WriteString(us.EndDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("period=")
 	builder.WriteString(fmt.Sprintf("%v", us.Period))
