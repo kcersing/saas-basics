@@ -95,7 +95,7 @@ struct Seat{
 }
 
 struct Period{
-    1 :optional PeriodTime day={} (api.raw = "date")
+    1 :optional list<PeriodTime> day={} (api.raw = "date")
 }
 struct PeriodTime{
     1:  optional string startTime ="" (api.raw = "startTime")

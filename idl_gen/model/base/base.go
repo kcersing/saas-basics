@@ -3736,23 +3736,23 @@ func (p *Seat) String() string {
 }
 
 type Period struct {
-	Day *PeriodTime `thrift:"day,1,optional" form:"day" json:"day" query:"day"`
+	Day []*PeriodTime `thrift:"day,1,optional" form:"day" json:"day" query:"day"`
 }
 
 func NewPeriod() *Period {
 	return &Period{
 
-		Day: &PeriodTime{},
+		Day: []*PeriodTime{},
 	}
 }
 
 func (p *Period) InitDefault() {
-	p.Day = &PeriodTime{}
+	p.Day = []*PeriodTime{}
 }
 
-var Period_Day_DEFAULT *PeriodTime = &PeriodTime{}
+var Period_Day_DEFAULT []*PeriodTime = []*PeriodTime{}
 
-func (p *Period) GetDay() (v *PeriodTime) {
+func (p *Period) GetDay() (v []*PeriodTime) {
 	if !p.IsSetDay() {
 		return Period_Day_DEFAULT
 	}
@@ -3787,7 +3787,7 @@ func (p *Period) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRUCT {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -3824,8 +3824,23 @@ ReadStructEndError:
 }
 
 func (p *Period) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewPeriodTime()
-	if err := _field.Read(iprot); err != nil {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*PeriodTime, 0, size)
+	values := make([]PeriodTime, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
 		return err
 	}
 	p.Day = _field
@@ -3862,10 +3877,18 @@ WriteStructEndError:
 
 func (p *Period) writeField1(oprot thrift.TProtocol) (err error) {
 	if p.IsSetDay() {
-		if err = oprot.WriteFieldBegin("day", thrift.STRUCT, 1); err != nil {
+		if err = oprot.WriteFieldBegin("day", thrift.LIST, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := p.Day.Write(oprot); err != nil {
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Day)); err != nil {
+			return err
+		}
+		for _, v := range p.Day {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
