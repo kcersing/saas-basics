@@ -191,7 +191,9 @@ struct UserTimePeriodInfo{
     4:  optional i64 userId = 0 (api.raw = "userId")
 }
 struct UserPeriodReq{
+    /**员工ID*/
     1:  optional i64 id = 0 (api.raw = "id")
+    /**时间*/
     2:  optional string date = "" (api.raw = "date")
 }
 

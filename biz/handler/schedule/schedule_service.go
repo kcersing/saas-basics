@@ -445,8 +445,8 @@ func ScheduleLessonsPublish(ctx context.Context, c *app.RequestContext) {
 
 // UserTimePeriod .
 //
-// @Summary 会员时间周期
-// @Description 会员时间周期
+// @Summary 员工时间周期
+// @Description 员工时间周期
 //
 //	@Param			request	body		schedule.UserPeriodReq	true	"query params"
 //	@Success		200		{object}	utils.Response

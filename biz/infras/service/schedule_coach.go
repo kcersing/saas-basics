@@ -91,7 +91,7 @@ func (s Schedule) ScheduleCoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachI
 	panic("implement me")
 }
 func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.UserTimePeriodInfo, err error) {
-	startTime, err := time.Parse(time.DateTime, req.Date)
+	startTime, err := time.Parse(time.DateOnly, req.Date)
 	if err != nil {
 		return nil, errors.New("日期类型传值错误")
 	}

@@ -3576,7 +3576,7 @@ paths:
       summary: 更新教练值班时间段
   /service/schedule/user-time-period:
     post:
-      description: 会员时间周期
+      description: 员工时间周期
       parameters:
       - description: query params
         in: body
@@ -3589,7 +3589,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 会员时间周期
+      summary: 员工时间周期
   /service/sms/buy:
     post:
       description: 购买短信 Description

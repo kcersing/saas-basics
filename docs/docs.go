@@ -3404,8 +3404,8 @@ const docTemplate = `{
         },
         "/service/schedule/user-time-period": {
             "post": {
-                "description": "会员时间周期",
-                "summary": "会员时间周期",
+                "description": "员工时间周期",
+                "summary": "员工时间周期",
                 "parameters": [
                     {
                         "description": "query params",
