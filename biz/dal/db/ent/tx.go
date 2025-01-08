@@ -86,8 +86,8 @@ type Tx struct {
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
-	// UserScheduling is the client for interacting with the UserScheduling builders.
-	UserScheduling *UserSchedulingClient
+	// UserTimePeriod is the client for interacting with the UserTimePeriod builders.
+	UserTimePeriod *UserTimePeriodClient
 	// Venue is the client for interacting with the Venue builders.
 	Venue *VenueClient
 	// VenuePlace is the client for interacting with the VenuePlace builders.
@@ -264,7 +264,7 @@ func (tx *Tx) init() {
 	tx.ScheduleMember = NewScheduleMemberClient(tx.config)
 	tx.Token = NewTokenClient(tx.config)
 	tx.User = NewUserClient(tx.config)
-	tx.UserScheduling = NewUserSchedulingClient(tx.config)
+	tx.UserTimePeriod = NewUserTimePeriodClient(tx.config)
 	tx.Venue = NewVenueClient(tx.config)
 	tx.VenuePlace = NewVenuePlaceClient(tx.config)
 	tx.VenueSms = NewVenueSmsClient(tx.config)

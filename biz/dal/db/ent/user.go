@@ -73,7 +73,7 @@ type UserEdges struct {
 	// Roles holds the value of the roles edge.
 	Roles []*Role `json:"roles,omitempty"`
 	// UserTimePeriod holds the value of the user_time_period edge.
-	UserTimePeriod []*UserScheduling `json:"user_time_period,omitempty"`
+	UserTimePeriod []*UserTimePeriod `json:"user_time_period,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [7]bool
@@ -139,7 +139,7 @@ func (e UserEdges) RolesOrErr() ([]*Role, error) {
 
 // UserTimePeriodOrErr returns the UserTimePeriod value or an error if the edge
 // was not loaded in eager-loading.
-func (e UserEdges) UserTimePeriodOrErr() ([]*UserScheduling, error) {
+func (e UserEdges) UserTimePeriodOrErr() ([]*UserTimePeriod, error) {
 	if e.loadedTypes[6] {
 		return e.UserTimePeriod, nil
 	}
@@ -322,7 +322,7 @@ func (u *User) QueryRoles() *RoleQuery {
 }
 
 // QueryUserTimePeriod queries the "user_time_period" edge of the User entity.
-func (u *User) QueryUserTimePeriod() *UserSchedulingQuery {
+func (u *User) QueryUserTimePeriod() *UserTimePeriodQuery {
 	return NewUserClient(u.config).QueryUserTimePeriod(u)
 }
 

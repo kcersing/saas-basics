@@ -14,7 +14,7 @@ import (
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
-	"saas/biz/dal/db/ent/userscheduling"
+	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/biz/dal/db/ent/venue"
 
 	"entgo.io/ent/dialect/sql"
@@ -35,7 +35,7 @@ type UserQuery struct {
 	withUserEntry      *EntryLogsQuery
 	withVenues         *VenueQuery
 	withRoles          *RoleQuery
-	withUserTimePeriod *UserSchedulingQuery
+	withUserTimePeriod *UserTimePeriodQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -205,8 +205,8 @@ func (uq *UserQuery) QueryRoles() *RoleQuery {
 }
 
 // QueryUserTimePeriod chains the current query on the "user_time_period" edge.
-func (uq *UserQuery) QueryUserTimePeriod() *UserSchedulingQuery {
-	query := (&UserSchedulingClient{config: uq.config}).Query()
+func (uq *UserQuery) QueryUserTimePeriod() *UserTimePeriodQuery {
+	query := (&UserTimePeriodClient{config: uq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := uq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -217,7 +217,7 @@ func (uq *UserQuery) QueryUserTimePeriod() *UserSchedulingQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, selector),
-			sqlgraph.To(userscheduling.Table, userscheduling.FieldID),
+			sqlgraph.To(usertimeperiod.Table, usertimeperiod.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.UserTimePeriodTable, user.UserTimePeriodColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
@@ -499,8 +499,8 @@ func (uq *UserQuery) WithRoles(opts ...func(*RoleQuery)) *UserQuery {
 
 // WithUserTimePeriod tells the query-builder to eager-load the nodes that are connected to
 // the "user_time_period" edge. The optional arguments are used to configure the query builder of the edge.
-func (uq *UserQuery) WithUserTimePeriod(opts ...func(*UserSchedulingQuery)) *UserQuery {
-	query := (&UserSchedulingClient{config: uq.config}).Query()
+func (uq *UserQuery) WithUserTimePeriod(opts ...func(*UserTimePeriodQuery)) *UserQuery {
+	query := (&UserTimePeriodClient{config: uq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -657,8 +657,8 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	}
 	if query := uq.withUserTimePeriod; query != nil {
 		if err := uq.loadUserTimePeriod(ctx, query, nodes,
-			func(n *User) { n.Edges.UserTimePeriod = []*UserScheduling{} },
-			func(n *User, e *UserScheduling) { n.Edges.UserTimePeriod = append(n.Edges.UserTimePeriod, e) }); err != nil {
+			func(n *User) { n.Edges.UserTimePeriod = []*UserTimePeriod{} },
+			func(n *User, e *UserTimePeriod) { n.Edges.UserTimePeriod = append(n.Edges.UserTimePeriod, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -937,7 +937,7 @@ func (uq *UserQuery) loadRoles(ctx context.Context, query *RoleQuery, nodes []*U
 	}
 	return nil
 }
-func (uq *UserQuery) loadUserTimePeriod(ctx context.Context, query *UserSchedulingQuery, nodes []*User, init func(*User), assign func(*User, *UserScheduling)) error {
+func (uq *UserQuery) loadUserTimePeriod(ctx context.Context, query *UserTimePeriodQuery, nodes []*User, init func(*User), assign func(*User, *UserTimePeriod)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*User)
 	for i := range nodes {
@@ -948,9 +948,9 @@ func (uq *UserQuery) loadUserTimePeriod(ctx context.Context, query *UserScheduli
 		}
 	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(userscheduling.FieldUserID)
+		query.ctx.AppendFieldOnce(usertimeperiod.FieldUserID)
 	}
-	query.Where(predicate.UserScheduling(func(s *sql.Selector) {
+	query.Where(predicate.UserTimePeriod(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.UserTimePeriodColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)

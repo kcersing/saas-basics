@@ -44,7 +44,7 @@ import (
 	"saas/biz/dal/db/ent/schedulemember"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
-	"saas/biz/dal/db/ent/userscheduling"
+	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
 	"saas/biz/dal/db/ent/venuesms"
@@ -151,7 +151,7 @@ func checkColumn(table, column string) error {
 			schedulemember.Table:        schedulemember.ValidColumn,
 			token.Table:                 token.ValidColumn,
 			user.Table:                  user.ValidColumn,
-			userscheduling.Table:        userscheduling.ValidColumn,
+			usertimeperiod.Table:        usertimeperiod.ValidColumn,
 			venue.Table:                 venue.ValidColumn,
 			venueplace.Table:            venueplace.ValidColumn,
 			venuesms.Table:              venuesms.ValidColumn,

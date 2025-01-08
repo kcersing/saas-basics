@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"saas/biz/dal/db/ent/user"
-	"saas/biz/dal/db/ent/userscheduling"
+	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/idl_gen/model/base"
 	"strings"
 	"time"
@@ -15,8 +15,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// UserScheduling is the model entity for the UserScheduling schema.
-type UserScheduling struct {
+// UserTimePeriod is the model entity for the UserTimePeriod schema.
+type UserTimePeriod struct {
 	config `json:"-"`
 	// ID of the ent.
 	// primary key
@@ -39,14 +39,16 @@ type UserScheduling struct {
 	Period base.Period `json:"period,omitempty"`
 	// 員工id
 	UserID int64 `json:"user_id,omitempty"`
+	// id
+	VenueID int64 `json:"venue_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the UserSchedulingQuery when eager-loading is set.
-	Edges        UserSchedulingEdges `json:"edges"`
+	// The values are being populated by the UserTimePeriodQuery when eager-loading is set.
+	Edges        UserTimePeriodEdges `json:"edges"`
 	selectValues sql.SelectValues
 }
 
-// UserSchedulingEdges holds the relations/edges for other nodes in the graph.
-type UserSchedulingEdges struct {
+// UserTimePeriodEdges holds the relations/edges for other nodes in the graph.
+type UserTimePeriodEdges struct {
 	// Users holds the value of the users edge.
 	Users *User `json:"users,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -56,7 +58,7 @@ type UserSchedulingEdges struct {
 
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e UserSchedulingEdges) UsersOrErr() (*User, error) {
+func (e UserTimePeriodEdges) UsersOrErr() (*User, error) {
 	if e.loadedTypes[0] {
 		if e.Users == nil {
 			// Edge was loaded but was not found.
@@ -68,15 +70,15 @@ func (e UserSchedulingEdges) UsersOrErr() (*User, error) {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*UserScheduling) scanValues(columns []string) ([]any, error) {
+func (*UserTimePeriod) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case userscheduling.FieldPeriod:
+		case usertimeperiod.FieldPeriod:
 			values[i] = new([]byte)
-		case userscheduling.FieldID, userscheduling.FieldDelete, userscheduling.FieldCreatedID, userscheduling.FieldStatus, userscheduling.FieldUserID:
+		case usertimeperiod.FieldID, usertimeperiod.FieldDelete, usertimeperiod.FieldCreatedID, usertimeperiod.FieldStatus, usertimeperiod.FieldUserID, usertimeperiod.FieldVenueID:
 			values[i] = new(sql.NullInt64)
-		case userscheduling.FieldCreatedAt, userscheduling.FieldUpdatedAt, userscheduling.FieldStartDate, userscheduling.FieldEndDate:
+		case usertimeperiod.FieldCreatedAt, usertimeperiod.FieldUpdatedAt, usertimeperiod.FieldStartDate, usertimeperiod.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -86,145 +88,154 @@ func (*UserScheduling) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the UserScheduling fields.
-func (us *UserScheduling) assignValues(columns []string, values []any) error {
+// to the UserTimePeriod fields.
+func (utp *UserTimePeriod) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case userscheduling.FieldID:
+		case usertimeperiod.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			us.ID = int64(value.Int64)
-		case userscheduling.FieldCreatedAt:
+			utp.ID = int64(value.Int64)
+		case usertimeperiod.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				us.CreatedAt = value.Time
+				utp.CreatedAt = value.Time
 			}
-		case userscheduling.FieldUpdatedAt:
+		case usertimeperiod.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				us.UpdatedAt = value.Time
+				utp.UpdatedAt = value.Time
 			}
-		case userscheduling.FieldDelete:
+		case usertimeperiod.FieldDelete:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field delete", values[i])
 			} else if value.Valid {
-				us.Delete = value.Int64
+				utp.Delete = value.Int64
 			}
-		case userscheduling.FieldCreatedID:
+		case usertimeperiod.FieldCreatedID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_id", values[i])
 			} else if value.Valid {
-				us.CreatedID = value.Int64
+				utp.CreatedID = value.Int64
 			}
-		case userscheduling.FieldStatus:
+		case usertimeperiod.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				us.Status = value.Int64
+				utp.Status = value.Int64
 			}
-		case userscheduling.FieldStartDate:
+		case usertimeperiod.FieldStartDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field start_date", values[i])
 			} else if value.Valid {
-				us.StartDate = value.Time
+				utp.StartDate = value.Time
 			}
-		case userscheduling.FieldEndDate:
+		case usertimeperiod.FieldEndDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field end_date", values[i])
 			} else if value.Valid {
-				us.EndDate = value.Time
+				utp.EndDate = value.Time
 			}
-		case userscheduling.FieldPeriod:
+		case usertimeperiod.FieldPeriod:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field period", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &us.Period); err != nil {
+				if err := json.Unmarshal(*value, &utp.Period); err != nil {
 					return fmt.Errorf("unmarshal field period: %w", err)
 				}
 			}
-		case userscheduling.FieldUserID:
+		case usertimeperiod.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				us.UserID = value.Int64
+				utp.UserID = value.Int64
+			}
+		case usertimeperiod.FieldVenueID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field venue_id", values[i])
+			} else if value.Valid {
+				utp.VenueID = value.Int64
 			}
 		default:
-			us.selectValues.Set(columns[i], values[i])
+			utp.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the UserScheduling.
+// Value returns the ent.Value that was dynamically selected and assigned to the UserTimePeriod.
 // This includes values selected through modifiers, order, etc.
-func (us *UserScheduling) Value(name string) (ent.Value, error) {
-	return us.selectValues.Get(name)
+func (utp *UserTimePeriod) Value(name string) (ent.Value, error) {
+	return utp.selectValues.Get(name)
 }
 
-// QueryUsers queries the "users" edge of the UserScheduling entity.
-func (us *UserScheduling) QueryUsers() *UserQuery {
-	return NewUserSchedulingClient(us.config).QueryUsers(us)
+// QueryUsers queries the "users" edge of the UserTimePeriod entity.
+func (utp *UserTimePeriod) QueryUsers() *UserQuery {
+	return NewUserTimePeriodClient(utp.config).QueryUsers(utp)
 }
 
-// Update returns a builder for updating this UserScheduling.
-// Note that you need to call UserScheduling.Unwrap() before calling this method if this UserScheduling
+// Update returns a builder for updating this UserTimePeriod.
+// Note that you need to call UserTimePeriod.Unwrap() before calling this method if this UserTimePeriod
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (us *UserScheduling) Update() *UserSchedulingUpdateOne {
-	return NewUserSchedulingClient(us.config).UpdateOne(us)
+func (utp *UserTimePeriod) Update() *UserTimePeriodUpdateOne {
+	return NewUserTimePeriodClient(utp.config).UpdateOne(utp)
 }
 
-// Unwrap unwraps the UserScheduling entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the UserTimePeriod entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (us *UserScheduling) Unwrap() *UserScheduling {
-	_tx, ok := us.config.driver.(*txDriver)
+func (utp *UserTimePeriod) Unwrap() *UserTimePeriod {
+	_tx, ok := utp.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: UserScheduling is not a transactional entity")
+		panic("ent: UserTimePeriod is not a transactional entity")
 	}
-	us.config.driver = _tx.drv
-	return us
+	utp.config.driver = _tx.drv
+	return utp
 }
 
 // String implements the fmt.Stringer.
-func (us *UserScheduling) String() string {
+func (utp *UserTimePeriod) String() string {
 	var builder strings.Builder
-	builder.WriteString("UserScheduling(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", us.ID))
+	builder.WriteString("UserTimePeriod(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", utp.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(us.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(utp.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(us.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(utp.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("delete=")
-	builder.WriteString(fmt.Sprintf("%v", us.Delete))
+	builder.WriteString(fmt.Sprintf("%v", utp.Delete))
 	builder.WriteString(", ")
 	builder.WriteString("created_id=")
-	builder.WriteString(fmt.Sprintf("%v", us.CreatedID))
+	builder.WriteString(fmt.Sprintf("%v", utp.CreatedID))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", us.Status))
+	builder.WriteString(fmt.Sprintf("%v", utp.Status))
 	builder.WriteString(", ")
 	builder.WriteString("start_date=")
-	builder.WriteString(us.StartDate.Format(time.ANSIC))
+	builder.WriteString(utp.StartDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
-	builder.WriteString(us.EndDate.Format(time.ANSIC))
+	builder.WriteString(utp.EndDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("period=")
-	builder.WriteString(fmt.Sprintf("%v", us.Period))
+	builder.WriteString(fmt.Sprintf("%v", utp.Period))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", us.UserID))
+	builder.WriteString(fmt.Sprintf("%v", utp.UserID))
+	builder.WriteString(", ")
+	builder.WriteString("venue_id=")
+	builder.WriteString(fmt.Sprintf("%v", utp.VenueID))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// UserSchedulings is a parsable slice of UserScheduling.
-type UserSchedulings []*UserScheduling
+// UserTimePeriods is a parsable slice of UserTimePeriod.
+type UserTimePeriods []*UserTimePeriod

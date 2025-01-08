@@ -41,7 +41,7 @@ import (
 	"saas/biz/dal/db/ent/schema"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
-	"saas/biz/dal/db/ent/userscheduling"
+	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
 	"saas/biz/dal/db/ent/venuesms"
@@ -1461,35 +1461,35 @@ func init() {
 	userDescJobTime := userFields[7].Descriptor()
 	// user.DefaultJobTime holds the default value on creation for the job_time field.
 	user.DefaultJobTime = userDescJobTime.Default.(int64)
-	userschedulingMixin := schema.UserScheduling{}.Mixin()
-	userschedulingMixinFields0 := userschedulingMixin[0].Fields()
-	_ = userschedulingMixinFields0
-	userschedulingMixinFields1 := userschedulingMixin[1].Fields()
-	_ = userschedulingMixinFields1
-	userschedulingFields := schema.UserScheduling{}.Fields()
-	_ = userschedulingFields
-	// userschedulingDescCreatedAt is the schema descriptor for created_at field.
-	userschedulingDescCreatedAt := userschedulingMixinFields0[1].Descriptor()
-	// userscheduling.DefaultCreatedAt holds the default value on creation for the created_at field.
-	userscheduling.DefaultCreatedAt = userschedulingDescCreatedAt.Default.(func() time.Time)
-	// userschedulingDescUpdatedAt is the schema descriptor for updated_at field.
-	userschedulingDescUpdatedAt := userschedulingMixinFields0[2].Descriptor()
-	// userscheduling.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	userscheduling.DefaultUpdatedAt = userschedulingDescUpdatedAt.Default.(func() time.Time)
-	// userscheduling.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	userscheduling.UpdateDefaultUpdatedAt = userschedulingDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// userschedulingDescDelete is the schema descriptor for delete field.
-	userschedulingDescDelete := userschedulingMixinFields0[3].Descriptor()
-	// userscheduling.DefaultDelete holds the default value on creation for the delete field.
-	userscheduling.DefaultDelete = userschedulingDescDelete.Default.(int64)
-	// userschedulingDescCreatedID is the schema descriptor for created_id field.
-	userschedulingDescCreatedID := userschedulingMixinFields0[4].Descriptor()
-	// userscheduling.DefaultCreatedID holds the default value on creation for the created_id field.
-	userscheduling.DefaultCreatedID = userschedulingDescCreatedID.Default.(int64)
-	// userschedulingDescStatus is the schema descriptor for status field.
-	userschedulingDescStatus := userschedulingMixinFields1[0].Descriptor()
-	// userscheduling.DefaultStatus holds the default value on creation for the status field.
-	userscheduling.DefaultStatus = userschedulingDescStatus.Default.(int64)
+	usertimeperiodMixin := schema.UserTimePeriod{}.Mixin()
+	usertimeperiodMixinFields0 := usertimeperiodMixin[0].Fields()
+	_ = usertimeperiodMixinFields0
+	usertimeperiodMixinFields1 := usertimeperiodMixin[1].Fields()
+	_ = usertimeperiodMixinFields1
+	usertimeperiodFields := schema.UserTimePeriod{}.Fields()
+	_ = usertimeperiodFields
+	// usertimeperiodDescCreatedAt is the schema descriptor for created_at field.
+	usertimeperiodDescCreatedAt := usertimeperiodMixinFields0[1].Descriptor()
+	// usertimeperiod.DefaultCreatedAt holds the default value on creation for the created_at field.
+	usertimeperiod.DefaultCreatedAt = usertimeperiodDescCreatedAt.Default.(func() time.Time)
+	// usertimeperiodDescUpdatedAt is the schema descriptor for updated_at field.
+	usertimeperiodDescUpdatedAt := usertimeperiodMixinFields0[2].Descriptor()
+	// usertimeperiod.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	usertimeperiod.DefaultUpdatedAt = usertimeperiodDescUpdatedAt.Default.(func() time.Time)
+	// usertimeperiod.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	usertimeperiod.UpdateDefaultUpdatedAt = usertimeperiodDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// usertimeperiodDescDelete is the schema descriptor for delete field.
+	usertimeperiodDescDelete := usertimeperiodMixinFields0[3].Descriptor()
+	// usertimeperiod.DefaultDelete holds the default value on creation for the delete field.
+	usertimeperiod.DefaultDelete = usertimeperiodDescDelete.Default.(int64)
+	// usertimeperiodDescCreatedID is the schema descriptor for created_id field.
+	usertimeperiodDescCreatedID := usertimeperiodMixinFields0[4].Descriptor()
+	// usertimeperiod.DefaultCreatedID holds the default value on creation for the created_id field.
+	usertimeperiod.DefaultCreatedID = usertimeperiodDescCreatedID.Default.(int64)
+	// usertimeperiodDescStatus is the schema descriptor for status field.
+	usertimeperiodDescStatus := usertimeperiodMixinFields1[0].Descriptor()
+	// usertimeperiod.DefaultStatus holds the default value on creation for the status field.
+	usertimeperiod.DefaultStatus = usertimeperiodDescStatus.Default.(int64)
 	venueMixin := schema.Venue{}.Mixin()
 	venueMixinFields0 := venueMixin[0].Fields()
 	_ = venueMixinFields0

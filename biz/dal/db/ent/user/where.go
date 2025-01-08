@@ -1150,7 +1150,7 @@ func HasUserTimePeriod() predicate.User {
 }
 
 // HasUserTimePeriodWith applies the HasEdge predicate on the "user_time_period" edge with a given conditions (other predicates).
-func HasUserTimePeriodWith(preds ...predicate.UserScheduling) predicate.User {
+func HasUserTimePeriodWith(preds ...predicate.UserTimePeriod) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newUserTimePeriodStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {

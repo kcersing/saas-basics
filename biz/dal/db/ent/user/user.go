@@ -100,8 +100,8 @@ const (
 	RolesInverseTable = "sys_roles"
 	// UserTimePeriodTable is the table that holds the user_time_period relation/edge.
 	UserTimePeriodTable = "sys_user_time_period"
-	// UserTimePeriodInverseTable is the table name for the UserScheduling entity.
-	// It exists in this package in order to avoid circular dependency with the "userscheduling" package.
+	// UserTimePeriodInverseTable is the table name for the UserTimePeriod entity.
+	// It exists in this package in order to avoid circular dependency with the "usertimeperiod" package.
 	UserTimePeriodInverseTable = "sys_user_time_period"
 	// UserTimePeriodColumn is the table column denoting the user_time_period relation/edge.
 	UserTimePeriodColumn = "user_id"

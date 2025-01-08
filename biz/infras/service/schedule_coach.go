@@ -1,11 +1,12 @@
 package service
 
 import (
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedulecoach"
-	"saas/biz/dal/db/ent/userscheduling"
+	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/idl_gen/model/schedule"
 	"time"
 )
@@ -21,22 +22,28 @@ func (s Schedule) CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) e
 	if err != nil {
 		return errors.New("日期类型传值错误")
 	}
-	var usc []*ent.UserSchedulingCreate
+	var usc []*ent.UserTimePeriodCreate
 	if len(req.UserId) > 0 {
 		for _, v := range req.UserId {
-			s.db.UserScheduling.Delete().Where(
-				userscheduling.UserID(v),
-				userscheduling.StartDate(startDate),
-				userscheduling.EndDate(endDate),
+			s.db.UserTimePeriod.Delete().Where(
+				usertimeperiod.UserID(v),
+				usertimeperiod.StartDate(startDate),
+				usertimeperiod.EndDate(endDate),
 			).Exec(s.ctx)
-			usc = append(usc, s.db.UserScheduling.Create().SetStartDate(startDate).SetEndDate(endDate).SetUserID(v).SetPeriod(*req.Period))
+			usc = append(usc, s.db.UserTimePeriod.
+				Create().
+				SetStartDate(startDate).
+				SetEndDate(endDate).
+				SetUserID(v).
+				SetVenueID(req.VenueId).
+				SetPeriod(*req.Period))
+
 		}
 	}
 
-	err = s.db.UserScheduling.CreateBulk(usc...).Exec(s.ctx)
-	if err != nil {
-		return err
-	}
+	err = s.db.UserTimePeriod.CreateBulk(usc...).Exec(s.ctx)
+	hlog.Info(err)
+
 	return nil
 
 }
@@ -95,13 +102,18 @@ func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.Use
 	if err != nil {
 		return nil, errors.New("日期类型传值错误")
 	}
-	first, err := s.db.UserScheduling.
+
+	var predicates []predicate.UserTimePeriod
+	if req.VenueId > 0 {
+		predicates = append(predicates, usertimeperiod.VenueID(req.VenueId))
+	}
+
+	predicates = append(predicates, usertimeperiod.UserID(req.ID))
+	predicates = append(predicates, usertimeperiod.StartDateLTE(startTime))
+	predicates = append(predicates, usertimeperiod.EndDateGTE(startTime))
+	first, err := s.db.Debug().UserTimePeriod.
 		Query().
-		Where(
-			userscheduling.UserID(req.ID),
-			userscheduling.StartDateGTE(startTime),
-			userscheduling.EndDateLTE(startTime),
-		).
+		Where(predicates...).
 		First(s.ctx)
 
 	if err != nil {

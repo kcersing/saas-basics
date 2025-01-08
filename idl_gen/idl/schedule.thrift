@@ -181,6 +181,7 @@ struct UserTimePeriodReq{
     /**时间段*/
     3:  optional base.Period period = {} (api.raw = "period")
     4:  optional list<i64> userId = {} (api.raw = "userId")
+    5:  optional i64 venueId = 0 (api.raw = "venueId")
 }
 struct UserTimePeriodInfo{
     /**时间如2024-05-16*/
@@ -192,9 +193,10 @@ struct UserTimePeriodInfo{
 }
 struct UserPeriodReq{
     /**员工ID*/
-    1:  optional i64 id = 0 (api.raw = "id")
+    1: optional i64 id = 0 (api.raw = "id")
     /**时间*/
-    2:  optional string date = "" (api.raw = "date")
+    2: optional string date = "" (api.raw = "date")
+    3: optional i64 venueId = 0 (api.raw = "venueId")
 }
 
 service ScheduleService {

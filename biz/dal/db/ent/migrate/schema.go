@@ -1402,6 +1402,7 @@ var (
 		{Name: "start_date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
 		{Name: "period", Type: field.TypeJSON, Nullable: true, Comment: "时间段"},
+		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "id"},
 		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "員工id"},
 	}
 	// SysUserTimePeriodTable holds the schema information for the "sys_user_time_period" table.
@@ -1412,7 +1413,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_user_time_period_sys_users_user_time_period",
-				Columns:    []*schema.Column{SysUserTimePeriodColumns[9]},
+				Columns:    []*schema.Column{SysUserTimePeriodColumns[10]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

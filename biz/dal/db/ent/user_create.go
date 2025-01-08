@@ -12,7 +12,7 @@ import (
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
-	"saas/biz/dal/db/ent/userscheduling"
+	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/biz/dal/db/ent/venue"
 	"time"
 
@@ -319,14 +319,14 @@ func (uc *UserCreate) AddRoles(r ...*Role) *UserCreate {
 	return uc.AddRoleIDs(ids...)
 }
 
-// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserScheduling entity by IDs.
+// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserTimePeriod entity by IDs.
 func (uc *UserCreate) AddUserTimePeriodIDs(ids ...int64) *UserCreate {
 	uc.mutation.AddUserTimePeriodIDs(ids...)
 	return uc
 }
 
-// AddUserTimePeriod adds the "user_time_period" edges to the UserScheduling entity.
-func (uc *UserCreate) AddUserTimePeriod(u ...*UserScheduling) *UserCreate {
+// AddUserTimePeriod adds the "user_time_period" edges to the UserTimePeriod entity.
+func (uc *UserCreate) AddUserTimePeriod(u ...*UserTimePeriod) *UserCreate {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -617,7 +617,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

@@ -13,7 +13,7 @@ import (
 	"saas/biz/dal/db/ent/role"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
-	"saas/biz/dal/db/ent/userscheduling"
+	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/biz/dal/db/ent/venue"
 	"time"
 
@@ -445,14 +445,14 @@ func (uu *UserUpdate) AddRoles(r ...*Role) *UserUpdate {
 	return uu.AddRoleIDs(ids...)
 }
 
-// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserScheduling entity by IDs.
+// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserTimePeriod entity by IDs.
 func (uu *UserUpdate) AddUserTimePeriodIDs(ids ...int64) *UserUpdate {
 	uu.mutation.AddUserTimePeriodIDs(ids...)
 	return uu
 }
 
-// AddUserTimePeriod adds the "user_time_period" edges to the UserScheduling entity.
-func (uu *UserUpdate) AddUserTimePeriod(u ...*UserScheduling) *UserUpdate {
+// AddUserTimePeriod adds the "user_time_period" edges to the UserTimePeriod entity.
+func (uu *UserUpdate) AddUserTimePeriod(u ...*UserTimePeriod) *UserUpdate {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -576,20 +576,20 @@ func (uu *UserUpdate) RemoveRoles(r ...*Role) *UserUpdate {
 	return uu.RemoveRoleIDs(ids...)
 }
 
-// ClearUserTimePeriod clears all "user_time_period" edges to the UserScheduling entity.
+// ClearUserTimePeriod clears all "user_time_period" edges to the UserTimePeriod entity.
 func (uu *UserUpdate) ClearUserTimePeriod() *UserUpdate {
 	uu.mutation.ClearUserTimePeriod()
 	return uu
 }
 
-// RemoveUserTimePeriodIDs removes the "user_time_period" edge to UserScheduling entities by IDs.
+// RemoveUserTimePeriodIDs removes the "user_time_period" edge to UserTimePeriod entities by IDs.
 func (uu *UserUpdate) RemoveUserTimePeriodIDs(ids ...int64) *UserUpdate {
 	uu.mutation.RemoveUserTimePeriodIDs(ids...)
 	return uu
 }
 
-// RemoveUserTimePeriod removes "user_time_period" edges to UserScheduling entities.
-func (uu *UserUpdate) RemoveUserTimePeriod(u ...*UserScheduling) *UserUpdate {
+// RemoveUserTimePeriod removes "user_time_period" edges to UserTimePeriod entities.
+func (uu *UserUpdate) RemoveUserTimePeriod(u ...*UserTimePeriod) *UserUpdate {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -1011,7 +1011,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1024,7 +1024,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1040,7 +1040,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1477,14 +1477,14 @@ func (uuo *UserUpdateOne) AddRoles(r ...*Role) *UserUpdateOne {
 	return uuo.AddRoleIDs(ids...)
 }
 
-// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserScheduling entity by IDs.
+// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserTimePeriod entity by IDs.
 func (uuo *UserUpdateOne) AddUserTimePeriodIDs(ids ...int64) *UserUpdateOne {
 	uuo.mutation.AddUserTimePeriodIDs(ids...)
 	return uuo
 }
 
-// AddUserTimePeriod adds the "user_time_period" edges to the UserScheduling entity.
-func (uuo *UserUpdateOne) AddUserTimePeriod(u ...*UserScheduling) *UserUpdateOne {
+// AddUserTimePeriod adds the "user_time_period" edges to the UserTimePeriod entity.
+func (uuo *UserUpdateOne) AddUserTimePeriod(u ...*UserTimePeriod) *UserUpdateOne {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -1608,20 +1608,20 @@ func (uuo *UserUpdateOne) RemoveRoles(r ...*Role) *UserUpdateOne {
 	return uuo.RemoveRoleIDs(ids...)
 }
 
-// ClearUserTimePeriod clears all "user_time_period" edges to the UserScheduling entity.
+// ClearUserTimePeriod clears all "user_time_period" edges to the UserTimePeriod entity.
 func (uuo *UserUpdateOne) ClearUserTimePeriod() *UserUpdateOne {
 	uuo.mutation.ClearUserTimePeriod()
 	return uuo
 }
 
-// RemoveUserTimePeriodIDs removes the "user_time_period" edge to UserScheduling entities by IDs.
+// RemoveUserTimePeriodIDs removes the "user_time_period" edge to UserTimePeriod entities by IDs.
 func (uuo *UserUpdateOne) RemoveUserTimePeriodIDs(ids ...int64) *UserUpdateOne {
 	uuo.mutation.RemoveUserTimePeriodIDs(ids...)
 	return uuo
 }
 
-// RemoveUserTimePeriod removes "user_time_period" edges to UserScheduling entities.
-func (uuo *UserUpdateOne) RemoveUserTimePeriod(u ...*UserScheduling) *UserUpdateOne {
+// RemoveUserTimePeriod removes "user_time_period" edges to UserTimePeriod entities.
+func (uuo *UserUpdateOne) RemoveUserTimePeriod(u ...*UserTimePeriod) *UserUpdateOne {
 	ids := make([]int64, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -2073,7 +2073,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -2086,7 +2086,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -2102,7 +2102,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Columns: []string{user.UserTimePeriodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(userscheduling.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

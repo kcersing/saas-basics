@@ -44,7 +44,7 @@ import (
 	"saas/biz/dal/db/ent/schedulemember"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
-	"saas/biz/dal/db/ent/userscheduling"
+	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
 	"saas/biz/dal/db/ent/venuesms"
@@ -103,7 +103,7 @@ const (
 	TypeScheduleMember        = "ScheduleMember"
 	TypeToken                 = "Token"
 	TypeUser                  = "User"
-	TypeUserScheduling        = "UserScheduling"
+	TypeUserTimePeriod        = "UserTimePeriod"
 	TypeVenue                 = "Venue"
 	TypeVenuePlace            = "VenuePlace"
 	TypeVenueSms              = "VenueSms"
@@ -58492,7 +58492,7 @@ func (m *UserMutation) ResetRoles() {
 	m.removedroles = nil
 }
 
-// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserScheduling entity by ids.
+// AddUserTimePeriodIDs adds the "user_time_period" edge to the UserTimePeriod entity by ids.
 func (m *UserMutation) AddUserTimePeriodIDs(ids ...int64) {
 	if m.user_time_period == nil {
 		m.user_time_period = make(map[int64]struct{})
@@ -58502,17 +58502,17 @@ func (m *UserMutation) AddUserTimePeriodIDs(ids ...int64) {
 	}
 }
 
-// ClearUserTimePeriod clears the "user_time_period" edge to the UserScheduling entity.
+// ClearUserTimePeriod clears the "user_time_period" edge to the UserTimePeriod entity.
 func (m *UserMutation) ClearUserTimePeriod() {
 	m.cleareduser_time_period = true
 }
 
-// UserTimePeriodCleared reports if the "user_time_period" edge to the UserScheduling entity was cleared.
+// UserTimePeriodCleared reports if the "user_time_period" edge to the UserTimePeriod entity was cleared.
 func (m *UserMutation) UserTimePeriodCleared() bool {
 	return m.cleareduser_time_period
 }
 
-// RemoveUserTimePeriodIDs removes the "user_time_period" edge to the UserScheduling entity by IDs.
+// RemoveUserTimePeriodIDs removes the "user_time_period" edge to the UserTimePeriod entity by IDs.
 func (m *UserMutation) RemoveUserTimePeriodIDs(ids ...int64) {
 	if m.removeduser_time_period == nil {
 		m.removeduser_time_period = make(map[int64]struct{})
@@ -58523,7 +58523,7 @@ func (m *UserMutation) RemoveUserTimePeriodIDs(ids ...int64) {
 	}
 }
 
-// RemovedUserTimePeriod returns the removed IDs of the "user_time_period" edge to the UserScheduling entity.
+// RemovedUserTimePeriod returns the removed IDs of the "user_time_period" edge to the UserTimePeriod entity.
 func (m *UserMutation) RemovedUserTimePeriodIDs() (ids []int64) {
 	for id := range m.removeduser_time_period {
 		ids = append(ids, id)
@@ -59326,8 +59326,8 @@ func (m *UserMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown User edge %s", name)
 }
 
-// UserSchedulingMutation represents an operation that mutates the UserScheduling nodes in the graph.
-type UserSchedulingMutation struct {
+// UserTimePeriodMutation represents an operation that mutates the UserTimePeriod nodes in the graph.
+type UserTimePeriodMutation struct {
 	config
 	op            Op
 	typ           string
@@ -59343,25 +59343,27 @@ type UserSchedulingMutation struct {
 	start_date    *time.Time
 	end_date      *time.Time
 	period        *base.Period
+	venue_id      *int64
+	addvenue_id   *int64
 	clearedFields map[string]struct{}
 	users         *int64
 	clearedusers  bool
 	done          bool
-	oldValue      func(context.Context) (*UserScheduling, error)
-	predicates    []predicate.UserScheduling
+	oldValue      func(context.Context) (*UserTimePeriod, error)
+	predicates    []predicate.UserTimePeriod
 }
 
-var _ ent.Mutation = (*UserSchedulingMutation)(nil)
+var _ ent.Mutation = (*UserTimePeriodMutation)(nil)
 
-// userschedulingOption allows management of the mutation configuration using functional options.
-type userschedulingOption func(*UserSchedulingMutation)
+// usertimeperiodOption allows management of the mutation configuration using functional options.
+type usertimeperiodOption func(*UserTimePeriodMutation)
 
-// newUserSchedulingMutation creates new mutation for the UserScheduling entity.
-func newUserSchedulingMutation(c config, op Op, opts ...userschedulingOption) *UserSchedulingMutation {
-	m := &UserSchedulingMutation{
+// newUserTimePeriodMutation creates new mutation for the UserTimePeriod entity.
+func newUserTimePeriodMutation(c config, op Op, opts ...usertimeperiodOption) *UserTimePeriodMutation {
+	m := &UserTimePeriodMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeUserScheduling,
+		typ:           TypeUserTimePeriod,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -59370,20 +59372,20 @@ func newUserSchedulingMutation(c config, op Op, opts ...userschedulingOption) *U
 	return m
 }
 
-// withUserSchedulingID sets the ID field of the mutation.
-func withUserSchedulingID(id int64) userschedulingOption {
-	return func(m *UserSchedulingMutation) {
+// withUserTimePeriodID sets the ID field of the mutation.
+func withUserTimePeriodID(id int64) usertimeperiodOption {
+	return func(m *UserTimePeriodMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *UserScheduling
+			value *UserTimePeriod
 		)
-		m.oldValue = func(ctx context.Context) (*UserScheduling, error) {
+		m.oldValue = func(ctx context.Context) (*UserTimePeriod, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().UserScheduling.Get(ctx, id)
+					value, err = m.Client().UserTimePeriod.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -59392,10 +59394,10 @@ func withUserSchedulingID(id int64) userschedulingOption {
 	}
 }
 
-// withUserScheduling sets the old UserScheduling of the mutation.
-func withUserScheduling(node *UserScheduling) userschedulingOption {
-	return func(m *UserSchedulingMutation) {
-		m.oldValue = func(context.Context) (*UserScheduling, error) {
+// withUserTimePeriod sets the old UserTimePeriod of the mutation.
+func withUserTimePeriod(node *UserTimePeriod) usertimeperiodOption {
+	return func(m *UserTimePeriodMutation) {
+		m.oldValue = func(context.Context) (*UserTimePeriod, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -59404,7 +59406,7 @@ func withUserScheduling(node *UserScheduling) userschedulingOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m UserSchedulingMutation) Client() *Client {
+func (m UserTimePeriodMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -59412,7 +59414,7 @@ func (m UserSchedulingMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m UserSchedulingMutation) Tx() (*Tx, error) {
+func (m UserTimePeriodMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -59422,14 +59424,14 @@ func (m UserSchedulingMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of UserScheduling entities.
-func (m *UserSchedulingMutation) SetID(id int64) {
+// operation is only accepted on creation of UserTimePeriod entities.
+func (m *UserTimePeriodMutation) SetID(id int64) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *UserSchedulingMutation) ID() (id int64, exists bool) {
+func (m *UserTimePeriodMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -59440,7 +59442,7 @@ func (m *UserSchedulingMutation) ID() (id int64, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *UserSchedulingMutation) IDs(ctx context.Context) ([]int64, error) {
+func (m *UserTimePeriodMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -59449,19 +59451,19 @@ func (m *UserSchedulingMutation) IDs(ctx context.Context) ([]int64, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().UserScheduling.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().UserTimePeriod.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (m *UserSchedulingMutation) SetCreatedAt(t time.Time) {
+func (m *UserTimePeriodMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
 }
 
 // CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *UserSchedulingMutation) CreatedAt() (r time.Time, exists bool) {
+func (m *UserTimePeriodMutation) CreatedAt() (r time.Time, exists bool) {
 	v := m.created_at
 	if v == nil {
 		return
@@ -59469,10 +59471,10 @@ func (m *UserSchedulingMutation) CreatedAt() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldCreatedAt returns the old "created_at" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldCreatedAt returns the old "created_at" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+func (m *UserTimePeriodMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
 	}
@@ -59487,30 +59489,30 @@ func (m *UserSchedulingMutation) OldCreatedAt(ctx context.Context) (v time.Time,
 }
 
 // ClearCreatedAt clears the value of the "created_at" field.
-func (m *UserSchedulingMutation) ClearCreatedAt() {
+func (m *UserTimePeriodMutation) ClearCreatedAt() {
 	m.created_at = nil
-	m.clearedFields[userscheduling.FieldCreatedAt] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldCreatedAt] = struct{}{}
 }
 
 // CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
-func (m *UserSchedulingMutation) CreatedAtCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldCreatedAt]
+func (m *UserTimePeriodMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldCreatedAt]
 	return ok
 }
 
 // ResetCreatedAt resets all changes to the "created_at" field.
-func (m *UserSchedulingMutation) ResetCreatedAt() {
+func (m *UserTimePeriodMutation) ResetCreatedAt() {
 	m.created_at = nil
-	delete(m.clearedFields, userscheduling.FieldCreatedAt)
+	delete(m.clearedFields, usertimeperiod.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (m *UserSchedulingMutation) SetUpdatedAt(t time.Time) {
+func (m *UserTimePeriodMutation) SetUpdatedAt(t time.Time) {
 	m.updated_at = &t
 }
 
 // UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *UserSchedulingMutation) UpdatedAt() (r time.Time, exists bool) {
+func (m *UserTimePeriodMutation) UpdatedAt() (r time.Time, exists bool) {
 	v := m.updated_at
 	if v == nil {
 		return
@@ -59518,10 +59520,10 @@ func (m *UserSchedulingMutation) UpdatedAt() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldUpdatedAt returns the old "updated_at" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldUpdatedAt returns the old "updated_at" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+func (m *UserTimePeriodMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
 	}
@@ -59536,31 +59538,31 @@ func (m *UserSchedulingMutation) OldUpdatedAt(ctx context.Context) (v time.Time,
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (m *UserSchedulingMutation) ClearUpdatedAt() {
+func (m *UserTimePeriodMutation) ClearUpdatedAt() {
 	m.updated_at = nil
-	m.clearedFields[userscheduling.FieldUpdatedAt] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldUpdatedAt] = struct{}{}
 }
 
 // UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
-func (m *UserSchedulingMutation) UpdatedAtCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldUpdatedAt]
+func (m *UserTimePeriodMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldUpdatedAt]
 	return ok
 }
 
 // ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *UserSchedulingMutation) ResetUpdatedAt() {
+func (m *UserTimePeriodMutation) ResetUpdatedAt() {
 	m.updated_at = nil
-	delete(m.clearedFields, userscheduling.FieldUpdatedAt)
+	delete(m.clearedFields, usertimeperiod.FieldUpdatedAt)
 }
 
 // SetDelete sets the "delete" field.
-func (m *UserSchedulingMutation) SetDelete(i int64) {
+func (m *UserTimePeriodMutation) SetDelete(i int64) {
 	m.delete = &i
 	m.adddelete = nil
 }
 
 // Delete returns the value of the "delete" field in the mutation.
-func (m *UserSchedulingMutation) Delete() (r int64, exists bool) {
+func (m *UserTimePeriodMutation) Delete() (r int64, exists bool) {
 	v := m.delete
 	if v == nil {
 		return
@@ -59568,10 +59570,10 @@ func (m *UserSchedulingMutation) Delete() (r int64, exists bool) {
 	return *v, true
 }
 
-// OldDelete returns the old "delete" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldDelete returns the old "delete" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldDelete(ctx context.Context) (v int64, err error) {
+func (m *UserTimePeriodMutation) OldDelete(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDelete is only allowed on UpdateOne operations")
 	}
@@ -59586,7 +59588,7 @@ func (m *UserSchedulingMutation) OldDelete(ctx context.Context) (v int64, err er
 }
 
 // AddDelete adds i to the "delete" field.
-func (m *UserSchedulingMutation) AddDelete(i int64) {
+func (m *UserTimePeriodMutation) AddDelete(i int64) {
 	if m.adddelete != nil {
 		*m.adddelete += i
 	} else {
@@ -59595,7 +59597,7 @@ func (m *UserSchedulingMutation) AddDelete(i int64) {
 }
 
 // AddedDelete returns the value that was added to the "delete" field in this mutation.
-func (m *UserSchedulingMutation) AddedDelete() (r int64, exists bool) {
+func (m *UserTimePeriodMutation) AddedDelete() (r int64, exists bool) {
 	v := m.adddelete
 	if v == nil {
 		return
@@ -59604,33 +59606,33 @@ func (m *UserSchedulingMutation) AddedDelete() (r int64, exists bool) {
 }
 
 // ClearDelete clears the value of the "delete" field.
-func (m *UserSchedulingMutation) ClearDelete() {
+func (m *UserTimePeriodMutation) ClearDelete() {
 	m.delete = nil
 	m.adddelete = nil
-	m.clearedFields[userscheduling.FieldDelete] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldDelete] = struct{}{}
 }
 
 // DeleteCleared returns if the "delete" field was cleared in this mutation.
-func (m *UserSchedulingMutation) DeleteCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldDelete]
+func (m *UserTimePeriodMutation) DeleteCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldDelete]
 	return ok
 }
 
 // ResetDelete resets all changes to the "delete" field.
-func (m *UserSchedulingMutation) ResetDelete() {
+func (m *UserTimePeriodMutation) ResetDelete() {
 	m.delete = nil
 	m.adddelete = nil
-	delete(m.clearedFields, userscheduling.FieldDelete)
+	delete(m.clearedFields, usertimeperiod.FieldDelete)
 }
 
 // SetCreatedID sets the "created_id" field.
-func (m *UserSchedulingMutation) SetCreatedID(i int64) {
+func (m *UserTimePeriodMutation) SetCreatedID(i int64) {
 	m.created_id = &i
 	m.addcreated_id = nil
 }
 
 // CreatedID returns the value of the "created_id" field in the mutation.
-func (m *UserSchedulingMutation) CreatedID() (r int64, exists bool) {
+func (m *UserTimePeriodMutation) CreatedID() (r int64, exists bool) {
 	v := m.created_id
 	if v == nil {
 		return
@@ -59638,10 +59640,10 @@ func (m *UserSchedulingMutation) CreatedID() (r int64, exists bool) {
 	return *v, true
 }
 
-// OldCreatedID returns the old "created_id" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldCreatedID returns the old "created_id" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldCreatedID(ctx context.Context) (v int64, err error) {
+func (m *UserTimePeriodMutation) OldCreatedID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCreatedID is only allowed on UpdateOne operations")
 	}
@@ -59656,7 +59658,7 @@ func (m *UserSchedulingMutation) OldCreatedID(ctx context.Context) (v int64, err
 }
 
 // AddCreatedID adds i to the "created_id" field.
-func (m *UserSchedulingMutation) AddCreatedID(i int64) {
+func (m *UserTimePeriodMutation) AddCreatedID(i int64) {
 	if m.addcreated_id != nil {
 		*m.addcreated_id += i
 	} else {
@@ -59665,7 +59667,7 @@ func (m *UserSchedulingMutation) AddCreatedID(i int64) {
 }
 
 // AddedCreatedID returns the value that was added to the "created_id" field in this mutation.
-func (m *UserSchedulingMutation) AddedCreatedID() (r int64, exists bool) {
+func (m *UserTimePeriodMutation) AddedCreatedID() (r int64, exists bool) {
 	v := m.addcreated_id
 	if v == nil {
 		return
@@ -59674,33 +59676,33 @@ func (m *UserSchedulingMutation) AddedCreatedID() (r int64, exists bool) {
 }
 
 // ClearCreatedID clears the value of the "created_id" field.
-func (m *UserSchedulingMutation) ClearCreatedID() {
+func (m *UserTimePeriodMutation) ClearCreatedID() {
 	m.created_id = nil
 	m.addcreated_id = nil
-	m.clearedFields[userscheduling.FieldCreatedID] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldCreatedID] = struct{}{}
 }
 
 // CreatedIDCleared returns if the "created_id" field was cleared in this mutation.
-func (m *UserSchedulingMutation) CreatedIDCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldCreatedID]
+func (m *UserTimePeriodMutation) CreatedIDCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldCreatedID]
 	return ok
 }
 
 // ResetCreatedID resets all changes to the "created_id" field.
-func (m *UserSchedulingMutation) ResetCreatedID() {
+func (m *UserTimePeriodMutation) ResetCreatedID() {
 	m.created_id = nil
 	m.addcreated_id = nil
-	delete(m.clearedFields, userscheduling.FieldCreatedID)
+	delete(m.clearedFields, usertimeperiod.FieldCreatedID)
 }
 
 // SetStatus sets the "status" field.
-func (m *UserSchedulingMutation) SetStatus(i int64) {
+func (m *UserTimePeriodMutation) SetStatus(i int64) {
 	m.status = &i
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *UserSchedulingMutation) Status() (r int64, exists bool) {
+func (m *UserTimePeriodMutation) Status() (r int64, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -59708,10 +59710,10 @@ func (m *UserSchedulingMutation) Status() (r int64, exists bool) {
 	return *v, true
 }
 
-// OldStatus returns the old "status" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldStatus returns the old "status" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldStatus(ctx context.Context) (v int64, err error) {
+func (m *UserTimePeriodMutation) OldStatus(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -59726,7 +59728,7 @@ func (m *UserSchedulingMutation) OldStatus(ctx context.Context) (v int64, err er
 }
 
 // AddStatus adds i to the "status" field.
-func (m *UserSchedulingMutation) AddStatus(i int64) {
+func (m *UserTimePeriodMutation) AddStatus(i int64) {
 	if m.addstatus != nil {
 		*m.addstatus += i
 	} else {
@@ -59735,7 +59737,7 @@ func (m *UserSchedulingMutation) AddStatus(i int64) {
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *UserSchedulingMutation) AddedStatus() (r int64, exists bool) {
+func (m *UserTimePeriodMutation) AddedStatus() (r int64, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -59744,32 +59746,32 @@ func (m *UserSchedulingMutation) AddedStatus() (r int64, exists bool) {
 }
 
 // ClearStatus clears the value of the "status" field.
-func (m *UserSchedulingMutation) ClearStatus() {
+func (m *UserTimePeriodMutation) ClearStatus() {
 	m.status = nil
 	m.addstatus = nil
-	m.clearedFields[userscheduling.FieldStatus] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldStatus] = struct{}{}
 }
 
 // StatusCleared returns if the "status" field was cleared in this mutation.
-func (m *UserSchedulingMutation) StatusCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldStatus]
+func (m *UserTimePeriodMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldStatus]
 	return ok
 }
 
 // ResetStatus resets all changes to the "status" field.
-func (m *UserSchedulingMutation) ResetStatus() {
+func (m *UserTimePeriodMutation) ResetStatus() {
 	m.status = nil
 	m.addstatus = nil
-	delete(m.clearedFields, userscheduling.FieldStatus)
+	delete(m.clearedFields, usertimeperiod.FieldStatus)
 }
 
 // SetStartDate sets the "start_date" field.
-func (m *UserSchedulingMutation) SetStartDate(t time.Time) {
+func (m *UserTimePeriodMutation) SetStartDate(t time.Time) {
 	m.start_date = &t
 }
 
 // StartDate returns the value of the "start_date" field in the mutation.
-func (m *UserSchedulingMutation) StartDate() (r time.Time, exists bool) {
+func (m *UserTimePeriodMutation) StartDate() (r time.Time, exists bool) {
 	v := m.start_date
 	if v == nil {
 		return
@@ -59777,10 +59779,10 @@ func (m *UserSchedulingMutation) StartDate() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldStartDate returns the old "start_date" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldStartDate returns the old "start_date" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldStartDate(ctx context.Context) (v time.Time, err error) {
+func (m *UserTimePeriodMutation) OldStartDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStartDate is only allowed on UpdateOne operations")
 	}
@@ -59795,30 +59797,30 @@ func (m *UserSchedulingMutation) OldStartDate(ctx context.Context) (v time.Time,
 }
 
 // ClearStartDate clears the value of the "start_date" field.
-func (m *UserSchedulingMutation) ClearStartDate() {
+func (m *UserTimePeriodMutation) ClearStartDate() {
 	m.start_date = nil
-	m.clearedFields[userscheduling.FieldStartDate] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldStartDate] = struct{}{}
 }
 
 // StartDateCleared returns if the "start_date" field was cleared in this mutation.
-func (m *UserSchedulingMutation) StartDateCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldStartDate]
+func (m *UserTimePeriodMutation) StartDateCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldStartDate]
 	return ok
 }
 
 // ResetStartDate resets all changes to the "start_date" field.
-func (m *UserSchedulingMutation) ResetStartDate() {
+func (m *UserTimePeriodMutation) ResetStartDate() {
 	m.start_date = nil
-	delete(m.clearedFields, userscheduling.FieldStartDate)
+	delete(m.clearedFields, usertimeperiod.FieldStartDate)
 }
 
 // SetEndDate sets the "end_date" field.
-func (m *UserSchedulingMutation) SetEndDate(t time.Time) {
+func (m *UserTimePeriodMutation) SetEndDate(t time.Time) {
 	m.end_date = &t
 }
 
 // EndDate returns the value of the "end_date" field in the mutation.
-func (m *UserSchedulingMutation) EndDate() (r time.Time, exists bool) {
+func (m *UserTimePeriodMutation) EndDate() (r time.Time, exists bool) {
 	v := m.end_date
 	if v == nil {
 		return
@@ -59826,10 +59828,10 @@ func (m *UserSchedulingMutation) EndDate() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldEndDate returns the old "end_date" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldEndDate returns the old "end_date" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldEndDate(ctx context.Context) (v time.Time, err error) {
+func (m *UserTimePeriodMutation) OldEndDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldEndDate is only allowed on UpdateOne operations")
 	}
@@ -59844,30 +59846,30 @@ func (m *UserSchedulingMutation) OldEndDate(ctx context.Context) (v time.Time, e
 }
 
 // ClearEndDate clears the value of the "end_date" field.
-func (m *UserSchedulingMutation) ClearEndDate() {
+func (m *UserTimePeriodMutation) ClearEndDate() {
 	m.end_date = nil
-	m.clearedFields[userscheduling.FieldEndDate] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldEndDate] = struct{}{}
 }
 
 // EndDateCleared returns if the "end_date" field was cleared in this mutation.
-func (m *UserSchedulingMutation) EndDateCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldEndDate]
+func (m *UserTimePeriodMutation) EndDateCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldEndDate]
 	return ok
 }
 
 // ResetEndDate resets all changes to the "end_date" field.
-func (m *UserSchedulingMutation) ResetEndDate() {
+func (m *UserTimePeriodMutation) ResetEndDate() {
 	m.end_date = nil
-	delete(m.clearedFields, userscheduling.FieldEndDate)
+	delete(m.clearedFields, usertimeperiod.FieldEndDate)
 }
 
 // SetPeriod sets the "period" field.
-func (m *UserSchedulingMutation) SetPeriod(b base.Period) {
+func (m *UserTimePeriodMutation) SetPeriod(b base.Period) {
 	m.period = &b
 }
 
 // Period returns the value of the "period" field in the mutation.
-func (m *UserSchedulingMutation) Period() (r base.Period, exists bool) {
+func (m *UserTimePeriodMutation) Period() (r base.Period, exists bool) {
 	v := m.period
 	if v == nil {
 		return
@@ -59875,10 +59877,10 @@ func (m *UserSchedulingMutation) Period() (r base.Period, exists bool) {
 	return *v, true
 }
 
-// OldPeriod returns the old "period" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldPeriod returns the old "period" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldPeriod(ctx context.Context) (v base.Period, err error) {
+func (m *UserTimePeriodMutation) OldPeriod(ctx context.Context) (v base.Period, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPeriod is only allowed on UpdateOne operations")
 	}
@@ -59893,30 +59895,30 @@ func (m *UserSchedulingMutation) OldPeriod(ctx context.Context) (v base.Period, 
 }
 
 // ClearPeriod clears the value of the "period" field.
-func (m *UserSchedulingMutation) ClearPeriod() {
+func (m *UserTimePeriodMutation) ClearPeriod() {
 	m.period = nil
-	m.clearedFields[userscheduling.FieldPeriod] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldPeriod] = struct{}{}
 }
 
 // PeriodCleared returns if the "period" field was cleared in this mutation.
-func (m *UserSchedulingMutation) PeriodCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldPeriod]
+func (m *UserTimePeriodMutation) PeriodCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldPeriod]
 	return ok
 }
 
 // ResetPeriod resets all changes to the "period" field.
-func (m *UserSchedulingMutation) ResetPeriod() {
+func (m *UserTimePeriodMutation) ResetPeriod() {
 	m.period = nil
-	delete(m.clearedFields, userscheduling.FieldPeriod)
+	delete(m.clearedFields, usertimeperiod.FieldPeriod)
 }
 
 // SetUserID sets the "user_id" field.
-func (m *UserSchedulingMutation) SetUserID(i int64) {
+func (m *UserTimePeriodMutation) SetUserID(i int64) {
 	m.users = &i
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *UserSchedulingMutation) UserID() (r int64, exists bool) {
+func (m *UserTimePeriodMutation) UserID() (r int64, exists bool) {
 	v := m.users
 	if v == nil {
 		return
@@ -59924,10 +59926,10 @@ func (m *UserSchedulingMutation) UserID() (r int64, exists bool) {
 	return *v, true
 }
 
-// OldUserID returns the old "user_id" field's value of the UserScheduling entity.
-// If the UserScheduling object wasn't provided to the builder, the object is fetched from the database.
+// OldUserID returns the old "user_id" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSchedulingMutation) OldUserID(ctx context.Context) (v int64, err error) {
+func (m *UserTimePeriodMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -59942,41 +59944,111 @@ func (m *UserSchedulingMutation) OldUserID(ctx context.Context) (v int64, err er
 }
 
 // ClearUserID clears the value of the "user_id" field.
-func (m *UserSchedulingMutation) ClearUserID() {
+func (m *UserTimePeriodMutation) ClearUserID() {
 	m.users = nil
-	m.clearedFields[userscheduling.FieldUserID] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldUserID] = struct{}{}
 }
 
 // UserIDCleared returns if the "user_id" field was cleared in this mutation.
-func (m *UserSchedulingMutation) UserIDCleared() bool {
-	_, ok := m.clearedFields[userscheduling.FieldUserID]
+func (m *UserTimePeriodMutation) UserIDCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldUserID]
 	return ok
 }
 
 // ResetUserID resets all changes to the "user_id" field.
-func (m *UserSchedulingMutation) ResetUserID() {
+func (m *UserTimePeriodMutation) ResetUserID() {
 	m.users = nil
-	delete(m.clearedFields, userscheduling.FieldUserID)
+	delete(m.clearedFields, usertimeperiod.FieldUserID)
+}
+
+// SetVenueID sets the "venue_id" field.
+func (m *UserTimePeriodMutation) SetVenueID(i int64) {
+	m.venue_id = &i
+	m.addvenue_id = nil
+}
+
+// VenueID returns the value of the "venue_id" field in the mutation.
+func (m *UserTimePeriodMutation) VenueID() (r int64, exists bool) {
+	v := m.venue_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVenueID returns the old "venue_id" field's value of the UserTimePeriod entity.
+// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserTimePeriodMutation) OldVenueID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVenueID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVenueID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVenueID: %w", err)
+	}
+	return oldValue.VenueID, nil
+}
+
+// AddVenueID adds i to the "venue_id" field.
+func (m *UserTimePeriodMutation) AddVenueID(i int64) {
+	if m.addvenue_id != nil {
+		*m.addvenue_id += i
+	} else {
+		m.addvenue_id = &i
+	}
+}
+
+// AddedVenueID returns the value that was added to the "venue_id" field in this mutation.
+func (m *UserTimePeriodMutation) AddedVenueID() (r int64, exists bool) {
+	v := m.addvenue_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearVenueID clears the value of the "venue_id" field.
+func (m *UserTimePeriodMutation) ClearVenueID() {
+	m.venue_id = nil
+	m.addvenue_id = nil
+	m.clearedFields[usertimeperiod.FieldVenueID] = struct{}{}
+}
+
+// VenueIDCleared returns if the "venue_id" field was cleared in this mutation.
+func (m *UserTimePeriodMutation) VenueIDCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldVenueID]
+	return ok
+}
+
+// ResetVenueID resets all changes to the "venue_id" field.
+func (m *UserTimePeriodMutation) ResetVenueID() {
+	m.venue_id = nil
+	m.addvenue_id = nil
+	delete(m.clearedFields, usertimeperiod.FieldVenueID)
 }
 
 // SetUsersID sets the "users" edge to the User entity by id.
-func (m *UserSchedulingMutation) SetUsersID(id int64) {
+func (m *UserTimePeriodMutation) SetUsersID(id int64) {
 	m.users = &id
 }
 
 // ClearUsers clears the "users" edge to the User entity.
-func (m *UserSchedulingMutation) ClearUsers() {
+func (m *UserTimePeriodMutation) ClearUsers() {
 	m.clearedusers = true
-	m.clearedFields[userscheduling.FieldUserID] = struct{}{}
+	m.clearedFields[usertimeperiod.FieldUserID] = struct{}{}
 }
 
 // UsersCleared reports if the "users" edge to the User entity was cleared.
-func (m *UserSchedulingMutation) UsersCleared() bool {
+func (m *UserTimePeriodMutation) UsersCleared() bool {
 	return m.UserIDCleared() || m.clearedusers
 }
 
 // UsersID returns the "users" edge ID in the mutation.
-func (m *UserSchedulingMutation) UsersID() (id int64, exists bool) {
+func (m *UserTimePeriodMutation) UsersID() (id int64, exists bool) {
 	if m.users != nil {
 		return *m.users, true
 	}
@@ -59986,7 +60058,7 @@ func (m *UserSchedulingMutation) UsersID() (id int64, exists bool) {
 // UsersIDs returns the "users" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // UsersID instead. It exists only for internal usage by the builders.
-func (m *UserSchedulingMutation) UsersIDs() (ids []int64) {
+func (m *UserTimePeriodMutation) UsersIDs() (ids []int64) {
 	if id := m.users; id != nil {
 		ids = append(ids, *id)
 	}
@@ -59994,20 +60066,20 @@ func (m *UserSchedulingMutation) UsersIDs() (ids []int64) {
 }
 
 // ResetUsers resets all changes to the "users" edge.
-func (m *UserSchedulingMutation) ResetUsers() {
+func (m *UserTimePeriodMutation) ResetUsers() {
 	m.users = nil
 	m.clearedusers = false
 }
 
-// Where appends a list predicates to the UserSchedulingMutation builder.
-func (m *UserSchedulingMutation) Where(ps ...predicate.UserScheduling) {
+// Where appends a list predicates to the UserTimePeriodMutation builder.
+func (m *UserTimePeriodMutation) Where(ps ...predicate.UserTimePeriod) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the UserSchedulingMutation builder. Using this method,
+// WhereP appends storage-level predicates to the UserTimePeriodMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *UserSchedulingMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.UserScheduling, len(ps))
+func (m *UserTimePeriodMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.UserTimePeriod, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -60015,51 +60087,54 @@ func (m *UserSchedulingMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *UserSchedulingMutation) Op() Op {
+func (m *UserTimePeriodMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *UserSchedulingMutation) SetOp(op Op) {
+func (m *UserTimePeriodMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (UserScheduling).
-func (m *UserSchedulingMutation) Type() string {
+// Type returns the node type of this mutation (UserTimePeriod).
+func (m *UserTimePeriodMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *UserSchedulingMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+func (m *UserTimePeriodMutation) Fields() []string {
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
-		fields = append(fields, userscheduling.FieldCreatedAt)
+		fields = append(fields, usertimeperiod.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
-		fields = append(fields, userscheduling.FieldUpdatedAt)
+		fields = append(fields, usertimeperiod.FieldUpdatedAt)
 	}
 	if m.delete != nil {
-		fields = append(fields, userscheduling.FieldDelete)
+		fields = append(fields, usertimeperiod.FieldDelete)
 	}
 	if m.created_id != nil {
-		fields = append(fields, userscheduling.FieldCreatedID)
+		fields = append(fields, usertimeperiod.FieldCreatedID)
 	}
 	if m.status != nil {
-		fields = append(fields, userscheduling.FieldStatus)
+		fields = append(fields, usertimeperiod.FieldStatus)
 	}
 	if m.start_date != nil {
-		fields = append(fields, userscheduling.FieldStartDate)
+		fields = append(fields, usertimeperiod.FieldStartDate)
 	}
 	if m.end_date != nil {
-		fields = append(fields, userscheduling.FieldEndDate)
+		fields = append(fields, usertimeperiod.FieldEndDate)
 	}
 	if m.period != nil {
-		fields = append(fields, userscheduling.FieldPeriod)
+		fields = append(fields, usertimeperiod.FieldPeriod)
 	}
 	if m.users != nil {
-		fields = append(fields, userscheduling.FieldUserID)
+		fields = append(fields, usertimeperiod.FieldUserID)
+	}
+	if m.venue_id != nil {
+		fields = append(fields, usertimeperiod.FieldVenueID)
 	}
 	return fields
 }
@@ -60067,26 +60142,28 @@ func (m *UserSchedulingMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *UserSchedulingMutation) Field(name string) (ent.Value, bool) {
+func (m *UserTimePeriodMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case userscheduling.FieldCreatedAt:
+	case usertimeperiod.FieldCreatedAt:
 		return m.CreatedAt()
-	case userscheduling.FieldUpdatedAt:
+	case usertimeperiod.FieldUpdatedAt:
 		return m.UpdatedAt()
-	case userscheduling.FieldDelete:
+	case usertimeperiod.FieldDelete:
 		return m.Delete()
-	case userscheduling.FieldCreatedID:
+	case usertimeperiod.FieldCreatedID:
 		return m.CreatedID()
-	case userscheduling.FieldStatus:
+	case usertimeperiod.FieldStatus:
 		return m.Status()
-	case userscheduling.FieldStartDate:
+	case usertimeperiod.FieldStartDate:
 		return m.StartDate()
-	case userscheduling.FieldEndDate:
+	case usertimeperiod.FieldEndDate:
 		return m.EndDate()
-	case userscheduling.FieldPeriod:
+	case usertimeperiod.FieldPeriod:
 		return m.Period()
-	case userscheduling.FieldUserID:
+	case usertimeperiod.FieldUserID:
 		return m.UserID()
+	case usertimeperiod.FieldVenueID:
+		return m.VenueID()
 	}
 	return nil, false
 }
@@ -60094,114 +60171,126 @@ func (m *UserSchedulingMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *UserSchedulingMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *UserTimePeriodMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case userscheduling.FieldCreatedAt:
+	case usertimeperiod.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
-	case userscheduling.FieldUpdatedAt:
+	case usertimeperiod.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
-	case userscheduling.FieldDelete:
+	case usertimeperiod.FieldDelete:
 		return m.OldDelete(ctx)
-	case userscheduling.FieldCreatedID:
+	case usertimeperiod.FieldCreatedID:
 		return m.OldCreatedID(ctx)
-	case userscheduling.FieldStatus:
+	case usertimeperiod.FieldStatus:
 		return m.OldStatus(ctx)
-	case userscheduling.FieldStartDate:
+	case usertimeperiod.FieldStartDate:
 		return m.OldStartDate(ctx)
-	case userscheduling.FieldEndDate:
+	case usertimeperiod.FieldEndDate:
 		return m.OldEndDate(ctx)
-	case userscheduling.FieldPeriod:
+	case usertimeperiod.FieldPeriod:
 		return m.OldPeriod(ctx)
-	case userscheduling.FieldUserID:
+	case usertimeperiod.FieldUserID:
 		return m.OldUserID(ctx)
+	case usertimeperiod.FieldVenueID:
+		return m.OldVenueID(ctx)
 	}
-	return nil, fmt.Errorf("unknown UserScheduling field %s", name)
+	return nil, fmt.Errorf("unknown UserTimePeriod field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *UserSchedulingMutation) SetField(name string, value ent.Value) error {
+func (m *UserTimePeriodMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case userscheduling.FieldCreatedAt:
+	case usertimeperiod.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreatedAt(v)
 		return nil
-	case userscheduling.FieldUpdatedAt:
+	case usertimeperiod.FieldUpdatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
 		return nil
-	case userscheduling.FieldDelete:
+	case usertimeperiod.FieldDelete:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDelete(v)
 		return nil
-	case userscheduling.FieldCreatedID:
+	case usertimeperiod.FieldCreatedID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreatedID(v)
 		return nil
-	case userscheduling.FieldStatus:
+	case usertimeperiod.FieldStatus:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
 		return nil
-	case userscheduling.FieldStartDate:
+	case usertimeperiod.FieldStartDate:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStartDate(v)
 		return nil
-	case userscheduling.FieldEndDate:
+	case usertimeperiod.FieldEndDate:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetEndDate(v)
 		return nil
-	case userscheduling.FieldPeriod:
+	case usertimeperiod.FieldPeriod:
 		v, ok := value.(base.Period)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPeriod(v)
 		return nil
-	case userscheduling.FieldUserID:
+	case usertimeperiod.FieldUserID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUserID(v)
 		return nil
+	case usertimeperiod.FieldVenueID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVenueID(v)
+		return nil
 	}
-	return fmt.Errorf("unknown UserScheduling field %s", name)
+	return fmt.Errorf("unknown UserTimePeriod field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *UserSchedulingMutation) AddedFields() []string {
+func (m *UserTimePeriodMutation) AddedFields() []string {
 	var fields []string
 	if m.adddelete != nil {
-		fields = append(fields, userscheduling.FieldDelete)
+		fields = append(fields, usertimeperiod.FieldDelete)
 	}
 	if m.addcreated_id != nil {
-		fields = append(fields, userscheduling.FieldCreatedID)
+		fields = append(fields, usertimeperiod.FieldCreatedID)
 	}
 	if m.addstatus != nil {
-		fields = append(fields, userscheduling.FieldStatus)
+		fields = append(fields, usertimeperiod.FieldStatus)
+	}
+	if m.addvenue_id != nil {
+		fields = append(fields, usertimeperiod.FieldVenueID)
 	}
 	return fields
 }
@@ -60209,14 +60298,16 @@ func (m *UserSchedulingMutation) AddedFields() []string {
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *UserSchedulingMutation) AddedField(name string) (ent.Value, bool) {
+func (m *UserTimePeriodMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case userscheduling.FieldDelete:
+	case usertimeperiod.FieldDelete:
 		return m.AddedDelete()
-	case userscheduling.FieldCreatedID:
+	case usertimeperiod.FieldCreatedID:
 		return m.AddedCreatedID()
-	case userscheduling.FieldStatus:
+	case usertimeperiod.FieldStatus:
 		return m.AddedStatus()
+	case usertimeperiod.FieldVenueID:
+		return m.AddedVenueID()
 	}
 	return nil, false
 }
@@ -60224,158 +60315,174 @@ func (m *UserSchedulingMutation) AddedField(name string) (ent.Value, bool) {
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *UserSchedulingMutation) AddField(name string, value ent.Value) error {
+func (m *UserTimePeriodMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case userscheduling.FieldDelete:
+	case usertimeperiod.FieldDelete:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDelete(v)
 		return nil
-	case userscheduling.FieldCreatedID:
+	case usertimeperiod.FieldCreatedID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreatedID(v)
 		return nil
-	case userscheduling.FieldStatus:
+	case usertimeperiod.FieldStatus:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
 		return nil
+	case usertimeperiod.FieldVenueID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddVenueID(v)
+		return nil
 	}
-	return fmt.Errorf("unknown UserScheduling numeric field %s", name)
+	return fmt.Errorf("unknown UserTimePeriod numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *UserSchedulingMutation) ClearedFields() []string {
+func (m *UserTimePeriodMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(userscheduling.FieldCreatedAt) {
-		fields = append(fields, userscheduling.FieldCreatedAt)
+	if m.FieldCleared(usertimeperiod.FieldCreatedAt) {
+		fields = append(fields, usertimeperiod.FieldCreatedAt)
 	}
-	if m.FieldCleared(userscheduling.FieldUpdatedAt) {
-		fields = append(fields, userscheduling.FieldUpdatedAt)
+	if m.FieldCleared(usertimeperiod.FieldUpdatedAt) {
+		fields = append(fields, usertimeperiod.FieldUpdatedAt)
 	}
-	if m.FieldCleared(userscheduling.FieldDelete) {
-		fields = append(fields, userscheduling.FieldDelete)
+	if m.FieldCleared(usertimeperiod.FieldDelete) {
+		fields = append(fields, usertimeperiod.FieldDelete)
 	}
-	if m.FieldCleared(userscheduling.FieldCreatedID) {
-		fields = append(fields, userscheduling.FieldCreatedID)
+	if m.FieldCleared(usertimeperiod.FieldCreatedID) {
+		fields = append(fields, usertimeperiod.FieldCreatedID)
 	}
-	if m.FieldCleared(userscheduling.FieldStatus) {
-		fields = append(fields, userscheduling.FieldStatus)
+	if m.FieldCleared(usertimeperiod.FieldStatus) {
+		fields = append(fields, usertimeperiod.FieldStatus)
 	}
-	if m.FieldCleared(userscheduling.FieldStartDate) {
-		fields = append(fields, userscheduling.FieldStartDate)
+	if m.FieldCleared(usertimeperiod.FieldStartDate) {
+		fields = append(fields, usertimeperiod.FieldStartDate)
 	}
-	if m.FieldCleared(userscheduling.FieldEndDate) {
-		fields = append(fields, userscheduling.FieldEndDate)
+	if m.FieldCleared(usertimeperiod.FieldEndDate) {
+		fields = append(fields, usertimeperiod.FieldEndDate)
 	}
-	if m.FieldCleared(userscheduling.FieldPeriod) {
-		fields = append(fields, userscheduling.FieldPeriod)
+	if m.FieldCleared(usertimeperiod.FieldPeriod) {
+		fields = append(fields, usertimeperiod.FieldPeriod)
 	}
-	if m.FieldCleared(userscheduling.FieldUserID) {
-		fields = append(fields, userscheduling.FieldUserID)
+	if m.FieldCleared(usertimeperiod.FieldUserID) {
+		fields = append(fields, usertimeperiod.FieldUserID)
+	}
+	if m.FieldCleared(usertimeperiod.FieldVenueID) {
+		fields = append(fields, usertimeperiod.FieldVenueID)
 	}
 	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *UserSchedulingMutation) FieldCleared(name string) bool {
+func (m *UserTimePeriodMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *UserSchedulingMutation) ClearField(name string) error {
+func (m *UserTimePeriodMutation) ClearField(name string) error {
 	switch name {
-	case userscheduling.FieldCreatedAt:
+	case usertimeperiod.FieldCreatedAt:
 		m.ClearCreatedAt()
 		return nil
-	case userscheduling.FieldUpdatedAt:
+	case usertimeperiod.FieldUpdatedAt:
 		m.ClearUpdatedAt()
 		return nil
-	case userscheduling.FieldDelete:
+	case usertimeperiod.FieldDelete:
 		m.ClearDelete()
 		return nil
-	case userscheduling.FieldCreatedID:
+	case usertimeperiod.FieldCreatedID:
 		m.ClearCreatedID()
 		return nil
-	case userscheduling.FieldStatus:
+	case usertimeperiod.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case userscheduling.FieldStartDate:
+	case usertimeperiod.FieldStartDate:
 		m.ClearStartDate()
 		return nil
-	case userscheduling.FieldEndDate:
+	case usertimeperiod.FieldEndDate:
 		m.ClearEndDate()
 		return nil
-	case userscheduling.FieldPeriod:
+	case usertimeperiod.FieldPeriod:
 		m.ClearPeriod()
 		return nil
-	case userscheduling.FieldUserID:
+	case usertimeperiod.FieldUserID:
 		m.ClearUserID()
 		return nil
+	case usertimeperiod.FieldVenueID:
+		m.ClearVenueID()
+		return nil
 	}
-	return fmt.Errorf("unknown UserScheduling nullable field %s", name)
+	return fmt.Errorf("unknown UserTimePeriod nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *UserSchedulingMutation) ResetField(name string) error {
+func (m *UserTimePeriodMutation) ResetField(name string) error {
 	switch name {
-	case userscheduling.FieldCreatedAt:
+	case usertimeperiod.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
-	case userscheduling.FieldUpdatedAt:
+	case usertimeperiod.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
-	case userscheduling.FieldDelete:
+	case usertimeperiod.FieldDelete:
 		m.ResetDelete()
 		return nil
-	case userscheduling.FieldCreatedID:
+	case usertimeperiod.FieldCreatedID:
 		m.ResetCreatedID()
 		return nil
-	case userscheduling.FieldStatus:
+	case usertimeperiod.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case userscheduling.FieldStartDate:
+	case usertimeperiod.FieldStartDate:
 		m.ResetStartDate()
 		return nil
-	case userscheduling.FieldEndDate:
+	case usertimeperiod.FieldEndDate:
 		m.ResetEndDate()
 		return nil
-	case userscheduling.FieldPeriod:
+	case usertimeperiod.FieldPeriod:
 		m.ResetPeriod()
 		return nil
-	case userscheduling.FieldUserID:
+	case usertimeperiod.FieldUserID:
 		m.ResetUserID()
 		return nil
+	case usertimeperiod.FieldVenueID:
+		m.ResetVenueID()
+		return nil
 	}
-	return fmt.Errorf("unknown UserScheduling field %s", name)
+	return fmt.Errorf("unknown UserTimePeriod field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *UserSchedulingMutation) AddedEdges() []string {
+func (m *UserTimePeriodMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.users != nil {
-		edges = append(edges, userscheduling.EdgeUsers)
+		edges = append(edges, usertimeperiod.EdgeUsers)
 	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *UserSchedulingMutation) AddedIDs(name string) []ent.Value {
+func (m *UserTimePeriodMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case userscheduling.EdgeUsers:
+	case usertimeperiod.EdgeUsers:
 		if id := m.users; id != nil {
 			return []ent.Value{*id}
 		}
@@ -60384,31 +60491,31 @@ func (m *UserSchedulingMutation) AddedIDs(name string) []ent.Value {
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *UserSchedulingMutation) RemovedEdges() []string {
+func (m *UserTimePeriodMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *UserSchedulingMutation) RemovedIDs(name string) []ent.Value {
+func (m *UserTimePeriodMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *UserSchedulingMutation) ClearedEdges() []string {
+func (m *UserTimePeriodMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.clearedusers {
-		edges = append(edges, userscheduling.EdgeUsers)
+		edges = append(edges, usertimeperiod.EdgeUsers)
 	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *UserSchedulingMutation) EdgeCleared(name string) bool {
+func (m *UserTimePeriodMutation) EdgeCleared(name string) bool {
 	switch name {
-	case userscheduling.EdgeUsers:
+	case usertimeperiod.EdgeUsers:
 		return m.clearedusers
 	}
 	return false
@@ -60416,24 +60523,24 @@ func (m *UserSchedulingMutation) EdgeCleared(name string) bool {
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *UserSchedulingMutation) ClearEdge(name string) error {
+func (m *UserTimePeriodMutation) ClearEdge(name string) error {
 	switch name {
-	case userscheduling.EdgeUsers:
+	case usertimeperiod.EdgeUsers:
 		m.ClearUsers()
 		return nil
 	}
-	return fmt.Errorf("unknown UserScheduling unique edge %s", name)
+	return fmt.Errorf("unknown UserTimePeriod unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *UserSchedulingMutation) ResetEdge(name string) error {
+func (m *UserTimePeriodMutation) ResetEdge(name string) error {
 	switch name {
-	case userscheduling.EdgeUsers:
+	case usertimeperiod.EdgeUsers:
 		m.ResetUsers()
 		return nil
 	}
-	return fmt.Errorf("unknown UserScheduling edge %s", name)
+	return fmt.Errorf("unknown UserTimePeriod edge %s", name)
 }
 
 // VenueMutation represents an operation that mutates the Venue nodes in the graph.

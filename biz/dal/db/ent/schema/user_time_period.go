@@ -10,27 +10,28 @@ import (
 	"saas/idl_gen/model/base"
 )
 
-type UserScheduling struct {
+type UserTimePeriod struct {
 	ent.Schema
 }
 
-func (UserScheduling) Fields() []ent.Field {
+func (UserTimePeriod) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("start_date").Comment("日期").Optional(),
 		field.Time("end_date").Comment("日期").Optional(),
 		field.JSON("period", base.Period{}).Comment("时间段").Optional(),
 		field.Int64("user_id").Comment("員工id").Optional(),
+		field.Int64("venue_id").Comment("id").Optional(),
 	}
 }
 
-func (UserScheduling) Mixin() []ent.Mixin {
+func (UserTimePeriod) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
 		mixins.StatusMixin{},
 	}
 }
 
-func (UserScheduling) Edges() []ent.Edge {
+func (UserTimePeriod) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("users", User.Type).
 			Ref("user_time_period").
@@ -38,11 +39,11 @@ func (UserScheduling) Edges() []ent.Edge {
 	}
 }
 
-func (UserScheduling) Indexes() []ent.Index {
+func (UserTimePeriod) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
-func (UserScheduling) Annotations() []schema.Annotation {
+func (UserTimePeriod) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: "sys_user_time_period", Options: "AUTO_INCREMENT = 100000"},
 		entsql.WithComments(true),
