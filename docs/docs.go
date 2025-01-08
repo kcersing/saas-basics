@@ -3402,6 +3402,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/schedule/user-time-period": {
+            "post": {
+                "description": "会员时间周期",
+                "summary": "会员时间周期",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.UserPeriodReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/sms/buy": {
             "post": {
                 "description": "购买短信 Description",
@@ -5608,7 +5633,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -5669,6 +5694,17 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "schedule.UserPeriodReq": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "integer"
                 }
             }

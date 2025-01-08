@@ -1007,7 +1007,7 @@ definitions:
       scheduleId:
         type: integer
       type:
-        type: integer
+        type: string
     type: object
   schedule.ScheduleListReq:
     properties:
@@ -1047,6 +1047,13 @@ definitions:
       scheduleId:
         type: integer
       type:
+        type: string
+    type: object
+  schedule.UserPeriodReq:
+    properties:
+      date:
+        type: string
+      id:
         type: integer
     type: object
   schedule.UserTimePeriodReq:
@@ -3567,6 +3574,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新教练值班时间段
+  /service/schedule/user-time-period:
+    post:
+      description: 会员时间周期
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schedule.UserPeriodReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员时间周期
   /service/sms/buy:
     post:
       description: 购买短信 Description
