@@ -100,7 +100,7 @@ struct Period{
 struct PeriodTime{
     1:  optional string startTime ="" (api.raw = "startTime")
     2:  optional string endTime ="" (api.raw = "endTime")
-    3:  optional string status ="" (api.raw = "status")
+    3:  optional i64 status =0 (api.raw = "status")
 }
 
 enum Err {

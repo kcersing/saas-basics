@@ -3913,7 +3913,7 @@ func (p *Period) String() string {
 type PeriodTime struct {
 	StartTime string `thrift:"startTime,1,optional" form:"startTime" json:"startTime" query:"startTime"`
 	EndTime   string `thrift:"endTime,2,optional" form:"endTime" json:"endTime" query:"endTime"`
-	Status    string `thrift:"status,3,optional" form:"status" json:"status" query:"status"`
+	Status    int64  `thrift:"status,3,optional" form:"status" json:"status" query:"status"`
 }
 
 func NewPeriodTime() *PeriodTime {
@@ -3921,14 +3921,14 @@ func NewPeriodTime() *PeriodTime {
 
 		StartTime: "",
 		EndTime:   "",
-		Status:    "",
+		Status:    0,
 	}
 }
 
 func (p *PeriodTime) InitDefault() {
 	p.StartTime = ""
 	p.EndTime = ""
-	p.Status = ""
+	p.Status = 0
 }
 
 var PeriodTime_StartTime_DEFAULT string = ""
@@ -3949,9 +3949,9 @@ func (p *PeriodTime) GetEndTime() (v string) {
 	return p.EndTime
 }
 
-var PeriodTime_Status_DEFAULT string = ""
+var PeriodTime_Status_DEFAULT int64 = 0
 
-func (p *PeriodTime) GetStatus() (v string) {
+func (p *PeriodTime) GetStatus() (v int64) {
 	if !p.IsSetStatus() {
 		return PeriodTime_Status_DEFAULT
 	}
@@ -4012,7 +4012,7 @@ func (p *PeriodTime) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -4072,8 +4072,8 @@ func (p *PeriodTime) ReadField2(iprot thrift.TProtocol) error {
 }
 func (p *PeriodTime) ReadField3(iprot thrift.TProtocol) error {
 
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -4158,10 +4158,10 @@ WriteFieldEndError:
 
 func (p *PeriodTime) writeField3(oprot thrift.TProtocol) (err error) {
 	if p.IsSetStatus() {
-		if err = oprot.WriteFieldBegin("status", thrift.STRING, 3); err != nil {
+		if err = oprot.WriteFieldBegin("status", thrift.I64, 3); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(p.Status); err != nil {
+		if err := oprot.WriteI64(p.Status); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
