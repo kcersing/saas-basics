@@ -45,8 +45,8 @@ func (o Order) List(req *order.ListOrderReq) (resp []*order.OrderInfo, total int
 		signStartAt, _ := time.Parse(time.DateTime, req.StartCompletionAt)
 		signEndAt, _ := time.Parse(time.DateTime, req.EndCompletionAt)
 
-		predicates = append(predicates, order2.CompletionAtGTE(signStartAt))
-		predicates = append(predicates, order2.CompletionAtLTE(signEndAt))
+		predicates = append(predicates, order2.CompletionAtLTE(signStartAt))
+		predicates = append(predicates, order2.CompletionAtGTE(signEndAt))
 	}
 
 	//lt：less than 小于

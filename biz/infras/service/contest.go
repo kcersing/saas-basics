@@ -130,15 +130,15 @@ func (c Contest) ContestList(req contest.ContestListReq) (resp []*contest.Contes
 		signStartAt, _ := time.Parse(time.DateTime, req.SignStartAt)
 		signEndAt, _ := time.Parse(time.DateTime, req.SignEndAt)
 
-		predicates = append(predicates, contest2.SignStartAtGTE(signStartAt))
-		predicates = append(predicates, contest2.SignEndAtLTE(signEndAt))
+		predicates = append(predicates, contest2.SignStartAtLTE(signStartAt))
+		predicates = append(predicates, contest2.SignEndAtGTE(signEndAt))
 	}
 	if req.StartAt != "" && req.EndAt != "" {
 		startAt, _ := time.Parse(time.DateTime, req.StartAt)
 		endAt, _ := time.Parse(time.DateTime, req.EndAt)
 
-		predicates = append(predicates, contest2.StartAtGTE(startAt))
-		predicates = append(predicates, contest2.EndAtLTE(endAt))
+		predicates = append(predicates, contest2.StartAtLTE(startAt))
+		predicates = append(predicates, contest2.EndAtGTE(endAt))
 	}
 	predicates = append(predicates, contest2.Delete(0))
 	lists, err := c.db.Contest.Query().Where(predicates...).

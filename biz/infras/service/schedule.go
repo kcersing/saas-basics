@@ -48,9 +48,9 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 	if req.StartTime != "" {
 		startTime, _ := time.Parse(time.DateOnly, req.StartTime)
 		//大于
-		predicates = append(predicates, schedule2.StartTimeGTE(startTime))
+		predicates = append(predicates, schedule2.StartTimeLTE(startTime))
 		//小于
-		predicates = append(predicates, schedule2.EndTimeLTE(startTime.Add(7*24*time.Hour)))
+		predicates = append(predicates, schedule2.EndTimeGTE(startTime.Add(7*24*time.Hour)))
 	}
 	if req.VenueId > 0 {
 		predicates = append(predicates, schedule2.VenueID(req.VenueId))
