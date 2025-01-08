@@ -32,9 +32,7 @@ type UserTimePeriod struct {
 	// 状态[1:正常,2:禁用]
 	Status int64 `json:"status,omitempty"`
 	// 日期
-	StartDate time.Time `json:"start_date,omitempty"`
-	// 日期
-	EndDate time.Time `json:"end_date,omitempty"`
+	Date time.Time `json:"date,omitempty"`
 	// 时间段
 	Period base.Period `json:"period,omitempty"`
 	// 員工id
@@ -78,7 +76,7 @@ func (*UserTimePeriod) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case usertimeperiod.FieldID, usertimeperiod.FieldDelete, usertimeperiod.FieldCreatedID, usertimeperiod.FieldStatus, usertimeperiod.FieldUserID, usertimeperiod.FieldVenueID:
 			values[i] = new(sql.NullInt64)
-		case usertimeperiod.FieldCreatedAt, usertimeperiod.FieldUpdatedAt, usertimeperiod.FieldStartDate, usertimeperiod.FieldEndDate:
+		case usertimeperiod.FieldCreatedAt, usertimeperiod.FieldUpdatedAt, usertimeperiod.FieldDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -131,17 +129,11 @@ func (utp *UserTimePeriod) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				utp.Status = value.Int64
 			}
-		case usertimeperiod.FieldStartDate:
+		case usertimeperiod.FieldDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field start_date", values[i])
+				return fmt.Errorf("unexpected type %T for field date", values[i])
 			} else if value.Valid {
-				utp.StartDate = value.Time
-			}
-		case usertimeperiod.FieldEndDate:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field end_date", values[i])
-			} else if value.Valid {
-				utp.EndDate = value.Time
+				utp.Date = value.Time
 			}
 		case usertimeperiod.FieldPeriod:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -219,11 +211,8 @@ func (utp *UserTimePeriod) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", utp.Status))
 	builder.WriteString(", ")
-	builder.WriteString("start_date=")
-	builder.WriteString(utp.StartDate.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("end_date=")
-	builder.WriteString(utp.EndDate.Format(time.ANSIC))
+	builder.WriteString("date=")
+	builder.WriteString(utp.Date.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("period=")
 	builder.WriteString(fmt.Sprintf("%v", utp.Period))

@@ -1399,8 +1399,7 @@ var (
 		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
-		{Name: "start_date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
-		{Name: "end_date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
+		{Name: "date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
 		{Name: "period", Type: field.TypeJSON, Nullable: true, Comment: "时间段"},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "id"},
 		{Name: "user_id", Type: field.TypeInt64, Nullable: true, Comment: "員工id"},
@@ -1413,7 +1412,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_user_time_period_sys_users_user_time_period",
-				Columns:    []*schema.Column{SysUserTimePeriodColumns[10]},
+				Columns:    []*schema.Column{SysUserTimePeriodColumns[9]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

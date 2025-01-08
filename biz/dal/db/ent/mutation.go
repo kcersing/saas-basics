@@ -59340,8 +59340,7 @@ type UserTimePeriodMutation struct {
 	addcreated_id *int64
 	status        *int64
 	addstatus     *int64
-	start_date    *time.Time
-	end_date      *time.Time
+	date          *time.Time
 	period        *base.Period
 	venue_id      *int64
 	addvenue_id   *int64
@@ -59765,102 +59764,53 @@ func (m *UserTimePeriodMutation) ResetStatus() {
 	delete(m.clearedFields, usertimeperiod.FieldStatus)
 }
 
-// SetStartDate sets the "start_date" field.
-func (m *UserTimePeriodMutation) SetStartDate(t time.Time) {
-	m.start_date = &t
+// SetDate sets the "date" field.
+func (m *UserTimePeriodMutation) SetDate(t time.Time) {
+	m.date = &t
 }
 
-// StartDate returns the value of the "start_date" field in the mutation.
-func (m *UserTimePeriodMutation) StartDate() (r time.Time, exists bool) {
-	v := m.start_date
+// Date returns the value of the "date" field in the mutation.
+func (m *UserTimePeriodMutation) Date() (r time.Time, exists bool) {
+	v := m.date
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldStartDate returns the old "start_date" field's value of the UserTimePeriod entity.
+// OldDate returns the old "date" field's value of the UserTimePeriod entity.
 // If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserTimePeriodMutation) OldStartDate(ctx context.Context) (v time.Time, err error) {
+func (m *UserTimePeriodMutation) OldDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStartDate is only allowed on UpdateOne operations")
+		return v, errors.New("OldDate is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStartDate requires an ID field in the mutation")
+		return v, errors.New("OldDate requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStartDate: %w", err)
+		return v, fmt.Errorf("querying old value for OldDate: %w", err)
 	}
-	return oldValue.StartDate, nil
+	return oldValue.Date, nil
 }
 
-// ClearStartDate clears the value of the "start_date" field.
-func (m *UserTimePeriodMutation) ClearStartDate() {
-	m.start_date = nil
-	m.clearedFields[usertimeperiod.FieldStartDate] = struct{}{}
+// ClearDate clears the value of the "date" field.
+func (m *UserTimePeriodMutation) ClearDate() {
+	m.date = nil
+	m.clearedFields[usertimeperiod.FieldDate] = struct{}{}
 }
 
-// StartDateCleared returns if the "start_date" field was cleared in this mutation.
-func (m *UserTimePeriodMutation) StartDateCleared() bool {
-	_, ok := m.clearedFields[usertimeperiod.FieldStartDate]
+// DateCleared returns if the "date" field was cleared in this mutation.
+func (m *UserTimePeriodMutation) DateCleared() bool {
+	_, ok := m.clearedFields[usertimeperiod.FieldDate]
 	return ok
 }
 
-// ResetStartDate resets all changes to the "start_date" field.
-func (m *UserTimePeriodMutation) ResetStartDate() {
-	m.start_date = nil
-	delete(m.clearedFields, usertimeperiod.FieldStartDate)
-}
-
-// SetEndDate sets the "end_date" field.
-func (m *UserTimePeriodMutation) SetEndDate(t time.Time) {
-	m.end_date = &t
-}
-
-// EndDate returns the value of the "end_date" field in the mutation.
-func (m *UserTimePeriodMutation) EndDate() (r time.Time, exists bool) {
-	v := m.end_date
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldEndDate returns the old "end_date" field's value of the UserTimePeriod entity.
-// If the UserTimePeriod object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserTimePeriodMutation) OldEndDate(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEndDate is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEndDate requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEndDate: %w", err)
-	}
-	return oldValue.EndDate, nil
-}
-
-// ClearEndDate clears the value of the "end_date" field.
-func (m *UserTimePeriodMutation) ClearEndDate() {
-	m.end_date = nil
-	m.clearedFields[usertimeperiod.FieldEndDate] = struct{}{}
-}
-
-// EndDateCleared returns if the "end_date" field was cleared in this mutation.
-func (m *UserTimePeriodMutation) EndDateCleared() bool {
-	_, ok := m.clearedFields[usertimeperiod.FieldEndDate]
-	return ok
-}
-
-// ResetEndDate resets all changes to the "end_date" field.
-func (m *UserTimePeriodMutation) ResetEndDate() {
-	m.end_date = nil
-	delete(m.clearedFields, usertimeperiod.FieldEndDate)
+// ResetDate resets all changes to the "date" field.
+func (m *UserTimePeriodMutation) ResetDate() {
+	m.date = nil
+	delete(m.clearedFields, usertimeperiod.FieldDate)
 }
 
 // SetPeriod sets the "period" field.
@@ -60105,7 +60055,7 @@ func (m *UserTimePeriodMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserTimePeriodMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, usertimeperiod.FieldCreatedAt)
 	}
@@ -60121,11 +60071,8 @@ func (m *UserTimePeriodMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, usertimeperiod.FieldStatus)
 	}
-	if m.start_date != nil {
-		fields = append(fields, usertimeperiod.FieldStartDate)
-	}
-	if m.end_date != nil {
-		fields = append(fields, usertimeperiod.FieldEndDate)
+	if m.date != nil {
+		fields = append(fields, usertimeperiod.FieldDate)
 	}
 	if m.period != nil {
 		fields = append(fields, usertimeperiod.FieldPeriod)
@@ -60154,10 +60101,8 @@ func (m *UserTimePeriodMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedID()
 	case usertimeperiod.FieldStatus:
 		return m.Status()
-	case usertimeperiod.FieldStartDate:
-		return m.StartDate()
-	case usertimeperiod.FieldEndDate:
-		return m.EndDate()
+	case usertimeperiod.FieldDate:
+		return m.Date()
 	case usertimeperiod.FieldPeriod:
 		return m.Period()
 	case usertimeperiod.FieldUserID:
@@ -60183,10 +60128,8 @@ func (m *UserTimePeriodMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldCreatedID(ctx)
 	case usertimeperiod.FieldStatus:
 		return m.OldStatus(ctx)
-	case usertimeperiod.FieldStartDate:
-		return m.OldStartDate(ctx)
-	case usertimeperiod.FieldEndDate:
-		return m.OldEndDate(ctx)
+	case usertimeperiod.FieldDate:
+		return m.OldDate(ctx)
 	case usertimeperiod.FieldPeriod:
 		return m.OldPeriod(ctx)
 	case usertimeperiod.FieldUserID:
@@ -60237,19 +60180,12 @@ func (m *UserTimePeriodMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case usertimeperiod.FieldStartDate:
+	case usertimeperiod.FieldDate:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetStartDate(v)
-		return nil
-	case usertimeperiod.FieldEndDate:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetEndDate(v)
+		m.SetDate(v)
 		return nil
 	case usertimeperiod.FieldPeriod:
 		v, ok := value.(base.Period)
@@ -60368,11 +60304,8 @@ func (m *UserTimePeriodMutation) ClearedFields() []string {
 	if m.FieldCleared(usertimeperiod.FieldStatus) {
 		fields = append(fields, usertimeperiod.FieldStatus)
 	}
-	if m.FieldCleared(usertimeperiod.FieldStartDate) {
-		fields = append(fields, usertimeperiod.FieldStartDate)
-	}
-	if m.FieldCleared(usertimeperiod.FieldEndDate) {
-		fields = append(fields, usertimeperiod.FieldEndDate)
+	if m.FieldCleared(usertimeperiod.FieldDate) {
+		fields = append(fields, usertimeperiod.FieldDate)
 	}
 	if m.FieldCleared(usertimeperiod.FieldPeriod) {
 		fields = append(fields, usertimeperiod.FieldPeriod)
@@ -60412,11 +60345,8 @@ func (m *UserTimePeriodMutation) ClearField(name string) error {
 	case usertimeperiod.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case usertimeperiod.FieldStartDate:
-		m.ClearStartDate()
-		return nil
-	case usertimeperiod.FieldEndDate:
-		m.ClearEndDate()
+	case usertimeperiod.FieldDate:
+		m.ClearDate()
 		return nil
 	case usertimeperiod.FieldPeriod:
 		m.ClearPeriod()
@@ -60450,11 +60380,8 @@ func (m *UserTimePeriodMutation) ResetField(name string) error {
 	case usertimeperiod.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case usertimeperiod.FieldStartDate:
-		m.ResetStartDate()
-		return nil
-	case usertimeperiod.FieldEndDate:
-		m.ResetEndDate()
+	case usertimeperiod.FieldDate:
+		m.ResetDate()
 		return nil
 	case usertimeperiod.FieldPeriod:
 		m.ResetPeriod()

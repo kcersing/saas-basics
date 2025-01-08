@@ -80,14 +80,9 @@ func Status(v int64) predicate.UserTimePeriod {
 	return predicate.UserTimePeriod(sql.FieldEQ(FieldStatus, v))
 }
 
-// StartDate applies equality check predicate on the "start_date" field. It's identical to StartDateEQ.
-func StartDate(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldEQ(FieldStartDate, v))
-}
-
-// EndDate applies equality check predicate on the "end_date" field. It's identical to EndDateEQ.
-func EndDate(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldEQ(FieldEndDate, v))
+// Date applies equality check predicate on the "date" field. It's identical to DateEQ.
+func Date(v time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldEQ(FieldDate, v))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
@@ -350,104 +345,54 @@ func StatusNotNil() predicate.UserTimePeriod {
 	return predicate.UserTimePeriod(sql.FieldNotNull(FieldStatus))
 }
 
-// StartDateEQ applies the EQ predicate on the "start_date" field.
-func StartDateEQ(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldEQ(FieldStartDate, v))
+// DateEQ applies the EQ predicate on the "date" field.
+func DateEQ(v time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldEQ(FieldDate, v))
 }
 
-// StartDateNEQ applies the NEQ predicate on the "start_date" field.
-func StartDateNEQ(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldNEQ(FieldStartDate, v))
+// DateNEQ applies the NEQ predicate on the "date" field.
+func DateNEQ(v time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldNEQ(FieldDate, v))
 }
 
-// StartDateIn applies the In predicate on the "start_date" field.
-func StartDateIn(vs ...time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldIn(FieldStartDate, vs...))
+// DateIn applies the In predicate on the "date" field.
+func DateIn(vs ...time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldIn(FieldDate, vs...))
 }
 
-// StartDateNotIn applies the NotIn predicate on the "start_date" field.
-func StartDateNotIn(vs ...time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldNotIn(FieldStartDate, vs...))
+// DateNotIn applies the NotIn predicate on the "date" field.
+func DateNotIn(vs ...time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldNotIn(FieldDate, vs...))
 }
 
-// StartDateGT applies the GT predicate on the "start_date" field.
-func StartDateGT(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldGT(FieldStartDate, v))
+// DateGT applies the GT predicate on the "date" field.
+func DateGT(v time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldGT(FieldDate, v))
 }
 
-// StartDateGTE applies the GTE predicate on the "start_date" field.
-func StartDateGTE(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldGTE(FieldStartDate, v))
+// DateGTE applies the GTE predicate on the "date" field.
+func DateGTE(v time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldGTE(FieldDate, v))
 }
 
-// StartDateLT applies the LT predicate on the "start_date" field.
-func StartDateLT(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldLT(FieldStartDate, v))
+// DateLT applies the LT predicate on the "date" field.
+func DateLT(v time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldLT(FieldDate, v))
 }
 
-// StartDateLTE applies the LTE predicate on the "start_date" field.
-func StartDateLTE(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldLTE(FieldStartDate, v))
+// DateLTE applies the LTE predicate on the "date" field.
+func DateLTE(v time.Time) predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldLTE(FieldDate, v))
 }
 
-// StartDateIsNil applies the IsNil predicate on the "start_date" field.
-func StartDateIsNil() predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldIsNull(FieldStartDate))
+// DateIsNil applies the IsNil predicate on the "date" field.
+func DateIsNil() predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldIsNull(FieldDate))
 }
 
-// StartDateNotNil applies the NotNil predicate on the "start_date" field.
-func StartDateNotNil() predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldNotNull(FieldStartDate))
-}
-
-// EndDateEQ applies the EQ predicate on the "end_date" field.
-func EndDateEQ(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldEQ(FieldEndDate, v))
-}
-
-// EndDateNEQ applies the NEQ predicate on the "end_date" field.
-func EndDateNEQ(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldNEQ(FieldEndDate, v))
-}
-
-// EndDateIn applies the In predicate on the "end_date" field.
-func EndDateIn(vs ...time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldIn(FieldEndDate, vs...))
-}
-
-// EndDateNotIn applies the NotIn predicate on the "end_date" field.
-func EndDateNotIn(vs ...time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldNotIn(FieldEndDate, vs...))
-}
-
-// EndDateGT applies the GT predicate on the "end_date" field.
-func EndDateGT(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldGT(FieldEndDate, v))
-}
-
-// EndDateGTE applies the GTE predicate on the "end_date" field.
-func EndDateGTE(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldGTE(FieldEndDate, v))
-}
-
-// EndDateLT applies the LT predicate on the "end_date" field.
-func EndDateLT(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldLT(FieldEndDate, v))
-}
-
-// EndDateLTE applies the LTE predicate on the "end_date" field.
-func EndDateLTE(v time.Time) predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldLTE(FieldEndDate, v))
-}
-
-// EndDateIsNil applies the IsNil predicate on the "end_date" field.
-func EndDateIsNil() predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldIsNull(FieldEndDate))
-}
-
-// EndDateNotNil applies the NotNil predicate on the "end_date" field.
-func EndDateNotNil() predicate.UserTimePeriod {
-	return predicate.UserTimePeriod(sql.FieldNotNull(FieldEndDate))
+// DateNotNil applies the NotNil predicate on the "date" field.
+func DateNotNil() predicate.UserTimePeriod {
+	return predicate.UserTimePeriod(sql.FieldNotNull(FieldDate))
 }
 
 // PeriodIsNil applies the IsNil predicate on the "period" field.

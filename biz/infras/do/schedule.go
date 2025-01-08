@@ -8,7 +8,8 @@ import (
 
 type Schedule interface {
 	CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) error
-	UpdateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) error
+	UpdateScheduleUserTimePeriod(req schedule.UpdateUserTimePeriodReq) error
+
 	CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourseReq) error
 	CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLessonsReq) error
 

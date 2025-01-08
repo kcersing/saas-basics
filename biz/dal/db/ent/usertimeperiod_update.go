@@ -123,43 +123,23 @@ func (utpu *UserTimePeriodUpdate) ClearStatus() *UserTimePeriodUpdate {
 	return utpu
 }
 
-// SetStartDate sets the "start_date" field.
-func (utpu *UserTimePeriodUpdate) SetStartDate(t time.Time) *UserTimePeriodUpdate {
-	utpu.mutation.SetStartDate(t)
+// SetDate sets the "date" field.
+func (utpu *UserTimePeriodUpdate) SetDate(t time.Time) *UserTimePeriodUpdate {
+	utpu.mutation.SetDate(t)
 	return utpu
 }
 
-// SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (utpu *UserTimePeriodUpdate) SetNillableStartDate(t *time.Time) *UserTimePeriodUpdate {
+// SetNillableDate sets the "date" field if the given value is not nil.
+func (utpu *UserTimePeriodUpdate) SetNillableDate(t *time.Time) *UserTimePeriodUpdate {
 	if t != nil {
-		utpu.SetStartDate(*t)
+		utpu.SetDate(*t)
 	}
 	return utpu
 }
 
-// ClearStartDate clears the value of the "start_date" field.
-func (utpu *UserTimePeriodUpdate) ClearStartDate() *UserTimePeriodUpdate {
-	utpu.mutation.ClearStartDate()
-	return utpu
-}
-
-// SetEndDate sets the "end_date" field.
-func (utpu *UserTimePeriodUpdate) SetEndDate(t time.Time) *UserTimePeriodUpdate {
-	utpu.mutation.SetEndDate(t)
-	return utpu
-}
-
-// SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (utpu *UserTimePeriodUpdate) SetNillableEndDate(t *time.Time) *UserTimePeriodUpdate {
-	if t != nil {
-		utpu.SetEndDate(*t)
-	}
-	return utpu
-}
-
-// ClearEndDate clears the value of the "end_date" field.
-func (utpu *UserTimePeriodUpdate) ClearEndDate() *UserTimePeriodUpdate {
-	utpu.mutation.ClearEndDate()
+// ClearDate clears the value of the "date" field.
+func (utpu *UserTimePeriodUpdate) ClearDate() *UserTimePeriodUpdate {
+	utpu.mutation.ClearDate()
 	return utpu
 }
 
@@ -341,17 +321,11 @@ func (utpu *UserTimePeriodUpdate) sqlSave(ctx context.Context) (n int, err error
 	if utpu.mutation.StatusCleared() {
 		_spec.ClearField(usertimeperiod.FieldStatus, field.TypeInt64)
 	}
-	if value, ok := utpu.mutation.StartDate(); ok {
-		_spec.SetField(usertimeperiod.FieldStartDate, field.TypeTime, value)
+	if value, ok := utpu.mutation.Date(); ok {
+		_spec.SetField(usertimeperiod.FieldDate, field.TypeTime, value)
 	}
-	if utpu.mutation.StartDateCleared() {
-		_spec.ClearField(usertimeperiod.FieldStartDate, field.TypeTime)
-	}
-	if value, ok := utpu.mutation.EndDate(); ok {
-		_spec.SetField(usertimeperiod.FieldEndDate, field.TypeTime, value)
-	}
-	if utpu.mutation.EndDateCleared() {
-		_spec.ClearField(usertimeperiod.FieldEndDate, field.TypeTime)
+	if utpu.mutation.DateCleared() {
+		_spec.ClearField(usertimeperiod.FieldDate, field.TypeTime)
 	}
 	if value, ok := utpu.mutation.Period(); ok {
 		_spec.SetField(usertimeperiod.FieldPeriod, field.TypeJSON, value)
@@ -510,43 +484,23 @@ func (utpuo *UserTimePeriodUpdateOne) ClearStatus() *UserTimePeriodUpdateOne {
 	return utpuo
 }
 
-// SetStartDate sets the "start_date" field.
-func (utpuo *UserTimePeriodUpdateOne) SetStartDate(t time.Time) *UserTimePeriodUpdateOne {
-	utpuo.mutation.SetStartDate(t)
+// SetDate sets the "date" field.
+func (utpuo *UserTimePeriodUpdateOne) SetDate(t time.Time) *UserTimePeriodUpdateOne {
+	utpuo.mutation.SetDate(t)
 	return utpuo
 }
 
-// SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (utpuo *UserTimePeriodUpdateOne) SetNillableStartDate(t *time.Time) *UserTimePeriodUpdateOne {
+// SetNillableDate sets the "date" field if the given value is not nil.
+func (utpuo *UserTimePeriodUpdateOne) SetNillableDate(t *time.Time) *UserTimePeriodUpdateOne {
 	if t != nil {
-		utpuo.SetStartDate(*t)
+		utpuo.SetDate(*t)
 	}
 	return utpuo
 }
 
-// ClearStartDate clears the value of the "start_date" field.
-func (utpuo *UserTimePeriodUpdateOne) ClearStartDate() *UserTimePeriodUpdateOne {
-	utpuo.mutation.ClearStartDate()
-	return utpuo
-}
-
-// SetEndDate sets the "end_date" field.
-func (utpuo *UserTimePeriodUpdateOne) SetEndDate(t time.Time) *UserTimePeriodUpdateOne {
-	utpuo.mutation.SetEndDate(t)
-	return utpuo
-}
-
-// SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (utpuo *UserTimePeriodUpdateOne) SetNillableEndDate(t *time.Time) *UserTimePeriodUpdateOne {
-	if t != nil {
-		utpuo.SetEndDate(*t)
-	}
-	return utpuo
-}
-
-// ClearEndDate clears the value of the "end_date" field.
-func (utpuo *UserTimePeriodUpdateOne) ClearEndDate() *UserTimePeriodUpdateOne {
-	utpuo.mutation.ClearEndDate()
+// ClearDate clears the value of the "date" field.
+func (utpuo *UserTimePeriodUpdateOne) ClearDate() *UserTimePeriodUpdateOne {
+	utpuo.mutation.ClearDate()
 	return utpuo
 }
 
@@ -758,17 +712,11 @@ func (utpuo *UserTimePeriodUpdateOne) sqlSave(ctx context.Context) (_node *UserT
 	if utpuo.mutation.StatusCleared() {
 		_spec.ClearField(usertimeperiod.FieldStatus, field.TypeInt64)
 	}
-	if value, ok := utpuo.mutation.StartDate(); ok {
-		_spec.SetField(usertimeperiod.FieldStartDate, field.TypeTime, value)
+	if value, ok := utpuo.mutation.Date(); ok {
+		_spec.SetField(usertimeperiod.FieldDate, field.TypeTime, value)
 	}
-	if utpuo.mutation.StartDateCleared() {
-		_spec.ClearField(usertimeperiod.FieldStartDate, field.TypeTime)
-	}
-	if value, ok := utpuo.mutation.EndDate(); ok {
-		_spec.SetField(usertimeperiod.FieldEndDate, field.TypeTime, value)
-	}
-	if utpuo.mutation.EndDateCleared() {
-		_spec.ClearField(usertimeperiod.FieldEndDate, field.TypeTime)
+	if utpuo.mutation.DateCleared() {
+		_spec.ClearField(usertimeperiod.FieldDate, field.TypeTime)
 	}
 	if value, ok := utpuo.mutation.Period(); ok {
 		_spec.SetField(usertimeperiod.FieldPeriod, field.TypeJSON, value)

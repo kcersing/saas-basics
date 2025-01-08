@@ -6610,10 +6610,7 @@ func (p *UserTimePeriodReq) String() string {
 }
 
 type UserTimePeriodInfo struct {
-	/**时间如2024-05-16*/
-	StartDate string `thrift:"startDate,1,optional" form:"startDate" json:"startDate" query:"startDate"`
-	EndDate   string `thrift:"endDate,2,optional" form:"endDate" json:"endDate" query:"endDate"`
-	/**时间段*/
+	Date   string       `thrift:"date,2,optional" form:"date" json:"date" query:"date"`
 	Period *base.Period `thrift:"period,3,optional" form:"period" json:"period" query:"period"`
 	UserId int64        `thrift:"userId,4,optional" form:"userId" json:"userId" query:"userId"`
 }
@@ -6621,36 +6618,25 @@ type UserTimePeriodInfo struct {
 func NewUserTimePeriodInfo() *UserTimePeriodInfo {
 	return &UserTimePeriodInfo{
 
-		StartDate: "",
-		EndDate:   "",
-		Period:    &base.Period{},
-		UserId:    0,
+		Date:   "",
+		Period: &base.Period{},
+		UserId: 0,
 	}
 }
 
 func (p *UserTimePeriodInfo) InitDefault() {
-	p.StartDate = ""
-	p.EndDate = ""
+	p.Date = ""
 	p.Period = &base.Period{}
 	p.UserId = 0
 }
 
-var UserTimePeriodInfo_StartDate_DEFAULT string = ""
+var UserTimePeriodInfo_Date_DEFAULT string = ""
 
-func (p *UserTimePeriodInfo) GetStartDate() (v string) {
-	if !p.IsSetStartDate() {
-		return UserTimePeriodInfo_StartDate_DEFAULT
+func (p *UserTimePeriodInfo) GetDate() (v string) {
+	if !p.IsSetDate() {
+		return UserTimePeriodInfo_Date_DEFAULT
 	}
-	return p.StartDate
-}
-
-var UserTimePeriodInfo_EndDate_DEFAULT string = ""
-
-func (p *UserTimePeriodInfo) GetEndDate() (v string) {
-	if !p.IsSetEndDate() {
-		return UserTimePeriodInfo_EndDate_DEFAULT
-	}
-	return p.EndDate
+	return p.Date
 }
 
 var UserTimePeriodInfo_Period_DEFAULT *base.Period = &base.Period{}
@@ -6672,18 +6658,13 @@ func (p *UserTimePeriodInfo) GetUserId() (v int64) {
 }
 
 var fieldIDToName_UserTimePeriodInfo = map[int16]string{
-	1: "startDate",
-	2: "endDate",
+	2: "date",
 	3: "period",
 	4: "userId",
 }
 
-func (p *UserTimePeriodInfo) IsSetStartDate() bool {
-	return p.StartDate != UserTimePeriodInfo_StartDate_DEFAULT
-}
-
-func (p *UserTimePeriodInfo) IsSetEndDate() bool {
-	return p.EndDate != UserTimePeriodInfo_EndDate_DEFAULT
+func (p *UserTimePeriodInfo) IsSetDate() bool {
+	return p.Date != UserTimePeriodInfo_Date_DEFAULT
 }
 
 func (p *UserTimePeriodInfo) IsSetPeriod() bool {
@@ -6713,14 +6694,6 @@ func (p *UserTimePeriodInfo) Read(iprot thrift.TProtocol) (err error) {
 		}
 
 		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
 		case 2:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
@@ -6774,17 +6747,6 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserTimePeriodInfo) ReadField1(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.StartDate = _field
-	return nil
-}
 func (p *UserTimePeriodInfo) ReadField2(iprot thrift.TProtocol) error {
 
 	var _field string
@@ -6793,7 +6755,7 @@ func (p *UserTimePeriodInfo) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.EndDate = _field
+	p.Date = _field
 	return nil
 }
 func (p *UserTimePeriodInfo) ReadField3(iprot thrift.TProtocol) error {
@@ -6822,10 +6784,6 @@ func (p *UserTimePeriodInfo) Write(oprot thrift.TProtocol) (err error) {
 		goto WriteStructBeginError
 	}
 	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
 			goto WriteFieldError
@@ -6856,31 +6814,12 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserTimePeriodInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.IsSetStartDate() {
-		if err = oprot.WriteFieldBegin("startDate", thrift.STRING, 1); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(p.StartDate); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
 func (p *UserTimePeriodInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetEndDate() {
-		if err = oprot.WriteFieldBegin("endDate", thrift.STRING, 2); err != nil {
+	if p.IsSetDate() {
+		if err = oprot.WriteFieldBegin("date", thrift.STRING, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(p.EndDate); err != nil {
+		if err := oprot.WriteString(p.Date); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -7215,11 +7154,342 @@ func (p *UserPeriodReq) String() string {
 
 }
 
+type UpdateUserTimePeriodReq struct {
+	/**员工ID*/
+	UserId int64 `thrift:"userId,1,optional" form:"userId" json:"userId" query:"userId"`
+	/**时间*/
+	Date    string       `thrift:"date,2,optional" form:"date" json:"date" query:"date"`
+	VenueId int64        `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
+	Period  *base.Period `thrift:"period,4,optional" form:"period" json:"period" query:"period"`
+}
+
+func NewUpdateUserTimePeriodReq() *UpdateUserTimePeriodReq {
+	return &UpdateUserTimePeriodReq{
+
+		UserId:  0,
+		Date:    "",
+		VenueId: 0,
+		Period:  &base.Period{},
+	}
+}
+
+func (p *UpdateUserTimePeriodReq) InitDefault() {
+	p.UserId = 0
+	p.Date = ""
+	p.VenueId = 0
+	p.Period = &base.Period{}
+}
+
+var UpdateUserTimePeriodReq_UserId_DEFAULT int64 = 0
+
+func (p *UpdateUserTimePeriodReq) GetUserId() (v int64) {
+	if !p.IsSetUserId() {
+		return UpdateUserTimePeriodReq_UserId_DEFAULT
+	}
+	return p.UserId
+}
+
+var UpdateUserTimePeriodReq_Date_DEFAULT string = ""
+
+func (p *UpdateUserTimePeriodReq) GetDate() (v string) {
+	if !p.IsSetDate() {
+		return UpdateUserTimePeriodReq_Date_DEFAULT
+	}
+	return p.Date
+}
+
+var UpdateUserTimePeriodReq_VenueId_DEFAULT int64 = 0
+
+func (p *UpdateUserTimePeriodReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return UpdateUserTimePeriodReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var UpdateUserTimePeriodReq_Period_DEFAULT *base.Period = &base.Period{}
+
+func (p *UpdateUserTimePeriodReq) GetPeriod() (v *base.Period) {
+	if !p.IsSetPeriod() {
+		return UpdateUserTimePeriodReq_Period_DEFAULT
+	}
+	return p.Period
+}
+
+var fieldIDToName_UpdateUserTimePeriodReq = map[int16]string{
+	1: "userId",
+	2: "date",
+	3: "venueId",
+	4: "period",
+}
+
+func (p *UpdateUserTimePeriodReq) IsSetUserId() bool {
+	return p.UserId != UpdateUserTimePeriodReq_UserId_DEFAULT
+}
+
+func (p *UpdateUserTimePeriodReq) IsSetDate() bool {
+	return p.Date != UpdateUserTimePeriodReq_Date_DEFAULT
+}
+
+func (p *UpdateUserTimePeriodReq) IsSetVenueId() bool {
+	return p.VenueId != UpdateUserTimePeriodReq_VenueId_DEFAULT
+}
+
+func (p *UpdateUserTimePeriodReq) IsSetPeriod() bool {
+	return p.Period != nil
+}
+
+func (p *UpdateUserTimePeriodReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UpdateUserTimePeriodReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *UpdateUserTimePeriodReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.UserId = _field
+	return nil
+}
+func (p *UpdateUserTimePeriodReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Date = _field
+	return nil
+}
+func (p *UpdateUserTimePeriodReq) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+func (p *UpdateUserTimePeriodReq) ReadField4(iprot thrift.TProtocol) error {
+	_field := base.NewPeriod()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Period = _field
+	return nil
+}
+
+func (p *UpdateUserTimePeriodReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("UpdateUserTimePeriodReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *UpdateUserTimePeriodReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetUserId() {
+		if err = oprot.WriteFieldBegin("userId", thrift.I64, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.UserId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *UpdateUserTimePeriodReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetDate() {
+		if err = oprot.WriteFieldBegin("date", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Date); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *UpdateUserTimePeriodReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *UpdateUserTimePeriodReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetPeriod() {
+		if err = oprot.WriteFieldBegin("period", thrift.STRUCT, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Period.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *UpdateUserTimePeriodReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UpdateUserTimePeriodReq(%+v)", *p)
+
+}
+
 type ScheduleService interface {
 	/**添加教练时间段*/
 	CreateScheduleUserTimePeriod(ctx context.Context, req *UserTimePeriodReq) (r *base.NilResponse, err error)
 	/**更新教练时间段*/
-	UpdateScheduleUserTimePeriod(ctx context.Context, req *UserTimePeriodReq) (r *base.NilResponse, err error)
+	UpdateScheduleUserTimePeriod(ctx context.Context, req *UpdateUserTimePeriodReq) (r *base.NilResponse, err error)
 
 	UserTimePeriod(ctx context.Context, req *UserPeriodReq) (r *base.NilResponse, err error)
 	/**约私教课*/
@@ -7287,7 +7557,7 @@ func (p *ScheduleServiceClient) CreateScheduleUserTimePeriod(ctx context.Context
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ScheduleServiceClient) UpdateScheduleUserTimePeriod(ctx context.Context, req *UserTimePeriodReq) (r *base.NilResponse, err error) {
+func (p *ScheduleServiceClient) UpdateScheduleUserTimePeriod(ctx context.Context, req *UpdateUserTimePeriodReq) (r *base.NilResponse, err error) {
 	var _args ScheduleServiceUpdateScheduleUserTimePeriodArgs
 	_args.Req = req
 	var _result ScheduleServiceUpdateScheduleUserTimePeriodResult
@@ -8600,7 +8870,7 @@ func (p *ScheduleServiceCreateScheduleUserTimePeriodResult) String() string {
 }
 
 type ScheduleServiceUpdateScheduleUserTimePeriodArgs struct {
-	Req *UserTimePeriodReq `thrift:"req,1"`
+	Req *UpdateUserTimePeriodReq `thrift:"req,1"`
 }
 
 func NewScheduleServiceUpdateScheduleUserTimePeriodArgs() *ScheduleServiceUpdateScheduleUserTimePeriodArgs {
@@ -8610,9 +8880,9 @@ func NewScheduleServiceUpdateScheduleUserTimePeriodArgs() *ScheduleServiceUpdate
 func (p *ScheduleServiceUpdateScheduleUserTimePeriodArgs) InitDefault() {
 }
 
-var ScheduleServiceUpdateScheduleUserTimePeriodArgs_Req_DEFAULT *UserTimePeriodReq
+var ScheduleServiceUpdateScheduleUserTimePeriodArgs_Req_DEFAULT *UpdateUserTimePeriodReq
 
-func (p *ScheduleServiceUpdateScheduleUserTimePeriodArgs) GetReq() (v *UserTimePeriodReq) {
+func (p *ScheduleServiceUpdateScheduleUserTimePeriodArgs) GetReq() (v *UpdateUserTimePeriodReq) {
 	if !p.IsSetReq() {
 		return ScheduleServiceUpdateScheduleUserTimePeriodArgs_Req_DEFAULT
 	}
@@ -8684,7 +8954,7 @@ ReadStructEndError:
 }
 
 func (p *ScheduleServiceUpdateScheduleUserTimePeriodArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewUserTimePeriodReq()
+	_field := NewUpdateUserTimePeriodReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}

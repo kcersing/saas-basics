@@ -46,13 +46,13 @@ func CreateScheduleUserTimePeriod(ctx context.Context, c *app.RequestContext) {
 // @Summary 更新教练值班时间段
 // @Description 更新教练值班时间段
 //
-//	@Param			request	body		schedule.UserTimePeriodReq	true	"query params"
+//	@Param			request	body		schedule.UpdateUserTimePeriodReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
 // @router /service/schedule/update-user-time-period [POST]
 func UpdateScheduleUserTimePeriod(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req schedule.UserTimePeriodReq
+	var req schedule.UpdateUserTimePeriodReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())

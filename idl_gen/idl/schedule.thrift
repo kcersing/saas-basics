@@ -184,10 +184,7 @@ struct UserTimePeriodReq{
     5:  optional i64 venueId = 0 (api.raw = "venueId")
 }
 struct UserTimePeriodInfo{
-    /**时间如2024-05-16*/
-    1:  optional string startDate ="" (api.raw = "startDate")
-    2:  optional string endDate ="" (api.raw = "endDate")
-    /**时间段*/
+    2:  optional string date ="" (api.raw = "date")
     3:  optional base.Period period = {} (api.raw = "period")
     4:  optional i64 userId = 0 (api.raw = "userId")
 }
@@ -198,12 +195,19 @@ struct UserPeriodReq{
     2: optional string date = "" (api.raw = "date")
     3: optional i64 venueId = 0 (api.raw = "venueId")
 }
-
+struct UpdateUserTimePeriodReq{
+ /**员工ID*/
+    1: optional i64 userId = 0 (api.raw = "userId")
+    /**时间*/
+    2: optional string date = "" (api.raw = "date")
+    3: optional i64 venueId = 0 (api.raw = "venueId")
+    4:  optional base.Period period = {} (api.raw = "period")
+}
 service ScheduleService {
     /**添加教练时间段*/
     base.NilResponse CreateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/create-user-time-period")
     /**更新教练时间段*/
-    base.NilResponse UpdateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/update-user-time-period")
+    base.NilResponse UpdateScheduleUserTimePeriod(1: UpdateUserTimePeriodReq req)  (api.post = "/service/schedule/update-user-time-period")
 
     base.NilResponse UserTimePeriod(1: UserPeriodReq req)  (api.post = "/service/schedule/user-time-period")
 

@@ -1052,8 +1052,12 @@ definitions:
   schedule.UserPeriodReq:
     properties:
       date:
+        description: '*时间'
         type: string
       id:
+        description: '*员工ID'
+        type: integer
+      venueId:
         type: integer
     type: object
   schedule.UserTimePeriodReq:
@@ -1071,6 +1075,8 @@ definitions:
         items:
           type: integer
         type: array
+      venueId:
+        type: integer
     type: object
   sms.SmsBuyReq:
     properties:

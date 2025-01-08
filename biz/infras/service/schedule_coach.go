@@ -25,18 +25,22 @@ func (s Schedule) CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) e
 	var usc []*ent.UserTimePeriodCreate
 	if len(req.UserId) > 0 {
 		for _, v := range req.UserId {
-			s.db.UserTimePeriod.Delete().Where(
-				usertimeperiod.UserID(v),
-				usertimeperiod.StartDate(startDate),
-				usertimeperiod.EndDate(endDate),
-			).Exec(s.ctx)
-			usc = append(usc, s.db.UserTimePeriod.
-				Create().
-				SetStartDate(startDate).
-				SetEndDate(endDate).
-				SetUserID(v).
-				SetVenueID(req.VenueId).
-				SetPeriod(*req.Period))
+			//Before
+			//
+			for {
+				date := startDate
+				usc = append(usc, s.db.UserTimePeriod.
+					Create().
+					SetDate(date).
+					SetUserID(v).
+					SetVenueID(req.VenueId).
+					SetPeriod(*req.Period))
+
+				date = startDate.Add(1)
+				if date.After(endDate) {
+					continue
+				}
+			}
 
 		}
 	}
@@ -48,8 +52,24 @@ func (s Schedule) CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) e
 
 }
 
-func (s Schedule) UpdateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) error {
-	return s.CreateScheduleUserTimePeriod(req)
+func (s Schedule) UpdateScheduleUserTimePeriod(req schedule.UpdateUserTimePeriodReq) error {
+	date, err := time.Parse(time.DateTime, req.Date)
+
+	if err != nil {
+		return errors.New("日期类型传值错误")
+	}
+	_, err = s.db.UserTimePeriod.
+		Create().
+		SetUserID(req.UserId).
+		SetVenueID(req.VenueId).
+		SetPeriod(*req.Period).
+		SetDate(date).
+		Save(s.ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*schedule.ScheduleCoachInfo, total int, err error) {
@@ -109,8 +129,7 @@ func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.Use
 	}
 
 	predicates = append(predicates, usertimeperiod.UserID(req.ID))
-	predicates = append(predicates, usertimeperiod.StartDateLTE(startTime))
-	predicates = append(predicates, usertimeperiod.EndDateGTE(startTime))
+	predicates = append(predicates, usertimeperiod.Date(startTime))
 	first, err := s.db.Debug().UserTimePeriod.
 		Query().
 		Where(predicates...).
@@ -120,10 +139,9 @@ func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.Use
 		return nil, err
 	}
 	resp = &schedule.UserTimePeriodInfo{
-		StartDate: first.StartDate.Format(time.DateTime),
-		EndDate:   first.EndDate.Format(time.DateTime),
-		Period:    &first.Period,
-		UserId:    first.UserID,
+		Date:   first.Date.Format(time.DateTime),
+		Period: &first.Period,
+		UserId: first.UserID,
 	}
 	return
 }

@@ -24,10 +24,8 @@ const (
 	FieldCreatedID = "created_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldStartDate holds the string denoting the start_date field in the database.
-	FieldStartDate = "start_date"
-	// FieldEndDate holds the string denoting the end_date field in the database.
-	FieldEndDate = "end_date"
+	// FieldDate holds the string denoting the date field in the database.
+	FieldDate = "date"
 	// FieldPeriod holds the string denoting the period field in the database.
 	FieldPeriod = "period"
 	// FieldUserID holds the string denoting the user_id field in the database.
@@ -55,8 +53,7 @@ var Columns = []string{
 	FieldDelete,
 	FieldCreatedID,
 	FieldStatus,
-	FieldStartDate,
-	FieldEndDate,
+	FieldDate,
 	FieldPeriod,
 	FieldUserID,
 	FieldVenueID,
@@ -120,14 +117,9 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByStartDate orders the results by the start_date field.
-func ByStartDate(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStartDate, opts...).ToFunc()
-}
-
-// ByEndDate orders the results by the end_date field.
-func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
+// ByDate orders the results by the date field.
+func ByDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDate, opts...).ToFunc()
 }
 
 // ByUserID orders the results by the user_id field.

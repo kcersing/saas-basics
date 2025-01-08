@@ -5702,9 +5702,14 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "date": {
+                    "description": "*时间",
                     "type": "string"
                 },
                 "id": {
+                    "description": "*员工ID",
+                    "type": "integer"
+                },
+                "venueId": {
                     "type": "integer"
                 }
             }
@@ -5732,6 +5737,9 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

@@ -91,30 +91,16 @@ func (utpc *UserTimePeriodCreate) SetNillableStatus(i *int64) *UserTimePeriodCre
 	return utpc
 }
 
-// SetStartDate sets the "start_date" field.
-func (utpc *UserTimePeriodCreate) SetStartDate(t time.Time) *UserTimePeriodCreate {
-	utpc.mutation.SetStartDate(t)
+// SetDate sets the "date" field.
+func (utpc *UserTimePeriodCreate) SetDate(t time.Time) *UserTimePeriodCreate {
+	utpc.mutation.SetDate(t)
 	return utpc
 }
 
-// SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (utpc *UserTimePeriodCreate) SetNillableStartDate(t *time.Time) *UserTimePeriodCreate {
+// SetNillableDate sets the "date" field if the given value is not nil.
+func (utpc *UserTimePeriodCreate) SetNillableDate(t *time.Time) *UserTimePeriodCreate {
 	if t != nil {
-		utpc.SetStartDate(*t)
-	}
-	return utpc
-}
-
-// SetEndDate sets the "end_date" field.
-func (utpc *UserTimePeriodCreate) SetEndDate(t time.Time) *UserTimePeriodCreate {
-	utpc.mutation.SetEndDate(t)
-	return utpc
-}
-
-// SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (utpc *UserTimePeriodCreate) SetNillableEndDate(t *time.Time) *UserTimePeriodCreate {
-	if t != nil {
-		utpc.SetEndDate(*t)
+		utpc.SetDate(*t)
 	}
 	return utpc
 }
@@ -297,13 +283,9 @@ func (utpc *UserTimePeriodCreate) createSpec() (*UserTimePeriod, *sqlgraph.Creat
 		_spec.SetField(usertimeperiod.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
-	if value, ok := utpc.mutation.StartDate(); ok {
-		_spec.SetField(usertimeperiod.FieldStartDate, field.TypeTime, value)
-		_node.StartDate = value
-	}
-	if value, ok := utpc.mutation.EndDate(); ok {
-		_spec.SetField(usertimeperiod.FieldEndDate, field.TypeTime, value)
-		_node.EndDate = value
+	if value, ok := utpc.mutation.Date(); ok {
+		_spec.SetField(usertimeperiod.FieldDate, field.TypeTime, value)
+		_node.Date = value
 	}
 	if value, ok := utpc.mutation.Period(); ok {
 		_spec.SetField(usertimeperiod.FieldPeriod, field.TypeJSON, value)
