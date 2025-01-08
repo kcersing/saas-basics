@@ -37,6 +37,7 @@ func Register(r *server.Hertz) {
 			_schedule.POST("/schedule-member-status", append(_updatememberstatusMw(), schedule.UpdateMemberStatus)...)
 			_schedule.POST("/status", append(_updateschedulestatusMw(), schedule.UpdateScheduleStatus)...)
 			_schedule.POST("/update-user-time-period", append(_updatescheduleusertimeperiodMw(), schedule.UpdateScheduleUserTimePeriod)...)
+			_schedule.POST("/user-time-period", append(_usertimeperiodMw(), schedule.UserTimePeriod)...)
 		}
 	}
 }

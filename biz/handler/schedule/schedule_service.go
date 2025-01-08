@@ -442,3 +442,30 @@ func ScheduleLessonsPublish(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
+
+// UserTimePeriod .
+//
+// @Summary 会员时间周期
+// @Description 会员时间周期
+//
+//	@Param			request	body		schedule.UserPeriodReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/schedule/user-time-period [POST]
+func UserTimePeriod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req schedule.UserPeriodReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	info, err := service.NewSchedule(ctx, c).UserTimePeriod(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
+}

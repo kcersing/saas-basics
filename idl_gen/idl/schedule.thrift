@@ -151,14 +151,14 @@ struct ScheduleMemberListReq {
     2:  optional i64 pageSize= 100 (api.raw = "pageSize")
     3:  optional i64 memberId = 0 (api.raw = "memberId")
     4:  optional i64 scheduleId = 0(api.raw = "scheduleId")
-    5:  optional i64 type =1  (api.raw = "type")
+    5:  optional string type =""  (api.raw = "type")
 }
 struct ScheduleCoachListReq{
     1:  optional i64 page = 1 (api.raw = "page")
     2:  optional i64 pageSize = 100 (api.raw = "pageSize")
     3:  optional i64 coachId = 0 (api.raw = "coachId")
     4:  optional i64 scheduleId = 0(api.raw = "scheduleId")
-    5:  optional i64 type=1  (api.raw = "type")
+    5:  optional string type=""  (api.raw = "type")
 }
 
 //struct SearchSubscribeByMemberReq{
@@ -182,13 +182,27 @@ struct UserTimePeriodReq{
     3:  optional base.Period period = {} (api.raw = "period")
     4:  optional list<i64> userId = {} (api.raw = "userId")
 }
-
+struct UserTimePeriodInfo{
+    /**时间如2024-05-16*/
+    1:  optional string startDate ="" (api.raw = "startDate")
+    2:  optional string endDate ="" (api.raw = "endDate")
+    /**时间段*/
+    3:  optional base.Period period = {} (api.raw = "period")
+    4:  optional i64 userId = 0 (api.raw = "userId")
+}
+struct UserPeriodReq{
+    1:  optional i64 id = 0 (api.raw = "id")
+    2:  optional string date = "" (api.raw = "date")
+}
 
 service ScheduleService {
     /**添加教练时间段*/
     base.NilResponse CreateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/create-user-time-period")
     /**更新教练时间段*/
     base.NilResponse UpdateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/update-user-time-period")
+
+    base.NilResponse UserTimePeriod(1: UserPeriodReq req)  (api.post = "/service/schedule/user-time-period")
+
     /**约私教课*/
     base.NilResponse CreateScheduleCourse(1: CreateOrUpdateScheduleCourseReq req)  (api.post = "/service/schedule/create-cours")
     /**排团教课*/

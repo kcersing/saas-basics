@@ -28,7 +28,7 @@ type Schedule interface {
 	UpdateScheduleMemberStatus(ID int64, status int64) error
 	ScheduleMemberInfo(ID int64) (roleInfo *schedule.ScheduleMemberInfo, err error)
 	//SearchSubscribeByMember(req schedule.SearchSubscribeByMemberReq) (list []schedule.SubscribeByMember, total int64, err error)
-
+	UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.UserTimePeriodInfo, err error)
 	CreateScheduleMemberCourse(req CreateScheduleMemberCourse) error
 
 	//CoachCreate(req schedule.ScheduleCoachInfo) error

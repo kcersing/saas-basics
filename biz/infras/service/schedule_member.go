@@ -5,7 +5,9 @@ import (
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberprofile"
+	"saas/biz/dal/db/ent/predicate"
 	schedule2 "saas/biz/dal/db/ent/schedule"
+	"saas/biz/dal/db/ent/schedulemember"
 	"saas/idl_gen/model/schedule"
 )
 
@@ -58,16 +60,54 @@ func (s Schedule) CreateMemberSubscribeLessons(req schedule.MemberSubscribeReq) 
 }
 
 func (s Schedule) ScheduleMemberList(req schedule.ScheduleMemberListReq) (resp []*schedule.ScheduleMemberInfo, total int, err error) {
-	//TODO implement me
-	panic("implement me")
+	var predicates []predicate.ScheduleMember
+
+	//if req.StartTime != "" {
+	//	startTime, _ := time.Parse(time.DateOnly, req.StartTime)
+	//	//大于
+	//	predicates = append(predicates, schedulemember.StartTimeGTE(startTime))
+	//	//小于
+	//	predicates = append(predicates, schedulemember.EndTimeLTE(startTime.Add(7*24*time.Hour)))
+	//}
+	if req.MemberId > 0 {
+		predicates = append(predicates, schedulemember.MemberID(req.MemberId))
+	}
+	if req.ScheduleId > 0 {
+		predicates = append(predicates, schedulemember.ScheduleID(req.ScheduleId))
+	}
+	if req.Type != "" {
+		predicates = append(predicates, schedulemember.Type(req.Type))
+
+	}
+	lists, err := s.db.ScheduleMember.Query().Where(predicates...).
+		Offset(int(req.Page-1) * int(req.PageSize)).
+		Limit(int(req.PageSize)).All(s.ctx)
+	if err != nil {
+		err = errors.Wrap(err, "get Schedule member list failed")
+		return resp, total, err
+	}
+	for _, v := range lists {
+		resp = append(resp, s.entScheduleMemberInfo(v))
+
+	}
+
+	total, _ = s.db.ScheduleMember.Query().Where(predicates...).Count(s.ctx)
+	return
 }
 
 func (s Schedule) UpdateScheduleMemberStatus(ID int64, status int64) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := s.db.ScheduleMember.Update().Where(schedulemember.ID(ID)).SetStatus(status).Save(s.ctx)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s Schedule) ScheduleMemberInfo(ID int64) (roleInfo *schedule.ScheduleMemberInfo, err error) {
-	//TODO implement me
-	panic("implement me")
+	first, err := s.db.ScheduleMember.Query().Where(schedulemember.ID(ID)).First(s.ctx)
+	if err != nil {
+		return nil, err
+	}
+	roleInfo = s.entScheduleMemberInfo(first)
+	return
 }
