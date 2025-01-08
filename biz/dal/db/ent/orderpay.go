@@ -45,7 +45,7 @@ type OrderPay struct {
 	// 预支付交易会话标识
 	PrepayID string `json:"prepay_id,omitempty"`
 	// 支付额外信息
-	PayExtra []string `json:"pay_extra,omitempty"`
+	PayExtra []uint8 `json:"pay_extra,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderPayQuery when eager-loading is set.
 	Edges        OrderPayEdges `json:"edges"`

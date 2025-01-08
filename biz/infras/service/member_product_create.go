@@ -8,10 +8,10 @@ import (
 )
 
 func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error {
+	orderItem, _ := req.Order.QueryItem().First(m.ctx)
+	product, _ := m.db.Product.Query().Where(product2.ID(orderItem.ProductID)).First(m.ctx)
 
-	product, _ := m.db.Product.Query().Where(product2.ID(req.ProductId)).First(m.ctx)
-
-	price := float64(req.OrderAmount.Total) / float64(req.OrderItem.Number)
+	price := float64(req.OrderAmount.Total) / float64(orderItem.Number)
 	mp, err := m.db.MemberProduct.
 		Create().
 		SetStatus(0).
@@ -19,7 +19,7 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 		SetType(product.Type).
 		SetSubType(product.SubType).
 		SetMemberID(req.MemberId).
-		SetProductID(req.ProductId).
+		SetProductID(orderItem.ProductID).
 		SetVenueID(req.VenueId).
 		SetOrderID(req.Order.ID).
 		SetName(product.Name).
@@ -37,7 +37,7 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 		return err
 	}
 
-	all, _ := m.db.ProductCourses.Query().Where(productcourses.ProductID(req.ProductId)).All(m.ctx)
+	all, _ := m.db.ProductCourses.Query().Where(productcourses.ProductID(orderItem.ProductID)).All(m.ctx)
 
 	if all != nil {
 		go func() {

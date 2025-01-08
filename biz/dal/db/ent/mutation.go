@@ -41810,8 +41810,8 @@ type OrderPayMutation struct {
 	pay_way         *string
 	pay_sn          *string
 	prepay_id       *string
-	pay_extra       *[]string
-	appendpay_extra []string
+	pay_extra       *[]uint8
+	appendpay_extra []uint8
 	clearedFields   map[string]struct{}
 	_order          *int64
 	cleared_order   bool
@@ -42597,13 +42597,13 @@ func (m *OrderPayMutation) ResetPrepayID() {
 }
 
 // SetPayExtra sets the "pay_extra" field.
-func (m *OrderPayMutation) SetPayExtra(s []string) {
-	m.pay_extra = &s
+func (m *OrderPayMutation) SetPayExtra(u []uint8) {
+	m.pay_extra = &u
 	m.appendpay_extra = nil
 }
 
 // PayExtra returns the value of the "pay_extra" field in the mutation.
-func (m *OrderPayMutation) PayExtra() (r []string, exists bool) {
+func (m *OrderPayMutation) PayExtra() (r []uint8, exists bool) {
 	v := m.pay_extra
 	if v == nil {
 		return
@@ -42614,7 +42614,7 @@ func (m *OrderPayMutation) PayExtra() (r []string, exists bool) {
 // OldPayExtra returns the old "pay_extra" field's value of the OrderPay entity.
 // If the OrderPay object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrderPayMutation) OldPayExtra(ctx context.Context) (v []string, err error) {
+func (m *OrderPayMutation) OldPayExtra(ctx context.Context) (v []uint8, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPayExtra is only allowed on UpdateOne operations")
 	}
@@ -42628,13 +42628,13 @@ func (m *OrderPayMutation) OldPayExtra(ctx context.Context) (v []string, err err
 	return oldValue.PayExtra, nil
 }
 
-// AppendPayExtra adds s to the "pay_extra" field.
-func (m *OrderPayMutation) AppendPayExtra(s []string) {
-	m.appendpay_extra = append(m.appendpay_extra, s...)
+// AppendPayExtra adds u to the "pay_extra" field.
+func (m *OrderPayMutation) AppendPayExtra(u []uint8) {
+	m.appendpay_extra = append(m.appendpay_extra, u...)
 }
 
 // AppendedPayExtra returns the list of values that were appended to the "pay_extra" field in this mutation.
-func (m *OrderPayMutation) AppendedPayExtra() ([]string, bool) {
+func (m *OrderPayMutation) AppendedPayExtra() ([]uint8, bool) {
 	if len(m.appendpay_extra) == 0 {
 		return nil, false
 	}
@@ -42925,7 +42925,7 @@ func (m *OrderPayMutation) SetField(name string, value ent.Value) error {
 		m.SetPrepayID(v)
 		return nil
 	case orderpay.FieldPayExtra:
-		v, ok := value.([]string)
+		v, ok := value.([]uint8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

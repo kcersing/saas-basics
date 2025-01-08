@@ -14,9 +14,7 @@ type MemberProduct interface {
 
 type CreateMemberProductReq struct {
 	MemberId    int64
-	ProductId   int64
 	VenueId     int64
 	Order       *ent.Order
 	OrderAmount *ent.OrderAmount
-	OrderItem   *ent.OrderItem
 }

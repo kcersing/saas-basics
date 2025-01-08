@@ -16,6 +16,7 @@ type Order interface {
 	CreateSmsOrder(req CreateSmsOrderReq) (orderOne *order.OrderInfo, err error)
 
 	Buy(req *order.BuyReq) (orderOne *order.OrderInfo, err error)
+	FinishOrder(c FinishOrder) (err error)
 }
 type CreateParticipantOrderReq struct {
 	Member *ent.Member
@@ -27,4 +28,10 @@ type CreateSmsOrderReq struct {
 	VenueId int64
 	Number  int64
 	Fee     float64
+}
+type FinishOrder struct {
+	Sn            string
+	Fee           int64
+	TransactionId string
+	Transaction   []byte
 }

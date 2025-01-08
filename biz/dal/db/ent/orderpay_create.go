@@ -189,8 +189,8 @@ func (opc *OrderPayCreate) SetNillablePrepayID(s *string) *OrderPayCreate {
 }
 
 // SetPayExtra sets the "pay_extra" field.
-func (opc *OrderPayCreate) SetPayExtra(s []string) *OrderPayCreate {
-	opc.mutation.SetPayExtra(s)
+func (opc *OrderPayCreate) SetPayExtra(u []uint8) *OrderPayCreate {
+	opc.mutation.SetPayExtra(u)
 	return opc
 }
 

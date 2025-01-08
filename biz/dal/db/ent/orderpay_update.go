@@ -271,14 +271,14 @@ func (opu *OrderPayUpdate) ClearPrepayID() *OrderPayUpdate {
 }
 
 // SetPayExtra sets the "pay_extra" field.
-func (opu *OrderPayUpdate) SetPayExtra(s []string) *OrderPayUpdate {
-	opu.mutation.SetPayExtra(s)
+func (opu *OrderPayUpdate) SetPayExtra(u []uint8) *OrderPayUpdate {
+	opu.mutation.SetPayExtra(u)
 	return opu
 }
 
-// AppendPayExtra appends s to the "pay_extra" field.
-func (opu *OrderPayUpdate) AppendPayExtra(s []string) *OrderPayUpdate {
-	opu.mutation.AppendPayExtra(s)
+// AppendPayExtra appends u to the "pay_extra" field.
+func (opu *OrderPayUpdate) AppendPayExtra(u []uint8) *OrderPayUpdate {
+	opu.mutation.AppendPayExtra(u)
 	return opu
 }
 
@@ -725,14 +725,14 @@ func (opuo *OrderPayUpdateOne) ClearPrepayID() *OrderPayUpdateOne {
 }
 
 // SetPayExtra sets the "pay_extra" field.
-func (opuo *OrderPayUpdateOne) SetPayExtra(s []string) *OrderPayUpdateOne {
-	opuo.mutation.SetPayExtra(s)
+func (opuo *OrderPayUpdateOne) SetPayExtra(u []uint8) *OrderPayUpdateOne {
+	opuo.mutation.SetPayExtra(u)
 	return opuo
 }
 
-// AppendPayExtra appends s to the "pay_extra" field.
-func (opuo *OrderPayUpdateOne) AppendPayExtra(s []string) *OrderPayUpdateOne {
-	opuo.mutation.AppendPayExtra(s)
+// AppendPayExtra appends u to the "pay_extra" field.
+func (opuo *OrderPayUpdateOne) AppendPayExtra(u []uint8) *OrderPayUpdateOne {
+	opuo.mutation.AppendPayExtra(u)
 	return opuo
 }
 
