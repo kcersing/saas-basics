@@ -4312,7 +4312,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "day": {
-                    "$ref": "#/definitions/base.PeriodTime"
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/base.PeriodTime"
+                    }
                 }
             }
         },

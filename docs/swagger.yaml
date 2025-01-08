@@ -142,7 +142,9 @@ definitions:
   base.Period:
     properties:
       day:
-        $ref: '#/definitions/base.PeriodTime'
+        items:
+          $ref: '#/definitions/base.PeriodTime'
+        type: array
     type: object
   base.PeriodTime:
     properties:
