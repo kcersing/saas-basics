@@ -6,8 +6,11 @@ import (
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedulecoach"
+	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/usertimeperiod"
+	"saas/idl_gen/model/base"
 	"saas/idl_gen/model/schedule"
+	"saas/pkg/enums"
 	"time"
 )
 
@@ -112,14 +115,72 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 	return
 }
 
+func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*schedule.ScheduleCoachPeriod, total int, err error) {
+
+	date, err := time.Parse(time.DateOnly, req.Date)
+	if err != nil {
+		return nil, 0, errors.New("日期类型传值错误")
+	}
+
+	userArr, err := s.db.User.Query().Where(user.DefaultVenueIDEQ(req.VenueId)).All(s.ctx)
+
+	if userArr == nil {
+		return nil, 0, errors.New("为查询到教练")
+	}
+	for _, v := range userArr {
+
+		coach := &schedule.ScheduleCoachPeriod{
+			Date:      date.Format(time.DateOnly),
+			CoachId:   v.ID,
+			VenueId:   v.DefaultVenueID,
+			CoachName: v.Name,
+		}
+		var userTags []*base.List
+		Tags, _ := v.QueryTags().All(s.ctx)
+		if len(Tags) > 0 {
+			for _, d := range Tags {
+				userTags = append(userTags, &base.List{
+					ID:   d.ID,
+					Name: d.Title,
+				})
+			}
+		}
+		coach.Tags = userTags
+
+		period, _ := v.QueryUserTimePeriod().Where(usertimeperiod.Date(date)).First(s.ctx)
+		if period != nil {
+			coach.Period = &period.Period
+		}
+		lists, _ := s.db.ScheduleCoach.Query().Where(
+			schedulecoach.CoachID(v.ID),
+			schedulecoach.Date(date),
+			schedulecoach.Type(enums.Lessons),
+		).All(s.ctx)
+
+		if len(lists) > 0 {
+			for _, d := range lists {
+				coach.ScheduleCoachList = append(coach.ScheduleCoachList, s.entScheduleCoachInfo(d))
+			}
+		}
+		resp = append(resp, coach)
+	}
+
+	return resp, len(userArr), nil
+}
 func (s Schedule) UpdateScheduleCoachStatus(ID int64, status int64) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := s.db.ScheduleCoach.Update().Where(schedulecoach.ID(ID)).SetStatus(status).Save(s.ctx)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s Schedule) ScheduleCoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachInfo, err error) {
-	//TODO implement me
-	panic("implement me")
+	first, err := s.db.ScheduleCoach.Query().Where(schedulecoach.ID(ID)).First(s.ctx)
+	if err != nil {
+		return nil, err
+	}
+	return s.entScheduleCoachInfo(first), nil
 }
 func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.UserTimePeriodInfo, err error) {
 	startTime, err := time.Parse(time.DateOnly, req.Date)

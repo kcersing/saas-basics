@@ -224,9 +224,6 @@ service ScheduleService {
     /**教练时间段*/
     base.NilResponse UserTimePeriod(1: UserPeriodReq req)  (api.post = "/service/schedule/user-time-period")
 
-    /**教练课程时间段*/
-    base.NilResponse ScheduleCoachPeriodList(1: UserPeriodReq req)  (api.post = "/service/schedule/coach-period-list")
-
     /**约私教课*/
     base.NilResponse CreateScheduleCourse(1: CreateOrUpdateScheduleCourseReq req)  (api.post = "/service/schedule/create-cours")
     /**排团教课*/
@@ -256,6 +253,8 @@ service ScheduleService {
     base.NilResponse UpdateScheduleCoachStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/schedule-coach-status")
     base.NilResponse ScheduleCoachInfo(1: base.IDReq req) (api.post = "/service/schedule/schedule-coach-info")
 
+   /**教练课程时间段*/
+    base.NilResponse ScheduleCoachPeriodList(1: UserPeriodReq req)  (api.post = "/service/schedule/coach-period-list")
 
 
 }

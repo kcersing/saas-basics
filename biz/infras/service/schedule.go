@@ -72,9 +72,7 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 		return resp, total, err
 	}
 	for _, v := range lists {
-
 		resp = append(resp, s.entScheduleInfo(v))
-
 	}
 
 	total, _ = s.db.Schedule.Query().Where(predicates...).Count(s.ctx)

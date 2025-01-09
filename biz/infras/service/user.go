@@ -256,17 +256,19 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 }
 
 func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
-	info = new(user.UserInfo)
-
-	info.ID = userEnt.ID
-	info.Status = userEnt.Status
-	info.Username = userEnt.Username
-	info.Name = userEnt.Name
-	info.Mobile = userEnt.Mobile
-	info.CreatedAt = userEnt.CreatedAt.Format(time.DateTime)
-	info.UpdatedAt = userEnt.UpdatedAt.Format(time.DateTime)
-	info.Type = userEnt.Type
-
+	info = &user.UserInfo{
+		ID:             userEnt.ID,
+		Status:         userEnt.Status,
+		Username:       userEnt.Username,
+		Name:           userEnt.Name,
+		Mobile:         userEnt.Mobile,
+		CreatedAt:      userEnt.CreatedAt.Format(time.DateTime),
+		UpdatedAt:      userEnt.UpdatedAt.Format(time.DateTime),
+		Type:           userEnt.Type,
+		Detail:         userEnt.Detail,
+		JobTime:        &userEnt.JobTime,
+		DefaultVenueId: userEnt.DefaultVenueID,
+	}
 	if userEnt.Gender == 0 {
 		info.Gender = "女性"
 	} else if userEnt.Gender == 1 {
@@ -274,8 +276,6 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	} else {
 		info.Gender = "保密"
 	}
-
-	info.Functions = userEnt.Functions
 
 	var gender string
 	if userEnt.Gender == 0 {
@@ -287,9 +287,7 @@ func (u User) entUserInfo(userEnt ent.User) (info *user.UserInfo) {
 	}
 
 	info.Gender = gender
-	info.Detail = userEnt.Detail
-	info.JobTime = &userEnt.JobTime
-	info.DefaultVenueId = userEnt.DefaultVenueID
+
 	var venues []*user.Venues
 	Venues, _ := userEnt.QueryVenues().All(u.ctx)
 	if len(Venues) > 0 {
