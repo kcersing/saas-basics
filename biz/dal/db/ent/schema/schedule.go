@@ -24,7 +24,7 @@ func (Schedule) Fields() []ent.Field {
 		field.Int64("num").Comment("上课人数").Optional(),
 		field.Int64("num_surplus").Comment("剩余可约人数").Optional(),
 
-		field.String("date").Comment("日期").Optional(),
+		field.Time("date").Comment("日期").Optional(),
 		field.Time("start_time").Comment("开始时间").Optional(),
 		field.Time("end_time").Comment("开始时间").Optional(),
 		field.Float("price").Default(0).Comment("课程价格").Optional(),

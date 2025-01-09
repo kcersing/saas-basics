@@ -48,9 +48,9 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 	if req.StartTime != "" {
 		startTime, _ := time.Parse(time.DateOnly, req.StartTime)
 		//大于
-		predicates = append(predicates, schedule2.StartTimeLTE(startTime))
+		predicates = append(predicates, schedule2.DateGTE(startTime))
 		//小于
-		predicates = append(predicates, schedule2.EndTimeGTE(startTime.Add(7*24*time.Hour)))
+		predicates = append(predicates, schedule2.DateLTE(startTime.Add(7*24*time.Hour)))
 	}
 	if req.VenueId > 0 {
 		predicates = append(predicates, schedule2.VenueID(req.VenueId))
@@ -64,8 +64,10 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 	if req.VenueId > 0 {
 		predicates = append(predicates, schedule2.VenueID(req.VenueId))
 	}
-
-	lists, err := s.db.Schedule.Query().Where(predicates...).
+	if req.Type != "" {
+		predicates = append(predicates, schedule2.TypeEQ(req.Type))
+	}
+	lists, err := s.db.Debug().Schedule.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(s.ctx)
 	if err != nil {
@@ -86,6 +88,7 @@ func (s Schedule) ScheduleDateList(req schedule.ScheduleListReq) (map[string][]*
 	req.Page = 1
 	req.PageSize = 1000
 	req.Status = []int64{1, 2, 3, 4}
+	req.Type = "lessons"
 	lists, total, err := s.ScheduleList(req)
 	m := make(map[string][]*schedule.ScheduleInfo)
 	for _, v := range lists {

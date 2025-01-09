@@ -1200,7 +1200,7 @@ var (
 		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
 		{Name: "num", Type: field.TypeInt64, Nullable: true, Comment: "上课人数"},
 		{Name: "num_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余可约人数"},
-		{Name: "date", Type: field.TypeString, Nullable: true, Comment: "日期"},
+		{Name: "date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "课程价格", Default: 0},

@@ -136,7 +136,7 @@ func (s Schedule) entScheduleInfo(req *ent.Schedule) (info *schedule.ScheduleInf
 		PlaceId:    req.PlaceID,
 		Num:        req.Num,
 		NumSurplus: req.NumSurplus,
-		Date:       req.Date,
+		Date:       req.Date.Format(time.DateOnly),
 		StartTime:  req.StartTime.Format("15:04"),
 		EndTime:    req.EndTime.Format("15:04"),
 

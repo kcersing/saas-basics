@@ -4816,7 +4816,7 @@ type ScheduleListReq struct {
 	VenueId   int64   `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
 	Status    []int64 `thrift:"status,7,optional" form:"status" json:"status" query:"status"`
 	StartTime string  `thrift:"startTime,8,optional" form:"startTime" json:"startTime" query:"startTime"`
-	Type      int64   `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
+	Type      string  `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewScheduleListReq() *ScheduleListReq {
@@ -4830,7 +4830,7 @@ func NewScheduleListReq() *ScheduleListReq {
 		VenueId:   0,
 		Status:    []int64{},
 		StartTime: "",
-		Type:      1,
+		Type:      "",
 	}
 }
 
@@ -4843,7 +4843,7 @@ func (p *ScheduleListReq) InitDefault() {
 	p.VenueId = 0
 	p.Status = []int64{}
 	p.StartTime = ""
-	p.Type = 1
+	p.Type = ""
 }
 
 var ScheduleListReq_Page_DEFAULT int64 = 1
@@ -4918,9 +4918,9 @@ func (p *ScheduleListReq) GetStartTime() (v string) {
 	return p.StartTime
 }
 
-var ScheduleListReq_Type_DEFAULT int64 = 1
+var ScheduleListReq_Type_DEFAULT string = ""
 
-func (p *ScheduleListReq) GetType() (v int64) {
+func (p *ScheduleListReq) GetType() (v string) {
 	if !p.IsSetType() {
 		return ScheduleListReq_Type_DEFAULT
 	}
@@ -5059,7 +5059,7 @@ func (p *ScheduleListReq) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 9:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField9(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -5221,8 +5221,8 @@ func (p *ScheduleListReq) ReadField8(iprot thrift.TProtocol) error {
 }
 func (p *ScheduleListReq) ReadField9(iprot thrift.TProtocol) error {
 
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
@@ -5469,10 +5469,10 @@ WriteFieldEndError:
 
 func (p *ScheduleListReq) writeField9(oprot thrift.TProtocol) (err error) {
 	if p.IsSetType() {
-		if err = oprot.WriteFieldBegin("type", thrift.I64, 9); err != nil {
+		if err = oprot.WriteFieldBegin("type", thrift.STRING, 9); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(p.Type); err != nil {
+		if err := oprot.WriteString(p.Type); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
