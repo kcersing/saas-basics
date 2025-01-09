@@ -216,9 +216,6 @@ struct ScheduleCoachPeriod{
 	7:optional list<ScheduleCoachInfo> scheduleCoachList = {}  (api.raw = "scheduleCoachList")
 }
 
-
-
-
 service ScheduleService {
     /**添加教练时间段*/
     base.NilResponse CreateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/create-user-time-period")
@@ -229,7 +226,6 @@ service ScheduleService {
 
     /**教练课程时间段*/
     base.NilResponse ScheduleCoachPeriodList(1: UserPeriodReq req)  (api.post = "/service/schedule/coach-period-list")
-
 
     /**约私教课*/
     base.NilResponse CreateScheduleCourse(1: CreateOrUpdateScheduleCourseReq req)  (api.post = "/service/schedule/create-cours")
