@@ -34,7 +34,6 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 		SetLength(product.Length).
 		SetDeadline(product.Deadline).
 		SetValidityAt(validityAt).
-		SetIsCourse(product.IsCourse).
 		SetCancelAt(cancelAt)
 
 	switch product.SubType {
@@ -43,23 +42,27 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 		// "私教课包"
 		mpEnt.
 			SetNumber(product.Times).
-			SetNumberSurplus(product.Times)
+			SetNumberSurplus(product.Times).
+			SetIsCourse(product.IsCourse)
 
 	case enums.CourseOne:
 		//一对一私教课
 		mpEnt.
 			SetNumber(orderItem.Number).
-			SetNumberSurplus(orderItem.Number)
+			SetNumberSurplus(orderItem.Number).
+			SetIsCourse(0)
 	case enums.CourseMore:
 		//一对多私教课
 		mpEnt.
 			SetNumber(orderItem.Number).
-			SetNumberSurplus(orderItem.Number)
+			SetNumberSurplus(orderItem.Number).
+			SetIsCourse(0)
 	case enums.CardSub:
 		//次卡
 		mpEnt.
 			SetNumber(product.Times).
-			SetNumberSurplus(product.Times)
+			SetNumberSurplus(product.Times).
+			SetIsCourse(0)
 	default:
 
 	}
