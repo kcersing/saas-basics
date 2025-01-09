@@ -117,15 +117,15 @@ func (b Bootcamp) BootcampList(req bootcamp.BootcampListReq) (resp []*bootcamp.B
 		signStartAt, _ := time.Parse(time.DateTime, req.SignStartAt)
 		signEndAt, _ := time.Parse(time.DateTime, req.SignEndAt)
 
-		predicates = append(predicates, bootcamp2.SignStartAtLTE(signStartAt))
-		predicates = append(predicates, bootcamp2.SignEndAtGTE(signEndAt))
+		predicates = append(predicates, bootcamp2.SignStartAtGTE(signStartAt))
+		predicates = append(predicates, bootcamp2.SignEndAtLTE(signEndAt))
 	}
 	if req.StartAt != "" && req.EndAt != "" {
 		startAt, _ := time.Parse(time.DateTime, req.StartAt)
 		endAt, _ := time.Parse(time.DateTime, req.EndAt)
 
-		predicates = append(predicates, bootcamp2.StartAtLTE(startAt))
-		predicates = append(predicates, bootcamp2.EndAtGTE(endAt))
+		predicates = append(predicates, bootcamp2.StartAtGTE(startAt))
+		predicates = append(predicates, bootcamp2.EndAtLTE(endAt))
 	}
 	predicates = append(predicates, bootcamp2.Delete(0))
 	lists, err := b.db.Bootcamp.Query().Where(predicates...).

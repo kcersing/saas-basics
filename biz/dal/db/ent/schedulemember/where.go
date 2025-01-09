@@ -115,6 +115,11 @@ func Type(v string) predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldEQ(FieldType, v))
 }
 
+// Date applies equality check predicate on the "date" field. It's identical to DateEQ.
+func Date(v time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldDate, v))
+}
+
 // StartTime applies equality check predicate on the "start_time" field. It's identical to StartTimeEQ.
 func StartTime(v time.Time) predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldEQ(FieldStartTime, v))
@@ -758,6 +763,56 @@ func TypeEqualFold(v string) predicate.ScheduleMember {
 // TypeContainsFold applies the ContainsFold predicate on the "type" field.
 func TypeContainsFold(v string) predicate.ScheduleMember {
 	return predicate.ScheduleMember(sql.FieldContainsFold(FieldType, v))
+}
+
+// DateEQ applies the EQ predicate on the "date" field.
+func DateEQ(v time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldEQ(FieldDate, v))
+}
+
+// DateNEQ applies the NEQ predicate on the "date" field.
+func DateNEQ(v time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNEQ(FieldDate, v))
+}
+
+// DateIn applies the In predicate on the "date" field.
+func DateIn(vs ...time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIn(FieldDate, vs...))
+}
+
+// DateNotIn applies the NotIn predicate on the "date" field.
+func DateNotIn(vs ...time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotIn(FieldDate, vs...))
+}
+
+// DateGT applies the GT predicate on the "date" field.
+func DateGT(v time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGT(FieldDate, v))
+}
+
+// DateGTE applies the GTE predicate on the "date" field.
+func DateGTE(v time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldGTE(FieldDate, v))
+}
+
+// DateLT applies the LT predicate on the "date" field.
+func DateLT(v time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLT(FieldDate, v))
+}
+
+// DateLTE applies the LTE predicate on the "date" field.
+func DateLTE(v time.Time) predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldLTE(FieldDate, v))
+}
+
+// DateIsNil applies the IsNil predicate on the "date" field.
+func DateIsNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldIsNull(FieldDate))
+}
+
+// DateNotNil applies the NotNil predicate on the "date" field.
+func DateNotNil() predicate.ScheduleMember {
+	return predicate.ScheduleMember(sql.FieldNotNull(FieldDate))
 }
 
 // StartTimeEQ applies the EQ predicate on the "start_time" field.

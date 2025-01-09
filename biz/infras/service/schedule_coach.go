@@ -78,9 +78,9 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 	//if req.StartTime != "" {
 	//	startTime, _ := time.Parse(time.DateOnly, req.StartTime)
 	//	//大于
-	//	predicates = append(predicates, schedulemember.StartTimeLTE(startTime))
+	//	predicates = append(predicates, schedulemember.StartTimeGTE(startTime))
 	//	//小于
-	//	predicates = append(predicates, schedulemember.EndTimeGTE(startTime.Add(7*24*time.Hour)))
+	//	predicates = append(predicates, schedulemember.EndTimeLTE(startTime.Add(7*24*time.Hour)))
 	//}
 	if req.CoachId > 0 {
 		predicates = append(predicates, schedulecoach.CoachID(req.CoachId))

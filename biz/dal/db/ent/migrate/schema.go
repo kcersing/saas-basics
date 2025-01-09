@@ -1227,6 +1227,7 @@ var (
 		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "课程"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
+		{Name: "date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "结束时间"},
 		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
@@ -1243,7 +1244,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_coach_schedule_coachs",
-				Columns:    []*schema.Column{ScheduleCoachColumns[17]},
+				Columns:    []*schema.Column{ScheduleCoachColumns[18]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1262,7 +1263,7 @@ var (
 			{
 				Name:    "schedulecoach_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleCoachColumns[17]},
+				Columns: []*schema.Column{ScheduleCoachColumns[18]},
 			},
 		},
 	}
@@ -1280,6 +1281,7 @@ var (
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员购买课ID"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
+		{Name: "date", Type: field.TypeTime, Nullable: true, Comment: "日期"},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "结束时间"},
 		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
@@ -1299,7 +1301,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_member_schedule_members",
-				Columns:    []*schema.Column{ScheduleMemberColumns[21]},
+				Columns:    []*schema.Column{ScheduleMemberColumns[22]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1318,7 +1320,7 @@ var (
 			{
 				Name:    "schedulemember_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleMemberColumns[21]},
+				Columns: []*schema.Column{ScheduleMemberColumns[22]},
 			},
 		},
 	}

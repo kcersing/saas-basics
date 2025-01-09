@@ -1032,7 +1032,7 @@ definitions:
           type: integer
         type: array
       type:
-        type: integer
+        type: string
       venueId:
         type: integer
     type: object
@@ -1048,6 +1048,19 @@ definitions:
         type: integer
       type:
         type: string
+    type: object
+  schedule.UpdateUserTimePeriodReq:
+    properties:
+      date:
+        description: '*时间'
+        type: string
+      period:
+        $ref: '#/definitions/base.Period'
+      userId:
+        description: '*员工ID'
+        type: integer
+      venueId:
+        type: integer
     type: object
   schedule.UserPeriodReq:
     properties:
@@ -3324,6 +3337,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新角色 Summary
+  /service/schedule/coach-period-list:
+    post:
+      responses: {}
   /service/schedule/create-cours:
     post:
       description: 会员约课-私教课
@@ -3573,7 +3589,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/schedule.UserTimePeriodReq'
+          $ref: '#/definitions/schedule.UpdateUserTimePeriodReq'
       responses:
         "200":
           description: OK

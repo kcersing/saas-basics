@@ -39,6 +39,8 @@ const (
 	FieldMemberProductID = "member_product_id"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
+	// FieldDate holds the string denoting the date field in the database.
+	FieldDate = "date"
 	// FieldStartTime holds the string denoting the start_time field in the database.
 	FieldStartTime = "start_time"
 	// FieldEndTime holds the string denoting the end_time field in the database.
@@ -85,6 +87,7 @@ var Columns = []string{
 	FieldMemberID,
 	FieldMemberProductID,
 	FieldType,
+	FieldDate,
 	FieldStartTime,
 	FieldEndTime,
 	FieldSignStartTime,
@@ -199,6 +202,11 @@ func ByMemberProductID(opts ...sql.OrderTermOption) OrderOption {
 // ByType orders the results by the type field.
 func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
+// ByDate orders the results by the date field.
+func ByDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDate, opts...).ToFunc()
 }
 
 // ByStartTime orders the results by the start_time field.

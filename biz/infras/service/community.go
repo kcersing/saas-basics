@@ -115,8 +115,8 @@ func (c Community) CommunityList(req community.CommunityListReq) (resp []*commun
 		signStartAt, _ := time.Parse(time.DateTime, req.SignStartAt)
 		signEndAt, _ := time.Parse(time.DateTime, req.SignEndAt)
 
-		predicates = append(predicates, community2.SignStartAtLTE(signStartAt))
-		predicates = append(predicates, community2.SignEndAtGTE(signEndAt))
+		predicates = append(predicates, community2.SignStartAtGTE(signStartAt))
+		predicates = append(predicates, community2.SignEndAtLTE(signEndAt))
 	}
 	if req.StartAt != "" && req.EndAt != "" {
 		startAt, _ := time.Parse(time.DateTime, req.StartAt)

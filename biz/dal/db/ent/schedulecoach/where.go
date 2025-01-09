@@ -110,6 +110,11 @@ func Type(v string) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldType, v))
 }
 
+// Date applies equality check predicate on the "date" field. It's identical to DateEQ.
+func Date(v time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEQ(FieldDate, v))
+}
+
 // StartTime applies equality check predicate on the "start_time" field. It's identical to StartTimeEQ.
 func StartTime(v time.Time) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldStartTime, v))
@@ -693,6 +698,56 @@ func TypeEqualFold(v string) predicate.ScheduleCoach {
 // TypeContainsFold applies the ContainsFold predicate on the "type" field.
 func TypeContainsFold(v string) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldContainsFold(FieldType, v))
+}
+
+// DateEQ applies the EQ predicate on the "date" field.
+func DateEQ(v time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEQ(FieldDate, v))
+}
+
+// DateNEQ applies the NEQ predicate on the "date" field.
+func DateNEQ(v time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNEQ(FieldDate, v))
+}
+
+// DateIn applies the In predicate on the "date" field.
+func DateIn(vs ...time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldIn(FieldDate, vs...))
+}
+
+// DateNotIn applies the NotIn predicate on the "date" field.
+func DateNotIn(vs ...time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNotIn(FieldDate, vs...))
+}
+
+// DateGT applies the GT predicate on the "date" field.
+func DateGT(v time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldGT(FieldDate, v))
+}
+
+// DateGTE applies the GTE predicate on the "date" field.
+func DateGTE(v time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldGTE(FieldDate, v))
+}
+
+// DateLT applies the LT predicate on the "date" field.
+func DateLT(v time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldLT(FieldDate, v))
+}
+
+// DateLTE applies the LTE predicate on the "date" field.
+func DateLTE(v time.Time) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldLTE(FieldDate, v))
+}
+
+// DateIsNil applies the IsNil predicate on the "date" field.
+func DateIsNil() predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldIsNull(FieldDate))
+}
+
+// DateNotNil applies the NotNil predicate on the "date" field.
+func DateNotNil() predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNotNull(FieldDate))
 }
 
 // StartTimeEQ applies the EQ predicate on the "start_time" field.

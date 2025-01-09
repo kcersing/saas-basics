@@ -89,8 +89,8 @@ func (m Member) MemberFullList(req member.MemberListReq) (resp []*member.MemberI
 		startAt, _ := time.Parse(time.DateTime, req.StartCreatedAt)
 		endAt, _ := time.Parse(time.DateTime, req.EndCreatedAt)
 
-		predicates = append(predicates, member2.CreatedAtLTE(startAt))
-		predicates = append(predicates, member2.CreatedAtGTE(endAt))
+		predicates = append(predicates, member2.CreatedAtGTE(startAt))
+		predicates = append(predicates, member2.CreatedAtLTE(endAt))
 	}
 
 	predicates = append(predicates, member2.Delete(0))
@@ -205,8 +205,8 @@ func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.Me
 		startAt, _ := time.Parse(time.DateTime, req.StartCreatedAt)
 		endAt, _ := time.Parse(time.DateTime, req.EndCreatedAt)
 
-		predicates = append(predicates, member2.CreatedAtLTE(startAt))
-		predicates = append(predicates, member2.CreatedAtGTE(endAt))
+		predicates = append(predicates, member2.CreatedAtGTE(startAt))
+		predicates = append(predicates, member2.CreatedAtLTE(endAt))
 	}
 
 	predicates = append(predicates, member2.Delete(0))

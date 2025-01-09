@@ -3002,6 +3002,11 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/schedule/coach-period-list": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/schedule/create-cours": {
             "post": {
                 "description": "会员约课-私教课",
@@ -3388,7 +3393,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schedule.UserTimePeriodReq"
+                            "$ref": "#/definitions/schedule.UpdateUserTimePeriodReq"
                         }
                     }
                 ],
@@ -5671,7 +5676,7 @@ const docTemplate = `{
                     }
                 },
                 "type": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "venueId": {
                     "type": "integer"
@@ -5695,6 +5700,25 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string"
+                }
+            }
+        },
+        "schedule.UpdateUserTimePeriodReq": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "description": "*时间",
+                    "type": "string"
+                },
+                "period": {
+                    "$ref": "#/definitions/base.Period"
+                },
+                "userId": {
+                    "description": "*员工ID",
+                    "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

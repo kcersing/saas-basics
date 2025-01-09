@@ -61,9 +61,6 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 	if len(req.Product) > 0 {
 		predicates = append(predicates, schedule2.ProductIDIn(req.Product...))
 	}
-	if req.VenueId > 0 {
-		predicates = append(predicates, schedule2.VenueID(req.VenueId))
-	}
 	if req.Type != "" {
 		predicates = append(predicates, schedule2.TypeEQ(req.Type))
 	}

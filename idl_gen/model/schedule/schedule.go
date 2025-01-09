@@ -7898,23 +7898,25 @@ func (p *UpdateUserTimePeriodReq) String() string {
 }
 
 type ScheduleCoachPeriod struct {
-	Date      string       `thrift:"date,1,optional" form:"date" json:"date" query:"date"`
-	CoachId   int64        `thrift:"coachId,2,optional" form:"coachId" json:"coachId" query:"coachId"`
-	VenueId   int64        `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
-	CoachName string       `thrift:"coachName,4,optional" form:"coachName" json:"coachName" query:"coachName"`
-	Tags      []*base.List `thrift:"tags,5,optional" form:"tags" json:"tags" query:"tags"`
-	Period    *base.Period `thrift:"period,6,optional" form:"period" json:"period" query:"period"`
+	Date              string               `thrift:"date,1,optional" form:"date" json:"date" query:"date"`
+	CoachId           int64                `thrift:"coachId,2,optional" form:"coachId" json:"coachId" query:"coachId"`
+	VenueId           int64                `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
+	CoachName         string               `thrift:"coachName,4,optional" form:"coachName" json:"coachName" query:"coachName"`
+	Tags              []*base.List         `thrift:"tags,5,optional" form:"tags" json:"tags" query:"tags"`
+	Period            *base.Period         `thrift:"period,6,optional" form:"period" json:"period" query:"period"`
+	ScheduleCoachList []*ScheduleCoachInfo `thrift:"scheduleCoachList,7,optional" form:"scheduleCoachList" json:"scheduleCoachList" query:"scheduleCoachList"`
 }
 
 func NewScheduleCoachPeriod() *ScheduleCoachPeriod {
 	return &ScheduleCoachPeriod{
 
-		Date:      "",
-		CoachId:   0,
-		VenueId:   0,
-		CoachName: "",
-		Tags:      []*base.List{},
-		Period:    &base.Period{},
+		Date:              "",
+		CoachId:           0,
+		VenueId:           0,
+		CoachName:         "",
+		Tags:              []*base.List{},
+		Period:            &base.Period{},
+		ScheduleCoachList: []*ScheduleCoachInfo{},
 	}
 }
 
@@ -7925,6 +7927,7 @@ func (p *ScheduleCoachPeriod) InitDefault() {
 	p.CoachName = ""
 	p.Tags = []*base.List{}
 	p.Period = &base.Period{}
+	p.ScheduleCoachList = []*ScheduleCoachInfo{}
 }
 
 var ScheduleCoachPeriod_Date_DEFAULT string = ""
@@ -7981,6 +7984,15 @@ func (p *ScheduleCoachPeriod) GetPeriod() (v *base.Period) {
 	return p.Period
 }
 
+var ScheduleCoachPeriod_ScheduleCoachList_DEFAULT []*ScheduleCoachInfo = []*ScheduleCoachInfo{}
+
+func (p *ScheduleCoachPeriod) GetScheduleCoachList() (v []*ScheduleCoachInfo) {
+	if !p.IsSetScheduleCoachList() {
+		return ScheduleCoachPeriod_ScheduleCoachList_DEFAULT
+	}
+	return p.ScheduleCoachList
+}
+
 var fieldIDToName_ScheduleCoachPeriod = map[int16]string{
 	1: "date",
 	2: "coachId",
@@ -7988,6 +8000,7 @@ var fieldIDToName_ScheduleCoachPeriod = map[int16]string{
 	4: "coachName",
 	5: "tags",
 	6: "period",
+	7: "scheduleCoachList",
 }
 
 func (p *ScheduleCoachPeriod) IsSetDate() bool {
@@ -8012,6 +8025,10 @@ func (p *ScheduleCoachPeriod) IsSetTags() bool {
 
 func (p *ScheduleCoachPeriod) IsSetPeriod() bool {
 	return p.Period != nil
+}
+
+func (p *ScheduleCoachPeriod) IsSetScheduleCoachList() bool {
+	return p.ScheduleCoachList != nil
 }
 
 func (p *ScheduleCoachPeriod) Read(iprot thrift.TProtocol) (err error) {
@@ -8076,6 +8093,14 @@ func (p *ScheduleCoachPeriod) Read(iprot thrift.TProtocol) (err error) {
 		case 6:
 			if fieldTypeId == thrift.STRUCT {
 				if err = p.ReadField6(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 7:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField7(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -8185,6 +8210,29 @@ func (p *ScheduleCoachPeriod) ReadField6(iprot thrift.TProtocol) error {
 	p.Period = _field
 	return nil
 }
+func (p *ScheduleCoachPeriod) ReadField7(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]*ScheduleCoachInfo, 0, size)
+	values := make([]ScheduleCoachInfo, size)
+	for i := 0; i < size; i++ {
+		_elem := &values[i]
+		_elem.InitDefault()
+
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.ScheduleCoachList = _field
+	return nil
+}
 
 func (p *ScheduleCoachPeriod) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -8214,6 +8262,10 @@ func (p *ScheduleCoachPeriod) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField6(oprot); err != nil {
 			fieldId = 6
+			goto WriteFieldError
+		}
+		if err = p.writeField7(oprot); err != nil {
+			fieldId = 7
 			goto WriteFieldError
 		}
 	}
@@ -8356,6 +8408,33 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
+func (p *ScheduleCoachPeriod) writeField7(oprot thrift.TProtocol) (err error) {
+	if p.IsSetScheduleCoachList() {
+		if err = oprot.WriteFieldBegin("scheduleCoachList", thrift.LIST, 7); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.ScheduleCoachList)); err != nil {
+			return err
+		}
+		for _, v := range p.ScheduleCoachList {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
 func (p *ScheduleCoachPeriod) String() string {
 	if p == nil {
 		return "<nil>"
@@ -8371,7 +8450,7 @@ type ScheduleService interface {
 	UpdateScheduleUserTimePeriod(ctx context.Context, req *UpdateUserTimePeriodReq) (r *base.NilResponse, err error)
 	/**教练时间段*/
 	UserTimePeriod(ctx context.Context, req *UserPeriodReq) (r *base.NilResponse, err error)
-	/**教练时间段*/
+	/**教练课程时间段*/
 	ScheduleCoachPeriodList(ctx context.Context, req *UserPeriodReq) (r *base.NilResponse, err error)
 	/**约私教课*/
 	CreateScheduleCourse(ctx context.Context, req *CreateOrUpdateScheduleCourseReq) (r *base.NilResponse, err error)

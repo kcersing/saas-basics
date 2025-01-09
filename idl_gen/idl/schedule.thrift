@@ -213,6 +213,7 @@ struct ScheduleCoachPeriod{
 	4:optional string coachName = "" (api.raw = "coachName")
     5:optional list<base.List> tags = {}  (api.raw = "tags")
 	6:optional base.Period period = {} (api.raw = "period")
+	7:optional list<ScheduleCoachInfo> scheduleCoachList = {}  (api.raw = "scheduleCoachList")
 }
 
 
@@ -226,7 +227,7 @@ service ScheduleService {
     /**教练时间段*/
     base.NilResponse UserTimePeriod(1: UserPeriodReq req)  (api.post = "/service/schedule/user-time-period")
 
-    /**教练时间段*/
+    /**教练课程时间段*/
     base.NilResponse ScheduleCoachPeriodList(1: UserPeriodReq req)  (api.post = "/service/schedule/coach-period-list")
 
 

@@ -189,6 +189,20 @@ func (smc *ScheduleMemberCreate) SetNillableType(s *string) *ScheduleMemberCreat
 	return smc
 }
 
+// SetDate sets the "date" field.
+func (smc *ScheduleMemberCreate) SetDate(t time.Time) *ScheduleMemberCreate {
+	smc.mutation.SetDate(t)
+	return smc
+}
+
+// SetNillableDate sets the "date" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableDate(t *time.Time) *ScheduleMemberCreate {
+	if t != nil {
+		smc.SetDate(*t)
+	}
+	return smc
+}
+
 // SetStartTime sets the "start_time" field.
 func (smc *ScheduleMemberCreate) SetStartTime(t time.Time) *ScheduleMemberCreate {
 	smc.mutation.SetStartTime(t)
@@ -484,6 +498,10 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 	if value, ok := smc.mutation.GetType(); ok {
 		_spec.SetField(schedulemember.FieldType, field.TypeString, value)
 		_node.Type = value
+	}
+	if value, ok := smc.mutation.Date(); ok {
+		_spec.SetField(schedulemember.FieldDate, field.TypeTime, value)
+		_node.Date = value
 	}
 	if value, ok := smc.mutation.StartTime(); ok {
 		_spec.SetField(schedulemember.FieldStartTime, field.TypeTime, value)

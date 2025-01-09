@@ -84,6 +84,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 			SetVenueID(req.VenueId).
 			SetCoachID(req.CoachId).
 			SetProductID(req.ProductId).
+			SetDate(data).
 			SetStartTime(startTime).
 			SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
 			SetStatus(1).
@@ -168,6 +169,7 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 		SetVenueID(req.VenueId).
 		SetProductID(req.ProductId).
 		SetStartTime(req.StartTime).
+		SetDate(req.One.Date).
 		SetEndTime(req.StartTime.Add(time.Duration(memberProduct.Length) * time.Minute)).
 		SetMemberProductID(memberProduct.ID).
 		SetStatus(1).
@@ -274,6 +276,7 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 		SetPlaceID(req.PlaceId).
 		SetProductID(req.ProductId).
 		SetStartTime(startTime).
+		SetDate(data).
 		SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
 		SetStatus(1).
 		SetCoachName(u.Name).
@@ -321,6 +324,7 @@ func (s Schedule) CreateMemberSubscribeLessons(req schedule.MemberSubscribeReq) 
 		SetVenueID(one.VenueID).
 		SetPlaceID(one.PlaceID).
 		SetMemberProductID(req.MemberProductId).
+		SetDate(one.Date).
 		SetStartTime(one.StartTime).
 		SetEndTime(one.StartTime).
 		SetStatus(0).

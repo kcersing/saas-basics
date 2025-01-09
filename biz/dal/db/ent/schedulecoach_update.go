@@ -270,6 +270,26 @@ func (scu *ScheduleCoachUpdate) ClearType() *ScheduleCoachUpdate {
 	return scu
 }
 
+// SetDate sets the "date" field.
+func (scu *ScheduleCoachUpdate) SetDate(t time.Time) *ScheduleCoachUpdate {
+	scu.mutation.SetDate(t)
+	return scu
+}
+
+// SetNillableDate sets the "date" field if the given value is not nil.
+func (scu *ScheduleCoachUpdate) SetNillableDate(t *time.Time) *ScheduleCoachUpdate {
+	if t != nil {
+		scu.SetDate(*t)
+	}
+	return scu
+}
+
+// ClearDate clears the value of the "date" field.
+func (scu *ScheduleCoachUpdate) ClearDate() *ScheduleCoachUpdate {
+	scu.mutation.ClearDate()
+	return scu
+}
+
 // SetStartTime sets the "start_time" field.
 func (scu *ScheduleCoachUpdate) SetStartTime(t time.Time) *ScheduleCoachUpdate {
 	scu.mutation.SetStartTime(t)
@@ -528,6 +548,12 @@ func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if scu.mutation.TypeCleared() {
 		_spec.ClearField(schedulecoach.FieldType, field.TypeString)
+	}
+	if value, ok := scu.mutation.Date(); ok {
+		_spec.SetField(schedulecoach.FieldDate, field.TypeTime, value)
+	}
+	if scu.mutation.DateCleared() {
+		_spec.ClearField(schedulecoach.FieldDate, field.TypeTime)
 	}
 	if value, ok := scu.mutation.StartTime(); ok {
 		_spec.SetField(schedulecoach.FieldStartTime, field.TypeTime, value)
@@ -855,6 +881,26 @@ func (scuo *ScheduleCoachUpdateOne) ClearType() *ScheduleCoachUpdateOne {
 	return scuo
 }
 
+// SetDate sets the "date" field.
+func (scuo *ScheduleCoachUpdateOne) SetDate(t time.Time) *ScheduleCoachUpdateOne {
+	scuo.mutation.SetDate(t)
+	return scuo
+}
+
+// SetNillableDate sets the "date" field if the given value is not nil.
+func (scuo *ScheduleCoachUpdateOne) SetNillableDate(t *time.Time) *ScheduleCoachUpdateOne {
+	if t != nil {
+		scuo.SetDate(*t)
+	}
+	return scuo
+}
+
+// ClearDate clears the value of the "date" field.
+func (scuo *ScheduleCoachUpdateOne) ClearDate() *ScheduleCoachUpdateOne {
+	scuo.mutation.ClearDate()
+	return scuo
+}
+
 // SetStartTime sets the "start_time" field.
 func (scuo *ScheduleCoachUpdateOne) SetStartTime(t time.Time) *ScheduleCoachUpdateOne {
 	scuo.mutation.SetStartTime(t)
@@ -1143,6 +1189,12 @@ func (scuo *ScheduleCoachUpdateOne) sqlSave(ctx context.Context) (_node *Schedul
 	}
 	if scuo.mutation.TypeCleared() {
 		_spec.ClearField(schedulecoach.FieldType, field.TypeString)
+	}
+	if value, ok := scuo.mutation.Date(); ok {
+		_spec.SetField(schedulecoach.FieldDate, field.TypeTime, value)
+	}
+	if scuo.mutation.DateCleared() {
+		_spec.ClearField(schedulecoach.FieldDate, field.TypeTime)
 	}
 	if value, ok := scuo.mutation.StartTime(); ok {
 		_spec.SetField(schedulecoach.FieldStartTime, field.TypeTime, value)

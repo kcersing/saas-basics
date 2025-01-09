@@ -45,6 +45,8 @@ type ScheduleMember struct {
 	MemberProductID int64 `json:"member_product_id,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
+	// 日期
+	Date time.Time `json:"date,omitempty"`
 	// 开始时间
 	StartTime time.Time `json:"start_time,omitempty"`
 	// 结束时间
@@ -102,7 +104,7 @@ func (*ScheduleMember) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldRemark:
 			values[i] = new(sql.NullString)
-		case schedulemember.FieldCreatedAt, schedulemember.FieldUpdatedAt, schedulemember.FieldStartTime, schedulemember.FieldEndTime, schedulemember.FieldSignStartTime, schedulemember.FieldSignEndTime:
+		case schedulemember.FieldCreatedAt, schedulemember.FieldUpdatedAt, schedulemember.FieldDate, schedulemember.FieldStartTime, schedulemember.FieldEndTime, schedulemember.FieldSignStartTime, schedulemember.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -196,6 +198,12 @@ func (sm *ScheduleMember) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
 				sm.Type = value.String
+			}
+		case schedulemember.FieldDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field date", values[i])
+			} else if value.Valid {
+				sm.Date = value.Time
 			}
 		case schedulemember.FieldStartTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -329,6 +337,9 @@ func (sm *ScheduleMember) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(sm.Type)
+	builder.WriteString(", ")
+	builder.WriteString("date=")
+	builder.WriteString(sm.Date.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("start_time=")
 	builder.WriteString(sm.StartTime.Format(time.ANSIC))

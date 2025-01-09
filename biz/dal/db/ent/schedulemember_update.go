@@ -298,6 +298,26 @@ func (smu *ScheduleMemberUpdate) ClearType() *ScheduleMemberUpdate {
 	return smu
 }
 
+// SetDate sets the "date" field.
+func (smu *ScheduleMemberUpdate) SetDate(t time.Time) *ScheduleMemberUpdate {
+	smu.mutation.SetDate(t)
+	return smu
+}
+
+// SetNillableDate sets the "date" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableDate(t *time.Time) *ScheduleMemberUpdate {
+	if t != nil {
+		smu.SetDate(*t)
+	}
+	return smu
+}
+
+// ClearDate clears the value of the "date" field.
+func (smu *ScheduleMemberUpdate) ClearDate() *ScheduleMemberUpdate {
+	smu.mutation.ClearDate()
+	return smu
+}
+
 // SetStartTime sets the "start_time" field.
 func (smu *ScheduleMemberUpdate) SetStartTime(t time.Time) *ScheduleMemberUpdate {
 	smu.mutation.SetStartTime(t)
@@ -632,6 +652,12 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if smu.mutation.TypeCleared() {
 		_spec.ClearField(schedulemember.FieldType, field.TypeString)
+	}
+	if value, ok := smu.mutation.Date(); ok {
+		_spec.SetField(schedulemember.FieldDate, field.TypeTime, value)
+	}
+	if smu.mutation.DateCleared() {
+		_spec.ClearField(schedulemember.FieldDate, field.TypeTime)
 	}
 	if value, ok := smu.mutation.StartTime(); ok {
 		_spec.SetField(schedulemember.FieldStartTime, field.TypeTime, value)
@@ -1007,6 +1033,26 @@ func (smuo *ScheduleMemberUpdateOne) ClearType() *ScheduleMemberUpdateOne {
 	return smuo
 }
 
+// SetDate sets the "date" field.
+func (smuo *ScheduleMemberUpdateOne) SetDate(t time.Time) *ScheduleMemberUpdateOne {
+	smuo.mutation.SetDate(t)
+	return smuo
+}
+
+// SetNillableDate sets the "date" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableDate(t *time.Time) *ScheduleMemberUpdateOne {
+	if t != nil {
+		smuo.SetDate(*t)
+	}
+	return smuo
+}
+
+// ClearDate clears the value of the "date" field.
+func (smuo *ScheduleMemberUpdateOne) ClearDate() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearDate()
+	return smuo
+}
+
 // SetStartTime sets the "start_time" field.
 func (smuo *ScheduleMemberUpdateOne) SetStartTime(t time.Time) *ScheduleMemberUpdateOne {
 	smuo.mutation.SetStartTime(t)
@@ -1371,6 +1417,12 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	}
 	if smuo.mutation.TypeCleared() {
 		_spec.ClearField(schedulemember.FieldType, field.TypeString)
+	}
+	if value, ok := smuo.mutation.Date(); ok {
+		_spec.SetField(schedulemember.FieldDate, field.TypeTime, value)
+	}
+	if smuo.mutation.DateCleared() {
+		_spec.ClearField(schedulemember.FieldDate, field.TypeTime)
 	}
 	if value, ok := smuo.mutation.StartTime(); ok {
 		_spec.SetField(schedulemember.FieldStartTime, field.TypeTime, value)
