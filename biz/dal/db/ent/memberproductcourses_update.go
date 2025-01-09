@@ -189,6 +189,33 @@ func (mpcu *MemberProductCoursesUpdate) ClearNumber() *MemberProductCoursesUpdat
 	return mpcu
 }
 
+// SetNumberSurplus sets the "number_surplus" field.
+func (mpcu *MemberProductCoursesUpdate) SetNumberSurplus(i int64) *MemberProductCoursesUpdate {
+	mpcu.mutation.ResetNumberSurplus()
+	mpcu.mutation.SetNumberSurplus(i)
+	return mpcu
+}
+
+// SetNillableNumberSurplus sets the "number_surplus" field if the given value is not nil.
+func (mpcu *MemberProductCoursesUpdate) SetNillableNumberSurplus(i *int64) *MemberProductCoursesUpdate {
+	if i != nil {
+		mpcu.SetNumberSurplus(*i)
+	}
+	return mpcu
+}
+
+// AddNumberSurplus adds i to the "number_surplus" field.
+func (mpcu *MemberProductCoursesUpdate) AddNumberSurplus(i int64) *MemberProductCoursesUpdate {
+	mpcu.mutation.AddNumberSurplus(i)
+	return mpcu
+}
+
+// ClearNumberSurplus clears the value of the "number_surplus" field.
+func (mpcu *MemberProductCoursesUpdate) ClearNumberSurplus() *MemberProductCoursesUpdate {
+	mpcu.mutation.ClearNumberSurplus()
+	return mpcu
+}
+
 // SetMemberProductID sets the "member_product_id" field.
 func (mpcu *MemberProductCoursesUpdate) SetMemberProductID(i int64) *MemberProductCoursesUpdate {
 	mpcu.mutation.SetMemberProductID(i)
@@ -392,6 +419,15 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if mpcu.mutation.NumberCleared() {
 		_spec.ClearField(memberproductcourses.FieldNumber, field.TypeInt64)
+	}
+	if value, ok := mpcu.mutation.NumberSurplus(); ok {
+		_spec.SetField(memberproductcourses.FieldNumberSurplus, field.TypeInt64, value)
+	}
+	if value, ok := mpcu.mutation.AddedNumberSurplus(); ok {
+		_spec.AddField(memberproductcourses.FieldNumberSurplus, field.TypeInt64, value)
+	}
+	if mpcu.mutation.NumberSurplusCleared() {
+		_spec.ClearField(memberproductcourses.FieldNumberSurplus, field.TypeInt64)
 	}
 	if value, ok := mpcu.mutation.CoursesID(); ok {
 		_spec.SetField(memberproductcourses.FieldCoursesID, field.TypeInt64, value)
@@ -640,6 +676,33 @@ func (mpcuo *MemberProductCoursesUpdateOne) ClearNumber() *MemberProductCoursesU
 	return mpcuo
 }
 
+// SetNumberSurplus sets the "number_surplus" field.
+func (mpcuo *MemberProductCoursesUpdateOne) SetNumberSurplus(i int64) *MemberProductCoursesUpdateOne {
+	mpcuo.mutation.ResetNumberSurplus()
+	mpcuo.mutation.SetNumberSurplus(i)
+	return mpcuo
+}
+
+// SetNillableNumberSurplus sets the "number_surplus" field if the given value is not nil.
+func (mpcuo *MemberProductCoursesUpdateOne) SetNillableNumberSurplus(i *int64) *MemberProductCoursesUpdateOne {
+	if i != nil {
+		mpcuo.SetNumberSurplus(*i)
+	}
+	return mpcuo
+}
+
+// AddNumberSurplus adds i to the "number_surplus" field.
+func (mpcuo *MemberProductCoursesUpdateOne) AddNumberSurplus(i int64) *MemberProductCoursesUpdateOne {
+	mpcuo.mutation.AddNumberSurplus(i)
+	return mpcuo
+}
+
+// ClearNumberSurplus clears the value of the "number_surplus" field.
+func (mpcuo *MemberProductCoursesUpdateOne) ClearNumberSurplus() *MemberProductCoursesUpdateOne {
+	mpcuo.mutation.ClearNumberSurplus()
+	return mpcuo
+}
+
 // SetMemberProductID sets the "member_product_id" field.
 func (mpcuo *MemberProductCoursesUpdateOne) SetMemberProductID(i int64) *MemberProductCoursesUpdateOne {
 	mpcuo.mutation.SetMemberProductID(i)
@@ -873,6 +936,15 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if mpcuo.mutation.NumberCleared() {
 		_spec.ClearField(memberproductcourses.FieldNumber, field.TypeInt64)
+	}
+	if value, ok := mpcuo.mutation.NumberSurplus(); ok {
+		_spec.SetField(memberproductcourses.FieldNumberSurplus, field.TypeInt64, value)
+	}
+	if value, ok := mpcuo.mutation.AddedNumberSurplus(); ok {
+		_spec.AddField(memberproductcourses.FieldNumberSurplus, field.TypeInt64, value)
+	}
+	if mpcuo.mutation.NumberSurplusCleared() {
+		_spec.ClearField(memberproductcourses.FieldNumberSurplus, field.TypeInt64)
 	}
 	if value, ok := mpcuo.mutation.CoursesID(); ok {
 		_spec.SetField(memberproductcourses.FieldCoursesID, field.TypeInt64, value)

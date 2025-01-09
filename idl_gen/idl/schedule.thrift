@@ -54,7 +54,6 @@ struct ScheduleMemberInfo {
 	14:string signEndTime          (api.raw = "signEndTime")
 	15:i64 status                (api.raw = "status")
 	16:i64 memberProductId       (api.raw = "memberProductId")
-
 	17:string placeName                  (api.raw = "placeName")
 	18:string venueName                  (api.raw = "venueName")
 	19:string memberName                 (api.raw = "memberName")
@@ -64,6 +63,10 @@ struct ScheduleMemberInfo {
 	23:string coachName     (api.raw = "coachName")
 	24:string mobile                     (api.raw = "mobile")
 	25: base.Seat seat  (api.raw = "seat")
+
+	26:i64 productId      (api.raw = "productId")
+
+
 }
 struct ScheduleCoachInfo{
 	1:i64 id              (api.raw = "id")
@@ -75,7 +78,7 @@ struct ScheduleCoachInfo{
 	7:string type           (api.raw = "type")
 	8:string createdAt      (api.raw = "createdAt")
 	9:string updatedAt      (api.raw = "updatedAt")
-// 	10:string date           (api.raw = "date")
+
 	11:string startTime      (api.raw = "startTime")
 	12:string endTime        (api.raw = "endTime")
 	13:string signStartTime  (api.raw = "signStartTime")
@@ -83,19 +86,18 @@ struct ScheduleCoachInfo{
 	15:i64 status          (api.raw = "status")
 
 	16:string scheduleName  (api.raw = "scheduleName")
-//	17:string productName  (api.raw = "productName")
-//	18:string venueName     (api.raw = "venueName")
-//	19:string placeName     (api.raw = "placeName")
 	20:string coachName     (api.raw = "coachName")
 //	21:string coachAvatar   (api.raw = "coachAvatar")
+ 	10:string date           (api.raw = "date")
+	18:string venueName     (api.raw = "venueName")
+	19:string placeName     (api.raw = "placeName")
 
-
-
-
-//	22:string mobile                     (api.raw = "mobile")
-//	23:string memberName                 (api.raw = "memberName")
+	21:i64 memberId      (api.raw = "memberId")
+	22:string memberMobile                     (api.raw = "memberMobile")
+	23:string memberName                 (api.raw = "memberName")
 //	24:string memberAvatar               (api.raw = "memberAvatar")
-//	25:string memberProductName          (api.raw = "memberProductName")
+	25:string memberProductName          (api.raw = "memberProductName")
+	26:i64 memberProductId      (api.raw = "memberProductId")
 //	27:string remark                     (api.raw = "remark")
 //	28:string mRemark                    (api.raw = "mRemark")
 }
@@ -196,20 +198,37 @@ struct UserPeriodReq{
     3: optional i64 venueId = 0 (api.raw = "venueId")
 }
 struct UpdateUserTimePeriodReq{
- /**员工ID*/
+    /**员工ID*/
     1: optional i64 userId = 0 (api.raw = "userId")
     /**时间*/
     2: optional string date = "" (api.raw = "date")
     3: optional i64 venueId = 0 (api.raw = "venueId")
     4:  optional base.Period period = {} (api.raw = "period")
 }
+
+struct ScheduleCoachPeriod{
+    1:optional string date = "" (api.raw = "date")
+	2:optional i64 coachId = 0 (api.raw = "coachId")
+	3:optional i64 venueId = 0 (api.raw = "venueId")
+	4:optional string coachName = "" (api.raw = "coachName")
+    5:optional list<base.List> tags = {}  (api.raw = "tags")
+	6:optional base.Period period = {} (api.raw = "period")
+}
+
+
+
+
 service ScheduleService {
     /**添加教练时间段*/
     base.NilResponse CreateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/create-user-time-period")
     /**更新教练时间段*/
     base.NilResponse UpdateScheduleUserTimePeriod(1: UpdateUserTimePeriodReq req)  (api.post = "/service/schedule/update-user-time-period")
-
+    /**教练时间段*/
     base.NilResponse UserTimePeriod(1: UserPeriodReq req)  (api.post = "/service/schedule/user-time-period")
+
+    /**教练时间段*/
+    base.NilResponse ScheduleCoachPeriodList(1: UserPeriodReq req)  (api.post = "/service/schedule/coach-period-list")
+
 
     /**约私教课*/
     base.NilResponse CreateScheduleCourse(1: CreateOrUpdateScheduleCourseReq req)  (api.post = "/service/schedule/create-cours")

@@ -7,6 +7,7 @@ import (
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/product"
+	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
@@ -75,12 +76,11 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 
 		_, err = tx.ScheduleCoach.Create().
 			SetSchedule(one).
-			SetScheduleName(one.Name).
 			SetType(req.Type).
 			SetVenueID(req.VenueId).
 			SetCoachID(req.CoachId).
-			SetStartTime(startTime).
 			SetProductID(req.ProductId).
+			SetStartTime(startTime).
 			SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
 			SetStatus(1).
 			SetCoachName(u.Name).
@@ -93,7 +93,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 	}
 
 	if req.MemberId != 0 {
-		err = NewSchedule(s.ctx, s.c).CreateScheduleMemberCourse(do.CreateScheduleMemberCourse{
+		err = s.CreateScheduleMemberCourse(do.CreateScheduleMemberCourse{
 			One:       one,
 			Type:      req.Type,
 			VenueId:   req.VenueId,
@@ -134,8 +134,12 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 			return err
 		}
 	} else {
+
 		memberProduct, err = s.db.MemberProduct.Query().
-			Where(memberproduct.ProductID(req.ProductId), memberproduct.CountSurplusGT(0)).
+			Where(
+				memberproduct.ProductID(req.ProductId),
+				memberproduct.NumberSurplusGT(0),
+			).
 			First(s.ctx)
 		if err != nil {
 			return err
@@ -147,7 +151,7 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 		return err
 	}
 
-	if (memberProduct.CountSurplus - 1) < 0 {
+	if (memberProduct.NumberSurplus - 1) < 0 {
 		hlog.Error("该会员课程不足:", req)
 		err = errors.Wrap(err, "该会员课程不足")
 		return err
@@ -157,8 +161,8 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 		SetSchedule(req.One).
 		SetType(req.Type).
 		SetMemberID(req.MemberId).
-		SetPlaceID(req.PlaceId).
 		SetVenueID(req.VenueId).
+		SetProductID(req.ProductId).
 		SetStartTime(req.StartTime).
 		SetEndTime(req.StartTime.Add(time.Duration(memberProduct.Length) * time.Minute)).
 		SetMemberProductID(memberProduct.ID).
@@ -174,7 +178,7 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 	_, err = s.db.MemberProduct.
 		Update().
 		Where(memberproduct.IDEQ(memberProduct.ID)).
-		AddCountSurplus(-1).
+		SetNumberSurplus(-1).
 		Save(s.ctx)
 	if err != nil {
 		hlog.Error("无法会员课程节数异常:", req)
@@ -257,7 +261,6 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 
 	_, err = tx.ScheduleCoach.Create().
 		SetSchedule(one).
-		SetScheduleName(one.Name).
 		SetType("lessons").
 		SetVenueID(req.VenueId).
 		SetCoachID(req.CoachId).
@@ -277,4 +280,52 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 		return err
 	}
 	return nil
+}
+func (s Schedule) CreateMemberSubscribeLessons(req schedule.MemberSubscribeReq) error {
+
+	one, err := s.db.Schedule.Query().Where(schedule2.IDEQ(req.ScheduleId)).First(s.ctx)
+
+	if err != nil {
+		hlog.Error("未查询到课程:", req)
+		err = errors.Wrap(err, "未查询到课程")
+		return err
+	}
+	mp, err := s.db.MemberProduct.Query().
+		Where(memberproduct.ID(req.MemberProductId)).
+		First(s.ctx)
+	if err != nil {
+		hlog.Error("未查询到该会员:", req)
+		err = errors.Wrap(err, "未查询到该会员")
+		return err
+	}
+	m, err := s.db.MemberProfile.Query().
+		Where(memberprofile.MemberIDEQ(req.MemberId)).
+		First(s.ctx)
+	if err != nil {
+		hlog.Error("未查询到该会员:", req)
+		err = errors.Wrap(err, "未查询到该会员")
+		return err
+	}
+	_, err = s.db.ScheduleMember.Create().
+		SetSchedule(one).
+		SetType(one.Type).
+		SetMemberID(req.MemberId).
+		SetProductID(one.ProductID).
+		SetVenueID(one.VenueID).
+		SetPlaceID(one.PlaceID).
+		SetMemberProductID(req.MemberProductId).
+		SetStartTime(one.StartTime).
+		SetEndTime(one.StartTime).
+		SetStatus(0).
+		SetMemberName(m.Name).
+		SetMemberProductName(mp.Name).
+		SetSeat(*req.Seat).
+		Save(s.ctx)
+	if err != nil {
+		hlog.Error("无法创建会员课程:", req)
+		err = errors.Wrap(err, "无法创建会员课程")
+		return err
+	}
+	return nil
+
 }

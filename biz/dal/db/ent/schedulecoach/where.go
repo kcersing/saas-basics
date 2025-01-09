@@ -105,11 +105,6 @@ func ProductID(v int64) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldProductID, v))
 }
 
-// ScheduleName applies equality check predicate on the "schedule_name" field. It's identical to ScheduleNameEQ.
-func ScheduleName(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldEQ(FieldScheduleName, v))
-}
-
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
 func Type(v string) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldType, v))
@@ -138,6 +133,11 @@ func SignEndTime(v time.Time) predicate.ScheduleCoach {
 // CoachName applies equality check predicate on the "coach_name" field. It's identical to CoachNameEQ.
 func CoachName(v string) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldCoachName, v))
+}
+
+// Remark applies equality check predicate on the "remark" field. It's identical to RemarkEQ.
+func Remark(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEQ(FieldRemark, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -620,81 +620,6 @@ func ProductIDNotNil() predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldNotNull(FieldProductID))
 }
 
-// ScheduleNameEQ applies the EQ predicate on the "schedule_name" field.
-func ScheduleNameEQ(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldEQ(FieldScheduleName, v))
-}
-
-// ScheduleNameNEQ applies the NEQ predicate on the "schedule_name" field.
-func ScheduleNameNEQ(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldNEQ(FieldScheduleName, v))
-}
-
-// ScheduleNameIn applies the In predicate on the "schedule_name" field.
-func ScheduleNameIn(vs ...string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldIn(FieldScheduleName, vs...))
-}
-
-// ScheduleNameNotIn applies the NotIn predicate on the "schedule_name" field.
-func ScheduleNameNotIn(vs ...string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldNotIn(FieldScheduleName, vs...))
-}
-
-// ScheduleNameGT applies the GT predicate on the "schedule_name" field.
-func ScheduleNameGT(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldGT(FieldScheduleName, v))
-}
-
-// ScheduleNameGTE applies the GTE predicate on the "schedule_name" field.
-func ScheduleNameGTE(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldGTE(FieldScheduleName, v))
-}
-
-// ScheduleNameLT applies the LT predicate on the "schedule_name" field.
-func ScheduleNameLT(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldLT(FieldScheduleName, v))
-}
-
-// ScheduleNameLTE applies the LTE predicate on the "schedule_name" field.
-func ScheduleNameLTE(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldLTE(FieldScheduleName, v))
-}
-
-// ScheduleNameContains applies the Contains predicate on the "schedule_name" field.
-func ScheduleNameContains(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldContains(FieldScheduleName, v))
-}
-
-// ScheduleNameHasPrefix applies the HasPrefix predicate on the "schedule_name" field.
-func ScheduleNameHasPrefix(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldHasPrefix(FieldScheduleName, v))
-}
-
-// ScheduleNameHasSuffix applies the HasSuffix predicate on the "schedule_name" field.
-func ScheduleNameHasSuffix(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldHasSuffix(FieldScheduleName, v))
-}
-
-// ScheduleNameIsNil applies the IsNil predicate on the "schedule_name" field.
-func ScheduleNameIsNil() predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldIsNull(FieldScheduleName))
-}
-
-// ScheduleNameNotNil applies the NotNil predicate on the "schedule_name" field.
-func ScheduleNameNotNil() predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldNotNull(FieldScheduleName))
-}
-
-// ScheduleNameEqualFold applies the EqualFold predicate on the "schedule_name" field.
-func ScheduleNameEqualFold(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldEqualFold(FieldScheduleName, v))
-}
-
-// ScheduleNameContainsFold applies the ContainsFold predicate on the "schedule_name" field.
-func ScheduleNameContainsFold(v string) predicate.ScheduleCoach {
-	return predicate.ScheduleCoach(sql.FieldContainsFold(FieldScheduleName, v))
-}
-
 // TypeEQ applies the EQ predicate on the "type" field.
 func TypeEQ(v string) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldEQ(FieldType, v))
@@ -1043,6 +968,81 @@ func CoachNameEqualFold(v string) predicate.ScheduleCoach {
 // CoachNameContainsFold applies the ContainsFold predicate on the "coach_name" field.
 func CoachNameContainsFold(v string) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(sql.FieldContainsFold(FieldCoachName, v))
+}
+
+// RemarkEQ applies the EQ predicate on the "remark" field.
+func RemarkEQ(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEQ(FieldRemark, v))
+}
+
+// RemarkNEQ applies the NEQ predicate on the "remark" field.
+func RemarkNEQ(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNEQ(FieldRemark, v))
+}
+
+// RemarkIn applies the In predicate on the "remark" field.
+func RemarkIn(vs ...string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldIn(FieldRemark, vs...))
+}
+
+// RemarkNotIn applies the NotIn predicate on the "remark" field.
+func RemarkNotIn(vs ...string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNotIn(FieldRemark, vs...))
+}
+
+// RemarkGT applies the GT predicate on the "remark" field.
+func RemarkGT(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldGT(FieldRemark, v))
+}
+
+// RemarkGTE applies the GTE predicate on the "remark" field.
+func RemarkGTE(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldGTE(FieldRemark, v))
+}
+
+// RemarkLT applies the LT predicate on the "remark" field.
+func RemarkLT(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldLT(FieldRemark, v))
+}
+
+// RemarkLTE applies the LTE predicate on the "remark" field.
+func RemarkLTE(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldLTE(FieldRemark, v))
+}
+
+// RemarkContains applies the Contains predicate on the "remark" field.
+func RemarkContains(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldContains(FieldRemark, v))
+}
+
+// RemarkHasPrefix applies the HasPrefix predicate on the "remark" field.
+func RemarkHasPrefix(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldHasPrefix(FieldRemark, v))
+}
+
+// RemarkHasSuffix applies the HasSuffix predicate on the "remark" field.
+func RemarkHasSuffix(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldHasSuffix(FieldRemark, v))
+}
+
+// RemarkIsNil applies the IsNil predicate on the "remark" field.
+func RemarkIsNil() predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldIsNull(FieldRemark))
+}
+
+// RemarkNotNil applies the NotNil predicate on the "remark" field.
+func RemarkNotNil() predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldNotNull(FieldRemark))
+}
+
+// RemarkEqualFold applies the EqualFold predicate on the "remark" field.
+func RemarkEqualFold(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldEqualFold(FieldRemark, v))
+}
+
+// RemarkContainsFold applies the ContainsFold predicate on the "remark" field.
+func RemarkContainsFold(v string) predicate.ScheduleCoach {
+	return predicate.ScheduleCoach(sql.FieldContainsFold(FieldRemark, v))
 }
 
 // HasSchedule applies the HasEdge predicate on the "schedule" edge.

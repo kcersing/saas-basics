@@ -175,3 +175,8 @@ func _usertimeperiodMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _schedulecoachperiodlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

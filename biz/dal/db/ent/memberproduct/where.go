@@ -140,14 +140,19 @@ func Length(v int64) predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldEQ(FieldLength, v))
 }
 
-// Count applies equality check predicate on the "count" field. It's identical to CountEQ.
-func Count(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldCount, v))
+// Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
+func Number(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldNumber, v))
 }
 
-// CountSurplus applies equality check predicate on the "count_surplus" field. It's identical to CountSurplusEQ.
-func CountSurplus(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldCountSurplus, v))
+// NumberSurplus applies equality check predicate on the "number_surplus" field. It's identical to NumberSurplusEQ.
+func NumberSurplus(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldNumberSurplus, v))
+}
+
+// IsCourse applies equality check predicate on the "is_course" field. It's identical to IsCourseEQ.
+func IsCourse(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldIsCourse, v))
 }
 
 // Deadline applies equality check predicate on the "deadline" field. It's identical to DeadlineEQ.
@@ -1095,104 +1100,154 @@ func LengthNotNil() predicate.MemberProduct {
 	return predicate.MemberProduct(sql.FieldNotNull(FieldLength))
 }
 
-// CountEQ applies the EQ predicate on the "count" field.
-func CountEQ(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldCount, v))
+// NumberEQ applies the EQ predicate on the "number" field.
+func NumberEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldNumber, v))
 }
 
-// CountNEQ applies the NEQ predicate on the "count" field.
-func CountNEQ(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNEQ(FieldCount, v))
+// NumberNEQ applies the NEQ predicate on the "number" field.
+func NumberNEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNEQ(FieldNumber, v))
 }
 
-// CountIn applies the In predicate on the "count" field.
-func CountIn(vs ...int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIn(FieldCount, vs...))
+// NumberIn applies the In predicate on the "number" field.
+func NumberIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIn(FieldNumber, vs...))
 }
 
-// CountNotIn applies the NotIn predicate on the "count" field.
-func CountNotIn(vs ...int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotIn(FieldCount, vs...))
+// NumberNotIn applies the NotIn predicate on the "number" field.
+func NumberNotIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotIn(FieldNumber, vs...))
 }
 
-// CountGT applies the GT predicate on the "count" field.
-func CountGT(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGT(FieldCount, v))
+// NumberGT applies the GT predicate on the "number" field.
+func NumberGT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGT(FieldNumber, v))
 }
 
-// CountGTE applies the GTE predicate on the "count" field.
-func CountGTE(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGTE(FieldCount, v))
+// NumberGTE applies the GTE predicate on the "number" field.
+func NumberGTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGTE(FieldNumber, v))
 }
 
-// CountLT applies the LT predicate on the "count" field.
-func CountLT(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLT(FieldCount, v))
+// NumberLT applies the LT predicate on the "number" field.
+func NumberLT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLT(FieldNumber, v))
 }
 
-// CountLTE applies the LTE predicate on the "count" field.
-func CountLTE(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLTE(FieldCount, v))
+// NumberLTE applies the LTE predicate on the "number" field.
+func NumberLTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLTE(FieldNumber, v))
 }
 
-// CountIsNil applies the IsNil predicate on the "count" field.
-func CountIsNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIsNull(FieldCount))
+// NumberIsNil applies the IsNil predicate on the "number" field.
+func NumberIsNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIsNull(FieldNumber))
 }
 
-// CountNotNil applies the NotNil predicate on the "count" field.
-func CountNotNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotNull(FieldCount))
+// NumberNotNil applies the NotNil predicate on the "number" field.
+func NumberNotNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotNull(FieldNumber))
 }
 
-// CountSurplusEQ applies the EQ predicate on the "count_surplus" field.
-func CountSurplusEQ(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldEQ(FieldCountSurplus, v))
+// NumberSurplusEQ applies the EQ predicate on the "number_surplus" field.
+func NumberSurplusEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldNumberSurplus, v))
 }
 
-// CountSurplusNEQ applies the NEQ predicate on the "count_surplus" field.
-func CountSurplusNEQ(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNEQ(FieldCountSurplus, v))
+// NumberSurplusNEQ applies the NEQ predicate on the "number_surplus" field.
+func NumberSurplusNEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNEQ(FieldNumberSurplus, v))
 }
 
-// CountSurplusIn applies the In predicate on the "count_surplus" field.
-func CountSurplusIn(vs ...int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIn(FieldCountSurplus, vs...))
+// NumberSurplusIn applies the In predicate on the "number_surplus" field.
+func NumberSurplusIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIn(FieldNumberSurplus, vs...))
 }
 
-// CountSurplusNotIn applies the NotIn predicate on the "count_surplus" field.
-func CountSurplusNotIn(vs ...int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotIn(FieldCountSurplus, vs...))
+// NumberSurplusNotIn applies the NotIn predicate on the "number_surplus" field.
+func NumberSurplusNotIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotIn(FieldNumberSurplus, vs...))
 }
 
-// CountSurplusGT applies the GT predicate on the "count_surplus" field.
-func CountSurplusGT(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGT(FieldCountSurplus, v))
+// NumberSurplusGT applies the GT predicate on the "number_surplus" field.
+func NumberSurplusGT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGT(FieldNumberSurplus, v))
 }
 
-// CountSurplusGTE applies the GTE predicate on the "count_surplus" field.
-func CountSurplusGTE(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldGTE(FieldCountSurplus, v))
+// NumberSurplusGTE applies the GTE predicate on the "number_surplus" field.
+func NumberSurplusGTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGTE(FieldNumberSurplus, v))
 }
 
-// CountSurplusLT applies the LT predicate on the "count_surplus" field.
-func CountSurplusLT(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLT(FieldCountSurplus, v))
+// NumberSurplusLT applies the LT predicate on the "number_surplus" field.
+func NumberSurplusLT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLT(FieldNumberSurplus, v))
 }
 
-// CountSurplusLTE applies the LTE predicate on the "count_surplus" field.
-func CountSurplusLTE(v int64) predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldLTE(FieldCountSurplus, v))
+// NumberSurplusLTE applies the LTE predicate on the "number_surplus" field.
+func NumberSurplusLTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLTE(FieldNumberSurplus, v))
 }
 
-// CountSurplusIsNil applies the IsNil predicate on the "count_surplus" field.
-func CountSurplusIsNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldIsNull(FieldCountSurplus))
+// NumberSurplusIsNil applies the IsNil predicate on the "number_surplus" field.
+func NumberSurplusIsNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIsNull(FieldNumberSurplus))
 }
 
-// CountSurplusNotNil applies the NotNil predicate on the "count_surplus" field.
-func CountSurplusNotNil() predicate.MemberProduct {
-	return predicate.MemberProduct(sql.FieldNotNull(FieldCountSurplus))
+// NumberSurplusNotNil applies the NotNil predicate on the "number_surplus" field.
+func NumberSurplusNotNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotNull(FieldNumberSurplus))
+}
+
+// IsCourseEQ applies the EQ predicate on the "is_course" field.
+func IsCourseEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldEQ(FieldIsCourse, v))
+}
+
+// IsCourseNEQ applies the NEQ predicate on the "is_course" field.
+func IsCourseNEQ(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNEQ(FieldIsCourse, v))
+}
+
+// IsCourseIn applies the In predicate on the "is_course" field.
+func IsCourseIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIn(FieldIsCourse, vs...))
+}
+
+// IsCourseNotIn applies the NotIn predicate on the "is_course" field.
+func IsCourseNotIn(vs ...int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotIn(FieldIsCourse, vs...))
+}
+
+// IsCourseGT applies the GT predicate on the "is_course" field.
+func IsCourseGT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGT(FieldIsCourse, v))
+}
+
+// IsCourseGTE applies the GTE predicate on the "is_course" field.
+func IsCourseGTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldGTE(FieldIsCourse, v))
+}
+
+// IsCourseLT applies the LT predicate on the "is_course" field.
+func IsCourseLT(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLT(FieldIsCourse, v))
+}
+
+// IsCourseLTE applies the LTE predicate on the "is_course" field.
+func IsCourseLTE(v int64) predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldLTE(FieldIsCourse, v))
+}
+
+// IsCourseIsNil applies the IsNil predicate on the "is_course" field.
+func IsCourseIsNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldIsNull(FieldIsCourse))
+}
+
+// IsCourseNotNil applies the NotNil predicate on the "is_course" field.
+func IsCourseNotNil() predicate.MemberProduct {
+	return predicate.MemberProduct(sql.FieldNotNull(FieldIsCourse))
 }
 
 // DeadlineEQ applies the EQ predicate on the "deadline" field.

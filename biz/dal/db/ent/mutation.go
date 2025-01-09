@@ -27009,10 +27009,12 @@ type MemberProductMutation struct {
 	addduration                    *int64
 	length                         *int64
 	addlength                      *int64
-	count                          *int64
-	addcount                       *int64
-	count_surplus                  *int64
-	addcount_surplus               *int64
+	number                         *int64
+	addnumber                      *int64
+	number_surplus                 *int64
+	addnumber_surplus              *int64
+	is_course                      *int64
+	addis_course                   *int64
 	deadline                       *int64
 	adddeadline                    *int64
 	validity_at                    *time.Time
@@ -28184,144 +28186,214 @@ func (m *MemberProductMutation) ResetLength() {
 	delete(m.clearedFields, memberproduct.FieldLength)
 }
 
-// SetCount sets the "count" field.
-func (m *MemberProductMutation) SetCount(i int64) {
-	m.count = &i
-	m.addcount = nil
+// SetNumber sets the "number" field.
+func (m *MemberProductMutation) SetNumber(i int64) {
+	m.number = &i
+	m.addnumber = nil
 }
 
-// Count returns the value of the "count" field in the mutation.
-func (m *MemberProductMutation) Count() (r int64, exists bool) {
-	v := m.count
+// Number returns the value of the "number" field in the mutation.
+func (m *MemberProductMutation) Number() (r int64, exists bool) {
+	v := m.number
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCount returns the old "count" field's value of the MemberProduct entity.
+// OldNumber returns the old "number" field's value of the MemberProduct entity.
 // If the MemberProduct object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberProductMutation) OldCount(ctx context.Context) (v int64, err error) {
+func (m *MemberProductMutation) OldNumber(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCount is only allowed on UpdateOne operations")
+		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCount requires an ID field in the mutation")
+		return v, errors.New("OldNumber requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCount: %w", err)
+		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
 	}
-	return oldValue.Count, nil
+	return oldValue.Number, nil
 }
 
-// AddCount adds i to the "count" field.
-func (m *MemberProductMutation) AddCount(i int64) {
-	if m.addcount != nil {
-		*m.addcount += i
+// AddNumber adds i to the "number" field.
+func (m *MemberProductMutation) AddNumber(i int64) {
+	if m.addnumber != nil {
+		*m.addnumber += i
 	} else {
-		m.addcount = &i
+		m.addnumber = &i
 	}
 }
 
-// AddedCount returns the value that was added to the "count" field in this mutation.
-func (m *MemberProductMutation) AddedCount() (r int64, exists bool) {
-	v := m.addcount
+// AddedNumber returns the value that was added to the "number" field in this mutation.
+func (m *MemberProductMutation) AddedNumber() (r int64, exists bool) {
+	v := m.addnumber
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ClearCount clears the value of the "count" field.
-func (m *MemberProductMutation) ClearCount() {
-	m.count = nil
-	m.addcount = nil
-	m.clearedFields[memberproduct.FieldCount] = struct{}{}
+// ClearNumber clears the value of the "number" field.
+func (m *MemberProductMutation) ClearNumber() {
+	m.number = nil
+	m.addnumber = nil
+	m.clearedFields[memberproduct.FieldNumber] = struct{}{}
 }
 
-// CountCleared returns if the "count" field was cleared in this mutation.
-func (m *MemberProductMutation) CountCleared() bool {
-	_, ok := m.clearedFields[memberproduct.FieldCount]
+// NumberCleared returns if the "number" field was cleared in this mutation.
+func (m *MemberProductMutation) NumberCleared() bool {
+	_, ok := m.clearedFields[memberproduct.FieldNumber]
 	return ok
 }
 
-// ResetCount resets all changes to the "count" field.
-func (m *MemberProductMutation) ResetCount() {
-	m.count = nil
-	m.addcount = nil
-	delete(m.clearedFields, memberproduct.FieldCount)
+// ResetNumber resets all changes to the "number" field.
+func (m *MemberProductMutation) ResetNumber() {
+	m.number = nil
+	m.addnumber = nil
+	delete(m.clearedFields, memberproduct.FieldNumber)
 }
 
-// SetCountSurplus sets the "count_surplus" field.
-func (m *MemberProductMutation) SetCountSurplus(i int64) {
-	m.count_surplus = &i
-	m.addcount_surplus = nil
+// SetNumberSurplus sets the "number_surplus" field.
+func (m *MemberProductMutation) SetNumberSurplus(i int64) {
+	m.number_surplus = &i
+	m.addnumber_surplus = nil
 }
 
-// CountSurplus returns the value of the "count_surplus" field in the mutation.
-func (m *MemberProductMutation) CountSurplus() (r int64, exists bool) {
-	v := m.count_surplus
+// NumberSurplus returns the value of the "number_surplus" field in the mutation.
+func (m *MemberProductMutation) NumberSurplus() (r int64, exists bool) {
+	v := m.number_surplus
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCountSurplus returns the old "count_surplus" field's value of the MemberProduct entity.
+// OldNumberSurplus returns the old "number_surplus" field's value of the MemberProduct entity.
 // If the MemberProduct object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemberProductMutation) OldCountSurplus(ctx context.Context) (v int64, err error) {
+func (m *MemberProductMutation) OldNumberSurplus(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCountSurplus is only allowed on UpdateOne operations")
+		return v, errors.New("OldNumberSurplus is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCountSurplus requires an ID field in the mutation")
+		return v, errors.New("OldNumberSurplus requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCountSurplus: %w", err)
+		return v, fmt.Errorf("querying old value for OldNumberSurplus: %w", err)
 	}
-	return oldValue.CountSurplus, nil
+	return oldValue.NumberSurplus, nil
 }
 
-// AddCountSurplus adds i to the "count_surplus" field.
-func (m *MemberProductMutation) AddCountSurplus(i int64) {
-	if m.addcount_surplus != nil {
-		*m.addcount_surplus += i
+// AddNumberSurplus adds i to the "number_surplus" field.
+func (m *MemberProductMutation) AddNumberSurplus(i int64) {
+	if m.addnumber_surplus != nil {
+		*m.addnumber_surplus += i
 	} else {
-		m.addcount_surplus = &i
+		m.addnumber_surplus = &i
 	}
 }
 
-// AddedCountSurplus returns the value that was added to the "count_surplus" field in this mutation.
-func (m *MemberProductMutation) AddedCountSurplus() (r int64, exists bool) {
-	v := m.addcount_surplus
+// AddedNumberSurplus returns the value that was added to the "number_surplus" field in this mutation.
+func (m *MemberProductMutation) AddedNumberSurplus() (r int64, exists bool) {
+	v := m.addnumber_surplus
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ClearCountSurplus clears the value of the "count_surplus" field.
-func (m *MemberProductMutation) ClearCountSurplus() {
-	m.count_surplus = nil
-	m.addcount_surplus = nil
-	m.clearedFields[memberproduct.FieldCountSurplus] = struct{}{}
+// ClearNumberSurplus clears the value of the "number_surplus" field.
+func (m *MemberProductMutation) ClearNumberSurplus() {
+	m.number_surplus = nil
+	m.addnumber_surplus = nil
+	m.clearedFields[memberproduct.FieldNumberSurplus] = struct{}{}
 }
 
-// CountSurplusCleared returns if the "count_surplus" field was cleared in this mutation.
-func (m *MemberProductMutation) CountSurplusCleared() bool {
-	_, ok := m.clearedFields[memberproduct.FieldCountSurplus]
+// NumberSurplusCleared returns if the "number_surplus" field was cleared in this mutation.
+func (m *MemberProductMutation) NumberSurplusCleared() bool {
+	_, ok := m.clearedFields[memberproduct.FieldNumberSurplus]
 	return ok
 }
 
-// ResetCountSurplus resets all changes to the "count_surplus" field.
-func (m *MemberProductMutation) ResetCountSurplus() {
-	m.count_surplus = nil
-	m.addcount_surplus = nil
-	delete(m.clearedFields, memberproduct.FieldCountSurplus)
+// ResetNumberSurplus resets all changes to the "number_surplus" field.
+func (m *MemberProductMutation) ResetNumberSurplus() {
+	m.number_surplus = nil
+	m.addnumber_surplus = nil
+	delete(m.clearedFields, memberproduct.FieldNumberSurplus)
+}
+
+// SetIsCourse sets the "is_course" field.
+func (m *MemberProductMutation) SetIsCourse(i int64) {
+	m.is_course = &i
+	m.addis_course = nil
+}
+
+// IsCourse returns the value of the "is_course" field in the mutation.
+func (m *MemberProductMutation) IsCourse() (r int64, exists bool) {
+	v := m.is_course
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsCourse returns the old "is_course" field's value of the MemberProduct entity.
+// If the MemberProduct object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberProductMutation) OldIsCourse(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsCourse is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsCourse requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsCourse: %w", err)
+	}
+	return oldValue.IsCourse, nil
+}
+
+// AddIsCourse adds i to the "is_course" field.
+func (m *MemberProductMutation) AddIsCourse(i int64) {
+	if m.addis_course != nil {
+		*m.addis_course += i
+	} else {
+		m.addis_course = &i
+	}
+}
+
+// AddedIsCourse returns the value that was added to the "is_course" field in this mutation.
+func (m *MemberProductMutation) AddedIsCourse() (r int64, exists bool) {
+	v := m.addis_course
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsCourse clears the value of the "is_course" field.
+func (m *MemberProductMutation) ClearIsCourse() {
+	m.is_course = nil
+	m.addis_course = nil
+	m.clearedFields[memberproduct.FieldIsCourse] = struct{}{}
+}
+
+// IsCourseCleared returns if the "is_course" field was cleared in this mutation.
+func (m *MemberProductMutation) IsCourseCleared() bool {
+	_, ok := m.clearedFields[memberproduct.FieldIsCourse]
+	return ok
+}
+
+// ResetIsCourse resets all changes to the "is_course" field.
+func (m *MemberProductMutation) ResetIsCourse() {
+	m.is_course = nil
+	m.addis_course = nil
+	delete(m.clearedFields, memberproduct.FieldIsCourse)
 }
 
 // SetDeadline sets the "deadline" field.
@@ -28782,7 +28854,7 @@ func (m *MemberProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberProductMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 23)
 	if m.created_at != nil {
 		fields = append(fields, memberproduct.FieldCreatedAt)
 	}
@@ -28834,11 +28906,14 @@ func (m *MemberProductMutation) Fields() []string {
 	if m.length != nil {
 		fields = append(fields, memberproduct.FieldLength)
 	}
-	if m.count != nil {
-		fields = append(fields, memberproduct.FieldCount)
+	if m.number != nil {
+		fields = append(fields, memberproduct.FieldNumber)
 	}
-	if m.count_surplus != nil {
-		fields = append(fields, memberproduct.FieldCountSurplus)
+	if m.number_surplus != nil {
+		fields = append(fields, memberproduct.FieldNumberSurplus)
+	}
+	if m.is_course != nil {
+		fields = append(fields, memberproduct.FieldIsCourse)
 	}
 	if m.deadline != nil {
 		fields = append(fields, memberproduct.FieldDeadline)
@@ -28891,10 +28966,12 @@ func (m *MemberProductMutation) Field(name string) (ent.Value, bool) {
 		return m.Duration()
 	case memberproduct.FieldLength:
 		return m.Length()
-	case memberproduct.FieldCount:
-		return m.Count()
-	case memberproduct.FieldCountSurplus:
-		return m.CountSurplus()
+	case memberproduct.FieldNumber:
+		return m.Number()
+	case memberproduct.FieldNumberSurplus:
+		return m.NumberSurplus()
+	case memberproduct.FieldIsCourse:
+		return m.IsCourse()
 	case memberproduct.FieldDeadline:
 		return m.Deadline()
 	case memberproduct.FieldValidityAt:
@@ -28944,10 +29021,12 @@ func (m *MemberProductMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldDuration(ctx)
 	case memberproduct.FieldLength:
 		return m.OldLength(ctx)
-	case memberproduct.FieldCount:
-		return m.OldCount(ctx)
-	case memberproduct.FieldCountSurplus:
-		return m.OldCountSurplus(ctx)
+	case memberproduct.FieldNumber:
+		return m.OldNumber(ctx)
+	case memberproduct.FieldNumberSurplus:
+		return m.OldNumberSurplus(ctx)
+	case memberproduct.FieldIsCourse:
+		return m.OldIsCourse(ctx)
 	case memberproduct.FieldDeadline:
 		return m.OldDeadline(ctx)
 	case memberproduct.FieldValidityAt:
@@ -29082,19 +29161,26 @@ func (m *MemberProductMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLength(v)
 		return nil
-	case memberproduct.FieldCount:
+	case memberproduct.FieldNumber:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCount(v)
+		m.SetNumber(v)
 		return nil
-	case memberproduct.FieldCountSurplus:
+	case memberproduct.FieldNumberSurplus:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCountSurplus(v)
+		m.SetNumberSurplus(v)
+		return nil
+	case memberproduct.FieldIsCourse:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsCourse(v)
 		return nil
 	case memberproduct.FieldDeadline:
 		v, ok := value.(int64)
@@ -29155,11 +29241,14 @@ func (m *MemberProductMutation) AddedFields() []string {
 	if m.addlength != nil {
 		fields = append(fields, memberproduct.FieldLength)
 	}
-	if m.addcount != nil {
-		fields = append(fields, memberproduct.FieldCount)
+	if m.addnumber != nil {
+		fields = append(fields, memberproduct.FieldNumber)
 	}
-	if m.addcount_surplus != nil {
-		fields = append(fields, memberproduct.FieldCountSurplus)
+	if m.addnumber_surplus != nil {
+		fields = append(fields, memberproduct.FieldNumberSurplus)
+	}
+	if m.addis_course != nil {
+		fields = append(fields, memberproduct.FieldIsCourse)
 	}
 	if m.adddeadline != nil {
 		fields = append(fields, memberproduct.FieldDeadline)
@@ -29192,10 +29281,12 @@ func (m *MemberProductMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedDuration()
 	case memberproduct.FieldLength:
 		return m.AddedLength()
-	case memberproduct.FieldCount:
-		return m.AddedCount()
-	case memberproduct.FieldCountSurplus:
-		return m.AddedCountSurplus()
+	case memberproduct.FieldNumber:
+		return m.AddedNumber()
+	case memberproduct.FieldNumberSurplus:
+		return m.AddedNumberSurplus()
+	case memberproduct.FieldIsCourse:
+		return m.AddedIsCourse()
 	case memberproduct.FieldDeadline:
 		return m.AddedDeadline()
 	}
@@ -29277,19 +29368,26 @@ func (m *MemberProductMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddLength(v)
 		return nil
-	case memberproduct.FieldCount:
+	case memberproduct.FieldNumber:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddCount(v)
+		m.AddNumber(v)
 		return nil
-	case memberproduct.FieldCountSurplus:
+	case memberproduct.FieldNumberSurplus:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddCountSurplus(v)
+		m.AddNumberSurplus(v)
+		return nil
+	case memberproduct.FieldIsCourse:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsCourse(v)
 		return nil
 	case memberproduct.FieldDeadline:
 		v, ok := value.(int64)
@@ -29357,11 +29455,14 @@ func (m *MemberProductMutation) ClearedFields() []string {
 	if m.FieldCleared(memberproduct.FieldLength) {
 		fields = append(fields, memberproduct.FieldLength)
 	}
-	if m.FieldCleared(memberproduct.FieldCount) {
-		fields = append(fields, memberproduct.FieldCount)
+	if m.FieldCleared(memberproduct.FieldNumber) {
+		fields = append(fields, memberproduct.FieldNumber)
 	}
-	if m.FieldCleared(memberproduct.FieldCountSurplus) {
-		fields = append(fields, memberproduct.FieldCountSurplus)
+	if m.FieldCleared(memberproduct.FieldNumberSurplus) {
+		fields = append(fields, memberproduct.FieldNumberSurplus)
+	}
+	if m.FieldCleared(memberproduct.FieldIsCourse) {
+		fields = append(fields, memberproduct.FieldIsCourse)
 	}
 	if m.FieldCleared(memberproduct.FieldDeadline) {
 		fields = append(fields, memberproduct.FieldDeadline)
@@ -29437,11 +29538,14 @@ func (m *MemberProductMutation) ClearField(name string) error {
 	case memberproduct.FieldLength:
 		m.ClearLength()
 		return nil
-	case memberproduct.FieldCount:
-		m.ClearCount()
+	case memberproduct.FieldNumber:
+		m.ClearNumber()
 		return nil
-	case memberproduct.FieldCountSurplus:
-		m.ClearCountSurplus()
+	case memberproduct.FieldNumberSurplus:
+		m.ClearNumberSurplus()
+		return nil
+	case memberproduct.FieldIsCourse:
+		m.ClearIsCourse()
 		return nil
 	case memberproduct.FieldDeadline:
 		m.ClearDeadline()
@@ -29511,11 +29615,14 @@ func (m *MemberProductMutation) ResetField(name string) error {
 	case memberproduct.FieldLength:
 		m.ResetLength()
 		return nil
-	case memberproduct.FieldCount:
-		m.ResetCount()
+	case memberproduct.FieldNumber:
+		m.ResetNumber()
 		return nil
-	case memberproduct.FieldCountSurplus:
-		m.ResetCountSurplus()
+	case memberproduct.FieldNumberSurplus:
+		m.ResetNumberSurplus()
+		return nil
+	case memberproduct.FieldIsCourse:
+		m.ResetIsCourse()
 		return nil
 	case memberproduct.FieldDeadline:
 		m.ResetDeadline()
@@ -29713,31 +29820,33 @@ func (m *MemberProductMutation) ResetEdge(name string) error {
 // MemberProductCoursesMutation represents an operation that mutates the MemberProductCourses nodes in the graph.
 type MemberProductCoursesMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int64
-	created_at    *time.Time
-	updated_at    *time.Time
-	delete        *int64
-	adddelete     *int64
-	created_id    *int64
-	addcreated_id *int64
-	status        *int64
-	addstatus     *int64
-	_type         *string
-	name          *string
-	number        *int64
-	addnumber     *int64
-	courses_id    *int64
-	addcourses_id *int64
-	clearedFields map[string]struct{}
-	nodeC         *int64
-	clearednodeC  bool
-	nodeL         *int64
-	clearednodeL  bool
-	done          bool
-	oldValue      func(context.Context) (*MemberProductCourses, error)
-	predicates    []predicate.MemberProductCourses
+	op                Op
+	typ               string
+	id                *int64
+	created_at        *time.Time
+	updated_at        *time.Time
+	delete            *int64
+	adddelete         *int64
+	created_id        *int64
+	addcreated_id     *int64
+	status            *int64
+	addstatus         *int64
+	_type             *string
+	name              *string
+	number            *int64
+	addnumber         *int64
+	number_surplus    *int64
+	addnumber_surplus *int64
+	courses_id        *int64
+	addcourses_id     *int64
+	clearedFields     map[string]struct{}
+	nodeC             *int64
+	clearednodeC      bool
+	nodeL             *int64
+	clearednodeL      bool
+	done              bool
+	oldValue          func(context.Context) (*MemberProductCourses, error)
+	predicates        []predicate.MemberProductCourses
 }
 
 var _ ent.Mutation = (*MemberProductCoursesMutation)(nil)
@@ -30320,6 +30429,76 @@ func (m *MemberProductCoursesMutation) ResetNumber() {
 	delete(m.clearedFields, memberproductcourses.FieldNumber)
 }
 
+// SetNumberSurplus sets the "number_surplus" field.
+func (m *MemberProductCoursesMutation) SetNumberSurplus(i int64) {
+	m.number_surplus = &i
+	m.addnumber_surplus = nil
+}
+
+// NumberSurplus returns the value of the "number_surplus" field in the mutation.
+func (m *MemberProductCoursesMutation) NumberSurplus() (r int64, exists bool) {
+	v := m.number_surplus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumberSurplus returns the old "number_surplus" field's value of the MemberProductCourses entity.
+// If the MemberProductCourses object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberProductCoursesMutation) OldNumberSurplus(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumberSurplus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumberSurplus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumberSurplus: %w", err)
+	}
+	return oldValue.NumberSurplus, nil
+}
+
+// AddNumberSurplus adds i to the "number_surplus" field.
+func (m *MemberProductCoursesMutation) AddNumberSurplus(i int64) {
+	if m.addnumber_surplus != nil {
+		*m.addnumber_surplus += i
+	} else {
+		m.addnumber_surplus = &i
+	}
+}
+
+// AddedNumberSurplus returns the value that was added to the "number_surplus" field in this mutation.
+func (m *MemberProductCoursesMutation) AddedNumberSurplus() (r int64, exists bool) {
+	v := m.addnumber_surplus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearNumberSurplus clears the value of the "number_surplus" field.
+func (m *MemberProductCoursesMutation) ClearNumberSurplus() {
+	m.number_surplus = nil
+	m.addnumber_surplus = nil
+	m.clearedFields[memberproductcourses.FieldNumberSurplus] = struct{}{}
+}
+
+// NumberSurplusCleared returns if the "number_surplus" field was cleared in this mutation.
+func (m *MemberProductCoursesMutation) NumberSurplusCleared() bool {
+	_, ok := m.clearedFields[memberproductcourses.FieldNumberSurplus]
+	return ok
+}
+
+// ResetNumberSurplus resets all changes to the "number_surplus" field.
+func (m *MemberProductCoursesMutation) ResetNumberSurplus() {
+	m.number_surplus = nil
+	m.addnumber_surplus = nil
+	delete(m.clearedFields, memberproductcourses.FieldNumberSurplus)
+}
+
 // SetMemberProductID sets the "member_product_id" field.
 func (m *MemberProductCoursesMutation) SetMemberProductID(i int64) {
 	m.nodeL = &i
@@ -30553,7 +30732,7 @@ func (m *MemberProductCoursesMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberProductCoursesMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, memberproductcourses.FieldCreatedAt)
 	}
@@ -30577,6 +30756,9 @@ func (m *MemberProductCoursesMutation) Fields() []string {
 	}
 	if m.number != nil {
 		fields = append(fields, memberproductcourses.FieldNumber)
+	}
+	if m.number_surplus != nil {
+		fields = append(fields, memberproductcourses.FieldNumberSurplus)
 	}
 	if m.nodeL != nil {
 		fields = append(fields, memberproductcourses.FieldMemberProductID)
@@ -30608,6 +30790,8 @@ func (m *MemberProductCoursesMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case memberproductcourses.FieldNumber:
 		return m.Number()
+	case memberproductcourses.FieldNumberSurplus:
+		return m.NumberSurplus()
 	case memberproductcourses.FieldMemberProductID:
 		return m.MemberProductID()
 	case memberproductcourses.FieldCoursesID:
@@ -30637,6 +30821,8 @@ func (m *MemberProductCoursesMutation) OldField(ctx context.Context, name string
 		return m.OldName(ctx)
 	case memberproductcourses.FieldNumber:
 		return m.OldNumber(ctx)
+	case memberproductcourses.FieldNumberSurplus:
+		return m.OldNumberSurplus(ctx)
 	case memberproductcourses.FieldMemberProductID:
 		return m.OldMemberProductID(ctx)
 	case memberproductcourses.FieldCoursesID:
@@ -30706,6 +30892,13 @@ func (m *MemberProductCoursesMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetNumber(v)
 		return nil
+	case memberproductcourses.FieldNumberSurplus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumberSurplus(v)
+		return nil
 	case memberproductcourses.FieldMemberProductID:
 		v, ok := value.(int64)
 		if !ok {
@@ -30740,6 +30933,9 @@ func (m *MemberProductCoursesMutation) AddedFields() []string {
 	if m.addnumber != nil {
 		fields = append(fields, memberproductcourses.FieldNumber)
 	}
+	if m.addnumber_surplus != nil {
+		fields = append(fields, memberproductcourses.FieldNumberSurplus)
+	}
 	if m.addcourses_id != nil {
 		fields = append(fields, memberproductcourses.FieldCoursesID)
 	}
@@ -30759,6 +30955,8 @@ func (m *MemberProductCoursesMutation) AddedField(name string) (ent.Value, bool)
 		return m.AddedStatus()
 	case memberproductcourses.FieldNumber:
 		return m.AddedNumber()
+	case memberproductcourses.FieldNumberSurplus:
+		return m.AddedNumberSurplus()
 	case memberproductcourses.FieldCoursesID:
 		return m.AddedCoursesID()
 	}
@@ -30798,6 +30996,13 @@ func (m *MemberProductCoursesMutation) AddField(name string, value ent.Value) er
 		}
 		m.AddNumber(v)
 		return nil
+	case memberproductcourses.FieldNumberSurplus:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddNumberSurplus(v)
+		return nil
 	case memberproductcourses.FieldCoursesID:
 		v, ok := value.(int64)
 		if !ok {
@@ -30836,6 +31041,9 @@ func (m *MemberProductCoursesMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(memberproductcourses.FieldNumber) {
 		fields = append(fields, memberproductcourses.FieldNumber)
+	}
+	if m.FieldCleared(memberproductcourses.FieldNumberSurplus) {
+		fields = append(fields, memberproductcourses.FieldNumberSurplus)
 	}
 	if m.FieldCleared(memberproductcourses.FieldMemberProductID) {
 		fields = append(fields, memberproductcourses.FieldMemberProductID)
@@ -30881,6 +31089,9 @@ func (m *MemberProductCoursesMutation) ClearField(name string) error {
 	case memberproductcourses.FieldNumber:
 		m.ClearNumber()
 		return nil
+	case memberproductcourses.FieldNumberSurplus:
+		m.ClearNumberSurplus()
+		return nil
 	case memberproductcourses.FieldMemberProductID:
 		m.ClearMemberProductID()
 		return nil
@@ -30918,6 +31129,9 @@ func (m *MemberProductCoursesMutation) ResetField(name string) error {
 		return nil
 	case memberproductcourses.FieldNumber:
 		m.ResetNumber()
+		return nil
+	case memberproductcourses.FieldNumberSurplus:
+		m.ResetNumberSurplus()
 		return nil
 	case memberproductcourses.FieldMemberProductID:
 		m.ResetMemberProductID()
@@ -50089,9 +50303,9 @@ type ScheduleMutation struct {
 	end_time       *time.Time
 	price          *float64
 	addprice       *float64
-	remark         *string
 	venue_name     *string
 	place_name     *string
+	remark         *string
 	clearedFields  map[string]struct{}
 	members        map[int64]struct{}
 	removedmembers map[int64]struct{}
@@ -51251,55 +51465,6 @@ func (m *ScheduleMutation) ResetPrice() {
 	delete(m.clearedFields, schedule.FieldPrice)
 }
 
-// SetRemark sets the "remark" field.
-func (m *ScheduleMutation) SetRemark(s string) {
-	m.remark = &s
-}
-
-// Remark returns the value of the "remark" field in the mutation.
-func (m *ScheduleMutation) Remark() (r string, exists bool) {
-	v := m.remark
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRemark returns the old "remark" field's value of the Schedule entity.
-// If the Schedule object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ScheduleMutation) OldRemark(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRemark is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRemark requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRemark: %w", err)
-	}
-	return oldValue.Remark, nil
-}
-
-// ClearRemark clears the value of the "remark" field.
-func (m *ScheduleMutation) ClearRemark() {
-	m.remark = nil
-	m.clearedFields[schedule.FieldRemark] = struct{}{}
-}
-
-// RemarkCleared returns if the "remark" field was cleared in this mutation.
-func (m *ScheduleMutation) RemarkCleared() bool {
-	_, ok := m.clearedFields[schedule.FieldRemark]
-	return ok
-}
-
-// ResetRemark resets all changes to the "remark" field.
-func (m *ScheduleMutation) ResetRemark() {
-	m.remark = nil
-	delete(m.clearedFields, schedule.FieldRemark)
-}
-
 // SetVenueName sets the "venue_name" field.
 func (m *ScheduleMutation) SetVenueName(s string) {
 	m.venue_name = &s
@@ -51396,6 +51561,55 @@ func (m *ScheduleMutation) PlaceNameCleared() bool {
 func (m *ScheduleMutation) ResetPlaceName() {
 	m.place_name = nil
 	delete(m.clearedFields, schedule.FieldPlaceName)
+}
+
+// SetRemark sets the "remark" field.
+func (m *ScheduleMutation) SetRemark(s string) {
+	m.remark = &s
+}
+
+// Remark returns the value of the "remark" field in the mutation.
+func (m *ScheduleMutation) Remark() (r string, exists bool) {
+	v := m.remark
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRemark returns the old "remark" field's value of the Schedule entity.
+// If the Schedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMutation) OldRemark(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRemark is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRemark requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRemark: %w", err)
+	}
+	return oldValue.Remark, nil
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (m *ScheduleMutation) ClearRemark() {
+	m.remark = nil
+	m.clearedFields[schedule.FieldRemark] = struct{}{}
+}
+
+// RemarkCleared returns if the "remark" field was cleared in this mutation.
+func (m *ScheduleMutation) RemarkCleared() bool {
+	_, ok := m.clearedFields[schedule.FieldRemark]
+	return ok
+}
+
+// ResetRemark resets all changes to the "remark" field.
+func (m *ScheduleMutation) ResetRemark() {
+	m.remark = nil
+	delete(m.clearedFields, schedule.FieldRemark)
 }
 
 // AddMemberIDs adds the "members" edge to the ScheduleMember entity by ids.
@@ -51592,14 +51806,14 @@ func (m *ScheduleMutation) Fields() []string {
 	if m.price != nil {
 		fields = append(fields, schedule.FieldPrice)
 	}
-	if m.remark != nil {
-		fields = append(fields, schedule.FieldRemark)
-	}
 	if m.venue_name != nil {
 		fields = append(fields, schedule.FieldVenueName)
 	}
 	if m.place_name != nil {
 		fields = append(fields, schedule.FieldPlaceName)
+	}
+	if m.remark != nil {
+		fields = append(fields, schedule.FieldRemark)
 	}
 	return fields
 }
@@ -51643,12 +51857,12 @@ func (m *ScheduleMutation) Field(name string) (ent.Value, bool) {
 		return m.EndTime()
 	case schedule.FieldPrice:
 		return m.Price()
-	case schedule.FieldRemark:
-		return m.Remark()
 	case schedule.FieldVenueName:
 		return m.VenueName()
 	case schedule.FieldPlaceName:
 		return m.PlaceName()
+	case schedule.FieldRemark:
+		return m.Remark()
 	}
 	return nil, false
 }
@@ -51692,12 +51906,12 @@ func (m *ScheduleMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldEndTime(ctx)
 	case schedule.FieldPrice:
 		return m.OldPrice(ctx)
-	case schedule.FieldRemark:
-		return m.OldRemark(ctx)
 	case schedule.FieldVenueName:
 		return m.OldVenueName(ctx)
 	case schedule.FieldPlaceName:
 		return m.OldPlaceName(ctx)
+	case schedule.FieldRemark:
+		return m.OldRemark(ctx)
 	}
 	return nil, fmt.Errorf("unknown Schedule field %s", name)
 }
@@ -51826,13 +52040,6 @@ func (m *ScheduleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPrice(v)
 		return nil
-	case schedule.FieldRemark:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRemark(v)
-		return nil
 	case schedule.FieldVenueName:
 		v, ok := value.(string)
 		if !ok {
@@ -51846,6 +52053,13 @@ func (m *ScheduleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPlaceName(v)
+		return nil
+	case schedule.FieldRemark:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRemark(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Schedule field %s", name)
@@ -52051,14 +52265,14 @@ func (m *ScheduleMutation) ClearedFields() []string {
 	if m.FieldCleared(schedule.FieldPrice) {
 		fields = append(fields, schedule.FieldPrice)
 	}
-	if m.FieldCleared(schedule.FieldRemark) {
-		fields = append(fields, schedule.FieldRemark)
-	}
 	if m.FieldCleared(schedule.FieldVenueName) {
 		fields = append(fields, schedule.FieldVenueName)
 	}
 	if m.FieldCleared(schedule.FieldPlaceName) {
 		fields = append(fields, schedule.FieldPlaceName)
+	}
+	if m.FieldCleared(schedule.FieldRemark) {
+		fields = append(fields, schedule.FieldRemark)
 	}
 	return fields
 }
@@ -52125,14 +52339,14 @@ func (m *ScheduleMutation) ClearField(name string) error {
 	case schedule.FieldPrice:
 		m.ClearPrice()
 		return nil
-	case schedule.FieldRemark:
-		m.ClearRemark()
-		return nil
 	case schedule.FieldVenueName:
 		m.ClearVenueName()
 		return nil
 	case schedule.FieldPlaceName:
 		m.ClearPlaceName()
+		return nil
+	case schedule.FieldRemark:
+		m.ClearRemark()
 		return nil
 	}
 	return fmt.Errorf("unknown Schedule nullable field %s", name)
@@ -52193,14 +52407,14 @@ func (m *ScheduleMutation) ResetField(name string) error {
 	case schedule.FieldPrice:
 		m.ResetPrice()
 		return nil
-	case schedule.FieldRemark:
-		m.ResetRemark()
-		return nil
 	case schedule.FieldVenueName:
 		m.ResetVenueName()
 		return nil
 	case schedule.FieldPlaceName:
 		m.ResetPlaceName()
+		return nil
+	case schedule.FieldRemark:
+		m.ResetRemark()
 		return nil
 	}
 	return fmt.Errorf("unknown Schedule field %s", name)
@@ -52338,13 +52552,13 @@ type ScheduleCoachMutation struct {
 	addplace_id     *int64
 	product_id      *int64
 	addproduct_id   *int64
-	schedule_name   *string
 	_type           *string
 	start_time      *time.Time
 	end_time        *time.Time
 	sign_start_time *time.Time
 	sign_end_time   *time.Time
 	coach_name      *string
+	remark          *string
 	clearedFields   map[string]struct{}
 	schedule        *int64
 	clearedschedule bool
@@ -53094,55 +53308,6 @@ func (m *ScheduleCoachMutation) ResetProductID() {
 	delete(m.clearedFields, schedulecoach.FieldProductID)
 }
 
-// SetScheduleName sets the "schedule_name" field.
-func (m *ScheduleCoachMutation) SetScheduleName(s string) {
-	m.schedule_name = &s
-}
-
-// ScheduleName returns the value of the "schedule_name" field in the mutation.
-func (m *ScheduleCoachMutation) ScheduleName() (r string, exists bool) {
-	v := m.schedule_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldScheduleName returns the old "schedule_name" field's value of the ScheduleCoach entity.
-// If the ScheduleCoach object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ScheduleCoachMutation) OldScheduleName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldScheduleName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldScheduleName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldScheduleName: %w", err)
-	}
-	return oldValue.ScheduleName, nil
-}
-
-// ClearScheduleName clears the value of the "schedule_name" field.
-func (m *ScheduleCoachMutation) ClearScheduleName() {
-	m.schedule_name = nil
-	m.clearedFields[schedulecoach.FieldScheduleName] = struct{}{}
-}
-
-// ScheduleNameCleared returns if the "schedule_name" field was cleared in this mutation.
-func (m *ScheduleCoachMutation) ScheduleNameCleared() bool {
-	_, ok := m.clearedFields[schedulecoach.FieldScheduleName]
-	return ok
-}
-
-// ResetScheduleName resets all changes to the "schedule_name" field.
-func (m *ScheduleCoachMutation) ResetScheduleName() {
-	m.schedule_name = nil
-	delete(m.clearedFields, schedulecoach.FieldScheduleName)
-}
-
 // SetType sets the "type" field.
 func (m *ScheduleCoachMutation) SetType(s string) {
 	m._type = &s
@@ -53437,6 +53602,55 @@ func (m *ScheduleCoachMutation) ResetCoachName() {
 	delete(m.clearedFields, schedulecoach.FieldCoachName)
 }
 
+// SetRemark sets the "remark" field.
+func (m *ScheduleCoachMutation) SetRemark(s string) {
+	m.remark = &s
+}
+
+// Remark returns the value of the "remark" field in the mutation.
+func (m *ScheduleCoachMutation) Remark() (r string, exists bool) {
+	v := m.remark
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRemark returns the old "remark" field's value of the ScheduleCoach entity.
+// If the ScheduleCoach object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleCoachMutation) OldRemark(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRemark is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRemark requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRemark: %w", err)
+	}
+	return oldValue.Remark, nil
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (m *ScheduleCoachMutation) ClearRemark() {
+	m.remark = nil
+	m.clearedFields[schedulecoach.FieldRemark] = struct{}{}
+}
+
+// RemarkCleared returns if the "remark" field was cleared in this mutation.
+func (m *ScheduleCoachMutation) RemarkCleared() bool {
+	_, ok := m.clearedFields[schedulecoach.FieldRemark]
+	return ok
+}
+
+// ResetRemark resets all changes to the "remark" field.
+func (m *ScheduleCoachMutation) ResetRemark() {
+	m.remark = nil
+	delete(m.clearedFields, schedulecoach.FieldRemark)
+}
+
 // ClearSchedule clears the "schedule" edge to the Schedule entity.
 func (m *ScheduleCoachMutation) ClearSchedule() {
 	m.clearedschedule = true
@@ -53529,9 +53743,6 @@ func (m *ScheduleCoachMutation) Fields() []string {
 	if m.product_id != nil {
 		fields = append(fields, schedulecoach.FieldProductID)
 	}
-	if m.schedule_name != nil {
-		fields = append(fields, schedulecoach.FieldScheduleName)
-	}
 	if m._type != nil {
 		fields = append(fields, schedulecoach.FieldType)
 	}
@@ -53549,6 +53760,9 @@ func (m *ScheduleCoachMutation) Fields() []string {
 	}
 	if m.coach_name != nil {
 		fields = append(fields, schedulecoach.FieldCoachName)
+	}
+	if m.remark != nil {
+		fields = append(fields, schedulecoach.FieldRemark)
 	}
 	return fields
 }
@@ -53578,8 +53792,6 @@ func (m *ScheduleCoachMutation) Field(name string) (ent.Value, bool) {
 		return m.ScheduleID()
 	case schedulecoach.FieldProductID:
 		return m.ProductID()
-	case schedulecoach.FieldScheduleName:
-		return m.ScheduleName()
 	case schedulecoach.FieldType:
 		return m.GetType()
 	case schedulecoach.FieldStartTime:
@@ -53592,6 +53804,8 @@ func (m *ScheduleCoachMutation) Field(name string) (ent.Value, bool) {
 		return m.SignEndTime()
 	case schedulecoach.FieldCoachName:
 		return m.CoachName()
+	case schedulecoach.FieldRemark:
+		return m.Remark()
 	}
 	return nil, false
 }
@@ -53621,8 +53835,6 @@ func (m *ScheduleCoachMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldScheduleID(ctx)
 	case schedulecoach.FieldProductID:
 		return m.OldProductID(ctx)
-	case schedulecoach.FieldScheduleName:
-		return m.OldScheduleName(ctx)
 	case schedulecoach.FieldType:
 		return m.OldType(ctx)
 	case schedulecoach.FieldStartTime:
@@ -53635,6 +53847,8 @@ func (m *ScheduleCoachMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldSignEndTime(ctx)
 	case schedulecoach.FieldCoachName:
 		return m.OldCoachName(ctx)
+	case schedulecoach.FieldRemark:
+		return m.OldRemark(ctx)
 	}
 	return nil, fmt.Errorf("unknown ScheduleCoach field %s", name)
 }
@@ -53714,13 +53928,6 @@ func (m *ScheduleCoachMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetProductID(v)
 		return nil
-	case schedulecoach.FieldScheduleName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetScheduleName(v)
-		return nil
 	case schedulecoach.FieldType:
 		v, ok := value.(string)
 		if !ok {
@@ -53762,6 +53969,13 @@ func (m *ScheduleCoachMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCoachName(v)
+		return nil
+	case schedulecoach.FieldRemark:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRemark(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleCoach field %s", name)
@@ -53910,9 +54124,6 @@ func (m *ScheduleCoachMutation) ClearedFields() []string {
 	if m.FieldCleared(schedulecoach.FieldProductID) {
 		fields = append(fields, schedulecoach.FieldProductID)
 	}
-	if m.FieldCleared(schedulecoach.FieldScheduleName) {
-		fields = append(fields, schedulecoach.FieldScheduleName)
-	}
 	if m.FieldCleared(schedulecoach.FieldType) {
 		fields = append(fields, schedulecoach.FieldType)
 	}
@@ -53930,6 +54141,9 @@ func (m *ScheduleCoachMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(schedulecoach.FieldCoachName) {
 		fields = append(fields, schedulecoach.FieldCoachName)
+	}
+	if m.FieldCleared(schedulecoach.FieldRemark) {
+		fields = append(fields, schedulecoach.FieldRemark)
 	}
 	return fields
 }
@@ -53975,9 +54189,6 @@ func (m *ScheduleCoachMutation) ClearField(name string) error {
 	case schedulecoach.FieldProductID:
 		m.ClearProductID()
 		return nil
-	case schedulecoach.FieldScheduleName:
-		m.ClearScheduleName()
-		return nil
 	case schedulecoach.FieldType:
 		m.ClearType()
 		return nil
@@ -53995,6 +54206,9 @@ func (m *ScheduleCoachMutation) ClearField(name string) error {
 		return nil
 	case schedulecoach.FieldCoachName:
 		m.ClearCoachName()
+		return nil
+	case schedulecoach.FieldRemark:
+		m.ClearRemark()
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleCoach nullable field %s", name)
@@ -54034,9 +54248,6 @@ func (m *ScheduleCoachMutation) ResetField(name string) error {
 	case schedulecoach.FieldProductID:
 		m.ResetProductID()
 		return nil
-	case schedulecoach.FieldScheduleName:
-		m.ResetScheduleName()
-		return nil
 	case schedulecoach.FieldType:
 		m.ResetType()
 		return nil
@@ -54054,6 +54265,9 @@ func (m *ScheduleCoachMutation) ResetField(name string) error {
 		return nil
 	case schedulecoach.FieldCoachName:
 		m.ResetCoachName()
+		return nil
+	case schedulecoach.FieldRemark:
+		m.ResetRemark()
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleCoach field %s", name)
@@ -54151,7 +54365,8 @@ type ScheduleMemberMutation struct {
 	addvenue_id          *int64
 	place_id             *int64
 	addplace_id          *int64
-	schedule_name        *string
+	product_id           *int64
+	addproduct_id        *int64
 	member_id            *int64
 	addmember_id         *int64
 	member_product_id    *int64
@@ -54162,6 +54377,8 @@ type ScheduleMemberMutation struct {
 	sign_start_time      *time.Time
 	sign_end_time        *time.Time
 	seat                 *base.Seat
+	is_course            *int64
+	addis_course         *int64
 	member_name          *string
 	member_product_name  *string
 	remark               *string
@@ -54725,6 +54942,76 @@ func (m *ScheduleMemberMutation) ResetPlaceID() {
 	delete(m.clearedFields, schedulemember.FieldPlaceID)
 }
 
+// SetProductID sets the "product_id" field.
+func (m *ScheduleMemberMutation) SetProductID(i int64) {
+	m.product_id = &i
+	m.addproduct_id = nil
+}
+
+// ProductID returns the value of the "product_id" field in the mutation.
+func (m *ScheduleMemberMutation) ProductID() (r int64, exists bool) {
+	v := m.product_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProductID returns the old "product_id" field's value of the ScheduleMember entity.
+// If the ScheduleMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMemberMutation) OldProductID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProductID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProductID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProductID: %w", err)
+	}
+	return oldValue.ProductID, nil
+}
+
+// AddProductID adds i to the "product_id" field.
+func (m *ScheduleMemberMutation) AddProductID(i int64) {
+	if m.addproduct_id != nil {
+		*m.addproduct_id += i
+	} else {
+		m.addproduct_id = &i
+	}
+}
+
+// AddedProductID returns the value that was added to the "product_id" field in this mutation.
+func (m *ScheduleMemberMutation) AddedProductID() (r int64, exists bool) {
+	v := m.addproduct_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearProductID clears the value of the "product_id" field.
+func (m *ScheduleMemberMutation) ClearProductID() {
+	m.product_id = nil
+	m.addproduct_id = nil
+	m.clearedFields[schedulemember.FieldProductID] = struct{}{}
+}
+
+// ProductIDCleared returns if the "product_id" field was cleared in this mutation.
+func (m *ScheduleMemberMutation) ProductIDCleared() bool {
+	_, ok := m.clearedFields[schedulemember.FieldProductID]
+	return ok
+}
+
+// ResetProductID resets all changes to the "product_id" field.
+func (m *ScheduleMemberMutation) ResetProductID() {
+	m.product_id = nil
+	m.addproduct_id = nil
+	delete(m.clearedFields, schedulemember.FieldProductID)
+}
+
 // SetScheduleID sets the "schedule_id" field.
 func (m *ScheduleMemberMutation) SetScheduleID(i int64) {
 	m.schedule = &i
@@ -54772,55 +55059,6 @@ func (m *ScheduleMemberMutation) ScheduleIDCleared() bool {
 func (m *ScheduleMemberMutation) ResetScheduleID() {
 	m.schedule = nil
 	delete(m.clearedFields, schedulemember.FieldScheduleID)
-}
-
-// SetScheduleName sets the "schedule_name" field.
-func (m *ScheduleMemberMutation) SetScheduleName(s string) {
-	m.schedule_name = &s
-}
-
-// ScheduleName returns the value of the "schedule_name" field in the mutation.
-func (m *ScheduleMemberMutation) ScheduleName() (r string, exists bool) {
-	v := m.schedule_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldScheduleName returns the old "schedule_name" field's value of the ScheduleMember entity.
-// If the ScheduleMember object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ScheduleMemberMutation) OldScheduleName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldScheduleName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldScheduleName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldScheduleName: %w", err)
-	}
-	return oldValue.ScheduleName, nil
-}
-
-// ClearScheduleName clears the value of the "schedule_name" field.
-func (m *ScheduleMemberMutation) ClearScheduleName() {
-	m.schedule_name = nil
-	m.clearedFields[schedulemember.FieldScheduleName] = struct{}{}
-}
-
-// ScheduleNameCleared returns if the "schedule_name" field was cleared in this mutation.
-func (m *ScheduleMemberMutation) ScheduleNameCleared() bool {
-	_, ok := m.clearedFields[schedulemember.FieldScheduleName]
-	return ok
-}
-
-// ResetScheduleName resets all changes to the "schedule_name" field.
-func (m *ScheduleMemberMutation) ResetScheduleName() {
-	m.schedule_name = nil
-	delete(m.clearedFields, schedulemember.FieldScheduleName)
 }
 
 // SetMemberID sets the "member_id" field.
@@ -55257,6 +55495,76 @@ func (m *ScheduleMemberMutation) ResetSeat() {
 	delete(m.clearedFields, schedulemember.FieldSeat)
 }
 
+// SetIsCourse sets the "is_course" field.
+func (m *ScheduleMemberMutation) SetIsCourse(i int64) {
+	m.is_course = &i
+	m.addis_course = nil
+}
+
+// IsCourse returns the value of the "is_course" field in the mutation.
+func (m *ScheduleMemberMutation) IsCourse() (r int64, exists bool) {
+	v := m.is_course
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsCourse returns the old "is_course" field's value of the ScheduleMember entity.
+// If the ScheduleMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduleMemberMutation) OldIsCourse(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsCourse is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsCourse requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsCourse: %w", err)
+	}
+	return oldValue.IsCourse, nil
+}
+
+// AddIsCourse adds i to the "is_course" field.
+func (m *ScheduleMemberMutation) AddIsCourse(i int64) {
+	if m.addis_course != nil {
+		*m.addis_course += i
+	} else {
+		m.addis_course = &i
+	}
+}
+
+// AddedIsCourse returns the value that was added to the "is_course" field in this mutation.
+func (m *ScheduleMemberMutation) AddedIsCourse() (r int64, exists bool) {
+	v := m.addis_course
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearIsCourse clears the value of the "is_course" field.
+func (m *ScheduleMemberMutation) ClearIsCourse() {
+	m.is_course = nil
+	m.addis_course = nil
+	m.clearedFields[schedulemember.FieldIsCourse] = struct{}{}
+}
+
+// IsCourseCleared returns if the "is_course" field was cleared in this mutation.
+func (m *ScheduleMemberMutation) IsCourseCleared() bool {
+	_, ok := m.clearedFields[schedulemember.FieldIsCourse]
+	return ok
+}
+
+// ResetIsCourse resets all changes to the "is_course" field.
+func (m *ScheduleMemberMutation) ResetIsCourse() {
+	m.is_course = nil
+	m.addis_course = nil
+	delete(m.clearedFields, schedulemember.FieldIsCourse)
+}
+
 // SetMemberName sets the "member_name" field.
 func (m *ScheduleMemberMutation) SetMemberName(s string) {
 	m.member_name = &s
@@ -55465,7 +55773,7 @@ func (m *ScheduleMemberMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduleMemberMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.created_at != nil {
 		fields = append(fields, schedulemember.FieldCreatedAt)
 	}
@@ -55487,11 +55795,11 @@ func (m *ScheduleMemberMutation) Fields() []string {
 	if m.place_id != nil {
 		fields = append(fields, schedulemember.FieldPlaceID)
 	}
+	if m.product_id != nil {
+		fields = append(fields, schedulemember.FieldProductID)
+	}
 	if m.schedule != nil {
 		fields = append(fields, schedulemember.FieldScheduleID)
-	}
-	if m.schedule_name != nil {
-		fields = append(fields, schedulemember.FieldScheduleName)
 	}
 	if m.member_id != nil {
 		fields = append(fields, schedulemember.FieldMemberID)
@@ -55516,6 +55824,9 @@ func (m *ScheduleMemberMutation) Fields() []string {
 	}
 	if m.seat != nil {
 		fields = append(fields, schedulemember.FieldSeat)
+	}
+	if m.is_course != nil {
+		fields = append(fields, schedulemember.FieldIsCourse)
 	}
 	if m.member_name != nil {
 		fields = append(fields, schedulemember.FieldMemberName)
@@ -55548,10 +55859,10 @@ func (m *ScheduleMemberMutation) Field(name string) (ent.Value, bool) {
 		return m.VenueID()
 	case schedulemember.FieldPlaceID:
 		return m.PlaceID()
+	case schedulemember.FieldProductID:
+		return m.ProductID()
 	case schedulemember.FieldScheduleID:
 		return m.ScheduleID()
-	case schedulemember.FieldScheduleName:
-		return m.ScheduleName()
 	case schedulemember.FieldMemberID:
 		return m.MemberID()
 	case schedulemember.FieldMemberProductID:
@@ -55568,6 +55879,8 @@ func (m *ScheduleMemberMutation) Field(name string) (ent.Value, bool) {
 		return m.SignEndTime()
 	case schedulemember.FieldSeat:
 		return m.Seat()
+	case schedulemember.FieldIsCourse:
+		return m.IsCourse()
 	case schedulemember.FieldMemberName:
 		return m.MemberName()
 	case schedulemember.FieldMemberProductName:
@@ -55597,10 +55910,10 @@ func (m *ScheduleMemberMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldVenueID(ctx)
 	case schedulemember.FieldPlaceID:
 		return m.OldPlaceID(ctx)
+	case schedulemember.FieldProductID:
+		return m.OldProductID(ctx)
 	case schedulemember.FieldScheduleID:
 		return m.OldScheduleID(ctx)
-	case schedulemember.FieldScheduleName:
-		return m.OldScheduleName(ctx)
 	case schedulemember.FieldMemberID:
 		return m.OldMemberID(ctx)
 	case schedulemember.FieldMemberProductID:
@@ -55617,6 +55930,8 @@ func (m *ScheduleMemberMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldSignEndTime(ctx)
 	case schedulemember.FieldSeat:
 		return m.OldSeat(ctx)
+	case schedulemember.FieldIsCourse:
+		return m.OldIsCourse(ctx)
 	case schedulemember.FieldMemberName:
 		return m.OldMemberName(ctx)
 	case schedulemember.FieldMemberProductName:
@@ -55681,19 +55996,19 @@ func (m *ScheduleMemberMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPlaceID(v)
 		return nil
+	case schedulemember.FieldProductID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProductID(v)
+		return nil
 	case schedulemember.FieldScheduleID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetScheduleID(v)
-		return nil
-	case schedulemember.FieldScheduleName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetScheduleName(v)
 		return nil
 	case schedulemember.FieldMemberID:
 		v, ok := value.(int64)
@@ -55751,6 +56066,13 @@ func (m *ScheduleMemberMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSeat(v)
 		return nil
+	case schedulemember.FieldIsCourse:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsCourse(v)
+		return nil
 	case schedulemember.FieldMemberName:
 		v, ok := value.(string)
 		if !ok {
@@ -55795,11 +56117,17 @@ func (m *ScheduleMemberMutation) AddedFields() []string {
 	if m.addplace_id != nil {
 		fields = append(fields, schedulemember.FieldPlaceID)
 	}
+	if m.addproduct_id != nil {
+		fields = append(fields, schedulemember.FieldProductID)
+	}
 	if m.addmember_id != nil {
 		fields = append(fields, schedulemember.FieldMemberID)
 	}
 	if m.addmember_product_id != nil {
 		fields = append(fields, schedulemember.FieldMemberProductID)
+	}
+	if m.addis_course != nil {
+		fields = append(fields, schedulemember.FieldIsCourse)
 	}
 	return fields
 }
@@ -55819,10 +56147,14 @@ func (m *ScheduleMemberMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedVenueID()
 	case schedulemember.FieldPlaceID:
 		return m.AddedPlaceID()
+	case schedulemember.FieldProductID:
+		return m.AddedProductID()
 	case schedulemember.FieldMemberID:
 		return m.AddedMemberID()
 	case schedulemember.FieldMemberProductID:
 		return m.AddedMemberProductID()
+	case schedulemember.FieldIsCourse:
+		return m.AddedIsCourse()
 	}
 	return nil, false
 }
@@ -55867,6 +56199,13 @@ func (m *ScheduleMemberMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddPlaceID(v)
 		return nil
+	case schedulemember.FieldProductID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddProductID(v)
+		return nil
 	case schedulemember.FieldMemberID:
 		v, ok := value.(int64)
 		if !ok {
@@ -55880,6 +56219,13 @@ func (m *ScheduleMemberMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddMemberProductID(v)
+		return nil
+	case schedulemember.FieldIsCourse:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsCourse(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduleMember numeric field %s", name)
@@ -55910,11 +56256,11 @@ func (m *ScheduleMemberMutation) ClearedFields() []string {
 	if m.FieldCleared(schedulemember.FieldPlaceID) {
 		fields = append(fields, schedulemember.FieldPlaceID)
 	}
+	if m.FieldCleared(schedulemember.FieldProductID) {
+		fields = append(fields, schedulemember.FieldProductID)
+	}
 	if m.FieldCleared(schedulemember.FieldScheduleID) {
 		fields = append(fields, schedulemember.FieldScheduleID)
-	}
-	if m.FieldCleared(schedulemember.FieldScheduleName) {
-		fields = append(fields, schedulemember.FieldScheduleName)
 	}
 	if m.FieldCleared(schedulemember.FieldMemberID) {
 		fields = append(fields, schedulemember.FieldMemberID)
@@ -55939,6 +56285,9 @@ func (m *ScheduleMemberMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(schedulemember.FieldSeat) {
 		fields = append(fields, schedulemember.FieldSeat)
+	}
+	if m.FieldCleared(schedulemember.FieldIsCourse) {
+		fields = append(fields, schedulemember.FieldIsCourse)
 	}
 	if m.FieldCleared(schedulemember.FieldMemberName) {
 		fields = append(fields, schedulemember.FieldMemberName)
@@ -55984,11 +56333,11 @@ func (m *ScheduleMemberMutation) ClearField(name string) error {
 	case schedulemember.FieldPlaceID:
 		m.ClearPlaceID()
 		return nil
+	case schedulemember.FieldProductID:
+		m.ClearProductID()
+		return nil
 	case schedulemember.FieldScheduleID:
 		m.ClearScheduleID()
-		return nil
-	case schedulemember.FieldScheduleName:
-		m.ClearScheduleName()
 		return nil
 	case schedulemember.FieldMemberID:
 		m.ClearMemberID()
@@ -56013,6 +56362,9 @@ func (m *ScheduleMemberMutation) ClearField(name string) error {
 		return nil
 	case schedulemember.FieldSeat:
 		m.ClearSeat()
+		return nil
+	case schedulemember.FieldIsCourse:
+		m.ClearIsCourse()
 		return nil
 	case schedulemember.FieldMemberName:
 		m.ClearMemberName()
@@ -56052,11 +56404,11 @@ func (m *ScheduleMemberMutation) ResetField(name string) error {
 	case schedulemember.FieldPlaceID:
 		m.ResetPlaceID()
 		return nil
+	case schedulemember.FieldProductID:
+		m.ResetProductID()
+		return nil
 	case schedulemember.FieldScheduleID:
 		m.ResetScheduleID()
-		return nil
-	case schedulemember.FieldScheduleName:
-		m.ResetScheduleName()
 		return nil
 	case schedulemember.FieldMemberID:
 		m.ResetMemberID()
@@ -56081,6 +56433,9 @@ func (m *ScheduleMemberMutation) ResetField(name string) error {
 		return nil
 	case schedulemember.FieldSeat:
 		m.ResetSeat()
+		return nil
+	case schedulemember.FieldIsCourse:
+		m.ResetIsCourse()
 		return nil
 	case schedulemember.FieldMemberName:
 		m.ResetMemberName()

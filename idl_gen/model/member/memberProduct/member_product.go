@@ -10,59 +10,62 @@ import (
 )
 
 type MemberProductInfo struct {
-	ID           int64   `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	Name         string  `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
-	Price        float64 `thrift:"price,3,optional" form:"price" json:"price" query:"price"`
-	Fee          float64 `thrift:"fee,4,optional" form:"fee" json:"fee" query:"fee"`
-	Status       int64   `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
-	Duration     int64   `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`
-	Length       int64   `thrift:"length,8,optional" form:"length" json:"length" query:"length"`
-	Type         string  `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
-	Deadline     int64   `thrift:"deadline,10,optional" form:"deadline" json:"deadline" query:"deadline"`
-	Count        int64   `thrift:"count,12,optional" form:"count" json:"count" query:"count"`
-	CountSurplus int64   `thrift:"countSurplus,13,optional" form:"countSurplus" json:"countSurplus" query:"countSurplus"`
-	ValidityAt   string  `thrift:"validityAt,14,optional" form:"validityAt" json:"validityAt" query:"validityAt"`
-	CancelAt     string  `thrift:"cancelAt,15,optional" form:"cancelAt" json:"cancelAt" query:"cancelAt"`
-	CreatedAt    string  `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
-	UpdatedAt    string  `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
-	OrderId      int64   `thrift:"orderId,18,optional" form:"orderId" json:"orderId" query:"orderId"`
-	VenueId      int64   `thrift:"venueId,19,optional" form:"venueId" json:"venueId" query:"venueId"`
-	ProductId    int64   `thrift:"productId,20,optional" form:"productId" json:"productId" query:"productId"`
-	MemberId     int64   `thrift:"memberId,21,optional" form:"memberId" json:"memberId" query:"memberId"`
-	SubType      string  `thrift:"subType,22,optional" form:"subType" json:"subType" query:"subType"`
-	Sn           string  `thrift:"sn,23,optional" form:"sn" json:"sn" query:"sn"`
+	ID            int64   `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	Name          string  `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	Price         float64 `thrift:"price,3,optional" form:"price" json:"price" query:"price"`
+	Fee           float64 `thrift:"fee,4,optional" form:"fee" json:"fee" query:"fee"`
+	Status        int64   `thrift:"status,6,optional" form:"status" json:"status" query:"status"`
+	Duration      int64   `thrift:"duration,7,optional" form:"duration" json:"duration" query:"duration"`
+	Length        int64   `thrift:"length,8,optional" form:"length" json:"length" query:"length"`
+	Type          string  `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
+	Deadline      int64   `thrift:"deadline,10,optional" form:"deadline" json:"deadline" query:"deadline"`
+	Number        int64   `thrift:"number,12,optional" form:"number" json:"number" query:"number"`
+	NumberSurplus int64   `thrift:"numberSurplus,13,optional" form:"numberSurplus" json:"numberSurplus" query:"numberSurplus"`
+	ValidityAt    string  `thrift:"validityAt,14,optional" form:"validityAt" json:"validityAt" query:"validityAt"`
+	CancelAt      string  `thrift:"cancelAt,15,optional" form:"cancelAt" json:"cancelAt" query:"cancelAt"`
+	CreatedAt     string  `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt     string  `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	OrderId       int64   `thrift:"orderId,18,optional" form:"orderId" json:"orderId" query:"orderId"`
+	VenueId       int64   `thrift:"venueId,19,optional" form:"venueId" json:"venueId" query:"venueId"`
+	ProductId     int64   `thrift:"productId,20,optional" form:"productId" json:"productId" query:"productId"`
+	MemberId      int64   `thrift:"memberId,21,optional" form:"memberId" json:"memberId" query:"memberId"`
+	SubType       string  `thrift:"subType,22,optional" form:"subType" json:"subType" query:"subType"`
+	Sn            string  `thrift:"sn,23,optional" form:"sn" json:"sn" query:"sn"`
 	/**课程-数组*/
 	Courses []*MemberProductCourses `thrift:"courses,24,optional" form:"courses" json:"courses" query:"courses"`
 	/**团课*/
 	Lessons []*MemberProductCourses `thrift:"lessons,25,optional" form:"lessons" json:"lessons" query:"lessons"`
+	/**课程 1不限2指定*/
+	IsCourse int64 `thrift:"isCourse,27,optional" form:"isCourse" json:"isCourse" query:"isCourse"`
 }
 
 func NewMemberProductInfo() *MemberProductInfo {
 	return &MemberProductInfo{
 
-		ID:           0,
-		Name:         "",
-		Price:        0.0,
-		Fee:          0.0,
-		Status:       0,
-		Duration:     0,
-		Length:       0,
-		Type:         "",
-		Deadline:     0,
-		Count:        0,
-		CountSurplus: 0,
-		ValidityAt:   "",
-		CancelAt:     "",
-		CreatedAt:    "",
-		UpdatedAt:    "",
-		OrderId:      0,
-		VenueId:      0,
-		ProductId:    0,
-		MemberId:     0,
-		SubType:      "",
-		Sn:           "",
-		Courses:      []*MemberProductCourses{},
-		Lessons:      []*MemberProductCourses{},
+		ID:            0,
+		Name:          "",
+		Price:         0.0,
+		Fee:           0.0,
+		Status:        0,
+		Duration:      0,
+		Length:        0,
+		Type:          "",
+		Deadline:      0,
+		Number:        0,
+		NumberSurplus: 0,
+		ValidityAt:    "",
+		CancelAt:      "",
+		CreatedAt:     "",
+		UpdatedAt:     "",
+		OrderId:       0,
+		VenueId:       0,
+		ProductId:     0,
+		MemberId:      0,
+		SubType:       "",
+		Sn:            "",
+		Courses:       []*MemberProductCourses{},
+		Lessons:       []*MemberProductCourses{},
+		IsCourse:      0,
 	}
 }
 
@@ -76,8 +79,8 @@ func (p *MemberProductInfo) InitDefault() {
 	p.Length = 0
 	p.Type = ""
 	p.Deadline = 0
-	p.Count = 0
-	p.CountSurplus = 0
+	p.Number = 0
+	p.NumberSurplus = 0
 	p.ValidityAt = ""
 	p.CancelAt = ""
 	p.CreatedAt = ""
@@ -90,6 +93,7 @@ func (p *MemberProductInfo) InitDefault() {
 	p.Sn = ""
 	p.Courses = []*MemberProductCourses{}
 	p.Lessons = []*MemberProductCourses{}
+	p.IsCourse = 0
 }
 
 var MemberProductInfo_ID_DEFAULT int64 = 0
@@ -173,22 +177,22 @@ func (p *MemberProductInfo) GetDeadline() (v int64) {
 	return p.Deadline
 }
 
-var MemberProductInfo_Count_DEFAULT int64 = 0
+var MemberProductInfo_Number_DEFAULT int64 = 0
 
-func (p *MemberProductInfo) GetCount() (v int64) {
-	if !p.IsSetCount() {
-		return MemberProductInfo_Count_DEFAULT
+func (p *MemberProductInfo) GetNumber() (v int64) {
+	if !p.IsSetNumber() {
+		return MemberProductInfo_Number_DEFAULT
 	}
-	return p.Count
+	return p.Number
 }
 
-var MemberProductInfo_CountSurplus_DEFAULT int64 = 0
+var MemberProductInfo_NumberSurplus_DEFAULT int64 = 0
 
-func (p *MemberProductInfo) GetCountSurplus() (v int64) {
-	if !p.IsSetCountSurplus() {
-		return MemberProductInfo_CountSurplus_DEFAULT
+func (p *MemberProductInfo) GetNumberSurplus() (v int64) {
+	if !p.IsSetNumberSurplus() {
+		return MemberProductInfo_NumberSurplus_DEFAULT
 	}
-	return p.CountSurplus
+	return p.NumberSurplus
 }
 
 var MemberProductInfo_ValidityAt_DEFAULT string = ""
@@ -299,6 +303,15 @@ func (p *MemberProductInfo) GetLessons() (v []*MemberProductCourses) {
 	return p.Lessons
 }
 
+var MemberProductInfo_IsCourse_DEFAULT int64 = 0
+
+func (p *MemberProductInfo) GetIsCourse() (v int64) {
+	if !p.IsSetIsCourse() {
+		return MemberProductInfo_IsCourse_DEFAULT
+	}
+	return p.IsCourse
+}
+
 var fieldIDToName_MemberProductInfo = map[int16]string{
 	1:  "id",
 	2:  "name",
@@ -309,8 +322,8 @@ var fieldIDToName_MemberProductInfo = map[int16]string{
 	8:  "length",
 	9:  "type",
 	10: "deadline",
-	12: "count",
-	13: "countSurplus",
+	12: "number",
+	13: "numberSurplus",
 	14: "validityAt",
 	15: "cancelAt",
 	16: "createdAt",
@@ -323,6 +336,7 @@ var fieldIDToName_MemberProductInfo = map[int16]string{
 	23: "sn",
 	24: "courses",
 	25: "lessons",
+	27: "isCourse",
 }
 
 func (p *MemberProductInfo) IsSetID() bool {
@@ -361,12 +375,12 @@ func (p *MemberProductInfo) IsSetDeadline() bool {
 	return p.Deadline != MemberProductInfo_Deadline_DEFAULT
 }
 
-func (p *MemberProductInfo) IsSetCount() bool {
-	return p.Count != MemberProductInfo_Count_DEFAULT
+func (p *MemberProductInfo) IsSetNumber() bool {
+	return p.Number != MemberProductInfo_Number_DEFAULT
 }
 
-func (p *MemberProductInfo) IsSetCountSurplus() bool {
-	return p.CountSurplus != MemberProductInfo_CountSurplus_DEFAULT
+func (p *MemberProductInfo) IsSetNumberSurplus() bool {
+	return p.NumberSurplus != MemberProductInfo_NumberSurplus_DEFAULT
 }
 
 func (p *MemberProductInfo) IsSetValidityAt() bool {
@@ -415,6 +429,10 @@ func (p *MemberProductInfo) IsSetCourses() bool {
 
 func (p *MemberProductInfo) IsSetLessons() bool {
 	return p.Lessons != nil
+}
+
+func (p *MemberProductInfo) IsSetIsCourse() bool {
+	return p.IsCourse != MemberProductInfo_IsCourse_DEFAULT
 }
 
 func (p *MemberProductInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -620,6 +638,14 @@ func (p *MemberProductInfo) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
+		case 27:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField27(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -756,7 +782,7 @@ func (p *MemberProductInfo) ReadField12(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Count = _field
+	p.Number = _field
 	return nil
 }
 func (p *MemberProductInfo) ReadField13(iprot thrift.TProtocol) error {
@@ -767,7 +793,7 @@ func (p *MemberProductInfo) ReadField13(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.CountSurplus = _field
+	p.NumberSurplus = _field
 	return nil
 }
 func (p *MemberProductInfo) ReadField14(iprot thrift.TProtocol) error {
@@ -926,6 +952,17 @@ func (p *MemberProductInfo) ReadField25(iprot thrift.TProtocol) error {
 	p.Lessons = _field
 	return nil
 }
+func (p *MemberProductInfo) ReadField27(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.IsCourse = _field
+	return nil
+}
 
 func (p *MemberProductInfo) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1023,6 +1060,10 @@ func (p *MemberProductInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField25(oprot); err != nil {
 			fieldId = 25
+			goto WriteFieldError
+		}
+		if err = p.writeField27(oprot); err != nil {
+			fieldId = 27
 			goto WriteFieldError
 		}
 	}
@@ -1215,11 +1256,11 @@ WriteFieldEndError:
 }
 
 func (p *MemberProductInfo) writeField12(oprot thrift.TProtocol) (err error) {
-	if p.IsSetCount() {
-		if err = oprot.WriteFieldBegin("count", thrift.I64, 12); err != nil {
+	if p.IsSetNumber() {
+		if err = oprot.WriteFieldBegin("number", thrift.I64, 12); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(p.Count); err != nil {
+		if err := oprot.WriteI64(p.Number); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1234,11 +1275,11 @@ WriteFieldEndError:
 }
 
 func (p *MemberProductInfo) writeField13(oprot thrift.TProtocol) (err error) {
-	if p.IsSetCountSurplus() {
-		if err = oprot.WriteFieldBegin("countSurplus", thrift.I64, 13); err != nil {
+	if p.IsSetNumberSurplus() {
+		if err = oprot.WriteFieldBegin("numberSurplus", thrift.I64, 13); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(p.CountSurplus); err != nil {
+		if err := oprot.WriteI64(p.NumberSurplus); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1496,6 +1537,25 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 25 end error: ", p), err)
 }
 
+func (p *MemberProductInfo) writeField27(oprot thrift.TProtocol) (err error) {
+	if p.IsSetIsCourse() {
+		if err = oprot.WriteFieldBegin("isCourse", thrift.I64, 27); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.IsCourse); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 27 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 27 end error: ", p), err)
+}
+
 func (p *MemberProductInfo) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1508,9 +1568,10 @@ type MemberProductCourses struct {
 	ID              int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
 	Type            string `thrift:"type,2,optional" form:"type" json:"type" query:"type"`
 	Name            string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
-	Number          int64  `thrift:"number,4,optional" form:"number" json:"number" query:"number"`
-	CoursesId       int64  `thrift:"coursesId,6,optional" form:"coursesId" json:"coursesId" query:"coursesId"`
 	MemberProductId int64  `thrift:"memberProductId,5,optional" form:"memberProductId" json:"memberProductId" query:"memberProductId"`
+	CoursesId       int64  `thrift:"coursesId,6,optional" form:"coursesId" json:"coursesId" query:"coursesId"`
+	Number          int64  `thrift:"number,7,optional" form:"number" json:"number" query:"number"`
+	NumberSurplus   int64  `thrift:"numberSurplus,8,optional" form:"numberSurplus" json:"numberSurplus" query:"numberSurplus"`
 }
 
 func NewMemberProductCourses() *MemberProductCourses {
@@ -1519,9 +1580,10 @@ func NewMemberProductCourses() *MemberProductCourses {
 		ID:              0,
 		Type:            "",
 		Name:            "",
-		Number:          0,
-		CoursesId:       0,
 		MemberProductId: 0,
+		CoursesId:       0,
+		Number:          0,
+		NumberSurplus:   0,
 	}
 }
 
@@ -1529,9 +1591,10 @@ func (p *MemberProductCourses) InitDefault() {
 	p.ID = 0
 	p.Type = ""
 	p.Name = ""
-	p.Number = 0
-	p.CoursesId = 0
 	p.MemberProductId = 0
+	p.CoursesId = 0
+	p.Number = 0
+	p.NumberSurplus = 0
 }
 
 var MemberProductCourses_ID_DEFAULT int64 = 0
@@ -1561,13 +1624,13 @@ func (p *MemberProductCourses) GetName() (v string) {
 	return p.Name
 }
 
-var MemberProductCourses_Number_DEFAULT int64 = 0
+var MemberProductCourses_MemberProductId_DEFAULT int64 = 0
 
-func (p *MemberProductCourses) GetNumber() (v int64) {
-	if !p.IsSetNumber() {
-		return MemberProductCourses_Number_DEFAULT
+func (p *MemberProductCourses) GetMemberProductId() (v int64) {
+	if !p.IsSetMemberProductId() {
+		return MemberProductCourses_MemberProductId_DEFAULT
 	}
-	return p.Number
+	return p.MemberProductId
 }
 
 var MemberProductCourses_CoursesId_DEFAULT int64 = 0
@@ -1579,22 +1642,32 @@ func (p *MemberProductCourses) GetCoursesId() (v int64) {
 	return p.CoursesId
 }
 
-var MemberProductCourses_MemberProductId_DEFAULT int64 = 0
+var MemberProductCourses_Number_DEFAULT int64 = 0
 
-func (p *MemberProductCourses) GetMemberProductId() (v int64) {
-	if !p.IsSetMemberProductId() {
-		return MemberProductCourses_MemberProductId_DEFAULT
+func (p *MemberProductCourses) GetNumber() (v int64) {
+	if !p.IsSetNumber() {
+		return MemberProductCourses_Number_DEFAULT
 	}
-	return p.MemberProductId
+	return p.Number
+}
+
+var MemberProductCourses_NumberSurplus_DEFAULT int64 = 0
+
+func (p *MemberProductCourses) GetNumberSurplus() (v int64) {
+	if !p.IsSetNumberSurplus() {
+		return MemberProductCourses_NumberSurplus_DEFAULT
+	}
+	return p.NumberSurplus
 }
 
 var fieldIDToName_MemberProductCourses = map[int16]string{
 	1: "id",
 	2: "type",
 	3: "name",
-	4: "number",
-	6: "coursesId",
 	5: "memberProductId",
+	6: "coursesId",
+	7: "number",
+	8: "numberSurplus",
 }
 
 func (p *MemberProductCourses) IsSetID() bool {
@@ -1609,16 +1682,20 @@ func (p *MemberProductCourses) IsSetName() bool {
 	return p.Name != MemberProductCourses_Name_DEFAULT
 }
 
-func (p *MemberProductCourses) IsSetNumber() bool {
-	return p.Number != MemberProductCourses_Number_DEFAULT
+func (p *MemberProductCourses) IsSetMemberProductId() bool {
+	return p.MemberProductId != MemberProductCourses_MemberProductId_DEFAULT
 }
 
 func (p *MemberProductCourses) IsSetCoursesId() bool {
 	return p.CoursesId != MemberProductCourses_CoursesId_DEFAULT
 }
 
-func (p *MemberProductCourses) IsSetMemberProductId() bool {
-	return p.MemberProductId != MemberProductCourses_MemberProductId_DEFAULT
+func (p *MemberProductCourses) IsSetNumber() bool {
+	return p.Number != MemberProductCourses_Number_DEFAULT
+}
+
+func (p *MemberProductCourses) IsSetNumberSurplus() bool {
+	return p.NumberSurplus != MemberProductCourses_NumberSurplus_DEFAULT
 }
 
 func (p *MemberProductCourses) Read(iprot thrift.TProtocol) (err error) {
@@ -1664,9 +1741,9 @@ func (p *MemberProductCourses) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 4:
+		case 5:
 			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField4(iprot); err != nil {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1680,9 +1757,17 @@ func (p *MemberProductCourses) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
-		case 5:
+		case 7:
 			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField5(iprot); err != nil {
+				if err = p.ReadField7(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1750,7 +1835,7 @@ func (p *MemberProductCourses) ReadField3(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *MemberProductCourses) ReadField4(iprot thrift.TProtocol) error {
+func (p *MemberProductCourses) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -1758,7 +1843,7 @@ func (p *MemberProductCourses) ReadField4(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Number = _field
+	p.MemberProductId = _field
 	return nil
 }
 func (p *MemberProductCourses) ReadField6(iprot thrift.TProtocol) error {
@@ -1772,7 +1857,7 @@ func (p *MemberProductCourses) ReadField6(iprot thrift.TProtocol) error {
 	p.CoursesId = _field
 	return nil
 }
-func (p *MemberProductCourses) ReadField5(iprot thrift.TProtocol) error {
+func (p *MemberProductCourses) ReadField7(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -1780,7 +1865,18 @@ func (p *MemberProductCourses) ReadField5(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.MemberProductId = _field
+	p.Number = _field
+	return nil
+}
+func (p *MemberProductCourses) ReadField8(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.NumberSurplus = _field
 	return nil
 }
 
@@ -1802,16 +1898,20 @@ func (p *MemberProductCourses) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 3
 			goto WriteFieldError
 		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 		if err = p.writeField6(oprot); err != nil {
 			fieldId = 6
 			goto WriteFieldError
 		}
-		if err = p.writeField5(oprot); err != nil {
-			fieldId = 5
+		if err = p.writeField7(oprot); err != nil {
+			fieldId = 7
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
 			goto WriteFieldError
 		}
 	}
@@ -1889,12 +1989,12 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *MemberProductCourses) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetNumber() {
-		if err = oprot.WriteFieldBegin("number", thrift.I64, 4); err != nil {
+func (p *MemberProductCourses) writeField5(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMemberProductId() {
+		if err = oprot.WriteFieldBegin("memberProductId", thrift.I64, 5); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(p.Number); err != nil {
+		if err := oprot.WriteI64(p.MemberProductId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1903,9 +2003,9 @@ func (p *MemberProductCourses) writeField4(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *MemberProductCourses) writeField6(oprot thrift.TProtocol) (err error) {
@@ -1927,12 +2027,12 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
-func (p *MemberProductCourses) writeField5(oprot thrift.TProtocol) (err error) {
-	if p.IsSetMemberProductId() {
-		if err = oprot.WriteFieldBegin("memberProductId", thrift.I64, 5); err != nil {
+func (p *MemberProductCourses) writeField7(oprot thrift.TProtocol) (err error) {
+	if p.IsSetNumber() {
+		if err = oprot.WriteFieldBegin("number", thrift.I64, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(p.MemberProductId); err != nil {
+		if err := oprot.WriteI64(p.Number); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -1941,9 +2041,28 @@ func (p *MemberProductCourses) writeField5(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
+}
+
+func (p *MemberProductCourses) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetNumberSurplus() {
+		if err = oprot.WriteFieldBegin("numberSurplus", thrift.I64, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.NumberSurplus); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
 func (p *MemberProductCourses) String() string {

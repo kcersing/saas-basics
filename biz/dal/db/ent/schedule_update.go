@@ -412,26 +412,6 @@ func (su *ScheduleUpdate) ClearPrice() *ScheduleUpdate {
 	return su
 }
 
-// SetRemark sets the "remark" field.
-func (su *ScheduleUpdate) SetRemark(s string) *ScheduleUpdate {
-	su.mutation.SetRemark(s)
-	return su
-}
-
-// SetNillableRemark sets the "remark" field if the given value is not nil.
-func (su *ScheduleUpdate) SetNillableRemark(s *string) *ScheduleUpdate {
-	if s != nil {
-		su.SetRemark(*s)
-	}
-	return su
-}
-
-// ClearRemark clears the value of the "remark" field.
-func (su *ScheduleUpdate) ClearRemark() *ScheduleUpdate {
-	su.mutation.ClearRemark()
-	return su
-}
-
 // SetVenueName sets the "venue_name" field.
 func (su *ScheduleUpdate) SetVenueName(s string) *ScheduleUpdate {
 	su.mutation.SetVenueName(s)
@@ -469,6 +449,26 @@ func (su *ScheduleUpdate) SetNillablePlaceName(s *string) *ScheduleUpdate {
 // ClearPlaceName clears the value of the "place_name" field.
 func (su *ScheduleUpdate) ClearPlaceName() *ScheduleUpdate {
 	su.mutation.ClearPlaceName()
+	return su
+}
+
+// SetRemark sets the "remark" field.
+func (su *ScheduleUpdate) SetRemark(s string) *ScheduleUpdate {
+	su.mutation.SetRemark(s)
+	return su
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (su *ScheduleUpdate) SetNillableRemark(s *string) *ScheduleUpdate {
+	if s != nil {
+		su.SetRemark(*s)
+	}
+	return su
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (su *ScheduleUpdate) ClearRemark() *ScheduleUpdate {
+	su.mutation.ClearRemark()
 	return su
 }
 
@@ -723,12 +723,6 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.PriceCleared() {
 		_spec.ClearField(schedule.FieldPrice, field.TypeFloat64)
 	}
-	if value, ok := su.mutation.Remark(); ok {
-		_spec.SetField(schedule.FieldRemark, field.TypeString, value)
-	}
-	if su.mutation.RemarkCleared() {
-		_spec.ClearField(schedule.FieldRemark, field.TypeString)
-	}
 	if value, ok := su.mutation.VenueName(); ok {
 		_spec.SetField(schedule.FieldVenueName, field.TypeString, value)
 	}
@@ -740,6 +734,12 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.PlaceNameCleared() {
 		_spec.ClearField(schedule.FieldPlaceName, field.TypeString)
+	}
+	if value, ok := su.mutation.Remark(); ok {
+		_spec.SetField(schedule.FieldRemark, field.TypeString, value)
+	}
+	if su.mutation.RemarkCleared() {
+		_spec.ClearField(schedule.FieldRemark, field.TypeString)
 	}
 	if su.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1233,26 +1233,6 @@ func (suo *ScheduleUpdateOne) ClearPrice() *ScheduleUpdateOne {
 	return suo
 }
 
-// SetRemark sets the "remark" field.
-func (suo *ScheduleUpdateOne) SetRemark(s string) *ScheduleUpdateOne {
-	suo.mutation.SetRemark(s)
-	return suo
-}
-
-// SetNillableRemark sets the "remark" field if the given value is not nil.
-func (suo *ScheduleUpdateOne) SetNillableRemark(s *string) *ScheduleUpdateOne {
-	if s != nil {
-		suo.SetRemark(*s)
-	}
-	return suo
-}
-
-// ClearRemark clears the value of the "remark" field.
-func (suo *ScheduleUpdateOne) ClearRemark() *ScheduleUpdateOne {
-	suo.mutation.ClearRemark()
-	return suo
-}
-
 // SetVenueName sets the "venue_name" field.
 func (suo *ScheduleUpdateOne) SetVenueName(s string) *ScheduleUpdateOne {
 	suo.mutation.SetVenueName(s)
@@ -1290,6 +1270,26 @@ func (suo *ScheduleUpdateOne) SetNillablePlaceName(s *string) *ScheduleUpdateOne
 // ClearPlaceName clears the value of the "place_name" field.
 func (suo *ScheduleUpdateOne) ClearPlaceName() *ScheduleUpdateOne {
 	suo.mutation.ClearPlaceName()
+	return suo
+}
+
+// SetRemark sets the "remark" field.
+func (suo *ScheduleUpdateOne) SetRemark(s string) *ScheduleUpdateOne {
+	suo.mutation.SetRemark(s)
+	return suo
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (suo *ScheduleUpdateOne) SetNillableRemark(s *string) *ScheduleUpdateOne {
+	if s != nil {
+		suo.SetRemark(*s)
+	}
+	return suo
+}
+
+// ClearRemark clears the value of the "remark" field.
+func (suo *ScheduleUpdateOne) ClearRemark() *ScheduleUpdateOne {
+	suo.mutation.ClearRemark()
 	return suo
 }
 
@@ -1574,12 +1574,6 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 	if suo.mutation.PriceCleared() {
 		_spec.ClearField(schedule.FieldPrice, field.TypeFloat64)
 	}
-	if value, ok := suo.mutation.Remark(); ok {
-		_spec.SetField(schedule.FieldRemark, field.TypeString, value)
-	}
-	if suo.mutation.RemarkCleared() {
-		_spec.ClearField(schedule.FieldRemark, field.TypeString)
-	}
 	if value, ok := suo.mutation.VenueName(); ok {
 		_spec.SetField(schedule.FieldVenueName, field.TypeString, value)
 	}
@@ -1591,6 +1585,12 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 	}
 	if suo.mutation.PlaceNameCleared() {
 		_spec.ClearField(schedule.FieldPlaceName, field.TypeString)
+	}
+	if value, ok := suo.mutation.Remark(); ok {
+		_spec.SetField(schedule.FieldRemark, field.TypeString, value)
+	}
+	if suo.mutation.RemarkCleared() {
+		_spec.ClearField(schedule.FieldRemark, field.TypeString)
 	}
 	if suo.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{

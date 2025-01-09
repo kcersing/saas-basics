@@ -637,8 +637,9 @@ var (
 		{Name: "fee", Type: field.TypeFloat64, Nullable: true, Comment: "总价"},
 		{Name: "duration", Type: field.TypeInt64, Nullable: true, Comment: "总时长"},
 		{Name: "length", Type: field.TypeInt64, Nullable: true, Comment: "单次时长"},
-		{Name: "count", Type: field.TypeInt64, Nullable: true, Comment: "总次数", Default: 0},
-		{Name: "count_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余次数", Default: 0},
+		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "总次数", Default: 0},
+		{Name: "number_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余次数", Default: 0},
+		{Name: "is_course", Type: field.TypeInt64, Nullable: true, Comment: "課包 课程1不限2指定", Default: 1},
 		{Name: "deadline", Type: field.TypeInt64, Nullable: true, Comment: "激活期限"},
 		{Name: "validity_at", Type: field.TypeTime, Nullable: true, Comment: "生效时间"},
 		{Name: "cancel_at", Type: field.TypeTime, Nullable: true, Comment: "作废时间"},
@@ -652,7 +653,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_member_member_products",
-				Columns:    []*schema.Column{MemberProductColumns[22]},
+				Columns:    []*schema.Column{MemberProductColumns[23]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -666,7 +667,7 @@ var (
 			{
 				Name:    "memberproduct_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{MemberProductColumns[22]},
+				Columns: []*schema.Column{MemberProductColumns[23]},
 			},
 			{
 				Name:    "memberproduct_product_id",
@@ -691,6 +692,7 @@ var (
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型", Default: ""},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "课名", Default: ""},
 		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "节数", Default: 0},
+		{Name: "number_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余次数", Default: 0},
 		{Name: "courses_id", Type: field.TypeInt64, Nullable: true, Comment: "课名称", Default: 0},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品名称", Default: 0},
 	}
@@ -702,13 +704,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_courses_member_product_memberCourses",
-				Columns:    []*schema.Column{MemberProductCoursesColumns[10]},
+				Columns:    []*schema.Column{MemberProductCoursesColumns[11]},
 				RefColumns: []*schema.Column{MemberProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "member_product_courses_member_product_memberLessons",
-				Columns:    []*schema.Column{MemberProductCoursesColumns[10]},
+				Columns:    []*schema.Column{MemberProductCoursesColumns[11]},
 				RefColumns: []*schema.Column{MemberProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1098,7 +1100,7 @@ var (
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "售价", Default: 0},
 		{Name: "times", Type: field.TypeInt64, Nullable: true, Comment: "次数", Default: 0},
 		{Name: "is_lessons", Type: field.TypeInt64, Nullable: true, Comment: "团课预约 1支持2不支持", Default: 1},
-		{Name: "is_course", Type: field.TypeInt64, Nullable: true, Comment: "課包 1支持2不支持", Default: 1},
+		{Name: "is_course", Type: field.TypeInt64, Nullable: true, Comment: "課包 课程1不限2指定", Default: 1},
 		{Name: "sales", Type: field.TypeJSON, Nullable: true, Comment: "售卖信息[售价等]"},
 		{Name: "is_sales", Type: field.TypeInt64, Nullable: true, Comment: "销售方式 1会员端", Default: 1},
 		{Name: "sign_sales_at", Type: field.TypeTime, Nullable: true, Comment: "开始售卖时间"},
@@ -1202,9 +1204,9 @@ var (
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "price", Type: field.TypeFloat64, Nullable: true, Comment: "课程价格", Default: 0},
-		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
 		{Name: "venue_name", Type: field.TypeString, Nullable: true, Comment: "场馆名称"},
 		{Name: "place_name", Type: field.TypeString, Nullable: true, Comment: "场地名称"},
+		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
 	}
 	// ScheduleTable holds the schema information for the "schedule" table.
 	ScheduleTable = &schema.Table{
@@ -1224,13 +1226,13 @@ var (
 		{Name: "coach_id", Type: field.TypeInt64, Nullable: true, Comment: "教练ID"},
 		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "课程"},
-		{Name: "schedule_name", Type: field.TypeString, Nullable: true, Comment: "课程名称"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
 		{Name: "start_time", Type: field.TypeTime, Nullable: true, Comment: "开始时间"},
 		{Name: "end_time", Type: field.TypeTime, Nullable: true, Comment: "结束时间"},
 		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
 		{Name: "sign_end_time", Type: field.TypeTime, Nullable: true, Comment: "下课签到时间"},
 		{Name: "coach_name", Type: field.TypeString, Nullable: true, Comment: "教练名称"},
+		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
 		{Name: "schedule_id", Type: field.TypeInt64, Nullable: true, Comment: "课程ID"},
 	}
 	// ScheduleCoachTable holds the schema information for the "schedule_coach" table.
@@ -1274,7 +1276,7 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
 		{Name: "place_id", Type: field.TypeInt64, Nullable: true, Comment: "场地ID"},
-		{Name: "schedule_name", Type: field.TypeString, Nullable: true, Comment: "课程名称"},
+		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "课程"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "会员购买课ID"},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型"},
@@ -1283,6 +1285,7 @@ var (
 		{Name: "sign_start_time", Type: field.TypeTime, Nullable: true, Comment: "上课签到时间"},
 		{Name: "sign_end_time", Type: field.TypeTime, Nullable: true, Comment: "下课签到时间"},
 		{Name: "seat", Type: field.TypeJSON, Nullable: true, Comment: "座位"},
+		{Name: "is_course", Type: field.TypeInt64, Nullable: true, Comment: "課包 1支持2不支持", Default: 1},
 		{Name: "member_name", Type: field.TypeString, Nullable: true, Comment: "会员名称"},
 		{Name: "member_product_name", Type: field.TypeString, Nullable: true, Comment: "会员产品名称"},
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "备注"},
@@ -1296,7 +1299,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "schedule_member_schedule_members",
-				Columns:    []*schema.Column{ScheduleMemberColumns[20]},
+				Columns:    []*schema.Column{ScheduleMemberColumns[21]},
 				RefColumns: []*schema.Column{ScheduleColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1315,7 +1318,7 @@ var (
 			{
 				Name:    "schedulemember_schedule_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduleMemberColumns[20]},
+				Columns: []*schema.Column{ScheduleMemberColumns[21]},
 			},
 		},
 	}

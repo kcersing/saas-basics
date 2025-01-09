@@ -719,14 +719,18 @@ func init() {
 	memberproductDescSubType := memberproductFields[2].Descriptor()
 	// memberproduct.DefaultSubType holds the default value on creation for the sub_type field.
 	memberproduct.DefaultSubType = memberproductDescSubType.Default.(string)
-	// memberproductDescCount is the schema descriptor for count field.
-	memberproductDescCount := memberproductFields[12].Descriptor()
-	// memberproduct.DefaultCount holds the default value on creation for the count field.
-	memberproduct.DefaultCount = memberproductDescCount.Default.(int64)
-	// memberproductDescCountSurplus is the schema descriptor for count_surplus field.
-	memberproductDescCountSurplus := memberproductFields[13].Descriptor()
-	// memberproduct.DefaultCountSurplus holds the default value on creation for the count_surplus field.
-	memberproduct.DefaultCountSurplus = memberproductDescCountSurplus.Default.(int64)
+	// memberproductDescNumber is the schema descriptor for number field.
+	memberproductDescNumber := memberproductFields[12].Descriptor()
+	// memberproduct.DefaultNumber holds the default value on creation for the number field.
+	memberproduct.DefaultNumber = memberproductDescNumber.Default.(int64)
+	// memberproductDescNumberSurplus is the schema descriptor for number_surplus field.
+	memberproductDescNumberSurplus := memberproductFields[13].Descriptor()
+	// memberproduct.DefaultNumberSurplus holds the default value on creation for the number_surplus field.
+	memberproduct.DefaultNumberSurplus = memberproductDescNumberSurplus.Default.(int64)
+	// memberproductDescIsCourse is the schema descriptor for is_course field.
+	memberproductDescIsCourse := memberproductFields[14].Descriptor()
+	// memberproduct.DefaultIsCourse holds the default value on creation for the is_course field.
+	memberproduct.DefaultIsCourse = memberproductDescIsCourse.Default.(int64)
 	memberproductcoursesMixin := schema.MemberProductCourses{}.Mixin()
 	memberproductcoursesMixinFields0 := memberproductcoursesMixin[0].Fields()
 	_ = memberproductcoursesMixinFields0
@@ -768,12 +772,16 @@ func init() {
 	memberproductcoursesDescNumber := memberproductcoursesFields[2].Descriptor()
 	// memberproductcourses.DefaultNumber holds the default value on creation for the number field.
 	memberproductcourses.DefaultNumber = memberproductcoursesDescNumber.Default.(int64)
+	// memberproductcoursesDescNumberSurplus is the schema descriptor for number_surplus field.
+	memberproductcoursesDescNumberSurplus := memberproductcoursesFields[3].Descriptor()
+	// memberproductcourses.DefaultNumberSurplus holds the default value on creation for the number_surplus field.
+	memberproductcourses.DefaultNumberSurplus = memberproductcoursesDescNumberSurplus.Default.(int64)
 	// memberproductcoursesDescMemberProductID is the schema descriptor for member_product_id field.
-	memberproductcoursesDescMemberProductID := memberproductcoursesFields[3].Descriptor()
+	memberproductcoursesDescMemberProductID := memberproductcoursesFields[4].Descriptor()
 	// memberproductcourses.DefaultMemberProductID holds the default value on creation for the member_product_id field.
 	memberproductcourses.DefaultMemberProductID = memberproductcoursesDescMemberProductID.Default.(int64)
 	// memberproductcoursesDescCoursesID is the schema descriptor for courses_id field.
-	memberproductcoursesDescCoursesID := memberproductcoursesFields[4].Descriptor()
+	memberproductcoursesDescCoursesID := memberproductcoursesFields[5].Descriptor()
 	// memberproductcourses.DefaultCoursesID holds the default value on creation for the courses_id field.
 	memberproductcourses.DefaultCoursesID = memberproductcoursesDescCoursesID.Default.(int64)
 	memberprofileMixin := schema.MemberProfile{}.Mixin()
@@ -1333,19 +1341,19 @@ func init() {
 	// schedulecoach.DefaultStatus holds the default value on creation for the status field.
 	schedulecoach.DefaultStatus = schedulecoachDescStatus.Default.(int64)
 	// schedulecoachDescStartTime is the schema descriptor for start_time field.
-	schedulecoachDescStartTime := schedulecoachFields[7].Descriptor()
+	schedulecoachDescStartTime := schedulecoachFields[6].Descriptor()
 	// schedulecoach.DefaultStartTime holds the default value on creation for the start_time field.
 	schedulecoach.DefaultStartTime = schedulecoachDescStartTime.Default.(func() time.Time)
 	// schedulecoachDescEndTime is the schema descriptor for end_time field.
-	schedulecoachDescEndTime := schedulecoachFields[8].Descriptor()
+	schedulecoachDescEndTime := schedulecoachFields[7].Descriptor()
 	// schedulecoach.DefaultEndTime holds the default value on creation for the end_time field.
 	schedulecoach.DefaultEndTime = schedulecoachDescEndTime.Default.(func() time.Time)
 	// schedulecoachDescSignStartTime is the schema descriptor for sign_start_time field.
-	schedulecoachDescSignStartTime := schedulecoachFields[9].Descriptor()
+	schedulecoachDescSignStartTime := schedulecoachFields[8].Descriptor()
 	// schedulecoach.DefaultSignStartTime holds the default value on creation for the sign_start_time field.
 	schedulecoach.DefaultSignStartTime = schedulecoachDescSignStartTime.Default.(func() time.Time)
 	// schedulecoachDescSignEndTime is the schema descriptor for sign_end_time field.
-	schedulecoachDescSignEndTime := schedulecoachFields[10].Descriptor()
+	schedulecoachDescSignEndTime := schedulecoachFields[9].Descriptor()
 	// schedulecoach.DefaultSignEndTime holds the default value on creation for the sign_end_time field.
 	schedulecoach.DefaultSignEndTime = schedulecoachDescSignEndTime.Default.(func() time.Time)
 	schedulememberMixin := schema.ScheduleMember{}.Mixin()
@@ -1397,6 +1405,10 @@ func init() {
 	schedulememberDescSeat := schedulememberFields[11].Descriptor()
 	// schedulemember.DefaultSeat holds the default value on creation for the seat field.
 	schedulemember.DefaultSeat = schedulememberDescSeat.Default.(base.Seat)
+	// schedulememberDescIsCourse is the schema descriptor for is_course field.
+	schedulememberDescIsCourse := schedulememberFields[12].Descriptor()
+	// schedulemember.DefaultIsCourse holds the default value on creation for the is_course field.
+	schedulemember.DefaultIsCourse = schedulememberDescIsCourse.Default.(int64)
 	tokenMixin := schema.Token{}.Mixin()
 	tokenMixinFields0 := tokenMixin[0].Fields()
 	_ = tokenMixinFields0

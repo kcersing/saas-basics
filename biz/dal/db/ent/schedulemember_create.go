@@ -119,6 +119,20 @@ func (smc *ScheduleMemberCreate) SetNillablePlaceID(i *int64) *ScheduleMemberCre
 	return smc
 }
 
+// SetProductID sets the "product_id" field.
+func (smc *ScheduleMemberCreate) SetProductID(i int64) *ScheduleMemberCreate {
+	smc.mutation.SetProductID(i)
+	return smc
+}
+
+// SetNillableProductID sets the "product_id" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableProductID(i *int64) *ScheduleMemberCreate {
+	if i != nil {
+		smc.SetProductID(*i)
+	}
+	return smc
+}
+
 // SetScheduleID sets the "schedule_id" field.
 func (smc *ScheduleMemberCreate) SetScheduleID(i int64) *ScheduleMemberCreate {
 	smc.mutation.SetScheduleID(i)
@@ -129,20 +143,6 @@ func (smc *ScheduleMemberCreate) SetScheduleID(i int64) *ScheduleMemberCreate {
 func (smc *ScheduleMemberCreate) SetNillableScheduleID(i *int64) *ScheduleMemberCreate {
 	if i != nil {
 		smc.SetScheduleID(*i)
-	}
-	return smc
-}
-
-// SetScheduleName sets the "schedule_name" field.
-func (smc *ScheduleMemberCreate) SetScheduleName(s string) *ScheduleMemberCreate {
-	smc.mutation.SetScheduleName(s)
-	return smc
-}
-
-// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
-func (smc *ScheduleMemberCreate) SetNillableScheduleName(s *string) *ScheduleMemberCreate {
-	if s != nil {
-		smc.SetScheduleName(*s)
 	}
 	return smc
 }
@@ -255,6 +255,20 @@ func (smc *ScheduleMemberCreate) SetSeat(b base.Seat) *ScheduleMemberCreate {
 func (smc *ScheduleMemberCreate) SetNillableSeat(b *base.Seat) *ScheduleMemberCreate {
 	if b != nil {
 		smc.SetSeat(*b)
+	}
+	return smc
+}
+
+// SetIsCourse sets the "is_course" field.
+func (smc *ScheduleMemberCreate) SetIsCourse(i int64) *ScheduleMemberCreate {
+	smc.mutation.SetIsCourse(i)
+	return smc
+}
+
+// SetNillableIsCourse sets the "is_course" field if the given value is not nil.
+func (smc *ScheduleMemberCreate) SetNillableIsCourse(i *int64) *ScheduleMemberCreate {
+	if i != nil {
+		smc.SetIsCourse(*i)
 	}
 	return smc
 }
@@ -387,6 +401,10 @@ func (smc *ScheduleMemberCreate) defaults() {
 		v := schedulemember.DefaultSeat
 		smc.mutation.SetSeat(v)
 	}
+	if _, ok := smc.mutation.IsCourse(); !ok {
+		v := schedulemember.DefaultIsCourse
+		smc.mutation.SetIsCourse(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -451,9 +469,9 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 		_spec.SetField(schedulemember.FieldPlaceID, field.TypeInt64, value)
 		_node.PlaceID = value
 	}
-	if value, ok := smc.mutation.ScheduleName(); ok {
-		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
-		_node.ScheduleName = value
+	if value, ok := smc.mutation.ProductID(); ok {
+		_spec.SetField(schedulemember.FieldProductID, field.TypeInt64, value)
+		_node.ProductID = value
 	}
 	if value, ok := smc.mutation.MemberID(); ok {
 		_spec.SetField(schedulemember.FieldMemberID, field.TypeInt64, value)
@@ -486,6 +504,10 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 	if value, ok := smc.mutation.Seat(); ok {
 		_spec.SetField(schedulemember.FieldSeat, field.TypeJSON, value)
 		_node.Seat = value
+	}
+	if value, ok := smc.mutation.IsCourse(); ok {
+		_spec.SetField(schedulemember.FieldIsCourse, field.TypeInt64, value)
+		_node.IsCourse = value
 	}
 	if value, ok := smc.mutation.MemberName(); ok {
 		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)

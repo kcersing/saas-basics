@@ -34,8 +34,6 @@ const (
 	FieldScheduleID = "schedule_id"
 	// FieldProductID holds the string denoting the product_id field in the database.
 	FieldProductID = "product_id"
-	// FieldScheduleName holds the string denoting the schedule_name field in the database.
-	FieldScheduleName = "schedule_name"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
 	// FieldStartTime holds the string denoting the start_time field in the database.
@@ -48,6 +46,8 @@ const (
 	FieldSignEndTime = "sign_end_time"
 	// FieldCoachName holds the string denoting the coach_name field in the database.
 	FieldCoachName = "coach_name"
+	// FieldRemark holds the string denoting the remark field in the database.
+	FieldRemark = "remark"
 	// EdgeSchedule holds the string denoting the schedule edge name in mutations.
 	EdgeSchedule = "schedule"
 	// Table holds the table name of the schedulecoach in the database.
@@ -74,13 +74,13 @@ var Columns = []string{
 	FieldPlaceID,
 	FieldScheduleID,
 	FieldProductID,
-	FieldScheduleName,
 	FieldType,
 	FieldStartTime,
 	FieldEndTime,
 	FieldSignStartTime,
 	FieldSignEndTime,
 	FieldCoachName,
+	FieldRemark,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -174,11 +174,6 @@ func ByProductID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductID, opts...).ToFunc()
 }
 
-// ByScheduleName orders the results by the schedule_name field.
-func ByScheduleName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldScheduleName, opts...).ToFunc()
-}
-
 // ByType orders the results by the type field.
 func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
@@ -207,6 +202,11 @@ func BySignEndTime(opts ...sql.OrderTermOption) OrderOption {
 // ByCoachName orders the results by the coach_name field.
 func ByCoachName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCoachName, opts...).ToFunc()
+}
+
+// ByRemark orders the results by the remark field.
+func ByRemark(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemark, opts...).ToFunc()
 }
 
 // ByScheduleField orders the results by schedule field.

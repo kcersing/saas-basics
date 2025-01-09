@@ -20,8 +20,8 @@ struct MemberProductInfo {
     8: optional i64 length = 0 (api.raw = "length")
     9: optional string type = "" (api.raw = "type")
     10: optional i64 deadline = 0 (api.raw = "deadline")
-    12: optional i64 count = 0 (api.raw = "count")
-    13: optional i64 countSurplus = 0 (api.raw = "countSurplus")
+    12: optional i64 number = 0 (api.raw = "number")
+    13: optional i64 numberSurplus = 0 (api.raw = "numberSurplus")
     14: optional string validityAt = ""   (api.raw = "validityAt")
     15: optional string cancelAt = ""  (api.raw = "cancelAt")
     16: optional string createdAt = ""   (api.raw = "updatedAt")
@@ -38,15 +38,22 @@ struct MemberProductInfo {
     24: optional list<MemberProductCourses> courses = {}  (api.raw = "courses")
     /**团课*/
     25: optional list<MemberProductCourses> lessons = {} (api.raw = "lessons")
+
+
+     /**课程 1不限2指定*/
+     27: optional i64 isCourse =0 (api.raw = "isCourse")
 }
 
 struct MemberProductCourses {
     1: optional i64 id =0 (api.raw = "id")
     2: optional string type = "" (api.raw = "type")
     3: optional string name=""  (api.raw = "name")
-    4: optional i64 number =0 (api.raw = "number")
-    6: optional i64 coursesId =0 (api.raw = "courses_id")
-    5: optional i64 memberProductId = 0  (api.raw = "member_product_id")
+        5: optional i64 memberProductId = 0  (api.raw = "member_product_id")
+        6: optional i64 coursesId =0 (api.raw = "courses_id")
+    7: optional i64 number = 0 (api.raw = "number")
+    8: optional i64 numberSurplus = 0 (api.raw = "numberSurplus")
+
+
 }
 
 struct MemberProductListReq {

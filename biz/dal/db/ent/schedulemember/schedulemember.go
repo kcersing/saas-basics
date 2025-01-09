@@ -29,10 +29,10 @@ const (
 	FieldVenueID = "venue_id"
 	// FieldPlaceID holds the string denoting the place_id field in the database.
 	FieldPlaceID = "place_id"
+	// FieldProductID holds the string denoting the product_id field in the database.
+	FieldProductID = "product_id"
 	// FieldScheduleID holds the string denoting the schedule_id field in the database.
 	FieldScheduleID = "schedule_id"
-	// FieldScheduleName holds the string denoting the schedule_name field in the database.
-	FieldScheduleName = "schedule_name"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
 	// FieldMemberProductID holds the string denoting the member_product_id field in the database.
@@ -49,6 +49,8 @@ const (
 	FieldSignEndTime = "sign_end_time"
 	// FieldSeat holds the string denoting the seat field in the database.
 	FieldSeat = "seat"
+	// FieldIsCourse holds the string denoting the is_course field in the database.
+	FieldIsCourse = "is_course"
 	// FieldMemberName holds the string denoting the member_name field in the database.
 	FieldMemberName = "member_name"
 	// FieldMemberProductName holds the string denoting the member_product_name field in the database.
@@ -78,8 +80,8 @@ var Columns = []string{
 	FieldStatus,
 	FieldVenueID,
 	FieldPlaceID,
+	FieldProductID,
 	FieldScheduleID,
-	FieldScheduleName,
 	FieldMemberID,
 	FieldMemberProductID,
 	FieldType,
@@ -88,6 +90,7 @@ var Columns = []string{
 	FieldSignStartTime,
 	FieldSignEndTime,
 	FieldSeat,
+	FieldIsCourse,
 	FieldMemberName,
 	FieldMemberProductName,
 	FieldRemark,
@@ -126,6 +129,8 @@ var (
 	DefaultSignEndTime func() time.Time
 	// DefaultSeat holds the default value on creation for the "seat" field.
 	DefaultSeat base.Seat
+	// DefaultIsCourse holds the default value on creation for the "is_course" field.
+	DefaultIsCourse int64
 )
 
 // OrderOption defines the ordering options for the ScheduleMember queries.
@@ -171,14 +176,14 @@ func ByPlaceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlaceID, opts...).ToFunc()
 }
 
+// ByProductID orders the results by the product_id field.
+func ByProductID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProductID, opts...).ToFunc()
+}
+
 // ByScheduleID orders the results by the schedule_id field.
 func ByScheduleID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScheduleID, opts...).ToFunc()
-}
-
-// ByScheduleName orders the results by the schedule_name field.
-func ByScheduleName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldScheduleName, opts...).ToFunc()
 }
 
 // ByMemberID orders the results by the member_id field.
@@ -214,6 +219,11 @@ func BySignStartTime(opts ...sql.OrderTermOption) OrderOption {
 // BySignEndTime orders the results by the sign_end_time field.
 func BySignEndTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSignEndTime, opts...).ToFunc()
+}
+
+// ByIsCourse orders the results by the is_course field.
+func ByIsCourse(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsCourse, opts...).ToFunc()
 }
 
 // ByMemberName orders the results by the member_name field.

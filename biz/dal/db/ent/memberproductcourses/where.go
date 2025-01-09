@@ -95,6 +95,11 @@ func Number(v int64) predicate.MemberProductCourses {
 	return predicate.MemberProductCourses(sql.FieldEQ(FieldNumber, v))
 }
 
+// NumberSurplus applies equality check predicate on the "number_surplus" field. It's identical to NumberSurplusEQ.
+func NumberSurplus(v int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldEQ(FieldNumberSurplus, v))
+}
+
 // MemberProductID applies equality check predicate on the "member_product_id" field. It's identical to MemberProductIDEQ.
 func MemberProductID(v int64) predicate.MemberProductCourses {
 	return predicate.MemberProductCourses(sql.FieldEQ(FieldMemberProductID, v))
@@ -553,6 +558,56 @@ func NumberIsNil() predicate.MemberProductCourses {
 // NumberNotNil applies the NotNil predicate on the "number" field.
 func NumberNotNil() predicate.MemberProductCourses {
 	return predicate.MemberProductCourses(sql.FieldNotNull(FieldNumber))
+}
+
+// NumberSurplusEQ applies the EQ predicate on the "number_surplus" field.
+func NumberSurplusEQ(v int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldEQ(FieldNumberSurplus, v))
+}
+
+// NumberSurplusNEQ applies the NEQ predicate on the "number_surplus" field.
+func NumberSurplusNEQ(v int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldNEQ(FieldNumberSurplus, v))
+}
+
+// NumberSurplusIn applies the In predicate on the "number_surplus" field.
+func NumberSurplusIn(vs ...int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldIn(FieldNumberSurplus, vs...))
+}
+
+// NumberSurplusNotIn applies the NotIn predicate on the "number_surplus" field.
+func NumberSurplusNotIn(vs ...int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldNotIn(FieldNumberSurplus, vs...))
+}
+
+// NumberSurplusGT applies the GT predicate on the "number_surplus" field.
+func NumberSurplusGT(v int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldGT(FieldNumberSurplus, v))
+}
+
+// NumberSurplusGTE applies the GTE predicate on the "number_surplus" field.
+func NumberSurplusGTE(v int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldGTE(FieldNumberSurplus, v))
+}
+
+// NumberSurplusLT applies the LT predicate on the "number_surplus" field.
+func NumberSurplusLT(v int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldLT(FieldNumberSurplus, v))
+}
+
+// NumberSurplusLTE applies the LTE predicate on the "number_surplus" field.
+func NumberSurplusLTE(v int64) predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldLTE(FieldNumberSurplus, v))
+}
+
+// NumberSurplusIsNil applies the IsNil predicate on the "number_surplus" field.
+func NumberSurplusIsNil() predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldIsNull(FieldNumberSurplus))
+}
+
+// NumberSurplusNotNil applies the NotNil predicate on the "number_surplus" field.
+func NumberSurplusNotNil() predicate.MemberProductCourses {
+	return predicate.MemberProductCourses(sql.FieldNotNull(FieldNumberSurplus))
 }
 
 // MemberProductIDEQ applies the EQ predicate on the "member_product_id" field.

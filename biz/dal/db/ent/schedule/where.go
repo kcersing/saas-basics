@@ -140,11 +140,6 @@ func Price(v float64) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldPrice, v))
 }
 
-// Remark applies equality check predicate on the "remark" field. It's identical to RemarkEQ.
-func Remark(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldEQ(FieldRemark, v))
-}
-
 // VenueName applies equality check predicate on the "venue_name" field. It's identical to VenueNameEQ.
 func VenueName(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldVenueName, v))
@@ -153,6 +148,11 @@ func VenueName(v string) predicate.Schedule {
 // PlaceName applies equality check predicate on the "place_name" field. It's identical to PlaceNameEQ.
 func PlaceName(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldPlaceName, v))
+}
+
+// Remark applies equality check predicate on the "remark" field. It's identical to RemarkEQ.
+func Remark(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldRemark, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1080,81 +1080,6 @@ func PriceNotNil() predicate.Schedule {
 	return predicate.Schedule(sql.FieldNotNull(FieldPrice))
 }
 
-// RemarkEQ applies the EQ predicate on the "remark" field.
-func RemarkEQ(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldEQ(FieldRemark, v))
-}
-
-// RemarkNEQ applies the NEQ predicate on the "remark" field.
-func RemarkNEQ(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldNEQ(FieldRemark, v))
-}
-
-// RemarkIn applies the In predicate on the "remark" field.
-func RemarkIn(vs ...string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldIn(FieldRemark, vs...))
-}
-
-// RemarkNotIn applies the NotIn predicate on the "remark" field.
-func RemarkNotIn(vs ...string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldNotIn(FieldRemark, vs...))
-}
-
-// RemarkGT applies the GT predicate on the "remark" field.
-func RemarkGT(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldGT(FieldRemark, v))
-}
-
-// RemarkGTE applies the GTE predicate on the "remark" field.
-func RemarkGTE(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldGTE(FieldRemark, v))
-}
-
-// RemarkLT applies the LT predicate on the "remark" field.
-func RemarkLT(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldLT(FieldRemark, v))
-}
-
-// RemarkLTE applies the LTE predicate on the "remark" field.
-func RemarkLTE(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldLTE(FieldRemark, v))
-}
-
-// RemarkContains applies the Contains predicate on the "remark" field.
-func RemarkContains(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldContains(FieldRemark, v))
-}
-
-// RemarkHasPrefix applies the HasPrefix predicate on the "remark" field.
-func RemarkHasPrefix(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldHasPrefix(FieldRemark, v))
-}
-
-// RemarkHasSuffix applies the HasSuffix predicate on the "remark" field.
-func RemarkHasSuffix(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldHasSuffix(FieldRemark, v))
-}
-
-// RemarkIsNil applies the IsNil predicate on the "remark" field.
-func RemarkIsNil() predicate.Schedule {
-	return predicate.Schedule(sql.FieldIsNull(FieldRemark))
-}
-
-// RemarkNotNil applies the NotNil predicate on the "remark" field.
-func RemarkNotNil() predicate.Schedule {
-	return predicate.Schedule(sql.FieldNotNull(FieldRemark))
-}
-
-// RemarkEqualFold applies the EqualFold predicate on the "remark" field.
-func RemarkEqualFold(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldEqualFold(FieldRemark, v))
-}
-
-// RemarkContainsFold applies the ContainsFold predicate on the "remark" field.
-func RemarkContainsFold(v string) predicate.Schedule {
-	return predicate.Schedule(sql.FieldContainsFold(FieldRemark, v))
-}
-
 // VenueNameEQ applies the EQ predicate on the "venue_name" field.
 func VenueNameEQ(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldEQ(FieldVenueName, v))
@@ -1303,6 +1228,81 @@ func PlaceNameEqualFold(v string) predicate.Schedule {
 // PlaceNameContainsFold applies the ContainsFold predicate on the "place_name" field.
 func PlaceNameContainsFold(v string) predicate.Schedule {
 	return predicate.Schedule(sql.FieldContainsFold(FieldPlaceName, v))
+}
+
+// RemarkEQ applies the EQ predicate on the "remark" field.
+func RemarkEQ(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEQ(FieldRemark, v))
+}
+
+// RemarkNEQ applies the NEQ predicate on the "remark" field.
+func RemarkNEQ(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNEQ(FieldRemark, v))
+}
+
+// RemarkIn applies the In predicate on the "remark" field.
+func RemarkIn(vs ...string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldIn(FieldRemark, vs...))
+}
+
+// RemarkNotIn applies the NotIn predicate on the "remark" field.
+func RemarkNotIn(vs ...string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotIn(FieldRemark, vs...))
+}
+
+// RemarkGT applies the GT predicate on the "remark" field.
+func RemarkGT(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGT(FieldRemark, v))
+}
+
+// RemarkGTE applies the GTE predicate on the "remark" field.
+func RemarkGTE(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldGTE(FieldRemark, v))
+}
+
+// RemarkLT applies the LT predicate on the "remark" field.
+func RemarkLT(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLT(FieldRemark, v))
+}
+
+// RemarkLTE applies the LTE predicate on the "remark" field.
+func RemarkLTE(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldLTE(FieldRemark, v))
+}
+
+// RemarkContains applies the Contains predicate on the "remark" field.
+func RemarkContains(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldContains(FieldRemark, v))
+}
+
+// RemarkHasPrefix applies the HasPrefix predicate on the "remark" field.
+func RemarkHasPrefix(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldHasPrefix(FieldRemark, v))
+}
+
+// RemarkHasSuffix applies the HasSuffix predicate on the "remark" field.
+func RemarkHasSuffix(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldHasSuffix(FieldRemark, v))
+}
+
+// RemarkIsNil applies the IsNil predicate on the "remark" field.
+func RemarkIsNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldIsNull(FieldRemark))
+}
+
+// RemarkNotNil applies the NotNil predicate on the "remark" field.
+func RemarkNotNil() predicate.Schedule {
+	return predicate.Schedule(sql.FieldNotNull(FieldRemark))
+}
+
+// RemarkEqualFold applies the EqualFold predicate on the "remark" field.
+func RemarkEqualFold(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldEqualFold(FieldRemark, v))
+}
+
+// RemarkContainsFold applies the ContainsFold predicate on the "remark" field.
+func RemarkContainsFold(v string) predicate.Schedule {
+	return predicate.Schedule(sql.FieldContainsFold(FieldRemark, v))
 }
 
 // HasMembers applies the HasEdge predicate on the "members" edge.

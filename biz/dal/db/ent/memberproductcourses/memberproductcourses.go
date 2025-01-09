@@ -30,6 +30,8 @@ const (
 	FieldName = "name"
 	// FieldNumber holds the string denoting the number field in the database.
 	FieldNumber = "number"
+	// FieldNumberSurplus holds the string denoting the number_surplus field in the database.
+	FieldNumberSurplus = "number_surplus"
 	// FieldMemberProductID holds the string denoting the member_product_id field in the database.
 	FieldMemberProductID = "member_product_id"
 	// FieldCoursesID holds the string denoting the courses_id field in the database.
@@ -67,6 +69,7 @@ var Columns = []string{
 	FieldType,
 	FieldName,
 	FieldNumber,
+	FieldNumberSurplus,
 	FieldMemberProductID,
 	FieldCoursesID,
 }
@@ -100,6 +103,8 @@ var (
 	DefaultName string
 	// DefaultNumber holds the default value on creation for the "number" field.
 	DefaultNumber int64
+	// DefaultNumberSurplus holds the default value on creation for the "number_surplus" field.
+	DefaultNumberSurplus int64
 	// DefaultMemberProductID holds the default value on creation for the "member_product_id" field.
 	DefaultMemberProductID int64
 	// DefaultCoursesID holds the default value on creation for the "courses_id" field.
@@ -152,6 +157,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByNumber orders the results by the number field.
 func ByNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNumber, opts...).ToFunc()
+}
+
+// ByNumberSurplus orders the results by the number_surplus field.
+func ByNumberSurplus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumberSurplus, opts...).ToFunc()
 }
 
 // ByMemberProductID orders the results by the member_product_id field.

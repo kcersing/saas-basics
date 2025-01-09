@@ -28,10 +28,10 @@ func (Schedule) Fields() []ent.Field {
 		field.Time("start_time").Comment("开始时间").Optional(),
 		field.Time("end_time").Comment("开始时间").Optional(),
 		field.Float("price").Default(0).Comment("课程价格").Optional(),
-		field.String("remark").Comment("备注").Optional(),
 
 		field.String("venue_name").Comment("场馆名称").Optional(),
 		field.String("place_name").Comment("场地名称").Optional(),
+		field.String("remark").Comment("备注").Optional(),
 	}
 }
 

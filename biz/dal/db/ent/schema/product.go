@@ -29,7 +29,7 @@ func (Product) Fields() []ent.Field {
 		field.Float("price").Default(0).Comment("售价").Optional(),
 		field.Int64("times").Default(0).Comment("次数").Optional(),
 		field.Int64("is_lessons").Default(1).Comment("团课预约 1支持2不支持").Optional(),
-		field.Int64("is_course").Default(1).Comment("課包 1支持2不支持").Optional(),
+		field.Int64("is_course").Default(1).Comment("課包 课程1不限2指定").Optional(),
 		field.JSON("sales", []*base.Sales{}).Comment("售卖信息[售价等]").Optional(),
 		field.Int64("is_sales").Default(1).Comment("销售方式 1会员端").Optional(),
 

@@ -160,20 +160,6 @@ func (scc *ScheduleCoachCreate) SetNillableProductID(i *int64) *ScheduleCoachCre
 	return scc
 }
 
-// SetScheduleName sets the "schedule_name" field.
-func (scc *ScheduleCoachCreate) SetScheduleName(s string) *ScheduleCoachCreate {
-	scc.mutation.SetScheduleName(s)
-	return scc
-}
-
-// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
-func (scc *ScheduleCoachCreate) SetNillableScheduleName(s *string) *ScheduleCoachCreate {
-	if s != nil {
-		scc.SetScheduleName(*s)
-	}
-	return scc
-}
-
 // SetType sets the "type" field.
 func (scc *ScheduleCoachCreate) SetType(s string) *ScheduleCoachCreate {
 	scc.mutation.SetType(s)
@@ -254,6 +240,20 @@ func (scc *ScheduleCoachCreate) SetCoachName(s string) *ScheduleCoachCreate {
 func (scc *ScheduleCoachCreate) SetNillableCoachName(s *string) *ScheduleCoachCreate {
 	if s != nil {
 		scc.SetCoachName(*s)
+	}
+	return scc
+}
+
+// SetRemark sets the "remark" field.
+func (scc *ScheduleCoachCreate) SetRemark(s string) *ScheduleCoachCreate {
+	scc.mutation.SetRemark(s)
+	return scc
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (scc *ScheduleCoachCreate) SetNillableRemark(s *string) *ScheduleCoachCreate {
+	if s != nil {
+		scc.SetRemark(*s)
 	}
 	return scc
 }
@@ -412,10 +412,6 @@ func (scc *ScheduleCoachCreate) createSpec() (*ScheduleCoach, *sqlgraph.CreateSp
 		_spec.SetField(schedulecoach.FieldProductID, field.TypeInt64, value)
 		_node.ProductID = value
 	}
-	if value, ok := scc.mutation.ScheduleName(); ok {
-		_spec.SetField(schedulecoach.FieldScheduleName, field.TypeString, value)
-		_node.ScheduleName = value
-	}
 	if value, ok := scc.mutation.GetType(); ok {
 		_spec.SetField(schedulecoach.FieldType, field.TypeString, value)
 		_node.Type = value
@@ -439,6 +435,10 @@ func (scc *ScheduleCoachCreate) createSpec() (*ScheduleCoach, *sqlgraph.CreateSp
 	if value, ok := scc.mutation.CoachName(); ok {
 		_spec.SetField(schedulecoach.FieldCoachName, field.TypeString, value)
 		_node.CoachName = value
+	}
+	if value, ok := scc.mutation.Remark(); ok {
+		_spec.SetField(schedulecoach.FieldRemark, field.TypeString, value)
+		_node.Remark = value
 	}
 	if nodes := scc.mutation.ScheduleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

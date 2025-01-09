@@ -20,22 +20,20 @@ func (ScheduleMember) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("venue_id").Comment("场馆id").Optional(),
 		field.Int64("place_id").Comment("场地ID").Optional(),
+		field.Int64("product_id").Comment("课程").Optional(),
 		field.Int64("schedule_id").Comment("课程ID").Optional(),
-		field.String("schedule_name").Comment("课程名称").Optional(),
 		field.Int64("member_id").Comment("会员id").Optional(),
 		field.Int64("member_product_id").Comment("会员购买课ID").Optional(),
-
 		field.String("type").Comment("类型").Optional(),
 		field.Time("start_time").Default(time.Now).Comment("开始时间").Optional(),
 		field.Time("end_time").Default(time.Now).Comment("结束时间").Optional(),
 		field.Time("sign_start_time").Default(time.Now).Comment("上课签到时间").Optional(),
 		field.Time("sign_end_time").Default(time.Now).Comment("下课签到时间").Optional(),
-
 		field.JSON("seat", base.Seat{}).Default(base.Seat{}).Comment("座位").Optional(),
+		field.Int64("is_course").Default(1).Comment("課包 1支持2不支持").Optional(),
 
 		field.String("member_name").Comment("会员名称").Optional(),
 		field.String("member_product_name").Comment("会员产品名称").Optional(),
-
 		field.String("remark").Comment("备注").Optional(),
 	}
 }

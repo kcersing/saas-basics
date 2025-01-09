@@ -259,20 +259,6 @@ func (sc *ScheduleCreate) SetNillablePrice(f *float64) *ScheduleCreate {
 	return sc
 }
 
-// SetRemark sets the "remark" field.
-func (sc *ScheduleCreate) SetRemark(s string) *ScheduleCreate {
-	sc.mutation.SetRemark(s)
-	return sc
-}
-
-// SetNillableRemark sets the "remark" field if the given value is not nil.
-func (sc *ScheduleCreate) SetNillableRemark(s *string) *ScheduleCreate {
-	if s != nil {
-		sc.SetRemark(*s)
-	}
-	return sc
-}
-
 // SetVenueName sets the "venue_name" field.
 func (sc *ScheduleCreate) SetVenueName(s string) *ScheduleCreate {
 	sc.mutation.SetVenueName(s)
@@ -297,6 +283,20 @@ func (sc *ScheduleCreate) SetPlaceName(s string) *ScheduleCreate {
 func (sc *ScheduleCreate) SetNillablePlaceName(s *string) *ScheduleCreate {
 	if s != nil {
 		sc.SetPlaceName(*s)
+	}
+	return sc
+}
+
+// SetRemark sets the "remark" field.
+func (sc *ScheduleCreate) SetRemark(s string) *ScheduleCreate {
+	sc.mutation.SetRemark(s)
+	return sc
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (sc *ScheduleCreate) SetNillableRemark(s *string) *ScheduleCreate {
+	if s != nil {
+		sc.SetRemark(*s)
 	}
 	return sc
 }
@@ -500,10 +500,6 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 		_spec.SetField(schedule.FieldPrice, field.TypeFloat64, value)
 		_node.Price = value
 	}
-	if value, ok := sc.mutation.Remark(); ok {
-		_spec.SetField(schedule.FieldRemark, field.TypeString, value)
-		_node.Remark = value
-	}
 	if value, ok := sc.mutation.VenueName(); ok {
 		_spec.SetField(schedule.FieldVenueName, field.TypeString, value)
 		_node.VenueName = value
@@ -511,6 +507,10 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.PlaceName(); ok {
 		_spec.SetField(schedule.FieldPlaceName, field.TypeString, value)
 		_node.PlaceName = value
+	}
+	if value, ok := sc.mutation.Remark(); ok {
+		_spec.SetField(schedule.FieldRemark, field.TypeString, value)
+		_node.Remark = value
 	}
 	if nodes := sc.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

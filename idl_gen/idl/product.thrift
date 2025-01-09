@@ -36,7 +36,7 @@ struct ProductInfo {
     /**次数(次卡)*/
     26:optional i64 times = 0 (api.raw = "times")
 
-     /**课程 课程 1不限2指定*/
+     /**课程 1不限2指定*/
      27: optional i64 isCourse =0 (api.raw = "isCourse")
      /**课程-数组*/
      28: optional list<base.CourseList> courses = {}  (api.raw = "courses")

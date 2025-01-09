@@ -39,8 +39,6 @@ type ScheduleCoach struct {
 	ScheduleID int64 `json:"schedule_id,omitempty"`
 	// 课程
 	ProductID int64 `json:"product_id,omitempty"`
-	// 课程名称
-	ScheduleName string `json:"schedule_name,omitempty"`
 	// 类型
 	Type string `json:"type,omitempty"`
 	// 开始时间
@@ -53,6 +51,8 @@ type ScheduleCoach struct {
 	SignEndTime time.Time `json:"sign_end_time,omitempty"`
 	// 教练名称
 	CoachName string `json:"coach_name,omitempty"`
+	// 备注
+	Remark string `json:"remark,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduleCoachQuery when eager-loading is set.
 	Edges        ScheduleCoachEdges `json:"edges"`
@@ -88,7 +88,7 @@ func (*ScheduleCoach) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedulecoach.FieldID, schedulecoach.FieldDelete, schedulecoach.FieldCreatedID, schedulecoach.FieldStatus, schedulecoach.FieldVenueID, schedulecoach.FieldCoachID, schedulecoach.FieldPlaceID, schedulecoach.FieldScheduleID, schedulecoach.FieldProductID:
 			values[i] = new(sql.NullInt64)
-		case schedulecoach.FieldScheduleName, schedulecoach.FieldType, schedulecoach.FieldCoachName:
+		case schedulecoach.FieldType, schedulecoach.FieldCoachName, schedulecoach.FieldRemark:
 			values[i] = new(sql.NullString)
 		case schedulecoach.FieldCreatedAt, schedulecoach.FieldUpdatedAt, schedulecoach.FieldStartTime, schedulecoach.FieldEndTime, schedulecoach.FieldSignStartTime, schedulecoach.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
@@ -173,12 +173,6 @@ func (sc *ScheduleCoach) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sc.ProductID = value.Int64
 			}
-		case schedulecoach.FieldScheduleName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field schedule_name", values[i])
-			} else if value.Valid {
-				sc.ScheduleName = value.String
-			}
 		case schedulecoach.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
@@ -214,6 +208,12 @@ func (sc *ScheduleCoach) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field coach_name", values[i])
 			} else if value.Valid {
 				sc.CoachName = value.String
+			}
+		case schedulecoach.FieldRemark:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remark", values[i])
+			} else if value.Valid {
+				sc.Remark = value.String
 			}
 		default:
 			sc.selectValues.Set(columns[i], values[i])
@@ -286,9 +286,6 @@ func (sc *ScheduleCoach) String() string {
 	builder.WriteString("product_id=")
 	builder.WriteString(fmt.Sprintf("%v", sc.ProductID))
 	builder.WriteString(", ")
-	builder.WriteString("schedule_name=")
-	builder.WriteString(sc.ScheduleName)
-	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(sc.Type)
 	builder.WriteString(", ")
@@ -306,6 +303,9 @@ func (sc *ScheduleCoach) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("coach_name=")
 	builder.WriteString(sc.CoachName)
+	builder.WriteString(", ")
+	builder.WriteString("remark=")
+	builder.WriteString(sc.Remark)
 	builder.WriteByte(')')
 	return builder.String()
 }

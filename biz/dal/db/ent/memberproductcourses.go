@@ -35,6 +35,8 @@ type MemberProductCourses struct {
 	Name string `json:"name,omitempty"`
 	// 节数
 	Number int64 `json:"number,omitempty"`
+	// 剩余次数
+	NumberSurplus int64 `json:"number_surplus,omitempty"`
 	// 产品名称
 	MemberProductID int64 `json:"member_product_id,omitempty"`
 	// 课名称
@@ -87,7 +89,7 @@ func (*MemberProductCourses) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case memberproductcourses.FieldID, memberproductcourses.FieldDelete, memberproductcourses.FieldCreatedID, memberproductcourses.FieldStatus, memberproductcourses.FieldNumber, memberproductcourses.FieldMemberProductID, memberproductcourses.FieldCoursesID:
+		case memberproductcourses.FieldID, memberproductcourses.FieldDelete, memberproductcourses.FieldCreatedID, memberproductcourses.FieldStatus, memberproductcourses.FieldNumber, memberproductcourses.FieldNumberSurplus, memberproductcourses.FieldMemberProductID, memberproductcourses.FieldCoursesID:
 			values[i] = new(sql.NullInt64)
 		case memberproductcourses.FieldType, memberproductcourses.FieldName:
 			values[i] = new(sql.NullString)
@@ -161,6 +163,12 @@ func (mpc *MemberProductCourses) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field number", values[i])
 			} else if value.Valid {
 				mpc.Number = value.Int64
+			}
+		case memberproductcourses.FieldNumberSurplus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field number_surplus", values[i])
+			} else if value.Valid {
+				mpc.NumberSurplus = value.Int64
 			}
 		case memberproductcourses.FieldMemberProductID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -243,6 +251,9 @@ func (mpc *MemberProductCourses) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("number=")
 	builder.WriteString(fmt.Sprintf("%v", mpc.Number))
+	builder.WriteString(", ")
+	builder.WriteString("number_surplus=")
+	builder.WriteString(fmt.Sprintf("%v", mpc.NumberSurplus))
 	builder.WriteString(", ")
 	builder.WriteString("member_product_id=")
 	builder.WriteString(fmt.Sprintf("%v", mpc.MemberProductID))

@@ -95,12 +95,16 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 	lists, err := s.db.ScheduleCoach.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(s.ctx)
+
 	if err != nil {
 		err = errors.Wrap(err, "get Schedule Coach list failed")
 		return resp, total, err
 	}
 	for _, v := range lists {
-		resp = append(resp, s.entScheduleCoachInfo(v))
+
+		k := s.entScheduleCoachInfo(v)
+
+		resp = append(resp, k)
 
 	}
 

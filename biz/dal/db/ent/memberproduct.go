@@ -54,9 +54,11 @@ type MemberProduct struct {
 	// 单次时长
 	Length int64 `json:"length,omitempty"`
 	// 总次数
-	Count int64 `json:"count,omitempty"`
+	Number int64 `json:"number,omitempty"`
 	// 剩余次数
-	CountSurplus int64 `json:"count_surplus,omitempty"`
+	NumberSurplus int64 `json:"number_surplus,omitempty"`
+	// 課包 课程1不限2指定
+	IsCourse int64 `json:"is_course,omitempty"`
 	// 激活期限
 	Deadline int64 `json:"deadline,omitempty"`
 	// 生效时间
@@ -142,7 +144,7 @@ func (*MemberProduct) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memberproduct.FieldPrice, memberproduct.FieldFee:
 			values[i] = new(sql.NullFloat64)
-		case memberproduct.FieldID, memberproduct.FieldDelete, memberproduct.FieldCreatedID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldVenueID, memberproduct.FieldOrderID, memberproduct.FieldDuration, memberproduct.FieldLength, memberproduct.FieldCount, memberproduct.FieldCountSurplus, memberproduct.FieldDeadline:
+		case memberproduct.FieldID, memberproduct.FieldDelete, memberproduct.FieldCreatedID, memberproduct.FieldStatus, memberproduct.FieldMemberID, memberproduct.FieldProductID, memberproduct.FieldVenueID, memberproduct.FieldOrderID, memberproduct.FieldDuration, memberproduct.FieldLength, memberproduct.FieldNumber, memberproduct.FieldNumberSurplus, memberproduct.FieldIsCourse, memberproduct.FieldDeadline:
 			values[i] = new(sql.NullInt64)
 		case memberproduct.FieldSn, memberproduct.FieldType, memberproduct.FieldSubType, memberproduct.FieldName:
 			values[i] = new(sql.NullString)
@@ -271,17 +273,23 @@ func (mp *MemberProduct) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mp.Length = value.Int64
 			}
-		case memberproduct.FieldCount:
+		case memberproduct.FieldNumber:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field count", values[i])
+				return fmt.Errorf("unexpected type %T for field number", values[i])
 			} else if value.Valid {
-				mp.Count = value.Int64
+				mp.Number = value.Int64
 			}
-		case memberproduct.FieldCountSurplus:
+		case memberproduct.FieldNumberSurplus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field count_surplus", values[i])
+				return fmt.Errorf("unexpected type %T for field number_surplus", values[i])
 			} else if value.Valid {
-				mp.CountSurplus = value.Int64
+				mp.NumberSurplus = value.Int64
+			}
+		case memberproduct.FieldIsCourse:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_course", values[i])
+			} else if value.Valid {
+				mp.IsCourse = value.Int64
 			}
 		case memberproduct.FieldDeadline:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -413,11 +421,14 @@ func (mp *MemberProduct) String() string {
 	builder.WriteString("length=")
 	builder.WriteString(fmt.Sprintf("%v", mp.Length))
 	builder.WriteString(", ")
-	builder.WriteString("count=")
-	builder.WriteString(fmt.Sprintf("%v", mp.Count))
+	builder.WriteString("number=")
+	builder.WriteString(fmt.Sprintf("%v", mp.Number))
 	builder.WriteString(", ")
-	builder.WriteString("count_surplus=")
-	builder.WriteString(fmt.Sprintf("%v", mp.CountSurplus))
+	builder.WriteString("number_surplus=")
+	builder.WriteString(fmt.Sprintf("%v", mp.NumberSurplus))
+	builder.WriteString(", ")
+	builder.WriteString("is_course=")
+	builder.WriteString(fmt.Sprintf("%v", mp.IsCourse))
 	builder.WriteString(", ")
 	builder.WriteString("deadline=")
 	builder.WriteString(fmt.Sprintf("%v", mp.Deadline))

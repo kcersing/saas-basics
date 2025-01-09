@@ -52,7 +52,7 @@ type Product struct {
 	Times int64 `json:"times,omitempty"`
 	// 团课预约 1支持2不支持
 	IsLessons int64 `json:"is_lessons,omitempty"`
-	// 課包 1支持2不支持
+	// 課包 课程1不限2指定
 	IsCourse int64 `json:"is_course,omitempty"`
 	// 售卖信息[售价等]
 	Sales []*base.Sales `json:"sales,omitempty"`

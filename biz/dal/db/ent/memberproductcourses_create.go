@@ -132,6 +132,20 @@ func (mpcc *MemberProductCoursesCreate) SetNillableNumber(i *int64) *MemberProdu
 	return mpcc
 }
 
+// SetNumberSurplus sets the "number_surplus" field.
+func (mpcc *MemberProductCoursesCreate) SetNumberSurplus(i int64) *MemberProductCoursesCreate {
+	mpcc.mutation.SetNumberSurplus(i)
+	return mpcc
+}
+
+// SetNillableNumberSurplus sets the "number_surplus" field if the given value is not nil.
+func (mpcc *MemberProductCoursesCreate) SetNillableNumberSurplus(i *int64) *MemberProductCoursesCreate {
+	if i != nil {
+		mpcc.SetNumberSurplus(*i)
+	}
+	return mpcc
+}
+
 // SetMemberProductID sets the "member_product_id" field.
 func (mpcc *MemberProductCoursesCreate) SetMemberProductID(i int64) *MemberProductCoursesCreate {
 	mpcc.mutation.SetMemberProductID(i)
@@ -271,6 +285,10 @@ func (mpcc *MemberProductCoursesCreate) defaults() {
 		v := memberproductcourses.DefaultNumber
 		mpcc.mutation.SetNumber(v)
 	}
+	if _, ok := mpcc.mutation.NumberSurplus(); !ok {
+		v := memberproductcourses.DefaultNumberSurplus
+		mpcc.mutation.SetNumberSurplus(v)
+	}
 	if _, ok := mpcc.mutation.MemberProductID(); !ok {
 		v := memberproductcourses.DefaultMemberProductID
 		mpcc.mutation.SetMemberProductID(v)
@@ -346,6 +364,10 @@ func (mpcc *MemberProductCoursesCreate) createSpec() (*MemberProductCourses, *sq
 	if value, ok := mpcc.mutation.Number(); ok {
 		_spec.SetField(memberproductcourses.FieldNumber, field.TypeInt64, value)
 		_node.Number = value
+	}
+	if value, ok := mpcc.mutation.NumberSurplus(); ok {
+		_spec.SetField(memberproductcourses.FieldNumberSurplus, field.TypeInt64, value)
+		_node.NumberSurplus = value
 	}
 	if value, ok := mpcc.mutation.CoursesID(); ok {
 		_spec.SetField(memberproductcourses.FieldCoursesID, field.TypeInt64, value)

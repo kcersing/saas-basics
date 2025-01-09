@@ -469,3 +469,19 @@ func UserTimePeriod(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, info, 0, "")
 	return
 }
+
+// ScheduleCoachPeriodList .
+// @router /service/schedule/coach-period-list [POST]
+func ScheduleCoachPeriodList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req schedule.UserPeriodReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

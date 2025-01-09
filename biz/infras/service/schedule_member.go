@@ -1,63 +1,12 @@
 package service
 
 import (
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent/memberproduct"
-	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/predicate"
-	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
 	"saas/idl_gen/model/schedule"
 )
-
-func (s Schedule) CreateMemberSubscribeLessons(req schedule.MemberSubscribeReq) error {
-
-	one, err := s.db.Schedule.Query().Where(schedule2.IDEQ(req.ScheduleId)).First(s.ctx)
-
-	if err != nil {
-		hlog.Error("未查询到课程:", req)
-		err = errors.Wrap(err, "未查询到课程")
-		return err
-	}
-	mp, err := s.db.MemberProduct.Query().
-		Where(memberproduct.ID(req.MemberProductId)).
-		First(s.ctx)
-	if err != nil {
-		hlog.Error("未查询到该会员:", req)
-		err = errors.Wrap(err, "未查询到该会员")
-		return err
-	}
-	m, err := s.db.MemberProfile.Query().
-		Where(memberprofile.MemberIDEQ(req.MemberId)).
-		First(s.ctx)
-	if err != nil {
-		hlog.Error("未查询到该会员:", req)
-		err = errors.Wrap(err, "未查询到该会员")
-		return err
-	}
-	_, err = s.db.ScheduleMember.Create().
-		SetSchedule(one).
-		SetType(one.Type).
-		SetMemberID(req.MemberId).
-		SetVenueID(one.VenueID).
-		SetStartTime(one.StartTime).
-		SetEndTime(one.StartTime).
-		SetMemberProductID(req.MemberProductId).
-		SetStatus(0).
-		SetMemberName(m.Name).
-		SetMemberProductName(mp.Name).
-		SetSeat(*req.Seat).
-		SetPlaceID(one.PlaceID).
-		Save(s.ctx)
-	if err != nil {
-		hlog.Error("无法创建会员课程:", req)
-		err = errors.Wrap(err, "无法创建会员课程")
-		return err
-	}
-	return nil
-
-}
 
 func (s Schedule) ScheduleMemberList(req schedule.ScheduleMemberListReq) (resp []*schedule.ScheduleMemberInfo, total int, err error) {
 	var predicates []predicate.ScheduleMember
@@ -87,8 +36,18 @@ func (s Schedule) ScheduleMemberList(req schedule.ScheduleMemberListReq) (resp [
 		return resp, total, err
 	}
 	for _, v := range lists {
-		resp = append(resp, s.entScheduleMemberInfo(v))
-
+		k := s.entScheduleMemberInfo(v)
+		f, _ := v.QuerySchedule().First(s.ctx)
+		coach, _ := f.QueryCoachs().First(s.ctx)
+		mp, _ := s.db.MemberProduct.Query().Where(memberproduct.ID(v.MemberProductID)).First(s.ctx)
+		resp = append(resp, k)
+		k.ScheduleName = f.Name
+		k.PlaceName = f.PlaceName
+		k.VenueName = f.VenueName
+		k.MemberProductSn = mp.Sn
+		k.CoachId = coach.CoachID
+		k.CoachName = coach.CoachName
+		k.ProductId = f.ProductID
 	}
 
 	total, _ = s.db.ScheduleMember.Query().Where(predicates...).Count(s.ctx)

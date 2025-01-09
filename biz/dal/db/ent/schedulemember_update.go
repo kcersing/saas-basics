@@ -177,6 +177,33 @@ func (smu *ScheduleMemberUpdate) ClearPlaceID() *ScheduleMemberUpdate {
 	return smu
 }
 
+// SetProductID sets the "product_id" field.
+func (smu *ScheduleMemberUpdate) SetProductID(i int64) *ScheduleMemberUpdate {
+	smu.mutation.ResetProductID()
+	smu.mutation.SetProductID(i)
+	return smu
+}
+
+// SetNillableProductID sets the "product_id" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableProductID(i *int64) *ScheduleMemberUpdate {
+	if i != nil {
+		smu.SetProductID(*i)
+	}
+	return smu
+}
+
+// AddProductID adds i to the "product_id" field.
+func (smu *ScheduleMemberUpdate) AddProductID(i int64) *ScheduleMemberUpdate {
+	smu.mutation.AddProductID(i)
+	return smu
+}
+
+// ClearProductID clears the value of the "product_id" field.
+func (smu *ScheduleMemberUpdate) ClearProductID() *ScheduleMemberUpdate {
+	smu.mutation.ClearProductID()
+	return smu
+}
+
 // SetScheduleID sets the "schedule_id" field.
 func (smu *ScheduleMemberUpdate) SetScheduleID(i int64) *ScheduleMemberUpdate {
 	smu.mutation.SetScheduleID(i)
@@ -194,26 +221,6 @@ func (smu *ScheduleMemberUpdate) SetNillableScheduleID(i *int64) *ScheduleMember
 // ClearScheduleID clears the value of the "schedule_id" field.
 func (smu *ScheduleMemberUpdate) ClearScheduleID() *ScheduleMemberUpdate {
 	smu.mutation.ClearScheduleID()
-	return smu
-}
-
-// SetScheduleName sets the "schedule_name" field.
-func (smu *ScheduleMemberUpdate) SetScheduleName(s string) *ScheduleMemberUpdate {
-	smu.mutation.SetScheduleName(s)
-	return smu
-}
-
-// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
-func (smu *ScheduleMemberUpdate) SetNillableScheduleName(s *string) *ScheduleMemberUpdate {
-	if s != nil {
-		smu.SetScheduleName(*s)
-	}
-	return smu
-}
-
-// ClearScheduleName clears the value of the "schedule_name" field.
-func (smu *ScheduleMemberUpdate) ClearScheduleName() *ScheduleMemberUpdate {
-	smu.mutation.ClearScheduleName()
 	return smu
 }
 
@@ -388,6 +395,33 @@ func (smu *ScheduleMemberUpdate) SetNillableSeat(b *base.Seat) *ScheduleMemberUp
 // ClearSeat clears the value of the "seat" field.
 func (smu *ScheduleMemberUpdate) ClearSeat() *ScheduleMemberUpdate {
 	smu.mutation.ClearSeat()
+	return smu
+}
+
+// SetIsCourse sets the "is_course" field.
+func (smu *ScheduleMemberUpdate) SetIsCourse(i int64) *ScheduleMemberUpdate {
+	smu.mutation.ResetIsCourse()
+	smu.mutation.SetIsCourse(i)
+	return smu
+}
+
+// SetNillableIsCourse sets the "is_course" field if the given value is not nil.
+func (smu *ScheduleMemberUpdate) SetNillableIsCourse(i *int64) *ScheduleMemberUpdate {
+	if i != nil {
+		smu.SetIsCourse(*i)
+	}
+	return smu
+}
+
+// AddIsCourse adds i to the "is_course" field.
+func (smu *ScheduleMemberUpdate) AddIsCourse(i int64) *ScheduleMemberUpdate {
+	smu.mutation.AddIsCourse(i)
+	return smu
+}
+
+// ClearIsCourse clears the value of the "is_course" field.
+func (smu *ScheduleMemberUpdate) ClearIsCourse() *ScheduleMemberUpdate {
+	smu.mutation.ClearIsCourse()
 	return smu
 }
 
@@ -566,11 +600,14 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if smu.mutation.PlaceIDCleared() {
 		_spec.ClearField(schedulemember.FieldPlaceID, field.TypeInt64)
 	}
-	if value, ok := smu.mutation.ScheduleName(); ok {
-		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
+	if value, ok := smu.mutation.ProductID(); ok {
+		_spec.SetField(schedulemember.FieldProductID, field.TypeInt64, value)
 	}
-	if smu.mutation.ScheduleNameCleared() {
-		_spec.ClearField(schedulemember.FieldScheduleName, field.TypeString)
+	if value, ok := smu.mutation.AddedProductID(); ok {
+		_spec.AddField(schedulemember.FieldProductID, field.TypeInt64, value)
+	}
+	if smu.mutation.ProductIDCleared() {
+		_spec.ClearField(schedulemember.FieldProductID, field.TypeInt64)
 	}
 	if value, ok := smu.mutation.MemberID(); ok {
 		_spec.SetField(schedulemember.FieldMemberID, field.TypeInt64, value)
@@ -625,6 +662,15 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if smu.mutation.SeatCleared() {
 		_spec.ClearField(schedulemember.FieldSeat, field.TypeJSON)
+	}
+	if value, ok := smu.mutation.IsCourse(); ok {
+		_spec.SetField(schedulemember.FieldIsCourse, field.TypeInt64, value)
+	}
+	if value, ok := smu.mutation.AddedIsCourse(); ok {
+		_spec.AddField(schedulemember.FieldIsCourse, field.TypeInt64, value)
+	}
+	if smu.mutation.IsCourseCleared() {
+		_spec.ClearField(schedulemember.FieldIsCourse, field.TypeInt64)
 	}
 	if value, ok := smu.mutation.MemberName(); ok {
 		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)
@@ -840,6 +886,33 @@ func (smuo *ScheduleMemberUpdateOne) ClearPlaceID() *ScheduleMemberUpdateOne {
 	return smuo
 }
 
+// SetProductID sets the "product_id" field.
+func (smuo *ScheduleMemberUpdateOne) SetProductID(i int64) *ScheduleMemberUpdateOne {
+	smuo.mutation.ResetProductID()
+	smuo.mutation.SetProductID(i)
+	return smuo
+}
+
+// SetNillableProductID sets the "product_id" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableProductID(i *int64) *ScheduleMemberUpdateOne {
+	if i != nil {
+		smuo.SetProductID(*i)
+	}
+	return smuo
+}
+
+// AddProductID adds i to the "product_id" field.
+func (smuo *ScheduleMemberUpdateOne) AddProductID(i int64) *ScheduleMemberUpdateOne {
+	smuo.mutation.AddProductID(i)
+	return smuo
+}
+
+// ClearProductID clears the value of the "product_id" field.
+func (smuo *ScheduleMemberUpdateOne) ClearProductID() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearProductID()
+	return smuo
+}
+
 // SetScheduleID sets the "schedule_id" field.
 func (smuo *ScheduleMemberUpdateOne) SetScheduleID(i int64) *ScheduleMemberUpdateOne {
 	smuo.mutation.SetScheduleID(i)
@@ -857,26 +930,6 @@ func (smuo *ScheduleMemberUpdateOne) SetNillableScheduleID(i *int64) *ScheduleMe
 // ClearScheduleID clears the value of the "schedule_id" field.
 func (smuo *ScheduleMemberUpdateOne) ClearScheduleID() *ScheduleMemberUpdateOne {
 	smuo.mutation.ClearScheduleID()
-	return smuo
-}
-
-// SetScheduleName sets the "schedule_name" field.
-func (smuo *ScheduleMemberUpdateOne) SetScheduleName(s string) *ScheduleMemberUpdateOne {
-	smuo.mutation.SetScheduleName(s)
-	return smuo
-}
-
-// SetNillableScheduleName sets the "schedule_name" field if the given value is not nil.
-func (smuo *ScheduleMemberUpdateOne) SetNillableScheduleName(s *string) *ScheduleMemberUpdateOne {
-	if s != nil {
-		smuo.SetScheduleName(*s)
-	}
-	return smuo
-}
-
-// ClearScheduleName clears the value of the "schedule_name" field.
-func (smuo *ScheduleMemberUpdateOne) ClearScheduleName() *ScheduleMemberUpdateOne {
-	smuo.mutation.ClearScheduleName()
 	return smuo
 }
 
@@ -1051,6 +1104,33 @@ func (smuo *ScheduleMemberUpdateOne) SetNillableSeat(b *base.Seat) *ScheduleMemb
 // ClearSeat clears the value of the "seat" field.
 func (smuo *ScheduleMemberUpdateOne) ClearSeat() *ScheduleMemberUpdateOne {
 	smuo.mutation.ClearSeat()
+	return smuo
+}
+
+// SetIsCourse sets the "is_course" field.
+func (smuo *ScheduleMemberUpdateOne) SetIsCourse(i int64) *ScheduleMemberUpdateOne {
+	smuo.mutation.ResetIsCourse()
+	smuo.mutation.SetIsCourse(i)
+	return smuo
+}
+
+// SetNillableIsCourse sets the "is_course" field if the given value is not nil.
+func (smuo *ScheduleMemberUpdateOne) SetNillableIsCourse(i *int64) *ScheduleMemberUpdateOne {
+	if i != nil {
+		smuo.SetIsCourse(*i)
+	}
+	return smuo
+}
+
+// AddIsCourse adds i to the "is_course" field.
+func (smuo *ScheduleMemberUpdateOne) AddIsCourse(i int64) *ScheduleMemberUpdateOne {
+	smuo.mutation.AddIsCourse(i)
+	return smuo
+}
+
+// ClearIsCourse clears the value of the "is_course" field.
+func (smuo *ScheduleMemberUpdateOne) ClearIsCourse() *ScheduleMemberUpdateOne {
+	smuo.mutation.ClearIsCourse()
 	return smuo
 }
 
@@ -1259,11 +1339,14 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	if smuo.mutation.PlaceIDCleared() {
 		_spec.ClearField(schedulemember.FieldPlaceID, field.TypeInt64)
 	}
-	if value, ok := smuo.mutation.ScheduleName(); ok {
-		_spec.SetField(schedulemember.FieldScheduleName, field.TypeString, value)
+	if value, ok := smuo.mutation.ProductID(); ok {
+		_spec.SetField(schedulemember.FieldProductID, field.TypeInt64, value)
 	}
-	if smuo.mutation.ScheduleNameCleared() {
-		_spec.ClearField(schedulemember.FieldScheduleName, field.TypeString)
+	if value, ok := smuo.mutation.AddedProductID(); ok {
+		_spec.AddField(schedulemember.FieldProductID, field.TypeInt64, value)
+	}
+	if smuo.mutation.ProductIDCleared() {
+		_spec.ClearField(schedulemember.FieldProductID, field.TypeInt64)
 	}
 	if value, ok := smuo.mutation.MemberID(); ok {
 		_spec.SetField(schedulemember.FieldMemberID, field.TypeInt64, value)
@@ -1318,6 +1401,15 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	}
 	if smuo.mutation.SeatCleared() {
 		_spec.ClearField(schedulemember.FieldSeat, field.TypeJSON)
+	}
+	if value, ok := smuo.mutation.IsCourse(); ok {
+		_spec.SetField(schedulemember.FieldIsCourse, field.TypeInt64, value)
+	}
+	if value, ok := smuo.mutation.AddedIsCourse(); ok {
+		_spec.AddField(schedulemember.FieldIsCourse, field.TypeInt64, value)
+	}
+	if smuo.mutation.IsCourseCleared() {
+		_spec.ClearField(schedulemember.FieldIsCourse, field.TypeInt64)
 	}
 	if value, ok := smuo.mutation.MemberName(); ok {
 		_spec.SetField(schedulemember.FieldMemberName, field.TypeString, value)

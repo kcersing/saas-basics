@@ -414,57 +414,84 @@ func (mpu *MemberProductUpdate) ClearLength() *MemberProductUpdate {
 	return mpu
 }
 
-// SetCount sets the "count" field.
-func (mpu *MemberProductUpdate) SetCount(i int64) *MemberProductUpdate {
-	mpu.mutation.ResetCount()
-	mpu.mutation.SetCount(i)
+// SetNumber sets the "number" field.
+func (mpu *MemberProductUpdate) SetNumber(i int64) *MemberProductUpdate {
+	mpu.mutation.ResetNumber()
+	mpu.mutation.SetNumber(i)
 	return mpu
 }
 
-// SetNillableCount sets the "count" field if the given value is not nil.
-func (mpu *MemberProductUpdate) SetNillableCount(i *int64) *MemberProductUpdate {
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (mpu *MemberProductUpdate) SetNillableNumber(i *int64) *MemberProductUpdate {
 	if i != nil {
-		mpu.SetCount(*i)
+		mpu.SetNumber(*i)
 	}
 	return mpu
 }
 
-// AddCount adds i to the "count" field.
-func (mpu *MemberProductUpdate) AddCount(i int64) *MemberProductUpdate {
-	mpu.mutation.AddCount(i)
+// AddNumber adds i to the "number" field.
+func (mpu *MemberProductUpdate) AddNumber(i int64) *MemberProductUpdate {
+	mpu.mutation.AddNumber(i)
 	return mpu
 }
 
-// ClearCount clears the value of the "count" field.
-func (mpu *MemberProductUpdate) ClearCount() *MemberProductUpdate {
-	mpu.mutation.ClearCount()
+// ClearNumber clears the value of the "number" field.
+func (mpu *MemberProductUpdate) ClearNumber() *MemberProductUpdate {
+	mpu.mutation.ClearNumber()
 	return mpu
 }
 
-// SetCountSurplus sets the "count_surplus" field.
-func (mpu *MemberProductUpdate) SetCountSurplus(i int64) *MemberProductUpdate {
-	mpu.mutation.ResetCountSurplus()
-	mpu.mutation.SetCountSurplus(i)
+// SetNumberSurplus sets the "number_surplus" field.
+func (mpu *MemberProductUpdate) SetNumberSurplus(i int64) *MemberProductUpdate {
+	mpu.mutation.ResetNumberSurplus()
+	mpu.mutation.SetNumberSurplus(i)
 	return mpu
 }
 
-// SetNillableCountSurplus sets the "count_surplus" field if the given value is not nil.
-func (mpu *MemberProductUpdate) SetNillableCountSurplus(i *int64) *MemberProductUpdate {
+// SetNillableNumberSurplus sets the "number_surplus" field if the given value is not nil.
+func (mpu *MemberProductUpdate) SetNillableNumberSurplus(i *int64) *MemberProductUpdate {
 	if i != nil {
-		mpu.SetCountSurplus(*i)
+		mpu.SetNumberSurplus(*i)
 	}
 	return mpu
 }
 
-// AddCountSurplus adds i to the "count_surplus" field.
-func (mpu *MemberProductUpdate) AddCountSurplus(i int64) *MemberProductUpdate {
-	mpu.mutation.AddCountSurplus(i)
+// AddNumberSurplus adds i to the "number_surplus" field.
+func (mpu *MemberProductUpdate) AddNumberSurplus(i int64) *MemberProductUpdate {
+	mpu.mutation.AddNumberSurplus(i)
 	return mpu
 }
 
-// ClearCountSurplus clears the value of the "count_surplus" field.
-func (mpu *MemberProductUpdate) ClearCountSurplus() *MemberProductUpdate {
-	mpu.mutation.ClearCountSurplus()
+// ClearNumberSurplus clears the value of the "number_surplus" field.
+func (mpu *MemberProductUpdate) ClearNumberSurplus() *MemberProductUpdate {
+	mpu.mutation.ClearNumberSurplus()
+	return mpu
+}
+
+// SetIsCourse sets the "is_course" field.
+func (mpu *MemberProductUpdate) SetIsCourse(i int64) *MemberProductUpdate {
+	mpu.mutation.ResetIsCourse()
+	mpu.mutation.SetIsCourse(i)
+	return mpu
+}
+
+// SetNillableIsCourse sets the "is_course" field if the given value is not nil.
+func (mpu *MemberProductUpdate) SetNillableIsCourse(i *int64) *MemberProductUpdate {
+	if i != nil {
+		mpu.SetIsCourse(*i)
+	}
+	return mpu
+}
+
+// AddIsCourse adds i to the "is_course" field.
+func (mpu *MemberProductUpdate) AddIsCourse(i int64) *MemberProductUpdate {
+	mpu.mutation.AddIsCourse(i)
+	return mpu
+}
+
+// ClearIsCourse clears the value of the "is_course" field.
+func (mpu *MemberProductUpdate) ClearIsCourse() *MemberProductUpdate {
+	mpu.mutation.ClearIsCourse()
 	return mpu
 }
 
@@ -877,23 +904,32 @@ func (mpu *MemberProductUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if mpu.mutation.LengthCleared() {
 		_spec.ClearField(memberproduct.FieldLength, field.TypeInt64)
 	}
-	if value, ok := mpu.mutation.Count(); ok {
-		_spec.SetField(memberproduct.FieldCount, field.TypeInt64, value)
+	if value, ok := mpu.mutation.Number(); ok {
+		_spec.SetField(memberproduct.FieldNumber, field.TypeInt64, value)
 	}
-	if value, ok := mpu.mutation.AddedCount(); ok {
-		_spec.AddField(memberproduct.FieldCount, field.TypeInt64, value)
+	if value, ok := mpu.mutation.AddedNumber(); ok {
+		_spec.AddField(memberproduct.FieldNumber, field.TypeInt64, value)
 	}
-	if mpu.mutation.CountCleared() {
-		_spec.ClearField(memberproduct.FieldCount, field.TypeInt64)
+	if mpu.mutation.NumberCleared() {
+		_spec.ClearField(memberproduct.FieldNumber, field.TypeInt64)
 	}
-	if value, ok := mpu.mutation.CountSurplus(); ok {
-		_spec.SetField(memberproduct.FieldCountSurplus, field.TypeInt64, value)
+	if value, ok := mpu.mutation.NumberSurplus(); ok {
+		_spec.SetField(memberproduct.FieldNumberSurplus, field.TypeInt64, value)
 	}
-	if value, ok := mpu.mutation.AddedCountSurplus(); ok {
-		_spec.AddField(memberproduct.FieldCountSurplus, field.TypeInt64, value)
+	if value, ok := mpu.mutation.AddedNumberSurplus(); ok {
+		_spec.AddField(memberproduct.FieldNumberSurplus, field.TypeInt64, value)
 	}
-	if mpu.mutation.CountSurplusCleared() {
-		_spec.ClearField(memberproduct.FieldCountSurplus, field.TypeInt64)
+	if mpu.mutation.NumberSurplusCleared() {
+		_spec.ClearField(memberproduct.FieldNumberSurplus, field.TypeInt64)
+	}
+	if value, ok := mpu.mutation.IsCourse(); ok {
+		_spec.SetField(memberproduct.FieldIsCourse, field.TypeInt64, value)
+	}
+	if value, ok := mpu.mutation.AddedIsCourse(); ok {
+		_spec.AddField(memberproduct.FieldIsCourse, field.TypeInt64, value)
+	}
+	if mpu.mutation.IsCourseCleared() {
+		_spec.ClearField(memberproduct.FieldIsCourse, field.TypeInt64)
 	}
 	if value, ok := mpu.mutation.Deadline(); ok {
 		_spec.SetField(memberproduct.FieldDeadline, field.TypeInt64, value)
@@ -1527,57 +1563,84 @@ func (mpuo *MemberProductUpdateOne) ClearLength() *MemberProductUpdateOne {
 	return mpuo
 }
 
-// SetCount sets the "count" field.
-func (mpuo *MemberProductUpdateOne) SetCount(i int64) *MemberProductUpdateOne {
-	mpuo.mutation.ResetCount()
-	mpuo.mutation.SetCount(i)
+// SetNumber sets the "number" field.
+func (mpuo *MemberProductUpdateOne) SetNumber(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.ResetNumber()
+	mpuo.mutation.SetNumber(i)
 	return mpuo
 }
 
-// SetNillableCount sets the "count" field if the given value is not nil.
-func (mpuo *MemberProductUpdateOne) SetNillableCount(i *int64) *MemberProductUpdateOne {
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (mpuo *MemberProductUpdateOne) SetNillableNumber(i *int64) *MemberProductUpdateOne {
 	if i != nil {
-		mpuo.SetCount(*i)
+		mpuo.SetNumber(*i)
 	}
 	return mpuo
 }
 
-// AddCount adds i to the "count" field.
-func (mpuo *MemberProductUpdateOne) AddCount(i int64) *MemberProductUpdateOne {
-	mpuo.mutation.AddCount(i)
+// AddNumber adds i to the "number" field.
+func (mpuo *MemberProductUpdateOne) AddNumber(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddNumber(i)
 	return mpuo
 }
 
-// ClearCount clears the value of the "count" field.
-func (mpuo *MemberProductUpdateOne) ClearCount() *MemberProductUpdateOne {
-	mpuo.mutation.ClearCount()
+// ClearNumber clears the value of the "number" field.
+func (mpuo *MemberProductUpdateOne) ClearNumber() *MemberProductUpdateOne {
+	mpuo.mutation.ClearNumber()
 	return mpuo
 }
 
-// SetCountSurplus sets the "count_surplus" field.
-func (mpuo *MemberProductUpdateOne) SetCountSurplus(i int64) *MemberProductUpdateOne {
-	mpuo.mutation.ResetCountSurplus()
-	mpuo.mutation.SetCountSurplus(i)
+// SetNumberSurplus sets the "number_surplus" field.
+func (mpuo *MemberProductUpdateOne) SetNumberSurplus(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.ResetNumberSurplus()
+	mpuo.mutation.SetNumberSurplus(i)
 	return mpuo
 }
 
-// SetNillableCountSurplus sets the "count_surplus" field if the given value is not nil.
-func (mpuo *MemberProductUpdateOne) SetNillableCountSurplus(i *int64) *MemberProductUpdateOne {
+// SetNillableNumberSurplus sets the "number_surplus" field if the given value is not nil.
+func (mpuo *MemberProductUpdateOne) SetNillableNumberSurplus(i *int64) *MemberProductUpdateOne {
 	if i != nil {
-		mpuo.SetCountSurplus(*i)
+		mpuo.SetNumberSurplus(*i)
 	}
 	return mpuo
 }
 
-// AddCountSurplus adds i to the "count_surplus" field.
-func (mpuo *MemberProductUpdateOne) AddCountSurplus(i int64) *MemberProductUpdateOne {
-	mpuo.mutation.AddCountSurplus(i)
+// AddNumberSurplus adds i to the "number_surplus" field.
+func (mpuo *MemberProductUpdateOne) AddNumberSurplus(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddNumberSurplus(i)
 	return mpuo
 }
 
-// ClearCountSurplus clears the value of the "count_surplus" field.
-func (mpuo *MemberProductUpdateOne) ClearCountSurplus() *MemberProductUpdateOne {
-	mpuo.mutation.ClearCountSurplus()
+// ClearNumberSurplus clears the value of the "number_surplus" field.
+func (mpuo *MemberProductUpdateOne) ClearNumberSurplus() *MemberProductUpdateOne {
+	mpuo.mutation.ClearNumberSurplus()
+	return mpuo
+}
+
+// SetIsCourse sets the "is_course" field.
+func (mpuo *MemberProductUpdateOne) SetIsCourse(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.ResetIsCourse()
+	mpuo.mutation.SetIsCourse(i)
+	return mpuo
+}
+
+// SetNillableIsCourse sets the "is_course" field if the given value is not nil.
+func (mpuo *MemberProductUpdateOne) SetNillableIsCourse(i *int64) *MemberProductUpdateOne {
+	if i != nil {
+		mpuo.SetIsCourse(*i)
+	}
+	return mpuo
+}
+
+// AddIsCourse adds i to the "is_course" field.
+func (mpuo *MemberProductUpdateOne) AddIsCourse(i int64) *MemberProductUpdateOne {
+	mpuo.mutation.AddIsCourse(i)
+	return mpuo
+}
+
+// ClearIsCourse clears the value of the "is_course" field.
+func (mpuo *MemberProductUpdateOne) ClearIsCourse() *MemberProductUpdateOne {
+	mpuo.mutation.ClearIsCourse()
 	return mpuo
 }
 
@@ -2020,23 +2083,32 @@ func (mpuo *MemberProductUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 	if mpuo.mutation.LengthCleared() {
 		_spec.ClearField(memberproduct.FieldLength, field.TypeInt64)
 	}
-	if value, ok := mpuo.mutation.Count(); ok {
-		_spec.SetField(memberproduct.FieldCount, field.TypeInt64, value)
+	if value, ok := mpuo.mutation.Number(); ok {
+		_spec.SetField(memberproduct.FieldNumber, field.TypeInt64, value)
 	}
-	if value, ok := mpuo.mutation.AddedCount(); ok {
-		_spec.AddField(memberproduct.FieldCount, field.TypeInt64, value)
+	if value, ok := mpuo.mutation.AddedNumber(); ok {
+		_spec.AddField(memberproduct.FieldNumber, field.TypeInt64, value)
 	}
-	if mpuo.mutation.CountCleared() {
-		_spec.ClearField(memberproduct.FieldCount, field.TypeInt64)
+	if mpuo.mutation.NumberCleared() {
+		_spec.ClearField(memberproduct.FieldNumber, field.TypeInt64)
 	}
-	if value, ok := mpuo.mutation.CountSurplus(); ok {
-		_spec.SetField(memberproduct.FieldCountSurplus, field.TypeInt64, value)
+	if value, ok := mpuo.mutation.NumberSurplus(); ok {
+		_spec.SetField(memberproduct.FieldNumberSurplus, field.TypeInt64, value)
 	}
-	if value, ok := mpuo.mutation.AddedCountSurplus(); ok {
-		_spec.AddField(memberproduct.FieldCountSurplus, field.TypeInt64, value)
+	if value, ok := mpuo.mutation.AddedNumberSurplus(); ok {
+		_spec.AddField(memberproduct.FieldNumberSurplus, field.TypeInt64, value)
 	}
-	if mpuo.mutation.CountSurplusCleared() {
-		_spec.ClearField(memberproduct.FieldCountSurplus, field.TypeInt64)
+	if mpuo.mutation.NumberSurplusCleared() {
+		_spec.ClearField(memberproduct.FieldNumberSurplus, field.TypeInt64)
+	}
+	if value, ok := mpuo.mutation.IsCourse(); ok {
+		_spec.SetField(memberproduct.FieldIsCourse, field.TypeInt64, value)
+	}
+	if value, ok := mpuo.mutation.AddedIsCourse(); ok {
+		_spec.AddField(memberproduct.FieldIsCourse, field.TypeInt64, value)
+	}
+	if mpuo.mutation.IsCourseCleared() {
+		_spec.ClearField(memberproduct.FieldIsCourse, field.TypeInt64)
 	}
 	if value, ok := mpuo.mutation.Deadline(); ok {
 		_spec.SetField(memberproduct.FieldDeadline, field.TypeInt64, value)

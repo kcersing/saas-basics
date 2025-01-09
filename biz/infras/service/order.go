@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/dgraph-io/ristretto"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
@@ -33,42 +32,6 @@ func NewOrder(ctx context.Context, c *app.RequestContext) do.Order {
 		db:    db.DB,
 		cache: cache.Cache,
 	}
-}
-
-func (o Order) FinishOrder(req do.FinishOrder) (err error) {
-	order, err := o.db.Order.Query().Where(order2.OrderSn(req.Sn)).First(o.ctx)
-	if err != nil {
-		hlog.Info(req.Sn + "订单不存在")
-		return err
-	}
-
-	o.db.Order.UpdateOne(order).SetCompletionAt(time.Now()).Save(o.ctx)
-
-	amount, _ := order.QueryAmount().First(o.ctx)
-
-	o.db.OrderAmount.UpdateOne(amount).
-		SetActual(0).
-		Save(o.ctx)
-	fee := req.Fee * 100
-
-	o.db.OrderPay.Create().
-		SetOrder(order).
-		SetPay(float64(fee)).
-		SetPayAt(time.Now()).
-		SetPayWay("wxPay").
-		SetPaySn(req.Sn).
-		SetPrepayID(req.TransactionId).
-		SetPayExtra(req.Transaction).
-		Save(o.ctx)
-
-	NewMemberProduct(o.ctx, o.c).CreateMemberProduct(do.CreateMemberProductReq{
-		MemberId:    order.MemberID,
-		VenueId:     order.VenueID,
-		Order:       order,
-		OrderAmount: amount,
-	})
-
-	return nil
 }
 
 func (o Order) Info(id int64) (info *order.OrderInfo, err error) {

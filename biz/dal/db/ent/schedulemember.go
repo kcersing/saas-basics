@@ -35,10 +35,10 @@ type ScheduleMember struct {
 	VenueID int64 `json:"venue_id,omitempty"`
 	// 场地ID
 	PlaceID int64 `json:"place_id,omitempty"`
+	// 课程
+	ProductID int64 `json:"product_id,omitempty"`
 	// 课程ID
 	ScheduleID int64 `json:"schedule_id,omitempty"`
-	// 课程名称
-	ScheduleName string `json:"schedule_name,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
 	// 会员购买课ID
@@ -55,6 +55,8 @@ type ScheduleMember struct {
 	SignEndTime time.Time `json:"sign_end_time,omitempty"`
 	// 座位
 	Seat base.Seat `json:"seat,omitempty"`
+	// 課包 1支持2不支持
+	IsCourse int64 `json:"is_course,omitempty"`
 	// 会员名称
 	MemberName string `json:"member_name,omitempty"`
 	// 会员产品名称
@@ -96,9 +98,9 @@ func (*ScheduleMember) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case schedulemember.FieldSeat:
 			values[i] = new([]byte)
-		case schedulemember.FieldID, schedulemember.FieldDelete, schedulemember.FieldCreatedID, schedulemember.FieldStatus, schedulemember.FieldVenueID, schedulemember.FieldPlaceID, schedulemember.FieldScheduleID, schedulemember.FieldMemberID, schedulemember.FieldMemberProductID:
+		case schedulemember.FieldID, schedulemember.FieldDelete, schedulemember.FieldCreatedID, schedulemember.FieldStatus, schedulemember.FieldVenueID, schedulemember.FieldPlaceID, schedulemember.FieldProductID, schedulemember.FieldScheduleID, schedulemember.FieldMemberID, schedulemember.FieldMemberProductID, schedulemember.FieldIsCourse:
 			values[i] = new(sql.NullInt64)
-		case schedulemember.FieldScheduleName, schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldRemark:
+		case schedulemember.FieldType, schedulemember.FieldMemberName, schedulemember.FieldMemberProductName, schedulemember.FieldRemark:
 			values[i] = new(sql.NullString)
 		case schedulemember.FieldCreatedAt, schedulemember.FieldUpdatedAt, schedulemember.FieldStartTime, schedulemember.FieldEndTime, schedulemember.FieldSignStartTime, schedulemember.FieldSignEndTime:
 			values[i] = new(sql.NullTime)
@@ -165,17 +167,17 @@ func (sm *ScheduleMember) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sm.PlaceID = value.Int64
 			}
+		case schedulemember.FieldProductID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field product_id", values[i])
+			} else if value.Valid {
+				sm.ProductID = value.Int64
+			}
 		case schedulemember.FieldScheduleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field schedule_id", values[i])
 			} else if value.Valid {
 				sm.ScheduleID = value.Int64
-			}
-		case schedulemember.FieldScheduleName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field schedule_name", values[i])
-			} else if value.Valid {
-				sm.ScheduleName = value.String
 			}
 		case schedulemember.FieldMemberID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -226,6 +228,12 @@ func (sm *ScheduleMember) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &sm.Seat); err != nil {
 					return fmt.Errorf("unmarshal field seat: %w", err)
 				}
+			}
+		case schedulemember.FieldIsCourse:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field is_course", values[i])
+			} else if value.Valid {
+				sm.IsCourse = value.Int64
 			}
 		case schedulemember.FieldMemberName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -307,11 +315,11 @@ func (sm *ScheduleMember) String() string {
 	builder.WriteString("place_id=")
 	builder.WriteString(fmt.Sprintf("%v", sm.PlaceID))
 	builder.WriteString(", ")
+	builder.WriteString("product_id=")
+	builder.WriteString(fmt.Sprintf("%v", sm.ProductID))
+	builder.WriteString(", ")
 	builder.WriteString("schedule_id=")
 	builder.WriteString(fmt.Sprintf("%v", sm.ScheduleID))
-	builder.WriteString(", ")
-	builder.WriteString("schedule_name=")
-	builder.WriteString(sm.ScheduleName)
 	builder.WriteString(", ")
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", sm.MemberID))
@@ -336,6 +344,9 @@ func (sm *ScheduleMember) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("seat=")
 	builder.WriteString(fmt.Sprintf("%v", sm.Seat))
+	builder.WriteString(", ")
+	builder.WriteString("is_course=")
+	builder.WriteString(fmt.Sprintf("%v", sm.IsCourse))
 	builder.WriteString(", ")
 	builder.WriteString("member_name=")
 	builder.WriteString(sm.MemberName)

@@ -48,10 +48,12 @@ const (
 	FieldDuration = "duration"
 	// FieldLength holds the string denoting the length field in the database.
 	FieldLength = "length"
-	// FieldCount holds the string denoting the count field in the database.
-	FieldCount = "count"
-	// FieldCountSurplus holds the string denoting the count_surplus field in the database.
-	FieldCountSurplus = "count_surplus"
+	// FieldNumber holds the string denoting the number field in the database.
+	FieldNumber = "number"
+	// FieldNumberSurplus holds the string denoting the number_surplus field in the database.
+	FieldNumberSurplus = "number_surplus"
+	// FieldIsCourse holds the string denoting the is_course field in the database.
+	FieldIsCourse = "is_course"
 	// FieldDeadline holds the string denoting the deadline field in the database.
 	FieldDeadline = "deadline"
 	// FieldValidityAt holds the string denoting the validity_at field in the database.
@@ -127,8 +129,9 @@ var Columns = []string{
 	FieldFee,
 	FieldDuration,
 	FieldLength,
-	FieldCount,
-	FieldCountSurplus,
+	FieldNumber,
+	FieldNumberSurplus,
+	FieldIsCourse,
 	FieldDeadline,
 	FieldValidityAt,
 	FieldCancelAt,
@@ -159,10 +162,12 @@ var (
 	DefaultStatus int64
 	// DefaultSubType holds the default value on creation for the "sub_type" field.
 	DefaultSubType string
-	// DefaultCount holds the default value on creation for the "count" field.
-	DefaultCount int64
-	// DefaultCountSurplus holds the default value on creation for the "count_surplus" field.
-	DefaultCountSurplus int64
+	// DefaultNumber holds the default value on creation for the "number" field.
+	DefaultNumber int64
+	// DefaultNumberSurplus holds the default value on creation for the "number_surplus" field.
+	DefaultNumberSurplus int64
+	// DefaultIsCourse holds the default value on creation for the "is_course" field.
+	DefaultIsCourse int64
 )
 
 // OrderOption defines the ordering options for the MemberProduct queries.
@@ -258,14 +263,19 @@ func ByLength(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLength, opts...).ToFunc()
 }
 
-// ByCount orders the results by the count field.
-func ByCount(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCount, opts...).ToFunc()
+// ByNumber orders the results by the number field.
+func ByNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumber, opts...).ToFunc()
 }
 
-// ByCountSurplus orders the results by the count_surplus field.
-func ByCountSurplus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCountSurplus, opts...).ToFunc()
+// ByNumberSurplus orders the results by the number_surplus field.
+func ByNumberSurplus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumberSurplus, opts...).ToFunc()
+}
+
+// ByIsCourse orders the results by the is_course field.
+func ByIsCourse(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsCourse, opts...).ToFunc()
 }
 
 // ByDeadline orders the results by the deadline field.

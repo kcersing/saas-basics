@@ -32,7 +32,6 @@ func (ScheduleCoach) Fields() []ent.Field {
 		field.Int64("place_id").Comment("场地ID").Optional(),
 		field.Int64("schedule_id").Comment("课程ID").Optional(),
 		field.Int64("product_id").Comment("课程").Optional(),
-		field.String("schedule_name").Comment("课程名称").Optional(),
 		field.String("type").Comment("类型").Optional(),
 		field.Time("start_time").Default(time.Now).Comment("开始时间").Optional(),
 		field.Time("end_time").Default(time.Now).Comment("结束时间").Optional(),
@@ -40,6 +39,7 @@ func (ScheduleCoach) Fields() []ent.Field {
 		field.Time("sign_end_time").Default(time.Now).Comment("下课签到时间").Optional(),
 
 		field.String("coach_name").Comment("教练名称").Optional(),
+		field.String("remark").Comment("备注").Optional(),
 	}
 }
 

@@ -261,30 +261,44 @@ func (mpc *MemberProductCreate) SetNillableLength(i *int64) *MemberProductCreate
 	return mpc
 }
 
-// SetCount sets the "count" field.
-func (mpc *MemberProductCreate) SetCount(i int64) *MemberProductCreate {
-	mpc.mutation.SetCount(i)
+// SetNumber sets the "number" field.
+func (mpc *MemberProductCreate) SetNumber(i int64) *MemberProductCreate {
+	mpc.mutation.SetNumber(i)
 	return mpc
 }
 
-// SetNillableCount sets the "count" field if the given value is not nil.
-func (mpc *MemberProductCreate) SetNillableCount(i *int64) *MemberProductCreate {
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableNumber(i *int64) *MemberProductCreate {
 	if i != nil {
-		mpc.SetCount(*i)
+		mpc.SetNumber(*i)
 	}
 	return mpc
 }
 
-// SetCountSurplus sets the "count_surplus" field.
-func (mpc *MemberProductCreate) SetCountSurplus(i int64) *MemberProductCreate {
-	mpc.mutation.SetCountSurplus(i)
+// SetNumberSurplus sets the "number_surplus" field.
+func (mpc *MemberProductCreate) SetNumberSurplus(i int64) *MemberProductCreate {
+	mpc.mutation.SetNumberSurplus(i)
 	return mpc
 }
 
-// SetNillableCountSurplus sets the "count_surplus" field if the given value is not nil.
-func (mpc *MemberProductCreate) SetNillableCountSurplus(i *int64) *MemberProductCreate {
+// SetNillableNumberSurplus sets the "number_surplus" field if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableNumberSurplus(i *int64) *MemberProductCreate {
 	if i != nil {
-		mpc.SetCountSurplus(*i)
+		mpc.SetNumberSurplus(*i)
+	}
+	return mpc
+}
+
+// SetIsCourse sets the "is_course" field.
+func (mpc *MemberProductCreate) SetIsCourse(i int64) *MemberProductCreate {
+	mpc.mutation.SetIsCourse(i)
+	return mpc
+}
+
+// SetNillableIsCourse sets the "is_course" field if the given value is not nil.
+func (mpc *MemberProductCreate) SetNillableIsCourse(i *int64) *MemberProductCreate {
+	if i != nil {
+		mpc.SetIsCourse(*i)
 	}
 	return mpc
 }
@@ -475,13 +489,17 @@ func (mpc *MemberProductCreate) defaults() {
 		v := memberproduct.DefaultSubType
 		mpc.mutation.SetSubType(v)
 	}
-	if _, ok := mpc.mutation.Count(); !ok {
-		v := memberproduct.DefaultCount
-		mpc.mutation.SetCount(v)
+	if _, ok := mpc.mutation.Number(); !ok {
+		v := memberproduct.DefaultNumber
+		mpc.mutation.SetNumber(v)
 	}
-	if _, ok := mpc.mutation.CountSurplus(); !ok {
-		v := memberproduct.DefaultCountSurplus
-		mpc.mutation.SetCountSurplus(v)
+	if _, ok := mpc.mutation.NumberSurplus(); !ok {
+		v := memberproduct.DefaultNumberSurplus
+		mpc.mutation.SetNumberSurplus(v)
+	}
+	if _, ok := mpc.mutation.IsCourse(); !ok {
+		v := memberproduct.DefaultIsCourse
+		mpc.mutation.SetIsCourse(v)
 	}
 }
 
@@ -583,13 +601,17 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 		_spec.SetField(memberproduct.FieldLength, field.TypeInt64, value)
 		_node.Length = value
 	}
-	if value, ok := mpc.mutation.Count(); ok {
-		_spec.SetField(memberproduct.FieldCount, field.TypeInt64, value)
-		_node.Count = value
+	if value, ok := mpc.mutation.Number(); ok {
+		_spec.SetField(memberproduct.FieldNumber, field.TypeInt64, value)
+		_node.Number = value
 	}
-	if value, ok := mpc.mutation.CountSurplus(); ok {
-		_spec.SetField(memberproduct.FieldCountSurplus, field.TypeInt64, value)
-		_node.CountSurplus = value
+	if value, ok := mpc.mutation.NumberSurplus(); ok {
+		_spec.SetField(memberproduct.FieldNumberSurplus, field.TypeInt64, value)
+		_node.NumberSurplus = value
+	}
+	if value, ok := mpc.mutation.IsCourse(); ok {
+		_spec.SetField(memberproduct.FieldIsCourse, field.TypeInt64, value)
+		_node.IsCourse = value
 	}
 	if value, ok := mpc.mutation.Deadline(); ok {
 		_spec.SetField(memberproduct.FieldDeadline, field.TypeInt64, value)
