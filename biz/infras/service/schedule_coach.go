@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/idl_gen/model/base"
 	"saas/idl_gen/model/schedule"
-	"saas/pkg/enums"
 	"time"
 )
 
@@ -154,7 +153,6 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 		lists, _ := s.db.ScheduleCoach.Query().Where(
 			schedulecoach.CoachID(v.ID),
 			schedulecoach.Date(date),
-			schedulecoach.Type(enums.Lessons),
 		).All(s.ctx)
 
 		if len(lists) > 0 {

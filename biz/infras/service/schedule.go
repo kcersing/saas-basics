@@ -11,6 +11,7 @@ import (
 	"saas/biz/dal/db/ent/predicate"
 	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
+	"saas/pkg/enums"
 	"time"
 
 	"saas/biz/infras/do"
@@ -83,7 +84,7 @@ func (s Schedule) ScheduleDateList(req schedule.ScheduleListReq) (map[string][]*
 	req.Page = 1
 	req.PageSize = 1000
 	req.Status = []int64{1, 2, 3, 4}
-	req.Type = "lessons"
+	req.Type = enums.Lessons
 	lists, total, err := s.ScheduleList(req)
 	m := make(map[string][]*schedule.ScheduleInfo)
 	for _, v := range lists {
