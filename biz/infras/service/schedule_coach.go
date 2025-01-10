@@ -1,11 +1,11 @@
 package service
 
 import (
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedulecoach"
-	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/idl_gen/model/base"
 	"saas/idl_gen/model/schedule"
@@ -115,21 +115,23 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 	}
 	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
-	userArr, err := s.db.User.Query().Where(user.DefaultVenueIDEQ(req.VenueId)).All(s.ctx)
-
+	userArr, err := s.db.UserTimePeriod.Query().Where(usertimeperiod.Date(date)).All(s.ctx)
+	hlog.Info(userArr)
 	if userArr == nil {
-		return nil, 0, errors.New("为查询到教练")
+		return nil, 0, errors.New("未查询到值班教练")
 	}
 	for _, v := range userArr {
+
+		u, _ := v.QueryUsers().First(s.ctx)
 
 		coach := &schedule.ScheduleCoachPeriod{
 			Date:      date.Format(time.DateOnly),
 			CoachId:   v.ID,
-			VenueId:   v.DefaultVenueID,
-			CoachName: v.Name,
+			VenueId:   u.DefaultVenueID,
+			CoachName: u.Name,
 		}
 		var userTags []*base.List
-		Tags, _ := v.QueryTags().All(s.ctx)
+		Tags, _ := u.QueryTags().All(s.ctx)
 		if len(Tags) > 0 {
 			for _, d := range Tags {
 				userTags = append(userTags, &base.List{
@@ -139,11 +141,7 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 			}
 		}
 		coach.Tags = userTags
-
-		period, _ := v.QueryUserTimePeriod().Where(usertimeperiod.Date(date)).First(s.ctx)
-		if period != nil {
-			coach.Period = &period.Period
-		}
+		coach.Period = &v.Period
 
 		var predicates []predicate.ScheduleCoach
 		predicates = append(predicates, schedulecoach.CoachID(v.ID))
