@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/predicate"
@@ -27,29 +26,21 @@ func (s Schedule) CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) e
 	var usc []*ent.UserTimePeriodCreate
 	if len(req.UserId) > 0 {
 		for _, v := range req.UserId {
-			//Before
-			//
-			for {
-				date := time.Date(startDate.Year(), startDate.Month(), startDate.Day(), 0, 0, 0, 0, startDate.Location())
-
+			for date := time.Date(startDate.Year(), startDate.Month(), startDate.Day(), 0, 0, 0, 0, startDate.Location()); date.Before(endDate); date = date.Add(24 * time.Hour) {
 				usc = append(usc, s.db.UserTimePeriod.
 					Create().
 					SetDate(date).
 					SetUserID(v).
 					SetVenueID(req.VenueId).
 					SetPeriod(*req.Period))
-
-				date = startDate.Add(1)
-				if date.After(endDate) {
-					continue
-				}
 			}
-
 		}
 	}
 
 	err = s.db.UserTimePeriod.CreateBulk(usc...).Exec(s.ctx)
-	hlog.Info(err)
+	if err != nil {
+		return errors.New("值班信息创建失败")
+	}
 
 	return nil
 
