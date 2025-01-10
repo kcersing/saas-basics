@@ -471,6 +471,13 @@ func UserTimePeriod(ctx context.Context, c *app.RequestContext) {
 }
 
 // ScheduleCoachPeriodList .
+//
+// @Summary 教练时间-课程周期列表
+// @Description 教练-课程时间周期列表
+//
+//	@Param			request	body		schedule.UserPeriodReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/schedule/coach-period-list [POST]
 func ScheduleCoachPeriodList(ctx context.Context, c *app.RequestContext) {
 	var err error

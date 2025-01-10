@@ -3004,7 +3004,27 @@ const docTemplate = `{
         },
         "/service/schedule/coach-period-list": {
             "post": {
-                "responses": {}
+                "description": "教练-课程时间周期列表",
+                "summary": "教练时间-课程周期列表",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.UserPeriodReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/schedule/create-cours": {
@@ -5731,6 +5751,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "*员工ID",
+                    "type": "integer"
+                },
+                "status": {
                     "type": "integer"
                 },
                 "venueId": {

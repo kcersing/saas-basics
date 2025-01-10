@@ -196,6 +196,7 @@ struct UserPeriodReq{
     /**时间*/
     2: optional string date = "" (api.raw = "date")
     3: optional i64 venueId = 0 (api.raw = "venueId")
+    4: optional i64 status = 0 (api.raw = "status")
 }
 struct UpdateUserTimePeriodReq{
     /**员工ID*/

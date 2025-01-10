@@ -144,10 +144,15 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 		if period != nil {
 			coach.Period = &period.Period
 		}
-		lists, _ := s.db.ScheduleCoach.Query().Where(
-			schedulecoach.CoachID(v.ID),
-			schedulecoach.Date(date),
-		).All(s.ctx)
+
+		var predicates []predicate.ScheduleCoach
+		predicates = append(predicates, schedulecoach.CoachID(v.ID))
+		predicates = append(predicates, schedulecoach.Date(date))
+		if req.Status > 0 {
+			predicates = append(predicates, schedulecoach.Status(req.Status))
+		}
+
+		lists, _ := s.db.ScheduleCoach.Query().Where(predicates...).All(s.ctx)
 
 		if len(lists) > 0 {
 			for _, d := range lists {

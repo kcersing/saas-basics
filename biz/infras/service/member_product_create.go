@@ -19,7 +19,7 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 	price := req.OrderAmount.Total / float64(orderItem.Number)
 	mpEnt := m.db.MemberProduct.
 		Create().
-		SetStatus(0).
+		SetStatus(1).
 		SetSn(utils.CreateCn()).
 		SetType(product.Type).
 		SetSubType(product.SubType).
@@ -82,7 +82,7 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 					SetName(v.Name).
 					SetType(v.Type).
 					SetNumber(v.Number).
-					SetNumberSurplus(product.Times).
+					SetNumberSurplus(v.Number).
 					SetCoursesID(v.ID).
 					Save(m.ctx)
 				if err != nil {
