@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"github.com/xuri/excelize/v2"
 	"saas/biz/dal/db/ent"
@@ -15,7 +14,6 @@ import (
 	"saas/idl_gen/model/member"
 	"saas/pkg/enums"
 	"saas/pkg/utils"
-	"strconv"
 	"time"
 )
 
@@ -102,12 +100,6 @@ func (m Member) MemberFullList(req member.MemberListReq) (resp []*member.MemberI
 	if err != nil {
 		err = errors.Wrap(err, "get Member list failed")
 		return resp, total, err
-	}
-
-	err = copier.Copy(&resp, &lists)
-	if err != nil {
-		err = errors.Wrap(err, "copy Member info failed")
-		return resp, 0, err
 	}
 
 	for i, v := range lists {
@@ -220,12 +212,6 @@ func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.Me
 		return resp, total, err
 	}
 
-	err = copier.Copy(&resp, &lists)
-	if err != nil {
-		err = errors.Wrap(err, "copy Member info failed")
-		return resp, 0, err
-	}
-
 	for i, v := range lists {
 		resp[i], _ = m.MemberInfo(v.ID)
 	}
@@ -307,24 +293,14 @@ func (m Member) MemberPotentialListExport(req member.MemberListReq) (string, err
 
 func (m Member) MemberInfo(id int64) (info *member.MemberInfo, err error) {
 
-	info = new(member.MemberInfo)
-
-	userInterface, exist := m.cache.Get("memberInfo" + strconv.Itoa(int(id)))
-	if exist {
-		if u, ok := userInterface.(*member.MemberInfo); ok {
-			return u, nil
-		}
-	}
-
 	memberEnt, err := m.db.Member.Query().Where(member2.IDEQ(id)).First(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get member failed")
-		return info, err
+		return nil, err
 	}
 
 	info = m.entMemberInfo(*memberEnt)
 
-	m.cache.SetWithTTL("memberInfo"+strconv.Itoa(int(info.ID)), &info, 1, 1*time.Hour)
 	return
 }
 

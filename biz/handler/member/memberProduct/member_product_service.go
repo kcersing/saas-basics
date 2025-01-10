@@ -4,6 +4,9 @@ package memberProduct
 
 import (
 	"context"
+	"saas/biz/infras/service"
+	"saas/pkg/errno"
+	"saas/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -12,6 +15,12 @@ import (
 )
 
 // MemberProductInfo .
+//
+//	@Summary		会员产品信息 Summary
+//	@Description	创建会员 Description
+//	@Param			request	body		base.IDReq	true "query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/member/product-info [POST]
 func MemberProductInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -22,12 +31,22 @@ func MemberProductInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	info, err := service.NewMemberProduct(ctx, c).MemberProductInfo(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, info, 0, "")
+	return
 }
 
 // MemberProductList .
+//
+//	@Summary		会员产品列表 Summary
+//	@Description	会员产品列表 Description
+//	@Param			request	body		memberProduct.MemberProductListReq	true "query params"
+//	@Success		200		{object}	utils.Response
+//
 // @router /service/member/product-list [POST]
 func MemberProductList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -38,7 +57,11 @@ func MemberProductList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	list, total, err := service.NewMemberProduct(ctx, c).MemberProductList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
 }

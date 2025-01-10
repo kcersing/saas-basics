@@ -702,6 +702,28 @@ definitions:
           type: integer
         type: array
     type: object
+  memberproduct.MemberProductListReq:
+    properties:
+      memberId:
+        type: integer
+      name:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        items:
+          type: integer
+        type: array
+      subType:
+        type: string
+      type:
+        description: 类型
+        type: string
+      venueId:
+        type: integer
+    type: object
   menu.ApiInfo:
     properties:
       createdAt:
@@ -2691,10 +2713,36 @@ paths:
       responses: {}
   /service/member/product-info:
     post:
-      responses: {}
+      description: 创建会员 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品信息 Summary
   /service/member/product-list:
     post:
-      responses: {}
+      description: 会员产品列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/memberproduct.MemberProductListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员产品列表 Summary
   /service/member/status:
     post:
       description: 更新会员状态 Description

@@ -1975,12 +1975,52 @@
         },
         "/service/member/product-info": {
             "post": {
-                "responses": {}
+                "description": "创建会员 Description",
+                "summary": "会员产品信息 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/member/product-list": {
             "post": {
-                "responses": {}
+                "description": "会员产品列表 Description",
+                "summary": "会员产品列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/memberproduct.MemberProductListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
             }
         },
         "/service/member/status": {
@@ -5203,6 +5243,39 @@
                     "items": {
                         "type": "integer"
                     }
+                }
+            }
+        },
+        "memberproduct.MemberProductListReq": {
+            "type": "object",
+            "properties": {
+                "memberId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "subType": {
+                    "type": "string"
+                },
+                "type": {
+                    "description": "类型",
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

@@ -64,4 +64,5 @@ struct MemberProductListReq {
     5: optional string type = "" (api.raw = "type") // 类型
     6: optional i64 venueId = 0 (api.raw = "venueId")
     7: optional string subType = "" (api.raw = "subType")
+    8: optional i64 memberId = 0 (api.raw = "memberId")
 }
