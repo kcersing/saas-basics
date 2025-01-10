@@ -55,11 +55,12 @@ func (s Schedule) CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) e
 }
 
 func (s Schedule) UpdateScheduleUserTimePeriod(req schedule.UpdateUserTimePeriodReq) error {
-	date, err := time.Parse(time.DateTime, req.Date)
-
+	startTime, err := time.Parse(time.DateTime, req.Date)
 	if err != nil {
 		return errors.New("日期类型传值错误")
 	}
+	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
+
 	_, err = s.db.UserTimePeriod.
 		Create().
 		SetUserID(req.UserId).
@@ -116,10 +117,11 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 
 func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*schedule.ScheduleCoachPeriod, total int, err error) {
 
-	date, err := time.Parse(time.DateOnly, req.Date)
+	startTime, err := time.Parse(time.DateTime, req.Date)
 	if err != nil {
 		return nil, 0, errors.New("日期类型传值错误")
 	}
+	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
 	userArr, err := s.db.User.Query().Where(user.DefaultVenueIDEQ(req.VenueId)).All(s.ctx)
 
@@ -181,10 +183,12 @@ func (s Schedule) ScheduleCoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachI
 	return s.entScheduleCoachInfo(first), nil
 }
 func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.UserTimePeriodInfo, err error) {
-	startTime, err := time.Parse(time.DateOnly, req.Date)
+
+	startTime, err := time.Parse(time.DateTime, req.Date)
 	if err != nil {
 		return nil, errors.New("日期类型传值错误")
 	}
+	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
 	var predicates []predicate.UserTimePeriod
 	if req.VenueId > 0 {
@@ -192,7 +196,7 @@ func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.Use
 	}
 
 	predicates = append(predicates, usertimeperiod.UserID(req.ID))
-	predicates = append(predicates, usertimeperiod.Date(startTime))
+	predicates = append(predicates, usertimeperiod.Date(date))
 	first, err := s.db.Debug().UserTimePeriod.
 		Query().
 		Where(predicates...).

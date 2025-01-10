@@ -23,10 +23,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 	if err != nil {
 		return errors.New("日期类型传值错误")
 	}
-	data, err := time.Parse(time.DateOnly, req.StartTime)
-	if err != nil {
-		return errors.New("日期类型传值错误")
-	}
+	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
 	tx, err := s.db.Tx(s.ctx)
 	if err != nil {
@@ -57,7 +54,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 		SetLength(first.Length).
 		//SetPlaceID(req.PlaceId)
 		//SetNum(req.Num).
-		SetDate(data).
+		SetDate(date).
 		SetStartTime(startTime).
 		SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
 		SetVenueName(venueName).
@@ -84,7 +81,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 			SetVenueID(req.VenueId).
 			SetCoachID(req.CoachId).
 			SetProductID(req.ProductId).
-			SetDate(data).
+			SetDate(date).
 			SetStartTime(startTime).
 			SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
 			SetStatus(1).
@@ -198,13 +195,11 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 
 	// 解析字符串到 time.Time 类型
 	startTime, err := time.Parse(time.DateTime, req.StartTime)
+
 	if err != nil {
 		return errors.New("日期类型传值错误")
 	}
-	data, err := time.Parse(time.DateOnly, req.StartTime)
-	if err != nil {
-		return errors.New("日期类型传值错误")
-	}
+	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
 	tx, err := s.db.Tx(s.ctx)
 	if err != nil {
@@ -245,7 +240,7 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 		SetPlaceID(req.PlaceId).
 		SetNum(place.Number).
 		SetNumSurplus(place.Number).
-		SetDate(data).
+		SetDate(date).
 		SetStartTime(startTime).
 		SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
 		//SetPrice(req.Price).
@@ -276,7 +271,7 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 		SetPlaceID(req.PlaceId).
 		SetProductID(req.ProductId).
 		SetStartTime(startTime).
-		SetDate(data).
+		SetDate(date).
 		SetEndTime(startTime.Add(time.Duration(first.Length) * time.Minute)).
 		SetStatus(1).
 		SetCoachName(u.Name).
