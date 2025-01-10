@@ -30,7 +30,8 @@ func (s Schedule) CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) e
 			//Before
 			//
 			for {
-				date := startDate
+				date := time.Date(startDate.Year(), startDate.Month(), startDate.Day(), 0, 0, 0, 0, startDate.Location())
+
 				usc = append(usc, s.db.UserTimePeriod.
 					Create().
 					SetDate(date).
