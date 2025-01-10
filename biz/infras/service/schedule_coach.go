@@ -12,7 +12,7 @@ import (
 )
 
 func (s Schedule) CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) error {
-	if req.VenueId > 0 {
+	if req.VenueId == 0 {
 		return errors.New("场馆ID不能为空")
 	}
 	startDate, err := time.Parse(time.DateTime, req.StartDate)
@@ -53,7 +53,7 @@ func (s Schedule) UpdateScheduleUserTimePeriod(req schedule.UpdateUserTimePeriod
 		return errors.New("日期类型传值错误")
 	}
 
-	if req.VenueId > 0 {
+	if req.VenueId == 0 {
 		return errors.New("场馆ID不能为空")
 	}
 
@@ -114,7 +114,7 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 }
 
 func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*schedule.ScheduleCoachPeriod, total int, err error) {
-	if req.VenueId > 0 {
+	if req.VenueId == 0 {
 		return nil, 0, errors.New("场馆ID不能为空")
 	}
 	startTime, err := time.Parse(time.DateTime, req.Date)
@@ -189,7 +189,7 @@ func (s Schedule) ScheduleCoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachI
 	return s.entScheduleCoachInfo(first), nil
 }
 func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.UserTimePeriodInfo, err error) {
-	if req.VenueId > 0 {
+	if req.VenueId == 0 {
 		return nil, errors.New("场馆ID不能为空")
 	}
 	startTime, err := time.Parse(time.DateTime, req.Date)
