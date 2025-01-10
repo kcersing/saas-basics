@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/predicate"
@@ -128,7 +127,7 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 		usertimeperiod.Date(date),
 		usertimeperiod.VenueID(req.VenueId),
 	).All(s.ctx)
-	hlog.Info(userArr)
+
 	if userArr == nil {
 		return nil, 0, errors.New("未查询到值班教练")
 	}
