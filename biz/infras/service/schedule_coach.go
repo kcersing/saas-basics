@@ -13,8 +13,10 @@ import (
 )
 
 func (s Schedule) CreateScheduleUserTimePeriod(req schedule.UserTimePeriodReq) error {
+	if req.VenueId > 0 {
+		return errors.New("场馆ID不能为空")
+	}
 	startDate, err := time.Parse(time.DateTime, req.StartDate)
-
 	if err != nil {
 		return errors.New("日期类型传值错误")
 	}
@@ -51,6 +53,11 @@ func (s Schedule) UpdateScheduleUserTimePeriod(req schedule.UpdateUserTimePeriod
 	if err != nil {
 		return errors.New("日期类型传值错误")
 	}
+
+	if req.VenueId > 0 {
+		return errors.New("场馆ID不能为空")
+	}
+
 	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
 	_, err = s.db.UserTimePeriod.
@@ -108,14 +115,19 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 }
 
 func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*schedule.ScheduleCoachPeriod, total int, err error) {
-
+	if req.VenueId > 0 {
+		return nil, 0, errors.New("场馆ID不能为空")
+	}
 	startTime, err := time.Parse(time.DateTime, req.Date)
 	if err != nil {
 		return nil, 0, errors.New("日期类型传值错误")
 	}
 	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
-	userArr, err := s.db.UserTimePeriod.Query().Where(usertimeperiod.Date(date)).All(s.ctx)
+	userArr, err := s.db.UserTimePeriod.Query().Where(
+		usertimeperiod.Date(date),
+		usertimeperiod.VenueID(req.VenueId),
+	).All(s.ctx)
 	hlog.Info(userArr)
 	if userArr == nil {
 		return nil, 0, errors.New("未查询到值班教练")
@@ -178,7 +190,9 @@ func (s Schedule) ScheduleCoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachI
 	return s.entScheduleCoachInfo(first), nil
 }
 func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.UserTimePeriodInfo, err error) {
-
+	if req.VenueId > 0 {
+		return nil, errors.New("场馆ID不能为空")
+	}
 	startTime, err := time.Parse(time.DateTime, req.Date)
 	if err != nil {
 		return nil, errors.New("日期类型传值错误")
@@ -186,10 +200,8 @@ func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.Use
 	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
 	var predicates []predicate.UserTimePeriod
-	if req.VenueId > 0 {
-		predicates = append(predicates, usertimeperiod.VenueID(req.VenueId))
-	}
 
+	predicates = append(predicates, usertimeperiod.VenueID(req.VenueId))
 	predicates = append(predicates, usertimeperiod.UserID(req.ID))
 	predicates = append(predicates, usertimeperiod.Date(date))
 	first, err := s.db.Debug().UserTimePeriod.
