@@ -40,7 +40,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 		Where(product.ID(req.ProductId)).
 		First(s.ctx)
 	if err != nil {
-		err = errors.Wrap(err, "未查询到该会员产品")
+		err = errors.Wrap(err, "未查询到该产品")
 		return rollback(tx, err)
 	}
 	venueName := ""
@@ -96,35 +96,39 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 		err = errors.Wrap(err, "create Course Record Coach failed")
 		return rollback(tx, err)
 	}
-	err = s.CreateScheduleMemberCourse(do.CreateScheduleMemberCourse{
-		One:       one,
-		Type:      req.Type,
-		VenueId:   req.VenueId,
-		StartTime: startTime,
-		MemberId:  req.MemberId,
-		ProductId: req.MemberProductId,
-	})
+
+	if err = tx.Commit(); err != nil {
+		return err
+	}
+
+	cmcReq := do.CreateScheduleMemberCourse{
+		One:             one,
+		Type:            req.Type,
+		VenueId:         req.VenueId,
+		StartTime:       startTime,
+		MemberId:        req.MemberId,
+		ProductId:       req.ProductId,
+		MemberProductId: req.MemberProductId,
+	}
+	err = s.CreateScheduleMemberCourse(cmcReq)
 	if err != nil {
 		return err
 	}
 	if len(req.MpIds) > 0 {
 		for _, v := range req.MpIds {
 			err = s.CreateScheduleMemberCourse(do.CreateScheduleMemberCourse{
-				One:       one,
-				Type:      req.Type,
-				VenueId:   req.VenueId,
-				StartTime: startTime,
-				MemberId:  v.MemberId,
-				ProductId: v.MemberProductId,
+				One:             one,
+				Type:            req.Type,
+				VenueId:         req.VenueId,
+				StartTime:       startTime,
+				MemberId:        v.MemberId,
+				MemberProductId: v.MemberProductId,
+				ProductId:       req.ProductId,
 			})
 			if err != nil {
 				return err
 			}
 		}
-	}
-
-	if err = tx.Commit(); err != nil {
-		return err
 	}
 	return nil
 }
@@ -133,8 +137,6 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 		Where(memberprofile.MemberID(req.MemberId)).
 		First(s.ctx)
 	if err != nil {
-		hlog.Error("未查询到该会员:", req)
-
 		return errors.Wrap(err, "未查询到该会员")
 	}
 
@@ -147,7 +149,6 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 	}
 
 	if memberProduct.NumberSurplus < 1 {
-		hlog.Error("该会员课程不足:", req)
 		return errors.Wrap(err, "该会员课程不足")
 	}
 
@@ -166,7 +167,7 @@ func (s Schedule) CreateScheduleMemberCourse(req do.CreateScheduleMemberCourse) 
 		SetMemberProductName(memberProduct.Name).
 		Save(s.ctx)
 	if err != nil {
-		hlog.Error("无法创建会员课程:", req)
+		hlog.Error("无法创建会员课程:", err)
 		err = errors.Wrap(err, "无法创建会员课程")
 		return err
 	}
