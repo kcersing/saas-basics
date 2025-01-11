@@ -110,7 +110,7 @@ struct CreateOrUpdateScheduleCourseReq {
     /**会员ID*/
     4:optional i64 memberId =0  (api.raw = "memberId")
      /**会员IDs*/
-    5:optional list<i64> memberIds =0  (api.raw = "memberIds")
+    5:optional list<mpIds> mpIds ={}  (api.raw = "mpIds")
     /**开始时间*/
     6:optional string startTime =""  (api.raw = "startTime")
     /**教练ID*/
@@ -120,6 +120,11 @@ struct CreateOrUpdateScheduleCourseReq {
     /**会员产品ID*/
     9:optional i64 memberProductId =0  (api.raw = "memberProductId")
 }
+struct mpIds{
+  1:optional i64 memberId =0  (api.raw = "memberId")
+  2:optional i64 memberProductId =0  (api.raw = "memberProductId")
+}
+
 struct CreateOrUpdateScheduleLessonsReq {
     /**产品*/
     1:optional i64 productId =0  (api.raw = "productId")
@@ -134,8 +139,6 @@ struct CreateOrUpdateScheduleLessonsReq {
 
     255:optional i64 id=0  (api.raw = "id")
 }
-
-
 
 struct ScheduleListReq {
     1:  optional i64 page = 1 (api.raw = "page")

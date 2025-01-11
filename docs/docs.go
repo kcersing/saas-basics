@@ -5640,16 +5640,16 @@ const docTemplate = `{
                     "description": "*会员ID",
                     "type": "integer"
                 },
-                "memberIds": {
-                    "description": "*会员IDs",
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
                 "memberProductId": {
                     "description": "*会员产品ID",
                     "type": "integer"
+                },
+                "mpIds": {
+                    "description": "*会员IDs",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schedule.MpIds"
+                    }
                 },
                 "productId": {
                     "description": "*产品ID",
@@ -5712,6 +5712,17 @@ const docTemplate = `{
                 },
                 "seat": {
                     "$ref": "#/definitions/base.Seat"
+                }
+            }
+        },
+        "schedule.MpIds": {
+            "type": "object",
+            "properties": {
+                "memberId": {
+                    "type": "integer"
+                },
+                "memberProductId": {
+                    "type": "integer"
                 }
             }
         },

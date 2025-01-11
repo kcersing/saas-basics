@@ -965,14 +965,14 @@ definitions:
       memberId:
         description: '*会员ID'
         type: integer
-      memberIds:
-        description: '*会员IDs'
-        items:
-          type: integer
-        type: array
       memberProductId:
         description: '*会员产品ID'
         type: integer
+      mpIds:
+        description: '*会员IDs'
+        items:
+          $ref: '#/definitions/schedule.MpIds'
+        type: array
       productId:
         description: '*产品ID'
         type: integer
@@ -1017,6 +1017,13 @@ definitions:
         type: integer
       seat:
         $ref: '#/definitions/base.Seat'
+    type: object
+  schedule.MpIds:
+    properties:
+      memberId:
+        type: integer
+      memberProductId:
+        type: integer
     type: object
   schedule.ScheduleCoachListReq:
     properties:
