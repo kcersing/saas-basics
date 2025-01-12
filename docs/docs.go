@@ -5426,12 +5426,15 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "description": "*产品名称",
                     "type": "string"
                 },
                 "nature": {
+                    "description": "*订单业务",
                     "type": "string"
                 },
                 "orderSn": {
+                    "description": "*产品编号",
                     "type": "string"
                 },
                 "page": {
@@ -5441,21 +5444,25 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "productId": {
+                    "description": "*产品ID",
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
                 "productType": {
+                    "description": "*产品类型",
                     "type": "string"
                 },
                 "sellId": {
+                    "description": "*销售员工ID",
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
                 "startCompletionAt": {
+                    "description": "*订单完成时间",
                     "type": "string"
                 },
                 "status": {

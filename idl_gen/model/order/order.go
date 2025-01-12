@@ -464,21 +464,28 @@ func (p *BuyReq) String() string {
 }
 
 type ListOrderReq struct {
-	Page              int64   `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
-	PageSize          int64   `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
-	Mobile            string  `thrift:"mobile,3,optional" form:"mobile" json:"mobile" query:"mobile"`
-	SellId            []int64 `thrift:"sellId,4,optional" form:"sellId" json:"sellId" query:"sellId"`
-	ProductId         []int64 `thrift:"productId,5,optional" form:"productId" json:"productId" query:"productId"`
-	VenueId           []int64 `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
-	Status            []int64 `thrift:"status,7,optional" form:"status" json:"status" query:"status"`
-	OrderSn           string  `thrift:"orderSn,8,optional" form:"orderSn" json:"orderSn" query:"orderSn"`
-	StartCompletionAt string  `thrift:"startCompletionAt,9,optional" form:"startCompletionAt" json:"startCompletionAt" query:"startCompletionAt"`
-	EndCompletionAt   string  `thrift:"endCompletionAt,10,optional" form:"endCompletionAt" json:"endCompletionAt" query:"endCompletionAt"`
-	ProductType       string  `thrift:"productType,11,optional" form:"productType" json:"productType" query:"productType"`
-	Nature            string  `thrift:"nature,12,optional" form:"nature" json:"nature" query:"nature"`
-	Name              string  `thrift:"name,13,optional" form:"name" json:"name" query:"name"`
-	MemberName        string  `thrift:"memberName,14,optional" form:"memberName" json:"memberName" query:"memberName"`
-	MemberId          int64   `thrift:"memberId,15,optional" form:"memberId" json:"memberId" query:"memberId"`
+	Page     int64  `thrift:"page,1,optional" form:"page" json:"page" query:"page"`
+	PageSize int64  `thrift:"pageSize,2,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	Mobile   string `thrift:"mobile,3,optional" form:"mobile" json:"mobile" query:"mobile"`
+	/**销售员工ID*/
+	SellId []int64 `thrift:"sellId,4,optional" form:"sellId" json:"sellId" query:"sellId"`
+	/**产品ID*/
+	ProductId []int64 `thrift:"productId,5,optional" form:"productId" json:"productId" query:"productId"`
+	VenueId   []int64 `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
+	Status    []int64 `thrift:"status,7,optional" form:"status" json:"status" query:"status"`
+	/**产品编号*/
+	OrderSn string `thrift:"orderSn,8,optional" form:"orderSn" json:"orderSn" query:"orderSn"`
+	/**订单完成时间*/
+	StartCompletionAt string `thrift:"startCompletionAt,9,optional" form:"startCompletionAt" json:"startCompletionAt" query:"startCompletionAt"`
+	EndCompletionAt   string `thrift:"endCompletionAt,10,optional" form:"endCompletionAt" json:"endCompletionAt" query:"endCompletionAt"`
+	/**产品类型*/
+	ProductType string `thrift:"productType,11,optional" form:"productType" json:"productType" query:"productType"`
+	/**订单业务*/
+	Nature string `thrift:"nature,12,optional" form:"nature" json:"nature" query:"nature"`
+	/**产品名称*/
+	Name       string `thrift:"name,13,optional" form:"name" json:"name" query:"name"`
+	MemberName string `thrift:"memberName,14,optional" form:"memberName" json:"memberName" query:"memberName"`
+	MemberId   int64  `thrift:"memberId,15,optional" form:"memberId" json:"memberId" query:"memberId"`
 }
 
 func NewListOrderReq() *ListOrderReq {
