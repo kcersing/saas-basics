@@ -27,15 +27,22 @@ struct ListOrderReq {
     1: optional i64 page=1 (api.raw = "page")
     2: optional i64 pageSize=100 (api.raw = "pageSize")
     3: optional string mobile="" (api.raw = "mobile")
+    /**销售员工ID*/
     4: optional list<i64> sellId=0 (api.raw = "sellId")
+    /**产品ID*/
     5: optional list<i64> productId=0 (api.raw = "productId")
     6: optional list<i64> venueId=0 (api.raw = "venueId")
     7: optional list<i64> status=0 (api.raw = "status")
+    /**产品编号*/
     8: optional string orderSn="" (api.raw = "orderSn")
+    /**订单完成时间*/
     9: optional string startCompletionAt="" (api.raw = "startCompletionAt")
     10: optional string endCompletionAt="" (api.raw = "endCompletionAt")
+    /**产品类型*/
     11: optional string productType="" (api.raw = "productType")
+    /**订单业务*/
     12: optional string nature="" (api.raw = "nature")
+    /**产品名称*/
     13: optional string name ="" (api.raw = "name ")
     14: optional string memberName="" (api.raw = "memberName")
     15: optional i64 memberId=0 (api.raw = "memberId")
