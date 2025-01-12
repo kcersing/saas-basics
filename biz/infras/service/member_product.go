@@ -47,9 +47,11 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 			for _, ve := range lessonsAll {
 
 				var length int64
+				var subType string
 				first, _ := m.db.Product.Query().Where(product2.IDEQ(ve.CoursesID)).First(m.ctx)
 				if first != nil {
 					length = first.Length
+					subType = first.SubType
 				}
 
 				lessons = append(lessons, &memberProduct.MemberProductCourses{
@@ -59,6 +61,7 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 					CoursesId:       ve.CoursesID,
 					MemberProductId: ve.MemberProductID,
 					Length:          length,
+					SubType:         subType,
 				},
 				)
 			}
@@ -81,6 +84,7 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 							CoursesId:       ve.ID,
 							MemberProductId: req.ID,
 							Length:          ve.Length,
+							SubType:         ve.SubType,
 						},
 						)
 					}
@@ -91,9 +95,11 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 				if len(coursesAll) > 0 {
 					for _, ve := range coursesAll {
 						var length int64
+						var subType string
 						first, _ := m.db.Product.Query().Where(product2.IDEQ(ve.CoursesID)).First(m.ctx)
 						if first != nil {
 							length = first.Length
+							subType = first.SubType
 						}
 						courses = append(courses, &memberProduct.MemberProductCourses{
 							ID:              ve.ID,
@@ -102,6 +108,7 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 							CoursesId:       ve.CoursesID,
 							MemberProductId: ve.MemberProductID,
 							Length:          length,
+							SubType:         subType,
 						},
 						)
 					}
