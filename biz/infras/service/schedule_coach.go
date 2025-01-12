@@ -157,7 +157,7 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 		coach.Period = &v.Period
 
 		var predicates []predicate.ScheduleCoach
-		predicates = append(predicates, schedulecoach.CoachID(v.ID))
+		predicates = append(predicates, schedulecoach.CoachID(u.ID))
 		predicates = append(predicates, schedulecoach.Date(date))
 		if req.Status > 0 {
 			predicates = append(predicates, schedulecoach.Status(req.Status))
