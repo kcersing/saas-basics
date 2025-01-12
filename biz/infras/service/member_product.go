@@ -45,12 +45,20 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 		lessonsAll, _ := req.QueryMemberLessons().All(m.ctx)
 		if len(lessonsAll) > 0 {
 			for _, ve := range lessonsAll {
+
+				var length int64
+				first, _ := m.db.Product.Query().Where(product2.IDEQ(ve.CoursesID)).First(m.ctx)
+				if first != nil {
+					length = first.Length
+				}
+
 				lessons = append(lessons, &memberProduct.MemberProductCourses{
 					ID:              ve.ID,
 					Type:            ve.Type,
 					Name:            ve.Name,
 					CoursesId:       ve.CoursesID,
 					MemberProductId: ve.MemberProductID,
+					Length:          length,
 				},
 				)
 			}
@@ -72,6 +80,7 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 							Name:            ve.Name,
 							CoursesId:       ve.ID,
 							MemberProductId: req.ID,
+							Length:          ve.Length,
 						},
 						)
 					}
@@ -81,13 +90,18 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 				coursesAll, _ := req.QueryMemberCourses().All(m.ctx)
 				if len(coursesAll) > 0 {
 					for _, ve := range coursesAll {
-
+						var length int64
+						first, _ := m.db.Product.Query().Where(product2.IDEQ(ve.CoursesID)).First(m.ctx)
+						if first != nil {
+							length = first.Length
+						}
 						courses = append(courses, &memberProduct.MemberProductCourses{
 							ID:              ve.ID,
 							Type:            ve.Type,
 							Name:            ve.Name,
 							CoursesId:       ve.CoursesID,
 							MemberProductId: ve.MemberProductID,
+							Length:          length,
 						},
 						)
 					}

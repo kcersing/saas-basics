@@ -1571,6 +1571,7 @@ type MemberProductCourses struct {
 	Name            string `thrift:"name,3,optional" form:"name" json:"name" query:"name"`
 	MemberProductId int64  `thrift:"memberProductId,5,optional" form:"memberProductId" json:"memberProductId" query:"memberProductId"`
 	CoursesId       int64  `thrift:"coursesId,6,optional" form:"coursesId" json:"coursesId" query:"coursesId"`
+	Length          int64  `thrift:"length,7,optional" form:"length" json:"length" query:"length"`
 }
 
 func NewMemberProductCourses() *MemberProductCourses {
@@ -1581,6 +1582,7 @@ func NewMemberProductCourses() *MemberProductCourses {
 		Name:            "",
 		MemberProductId: 0,
 		CoursesId:       0,
+		Length:          0,
 	}
 }
 
@@ -1590,6 +1592,7 @@ func (p *MemberProductCourses) InitDefault() {
 	p.Name = ""
 	p.MemberProductId = 0
 	p.CoursesId = 0
+	p.Length = 0
 }
 
 var MemberProductCourses_ID_DEFAULT int64 = 0
@@ -1637,12 +1640,22 @@ func (p *MemberProductCourses) GetCoursesId() (v int64) {
 	return p.CoursesId
 }
 
+var MemberProductCourses_Length_DEFAULT int64 = 0
+
+func (p *MemberProductCourses) GetLength() (v int64) {
+	if !p.IsSetLength() {
+		return MemberProductCourses_Length_DEFAULT
+	}
+	return p.Length
+}
+
 var fieldIDToName_MemberProductCourses = map[int16]string{
 	1: "id",
 	2: "type",
 	3: "name",
 	5: "memberProductId",
 	6: "coursesId",
+	7: "length",
 }
 
 func (p *MemberProductCourses) IsSetID() bool {
@@ -1663,6 +1676,10 @@ func (p *MemberProductCourses) IsSetMemberProductId() bool {
 
 func (p *MemberProductCourses) IsSetCoursesId() bool {
 	return p.CoursesId != MemberProductCourses_CoursesId_DEFAULT
+}
+
+func (p *MemberProductCourses) IsSetLength() bool {
+	return p.Length != MemberProductCourses_Length_DEFAULT
 }
 
 func (p *MemberProductCourses) Read(iprot thrift.TProtocol) (err error) {
@@ -1719,6 +1736,14 @@ func (p *MemberProductCourses) Read(iprot thrift.TProtocol) (err error) {
 		case 6:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField6(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 7:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField7(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1808,6 +1833,17 @@ func (p *MemberProductCourses) ReadField6(iprot thrift.TProtocol) error {
 	p.CoursesId = _field
 	return nil
 }
+func (p *MemberProductCourses) ReadField7(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Length = _field
+	return nil
+}
 
 func (p *MemberProductCourses) Write(oprot thrift.TProtocol) (err error) {
 
@@ -1834,6 +1870,10 @@ func (p *MemberProductCourses) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField6(oprot); err != nil {
 			fieldId = 6
+			goto WriteFieldError
+		}
+		if err = p.writeField7(oprot); err != nil {
+			fieldId = 7
 			goto WriteFieldError
 		}
 	}
@@ -1947,6 +1987,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+}
+
+func (p *MemberProductCourses) writeField7(oprot thrift.TProtocol) (err error) {
+	if p.IsSetLength() {
+		if err = oprot.WriteFieldBegin("length", thrift.I64, 7); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Length); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
 }
 
 func (p *MemberProductCourses) String() string {

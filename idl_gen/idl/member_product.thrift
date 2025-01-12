@@ -50,6 +50,7 @@ struct MemberProductCourses {
     3: optional string name=""  (api.raw = "name")
     5: optional i64 memberProductId = 0  (api.raw = "member_product_id")
     6: optional i64 coursesId =0 (api.raw = "courses_id")
+   7: optional i64 length = 0 (api.raw = "length")
 
 
 }
