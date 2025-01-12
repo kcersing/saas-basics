@@ -81,7 +81,7 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 					SetMemberProductID(mp.ID).
 					SetName(v.Name).
 					SetType(v.Type).
-					SetCoursesID(v.ID).
+					SetCoursesID(v.CoursesID).
 					Save(m.ctx)
 				if err != nil {
 					hlog.Info(mp.Sn + "创建附属课程失败")
