@@ -139,7 +139,7 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 
 		coach := &schedule.ScheduleCoachPeriod{
 			Date:      date.Format(time.DateOnly),
-			CoachId:   v.ID,
+			CoachId:   u.ID,
 			VenueId:   u.DefaultVenueID,
 			CoachName: u.Name,
 		}
