@@ -65,6 +65,8 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 	if req.Type != "" {
 		predicates = append(predicates, schedule2.TypeEQ(req.Type))
 	}
+	predicates = append(predicates, schedule2.StatusNotIn(0, 5))
+
 	lists, err := s.db.Debug().Schedule.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(s.ctx)

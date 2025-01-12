@@ -96,6 +96,7 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 		predicates = append(predicates, schedulecoach.Type(req.Type))
 
 	}
+	predicates = append(predicates, schedulecoach.HasScheduleWith(schedule2.StatusNotIn(0, 5)))
 	lists, err := s.db.ScheduleCoach.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(s.ctx)
