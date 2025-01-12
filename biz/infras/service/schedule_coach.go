@@ -4,6 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/predicate"
+	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
 	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/idl_gen/model/base"
@@ -160,7 +161,7 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 		var predicates []predicate.ScheduleCoach
 		predicates = append(predicates, schedulecoach.CoachID(u.ID))
 		predicates = append(predicates, schedulecoach.Date(date))
-		predicates = append(predicates, schedulecoach.StatusNotIn(0, 5))
+		predicates = append(predicates, schedulecoach.HasScheduleWith(schedule2.StatusNotIn(0, 5)))
 		if req.Status > 0 {
 			predicates = append(predicates, schedulecoach.Status(req.Status))
 		}
