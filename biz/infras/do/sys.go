@@ -33,10 +33,19 @@ type SysStaffList struct {
 	Functions []string `json:"functions"`
 }
 type SysMemberList struct {
-	Id     int64  `json:"id"`
-	Name   string `json:"name"`
-	Mobile string `json:"mobile"`
+	Id            int64                  `json:"id"`
+	Name          string                 `json:"name"`
+	Mobile        string                 `json:"mobile"`
+	MemberProduct []SysMemberProductList `json:"memberProduct"`
 }
+type SysMemberProductList struct {
+	Id            int64  `json:"id"`
+	Name          string `json:"name"`
+	NumberSurplus int64  `json:"numberSurplus"`
+	IsCourse      int64  `json:"isCourse"`
+	Type          string `json:"type"`
+}
+
 type SysPlaceList struct {
 	Id       int64          `json:"id"`
 	Name     string         `json:"name"`

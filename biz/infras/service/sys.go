@@ -25,6 +25,7 @@ import (
 	"saas/config"
 	"saas/idl_gen/model/base"
 	"saas/idl_gen/model/sys"
+	"saas/pkg/enums"
 )
 
 type Sys struct {
@@ -178,7 +179,14 @@ func (s Sys) MemberList(req sys.SysMemberListReq) (list []do.SysMemberList, tota
 	}
 
 	if len(req.ProductId) > 0 {
-		predicates = append(predicates, member.HasMemberProductsWith(memberproduct.ProductIDIn(req.ProductId...)))
+		predicates = append(predicates, member.HasMemberProductsWith(
+			memberproduct.Or(
+				memberproduct.ProductIDIn(req.ProductId...),
+				memberproduct.And(memberproduct.IsCourse(1), memberproduct.TypeEQ(enums.CoursePackage)),
+			),
+			memberproduct.StatusIn(1, 2),
+			memberproduct.Delete(0),
+		))
 	}
 	predicates = append(predicates, member.Delete(0))
 	lists, err := s.db.Member.Query().Where(predicates...).All(s.ctx)
@@ -188,12 +196,34 @@ func (s Sys) MemberList(req sys.SysMemberListReq) (list []do.SysMemberList, tota
 		return nil, 0, err
 	}
 	for _, v := range lists {
+		var mps []do.SysMemberProductList
+		mpAll, _ := v.QueryMemberProducts().Where(
+			memberproduct.Or(
+				memberproduct.ProductIDIn(req.ProductId...),
+
+				memberproduct.And(memberproduct.IsCourse(1), memberproduct.TypeEQ(enums.CoursePackage)),
+			),
+			memberproduct.StatusIn(1, 2),
+			memberproduct.Delete(0),
+		).All(s.ctx)
+		if mpAll != nil {
+			for _, mp := range mpAll {
+				mps = append(mps, do.SysMemberProductList{
+					Id:            mp.ID,
+					Name:          mp.Name,
+					NumberSurplus: mp.NumberSurplus,
+					IsCourse:      mp.IsCourse,
+					Type:          mp.Type,
+				})
+			}
+		}
 		pro, _ := v.QueryMemberProfile().First(s.ctx)
 		if pro != nil {
 			list = append(list, do.SysMemberList{
-				Id:     v.ID,
-				Name:   pro.Name,
-				Mobile: v.Mobile,
+				Id:            v.ID,
+				Name:          pro.Name,
+				Mobile:        v.Mobile,
+				MemberProduct: mps,
 			})
 		}
 
