@@ -5416,7 +5416,10 @@ const docTemplate = `{
                 "endCompletionAt": {
                     "type": "string"
                 },
-                "member_name": {
+                "memberId": {
+                    "type": "integer"
+                },
+                "memberName": {
                     "type": "string"
                 },
                 "mobile": {

@@ -37,7 +37,8 @@ struct ListOrderReq {
     11: optional string productType="" (api.raw = "productType")
     12: optional string nature="" (api.raw = "nature")
     13: optional string name ="" (api.raw = "name ")
-    14: optional string member_name="" (api.raw = "member_name")
+    14: optional string memberName="" (api.raw = "memberName")
+    15: optional i64 memberId=0 (api.raw = "memberId")
 
 }
 struct OrderInfo {

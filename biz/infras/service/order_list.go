@@ -40,7 +40,9 @@ func (o Order) List(req *order.ListOrderReq) (resp []*order.OrderInfo, total int
 	if len(req.VenueId) > 0 {
 		predicates = append(predicates, order2.VenueIDIn(req.VenueId...))
 	}
-
+	if req.MemberId > 0 {
+		predicates = append(predicates, order2.MemberIDEQ(req.MemberId))
+	}
 	if req.StartCompletionAt != "" && req.EndCompletionAt != "" {
 		signStartAt, _ := time.Parse(time.DateTime, req.StartCompletionAt)
 		signEndAt, _ := time.Parse(time.DateTime, req.EndCompletionAt)
