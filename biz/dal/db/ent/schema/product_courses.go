@@ -18,8 +18,6 @@ func (ProductCourses) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("type").Default("").Comment("类型").Optional(),
 		field.String("name").Default("").Comment("课名").Optional(),
-
-		field.Int64("number").Default(0).Comment("节数").Optional(),
 		field.Int64("product_id").Default(0).Comment("产品名称").Optional(),
 		field.Int64("courses_id").Default(0).Comment("课名称").Optional(),
 	}

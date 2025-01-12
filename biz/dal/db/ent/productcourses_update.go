@@ -162,33 +162,6 @@ func (pcu *ProductCoursesUpdate) ClearName() *ProductCoursesUpdate {
 	return pcu
 }
 
-// SetNumber sets the "number" field.
-func (pcu *ProductCoursesUpdate) SetNumber(i int64) *ProductCoursesUpdate {
-	pcu.mutation.ResetNumber()
-	pcu.mutation.SetNumber(i)
-	return pcu
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (pcu *ProductCoursesUpdate) SetNillableNumber(i *int64) *ProductCoursesUpdate {
-	if i != nil {
-		pcu.SetNumber(*i)
-	}
-	return pcu
-}
-
-// AddNumber adds i to the "number" field.
-func (pcu *ProductCoursesUpdate) AddNumber(i int64) *ProductCoursesUpdate {
-	pcu.mutation.AddNumber(i)
-	return pcu
-}
-
-// ClearNumber clears the value of the "number" field.
-func (pcu *ProductCoursesUpdate) ClearNumber() *ProductCoursesUpdate {
-	pcu.mutation.ClearNumber()
-	return pcu
-}
-
 // SetProductID sets the "product_id" field.
 func (pcu *ProductCoursesUpdate) SetProductID(i int64) *ProductCoursesUpdate {
 	pcu.mutation.SetProductID(i)
@@ -383,15 +356,6 @@ func (pcu *ProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if pcu.mutation.NameCleared() {
 		_spec.ClearField(productcourses.FieldName, field.TypeString)
-	}
-	if value, ok := pcu.mutation.Number(); ok {
-		_spec.SetField(productcourses.FieldNumber, field.TypeInt64, value)
-	}
-	if value, ok := pcu.mutation.AddedNumber(); ok {
-		_spec.AddField(productcourses.FieldNumber, field.TypeInt64, value)
-	}
-	if pcu.mutation.NumberCleared() {
-		_spec.ClearField(productcourses.FieldNumber, field.TypeInt64)
 	}
 	if value, ok := pcu.mutation.CoursesID(); ok {
 		_spec.SetField(productcourses.FieldCoursesID, field.TypeInt64, value)
@@ -610,33 +574,6 @@ func (pcuo *ProductCoursesUpdateOne) SetNillableName(s *string) *ProductCoursesU
 // ClearName clears the value of the "name" field.
 func (pcuo *ProductCoursesUpdateOne) ClearName() *ProductCoursesUpdateOne {
 	pcuo.mutation.ClearName()
-	return pcuo
-}
-
-// SetNumber sets the "number" field.
-func (pcuo *ProductCoursesUpdateOne) SetNumber(i int64) *ProductCoursesUpdateOne {
-	pcuo.mutation.ResetNumber()
-	pcuo.mutation.SetNumber(i)
-	return pcuo
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (pcuo *ProductCoursesUpdateOne) SetNillableNumber(i *int64) *ProductCoursesUpdateOne {
-	if i != nil {
-		pcuo.SetNumber(*i)
-	}
-	return pcuo
-}
-
-// AddNumber adds i to the "number" field.
-func (pcuo *ProductCoursesUpdateOne) AddNumber(i int64) *ProductCoursesUpdateOne {
-	pcuo.mutation.AddNumber(i)
-	return pcuo
-}
-
-// ClearNumber clears the value of the "number" field.
-func (pcuo *ProductCoursesUpdateOne) ClearNumber() *ProductCoursesUpdateOne {
-	pcuo.mutation.ClearNumber()
 	return pcuo
 }
 
@@ -864,15 +801,6 @@ func (pcuo *ProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node *Produc
 	}
 	if pcuo.mutation.NameCleared() {
 		_spec.ClearField(productcourses.FieldName, field.TypeString)
-	}
-	if value, ok := pcuo.mutation.Number(); ok {
-		_spec.SetField(productcourses.FieldNumber, field.TypeInt64, value)
-	}
-	if value, ok := pcuo.mutation.AddedNumber(); ok {
-		_spec.AddField(productcourses.FieldNumber, field.TypeInt64, value)
-	}
-	if pcuo.mutation.NumberCleared() {
-		_spec.ClearField(productcourses.FieldNumber, field.TypeInt64)
 	}
 	if value, ok := pcuo.mutation.CoursesID(); ok {
 		_spec.SetField(productcourses.FieldCoursesID, field.TypeInt64, value)

@@ -17,6 +17,7 @@ struct SysStaffListReq {
     6: optional i64 venueId=0 (api.raw = "venueId" )
     /**标签*/
     5: optional list<i64> tagId=0 (api.raw = "tagId" )
+    7: optional i64 productId=0 (api.raw = "productId" )
 }
 
 struct SysPlaceListReq {

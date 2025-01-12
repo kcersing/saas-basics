@@ -81,8 +81,6 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 					SetMemberProductID(mp.ID).
 					SetName(v.Name).
 					SetType(v.Type).
-					SetNumber(v.Number).
-					SetNumberSurplus(v.Number).
 					SetCoursesID(v.ID).
 					Save(m.ctx)
 				if err != nil {

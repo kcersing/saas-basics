@@ -78,7 +78,6 @@ func (p Product) CreateProduct(req product.CreateOrUpdateProductReq) error {
 					SetCoursesID(v.ID).
 					SetType(v.Type).
 					SetName(v.Name).
-					SetNumber(v.Number).
 					Save(p.ctx)
 			}
 		}()
@@ -146,7 +145,6 @@ func (p Product) UpdateProduct(req product.CreateOrUpdateProductReq) error {
 					SetCoursesID(v.ID).
 					SetType(v.Type).
 					SetName(v.Name).
-					SetNumber(v.Number).
 					Save(p.ctx)
 			}
 		}()
@@ -266,10 +264,9 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 	if len(coursesAll) > 0 {
 		for _, ve := range coursesAll {
 			courses = append(courses, &base.CourseList{
-				ID:     ve.CoursesID,
-				Name:   ve.Name,
-				Type:   ve.Type,
-				Number: ve.Number,
+				ID:   ve.CoursesID,
+				Name: ve.Name,
+				Type: ve.Type,
 			},
 			)
 
@@ -279,10 +276,9 @@ func (p Product) entProductInfo(v *ent.Product) *product.ProductInfo {
 	if len(lessonsAll) > 0 {
 		for _, ve := range lessonsAll {
 			lessons = append(lessons, &base.CourseList{
-				ID:     ve.CoursesID,
-				Name:   ve.Name,
-				Type:   ve.Type,
-				Number: ve.Number,
+				ID:   ve.CoursesID,
+				Name: ve.Name,
+				Type: ve.Type,
 			},
 			)
 

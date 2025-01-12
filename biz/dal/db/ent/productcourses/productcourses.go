@@ -28,8 +28,6 @@ const (
 	FieldType = "type"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldNumber holds the string denoting the number field in the database.
-	FieldNumber = "number"
 	// FieldProductID holds the string denoting the product_id field in the database.
 	FieldProductID = "product_id"
 	// FieldCoursesID holds the string denoting the courses_id field in the database.
@@ -66,7 +64,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldType,
 	FieldName,
-	FieldNumber,
 	FieldProductID,
 	FieldCoursesID,
 }
@@ -98,8 +95,6 @@ var (
 	DefaultType string
 	// DefaultName holds the default value on creation for the "name" field.
 	DefaultName string
-	// DefaultNumber holds the default value on creation for the "number" field.
-	DefaultNumber int64
 	// DefaultProductID holds the default value on creation for the "product_id" field.
 	DefaultProductID int64
 	// DefaultCoursesID holds the default value on creation for the "courses_id" field.
@@ -147,11 +142,6 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
-}
-
-// ByNumber orders the results by the number field.
-func ByNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNumber, opts...).ToFunc()
 }
 
 // ByProductID orders the results by the product_id field.

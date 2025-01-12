@@ -4325,9 +4325,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "number": {
-                    "type": "integer"
-                },
                 "type": {
                     "type": "string"
                 }
@@ -5984,6 +5981,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "productId": {
+                    "type": "integer"
                 },
                 "tagId": {
                     "description": "*标签",

@@ -691,8 +691,6 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型", Default: ""},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "课名", Default: ""},
-		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "节数", Default: 0},
-		{Name: "number_surplus", Type: field.TypeInt64, Nullable: true, Comment: "剩余次数", Default: 0},
 		{Name: "courses_id", Type: field.TypeInt64, Nullable: true, Comment: "课名称", Default: 0},
 		{Name: "member_product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品名称", Default: 0},
 	}
@@ -704,13 +702,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "member_product_courses_member_product_memberCourses",
-				Columns:    []*schema.Column{MemberProductCoursesColumns[11]},
+				Columns:    []*schema.Column{MemberProductCoursesColumns[9]},
 				RefColumns: []*schema.Column{MemberProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "member_product_courses_member_product_memberLessons",
-				Columns:    []*schema.Column{MemberProductCoursesColumns[11]},
+				Columns:    []*schema.Column{MemberProductCoursesColumns[9]},
 				RefColumns: []*schema.Column{MemberProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1131,7 +1129,6 @@ var (
 		{Name: "status", Type: field.TypeInt64, Nullable: true, Comment: "状态[1:正常,2:禁用]", Default: 1},
 		{Name: "type", Type: field.TypeString, Nullable: true, Comment: "类型", Default: ""},
 		{Name: "name", Type: field.TypeString, Nullable: true, Comment: "课名", Default: ""},
-		{Name: "number", Type: field.TypeInt64, Nullable: true, Comment: "节数", Default: 0},
 		{Name: "courses_id", Type: field.TypeInt64, Nullable: true, Comment: "课名称", Default: 0},
 		{Name: "product_id", Type: field.TypeInt64, Nullable: true, Comment: "产品名称", Default: 0},
 	}
@@ -1143,13 +1140,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "product_courses_product_courses",
-				Columns:    []*schema.Column{ProductCoursesColumns[10]},
+				Columns:    []*schema.Column{ProductCoursesColumns[9]},
 				RefColumns: []*schema.Column{ProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "product_courses_product_lessons",
-				Columns:    []*schema.Column{ProductCoursesColumns[10]},
+				Columns:    []*schema.Column{ProductCoursesColumns[9]},
 				RefColumns: []*schema.Column{ProductColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

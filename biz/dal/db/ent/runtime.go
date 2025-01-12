@@ -768,20 +768,12 @@ func init() {
 	memberproductcoursesDescName := memberproductcoursesFields[1].Descriptor()
 	// memberproductcourses.DefaultName holds the default value on creation for the name field.
 	memberproductcourses.DefaultName = memberproductcoursesDescName.Default.(string)
-	// memberproductcoursesDescNumber is the schema descriptor for number field.
-	memberproductcoursesDescNumber := memberproductcoursesFields[2].Descriptor()
-	// memberproductcourses.DefaultNumber holds the default value on creation for the number field.
-	memberproductcourses.DefaultNumber = memberproductcoursesDescNumber.Default.(int64)
-	// memberproductcoursesDescNumberSurplus is the schema descriptor for number_surplus field.
-	memberproductcoursesDescNumberSurplus := memberproductcoursesFields[3].Descriptor()
-	// memberproductcourses.DefaultNumberSurplus holds the default value on creation for the number_surplus field.
-	memberproductcourses.DefaultNumberSurplus = memberproductcoursesDescNumberSurplus.Default.(int64)
 	// memberproductcoursesDescMemberProductID is the schema descriptor for member_product_id field.
-	memberproductcoursesDescMemberProductID := memberproductcoursesFields[4].Descriptor()
+	memberproductcoursesDescMemberProductID := memberproductcoursesFields[2].Descriptor()
 	// memberproductcourses.DefaultMemberProductID holds the default value on creation for the member_product_id field.
 	memberproductcourses.DefaultMemberProductID = memberproductcoursesDescMemberProductID.Default.(int64)
 	// memberproductcoursesDescCoursesID is the schema descriptor for courses_id field.
-	memberproductcoursesDescCoursesID := memberproductcoursesFields[5].Descriptor()
+	memberproductcoursesDescCoursesID := memberproductcoursesFields[3].Descriptor()
 	// memberproductcourses.DefaultCoursesID holds the default value on creation for the courses_id field.
 	memberproductcourses.DefaultCoursesID = memberproductcoursesDescCoursesID.Default.(int64)
 	memberprofileMixin := schema.MemberProfile{}.Mixin()
@@ -1217,16 +1209,12 @@ func init() {
 	productcoursesDescName := productcoursesFields[1].Descriptor()
 	// productcourses.DefaultName holds the default value on creation for the name field.
 	productcourses.DefaultName = productcoursesDescName.Default.(string)
-	// productcoursesDescNumber is the schema descriptor for number field.
-	productcoursesDescNumber := productcoursesFields[2].Descriptor()
-	// productcourses.DefaultNumber holds the default value on creation for the number field.
-	productcourses.DefaultNumber = productcoursesDescNumber.Default.(int64)
 	// productcoursesDescProductID is the schema descriptor for product_id field.
-	productcoursesDescProductID := productcoursesFields[3].Descriptor()
+	productcoursesDescProductID := productcoursesFields[2].Descriptor()
 	// productcourses.DefaultProductID holds the default value on creation for the product_id field.
 	productcourses.DefaultProductID = productcoursesDescProductID.Default.(int64)
 	// productcoursesDescCoursesID is the schema descriptor for courses_id field.
-	productcoursesDescCoursesID := productcoursesFields[4].Descriptor()
+	productcoursesDescCoursesID := productcoursesFields[3].Descriptor()
 	// productcourses.DefaultCoursesID holds the default value on creation for the courses_id field.
 	productcourses.DefaultCoursesID = productcoursesDescCoursesID.Default.(int64)
 	roleMixin := schema.Role{}.Mixin()

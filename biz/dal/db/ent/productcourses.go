@@ -33,8 +33,6 @@ type ProductCourses struct {
 	Type string `json:"type,omitempty"`
 	// 课名
 	Name string `json:"name,omitempty"`
-	// 节数
-	Number int64 `json:"number,omitempty"`
 	// 产品名称
 	ProductID int64 `json:"product_id,omitempty"`
 	// 课名称
@@ -87,7 +85,7 @@ func (*ProductCourses) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case productcourses.FieldID, productcourses.FieldDelete, productcourses.FieldCreatedID, productcourses.FieldStatus, productcourses.FieldNumber, productcourses.FieldProductID, productcourses.FieldCoursesID:
+		case productcourses.FieldID, productcourses.FieldDelete, productcourses.FieldCreatedID, productcourses.FieldStatus, productcourses.FieldProductID, productcourses.FieldCoursesID:
 			values[i] = new(sql.NullInt64)
 		case productcourses.FieldType, productcourses.FieldName:
 			values[i] = new(sql.NullString)
@@ -155,12 +153,6 @@ func (pc *ProductCourses) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				pc.Name = value.String
-			}
-		case productcourses.FieldNumber:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field number", values[i])
-			} else if value.Valid {
-				pc.Number = value.Int64
 			}
 		case productcourses.FieldProductID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -240,9 +232,6 @@ func (pc *ProductCourses) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(pc.Name)
-	builder.WriteString(", ")
-	builder.WriteString("number=")
-	builder.WriteString(fmt.Sprintf("%v", pc.Number))
 	builder.WriteString(", ")
 	builder.WriteString("product_id=")
 	builder.WriteString(fmt.Sprintf("%v", pc.ProductID))

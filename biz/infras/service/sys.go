@@ -239,6 +239,20 @@ func (s Sys) StaffList(req sys.SysStaffListReq) (list []do.SysStaffList, total i
 	if len(req.TagId) > 0 {
 		predicates = append(predicates, user2.HasTagsWith(dictionarydetail.IDIn(req.TagId...)))
 	}
+
+	if req.ProductId > 0 {
+
+		first, err := s.db.Product.Query().Where(product.ID(req.ProductId)).First(s.ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+		tag, err := first.QueryTags().IDs(s.ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+		predicates = append(predicates, user2.HasTagsWith(dictionarydetail.IDIn(tag...)))
+	}
+
 	if len(req.Functions) > 0 {
 		var a []any
 		for _, v := range req.Functions {

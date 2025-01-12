@@ -350,7 +350,8 @@ type SysStaffListReq struct {
 	Functions []string `thrift:"functions,3,optional" form:"functions" json:"functions" query:"functions"`
 	VenueId   int64    `thrift:"venueId,6,optional" form:"venueId" json:"venueId" query:"venueId"`
 	/**标签*/
-	TagId []int64 `thrift:"tagId,5,optional" form:"tagId" json:"tagId" query:"tagId"`
+	TagId     []int64 `thrift:"tagId,5,optional" form:"tagId" json:"tagId" query:"tagId"`
+	ProductId int64   `thrift:"productId,7,optional" form:"productId" json:"productId" query:"productId"`
 }
 
 func NewSysStaffListReq() *SysStaffListReq {
@@ -360,6 +361,7 @@ func NewSysStaffListReq() *SysStaffListReq {
 		Functions: []string{},
 		VenueId:   0,
 		TagId:     []int64{},
+		ProductId: 0,
 	}
 }
 
@@ -368,6 +370,7 @@ func (p *SysStaffListReq) InitDefault() {
 	p.Functions = []string{}
 	p.VenueId = 0
 	p.TagId = []int64{}
+	p.ProductId = 0
 }
 
 var SysStaffListReq_Name_DEFAULT string = ""
@@ -406,11 +409,21 @@ func (p *SysStaffListReq) GetTagId() (v []int64) {
 	return p.TagId
 }
 
+var SysStaffListReq_ProductId_DEFAULT int64 = 0
+
+func (p *SysStaffListReq) GetProductId() (v int64) {
+	if !p.IsSetProductId() {
+		return SysStaffListReq_ProductId_DEFAULT
+	}
+	return p.ProductId
+}
+
 var fieldIDToName_SysStaffListReq = map[int16]string{
 	1: "name",
 	3: "functions",
 	6: "venueId",
 	5: "tagId",
+	7: "productId",
 }
 
 func (p *SysStaffListReq) IsSetName() bool {
@@ -427,6 +440,10 @@ func (p *SysStaffListReq) IsSetVenueId() bool {
 
 func (p *SysStaffListReq) IsSetTagId() bool {
 	return p.TagId != nil
+}
+
+func (p *SysStaffListReq) IsSetProductId() bool {
+	return p.ProductId != SysStaffListReq_ProductId_DEFAULT
 }
 
 func (p *SysStaffListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -475,6 +492,14 @@ func (p *SysStaffListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 5:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 7:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField7(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -577,6 +602,17 @@ func (p *SysStaffListReq) ReadField5(iprot thrift.TProtocol) error {
 	p.TagId = _field
 	return nil
 }
+func (p *SysStaffListReq) ReadField7(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.ProductId = _field
+	return nil
+}
 
 func (p *SysStaffListReq) Write(oprot thrift.TProtocol) (err error) {
 
@@ -599,6 +635,10 @@ func (p *SysStaffListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField7(oprot); err != nil {
+			fieldId = 7
 			goto WriteFieldError
 		}
 	}
@@ -709,6 +749,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *SysStaffListReq) writeField7(oprot thrift.TProtocol) (err error) {
+	if p.IsSetProductId() {
+		if err = oprot.WriteFieldBegin("productId", thrift.I64, 7); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.ProductId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
 }
 
 func (p *SysStaffListReq) String() string {

@@ -10,8 +10,8 @@ import (
 	"saas/biz/dal/db/ent"
 	member2 "saas/biz/dal/db/ent/member"
 	memberproduct2 "saas/biz/dal/db/ent/memberproduct"
-
 	"saas/biz/dal/db/ent/predicate"
+	product2 "saas/biz/dal/db/ent/product"
 	memberProduct "saas/idl_gen/model/member/memberProduct"
 	"saas/pkg/enums"
 	"time"
@@ -41,7 +41,7 @@ func (m MemberProduct) MemberProductInfo(id int64) (info *memberProduct.MemberPr
 }
 func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *memberProduct.MemberProductInfo) {
 	var courses, lessons []*memberProduct.MemberProductCourses
-	if req.Type == enums.Lessons {
+	if req.Type == enums.Card {
 		lessonsAll, _ := req.QueryMemberLessons().All(m.ctx)
 		if len(lessonsAll) > 0 {
 			for _, ve := range lessonsAll {
@@ -56,50 +56,70 @@ func (m MemberProduct) entMemberProductInfo(req *ent.MemberProduct) (info *membe
 			}
 		}
 	} else {
-		if req.Type != enums.Card {
-			coursesAll, _ := req.QueryMemberCourses().All(m.ctx)
-			if len(coursesAll) > 0 {
-				for _, ve := range coursesAll {
-					courses = append(courses, &memberProduct.MemberProductCourses{
-						ID:              ve.ID,
-						Type:            ve.Type,
-						Name:            ve.Name,
-						Number:          req.Number,
-						NumberSurplus:   req.NumberSurplus,
-						CoursesId:       ve.CoursesID,
-						MemberProductId: ve.MemberProductID,
-					},
-					)
+		if req.Type == enums.CoursePackage {
+			if req.IsCourse == 1 {
+				coursesAll, _ := m.db.Product.Query().Where(
+					product2.TypeEQ("course"),
+					product2.Delete(0),
+					product2.StatusNEQ(2),
+				).All(m.ctx)
+				if len(coursesAll) > 0 {
+					for _, ve := range coursesAll {
+
+						courses = append(courses, &memberProduct.MemberProductCourses{
+							ID:              ve.ID,
+							Type:            ve.Type,
+							Name:            ve.Name,
+							CoursesId:       ve.ID,
+							MemberProductId: req.ID,
+						},
+						)
+					}
 				}
 			}
+			if req.IsCourse == 2 {
+				coursesAll, _ := req.QueryMemberCourses().All(m.ctx)
+				if len(coursesAll) > 0 {
+					for _, ve := range coursesAll {
+
+						courses = append(courses, &memberProduct.MemberProductCourses{
+							ID:              ve.ID,
+							Type:            ve.Type,
+							Name:            ve.Name,
+							CoursesId:       ve.CoursesID,
+							MemberProductId: ve.MemberProductID,
+						},
+						)
+					}
+				}
+			}
+
 		}
 	}
 
 	return &memberProduct.MemberProductInfo{
-		ID:            req.ID,
-		Name:          req.Name,
-		Price:         req.Price,
-		Fee:           req.Fee,
-		Status:        req.Status,
-		Duration:      req.Duration,
-		Length:        req.Length,
-		Type:          req.Type,
-		Deadline:      req.Deadline,
-		Number:        req.Number,
-		NumberSurplus: req.NumberSurplus,
-		ValidityAt:    req.ValidityAt.Format(time.DateTime),
-		CancelAt:      req.CancelAt.Format(time.DateTime),
-		CreatedAt:     req.CreatedAt.Format(time.DateTime),
-		UpdatedAt:     req.UpdatedAt.Format(time.DateTime),
-		OrderId:       req.OrderID,
-		VenueId:       req.VenueID,
-		ProductId:     req.ProductID,
-		MemberId:      req.MemberID,
-		SubType:       req.SubType,
-		Sn:            req.Sn,
-		Courses:       courses,
-		Lessons:       lessons,
-		IsCourse:      req.IsCourse,
+		ID:         req.ID,
+		Name:       req.Name,
+		Price:      req.Price,
+		Fee:        req.Fee,
+		Status:     req.Status,
+		Duration:   req.Duration,
+		Length:     req.Length,
+		Type:       req.Type,
+		Deadline:   req.Deadline,
+		ValidityAt: req.ValidityAt.Format(time.DateTime),
+		CancelAt:   req.CancelAt.Format(time.DateTime),
+		CreatedAt:  req.CreatedAt.Format(time.DateTime),
+		UpdatedAt:  req.UpdatedAt.Format(time.DateTime),
+		OrderId:    req.OrderID,
+		VenueId:    req.VenueID,
+		ProductId:  req.ProductID,
+		MemberId:   req.MemberID,
+		SubType:    req.SubType,
+		Sn:         req.Sn,
+		Courses:    courses,
+		Lessons:    lessons,
+		IsCourse:   req.IsCourse,
 	}
 }
 

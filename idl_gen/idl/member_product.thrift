@@ -48,10 +48,8 @@ struct MemberProductCourses {
     1: optional i64 id =0 (api.raw = "id")
     2: optional string type = "" (api.raw = "type")
     3: optional string name=""  (api.raw = "name")
-        5: optional i64 memberProductId = 0  (api.raw = "member_product_id")
-        6: optional i64 coursesId =0 (api.raw = "courses_id")
-    7: optional i64 number = 0 (api.raw = "number")
-    8: optional i64 numberSurplus = 0 (api.raw = "numberSurplus")
+    5: optional i64 memberProductId = 0  (api.raw = "member_product_id")
+    6: optional i64 coursesId =0 (api.raw = "courses_id")
 
 
 }

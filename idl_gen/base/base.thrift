@@ -80,7 +80,6 @@ struct CourseList {
     1: optional i64 id= 0 (api.raw = "id" )
     2: optional string name ="" (api.raw = "name" )
     3: optional string type ="" (api.raw = "type" )
-    4: optional i64 number =0 (api.raw = "number" )
 }
 struct Sales {
     1: optional i64 number = 0 (api.raw = "number")

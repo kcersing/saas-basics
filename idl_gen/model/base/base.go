@@ -2929,19 +2929,17 @@ func (p *List) String() string {
 }
 
 type CourseList struct {
-	ID     int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	Name   string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
-	Type   string `thrift:"type,3,optional" form:"type" json:"type" query:"type"`
-	Number int64  `thrift:"number,4,optional" form:"number" json:"number" query:"number"`
+	ID   int64  `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	Name string `thrift:"name,2,optional" form:"name" json:"name" query:"name"`
+	Type string `thrift:"type,3,optional" form:"type" json:"type" query:"type"`
 }
 
 func NewCourseList() *CourseList {
 	return &CourseList{
 
-		ID:     0,
-		Name:   "",
-		Type:   "",
-		Number: 0,
+		ID:   0,
+		Name: "",
+		Type: "",
 	}
 }
 
@@ -2949,7 +2947,6 @@ func (p *CourseList) InitDefault() {
 	p.ID = 0
 	p.Name = ""
 	p.Type = ""
-	p.Number = 0
 }
 
 var CourseList_ID_DEFAULT int64 = 0
@@ -2979,20 +2976,10 @@ func (p *CourseList) GetType() (v string) {
 	return p.Type
 }
 
-var CourseList_Number_DEFAULT int64 = 0
-
-func (p *CourseList) GetNumber() (v int64) {
-	if !p.IsSetNumber() {
-		return CourseList_Number_DEFAULT
-	}
-	return p.Number
-}
-
 var fieldIDToName_CourseList = map[int16]string{
 	1: "id",
 	2: "name",
 	3: "type",
-	4: "number",
 }
 
 func (p *CourseList) IsSetID() bool {
@@ -3005,10 +2992,6 @@ func (p *CourseList) IsSetName() bool {
 
 func (p *CourseList) IsSetType() bool {
 	return p.Type != CourseList_Type_DEFAULT
-}
-
-func (p *CourseList) IsSetNumber() bool {
-	return p.Number != CourseList_Number_DEFAULT
 }
 
 func (p *CourseList) Read(iprot thrift.TProtocol) (err error) {
@@ -3049,14 +3032,6 @@ func (p *CourseList) Read(iprot thrift.TProtocol) (err error) {
 		case 3:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 4:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3124,17 +3099,6 @@ func (p *CourseList) ReadField3(iprot thrift.TProtocol) error {
 	p.Type = _field
 	return nil
 }
-func (p *CourseList) ReadField4(iprot thrift.TProtocol) error {
-
-	var _field int64
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Number = _field
-	return nil
-}
 
 func (p *CourseList) Write(oprot thrift.TProtocol) (err error) {
 
@@ -3153,10 +3117,6 @@ func (p *CourseList) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -3232,25 +3192,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *CourseList) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetNumber() {
-		if err = oprot.WriteFieldBegin("number", thrift.I64, 4); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(p.Number); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *CourseList) String() string {

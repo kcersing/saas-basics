@@ -118,20 +118,6 @@ func (pcc *ProductCoursesCreate) SetNillableName(s *string) *ProductCoursesCreat
 	return pcc
 }
 
-// SetNumber sets the "number" field.
-func (pcc *ProductCoursesCreate) SetNumber(i int64) *ProductCoursesCreate {
-	pcc.mutation.SetNumber(i)
-	return pcc
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (pcc *ProductCoursesCreate) SetNillableNumber(i *int64) *ProductCoursesCreate {
-	if i != nil {
-		pcc.SetNumber(*i)
-	}
-	return pcc
-}
-
 // SetProductID sets the "product_id" field.
 func (pcc *ProductCoursesCreate) SetProductID(i int64) *ProductCoursesCreate {
 	pcc.mutation.SetProductID(i)
@@ -267,10 +253,6 @@ func (pcc *ProductCoursesCreate) defaults() {
 		v := productcourses.DefaultName
 		pcc.mutation.SetName(v)
 	}
-	if _, ok := pcc.mutation.Number(); !ok {
-		v := productcourses.DefaultNumber
-		pcc.mutation.SetNumber(v)
-	}
 	if _, ok := pcc.mutation.ProductID(); !ok {
 		v := productcourses.DefaultProductID
 		pcc.mutation.SetProductID(v)
@@ -342,10 +324,6 @@ func (pcc *ProductCoursesCreate) createSpec() (*ProductCourses, *sqlgraph.Create
 	if value, ok := pcc.mutation.Name(); ok {
 		_spec.SetField(productcourses.FieldName, field.TypeString, value)
 		_node.Name = value
-	}
-	if value, ok := pcc.mutation.Number(); ok {
-		_spec.SetField(productcourses.FieldNumber, field.TypeInt64, value)
-		_node.Number = value
 	}
 	if value, ok := pcc.mutation.CoursesID(); ok {
 		_spec.SetField(productcourses.FieldCoursesID, field.TypeInt64, value)
