@@ -3192,6 +3192,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/schedule/delete-user-time-period": {
+            "post": {
+                "description": "删除员工时间周期",
+                "summary": "删除员工时间周期",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.Ids"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/schedule/info": {
             "post": {
                 "description": "课程详情",

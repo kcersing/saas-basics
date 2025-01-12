@@ -496,3 +496,29 @@ func ScheduleCoachPeriodList(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
 	return
 }
+
+// DeleteUserTimePeriod .
+// @Summary 删除员工时间周期
+// @Description 删除员工时间周期
+//
+//	@Param			request	body		base.Ids	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/schedule/delete-user-time-period [POST]
+func DeleteUserTimePeriod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = service.NewSchedule(ctx, c).DeleteUserTimePeriod(req.ID)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, nil, 0, "")
+	return
+}

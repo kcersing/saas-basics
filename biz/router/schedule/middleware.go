@@ -180,3 +180,8 @@ func _schedulecoachperiodlistMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _deleteusertimeperiodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

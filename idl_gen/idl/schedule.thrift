@@ -225,6 +225,8 @@ service ScheduleService {
     base.NilResponse CreateScheduleUserTimePeriod(1: UserTimePeriodReq req)  (api.post = "/service/schedule/create-user-time-period")
     /**更新教练时间段*/
     base.NilResponse UpdateScheduleUserTimePeriod(1: UpdateUserTimePeriodReq req)  (api.post = "/service/schedule/update-user-time-period")
+    base.NilResponse DeleteUserTimePeriod(1: base.IDReq req)  (api.post = "/service/schedule/delete-user-time-period")
+
     /**教练时间段*/
     base.NilResponse UserTimePeriod(1: UserPeriodReq req)  (api.post = "/service/schedule/user-time-period")
 

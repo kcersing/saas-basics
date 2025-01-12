@@ -27,6 +27,7 @@ func Register(r *server.Hertz) {
 			_schedule.POST("/create-member-subscribe-lessons", append(_createmembersubscribelessonsMw(), schedule.CreateMemberSubscribeLessons)...)
 			_schedule.POST("/create-user-time-period", append(_createscheduleusertimeperiodMw(), schedule.CreateScheduleUserTimePeriod)...)
 			_schedule.POST("/date-list", append(_scheduledatelistMw(), schedule.ScheduleDateList)...)
+			_schedule.POST("/delete-user-time-period", append(_deleteusertimeperiodMw(), schedule.DeleteUserTimePeriod)...)
 			_schedule.POST("/info", append(_scheduleinfoMw(), schedule.ScheduleInfo)...)
 			_schedule.POST("/lessons-publish", append(_schedulelessonspublishMw(), schedule.ScheduleLessonsPublish)...)
 			_schedule.POST("/list", append(_schedulelistMw(), schedule.ScheduleList)...)

@@ -220,3 +220,10 @@ func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.Use
 	}
 	return
 }
+func (s Schedule) DeleteUserTimePeriod(ID int64) error {
+	err := s.db.UserTimePeriod.DeleteOneID(ID).Exec(s.ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}

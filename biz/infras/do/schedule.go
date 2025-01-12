@@ -41,6 +41,8 @@ type Schedule interface {
 
 	UpdateScheduleCoachStatus(ID int64, status int64) error
 	ScheduleCoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachInfo, err error)
+
+	DeleteUserTimePeriod(ID int64) error
 }
 
 type CreateScheduleMemberCourse struct {

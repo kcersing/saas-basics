@@ -8736,6 +8736,8 @@ type ScheduleService interface {
 	CreateScheduleUserTimePeriod(ctx context.Context, req *UserTimePeriodReq) (r *base.NilResponse, err error)
 	/**更新教练时间段*/
 	UpdateScheduleUserTimePeriod(ctx context.Context, req *UpdateUserTimePeriodReq) (r *base.NilResponse, err error)
+
+	DeleteUserTimePeriod(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	/**教练时间段*/
 	UserTimePeriod(ctx context.Context, req *UserPeriodReq) (r *base.NilResponse, err error)
 	/**约私教课*/
@@ -8810,6 +8812,15 @@ func (p *ScheduleServiceClient) UpdateScheduleUserTimePeriod(ctx context.Context
 	_args.Req = req
 	var _result ScheduleServiceUpdateScheduleUserTimePeriodResult
 	if err = p.Client_().Call(ctx, "UpdateScheduleUserTimePeriod", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *ScheduleServiceClient) DeleteUserTimePeriod(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
+	var _args ScheduleServiceDeleteUserTimePeriodArgs
+	_args.Req = req
+	var _result ScheduleServiceDeleteUserTimePeriodResult
+	if err = p.Client_().Call(ctx, "DeleteUserTimePeriod", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -8981,6 +8992,7 @@ func NewScheduleServiceProcessor(handler ScheduleService) *ScheduleServiceProces
 	self := &ScheduleServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
 	self.AddToProcessorMap("CreateScheduleUserTimePeriod", &scheduleServiceProcessorCreateScheduleUserTimePeriod{handler: handler})
 	self.AddToProcessorMap("UpdateScheduleUserTimePeriod", &scheduleServiceProcessorUpdateScheduleUserTimePeriod{handler: handler})
+	self.AddToProcessorMap("DeleteUserTimePeriod", &scheduleServiceProcessorDeleteUserTimePeriod{handler: handler})
 	self.AddToProcessorMap("UserTimePeriod", &scheduleServiceProcessorUserTimePeriod{handler: handler})
 	self.AddToProcessorMap("CreateScheduleCourse", &scheduleServiceProcessorCreateScheduleCourse{handler: handler})
 	self.AddToProcessorMap("CreateScheduleLessons", &scheduleServiceProcessorCreateScheduleLessons{handler: handler})
@@ -9096,6 +9108,54 @@ func (p *scheduleServiceProcessorUpdateScheduleUserTimePeriod) Process(ctx conte
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("UpdateScheduleUserTimePeriod", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type scheduleServiceProcessorDeleteUserTimePeriod struct {
+	handler ScheduleService
+}
+
+func (p *scheduleServiceProcessorDeleteUserTimePeriod) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ScheduleServiceDeleteUserTimePeriodArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("DeleteUserTimePeriod", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := ScheduleServiceDeleteUserTimePeriodResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.DeleteUserTimePeriod(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing DeleteUserTimePeriod: "+err2.Error())
+		oprot.WriteMessageBegin("DeleteUserTimePeriod", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("DeleteUserTimePeriod", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -10470,6 +10530,302 @@ func (p *ScheduleServiceUpdateScheduleUserTimePeriodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ScheduleServiceUpdateScheduleUserTimePeriodResult(%+v)", *p)
+
+}
+
+type ScheduleServiceDeleteUserTimePeriodArgs struct {
+	Req *base.IDReq `thrift:"req,1"`
+}
+
+func NewScheduleServiceDeleteUserTimePeriodArgs() *ScheduleServiceDeleteUserTimePeriodArgs {
+	return &ScheduleServiceDeleteUserTimePeriodArgs{}
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodArgs) InitDefault() {
+}
+
+var ScheduleServiceDeleteUserTimePeriodArgs_Req_DEFAULT *base.IDReq
+
+func (p *ScheduleServiceDeleteUserTimePeriodArgs) GetReq() (v *base.IDReq) {
+	if !p.IsSetReq() {
+		return ScheduleServiceDeleteUserTimePeriodArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_ScheduleServiceDeleteUserTimePeriodArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceDeleteUserTimePeriodArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := base.NewIDReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodArgs) Write(oprot thrift.TProtocol) (err error) {
+
+	var fieldId int16
+	if err = oprot.WriteStructBegin("DeleteUserTimePeriod_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ScheduleServiceDeleteUserTimePeriodArgs(%+v)", *p)
+
+}
+
+type ScheduleServiceDeleteUserTimePeriodResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewScheduleServiceDeleteUserTimePeriodResult() *ScheduleServiceDeleteUserTimePeriodResult {
+	return &ScheduleServiceDeleteUserTimePeriodResult{}
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodResult) InitDefault() {
+}
+
+var ScheduleServiceDeleteUserTimePeriodResult_Success_DEFAULT *base.NilResponse
+
+func (p *ScheduleServiceDeleteUserTimePeriodResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return ScheduleServiceDeleteUserTimePeriodResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_ScheduleServiceDeleteUserTimePeriodResult = map[int16]string{
+	0: "success",
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ScheduleServiceDeleteUserTimePeriodResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodResult) Write(oprot thrift.TProtocol) (err error) {
+
+	var fieldId int16
+	if err = oprot.WriteStructBegin("DeleteUserTimePeriod_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *ScheduleServiceDeleteUserTimePeriodResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ScheduleServiceDeleteUserTimePeriodResult(%+v)", *p)
 
 }
 
