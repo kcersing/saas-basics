@@ -155,6 +155,7 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 		}
 		coach.Tags = userTags
 		coach.Period = &v.Period
+		coach.PeriodId = v.ID
 
 		var predicates []predicate.ScheduleCoach
 		predicates = append(predicates, schedulecoach.CoachID(u.ID))

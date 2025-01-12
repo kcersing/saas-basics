@@ -8190,6 +8190,7 @@ type ScheduleCoachPeriod struct {
 	VenueId           int64                `thrift:"venueId,3,optional" form:"venueId" json:"venueId" query:"venueId"`
 	CoachName         string               `thrift:"coachName,4,optional" form:"coachName" json:"coachName" query:"coachName"`
 	Tags              []*base.List         `thrift:"tags,5,optional" form:"tags" json:"tags" query:"tags"`
+	PeriodId          int64                `thrift:"periodId,8,optional" form:"periodId" json:"periodId" query:"periodId"`
 	Period            *base.Period         `thrift:"period,6,optional" form:"period" json:"period" query:"period"`
 	ScheduleCoachList []*ScheduleCoachInfo `thrift:"scheduleCoachList,7,optional" form:"scheduleCoachList" json:"scheduleCoachList" query:"scheduleCoachList"`
 }
@@ -8202,6 +8203,7 @@ func NewScheduleCoachPeriod() *ScheduleCoachPeriod {
 		VenueId:           0,
 		CoachName:         "",
 		Tags:              []*base.List{},
+		PeriodId:          0,
 		Period:            &base.Period{},
 		ScheduleCoachList: []*ScheduleCoachInfo{},
 	}
@@ -8213,6 +8215,7 @@ func (p *ScheduleCoachPeriod) InitDefault() {
 	p.VenueId = 0
 	p.CoachName = ""
 	p.Tags = []*base.List{}
+	p.PeriodId = 0
 	p.Period = &base.Period{}
 	p.ScheduleCoachList = []*ScheduleCoachInfo{}
 }
@@ -8262,6 +8265,15 @@ func (p *ScheduleCoachPeriod) GetTags() (v []*base.List) {
 	return p.Tags
 }
 
+var ScheduleCoachPeriod_PeriodId_DEFAULT int64 = 0
+
+func (p *ScheduleCoachPeriod) GetPeriodId() (v int64) {
+	if !p.IsSetPeriodId() {
+		return ScheduleCoachPeriod_PeriodId_DEFAULT
+	}
+	return p.PeriodId
+}
+
 var ScheduleCoachPeriod_Period_DEFAULT *base.Period = &base.Period{}
 
 func (p *ScheduleCoachPeriod) GetPeriod() (v *base.Period) {
@@ -8286,6 +8298,7 @@ var fieldIDToName_ScheduleCoachPeriod = map[int16]string{
 	3: "venueId",
 	4: "coachName",
 	5: "tags",
+	8: "periodId",
 	6: "period",
 	7: "scheduleCoachList",
 }
@@ -8308,6 +8321,10 @@ func (p *ScheduleCoachPeriod) IsSetCoachName() bool {
 
 func (p *ScheduleCoachPeriod) IsSetTags() bool {
 	return p.Tags != nil
+}
+
+func (p *ScheduleCoachPeriod) IsSetPeriodId() bool {
+	return p.PeriodId != ScheduleCoachPeriod_PeriodId_DEFAULT
 }
 
 func (p *ScheduleCoachPeriod) IsSetPeriod() bool {
@@ -8372,6 +8389,14 @@ func (p *ScheduleCoachPeriod) Read(iprot thrift.TProtocol) (err error) {
 		case 5:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 8:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -8489,6 +8514,17 @@ func (p *ScheduleCoachPeriod) ReadField5(iprot thrift.TProtocol) error {
 	p.Tags = _field
 	return nil
 }
+func (p *ScheduleCoachPeriod) ReadField8(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.PeriodId = _field
+	return nil
+}
 func (p *ScheduleCoachPeriod) ReadField6(iprot thrift.TProtocol) error {
 	_field := base.NewPeriod()
 	if err := _field.Read(iprot); err != nil {
@@ -8546,6 +8582,10 @@ func (p *ScheduleCoachPeriod) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
 			goto WriteFieldError
 		}
 		if err = p.writeField6(oprot); err != nil {
@@ -8675,6 +8715,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *ScheduleCoachPeriod) writeField8(oprot thrift.TProtocol) (err error) {
+	if p.IsSetPeriodId() {
+		if err = oprot.WriteFieldBegin("periodId", thrift.I64, 8); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.PeriodId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
 func (p *ScheduleCoachPeriod) writeField6(oprot thrift.TProtocol) (err error) {

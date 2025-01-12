@@ -216,6 +216,7 @@ struct ScheduleCoachPeriod{
 	3:optional i64 venueId = 0 (api.raw = "venueId")
 	4:optional string coachName = "" (api.raw = "coachName")
     5:optional list<base.List> tags = {}  (api.raw = "tags")
+    8:optional i64 periodId = 0 (api.raw = "periodId")
 	6:optional base.Period period = {} (api.raw = "period")
 	7:optional list<ScheduleCoachInfo> scheduleCoachList = {}  (api.raw = "scheduleCoachList")
 }
