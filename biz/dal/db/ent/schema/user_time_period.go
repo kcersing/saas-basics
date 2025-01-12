@@ -32,9 +32,7 @@ func (UserTimePeriod) Mixin() []ent.Mixin {
 
 func (UserTimePeriod) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("users", User.Type).
-			Ref("user_time_period").
-			Field("user_id").Unique(),
+		edge.From("users", User.Type).Ref("user_time_period").Field("user_id").Unique(),
 	}
 }
 

@@ -102,8 +102,8 @@ func (m Member) MemberFullList(req member.MemberListReq) (resp []*member.MemberI
 		return resp, total, err
 	}
 
-	for i, v := range lists {
-		resp[i], _ = m.MemberInfo(v.ID)
+	for _, v := range lists {
+		resp = append(resp, m.entMemberInfo(*v))
 	}
 
 	total, _ = m.db.Member.Query().Where(predicates...).Count(m.ctx)
@@ -212,8 +212,8 @@ func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.Me
 		return resp, total, err
 	}
 
-	for i, v := range lists {
-		resp[i], _ = m.MemberInfo(v.ID)
+	for _, v := range lists {
+		resp = append(resp, m.entMemberInfo(*v))
 	}
 
 	total, _ = m.db.Member.Query().Where(predicates...).Count(m.ctx)

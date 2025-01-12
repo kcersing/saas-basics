@@ -60,11 +60,13 @@ func (s Schedule) UpdateScheduleUserTimePeriod(req schedule.UpdateUserTimePeriod
 	date := time.Date(startTime.Year(), startTime.Month(), startTime.Day(), 0, 0, 0, 0, startTime.Location())
 
 	_, err = s.db.UserTimePeriod.
-		Create().
-		SetUserID(req.UserId).
-		SetVenueID(req.VenueId).
+		Update().
+		Where(
+			usertimeperiod.UserIDEQ(req.UserId),
+			usertimeperiod.DateEQ(date),
+			usertimeperiod.VenueIDEQ(req.VenueId),
+		).
 		SetPeriod(*req.Period).
-		SetDate(date).
 		Save(s.ctx)
 	if err != nil {
 		return err
