@@ -4,6 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/predicate"
+	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
 	"saas/idl_gen/model/schedule"
 )
@@ -28,6 +29,9 @@ func (s Schedule) ScheduleMemberList(req schedule.ScheduleMemberListReq) (resp [
 		predicates = append(predicates, schedulemember.Type(req.Type))
 
 	}
+
+	predicates = append(predicates, schedulemember.HasScheduleWith(schedule2.StatusNotIn(0, 5)))
+
 	lists, err := s.db.ScheduleMember.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(s.ctx)
