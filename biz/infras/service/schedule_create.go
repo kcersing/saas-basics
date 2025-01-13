@@ -53,7 +53,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 		}
 	}
 	one, err := tx.Schedule.Create().
-		SetType(req.Type).
+		SetType(first.SubType).
 		SetName(first.Name).
 		SetStatus(2).
 		SetVenueID(req.VenueId).
@@ -82,7 +82,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 
 	_, err = tx.ScheduleCoach.Create().
 		SetSchedule(one).
-		SetType(req.Type).
+		SetType(first.SubType).
 		SetVenueID(req.VenueId).
 		SetCoachID(req.CoachId).
 		SetProductID(req.ProductId).
@@ -103,7 +103,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 
 	cmcReq := do.CreateScheduleMemberCourse{
 		One:             one,
-		Type:            req.Type,
+		Type:            first.SubType,
 		VenueId:         req.VenueId,
 		StartTime:       startTime,
 		MemberId:        req.MemberId,
@@ -118,7 +118,7 @@ func (s Schedule) CreateScheduleCourse(req schedule.CreateOrUpdateScheduleCourse
 		for _, v := range req.MpIds {
 			err = s.CreateScheduleMemberCourse(do.CreateScheduleMemberCourse{
 				One:             one,
-				Type:            req.Type,
+				Type:            first.SubType,
 				VenueId:         req.VenueId,
 				StartTime:       startTime,
 				MemberId:        v.MemberId,
@@ -225,7 +225,7 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 	placeName = place.Name
 
 	one, err := tx.Schedule.Create().
-		SetType("lessons").
+		SetType(first.SubType).
 		SetName(first.Name).
 		SetStatus(1).
 		SetVenueID(req.VenueId).
@@ -258,7 +258,7 @@ func (s Schedule) CreateScheduleLessons(req schedule.CreateOrUpdateScheduleLesso
 
 	_, err = tx.ScheduleCoach.Create().
 		SetSchedule(one).
-		SetType("lessons").
+		SetType(first.SubType).
 		SetVenueID(req.VenueId).
 		SetCoachID(req.CoachId).
 		SetPlaceID(req.PlaceId).
