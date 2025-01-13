@@ -165,7 +165,7 @@ func ScheduleList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	list, total, err := service.NewSchedule(ctx, c).ScheduleList(req)
+	list, total, err := service.NewSchedule(ctx, c).ScheduleList(req, true)
 	if err != nil {
 		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
 		return

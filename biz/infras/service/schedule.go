@@ -45,7 +45,7 @@ func (s Schedule) DeleteSchedule(id int64) error {
 	return err
 }
 
-func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.ScheduleInfo, total int, err error) {
+func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (resp []*schedule.ScheduleInfo, total int, err error) {
 	var predicates []predicate.Schedule
 
 	if req.StartTime != "" && req.EndTime != "" {
@@ -100,7 +100,7 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 
 	predicates = append(predicates, schedule2.StatusNotIn(0, 5))
 
-	lists, err := s.db.Debug().Schedule.Query().Where(predicates...).
+	lists, err := s.db.Schedule.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Limit(int(req.PageSize)).All(s.ctx)
 	if err != nil {
@@ -108,7 +108,27 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.S
 		return resp, total, err
 	}
 	for _, v := range lists {
-		resp = append(resp, s.entScheduleInfo(v))
+
+		sc := s.entScheduleInfo(v)
+
+		if isSubList {
+			coachList, _, _ := s.ScheduleCoachList(schedule.ScheduleCoachListReq{
+				Page:       1,
+				PageSize:   999,
+				ScheduleId: sc.ID,
+			})
+
+			list, _, _ := s.ScheduleMemberList(schedule.ScheduleMemberListReq{
+				Page:       1,
+				PageSize:   999,
+				ScheduleId: sc.ID,
+			})
+
+			sc.CoachCourseRecord = coachList
+			sc.MemberCourseRecord = list
+		}
+
+		resp = append(resp, sc)
 	}
 
 	total, _ = s.db.Schedule.Query().Where(predicates...).Count(s.ctx)
@@ -120,7 +140,7 @@ func (s Schedule) ScheduleDateList(req schedule.ScheduleListReq) (map[string][]*
 	req.PageSize = 1000
 	req.Status = []int64{1, 2, 3, 4}
 	req.Type = enums.Lessons
-	lists, total, err := s.ScheduleList(req)
+	lists, total, err := s.ScheduleList(req, false)
 	m := make(map[string][]*schedule.ScheduleInfo)
 	for _, v := range lists {
 		m[v.Date] = append(m[v.Date], v)

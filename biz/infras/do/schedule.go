@@ -16,7 +16,7 @@ type Schedule interface {
 	//UpdateSchedule(req schedule.CreateOrUpdateScheduleReq) error
 
 	DeleteSchedule(id int64) error
-	ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.ScheduleInfo, total int, err error)
+	ScheduleList(req schedule.ScheduleListReq, isSubList bool) (resp []*schedule.ScheduleInfo, total int, err error)
 	ScheduleDateList(req schedule.ScheduleListReq) (map[string][]*schedule.ScheduleInfo, int, error)
 	UpdateScheduleStatus(ID int64, status int64) error
 	ScheduleInfo(ID int64) (resp *schedule.ScheduleInfo, err error)
