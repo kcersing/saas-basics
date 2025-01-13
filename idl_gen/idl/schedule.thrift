@@ -143,13 +143,28 @@ struct CreateOrUpdateScheduleLessonsReq {
 struct ScheduleListReq {
     1:  optional i64 page = 1 (api.raw = "page")
     2:  optional i64 pageSize = 100 (api.raw = "pageSize")
-    3:  optional i64 member = 0 (api.raw = "member")
-    4:  optional list<i64> coach = 0 (api.raw = "coach")
-    5:  optional list<i64> product = 0 (api.raw = "product")
+
+    /**教练ID*/
+    4:  optional list<i64> coachId = 0 (api.raw = "coachId")
+    5:  optional list<i64> productId = 0 (api.raw = "productId")
     6:  optional i64 venueId = 0 (api.raw = "venueId")
+    /**状态*/
     7:  optional list<i64> status = 0 (api.raw = "status")
-    8:  optional string startTime =""  (api.raw = "startTime")
+    /**课程名称*/
+    8:  optional string name =""  (api.raw = "name")
+    /**产品类型*/
     9:  optional string type =""  (api.raw = "type")
+    /**产品次类型*/
+    10:  optional string subType =""  (api.raw = "subType")
+    /**上课时间*/
+    11:  optional string startTime =""  (api.raw = "startTime")
+    12:  optional string endTime =""  (api.raw = "endTime")
+    /**会员名称*/
+    13:  optional string memberName =""  (api.raw = "memberName")
+   /**会员手机号*/
+   14:  optional string memberMobile =""  (api.raw = "memberMobile")
+
+
 }
 struct ScheduleMemberListReq {
     1:  optional i64 page = 1 (api.raw = "page")

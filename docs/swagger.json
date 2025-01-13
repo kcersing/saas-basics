@@ -5770,14 +5770,27 @@
         "schedule.ScheduleListReq": {
             "type": "object",
             "properties": {
-                "coach": {
+                "coachId": {
+                    "description": "*教练ID",
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
-                "member": {
-                    "type": "integer"
+                "endTime": {
+                    "type": "string"
+                },
+                "memberMobile": {
+                    "description": "*会员手机号",
+                    "type": "string"
+                },
+                "memberName": {
+                    "description": "*会员名称",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "*课程名称",
+                    "type": "string"
                 },
                 "page": {
                     "type": "integer"
@@ -5785,22 +5798,26 @@
                 "pageSize": {
                     "type": "integer"
                 },
-                "product": {
+                "productId": {
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
                 "startTime": {
+                    "description": "*上课时间",
                     "type": "string"
                 },
                 "status": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "description": "*状态",
+                    "type": "integer"
+                },
+                "subType": {
+                    "description": "*产品次类型",
+                    "type": "string"
                 },
                 "type": {
+                    "description": "*产品类型",
                     "type": "string"
                 },
                 "venueId": {

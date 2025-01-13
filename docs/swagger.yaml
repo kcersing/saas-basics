@@ -1047,27 +1047,41 @@ definitions:
     type: object
   schedule.ScheduleListReq:
     properties:
-      coach:
+      coachId:
+        description: '*教练ID'
         items:
           type: integer
         type: array
-      member:
-        type: integer
+      endTime:
+        type: string
+      memberMobile:
+        description: '*会员手机号'
+        type: string
+      memberName:
+        description: '*会员名称'
+        type: string
+      name:
+        description: '*课程名称'
+        type: string
       page:
         type: integer
       pageSize:
         type: integer
-      product:
+      productId:
         items:
           type: integer
         type: array
       startTime:
+        description: '*上课时间'
         type: string
       status:
-        items:
-          type: integer
-        type: array
+        description: '*状态'
+        type: integer
+      subType:
+        description: '*产品次类型'
+        type: string
       type:
+        description: '*产品类型'
         type: string
       venueId:
         type: integer

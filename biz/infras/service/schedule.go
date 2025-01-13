@@ -8,9 +8,11 @@ import (
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
+	member2 "saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
+	"saas/biz/dal/db/ent/schedulemember"
 	"saas/pkg/enums"
 	"time"
 
@@ -46,25 +48,56 @@ func (s Schedule) DeleteSchedule(id int64) error {
 func (s Schedule) ScheduleList(req schedule.ScheduleListReq) (resp []*schedule.ScheduleInfo, total int, err error) {
 	var predicates []predicate.Schedule
 
-	if req.StartTime != "" {
+	if req.StartTime != "" && req.EndTime != "" {
 		startTime, _ := time.Parse(time.DateOnly, req.StartTime)
-		//大于
+		endTime, _ := time.Parse(time.DateOnly, req.EndTime)
+
 		predicates = append(predicates, schedule2.DateGTE(startTime))
-		//小于
-		predicates = append(predicates, schedule2.DateLTE(startTime.Add(7*24*time.Hour)))
+		predicates = append(predicates, schedule2.DateLTE(endTime))
 	}
 	if req.VenueId > 0 {
 		predicates = append(predicates, schedule2.VenueID(req.VenueId))
 	}
-	if len(req.Coach) > 0 {
-		predicates = append(predicates, schedule2.HasCoachsWith(schedulecoach.CoachIDIn(req.Coach...)))
+	if len(req.CoachId) > 0 {
+		predicates = append(predicates, schedule2.HasCoachsWith(schedulecoach.CoachIDIn(req.CoachId...)))
 	}
-	if len(req.Product) > 0 {
-		predicates = append(predicates, schedule2.ProductIDIn(req.Product...))
+	if len(req.ProductId) > 0 {
+		predicates = append(predicates, schedule2.ProductIDIn(req.ProductId...))
 	}
 	if req.Type != "" {
 		predicates = append(predicates, schedule2.TypeEQ(req.Type))
 	}
+	if req.SubType != "" {
+		predicates = append(predicates, schedule2.TypeEQ(req.SubType))
+	}
+
+	if len(req.Status) > 0 {
+		predicates = append(predicates, schedule2.StatusIn(req.Status...))
+	}
+
+	if req.Name != "" {
+		predicates = append(predicates, schedule2.NameEQ(req.Name))
+	}
+	if req.VenueId == 0 {
+		return resp, total, errors.New("场馆ID不能为空")
+	}
+
+	if req.MemberName != "" {
+		predicates = append(predicates, schedule2.HasMembersWith(schedulemember.MemberNameEQ(req.MemberName)))
+	}
+	if req.MemberMobile != "" {
+		first, _ := s.db.Member.Query().Where(
+			member2.MobileEQ(req.MemberMobile),
+			member2.Delete(0),
+		).First(s.ctx)
+		if first == nil {
+			return nil, 0, errors.New("未找到符合条件的会员")
+		}
+		predicates = append(predicates, schedule2.HasMembersWith(schedulemember.MemberIDEQ(first.ID)))
+	}
+
+	predicates = append(predicates, schedule2.VenueIDEQ(req.VenueId))
+
 	predicates = append(predicates, schedule2.StatusNotIn(0, 5))
 
 	lists, err := s.db.Debug().Schedule.Query().Where(predicates...).
