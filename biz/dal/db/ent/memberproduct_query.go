@@ -623,7 +623,9 @@ func (mpq *MemberProductQuery) loadMemberProductEntry(ctx context.Context, query
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(entrylogs.FieldMemberProductID)
+	}
 	query.Where(predicate.EntryLogs(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(memberproduct.MemberProductEntryColumn), fks...))
 	}))
@@ -632,13 +634,10 @@ func (mpq *MemberProductQuery) loadMemberProductEntry(ctx context.Context, query
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.member_product_member_product_entry
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "member_product_member_product_entry" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.MemberProductID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "member_product_member_product_entry" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "member_product_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -654,7 +653,9 @@ func (mpq *MemberProductQuery) loadMemberProductContents(ctx context.Context, qu
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(membercontract.FieldMemberProductID)
+	}
 	query.Where(predicate.MemberContract(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(memberproduct.MemberProductContentsColumn), fks...))
 	}))
@@ -663,13 +664,10 @@ func (mpq *MemberProductQuery) loadMemberProductContents(ctx context.Context, qu
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.member_product_member_product_contents
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "member_product_member_product_contents" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.MemberProductID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "member_product_member_product_contents" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "member_product_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

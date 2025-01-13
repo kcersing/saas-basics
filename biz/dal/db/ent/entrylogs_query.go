@@ -8,6 +8,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/member"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
@@ -20,14 +21,14 @@ import (
 // EntryLogsQuery is the builder for querying EntryLogs entities.
 type EntryLogsQuery struct {
 	config
-	ctx         *QueryContext
-	order       []entrylogs.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.EntryLogs
-	withVenues  *VenueQuery
-	withMembers *MemberQuery
-	withUsers   *UserQuery
-	withFKs     bool
+	ctx                *QueryContext
+	order              []entrylogs.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.EntryLogs
+	withVenues         *VenueQuery
+	withMembers        *MemberQuery
+	withUsers          *UserQuery
+	withMemberProducts *MemberProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -123,6 +124,28 @@ func (elq *EntryLogsQuery) QueryUsers() *UserQuery {
 			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.UsersTable, entrylogs.UsersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberProducts chains the current query on the "member_products" edge.
+func (elq *EntryLogsQuery) QueryMemberProducts() *MemberProductQuery {
+	query := (&MemberProductClient{config: elq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := elq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := elq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, selector),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MemberProductsTable, entrylogs.MemberProductsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
 		return fromU, nil
@@ -317,14 +340,15 @@ func (elq *EntryLogsQuery) Clone() *EntryLogsQuery {
 		return nil
 	}
 	return &EntryLogsQuery{
-		config:      elq.config,
-		ctx:         elq.ctx.Clone(),
-		order:       append([]entrylogs.OrderOption{}, elq.order...),
-		inters:      append([]Interceptor{}, elq.inters...),
-		predicates:  append([]predicate.EntryLogs{}, elq.predicates...),
-		withVenues:  elq.withVenues.Clone(),
-		withMembers: elq.withMembers.Clone(),
-		withUsers:   elq.withUsers.Clone(),
+		config:             elq.config,
+		ctx:                elq.ctx.Clone(),
+		order:              append([]entrylogs.OrderOption{}, elq.order...),
+		inters:             append([]Interceptor{}, elq.inters...),
+		predicates:         append([]predicate.EntryLogs{}, elq.predicates...),
+		withVenues:         elq.withVenues.Clone(),
+		withMembers:        elq.withMembers.Clone(),
+		withUsers:          elq.withUsers.Clone(),
+		withMemberProducts: elq.withMemberProducts.Clone(),
 		// clone intermediate query.
 		sql:  elq.sql.Clone(),
 		path: elq.path,
@@ -361,6 +385,17 @@ func (elq *EntryLogsQuery) WithUsers(opts ...func(*UserQuery)) *EntryLogsQuery {
 		opt(query)
 	}
 	elq.withUsers = query
+	return elq
+}
+
+// WithMemberProducts tells the query-builder to eager-load the nodes that are connected to
+// the "member_products" edge. The optional arguments are used to configure the query builder of the edge.
+func (elq *EntryLogsQuery) WithMemberProducts(opts ...func(*MemberProductQuery)) *EntryLogsQuery {
+	query := (&MemberProductClient{config: elq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	elq.withMemberProducts = query
 	return elq
 }
 
@@ -441,17 +476,14 @@ func (elq *EntryLogsQuery) prepareQuery(ctx context.Context) error {
 func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EntryLogs, error) {
 	var (
 		nodes       = []*EntryLogs{}
-		withFKs     = elq.withFKs
 		_spec       = elq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			elq.withVenues != nil,
 			elq.withMembers != nil,
 			elq.withUsers != nil,
+			elq.withMemberProducts != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, entrylogs.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*EntryLogs).scanValues(nil, columns)
 	}
@@ -485,6 +517,12 @@ func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*E
 	if query := elq.withUsers; query != nil {
 		if err := elq.loadUsers(ctx, query, nodes, nil,
 			func(n *EntryLogs, e *User) { n.Edges.Users = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := elq.withMemberProducts; query != nil {
+		if err := elq.loadMemberProducts(ctx, query, nodes, nil,
+			func(n *EntryLogs, e *MemberProduct) { n.Edges.MemberProducts = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -578,6 +616,35 @@ func (elq *EntryLogsQuery) loadUsers(ctx context.Context, query *UserQuery, node
 	}
 	return nil
 }
+func (elq *EntryLogsQuery) loadMemberProducts(ctx context.Context, query *MemberProductQuery, nodes []*EntryLogs, init func(*EntryLogs), assign func(*EntryLogs, *MemberProduct)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*EntryLogs)
+	for i := range nodes {
+		fk := nodes[i].MemberProductID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(memberproduct.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "member_product_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (elq *EntryLogsQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := elq.querySpec()
@@ -612,6 +679,9 @@ func (elq *EntryLogsQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if elq.withUsers != nil {
 			_spec.Node.AddColumnOnce(entrylogs.FieldUserID)
+		}
+		if elq.withMemberProducts != nil {
+			_spec.Node.AddColumnOnce(entrylogs.FieldMemberProductID)
 		}
 	}
 	if ps := elq.predicates; len(ps) > 0 {

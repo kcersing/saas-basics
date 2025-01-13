@@ -85,6 +85,11 @@ func MemberID(v int64) predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldEQ(FieldMemberID, v))
 }
 
+// ProductID applies equality check predicate on the "product_id" field. It's identical to ProductIDEQ.
+func ProductID(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldEQ(FieldProductID, v))
+}
+
 // ContractID applies equality check predicate on the "contract_id" field. It's identical to ContractIDEQ.
 func ContractID(v int64) predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldEQ(FieldContractID, v))
@@ -395,6 +400,56 @@ func MemberIDNotNil() predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldNotNull(FieldMemberID))
 }
 
+// ProductIDEQ applies the EQ predicate on the "product_id" field.
+func ProductIDEQ(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldEQ(FieldProductID, v))
+}
+
+// ProductIDNEQ applies the NEQ predicate on the "product_id" field.
+func ProductIDNEQ(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNEQ(FieldProductID, v))
+}
+
+// ProductIDIn applies the In predicate on the "product_id" field.
+func ProductIDIn(vs ...int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldIn(FieldProductID, vs...))
+}
+
+// ProductIDNotIn applies the NotIn predicate on the "product_id" field.
+func ProductIDNotIn(vs ...int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNotIn(FieldProductID, vs...))
+}
+
+// ProductIDGT applies the GT predicate on the "product_id" field.
+func ProductIDGT(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldGT(FieldProductID, v))
+}
+
+// ProductIDGTE applies the GTE predicate on the "product_id" field.
+func ProductIDGTE(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldGTE(FieldProductID, v))
+}
+
+// ProductIDLT applies the LT predicate on the "product_id" field.
+func ProductIDLT(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldLT(FieldProductID, v))
+}
+
+// ProductIDLTE applies the LTE predicate on the "product_id" field.
+func ProductIDLTE(v int64) predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldLTE(FieldProductID, v))
+}
+
+// ProductIDIsNil applies the IsNil predicate on the "product_id" field.
+func ProductIDIsNil() predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldIsNull(FieldProductID))
+}
+
+// ProductIDNotNil applies the NotNil predicate on the "product_id" field.
+func ProductIDNotNil() predicate.MemberContract {
+	return predicate.MemberContract(sql.FieldNotNull(FieldProductID))
+}
+
 // ContractIDEQ applies the EQ predicate on the "contract_id" field.
 func ContractIDEQ(v int64) predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldEQ(FieldContractID, v))
@@ -543,26 +598,6 @@ func MemberProductIDIn(vs ...int64) predicate.MemberContract {
 // MemberProductIDNotIn applies the NotIn predicate on the "member_product_id" field.
 func MemberProductIDNotIn(vs ...int64) predicate.MemberContract {
 	return predicate.MemberContract(sql.FieldNotIn(FieldMemberProductID, vs...))
-}
-
-// MemberProductIDGT applies the GT predicate on the "member_product_id" field.
-func MemberProductIDGT(v int64) predicate.MemberContract {
-	return predicate.MemberContract(sql.FieldGT(FieldMemberProductID, v))
-}
-
-// MemberProductIDGTE applies the GTE predicate on the "member_product_id" field.
-func MemberProductIDGTE(v int64) predicate.MemberContract {
-	return predicate.MemberContract(sql.FieldGTE(FieldMemberProductID, v))
-}
-
-// MemberProductIDLT applies the LT predicate on the "member_product_id" field.
-func MemberProductIDLT(v int64) predicate.MemberContract {
-	return predicate.MemberContract(sql.FieldLT(FieldMemberProductID, v))
-}
-
-// MemberProductIDLTE applies the LTE predicate on the "member_product_id" field.
-func MemberProductIDLTE(v int64) predicate.MemberContract {
-	return predicate.MemberContract(sql.FieldLTE(FieldMemberProductID, v))
 }
 
 // MemberProductIDIsNil applies the IsNil predicate on the "member_product_id" field.
@@ -786,6 +821,29 @@ func HasOrder() predicate.MemberContract {
 func HasOrderWith(preds ...predicate.Order) predicate.MemberContract {
 	return predicate.MemberContract(func(s *sql.Selector) {
 		step := newOrderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMemberProduct applies the HasEdge predicate on the "member_product" edge.
+func HasMemberProduct() predicate.MemberContract {
+	return predicate.MemberContract(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, MemberProductTable, MemberProductColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberProductWith applies the HasEdge predicate on the "member_product" edge with a given conditions (other predicates).
+func HasMemberProductWith(preds ...predicate.MemberProduct) predicate.MemberContract {
+	return predicate.MemberContract(func(s *sql.Selector) {
+		step := newMemberProductStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -1533,49 +1533,55 @@ func (p *ListOrderReq) String() string {
 }
 
 type OrderInfo struct {
-	ID           int64         `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
-	OrderSn      string        `thrift:"orderSn,2,optional" form:"orderSn" json:"orderSn" query:"orderSn"`
-	Status       int64         `thrift:"status,3,optional" form:"status" json:"status" query:"status"`
-	Source       string        `thrift:"source,4,optional" form:"source" json:"source" query:"source"`
-	Device       string        `thrift:"device,5,optional" form:"device" json:"device" query:"device"`
-	Nature       string        `thrift:"nature,6,optional" form:"nature" json:"nature" query:"nature"`
-	ProductType  string        `thrift:"productType,10,optional" form:"productType" json:"productType" query:"productType"`
-	VenueId      int64         `thrift:"venueId,11,optional" form:"venueId" json:"venueId" query:"venueId"`
-	MemberId     int64         `thrift:"memberId,12,optional" form:"memberId" json:"memberId" query:"memberId"`
-	CreateId     int64         `thrift:"createId,13,optional" form:"createId" json:"createId" query:"createId"`
-	CompletionAt string        `thrift:"completionAt,15,optional" form:"completionAt" json:"completionAt" query:"completionAt"`
-	CreatedAt    string        `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
-	UpdatedAt    string        `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
-	MemberName   string        `thrift:"memberName,18,optional" form:"memberName" json:"memberName" query:"memberName"`
-	MemberMobile string        `thrift:"memberMobile,19,optional" form:"memberMobile" json:"memberMobile" query:"memberMobile"`
-	OrderAmount  *OrderAmount  `thrift:"orderAmount,250,optional" form:"orderAmount" json:"orderAmount" query:"orderAmount"`
-	OrderItem    *OrderItem    `thrift:"orderItem,251,optional" form:"orderItem" json:"orderItem" query:"orderItem"`
-	OrderPay     []*OrderPay   `thrift:"orderPay,252,optional" form:"orderPay" json:"orderPay" query:"orderPay"`
-	OrderSales   []*OrderSales `thrift:"orderSales,253,optional" form:"orderSales" json:"orderSales" query:"orderSales"`
+	ID             int64         `thrift:"id,1,optional" form:"id" json:"id" query:"id"`
+	OrderSn        string        `thrift:"orderSn,2,optional" form:"orderSn" json:"orderSn" query:"orderSn"`
+	Status         int64         `thrift:"status,3,optional" form:"status" json:"status" query:"status"`
+	Source         string        `thrift:"source,4,optional" form:"source" json:"source" query:"source"`
+	Device         string        `thrift:"device,5,optional" form:"device" json:"device" query:"device"`
+	Nature         string        `thrift:"nature,6,optional" form:"nature" json:"nature" query:"nature"`
+	ProductType    string        `thrift:"productType,10,optional" form:"productType" json:"productType" query:"productType"`
+	VenueId        int64         `thrift:"venueId,11,optional" form:"venueId" json:"venueId" query:"venueId"`
+	MemberId       int64         `thrift:"memberId,12,optional" form:"memberId" json:"memberId" query:"memberId"`
+	CreateId       int64         `thrift:"createId,13,optional" form:"createId" json:"createId" query:"createId"`
+	CompletionAt   string        `thrift:"completionAt,15,optional" form:"completionAt" json:"completionAt" query:"completionAt"`
+	CreatedAt      string        `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt      string        `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	MemberName     string        `thrift:"memberName,18,optional" form:"memberName" json:"memberName" query:"memberName"`
+	MemberMobile   string        `thrift:"memberMobile,19,optional" form:"memberMobile" json:"memberMobile" query:"memberMobile"`
+	OrderAmount    *OrderAmount  `thrift:"orderAmount,250,optional" form:"orderAmount" json:"orderAmount" query:"orderAmount"`
+	OrderItem      *OrderItem    `thrift:"orderItem,251,optional" form:"orderItem" json:"orderItem" query:"orderItem"`
+	OrderPay       []*OrderPay   `thrift:"orderPay,252,optional" form:"orderPay" json:"orderPay" query:"orderPay"`
+	OrderSales     []*OrderSales `thrift:"orderSales,253,optional" form:"orderSales" json:"orderSales" query:"orderSales"`
+	StatusName     string        `thrift:"statusName,20,optional" form:"statusName" json:"statusName" query:"statusName"`
+	SourceName     string        `thrift:"sourceName,21,optional" form:"sourceName" json:"sourceName" query:"sourceName"`
+	ProductSubType string        `thrift:"productSubType,22,optional" form:"productSubType" json:"productSubType" query:"productSubType"`
 }
 
 func NewOrderInfo() *OrderInfo {
 	return &OrderInfo{
 
-		ID:           0,
-		OrderSn:      "",
-		Status:       0,
-		Source:       "",
-		Device:       "",
-		Nature:       "",
-		ProductType:  "",
-		VenueId:      0,
-		MemberId:     0,
-		CreateId:     0,
-		CompletionAt: "",
-		CreatedAt:    "",
-		UpdatedAt:    "",
-		MemberName:   "",
-		MemberMobile: "",
-		OrderAmount:  &OrderAmount{},
-		OrderItem:    &OrderItem{},
-		OrderPay:     []*OrderPay{},
-		OrderSales:   []*OrderSales{},
+		ID:             0,
+		OrderSn:        "",
+		Status:         0,
+		Source:         "",
+		Device:         "",
+		Nature:         "",
+		ProductType:    "",
+		VenueId:        0,
+		MemberId:       0,
+		CreateId:       0,
+		CompletionAt:   "",
+		CreatedAt:      "",
+		UpdatedAt:      "",
+		MemberName:     "",
+		MemberMobile:   "",
+		OrderAmount:    &OrderAmount{},
+		OrderItem:      &OrderItem{},
+		OrderPay:       []*OrderPay{},
+		OrderSales:     []*OrderSales{},
+		StatusName:     "",
+		SourceName:     "",
+		ProductSubType: "",
 	}
 }
 
@@ -1599,6 +1605,9 @@ func (p *OrderInfo) InitDefault() {
 	p.OrderItem = &OrderItem{}
 	p.OrderPay = []*OrderPay{}
 	p.OrderSales = []*OrderSales{}
+	p.StatusName = ""
+	p.SourceName = ""
+	p.ProductSubType = ""
 }
 
 var OrderInfo_ID_DEFAULT int64 = 0
@@ -1772,6 +1781,33 @@ func (p *OrderInfo) GetOrderSales() (v []*OrderSales) {
 	return p.OrderSales
 }
 
+var OrderInfo_StatusName_DEFAULT string = ""
+
+func (p *OrderInfo) GetStatusName() (v string) {
+	if !p.IsSetStatusName() {
+		return OrderInfo_StatusName_DEFAULT
+	}
+	return p.StatusName
+}
+
+var OrderInfo_SourceName_DEFAULT string = ""
+
+func (p *OrderInfo) GetSourceName() (v string) {
+	if !p.IsSetSourceName() {
+		return OrderInfo_SourceName_DEFAULT
+	}
+	return p.SourceName
+}
+
+var OrderInfo_ProductSubType_DEFAULT string = ""
+
+func (p *OrderInfo) GetProductSubType() (v string) {
+	if !p.IsSetProductSubType() {
+		return OrderInfo_ProductSubType_DEFAULT
+	}
+	return p.ProductSubType
+}
+
 var fieldIDToName_OrderInfo = map[int16]string{
 	1:   "id",
 	2:   "orderSn",
@@ -1792,6 +1828,9 @@ var fieldIDToName_OrderInfo = map[int16]string{
 	251: "orderItem",
 	252: "orderPay",
 	253: "orderSales",
+	20:  "statusName",
+	21:  "sourceName",
+	22:  "productSubType",
 }
 
 func (p *OrderInfo) IsSetID() bool {
@@ -1868,6 +1907,18 @@ func (p *OrderInfo) IsSetOrderPay() bool {
 
 func (p *OrderInfo) IsSetOrderSales() bool {
 	return p.OrderSales != nil
+}
+
+func (p *OrderInfo) IsSetStatusName() bool {
+	return p.StatusName != OrderInfo_StatusName_DEFAULT
+}
+
+func (p *OrderInfo) IsSetSourceName() bool {
+	return p.SourceName != OrderInfo_SourceName_DEFAULT
+}
+
+func (p *OrderInfo) IsSetProductSubType() bool {
+	return p.ProductSubType != OrderInfo_ProductSubType_DEFAULT
 }
 
 func (p *OrderInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -2036,6 +2087,30 @@ func (p *OrderInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 253:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField253(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 20:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField20(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 21:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField21(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 22:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField22(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2297,6 +2372,39 @@ func (p *OrderInfo) ReadField253(iprot thrift.TProtocol) error {
 	p.OrderSales = _field
 	return nil
 }
+func (p *OrderInfo) ReadField20(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.StatusName = _field
+	return nil
+}
+func (p *OrderInfo) ReadField21(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.SourceName = _field
+	return nil
+}
+func (p *OrderInfo) ReadField22(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.ProductSubType = _field
+	return nil
+}
 
 func (p *OrderInfo) Write(oprot thrift.TProtocol) (err error) {
 
@@ -2379,6 +2487,18 @@ func (p *OrderInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField253(oprot); err != nil {
 			fieldId = 253
+			goto WriteFieldError
+		}
+		if err = p.writeField20(oprot); err != nil {
+			fieldId = 20
+			goto WriteFieldError
+		}
+		if err = p.writeField21(oprot); err != nil {
+			fieldId = 21
+			goto WriteFieldError
+		}
+		if err = p.writeField22(oprot); err != nil {
+			fieldId = 22
 			goto WriteFieldError
 		}
 	}
@@ -2774,6 +2894,63 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 253 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 253 end error: ", p), err)
+}
+
+func (p *OrderInfo) writeField20(oprot thrift.TProtocol) (err error) {
+	if p.IsSetStatusName() {
+		if err = oprot.WriteFieldBegin("statusName", thrift.STRING, 20); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.StatusName); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 20 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 20 end error: ", p), err)
+}
+
+func (p *OrderInfo) writeField21(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSourceName() {
+		if err = oprot.WriteFieldBegin("sourceName", thrift.STRING, 21); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.SourceName); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 21 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 21 end error: ", p), err)
+}
+
+func (p *OrderInfo) writeField22(oprot thrift.TProtocol) (err error) {
+	if p.IsSetProductSubType() {
+		if err = oprot.WriteFieldBegin("productSubType", thrift.STRING, 22); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.ProductSubType); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 22 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 22 end error: ", p), err)
 }
 
 func (p *OrderInfo) String() string {

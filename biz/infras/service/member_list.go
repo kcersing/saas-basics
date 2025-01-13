@@ -48,19 +48,21 @@ func (m Member) entMemberContractInfo(v ent.MemberContract) *member.MemberContra
 	vInfo, _ := NewVenue(m.ctx, m.c).VenueInfo(v.VenueID)
 	first, _ := v.QueryContent().First(m.ctx)
 	mInfo, _ := m.db.MemberProfile.Query().Where(memberprofile.MemberID(v.MemberID)).First(m.ctx)
-	//mpInfo, _ := v.QueryMemberProduct().First(m.ctx)
+	mpInfo, _ := v.QueryMemberProduct().First(m.ctx)
 	return &member.MemberContractInfo{
-		Name:       &v.Name,
-		MemberId:   &v.MemberID,
-		MemberName: &mInfo.Name,
-		VenueId:    &v.VenueID,
-		VenueName:  &vInfo.Name,
-		//MemberProductId:   &v.MemberProductID,
-		//MemberProductName: nil,
-		ContractId: &v.ContractID,
-		Sign:       &v.Sign,
-		SignImg:    &first.SignImg,
-		Content:    &first.Content,
+		Name:              v.Name,
+		MemberId:          v.MemberID,
+		MemberName:        mInfo.Name,
+		VenueId:           v.VenueID,
+		VenueName:         vInfo.Name,
+		MemberProductId:   v.MemberProductID,
+		MemberProductName: mpInfo.Name,
+		ContractId:        v.ContractID,
+		Sign:              v.Sign,
+		SignImg:           first.SignImg,
+		Content:           first.Content,
+		CreatedAt:         v.CreatedAt.Format(time.DateTime),
+		UpdatedAt:         v.UpdatedAt.Format(time.DateTime),
 	}
 }
 

@@ -40,6 +40,8 @@ const (
 	EdgeMembers = "members"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
+	// EdgeMemberProducts holds the string denoting the member_products edge name in mutations.
+	EdgeMemberProducts = "member_products"
 	// Table holds the table name of the entrylogs in the database.
 	Table = "entry_logs"
 	// VenuesTable is the table that holds the venues relation/edge.
@@ -63,6 +65,13 @@ const (
 	UsersInverseTable = "sys_users"
 	// UsersColumn is the table column denoting the users relation/edge.
 	UsersColumn = "user_id"
+	// MemberProductsTable is the table that holds the member_products relation/edge.
+	MemberProductsTable = "entry_logs"
+	// MemberProductsInverseTable is the table name for the MemberProduct entity.
+	// It exists in this package in order to avoid circular dependency with the "memberproduct" package.
+	MemberProductsInverseTable = "member_product"
+	// MemberProductsColumn is the table column denoting the member_products relation/edge.
+	MemberProductsColumn = "member_product_id"
 )
 
 // Columns holds all SQL columns for entrylogs fields.
@@ -80,21 +89,10 @@ var Columns = []string{
 	FieldLeavingTime,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "entry_logs"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"member_product_member_product_entry",
-}
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -196,6 +194,13 @@ func ByUsersField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByMemberProductsField orders the results by member_products field.
+func ByMemberProductsField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberProductsStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newVenuesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -215,5 +220,12 @@ func newUsersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UsersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, UsersTable, UsersColumn),
+	)
+}
+func newMemberProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MemberProductsTable, MemberProductsColumn),
 	)
 }

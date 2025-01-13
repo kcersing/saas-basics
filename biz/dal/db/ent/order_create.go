@@ -153,6 +153,20 @@ func (oc *OrderCreate) SetNillableProductType(s *string) *OrderCreate {
 	return oc
 }
 
+// SetProductSubType sets the "product_sub_type" field.
+func (oc *OrderCreate) SetProductSubType(s string) *OrderCreate {
+	oc.mutation.SetProductSubType(s)
+	return oc
+}
+
+// SetNillableProductSubType sets the "product_sub_type" field if the given value is not nil.
+func (oc *OrderCreate) SetNillableProductSubType(s *string) *OrderCreate {
+	if s != nil {
+		oc.SetProductSubType(*s)
+	}
+	return oc
+}
+
 // SetStatus sets the "status" field.
 func (oc *OrderCreate) SetStatus(i int64) *OrderCreate {
 	oc.mutation.SetStatus(i)
@@ -469,6 +483,10 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 	if value, ok := oc.mutation.ProductType(); ok {
 		_spec.SetField(order.FieldProductType, field.TypeString, value)
 		_node.ProductType = value
+	}
+	if value, ok := oc.mutation.ProductSubType(); ok {
+		_spec.SetField(order.FieldProductSubType, field.TypeString, value)
+		_node.ProductSubType = value
 	}
 	if value, ok := oc.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)

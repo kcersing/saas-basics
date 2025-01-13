@@ -960,7 +960,6 @@ func (mq *MemberQuery) loadMemberEntry(ctx context.Context, query *EntryLogsQuer
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(entrylogs.FieldMemberID)
 	}
@@ -991,7 +990,6 @@ func (mq *MemberQuery) loadMemberContents(ctx context.Context, query *MemberCont
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(membercontract.FieldMemberID)
 	}

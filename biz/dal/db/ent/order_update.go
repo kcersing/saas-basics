@@ -195,6 +195,26 @@ func (ou *OrderUpdate) ClearProductType() *OrderUpdate {
 	return ou
 }
 
+// SetProductSubType sets the "product_sub_type" field.
+func (ou *OrderUpdate) SetProductSubType(s string) *OrderUpdate {
+	ou.mutation.SetProductSubType(s)
+	return ou
+}
+
+// SetNillableProductSubType sets the "product_sub_type" field if the given value is not nil.
+func (ou *OrderUpdate) SetNillableProductSubType(s *string) *OrderUpdate {
+	if s != nil {
+		ou.SetProductSubType(*s)
+	}
+	return ou
+}
+
+// ClearProductSubType clears the value of the "product_sub_type" field.
+func (ou *OrderUpdate) ClearProductSubType() *OrderUpdate {
+	ou.mutation.ClearProductSubType()
+	return ou
+}
+
 // SetStatus sets the "status" field.
 func (ou *OrderUpdate) SetStatus(i int64) *OrderUpdate {
 	ou.mutation.ResetStatus()
@@ -622,6 +642,12 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.ProductTypeCleared() {
 		_spec.ClearField(order.FieldProductType, field.TypeString)
+	}
+	if value, ok := ou.mutation.ProductSubType(); ok {
+		_spec.SetField(order.FieldProductSubType, field.TypeString, value)
+	}
+	if ou.mutation.ProductSubTypeCleared() {
+		_spec.ClearField(order.FieldProductSubType, field.TypeString)
 	}
 	if value, ok := ou.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)
@@ -1141,6 +1167,26 @@ func (ouo *OrderUpdateOne) ClearProductType() *OrderUpdateOne {
 	return ouo
 }
 
+// SetProductSubType sets the "product_sub_type" field.
+func (ouo *OrderUpdateOne) SetProductSubType(s string) *OrderUpdateOne {
+	ouo.mutation.SetProductSubType(s)
+	return ouo
+}
+
+// SetNillableProductSubType sets the "product_sub_type" field if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableProductSubType(s *string) *OrderUpdateOne {
+	if s != nil {
+		ouo.SetProductSubType(*s)
+	}
+	return ouo
+}
+
+// ClearProductSubType clears the value of the "product_sub_type" field.
+func (ouo *OrderUpdateOne) ClearProductSubType() *OrderUpdateOne {
+	ouo.mutation.ClearProductSubType()
+	return ouo
+}
+
 // SetStatus sets the "status" field.
 func (ouo *OrderUpdateOne) SetStatus(i int64) *OrderUpdateOne {
 	ouo.mutation.ResetStatus()
@@ -1598,6 +1644,12 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	}
 	if ouo.mutation.ProductTypeCleared() {
 		_spec.ClearField(order.FieldProductType, field.TypeString)
+	}
+	if value, ok := ouo.mutation.ProductSubType(); ok {
+		_spec.SetField(order.FieldProductSubType, field.TypeString, value)
+	}
+	if ouo.mutation.ProductSubTypeCleared() {
+		_spec.ClearField(order.FieldProductSubType, field.TypeString)
 	}
 	if value, ok := ouo.mutation.Status(); ok {
 		_spec.SetField(order.FieldStatus, field.TypeInt64, value)

@@ -68,6 +68,11 @@ struct OrderInfo {
     251: optional OrderItem orderItem={} (api.raw = "orderItem")
     252: optional list<OrderPay> orderPay={} (api.raw = "orderPay")
     253: optional list<OrderSales> orderSales={} (api.raw = "orderSales")
+
+    20:  optional string statusName="" (api.raw = "statusName")
+    21:  optional string sourceName="" (api.raw = "sourceName")
+    22: optional string productSubType="" (api.raw = "productSubType")
+
 }
 
 struct OrderAmount {

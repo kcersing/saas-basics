@@ -72,6 +72,34 @@ func (m MemberProduct) CreateMemberProduct(req do.CreateMemberProductReq) error 
 		return err
 	}
 
+	go func() {
+		contract, _ := product.QueryContracts().First(m.ctx)
+		if contract != nil {
+			hlog.Info(mp.Sn + "查找合同失败")
+		} else {
+			memberContract, err := m.db.MemberContract.Create().
+				SetContractID(contract.ID).
+				SetVenueID(mp.VenueID).
+				SetProductID(product.ID).
+				SetName(contract.Name).
+				SetMemberID(mp.MemberID).
+				SetMemberProductID(mp.ID).
+				SetOrderID(req.Order.ID).
+				Save(m.ctx)
+			if err != nil {
+				hlog.Info(mp.Sn + "创建合同失败")
+			}
+			_, err = m.db.MemberContractContent.Create().
+				SetMemberContractID(memberContract.ID).
+				SetContent(contract.Content).
+				SetContractID(memberContract.ID).Save(m.ctx)
+			if err != nil {
+				hlog.Info(mp.Sn + "创建合同内容失败")
+			}
+		}
+
+	}()
+
 	all, _ := m.db.ProductCourses.Query().Where(productcourses.ProductID(orderItem.ProductID)).All(m.ctx)
 
 	if all != nil {

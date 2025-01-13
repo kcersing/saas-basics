@@ -970,15 +970,15 @@ func init() {
 	// order.DefaultCreatedID holds the default value on creation for the created_id field.
 	order.DefaultCreatedID = orderDescCreatedID.Default.(int64)
 	// orderDescStatus is the schema descriptor for status field.
-	orderDescStatus := orderFields[5].Descriptor()
+	orderDescStatus := orderFields[6].Descriptor()
 	// order.DefaultStatus holds the default value on creation for the status field.
 	order.DefaultStatus = orderDescStatus.Default.(int64)
 	// orderDescSource is the schema descriptor for source field.
-	orderDescSource := orderFields[6].Descriptor()
+	orderDescSource := orderFields[7].Descriptor()
 	// order.DefaultSource holds the default value on creation for the source field.
 	order.DefaultSource = orderDescSource.Default.(string)
 	// orderDescDevice is the schema descriptor for device field.
-	orderDescDevice := orderFields[7].Descriptor()
+	orderDescDevice := orderFields[8].Descriptor()
 	// order.DefaultDevice holds the default value on creation for the device field.
 	order.DefaultDevice = orderDescDevice.Default.(string)
 	orderamountMixin := schema.OrderAmount{}.Mixin()

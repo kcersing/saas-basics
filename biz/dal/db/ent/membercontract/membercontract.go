@@ -26,6 +26,8 @@ const (
 	FieldStatus = "status"
 	// FieldMemberID holds the string denoting the member_id field in the database.
 	FieldMemberID = "member_id"
+	// FieldProductID holds the string denoting the product_id field in the database.
+	FieldProductID = "product_id"
 	// FieldContractID holds the string denoting the contract_id field in the database.
 	FieldContractID = "contract_id"
 	// FieldOrderID holds the string denoting the order_id field in the database.
@@ -44,6 +46,8 @@ const (
 	EdgeMember = "member"
 	// EdgeOrder holds the string denoting the order edge name in mutations.
 	EdgeOrder = "order"
+	// EdgeMemberProduct holds the string denoting the member_product edge name in mutations.
+	EdgeMemberProduct = "member_product"
 	// Table holds the table name of the membercontract in the database.
 	Table = "member_contract"
 	// ContentTable is the table that holds the content relation/edge.
@@ -67,6 +71,13 @@ const (
 	OrderInverseTable = "order"
 	// OrderColumn is the table column denoting the order relation/edge.
 	OrderColumn = "order_id"
+	// MemberProductTable is the table that holds the member_product relation/edge.
+	MemberProductTable = "member_contract"
+	// MemberProductInverseTable is the table name for the MemberProduct entity.
+	// It exists in this package in order to avoid circular dependency with the "memberproduct" package.
+	MemberProductInverseTable = "member_product"
+	// MemberProductColumn is the table column denoting the member_product relation/edge.
+	MemberProductColumn = "member_product_id"
 )
 
 // Columns holds all SQL columns for membercontract fields.
@@ -78,6 +89,7 @@ var Columns = []string{
 	FieldCreatedID,
 	FieldStatus,
 	FieldMemberID,
+	FieldProductID,
 	FieldContractID,
 	FieldOrderID,
 	FieldVenueID,
@@ -86,21 +98,10 @@ var Columns = []string{
 	FieldSign,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "member_contract"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"member_product_member_product_contents",
-}
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -160,6 +161,11 @@ func ByMemberID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberID, opts...).ToFunc()
 }
 
+// ByProductID orders the results by the product_id field.
+func ByProductID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProductID, opts...).ToFunc()
+}
+
 // ByContractID orders the results by the contract_id field.
 func ByContractID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContractID, opts...).ToFunc()
@@ -217,6 +223,13 @@ func ByOrderField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newOrderStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByMemberProductField orders the results by member_product field.
+func ByMemberProductField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemberProductStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newContentStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -236,5 +249,12 @@ func newOrderStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OrderInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OrderTable, OrderColumn),
+	)
+}
+func newMemberProductStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemberProductInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MemberProductTable, MemberProductColumn),
 	)
 }

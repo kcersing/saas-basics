@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/membercontractcontent"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -21,14 +22,14 @@ import (
 // MemberContractQuery is the builder for querying MemberContract entities.
 type MemberContractQuery struct {
 	config
-	ctx         *QueryContext
-	order       []membercontract.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.MemberContract
-	withContent *MemberContractContentQuery
-	withMember  *MemberQuery
-	withOrder   *OrderQuery
-	withFKs     bool
+	ctx               *QueryContext
+	order             []membercontract.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.MemberContract
+	withContent       *MemberContractContentQuery
+	withMember        *MemberQuery
+	withOrder         *OrderQuery
+	withMemberProduct *MemberProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -124,6 +125,28 @@ func (mcq *MemberContractQuery) QueryOrder() *OrderQuery {
 			sqlgraph.From(membercontract.Table, membercontract.FieldID, selector),
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.OrderTable, membercontract.OrderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mcq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMemberProduct chains the current query on the "member_product" edge.
+func (mcq *MemberContractQuery) QueryMemberProduct() *MemberProductQuery {
+	query := (&MemberProductClient{config: mcq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mcq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mcq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membercontract.Table, membercontract.FieldID, selector),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.MemberProductTable, membercontract.MemberProductColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mcq.driver.Dialect(), step)
 		return fromU, nil
@@ -318,14 +341,15 @@ func (mcq *MemberContractQuery) Clone() *MemberContractQuery {
 		return nil
 	}
 	return &MemberContractQuery{
-		config:      mcq.config,
-		ctx:         mcq.ctx.Clone(),
-		order:       append([]membercontract.OrderOption{}, mcq.order...),
-		inters:      append([]Interceptor{}, mcq.inters...),
-		predicates:  append([]predicate.MemberContract{}, mcq.predicates...),
-		withContent: mcq.withContent.Clone(),
-		withMember:  mcq.withMember.Clone(),
-		withOrder:   mcq.withOrder.Clone(),
+		config:            mcq.config,
+		ctx:               mcq.ctx.Clone(),
+		order:             append([]membercontract.OrderOption{}, mcq.order...),
+		inters:            append([]Interceptor{}, mcq.inters...),
+		predicates:        append([]predicate.MemberContract{}, mcq.predicates...),
+		withContent:       mcq.withContent.Clone(),
+		withMember:        mcq.withMember.Clone(),
+		withOrder:         mcq.withOrder.Clone(),
+		withMemberProduct: mcq.withMemberProduct.Clone(),
 		// clone intermediate query.
 		sql:  mcq.sql.Clone(),
 		path: mcq.path,
@@ -362,6 +386,17 @@ func (mcq *MemberContractQuery) WithOrder(opts ...func(*OrderQuery)) *MemberCont
 		opt(query)
 	}
 	mcq.withOrder = query
+	return mcq
+}
+
+// WithMemberProduct tells the query-builder to eager-load the nodes that are connected to
+// the "member_product" edge. The optional arguments are used to configure the query builder of the edge.
+func (mcq *MemberContractQuery) WithMemberProduct(opts ...func(*MemberProductQuery)) *MemberContractQuery {
+	query := (&MemberProductClient{config: mcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mcq.withMemberProduct = query
 	return mcq
 }
 
@@ -442,17 +477,14 @@ func (mcq *MemberContractQuery) prepareQuery(ctx context.Context) error {
 func (mcq *MemberContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MemberContract, error) {
 	var (
 		nodes       = []*MemberContract{}
-		withFKs     = mcq.withFKs
 		_spec       = mcq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			mcq.withContent != nil,
 			mcq.withMember != nil,
 			mcq.withOrder != nil,
+			mcq.withMemberProduct != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, membercontract.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*MemberContract).scanValues(nil, columns)
 	}
@@ -487,6 +519,12 @@ func (mcq *MemberContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	if query := mcq.withOrder; query != nil {
 		if err := mcq.loadOrder(ctx, query, nodes, nil,
 			func(n *MemberContract, e *Order) { n.Edges.Order = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := mcq.withMemberProduct; query != nil {
+		if err := mcq.loadMemberProduct(ctx, query, nodes, nil,
+			func(n *MemberContract, e *MemberProduct) { n.Edges.MemberProduct = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -581,6 +619,35 @@ func (mcq *MemberContractQuery) loadOrder(ctx context.Context, query *OrderQuery
 	}
 	return nil
 }
+func (mcq *MemberContractQuery) loadMemberProduct(ctx context.Context, query *MemberProductQuery, nodes []*MemberContract, init func(*MemberContract), assign func(*MemberContract, *MemberProduct)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*MemberContract)
+	for i := range nodes {
+		fk := nodes[i].MemberProductID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(memberproduct.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "member_product_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (mcq *MemberContractQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mcq.querySpec()
@@ -612,6 +679,9 @@ func (mcq *MemberContractQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if mcq.withOrder != nil {
 			_spec.Node.AddColumnOnce(membercontract.FieldOrderID)
+		}
+		if mcq.withMemberProduct != nil {
+			_spec.Node.AddColumnOnce(membercontract.FieldMemberProductID)
 		}
 	}
 	if ps := mcq.predicates; len(ps) > 0 {

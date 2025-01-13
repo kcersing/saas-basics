@@ -85,14 +85,14 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "entrylogs" package.
 	MemberProductEntryInverseTable = "entry_logs"
 	// MemberProductEntryColumn is the table column denoting the member_product_entry relation/edge.
-	MemberProductEntryColumn = "member_product_member_product_entry"
+	MemberProductEntryColumn = "member_product_id"
 	// MemberProductContentsTable is the table that holds the member_product_contents relation/edge.
 	MemberProductContentsTable = "member_contract"
 	// MemberProductContentsInverseTable is the table name for the MemberContract entity.
 	// It exists in this package in order to avoid circular dependency with the "membercontract" package.
 	MemberProductContentsInverseTable = "member_contract"
 	// MemberProductContentsColumn is the table column denoting the member_product_contents relation/edge.
-	MemberProductContentsColumn = "member_product_member_product_contents"
+	MemberProductContentsColumn = "member_product_id"
 	// MemberCoursesTable is the table that holds the memberCourses relation/edge.
 	MemberCoursesTable = "member_product_courses"
 	// MemberCoursesInverseTable is the table name for the MemberProductCourses entity.

@@ -7,12 +7,14 @@ import (
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
+	"saas/biz/dal/db/ent/dictionarydetail"
 	member2 "saas/biz/dal/db/ent/member"
 	memberprofile2 "saas/biz/dal/db/ent/memberprofile"
 	order2 "saas/biz/dal/db/ent/order"
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/order"
+	"saas/pkg/enums"
 	"time"
 )
 
@@ -51,12 +53,16 @@ func (o Order) entOrderInfo(v *ent.Order) *order.OrderInfo {
 	createdAt := v.CreatedAt.Format(time.DateTime)
 	updatedAt := v.UpdatedAt.Format(time.DateTime)
 
-	var memberName, memberMobile string
+	var memberName, memberMobile, sourceName string
 	m, _ := o.db.Member.Query().Where(member2.IDEQ(v.MemberID)).First(o.ctx)
 	mpr, _ := o.db.MemberProfile.Query().Where(memberprofile2.MemberIDEQ(v.MemberID)).First(o.ctx)
 	if mpr != nil && m != nil {
 		memberName = mpr.Name
 		memberMobile = m.Mobile
+		dictionaryDetail, _ := o.db.DictionaryDetail.Query().Where(dictionarydetail.IDEQ(mpr.Source)).First(o.ctx)
+		if dictionaryDetail != nil {
+			sourceName = dictionaryDetail.Title
+		}
 	}
 
 	return &order.OrderInfo{
@@ -79,6 +85,10 @@ func (o Order) entOrderInfo(v *ent.Order) *order.OrderInfo {
 		OrderSales:   o.entOrderSales(v),
 		MemberName:   memberName,
 		MemberMobile: memberMobile,
+
+		SourceName:     sourceName,
+		StatusName:     enums.ReturnOrderStatusValues(v.Status),
+		ProductSubType: v.ProductSubType,
 	}
 }
 func (o Order) entOrderSales(v *ent.Order) (sales []*order.OrderSales) {

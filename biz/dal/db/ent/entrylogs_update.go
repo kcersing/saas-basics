@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/member"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
@@ -159,7 +160,6 @@ func (elu *EntryLogsUpdate) ClearVenueID() *EntryLogsUpdate {
 
 // SetMemberProductID sets the "member_product_id" field.
 func (elu *EntryLogsUpdate) SetMemberProductID(i int64) *EntryLogsUpdate {
-	elu.mutation.ResetMemberProductID()
 	elu.mutation.SetMemberProductID(i)
 	return elu
 }
@@ -169,12 +169,6 @@ func (elu *EntryLogsUpdate) SetNillableMemberProductID(i *int64) *EntryLogsUpdat
 	if i != nil {
 		elu.SetMemberProductID(*i)
 	}
-	return elu
-}
-
-// AddMemberProductID adds i to the "member_product_id" field.
-func (elu *EntryLogsUpdate) AddMemberProductID(i int64) *EntryLogsUpdate {
-	elu.mutation.AddMemberProductID(i)
 	return elu
 }
 
@@ -281,6 +275,25 @@ func (elu *EntryLogsUpdate) SetUsers(u *User) *EntryLogsUpdate {
 	return elu.SetUsersID(u.ID)
 }
 
+// SetMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID.
+func (elu *EntryLogsUpdate) SetMemberProductsID(id int64) *EntryLogsUpdate {
+	elu.mutation.SetMemberProductsID(id)
+	return elu
+}
+
+// SetNillableMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID if the given value is not nil.
+func (elu *EntryLogsUpdate) SetNillableMemberProductsID(id *int64) *EntryLogsUpdate {
+	if id != nil {
+		elu = elu.SetMemberProductsID(*id)
+	}
+	return elu
+}
+
+// SetMemberProducts sets the "member_products" edge to the MemberProduct entity.
+func (elu *EntryLogsUpdate) SetMemberProducts(m *MemberProduct) *EntryLogsUpdate {
+	return elu.SetMemberProductsID(m.ID)
+}
+
 // Mutation returns the EntryLogsMutation object of the builder.
 func (elu *EntryLogsUpdate) Mutation() *EntryLogsMutation {
 	return elu.mutation
@@ -301,6 +314,12 @@ func (elu *EntryLogsUpdate) ClearMembers() *EntryLogsUpdate {
 // ClearUsers clears the "users" edge to the User entity.
 func (elu *EntryLogsUpdate) ClearUsers() *EntryLogsUpdate {
 	elu.mutation.ClearUsers()
+	return elu
+}
+
+// ClearMemberProducts clears the "member_products" edge to the MemberProduct entity.
+func (elu *EntryLogsUpdate) ClearMemberProducts() *EntryLogsUpdate {
+	elu.mutation.ClearMemberProducts()
 	return elu
 }
 
@@ -375,15 +394,6 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if elu.mutation.CreatedIDCleared() {
 		_spec.ClearField(entrylogs.FieldCreatedID, field.TypeInt64)
-	}
-	if value, ok := elu.mutation.MemberProductID(); ok {
-		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-	}
-	if value, ok := elu.mutation.AddedMemberProductID(); ok {
-		_spec.AddField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-	}
-	if elu.mutation.MemberProductIDCleared() {
-		_spec.ClearField(entrylogs.FieldMemberProductID, field.TypeInt64)
 	}
 	if value, ok := elu.mutation.EntryTime(); ok {
 		_spec.SetField(entrylogs.FieldEntryTime, field.TypeTime, value)
@@ -477,6 +487,35 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if elu.mutation.MemberProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := elu.mutation.MemberProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -632,7 +671,6 @@ func (eluo *EntryLogsUpdateOne) ClearVenueID() *EntryLogsUpdateOne {
 
 // SetMemberProductID sets the "member_product_id" field.
 func (eluo *EntryLogsUpdateOne) SetMemberProductID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.ResetMemberProductID()
 	eluo.mutation.SetMemberProductID(i)
 	return eluo
 }
@@ -642,12 +680,6 @@ func (eluo *EntryLogsUpdateOne) SetNillableMemberProductID(i *int64) *EntryLogsU
 	if i != nil {
 		eluo.SetMemberProductID(*i)
 	}
-	return eluo
-}
-
-// AddMemberProductID adds i to the "member_product_id" field.
-func (eluo *EntryLogsUpdateOne) AddMemberProductID(i int64) *EntryLogsUpdateOne {
-	eluo.mutation.AddMemberProductID(i)
 	return eluo
 }
 
@@ -754,6 +786,25 @@ func (eluo *EntryLogsUpdateOne) SetUsers(u *User) *EntryLogsUpdateOne {
 	return eluo.SetUsersID(u.ID)
 }
 
+// SetMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID.
+func (eluo *EntryLogsUpdateOne) SetMemberProductsID(id int64) *EntryLogsUpdateOne {
+	eluo.mutation.SetMemberProductsID(id)
+	return eluo
+}
+
+// SetNillableMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID if the given value is not nil.
+func (eluo *EntryLogsUpdateOne) SetNillableMemberProductsID(id *int64) *EntryLogsUpdateOne {
+	if id != nil {
+		eluo = eluo.SetMemberProductsID(*id)
+	}
+	return eluo
+}
+
+// SetMemberProducts sets the "member_products" edge to the MemberProduct entity.
+func (eluo *EntryLogsUpdateOne) SetMemberProducts(m *MemberProduct) *EntryLogsUpdateOne {
+	return eluo.SetMemberProductsID(m.ID)
+}
+
 // Mutation returns the EntryLogsMutation object of the builder.
 func (eluo *EntryLogsUpdateOne) Mutation() *EntryLogsMutation {
 	return eluo.mutation
@@ -774,6 +825,12 @@ func (eluo *EntryLogsUpdateOne) ClearMembers() *EntryLogsUpdateOne {
 // ClearUsers clears the "users" edge to the User entity.
 func (eluo *EntryLogsUpdateOne) ClearUsers() *EntryLogsUpdateOne {
 	eluo.mutation.ClearUsers()
+	return eluo
+}
+
+// ClearMemberProducts clears the "member_products" edge to the MemberProduct entity.
+func (eluo *EntryLogsUpdateOne) ClearMemberProducts() *EntryLogsUpdateOne {
+	eluo.mutation.ClearMemberProducts()
 	return eluo
 }
 
@@ -879,15 +936,6 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 	if eluo.mutation.CreatedIDCleared() {
 		_spec.ClearField(entrylogs.FieldCreatedID, field.TypeInt64)
 	}
-	if value, ok := eluo.mutation.MemberProductID(); ok {
-		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-	}
-	if value, ok := eluo.mutation.AddedMemberProductID(); ok {
-		_spec.AddField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-	}
-	if eluo.mutation.MemberProductIDCleared() {
-		_spec.ClearField(entrylogs.FieldMemberProductID, field.TypeInt64)
-	}
 	if value, ok := eluo.mutation.EntryTime(); ok {
 		_spec.SetField(entrylogs.FieldEntryTime, field.TypeTime, value)
 	}
@@ -980,6 +1028,35 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eluo.mutation.MemberProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eluo.mutation.MemberProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

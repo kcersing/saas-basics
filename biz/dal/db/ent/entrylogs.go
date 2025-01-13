@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/member"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"strings"
@@ -43,9 +44,8 @@ type EntryLogs struct {
 	LeavingTime time.Time `json:"leaving_time,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EntryLogsQuery when eager-loading is set.
-	Edges                               EntryLogsEdges `json:"edges"`
-	member_product_member_product_entry *int64
-	selectValues                        sql.SelectValues
+	Edges        EntryLogsEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // EntryLogsEdges holds the relations/edges for other nodes in the graph.
@@ -56,9 +56,11 @@ type EntryLogsEdges struct {
 	Members *Member `json:"members,omitempty"`
 	// Users holds the value of the users edge.
 	Users *User `json:"users,omitempty"`
+	// MemberProducts holds the value of the member_products edge.
+	MemberProducts *MemberProduct `json:"member_products,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // VenuesOrErr returns the Venues value or an error if the edge
@@ -100,6 +102,19 @@ func (e EntryLogsEdges) UsersOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "users"}
 }
 
+// MemberProductsOrErr returns the MemberProducts value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntryLogsEdges) MemberProductsOrErr() (*MemberProduct, error) {
+	if e.loadedTypes[3] {
+		if e.MemberProducts == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: memberproduct.Label}
+		}
+		return e.MemberProducts, nil
+	}
+	return nil, &NotLoadedError{edge: "member_products"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*EntryLogs) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -109,8 +124,6 @@ func (*EntryLogs) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case entrylogs.FieldCreatedAt, entrylogs.FieldUpdatedAt, entrylogs.FieldEntryTime, entrylogs.FieldLeavingTime:
 			values[i] = new(sql.NullTime)
-		case entrylogs.ForeignKeys[0]: // member_product_member_product_entry
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -192,13 +205,6 @@ func (el *EntryLogs) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				el.LeavingTime = value.Time
 			}
-		case entrylogs.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field member_product_member_product_entry", value)
-			} else if value.Valid {
-				el.member_product_member_product_entry = new(int64)
-				*el.member_product_member_product_entry = int64(value.Int64)
-			}
 		default:
 			el.selectValues.Set(columns[i], values[i])
 		}
@@ -225,6 +231,11 @@ func (el *EntryLogs) QueryMembers() *MemberQuery {
 // QueryUsers queries the "users" edge of the EntryLogs entity.
 func (el *EntryLogs) QueryUsers() *UserQuery {
 	return NewEntryLogsClient(el.config).QueryUsers(el)
+}
+
+// QueryMemberProducts queries the "member_products" edge of the EntryLogs entity.
+func (el *EntryLogs) QueryMemberProducts() *MemberProductQuery {
+	return NewEntryLogsClient(el.config).QueryMemberProducts(el)
 }
 
 // Update returns a builder for updating this EntryLogs.

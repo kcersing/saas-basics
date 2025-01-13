@@ -21,6 +21,7 @@ func (Order) Fields() []ent.Field {
 		field.Int64("member_id").Comment("会员id").Optional(),
 		field.String("nature").Comment("业务类型").Optional(),
 		field.String("product_type").Comment("产品类型").Optional(),
+		field.String("product_sub_type").Comment("产品类型").Optional(),
 		field.Int64("status").Default(1).Comment("状态 | [1:待付款]").Optional(),
 		field.String("source").Default("").Comment("订单来源").Optional(),
 		field.String("device").Default("").Comment("设备来源").Optional(),

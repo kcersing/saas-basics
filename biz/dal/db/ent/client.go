@@ -2393,6 +2393,22 @@ func (c *EntryLogsClient) QueryUsers(el *EntryLogs) *UserQuery {
 	return query
 }
 
+// QueryMemberProducts queries the member_products edge of a EntryLogs.
+func (c *EntryLogsClient) QueryMemberProducts(el *EntryLogs) *MemberProductQuery {
+	query := (&MemberProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := el.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entrylogs.Table, entrylogs.FieldID, id),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MemberProductsTable, entrylogs.MemberProductsColumn),
+		)
+		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *EntryLogsClient) Hooks() []Hook {
 	return c.hooks.EntryLogs
@@ -2993,6 +3009,22 @@ func (c *MemberContractClient) QueryOrder(mc *MemberContract) *OrderQuery {
 			sqlgraph.From(membercontract.Table, membercontract.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.OrderTable, membercontract.OrderColumn),
+		)
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberProduct queries the member_product edge of a MemberContract.
+func (c *MemberContractClient) QueryMemberProduct(mc *MemberContract) *MemberProductQuery {
+	query := (&MemberProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membercontract.Table, membercontract.FieldID, id),
+			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.MemberProductTable, membercontract.MemberProductColumn),
 		)
 		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
 		return fromV, nil

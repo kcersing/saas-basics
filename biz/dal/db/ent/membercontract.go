@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/order"
 	"strings"
 	"time"
@@ -32,6 +33,8 @@ type MemberContract struct {
 	Status int64 `json:"status,omitempty"`
 	// 会员id
 	MemberID int64 `json:"member_id,omitempty"`
+	// 产品ID
+	ProductID int64 `json:"product_id,omitempty"`
 	// 原始合同id
 	ContractID int64 `json:"contract_id,omitempty"`
 	// 订单id
@@ -46,9 +49,8 @@ type MemberContract struct {
 	Sign string `json:"sign,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberContractQuery when eager-loading is set.
-	Edges                                  MemberContractEdges `json:"edges"`
-	member_product_member_product_contents *int64
-	selectValues                           sql.SelectValues
+	Edges        MemberContractEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // MemberContractEdges holds the relations/edges for other nodes in the graph.
@@ -59,9 +61,11 @@ type MemberContractEdges struct {
 	Member *Member `json:"member,omitempty"`
 	// Order holds the value of the order edge.
 	Order *Order `json:"order,omitempty"`
+	// MemberProduct holds the value of the member_product edge.
+	MemberProduct *MemberProduct `json:"member_product,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // ContentOrErr returns the Content value or an error if the edge
@@ -99,19 +103,30 @@ func (e MemberContractEdges) OrderOrErr() (*Order, error) {
 	return nil, &NotLoadedError{edge: "order"}
 }
 
+// MemberProductOrErr returns the MemberProduct value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e MemberContractEdges) MemberProductOrErr() (*MemberProduct, error) {
+	if e.loadedTypes[3] {
+		if e.MemberProduct == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: memberproduct.Label}
+		}
+		return e.MemberProduct, nil
+	}
+	return nil, &NotLoadedError{edge: "member_product"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*MemberContract) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case membercontract.FieldID, membercontract.FieldDelete, membercontract.FieldCreatedID, membercontract.FieldStatus, membercontract.FieldMemberID, membercontract.FieldContractID, membercontract.FieldOrderID, membercontract.FieldVenueID, membercontract.FieldMemberProductID:
+		case membercontract.FieldID, membercontract.FieldDelete, membercontract.FieldCreatedID, membercontract.FieldStatus, membercontract.FieldMemberID, membercontract.FieldProductID, membercontract.FieldContractID, membercontract.FieldOrderID, membercontract.FieldVenueID, membercontract.FieldMemberProductID:
 			values[i] = new(sql.NullInt64)
 		case membercontract.FieldName, membercontract.FieldSign:
 			values[i] = new(sql.NullString)
 		case membercontract.FieldCreatedAt, membercontract.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case membercontract.ForeignKeys[0]: // member_product_member_product_contents
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -169,6 +184,12 @@ func (mc *MemberContract) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mc.MemberID = value.Int64
 			}
+		case membercontract.FieldProductID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field product_id", values[i])
+			} else if value.Valid {
+				mc.ProductID = value.Int64
+			}
 		case membercontract.FieldContractID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field contract_id", values[i])
@@ -205,13 +226,6 @@ func (mc *MemberContract) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mc.Sign = value.String
 			}
-		case membercontract.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field member_product_member_product_contents", value)
-			} else if value.Valid {
-				mc.member_product_member_product_contents = new(int64)
-				*mc.member_product_member_product_contents = int64(value.Int64)
-			}
 		default:
 			mc.selectValues.Set(columns[i], values[i])
 		}
@@ -238,6 +252,11 @@ func (mc *MemberContract) QueryMember() *MemberQuery {
 // QueryOrder queries the "order" edge of the MemberContract entity.
 func (mc *MemberContract) QueryOrder() *OrderQuery {
 	return NewMemberContractClient(mc.config).QueryOrder(mc)
+}
+
+// QueryMemberProduct queries the "member_product" edge of the MemberContract entity.
+func (mc *MemberContract) QueryMemberProduct() *MemberProductQuery {
+	return NewMemberContractClient(mc.config).QueryMemberProduct(mc)
 }
 
 // Update returns a builder for updating this MemberContract.
@@ -280,6 +299,9 @@ func (mc *MemberContract) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("member_id=")
 	builder.WriteString(fmt.Sprintf("%v", mc.MemberID))
+	builder.WriteString(", ")
+	builder.WriteString("product_id=")
+	builder.WriteString(fmt.Sprintf("%v", mc.ProductID))
 	builder.WriteString(", ")
 	builder.WriteString("contract_id=")
 	builder.WriteString(fmt.Sprintf("%v", mc.ContractID))

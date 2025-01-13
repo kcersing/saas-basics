@@ -100,6 +100,11 @@ func ProductType(v string) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldProductType, v))
 }
 
+// ProductSubType applies equality check predicate on the "product_sub_type" field. It's identical to ProductSubTypeEQ.
+func ProductSubType(v string) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldProductSubType, v))
+}
+
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v int64) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldStatus, v))
@@ -583,6 +588,81 @@ func ProductTypeEqualFold(v string) predicate.Order {
 // ProductTypeContainsFold applies the ContainsFold predicate on the "product_type" field.
 func ProductTypeContainsFold(v string) predicate.Order {
 	return predicate.Order(sql.FieldContainsFold(FieldProductType, v))
+}
+
+// ProductSubTypeEQ applies the EQ predicate on the "product_sub_type" field.
+func ProductSubTypeEQ(v string) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldProductSubType, v))
+}
+
+// ProductSubTypeNEQ applies the NEQ predicate on the "product_sub_type" field.
+func ProductSubTypeNEQ(v string) predicate.Order {
+	return predicate.Order(sql.FieldNEQ(FieldProductSubType, v))
+}
+
+// ProductSubTypeIn applies the In predicate on the "product_sub_type" field.
+func ProductSubTypeIn(vs ...string) predicate.Order {
+	return predicate.Order(sql.FieldIn(FieldProductSubType, vs...))
+}
+
+// ProductSubTypeNotIn applies the NotIn predicate on the "product_sub_type" field.
+func ProductSubTypeNotIn(vs ...string) predicate.Order {
+	return predicate.Order(sql.FieldNotIn(FieldProductSubType, vs...))
+}
+
+// ProductSubTypeGT applies the GT predicate on the "product_sub_type" field.
+func ProductSubTypeGT(v string) predicate.Order {
+	return predicate.Order(sql.FieldGT(FieldProductSubType, v))
+}
+
+// ProductSubTypeGTE applies the GTE predicate on the "product_sub_type" field.
+func ProductSubTypeGTE(v string) predicate.Order {
+	return predicate.Order(sql.FieldGTE(FieldProductSubType, v))
+}
+
+// ProductSubTypeLT applies the LT predicate on the "product_sub_type" field.
+func ProductSubTypeLT(v string) predicate.Order {
+	return predicate.Order(sql.FieldLT(FieldProductSubType, v))
+}
+
+// ProductSubTypeLTE applies the LTE predicate on the "product_sub_type" field.
+func ProductSubTypeLTE(v string) predicate.Order {
+	return predicate.Order(sql.FieldLTE(FieldProductSubType, v))
+}
+
+// ProductSubTypeContains applies the Contains predicate on the "product_sub_type" field.
+func ProductSubTypeContains(v string) predicate.Order {
+	return predicate.Order(sql.FieldContains(FieldProductSubType, v))
+}
+
+// ProductSubTypeHasPrefix applies the HasPrefix predicate on the "product_sub_type" field.
+func ProductSubTypeHasPrefix(v string) predicate.Order {
+	return predicate.Order(sql.FieldHasPrefix(FieldProductSubType, v))
+}
+
+// ProductSubTypeHasSuffix applies the HasSuffix predicate on the "product_sub_type" field.
+func ProductSubTypeHasSuffix(v string) predicate.Order {
+	return predicate.Order(sql.FieldHasSuffix(FieldProductSubType, v))
+}
+
+// ProductSubTypeIsNil applies the IsNil predicate on the "product_sub_type" field.
+func ProductSubTypeIsNil() predicate.Order {
+	return predicate.Order(sql.FieldIsNull(FieldProductSubType))
+}
+
+// ProductSubTypeNotNil applies the NotNil predicate on the "product_sub_type" field.
+func ProductSubTypeNotNil() predicate.Order {
+	return predicate.Order(sql.FieldNotNull(FieldProductSubType))
+}
+
+// ProductSubTypeEqualFold applies the EqualFold predicate on the "product_sub_type" field.
+func ProductSubTypeEqualFold(v string) predicate.Order {
+	return predicate.Order(sql.FieldEqualFold(FieldProductSubType, v))
+}
+
+// ProductSubTypeContainsFold applies the ContainsFold predicate on the "product_sub_type" field.
+func ProductSubTypeContainsFold(v string) predicate.Order {
+	return predicate.Order(sql.FieldContainsFold(FieldProductSubType, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

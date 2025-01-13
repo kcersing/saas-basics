@@ -8,6 +8,7 @@ import (
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/membercontractcontent"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/order"
 	"time"
 
@@ -102,6 +103,20 @@ func (mcc *MemberContractCreate) SetMemberID(i int64) *MemberContractCreate {
 func (mcc *MemberContractCreate) SetNillableMemberID(i *int64) *MemberContractCreate {
 	if i != nil {
 		mcc.SetMemberID(*i)
+	}
+	return mcc
+}
+
+// SetProductID sets the "product_id" field.
+func (mcc *MemberContractCreate) SetProductID(i int64) *MemberContractCreate {
+	mcc.mutation.SetProductID(i)
+	return mcc
+}
+
+// SetNillableProductID sets the "product_id" field if the given value is not nil.
+func (mcc *MemberContractCreate) SetNillableProductID(i *int64) *MemberContractCreate {
+	if i != nil {
+		mcc.SetProductID(*i)
 	}
 	return mcc
 }
@@ -221,6 +236,11 @@ func (mcc *MemberContractCreate) SetOrder(o *Order) *MemberContractCreate {
 	return mcc.SetOrderID(o.ID)
 }
 
+// SetMemberProduct sets the "member_product" edge to the MemberProduct entity.
+func (mcc *MemberContractCreate) SetMemberProduct(m *MemberProduct) *MemberContractCreate {
+	return mcc.SetMemberProductID(m.ID)
+}
+
 // Mutation returns the MemberContractMutation object of the builder.
 func (mcc *MemberContractCreate) Mutation() *MemberContractMutation {
 	return mcc.mutation
@@ -332,6 +352,10 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 		_spec.SetField(membercontract.FieldStatus, field.TypeInt64, value)
 		_node.Status = value
 	}
+	if value, ok := mcc.mutation.ProductID(); ok {
+		_spec.SetField(membercontract.FieldProductID, field.TypeInt64, value)
+		_node.ProductID = value
+	}
 	if value, ok := mcc.mutation.ContractID(); ok {
 		_spec.SetField(membercontract.FieldContractID, field.TypeInt64, value)
 		_node.ContractID = value
@@ -339,10 +363,6 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 	if value, ok := mcc.mutation.VenueID(); ok {
 		_spec.SetField(membercontract.FieldVenueID, field.TypeInt64, value)
 		_node.VenueID = value
-	}
-	if value, ok := mcc.mutation.MemberProductID(); ok {
-		_spec.SetField(membercontract.FieldMemberProductID, field.TypeInt64, value)
-		_node.MemberProductID = value
 	}
 	if value, ok := mcc.mutation.Name(); ok {
 		_spec.SetField(membercontract.FieldName, field.TypeString, value)
@@ -400,6 +420,23 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OrderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mcc.mutation.MemberProductIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   membercontract.MemberProductTable,
+			Columns: []string{membercontract.MemberProductColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.MemberProductID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

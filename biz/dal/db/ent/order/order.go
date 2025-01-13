@@ -32,6 +32,8 @@ const (
 	FieldNature = "nature"
 	// FieldProductType holds the string denoting the product_type field in the database.
 	FieldProductType = "product_type"
+	// FieldProductSubType holds the string denoting the product_sub_type field in the database.
+	FieldProductSubType = "product_sub_type"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -128,6 +130,7 @@ var Columns = []string{
 	FieldMemberID,
 	FieldNature,
 	FieldProductType,
+	FieldProductSubType,
 	FieldStatus,
 	FieldSource,
 	FieldDevice,
@@ -214,6 +217,11 @@ func ByNature(opts ...sql.OrderTermOption) OrderOption {
 // ByProductType orders the results by the product_type field.
 func ByProductType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductType, opts...).ToFunc()
+}
+
+// ByProductSubType orders the results by the product_sub_type field.
+func ByProductSubType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProductSubType, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

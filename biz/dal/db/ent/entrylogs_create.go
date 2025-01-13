@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/member"
+	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 	"time"
@@ -225,6 +226,25 @@ func (elc *EntryLogsCreate) SetUsers(u *User) *EntryLogsCreate {
 	return elc.SetUsersID(u.ID)
 }
 
+// SetMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID.
+func (elc *EntryLogsCreate) SetMemberProductsID(id int64) *EntryLogsCreate {
+	elc.mutation.SetMemberProductsID(id)
+	return elc
+}
+
+// SetNillableMemberProductsID sets the "member_products" edge to the MemberProduct entity by ID if the given value is not nil.
+func (elc *EntryLogsCreate) SetNillableMemberProductsID(id *int64) *EntryLogsCreate {
+	if id != nil {
+		elc = elc.SetMemberProductsID(*id)
+	}
+	return elc
+}
+
+// SetMemberProducts sets the "member_products" edge to the MemberProduct entity.
+func (elc *EntryLogsCreate) SetMemberProducts(m *MemberProduct) *EntryLogsCreate {
+	return elc.SetMemberProductsID(m.ID)
+}
+
 // Mutation returns the EntryLogsMutation object of the builder.
 func (elc *EntryLogsCreate) Mutation() *EntryLogsMutation {
 	return elc.mutation
@@ -336,10 +356,6 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 		_spec.SetField(entrylogs.FieldCreatedID, field.TypeInt64, value)
 		_node.CreatedID = value
 	}
-	if value, ok := elc.mutation.MemberProductID(); ok {
-		_spec.SetField(entrylogs.FieldMemberProductID, field.TypeInt64, value)
-		_node.MemberProductID = value
-	}
 	if value, ok := elc.mutation.EntryTime(); ok {
 		_spec.SetField(entrylogs.FieldEntryTime, field.TypeTime, value)
 		_node.EntryTime = value
@@ -397,6 +413,23 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := elc.mutation.MemberProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entrylogs.MemberProductsTable,
+			Columns: []string{entrylogs.MemberProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.MemberProductID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -134,17 +134,19 @@ struct MemberContractListReq{
 }
 
 struct MemberContractInfo{
-    1:  optional string	name (api.raw = "name")
-    2:  optional i64 memberId (api.raw = "memberId")
-    3:  optional string	memberName (api.raw = "memberName")
-    4:  optional i64 venueId (api.raw = "venueId")
-    5:  optional string	venueName (api.raw = "venueName")
-    6:  optional i64 memberProductId (api.raw = "memberProductId")
-    7:  optional string	memberProductName (api.raw = "memberProductName")
-    8:  optional i64 contractId (api.raw = "contractId")
-    10:  optional string sign (api.raw = "sign")
-    11:  optional string signImg (api.raw = "signImg")
-    12:  optional string content (api.raw = "content")
+    1:  optional string	name =""(api.raw = "name")
+    2:  optional i64 memberId =0 (api.raw = "memberId")
+    3:  optional string	memberName="" (api.raw = "memberName")
+    4:  optional i64 venueId =0(api.raw = "venueId")
+    5:  optional string	venueName="" (api.raw = "venueName")
+    6:  optional i64 memberProductId =0(api.raw = "memberProductId")
+    7:  optional string	memberProductName =""(api.raw = "memberProductName")
+    8:  optional i64 contractId =0(api.raw = "contractId")
+    10:  optional string sign =""(api.raw = "sign")
+    11:  optional string signImg="" (api.raw = "signImg")
+    12:  optional string content="" (api.raw = "content")
+    13:optional string createdAt ="" (api.raw = "createdAt")
+    14:optional string updatedAt  =""(api.raw = "updatedAt")
 }
 
 

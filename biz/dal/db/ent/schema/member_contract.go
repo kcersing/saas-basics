@@ -17,6 +17,7 @@ type MemberContract struct {
 func (MemberContract) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("member_id").Comment("会员id").Optional(),
+		field.Int64("product_id").Comment("产品ID").Optional(),
 		field.Int64("contract_id").Comment("原始合同id").Optional(),
 		field.Int64("order_id").Comment("订单id").Optional(),
 		field.Int64("venue_id").Comment("场馆id").Optional(),
@@ -40,7 +41,9 @@ func (MemberContract) Edges() []ent.Edge {
 
 		edge.From("member", Member.Type).Ref("member_contents").Field("member_id").Unique(),
 		edge.From("order", Order.Type).Ref("order_contents").Field("order_id").Unique(),
-		//edge.From("member_product", MemberProduct.Type).Ref("member_product_contents").Field("member_product_id").Unique(),
+		edge.From("member_product", MemberProduct.Type).
+			Ref("member_product_contents").
+			Field("member_product_id").Unique(),
 	}
 }
 

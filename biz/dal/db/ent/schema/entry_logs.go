@@ -42,7 +42,7 @@ func (EntryLogs) Edges() []ent.Edge {
 		edge.From("venues", Venue.Type).Ref("venue_entry").Field("venue_id").Unique(),
 		edge.From("members", Member.Type).Ref("member_entry").Field("member_id").Unique(),
 		edge.From("users", User.Type).Ref("user_entry").Field("user_id").Unique(),
-		//edge.From("member_products", MemberProduct.Type).Ref("member_product_entry").Field("member_product_id").Unique(),
+		edge.From("member_products", MemberProduct.Type).Ref("member_product_entry").Field("member_product_id").Unique(),
 	}
 }
 

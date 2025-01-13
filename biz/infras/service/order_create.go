@@ -117,7 +117,6 @@ func (o Order) FinishOrder(req do.FinishOrder) (err error) {
 		hlog.Info(req.Sn + "OrderPay 创建失败")
 	}
 	if (amount.Total - fee) == 0 {
-
 		_, err = o.db.Order.
 			UpdateOne(first).
 			SetCompletionAt(time.Now()).

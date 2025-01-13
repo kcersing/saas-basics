@@ -5224,123 +5224,171 @@ func (p *MemberContractListReq) String() string {
 }
 
 type MemberContractInfo struct {
-	Name              *string `thrift:"name,1,optional" form:"name" json:"name" query:"name"`
-	MemberId          *int64  `thrift:"memberId,2,optional" form:"memberId" json:"memberId" query:"memberId"`
-	MemberName        *string `thrift:"memberName,3,optional" form:"memberName" json:"memberName" query:"memberName"`
-	VenueId           *int64  `thrift:"venueId,4,optional" form:"venueId" json:"venueId" query:"venueId"`
-	VenueName         *string `thrift:"venueName,5,optional" form:"venueName" json:"venueName" query:"venueName"`
-	MemberProductId   *int64  `thrift:"memberProductId,6,optional" form:"memberProductId" json:"memberProductId" query:"memberProductId"`
-	MemberProductName *string `thrift:"memberProductName,7,optional" form:"memberProductName" json:"memberProductName" query:"memberProductName"`
-	ContractId        *int64  `thrift:"contractId,8,optional" form:"contractId" json:"contractId" query:"contractId"`
-	Sign              *string `thrift:"sign,10,optional" form:"sign" json:"sign" query:"sign"`
-	SignImg           *string `thrift:"signImg,11,optional" form:"signImg" json:"signImg" query:"signImg"`
-	Content           *string `thrift:"content,12,optional" form:"content" json:"content" query:"content"`
+	Name              string `thrift:"name,1,optional" form:"name" json:"name" query:"name"`
+	MemberId          int64  `thrift:"memberId,2,optional" form:"memberId" json:"memberId" query:"memberId"`
+	MemberName        string `thrift:"memberName,3,optional" form:"memberName" json:"memberName" query:"memberName"`
+	VenueId           int64  `thrift:"venueId,4,optional" form:"venueId" json:"venueId" query:"venueId"`
+	VenueName         string `thrift:"venueName,5,optional" form:"venueName" json:"venueName" query:"venueName"`
+	MemberProductId   int64  `thrift:"memberProductId,6,optional" form:"memberProductId" json:"memberProductId" query:"memberProductId"`
+	MemberProductName string `thrift:"memberProductName,7,optional" form:"memberProductName" json:"memberProductName" query:"memberProductName"`
+	ContractId        int64  `thrift:"contractId,8,optional" form:"contractId" json:"contractId" query:"contractId"`
+	Sign              string `thrift:"sign,10,optional" form:"sign" json:"sign" query:"sign"`
+	SignImg           string `thrift:"signImg,11,optional" form:"signImg" json:"signImg" query:"signImg"`
+	Content           string `thrift:"content,12,optional" form:"content" json:"content" query:"content"`
+	CreatedAt         string `thrift:"createdAt,13,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
+	UpdatedAt         string `thrift:"updatedAt,14,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
 }
 
 func NewMemberContractInfo() *MemberContractInfo {
-	return &MemberContractInfo{}
+	return &MemberContractInfo{
+
+		Name:              "",
+		MemberId:          0,
+		MemberName:        "",
+		VenueId:           0,
+		VenueName:         "",
+		MemberProductId:   0,
+		MemberProductName: "",
+		ContractId:        0,
+		Sign:              "",
+		SignImg:           "",
+		Content:           "",
+		CreatedAt:         "",
+		UpdatedAt:         "",
+	}
 }
 
 func (p *MemberContractInfo) InitDefault() {
+	p.Name = ""
+	p.MemberId = 0
+	p.MemberName = ""
+	p.VenueId = 0
+	p.VenueName = ""
+	p.MemberProductId = 0
+	p.MemberProductName = ""
+	p.ContractId = 0
+	p.Sign = ""
+	p.SignImg = ""
+	p.Content = ""
+	p.CreatedAt = ""
+	p.UpdatedAt = ""
 }
 
-var MemberContractInfo_Name_DEFAULT string
+var MemberContractInfo_Name_DEFAULT string = ""
 
 func (p *MemberContractInfo) GetName() (v string) {
 	if !p.IsSetName() {
 		return MemberContractInfo_Name_DEFAULT
 	}
-	return *p.Name
+	return p.Name
 }
 
-var MemberContractInfo_MemberId_DEFAULT int64
+var MemberContractInfo_MemberId_DEFAULT int64 = 0
 
 func (p *MemberContractInfo) GetMemberId() (v int64) {
 	if !p.IsSetMemberId() {
 		return MemberContractInfo_MemberId_DEFAULT
 	}
-	return *p.MemberId
+	return p.MemberId
 }
 
-var MemberContractInfo_MemberName_DEFAULT string
+var MemberContractInfo_MemberName_DEFAULT string = ""
 
 func (p *MemberContractInfo) GetMemberName() (v string) {
 	if !p.IsSetMemberName() {
 		return MemberContractInfo_MemberName_DEFAULT
 	}
-	return *p.MemberName
+	return p.MemberName
 }
 
-var MemberContractInfo_VenueId_DEFAULT int64
+var MemberContractInfo_VenueId_DEFAULT int64 = 0
 
 func (p *MemberContractInfo) GetVenueId() (v int64) {
 	if !p.IsSetVenueId() {
 		return MemberContractInfo_VenueId_DEFAULT
 	}
-	return *p.VenueId
+	return p.VenueId
 }
 
-var MemberContractInfo_VenueName_DEFAULT string
+var MemberContractInfo_VenueName_DEFAULT string = ""
 
 func (p *MemberContractInfo) GetVenueName() (v string) {
 	if !p.IsSetVenueName() {
 		return MemberContractInfo_VenueName_DEFAULT
 	}
-	return *p.VenueName
+	return p.VenueName
 }
 
-var MemberContractInfo_MemberProductId_DEFAULT int64
+var MemberContractInfo_MemberProductId_DEFAULT int64 = 0
 
 func (p *MemberContractInfo) GetMemberProductId() (v int64) {
 	if !p.IsSetMemberProductId() {
 		return MemberContractInfo_MemberProductId_DEFAULT
 	}
-	return *p.MemberProductId
+	return p.MemberProductId
 }
 
-var MemberContractInfo_MemberProductName_DEFAULT string
+var MemberContractInfo_MemberProductName_DEFAULT string = ""
 
 func (p *MemberContractInfo) GetMemberProductName() (v string) {
 	if !p.IsSetMemberProductName() {
 		return MemberContractInfo_MemberProductName_DEFAULT
 	}
-	return *p.MemberProductName
+	return p.MemberProductName
 }
 
-var MemberContractInfo_ContractId_DEFAULT int64
+var MemberContractInfo_ContractId_DEFAULT int64 = 0
 
 func (p *MemberContractInfo) GetContractId() (v int64) {
 	if !p.IsSetContractId() {
 		return MemberContractInfo_ContractId_DEFAULT
 	}
-	return *p.ContractId
+	return p.ContractId
 }
 
-var MemberContractInfo_Sign_DEFAULT string
+var MemberContractInfo_Sign_DEFAULT string = ""
 
 func (p *MemberContractInfo) GetSign() (v string) {
 	if !p.IsSetSign() {
 		return MemberContractInfo_Sign_DEFAULT
 	}
-	return *p.Sign
+	return p.Sign
 }
 
-var MemberContractInfo_SignImg_DEFAULT string
+var MemberContractInfo_SignImg_DEFAULT string = ""
 
 func (p *MemberContractInfo) GetSignImg() (v string) {
 	if !p.IsSetSignImg() {
 		return MemberContractInfo_SignImg_DEFAULT
 	}
-	return *p.SignImg
+	return p.SignImg
 }
 
-var MemberContractInfo_Content_DEFAULT string
+var MemberContractInfo_Content_DEFAULT string = ""
 
 func (p *MemberContractInfo) GetContent() (v string) {
 	if !p.IsSetContent() {
 		return MemberContractInfo_Content_DEFAULT
 	}
-	return *p.Content
+	return p.Content
+}
+
+var MemberContractInfo_CreatedAt_DEFAULT string = ""
+
+func (p *MemberContractInfo) GetCreatedAt() (v string) {
+	if !p.IsSetCreatedAt() {
+		return MemberContractInfo_CreatedAt_DEFAULT
+	}
+	return p.CreatedAt
+}
+
+var MemberContractInfo_UpdatedAt_DEFAULT string = ""
+
+func (p *MemberContractInfo) GetUpdatedAt() (v string) {
+	if !p.IsSetUpdatedAt() {
+		return MemberContractInfo_UpdatedAt_DEFAULT
+	}
+	return p.UpdatedAt
 }
 
 var fieldIDToName_MemberContractInfo = map[int16]string{
@@ -5355,50 +5403,60 @@ var fieldIDToName_MemberContractInfo = map[int16]string{
 	10: "sign",
 	11: "signImg",
 	12: "content",
+	13: "createdAt",
+	14: "updatedAt",
 }
 
 func (p *MemberContractInfo) IsSetName() bool {
-	return p.Name != nil
+	return p.Name != MemberContractInfo_Name_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetMemberId() bool {
-	return p.MemberId != nil
+	return p.MemberId != MemberContractInfo_MemberId_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetMemberName() bool {
-	return p.MemberName != nil
+	return p.MemberName != MemberContractInfo_MemberName_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetVenueId() bool {
-	return p.VenueId != nil
+	return p.VenueId != MemberContractInfo_VenueId_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetVenueName() bool {
-	return p.VenueName != nil
+	return p.VenueName != MemberContractInfo_VenueName_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetMemberProductId() bool {
-	return p.MemberProductId != nil
+	return p.MemberProductId != MemberContractInfo_MemberProductId_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetMemberProductName() bool {
-	return p.MemberProductName != nil
+	return p.MemberProductName != MemberContractInfo_MemberProductName_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetContractId() bool {
-	return p.ContractId != nil
+	return p.ContractId != MemberContractInfo_ContractId_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetSign() bool {
-	return p.Sign != nil
+	return p.Sign != MemberContractInfo_Sign_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetSignImg() bool {
-	return p.SignImg != nil
+	return p.SignImg != MemberContractInfo_SignImg_DEFAULT
 }
 
 func (p *MemberContractInfo) IsSetContent() bool {
-	return p.Content != nil
+	return p.Content != MemberContractInfo_Content_DEFAULT
+}
+
+func (p *MemberContractInfo) IsSetCreatedAt() bool {
+	return p.CreatedAt != MemberContractInfo_CreatedAt_DEFAULT
+}
+
+func (p *MemberContractInfo) IsSetUpdatedAt() bool {
+	return p.UpdatedAt != MemberContractInfo_UpdatedAt_DEFAULT
 }
 
 func (p *MemberContractInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -5508,6 +5566,22 @@ func (p *MemberContractInfo) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
+		case 13:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField13(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 14:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField14(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -5539,123 +5613,145 @@ ReadStructEndError:
 
 func (p *MemberContractInfo) ReadField1(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Name = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField2(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.MemberId = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField3(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.MemberName = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField4(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.VenueId = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField5(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.VenueName = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField6(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.MemberProductId = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField7(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.MemberProductName = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField8(iprot thrift.TProtocol) error {
 
-	var _field *int64
+	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.ContractId = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField10(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Sign = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField11(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.SignImg = _field
 	return nil
 }
 func (p *MemberContractInfo) ReadField12(iprot thrift.TProtocol) error {
 
-	var _field *string
+	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		_field = &v
+		_field = v
 	}
 	p.Content = _field
+	return nil
+}
+func (p *MemberContractInfo) ReadField13(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CreatedAt = _field
+	return nil
+}
+func (p *MemberContractInfo) ReadField14(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.UpdatedAt = _field
 	return nil
 }
 
@@ -5710,6 +5806,14 @@ func (p *MemberContractInfo) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 12
 			goto WriteFieldError
 		}
+		if err = p.writeField13(oprot); err != nil {
+			fieldId = 13
+			goto WriteFieldError
+		}
+		if err = p.writeField14(oprot); err != nil {
+			fieldId = 14
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -5733,7 +5837,7 @@ func (p *MemberContractInfo) writeField1(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("name", thrift.STRING, 1); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Name); err != nil {
+		if err := oprot.WriteString(p.Name); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5752,7 +5856,7 @@ func (p *MemberContractInfo) writeField2(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("memberId", thrift.I64, 2); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.MemberId); err != nil {
+		if err := oprot.WriteI64(p.MemberId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5771,7 +5875,7 @@ func (p *MemberContractInfo) writeField3(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("memberName", thrift.STRING, 3); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.MemberName); err != nil {
+		if err := oprot.WriteString(p.MemberName); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5790,7 +5894,7 @@ func (p *MemberContractInfo) writeField4(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 4); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.VenueId); err != nil {
+		if err := oprot.WriteI64(p.VenueId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5809,7 +5913,7 @@ func (p *MemberContractInfo) writeField5(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("venueName", thrift.STRING, 5); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.VenueName); err != nil {
+		if err := oprot.WriteString(p.VenueName); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5828,7 +5932,7 @@ func (p *MemberContractInfo) writeField6(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("memberProductId", thrift.I64, 6); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.MemberProductId); err != nil {
+		if err := oprot.WriteI64(p.MemberProductId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5847,7 +5951,7 @@ func (p *MemberContractInfo) writeField7(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("memberProductName", thrift.STRING, 7); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.MemberProductName); err != nil {
+		if err := oprot.WriteString(p.MemberProductName); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5866,7 +5970,7 @@ func (p *MemberContractInfo) writeField8(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("contractId", thrift.I64, 8); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.ContractId); err != nil {
+		if err := oprot.WriteI64(p.ContractId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5885,7 +5989,7 @@ func (p *MemberContractInfo) writeField10(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("sign", thrift.STRING, 10); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Sign); err != nil {
+		if err := oprot.WriteString(p.Sign); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5904,7 +6008,7 @@ func (p *MemberContractInfo) writeField11(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("signImg", thrift.STRING, 11); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.SignImg); err != nil {
+		if err := oprot.WriteString(p.SignImg); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5923,7 +6027,7 @@ func (p *MemberContractInfo) writeField12(oprot thrift.TProtocol) (err error) {
 		if err = oprot.WriteFieldBegin("content", thrift.STRING, 12); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteString(*p.Content); err != nil {
+		if err := oprot.WriteString(p.Content); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -5935,6 +6039,44 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 12 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 12 end error: ", p), err)
+}
+
+func (p *MemberContractInfo) writeField13(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCreatedAt() {
+		if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 13); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.CreatedAt); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 13 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 13 end error: ", p), err)
+}
+
+func (p *MemberContractInfo) writeField14(oprot thrift.TProtocol) (err error) {
+	if p.IsSetUpdatedAt() {
+		if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 14); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.UpdatedAt); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 14 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 14 end error: ", p), err)
 }
 
 func (p *MemberContractInfo) String() string {

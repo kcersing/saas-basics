@@ -415,26 +415,6 @@ func MemberProductIDNotIn(vs ...int64) predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldNotIn(FieldMemberProductID, vs...))
 }
 
-// MemberProductIDGT applies the GT predicate on the "member_product_id" field.
-func MemberProductIDGT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGT(FieldMemberProductID, v))
-}
-
-// MemberProductIDGTE applies the GTE predicate on the "member_product_id" field.
-func MemberProductIDGTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldGTE(FieldMemberProductID, v))
-}
-
-// MemberProductIDLT applies the LT predicate on the "member_product_id" field.
-func MemberProductIDLT(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLT(FieldMemberProductID, v))
-}
-
-// MemberProductIDLTE applies the LTE predicate on the "member_product_id" field.
-func MemberProductIDLTE(v int64) predicate.EntryLogs {
-	return predicate.EntryLogs(sql.FieldLTE(FieldMemberProductID, v))
-}
-
 // MemberProductIDIsNil applies the IsNil predicate on the "member_product_id" field.
 func MemberProductIDIsNil() predicate.EntryLogs {
 	return predicate.EntryLogs(sql.FieldIsNull(FieldMemberProductID))
@@ -606,6 +586,29 @@ func HasUsers() predicate.EntryLogs {
 func HasUsersWith(preds ...predicate.User) predicate.EntryLogs {
 	return predicate.EntryLogs(func(s *sql.Selector) {
 		step := newUsersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMemberProducts applies the HasEdge predicate on the "member_products" edge.
+func HasMemberProducts() predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, MemberProductsTable, MemberProductsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemberProductsWith applies the HasEdge predicate on the "member_products" edge with a given conditions (other predicates).
+func HasMemberProductsWith(preds ...predicate.MemberProduct) predicate.EntryLogs {
+	return predicate.EntryLogs(func(s *sql.Selector) {
+		step := newMemberProductsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
