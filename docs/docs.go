@@ -5764,6 +5764,13 @@ const docTemplate = `{
                 "coachId": {
                     "type": "integer"
                 },
+                "endTime": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "*课程名称",
+                    "type": "string"
+                },
                 "page": {
                     "type": "integer"
                 },
@@ -5773,8 +5780,22 @@ const docTemplate = `{
                 "scheduleId": {
                     "type": "integer"
                 },
+                "startTime": {
+                    "description": "*上课时间",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "*状态",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "type": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },
@@ -5821,7 +5842,10 @@ const docTemplate = `{
                 },
                 "status": {
                     "description": "*状态",
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "subType": {
                     "description": "*产品次类型",
@@ -5839,8 +5863,15 @@ const docTemplate = `{
         "schedule.ScheduleMemberListReq": {
             "type": "object",
             "properties": {
+                "endTime": {
+                    "type": "string"
+                },
                 "memberId": {
                     "type": "integer"
+                },
+                "name": {
+                    "description": "*课程名称",
+                    "type": "string"
                 },
                 "page": {
                     "type": "integer"
@@ -5851,8 +5882,22 @@ const docTemplate = `{
                 "scheduleId": {
                     "type": "integer"
                 },
+                "startTime": {
+                    "description": "*上课时间",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "*状态",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "type": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

@@ -79,16 +79,17 @@ func (s Schedule) UpdateScheduleUserTimePeriod(req schedule.UpdateUserTimePeriod
 func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*schedule.ScheduleCoachInfo, total int, err error) {
 	var predicates []predicate.ScheduleCoach
 
-	//if req.StartTime != "" {
-	//	startTime, _ := time.Parse(time.DateOnly, req.StartTime)
-	//	//大于
-	//	predicates = append(predicates, schedulemember.StartTimeGTE(startTime))
-	//	//小于
-	//	predicates = append(predicates, schedulemember.EndTimeLTE(startTime.Add(7*24*time.Hour)))
-	//}
-	if req.CoachId > 0 {
-		predicates = append(predicates, schedulecoach.CoachID(req.CoachId))
+	if req.StartTime != "" && req.EndTime != "" {
+		startTime, _ := time.Parse(time.DateOnly, req.StartTime)
+		endTime, _ := time.Parse(time.DateOnly, req.EndTime)
+
+		predicates = append(predicates, schedulecoach.DateGTE(startTime))
+		predicates = append(predicates, schedulecoach.DateLTE(endTime))
 	}
+	if len(req.Status) > 0 {
+		predicates = append(predicates, schedulecoach.StatusIn(req.Status...))
+	}
+
 	if req.ScheduleId > 0 {
 		predicates = append(predicates, schedulecoach.ScheduleID(req.ScheduleId))
 	}
@@ -96,6 +97,19 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 		predicates = append(predicates, schedulecoach.Type(req.Type))
 
 	}
+	if req.Name != "" {
+		predicates = append(predicates, schedulecoach.HasScheduleWith(schedule2.NameEQ(req.Name)))
+	}
+
+	if req.CoachId > 0 {
+		predicates = append(predicates, schedulecoach.CoachID(req.CoachId))
+	}
+
+	if req.VenueId == 0 {
+		return resp, total, errors.New("场馆ID不能为空")
+	}
+	predicates = append(predicates, schedulecoach.VenueIDEQ(req.VenueId))
+
 	predicates = append(predicates, schedulecoach.HasScheduleWith(schedule2.StatusNotIn(0, 5)))
 	lists, err := s.db.ScheduleCoach.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).

@@ -172,6 +172,14 @@ struct ScheduleMemberListReq {
     3:  optional i64 memberId = 0 (api.raw = "memberId")
     4:  optional i64 scheduleId = 0(api.raw = "scheduleId")
     5:  optional string type =""  (api.raw = "type")
+    6:  optional i64 venueId = 0 (api.raw = "venueId")
+    /**上课时间*/
+    11:  optional string startTime =""  (api.raw = "startTime")
+    12:  optional string endTime =""  (api.raw = "endTime")
+    /**课程名称*/
+    8:  optional string name =""  (api.raw = "name")
+    /**状态*/
+    7:  optional list<i64> status = 0 (api.raw = "status")
 }
 struct ScheduleCoachListReq{
     1:  optional i64 page = 1 (api.raw = "page")
@@ -179,6 +187,14 @@ struct ScheduleCoachListReq{
     3:  optional i64 coachId = 0 (api.raw = "coachId")
     4:  optional i64 scheduleId = 0(api.raw = "scheduleId")
     5:  optional string type=""  (api.raw = "type")
+    6:  optional i64 venueId = 0 (api.raw = "venueId")
+    /**上课时间*/
+    11:  optional string startTime =""  (api.raw = "startTime")
+    12:  optional string endTime =""  (api.raw = "endTime")
+    /**课程名称*/
+    8:  optional string name =""  (api.raw = "name")
+    /**状态*/
+    7:  optional list<i64> status = 0 (api.raw = "status")
 }
 
 //struct SearchSubscribeByMemberReq{

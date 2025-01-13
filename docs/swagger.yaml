@@ -1036,14 +1036,29 @@ definitions:
     properties:
       coachId:
         type: integer
+      endTime:
+        type: string
+      name:
+        description: '*课程名称'
+        type: string
       page:
         type: integer
       pageSize:
         type: integer
       scheduleId:
         type: integer
+      startTime:
+        description: '*上课时间'
+        type: string
+      status:
+        description: '*状态'
+        items:
+          type: integer
+        type: array
       type:
         type: string
+      venueId:
+        type: integer
     type: object
   schedule.ScheduleListReq:
     properties:
@@ -1076,7 +1091,9 @@ definitions:
         type: string
       status:
         description: '*状态'
-        type: integer
+        items:
+          type: integer
+        type: array
       subType:
         description: '*产品次类型'
         type: string
@@ -1088,16 +1105,31 @@ definitions:
     type: object
   schedule.ScheduleMemberListReq:
     properties:
+      endTime:
+        type: string
       memberId:
         type: integer
+      name:
+        description: '*课程名称'
+        type: string
       page:
         type: integer
       pageSize:
         type: integer
       scheduleId:
         type: integer
+      startTime:
+        description: '*上课时间'
+        type: string
+      status:
+        description: '*状态'
+        items:
+          type: integer
+        type: array
       type:
         type: string
+      venueId:
+        type: integer
     type: object
   schedule.UpdateUserTimePeriodReq:
     properties:

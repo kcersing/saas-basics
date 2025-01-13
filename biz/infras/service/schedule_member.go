@@ -7,18 +7,22 @@ import (
 	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
 	"saas/idl_gen/model/schedule"
+	"time"
 )
 
 func (s Schedule) ScheduleMemberList(req schedule.ScheduleMemberListReq) (resp []*schedule.ScheduleMemberInfo, total int, err error) {
 	var predicates []predicate.ScheduleMember
 
-	//if req.StartTime != "" {
-	//	startTime, _ := time.Parse(time.DateOnly, req.StartTime)
-	//	//大于
-	//	predicates = append(predicates, schedulemember.StartTimeGTE(startTime))
-	//	//小于
-	//	predicates = append(predicates, schedulemember.EndTimeLTE(startTime.Add(7*24*time.Hour)))
-	//}
+	if req.StartTime != "" && req.EndTime != "" {
+		startTime, _ := time.Parse(time.DateOnly, req.StartTime)
+		endTime, _ := time.Parse(time.DateOnly, req.EndTime)
+
+		predicates = append(predicates, schedulemember.DateGTE(startTime))
+		predicates = append(predicates, schedulemember.DateLTE(endTime))
+	}
+	if len(req.Status) > 0 {
+		predicates = append(predicates, schedulemember.StatusIn(req.Status...))
+	}
 	if req.MemberId > 0 {
 		predicates = append(predicates, schedulemember.MemberID(req.MemberId))
 	}
@@ -29,6 +33,13 @@ func (s Schedule) ScheduleMemberList(req schedule.ScheduleMemberListReq) (resp [
 		predicates = append(predicates, schedulemember.Type(req.Type))
 
 	}
+	if req.Name != "" {
+		predicates = append(predicates, schedulemember.HasScheduleWith(schedule2.NameEQ(req.Name)))
+	}
+	if req.VenueId == 0 {
+		return resp, total, errors.New("场馆ID不能为空")
+	}
+	predicates = append(predicates, schedulemember.VenueIDEQ(req.VenueId))
 
 	predicates = append(predicates, schedulemember.HasScheduleWith(schedule2.StatusNotIn(0, 5)))
 
