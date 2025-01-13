@@ -10,8 +10,6 @@ func ReturnMemberProductStatusValues(key int64) (values string) {
 		values = "过期"
 	case 4:
 		values = "退费"
-	//case 5:
-	//	values = "订单已完成"
 	default:
 		values = "状态异常"
 	}

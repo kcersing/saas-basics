@@ -5847,10 +5847,6 @@ const docTemplate = `{
                         "type": "integer"
                     }
                 },
-                "subType": {
-                    "description": "*产品次类型",
-                    "type": "string"
-                },
                 "type": {
                     "description": "*产品类型",
                     "type": "string"

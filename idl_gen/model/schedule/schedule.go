@@ -5040,8 +5040,6 @@ type ScheduleListReq struct {
 	Name string `thrift:"name,8,optional" form:"name" json:"name" query:"name"`
 	/**产品类型*/
 	Type string `thrift:"type,9,optional" form:"type" json:"type" query:"type"`
-	/**产品次类型*/
-	SubType string `thrift:"subType,10,optional" form:"subType" json:"subType" query:"subType"`
 	/**上课时间*/
 	StartTime string `thrift:"startTime,11,optional" form:"startTime" json:"startTime" query:"startTime"`
 	EndTime   string `thrift:"endTime,12,optional" form:"endTime" json:"endTime" query:"endTime"`
@@ -5062,7 +5060,6 @@ func NewScheduleListReq() *ScheduleListReq {
 		Status:       []int64{},
 		Name:         "",
 		Type:         "",
-		SubType:      "",
 		StartTime:    "",
 		EndTime:      "",
 		MemberName:   "",
@@ -5079,7 +5076,6 @@ func (p *ScheduleListReq) InitDefault() {
 	p.Status = []int64{}
 	p.Name = ""
 	p.Type = ""
-	p.SubType = ""
 	p.StartTime = ""
 	p.EndTime = ""
 	p.MemberName = ""
@@ -5158,15 +5154,6 @@ func (p *ScheduleListReq) GetType() (v string) {
 	return p.Type
 }
 
-var ScheduleListReq_SubType_DEFAULT string = ""
-
-func (p *ScheduleListReq) GetSubType() (v string) {
-	if !p.IsSetSubType() {
-		return ScheduleListReq_SubType_DEFAULT
-	}
-	return p.SubType
-}
-
 var ScheduleListReq_StartTime_DEFAULT string = ""
 
 func (p *ScheduleListReq) GetStartTime() (v string) {
@@ -5212,7 +5199,6 @@ var fieldIDToName_ScheduleListReq = map[int16]string{
 	7:  "status",
 	8:  "name",
 	9:  "type",
-	10: "subType",
 	11: "startTime",
 	12: "endTime",
 	13: "memberName",
@@ -5249,10 +5235,6 @@ func (p *ScheduleListReq) IsSetName() bool {
 
 func (p *ScheduleListReq) IsSetType() bool {
 	return p.Type != ScheduleListReq_Type_DEFAULT
-}
-
-func (p *ScheduleListReq) IsSetSubType() bool {
-	return p.SubType != ScheduleListReq_SubType_DEFAULT
 }
 
 func (p *ScheduleListReq) IsSetStartTime() bool {
@@ -5349,14 +5331,6 @@ func (p *ScheduleListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 9:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField9(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 10:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField10(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -5547,17 +5521,6 @@ func (p *ScheduleListReq) ReadField9(iprot thrift.TProtocol) error {
 	p.Type = _field
 	return nil
 }
-func (p *ScheduleListReq) ReadField10(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.SubType = _field
-	return nil
-}
 func (p *ScheduleListReq) ReadField11(iprot thrift.TProtocol) error {
 
 	var _field string
@@ -5640,10 +5603,6 @@ func (p *ScheduleListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField9(oprot); err != nil {
 			fieldId = 9
-			goto WriteFieldError
-		}
-		if err = p.writeField10(oprot); err != nil {
-			fieldId = 10
 			goto WriteFieldError
 		}
 		if err = p.writeField11(oprot); err != nil {
@@ -5854,25 +5813,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
-}
-
-func (p *ScheduleListReq) writeField10(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSubType() {
-		if err = oprot.WriteFieldBegin("subType", thrift.STRING, 10); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(p.SubType); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 10 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
 }
 
 func (p *ScheduleListReq) writeField11(oprot thrift.TProtocol) (err error) {

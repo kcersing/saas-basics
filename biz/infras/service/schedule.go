@@ -67,9 +67,6 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (re
 	if req.Type != "" {
 		predicates = append(predicates, schedule2.TypeEQ(req.Type))
 	}
-	//if req.SubType != "" {
-	//	predicates = append(predicates, schedule2.SubTypeEQ(req.SubType))
-	//}
 
 	if len(req.Status) > 0 {
 		predicates = append(predicates, schedule2.StatusIn(req.Status...))

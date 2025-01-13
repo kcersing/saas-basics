@@ -154,8 +154,6 @@ struct ScheduleListReq {
     8:  optional string name =""  (api.raw = "name")
     /**产品类型*/
     9:  optional string type =""  (api.raw = "type")
-    /**产品次类型*/
-    10:  optional string subType =""  (api.raw = "subType")
     /**上课时间*/
     11:  optional string startTime =""  (api.raw = "startTime")
     12:  optional string endTime =""  (api.raw = "endTime")
