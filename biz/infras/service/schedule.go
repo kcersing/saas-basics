@@ -112,6 +112,7 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (re
 
 	lists, err := s.db.Schedule.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(schedule2.FieldID)).
 		Limit(int(req.PageSize)).All(s.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Schedule list failed")
@@ -126,12 +127,14 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (re
 				Page:       1,
 				PageSize:   999,
 				ScheduleId: sc.ID,
+				VenueId:    sc.VenueId,
 			})
 
 			list, _, _ := s.ScheduleMemberList(schedule.ScheduleMemberListReq{
 				Page:       1,
 				PageSize:   999,
 				ScheduleId: sc.ID,
+				VenueId:    sc.VenueId,
 			})
 
 			sc.CoachCourseRecord = coachList
