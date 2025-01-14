@@ -1069,6 +1069,11 @@ definitions:
         type: array
       endTime:
         type: string
+      memberId:
+        description: '*会员ID'
+        items:
+          type: integer
+        type: array
       memberMobile:
         description: '*会员手机号'
         type: string
@@ -1093,6 +1098,11 @@ definitions:
         description: '*状态'
         items:
           type: integer
+        type: array
+      subType:
+        description: '*产品类型'
+        items:
+          type: string
         type: array
       type:
         description: '*产品类型'
@@ -1510,21 +1520,6 @@ definitions:
 info:
   contact: {}
 paths:
-  /api/pub/upload/:
-    post:
-      description: 上传文件 Description
-      parameters:
-      - description: files
-        in: query
-        name: string
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 上传文件 Summary
   /ping:
     get:
       description: ping Description
@@ -3347,6 +3342,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新产品 Summary
+  /service/pub/upload/:
+    post:
+      responses: {}
   /service/role:
     get:
       description: 获取角色信息 Description

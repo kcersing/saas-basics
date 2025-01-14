@@ -6,9 +6,8 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"saas/biz/dal/minio"
-
 	"path"
+	"saas/biz/dal/minio"
 	"saas/config"
 	"saas/pkg/errno"
 	"saas/pkg/utils"
@@ -23,6 +22,9 @@ import (
 //	@Param			string	query		string	true	"files"
 //	@Success		200		{object}	utils.Response
 //	@router			/api/pub/upload/ [POST]
+
+// Upload .
+// @router /service/pub/upload/ [POST]
 func Upload(ctx context.Context, c *app.RequestContext) {
 	file, err := c.FormFile("files")
 	if err != nil {

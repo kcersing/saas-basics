@@ -18,9 +18,9 @@ func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
 	{
-		_api := root.Group("/api", _apiMw()...)
+		_service := root.Group("/service", _serviceMw()...)
 		{
-			_pub := _api.Group("/pub", _pubMw()...)
+			_pub := _service.Group("/pub", _pubMw()...)
 			{
 				_upload := _pub.Group("/upload", _uploadMw()...)
 				_upload.POST("/", append(_upload0Mw(), pub.Upload)...)

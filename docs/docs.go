@@ -15,29 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/pub/upload/": {
-            "post": {
-                "description": "上传文件 Description",
-                "summary": "上传文件 Summary",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "files",
-                        "name": "string",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/ping": {
             "get": {
                 "description": "ping Description",
@@ -2885,6 +2862,11 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/service/pub/upload/": {
+            "post": {
+                "responses": {}
             }
         },
         "/service/role": {
@@ -5812,6 +5794,13 @@ const docTemplate = `{
                 "endTime": {
                     "type": "string"
                 },
+                "memberId": {
+                    "description": "*会员ID",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "memberMobile": {
                     "description": "*会员手机号",
                     "type": "string"
@@ -5845,6 +5834,13 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "type": "integer"
+                    }
+                },
+                "subType": {
+                    "description": "*产品类型",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
                 },
                 "type": {

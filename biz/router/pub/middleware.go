@@ -30,3 +30,8 @@ func _upload0Mw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _serviceMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
