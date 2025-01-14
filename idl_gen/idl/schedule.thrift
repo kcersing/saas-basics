@@ -159,10 +159,10 @@ struct ScheduleListReq {
     12:  optional string endTime =""  (api.raw = "endTime")
     /**会员名称*/
     13:  optional string memberName =""  (api.raw = "memberName")
-   /**会员手机号*/
-   14:  optional string memberMobile =""  (api.raw = "memberMobile")
-
-
+    /**会员手机号*/
+    14:  optional string memberMobile =""  (api.raw = "memberMobile")
+    /**会员ID*/
+    15:  optional list<i64> memberId = 0  (api.raw = "memberId")
 }
 struct ScheduleMemberListReq {
     1:  optional i64 page = 1 (api.raw = "page")
