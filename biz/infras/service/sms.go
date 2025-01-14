@@ -80,6 +80,7 @@ func (s Sms) SendList(req sms.SmsSendListReq) (resp []*sms.SmsSend, total int, e
 	predicates = append(predicates, venuesmslog.VenueID(req.VenueId))
 	all, err := s.db.VenueSmsLog.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(venuesmslog.FieldID)).
 		Limit(int(req.PageSize)).All(s.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Venue Sms log list failed")

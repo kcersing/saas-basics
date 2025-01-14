@@ -126,6 +126,7 @@ func (d Dictionary) List(req *dictionary.DictListReq) (list []*dictionary.Dictio
 	predicates = append(predicates, dictionary2.Delete(0))
 	dictionaries, err := d.db.Dictionary.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(dictionary2.FieldID)).
 		Limit(int(req.PageSize)).All(d.ctx)
 	if err != nil {
 		return nil, 0, errors.Wrap(err, "query Dictionary list failed")

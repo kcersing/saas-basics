@@ -100,6 +100,7 @@ func (c Contract) List(req *contract.ContractListReq) (list []*contract.Contract
 	predicates = append(predicates, contract2.Delete(0))
 	all, err := c.db.Contract.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(contract2.FieldID)).
 		Limit(int(req.PageSize)).All(c.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Contract list failed")

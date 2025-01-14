@@ -149,6 +149,7 @@ func (v Venue) List(req *venue.VenueListReq) (list []*venue.VenueInfo, total int
 	predicates = append(predicates, venue2.Delete(0))
 	venueList, err := v.db.Venue.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(venue2.FieldID)).
 		Limit(int(req.PageSize)).All(v.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Venue list failed")

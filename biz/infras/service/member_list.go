@@ -31,6 +31,7 @@ func (m Member) ContractList(req member.MemberContractListReq) (resp []*member.M
 	predicates = append(predicates, membercontract.Delete(0))
 	lists, err := m.db.MemberContract.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(membercontract.FieldID)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Member Contract list failed")
@@ -96,8 +97,8 @@ func (m Member) MemberFullList(req member.MemberListReq) (resp []*member.MemberI
 	predicates = append(predicates, member2.Delete(0))
 	predicates = append(predicates, member2.HasMemberProfileWith(memberprofile.Condition(2)))
 	lists, err := m.db.Member.Query().Where(predicates...).
-		Order(ent.Desc(member2.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(member2.FieldID)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Member list failed")
@@ -206,8 +207,8 @@ func (m Member) MemberPotentialList(req member.MemberListReq) (resp []*member.Me
 	predicates = append(predicates, member2.Delete(0))
 	predicates = append(predicates, member2.HasMemberProfileWith(memberprofile.Condition(1)))
 	lists, err := m.db.Member.Query().Where(predicates...).
-		Order(ent.Desc(member2.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(member2.FieldID)).
 		Limit(int(req.PageSize)).All(m.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Member list failed")

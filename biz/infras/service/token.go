@@ -124,6 +124,7 @@ func (t Token) List(req *token.TokenListReq) (res []*token.TokenInfo, total int,
 		WithToken(func(q *ent.TokenQuery) {
 			// get token all fields default, or use q.Select() to get some fields
 		}).Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(entuser.FieldID)).
 		Limit(int(req.PageSize)).All(t.ctx)
 	if err != nil {
 		return res, total, errors.Wrap(err, "get User - Token list failed")

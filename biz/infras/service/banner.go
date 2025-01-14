@@ -68,8 +68,8 @@ func (b Banner) List(req *banner.BannerListReq) (resp []*banner.BannerInfo, tota
 	predicates = append(predicates, banner2.Delete(0))
 
 	lists, err := b.db.Banner.Query().Where(predicates...).
-		Order(ent.Desc(contestparticipant.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(contestparticipant.FieldID)).
 		Limit(int(req.PageSize)).All(b.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get contest participant list failed")

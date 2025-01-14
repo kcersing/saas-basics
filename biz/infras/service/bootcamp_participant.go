@@ -167,8 +167,8 @@ func (b Bootcamp) ParticipantList(req bootcamp.ParticipantListReq) (resp []*boot
 	predicates = append(predicates, bootcampparticipant.BootcampID(req.BootcampId))
 	predicates = append(predicates, bootcampparticipant.Delete(0))
 	lists, err := b.db.BootcampParticipant.Query().Where(predicates...).
-		Order(ent.Desc(bootcampparticipant.FieldID)).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(bootcampparticipant.FieldID)).
 		Limit(int(req.PageSize)).All(b.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get bootcamp participant list failed")

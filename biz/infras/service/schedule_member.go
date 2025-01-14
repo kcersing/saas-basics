@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/pkg/errors"
+	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/predicate"
 	schedule2 "saas/biz/dal/db/ent/schedule"
@@ -45,6 +46,7 @@ func (s Schedule) ScheduleMemberList(req schedule.ScheduleMemberListReq) (resp [
 
 	lists, err := s.db.ScheduleMember.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(schedulemember.FieldID)).
 		Limit(int(req.PageSize)).All(s.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Schedule member list failed")

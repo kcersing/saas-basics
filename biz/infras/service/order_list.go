@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/xuri/excelize/v2"
+	"saas/biz/dal/db/ent"
 	"saas/biz/dal/db/ent/member"
 	order2 "saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderitem"
@@ -60,6 +61,7 @@ func (o Order) List(req *order.ListOrderReq) (resp []*order.OrderInfo, total int
 
 	lists, err := o.db.Order.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(order2.FieldID)).
 		Limit(int(req.PageSize)).All(o.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Order list failed")

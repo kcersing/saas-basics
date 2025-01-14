@@ -240,6 +240,7 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 	predicates = append(predicates, user2.Delete(0))
 	users, err := u.db.User.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(user2.FieldID)).
 		Limit(int(req.PageSize)).All(u.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get user list failed")

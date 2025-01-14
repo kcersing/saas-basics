@@ -127,6 +127,7 @@ func (a Api) List(req menu.ApiPageReq) (resp []*menu.ApiInfo, total int64, err e
 	predicates = append(predicates, api.Delete(0))
 	apis, err := a.db.API.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(api.FieldID)).
 		Limit(int(req.PageSize)).All(a.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get api list failed")

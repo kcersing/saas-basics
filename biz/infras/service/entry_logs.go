@@ -65,6 +65,7 @@ func (e EntryLogs) List(req *entry.EntryListReq) (list []*entry.EntryInfo, total
 	predicates = append(predicates, entrylogs.Delete(0))
 	lists, err := e.db.EntryLogs.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(entrylogs.FieldID)).
 		Limit(int(req.PageSize)).All(e.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Entry list failed")

@@ -82,6 +82,7 @@ func (v Venue) PlaceList(req *venue.VenuePlaceListReq) (list []*venue.VenuePlace
 	predicates = append(predicates, venueplace.Delete(0))
 	l, err := v.db.VenuePlace.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
+		Order(ent.Desc(venueplace.FieldID)).
 		Limit(int(req.PageSize)).All(v.ctx)
 	if err != nil {
 		err = errors.Wrap(err, "get Venue Place list failed")
