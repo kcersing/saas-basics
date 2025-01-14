@@ -68,8 +68,17 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (re
 	if len(req.ProductId) > 0 {
 		predicates = append(predicates, schedule2.ProductIDIn(req.ProductId...))
 	}
+
 	if req.Type != "" {
-		predicates = append(predicates, schedule2.TypeEQ(req.Type))
+		if req.Type == enums.Lessons {
+			predicates = append(predicates, schedule2.TypeEQ(req.Type))
+		}
+		if req.Type == enums.Course {
+			predicates = append(predicates, schedule2.TypeIn(enums.CourseOne, enums.CourseMore))
+		}
+	}
+	if len(req.SubType) > 0 {
+		predicates = append(predicates, schedule2.TypeIn(req.SubType...))
 	}
 
 	if len(req.Status) > 0 {

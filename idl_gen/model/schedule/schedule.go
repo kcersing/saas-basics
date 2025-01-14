@@ -5049,6 +5049,8 @@ type ScheduleListReq struct {
 	MemberMobile string `thrift:"memberMobile,14,optional" form:"memberMobile" json:"memberMobile" query:"memberMobile"`
 	/**会员ID*/
 	MemberId []int64 `thrift:"memberId,15,optional" form:"memberId" json:"memberId" query:"memberId"`
+	/**产品类型*/
+	SubType []string `thrift:"subType,16,optional" form:"subType" json:"subType" query:"subType"`
 }
 
 func NewScheduleListReq() *ScheduleListReq {
@@ -5067,6 +5069,7 @@ func NewScheduleListReq() *ScheduleListReq {
 		MemberName:   "",
 		MemberMobile: "",
 		MemberId:     []int64{},
+		SubType:      []string{},
 	}
 }
 
@@ -5084,6 +5087,7 @@ func (p *ScheduleListReq) InitDefault() {
 	p.MemberName = ""
 	p.MemberMobile = ""
 	p.MemberId = []int64{}
+	p.SubType = []string{}
 }
 
 var ScheduleListReq_Page_DEFAULT int64 = 1
@@ -5203,6 +5207,15 @@ func (p *ScheduleListReq) GetMemberId() (v []int64) {
 	return p.MemberId
 }
 
+var ScheduleListReq_SubType_DEFAULT []string = []string{}
+
+func (p *ScheduleListReq) GetSubType() (v []string) {
+	if !p.IsSetSubType() {
+		return ScheduleListReq_SubType_DEFAULT
+	}
+	return p.SubType
+}
+
 var fieldIDToName_ScheduleListReq = map[int16]string{
 	1:  "page",
 	2:  "pageSize",
@@ -5217,6 +5230,7 @@ var fieldIDToName_ScheduleListReq = map[int16]string{
 	13: "memberName",
 	14: "memberMobile",
 	15: "memberId",
+	16: "subType",
 }
 
 func (p *ScheduleListReq) IsSetPage() bool {
@@ -5269,6 +5283,10 @@ func (p *ScheduleListReq) IsSetMemberMobile() bool {
 
 func (p *ScheduleListReq) IsSetMemberId() bool {
 	return p.MemberId != nil
+}
+
+func (p *ScheduleListReq) IsSetSubType() bool {
+	return p.SubType != nil
 }
 
 func (p *ScheduleListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -5389,6 +5407,14 @@ func (p *ScheduleListReq) Read(iprot thrift.TProtocol) (err error) {
 		case 15:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField15(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 16:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField16(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -5614,6 +5640,29 @@ func (p *ScheduleListReq) ReadField15(iprot thrift.TProtocol) error {
 	p.MemberId = _field
 	return nil
 }
+func (p *ScheduleListReq) ReadField16(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	_field := make([]string, 0, size)
+	for i := 0; i < size; i++ {
+
+		var _elem string
+		if v, err := iprot.ReadString(); err != nil {
+			return err
+		} else {
+			_elem = v
+		}
+
+		_field = append(_field, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	p.SubType = _field
+	return nil
+}
 
 func (p *ScheduleListReq) Write(oprot thrift.TProtocol) (err error) {
 
@@ -5672,6 +5721,10 @@ func (p *ScheduleListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField15(oprot); err != nil {
 			fieldId = 15
+			goto WriteFieldError
+		}
+		if err = p.writeField16(oprot); err != nil {
+			fieldId = 16
 			goto WriteFieldError
 		}
 	}
@@ -5969,6 +6022,33 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 15 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 15 end error: ", p), err)
+}
+
+func (p *ScheduleListReq) writeField16(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSubType() {
+		if err = oprot.WriteFieldBegin("subType", thrift.LIST, 16); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.STRING, len(p.SubType)); err != nil {
+			return err
+		}
+		for _, v := range p.SubType {
+			if err := oprot.WriteString(v); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 16 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 16 end error: ", p), err)
 }
 
 func (p *ScheduleListReq) String() string {

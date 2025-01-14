@@ -163,6 +163,9 @@ struct ScheduleListReq {
     14:  optional string memberMobile =""  (api.raw = "memberMobile")
     /**会员ID*/
     15:  optional list<i64> memberId = 0  (api.raw = "memberId")
+
+        /**产品类型*/
+    16:  optional  list<string> subType =""  (api.raw = "subType")
 }
 struct ScheduleMemberListReq {
     1:  optional i64 page = 1 (api.raw = "page")
@@ -271,6 +274,7 @@ service ScheduleService {
     base.NilResponse UpdateScheduleStatus(1: base.StatusCodeReq req) (api.post = "/service/schedule/status")
     /**课程列表*/
     base.NilResponse ScheduleList(1: ScheduleListReq req )(api.post = "/service/schedule/list")
+
     /**按时间-课程列表*/
     base.NilResponse ScheduleDateList(1: ScheduleListReq req )(api.post = "/service/schedule/date-list")
 
