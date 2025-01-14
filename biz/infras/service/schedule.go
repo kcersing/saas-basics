@@ -63,7 +63,7 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (re
 	}
 
 	if len(req.MemberId) > 0 {
-		predicates = append(predicates, schedule2.HasMembersWith(schedulemember.ScheduleIDIn(req.MemberId...)))
+		predicates = append(predicates, schedule2.HasMembersWith(schedulemember.MemberIDIn(req.MemberId...)))
 	}
 	if len(req.ProductId) > 0 {
 		predicates = append(predicates, schedule2.ProductIDIn(req.ProductId...))
