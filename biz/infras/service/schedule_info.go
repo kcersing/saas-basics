@@ -23,21 +23,21 @@ func (s Schedule) ScheduleInfo(ID int64) (resp *schedule.ScheduleInfo, err error
 	coachAll, _ := one.QueryCoachs().All(s.ctx)
 	if coachAll != nil {
 		for _, v := range coachAll {
-			resp.CoachCourseRecord = append(resp.CoachCourseRecord, s.entScheduleCoachInfo(v))
+			resp.CoachCourseRecord = append(resp.CoachCourseRecord, s.entScheduleCoachInfo(v, one))
 		}
 	}
 
 	memberAll, _ := one.QueryMembers().All(s.ctx)
 	if memberAll != nil {
 		for _, v := range memberAll {
-			resp.MemberCourseRecord = append(resp.MemberCourseRecord, s.entScheduleMemberInfo(v))
+			resp.MemberCourseRecord = append(resp.MemberCourseRecord, s.entScheduleMemberInfo(v, one))
 		}
 	}
 
 	return
 }
 
-func (s Schedule) entScheduleMemberInfo(req *ent.ScheduleMember) (info *schedule.ScheduleMemberInfo) {
+func (s Schedule) entScheduleMemberInfo(req *ent.ScheduleMember, sch *ent.Schedule) (info *schedule.ScheduleMemberInfo) {
 
 	info = &schedule.ScheduleMemberInfo{
 		ID:         req.ID,
@@ -66,13 +66,15 @@ func (s Schedule) entScheduleMemberInfo(req *ent.ScheduleMember) (info *schedule
 		info.Mobile = member.Mobile
 	}
 
-	f, _ := req.QuerySchedule().First(s.ctx)
-	if f != nil {
-		info.ScheduleName = f.Name
-		info.PlaceName = f.PlaceName
-		info.VenueName = f.VenueName
-		info.ProductId = f.ProductID
-		coach, _ := f.QueryCoachs().First(s.ctx)
+	if sch != nil {
+		sch, _ = req.QuerySchedule().First(s.ctx)
+	}
+	if sch != nil {
+		info.ScheduleName = sch.Name
+		info.PlaceName = sch.PlaceName
+		info.VenueName = sch.VenueName
+		info.ProductId = sch.ProductID
+		coach, _ := sch.QueryCoachs().First(s.ctx)
 		if coach != nil {
 			info.CoachId = coach.CoachID
 			info.CoachName = coach.CoachName
@@ -85,7 +87,7 @@ func (s Schedule) entScheduleMemberInfo(req *ent.ScheduleMember) (info *schedule
 	}
 	return
 }
-func (s Schedule) entScheduleCoachInfo(req *ent.ScheduleCoach) (info *schedule.ScheduleCoachInfo) {
+func (s Schedule) entScheduleCoachInfo(req *ent.ScheduleCoach, sch *ent.Schedule) (info *schedule.ScheduleCoachInfo) {
 
 	info = &schedule.ScheduleCoachInfo{
 		ID:      req.ID,
@@ -108,12 +110,15 @@ func (s Schedule) entScheduleCoachInfo(req *ent.ScheduleCoach) (info *schedule.S
 		CoachName: req.CoachName,
 		ProductId: req.ProductID,
 	}
-	f, _ := req.QuerySchedule().First(s.ctx)
-	if f != nil {
-		info.ScheduleName = f.Name
-		info.VenueName = f.VenueName
-		info.PlaceName = f.PlaceName
-		m, _ := f.QueryMembers().First(s.ctx)
+	if sch == nil {
+		sch, _ = req.QuerySchedule().First(s.ctx)
+	}
+
+	if sch != nil {
+		info.ScheduleName = sch.Name
+		info.VenueName = sch.VenueName
+		info.PlaceName = sch.PlaceName
+		m, _ := sch.QueryMembers().First(s.ctx)
 		if m != nil {
 			member, _ := s.db.Member.Query().Where(member2.ID(m.MemberID)).First(s.ctx)
 			info.MemberId = m.MemberID

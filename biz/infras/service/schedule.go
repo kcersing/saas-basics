@@ -123,22 +123,23 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (re
 		sc := s.entScheduleInfo(v)
 
 		if isSubList {
-			coachList, _, _ := s.ScheduleCoachList(schedule.ScheduleCoachListReq{
-				Page:       1,
-				PageSize:   999,
-				ScheduleId: sc.ID,
-				VenueId:    sc.VenueId,
-			})
+			coachListAll, _ := s.db.ScheduleCoach.Query().Where(schedulecoach.ScheduleID(sc.ID)).
+				Order(ent.Desc(schedulecoach.FieldID)).
+				All(s.ctx)
+			for _, nodeCoach := range coachListAll {
+				nodeCoachInfo := s.entScheduleCoachInfo(nodeCoach, v)
+				sc.CoachCourseRecord = append(sc.CoachCourseRecord, nodeCoachInfo)
+			}
 
-			list, _, _ := s.ScheduleMemberList(schedule.ScheduleMemberListReq{
-				Page:       1,
-				PageSize:   999,
-				ScheduleId: sc.ID,
-				VenueId:    sc.VenueId,
-			})
+			memberListAll, _ := s.db.ScheduleMember.Query().Where(schedulemember.ScheduleID(sc.ID)).
+				Order(ent.Desc(schedulecoach.FieldID)).
+				All(s.ctx)
 
-			sc.CoachCourseRecord = coachList
-			sc.MemberCourseRecord = list
+			for _, nodeMember := range memberListAll {
+				nodeMemberInfo := s.entScheduleMemberInfo(nodeMember, v)
+				sc.MemberCourseRecord = append(sc.MemberCourseRecord, nodeMemberInfo)
+			}
+
 		}
 
 		resp = append(resp, sc)

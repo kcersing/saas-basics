@@ -122,7 +122,7 @@ func (s Schedule) ScheduleCoachList(req schedule.ScheduleCoachListReq) (resp []*
 	}
 	for _, v := range lists {
 
-		k := s.entScheduleCoachInfo(v)
+		k := s.entScheduleCoachInfo(v, nil)
 
 		resp = append(resp, k)
 
@@ -189,7 +189,7 @@ func (s Schedule) ScheduleCoachPeriodList(req schedule.UserPeriodReq) (resp []*s
 
 		if len(lists) > 0 {
 			for _, d := range lists {
-				coach.ScheduleCoachList = append(coach.ScheduleCoachList, s.entScheduleCoachInfo(d))
+				coach.ScheduleCoachList = append(coach.ScheduleCoachList, s.entScheduleCoachInfo(d, nil))
 			}
 		}
 		resp = append(resp, coach)
@@ -210,7 +210,7 @@ func (s Schedule) ScheduleCoachInfo(ID int64) (roleInfo *schedule.ScheduleCoachI
 	if err != nil {
 		return nil, err
 	}
-	return s.entScheduleCoachInfo(first), nil
+	return s.entScheduleCoachInfo(first, nil), nil
 }
 func (s Schedule) UserTimePeriod(req schedule.UserPeriodReq) (resp *schedule.UserTimePeriodInfo, err error) {
 	if req.VenueId == 0 {

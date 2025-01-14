@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/pkg/errors"
 	"saas/biz/dal/db/ent"
-	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/predicate"
 	schedule2 "saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
@@ -53,18 +52,8 @@ func (s Schedule) ScheduleMemberList(req schedule.ScheduleMemberListReq) (resp [
 		return resp, total, err
 	}
 	for _, v := range lists {
-		k := s.entScheduleMemberInfo(v)
-		f, _ := v.QuerySchedule().First(s.ctx)
-		coach, _ := f.QueryCoachs().First(s.ctx)
-		mp, _ := s.db.MemberProduct.Query().Where(memberproduct.ID(v.MemberProductID)).First(s.ctx)
-		resp = append(resp, k)
-		k.ScheduleName = f.Name
-		k.PlaceName = f.PlaceName
-		k.VenueName = f.VenueName
-		k.MemberProductSn = mp.Sn
-		k.CoachId = coach.CoachID
-		k.CoachName = coach.CoachName
-		k.ProductId = f.ProductID
+		resp = append(resp, s.entScheduleMemberInfo(v, nil))
+
 	}
 
 	total, _ = s.db.ScheduleMember.Query().Where(predicates...).Count(s.ctx)
@@ -84,6 +73,6 @@ func (s Schedule) ScheduleMemberInfo(ID int64) (roleInfo *schedule.ScheduleMembe
 	if err != nil {
 		return nil, err
 	}
-	roleInfo = s.entScheduleMemberInfo(first)
+	roleInfo = s.entScheduleMemberInfo(first, nil)
 	return
 }
