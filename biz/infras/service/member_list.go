@@ -5,6 +5,11 @@ import (
 	"github.com/pkg/errors"
 	"github.com/xuri/excelize/v2"
 	"saas/biz/dal/db/ent"
+	bootcamp2 "saas/biz/dal/db/ent/bootcamp"
+	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/communityparticipant"
+	contest2 "saas/biz/dal/db/ent/contest"
+	"saas/biz/dal/db/ent/contestparticipant"
 	member2 "saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberprofile"
@@ -398,4 +403,75 @@ func (m Member) MemberPrivacy(ID int64) (info *member.MemberPrivacy, err error) 
 	//		info.FacePicUpdatedTime = faceFirst.FacePicUpdatedTime.Format(time.DateTime)
 	//	}
 	return
+}
+
+func (m Member) ContestList(req member.MemberContestListReq) (resp []*member.MemberContestInfo, total int, err error) {
+
+	all, err := m.db.Debug().ContestParticipant.Query().
+		WithContest(func(q *ent.ContestQuery) {
+			q.Select(contest2.FieldName, contest2.FieldSignStartAt, contest2.FieldSignEndAt)
+		}).
+		Where(contestparticipant.MemberIDEQ(req.MemberId)).
+		All(m.ctx)
+
+	if err != nil {
+		return nil, 0, err
+	}
+	for _, v := range all {
+		resp = append(resp, &member.MemberContestInfo{
+			Name:        v.Edges.Contest.Name,
+			Sn:          v.OrderSn,
+			CreatedAt:   v.CreatedAt.Format(time.DateTime),
+			Fee:         v.Fee,
+			Status:      v.Status,
+			SignStartAt: v.Edges.Contest.SignStartAt.Format(time.DateTime),
+			SignEndAt:   v.Edges.Contest.SignEndAt.Format(time.DateTime),
+		},
+		)
+	}
+
+	return resp, total, nil
+}
+
+func (m Member) BootcampList(req member.MemberBootcampListReq) (resp []*member.MemberBootcampInfo, total int, err error) {
+	all, err := m.db.Debug().BootcampParticipant.Query().
+		WithBootcamps(func(q *ent.BootcampQuery) {
+			q.Select(bootcamp2.FieldName, bootcamp2.FieldSignStartAt, bootcamp2.FieldSignEndAt)
+		}).
+		Where(bootcampparticipant.MemberIDEQ(req.MemberId)).
+		All(m.ctx)
+
+	if err != nil {
+		return nil, 0, err
+	}
+	for _, v := range all {
+
+		resp = append(resp, &member.MemberBootcampInfo{
+			Name: v.Edges.Bootcamps.Name,
+		},
+		)
+	}
+
+	return resp, total, nil
+}
+
+func (m Member) CommunityList(req member.MemberCommunityListReq) (resp []*member.MemberCommunityInfo, total int, err error) {
+	all, err := m.db.Debug().CommunityParticipant.Query().
+		WithCommunity(func(q *ent.CommunityQuery) {
+			q.Select(contest2.FieldName, contest2.FieldSignStartAt, contest2.FieldSignEndAt)
+		}).
+		Where(communityparticipant.MemberIDEQ(req.MemberId)).
+		All(m.ctx)
+
+	if err != nil {
+		return nil, 0, err
+	}
+	for _, v := range all {
+		resp = append(resp, &member.MemberCommunityInfo{
+			Name: v.Edges.Community.Name,
+		},
+		)
+	}
+
+	return resp, total, nil
 }

@@ -155,8 +155,41 @@ struct UpdateMemberFollowReq{
     2:  optional i64 followId=0 (api.raw = "followId")
 }
 
+struct MemberContestListReq{
+    1:  optional string	name =""(api.raw = "name")
+    2:  optional string	sn =""(api.raw = "sn")
+    9: optional string startCompletionAt="" (api.raw = "startCompletionAt")
+    10: optional string endCompletionAt="" (api.raw = "endCompletionAt")
 
+    11:  optional i64 memberId=0 (api.raw = "memberId")
+}
+struct MemberContestInfo{
+    1:  optional string	name =""(api.raw = "name")
+    2:  optional string	sn =""(api.raw = "sn")
+    3:optional string createdAt ="" (api.raw = "createdAt")
+    4:optional double fee =0 (api.raw = "fee")
+    5:optional i64 status=0 (api.raw = "status")
 
+    9: optional string signStartAt="" (api.raw = "signStartAt")
+    10: optional string signEndAt="" (api.raw = "signEndAt")
+}
+
+struct MemberBootcampListReq{
+    1:  optional i64 memberId=0 (api.raw = "memberId")
+    2:  optional string	name =""(api.raw = "name")
+}
+struct MemberBootcampInfo{
+    1:  optional string	name =""(api.raw = "name")
+
+}
+struct MemberCommunityListReq{
+  1:  optional i64 memberId=0 (api.raw = "memberId")
+    2:  optional string	name =""(api.raw = "name")
+}
+struct MemberCommunityInfo{
+    1:  optional string	name =""(api.raw = "name")
+
+}
 service MemberService {
 
   // 新增用户
@@ -186,4 +219,9 @@ service MemberService {
 
   base.NilResponse MemberContractList(1: MemberContractListReq req) (api.post = "/service/member/contract-list")
 
+
+
+  base.NilResponse MemberContestList (1: MemberContestListReq req) (api.post = "/service/member/contest-list")
+  base.NilResponse MemberBootcampList (1: MemberBootcampListReq req) (api.post = "/service/member/bootcamp-list")
+  base.NilResponse MemberCommunityList (1: MemberCommunityListReq req) (api.post = "/service/member/community-list")
 }

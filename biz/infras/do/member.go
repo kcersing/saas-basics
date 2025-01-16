@@ -25,4 +25,8 @@ type Member interface {
 	//ProductSearch(members []int64) (info *ProductInfo, err error)
 	//PropertySearch(memberProducts []int64) (info *PropertyInfo, err error)
 	ContractList(req member.MemberContractListReq) (resp []*member.MemberContractInfo, total int, err error)
+
+	ContestList(req member.MemberContestListReq) (resp []*member.MemberContestInfo, total int, err error)
+	BootcampList(req member.MemberBootcampListReq) (resp []*member.MemberBootcampInfo, total int, err error)
+	CommunityList(req member.MemberCommunityListReq) (resp []*member.MemberCommunityInfo, total int, err error)
 }

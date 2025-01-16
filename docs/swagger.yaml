@@ -2663,6 +2663,15 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 获取操作日志列表 Summary
+  /service/member/bootcamp-list:
+    post:
+      responses: {}
+  /service/member/community-list:
+    post:
+      responses: {}
+  /service/member/contest-list:
+    post:
+      responses: {}
   /service/member/contract-list:
     post:
       description: 会员合同列表 Description

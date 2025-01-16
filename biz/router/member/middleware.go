@@ -150,3 +150,18 @@ func _memberproductinfoMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _memberbootcamplistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _membercommunitylistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _membercontestlistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

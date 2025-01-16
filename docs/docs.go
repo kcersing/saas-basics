@@ -1801,6 +1801,21 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/member/bootcamp-list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/community-list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/member/contest-list": {
+            "post": {
+                "responses": {}
+            }
+        },
         "/service/member/contract-list": {
             "post": {
                 "description": "会员合同列表 Description",

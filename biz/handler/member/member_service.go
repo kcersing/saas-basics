@@ -288,3 +288,55 @@ func DelMember(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, nil, 0, "")
 	return
 }
+
+// MemberContestList .
+// @router /service/member/contest-list [POST]
+func MemberContestList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberContestListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	list, total, err := service.NewMember(ctx, c).ContestList(req)
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	utils.SendResponse(c, errno.Success, list, int64(total), "")
+	return
+}
+
+// MemberBootcampList .
+// @router /service/member/bootcamp-list [POST]
+func MemberBootcampList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberBootcampListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// MemberCommunityList .
+// @router /service/member/community-list [POST]
+func MemberCommunityList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req member.MemberCommunityListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

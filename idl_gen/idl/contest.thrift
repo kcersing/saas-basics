@@ -36,6 +36,7 @@ service ContestService {
   base.NilResponse DelContest(1: base.IDReq req) (api.post = "/service/contest/del")
 
   base.NilResponse ParticipantFinish(1: ParticipantFinishReq req) (api.post = "/service/participant/finish")
+
 }
 
 struct ParticipantFinishReq{
