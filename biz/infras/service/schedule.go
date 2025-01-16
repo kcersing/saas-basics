@@ -49,8 +49,14 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (re
 	var predicates []predicate.Schedule
 
 	if req.StartTime != "" && req.EndTime != "" {
-		startTime, _ := time.Parse(time.DateOnly, req.StartTime)
-		endTime, _ := time.Parse(time.DateOnly, req.EndTime)
+		startTime, err := time.Parse(time.DateTime, req.StartTime)
+		if err != nil {
+			return nil, 0, errors.New("日期类型传值错误")
+		}
+		endTime, err := time.Parse(time.DateTime, req.EndTime)
+		if err != nil {
+			return nil, 0, errors.New("日期类型传值错误")
+		}
 
 		predicates = append(predicates, schedule2.DateGTE(startTime))
 		predicates = append(predicates, schedule2.DateLTE(endTime))
@@ -110,7 +116,7 @@ func (s Schedule) ScheduleList(req schedule.ScheduleListReq, isSubList bool) (re
 
 	predicates = append(predicates, schedule2.StatusNotIn(0, 5))
 
-	lists, err := s.db.Schedule.Query().Where(predicates...).
+	lists, err := s.db.Debug().Schedule.Query().Where(predicates...).
 		Offset(int(req.Page-1) * int(req.PageSize)).
 		Order(ent.Desc(schedule2.FieldID)).
 		Limit(int(req.PageSize)).All(s.ctx)
