@@ -97,6 +97,7 @@ struct OrderItem {
     8:  optional string name="" (api.raw = "name")
     16:  optional string createdAt="" (api.raw = "createdAt")
     17:  optional string updatedAt="" (api.raw = "updatedAt")
+    9: optional i64 number=1 (api.raw = "number")
 }
 
 struct OrderPay{

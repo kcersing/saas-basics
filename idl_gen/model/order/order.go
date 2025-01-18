@@ -3541,6 +3541,7 @@ type OrderItem struct {
 	Name                 string `thrift:"name,8,optional" form:"name" json:"name" query:"name"`
 	CreatedAt            string `thrift:"createdAt,16,optional" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt            string `thrift:"updatedAt,17,optional" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
+	Number               int64  `thrift:"number,9,optional" form:"number" json:"number" query:"number"`
 }
 
 func NewOrderItem() *OrderItem {
@@ -3556,6 +3557,7 @@ func NewOrderItem() *OrderItem {
 		Name:                 "",
 		CreatedAt:            "",
 		UpdatedAt:            "",
+		Number:               1,
 	}
 }
 
@@ -3570,6 +3572,7 @@ func (p *OrderItem) InitDefault() {
 	p.Name = ""
 	p.CreatedAt = ""
 	p.UpdatedAt = ""
+	p.Number = 1
 }
 
 var OrderItem_ID_DEFAULT int64 = 0
@@ -3662,6 +3665,15 @@ func (p *OrderItem) GetUpdatedAt() (v string) {
 	return p.UpdatedAt
 }
 
+var OrderItem_Number_DEFAULT int64 = 1
+
+func (p *OrderItem) GetNumber() (v int64) {
+	if !p.IsSetNumber() {
+		return OrderItem_Number_DEFAULT
+	}
+	return p.Number
+}
+
 var fieldIDToName_OrderItem = map[int16]string{
 	1:  "id",
 	2:  "productId",
@@ -3673,6 +3685,7 @@ var fieldIDToName_OrderItem = map[int16]string{
 	8:  "name",
 	16: "createdAt",
 	17: "updatedAt",
+	9:  "number",
 }
 
 func (p *OrderItem) IsSetID() bool {
@@ -3713,6 +3726,10 @@ func (p *OrderItem) IsSetCreatedAt() bool {
 
 func (p *OrderItem) IsSetUpdatedAt() bool {
 	return p.UpdatedAt != OrderItem_UpdatedAt_DEFAULT
+}
+
+func (p *OrderItem) IsSetNumber() bool {
+	return p.Number != OrderItem_Number_DEFAULT
 }
 
 func (p *OrderItem) Read(iprot thrift.TProtocol) (err error) {
@@ -3809,6 +3826,14 @@ func (p *OrderItem) Read(iprot thrift.TProtocol) (err error) {
 		case 17:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField17(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField9(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3953,6 +3978,17 @@ func (p *OrderItem) ReadField17(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
+func (p *OrderItem) ReadField9(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Number = _field
+	return nil
+}
 
 func (p *OrderItem) Write(oprot thrift.TProtocol) (err error) {
 
@@ -3999,6 +4035,10 @@ func (p *OrderItem) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField17(oprot); err != nil {
 			fieldId = 17
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
 			goto WriteFieldError
 		}
 	}
@@ -4207,6 +4247,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 17 end error: ", p), err)
+}
+
+func (p *OrderItem) writeField9(oprot thrift.TProtocol) (err error) {
+	if p.IsSetNumber() {
+		if err = oprot.WriteFieldBegin("number", thrift.I64, 9); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.Number); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
 }
 
 func (p *OrderItem) String() string {
