@@ -851,6 +851,23 @@ definitions:
           type: integer
         type: array
     type: object
+  order.OrderAllCountReq:
+    properties:
+      endAt:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      payWay:
+        type: string
+      startAt:
+        type: string
+      status:
+        type: integer
+      venueId:
+        type: integer
+    type: object
   order.UpdateOrderReq:
     type: object
   product.CreateOrUpdateProductReq:
@@ -2946,6 +2963,22 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新菜单 Summary
+  /service/order/all-count:
+    post:
+      description: 获取收支统计 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/order.OrderAllCountReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 获取收支统计 Summary
   /service/order/buy:
     post:
       responses: {}

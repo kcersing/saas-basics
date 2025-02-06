@@ -59,3 +59,8 @@ func _buyMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _orderallcountMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

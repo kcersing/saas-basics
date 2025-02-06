@@ -157,3 +157,39 @@ func Buy(ctx context.Context, c *app.RequestContext) {
 	utils.SendResponse(c, errno.Success, o, 0, "")
 	return
 }
+
+// OrderAllCount .
+//
+//	@Summary		获取收支统计 Summary
+//	@Description	获取收支统计 Description
+//	@Param			request	body		order.OrderAllCountReq	true	"query params"
+//	@Success		200		{object}	utils.Response
+//
+// @router /service/order/all-count [POST]
+func OrderAllCount(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.OrderAllCountReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp, count, total, err := service.NewOrder(ctx, c).OrderAllCount(&req)
+
+	if err != nil {
+		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
+		return
+	}
+	type resps struct {
+		List      interface{} `json:"list"`
+		ActualAll float64     `json:"actualAll"`
+	}
+
+	utils.SendResponse(c, errno.Success,
+		resps{
+			List:      resp,
+			ActualAll: count,
+		}, int64(total), "")
+	return
+}

@@ -17,6 +17,8 @@ type Order interface {
 
 	Buy(req *order.BuyReq) (orderOne *order.OrderInfo, err error)
 	FinishOrder(c FinishOrder) (err error)
+
+	OrderAllCount(req *order.OrderAllCountReq) (resp []*order.OrderCountInfo, actual float64, total int, err error)
 }
 type CreateParticipantOrderReq struct {
 	Member *ent.Member

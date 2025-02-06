@@ -2245,6 +2245,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/service/order/all-count": {
+            "post": {
+                "description": "获取收支统计 Description",
+                "summary": "获取收支统计 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.OrderAllCountReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/service/order/buy": {
             "post": {
                 "responses": {}
@@ -5498,6 +5523,32 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
+                }
+            }
+        },
+        "order.OrderAllCountReq": {
+            "type": "object",
+            "properties": {
+                "endAt": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "payWay": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
                 }
             }
         },

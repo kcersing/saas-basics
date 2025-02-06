@@ -10,6 +10,24 @@ service OrderService {
     base.NilResponse ListOrder(1: ListOrderReq req )(api.post = "/service/order/list") // 订单列表
     base.NilResponse GetOrderById(1: base.IDReq req) (api.get = "/service/order/info") // 订单详情
     base.NilResponse OrderListExport(1: ListOrderReq req) (api.post = "/service/order/list/export")
+
+
+    base.NilResponse OrderAllCount(1: OrderAllCountReq req) (api.post = "/service/order/all-count")
+}
+ struct OrderCountInfo{
+     1: optional i64 venueId=0 (api.raw = "venueId")
+     2: optional string venueName="" (api.raw = "venueName")
+     3: optional double actual=0 (api.raw = "actual")
+
+ }
+struct OrderAllCountReq{
+    1: optional i64 venueId=0 (api.raw = "venueId")
+    2: optional string payWay="" (api.raw = "payWay")
+    3: optional string startAt="" (api.raw = "startAt")
+    4: optional string endAt="" (api.raw = "endAt")
+    5:  optional i64 status=0 (api.raw = "status")
+    255: optional i64 page=1 (api.raw = "page")
+    256: optional i64 pageSize=100 (api.raw = "pageSize")
 }
 struct BuyReq{
     1: optional i64 venueId=0 (api.raw = "venueId")
