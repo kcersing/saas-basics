@@ -283,13 +283,14 @@ func (p *OrderCountInfo) String() string {
 }
 
 type OrderAllCountReq struct {
-	VenueId  int64  `thrift:"venueId,1,optional" form:"venueId" json:"venueId" query:"venueId"`
-	PayWay   string `thrift:"payWay,2,optional" form:"payWay" json:"payWay" query:"payWay"`
-	StartAt  string `thrift:"startAt,3,optional" form:"startAt" json:"startAt" query:"startAt"`
-	EndAt    string `thrift:"endAt,4,optional" form:"endAt" json:"endAt" query:"endAt"`
-	Status   int64  `thrift:"status,5,optional" form:"status" json:"status" query:"status"`
-	Page     int64  `thrift:"page,255,optional" form:"page" json:"page" query:"page"`
-	PageSize int64  `thrift:"pageSize,256,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
+	VenueId int64  `thrift:"venueId,1,optional" form:"venueId" json:"venueId" query:"venueId"`
+	PayWay  string `thrift:"payWay,2,optional" form:"payWay" json:"payWay" query:"payWay"`
+	StartAt string `thrift:"startAt,3,optional" form:"startAt" json:"startAt" query:"startAt"`
+	EndAt   string `thrift:"endAt,4,optional" form:"endAt" json:"endAt" query:"endAt"`
+	/**状态  1收入 2支出*/
+	Status   int64 `thrift:"status,5,optional" form:"status" json:"status" query:"status"`
+	Page     int64 `thrift:"page,255,optional" form:"page" json:"page" query:"page"`
+	PageSize int64 `thrift:"pageSize,256,optional" form:"pageSize" json:"pageSize" query:"pageSize"`
 }
 
 func NewOrderAllCountReq() *OrderAllCountReq {

@@ -125,6 +125,11 @@ func CompletionAt(v time.Time) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldCompletionAt, v))
 }
 
+// RefundAt applies equality check predicate on the "refund_at" field. It's identical to RefundAtEQ.
+func RefundAt(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldRefundAt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Order {
 	return predicate.Order(sql.FieldEQ(FieldCreatedAt, v))
@@ -913,6 +918,56 @@ func CompletionAtIsNil() predicate.Order {
 // CompletionAtNotNil applies the NotNil predicate on the "completion_at" field.
 func CompletionAtNotNil() predicate.Order {
 	return predicate.Order(sql.FieldNotNull(FieldCompletionAt))
+}
+
+// RefundAtEQ applies the EQ predicate on the "refund_at" field.
+func RefundAtEQ(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldEQ(FieldRefundAt, v))
+}
+
+// RefundAtNEQ applies the NEQ predicate on the "refund_at" field.
+func RefundAtNEQ(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldNEQ(FieldRefundAt, v))
+}
+
+// RefundAtIn applies the In predicate on the "refund_at" field.
+func RefundAtIn(vs ...time.Time) predicate.Order {
+	return predicate.Order(sql.FieldIn(FieldRefundAt, vs...))
+}
+
+// RefundAtNotIn applies the NotIn predicate on the "refund_at" field.
+func RefundAtNotIn(vs ...time.Time) predicate.Order {
+	return predicate.Order(sql.FieldNotIn(FieldRefundAt, vs...))
+}
+
+// RefundAtGT applies the GT predicate on the "refund_at" field.
+func RefundAtGT(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldGT(FieldRefundAt, v))
+}
+
+// RefundAtGTE applies the GTE predicate on the "refund_at" field.
+func RefundAtGTE(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldGTE(FieldRefundAt, v))
+}
+
+// RefundAtLT applies the LT predicate on the "refund_at" field.
+func RefundAtLT(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldLT(FieldRefundAt, v))
+}
+
+// RefundAtLTE applies the LTE predicate on the "refund_at" field.
+func RefundAtLTE(v time.Time) predicate.Order {
+	return predicate.Order(sql.FieldLTE(FieldRefundAt, v))
+}
+
+// RefundAtIsNil applies the IsNil predicate on the "refund_at" field.
+func RefundAtIsNil() predicate.Order {
+	return predicate.Order(sql.FieldIsNull(FieldRefundAt))
+}
+
+// RefundAtNotNil applies the NotNil predicate on the "refund_at" field.
+func RefundAtNotNil() predicate.Order {
+	return predicate.Order(sql.FieldNotNull(FieldRefundAt))
 }
 
 // HasAmount applies the HasEdge predicate on the "amount" edge.

@@ -10,6 +10,8 @@ import (
 	"github.com/ArtisanCloud/PowerWeChat/v3/src/payment/refund/response"
 	"github.com/cloudwego/hertz/pkg/common/json"
 	"log"
+	order2 "saas/biz/dal/db/ent/order"
+	"saas/pkg/enums"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -137,7 +139,7 @@ func (p Payment) Notify(c interface{}) {
 
 			if transaction.OutTradeNo != "" {
 				tr, _ := json.Marshal(transaction)
-				
+
 				NewOrder(p.ctx, p.c).FinishOrder(do.FinishOrder{
 					Sn:            transaction.OutTradeNo,
 					Fee:           transaction.Amount.Total,
@@ -204,7 +206,55 @@ func (p Payment) RefundOrder(req payment.RefundOrderReq) (*response.ResponseRefu
 		hlog.Infof("error: %s", err)
 		return nil, err
 	}
+	go func() {
+		p.orderRefund(outRefundNo)
+	}()
+
 	//c.JSON(http.StatusOK, rs)
 
 	return rs, nil
+}
+
+func (p Payment) orderRefund(orderSn string) {
+
+	order, err := p.db.Order.Query().Where(order2.OrderSn(orderSn)).First(p.ctx)
+	if err != nil {
+		hlog.Error(err)
+		return
+	}
+	_, err = p.db.Order.Update().
+		Where(order2.OrderSn(orderSn)).
+		SetStatus(4).
+		SetRefundAt(time.Now()).
+		Save(p.ctx)
+	if err != nil {
+		hlog.Error(err)
+		return
+	}
+	if order.Nature == "" {
+
+	}
+	if order.ProductType == enums.Sms {
+
+	}
+	if order.ProductType == enums.Contest {
+
+	}
+	if order.ProductType == enums.Bootcamp {
+
+	}
+
+	if order.ProductType == enums.Card {
+
+	}
+
+	if order.ProductType == enums.Course {
+
+	}
+	if order.ProductType == enums.Lessons {
+
+	}
+	if order.ProductType == enums.CoursePackage {
+
+	}
 }

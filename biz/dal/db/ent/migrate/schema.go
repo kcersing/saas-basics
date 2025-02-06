@@ -869,6 +869,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true, Comment: "订单来源", Default: ""},
 		{Name: "device", Type: field.TypeString, Nullable: true, Comment: "设备来源", Default: ""},
 		{Name: "completion_at", Type: field.TypeTime, Nullable: true, Comment: "订单完成时间"},
+		{Name: "refund_at", Type: field.TypeTime, Nullable: true, Comment: "订单退费时间"},
 		{Name: "member_id", Type: field.TypeInt64, Nullable: true, Comment: "会员id"},
 		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
 		{Name: "venue_id", Type: field.TypeInt64, Nullable: true, Comment: "场馆id"},
@@ -881,19 +882,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "order_member_member_orders",
-				Columns:    []*schema.Column{OrderColumns[12]},
+				Columns:    []*schema.Column{OrderColumns[13]},
 				RefColumns: []*schema.Column{MemberColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "order_sys_users_created_orders",
-				Columns:    []*schema.Column{OrderColumns[13]},
+				Columns:    []*schema.Column{OrderColumns[14]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "order_venue_venue_orders",
-				Columns:    []*schema.Column{OrderColumns[14]},
+				Columns:    []*schema.Column{OrderColumns[15]},
 				RefColumns: []*schema.Column{VenueColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -907,12 +908,12 @@ var (
 			{
 				Name:    "order_venue_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderColumns[14]},
+				Columns: []*schema.Column{OrderColumns[15]},
 			},
 			{
 				Name:    "order_member_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrderColumns[12]},
+				Columns: []*schema.Column{OrderColumns[13]},
 			},
 			{
 				Name:    "order_completion_at",

@@ -223,6 +223,20 @@ func (oc *OrderCreate) SetNillableCompletionAt(t *time.Time) *OrderCreate {
 	return oc
 }
 
+// SetRefundAt sets the "refund_at" field.
+func (oc *OrderCreate) SetRefundAt(t time.Time) *OrderCreate {
+	oc.mutation.SetRefundAt(t)
+	return oc
+}
+
+// SetNillableRefundAt sets the "refund_at" field if the given value is not nil.
+func (oc *OrderCreate) SetNillableRefundAt(t *time.Time) *OrderCreate {
+	if t != nil {
+		oc.SetRefundAt(*t)
+	}
+	return oc
+}
+
 // SetID sets the "id" field.
 func (oc *OrderCreate) SetID(i int64) *OrderCreate {
 	oc.mutation.SetID(i)
@@ -503,6 +517,10 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 	if value, ok := oc.mutation.CompletionAt(); ok {
 		_spec.SetField(order.FieldCompletionAt, field.TypeTime, value)
 		_node.CompletionAt = value
+	}
+	if value, ok := oc.mutation.RefundAt(); ok {
+		_spec.SetField(order.FieldRefundAt, field.TypeTime, value)
+		_node.RefundAt = value
 	}
 	if nodes := oc.mutation.AmountIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -49,6 +49,8 @@ type Order struct {
 	Device string `json:"device,omitempty"`
 	// 订单完成时间
 	CompletionAt time.Time `json:"completion_at,omitempty"`
+	// 订单退费时间
+	RefundAt time.Time `json:"refund_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderQuery when eager-loading is set.
 	Edges        OrderEdges `json:"edges"`
@@ -171,7 +173,7 @@ func (*Order) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case order.FieldOrderSn, order.FieldNature, order.FieldProductType, order.FieldProductSubType, order.FieldSource, order.FieldDevice:
 			values[i] = new(sql.NullString)
-		case order.FieldCreatedAt, order.FieldUpdatedAt, order.FieldCompletionAt:
+		case order.FieldCreatedAt, order.FieldUpdatedAt, order.FieldCompletionAt, order.FieldRefundAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -277,6 +279,12 @@ func (o *Order) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field completion_at", values[i])
 			} else if value.Valid {
 				o.CompletionAt = value.Time
+			}
+		case order.FieldRefundAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field refund_at", values[i])
+			} else if value.Valid {
+				o.RefundAt = value.Time
 			}
 		default:
 			o.selectValues.Set(columns[i], values[i])
@@ -395,6 +403,9 @@ func (o *Order) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("completion_at=")
 	builder.WriteString(o.CompletionAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("refund_at=")
+	builder.WriteString(o.RefundAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

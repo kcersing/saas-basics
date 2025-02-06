@@ -25,6 +25,7 @@ struct OrderAllCountReq{
     2: optional string payWay="" (api.raw = "payWay")
     3: optional string startAt="" (api.raw = "startAt")
     4: optional string endAt="" (api.raw = "endAt")
+    /**状态  1收入 2支出*/
     5:  optional i64 status=0 (api.raw = "status")
     255: optional i64 page=1 (api.raw = "page")
     256: optional i64 pageSize=100 (api.raw = "pageSize")

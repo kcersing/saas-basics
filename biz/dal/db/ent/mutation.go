@@ -37381,6 +37381,7 @@ type OrderMutation struct {
 	source                *string
 	device                *string
 	completion_at         *time.Time
+	refund_at             *time.Time
 	clearedFields         map[string]struct{}
 	amount                map[int64]struct{}
 	removedamount         map[int64]struct{}
@@ -38240,6 +38241,55 @@ func (m *OrderMutation) ResetCompletionAt() {
 	delete(m.clearedFields, order.FieldCompletionAt)
 }
 
+// SetRefundAt sets the "refund_at" field.
+func (m *OrderMutation) SetRefundAt(t time.Time) {
+	m.refund_at = &t
+}
+
+// RefundAt returns the value of the "refund_at" field in the mutation.
+func (m *OrderMutation) RefundAt() (r time.Time, exists bool) {
+	v := m.refund_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRefundAt returns the old "refund_at" field's value of the Order entity.
+// If the Order object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrderMutation) OldRefundAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRefundAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRefundAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRefundAt: %w", err)
+	}
+	return oldValue.RefundAt, nil
+}
+
+// ClearRefundAt clears the value of the "refund_at" field.
+func (m *OrderMutation) ClearRefundAt() {
+	m.refund_at = nil
+	m.clearedFields[order.FieldRefundAt] = struct{}{}
+}
+
+// RefundAtCleared returns if the "refund_at" field was cleared in this mutation.
+func (m *OrderMutation) RefundAtCleared() bool {
+	_, ok := m.clearedFields[order.FieldRefundAt]
+	return ok
+}
+
+// ResetRefundAt resets all changes to the "refund_at" field.
+func (m *OrderMutation) ResetRefundAt() {
+	m.refund_at = nil
+	delete(m.clearedFields, order.FieldRefundAt)
+}
+
 // AddAmountIDs adds the "amount" edge to the OrderAmount entity by ids.
 func (m *OrderMutation) AddAmountIDs(ids ...int64) {
 	if m.amount == nil {
@@ -38664,7 +38714,7 @@ func (m *OrderMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrderMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, order.FieldCreatedAt)
 	}
@@ -38707,6 +38757,9 @@ func (m *OrderMutation) Fields() []string {
 	if m.completion_at != nil {
 		fields = append(fields, order.FieldCompletionAt)
 	}
+	if m.refund_at != nil {
+		fields = append(fields, order.FieldRefundAt)
+	}
 	return fields
 }
 
@@ -38743,6 +38796,8 @@ func (m *OrderMutation) Field(name string) (ent.Value, bool) {
 		return m.Device()
 	case order.FieldCompletionAt:
 		return m.CompletionAt()
+	case order.FieldRefundAt:
+		return m.RefundAt()
 	}
 	return nil, false
 }
@@ -38780,6 +38835,8 @@ func (m *OrderMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldDevice(ctx)
 	case order.FieldCompletionAt:
 		return m.OldCompletionAt(ctx)
+	case order.FieldRefundAt:
+		return m.OldRefundAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Order field %s", name)
 }
@@ -38887,6 +38944,13 @@ func (m *OrderMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCompletionAt(v)
 		return nil
+	case order.FieldRefundAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRefundAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Order field %s", name)
 }
@@ -38986,6 +39050,9 @@ func (m *OrderMutation) ClearedFields() []string {
 	if m.FieldCleared(order.FieldCompletionAt) {
 		fields = append(fields, order.FieldCompletionAt)
 	}
+	if m.FieldCleared(order.FieldRefundAt) {
+		fields = append(fields, order.FieldRefundAt)
+	}
 	return fields
 }
 
@@ -39042,6 +39109,9 @@ func (m *OrderMutation) ClearField(name string) error {
 	case order.FieldCompletionAt:
 		m.ClearCompletionAt()
 		return nil
+	case order.FieldRefundAt:
+		m.ClearRefundAt()
+		return nil
 	}
 	return fmt.Errorf("unknown Order nullable field %s", name)
 }
@@ -39091,6 +39161,9 @@ func (m *OrderMutation) ResetField(name string) error {
 		return nil
 	case order.FieldCompletionAt:
 		m.ResetCompletionAt()
+		return nil
+	case order.FieldRefundAt:
+		m.ResetRefundAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Order field %s", name)

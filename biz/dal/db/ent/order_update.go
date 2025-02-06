@@ -302,6 +302,26 @@ func (ou *OrderUpdate) ClearCompletionAt() *OrderUpdate {
 	return ou
 }
 
+// SetRefundAt sets the "refund_at" field.
+func (ou *OrderUpdate) SetRefundAt(t time.Time) *OrderUpdate {
+	ou.mutation.SetRefundAt(t)
+	return ou
+}
+
+// SetNillableRefundAt sets the "refund_at" field if the given value is not nil.
+func (ou *OrderUpdate) SetNillableRefundAt(t *time.Time) *OrderUpdate {
+	if t != nil {
+		ou.SetRefundAt(*t)
+	}
+	return ou
+}
+
+// ClearRefundAt clears the value of the "refund_at" field.
+func (ou *OrderUpdate) ClearRefundAt() *OrderUpdate {
+	ou.mutation.ClearRefundAt()
+	return ou
+}
+
 // AddAmountIDs adds the "amount" edge to the OrderAmount entity by IDs.
 func (ou *OrderUpdate) AddAmountIDs(ids ...int64) *OrderUpdate {
 	ou.mutation.AddAmountIDs(ids...)
@@ -675,6 +695,12 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.CompletionAtCleared() {
 		_spec.ClearField(order.FieldCompletionAt, field.TypeTime)
+	}
+	if value, ok := ou.mutation.RefundAt(); ok {
+		_spec.SetField(order.FieldRefundAt, field.TypeTime, value)
+	}
+	if ou.mutation.RefundAtCleared() {
+		_spec.ClearField(order.FieldRefundAt, field.TypeTime)
 	}
 	if ou.mutation.AmountCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1274,6 +1300,26 @@ func (ouo *OrderUpdateOne) ClearCompletionAt() *OrderUpdateOne {
 	return ouo
 }
 
+// SetRefundAt sets the "refund_at" field.
+func (ouo *OrderUpdateOne) SetRefundAt(t time.Time) *OrderUpdateOne {
+	ouo.mutation.SetRefundAt(t)
+	return ouo
+}
+
+// SetNillableRefundAt sets the "refund_at" field if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableRefundAt(t *time.Time) *OrderUpdateOne {
+	if t != nil {
+		ouo.SetRefundAt(*t)
+	}
+	return ouo
+}
+
+// ClearRefundAt clears the value of the "refund_at" field.
+func (ouo *OrderUpdateOne) ClearRefundAt() *OrderUpdateOne {
+	ouo.mutation.ClearRefundAt()
+	return ouo
+}
+
 // AddAmountIDs adds the "amount" edge to the OrderAmount entity by IDs.
 func (ouo *OrderUpdateOne) AddAmountIDs(ids ...int64) *OrderUpdateOne {
 	ouo.mutation.AddAmountIDs(ids...)
@@ -1677,6 +1723,12 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 	}
 	if ouo.mutation.CompletionAtCleared() {
 		_spec.ClearField(order.FieldCompletionAt, field.TypeTime)
+	}
+	if value, ok := ouo.mutation.RefundAt(); ok {
+		_spec.SetField(order.FieldRefundAt, field.TypeTime, value)
+	}
+	if ouo.mutation.RefundAtCleared() {
+		_spec.ClearField(order.FieldRefundAt, field.TypeTime)
 	}
 	if ouo.mutation.AmountCleared() {
 		edge := &sqlgraph.EdgeSpec{

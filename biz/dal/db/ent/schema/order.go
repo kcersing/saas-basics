@@ -26,6 +26,7 @@ func (Order) Fields() []ent.Field {
 		field.String("source").Default("").Comment("订单来源").Optional(),
 		field.String("device").Default("").Comment("设备来源").Optional(),
 		field.Time("completion_at").Comment("订单完成时间").Optional(),
+		field.Time("refund_at").Comment("订单退费时间").Optional(),
 	}
 }
 

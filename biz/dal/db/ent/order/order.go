@@ -42,6 +42,8 @@ const (
 	FieldDevice = "device"
 	// FieldCompletionAt holds the string denoting the completion_at field in the database.
 	FieldCompletionAt = "completion_at"
+	// FieldRefundAt holds the string denoting the refund_at field in the database.
+	FieldRefundAt = "refund_at"
 	// EdgeAmount holds the string denoting the amount edge name in mutations.
 	EdgeAmount = "amount"
 	// EdgeItem holds the string denoting the item edge name in mutations.
@@ -135,6 +137,7 @@ var Columns = []string{
 	FieldSource,
 	FieldDevice,
 	FieldCompletionAt,
+	FieldRefundAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -242,6 +245,11 @@ func ByDevice(opts ...sql.OrderTermOption) OrderOption {
 // ByCompletionAt orders the results by the completion_at field.
 func ByCompletionAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompletionAt, opts...).ToFunc()
+}
+
+// ByRefundAt orders the results by the refund_at field.
+func ByRefundAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRefundAt, opts...).ToFunc()
 }
 
 // ByAmountCount orders the results by amount count.

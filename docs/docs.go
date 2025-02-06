@@ -5545,6 +5545,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
+                    "description": "*状态  1收入 2支出",
                     "type": "integer"
                 },
                 "venueId": {
