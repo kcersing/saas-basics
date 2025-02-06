@@ -231,30 +231,30 @@ func (p Payment) orderRefund(orderSn string) {
 		hlog.Error(err)
 		return
 	}
-	if order.Nature == "" {
+	if order.Nature == enums.Buy {
+		if order.ProductType == enums.Sms {
 
+		}
+		if order.ProductType == enums.Contest {
+
+		}
+		if order.ProductType == enums.Bootcamp {
+
+		}
+
+		if order.ProductType == enums.Card {
+
+		}
+
+		if order.ProductType == enums.Course {
+
+		}
+		if order.ProductType == enums.Lessons {
+
+		}
+		if order.ProductType == enums.CoursePackage {
+
+		}
 	}
-	if order.ProductType == enums.Sms {
 
-	}
-	if order.ProductType == enums.Contest {
-
-	}
-	if order.ProductType == enums.Bootcamp {
-
-	}
-
-	if order.ProductType == enums.Card {
-
-	}
-
-	if order.ProductType == enums.Course {
-
-	}
-	if order.ProductType == enums.Lessons {
-
-	}
-	if order.ProductType == enums.CoursePackage {
-
-	}
 }
