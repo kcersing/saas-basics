@@ -173,8 +173,11 @@ func (o Order) OrderAllCount(req *order.OrderAllCountReq) (resp []*order.OrderCo
 	if req.VenueId > 0 {
 		predicates = append(predicates, order2.VenueIDEQ(req.VenueId))
 	}
-	if req.Status > 0 {
-		predicates = append(predicates, order2.StatusEQ(req.Status))
+	if req.Status == 1 {
+		predicates = append(predicates, order2.StatusIn(4, 5))
+	}
+	if req.Status == 2 {
+		predicates = append(predicates, order2.StatusIn(4))
 	}
 	if req.StartAt != "" && req.EndAt != "" {
 		signStartAt, _ := time.Parse(time.DateTime, req.StartAt)
