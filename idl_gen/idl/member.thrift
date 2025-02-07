@@ -192,19 +192,19 @@ struct MemberCommunityInfo{
 }
 service MemberService {
 
-  // 新增用户
+  /**新增用户*/
   base.NilResponse CreateMember(1: CreateOrUpdateMemberReq req) (api.post = "/service/member/create")
 
-  // 更新用户
+  /**更新用户*/
   base.NilResponse UpdateMember(1: CreateOrUpdateMemberReq req) (api.post = "/service/member/update")
 
-  // 获取用户基本信息
+  /**获取用户基本信息*/
   base.NilResponse MemberInfo(1: base.IDReq req) (api.post = "/service/member/info")
 
-  // 获取用户列表
+  /**获取用户列表*/
   base.NilResponse MemberFullList(1: MemberListReq req) (api.post = "/service/member/full-list")
 
-  // 获取用户列表
+  /**获取用户列表*/
   base.NilResponse MemberPotentialList(1: MemberListReq req) (api.post = "/service/member/potential-list")
 
   base.NilResponse MemberFullListExport(1: MemberListReq req) (api.post = "/service/member/full-list/export")
@@ -212,7 +212,8 @@ service MemberService {
   base.NilResponse MemberPotentialListExport(1: MemberListReq req) (api.post = "/service/member/potential-list/export")
 
   base.NilResponse DelMember(1: base.Ids req) (api.post = "/service/member/del")
-  // 更新用户状态
+
+  /**更新用户状态*/
   base.NilResponse UpdateMemberStatus(1: base.StatusCodeReq req) (api.post = "/service/member/status")
 
   base.NilResponse UpdateMemberFollow(1: UpdateMemberFollowReq req) (api.post = "/service/member/update-follow")
