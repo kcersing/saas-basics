@@ -163,8 +163,7 @@ struct ScheduleListReq {
     14:  optional string memberMobile =""  (api.raw = "memberMobile")
     /**会员ID*/
     15:  optional list<i64> memberId = 0  (api.raw = "memberId")
-
-        /**产品类型*/
+    /**产品类型*/
     16:  optional  list<string> subType =""  (api.raw = "subType")
 }
 struct ScheduleMemberListReq {

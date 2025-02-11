@@ -4,15 +4,19 @@ include "../base/base.thrift"
 include "member_product.thrift"
 include "member.thrift"
 include "schedule.thrift"
+include "order.thrift"
+/**
+ * 微信小程序服务
+ */
 
 service WxMemberService {
 
-   /**会员注册*/
-   base.NilResponse MemberRegister(1: MemberRegisterReq req) (api.post = "/service/wx/member-register")
-   /**会员验证码*/
-   base.NilResponse MemberCaptcha(1: MemberCaptchaReq req) (api.post = "/service/wx/member-captcha")
-   /**会员登录*/
-   base.NilResponse MemberLogin(1: MemberLoginReq req) (api.post = "/service/wx/member-login")
+//   /**会员注册*/
+//   base.NilResponse MemberRegister(1: MemberRegisterReq req) (api.post = "/service/wx/member-register")
+//   /**会员验证码*/
+//   base.NilResponse MemberCaptcha(1: MemberCaptchaReq req) (api.post = "/service/wx/member-captcha")
+//   /**会员登录*/
+//   base.NilResponse MemberLogin(1: MemberLoginReq req) (api.post = "/service/wx/member-login")
    /**会员登出*/
    base.NilResponse MemberLogout(1: base.IDReq req) (api.post = "/service/wx/member-logout")
    /**会员详情*/
@@ -64,19 +68,23 @@ service WxMemberService {
    base.NilResponse VenueInfo (1: base.IDReq req) (api.post = "/service/wx/venue-info")
 
    /**扫码入场*/
-   base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
+//   base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
+      base.NilResponse ScanQR (1: ScanQRReq req) (api.post = "/service/wx/scan-QR")
    /**激活*/
    base.NilResponse Activation (1: base.IDReq req) (api.post = "/service/wx/activation")
 
 
-   /**会员约课*/
-   base.NilResponse CreateMemberSchedule(1: CreateMemberScheduleReq req) (api.post = "/service/wx/create-member-schedule")
+   /**会员私教课约课*/
+   base.NilResponse CreateMemberScheduleCourse(1: schedule.CreateOrUpdateScheduleCourseReq req) (api.post = "/service/wx/create-member-schedule-course")
+    /**排团教课*/
+    base.NilResponse CreateMemberScheduleCourseLessons(1: CreateMemberScheduleLessonsReq req) (api.post = "/service/wx/create-member-schedule-lessons")
+
    /**产品详情*/
    base.NilResponse ProductInfo(1: base.IDReq req) (api.post = "/service/wx/product-info")
    /**产品列表*/
    base.NilResponse ProductList(1:  ProductListReq req) (api.post = "/service/wx/product-list")
    /**下单*/
-   base.NilResponse CreateOrder(1: CreateOrderReq req) (api.post = "/service/wx/create-order")
+   base.NilResponse Buy(1: order.BuyReq req) (api.post = "/service/wx/buy")
 
    /**教练列表*/
    base.NilResponse CoachList(1: CoachListReq req) (api.post = "/service/wx/coach-list")
@@ -90,6 +98,84 @@ service WxMemberService {
    /**场地预约*/
    base.NilResponse CreatePlaceSchedule(1: CreatePlaceScheduleReq req) (api.post = "/service/wx/create-place-schedule")
 
+}
+struct CreatePlaceScheduleReq {
+    1:  optional i64 memberId=0 (api.raw = "memberId")
+    2:  optional i64 placeId=0 (api.raw = "placeId")
+}
+struct PlaceListReq{
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional i64 status=0 (api.raw = "status")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+struct CoachListReq{
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional i64 status=0 (api.raw = "status")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+
+
+struct ContestListReq {
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional i64 condition=0 (api.raw = "condition")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+struct JoinContestReq {
+    1:  optional i64 contestId=1 (api.raw = "contestId")
+    2:  optional string fields="" (api.raw = "fields")
+    3:  optional string name="" (api.raw = "name")
+    4:  optional string mobile="" (api.raw = "mobile")
+}
+struct BootcampListReq{
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional i64 condition=0 (api.raw = "condition")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+struct JoinBootcampReq{
+    1:  optional i64 bootcampId=0 (api.raw = "bootcampId")
+    2:  optional string fields="" (api.raw = "fields")
+    3:  optional string name="" (api.raw = "name")
+    4:  optional string mobile="" (api.raw = "mobile")
+}
+struct CommunityListReq{
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional i64 condition=0 (api.raw = "condition")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+struct JoinCommunityReq{
+    1:  optional i64 communityId=0 (api.raw = "communityId")
+    2:  optional string fields="" (api.raw = "fields")
+    3:  optional string name="" (api.raw = "name")
+}
+struct VenueListReq{
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  optional string type =""(api.raw = "type")
+    4:  optional list<i64> classify =0 (api.raw = "classify")
+    5: optional i64 status=0 (api.raw = "status")
+}
+struct ScanQRReq{
+    1:  optional i64 memberId=0 (api.raw = "memberId")
+    2:  optional i64 venueId=0 (api.raw = "venueId")
+}
+
+struct CreateMemberScheduleLessonsReq{
+    1:optional i64 memberId=0 (api.raw = "memberId")
+    2:optional i64 scheduleId=0 (api.raw = "scheduleId")
+    3:optional base.Seat seats  (api.raw = "seat")
+    4:optional i64 memberProductId    (api.raw = "memberProductId")
+}
+
+struct ProductListReq{
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3: optional i64 status=0 (api.raw = "status")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
 }
 
 service WxStaffService {
