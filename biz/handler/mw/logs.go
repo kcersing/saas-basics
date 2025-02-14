@@ -53,9 +53,17 @@ func LogMw() app.HandlerFunc {
 			userIDStr = "0"
 		}
 
-		userID, _ := strconv.Atoi(userIDStr)
+		userID, err := strconv.Atoi(userIDStr)
 
-		userInfo, _ := service.NewUser(ctx, c).Info(int64(userID))
+		if err != nil {
+			userID = 0
+		}
+
+		userInfo, err := service.NewUser(ctx, c).Info(int64(userID))
+
+		if err != nil {
+			hlog.Error(err)
+		}
 
 		if userInfo != nil {
 			username = userInfo.Name
@@ -63,7 +71,7 @@ func LogMw() app.HandlerFunc {
 
 		logs.Operatorsr = username
 
-		err := service.NewLogs(ctx, c).Create(&logs)
+		err = service.NewLogs(ctx, c).Create(&logs)
 
 		if err != nil {
 			hlog.Error(err)

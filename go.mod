@@ -28,7 +28,6 @@ require (
 	github.com/hertz-contrib/reverseproxy v1.0.6
 	github.com/hertz-contrib/swagger v0.1.0
 	github.com/jackc/pgx/v5 v5.7.1
-	github.com/jinzhu/copier v0.4.0
 	github.com/lib/pq v1.10.2
 	github.com/minio/minio-go/v7 v7.0.69
 	github.com/mojocn/base64Captcha v1.3.6

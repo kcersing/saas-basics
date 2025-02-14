@@ -13,7 +13,9 @@ func rootMw() []app.HandlerFunc {
 
 func _serviceMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.LogMw(),
+	}
 }
 
 func _memberMw() []app.HandlerFunc {

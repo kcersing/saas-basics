@@ -4,6 +4,8 @@ package wx
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"saas/biz/dal/casbin"
+	"saas/biz/handler/mw"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -13,7 +15,9 @@ func rootMw() []app.HandlerFunc {
 
 func _serviceMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.LogMw(),
+	}
 }
 
 func _wxMw() []app.HandlerFunc {
@@ -193,7 +197,9 @@ func _venuelistMw() []app.HandlerFunc {
 
 func _staffMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.GetJWTMw(casbin.CasbinEnforcer()).MiddlewareFunc(),
+	}
 }
 
 func _mymemberMw() []app.HandlerFunc {

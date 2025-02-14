@@ -10,15 +10,14 @@ import (
 
 func rootMw() []app.HandlerFunc {
 	// your code...
+	return nil
+}
+
+func _serviceMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
 		mw.GetJWTMw(casbin.CasbinEnforcer()).MiddlewareFunc(),
 		mw.LogMw(),
 	}
-}
-
-func _serviceMw() []app.HandlerFunc {
-	// your code...
-	return nil
 }
 
 func _entryMw() []app.HandlerFunc {
