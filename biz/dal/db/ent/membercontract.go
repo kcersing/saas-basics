@@ -80,12 +80,10 @@ func (e MemberContractEdges) ContentOrErr() ([]*MemberContractContent, error) {
 // MemberOrErr returns the Member value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e MemberContractEdges) MemberOrErr() (*Member, error) {
-	if e.loadedTypes[1] {
-		if e.Member == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: member.Label}
-		}
+	if e.Member != nil {
 		return e.Member, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: member.Label}
 	}
 	return nil, &NotLoadedError{edge: "member"}
 }
@@ -93,12 +91,10 @@ func (e MemberContractEdges) MemberOrErr() (*Member, error) {
 // OrderOrErr returns the Order value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e MemberContractEdges) OrderOrErr() (*Order, error) {
-	if e.loadedTypes[2] {
-		if e.Order == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: order.Label}
-		}
+	if e.Order != nil {
 		return e.Order, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: order.Label}
 	}
 	return nil, &NotLoadedError{edge: "order"}
 }
@@ -106,12 +102,10 @@ func (e MemberContractEdges) OrderOrErr() (*Order, error) {
 // MemberProductOrErr returns the MemberProduct value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e MemberContractEdges) MemberProductOrErr() (*MemberProduct, error) {
-	if e.loadedTypes[3] {
-		if e.MemberProduct == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: memberproduct.Label}
-		}
+	if e.MemberProduct != nil {
 		return e.MemberProduct, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: memberproduct.Label}
 	}
 	return nil, &NotLoadedError{edge: "member_product"}
 }

@@ -11,7 +11,6 @@ import (
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
-	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/biz/dal/db/ent/venue"
@@ -351,25 +350,6 @@ func (uu *UserUpdate) ClearDetail() *UserUpdate {
 	return uu
 }
 
-// SetTokenID sets the "token" edge to the Token entity by ID.
-func (uu *UserUpdate) SetTokenID(id int64) *UserUpdate {
-	uu.mutation.SetTokenID(id)
-	return uu
-}
-
-// SetNillableTokenID sets the "token" edge to the Token entity by ID if the given value is not nil.
-func (uu *UserUpdate) SetNillableTokenID(id *int64) *UserUpdate {
-	if id != nil {
-		uu = uu.SetTokenID(*id)
-	}
-	return uu
-}
-
-// SetToken sets the "token" edge to the Token entity.
-func (uu *UserUpdate) SetToken(t *Token) *UserUpdate {
-	return uu.SetTokenID(t.ID)
-}
-
 // AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
 func (uu *UserUpdate) AddTagIDs(ids ...int64) *UserUpdate {
 	uu.mutation.AddTagIDs(ids...)
@@ -463,12 +443,6 @@ func (uu *UserUpdate) AddUserTimePeriod(u ...*UserTimePeriod) *UserUpdate {
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
-}
-
-// ClearToken clears the "token" edge to the Token entity.
-func (uu *UserUpdate) ClearToken() *UserUpdate {
-	uu.mutation.ClearToken()
-	return uu
 }
 
 // ClearTags clears all "tags" edges to the DictionaryDetail entity.
@@ -748,35 +722,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.DetailCleared() {
 		_spec.ClearField(user.FieldDetail, field.TypeString)
-	}
-	if uu.mutation.TokenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: false,
-			Table:   user.TokenTable,
-			Columns: []string{user.TokenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := uu.mutation.TokenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: false,
-			Table:   user.TokenTable,
-			Columns: []string{user.TokenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if uu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1383,25 +1328,6 @@ func (uuo *UserUpdateOne) ClearDetail() *UserUpdateOne {
 	return uuo
 }
 
-// SetTokenID sets the "token" edge to the Token entity by ID.
-func (uuo *UserUpdateOne) SetTokenID(id int64) *UserUpdateOne {
-	uuo.mutation.SetTokenID(id)
-	return uuo
-}
-
-// SetNillableTokenID sets the "token" edge to the Token entity by ID if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableTokenID(id *int64) *UserUpdateOne {
-	if id != nil {
-		uuo = uuo.SetTokenID(*id)
-	}
-	return uuo
-}
-
-// SetToken sets the "token" edge to the Token entity.
-func (uuo *UserUpdateOne) SetToken(t *Token) *UserUpdateOne {
-	return uuo.SetTokenID(t.ID)
-}
-
 // AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
 func (uuo *UserUpdateOne) AddTagIDs(ids ...int64) *UserUpdateOne {
 	uuo.mutation.AddTagIDs(ids...)
@@ -1495,12 +1421,6 @@ func (uuo *UserUpdateOne) AddUserTimePeriod(u ...*UserTimePeriod) *UserUpdateOne
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
-}
-
-// ClearToken clears the "token" edge to the Token entity.
-func (uuo *UserUpdateOne) ClearToken() *UserUpdateOne {
-	uuo.mutation.ClearToken()
-	return uuo
 }
 
 // ClearTags clears all "tags" edges to the DictionaryDetail entity.
@@ -1810,35 +1730,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.DetailCleared() {
 		_spec.ClearField(user.FieldDetail, field.TypeString)
-	}
-	if uuo.mutation.TokenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: false,
-			Table:   user.TokenTable,
-			Columns: []string{user.TokenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := uuo.mutation.TokenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: false,
-			Table:   user.TokenTable,
-			Columns: []string{user.TokenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if uuo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{

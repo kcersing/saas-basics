@@ -12,6 +12,8 @@ struct TokenInfo {
     6:  string token (api.raw = "token")
     7:  string source (api.raw = "source")
     8:  string expiredAt (api.raw = "expiredAt")
+    9:  i64 type (api.raw = "type")
+    10: string mobile (api.raw = "mobile")
 }
 // token列表请求参数
 struct TokenListReq {
@@ -19,6 +21,8 @@ struct TokenListReq {
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3:  string username="" (api.raw = "username")
     4:  i64 userId=0 (api.raw = "userID")
+    5:  i64 type (api.raw = "type")
+    6: string mobile (api.raw = "mobile")
 }
 
 service TokenService{

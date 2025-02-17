@@ -221,3 +221,33 @@ func _signstaffscheduleMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _membercaptchaMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberloginMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _memberregisterMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _staffcaptchaMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _staffloginMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _stafflogoutMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

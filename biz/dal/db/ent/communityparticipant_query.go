@@ -12,6 +12,7 @@ import (
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -109,7 +110,7 @@ func (cpq *CommunityParticipantQuery) QueryMembers() *MemberQuery {
 // First returns the first CommunityParticipant entity from the query.
 // Returns a *NotFoundError when no CommunityParticipant was found.
 func (cpq *CommunityParticipantQuery) First(ctx context.Context) (*CommunityParticipant, error) {
-	nodes, err := cpq.Limit(1).All(setContextOp(ctx, cpq.ctx, "First"))
+	nodes, err := cpq.Limit(1).All(setContextOp(ctx, cpq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +133,7 @@ func (cpq *CommunityParticipantQuery) FirstX(ctx context.Context) *CommunityPart
 // Returns a *NotFoundError when no CommunityParticipant ID was found.
 func (cpq *CommunityParticipantQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = cpq.Limit(1).IDs(setContextOp(ctx, cpq.ctx, "FirstID")); err != nil {
+	if ids, err = cpq.Limit(1).IDs(setContextOp(ctx, cpq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -155,7 +156,7 @@ func (cpq *CommunityParticipantQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one CommunityParticipant entity is found.
 // Returns a *NotFoundError when no CommunityParticipant entities are found.
 func (cpq *CommunityParticipantQuery) Only(ctx context.Context) (*CommunityParticipant, error) {
-	nodes, err := cpq.Limit(2).All(setContextOp(ctx, cpq.ctx, "Only"))
+	nodes, err := cpq.Limit(2).All(setContextOp(ctx, cpq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +184,7 @@ func (cpq *CommunityParticipantQuery) OnlyX(ctx context.Context) *CommunityParti
 // Returns a *NotFoundError when no entities are found.
 func (cpq *CommunityParticipantQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = cpq.Limit(2).IDs(setContextOp(ctx, cpq.ctx, "OnlyID")); err != nil {
+	if ids, err = cpq.Limit(2).IDs(setContextOp(ctx, cpq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -208,7 +209,7 @@ func (cpq *CommunityParticipantQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of CommunityParticipants.
 func (cpq *CommunityParticipantQuery) All(ctx context.Context) ([]*CommunityParticipant, error) {
-	ctx = setContextOp(ctx, cpq.ctx, "All")
+	ctx = setContextOp(ctx, cpq.ctx, ent.OpQueryAll)
 	if err := cpq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -230,7 +231,7 @@ func (cpq *CommunityParticipantQuery) IDs(ctx context.Context) (ids []int64, err
 	if cpq.ctx.Unique == nil && cpq.path != nil {
 		cpq.Unique(true)
 	}
-	ctx = setContextOp(ctx, cpq.ctx, "IDs")
+	ctx = setContextOp(ctx, cpq.ctx, ent.OpQueryIDs)
 	if err = cpq.Select(communityparticipant.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -248,7 +249,7 @@ func (cpq *CommunityParticipantQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (cpq *CommunityParticipantQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, cpq.ctx, "Count")
+	ctx = setContextOp(ctx, cpq.ctx, ent.OpQueryCount)
 	if err := cpq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -266,7 +267,7 @@ func (cpq *CommunityParticipantQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (cpq *CommunityParticipantQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, cpq.ctx, "Exist")
+	ctx = setContextOp(ctx, cpq.ctx, ent.OpQueryExist)
 	switch _, err := cpq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -634,7 +635,7 @@ func (cpgb *CommunityParticipantGroupBy) Aggregate(fns ...AggregateFunc) *Commun
 
 // Scan applies the selector query and scans the result into the given value.
 func (cpgb *CommunityParticipantGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cpgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, cpgb.build.ctx, ent.OpQueryGroupBy)
 	if err := cpgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -682,7 +683,7 @@ func (cps *CommunityParticipantSelect) Aggregate(fns ...AggregateFunc) *Communit
 
 // Scan applies the selector query and scans the result into the given value.
 func (cps *CommunityParticipantSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cps.ctx, "Select")
+	ctx = setContextOp(ctx, cps.ctx, ent.OpQuerySelect)
 	if err := cps.prepareQuery(ctx); err != nil {
 		return err
 	}

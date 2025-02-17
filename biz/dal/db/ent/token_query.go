@@ -8,8 +8,8 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/token"
-	"saas/biz/dal/db/ent/user"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -22,8 +22,6 @@ type TokenQuery struct {
 	order      []token.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Token
-	withOwner  *UserQuery
-	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -60,32 +58,10 @@ func (tq *TokenQuery) Order(o ...token.OrderOption) *TokenQuery {
 	return tq
 }
 
-// QueryOwner chains the current query on the "owner" edge.
-func (tq *TokenQuery) QueryOwner() *UserQuery {
-	query := (&UserClient{config: tq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := tq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(token.Table, token.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, token.OwnerTable, token.OwnerColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // First returns the first Token entity from the query.
 // Returns a *NotFoundError when no Token was found.
 func (tq *TokenQuery) First(ctx context.Context) (*Token, error) {
-	nodes, err := tq.Limit(1).All(setContextOp(ctx, tq.ctx, "First"))
+	nodes, err := tq.Limit(1).All(setContextOp(ctx, tq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +84,7 @@ func (tq *TokenQuery) FirstX(ctx context.Context) *Token {
 // Returns a *NotFoundError when no Token ID was found.
 func (tq *TokenQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = tq.Limit(1).IDs(setContextOp(ctx, tq.ctx, "FirstID")); err != nil {
+	if ids, err = tq.Limit(1).IDs(setContextOp(ctx, tq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +107,7 @@ func (tq *TokenQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Token entity is found.
 // Returns a *NotFoundError when no Token entities are found.
 func (tq *TokenQuery) Only(ctx context.Context) (*Token, error) {
-	nodes, err := tq.Limit(2).All(setContextOp(ctx, tq.ctx, "Only"))
+	nodes, err := tq.Limit(2).All(setContextOp(ctx, tq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +135,7 @@ func (tq *TokenQuery) OnlyX(ctx context.Context) *Token {
 // Returns a *NotFoundError when no entities are found.
 func (tq *TokenQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = tq.Limit(2).IDs(setContextOp(ctx, tq.ctx, "OnlyID")); err != nil {
+	if ids, err = tq.Limit(2).IDs(setContextOp(ctx, tq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +160,7 @@ func (tq *TokenQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Tokens.
 func (tq *TokenQuery) All(ctx context.Context) ([]*Token, error) {
-	ctx = setContextOp(ctx, tq.ctx, "All")
+	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryAll)
 	if err := tq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +182,7 @@ func (tq *TokenQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if tq.ctx.Unique == nil && tq.path != nil {
 		tq.Unique(true)
 	}
-	ctx = setContextOp(ctx, tq.ctx, "IDs")
+	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryIDs)
 	if err = tq.Select(token.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +200,7 @@ func (tq *TokenQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (tq *TokenQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tq.ctx, "Count")
+	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryCount)
 	if err := tq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +218,7 @@ func (tq *TokenQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (tq *TokenQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tq.ctx, "Exist")
+	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryExist)
 	switch _, err := tq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -274,22 +250,10 @@ func (tq *TokenQuery) Clone() *TokenQuery {
 		order:      append([]token.OrderOption{}, tq.order...),
 		inters:     append([]Interceptor{}, tq.inters...),
 		predicates: append([]predicate.Token{}, tq.predicates...),
-		withOwner:  tq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:  tq.sql.Clone(),
 		path: tq.path,
 	}
-}
-
-// WithOwner tells the query-builder to eager-load the nodes that are connected to
-// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TokenQuery) WithOwner(opts ...func(*UserQuery)) *TokenQuery {
-	query := (&UserClient{config: tq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	tq.withOwner = query
-	return tq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -368,26 +332,15 @@ func (tq *TokenQuery) prepareQuery(ctx context.Context) error {
 
 func (tq *TokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Token, error) {
 	var (
-		nodes       = []*Token{}
-		withFKs     = tq.withFKs
-		_spec       = tq.querySpec()
-		loadedTypes = [1]bool{
-			tq.withOwner != nil,
-		}
+		nodes = []*Token{}
+		_spec = tq.querySpec()
 	)
-	if tq.withOwner != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, token.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Token).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Token{config: tq.config}
 		nodes = append(nodes, node)
-		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -399,46 +352,7 @@ func (tq *TokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Token,
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tq.withOwner; query != nil {
-		if err := tq.loadOwner(ctx, query, nodes, nil,
-			func(n *Token, e *User) { n.Edges.Owner = e }); err != nil {
-			return nil, err
-		}
-	}
 	return nodes, nil
-}
-
-func (tq *TokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*Token, init func(*Token), assign func(*Token, *User)) error {
-	ids := make([]int64, 0, len(nodes))
-	nodeids := make(map[int64][]*Token)
-	for i := range nodes {
-		if nodes[i].user_token == nil {
-			continue
-		}
-		fk := *nodes[i].user_token
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(user.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "user_token" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
 }
 
 func (tq *TokenQuery) sqlCount(ctx context.Context) (int, error) {
@@ -536,7 +450,7 @@ func (tgb *TokenGroupBy) Aggregate(fns ...AggregateFunc) *TokenGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (tgb *TokenGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, tgb.build.ctx, ent.OpQueryGroupBy)
 	if err := tgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -584,7 +498,7 @@ func (ts *TokenSelect) Aggregate(fns ...AggregateFunc) *TokenSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ts *TokenSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ts.ctx, "Select")
+	ctx = setContextOp(ctx, ts.ctx, ent.OpQuerySelect)
 	if err := ts.prepareQuery(ctx); err != nil {
 		return err
 	}

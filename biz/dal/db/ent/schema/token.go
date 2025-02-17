@@ -4,7 +4,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"saas/biz/dal/db/ent/schema/mixins"
@@ -21,18 +20,13 @@ func (Token) Fields() []ent.Field {
 		field.String("token").Comment("Token string | Token 字符串"),
 		field.String("source").Comment("Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"),
 		field.Time("expired_at").Comment(" Expire time | 过期时间"),
+		field.Int64("type").Default(1).Comment("type 1会员 2员工"),
 	}
 }
 
 func (Token) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},
-	}
-}
-
-func (Token) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.From("owner", User.Type).Ref("token").Unique(),
 	}
 }
 

@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venuesms"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -84,7 +85,7 @@ func (vsq *VenueSmsQuery) QueryVenue() *VenueQuery {
 // First returns the first VenueSms entity from the query.
 // Returns a *NotFoundError when no VenueSms was found.
 func (vsq *VenueSmsQuery) First(ctx context.Context) (*VenueSms, error) {
-	nodes, err := vsq.Limit(1).All(setContextOp(ctx, vsq.ctx, "First"))
+	nodes, err := vsq.Limit(1).All(setContextOp(ctx, vsq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +108,7 @@ func (vsq *VenueSmsQuery) FirstX(ctx context.Context) *VenueSms {
 // Returns a *NotFoundError when no VenueSms ID was found.
 func (vsq *VenueSmsQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = vsq.Limit(1).IDs(setContextOp(ctx, vsq.ctx, "FirstID")); err != nil {
+	if ids, err = vsq.Limit(1).IDs(setContextOp(ctx, vsq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -130,7 +131,7 @@ func (vsq *VenueSmsQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one VenueSms entity is found.
 // Returns a *NotFoundError when no VenueSms entities are found.
 func (vsq *VenueSmsQuery) Only(ctx context.Context) (*VenueSms, error) {
-	nodes, err := vsq.Limit(2).All(setContextOp(ctx, vsq.ctx, "Only"))
+	nodes, err := vsq.Limit(2).All(setContextOp(ctx, vsq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +159,7 @@ func (vsq *VenueSmsQuery) OnlyX(ctx context.Context) *VenueSms {
 // Returns a *NotFoundError when no entities are found.
 func (vsq *VenueSmsQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = vsq.Limit(2).IDs(setContextOp(ctx, vsq.ctx, "OnlyID")); err != nil {
+	if ids, err = vsq.Limit(2).IDs(setContextOp(ctx, vsq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -183,7 +184,7 @@ func (vsq *VenueSmsQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of VenueSmsSlice.
 func (vsq *VenueSmsQuery) All(ctx context.Context) ([]*VenueSms, error) {
-	ctx = setContextOp(ctx, vsq.ctx, "All")
+	ctx = setContextOp(ctx, vsq.ctx, ent.OpQueryAll)
 	if err := vsq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -205,7 +206,7 @@ func (vsq *VenueSmsQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if vsq.ctx.Unique == nil && vsq.path != nil {
 		vsq.Unique(true)
 	}
-	ctx = setContextOp(ctx, vsq.ctx, "IDs")
+	ctx = setContextOp(ctx, vsq.ctx, ent.OpQueryIDs)
 	if err = vsq.Select(venuesms.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -223,7 +224,7 @@ func (vsq *VenueSmsQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (vsq *VenueSmsQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, vsq.ctx, "Count")
+	ctx = setContextOp(ctx, vsq.ctx, ent.OpQueryCount)
 	if err := vsq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -241,7 +242,7 @@ func (vsq *VenueSmsQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (vsq *VenueSmsQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, vsq.ctx, "Exist")
+	ctx = setContextOp(ctx, vsq.ctx, ent.OpQueryExist)
 	switch _, err := vsq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -528,7 +529,7 @@ func (vsgb *VenueSmsGroupBy) Aggregate(fns ...AggregateFunc) *VenueSmsGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (vsgb *VenueSmsGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, vsgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, vsgb.build.ctx, ent.OpQueryGroupBy)
 	if err := vsgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -576,7 +577,7 @@ func (vss *VenueSmsSelect) Aggregate(fns ...AggregateFunc) *VenueSmsSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (vss *VenueSmsSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, vss.ctx, "Select")
+	ctx = setContextOp(ctx, vss.ctx, ent.OpQuerySelect)
 	if err := vss.prepareQuery(ctx); err != nil {
 		return err
 	}

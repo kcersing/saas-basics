@@ -13,6 +13,7 @@ import (
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -156,7 +157,7 @@ func (elq *EntryLogsQuery) QueryMemberProducts() *MemberProductQuery {
 // First returns the first EntryLogs entity from the query.
 // Returns a *NotFoundError when no EntryLogs was found.
 func (elq *EntryLogsQuery) First(ctx context.Context) (*EntryLogs, error) {
-	nodes, err := elq.Limit(1).All(setContextOp(ctx, elq.ctx, "First"))
+	nodes, err := elq.Limit(1).All(setContextOp(ctx, elq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -179,7 +180,7 @@ func (elq *EntryLogsQuery) FirstX(ctx context.Context) *EntryLogs {
 // Returns a *NotFoundError when no EntryLogs ID was found.
 func (elq *EntryLogsQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = elq.Limit(1).IDs(setContextOp(ctx, elq.ctx, "FirstID")); err != nil {
+	if ids, err = elq.Limit(1).IDs(setContextOp(ctx, elq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -202,7 +203,7 @@ func (elq *EntryLogsQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one EntryLogs entity is found.
 // Returns a *NotFoundError when no EntryLogs entities are found.
 func (elq *EntryLogsQuery) Only(ctx context.Context) (*EntryLogs, error) {
-	nodes, err := elq.Limit(2).All(setContextOp(ctx, elq.ctx, "Only"))
+	nodes, err := elq.Limit(2).All(setContextOp(ctx, elq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -230,7 +231,7 @@ func (elq *EntryLogsQuery) OnlyX(ctx context.Context) *EntryLogs {
 // Returns a *NotFoundError when no entities are found.
 func (elq *EntryLogsQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = elq.Limit(2).IDs(setContextOp(ctx, elq.ctx, "OnlyID")); err != nil {
+	if ids, err = elq.Limit(2).IDs(setContextOp(ctx, elq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -255,7 +256,7 @@ func (elq *EntryLogsQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of EntryLogsSlice.
 func (elq *EntryLogsQuery) All(ctx context.Context) ([]*EntryLogs, error) {
-	ctx = setContextOp(ctx, elq.ctx, "All")
+	ctx = setContextOp(ctx, elq.ctx, ent.OpQueryAll)
 	if err := elq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -277,7 +278,7 @@ func (elq *EntryLogsQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if elq.ctx.Unique == nil && elq.path != nil {
 		elq.Unique(true)
 	}
-	ctx = setContextOp(ctx, elq.ctx, "IDs")
+	ctx = setContextOp(ctx, elq.ctx, ent.OpQueryIDs)
 	if err = elq.Select(entrylogs.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -295,7 +296,7 @@ func (elq *EntryLogsQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (elq *EntryLogsQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, elq.ctx, "Count")
+	ctx = setContextOp(ctx, elq.ctx, ent.OpQueryCount)
 	if err := elq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -313,7 +314,7 @@ func (elq *EntryLogsQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (elq *EntryLogsQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, elq.ctx, "Exist")
+	ctx = setContextOp(ctx, elq.ctx, ent.OpQueryExist)
 	switch _, err := elq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -753,7 +754,7 @@ func (elgb *EntryLogsGroupBy) Aggregate(fns ...AggregateFunc) *EntryLogsGroupBy 
 
 // Scan applies the selector query and scans the result into the given value.
 func (elgb *EntryLogsGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, elgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, elgb.build.ctx, ent.OpQueryGroupBy)
 	if err := elgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -801,7 +802,7 @@ func (els *EntryLogsSelect) Aggregate(fns ...AggregateFunc) *EntryLogsSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (els *EntryLogsSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, els.ctx, "Select")
+	ctx = setContextOp(ctx, els.ctx, ent.OpQuerySelect)
 	if err := els.prepareQuery(ctx); err != nil {
 		return err
 	}

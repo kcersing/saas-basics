@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/usertimeperiod"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -84,7 +85,7 @@ func (utpq *UserTimePeriodQuery) QueryUsers() *UserQuery {
 // First returns the first UserTimePeriod entity from the query.
 // Returns a *NotFoundError when no UserTimePeriod was found.
 func (utpq *UserTimePeriodQuery) First(ctx context.Context) (*UserTimePeriod, error) {
-	nodes, err := utpq.Limit(1).All(setContextOp(ctx, utpq.ctx, "First"))
+	nodes, err := utpq.Limit(1).All(setContextOp(ctx, utpq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +108,7 @@ func (utpq *UserTimePeriodQuery) FirstX(ctx context.Context) *UserTimePeriod {
 // Returns a *NotFoundError when no UserTimePeriod ID was found.
 func (utpq *UserTimePeriodQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = utpq.Limit(1).IDs(setContextOp(ctx, utpq.ctx, "FirstID")); err != nil {
+	if ids, err = utpq.Limit(1).IDs(setContextOp(ctx, utpq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -130,7 +131,7 @@ func (utpq *UserTimePeriodQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one UserTimePeriod entity is found.
 // Returns a *NotFoundError when no UserTimePeriod entities are found.
 func (utpq *UserTimePeriodQuery) Only(ctx context.Context) (*UserTimePeriod, error) {
-	nodes, err := utpq.Limit(2).All(setContextOp(ctx, utpq.ctx, "Only"))
+	nodes, err := utpq.Limit(2).All(setContextOp(ctx, utpq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +159,7 @@ func (utpq *UserTimePeriodQuery) OnlyX(ctx context.Context) *UserTimePeriod {
 // Returns a *NotFoundError when no entities are found.
 func (utpq *UserTimePeriodQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = utpq.Limit(2).IDs(setContextOp(ctx, utpq.ctx, "OnlyID")); err != nil {
+	if ids, err = utpq.Limit(2).IDs(setContextOp(ctx, utpq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -183,7 +184,7 @@ func (utpq *UserTimePeriodQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of UserTimePeriods.
 func (utpq *UserTimePeriodQuery) All(ctx context.Context) ([]*UserTimePeriod, error) {
-	ctx = setContextOp(ctx, utpq.ctx, "All")
+	ctx = setContextOp(ctx, utpq.ctx, ent.OpQueryAll)
 	if err := utpq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -205,7 +206,7 @@ func (utpq *UserTimePeriodQuery) IDs(ctx context.Context) (ids []int64, err erro
 	if utpq.ctx.Unique == nil && utpq.path != nil {
 		utpq.Unique(true)
 	}
-	ctx = setContextOp(ctx, utpq.ctx, "IDs")
+	ctx = setContextOp(ctx, utpq.ctx, ent.OpQueryIDs)
 	if err = utpq.Select(usertimeperiod.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -223,7 +224,7 @@ func (utpq *UserTimePeriodQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (utpq *UserTimePeriodQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, utpq.ctx, "Count")
+	ctx = setContextOp(ctx, utpq.ctx, ent.OpQueryCount)
 	if err := utpq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -241,7 +242,7 @@ func (utpq *UserTimePeriodQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (utpq *UserTimePeriodQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, utpq.ctx, "Exist")
+	ctx = setContextOp(ctx, utpq.ctx, ent.OpQueryExist)
 	switch _, err := utpq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -528,7 +529,7 @@ func (utpgb *UserTimePeriodGroupBy) Aggregate(fns ...AggregateFunc) *UserTimePer
 
 // Scan applies the selector query and scans the result into the given value.
 func (utpgb *UserTimePeriodGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, utpgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, utpgb.build.ctx, ent.OpQueryGroupBy)
 	if err := utpgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -576,7 +577,7 @@ func (utps *UserTimePeriodSelect) Aggregate(fns ...AggregateFunc) *UserTimePerio
 
 // Scan applies the selector query and scans the result into the given value.
 func (utps *UserTimePeriodSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, utps.ctx, "Select")
+	ctx = setContextOp(ctx, utps.ctx, ent.OpQuerySelect)
 	if err := utps.prepareQuery(ctx); err != nil {
 		return err
 	}

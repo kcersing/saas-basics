@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -93,6 +92,11 @@ func Source(v string) predicate.Token {
 // ExpiredAt applies equality check predicate on the "expired_at" field. It's identical to ExpiredAtEQ.
 func ExpiredAt(v time.Time) predicate.Token {
 	return predicate.Token(sql.FieldEQ(FieldExpiredAt, v))
+}
+
+// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
+func Type(v int64) predicate.Token {
+	return predicate.Token(sql.FieldEQ(FieldType, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -505,27 +509,44 @@ func ExpiredAtLTE(v time.Time) predicate.Token {
 	return predicate.Token(sql.FieldLTE(FieldExpiredAt, v))
 }
 
-// HasOwner applies the HasEdge predicate on the "owner" edge.
-func HasOwner() predicate.Token {
-	return predicate.Token(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, OwnerTable, OwnerColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v int64) predicate.Token {
+	return predicate.Token(sql.FieldEQ(FieldType, v))
 }
 
-// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
-func HasOwnerWith(preds ...predicate.User) predicate.Token {
-	return predicate.Token(func(s *sql.Selector) {
-		step := newOwnerStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v int64) predicate.Token {
+	return predicate.Token(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...int64) predicate.Token {
+	return predicate.Token(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...int64) predicate.Token {
+	return predicate.Token(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeGT applies the GT predicate on the "type" field.
+func TypeGT(v int64) predicate.Token {
+	return predicate.Token(sql.FieldGT(FieldType, v))
+}
+
+// TypeGTE applies the GTE predicate on the "type" field.
+func TypeGTE(v int64) predicate.Token {
+	return predicate.Token(sql.FieldGTE(FieldType, v))
+}
+
+// TypeLT applies the LT predicate on the "type" field.
+func TypeLT(v int64) predicate.Token {
+	return predicate.Token(sql.FieldLT(FieldType, v))
+}
+
+// TypeLTE applies the LTE predicate on the "type" field.
+func TypeLTE(v int64) predicate.Token {
+	return predicate.Token(sql.FieldLTE(FieldType, v))
 }
 
 // And groups predicates with the AND operator between them.

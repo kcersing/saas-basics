@@ -1000,29 +1000,6 @@ func DetailContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldDetail, v))
 }
 
-// HasToken applies the HasEdge predicate on the "token" edge.
-func HasToken() predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, TokenTable, TokenColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasTokenWith applies the HasEdge predicate on the "token" edge with a given conditions (other predicates).
-func HasTokenWith(preds ...predicate.Token) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		step := newTokenStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasTags applies the HasEdge predicate on the "tags" edge.
 func HasTags() predicate.User {
 	return predicate.User(func(s *sql.Selector) {

@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/orderpay"
 	"saas/biz/dal/db/ent/predicate"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -84,7 +85,7 @@ func (opq *OrderPayQuery) QueryOrder() *OrderQuery {
 // First returns the first OrderPay entity from the query.
 // Returns a *NotFoundError when no OrderPay was found.
 func (opq *OrderPayQuery) First(ctx context.Context) (*OrderPay, error) {
-	nodes, err := opq.Limit(1).All(setContextOp(ctx, opq.ctx, "First"))
+	nodes, err := opq.Limit(1).All(setContextOp(ctx, opq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +108,7 @@ func (opq *OrderPayQuery) FirstX(ctx context.Context) *OrderPay {
 // Returns a *NotFoundError when no OrderPay ID was found.
 func (opq *OrderPayQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = opq.Limit(1).IDs(setContextOp(ctx, opq.ctx, "FirstID")); err != nil {
+	if ids, err = opq.Limit(1).IDs(setContextOp(ctx, opq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -130,7 +131,7 @@ func (opq *OrderPayQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one OrderPay entity is found.
 // Returns a *NotFoundError when no OrderPay entities are found.
 func (opq *OrderPayQuery) Only(ctx context.Context) (*OrderPay, error) {
-	nodes, err := opq.Limit(2).All(setContextOp(ctx, opq.ctx, "Only"))
+	nodes, err := opq.Limit(2).All(setContextOp(ctx, opq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +159,7 @@ func (opq *OrderPayQuery) OnlyX(ctx context.Context) *OrderPay {
 // Returns a *NotFoundError when no entities are found.
 func (opq *OrderPayQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = opq.Limit(2).IDs(setContextOp(ctx, opq.ctx, "OnlyID")); err != nil {
+	if ids, err = opq.Limit(2).IDs(setContextOp(ctx, opq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -183,7 +184,7 @@ func (opq *OrderPayQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of OrderPays.
 func (opq *OrderPayQuery) All(ctx context.Context) ([]*OrderPay, error) {
-	ctx = setContextOp(ctx, opq.ctx, "All")
+	ctx = setContextOp(ctx, opq.ctx, ent.OpQueryAll)
 	if err := opq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -205,7 +206,7 @@ func (opq *OrderPayQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if opq.ctx.Unique == nil && opq.path != nil {
 		opq.Unique(true)
 	}
-	ctx = setContextOp(ctx, opq.ctx, "IDs")
+	ctx = setContextOp(ctx, opq.ctx, ent.OpQueryIDs)
 	if err = opq.Select(orderpay.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -223,7 +224,7 @@ func (opq *OrderPayQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (opq *OrderPayQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, opq.ctx, "Count")
+	ctx = setContextOp(ctx, opq.ctx, ent.OpQueryCount)
 	if err := opq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -241,7 +242,7 @@ func (opq *OrderPayQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (opq *OrderPayQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, opq.ctx, "Exist")
+	ctx = setContextOp(ctx, opq.ctx, ent.OpQueryExist)
 	switch _, err := opq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -528,7 +529,7 @@ func (opgb *OrderPayGroupBy) Aggregate(fns ...AggregateFunc) *OrderPayGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (opgb *OrderPayGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, opgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, opgb.build.ctx, ent.OpQueryGroupBy)
 	if err := opgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -576,7 +577,7 @@ func (ops *OrderPaySelect) Aggregate(fns ...AggregateFunc) *OrderPaySelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ops *OrderPaySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ops.ctx, "Select")
+	ctx = setContextOp(ctx, ops.ctx, ent.OpQuerySelect)
 	if err := ops.prepareQuery(ctx); err != nil {
 		return err
 	}

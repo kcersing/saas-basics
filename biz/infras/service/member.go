@@ -15,6 +15,7 @@ import (
 	"saas/biz/infras/do"
 	"saas/config"
 	"saas/idl_gen/model/member"
+	"saas/idl_gen/model/wx"
 	"saas/pkg/encrypt"
 	"saas/pkg/enums"
 	"time"
@@ -226,4 +227,18 @@ func (m Member) ChangePassword(ID int64, oldPassword, newPassword string) error 
 func (m Member) UpdateMemberStatus(ID int64, status int64) error {
 	_, err := m.db.Member.Update().Where(member2.IDEQ(ID)).SetStatus(status).Save(m.ctx)
 	return err
+}
+
+func (m Member) Login(res *wx.MemberLoginReq) (info *member.MemberInfo, err error) {
+	return
+}
+func (m Member) Captcha(res *wx.MemberCaptchaReq) (code string, err error) {
+	return
+}
+func (m Member) Registe(res *wx.MemberRegisterReq) (info *member.MemberInfo, err error) {
+	return
+}
+
+func (m Member) Logout(id int64) (ok bool, err error) {
+	return true, nil
 }

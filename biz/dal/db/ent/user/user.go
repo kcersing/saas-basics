@@ -46,8 +46,6 @@ const (
 	FieldAvatar = "avatar"
 	// FieldDetail holds the string denoting the detail field in the database.
 	FieldDetail = "detail"
-	// EdgeToken holds the string denoting the token edge name in mutations.
-	EdgeToken = "token"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
 	// EdgeCreatedOrders holds the string denoting the created_orders edge name in mutations.
@@ -62,13 +60,6 @@ const (
 	EdgeUserTimePeriod = "user_time_period"
 	// Table holds the table name of the user in the database.
 	Table = "sys_users"
-	// TokenTable is the table that holds the token relation/edge.
-	TokenTable = "sys_tokens"
-	// TokenInverseTable is the table name for the Token entity.
-	// It exists in this package in order to avoid circular dependency with the "token" package.
-	TokenInverseTable = "sys_tokens"
-	// TokenColumn is the table column denoting the token relation/edge.
-	TokenColumn = "user_token"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
 	TagsTable = "user_tags"
 	// TagsInverseTable is the table name for the DictionaryDetail entity.
@@ -254,13 +245,6 @@ func ByDetail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDetail, opts...).ToFunc()
 }
 
-// ByTokenField orders the results by token field.
-func ByTokenField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTokenStep(), sql.OrderByField(field, opts...))
-	}
-}
-
 // ByTagsCount orders the results by tags count.
 func ByTagsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -343,13 +327,6 @@ func ByUserTimePeriod(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newUserTimePeriodStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
-}
-func newTokenStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TokenInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, TokenTable, TokenColumn),
-	)
 }
 func newTagsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

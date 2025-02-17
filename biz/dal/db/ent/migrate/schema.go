@@ -1333,21 +1333,13 @@ var (
 		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
 		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
 		{Name: "expired_at", Type: field.TypeTime, Comment: " Expire time | 过期时间"},
-		{Name: "user_token", Type: field.TypeInt64, Unique: true, Nullable: true},
+		{Name: "type", Type: field.TypeInt64, Comment: "type 1会员 2员工", Default: 1},
 	}
 	// SysTokensTable holds the schema information for the "sys_tokens" table.
 	SysTokensTable = &schema.Table{
 		Name:       "sys_tokens",
 		Columns:    SysTokensColumns,
 		PrimaryKey: []*schema.Column{SysTokensColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "sys_tokens_sys_users_token",
-				Columns:    []*schema.Column{SysTokensColumns[9]},
-				RefColumns: []*schema.Column{SysUsersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "token_user_id",
@@ -2034,7 +2026,6 @@ func init() {
 		Table:   "schedule_member",
 		Options: "AUTO_INCREMENT = 100000",
 	}
-	SysTokensTable.ForeignKeys[0].RefTable = SysUsersTable
 	SysTokensTable.Annotation = &entsql.Annotation{
 		Table: "sys_tokens",
 	}

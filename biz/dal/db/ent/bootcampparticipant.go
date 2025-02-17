@@ -65,12 +65,10 @@ type BootcampParticipantEdges struct {
 // BootcampsOrErr returns the Bootcamps value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BootcampParticipantEdges) BootcampsOrErr() (*Bootcamp, error) {
-	if e.loadedTypes[0] {
-		if e.Bootcamps == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: bootcamp.Label}
-		}
+	if e.Bootcamps != nil {
 		return e.Bootcamps, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: bootcamp.Label}
 	}
 	return nil, &NotLoadedError{edge: "bootcamps"}
 }

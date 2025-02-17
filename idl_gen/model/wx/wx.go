@@ -13,6 +13,1315 @@ import (
 	"saas/idl_gen/model/schedule"
 )
 
+/**
+ * 微信小程序服务
+ */
+type MemberRegisterReq struct {
+	Mobile  string `thrift:"mobile,1,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Captcha string `thrift:"captcha,2,optional" form:"captcha" json:"captcha" query:"captcha"`
+	VenueId int64  `thrift:"venueId,4,optional" form:"venueId" json:"venueId" query:"venueId"`
+}
+
+func NewMemberRegisterReq() *MemberRegisterReq {
+	return &MemberRegisterReq{
+
+		Mobile:  "",
+		Captcha: "",
+		VenueId: 0,
+	}
+}
+
+func (p *MemberRegisterReq) InitDefault() {
+	p.Mobile = ""
+	p.Captcha = ""
+	p.VenueId = 0
+}
+
+var MemberRegisterReq_Mobile_DEFAULT string = ""
+
+func (p *MemberRegisterReq) GetMobile() (v string) {
+	if !p.IsSetMobile() {
+		return MemberRegisterReq_Mobile_DEFAULT
+	}
+	return p.Mobile
+}
+
+var MemberRegisterReq_Captcha_DEFAULT string = ""
+
+func (p *MemberRegisterReq) GetCaptcha() (v string) {
+	if !p.IsSetCaptcha() {
+		return MemberRegisterReq_Captcha_DEFAULT
+	}
+	return p.Captcha
+}
+
+var MemberRegisterReq_VenueId_DEFAULT int64 = 0
+
+func (p *MemberRegisterReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return MemberRegisterReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var fieldIDToName_MemberRegisterReq = map[int16]string{
+	1: "mobile",
+	2: "captcha",
+	4: "venueId",
+}
+
+func (p *MemberRegisterReq) IsSetMobile() bool {
+	return p.Mobile != MemberRegisterReq_Mobile_DEFAULT
+}
+
+func (p *MemberRegisterReq) IsSetCaptcha() bool {
+	return p.Captcha != MemberRegisterReq_Captcha_DEFAULT
+}
+
+func (p *MemberRegisterReq) IsSetVenueId() bool {
+	return p.VenueId != MemberRegisterReq_VenueId_DEFAULT
+}
+
+func (p *MemberRegisterReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MemberRegisterReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *MemberRegisterReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Mobile = _field
+	return nil
+}
+func (p *MemberRegisterReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Captcha = _field
+	return nil
+}
+func (p *MemberRegisterReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+
+func (p *MemberRegisterReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberRegisterReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *MemberRegisterReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMobile() {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Mobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *MemberRegisterReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCaptcha() {
+		if err = oprot.WriteFieldBegin("captcha", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Captcha); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *MemberRegisterReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *MemberRegisterReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("MemberRegisterReq(%+v)", *p)
+
+}
+
+type MemberCaptchaReq struct {
+	Mobile  string `thrift:"mobile,1,optional" form:"mobile" json:"mobile" query:"mobile"`
+	VenueId int64  `thrift:"venueId,4,optional" form:"venueId" json:"venueId" query:"venueId"`
+}
+
+func NewMemberCaptchaReq() *MemberCaptchaReq {
+	return &MemberCaptchaReq{
+
+		Mobile:  "",
+		VenueId: 0,
+	}
+}
+
+func (p *MemberCaptchaReq) InitDefault() {
+	p.Mobile = ""
+	p.VenueId = 0
+}
+
+var MemberCaptchaReq_Mobile_DEFAULT string = ""
+
+func (p *MemberCaptchaReq) GetMobile() (v string) {
+	if !p.IsSetMobile() {
+		return MemberCaptchaReq_Mobile_DEFAULT
+	}
+	return p.Mobile
+}
+
+var MemberCaptchaReq_VenueId_DEFAULT int64 = 0
+
+func (p *MemberCaptchaReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return MemberCaptchaReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var fieldIDToName_MemberCaptchaReq = map[int16]string{
+	1: "mobile",
+	4: "venueId",
+}
+
+func (p *MemberCaptchaReq) IsSetMobile() bool {
+	return p.Mobile != MemberCaptchaReq_Mobile_DEFAULT
+}
+
+func (p *MemberCaptchaReq) IsSetVenueId() bool {
+	return p.VenueId != MemberCaptchaReq_VenueId_DEFAULT
+}
+
+func (p *MemberCaptchaReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MemberCaptchaReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *MemberCaptchaReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Mobile = _field
+	return nil
+}
+func (p *MemberCaptchaReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+
+func (p *MemberCaptchaReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberCaptchaReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *MemberCaptchaReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMobile() {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Mobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *MemberCaptchaReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *MemberCaptchaReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("MemberCaptchaReq(%+v)", *p)
+
+}
+
+type MemberLoginReq struct {
+	Mobile  string `thrift:"mobile,1,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Captcha string `thrift:"captcha,2,optional" form:"captcha" json:"captcha" query:"captcha"`
+	VenueId int64  `thrift:"venueId,4,optional" form:"venueId" json:"venueId" query:"venueId"`
+}
+
+func NewMemberLoginReq() *MemberLoginReq {
+	return &MemberLoginReq{
+
+		Mobile:  "",
+		Captcha: "",
+		VenueId: 0,
+	}
+}
+
+func (p *MemberLoginReq) InitDefault() {
+	p.Mobile = ""
+	p.Captcha = ""
+	p.VenueId = 0
+}
+
+var MemberLoginReq_Mobile_DEFAULT string = ""
+
+func (p *MemberLoginReq) GetMobile() (v string) {
+	if !p.IsSetMobile() {
+		return MemberLoginReq_Mobile_DEFAULT
+	}
+	return p.Mobile
+}
+
+var MemberLoginReq_Captcha_DEFAULT string = ""
+
+func (p *MemberLoginReq) GetCaptcha() (v string) {
+	if !p.IsSetCaptcha() {
+		return MemberLoginReq_Captcha_DEFAULT
+	}
+	return p.Captcha
+}
+
+var MemberLoginReq_VenueId_DEFAULT int64 = 0
+
+func (p *MemberLoginReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return MemberLoginReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var fieldIDToName_MemberLoginReq = map[int16]string{
+	1: "mobile",
+	2: "captcha",
+	4: "venueId",
+}
+
+func (p *MemberLoginReq) IsSetMobile() bool {
+	return p.Mobile != MemberLoginReq_Mobile_DEFAULT
+}
+
+func (p *MemberLoginReq) IsSetCaptcha() bool {
+	return p.Captcha != MemberLoginReq_Captcha_DEFAULT
+}
+
+func (p *MemberLoginReq) IsSetVenueId() bool {
+	return p.VenueId != MemberLoginReq_VenueId_DEFAULT
+}
+
+func (p *MemberLoginReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MemberLoginReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *MemberLoginReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Mobile = _field
+	return nil
+}
+func (p *MemberLoginReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Captcha = _field
+	return nil
+}
+func (p *MemberLoginReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+
+func (p *MemberLoginReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberLoginReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *MemberLoginReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMobile() {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Mobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *MemberLoginReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCaptcha() {
+		if err = oprot.WriteFieldBegin("captcha", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Captcha); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *MemberLoginReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *MemberLoginReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("MemberLoginReq(%+v)", *p)
+
+}
+
+type StaffCaptchaReq struct {
+	Mobile  string `thrift:"mobile,1,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Captcha string `thrift:"captcha,2,optional" form:"captcha" json:"captcha" query:"captcha"`
+	VenueId int64  `thrift:"venueId,4,optional" form:"venueId" json:"venueId" query:"venueId"`
+}
+
+func NewStaffCaptchaReq() *StaffCaptchaReq {
+	return &StaffCaptchaReq{
+
+		Mobile:  "",
+		Captcha: "",
+		VenueId: 0,
+	}
+}
+
+func (p *StaffCaptchaReq) InitDefault() {
+	p.Mobile = ""
+	p.Captcha = ""
+	p.VenueId = 0
+}
+
+var StaffCaptchaReq_Mobile_DEFAULT string = ""
+
+func (p *StaffCaptchaReq) GetMobile() (v string) {
+	if !p.IsSetMobile() {
+		return StaffCaptchaReq_Mobile_DEFAULT
+	}
+	return p.Mobile
+}
+
+var StaffCaptchaReq_Captcha_DEFAULT string = ""
+
+func (p *StaffCaptchaReq) GetCaptcha() (v string) {
+	if !p.IsSetCaptcha() {
+		return StaffCaptchaReq_Captcha_DEFAULT
+	}
+	return p.Captcha
+}
+
+var StaffCaptchaReq_VenueId_DEFAULT int64 = 0
+
+func (p *StaffCaptchaReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return StaffCaptchaReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var fieldIDToName_StaffCaptchaReq = map[int16]string{
+	1: "mobile",
+	2: "captcha",
+	4: "venueId",
+}
+
+func (p *StaffCaptchaReq) IsSetMobile() bool {
+	return p.Mobile != StaffCaptchaReq_Mobile_DEFAULT
+}
+
+func (p *StaffCaptchaReq) IsSetCaptcha() bool {
+	return p.Captcha != StaffCaptchaReq_Captcha_DEFAULT
+}
+
+func (p *StaffCaptchaReq) IsSetVenueId() bool {
+	return p.VenueId != StaffCaptchaReq_VenueId_DEFAULT
+}
+
+func (p *StaffCaptchaReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_StaffCaptchaReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *StaffCaptchaReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Mobile = _field
+	return nil
+}
+func (p *StaffCaptchaReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Captcha = _field
+	return nil
+}
+func (p *StaffCaptchaReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+
+func (p *StaffCaptchaReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("StaffCaptchaReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *StaffCaptchaReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMobile() {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Mobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *StaffCaptchaReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCaptcha() {
+		if err = oprot.WriteFieldBegin("captcha", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Captcha); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *StaffCaptchaReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *StaffCaptchaReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("StaffCaptchaReq(%+v)", *p)
+
+}
+
+type StaffLoginReq struct {
+	Mobile  string `thrift:"mobile,1,optional" form:"mobile" json:"mobile" query:"mobile"`
+	Captcha string `thrift:"captcha,2,optional" form:"captcha" json:"captcha" query:"captcha"`
+	VenueId int64  `thrift:"venueId,4,optional" form:"venueId" json:"venueId" query:"venueId"`
+}
+
+func NewStaffLoginReq() *StaffLoginReq {
+	return &StaffLoginReq{
+
+		Mobile:  "",
+		Captcha: "",
+		VenueId: 0,
+	}
+}
+
+func (p *StaffLoginReq) InitDefault() {
+	p.Mobile = ""
+	p.Captcha = ""
+	p.VenueId = 0
+}
+
+var StaffLoginReq_Mobile_DEFAULT string = ""
+
+func (p *StaffLoginReq) GetMobile() (v string) {
+	if !p.IsSetMobile() {
+		return StaffLoginReq_Mobile_DEFAULT
+	}
+	return p.Mobile
+}
+
+var StaffLoginReq_Captcha_DEFAULT string = ""
+
+func (p *StaffLoginReq) GetCaptcha() (v string) {
+	if !p.IsSetCaptcha() {
+		return StaffLoginReq_Captcha_DEFAULT
+	}
+	return p.Captcha
+}
+
+var StaffLoginReq_VenueId_DEFAULT int64 = 0
+
+func (p *StaffLoginReq) GetVenueId() (v int64) {
+	if !p.IsSetVenueId() {
+		return StaffLoginReq_VenueId_DEFAULT
+	}
+	return p.VenueId
+}
+
+var fieldIDToName_StaffLoginReq = map[int16]string{
+	1: "mobile",
+	2: "captcha",
+	4: "venueId",
+}
+
+func (p *StaffLoginReq) IsSetMobile() bool {
+	return p.Mobile != StaffLoginReq_Mobile_DEFAULT
+}
+
+func (p *StaffLoginReq) IsSetCaptcha() bool {
+	return p.Captcha != StaffLoginReq_Captcha_DEFAULT
+}
+
+func (p *StaffLoginReq) IsSetVenueId() bool {
+	return p.VenueId != StaffLoginReq_VenueId_DEFAULT
+}
+
+func (p *StaffLoginReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_StaffLoginReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *StaffLoginReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Mobile = _field
+	return nil
+}
+func (p *StaffLoginReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Captcha = _field
+	return nil
+}
+func (p *StaffLoginReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VenueId = _field
+	return nil
+}
+
+func (p *StaffLoginReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("StaffLoginReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *StaffLoginReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if p.IsSetMobile() {
+		if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 1); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Mobile); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *StaffLoginReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetCaptcha() {
+		if err = oprot.WriteFieldBegin("captcha", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(p.Captcha); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *StaffLoginReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetVenueId() {
+		if err = oprot.WriteFieldBegin("venueId", thrift.I64, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(p.VenueId); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *StaffLoginReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("StaffLoginReq(%+v)", *p)
+
+}
+
 type CreatePlaceScheduleReq struct {
 	MemberId int64 `thrift:"memberId,1,optional" form:"memberId" json:"memberId" query:"memberId"`
 	PlaceId  int64 `thrift:"placeId,2,optional" form:"placeId" json:"placeId" query:"placeId"`
@@ -4807,16 +6116,13 @@ func (p *SignStaffScheduleReq) String() string {
 
 }
 
-/**
- * 微信小程序服务
- */
 type WxService interface {
-	//   /**会员注册*/
-	//   base.NilResponse MemberRegister(1: MemberRegisterReq req) (api.post = "/service/wx/member/register")
-	//   /**会员验证码*/
-	//   base.NilResponse MemberCaptcha(1: MemberCaptchaReq req) (api.post = "/service/wx/member/captcha")
-	//   /**会员登录*/
-	//   base.NilResponse MemberLogin(1: MemberLoginReq req) (api.post = "/service/wx/member/login")
+	/**会员注册*/
+	MemberRegister(ctx context.Context, req *MemberRegisterReq) (r *base.NilResponse, err error)
+	/**会员验证码*/
+	MemberCaptcha(ctx context.Context, req *MemberCaptchaReq) (r *base.NilResponse, err error)
+	/**会员登录*/
+	MemberLogin(ctx context.Context, req *MemberLoginReq) (r *base.NilResponse, err error)
 	/**会员登出*/
 	MemberLogout(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	/**会员详情*/
@@ -4892,6 +6198,12 @@ type WxService interface {
 	SignMemberSchedule(ctx context.Context, req *SignMemberScheduleReq) (r *base.NilResponse, err error)
 	/**教练签到*/
 	SignStaffSchedule(ctx context.Context, req *SignStaffScheduleReq) (r *base.NilResponse, err error)
+	/**教练验证码*/
+	StaffCaptcha(ctx context.Context, req *StaffCaptchaReq) (r *base.NilResponse, err error)
+	/**教练登录*/
+	StaffLogin(ctx context.Context, req *StaffLoginReq) (r *base.NilResponse, err error)
+	/**会员登出*/
+	StaffLogout(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 }
 
 type WxServiceClient struct {
@@ -4920,6 +6232,33 @@ func (p *WxServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
+func (p *WxServiceClient) MemberRegister(ctx context.Context, req *MemberRegisterReq) (r *base.NilResponse, err error) {
+	var _args WxServiceMemberRegisterArgs
+	_args.Req = req
+	var _result WxServiceMemberRegisterResult
+	if err = p.Client_().Call(ctx, "MemberRegister", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *WxServiceClient) MemberCaptcha(ctx context.Context, req *MemberCaptchaReq) (r *base.NilResponse, err error) {
+	var _args WxServiceMemberCaptchaArgs
+	_args.Req = req
+	var _result WxServiceMemberCaptchaResult
+	if err = p.Client_().Call(ctx, "MemberCaptcha", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *WxServiceClient) MemberLogin(ctx context.Context, req *MemberLoginReq) (r *base.NilResponse, err error) {
+	var _args WxServiceMemberLoginArgs
+	_args.Req = req
+	var _result WxServiceMemberLoginResult
+	if err = p.Client_().Call(ctx, "MemberLogin", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
 func (p *WxServiceClient) MemberLogout(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
 	var _args WxServiceMemberLogoutArgs
 	_args.Req = req
@@ -5253,6 +6592,33 @@ func (p *WxServiceClient) SignStaffSchedule(ctx context.Context, req *SignStaffS
 	}
 	return _result.GetSuccess(), nil
 }
+func (p *WxServiceClient) StaffCaptcha(ctx context.Context, req *StaffCaptchaReq) (r *base.NilResponse, err error) {
+	var _args WxServiceStaffCaptchaArgs
+	_args.Req = req
+	var _result WxServiceStaffCaptchaResult
+	if err = p.Client_().Call(ctx, "StaffCaptcha", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *WxServiceClient) StaffLogin(ctx context.Context, req *StaffLoginReq) (r *base.NilResponse, err error) {
+	var _args WxServiceStaffLoginArgs
+	_args.Req = req
+	var _result WxServiceStaffLoginResult
+	if err = p.Client_().Call(ctx, "StaffLogin", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *WxServiceClient) StaffLogout(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
+	var _args WxServiceStaffLogoutArgs
+	_args.Req = req
+	var _result WxServiceStaffLogoutResult
+	if err = p.Client_().Call(ctx, "StaffLogout", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
 
 type WxServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
@@ -5274,6 +6640,9 @@ func (p *WxServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction
 
 func NewWxServiceProcessor(handler WxService) *WxServiceProcessor {
 	self := &WxServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self.AddToProcessorMap("MemberRegister", &wxServiceProcessorMemberRegister{handler: handler})
+	self.AddToProcessorMap("MemberCaptcha", &wxServiceProcessorMemberCaptcha{handler: handler})
+	self.AddToProcessorMap("MemberLogin", &wxServiceProcessorMemberLogin{handler: handler})
 	self.AddToProcessorMap("MemberLogout", &wxServiceProcessorMemberLogout{handler: handler})
 	self.AddToProcessorMap("MemberInfo", &wxServiceProcessorMemberInfo{handler: handler})
 	self.AddToProcessorMap("MemberProductInfo", &wxServiceProcessorMemberProductInfo{handler: handler})
@@ -5311,6 +6680,9 @@ func NewWxServiceProcessor(handler WxService) *WxServiceProcessor {
 	self.AddToProcessorMap("CoachScheduleList", &wxServiceProcessorCoachScheduleList{handler: handler})
 	self.AddToProcessorMap("SignMemberSchedule", &wxServiceProcessorSignMemberSchedule{handler: handler})
 	self.AddToProcessorMap("SignStaffSchedule", &wxServiceProcessorSignStaffSchedule{handler: handler})
+	self.AddToProcessorMap("StaffCaptcha", &wxServiceProcessorStaffCaptcha{handler: handler})
+	self.AddToProcessorMap("StaffLogin", &wxServiceProcessorStaffLogin{handler: handler})
+	self.AddToProcessorMap("StaffLogout", &wxServiceProcessorStaffLogout{handler: handler})
 	return self
 }
 func (p *WxServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -5329,6 +6701,150 @@ func (p *WxServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TP
 	oprot.WriteMessageEnd()
 	oprot.Flush(ctx)
 	return false, x
+}
+
+type wxServiceProcessorMemberRegister struct {
+	handler WxService
+}
+
+func (p *wxServiceProcessorMemberRegister) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := WxServiceMemberRegisterArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("MemberRegister", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := WxServiceMemberRegisterResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.MemberRegister(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MemberRegister: "+err2.Error())
+		oprot.WriteMessageBegin("MemberRegister", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("MemberRegister", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type wxServiceProcessorMemberCaptcha struct {
+	handler WxService
+}
+
+func (p *wxServiceProcessorMemberCaptcha) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := WxServiceMemberCaptchaArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("MemberCaptcha", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := WxServiceMemberCaptchaResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.MemberCaptcha(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MemberCaptcha: "+err2.Error())
+		oprot.WriteMessageBegin("MemberCaptcha", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("MemberCaptcha", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type wxServiceProcessorMemberLogin struct {
+	handler WxService
+}
+
+func (p *wxServiceProcessorMemberLogin) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := WxServiceMemberLoginArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("MemberLogin", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := WxServiceMemberLoginResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.MemberLogin(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MemberLogin: "+err2.Error())
+		oprot.WriteMessageBegin("MemberLogin", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("MemberLogin", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
 }
 
 type wxServiceProcessorMemberLogout struct {
@@ -7105,6 +8621,1032 @@ func (p *wxServiceProcessorSignStaffSchedule) Process(ctx context.Context, seqId
 		return
 	}
 	return true, err
+}
+
+type wxServiceProcessorStaffCaptcha struct {
+	handler WxService
+}
+
+func (p *wxServiceProcessorStaffCaptcha) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := WxServiceStaffCaptchaArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("StaffCaptcha", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := WxServiceStaffCaptchaResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.StaffCaptcha(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing StaffCaptcha: "+err2.Error())
+		oprot.WriteMessageBegin("StaffCaptcha", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("StaffCaptcha", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type wxServiceProcessorStaffLogin struct {
+	handler WxService
+}
+
+func (p *wxServiceProcessorStaffLogin) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := WxServiceStaffLoginArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("StaffLogin", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := WxServiceStaffLoginResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.StaffLogin(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing StaffLogin: "+err2.Error())
+		oprot.WriteMessageBegin("StaffLogin", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("StaffLogin", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type wxServiceProcessorStaffLogout struct {
+	handler WxService
+}
+
+func (p *wxServiceProcessorStaffLogout) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := WxServiceStaffLogoutArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("StaffLogout", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := WxServiceStaffLogoutResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.StaffLogout(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing StaffLogout: "+err2.Error())
+		oprot.WriteMessageBegin("StaffLogout", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("StaffLogout", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type WxServiceMemberRegisterArgs struct {
+	Req *MemberRegisterReq `thrift:"req,1"`
+}
+
+func NewWxServiceMemberRegisterArgs() *WxServiceMemberRegisterArgs {
+	return &WxServiceMemberRegisterArgs{}
+}
+
+func (p *WxServiceMemberRegisterArgs) InitDefault() {
+}
+
+var WxServiceMemberRegisterArgs_Req_DEFAULT *MemberRegisterReq
+
+func (p *WxServiceMemberRegisterArgs) GetReq() (v *MemberRegisterReq) {
+	if !p.IsSetReq() {
+		return WxServiceMemberRegisterArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_WxServiceMemberRegisterArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *WxServiceMemberRegisterArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *WxServiceMemberRegisterArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberRegisterArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberRegisterArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewMemberRegisterReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *WxServiceMemberRegisterArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberRegister_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberRegisterArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *WxServiceMemberRegisterArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceMemberRegisterArgs(%+v)", *p)
+
+}
+
+type WxServiceMemberRegisterResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewWxServiceMemberRegisterResult() *WxServiceMemberRegisterResult {
+	return &WxServiceMemberRegisterResult{}
+}
+
+func (p *WxServiceMemberRegisterResult) InitDefault() {
+}
+
+var WxServiceMemberRegisterResult_Success_DEFAULT *base.NilResponse
+
+func (p *WxServiceMemberRegisterResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return WxServiceMemberRegisterResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_WxServiceMemberRegisterResult = map[int16]string{
+	0: "success",
+}
+
+func (p *WxServiceMemberRegisterResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *WxServiceMemberRegisterResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberRegisterResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberRegisterResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *WxServiceMemberRegisterResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberRegister_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberRegisterResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *WxServiceMemberRegisterResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceMemberRegisterResult(%+v)", *p)
+
+}
+
+type WxServiceMemberCaptchaArgs struct {
+	Req *MemberCaptchaReq `thrift:"req,1"`
+}
+
+func NewWxServiceMemberCaptchaArgs() *WxServiceMemberCaptchaArgs {
+	return &WxServiceMemberCaptchaArgs{}
+}
+
+func (p *WxServiceMemberCaptchaArgs) InitDefault() {
+}
+
+var WxServiceMemberCaptchaArgs_Req_DEFAULT *MemberCaptchaReq
+
+func (p *WxServiceMemberCaptchaArgs) GetReq() (v *MemberCaptchaReq) {
+	if !p.IsSetReq() {
+		return WxServiceMemberCaptchaArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_WxServiceMemberCaptchaArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *WxServiceMemberCaptchaArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *WxServiceMemberCaptchaArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberCaptchaArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberCaptchaArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewMemberCaptchaReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *WxServiceMemberCaptchaArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberCaptcha_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberCaptchaArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *WxServiceMemberCaptchaArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceMemberCaptchaArgs(%+v)", *p)
+
+}
+
+type WxServiceMemberCaptchaResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewWxServiceMemberCaptchaResult() *WxServiceMemberCaptchaResult {
+	return &WxServiceMemberCaptchaResult{}
+}
+
+func (p *WxServiceMemberCaptchaResult) InitDefault() {
+}
+
+var WxServiceMemberCaptchaResult_Success_DEFAULT *base.NilResponse
+
+func (p *WxServiceMemberCaptchaResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return WxServiceMemberCaptchaResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_WxServiceMemberCaptchaResult = map[int16]string{
+	0: "success",
+}
+
+func (p *WxServiceMemberCaptchaResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *WxServiceMemberCaptchaResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberCaptchaResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberCaptchaResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *WxServiceMemberCaptchaResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberCaptcha_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberCaptchaResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *WxServiceMemberCaptchaResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceMemberCaptchaResult(%+v)", *p)
+
+}
+
+type WxServiceMemberLoginArgs struct {
+	Req *MemberLoginReq `thrift:"req,1"`
+}
+
+func NewWxServiceMemberLoginArgs() *WxServiceMemberLoginArgs {
+	return &WxServiceMemberLoginArgs{}
+}
+
+func (p *WxServiceMemberLoginArgs) InitDefault() {
+}
+
+var WxServiceMemberLoginArgs_Req_DEFAULT *MemberLoginReq
+
+func (p *WxServiceMemberLoginArgs) GetReq() (v *MemberLoginReq) {
+	if !p.IsSetReq() {
+		return WxServiceMemberLoginArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_WxServiceMemberLoginArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *WxServiceMemberLoginArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *WxServiceMemberLoginArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberLoginArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberLoginArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewMemberLoginReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *WxServiceMemberLoginArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberLogin_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberLoginArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *WxServiceMemberLoginArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceMemberLoginArgs(%+v)", *p)
+
+}
+
+type WxServiceMemberLoginResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewWxServiceMemberLoginResult() *WxServiceMemberLoginResult {
+	return &WxServiceMemberLoginResult{}
+}
+
+func (p *WxServiceMemberLoginResult) InitDefault() {
+}
+
+var WxServiceMemberLoginResult_Success_DEFAULT *base.NilResponse
+
+func (p *WxServiceMemberLoginResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return WxServiceMemberLoginResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_WxServiceMemberLoginResult = map[int16]string{
+	0: "success",
+}
+
+func (p *WxServiceMemberLoginResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *WxServiceMemberLoginResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberLoginResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberLoginResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *WxServiceMemberLoginResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("MemberLogin_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceMemberLoginResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *WxServiceMemberLoginResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceMemberLoginResult(%+v)", *p)
+
 }
 
 type WxServiceMemberLogoutArgs struct {
@@ -17982,5 +20524,887 @@ func (p *WxServiceSignStaffScheduleResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("WxServiceSignStaffScheduleResult(%+v)", *p)
+
+}
+
+type WxServiceStaffCaptchaArgs struct {
+	Req *StaffCaptchaReq `thrift:"req,1"`
+}
+
+func NewWxServiceStaffCaptchaArgs() *WxServiceStaffCaptchaArgs {
+	return &WxServiceStaffCaptchaArgs{}
+}
+
+func (p *WxServiceStaffCaptchaArgs) InitDefault() {
+}
+
+var WxServiceStaffCaptchaArgs_Req_DEFAULT *StaffCaptchaReq
+
+func (p *WxServiceStaffCaptchaArgs) GetReq() (v *StaffCaptchaReq) {
+	if !p.IsSetReq() {
+		return WxServiceStaffCaptchaArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_WxServiceStaffCaptchaArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *WxServiceStaffCaptchaArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *WxServiceStaffCaptchaArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffCaptchaArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffCaptchaArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewStaffCaptchaReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *WxServiceStaffCaptchaArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("StaffCaptcha_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffCaptchaArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *WxServiceStaffCaptchaArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceStaffCaptchaArgs(%+v)", *p)
+
+}
+
+type WxServiceStaffCaptchaResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewWxServiceStaffCaptchaResult() *WxServiceStaffCaptchaResult {
+	return &WxServiceStaffCaptchaResult{}
+}
+
+func (p *WxServiceStaffCaptchaResult) InitDefault() {
+}
+
+var WxServiceStaffCaptchaResult_Success_DEFAULT *base.NilResponse
+
+func (p *WxServiceStaffCaptchaResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return WxServiceStaffCaptchaResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_WxServiceStaffCaptchaResult = map[int16]string{
+	0: "success",
+}
+
+func (p *WxServiceStaffCaptchaResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *WxServiceStaffCaptchaResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffCaptchaResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffCaptchaResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *WxServiceStaffCaptchaResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("StaffCaptcha_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffCaptchaResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *WxServiceStaffCaptchaResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceStaffCaptchaResult(%+v)", *p)
+
+}
+
+type WxServiceStaffLoginArgs struct {
+	Req *StaffLoginReq `thrift:"req,1"`
+}
+
+func NewWxServiceStaffLoginArgs() *WxServiceStaffLoginArgs {
+	return &WxServiceStaffLoginArgs{}
+}
+
+func (p *WxServiceStaffLoginArgs) InitDefault() {
+}
+
+var WxServiceStaffLoginArgs_Req_DEFAULT *StaffLoginReq
+
+func (p *WxServiceStaffLoginArgs) GetReq() (v *StaffLoginReq) {
+	if !p.IsSetReq() {
+		return WxServiceStaffLoginArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_WxServiceStaffLoginArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *WxServiceStaffLoginArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *WxServiceStaffLoginArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffLoginArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffLoginArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewStaffLoginReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *WxServiceStaffLoginArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("StaffLogin_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffLoginArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *WxServiceStaffLoginArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceStaffLoginArgs(%+v)", *p)
+
+}
+
+type WxServiceStaffLoginResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewWxServiceStaffLoginResult() *WxServiceStaffLoginResult {
+	return &WxServiceStaffLoginResult{}
+}
+
+func (p *WxServiceStaffLoginResult) InitDefault() {
+}
+
+var WxServiceStaffLoginResult_Success_DEFAULT *base.NilResponse
+
+func (p *WxServiceStaffLoginResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return WxServiceStaffLoginResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_WxServiceStaffLoginResult = map[int16]string{
+	0: "success",
+}
+
+func (p *WxServiceStaffLoginResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *WxServiceStaffLoginResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffLoginResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffLoginResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *WxServiceStaffLoginResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("StaffLogin_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffLoginResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *WxServiceStaffLoginResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceStaffLoginResult(%+v)", *p)
+
+}
+
+type WxServiceStaffLogoutArgs struct {
+	Req *base.IDReq `thrift:"req,1"`
+}
+
+func NewWxServiceStaffLogoutArgs() *WxServiceStaffLogoutArgs {
+	return &WxServiceStaffLogoutArgs{}
+}
+
+func (p *WxServiceStaffLogoutArgs) InitDefault() {
+}
+
+var WxServiceStaffLogoutArgs_Req_DEFAULT *base.IDReq
+
+func (p *WxServiceStaffLogoutArgs) GetReq() (v *base.IDReq) {
+	if !p.IsSetReq() {
+		return WxServiceStaffLogoutArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_WxServiceStaffLogoutArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *WxServiceStaffLogoutArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *WxServiceStaffLogoutArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffLogoutArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffLogoutArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := base.NewIDReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *WxServiceStaffLogoutArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("StaffLogout_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffLogoutArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *WxServiceStaffLogoutArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceStaffLogoutArgs(%+v)", *p)
+
+}
+
+type WxServiceStaffLogoutResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewWxServiceStaffLogoutResult() *WxServiceStaffLogoutResult {
+	return &WxServiceStaffLogoutResult{}
+}
+
+func (p *WxServiceStaffLogoutResult) InitDefault() {
+}
+
+var WxServiceStaffLogoutResult_Success_DEFAULT *base.NilResponse
+
+func (p *WxServiceStaffLogoutResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return WxServiceStaffLogoutResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_WxServiceStaffLogoutResult = map[int16]string{
+	0: "success",
+}
+
+func (p *WxServiceStaffLogoutResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *WxServiceStaffLogoutResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffLogoutResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffLogoutResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *WxServiceStaffLogoutResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("StaffLogout_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServiceStaffLogoutResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *WxServiceStaffLogoutResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServiceStaffLogoutResult(%+v)", *p)
 
 }

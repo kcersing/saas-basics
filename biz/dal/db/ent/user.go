@@ -5,7 +5,6 @@ package ent
 import (
 	"encoding/json"
 	"fmt"
-	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"strings"
 	"time"
@@ -60,8 +59,6 @@ type User struct {
 
 // UserEdges holds the relations/edges for other nodes in the graph.
 type UserEdges struct {
-	// Token holds the value of the token edge.
-	Token *Token `json:"token,omitempty"`
 	// Tags holds the value of the tags edge.
 	Tags []*DictionaryDetail `json:"tags,omitempty"`
 	// CreatedOrders holds the value of the created_orders edge.
@@ -76,26 +73,13 @@ type UserEdges struct {
 	UserTimePeriod []*UserTimePeriod `json:"user_time_period,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
-}
-
-// TokenOrErr returns the Token value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e UserEdges) TokenOrErr() (*Token, error) {
-	if e.loadedTypes[0] {
-		if e.Token == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: token.Label}
-		}
-		return e.Token, nil
-	}
-	return nil, &NotLoadedError{edge: "token"}
+	loadedTypes [6]bool
 }
 
 // TagsOrErr returns the Tags value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) TagsOrErr() ([]*DictionaryDetail, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[0] {
 		return e.Tags, nil
 	}
 	return nil, &NotLoadedError{edge: "tags"}
@@ -104,7 +88,7 @@ func (e UserEdges) TagsOrErr() ([]*DictionaryDetail, error) {
 // CreatedOrdersOrErr returns the CreatedOrders value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) CreatedOrdersOrErr() ([]*Order, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[1] {
 		return e.CreatedOrders, nil
 	}
 	return nil, &NotLoadedError{edge: "created_orders"}
@@ -113,7 +97,7 @@ func (e UserEdges) CreatedOrdersOrErr() ([]*Order, error) {
 // UserEntryOrErr returns the UserEntry value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) UserEntryOrErr() ([]*EntryLogs, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.UserEntry, nil
 	}
 	return nil, &NotLoadedError{edge: "user_entry"}
@@ -122,7 +106,7 @@ func (e UserEdges) UserEntryOrErr() ([]*EntryLogs, error) {
 // VenuesOrErr returns the Venues value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) VenuesOrErr() ([]*Venue, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		return e.Venues, nil
 	}
 	return nil, &NotLoadedError{edge: "venues"}
@@ -131,7 +115,7 @@ func (e UserEdges) VenuesOrErr() ([]*Venue, error) {
 // RolesOrErr returns the Roles value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) RolesOrErr() ([]*Role, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[4] {
 		return e.Roles, nil
 	}
 	return nil, &NotLoadedError{edge: "roles"}
@@ -140,7 +124,7 @@ func (e UserEdges) RolesOrErr() ([]*Role, error) {
 // UserTimePeriodOrErr returns the UserTimePeriod value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) UserTimePeriodOrErr() ([]*UserTimePeriod, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[5] {
 		return e.UserTimePeriod, nil
 	}
 	return nil, &NotLoadedError{edge: "user_time_period"}
@@ -289,11 +273,6 @@ func (u *User) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (u *User) Value(name string) (ent.Value, error) {
 	return u.selectValues.Get(name)
-}
-
-// QueryToken queries the "token" edge of the User entity.
-func (u *User) QueryToken() *TokenQuery {
-	return NewUserClient(u.config).QueryToken(u)
 }
 
 // QueryTags queries the "tags" edge of the User entity.

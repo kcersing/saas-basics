@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/predicate"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -107,7 +108,7 @@ func (mpcq *MemberProductCoursesQuery) QueryNodeL() *MemberProductQuery {
 // First returns the first MemberProductCourses entity from the query.
 // Returns a *NotFoundError when no MemberProductCourses was found.
 func (mpcq *MemberProductCoursesQuery) First(ctx context.Context) (*MemberProductCourses, error) {
-	nodes, err := mpcq.Limit(1).All(setContextOp(ctx, mpcq.ctx, "First"))
+	nodes, err := mpcq.Limit(1).All(setContextOp(ctx, mpcq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +131,7 @@ func (mpcq *MemberProductCoursesQuery) FirstX(ctx context.Context) *MemberProduc
 // Returns a *NotFoundError when no MemberProductCourses ID was found.
 func (mpcq *MemberProductCoursesQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mpcq.Limit(1).IDs(setContextOp(ctx, mpcq.ctx, "FirstID")); err != nil {
+	if ids, err = mpcq.Limit(1).IDs(setContextOp(ctx, mpcq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -153,7 +154,7 @@ func (mpcq *MemberProductCoursesQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one MemberProductCourses entity is found.
 // Returns a *NotFoundError when no MemberProductCourses entities are found.
 func (mpcq *MemberProductCoursesQuery) Only(ctx context.Context) (*MemberProductCourses, error) {
-	nodes, err := mpcq.Limit(2).All(setContextOp(ctx, mpcq.ctx, "Only"))
+	nodes, err := mpcq.Limit(2).All(setContextOp(ctx, mpcq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -181,7 +182,7 @@ func (mpcq *MemberProductCoursesQuery) OnlyX(ctx context.Context) *MemberProduct
 // Returns a *NotFoundError when no entities are found.
 func (mpcq *MemberProductCoursesQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mpcq.Limit(2).IDs(setContextOp(ctx, mpcq.ctx, "OnlyID")); err != nil {
+	if ids, err = mpcq.Limit(2).IDs(setContextOp(ctx, mpcq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -206,7 +207,7 @@ func (mpcq *MemberProductCoursesQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of MemberProductCoursesSlice.
 func (mpcq *MemberProductCoursesQuery) All(ctx context.Context) ([]*MemberProductCourses, error) {
-	ctx = setContextOp(ctx, mpcq.ctx, "All")
+	ctx = setContextOp(ctx, mpcq.ctx, ent.OpQueryAll)
 	if err := mpcq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -228,7 +229,7 @@ func (mpcq *MemberProductCoursesQuery) IDs(ctx context.Context) (ids []int64, er
 	if mpcq.ctx.Unique == nil && mpcq.path != nil {
 		mpcq.Unique(true)
 	}
-	ctx = setContextOp(ctx, mpcq.ctx, "IDs")
+	ctx = setContextOp(ctx, mpcq.ctx, ent.OpQueryIDs)
 	if err = mpcq.Select(memberproductcourses.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -246,7 +247,7 @@ func (mpcq *MemberProductCoursesQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (mpcq *MemberProductCoursesQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mpcq.ctx, "Count")
+	ctx = setContextOp(ctx, mpcq.ctx, ent.OpQueryCount)
 	if err := mpcq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -264,7 +265,7 @@ func (mpcq *MemberProductCoursesQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (mpcq *MemberProductCoursesQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mpcq.ctx, "Exist")
+	ctx = setContextOp(ctx, mpcq.ctx, ent.OpQueryExist)
 	switch _, err := mpcq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -602,7 +603,7 @@ func (mpcgb *MemberProductCoursesGroupBy) Aggregate(fns ...AggregateFunc) *Membe
 
 // Scan applies the selector query and scans the result into the given value.
 func (mpcgb *MemberProductCoursesGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mpcgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, mpcgb.build.ctx, ent.OpQueryGroupBy)
 	if err := mpcgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -650,7 +651,7 @@ func (mpcs *MemberProductCoursesSelect) Aggregate(fns ...AggregateFunc) *MemberP
 
 // Scan applies the selector query and scans the result into the given value.
 func (mpcs *MemberProductCoursesSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mpcs.ctx, "Select")
+	ctx = setContextOp(ctx, mpcs.ctx, ent.OpQuerySelect)
 	if err := mpcs.prepareQuery(ctx); err != nil {
 		return err
 	}

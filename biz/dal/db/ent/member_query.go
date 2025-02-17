@@ -20,6 +20,7 @@ import (
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -301,7 +302,7 @@ func (mq *MemberQuery) QueryMemberCommunitys() *CommunityParticipantQuery {
 // First returns the first Member entity from the query.
 // Returns a *NotFoundError when no Member was found.
 func (mq *MemberQuery) First(ctx context.Context) (*Member, error) {
-	nodes, err := mq.Limit(1).All(setContextOp(ctx, mq.ctx, "First"))
+	nodes, err := mq.Limit(1).All(setContextOp(ctx, mq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -324,7 +325,7 @@ func (mq *MemberQuery) FirstX(ctx context.Context) *Member {
 // Returns a *NotFoundError when no Member ID was found.
 func (mq *MemberQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mq.Limit(1).IDs(setContextOp(ctx, mq.ctx, "FirstID")); err != nil {
+	if ids, err = mq.Limit(1).IDs(setContextOp(ctx, mq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -347,7 +348,7 @@ func (mq *MemberQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Member entity is found.
 // Returns a *NotFoundError when no Member entities are found.
 func (mq *MemberQuery) Only(ctx context.Context) (*Member, error) {
-	nodes, err := mq.Limit(2).All(setContextOp(ctx, mq.ctx, "Only"))
+	nodes, err := mq.Limit(2).All(setContextOp(ctx, mq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -375,7 +376,7 @@ func (mq *MemberQuery) OnlyX(ctx context.Context) *Member {
 // Returns a *NotFoundError when no entities are found.
 func (mq *MemberQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mq.Limit(2).IDs(setContextOp(ctx, mq.ctx, "OnlyID")); err != nil {
+	if ids, err = mq.Limit(2).IDs(setContextOp(ctx, mq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -400,7 +401,7 @@ func (mq *MemberQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Members.
 func (mq *MemberQuery) All(ctx context.Context) ([]*Member, error) {
-	ctx = setContextOp(ctx, mq.ctx, "All")
+	ctx = setContextOp(ctx, mq.ctx, ent.OpQueryAll)
 	if err := mq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -422,7 +423,7 @@ func (mq *MemberQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if mq.ctx.Unique == nil && mq.path != nil {
 		mq.Unique(true)
 	}
-	ctx = setContextOp(ctx, mq.ctx, "IDs")
+	ctx = setContextOp(ctx, mq.ctx, ent.OpQueryIDs)
 	if err = mq.Select(member.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -440,7 +441,7 @@ func (mq *MemberQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (mq *MemberQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mq.ctx, "Count")
+	ctx = setContextOp(ctx, mq.ctx, ent.OpQueryCount)
 	if err := mq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -458,7 +459,7 @@ func (mq *MemberQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (mq *MemberQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mq.ctx, "Exist")
+	ctx = setContextOp(ctx, mq.ctx, ent.OpQueryExist)
 	switch _, err := mq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -1289,7 +1290,7 @@ func (mgb *MemberGroupBy) Aggregate(fns ...AggregateFunc) *MemberGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (mgb *MemberGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, mgb.build.ctx, ent.OpQueryGroupBy)
 	if err := mgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -1337,7 +1338,7 @@ func (ms *MemberSelect) Aggregate(fns ...AggregateFunc) *MemberSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ms *MemberSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ms.ctx, "Select")
+	ctx = setContextOp(ctx, ms.ctx, ent.OpQuerySelect)
 	if err := ms.prepareQuery(ctx); err != nil {
 		return err
 	}

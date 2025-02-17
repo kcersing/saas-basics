@@ -2,6 +2,7 @@ package do
 
 import (
 	"saas/idl_gen/model/member"
+	"saas/idl_gen/model/wx"
 )
 
 type Member interface {
@@ -29,4 +30,10 @@ type Member interface {
 	ContestList(req member.MemberContestListReq) (resp []*member.MemberContestInfo, total int, err error)
 	BootcampList(req member.MemberBootcampListReq) (resp []*member.MemberBootcampInfo, total int, err error)
 	CommunityList(req member.MemberCommunityListReq) (resp []*member.MemberCommunityInfo, total int, err error)
+
+	// wx
+	Login(res *wx.MemberLoginReq) (info *member.MemberInfo, err error)
+	Captcha(res *wx.MemberCaptchaReq) (code string, err error)
+	Registe(res *wx.MemberRegisterReq) (info *member.MemberInfo, err error)
+	Logout(id int64) (ok bool, err error)
 }

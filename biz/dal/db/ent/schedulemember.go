@@ -83,12 +83,10 @@ type ScheduleMemberEdges struct {
 // ScheduleOrErr returns the Schedule value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ScheduleMemberEdges) ScheduleOrErr() (*Schedule, error) {
-	if e.loadedTypes[0] {
-		if e.Schedule == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: schedule.Label}
-		}
+	if e.Schedule != nil {
 		return e.Schedule, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: schedule.Label}
 	}
 	return nil, &NotLoadedError{edge: "schedule"}
 }

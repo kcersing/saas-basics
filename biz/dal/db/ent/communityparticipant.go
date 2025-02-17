@@ -65,12 +65,10 @@ type CommunityParticipantEdges struct {
 // CommunityOrErr returns the Community value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CommunityParticipantEdges) CommunityOrErr() (*Community, error) {
-	if e.loadedTypes[0] {
-		if e.Community == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: community.Label}
-		}
+	if e.Community != nil {
 		return e.Community, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: community.Label}
 	}
 	return nil, &NotLoadedError{edge: "community"}
 }

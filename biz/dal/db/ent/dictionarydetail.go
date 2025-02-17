@@ -59,12 +59,10 @@ type DictionaryDetailEdges struct {
 // DictionaryOrErr returns the Dictionary value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e DictionaryDetailEdges) DictionaryOrErr() (*Dictionary, error) {
-	if e.loadedTypes[0] {
-		if e.Dictionary == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: dictionary.Label}
-		}
+	if e.Dictionary != nil {
 		return e.Dictionary, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: dictionary.Label}
 	}
 	return nil, &NotLoadedError{edge: "dictionary"}
 }

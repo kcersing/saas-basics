@@ -13,6 +13,7 @@ import (
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -133,7 +134,7 @@ func (ddq *DictionaryDetailQuery) QueryProducts() *ProductQuery {
 // First returns the first DictionaryDetail entity from the query.
 // Returns a *NotFoundError when no DictionaryDetail was found.
 func (ddq *DictionaryDetailQuery) First(ctx context.Context) (*DictionaryDetail, error) {
-	nodes, err := ddq.Limit(1).All(setContextOp(ctx, ddq.ctx, "First"))
+	nodes, err := ddq.Limit(1).All(setContextOp(ctx, ddq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +157,7 @@ func (ddq *DictionaryDetailQuery) FirstX(ctx context.Context) *DictionaryDetail 
 // Returns a *NotFoundError when no DictionaryDetail ID was found.
 func (ddq *DictionaryDetailQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = ddq.Limit(1).IDs(setContextOp(ctx, ddq.ctx, "FirstID")); err != nil {
+	if ids, err = ddq.Limit(1).IDs(setContextOp(ctx, ddq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -179,7 +180,7 @@ func (ddq *DictionaryDetailQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one DictionaryDetail entity is found.
 // Returns a *NotFoundError when no DictionaryDetail entities are found.
 func (ddq *DictionaryDetailQuery) Only(ctx context.Context) (*DictionaryDetail, error) {
-	nodes, err := ddq.Limit(2).All(setContextOp(ctx, ddq.ctx, "Only"))
+	nodes, err := ddq.Limit(2).All(setContextOp(ctx, ddq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +208,7 @@ func (ddq *DictionaryDetailQuery) OnlyX(ctx context.Context) *DictionaryDetail {
 // Returns a *NotFoundError when no entities are found.
 func (ddq *DictionaryDetailQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = ddq.Limit(2).IDs(setContextOp(ctx, ddq.ctx, "OnlyID")); err != nil {
+	if ids, err = ddq.Limit(2).IDs(setContextOp(ctx, ddq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -232,7 +233,7 @@ func (ddq *DictionaryDetailQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of DictionaryDetails.
 func (ddq *DictionaryDetailQuery) All(ctx context.Context) ([]*DictionaryDetail, error) {
-	ctx = setContextOp(ctx, ddq.ctx, "All")
+	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryAll)
 	if err := ddq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -254,7 +255,7 @@ func (ddq *DictionaryDetailQuery) IDs(ctx context.Context) (ids []int64, err err
 	if ddq.ctx.Unique == nil && ddq.path != nil {
 		ddq.Unique(true)
 	}
-	ctx = setContextOp(ctx, ddq.ctx, "IDs")
+	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryIDs)
 	if err = ddq.Select(dictionarydetail.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -272,7 +273,7 @@ func (ddq *DictionaryDetailQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (ddq *DictionaryDetailQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ddq.ctx, "Count")
+	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryCount)
 	if err := ddq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -290,7 +291,7 @@ func (ddq *DictionaryDetailQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (ddq *DictionaryDetailQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ddq.ctx, "Exist")
+	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryExist)
 	switch _, err := ddq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -739,7 +740,7 @@ func (ddgb *DictionaryDetailGroupBy) Aggregate(fns ...AggregateFunc) *Dictionary
 
 // Scan applies the selector query and scans the result into the given value.
 func (ddgb *DictionaryDetailGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ddgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, ddgb.build.ctx, ent.OpQueryGroupBy)
 	if err := ddgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -787,7 +788,7 @@ func (dds *DictionaryDetailSelect) Aggregate(fns ...AggregateFunc) *DictionaryDe
 
 // Scan applies the selector query and scans the result into the given value.
 func (dds *DictionaryDetailSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, dds.ctx, "Select")
+	ctx = setContextOp(ctx, dds.ctx, ent.OpQuerySelect)
 	if err := dds.prepareQuery(ctx); err != nil {
 		return err
 	}

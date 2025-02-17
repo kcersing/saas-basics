@@ -17,6 +17,7 @@ import (
 	"saas/biz/dal/db/ent/venuesms"
 	"saas/biz/dal/db/ent/venuesmslog"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -229,7 +230,7 @@ func (vq *VenueQuery) QueryRoles() *RoleQuery {
 // First returns the first Venue entity from the query.
 // Returns a *NotFoundError when no Venue was found.
 func (vq *VenueQuery) First(ctx context.Context) (*Venue, error) {
-	nodes, err := vq.Limit(1).All(setContextOp(ctx, vq.ctx, "First"))
+	nodes, err := vq.Limit(1).All(setContextOp(ctx, vq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -252,7 +253,7 @@ func (vq *VenueQuery) FirstX(ctx context.Context) *Venue {
 // Returns a *NotFoundError when no Venue ID was found.
 func (vq *VenueQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = vq.Limit(1).IDs(setContextOp(ctx, vq.ctx, "FirstID")); err != nil {
+	if ids, err = vq.Limit(1).IDs(setContextOp(ctx, vq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -275,7 +276,7 @@ func (vq *VenueQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Venue entity is found.
 // Returns a *NotFoundError when no Venue entities are found.
 func (vq *VenueQuery) Only(ctx context.Context) (*Venue, error) {
-	nodes, err := vq.Limit(2).All(setContextOp(ctx, vq.ctx, "Only"))
+	nodes, err := vq.Limit(2).All(setContextOp(ctx, vq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -303,7 +304,7 @@ func (vq *VenueQuery) OnlyX(ctx context.Context) *Venue {
 // Returns a *NotFoundError when no entities are found.
 func (vq *VenueQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = vq.Limit(2).IDs(setContextOp(ctx, vq.ctx, "OnlyID")); err != nil {
+	if ids, err = vq.Limit(2).IDs(setContextOp(ctx, vq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -328,7 +329,7 @@ func (vq *VenueQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Venues.
 func (vq *VenueQuery) All(ctx context.Context) ([]*Venue, error) {
-	ctx = setContextOp(ctx, vq.ctx, "All")
+	ctx = setContextOp(ctx, vq.ctx, ent.OpQueryAll)
 	if err := vq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -350,7 +351,7 @@ func (vq *VenueQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if vq.ctx.Unique == nil && vq.path != nil {
 		vq.Unique(true)
 	}
-	ctx = setContextOp(ctx, vq.ctx, "IDs")
+	ctx = setContextOp(ctx, vq.ctx, ent.OpQueryIDs)
 	if err = vq.Select(venue.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -368,7 +369,7 @@ func (vq *VenueQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (vq *VenueQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, vq.ctx, "Count")
+	ctx = setContextOp(ctx, vq.ctx, ent.OpQueryCount)
 	if err := vq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -386,7 +387,7 @@ func (vq *VenueQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (vq *VenueQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, vq.ctx, "Exist")
+	ctx = setContextOp(ctx, vq.ctx, ent.OpQueryExist)
 	switch _, err := vq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -1034,7 +1035,7 @@ func (vgb *VenueGroupBy) Aggregate(fns ...AggregateFunc) *VenueGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (vgb *VenueGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, vgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, vgb.build.ctx, ent.OpQueryGroupBy)
 	if err := vgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -1082,7 +1083,7 @@ func (vs *VenueSelect) Aggregate(fns ...AggregateFunc) *VenueSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (vs *VenueSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, vs.ctx, "Select")
+	ctx = setContextOp(ctx, vs.ctx, ent.OpQuerySelect)
 	if err := vs.prepareQuery(ctx); err != nil {
 		return err
 	}

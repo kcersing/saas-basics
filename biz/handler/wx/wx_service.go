@@ -606,3 +606,99 @@ func SignStaffSchedule(ctx context.Context, c *app.RequestContext) {
 
 	c.JSON(consts.StatusOK, resp)
 }
+
+// MemberRegister .
+// @router /service/wx/member/register [POST]
+func MemberRegister(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req wx.MemberRegisterReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// MemberCaptcha .
+// @router /service/wx/member/captcha [POST]
+func MemberCaptcha(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req wx.MemberCaptchaReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// MemberLogin .
+// @router /service/wx/member/login [POST]
+func MemberLogin(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req wx.MemberLoginReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// StaffCaptcha .
+// @router /service/wx/staff/captcha [POST]
+func StaffCaptcha(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req wx.StaffCaptchaReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// StaffLogin .
+// @router /service/wx/staff/login [POST]
+func StaffLogin(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req wx.StaffLoginReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// StaffLogout .
+// @router /service/wx/staff/logout [POST]
+func StaffLogout(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req base.IDReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

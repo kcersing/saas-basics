@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"saas/biz/dal/db/ent/token"
-	"saas/biz/dal/db/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -101,29 +100,24 @@ func (tc *TokenCreate) SetExpiredAt(t time.Time) *TokenCreate {
 	return tc
 }
 
-// SetID sets the "id" field.
-func (tc *TokenCreate) SetID(i int64) *TokenCreate {
-	tc.mutation.SetID(i)
+// SetType sets the "type" field.
+func (tc *TokenCreate) SetType(i int64) *TokenCreate {
+	tc.mutation.SetType(i)
 	return tc
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
-func (tc *TokenCreate) SetOwnerID(id int64) *TokenCreate {
-	tc.mutation.SetOwnerID(id)
-	return tc
-}
-
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
-func (tc *TokenCreate) SetNillableOwnerID(id *int64) *TokenCreate {
-	if id != nil {
-		tc = tc.SetOwnerID(*id)
+// SetNillableType sets the "type" field if the given value is not nil.
+func (tc *TokenCreate) SetNillableType(i *int64) *TokenCreate {
+	if i != nil {
+		tc.SetType(*i)
 	}
 	return tc
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (tc *TokenCreate) SetOwner(u *User) *TokenCreate {
-	return tc.SetOwnerID(u.ID)
+// SetID sets the "id" field.
+func (tc *TokenCreate) SetID(i int64) *TokenCreate {
+	tc.mutation.SetID(i)
+	return tc
 }
 
 // Mutation returns the TokenMutation object of the builder.
@@ -177,6 +171,10 @@ func (tc *TokenCreate) defaults() {
 		v := token.DefaultCreatedID
 		tc.mutation.SetCreatedID(v)
 	}
+	if _, ok := tc.mutation.GetType(); !ok {
+		v := token.DefaultType
+		tc.mutation.SetType(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -192,6 +190,9 @@ func (tc *TokenCreate) check() error {
 	}
 	if _, ok := tc.mutation.ExpiredAt(); !ok {
 		return &ValidationError{Name: "expired_at", err: errors.New(`ent: missing required field "Token.expired_at"`)}
+	}
+	if _, ok := tc.mutation.GetType(); !ok {
+		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Token.type"`)}
 	}
 	return nil
 }
@@ -257,22 +258,9 @@ func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
 		_node.ExpiredAt = value
 	}
-	if nodes := tc.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   token.OwnerTable,
-			Columns: []string{token.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.user_token = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
+	if value, ok := tc.mutation.GetType(); ok {
+		_spec.SetField(token.FieldType, field.TypeInt64, value)
+		_node.Type = value
 	}
 	return _node, _spec
 }

@@ -11,6 +11,7 @@ import (
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/predicate"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -85,7 +86,7 @@ func (cq *ContestQuery) QueryContestParticipants() *ContestParticipantQuery {
 // First returns the first Contest entity from the query.
 // Returns a *NotFoundError when no Contest was found.
 func (cq *ContestQuery) First(ctx context.Context) (*Contest, error) {
-	nodes, err := cq.Limit(1).All(setContextOp(ctx, cq.ctx, "First"))
+	nodes, err := cq.Limit(1).All(setContextOp(ctx, cq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +109,7 @@ func (cq *ContestQuery) FirstX(ctx context.Context) *Contest {
 // Returns a *NotFoundError when no Contest ID was found.
 func (cq *ContestQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = cq.Limit(1).IDs(setContextOp(ctx, cq.ctx, "FirstID")); err != nil {
+	if ids, err = cq.Limit(1).IDs(setContextOp(ctx, cq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +132,7 @@ func (cq *ContestQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Contest entity is found.
 // Returns a *NotFoundError when no Contest entities are found.
 func (cq *ContestQuery) Only(ctx context.Context) (*Contest, error) {
-	nodes, err := cq.Limit(2).All(setContextOp(ctx, cq.ctx, "Only"))
+	nodes, err := cq.Limit(2).All(setContextOp(ctx, cq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +160,7 @@ func (cq *ContestQuery) OnlyX(ctx context.Context) *Contest {
 // Returns a *NotFoundError when no entities are found.
 func (cq *ContestQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = cq.Limit(2).IDs(setContextOp(ctx, cq.ctx, "OnlyID")); err != nil {
+	if ids, err = cq.Limit(2).IDs(setContextOp(ctx, cq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +185,7 @@ func (cq *ContestQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Contests.
 func (cq *ContestQuery) All(ctx context.Context) ([]*Contest, error) {
-	ctx = setContextOp(ctx, cq.ctx, "All")
+	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryAll)
 	if err := cq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +207,7 @@ func (cq *ContestQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if cq.ctx.Unique == nil && cq.path != nil {
 		cq.Unique(true)
 	}
-	ctx = setContextOp(ctx, cq.ctx, "IDs")
+	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryIDs)
 	if err = cq.Select(contest.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +225,7 @@ func (cq *ContestQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (cq *ContestQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, cq.ctx, "Count")
+	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryCount)
 	if err := cq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +243,7 @@ func (cq *ContestQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (cq *ContestQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, cq.ctx, "Exist")
+	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryExist)
 	switch _, err := cq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -530,7 +531,7 @@ func (cgb *ContestGroupBy) Aggregate(fns ...AggregateFunc) *ContestGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (cgb *ContestGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, cgb.build.ctx, ent.OpQueryGroupBy)
 	if err := cgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -578,7 +579,7 @@ func (cs *ContestSelect) Aggregate(fns ...AggregateFunc) *ContestSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (cs *ContestSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cs.ctx, "Select")
+	ctx = setContextOp(ctx, cs.ctx, ent.OpQuerySelect)
 	if err := cs.prepareQuery(ctx); err != nil {
 		return err
 	}

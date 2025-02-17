@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/token"
-	"saas/biz/dal/db/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -158,34 +157,30 @@ func (tu *TokenUpdate) SetNillableExpiredAt(t *time.Time) *TokenUpdate {
 	return tu
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
-func (tu *TokenUpdate) SetOwnerID(id int64) *TokenUpdate {
-	tu.mutation.SetOwnerID(id)
+// SetType sets the "type" field.
+func (tu *TokenUpdate) SetType(i int64) *TokenUpdate {
+	tu.mutation.ResetType()
+	tu.mutation.SetType(i)
 	return tu
 }
 
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
-func (tu *TokenUpdate) SetNillableOwnerID(id *int64) *TokenUpdate {
-	if id != nil {
-		tu = tu.SetOwnerID(*id)
+// SetNillableType sets the "type" field if the given value is not nil.
+func (tu *TokenUpdate) SetNillableType(i *int64) *TokenUpdate {
+	if i != nil {
+		tu.SetType(*i)
 	}
 	return tu
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (tu *TokenUpdate) SetOwner(u *User) *TokenUpdate {
-	return tu.SetOwnerID(u.ID)
+// AddType adds i to the "type" field.
+func (tu *TokenUpdate) AddType(i int64) *TokenUpdate {
+	tu.mutation.AddType(i)
+	return tu
 }
 
 // Mutation returns the TokenMutation object of the builder.
 func (tu *TokenUpdate) Mutation() *TokenMutation {
 	return tu.mutation
-}
-
-// ClearOwner clears the "owner" edge to the User entity.
-func (tu *TokenUpdate) ClearOwner() *TokenUpdate {
-	tu.mutation.ClearOwner()
-	return tu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -275,34 +270,11 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := tu.mutation.ExpiredAt(); ok {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
 	}
-	if tu.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   token.OwnerTable,
-			Columns: []string{token.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	if value, ok := tu.mutation.GetType(); ok {
+		_spec.SetField(token.FieldType, field.TypeInt64, value)
 	}
-	if nodes := tu.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   token.OwnerTable,
-			Columns: []string{token.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	if value, ok := tu.mutation.AddedType(); ok {
+		_spec.AddField(token.FieldType, field.TypeInt64, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -453,34 +425,30 @@ func (tuo *TokenUpdateOne) SetNillableExpiredAt(t *time.Time) *TokenUpdateOne {
 	return tuo
 }
 
-// SetOwnerID sets the "owner" edge to the User entity by ID.
-func (tuo *TokenUpdateOne) SetOwnerID(id int64) *TokenUpdateOne {
-	tuo.mutation.SetOwnerID(id)
+// SetType sets the "type" field.
+func (tuo *TokenUpdateOne) SetType(i int64) *TokenUpdateOne {
+	tuo.mutation.ResetType()
+	tuo.mutation.SetType(i)
 	return tuo
 }
 
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
-func (tuo *TokenUpdateOne) SetNillableOwnerID(id *int64) *TokenUpdateOne {
-	if id != nil {
-		tuo = tuo.SetOwnerID(*id)
+// SetNillableType sets the "type" field if the given value is not nil.
+func (tuo *TokenUpdateOne) SetNillableType(i *int64) *TokenUpdateOne {
+	if i != nil {
+		tuo.SetType(*i)
 	}
 	return tuo
 }
 
-// SetOwner sets the "owner" edge to the User entity.
-func (tuo *TokenUpdateOne) SetOwner(u *User) *TokenUpdateOne {
-	return tuo.SetOwnerID(u.ID)
+// AddType adds i to the "type" field.
+func (tuo *TokenUpdateOne) AddType(i int64) *TokenUpdateOne {
+	tuo.mutation.AddType(i)
+	return tuo
 }
 
 // Mutation returns the TokenMutation object of the builder.
 func (tuo *TokenUpdateOne) Mutation() *TokenMutation {
 	return tuo.mutation
-}
-
-// ClearOwner clears the "owner" edge to the User entity.
-func (tuo *TokenUpdateOne) ClearOwner() *TokenUpdateOne {
-	tuo.mutation.ClearOwner()
-	return tuo
 }
 
 // Where appends a list predicates to the TokenUpdate builder.
@@ -600,34 +568,11 @@ func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error
 	if value, ok := tuo.mutation.ExpiredAt(); ok {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
 	}
-	if tuo.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   token.OwnerTable,
-			Columns: []string{token.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	if value, ok := tuo.mutation.GetType(); ok {
+		_spec.SetField(token.FieldType, field.TypeInt64, value)
 	}
-	if nodes := tuo.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   token.OwnerTable,
-			Columns: []string{token.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	if value, ok := tuo.mutation.AddedType(); ok {
+		_spec.AddField(token.FieldType, field.TypeInt64, value)
 	}
 	_node = &Token{config: tuo.config}
 	_spec.Assign = _node.assignValues

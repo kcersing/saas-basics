@@ -9,14 +9,29 @@ include "order.thrift"
  * 微信小程序服务
  */
 
+struct MemberRegisterReq {
+    1:  optional string mobile="" (api.raw = "mobile")
+    2:  optional string captcha="" (api.raw = "captcha")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+struct MemberCaptchaReq {
+    1:  optional string mobile="" (api.raw = "mobile")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+struct MemberLoginReq {
+    1:  optional string mobile="" (api.raw = "mobile")
+    2:  optional string captcha="" (api.raw = "captcha")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+
 service WxService {
 
-//   /**会员注册*/
-//   base.NilResponse MemberRegister(1: MemberRegisterReq req) (api.post = "/service/wx/member/register")
-//   /**会员验证码*/
-//   base.NilResponse MemberCaptcha(1: MemberCaptchaReq req) (api.post = "/service/wx/member/captcha")
-//   /**会员登录*/
-//   base.NilResponse MemberLogin(1: MemberLoginReq req) (api.post = "/service/wx/member/login")
+   /**会员注册*/
+   base.NilResponse MemberRegister(1: MemberRegisterReq req) (api.post = "/service/wx/member/register")
+   /**会员验证码*/
+   base.NilResponse MemberCaptcha(1: MemberCaptchaReq req) (api.post = "/service/wx/member/captcha")
+   /**会员登录*/
+   base.NilResponse MemberLogin(1: MemberLoginReq req) (api.post = "/service/wx/member/login")
    /**会员登出*/
    base.NilResponse MemberLogout(1: base.IDReq req) (api.post = "/service/wx/member/logout")
    /**会员详情*/
@@ -106,8 +121,25 @@ service WxService {
    base.NilResponse SignMemberSchedule(1: SignMemberScheduleReq req) (api.post = "/service/wx/staff/sign-member-schedule")
    /**教练签到*/
    base.NilResponse SignStaffSchedule(1: SignStaffScheduleReq req) (api.post = "/service/wx/staff/sign-staff-schedule")
-
+   /**教练验证码*/
+   base.NilResponse StaffCaptcha(1: StaffCaptchaReq req) (api.post = "/service/wx/staff/captcha")
+   /**教练登录*/
+   base.NilResponse StaffLogin(1: StaffLoginReq req) (api.post = "/service/wx/staff/login")
+   /**会员登出*/
+   base.NilResponse StaffLogout(1: base.IDReq req) (api.post = "/service/wx/staff/logout")
 }
+
+struct StaffCaptchaReq {
+    1:  optional string mobile="" (api.raw = "mobile")
+    2:  optional string captcha="" (api.raw = "captcha")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+struct StaffLoginReq {
+    1:  optional string mobile="" (api.raw = "mobile")
+    2:  optional string captcha="" (api.raw = "captcha")
+    4:  optional i64 venueId=0 (api.raw = "venueId")
+}
+
 struct CreatePlaceScheduleReq {
     1:  optional i64 memberId=0 (api.raw = "memberId")
     2:  optional i64 placeId=0 (api.raw = "placeId")

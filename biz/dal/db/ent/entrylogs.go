@@ -66,12 +66,10 @@ type EntryLogsEdges struct {
 // VenuesOrErr returns the Venues value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EntryLogsEdges) VenuesOrErr() (*Venue, error) {
-	if e.loadedTypes[0] {
-		if e.Venues == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: venue.Label}
-		}
+	if e.Venues != nil {
 		return e.Venues, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: venue.Label}
 	}
 	return nil, &NotLoadedError{edge: "venues"}
 }
@@ -79,12 +77,10 @@ func (e EntryLogsEdges) VenuesOrErr() (*Venue, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EntryLogsEdges) MembersOrErr() (*Member, error) {
-	if e.loadedTypes[1] {
-		if e.Members == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: member.Label}
-		}
+	if e.Members != nil {
 		return e.Members, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: member.Label}
 	}
 	return nil, &NotLoadedError{edge: "members"}
 }
@@ -92,12 +88,10 @@ func (e EntryLogsEdges) MembersOrErr() (*Member, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EntryLogsEdges) UsersOrErr() (*User, error) {
-	if e.loadedTypes[2] {
-		if e.Users == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: user.Label}
-		}
+	if e.Users != nil {
 		return e.Users, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "users"}
 }
@@ -105,12 +99,10 @@ func (e EntryLogsEdges) UsersOrErr() (*User, error) {
 // MemberProductsOrErr returns the MemberProducts value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EntryLogsEdges) MemberProductsOrErr() (*MemberProduct, error) {
-	if e.loadedTypes[3] {
-		if e.MemberProducts == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: memberproduct.Label}
-		}
+	if e.MemberProducts != nil {
 		return e.MemberProducts, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: memberproduct.Label}
 	}
 	return nil, &NotLoadedError{edge: "member_products"}
 }

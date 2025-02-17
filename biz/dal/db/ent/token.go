@@ -5,7 +5,6 @@ package ent
 import (
 	"fmt"
 	"saas/biz/dal/db/ent/token"
-	"saas/biz/dal/db/ent/user"
 	"strings"
 	"time"
 
@@ -34,33 +33,9 @@ type Token struct {
 	Source string `json:"source,omitempty"`
 	//  Expire time | 过期时间
 	ExpiredAt time.Time `json:"expired_at,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the TokenQuery when eager-loading is set.
-	Edges        TokenEdges `json:"edges"`
-	user_token   *int64
+	// type 1会员 2员工
+	Type         int64 `json:"type,omitempty"`
 	selectValues sql.SelectValues
-}
-
-// TokenEdges holds the relations/edges for other nodes in the graph.
-type TokenEdges struct {
-	// Owner holds the value of the owner edge.
-	Owner *User `json:"owner,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-}
-
-// OwnerOrErr returns the Owner value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e TokenEdges) OwnerOrErr() (*User, error) {
-	if e.loadedTypes[0] {
-		if e.Owner == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: user.Label}
-		}
-		return e.Owner, nil
-	}
-	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -68,14 +43,12 @@ func (*Token) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case token.FieldID, token.FieldDelete, token.FieldCreatedID, token.FieldUserID:
+		case token.FieldID, token.FieldDelete, token.FieldCreatedID, token.FieldUserID, token.FieldType:
 			values[i] = new(sql.NullInt64)
 		case token.FieldToken, token.FieldSource:
 			values[i] = new(sql.NullString)
 		case token.FieldCreatedAt, token.FieldUpdatedAt, token.FieldExpiredAt:
 			values[i] = new(sql.NullTime)
-		case token.ForeignKeys[0]: // user_token
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -145,12 +118,11 @@ func (t *Token) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.ExpiredAt = value.Time
 			}
-		case token.ForeignKeys[0]:
+		case token.FieldType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field user_token", value)
+				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				t.user_token = new(int64)
-				*t.user_token = int64(value.Int64)
+				t.Type = value.Int64
 			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
@@ -163,11 +135,6 @@ func (t *Token) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (t *Token) Value(name string) (ent.Value, error) {
 	return t.selectValues.Get(name)
-}
-
-// QueryOwner queries the "owner" edge of the Token entity.
-func (t *Token) QueryOwner() *UserQuery {
-	return NewTokenClient(t.config).QueryOwner(t)
 }
 
 // Update returns a builder for updating this Token.
@@ -216,6 +183,9 @@ func (t *Token) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("expired_at=")
 	builder.WriteString(t.ExpiredAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", t.Type))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -12,6 +12,7 @@ import (
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venueplace"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -109,7 +110,7 @@ func (vpq *VenuePlaceQuery) QueryProducts() *ProductQuery {
 // First returns the first VenuePlace entity from the query.
 // Returns a *NotFoundError when no VenuePlace was found.
 func (vpq *VenuePlaceQuery) First(ctx context.Context) (*VenuePlace, error) {
-	nodes, err := vpq.Limit(1).All(setContextOp(ctx, vpq.ctx, "First"))
+	nodes, err := vpq.Limit(1).All(setContextOp(ctx, vpq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +133,7 @@ func (vpq *VenuePlaceQuery) FirstX(ctx context.Context) *VenuePlace {
 // Returns a *NotFoundError when no VenuePlace ID was found.
 func (vpq *VenuePlaceQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = vpq.Limit(1).IDs(setContextOp(ctx, vpq.ctx, "FirstID")); err != nil {
+	if ids, err = vpq.Limit(1).IDs(setContextOp(ctx, vpq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -155,7 +156,7 @@ func (vpq *VenuePlaceQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one VenuePlace entity is found.
 // Returns a *NotFoundError when no VenuePlace entities are found.
 func (vpq *VenuePlaceQuery) Only(ctx context.Context) (*VenuePlace, error) {
-	nodes, err := vpq.Limit(2).All(setContextOp(ctx, vpq.ctx, "Only"))
+	nodes, err := vpq.Limit(2).All(setContextOp(ctx, vpq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +184,7 @@ func (vpq *VenuePlaceQuery) OnlyX(ctx context.Context) *VenuePlace {
 // Returns a *NotFoundError when no entities are found.
 func (vpq *VenuePlaceQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = vpq.Limit(2).IDs(setContextOp(ctx, vpq.ctx, "OnlyID")); err != nil {
+	if ids, err = vpq.Limit(2).IDs(setContextOp(ctx, vpq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -208,7 +209,7 @@ func (vpq *VenuePlaceQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of VenuePlaces.
 func (vpq *VenuePlaceQuery) All(ctx context.Context) ([]*VenuePlace, error) {
-	ctx = setContextOp(ctx, vpq.ctx, "All")
+	ctx = setContextOp(ctx, vpq.ctx, ent.OpQueryAll)
 	if err := vpq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -230,7 +231,7 @@ func (vpq *VenuePlaceQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if vpq.ctx.Unique == nil && vpq.path != nil {
 		vpq.Unique(true)
 	}
-	ctx = setContextOp(ctx, vpq.ctx, "IDs")
+	ctx = setContextOp(ctx, vpq.ctx, ent.OpQueryIDs)
 	if err = vpq.Select(venueplace.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -248,7 +249,7 @@ func (vpq *VenuePlaceQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (vpq *VenuePlaceQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, vpq.ctx, "Count")
+	ctx = setContextOp(ctx, vpq.ctx, ent.OpQueryCount)
 	if err := vpq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -266,7 +267,7 @@ func (vpq *VenuePlaceQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (vpq *VenuePlaceQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, vpq.ctx, "Exist")
+	ctx = setContextOp(ctx, vpq.ctx, ent.OpQueryExist)
 	switch _, err := vpq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -634,7 +635,7 @@ func (vpgb *VenuePlaceGroupBy) Aggregate(fns ...AggregateFunc) *VenuePlaceGroupB
 
 // Scan applies the selector query and scans the result into the given value.
 func (vpgb *VenuePlaceGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, vpgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, vpgb.build.ctx, ent.OpQueryGroupBy)
 	if err := vpgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -682,7 +683,7 @@ func (vps *VenuePlaceSelect) Aggregate(fns ...AggregateFunc) *VenuePlaceSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (vps *VenuePlaceSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, vps.ctx, "Select")
+	ctx = setContextOp(ctx, vps.ctx, ent.OpQuerySelect)
 	if err := vps.prepareQuery(ctx); err != nil {
 		return err
 	}

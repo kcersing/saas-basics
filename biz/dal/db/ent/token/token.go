@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -30,17 +29,10 @@ const (
 	FieldSource = "source"
 	// FieldExpiredAt holds the string denoting the expired_at field in the database.
 	FieldExpiredAt = "expired_at"
-	// EdgeOwner holds the string denoting the owner edge name in mutations.
-	EdgeOwner = "owner"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// Table holds the table name of the token in the database.
 	Table = "sys_tokens"
-	// OwnerTable is the table that holds the owner relation/edge.
-	OwnerTable = "sys_tokens"
-	// OwnerInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	OwnerInverseTable = "sys_users"
-	// OwnerColumn is the table column denoting the owner relation/edge.
-	OwnerColumn = "user_token"
 )
 
 // Columns holds all SQL columns for token fields.
@@ -54,23 +46,13 @@ var Columns = []string{
 	FieldToken,
 	FieldSource,
 	FieldExpiredAt,
-}
-
-// ForeignKeys holds the SQL foreign-keys that are owned by the "sys_tokens"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"user_token",
+	FieldType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -88,6 +70,8 @@ var (
 	DefaultDelete int64
 	// DefaultCreatedID holds the default value on creation for the "created_id" field.
 	DefaultCreatedID int64
+	// DefaultType holds the default value on creation for the "type" field.
+	DefaultType int64
 )
 
 // OrderOption defines the ordering options for the Token queries.
@@ -138,16 +122,7 @@ func ByExpiredAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpiredAt, opts...).ToFunc()
 }
 
-// ByOwnerField orders the results by owner field.
-func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
-	}
-}
-func newOwnerStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OwnerInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, true, OwnerTable, OwnerColumn),
-	)
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }

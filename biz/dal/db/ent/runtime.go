@@ -1420,6 +1420,10 @@ func init() {
 	tokenDescCreatedID := tokenMixinFields0[4].Descriptor()
 	// token.DefaultCreatedID holds the default value on creation for the created_id field.
 	token.DefaultCreatedID = tokenDescCreatedID.Default.(int64)
+	// tokenDescType is the schema descriptor for type field.
+	tokenDescType := tokenFields[5].Descriptor()
+	// token.DefaultType holds the default value on creation for the type field.
+	token.DefaultType = tokenDescType.Default.(int64)
 	userMixin := schema.User{}.Mixin()
 	userMixinFields0 := userMixin[0].Fields()
 	_ = userMixinFields0
