@@ -2,12 +2,15 @@ package service
 
 import (
 	"context"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgraph-io/ristretto"
 	"github.com/pkg/errors"
 	"saas/biz/dal/cache"
 	"saas/biz/dal/db"
 	"saas/biz/dal/db/ent"
+	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/predicate"
 	user2 "saas/biz/dal/db/ent/user"
 	"saas/biz/infras/do"
@@ -229,6 +232,24 @@ func (u User) List(req user.UserListReq) (userList []*user.UserInfo, total int, 
 	}
 	if req.Status != 0 {
 		predicates = append(predicates, user2.Status(req.Status))
+	}
+
+	if req.VenueId > 0 {
+		predicates = append(predicates, user2.DefaultVenueID(req.VenueId))
+	}
+	if len(req.TagId) > 0 {
+		predicates = append(predicates, user2.HasTagsWith(dictionarydetail.IDIn(req.TagId...)))
+	}
+
+	if len(req.Functions) > 0 {
+		var a []any
+		for _, v := range req.Functions {
+			a = append(a, v)
+		}
+		predicates = append(predicates,
+			func(s *sql.Selector) {
+				s.Where(sqljson.ValueContains(user2.FieldFunctions, a))
+			})
 	}
 
 	//if req.RoleId != 0 {

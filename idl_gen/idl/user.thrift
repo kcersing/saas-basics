@@ -99,6 +99,10 @@ struct UserListReq {
     8:  optional i64 status=0 (api.raw = "status")
     9:  optional i64 type=1 (api.raw = "type")
     10:optional i64 venueId=0 (api.raw = "venueId")
+    /**职能*/
+    11: optional list<string> functions="" (api.raw = "functions")
+    /**标签*/
+    13: optional list<i64> tagId=0 (api.raw = "tagId" )
 }
 
 struct SetUserRole{

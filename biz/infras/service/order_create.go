@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/pkg/errors"
+	"golang.org/x/sync/errgroup"
 	member2 "saas/biz/dal/db/ent/member"
 	order2 "saas/biz/dal/db/ent/order"
 	product2 "saas/biz/dal/db/ent/product"
@@ -14,6 +15,19 @@ import (
 	"strconv"
 	"time"
 )
+
+func gos() {
+	var g errgroup.Group
+
+	g.Go(func() error {
+		return nil
+
+	})
+
+	if err := g.Wait(); err != nil {
+		hlog.Info(err)
+	}
+}
 
 func (o Order) Buy(req *order.BuyReq) (orderOne *order.OrderInfo, err error) {
 
