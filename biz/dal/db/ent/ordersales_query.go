@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/ordersales"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -85,7 +84,7 @@ func (osq *OrderSalesQuery) QueryOrder() *OrderQuery {
 // First returns the first OrderSales entity from the query.
 // Returns a *NotFoundError when no OrderSales was found.
 func (osq *OrderSalesQuery) First(ctx context.Context) (*OrderSales, error) {
-	nodes, err := osq.Limit(1).All(setContextOp(ctx, osq.ctx, ent.OpQueryFirst))
+	nodes, err := osq.Limit(1).All(setContextOp(ctx, osq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +107,7 @@ func (osq *OrderSalesQuery) FirstX(ctx context.Context) *OrderSales {
 // Returns a *NotFoundError when no OrderSales ID was found.
 func (osq *OrderSalesQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = osq.Limit(1).IDs(setContextOp(ctx, osq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = osq.Limit(1).IDs(setContextOp(ctx, osq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +130,7 @@ func (osq *OrderSalesQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one OrderSales entity is found.
 // Returns a *NotFoundError when no OrderSales entities are found.
 func (osq *OrderSalesQuery) Only(ctx context.Context) (*OrderSales, error) {
-	nodes, err := osq.Limit(2).All(setContextOp(ctx, osq.ctx, ent.OpQueryOnly))
+	nodes, err := osq.Limit(2).All(setContextOp(ctx, osq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +158,7 @@ func (osq *OrderSalesQuery) OnlyX(ctx context.Context) *OrderSales {
 // Returns a *NotFoundError when no entities are found.
 func (osq *OrderSalesQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = osq.Limit(2).IDs(setContextOp(ctx, osq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = osq.Limit(2).IDs(setContextOp(ctx, osq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +183,7 @@ func (osq *OrderSalesQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of OrderSalesSlice.
 func (osq *OrderSalesQuery) All(ctx context.Context) ([]*OrderSales, error) {
-	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, osq.ctx, "All")
 	if err := osq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +205,7 @@ func (osq *OrderSalesQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if osq.ctx.Unique == nil && osq.path != nil {
 		osq.Unique(true)
 	}
-	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, osq.ctx, "IDs")
 	if err = osq.Select(ordersales.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +223,7 @@ func (osq *OrderSalesQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (osq *OrderSalesQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, osq.ctx, "Count")
 	if err := osq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +241,7 @@ func (osq *OrderSalesQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (osq *OrderSalesQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, osq.ctx, "Exist")
 	switch _, err := osq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -529,7 +528,7 @@ func (osgb *OrderSalesGroupBy) Aggregate(fns ...AggregateFunc) *OrderSalesGroupB
 
 // Scan applies the selector query and scans the result into the given value.
 func (osgb *OrderSalesGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, osgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, osgb.build.ctx, "GroupBy")
 	if err := osgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -577,7 +576,7 @@ func (oss *OrderSalesSelect) Aggregate(fns ...AggregateFunc) *OrderSalesSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (oss *OrderSalesSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oss.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, oss.ctx, "Select")
 	if err := oss.prepareQuery(ctx); err != nil {
 		return err
 	}

@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/productcourses"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -108,7 +107,7 @@ func (pcq *ProductCoursesQuery) QueryNodeL() *ProductQuery {
 // First returns the first ProductCourses entity from the query.
 // Returns a *NotFoundError when no ProductCourses was found.
 func (pcq *ProductCoursesQuery) First(ctx context.Context) (*ProductCourses, error) {
-	nodes, err := pcq.Limit(1).All(setContextOp(ctx, pcq.ctx, ent.OpQueryFirst))
+	nodes, err := pcq.Limit(1).All(setContextOp(ctx, pcq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +130,7 @@ func (pcq *ProductCoursesQuery) FirstX(ctx context.Context) *ProductCourses {
 // Returns a *NotFoundError when no ProductCourses ID was found.
 func (pcq *ProductCoursesQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = pcq.Limit(1).IDs(setContextOp(ctx, pcq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = pcq.Limit(1).IDs(setContextOp(ctx, pcq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -154,7 +153,7 @@ func (pcq *ProductCoursesQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one ProductCourses entity is found.
 // Returns a *NotFoundError when no ProductCourses entities are found.
 func (pcq *ProductCoursesQuery) Only(ctx context.Context) (*ProductCourses, error) {
-	nodes, err := pcq.Limit(2).All(setContextOp(ctx, pcq.ctx, ent.OpQueryOnly))
+	nodes, err := pcq.Limit(2).All(setContextOp(ctx, pcq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -182,7 +181,7 @@ func (pcq *ProductCoursesQuery) OnlyX(ctx context.Context) *ProductCourses {
 // Returns a *NotFoundError when no entities are found.
 func (pcq *ProductCoursesQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = pcq.Limit(2).IDs(setContextOp(ctx, pcq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = pcq.Limit(2).IDs(setContextOp(ctx, pcq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -207,7 +206,7 @@ func (pcq *ProductCoursesQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of ProductCoursesSlice.
 func (pcq *ProductCoursesQuery) All(ctx context.Context) ([]*ProductCourses, error) {
-	ctx = setContextOp(ctx, pcq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, pcq.ctx, "All")
 	if err := pcq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -229,7 +228,7 @@ func (pcq *ProductCoursesQuery) IDs(ctx context.Context) (ids []int64, err error
 	if pcq.ctx.Unique == nil && pcq.path != nil {
 		pcq.Unique(true)
 	}
-	ctx = setContextOp(ctx, pcq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, pcq.ctx, "IDs")
 	if err = pcq.Select(productcourses.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -247,7 +246,7 @@ func (pcq *ProductCoursesQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (pcq *ProductCoursesQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, pcq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, pcq.ctx, "Count")
 	if err := pcq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -265,7 +264,7 @@ func (pcq *ProductCoursesQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (pcq *ProductCoursesQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, pcq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, pcq.ctx, "Exist")
 	switch _, err := pcq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -603,7 +602,7 @@ func (pcgb *ProductCoursesGroupBy) Aggregate(fns ...AggregateFunc) *ProductCours
 
 // Scan applies the selector query and scans the result into the given value.
 func (pcgb *ProductCoursesGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, pcgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, pcgb.build.ctx, "GroupBy")
 	if err := pcgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -651,7 +650,7 @@ func (pcs *ProductCoursesSelect) Aggregate(fns ...AggregateFunc) *ProductCourses
 
 // Scan applies the selector query and scans the result into the given value.
 func (pcs *ProductCoursesSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, pcs.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, pcs.ctx, "Select")
 	if err := pcs.prepareQuery(ctx); err != nil {
 		return err
 	}

@@ -13,7 +13,6 @@ import (
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -134,7 +133,7 @@ func (rq *RoleQuery) QueryVenues() *VenueQuery {
 // First returns the first Role entity from the query.
 // Returns a *NotFoundError when no Role was found.
 func (rq *RoleQuery) First(ctx context.Context) (*Role, error) {
-	nodes, err := rq.Limit(1).All(setContextOp(ctx, rq.ctx, ent.OpQueryFirst))
+	nodes, err := rq.Limit(1).All(setContextOp(ctx, rq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +156,7 @@ func (rq *RoleQuery) FirstX(ctx context.Context) *Role {
 // Returns a *NotFoundError when no Role ID was found.
 func (rq *RoleQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = rq.Limit(1).IDs(setContextOp(ctx, rq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = rq.Limit(1).IDs(setContextOp(ctx, rq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -180,7 +179,7 @@ func (rq *RoleQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Role entity is found.
 // Returns a *NotFoundError when no Role entities are found.
 func (rq *RoleQuery) Only(ctx context.Context) (*Role, error) {
-	nodes, err := rq.Limit(2).All(setContextOp(ctx, rq.ctx, ent.OpQueryOnly))
+	nodes, err := rq.Limit(2).All(setContextOp(ctx, rq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -208,7 +207,7 @@ func (rq *RoleQuery) OnlyX(ctx context.Context) *Role {
 // Returns a *NotFoundError when no entities are found.
 func (rq *RoleQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = rq.Limit(2).IDs(setContextOp(ctx, rq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = rq.Limit(2).IDs(setContextOp(ctx, rq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -233,7 +232,7 @@ func (rq *RoleQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Roles.
 func (rq *RoleQuery) All(ctx context.Context) ([]*Role, error) {
-	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, rq.ctx, "All")
 	if err := rq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -255,7 +254,7 @@ func (rq *RoleQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if rq.ctx.Unique == nil && rq.path != nil {
 		rq.Unique(true)
 	}
-	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, rq.ctx, "IDs")
 	if err = rq.Select(role.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -273,7 +272,7 @@ func (rq *RoleQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (rq *RoleQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, rq.ctx, "Count")
 	if err := rq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -291,7 +290,7 @@ func (rq *RoleQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (rq *RoleQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, rq.ctx, "Exist")
 	switch _, err := rq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -770,7 +769,7 @@ func (rgb *RoleGroupBy) Aggregate(fns ...AggregateFunc) *RoleGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (rgb *RoleGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, rgb.build.ctx, "GroupBy")
 	if err := rgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -818,7 +817,7 @@ func (rs *RoleSelect) Aggregate(fns ...AggregateFunc) *RoleSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (rs *RoleSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rs.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, rs.ctx, "Select")
 	if err := rs.prepareQuery(ctx); err != nil {
 		return err
 	}

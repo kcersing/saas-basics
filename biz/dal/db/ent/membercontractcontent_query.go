@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -85,7 +84,7 @@ func (mccq *MemberContractContentQuery) QueryContract() *MemberContractQuery {
 // First returns the first MemberContractContent entity from the query.
 // Returns a *NotFoundError when no MemberContractContent was found.
 func (mccq *MemberContractContentQuery) First(ctx context.Context) (*MemberContractContent, error) {
-	nodes, err := mccq.Limit(1).All(setContextOp(ctx, mccq.ctx, ent.OpQueryFirst))
+	nodes, err := mccq.Limit(1).All(setContextOp(ctx, mccq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +107,7 @@ func (mccq *MemberContractContentQuery) FirstX(ctx context.Context) *MemberContr
 // Returns a *NotFoundError when no MemberContractContent ID was found.
 func (mccq *MemberContractContentQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mccq.Limit(1).IDs(setContextOp(ctx, mccq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = mccq.Limit(1).IDs(setContextOp(ctx, mccq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +130,7 @@ func (mccq *MemberContractContentQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one MemberContractContent entity is found.
 // Returns a *NotFoundError when no MemberContractContent entities are found.
 func (mccq *MemberContractContentQuery) Only(ctx context.Context) (*MemberContractContent, error) {
-	nodes, err := mccq.Limit(2).All(setContextOp(ctx, mccq.ctx, ent.OpQueryOnly))
+	nodes, err := mccq.Limit(2).All(setContextOp(ctx, mccq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +158,7 @@ func (mccq *MemberContractContentQuery) OnlyX(ctx context.Context) *MemberContra
 // Returns a *NotFoundError when no entities are found.
 func (mccq *MemberContractContentQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mccq.Limit(2).IDs(setContextOp(ctx, mccq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = mccq.Limit(2).IDs(setContextOp(ctx, mccq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +183,7 @@ func (mccq *MemberContractContentQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of MemberContractContents.
 func (mccq *MemberContractContentQuery) All(ctx context.Context) ([]*MemberContractContent, error) {
-	ctx = setContextOp(ctx, mccq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, mccq.ctx, "All")
 	if err := mccq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +205,7 @@ func (mccq *MemberContractContentQuery) IDs(ctx context.Context) (ids []int64, e
 	if mccq.ctx.Unique == nil && mccq.path != nil {
 		mccq.Unique(true)
 	}
-	ctx = setContextOp(ctx, mccq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, mccq.ctx, "IDs")
 	if err = mccq.Select(membercontractcontent.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +223,7 @@ func (mccq *MemberContractContentQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (mccq *MemberContractContentQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mccq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, mccq.ctx, "Count")
 	if err := mccq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +241,7 @@ func (mccq *MemberContractContentQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (mccq *MemberContractContentQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mccq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, mccq.ctx, "Exist")
 	switch _, err := mccq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -529,7 +528,7 @@ func (mccgb *MemberContractContentGroupBy) Aggregate(fns ...AggregateFunc) *Memb
 
 // Scan applies the selector query and scans the result into the given value.
 func (mccgb *MemberContractContentGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mccgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, mccgb.build.ctx, "GroupBy")
 	if err := mccgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -577,7 +576,7 @@ func (mccs *MemberContractContentSelect) Aggregate(fns ...AggregateFunc) *Member
 
 // Scan applies the selector query and scans the result into the given value.
 func (mccs *MemberContractContentSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mccs.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, mccs.ctx, "Select")
 	if err := mccs.prepareQuery(ctx); err != nil {
 		return err
 	}

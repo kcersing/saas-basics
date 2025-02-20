@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -85,7 +84,7 @@ func (mnq *MemberNoteQuery) QueryNotes() *MemberQuery {
 // First returns the first MemberNote entity from the query.
 // Returns a *NotFoundError when no MemberNote was found.
 func (mnq *MemberNoteQuery) First(ctx context.Context) (*MemberNote, error) {
-	nodes, err := mnq.Limit(1).All(setContextOp(ctx, mnq.ctx, ent.OpQueryFirst))
+	nodes, err := mnq.Limit(1).All(setContextOp(ctx, mnq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +107,7 @@ func (mnq *MemberNoteQuery) FirstX(ctx context.Context) *MemberNote {
 // Returns a *NotFoundError when no MemberNote ID was found.
 func (mnq *MemberNoteQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mnq.Limit(1).IDs(setContextOp(ctx, mnq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = mnq.Limit(1).IDs(setContextOp(ctx, mnq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +130,7 @@ func (mnq *MemberNoteQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one MemberNote entity is found.
 // Returns a *NotFoundError when no MemberNote entities are found.
 func (mnq *MemberNoteQuery) Only(ctx context.Context) (*MemberNote, error) {
-	nodes, err := mnq.Limit(2).All(setContextOp(ctx, mnq.ctx, ent.OpQueryOnly))
+	nodes, err := mnq.Limit(2).All(setContextOp(ctx, mnq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +158,7 @@ func (mnq *MemberNoteQuery) OnlyX(ctx context.Context) *MemberNote {
 // Returns a *NotFoundError when no entities are found.
 func (mnq *MemberNoteQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mnq.Limit(2).IDs(setContextOp(ctx, mnq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = mnq.Limit(2).IDs(setContextOp(ctx, mnq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +183,7 @@ func (mnq *MemberNoteQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of MemberNotes.
 func (mnq *MemberNoteQuery) All(ctx context.Context) ([]*MemberNote, error) {
-	ctx = setContextOp(ctx, mnq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, mnq.ctx, "All")
 	if err := mnq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +205,7 @@ func (mnq *MemberNoteQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if mnq.ctx.Unique == nil && mnq.path != nil {
 		mnq.Unique(true)
 	}
-	ctx = setContextOp(ctx, mnq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, mnq.ctx, "IDs")
 	if err = mnq.Select(membernote.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +223,7 @@ func (mnq *MemberNoteQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (mnq *MemberNoteQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mnq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, mnq.ctx, "Count")
 	if err := mnq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +241,7 @@ func (mnq *MemberNoteQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (mnq *MemberNoteQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mnq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, mnq.ctx, "Exist")
 	switch _, err := mnq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -529,7 +528,7 @@ func (mngb *MemberNoteGroupBy) Aggregate(fns ...AggregateFunc) *MemberNoteGroupB
 
 // Scan applies the selector query and scans the result into the given value.
 func (mngb *MemberNoteGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mngb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, mngb.build.ctx, "GroupBy")
 	if err := mngb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -577,7 +576,7 @@ func (mns *MemberNoteSelect) Aggregate(fns ...AggregateFunc) *MemberNoteSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (mns *MemberNoteSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mns.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, mns.ctx, "Select")
 	if err := mns.prepareQuery(ctx); err != nil {
 		return err
 	}

@@ -251,3 +251,8 @@ func _stafflogoutMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _payMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

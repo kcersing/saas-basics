@@ -14,7 +14,6 @@ import (
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -158,7 +157,7 @@ func (mcq *MemberContractQuery) QueryMemberProduct() *MemberProductQuery {
 // First returns the first MemberContract entity from the query.
 // Returns a *NotFoundError when no MemberContract was found.
 func (mcq *MemberContractQuery) First(ctx context.Context) (*MemberContract, error) {
-	nodes, err := mcq.Limit(1).All(setContextOp(ctx, mcq.ctx, ent.OpQueryFirst))
+	nodes, err := mcq.Limit(1).All(setContextOp(ctx, mcq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -181,7 +180,7 @@ func (mcq *MemberContractQuery) FirstX(ctx context.Context) *MemberContract {
 // Returns a *NotFoundError when no MemberContract ID was found.
 func (mcq *MemberContractQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mcq.Limit(1).IDs(setContextOp(ctx, mcq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = mcq.Limit(1).IDs(setContextOp(ctx, mcq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -204,7 +203,7 @@ func (mcq *MemberContractQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one MemberContract entity is found.
 // Returns a *NotFoundError when no MemberContract entities are found.
 func (mcq *MemberContractQuery) Only(ctx context.Context) (*MemberContract, error) {
-	nodes, err := mcq.Limit(2).All(setContextOp(ctx, mcq.ctx, ent.OpQueryOnly))
+	nodes, err := mcq.Limit(2).All(setContextOp(ctx, mcq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -232,7 +231,7 @@ func (mcq *MemberContractQuery) OnlyX(ctx context.Context) *MemberContract {
 // Returns a *NotFoundError when no entities are found.
 func (mcq *MemberContractQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mcq.Limit(2).IDs(setContextOp(ctx, mcq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = mcq.Limit(2).IDs(setContextOp(ctx, mcq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -257,7 +256,7 @@ func (mcq *MemberContractQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of MemberContracts.
 func (mcq *MemberContractQuery) All(ctx context.Context) ([]*MemberContract, error) {
-	ctx = setContextOp(ctx, mcq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, mcq.ctx, "All")
 	if err := mcq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -279,7 +278,7 @@ func (mcq *MemberContractQuery) IDs(ctx context.Context) (ids []int64, err error
 	if mcq.ctx.Unique == nil && mcq.path != nil {
 		mcq.Unique(true)
 	}
-	ctx = setContextOp(ctx, mcq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, mcq.ctx, "IDs")
 	if err = mcq.Select(membercontract.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -297,7 +296,7 @@ func (mcq *MemberContractQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (mcq *MemberContractQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mcq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, mcq.ctx, "Count")
 	if err := mcq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -315,7 +314,7 @@ func (mcq *MemberContractQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (mcq *MemberContractQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mcq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, mcq.ctx, "Exist")
 	switch _, err := mcq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -754,7 +753,7 @@ func (mcgb *MemberContractGroupBy) Aggregate(fns ...AggregateFunc) *MemberContra
 
 // Scan applies the selector query and scans the result into the given value.
 func (mcgb *MemberContractGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mcgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, mcgb.build.ctx, "GroupBy")
 	if err := mcgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -802,7 +801,7 @@ func (mcs *MemberContractSelect) Aggregate(fns ...AggregateFunc) *MemberContract
 
 // Scan applies the selector query and scans the result into the given value.
 func (mcs *MemberContractSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mcs.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, mcs.ctx, "Select")
 	if err := mcs.prepareQuery(ctx); err != nil {
 		return err
 	}

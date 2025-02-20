@@ -9,7 +9,6 @@ import (
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/token"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -61,7 +60,7 @@ func (tq *TokenQuery) Order(o ...token.OrderOption) *TokenQuery {
 // First returns the first Token entity from the query.
 // Returns a *NotFoundError when no Token was found.
 func (tq *TokenQuery) First(ctx context.Context) (*Token, error) {
-	nodes, err := tq.Limit(1).All(setContextOp(ctx, tq.ctx, ent.OpQueryFirst))
+	nodes, err := tq.Limit(1).All(setContextOp(ctx, tq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +83,7 @@ func (tq *TokenQuery) FirstX(ctx context.Context) *Token {
 // Returns a *NotFoundError when no Token ID was found.
 func (tq *TokenQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = tq.Limit(1).IDs(setContextOp(ctx, tq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = tq.Limit(1).IDs(setContextOp(ctx, tq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -107,7 +106,7 @@ func (tq *TokenQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Token entity is found.
 // Returns a *NotFoundError when no Token entities are found.
 func (tq *TokenQuery) Only(ctx context.Context) (*Token, error) {
-	nodes, err := tq.Limit(2).All(setContextOp(ctx, tq.ctx, ent.OpQueryOnly))
+	nodes, err := tq.Limit(2).All(setContextOp(ctx, tq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +134,7 @@ func (tq *TokenQuery) OnlyX(ctx context.Context) *Token {
 // Returns a *NotFoundError when no entities are found.
 func (tq *TokenQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = tq.Limit(2).IDs(setContextOp(ctx, tq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = tq.Limit(2).IDs(setContextOp(ctx, tq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -160,7 +159,7 @@ func (tq *TokenQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Tokens.
 func (tq *TokenQuery) All(ctx context.Context) ([]*Token, error) {
-	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, tq.ctx, "All")
 	if err := tq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -182,7 +181,7 @@ func (tq *TokenQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if tq.ctx.Unique == nil && tq.path != nil {
 		tq.Unique(true)
 	}
-	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, tq.ctx, "IDs")
 	if err = tq.Select(token.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -200,7 +199,7 @@ func (tq *TokenQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (tq *TokenQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, tq.ctx, "Count")
 	if err := tq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -218,7 +217,7 @@ func (tq *TokenQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (tq *TokenQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, tq.ctx, "Exist")
 	switch _, err := tq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -450,7 +449,7 @@ func (tgb *TokenGroupBy) Aggregate(fns ...AggregateFunc) *TokenGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (tgb *TokenGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, tgb.build.ctx, "GroupBy")
 	if err := tgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -498,7 +497,7 @@ func (ts *TokenSelect) Aggregate(fns ...AggregateFunc) *TokenSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ts *TokenSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ts.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, ts.ctx, "Select")
 	if err := ts.prepareQuery(ctx); err != nil {
 		return err
 	}

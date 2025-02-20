@@ -41,7 +41,7 @@ func (t Token) Create(req *token.TokenInfo) error {
 	if expiredAt.Sub(time.Now()).Seconds() < 5 {
 		return errors.New("expired time must be greater than now, more than 5s")
 	}
-	tokenExist, err := t.db.Token.Query().Where(token2.UserID(req.UserID)).Only(t.ctx)
+	tokenExist, err := t.db.Token.Query().Where(token2.UserID(req.UserId)).Only(t.ctx)
 	if err != nil {
 		if !ent.IsNotFound(err) {
 			return errors.Wrap(err, "create Token failed")
@@ -52,13 +52,12 @@ func (t Token) Create(req *token.TokenInfo) error {
 		return t.Update(req)
 	}
 
-	userInfo, err := t.db.User.Query().Where(entuser.IDEQ(req.UserID)).Only(t.ctx)
 	if err != nil {
 		return errors.Wrap(err, "get userinfo failed")
 	}
 	_, err = t.db.Token.Create().
 		SetOwner(userInfo).
-		SetUserID(req.UserID).
+		SetUserID(req.UserId).
 		SetToken(req.Token).
 		SetSource(req.Source).
 		SetExpiredAt(expiredAt).
@@ -66,7 +65,7 @@ func (t Token) Create(req *token.TokenInfo) error {
 	if err != nil {
 		return errors.Wrap(err, "create Token failed")
 	}
-	t.cache.SetWithTTL(fmt.Sprintf("token_%d", req.UserID), req.UserID, 0, expiredAt.Sub(time.Now()))
+	t.cache.SetWithTTL(fmt.Sprintf("token_%d", req.UserId), req.UserId, 0, expiredAt.Sub(time.Now()))
 	t.cache.Wait()
 	return nil
 }
@@ -78,7 +77,7 @@ func (t Token) Update(req *token.TokenInfo) error {
 		return errors.New("expired time must be greater than now, more than 5s")
 	}
 	_, err := t.db.Token.UpdateOneID(req.ID).
-		SetUserID(req.UserID).
+		SetUserID(req.UserId).
 		SetToken(req.Token).
 		SetSource(req.Source).
 		SetUpdatedAt(time.Now()).

@@ -5336,10 +5336,10 @@ type WxService interface {
 	MemberRegister(ctx context.Context, req *MemberRegisterReq) (r *base.NilResponse, err error)
 	/**会员验证码*/
 	MemberCaptcha(ctx context.Context, req *MemberCaptchaReq) (r *base.NilResponse, err error)
-	/**会员登录*/
-	MemberLogin(ctx context.Context, req *MemberLoginReq) (r *base.NilResponse, err error)
-	/**会员登出*/
-	MemberLogout(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
+	//   /**会员登录*/
+	//   base.NilResponse MemberLogin(1: MemberLoginReq req) (api.post = "/service/wx/member/login")
+	//   /**会员登出*/
+	//   base.NilResponse MemberLogout(1: base.IDReq req) (api.post = "/service/wx/member/logout")
 	/**会员详情*/
 	MemberInfo(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	/**会员产品详情*/
@@ -5395,6 +5395,8 @@ type WxService interface {
 	ProductList(ctx context.Context, req *product.ProductListReq) (r *base.NilResponse, err error)
 	/**下单*/
 	Buy(ctx context.Context, req *order.BuyReq) (r *base.NilResponse, err error)
+	/**支付*/
+	Pay(ctx context.Context, req *order.OrderPay) (r *base.NilResponse, err error)
 	/**教练列表*/
 	CoachList(ctx context.Context, req *CoachListReq) (r *base.NilResponse, err error)
 	/**教练详情*/
@@ -5415,10 +5417,6 @@ type WxService interface {
 	SignStaffSchedule(ctx context.Context, req *SignStaffScheduleReq) (r *base.NilResponse, err error)
 	/**教练验证码*/
 	StaffCaptcha(ctx context.Context, req *StaffCaptchaReq) (r *base.NilResponse, err error)
-	/**教练登录*/
-	StaffLogin(ctx context.Context, req *StaffLoginReq) (r *base.NilResponse, err error)
-	/**会员登出*/
-	StaffLogout(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 }
 
 type WxServiceClient struct {
@@ -5461,24 +5459,6 @@ func (p *WxServiceClient) MemberCaptcha(ctx context.Context, req *MemberCaptchaR
 	_args.Req = req
 	var _result WxServiceMemberCaptchaResult
 	if err = p.Client_().Call(ctx, "MemberCaptcha", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-func (p *WxServiceClient) MemberLogin(ctx context.Context, req *MemberLoginReq) (r *base.NilResponse, err error) {
-	var _args WxServiceMemberLoginArgs
-	_args.Req = req
-	var _result WxServiceMemberLoginResult
-	if err = p.Client_().Call(ctx, "MemberLogin", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-func (p *WxServiceClient) MemberLogout(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
-	var _args WxServiceMemberLogoutArgs
-	_args.Req = req
-	var _result WxServiceMemberLogoutResult
-	if err = p.Client_().Call(ctx, "MemberLogout", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -5726,6 +5706,15 @@ func (p *WxServiceClient) Buy(ctx context.Context, req *order.BuyReq) (r *base.N
 	}
 	return _result.GetSuccess(), nil
 }
+func (p *WxServiceClient) Pay(ctx context.Context, req *order.OrderPay) (r *base.NilResponse, err error) {
+	var _args WxServicePayArgs
+	_args.Req = req
+	var _result WxServicePayResult
+	if err = p.Client_().Call(ctx, "Pay", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
 func (p *WxServiceClient) CoachList(ctx context.Context, req *CoachListReq) (r *base.NilResponse, err error) {
 	var _args WxServiceCoachListArgs
 	_args.Req = req
@@ -5816,24 +5805,6 @@ func (p *WxServiceClient) StaffCaptcha(ctx context.Context, req *StaffCaptchaReq
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *WxServiceClient) StaffLogin(ctx context.Context, req *StaffLoginReq) (r *base.NilResponse, err error) {
-	var _args WxServiceStaffLoginArgs
-	_args.Req = req
-	var _result WxServiceStaffLoginResult
-	if err = p.Client_().Call(ctx, "StaffLogin", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-func (p *WxServiceClient) StaffLogout(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error) {
-	var _args WxServiceStaffLogoutArgs
-	_args.Req = req
-	var _result WxServiceStaffLogoutResult
-	if err = p.Client_().Call(ctx, "StaffLogout", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
 
 type WxServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
@@ -5857,8 +5828,6 @@ func NewWxServiceProcessor(handler WxService) *WxServiceProcessor {
 	self := &WxServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
 	self.AddToProcessorMap("MemberRegister", &wxServiceProcessorMemberRegister{handler: handler})
 	self.AddToProcessorMap("MemberCaptcha", &wxServiceProcessorMemberCaptcha{handler: handler})
-	self.AddToProcessorMap("MemberLogin", &wxServiceProcessorMemberLogin{handler: handler})
-	self.AddToProcessorMap("MemberLogout", &wxServiceProcessorMemberLogout{handler: handler})
 	self.AddToProcessorMap("MemberInfo", &wxServiceProcessorMemberInfo{handler: handler})
 	self.AddToProcessorMap("MemberProductInfo", &wxServiceProcessorMemberProductInfo{handler: handler})
 	self.AddToProcessorMap("MemberProductList", &wxServiceProcessorMemberProductList{handler: handler})
@@ -5886,6 +5855,7 @@ func NewWxServiceProcessor(handler WxService) *WxServiceProcessor {
 	self.AddToProcessorMap("ProductInfo", &wxServiceProcessorProductInfo{handler: handler})
 	self.AddToProcessorMap("ProductList", &wxServiceProcessorProductList{handler: handler})
 	self.AddToProcessorMap("Buy", &wxServiceProcessorBuy{handler: handler})
+	self.AddToProcessorMap("Pay", &wxServiceProcessorPay{handler: handler})
 	self.AddToProcessorMap("CoachList", &wxServiceProcessorCoachList{handler: handler})
 	self.AddToProcessorMap("CoachInfo", &wxServiceProcessorCoachInfo{handler: handler})
 	self.AddToProcessorMap("PlaceList", &wxServiceProcessorPlaceList{handler: handler})
@@ -5896,8 +5866,6 @@ func NewWxServiceProcessor(handler WxService) *WxServiceProcessor {
 	self.AddToProcessorMap("SignMemberSchedule", &wxServiceProcessorSignMemberSchedule{handler: handler})
 	self.AddToProcessorMap("SignStaffSchedule", &wxServiceProcessorSignStaffSchedule{handler: handler})
 	self.AddToProcessorMap("StaffCaptcha", &wxServiceProcessorStaffCaptcha{handler: handler})
-	self.AddToProcessorMap("StaffLogin", &wxServiceProcessorStaffLogin{handler: handler})
-	self.AddToProcessorMap("StaffLogout", &wxServiceProcessorStaffLogout{handler: handler})
 	return self
 }
 func (p *WxServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -5997,102 +5965,6 @@ func (p *wxServiceProcessorMemberCaptcha) Process(ctx context.Context, seqId int
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("MemberCaptcha", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 = result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type wxServiceProcessorMemberLogin struct {
-	handler WxService
-}
-
-func (p *wxServiceProcessorMemberLogin) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := WxServiceMemberLoginArgs{}
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("MemberLogin", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return false, err
-	}
-
-	iprot.ReadMessageEnd()
-	var err2 error
-	result := WxServiceMemberLoginResult{}
-	var retval *base.NilResponse
-	if retval, err2 = p.handler.MemberLogin(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MemberLogin: "+err2.Error())
-		oprot.WriteMessageBegin("MemberLogin", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return true, err2
-	} else {
-		result.Success = retval
-	}
-	if err2 = oprot.WriteMessageBegin("MemberLogin", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 = result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type wxServiceProcessorMemberLogout struct {
-	handler WxService
-}
-
-func (p *wxServiceProcessorMemberLogout) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := WxServiceMemberLogoutArgs{}
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("MemberLogout", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return false, err
-	}
-
-	iprot.ReadMessageEnd()
-	var err2 error
-	result := WxServiceMemberLogoutResult{}
-	var retval *base.NilResponse
-	if retval, err2 = p.handler.MemberLogout(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing MemberLogout: "+err2.Error())
-		oprot.WriteMessageBegin("MemberLogout", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return true, err2
-	} else {
-		result.Success = retval
-	}
-	if err2 = oprot.WriteMessageBegin("MemberLogout", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -7406,6 +7278,54 @@ func (p *wxServiceProcessorBuy) Process(ctx context.Context, seqId int32, iprot,
 	return true, err
 }
 
+type wxServiceProcessorPay struct {
+	handler WxService
+}
+
+func (p *wxServiceProcessorPay) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := WxServicePayArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("Pay", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := WxServicePayResult{}
+	var retval *base.NilResponse
+	if retval, err2 = p.handler.Pay(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Pay: "+err2.Error())
+		oprot.WriteMessageBegin("Pay", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("Pay", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
 type wxServiceProcessorCoachList struct {
 	handler WxService
 }
@@ -7869,102 +7789,6 @@ func (p *wxServiceProcessorStaffCaptcha) Process(ctx context.Context, seqId int3
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("StaffCaptcha", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 = result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type wxServiceProcessorStaffLogin struct {
-	handler WxService
-}
-
-func (p *wxServiceProcessorStaffLogin) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := WxServiceStaffLoginArgs{}
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("StaffLogin", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return false, err
-	}
-
-	iprot.ReadMessageEnd()
-	var err2 error
-	result := WxServiceStaffLoginResult{}
-	var retval *base.NilResponse
-	if retval, err2 = p.handler.StaffLogin(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing StaffLogin: "+err2.Error())
-		oprot.WriteMessageBegin("StaffLogin", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return true, err2
-	} else {
-		result.Success = retval
-	}
-	if err2 = oprot.WriteMessageBegin("StaffLogin", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 = result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type wxServiceProcessorStaffLogout struct {
-	handler WxService
-}
-
-func (p *wxServiceProcessorStaffLogout) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := WxServiceStaffLogoutArgs{}
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("StaffLogout", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return false, err
-	}
-
-	iprot.ReadMessageEnd()
-	var err2 error
-	result := WxServiceStaffLogoutResult{}
-	var retval *base.NilResponse
-	if retval, err2 = p.handler.StaffLogout(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing StaffLogout: "+err2.Error())
-		oprot.WriteMessageBegin("StaffLogout", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return true, err2
-	} else {
-		result.Success = retval
-	}
-	if err2 = oprot.WriteMessageBegin("StaffLogout", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -8567,594 +8391,6 @@ func (p *WxServiceMemberCaptchaResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("WxServiceMemberCaptchaResult(%+v)", *p)
-
-}
-
-type WxServiceMemberLoginArgs struct {
-	Req *MemberLoginReq `thrift:"req,1"`
-}
-
-func NewWxServiceMemberLoginArgs() *WxServiceMemberLoginArgs {
-	return &WxServiceMemberLoginArgs{}
-}
-
-func (p *WxServiceMemberLoginArgs) InitDefault() {
-}
-
-var WxServiceMemberLoginArgs_Req_DEFAULT *MemberLoginReq
-
-func (p *WxServiceMemberLoginArgs) GetReq() (v *MemberLoginReq) {
-	if !p.IsSetReq() {
-		return WxServiceMemberLoginArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-var fieldIDToName_WxServiceMemberLoginArgs = map[int16]string{
-	1: "req",
-}
-
-func (p *WxServiceMemberLoginArgs) IsSetReq() bool {
-	return p.Req != nil
-}
-
-func (p *WxServiceMemberLoginArgs) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberLoginArgs[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *WxServiceMemberLoginArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewMemberLoginReq()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Req = _field
-	return nil
-}
-
-func (p *WxServiceMemberLoginArgs) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("MemberLogin_args"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *WxServiceMemberLoginArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Req.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *WxServiceMemberLoginArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("WxServiceMemberLoginArgs(%+v)", *p)
-
-}
-
-type WxServiceMemberLoginResult struct {
-	Success *base.NilResponse `thrift:"success,0,optional"`
-}
-
-func NewWxServiceMemberLoginResult() *WxServiceMemberLoginResult {
-	return &WxServiceMemberLoginResult{}
-}
-
-func (p *WxServiceMemberLoginResult) InitDefault() {
-}
-
-var WxServiceMemberLoginResult_Success_DEFAULT *base.NilResponse
-
-func (p *WxServiceMemberLoginResult) GetSuccess() (v *base.NilResponse) {
-	if !p.IsSetSuccess() {
-		return WxServiceMemberLoginResult_Success_DEFAULT
-	}
-	return p.Success
-}
-
-var fieldIDToName_WxServiceMemberLoginResult = map[int16]string{
-	0: "success",
-}
-
-func (p *WxServiceMemberLoginResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *WxServiceMemberLoginResult) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 0:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField0(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberLoginResult[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *WxServiceMemberLoginResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := base.NewNilResponse()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Success = _field
-	return nil
-}
-
-func (p *WxServiceMemberLoginResult) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("MemberLogin_result"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField0(oprot); err != nil {
-			fieldId = 0
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *WxServiceMemberLoginResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := p.Success.Write(oprot); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
-}
-
-func (p *WxServiceMemberLoginResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("WxServiceMemberLoginResult(%+v)", *p)
-
-}
-
-type WxServiceMemberLogoutArgs struct {
-	Req *base.IDReq `thrift:"req,1"`
-}
-
-func NewWxServiceMemberLogoutArgs() *WxServiceMemberLogoutArgs {
-	return &WxServiceMemberLogoutArgs{}
-}
-
-func (p *WxServiceMemberLogoutArgs) InitDefault() {
-}
-
-var WxServiceMemberLogoutArgs_Req_DEFAULT *base.IDReq
-
-func (p *WxServiceMemberLogoutArgs) GetReq() (v *base.IDReq) {
-	if !p.IsSetReq() {
-		return WxServiceMemberLogoutArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-var fieldIDToName_WxServiceMemberLogoutArgs = map[int16]string{
-	1: "req",
-}
-
-func (p *WxServiceMemberLogoutArgs) IsSetReq() bool {
-	return p.Req != nil
-}
-
-func (p *WxServiceMemberLogoutArgs) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberLogoutArgs[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *WxServiceMemberLogoutArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := base.NewIDReq()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Req = _field
-	return nil
-}
-
-func (p *WxServiceMemberLogoutArgs) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("MemberLogout_args"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *WxServiceMemberLogoutArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Req.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *WxServiceMemberLogoutArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("WxServiceMemberLogoutArgs(%+v)", *p)
-
-}
-
-type WxServiceMemberLogoutResult struct {
-	Success *base.NilResponse `thrift:"success,0,optional"`
-}
-
-func NewWxServiceMemberLogoutResult() *WxServiceMemberLogoutResult {
-	return &WxServiceMemberLogoutResult{}
-}
-
-func (p *WxServiceMemberLogoutResult) InitDefault() {
-}
-
-var WxServiceMemberLogoutResult_Success_DEFAULT *base.NilResponse
-
-func (p *WxServiceMemberLogoutResult) GetSuccess() (v *base.NilResponse) {
-	if !p.IsSetSuccess() {
-		return WxServiceMemberLogoutResult_Success_DEFAULT
-	}
-	return p.Success
-}
-
-var fieldIDToName_WxServiceMemberLogoutResult = map[int16]string{
-	0: "success",
-}
-
-func (p *WxServiceMemberLogoutResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *WxServiceMemberLogoutResult) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 0:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField0(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceMemberLogoutResult[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *WxServiceMemberLogoutResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := base.NewNilResponse()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Success = _field
-	return nil
-}
-
-func (p *WxServiceMemberLogoutResult) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("MemberLogout_result"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField0(oprot); err != nil {
-			fieldId = 0
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *WxServiceMemberLogoutResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := p.Success.Write(oprot); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
-}
-
-func (p *WxServiceMemberLogoutResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("WxServiceMemberLogoutResult(%+v)", *p)
 
 }
 
@@ -17096,6 +16332,300 @@ func (p *WxServiceBuyResult) String() string {
 
 }
 
+type WxServicePayArgs struct {
+	Req *order.OrderPay `thrift:"req,1"`
+}
+
+func NewWxServicePayArgs() *WxServicePayArgs {
+	return &WxServicePayArgs{}
+}
+
+func (p *WxServicePayArgs) InitDefault() {
+}
+
+var WxServicePayArgs_Req_DEFAULT *order.OrderPay
+
+func (p *WxServicePayArgs) GetReq() (v *order.OrderPay) {
+	if !p.IsSetReq() {
+		return WxServicePayArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_WxServicePayArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *WxServicePayArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *WxServicePayArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServicePayArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServicePayArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := order.NewOrderPay()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *WxServicePayArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("Pay_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServicePayArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *WxServicePayArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServicePayArgs(%+v)", *p)
+
+}
+
+type WxServicePayResult struct {
+	Success *base.NilResponse `thrift:"success,0,optional"`
+}
+
+func NewWxServicePayResult() *WxServicePayResult {
+	return &WxServicePayResult{}
+}
+
+func (p *WxServicePayResult) InitDefault() {
+}
+
+var WxServicePayResult_Success_DEFAULT *base.NilResponse
+
+func (p *WxServicePayResult) GetSuccess() (v *base.NilResponse) {
+	if !p.IsSetSuccess() {
+		return WxServicePayResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_WxServicePayResult = map[int16]string{
+	0: "success",
+}
+
+func (p *WxServicePayResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *WxServicePayResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServicePayResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *WxServicePayResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := base.NewNilResponse()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *WxServicePayResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("Pay_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *WxServicePayResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *WxServicePayResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("WxServicePayResult(%+v)", *p)
+
+}
+
 type WxServiceCoachListArgs struct {
 	Req *CoachListReq `thrift:"req,1"`
 }
@@ -20033,593 +19563,5 @@ func (p *WxServiceStaffCaptchaResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("WxServiceStaffCaptchaResult(%+v)", *p)
-
-}
-
-type WxServiceStaffLoginArgs struct {
-	Req *StaffLoginReq `thrift:"req,1"`
-}
-
-func NewWxServiceStaffLoginArgs() *WxServiceStaffLoginArgs {
-	return &WxServiceStaffLoginArgs{}
-}
-
-func (p *WxServiceStaffLoginArgs) InitDefault() {
-}
-
-var WxServiceStaffLoginArgs_Req_DEFAULT *StaffLoginReq
-
-func (p *WxServiceStaffLoginArgs) GetReq() (v *StaffLoginReq) {
-	if !p.IsSetReq() {
-		return WxServiceStaffLoginArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-var fieldIDToName_WxServiceStaffLoginArgs = map[int16]string{
-	1: "req",
-}
-
-func (p *WxServiceStaffLoginArgs) IsSetReq() bool {
-	return p.Req != nil
-}
-
-func (p *WxServiceStaffLoginArgs) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffLoginArgs[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *WxServiceStaffLoginArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewStaffLoginReq()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Req = _field
-	return nil
-}
-
-func (p *WxServiceStaffLoginArgs) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("StaffLogin_args"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *WxServiceStaffLoginArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Req.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *WxServiceStaffLoginArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("WxServiceStaffLoginArgs(%+v)", *p)
-
-}
-
-type WxServiceStaffLoginResult struct {
-	Success *base.NilResponse `thrift:"success,0,optional"`
-}
-
-func NewWxServiceStaffLoginResult() *WxServiceStaffLoginResult {
-	return &WxServiceStaffLoginResult{}
-}
-
-func (p *WxServiceStaffLoginResult) InitDefault() {
-}
-
-var WxServiceStaffLoginResult_Success_DEFAULT *base.NilResponse
-
-func (p *WxServiceStaffLoginResult) GetSuccess() (v *base.NilResponse) {
-	if !p.IsSetSuccess() {
-		return WxServiceStaffLoginResult_Success_DEFAULT
-	}
-	return p.Success
-}
-
-var fieldIDToName_WxServiceStaffLoginResult = map[int16]string{
-	0: "success",
-}
-
-func (p *WxServiceStaffLoginResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *WxServiceStaffLoginResult) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 0:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField0(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffLoginResult[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *WxServiceStaffLoginResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := base.NewNilResponse()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Success = _field
-	return nil
-}
-
-func (p *WxServiceStaffLoginResult) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("StaffLogin_result"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField0(oprot); err != nil {
-			fieldId = 0
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *WxServiceStaffLoginResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := p.Success.Write(oprot); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
-}
-
-func (p *WxServiceStaffLoginResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("WxServiceStaffLoginResult(%+v)", *p)
-
-}
-
-type WxServiceStaffLogoutArgs struct {
-	Req *base.IDReq `thrift:"req,1"`
-}
-
-func NewWxServiceStaffLogoutArgs() *WxServiceStaffLogoutArgs {
-	return &WxServiceStaffLogoutArgs{}
-}
-
-func (p *WxServiceStaffLogoutArgs) InitDefault() {
-}
-
-var WxServiceStaffLogoutArgs_Req_DEFAULT *base.IDReq
-
-func (p *WxServiceStaffLogoutArgs) GetReq() (v *base.IDReq) {
-	if !p.IsSetReq() {
-		return WxServiceStaffLogoutArgs_Req_DEFAULT
-	}
-	return p.Req
-}
-
-var fieldIDToName_WxServiceStaffLogoutArgs = map[int16]string{
-	1: "req",
-}
-
-func (p *WxServiceStaffLogoutArgs) IsSetReq() bool {
-	return p.Req != nil
-}
-
-func (p *WxServiceStaffLogoutArgs) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffLogoutArgs[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *WxServiceStaffLogoutArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := base.NewIDReq()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Req = _field
-	return nil
-}
-
-func (p *WxServiceStaffLogoutArgs) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("StaffLogout_args"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *WxServiceStaffLogoutArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Req.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *WxServiceStaffLogoutArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("WxServiceStaffLogoutArgs(%+v)", *p)
-
-}
-
-type WxServiceStaffLogoutResult struct {
-	Success *base.NilResponse `thrift:"success,0,optional"`
-}
-
-func NewWxServiceStaffLogoutResult() *WxServiceStaffLogoutResult {
-	return &WxServiceStaffLogoutResult{}
-}
-
-func (p *WxServiceStaffLogoutResult) InitDefault() {
-}
-
-var WxServiceStaffLogoutResult_Success_DEFAULT *base.NilResponse
-
-func (p *WxServiceStaffLogoutResult) GetSuccess() (v *base.NilResponse) {
-	if !p.IsSetSuccess() {
-		return WxServiceStaffLogoutResult_Success_DEFAULT
-	}
-	return p.Success
-}
-
-var fieldIDToName_WxServiceStaffLogoutResult = map[int16]string{
-	0: "success",
-}
-
-func (p *WxServiceStaffLogoutResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *WxServiceStaffLogoutResult) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 0:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField0(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WxServiceStaffLogoutResult[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *WxServiceStaffLogoutResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := base.NewNilResponse()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Success = _field
-	return nil
-}
-
-func (p *WxServiceStaffLogoutResult) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("StaffLogout_result"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField0(oprot); err != nil {
-			fieldId = 0
-			goto WriteFieldError
-		}
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *WxServiceStaffLogoutResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := p.Success.Write(oprot); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
-}
-
-func (p *WxServiceStaffLogoutResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("WxServiceStaffLogoutResult(%+v)", *p)
 
 }

@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -85,7 +84,7 @@ func (smq *ScheduleMemberQuery) QuerySchedule() *ScheduleQuery {
 // First returns the first ScheduleMember entity from the query.
 // Returns a *NotFoundError when no ScheduleMember was found.
 func (smq *ScheduleMemberQuery) First(ctx context.Context) (*ScheduleMember, error) {
-	nodes, err := smq.Limit(1).All(setContextOp(ctx, smq.ctx, ent.OpQueryFirst))
+	nodes, err := smq.Limit(1).All(setContextOp(ctx, smq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +107,7 @@ func (smq *ScheduleMemberQuery) FirstX(ctx context.Context) *ScheduleMember {
 // Returns a *NotFoundError when no ScheduleMember ID was found.
 func (smq *ScheduleMemberQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = smq.Limit(1).IDs(setContextOp(ctx, smq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = smq.Limit(1).IDs(setContextOp(ctx, smq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +130,7 @@ func (smq *ScheduleMemberQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one ScheduleMember entity is found.
 // Returns a *NotFoundError when no ScheduleMember entities are found.
 func (smq *ScheduleMemberQuery) Only(ctx context.Context) (*ScheduleMember, error) {
-	nodes, err := smq.Limit(2).All(setContextOp(ctx, smq.ctx, ent.OpQueryOnly))
+	nodes, err := smq.Limit(2).All(setContextOp(ctx, smq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +158,7 @@ func (smq *ScheduleMemberQuery) OnlyX(ctx context.Context) *ScheduleMember {
 // Returns a *NotFoundError when no entities are found.
 func (smq *ScheduleMemberQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = smq.Limit(2).IDs(setContextOp(ctx, smq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = smq.Limit(2).IDs(setContextOp(ctx, smq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +183,7 @@ func (smq *ScheduleMemberQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of ScheduleMembers.
 func (smq *ScheduleMemberQuery) All(ctx context.Context) ([]*ScheduleMember, error) {
-	ctx = setContextOp(ctx, smq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, smq.ctx, "All")
 	if err := smq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +205,7 @@ func (smq *ScheduleMemberQuery) IDs(ctx context.Context) (ids []int64, err error
 	if smq.ctx.Unique == nil && smq.path != nil {
 		smq.Unique(true)
 	}
-	ctx = setContextOp(ctx, smq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, smq.ctx, "IDs")
 	if err = smq.Select(schedulemember.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +223,7 @@ func (smq *ScheduleMemberQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (smq *ScheduleMemberQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, smq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, smq.ctx, "Count")
 	if err := smq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +241,7 @@ func (smq *ScheduleMemberQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (smq *ScheduleMemberQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, smq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, smq.ctx, "Exist")
 	switch _, err := smq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -529,7 +528,7 @@ func (smgb *ScheduleMemberGroupBy) Aggregate(fns ...AggregateFunc) *ScheduleMemb
 
 // Scan applies the selector query and scans the result into the given value.
 func (smgb *ScheduleMemberGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, smgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, smgb.build.ctx, "GroupBy")
 	if err := smgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -577,7 +576,7 @@ func (sms *ScheduleMemberSelect) Aggregate(fns ...AggregateFunc) *ScheduleMember
 
 // Scan applies the selector query and scans the result into the given value.
 func (sms *ScheduleMemberSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sms.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, sms.ctx, "Select")
 	if err := sms.prepareQuery(ctx); err != nil {
 		return err
 	}

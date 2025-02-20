@@ -9,7 +9,6 @@ import (
 	"saas/biz/dal/db/ent/api"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -61,7 +60,7 @@ func (aq *APIQuery) Order(o ...api.OrderOption) *APIQuery {
 // First returns the first API entity from the query.
 // Returns a *NotFoundError when no API was found.
 func (aq *APIQuery) First(ctx context.Context) (*API, error) {
-	nodes, err := aq.Limit(1).All(setContextOp(ctx, aq.ctx, ent.OpQueryFirst))
+	nodes, err := aq.Limit(1).All(setContextOp(ctx, aq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +83,7 @@ func (aq *APIQuery) FirstX(ctx context.Context) *API {
 // Returns a *NotFoundError when no API ID was found.
 func (aq *APIQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = aq.Limit(1).IDs(setContextOp(ctx, aq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = aq.Limit(1).IDs(setContextOp(ctx, aq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -107,7 +106,7 @@ func (aq *APIQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one API entity is found.
 // Returns a *NotFoundError when no API entities are found.
 func (aq *APIQuery) Only(ctx context.Context) (*API, error) {
-	nodes, err := aq.Limit(2).All(setContextOp(ctx, aq.ctx, ent.OpQueryOnly))
+	nodes, err := aq.Limit(2).All(setContextOp(ctx, aq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +134,7 @@ func (aq *APIQuery) OnlyX(ctx context.Context) *API {
 // Returns a *NotFoundError when no entities are found.
 func (aq *APIQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = aq.Limit(2).IDs(setContextOp(ctx, aq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = aq.Limit(2).IDs(setContextOp(ctx, aq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -160,7 +159,7 @@ func (aq *APIQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of APIs.
 func (aq *APIQuery) All(ctx context.Context) ([]*API, error) {
-	ctx = setContextOp(ctx, aq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, aq.ctx, "All")
 	if err := aq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -182,7 +181,7 @@ func (aq *APIQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if aq.ctx.Unique == nil && aq.path != nil {
 		aq.Unique(true)
 	}
-	ctx = setContextOp(ctx, aq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, aq.ctx, "IDs")
 	if err = aq.Select(api.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -200,7 +199,7 @@ func (aq *APIQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (aq *APIQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, aq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, aq.ctx, "Count")
 	if err := aq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -218,7 +217,7 @@ func (aq *APIQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (aq *APIQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, aq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, aq.ctx, "Exist")
 	switch _, err := aq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -450,7 +449,7 @@ func (agb *APIGroupBy) Aggregate(fns ...AggregateFunc) *APIGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (agb *APIGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, agb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, agb.build.ctx, "GroupBy")
 	if err := agb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -498,7 +497,7 @@ func (as *APISelect) Aggregate(fns ...AggregateFunc) *APISelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (as *APISelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, as.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, as.ctx, "Select")
 	if err := as.prepareQuery(ctx); err != nil {
 		return err
 	}

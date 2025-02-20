@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -85,7 +84,7 @@ func (mpq *MemberProfileQuery) QueryMember() *MemberQuery {
 // First returns the first MemberProfile entity from the query.
 // Returns a *NotFoundError when no MemberProfile was found.
 func (mpq *MemberProfileQuery) First(ctx context.Context) (*MemberProfile, error) {
-	nodes, err := mpq.Limit(1).All(setContextOp(ctx, mpq.ctx, ent.OpQueryFirst))
+	nodes, err := mpq.Limit(1).All(setContextOp(ctx, mpq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +107,7 @@ func (mpq *MemberProfileQuery) FirstX(ctx context.Context) *MemberProfile {
 // Returns a *NotFoundError when no MemberProfile ID was found.
 func (mpq *MemberProfileQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mpq.Limit(1).IDs(setContextOp(ctx, mpq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = mpq.Limit(1).IDs(setContextOp(ctx, mpq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +130,7 @@ func (mpq *MemberProfileQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one MemberProfile entity is found.
 // Returns a *NotFoundError when no MemberProfile entities are found.
 func (mpq *MemberProfileQuery) Only(ctx context.Context) (*MemberProfile, error) {
-	nodes, err := mpq.Limit(2).All(setContextOp(ctx, mpq.ctx, ent.OpQueryOnly))
+	nodes, err := mpq.Limit(2).All(setContextOp(ctx, mpq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +158,7 @@ func (mpq *MemberProfileQuery) OnlyX(ctx context.Context) *MemberProfile {
 // Returns a *NotFoundError when no entities are found.
 func (mpq *MemberProfileQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mpq.Limit(2).IDs(setContextOp(ctx, mpq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = mpq.Limit(2).IDs(setContextOp(ctx, mpq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +183,7 @@ func (mpq *MemberProfileQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of MemberProfiles.
 func (mpq *MemberProfileQuery) All(ctx context.Context) ([]*MemberProfile, error) {
-	ctx = setContextOp(ctx, mpq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, mpq.ctx, "All")
 	if err := mpq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +205,7 @@ func (mpq *MemberProfileQuery) IDs(ctx context.Context) (ids []int64, err error)
 	if mpq.ctx.Unique == nil && mpq.path != nil {
 		mpq.Unique(true)
 	}
-	ctx = setContextOp(ctx, mpq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, mpq.ctx, "IDs")
 	if err = mpq.Select(memberprofile.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +223,7 @@ func (mpq *MemberProfileQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (mpq *MemberProfileQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mpq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, mpq.ctx, "Count")
 	if err := mpq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +241,7 @@ func (mpq *MemberProfileQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (mpq *MemberProfileQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mpq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, mpq.ctx, "Exist")
 	switch _, err := mpq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -529,7 +528,7 @@ func (mpgb *MemberProfileGroupBy) Aggregate(fns ...AggregateFunc) *MemberProfile
 
 // Scan applies the selector query and scans the result into the given value.
 func (mpgb *MemberProfileGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mpgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, mpgb.build.ctx, "GroupBy")
 	if err := mpgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -577,7 +576,7 @@ func (mps *MemberProfileSelect) Aggregate(fns ...AggregateFunc) *MemberProfileSe
 
 // Scan applies the selector query and scans the result into the given value.
 func (mps *MemberProfileSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mps.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, mps.ctx, "Select")
 	if err := mps.prepareQuery(ctx); err != nil {
 		return err
 	}

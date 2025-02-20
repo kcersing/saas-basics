@@ -94,11 +94,6 @@ func ExpiredAt(v time.Time) predicate.Token {
 	return predicate.Token(sql.FieldEQ(FieldExpiredAt, v))
 }
 
-// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
-func Type(v int64) predicate.Token {
-	return predicate.Token(sql.FieldEQ(FieldType, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Token {
 	return predicate.Token(sql.FieldEQ(FieldCreatedAt, v))
@@ -507,46 +502,6 @@ func ExpiredAtLT(v time.Time) predicate.Token {
 // ExpiredAtLTE applies the LTE predicate on the "expired_at" field.
 func ExpiredAtLTE(v time.Time) predicate.Token {
 	return predicate.Token(sql.FieldLTE(FieldExpiredAt, v))
-}
-
-// TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v int64) predicate.Token {
-	return predicate.Token(sql.FieldEQ(FieldType, v))
-}
-
-// TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v int64) predicate.Token {
-	return predicate.Token(sql.FieldNEQ(FieldType, v))
-}
-
-// TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...int64) predicate.Token {
-	return predicate.Token(sql.FieldIn(FieldType, vs...))
-}
-
-// TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...int64) predicate.Token {
-	return predicate.Token(sql.FieldNotIn(FieldType, vs...))
-}
-
-// TypeGT applies the GT predicate on the "type" field.
-func TypeGT(v int64) predicate.Token {
-	return predicate.Token(sql.FieldGT(FieldType, v))
-}
-
-// TypeGTE applies the GTE predicate on the "type" field.
-func TypeGTE(v int64) predicate.Token {
-	return predicate.Token(sql.FieldGTE(FieldType, v))
-}
-
-// TypeLT applies the LT predicate on the "type" field.
-func TypeLT(v int64) predicate.Token {
-	return predicate.Token(sql.FieldLT(FieldType, v))
-}
-
-// TypeLTE applies the LTE predicate on the "type" field.
-func TypeLTE(v int64) predicate.Token {
-	return predicate.Token(sql.FieldLTE(FieldType, v))
 }
 
 // And groups predicates with the AND operator between them.

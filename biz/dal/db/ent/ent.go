@@ -28,6 +28,7 @@ import (
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/memberprofile"
+	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/messages"
@@ -110,7 +111,7 @@ var (
 	columnCheck sql.ColumnCheck
 )
 
-// checkColumn checks if the column exists in the given table.
+// columnChecker checks if the column exists in the given table.
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
@@ -135,6 +136,7 @@ func checkColumn(table, column string) error {
 			memberproduct.Table:         memberproduct.ValidColumn,
 			memberproductcourses.Table:  memberproductcourses.ValidColumn,
 			memberprofile.Table:         memberprofile.ValidColumn,
+			membertoken.Table:           membertoken.ValidColumn,
 			menu.Table:                  menu.ValidColumn,
 			menuparam.Table:             menuparam.ValidColumn,
 			messages.Table:              messages.ValidColumn,

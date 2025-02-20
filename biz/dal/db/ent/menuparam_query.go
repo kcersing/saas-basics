@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -86,7 +85,7 @@ func (mpq *MenuParamQuery) QueryMenus() *MenuQuery {
 // First returns the first MenuParam entity from the query.
 // Returns a *NotFoundError when no MenuParam was found.
 func (mpq *MenuParamQuery) First(ctx context.Context) (*MenuParam, error) {
-	nodes, err := mpq.Limit(1).All(setContextOp(ctx, mpq.ctx, ent.OpQueryFirst))
+	nodes, err := mpq.Limit(1).All(setContextOp(ctx, mpq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +108,7 @@ func (mpq *MenuParamQuery) FirstX(ctx context.Context) *MenuParam {
 // Returns a *NotFoundError when no MenuParam ID was found.
 func (mpq *MenuParamQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mpq.Limit(1).IDs(setContextOp(ctx, mpq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = mpq.Limit(1).IDs(setContextOp(ctx, mpq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -132,7 +131,7 @@ func (mpq *MenuParamQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one MenuParam entity is found.
 // Returns a *NotFoundError when no MenuParam entities are found.
 func (mpq *MenuParamQuery) Only(ctx context.Context) (*MenuParam, error) {
-	nodes, err := mpq.Limit(2).All(setContextOp(ctx, mpq.ctx, ent.OpQueryOnly))
+	nodes, err := mpq.Limit(2).All(setContextOp(ctx, mpq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +159,7 @@ func (mpq *MenuParamQuery) OnlyX(ctx context.Context) *MenuParam {
 // Returns a *NotFoundError when no entities are found.
 func (mpq *MenuParamQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mpq.Limit(2).IDs(setContextOp(ctx, mpq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = mpq.Limit(2).IDs(setContextOp(ctx, mpq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -185,7 +184,7 @@ func (mpq *MenuParamQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of MenuParams.
 func (mpq *MenuParamQuery) All(ctx context.Context) ([]*MenuParam, error) {
-	ctx = setContextOp(ctx, mpq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, mpq.ctx, "All")
 	if err := mpq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -207,7 +206,7 @@ func (mpq *MenuParamQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if mpq.ctx.Unique == nil && mpq.path != nil {
 		mpq.Unique(true)
 	}
-	ctx = setContextOp(ctx, mpq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, mpq.ctx, "IDs")
 	if err = mpq.Select(menuparam.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -225,7 +224,7 @@ func (mpq *MenuParamQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (mpq *MenuParamQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mpq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, mpq.ctx, "Count")
 	if err := mpq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -243,7 +242,7 @@ func (mpq *MenuParamQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (mpq *MenuParamQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mpq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, mpq.ctx, "Exist")
 	switch _, err := mpq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -537,7 +536,7 @@ func (mpgb *MenuParamGroupBy) Aggregate(fns ...AggregateFunc) *MenuParamGroupBy 
 
 // Scan applies the selector query and scans the result into the given value.
 func (mpgb *MenuParamGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mpgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, mpgb.build.ctx, "GroupBy")
 	if err := mpgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -585,7 +584,7 @@ func (mps *MenuParamSelect) Aggregate(fns ...AggregateFunc) *MenuParamSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (mps *MenuParamSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mps.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, mps.ctx, "Select")
 	if err := mps.prepareQuery(ctx); err != nil {
 		return err
 	}

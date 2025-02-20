@@ -9,7 +9,6 @@ import (
 	"saas/biz/dal/db/ent/banner"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -61,7 +60,7 @@ func (bq *BannerQuery) Order(o ...banner.OrderOption) *BannerQuery {
 // First returns the first Banner entity from the query.
 // Returns a *NotFoundError when no Banner was found.
 func (bq *BannerQuery) First(ctx context.Context) (*Banner, error) {
-	nodes, err := bq.Limit(1).All(setContextOp(ctx, bq.ctx, ent.OpQueryFirst))
+	nodes, err := bq.Limit(1).All(setContextOp(ctx, bq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +83,7 @@ func (bq *BannerQuery) FirstX(ctx context.Context) *Banner {
 // Returns a *NotFoundError when no Banner ID was found.
 func (bq *BannerQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = bq.Limit(1).IDs(setContextOp(ctx, bq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = bq.Limit(1).IDs(setContextOp(ctx, bq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -107,7 +106,7 @@ func (bq *BannerQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Banner entity is found.
 // Returns a *NotFoundError when no Banner entities are found.
 func (bq *BannerQuery) Only(ctx context.Context) (*Banner, error) {
-	nodes, err := bq.Limit(2).All(setContextOp(ctx, bq.ctx, ent.OpQueryOnly))
+	nodes, err := bq.Limit(2).All(setContextOp(ctx, bq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +134,7 @@ func (bq *BannerQuery) OnlyX(ctx context.Context) *Banner {
 // Returns a *NotFoundError when no entities are found.
 func (bq *BannerQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = bq.Limit(2).IDs(setContextOp(ctx, bq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = bq.Limit(2).IDs(setContextOp(ctx, bq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -160,7 +159,7 @@ func (bq *BannerQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Banners.
 func (bq *BannerQuery) All(ctx context.Context) ([]*Banner, error) {
-	ctx = setContextOp(ctx, bq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, bq.ctx, "All")
 	if err := bq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -182,7 +181,7 @@ func (bq *BannerQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if bq.ctx.Unique == nil && bq.path != nil {
 		bq.Unique(true)
 	}
-	ctx = setContextOp(ctx, bq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, bq.ctx, "IDs")
 	if err = bq.Select(banner.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -200,7 +199,7 @@ func (bq *BannerQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (bq *BannerQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, bq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, bq.ctx, "Count")
 	if err := bq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -218,7 +217,7 @@ func (bq *BannerQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (bq *BannerQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, bq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, bq.ctx, "Exist")
 	switch _, err := bq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -450,7 +449,7 @@ func (bgb *BannerGroupBy) Aggregate(fns ...AggregateFunc) *BannerGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (bgb *BannerGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, bgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, bgb.build.ctx, "GroupBy")
 	if err := bgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -498,7 +497,7 @@ func (bs *BannerSelect) Aggregate(fns ...AggregateFunc) *BannerSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (bs *BannerSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, bs.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, bs.ctx, "Select")
 	if err := bs.prepareQuery(ctx); err != nil {
 		return err
 	}

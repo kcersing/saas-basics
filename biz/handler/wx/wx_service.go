@@ -24,32 +24,6 @@ import (
 	wx "saas/idl_gen/model/wx"
 )
 
-// MemberLogout .
-//
-//	@Summary		会员登出 Summary
-//	@Description	会员登出 Description
-//	@Param			request	body		base.IDReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//
-// @router /service/wx/member/logout [POST]
-func MemberLogout(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	_, err = service.NewMember(ctx, c).Logout(req.ID)
-	if err != nil {
-		utils.SendResponse(c, errno.ConvertErr(err), nil, 0, "")
-		return
-	}
-	utils.SendResponse(c, errno.Success, nil, 0, "")
-	return
-}
-
 // MemberInfo .
 //
 //	@Summary		会员信息 Summary
@@ -899,28 +873,6 @@ func MemberCaptcha(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// MemberLogin .
-//
-//	@Summary		会员登录 Summary
-//	@Description	会员登录 Description
-//	@Param			request	body		wx.MemberLoginReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//
-// @router /service/wx/member/login [POST]
-func MemberLogin(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req wx.MemberLoginReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
 // StaffCaptcha .
 //
 //	@Summary		教练验证码 Summary
@@ -932,50 +884,6 @@ func MemberLogin(ctx context.Context, c *app.RequestContext) {
 func StaffCaptcha(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req wx.StaffCaptchaReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// StaffLogin .
-//
-//	@Summary		教练登录 Summary
-//	@Description	教练登录 Description
-//	@Param			request	body		wx.StaffLoginReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//
-// @router /service/wx/staff/login [POST]
-func StaffLogin(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req wx.StaffLoginReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(base.NilResponse)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// StaffLogout .
-//
-//	@Summary		教练登出 Summary
-//	@Description	教练登出 Description
-//	@Param			request	body		base.IDReq	true	"query params"
-//	@Success		200		{object}	utils.Response
-//
-// @router /service/wx/staff/logout [POST]
-func StaffLogout(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req base.IDReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -1074,4 +982,20 @@ func PlaceList(ctx context.Context, c *app.RequestContext) {
 	}
 	utils.SendResponse(c, errno.Success, list, int64(total), "")
 	return
+}
+
+// Pay .
+// @router /service/wx/member/pay [POST]
+func Pay(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.OrderPay
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(base.NilResponse)
+
+	c.JSON(consts.StatusOK, resp)
 }

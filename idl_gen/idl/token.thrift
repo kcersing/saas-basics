@@ -7,12 +7,22 @@ struct TokenInfo {
     1:  i64 id (api.raw = "id")
     2:  string createdAt (api.raw = "createdAt")
     3:  string updatedAt (api.raw = "updatedAt")
-    4:  i64 user_id (api.raw = "userId")
+    4:  i64 userId (api.raw = "userId")
     5:  string username (api.raw = "username")
     6:  string token (api.raw = "token")
     7:  string source (api.raw = "source")
     8:  string expiredAt (api.raw = "expiredAt")
-    9:  i64 type (api.raw = "type")
+    10: string mobile (api.raw = "mobile")
+}
+struct UserTokenInfo {
+    1:  i64 id (api.raw = "id")
+    2:  string createdAt (api.raw = "createdAt")
+    3:  string updatedAt (api.raw = "updatedAt")
+    4:  i64 memberId (api.raw = "memberId")
+    5:  string name (api.raw = "username")
+    6:  string token (api.raw = "token")
+    7:  string source (api.raw = "source")
+    8:  string expiredAt (api.raw = "expiredAt")
     10: string mobile (api.raw = "mobile")
 }
 // token列表请求参数

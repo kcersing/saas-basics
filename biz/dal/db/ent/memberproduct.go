@@ -91,10 +91,12 @@ type MemberProductEdges struct {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e MemberProductEdges) MembersOrErr() (*Member, error) {
-	if e.Members != nil {
+	if e.loadedTypes[0] {
+		if e.Members == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: member.Label}
+		}
 		return e.Members, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: member.Label}
 	}
 	return nil, &NotLoadedError{edge: "members"}
 }

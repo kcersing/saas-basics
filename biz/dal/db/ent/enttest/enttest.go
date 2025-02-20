@@ -4,7 +4,6 @@ package enttest
 
 import (
 	"context"
-
 	"saas/biz/dal/db/ent"
 	// required by schema hooks.
 	_ "saas/biz/dal/db/ent/runtime"

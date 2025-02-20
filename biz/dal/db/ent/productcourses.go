@@ -57,10 +57,12 @@ type ProductCoursesEdges struct {
 // NodeCOrErr returns the NodeC value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProductCoursesEdges) NodeCOrErr() (*Product, error) {
-	if e.NodeC != nil {
+	if e.loadedTypes[0] {
+		if e.NodeC == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: product.Label}
+		}
 		return e.NodeC, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: product.Label}
 	}
 	return nil, &NotLoadedError{edge: "nodeC"}
 }
@@ -68,10 +70,12 @@ func (e ProductCoursesEdges) NodeCOrErr() (*Product, error) {
 // NodeLOrErr returns the NodeL value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProductCoursesEdges) NodeLOrErr() (*Product, error) {
-	if e.NodeL != nil {
+	if e.loadedTypes[1] {
+		if e.NodeL == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: product.Label}
+		}
 		return e.NodeL, nil
-	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: product.Label}
 	}
 	return nil, &NotLoadedError{edge: "nodeL"}
 }

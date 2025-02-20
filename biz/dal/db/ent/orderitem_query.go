@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -85,7 +84,7 @@ func (oiq *OrderItemQuery) QueryOrder() *OrderQuery {
 // First returns the first OrderItem entity from the query.
 // Returns a *NotFoundError when no OrderItem was found.
 func (oiq *OrderItemQuery) First(ctx context.Context) (*OrderItem, error) {
-	nodes, err := oiq.Limit(1).All(setContextOp(ctx, oiq.ctx, ent.OpQueryFirst))
+	nodes, err := oiq.Limit(1).All(setContextOp(ctx, oiq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +107,7 @@ func (oiq *OrderItemQuery) FirstX(ctx context.Context) *OrderItem {
 // Returns a *NotFoundError when no OrderItem ID was found.
 func (oiq *OrderItemQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = oiq.Limit(1).IDs(setContextOp(ctx, oiq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = oiq.Limit(1).IDs(setContextOp(ctx, oiq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +130,7 @@ func (oiq *OrderItemQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one OrderItem entity is found.
 // Returns a *NotFoundError when no OrderItem entities are found.
 func (oiq *OrderItemQuery) Only(ctx context.Context) (*OrderItem, error) {
-	nodes, err := oiq.Limit(2).All(setContextOp(ctx, oiq.ctx, ent.OpQueryOnly))
+	nodes, err := oiq.Limit(2).All(setContextOp(ctx, oiq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +158,7 @@ func (oiq *OrderItemQuery) OnlyX(ctx context.Context) *OrderItem {
 // Returns a *NotFoundError when no entities are found.
 func (oiq *OrderItemQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = oiq.Limit(2).IDs(setContextOp(ctx, oiq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = oiq.Limit(2).IDs(setContextOp(ctx, oiq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +183,7 @@ func (oiq *OrderItemQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of OrderItems.
 func (oiq *OrderItemQuery) All(ctx context.Context) ([]*OrderItem, error) {
-	ctx = setContextOp(ctx, oiq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, oiq.ctx, "All")
 	if err := oiq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +205,7 @@ func (oiq *OrderItemQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if oiq.ctx.Unique == nil && oiq.path != nil {
 		oiq.Unique(true)
 	}
-	ctx = setContextOp(ctx, oiq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, oiq.ctx, "IDs")
 	if err = oiq.Select(orderitem.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +223,7 @@ func (oiq *OrderItemQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (oiq *OrderItemQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, oiq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, oiq.ctx, "Count")
 	if err := oiq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +241,7 @@ func (oiq *OrderItemQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (oiq *OrderItemQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, oiq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, oiq.ctx, "Exist")
 	switch _, err := oiq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -529,7 +528,7 @@ func (oigb *OrderItemGroupBy) Aggregate(fns ...AggregateFunc) *OrderItemGroupBy 
 
 // Scan applies the selector query and scans the result into the given value.
 func (oigb *OrderItemGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oigb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, oigb.build.ctx, "GroupBy")
 	if err := oigb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -577,7 +576,7 @@ func (ois *OrderItemSelect) Aggregate(fns ...AggregateFunc) *OrderItemSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ois *OrderItemSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ois.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, ois.ctx, "Select")
 	if err := ois.prepareQuery(ctx); err != nil {
 		return err
 	}

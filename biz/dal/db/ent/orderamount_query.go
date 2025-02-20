@@ -10,7 +10,6 @@ import (
 	"saas/biz/dal/db/ent/orderamount"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -85,7 +84,7 @@ func (oaq *OrderAmountQuery) QueryOrder() *OrderQuery {
 // First returns the first OrderAmount entity from the query.
 // Returns a *NotFoundError when no OrderAmount was found.
 func (oaq *OrderAmountQuery) First(ctx context.Context) (*OrderAmount, error) {
-	nodes, err := oaq.Limit(1).All(setContextOp(ctx, oaq.ctx, ent.OpQueryFirst))
+	nodes, err := oaq.Limit(1).All(setContextOp(ctx, oaq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +107,7 @@ func (oaq *OrderAmountQuery) FirstX(ctx context.Context) *OrderAmount {
 // Returns a *NotFoundError when no OrderAmount ID was found.
 func (oaq *OrderAmountQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = oaq.Limit(1).IDs(setContextOp(ctx, oaq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = oaq.Limit(1).IDs(setContextOp(ctx, oaq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -131,7 +130,7 @@ func (oaq *OrderAmountQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one OrderAmount entity is found.
 // Returns a *NotFoundError when no OrderAmount entities are found.
 func (oaq *OrderAmountQuery) Only(ctx context.Context) (*OrderAmount, error) {
-	nodes, err := oaq.Limit(2).All(setContextOp(ctx, oaq.ctx, ent.OpQueryOnly))
+	nodes, err := oaq.Limit(2).All(setContextOp(ctx, oaq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +158,7 @@ func (oaq *OrderAmountQuery) OnlyX(ctx context.Context) *OrderAmount {
 // Returns a *NotFoundError when no entities are found.
 func (oaq *OrderAmountQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = oaq.Limit(2).IDs(setContextOp(ctx, oaq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = oaq.Limit(2).IDs(setContextOp(ctx, oaq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -184,7 +183,7 @@ func (oaq *OrderAmountQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of OrderAmounts.
 func (oaq *OrderAmountQuery) All(ctx context.Context) ([]*OrderAmount, error) {
-	ctx = setContextOp(ctx, oaq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, oaq.ctx, "All")
 	if err := oaq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -206,7 +205,7 @@ func (oaq *OrderAmountQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if oaq.ctx.Unique == nil && oaq.path != nil {
 		oaq.Unique(true)
 	}
-	ctx = setContextOp(ctx, oaq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, oaq.ctx, "IDs")
 	if err = oaq.Select(orderamount.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,7 +223,7 @@ func (oaq *OrderAmountQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (oaq *OrderAmountQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, oaq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, oaq.ctx, "Count")
 	if err := oaq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -242,7 +241,7 @@ func (oaq *OrderAmountQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (oaq *OrderAmountQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, oaq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, oaq.ctx, "Exist")
 	switch _, err := oaq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -529,7 +528,7 @@ func (oagb *OrderAmountGroupBy) Aggregate(fns ...AggregateFunc) *OrderAmountGrou
 
 // Scan applies the selector query and scans the result into the given value.
 func (oagb *OrderAmountGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oagb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, oagb.build.ctx, "GroupBy")
 	if err := oagb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -577,7 +576,7 @@ func (oas *OrderAmountSelect) Aggregate(fns ...AggregateFunc) *OrderAmountSelect
 
 // Scan applies the selector query and scans the result into the given value.
 func (oas *OrderAmountSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oas.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, oas.ctx, "Select")
 	if err := oas.prepareQuery(ctx); err != nil {
 		return err
 	}

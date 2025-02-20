@@ -18,7 +18,6 @@ import (
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/venue"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -254,7 +253,7 @@ func (oq *OrderQuery) QueryOrderCreates() *UserQuery {
 // First returns the first Order entity from the query.
 // Returns a *NotFoundError when no Order was found.
 func (oq *OrderQuery) First(ctx context.Context) (*Order, error) {
-	nodes, err := oq.Limit(1).All(setContextOp(ctx, oq.ctx, ent.OpQueryFirst))
+	nodes, err := oq.Limit(1).All(setContextOp(ctx, oq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -277,7 +276,7 @@ func (oq *OrderQuery) FirstX(ctx context.Context) *Order {
 // Returns a *NotFoundError when no Order ID was found.
 func (oq *OrderQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = oq.Limit(1).IDs(setContextOp(ctx, oq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = oq.Limit(1).IDs(setContextOp(ctx, oq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -300,7 +299,7 @@ func (oq *OrderQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Order entity is found.
 // Returns a *NotFoundError when no Order entities are found.
 func (oq *OrderQuery) Only(ctx context.Context) (*Order, error) {
-	nodes, err := oq.Limit(2).All(setContextOp(ctx, oq.ctx, ent.OpQueryOnly))
+	nodes, err := oq.Limit(2).All(setContextOp(ctx, oq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -328,7 +327,7 @@ func (oq *OrderQuery) OnlyX(ctx context.Context) *Order {
 // Returns a *NotFoundError when no entities are found.
 func (oq *OrderQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = oq.Limit(2).IDs(setContextOp(ctx, oq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = oq.Limit(2).IDs(setContextOp(ctx, oq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -353,7 +352,7 @@ func (oq *OrderQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Orders.
 func (oq *OrderQuery) All(ctx context.Context) ([]*Order, error) {
-	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, oq.ctx, "All")
 	if err := oq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -375,7 +374,7 @@ func (oq *OrderQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if oq.ctx.Unique == nil && oq.path != nil {
 		oq.Unique(true)
 	}
-	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, oq.ctx, "IDs")
 	if err = oq.Select(order.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -393,7 +392,7 @@ func (oq *OrderQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (oq *OrderQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, oq.ctx, "Count")
 	if err := oq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -411,7 +410,7 @@ func (oq *OrderQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (oq *OrderQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, oq.ctx, "Exist")
 	switch _, err := oq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -1050,7 +1049,7 @@ func (ogb *OrderGroupBy) Aggregate(fns ...AggregateFunc) *OrderGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ogb *OrderGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ogb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, ogb.build.ctx, "GroupBy")
 	if err := ogb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -1098,7 +1097,7 @@ func (os *OrderSelect) Aggregate(fns ...AggregateFunc) *OrderSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (os *OrderSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, os.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, os.ctx, "Select")
 	if err := os.prepareQuery(ctx); err != nil {
 		return err
 	}

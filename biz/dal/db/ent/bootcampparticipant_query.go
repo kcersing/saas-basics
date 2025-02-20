@@ -12,7 +12,6 @@ import (
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -110,7 +109,7 @@ func (bpq *BootcampParticipantQuery) QueryMembers() *MemberQuery {
 // First returns the first BootcampParticipant entity from the query.
 // Returns a *NotFoundError when no BootcampParticipant was found.
 func (bpq *BootcampParticipantQuery) First(ctx context.Context) (*BootcampParticipant, error) {
-	nodes, err := bpq.Limit(1).All(setContextOp(ctx, bpq.ctx, ent.OpQueryFirst))
+	nodes, err := bpq.Limit(1).All(setContextOp(ctx, bpq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +132,7 @@ func (bpq *BootcampParticipantQuery) FirstX(ctx context.Context) *BootcampPartic
 // Returns a *NotFoundError when no BootcampParticipant ID was found.
 func (bpq *BootcampParticipantQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = bpq.Limit(1).IDs(setContextOp(ctx, bpq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = bpq.Limit(1).IDs(setContextOp(ctx, bpq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -156,7 +155,7 @@ func (bpq *BootcampParticipantQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one BootcampParticipant entity is found.
 // Returns a *NotFoundError when no BootcampParticipant entities are found.
 func (bpq *BootcampParticipantQuery) Only(ctx context.Context) (*BootcampParticipant, error) {
-	nodes, err := bpq.Limit(2).All(setContextOp(ctx, bpq.ctx, ent.OpQueryOnly))
+	nodes, err := bpq.Limit(2).All(setContextOp(ctx, bpq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +183,7 @@ func (bpq *BootcampParticipantQuery) OnlyX(ctx context.Context) *BootcampPartici
 // Returns a *NotFoundError when no entities are found.
 func (bpq *BootcampParticipantQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = bpq.Limit(2).IDs(setContextOp(ctx, bpq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = bpq.Limit(2).IDs(setContextOp(ctx, bpq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -209,7 +208,7 @@ func (bpq *BootcampParticipantQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of BootcampParticipants.
 func (bpq *BootcampParticipantQuery) All(ctx context.Context) ([]*BootcampParticipant, error) {
-	ctx = setContextOp(ctx, bpq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, bpq.ctx, "All")
 	if err := bpq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -231,7 +230,7 @@ func (bpq *BootcampParticipantQuery) IDs(ctx context.Context) (ids []int64, err 
 	if bpq.ctx.Unique == nil && bpq.path != nil {
 		bpq.Unique(true)
 	}
-	ctx = setContextOp(ctx, bpq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, bpq.ctx, "IDs")
 	if err = bpq.Select(bootcampparticipant.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -249,7 +248,7 @@ func (bpq *BootcampParticipantQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (bpq *BootcampParticipantQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, bpq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, bpq.ctx, "Count")
 	if err := bpq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -267,7 +266,7 @@ func (bpq *BootcampParticipantQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (bpq *BootcampParticipantQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, bpq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, bpq.ctx, "Exist")
 	switch _, err := bpq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -635,7 +634,7 @@ func (bpgb *BootcampParticipantGroupBy) Aggregate(fns ...AggregateFunc) *Bootcam
 
 // Scan applies the selector query and scans the result into the given value.
 func (bpgb *BootcampParticipantGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, bpgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, bpgb.build.ctx, "GroupBy")
 	if err := bpgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -683,7 +682,7 @@ func (bps *BootcampParticipantSelect) Aggregate(fns ...AggregateFunc) *BootcampP
 
 // Scan applies the selector query and scans the result into the given value.
 func (bps *BootcampParticipantSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, bps.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, bps.ctx, "Select")
 	if err := bps.prepareQuery(ctx); err != nil {
 		return err
 	}

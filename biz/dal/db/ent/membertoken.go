@@ -4,7 +4,7 @@ package ent
 
 import (
 	"fmt"
-	"saas/biz/dal/db/ent/token"
+	"saas/biz/dal/db/ent/membertoken"
 	"strings"
 	"time"
 
@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// Token is the model entity for the Token schema.
-type Token struct {
+// MemberToken is the model entity for the MemberToken schema.
+type MemberToken struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int64 `json:"id,omitempty"`
@@ -26,7 +26,7 @@ type Token struct {
 	// created
 	CreatedID int64 `json:"created_id,omitempty"`
 	//  User's ID | 用户的ID
-	UserID int64 `json:"user_id,omitempty"`
+	MemberID int64 `json:"member_id,omitempty"`
 	// Token string | Token 字符串
 	Token string `json:"token,omitempty"`
 	// Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）
@@ -37,15 +37,15 @@ type Token struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Token) scanValues(columns []string) ([]any, error) {
+func (*MemberToken) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case token.FieldID, token.FieldDelete, token.FieldCreatedID, token.FieldUserID:
+		case membertoken.FieldID, membertoken.FieldDelete, membertoken.FieldCreatedID, membertoken.FieldMemberID:
 			values[i] = new(sql.NullInt64)
-		case token.FieldToken, token.FieldSource:
+		case membertoken.FieldToken, membertoken.FieldSource:
 			values[i] = new(sql.NullString)
-		case token.FieldCreatedAt, token.FieldUpdatedAt, token.FieldExpiredAt:
+		case membertoken.FieldCreatedAt, membertoken.FieldUpdatedAt, membertoken.FieldExpiredAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -55,129 +55,129 @@ func (*Token) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the Token fields.
-func (t *Token) assignValues(columns []string, values []any) error {
+// to the MemberToken fields.
+func (mt *MemberToken) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case token.FieldID:
+		case membertoken.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			t.ID = int64(value.Int64)
-		case token.FieldCreatedAt:
+			mt.ID = int64(value.Int64)
+		case membertoken.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				t.CreatedAt = value.Time
+				mt.CreatedAt = value.Time
 			}
-		case token.FieldUpdatedAt:
+		case membertoken.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				t.UpdatedAt = value.Time
+				mt.UpdatedAt = value.Time
 			}
-		case token.FieldDelete:
+		case membertoken.FieldDelete:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field delete", values[i])
 			} else if value.Valid {
-				t.Delete = value.Int64
+				mt.Delete = value.Int64
 			}
-		case token.FieldCreatedID:
+		case membertoken.FieldCreatedID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_id", values[i])
 			} else if value.Valid {
-				t.CreatedID = value.Int64
+				mt.CreatedID = value.Int64
 			}
-		case token.FieldUserID:
+		case membertoken.FieldMemberID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+				return fmt.Errorf("unexpected type %T for field member_id", values[i])
 			} else if value.Valid {
-				t.UserID = value.Int64
+				mt.MemberID = value.Int64
 			}
-		case token.FieldToken:
+		case membertoken.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
-				t.Token = value.String
+				mt.Token = value.String
 			}
-		case token.FieldSource:
+		case membertoken.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				t.Source = value.String
+				mt.Source = value.String
 			}
-		case token.FieldExpiredAt:
+		case membertoken.FieldExpiredAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expired_at", values[i])
 			} else if value.Valid {
-				t.ExpiredAt = value.Time
+				mt.ExpiredAt = value.Time
 			}
 		default:
-			t.selectValues.Set(columns[i], values[i])
+			mt.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the Token.
+// Value returns the ent.Value that was dynamically selected and assigned to the MemberToken.
 // This includes values selected through modifiers, order, etc.
-func (t *Token) Value(name string) (ent.Value, error) {
-	return t.selectValues.Get(name)
+func (mt *MemberToken) Value(name string) (ent.Value, error) {
+	return mt.selectValues.Get(name)
 }
 
-// Update returns a builder for updating this Token.
-// Note that you need to call Token.Unwrap() before calling this method if this Token
+// Update returns a builder for updating this MemberToken.
+// Note that you need to call MemberToken.Unwrap() before calling this method if this MemberToken
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (t *Token) Update() *TokenUpdateOne {
-	return NewTokenClient(t.config).UpdateOne(t)
+func (mt *MemberToken) Update() *MemberTokenUpdateOne {
+	return NewMemberTokenClient(mt.config).UpdateOne(mt)
 }
 
-// Unwrap unwraps the Token entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the MemberToken entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (t *Token) Unwrap() *Token {
-	_tx, ok := t.config.driver.(*txDriver)
+func (mt *MemberToken) Unwrap() *MemberToken {
+	_tx, ok := mt.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: Token is not a transactional entity")
+		panic("ent: MemberToken is not a transactional entity")
 	}
-	t.config.driver = _tx.drv
-	return t
+	mt.config.driver = _tx.drv
+	return mt
 }
 
 // String implements the fmt.Stringer.
-func (t *Token) String() string {
+func (mt *MemberToken) String() string {
 	var builder strings.Builder
-	builder.WriteString("Token(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString("MemberToken(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", mt.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(t.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(mt.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(mt.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("delete=")
-	builder.WriteString(fmt.Sprintf("%v", t.Delete))
+	builder.WriteString(fmt.Sprintf("%v", mt.Delete))
 	builder.WriteString(", ")
 	builder.WriteString("created_id=")
-	builder.WriteString(fmt.Sprintf("%v", t.CreatedID))
+	builder.WriteString(fmt.Sprintf("%v", mt.CreatedID))
 	builder.WriteString(", ")
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", t.UserID))
+	builder.WriteString("member_id=")
+	builder.WriteString(fmt.Sprintf("%v", mt.MemberID))
 	builder.WriteString(", ")
 	builder.WriteString("token=")
-	builder.WriteString(t.Token)
+	builder.WriteString(mt.Token)
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(t.Source)
+	builder.WriteString(mt.Source)
 	builder.WriteString(", ")
 	builder.WriteString("expired_at=")
-	builder.WriteString(t.ExpiredAt.Format(time.ANSIC))
+	builder.WriteString(mt.ExpiredAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// Tokens is a parsable slice of Token.
-type Tokens []*Token
+// MemberTokens is a parsable slice of MemberToken.
+type MemberTokens []*MemberToken

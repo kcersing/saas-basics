@@ -65,10 +65,12 @@ type ContestParticipantEdges struct {
 // ContestOrErr returns the Contest value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ContestParticipantEdges) ContestOrErr() (*Contest, error) {
-	if e.Contest != nil {
+	if e.loadedTypes[0] {
+		if e.Contest == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: contest.Label}
+		}
 		return e.Contest, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: contest.Label}
 	}
 	return nil, &NotLoadedError{edge: "contest"}
 }

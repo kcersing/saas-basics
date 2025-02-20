@@ -35,10 +35,10 @@ service WxService {
    base.NilResponse MemberRegister(1: MemberRegisterReq req) (api.post = "/service/wx/member/register")
    /**会员验证码*/
    base.NilResponse MemberCaptcha(1: MemberCaptchaReq req) (api.post = "/service/wx/member/captcha")
-   /**会员登录*/
-   base.NilResponse MemberLogin(1: MemberLoginReq req) (api.post = "/service/wx/member/login")
-   /**会员登出*/
-   base.NilResponse MemberLogout(1: base.IDReq req) (api.post = "/service/wx/member/logout")
+//   /**会员登录*/
+//   base.NilResponse MemberLogin(1: MemberLoginReq req) (api.post = "/service/wx/member/login")
+//   /**会员登出*/
+//   base.NilResponse MemberLogout(1: base.IDReq req) (api.post = "/service/wx/member/logout")
    /**会员详情*/
    base.NilResponse MemberInfo(1: base.IDReq req) (api.post = "/service/wx/member/info")
    /**会员产品详情*/
@@ -57,8 +57,6 @@ service WxService {
    base.NilResponse MemberContractList(1: member.MemberContractListReq req) (api.post = "/service/wx/member/contract-list")
    /**会员课程列表*/
    base.NilResponse ScheduleMemberList(1: schedule.ScheduleMemberListReq req) (api.post = "/service/wx/member/schedule-member-list")
-
-
 
    /**比赛列表*/
    base.NilResponse ContestList (1: contest.ContestListReq req) (api.post = "/service/wx/member/contest-list")
@@ -88,14 +86,14 @@ service WxService {
    base.NilResponse VenueInfo (1: base.IDReq req) (api.post = "/service/wx/member/venue-info")
 
    /**扫码入场*/
-//   base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
-      base.NilResponse ScanQR (1: ScanQRReq req) (api.post = "/service/wx/member/scan-QR")
+   //base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
+   base.NilResponse ScanQR (1: ScanQRReq req) (api.post = "/service/wx/member/scan-QR")
    /**激活*/
    base.NilResponse Activation (1: base.IDReq req) (api.post = "/service/wx/member/activation")
 
 
-   /**会员私教课约课*/
-   base.NilResponse CreateMemberScheduleCourse(1: schedule.CreateOrUpdateScheduleCourseReq req) (api.post = "/service/wx/member/create-member-schedule-course")
+    /**会员私教课约课*/
+    base.NilResponse CreateMemberScheduleCourse(1: schedule.CreateOrUpdateScheduleCourseReq req) (api.post = "/service/wx/member/create-member-schedule-course")
     /**排团教课*/
     base.NilResponse CreateMemberScheduleCourseLessons(1: CreateMemberScheduleLessonsReq req) (api.post = "/service/wx/member/create-member-schedule-lessons")
 
@@ -105,6 +103,8 @@ service WxService {
    base.NilResponse ProductList(1: product.ProductListReq req) (api.post = "/service/wx/member/product-list")
    /**下单*/
    base.NilResponse Buy(1: order.BuyReq req) (api.post = "/service/wx/member/buy")
+   /**支付*/
+   base.NilResponse Pay(1: order.OrderPay req) (api.post = "/service/wx/member/pay")
 
    /**教练列表*/
    base.NilResponse CoachList(1: CoachListReq req) (api.post = "/service/wx/member/coach-list")
@@ -128,10 +128,10 @@ service WxService {
    base.NilResponse SignStaffSchedule(1: SignStaffScheduleReq req) (api.post = "/service/wx/staff/sign-staff-schedule")
    /**教练验证码*/
    base.NilResponse StaffCaptcha(1: StaffCaptchaReq req) (api.post = "/service/wx/staff/captcha")
-   /**教练登录*/
-   base.NilResponse StaffLogin(1: StaffLoginReq req) (api.post = "/service/wx/staff/login")
-   /**会员登出*/
-   base.NilResponse StaffLogout(1: base.IDReq req) (api.post = "/service/wx/staff/logout")
+//   /**教练登录*/
+//   base.NilResponse StaffLogin(1: StaffLoginReq req) (api.post = "/service/wx/staff/login")
+//   /**会员登出*/
+//   base.NilResponse StaffLogout(1: base.IDReq req) (api.post = "/service/wx/staff/logout")
 }
 
 struct StaffCaptchaReq {

@@ -61,10 +61,12 @@ type VenueSmsLogEdges struct {
 // VenueOrErr returns the Venue value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e VenueSmsLogEdges) VenueOrErr() (*Venue, error) {
-	if e.Venue != nil {
+	if e.loadedTypes[0] {
+		if e.Venue == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: venue.Label}
+		}
 		return e.Venue, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: venue.Label}
 	}
 	return nil, &NotLoadedError{edge: "venue"}
 }

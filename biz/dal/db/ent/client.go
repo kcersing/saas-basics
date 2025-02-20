@@ -32,6 +32,7 @@ import (
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/memberprofile"
+	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/messages"
@@ -107,6 +108,8 @@ type Client struct {
 	MemberProductCourses *MemberProductCoursesClient
 	// MemberProfile is the client for interacting with the MemberProfile builders.
 	MemberProfile *MemberProfileClient
+	// MemberToken is the client for interacting with the MemberToken builders.
+	MemberToken *MemberTokenClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// MenuParam is the client for interacting with the MenuParam builders.
@@ -181,6 +184,7 @@ func (c *Client) init() {
 	c.MemberProduct = NewMemberProductClient(c.config)
 	c.MemberProductCourses = NewMemberProductCoursesClient(c.config)
 	c.MemberProfile = NewMemberProfileClient(c.config)
+	c.MemberToken = NewMemberTokenClient(c.config)
 	c.Menu = NewMenuClient(c.config)
 	c.MenuParam = NewMenuParamClient(c.config)
 	c.Messages = NewMessagesClient(c.config)
@@ -315,6 +319,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		MemberProduct:         NewMemberProductClient(cfg),
 		MemberProductCourses:  NewMemberProductCoursesClient(cfg),
 		MemberProfile:         NewMemberProfileClient(cfg),
+		MemberToken:           NewMemberTokenClient(cfg),
 		Menu:                  NewMenuClient(cfg),
 		MenuParam:             NewMenuParamClient(cfg),
 		Messages:              NewMessagesClient(cfg),
@@ -376,6 +381,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		MemberProduct:         NewMemberProductClient(cfg),
 		MemberProductCourses:  NewMemberProductCoursesClient(cfg),
 		MemberProfile:         NewMemberProfileClient(cfg),
+		MemberToken:           NewMemberTokenClient(cfg),
 		Menu:                  NewMenuClient(cfg),
 		MenuParam:             NewMenuParamClient(cfg),
 		Messages:              NewMessagesClient(cfg),
@@ -430,11 +436,11 @@ func (c *Client) Use(hooks ...Hook) {
 		c.CommunityParticipant, c.Contest, c.ContestParticipant, c.Contract,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
-		c.MemberProduct, c.MemberProductCourses, c.MemberProfile, c.Menu, c.MenuParam,
-		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
-		c.Product, c.ProductCourses, c.Role, c.Schedule, c.ScheduleCoach,
-		c.ScheduleMember, c.Token, c.User, c.UserTimePeriod, c.Venue, c.VenuePlace,
-		c.VenueSms, c.VenueSmsLog,
+		c.MemberProduct, c.MemberProductCourses, c.MemberProfile, c.MemberToken,
+		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
+		c.OrderPay, c.OrderSales, c.Product, c.ProductCourses, c.Role, c.Schedule,
+		c.ScheduleCoach, c.ScheduleMember, c.Token, c.User, c.UserTimePeriod, c.Venue,
+		c.VenuePlace, c.VenueSms, c.VenueSmsLog,
 	} {
 		n.Use(hooks...)
 	}
@@ -448,11 +454,11 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.CommunityParticipant, c.Contest, c.ContestParticipant, c.Contract,
 		c.Dictionary, c.DictionaryDetail, c.EntryLogs, c.Logs, c.Member,
 		c.MemberContract, c.MemberContractContent, c.MemberDetails, c.MemberNote,
-		c.MemberProduct, c.MemberProductCourses, c.MemberProfile, c.Menu, c.MenuParam,
-		c.Messages, c.Order, c.OrderAmount, c.OrderItem, c.OrderPay, c.OrderSales,
-		c.Product, c.ProductCourses, c.Role, c.Schedule, c.ScheduleCoach,
-		c.ScheduleMember, c.Token, c.User, c.UserTimePeriod, c.Venue, c.VenuePlace,
-		c.VenueSms, c.VenueSmsLog,
+		c.MemberProduct, c.MemberProductCourses, c.MemberProfile, c.MemberToken,
+		c.Menu, c.MenuParam, c.Messages, c.Order, c.OrderAmount, c.OrderItem,
+		c.OrderPay, c.OrderSales, c.Product, c.ProductCourses, c.Role, c.Schedule,
+		c.ScheduleCoach, c.ScheduleMember, c.Token, c.User, c.UserTimePeriod, c.Venue,
+		c.VenuePlace, c.VenueSms, c.VenueSmsLog,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -503,6 +509,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.MemberProductCourses.mutate(ctx, m)
 	case *MemberProfileMutation:
 		return c.MemberProfile.mutate(ctx, m)
+	case *MemberTokenMutation:
+		return c.MemberToken.mutate(ctx, m)
 	case *MenuMutation:
 		return c.Menu.mutate(ctx, m)
 	case *MenuParamMutation:
@@ -4028,6 +4036,139 @@ func (c *MemberProfileClient) mutate(ctx context.Context, m *MemberProfileMutati
 		return (&MemberProfileDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown MemberProfile mutation op: %q", m.Op())
+	}
+}
+
+// MemberTokenClient is a client for the MemberToken schema.
+type MemberTokenClient struct {
+	config
+}
+
+// NewMemberTokenClient returns a client for the MemberToken from the given config.
+func NewMemberTokenClient(c config) *MemberTokenClient {
+	return &MemberTokenClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `membertoken.Hooks(f(g(h())))`.
+func (c *MemberTokenClient) Use(hooks ...Hook) {
+	c.hooks.MemberToken = append(c.hooks.MemberToken, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `membertoken.Intercept(f(g(h())))`.
+func (c *MemberTokenClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemberToken = append(c.inters.MemberToken, interceptors...)
+}
+
+// Create returns a builder for creating a MemberToken entity.
+func (c *MemberTokenClient) Create() *MemberTokenCreate {
+	mutation := newMemberTokenMutation(c.config, OpCreate)
+	return &MemberTokenCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemberToken entities.
+func (c *MemberTokenClient) CreateBulk(builders ...*MemberTokenCreate) *MemberTokenCreateBulk {
+	return &MemberTokenCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberTokenClient) MapCreateBulk(slice any, setFunc func(*MemberTokenCreate, int)) *MemberTokenCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberTokenCreateBulk{err: fmt.Errorf("calling to MemberTokenClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberTokenCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberTokenCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemberToken.
+func (c *MemberTokenClient) Update() *MemberTokenUpdate {
+	mutation := newMemberTokenMutation(c.config, OpUpdate)
+	return &MemberTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemberTokenClient) UpdateOne(mt *MemberToken) *MemberTokenUpdateOne {
+	mutation := newMemberTokenMutation(c.config, OpUpdateOne, withMemberToken(mt))
+	return &MemberTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemberTokenClient) UpdateOneID(id int64) *MemberTokenUpdateOne {
+	mutation := newMemberTokenMutation(c.config, OpUpdateOne, withMemberTokenID(id))
+	return &MemberTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemberToken.
+func (c *MemberTokenClient) Delete() *MemberTokenDelete {
+	mutation := newMemberTokenMutation(c.config, OpDelete)
+	return &MemberTokenDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemberTokenClient) DeleteOne(mt *MemberToken) *MemberTokenDeleteOne {
+	return c.DeleteOneID(mt.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemberTokenClient) DeleteOneID(id int64) *MemberTokenDeleteOne {
+	builder := c.Delete().Where(membertoken.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemberTokenDeleteOne{builder}
+}
+
+// Query returns a query builder for MemberToken.
+func (c *MemberTokenClient) Query() *MemberTokenQuery {
+	return &MemberTokenQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemberToken},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemberToken entity by its id.
+func (c *MemberTokenClient) Get(ctx context.Context, id int64) (*MemberToken, error) {
+	return c.Query().Where(membertoken.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemberTokenClient) GetX(ctx context.Context, id int64) *MemberToken {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *MemberTokenClient) Hooks() []Hook {
+	return c.hooks.MemberToken
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemberTokenClient) Interceptors() []Interceptor {
+	return c.inters.MemberToken
+}
+
+func (c *MemberTokenClient) mutate(ctx context.Context, m *MemberTokenMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemberTokenCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemberTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemberTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemberTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemberToken mutation op: %q", m.Op())
 	}
 }
 
@@ -7614,18 +7755,19 @@ type (
 		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
 		Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail, EntryLogs,
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
-		MemberProduct, MemberProductCourses, MemberProfile, Menu, MenuParam, Messages,
-		Order, OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductCourses,
-		Role, Schedule, ScheduleCoach, ScheduleMember, Token, User, UserTimePeriod,
-		Venue, VenuePlace, VenueSms, VenueSmsLog []ent.Hook
+		MemberProduct, MemberProductCourses, MemberProfile, MemberToken, Menu,
+		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales,
+		Product, ProductCourses, Role, Schedule, ScheduleCoach, ScheduleMember, Token,
+		User, UserTimePeriod, Venue, VenuePlace, VenueSms, VenueSmsLog []ent.Hook
 	}
 	inters struct {
 		API, Banner, Bootcamp, BootcampParticipant, Community, CommunityParticipant,
 		Contest, ContestParticipant, Contract, Dictionary, DictionaryDetail, EntryLogs,
 		Logs, Member, MemberContract, MemberContractContent, MemberDetails, MemberNote,
-		MemberProduct, MemberProductCourses, MemberProfile, Menu, MenuParam, Messages,
-		Order, OrderAmount, OrderItem, OrderPay, OrderSales, Product, ProductCourses,
-		Role, Schedule, ScheduleCoach, ScheduleMember, Token, User, UserTimePeriod,
-		Venue, VenuePlace, VenueSms, VenueSmsLog []ent.Interceptor
+		MemberProduct, MemberProductCourses, MemberProfile, MemberToken, Menu,
+		MenuParam, Messages, Order, OrderAmount, OrderItem, OrderPay, OrderSales,
+		Product, ProductCourses, Role, Schedule, ScheduleCoach, ScheduleMember, Token,
+		User, UserTimePeriod, Venue, VenuePlace, VenueSms,
+		VenueSmsLog []ent.Interceptor
 	}
 )

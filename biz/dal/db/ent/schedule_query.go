@@ -12,7 +12,6 @@ import (
 	"saas/biz/dal/db/ent/schedulecoach"
 	"saas/biz/dal/db/ent/schedulemember"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -110,7 +109,7 @@ func (sq *ScheduleQuery) QueryCoachs() *ScheduleCoachQuery {
 // First returns the first Schedule entity from the query.
 // Returns a *NotFoundError when no Schedule was found.
 func (sq *ScheduleQuery) First(ctx context.Context) (*Schedule, error) {
-	nodes, err := sq.Limit(1).All(setContextOp(ctx, sq.ctx, ent.OpQueryFirst))
+	nodes, err := sq.Limit(1).All(setContextOp(ctx, sq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +132,7 @@ func (sq *ScheduleQuery) FirstX(ctx context.Context) *Schedule {
 // Returns a *NotFoundError when no Schedule ID was found.
 func (sq *ScheduleQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = sq.Limit(1).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = sq.Limit(1).IDs(setContextOp(ctx, sq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -156,7 +155,7 @@ func (sq *ScheduleQuery) FirstIDX(ctx context.Context) int64 {
 // Returns a *NotSingularError when more than one Schedule entity is found.
 // Returns a *NotFoundError when no Schedule entities are found.
 func (sq *ScheduleQuery) Only(ctx context.Context) (*Schedule, error) {
-	nodes, err := sq.Limit(2).All(setContextOp(ctx, sq.ctx, ent.OpQueryOnly))
+	nodes, err := sq.Limit(2).All(setContextOp(ctx, sq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +183,7 @@ func (sq *ScheduleQuery) OnlyX(ctx context.Context) *Schedule {
 // Returns a *NotFoundError when no entities are found.
 func (sq *ScheduleQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = sq.Limit(2).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = sq.Limit(2).IDs(setContextOp(ctx, sq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -209,7 +208,7 @@ func (sq *ScheduleQuery) OnlyIDX(ctx context.Context) int64 {
 
 // All executes the query and returns a list of Schedules.
 func (sq *ScheduleQuery) All(ctx context.Context) ([]*Schedule, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryAll)
+	ctx = setContextOp(ctx, sq.ctx, "All")
 	if err := sq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -231,7 +230,7 @@ func (sq *ScheduleQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if sq.ctx.Unique == nil && sq.path != nil {
 		sq.Unique(true)
 	}
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, sq.ctx, "IDs")
 	if err = sq.Select(schedule.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -249,7 +248,7 @@ func (sq *ScheduleQuery) IDsX(ctx context.Context) []int64 {
 
 // Count returns the count of the given query.
 func (sq *ScheduleQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryCount)
+	ctx = setContextOp(ctx, sq.ctx, "Count")
 	if err := sq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -267,7 +266,7 @@ func (sq *ScheduleQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (sq *ScheduleQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryExist)
+	ctx = setContextOp(ctx, sq.ctx, "Exist")
 	switch _, err := sq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -603,7 +602,7 @@ func (sgb *ScheduleGroupBy) Aggregate(fns ...AggregateFunc) *ScheduleGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (sgb *ScheduleGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sgb.build.ctx, ent.OpQueryGroupBy)
+	ctx = setContextOp(ctx, sgb.build.ctx, "GroupBy")
 	if err := sgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -651,7 +650,7 @@ func (ss *ScheduleSelect) Aggregate(fns ...AggregateFunc) *ScheduleSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ss *ScheduleSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ss.ctx, ent.OpQuerySelect)
+	ctx = setContextOp(ctx, ss.ctx, "Select")
 	if err := ss.prepareQuery(ctx); err != nil {
 		return err
 	}

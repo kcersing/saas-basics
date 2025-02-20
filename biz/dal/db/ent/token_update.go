@@ -157,27 +157,6 @@ func (tu *TokenUpdate) SetNillableExpiredAt(t *time.Time) *TokenUpdate {
 	return tu
 }
 
-// SetType sets the "type" field.
-func (tu *TokenUpdate) SetType(i int64) *TokenUpdate {
-	tu.mutation.ResetType()
-	tu.mutation.SetType(i)
-	return tu
-}
-
-// SetNillableType sets the "type" field if the given value is not nil.
-func (tu *TokenUpdate) SetNillableType(i *int64) *TokenUpdate {
-	if i != nil {
-		tu.SetType(*i)
-	}
-	return tu
-}
-
-// AddType adds i to the "type" field.
-func (tu *TokenUpdate) AddType(i int64) *TokenUpdate {
-	tu.mutation.AddType(i)
-	return tu
-}
-
 // Mutation returns the TokenMutation object of the builder.
 func (tu *TokenUpdate) Mutation() *TokenMutation {
 	return tu.mutation
@@ -269,12 +248,6 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := tu.mutation.ExpiredAt(); ok {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
-	}
-	if value, ok := tu.mutation.GetType(); ok {
-		_spec.SetField(token.FieldType, field.TypeInt64, value)
-	}
-	if value, ok := tu.mutation.AddedType(); ok {
-		_spec.AddField(token.FieldType, field.TypeInt64, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -425,27 +398,6 @@ func (tuo *TokenUpdateOne) SetNillableExpiredAt(t *time.Time) *TokenUpdateOne {
 	return tuo
 }
 
-// SetType sets the "type" field.
-func (tuo *TokenUpdateOne) SetType(i int64) *TokenUpdateOne {
-	tuo.mutation.ResetType()
-	tuo.mutation.SetType(i)
-	return tuo
-}
-
-// SetNillableType sets the "type" field if the given value is not nil.
-func (tuo *TokenUpdateOne) SetNillableType(i *int64) *TokenUpdateOne {
-	if i != nil {
-		tuo.SetType(*i)
-	}
-	return tuo
-}
-
-// AddType adds i to the "type" field.
-func (tuo *TokenUpdateOne) AddType(i int64) *TokenUpdateOne {
-	tuo.mutation.AddType(i)
-	return tuo
-}
-
 // Mutation returns the TokenMutation object of the builder.
 func (tuo *TokenUpdateOne) Mutation() *TokenMutation {
 	return tuo.mutation
@@ -567,12 +519,6 @@ func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error
 	}
 	if value, ok := tuo.mutation.ExpiredAt(); ok {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
-	}
-	if value, ok := tuo.mutation.GetType(); ok {
-		_spec.SetField(token.FieldType, field.TypeInt64, value)
-	}
-	if value, ok := tuo.mutation.AddedType(); ok {
-		_spec.AddField(token.FieldType, field.TypeInt64, value)
 	}
 	_node = &Token{config: tuo.config}
 	_spec.Assign = _node.assignValues

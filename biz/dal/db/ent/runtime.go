@@ -24,6 +24,7 @@ import (
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/memberprofile"
+	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/messages"
@@ -823,6 +824,29 @@ func init() {
 	memberprofileDescGrade := memberprofileFields[11].Descriptor()
 	// memberprofile.DefaultGrade holds the default value on creation for the grade field.
 	memberprofile.DefaultGrade = memberprofileDescGrade.Default.(int64)
+	membertokenMixin := schema.MemberToken{}.Mixin()
+	membertokenMixinFields0 := membertokenMixin[0].Fields()
+	_ = membertokenMixinFields0
+	membertokenFields := schema.MemberToken{}.Fields()
+	_ = membertokenFields
+	// membertokenDescCreatedAt is the schema descriptor for created_at field.
+	membertokenDescCreatedAt := membertokenMixinFields0[1].Descriptor()
+	// membertoken.DefaultCreatedAt holds the default value on creation for the created_at field.
+	membertoken.DefaultCreatedAt = membertokenDescCreatedAt.Default.(func() time.Time)
+	// membertokenDescUpdatedAt is the schema descriptor for updated_at field.
+	membertokenDescUpdatedAt := membertokenMixinFields0[2].Descriptor()
+	// membertoken.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	membertoken.DefaultUpdatedAt = membertokenDescUpdatedAt.Default.(func() time.Time)
+	// membertoken.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	membertoken.UpdateDefaultUpdatedAt = membertokenDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// membertokenDescDelete is the schema descriptor for delete field.
+	membertokenDescDelete := membertokenMixinFields0[3].Descriptor()
+	// membertoken.DefaultDelete holds the default value on creation for the delete field.
+	membertoken.DefaultDelete = membertokenDescDelete.Default.(int64)
+	// membertokenDescCreatedID is the schema descriptor for created_id field.
+	membertokenDescCreatedID := membertokenMixinFields0[4].Descriptor()
+	// membertoken.DefaultCreatedID holds the default value on creation for the created_id field.
+	membertoken.DefaultCreatedID = membertokenDescCreatedID.Default.(int64)
 	menuMixin := schema.Menu{}.Mixin()
 	menuMixinFields0 := menuMixin[0].Fields()
 	_ = menuMixinFields0
@@ -1420,10 +1444,6 @@ func init() {
 	tokenDescCreatedID := tokenMixinFields0[4].Descriptor()
 	// token.DefaultCreatedID holds the default value on creation for the created_id field.
 	token.DefaultCreatedID = tokenDescCreatedID.Default.(int64)
-	// tokenDescType is the schema descriptor for type field.
-	tokenDescType := tokenFields[5].Descriptor()
-	// token.DefaultType holds the default value on creation for the type field.
-	token.DefaultType = tokenDescType.Default.(int64)
 	userMixin := schema.User{}.Mixin()
 	userMixinFields0 := userMixin[0].Fields()
 	_ = userMixinFields0

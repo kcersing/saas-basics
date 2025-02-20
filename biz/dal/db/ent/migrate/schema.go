@@ -763,6 +763,36 @@ var (
 			},
 		},
 	}
+	// MemberTokenColumns holds the columns for the "member_token" table.
+	MemberTokenColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "created time"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "last update time"},
+		{Name: "delete", Type: field.TypeInt64, Nullable: true, Comment: "last delete  1:已删除", Default: 0},
+		{Name: "created_id", Type: field.TypeInt64, Nullable: true, Comment: "created", Default: 0},
+		{Name: "member_id", Type: field.TypeInt64, Unique: true, Comment: " User's ID | 用户的ID"},
+		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
+		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
+		{Name: "expired_at", Type: field.TypeTime, Comment: " Expire time | 过期时间"},
+	}
+	// MemberTokenTable holds the schema information for the "member_token" table.
+	MemberTokenTable = &schema.Table{
+		Name:       "member_token",
+		Columns:    MemberTokenColumns,
+		PrimaryKey: []*schema.Column{MemberTokenColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "membertoken_member_id",
+				Unique:  false,
+				Columns: []*schema.Column{MemberTokenColumns[5]},
+			},
+			{
+				Name:    "membertoken_expired_at",
+				Unique:  false,
+				Columns: []*schema.Column{MemberTokenColumns[8]},
+			},
+		},
+	}
 	// SysMenusColumns holds the columns for the "sys_menus" table.
 	SysMenusColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true, Comment: "primary key"},
@@ -1333,7 +1363,6 @@ var (
 		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
 		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
 		{Name: "expired_at", Type: field.TypeTime, Comment: " Expire time | 过期时间"},
-		{Name: "type", Type: field.TypeInt64, Comment: "type 1会员 2员工", Default: 1},
 	}
 	// SysTokensTable holds the schema information for the "sys_tokens" table.
 	SysTokensTable = &schema.Table{
@@ -1834,6 +1863,7 @@ var (
 		MemberProductTable,
 		MemberProductCoursesTable,
 		MemberProfileTable,
+		MemberTokenTable,
 		SysMenusTable,
 		SysMenuParamsTable,
 		MessagesTable,
@@ -1960,6 +1990,9 @@ func init() {
 	MemberProfileTable.Annotation = &entsql.Annotation{
 		Table:   "member_profile",
 		Options: "AUTO_INCREMENT = 100000",
+	}
+	MemberTokenTable.Annotation = &entsql.Annotation{
+		Table: "member_token",
 	}
 	SysMenusTable.ForeignKeys[0].RefTable = SysMenusTable
 	SysMenusTable.Annotation = &entsql.Annotation{

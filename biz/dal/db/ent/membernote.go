@@ -53,10 +53,12 @@ type MemberNoteEdges struct {
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e MemberNoteEdges) NotesOrErr() (*Member, error) {
-	if e.Notes != nil {
+	if e.loadedTypes[0] {
+		if e.Notes == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: member.Label}
+		}
 		return e.Notes, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: member.Label}
 	}
 	return nil, &NotLoadedError{edge: "notes"}
 }

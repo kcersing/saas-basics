@@ -128,10 +128,12 @@ func (e OrderEdges) SalesOrErr() ([]*OrderSales, error) {
 // OrderVenuesOrErr returns the OrderVenues value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrderEdges) OrderVenuesOrErr() (*Venue, error) {
-	if e.OrderVenues != nil {
+	if e.loadedTypes[5] {
+		if e.OrderVenues == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: venue.Label}
+		}
 		return e.OrderVenues, nil
-	} else if e.loadedTypes[5] {
-		return nil, &NotFoundError{label: venue.Label}
 	}
 	return nil, &NotLoadedError{edge: "order_venues"}
 }
@@ -139,10 +141,12 @@ func (e OrderEdges) OrderVenuesOrErr() (*Venue, error) {
 // OrderMembersOrErr returns the OrderMembers value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrderEdges) OrderMembersOrErr() (*Member, error) {
-	if e.OrderMembers != nil {
+	if e.loadedTypes[6] {
+		if e.OrderMembers == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: member.Label}
+		}
 		return e.OrderMembers, nil
-	} else if e.loadedTypes[6] {
-		return nil, &NotFoundError{label: member.Label}
 	}
 	return nil, &NotLoadedError{edge: "order_members"}
 }
@@ -150,10 +154,12 @@ func (e OrderEdges) OrderMembersOrErr() (*Member, error) {
 // OrderCreatesOrErr returns the OrderCreates value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrderEdges) OrderCreatesOrErr() (*User, error) {
-	if e.OrderCreates != nil {
+	if e.loadedTypes[7] {
+		if e.OrderCreates == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: user.Label}
+		}
 		return e.OrderCreates, nil
-	} else if e.loadedTypes[7] {
-		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "order_creates"}
 }

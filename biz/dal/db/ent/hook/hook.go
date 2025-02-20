@@ -260,6 +260,18 @@ func (f MemberProfileFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Valu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberProfileMutation", m)
 }
 
+// The MemberTokenFunc type is an adapter to allow the use of ordinary
+// function as MemberToken mutator.
+type MemberTokenFunc func(context.Context, *ent.MemberTokenMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemberTokenFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemberTokenMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberTokenMutation", m)
+}
+
 // The MenuFunc type is an adapter to allow the use of ordinary
 // function as Menu mutator.
 type MenuFunc func(context.Context, *ent.MenuMutation) (ent.Value, error)

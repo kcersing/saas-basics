@@ -49,6 +49,9 @@ gen-user:
 gen-ent:
 	go generate ./biz/dal/db/ent
 	go run -mod=mod entgo.io/ent/cmd/ent generate --feature sql/modifier ./biz/dal/db/ent/schema
+	go run -mod=mod entgo.io/ent/cmd/ent generate --feature sql/schemaconfig ./biz/dal/db/ent/schema
+	go run -mod=mod entgo.io/ent/cmd/ent generate --feature bidiedges ./biz/dal/db/ent/schema
+
 
 #cd /xingfufit/go/saas-basics/
 #lsof -i :9039

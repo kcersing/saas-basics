@@ -100,20 +100,6 @@ func (tc *TokenCreate) SetExpiredAt(t time.Time) *TokenCreate {
 	return tc
 }
 
-// SetType sets the "type" field.
-func (tc *TokenCreate) SetType(i int64) *TokenCreate {
-	tc.mutation.SetType(i)
-	return tc
-}
-
-// SetNillableType sets the "type" field if the given value is not nil.
-func (tc *TokenCreate) SetNillableType(i *int64) *TokenCreate {
-	if i != nil {
-		tc.SetType(*i)
-	}
-	return tc
-}
-
 // SetID sets the "id" field.
 func (tc *TokenCreate) SetID(i int64) *TokenCreate {
 	tc.mutation.SetID(i)
@@ -171,10 +157,6 @@ func (tc *TokenCreate) defaults() {
 		v := token.DefaultCreatedID
 		tc.mutation.SetCreatedID(v)
 	}
-	if _, ok := tc.mutation.GetType(); !ok {
-		v := token.DefaultType
-		tc.mutation.SetType(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -190,9 +172,6 @@ func (tc *TokenCreate) check() error {
 	}
 	if _, ok := tc.mutation.ExpiredAt(); !ok {
 		return &ValidationError{Name: "expired_at", err: errors.New(`ent: missing required field "Token.expired_at"`)}
-	}
-	if _, ok := tc.mutation.GetType(); !ok {
-		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Token.type"`)}
 	}
 	return nil
 }
@@ -257,10 +236,6 @@ func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.ExpiredAt(); ok {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
 		_node.ExpiredAt = value
-	}
-	if value, ok := tc.mutation.GetType(); ok {
-		_spec.SetField(token.FieldType, field.TypeInt64, value)
-		_node.Type = value
 	}
 	return _node, _spec
 }
