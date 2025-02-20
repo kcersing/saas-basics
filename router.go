@@ -32,9 +32,9 @@ func customizedRegister(r *server.Hertz) {
 	//	@Success		200		{object}	utils.Response
 	//
 	// @router /service/wx/member/login [POST]
-	r.POST("/service/wx/member/login", mw.GetUsJWTMw(casbin.CasbinEnforcer()).LoginHandler)
-	r.POST("/service/wx/member/logout", mw.GetUsJWTMw(casbin.CasbinEnforcer()).LogoutHandler)
-	r.POST("/service/wx/member/refresh_token", mw.GetUsJWTMw(casbin.CasbinEnforcer()).RefreshHandler)
+	//r.POST("/service/wx/member/login", mw.GetUsJWTMw(casbin.CasbinEnforcer()).LoginHandler)
+	//r.POST("/service/wx/member/logout", mw.GetUsJWTMw(casbin.CasbinEnforcer()).LogoutHandler)
+	//r.POST("/service/wx/member/refresh_token", mw.GetUsJWTMw(casbin.CasbinEnforcer()).RefreshHandler)
 
 	// StaffLogin .
 	//

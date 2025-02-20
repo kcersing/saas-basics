@@ -5381,7 +5381,7 @@ type WxService interface {
 	/**场馆详情*/
 	VenueInfo(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)
 	/**扫码入场*/
-	//   base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
+	//base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
 	ScanQR(ctx context.Context, req *ScanQRReq) (r *base.NilResponse, err error)
 	/**激活*/
 	Activation(ctx context.Context, req *base.IDReq) (r *base.NilResponse, err error)

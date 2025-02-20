@@ -8,6 +8,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/token"
+	"saas/biz/dal/db/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -21,6 +22,8 @@ type TokenQuery struct {
 	order      []token.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Token
+	withOwner  *UserQuery
+	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +58,28 @@ func (tq *TokenQuery) Unique(unique bool) *TokenQuery {
 func (tq *TokenQuery) Order(o ...token.OrderOption) *TokenQuery {
 	tq.order = append(tq.order, o...)
 	return tq
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (tq *TokenQuery) QueryOwner() *UserQuery {
+	query := (&UserClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(token.Table, token.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, token.OwnerTable, token.OwnerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Token entity from the query.
@@ -249,10 +274,22 @@ func (tq *TokenQuery) Clone() *TokenQuery {
 		order:      append([]token.OrderOption{}, tq.order...),
 		inters:     append([]Interceptor{}, tq.inters...),
 		predicates: append([]predicate.Token{}, tq.predicates...),
+		withOwner:  tq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:  tq.sql.Clone(),
 		path: tq.path,
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TokenQuery) WithOwner(opts ...func(*UserQuery)) *TokenQuery {
+	query := (&UserClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withOwner = query
+	return tq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,15 +368,26 @@ func (tq *TokenQuery) prepareQuery(ctx context.Context) error {
 
 func (tq *TokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Token, error) {
 	var (
-		nodes = []*Token{}
-		_spec = tq.querySpec()
+		nodes       = []*Token{}
+		withFKs     = tq.withFKs
+		_spec       = tq.querySpec()
+		loadedTypes = [1]bool{
+			tq.withOwner != nil,
+		}
 	)
+	if tq.withOwner != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, token.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Token).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Token{config: tq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +399,46 @@ func (tq *TokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Token,
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := tq.withOwner; query != nil {
+		if err := tq.loadOwner(ctx, query, nodes, nil,
+			func(n *Token, e *User) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (tq *TokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*Token, init func(*Token), assign func(*Token, *User)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*Token)
+	for i := range nodes {
+		if nodes[i].user_token == nil {
+			continue
+		}
+		fk := *nodes[i].user_token
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "user_token" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (tq *TokenQuery) sqlCount(ctx context.Context) (int, error) {

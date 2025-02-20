@@ -6638,6 +6638,22 @@ func (c *TokenClient) GetX(ctx context.Context, id int64) *Token {
 	return obj
 }
 
+// QueryOwner queries the owner edge of a Token.
+func (c *TokenClient) QueryOwner(t *Token) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(token.Table, token.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, token.OwnerTable, token.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TokenClient) Hooks() []Hook {
 	return c.hooks.Token
@@ -6769,6 +6785,22 @@ func (c *UserClient) GetX(ctx context.Context, id int64) *User {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryToken queries the token edge of a User.
+func (c *UserClient) QueryToken(u *User) *TokenQuery {
+	query := (&TokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(token.Table, token.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, user.TokenTable, user.TokenColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryTags queries the tags edge of a User.

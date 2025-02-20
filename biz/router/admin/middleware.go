@@ -4,6 +4,7 @@ package admin
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"saas/biz/handler/mw"
 )
 
 func rootMw() []app.HandlerFunc {

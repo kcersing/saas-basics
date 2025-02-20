@@ -10,6 +10,7 @@ import (
 	"saas/biz/dal/db/ent/entrylogs"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/role"
+	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/usertimeperiod"
 	"saas/biz/dal/db/ent/venue"
@@ -222,6 +223,25 @@ func (uc *UserCreate) SetNillableDetail(s *string) *UserCreate {
 func (uc *UserCreate) SetID(i int64) *UserCreate {
 	uc.mutation.SetID(i)
 	return uc
+}
+
+// SetTokenID sets the "token" edge to the Token entity by ID.
+func (uc *UserCreate) SetTokenID(id int64) *UserCreate {
+	uc.mutation.SetTokenID(id)
+	return uc
+}
+
+// SetNillableTokenID sets the "token" edge to the Token entity by ID if the given value is not nil.
+func (uc *UserCreate) SetNillableTokenID(id *int64) *UserCreate {
+	if id != nil {
+		uc = uc.SetTokenID(*id)
+	}
+	return uc
+}
+
+// SetToken sets the "token" edge to the Token entity.
+func (uc *UserCreate) SetToken(t *Token) *UserCreate {
+	return uc.SetTokenID(t.ID)
 }
 
 // AddTagIDs adds the "tags" edge to the DictionaryDetail entity by IDs.
@@ -492,6 +512,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Detail(); ok {
 		_spec.SetField(user.FieldDetail, field.TypeString, value)
 		_node.Detail = value
+	}
+	if nodes := uc.mutation.TokenIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.TokenTable,
+			Columns: []string{user.TokenColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := uc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

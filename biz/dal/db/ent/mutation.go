@@ -57552,6 +57552,8 @@ type TokenMutation struct {
 	source        *string
 	expired_at    *time.Time
 	clearedFields map[string]struct{}
+	owner         *int64
+	clearedowner  bool
 	done          bool
 	oldValue      func(context.Context) (*Token, error)
 	predicates    []predicate.Token
@@ -58063,6 +58065,45 @@ func (m *TokenMutation) ResetExpiredAt() {
 	m.expired_at = nil
 }
 
+// SetOwnerID sets the "owner" edge to the User entity by id.
+func (m *TokenMutation) SetOwnerID(id int64) {
+	m.owner = &id
+}
+
+// ClearOwner clears the "owner" edge to the User entity.
+func (m *TokenMutation) ClearOwner() {
+	m.clearedowner = true
+}
+
+// OwnerCleared reports if the "owner" edge to the User entity was cleared.
+func (m *TokenMutation) OwnerCleared() bool {
+	return m.clearedowner
+}
+
+// OwnerID returns the "owner" edge ID in the mutation.
+func (m *TokenMutation) OwnerID() (id int64, exists bool) {
+	if m.owner != nil {
+		return *m.owner, true
+	}
+	return
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *TokenMutation) OwnerIDs() (ids []int64) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *TokenMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
 // Where appends a list predicates to the TokenMutation builder.
 func (m *TokenMutation) Where(ps ...predicate.Token) {
 	m.predicates = append(m.predicates, ps...)
@@ -58381,19 +58422,28 @@ func (m *TokenMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TokenMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.owner != nil {
+		edges = append(edges, token.EdgeOwner)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *TokenMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case token.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TokenMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -58405,25 +58455,42 @@ func (m *TokenMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TokenMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedowner {
+		edges = append(edges, token.EdgeOwner)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *TokenMutation) EdgeCleared(name string) bool {
+	switch name {
+	case token.EdgeOwner:
+		return m.clearedowner
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *TokenMutation) ClearEdge(name string) error {
+	switch name {
+	case token.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
 	return fmt.Errorf("unknown Token unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *TokenMutation) ResetEdge(name string) error {
+	switch name {
+	case token.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	}
 	return fmt.Errorf("unknown Token edge %s", name)
 }
 
@@ -58458,6 +58525,8 @@ type UserMutation struct {
 	avatar                  *string
 	detail                  *string
 	clearedFields           map[string]struct{}
+	token                   *int64
+	clearedtoken            bool
 	tags                    map[int64]struct{}
 	removedtags             map[int64]struct{}
 	clearedtags             bool
@@ -59479,6 +59548,45 @@ func (m *UserMutation) ResetDetail() {
 	delete(m.clearedFields, user.FieldDetail)
 }
 
+// SetTokenID sets the "token" edge to the Token entity by id.
+func (m *UserMutation) SetTokenID(id int64) {
+	m.token = &id
+}
+
+// ClearToken clears the "token" edge to the Token entity.
+func (m *UserMutation) ClearToken() {
+	m.clearedtoken = true
+}
+
+// TokenCleared reports if the "token" edge to the Token entity was cleared.
+func (m *UserMutation) TokenCleared() bool {
+	return m.clearedtoken
+}
+
+// TokenID returns the "token" edge ID in the mutation.
+func (m *UserMutation) TokenID() (id int64, exists bool) {
+	if m.token != nil {
+		return *m.token, true
+	}
+	return
+}
+
+// TokenIDs returns the "token" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// TokenID instead. It exists only for internal usage by the builders.
+func (m *UserMutation) TokenIDs() (ids []int64) {
+	if id := m.token; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetToken resets all changes to the "token" edge.
+func (m *UserMutation) ResetToken() {
+	m.token = nil
+	m.clearedtoken = false
+}
+
 // AddTagIDs adds the "tags" edge to the DictionaryDetail entity by ids.
 func (m *UserMutation) AddTagIDs(ids ...int64) {
 	if m.tags == nil {
@@ -60353,7 +60461,10 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
+	if m.token != nil {
+		edges = append(edges, user.EdgeToken)
+	}
 	if m.tags != nil {
 		edges = append(edges, user.EdgeTags)
 	}
@@ -60379,6 +60490,10 @@ func (m *UserMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *UserMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case user.EdgeToken:
+		if id := m.token; id != nil {
+			return []ent.Value{*id}
+		}
 	case user.EdgeTags:
 		ids := make([]ent.Value, 0, len(m.tags))
 		for id := range m.tags {
@@ -60421,7 +60536,7 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedtags != nil {
 		edges = append(edges, user.EdgeTags)
 	}
@@ -60489,7 +60604,10 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
+	if m.clearedtoken {
+		edges = append(edges, user.EdgeToken)
+	}
 	if m.clearedtags {
 		edges = append(edges, user.EdgeTags)
 	}
@@ -60515,6 +60633,8 @@ func (m *UserMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *UserMutation) EdgeCleared(name string) bool {
 	switch name {
+	case user.EdgeToken:
+		return m.clearedtoken
 	case user.EdgeTags:
 		return m.clearedtags
 	case user.EdgeCreatedOrders:
@@ -60535,6 +60655,9 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *UserMutation) ClearEdge(name string) error {
 	switch name {
+	case user.EdgeToken:
+		m.ClearToken()
+		return nil
 	}
 	return fmt.Errorf("unknown User unique edge %s", name)
 }
@@ -60543,6 +60666,9 @@ func (m *UserMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *UserMutation) ResetEdge(name string) error {
 	switch name {
+	case user.EdgeToken:
+		m.ResetToken()
+		return nil
 	case user.EdgeTags:
 		m.ResetTags()
 		return nil

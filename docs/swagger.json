@@ -4217,12 +4217,7 @@
                 }
             }
         },
-        "/service/wx/member/activation": {
-            "post": {
-                "responses": {}
-            }
-        },
-        "/service/wx/member/bootcamp-info": {
+        "/service/wx/bootcamp-info": {
             "post": {
                 "description": "训练营详情 Description",
                 "summary": "训练营详情 Summary",
@@ -4247,7 +4242,7 @@
                 }
             }
         },
-        "/service/wx/member/bootcamp-list": {
+        "/service/wx/bootcamp-list": {
             "post": {
                 "description": "训练营列表 Description",
                 "summary": "训练营列表 Summary",
@@ -4259,6 +4254,261 @@
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/bootcamp.BootcampListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/coach-info": {
+            "post": {
+                "description": "教练详情 Description",
+                "summary": "教练详情 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/coach-list": {
+            "post": {
+                "description": "教练列表 Description",
+                "summary": "教练列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/wx.CoachListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/community-info": {
+            "post": {
+                "description": "社群详情 Description",
+                "summary": "社群详情 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/community-list": {
+            "post": {
+                "description": "社群列表 Description",
+                "summary": "社群列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/community.CommunityListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/contest-info": {
+            "post": {
+                "description": "竞赛详情 Description",
+                "summary": "竞赛详情 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/contest-list": {
+            "post": {
+                "description": "竞赛列表 Description",
+                "summary": "竞赛列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contest.ContestListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/join-bootcamp": {
+            "post": {
+                "description": "报名训练营 Description",
+                "summary": "报名训练营 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/wx.JoinBootcampReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/join-community": {
+            "post": {
+                "description": "加入社群 Description",
+                "summary": "加入社群 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/wx.JoinCommunityReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/join-contest": {
+            "post": {
+                "description": "报名竞赛 Description",
+                "summary": "报名竞赛 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/wx.JoinContestReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/member/activation": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/service/wx/member/bootcamp-list": {
+            "post": {
+                "description": "会员训练营列表 Description",
+                "summary": "会员训练营列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/member.MemberBootcampListReq"
                         }
                     }
                 ],
@@ -4322,85 +4572,10 @@
                 }
             }
         },
-        "/service/wx/member/coach-info": {
-            "post": {
-                "description": "教练详情 Description",
-                "summary": "教练详情 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/member/coach-list": {
-            "post": {
-                "description": "教练列表 Description",
-                "summary": "教练列表 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/wx.CoachListReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/member/community-info": {
-            "post": {
-                "description": "社群详情 Description",
-                "summary": "社群详情 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/service/wx/member/community-list": {
             "post": {
-                "description": "社群列表 Description",
-                "summary": "社群列表 Summary",
+                "description": "会员社群列表 Description",
+                "summary": "会员社群列表 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -4408,32 +4583,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/community.CommunityListReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/member/contest-info": {
-            "post": {
-                "description": "竞赛详情 Description",
-                "summary": "竞赛详情 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
+                            "$ref": "#/definitions/member.MemberCommunityListReq"
                         }
                     }
                 ],
@@ -4449,8 +4599,8 @@
         },
         "/service/wx/member/contest-list": {
             "post": {
-                "description": "竞赛列表 Description",
-                "summary": "竞赛列表 Summary",
+                "description": "会员竞赛列表 Description",
+                "summary": "会员竞赛列表 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -4458,7 +4608,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/contest.ContestListReq"
+                            "$ref": "#/definitions/member.MemberContestListReq"
                         }
                     }
                 ],
@@ -4597,131 +4747,6 @@
                 }
             }
         },
-        "/service/wx/member/join-bootcamp": {
-            "post": {
-                "description": "报名训练营 Description",
-                "summary": "报名训练营 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/wx.JoinBootcampReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/member/join-community": {
-            "post": {
-                "description": "加入社群 Description",
-                "summary": "加入社群 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/wx.JoinCommunityReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/member/join-contest": {
-            "post": {
-                "description": "报名竞赛 Description",
-                "summary": "报名竞赛 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/wx.JoinContestReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/member/login": {
-            "post": {
-                "description": "会员登录 Description",
-                "summary": "会员登录 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/wx.MemberLoginReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/member/logout": {
-            "post": {
-                "description": "会员登出 Description",
-                "summary": "会员登出 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/service/wx/member/order-list": {
             "post": {
                 "description": "会员订单列表 Description",
@@ -4747,60 +4772,15 @@
                 }
             }
         },
-        "/service/wx/member/place-info": {
+        "/service/wx/member/pay": {
             "post": {
-                "description": "场地详情 Description",
-                "summary": "场地详情 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/member/place-list": {
-            "post": {
-                "description": "场地列表 Description",
-                "summary": "场地列表 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/venue.VenuePlaceListReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/service/wx/member/product-info": {
             "post": {
-                "description": "产品详情 Description",
-                "summary": "产品详情 Summary",
+                "description": "会员产品信息 Description",
+                "summary": "会员产品信息 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -4824,8 +4804,8 @@
         },
         "/service/wx/member/product-list": {
             "post": {
-                "description": "产品列表 Description",
-                "summary": "产品列表 Summary",
+                "description": "会员产品列表 Description",
+                "summary": "会员产品列表 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -4833,7 +4813,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/product.ProductListReq"
+                            "$ref": "#/definitions/memberproduct.MemberProductListReq"
                         }
                     }
                 ],
@@ -4922,10 +4902,10 @@
                 }
             }
         },
-        "/service/wx/member/venue-info": {
+        "/service/wx/place-info": {
             "post": {
-                "description": "场馆详情 Description",
-                "summary": "场馆详情 Summary",
+                "description": "场地详情 Description",
+                "summary": "场地详情 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -4947,10 +4927,10 @@
                 }
             }
         },
-        "/service/wx/member/venue-list": {
+        "/service/wx/place-list": {
             "post": {
-                "description": "场馆列表 Description",
-                "summary": "场馆列表 Summary",
+                "description": "场地列表 Description",
+                "summary": "场地列表 Summary",
                 "parameters": [
                     {
                         "description": "query params",
@@ -4958,7 +4938,57 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/venue.VenueListReq"
+                            "$ref": "#/definitions/venue.VenuePlaceListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/product-info": {
+            "post": {
+                "description": "产品详情 Description",
+                "summary": "产品详情 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/product-list": {
+            "post": {
+                "description": "产品列表 Description",
+                "summary": "产品列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/product.ProductListReq"
                         }
                     }
                 ],
@@ -4984,56 +5014,6 @@
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/wx.StaffCaptchaReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/staff/login": {
-            "post": {
-                "description": "教练登录 Description",
-                "summary": "教练登录 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/wx.StaffLoginReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/service/wx/staff/logout": {
-            "post": {
-                "description": "教练登出 Description",
-                "summary": "教练登出 Summary",
-                "parameters": [
-                    {
-                        "description": "query params",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.IDReq"
                         }
                     }
                 ],
@@ -5134,6 +5114,56 @@
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/wx.SignStaffScheduleReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/venue-info": {
+            "post": {
+                "description": "场馆详情 Description",
+                "summary": "场馆详情 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.IDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/service/wx/venue-list": {
+            "post": {
+                "description": "场馆列表 Description",
+                "summary": "场馆列表 Summary",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/venue.VenueListReq"
                         }
                     }
                 ],
@@ -7152,6 +7182,9 @@
                 "id": {
                     "type": "integer"
                 },
+                "mobile": {
+                    "type": "string"
+                },
                 "source": {
                     "type": "string"
                 },
@@ -7161,7 +7194,7 @@
                 "updatedAt": {
                     "type": "string"
                 },
-                "user_id": {
+                "userId": {
                     "type": "integer"
                 },
                 "username": {
@@ -7172,10 +7205,16 @@
         "token.TokenListReq": {
             "type": "object",
             "properties": {
+                "mobile": {
+                    "type": "string"
+                },
                 "page": {
                     "type": "integer"
                 },
                 "pageSize": {
+                    "type": "integer"
+                },
+                "type": {
                     "type": "integer"
                 },
                 "userId": {
@@ -7649,20 +7688,6 @@
                 }
             }
         },
-        "wx.MemberLoginReq": {
-            "type": "object",
-            "properties": {
-                "captcha": {
-                    "type": "string"
-                },
-                "mobile": {
-                    "type": "string"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
         "wx.MemberOrderListReq": {
             "type": "object",
             "properties": {
@@ -7773,20 +7798,6 @@
             }
         },
         "wx.StaffCaptchaReq": {
-            "type": "object",
-            "properties": {
-                "captcha": {
-                    "type": "string"
-                },
-                "mobile": {
-                    "type": "string"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "wx.StaffLoginReq": {
             "type": "object",
             "properties": {
                 "captcha": {

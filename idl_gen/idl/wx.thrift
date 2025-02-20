@@ -59,31 +59,31 @@ service WxService {
    base.NilResponse ScheduleMemberList(1: schedule.ScheduleMemberListReq req) (api.post = "/service/wx/member/schedule-member-list")
 
    /**比赛列表*/
-   base.NilResponse ContestList (1: contest.ContestListReq req) (api.post = "/service/wx/member/contest-list")
+   base.NilResponse ContestList (1: contest.ContestListReq req) (api.post = "/service/wx/contest-list")
    /**比赛详情*/
-   base.NilResponse ContestInfo (1: base.IDReq req) (api.post = "/service/wx/member/contest-info")
+   base.NilResponse ContestInfo (1: base.IDReq req) (api.post = "/service/wx/contest-info")
    /**比赛报名*/
-   base.NilResponse JoinContest (1: JoinContestReq req) (api.post = "/service/wx/member/join-contest")
+   base.NilResponse JoinContest (1: JoinContestReq req) (api.post = "/service/wx/join-contest")
 
 
    /**训练营列表*/
-   base.NilResponse BootcampList (1: bootcamp.BootcampListReq req) (api.post = "/service/wx/member/bootcamp-list")
+   base.NilResponse BootcampList (1: bootcamp.BootcampListReq req) (api.post = "/service/wx/bootcamp-list")
    /**训练营详情*/
-   base.NilResponse BootcampInfo (1: base.IDReq req) (api.post = "/service/wx/member/bootcamp-info")
+   base.NilResponse BootcampInfo (1: base.IDReq req) (api.post = "/service/wx/bootcamp-info")
    /**训练营报名*/
-   base.NilResponse JoinBootcamp (1: JoinBootcampReq req) (api.post = "/service/wx/member/join-bootcamp")
+   base.NilResponse JoinBootcamp (1: JoinBootcampReq req) (api.post = "/service/wx/join-bootcamp")
 
    /**社群列表*/
-   base.NilResponse CommunityList (1: community.CommunityListReq req) (api.post = "/service/wx/member/community-list")
+   base.NilResponse CommunityList (1: community.CommunityListReq req) (api.post = "/service/wx/community-list")
    /**社群详情*/
-   base.NilResponse CommunityInfo (1: base.IDReq req) (api.post = "/service/wx/member/community-info")
+   base.NilResponse CommunityInfo (1: base.IDReq req) (api.post = "/service/wx/community-info")
    /**社群报名*/
-   base.NilResponse JoinCommunity (1: JoinCommunityReq req) (api.post = "/service/wx/member/join-community")
+   base.NilResponse JoinCommunity (1: JoinCommunityReq req) (api.post = "/service/wx/join-community")
 
    /**场馆列表*/
-   base.NilResponse VenueList (1: venue.VenueListReq req) (api.post = "/service/wx/member/venue-list")
+   base.NilResponse VenueList (1: venue.VenueListReq req) (api.post = "/service/wx/venue-list")
    /**场馆详情*/
-   base.NilResponse VenueInfo (1: base.IDReq req) (api.post = "/service/wx/member/venue-info")
+   base.NilResponse VenueInfo (1: base.IDReq req) (api.post = "/service/wx/venue-info")
 
    /**扫码入场*/
    //base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
@@ -98,23 +98,23 @@ service WxService {
     base.NilResponse CreateMemberScheduleCourseLessons(1: CreateMemberScheduleLessonsReq req) (api.post = "/service/wx/member/create-member-schedule-lessons")
 
    /**产品详情*/
-   base.NilResponse ProductInfo(1: base.IDReq req) (api.post = "/service/wx/member/product-info")
+   base.NilResponse ProductInfo(1: base.IDReq req) (api.post = "/service/wx/product-info")
    /**产品列表*/
-   base.NilResponse ProductList(1: product.ProductListReq req) (api.post = "/service/wx/member/product-list")
+   base.NilResponse ProductList(1: product.ProductListReq req) (api.post = "/service/wx/product-list")
    /**下单*/
    base.NilResponse Buy(1: order.BuyReq req) (api.post = "/service/wx/member/buy")
    /**支付*/
    base.NilResponse Pay(1: order.OrderPay req) (api.post = "/service/wx/member/pay")
 
    /**教练列表*/
-   base.NilResponse CoachList(1: CoachListReq req) (api.post = "/service/wx/member/coach-list")
+   base.NilResponse CoachList(1: CoachListReq req) (api.post = "/service/wx/coach-list")
    /**教练详情*/
-   base.NilResponse CoachInfo(1: base.IDReq req) (api.post = "/service/wx/member/coach-info")
+   base.NilResponse CoachInfo(1: base.IDReq req) (api.post = "/service/wx/coach-info")
 
    /**场地列表*/
-   base.NilResponse PlaceList(1: venue.VenuePlaceListReq req) (api.post = "/service/wx/member/place-list")
+   base.NilResponse PlaceList(1: venue.VenuePlaceListReq req) (api.post = "/service/wx/place-list")
    /**场地详情*/
-   base.NilResponse PlaceInfo(1: base.IDReq req) (api.post = "/service/wx/member/place-info")
+   base.NilResponse PlaceInfo(1: base.IDReq req) (api.post = "/service/wx/place-info")
    /**场地预约*/
    base.NilResponse CreatePlaceSchedule(1: CreatePlaceScheduleReq req) (api.post = "/service/wx/member/create-place-schedule")
 

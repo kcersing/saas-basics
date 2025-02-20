@@ -1339,22 +1339,28 @@ definitions:
         type: string
       id:
         type: integer
+      mobile:
+        type: string
       source:
         type: string
       token:
         type: string
       updatedAt:
         type: string
-      user_id:
+      userId:
         type: integer
       username:
         type: string
     type: object
   token.TokenListReq:
     properties:
+      mobile:
+        type: string
       page:
         type: integer
       pageSize:
+        type: integer
+      type:
         type: integer
       userId:
         type: integer
@@ -1669,15 +1675,6 @@ definitions:
       venueId:
         type: integer
     type: object
-  wx.MemberLoginReq:
-    properties:
-      captcha:
-        type: string
-      mobile:
-        type: string
-      venueId:
-        type: integer
-    type: object
   wx.MemberOrderListReq:
     properties:
       endCompletionAt:
@@ -1751,15 +1748,6 @@ definitions:
         type: integer
     type: object
   wx.StaffCaptchaReq:
-    properties:
-      captcha:
-        type: string
-      mobile:
-        type: string
-      venueId:
-        type: integer
-    type: object
-  wx.StaffLoginReq:
     properties:
       captcha:
         type: string
@@ -4462,10 +4450,7 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 更新场馆 Summary
-  /service/wx/member/activation:
-    post:
-      responses: {}
-  /service/wx/member/bootcamp-info:
+  /service/wx/bootcamp-info:
     post:
       description: 训练营详情 Description
       parameters:
@@ -4481,7 +4466,7 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 训练营详情 Summary
-  /service/wx/member/bootcamp-list:
+  /service/wx/bootcamp-list:
     post:
       description: 训练营列表 Description
       parameters:
@@ -4497,6 +4482,169 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 训练营列表 Summary
+  /service/wx/coach-info:
+    post:
+      description: 教练详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 教练详情 Summary
+  /service/wx/coach-list:
+    post:
+      description: 教练列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/wx.CoachListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 教练列表 Summary
+  /service/wx/community-info:
+    post:
+      description: 社群详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 社群详情 Summary
+  /service/wx/community-list:
+    post:
+      description: 社群列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/community.CommunityListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 社群列表 Summary
+  /service/wx/contest-info:
+    post:
+      description: 竞赛详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 竞赛详情 Summary
+  /service/wx/contest-list:
+    post:
+      description: 竞赛列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contest.ContestListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 竞赛列表 Summary
+  /service/wx/join-bootcamp:
+    post:
+      description: 报名训练营 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/wx.JoinBootcampReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 报名训练营 Summary
+  /service/wx/join-community:
+    post:
+      description: 加入社群 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/wx.JoinCommunityReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 加入社群 Summary
+  /service/wx/join-contest:
+    post:
+      description: 报名竞赛 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/wx.JoinContestReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 报名竞赛 Summary
+  /service/wx/member/activation:
+    post:
+      responses: {}
+  /service/wx/member/bootcamp-list:
+    post:
+      description: 会员训练营列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/member.MemberBootcampListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 会员训练营列表 Summary
   /service/wx/member/buy:
     post:
       description: 下单 Description
@@ -4529,102 +4677,38 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 会员验证码 Summary
-  /service/wx/member/coach-info:
-    post:
-      description: 教练详情 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 教练详情 Summary
-  /service/wx/member/coach-list:
-    post:
-      description: 教练列表 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/wx.CoachListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 教练列表 Summary
-  /service/wx/member/community-info:
-    post:
-      description: 社群详情 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 社群详情 Summary
   /service/wx/member/community-list:
     post:
-      description: 社群列表 Description
+      description: 会员社群列表 Description
       parameters:
       - description: query params
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/community.CommunityListReq'
+          $ref: '#/definitions/member.MemberCommunityListReq'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 社群列表 Summary
-  /service/wx/member/contest-info:
-    post:
-      description: 竞赛详情 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 竞赛详情 Summary
+      summary: 会员社群列表 Summary
   /service/wx/member/contest-list:
     post:
-      description: 竞赛列表 Description
+      description: 会员竞赛列表 Description
       parameters:
       - description: query params
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/contest.ContestListReq'
+          $ref: '#/definitions/member.MemberContestListReq'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 竞赛列表 Summary
+      summary: 会员竞赛列表 Summary
   /service/wx/member/contract-list:
     post:
       description: 会员合同列表 Description
@@ -4705,86 +4789,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 会员信息 Summary
-  /service/wx/member/join-bootcamp:
-    post:
-      description: 报名训练营 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/wx.JoinBootcampReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 报名训练营 Summary
-  /service/wx/member/join-community:
-    post:
-      description: 加入社群 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/wx.JoinCommunityReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 加入社群 Summary
-  /service/wx/member/join-contest:
-    post:
-      description: 报名竞赛 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/wx.JoinContestReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 报名竞赛 Summary
-  /service/wx/member/login:
-    post:
-      description: 会员登录 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/wx.MemberLoginReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员登录 Summary
-  /service/wx/member/logout:
-    post:
-      description: 会员登出 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 会员登出 Summary
   /service/wx/member/order-list:
     post:
       description: 会员订单列表 Description
@@ -4801,41 +4805,12 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 会员订单列表 Summary
-  /service/wx/member/place-info:
+  /service/wx/member/pay:
     post:
-      description: 场地详情 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 场地详情 Summary
-  /service/wx/member/place-list:
-    post:
-      description: 场地列表 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/venue.VenuePlaceListReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 场地列表 Summary
+      responses: {}
   /service/wx/member/product-info:
     post:
-      description: 产品详情 Description
+      description: 会员产品信息 Description
       parameters:
       - description: query params
         in: body
@@ -4848,23 +4823,23 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 产品详情 Summary
+      summary: 会员产品信息 Summary
   /service/wx/member/product-list:
     post:
-      description: 产品列表 Description
+      description: 会员产品列表 Description
       parameters:
       - description: query params
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/product.ProductListReq'
+          $ref: '#/definitions/memberproduct.MemberProductListReq'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 产品列表 Summary
+      summary: 会员产品列表 Summary
   /service/wx/member/register:
     post:
       description: 会员注册 Description
@@ -4913,9 +4888,9 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 会员约课列表 Summary
-  /service/wx/member/venue-info:
+  /service/wx/place-info:
     post:
-      description: 场馆详情 Description
+      description: 场地详情 Description
       parameters:
       - description: query params
         in: body
@@ -4928,23 +4903,55 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 场馆详情 Summary
-  /service/wx/member/venue-list:
+      summary: 场地详情 Summary
+  /service/wx/place-list:
     post:
-      description: 场馆列表 Description
+      description: 场地列表 Description
       parameters:
       - description: query params
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/venue.VenueListReq'
+          $ref: '#/definitions/venue.VenuePlaceListReq'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 场馆列表 Summary
+      summary: 场地列表 Summary
+  /service/wx/product-info:
+    post:
+      description: 产品详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 产品详情 Summary
+  /service/wx/product-list:
+    post:
+      description: 产品列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.ProductListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 产品列表 Summary
   /service/wx/staff/captcha:
     post:
       description: 教练验证码 Description
@@ -4961,38 +4968,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 教练验证码 Summary
-  /service/wx/staff/login:
-    post:
-      description: 教练登录 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/wx.StaffLoginReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 教练登录 Summary
-  /service/wx/staff/logout:
-    post:
-      description: 教练登出 Description
-      parameters:
-      - description: query params
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/base.IDReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.Response'
-      summary: 教练登出 Summary
   /service/wx/staff/my-member:
     post:
       description: 我的会员 Description
@@ -5057,4 +5032,36 @@ paths:
           schema:
             $ref: '#/definitions/utils.Response'
       summary: 教练签到 Summary
+  /service/wx/venue-info:
+    post:
+      description: 场馆详情 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/base.IDReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场馆详情 Summary
+  /service/wx/venue-list:
+    post:
+      description: 场馆列表 Description
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/venue.VenueListReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: 场馆列表 Summary
 swagger: "2.0"

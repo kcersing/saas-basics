@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/biz/dal/db/ent/token"
+	"saas/biz/dal/db/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -104,6 +105,25 @@ func (tc *TokenCreate) SetExpiredAt(t time.Time) *TokenCreate {
 func (tc *TokenCreate) SetID(i int64) *TokenCreate {
 	tc.mutation.SetID(i)
 	return tc
+}
+
+// SetOwnerID sets the "owner" edge to the User entity by ID.
+func (tc *TokenCreate) SetOwnerID(id int64) *TokenCreate {
+	tc.mutation.SetOwnerID(id)
+	return tc
+}
+
+// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+func (tc *TokenCreate) SetNillableOwnerID(id *int64) *TokenCreate {
+	if id != nil {
+		tc = tc.SetOwnerID(*id)
+	}
+	return tc
+}
+
+// SetOwner sets the "owner" edge to the User entity.
+func (tc *TokenCreate) SetOwner(u *User) *TokenCreate {
+	return tc.SetOwnerID(u.ID)
 }
 
 // Mutation returns the TokenMutation object of the builder.
@@ -236,6 +256,23 @@ func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.ExpiredAt(); ok {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
 		_node.ExpiredAt = value
+	}
+	if nodes := tc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   token.OwnerTable,
+			Columns: []string{token.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.user_token = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

@@ -233,7 +233,7 @@ func ScheduleMemberList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		contest.ContestListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/contest-list [POST]
+// @router /service/wx/contest-list [POST]
 func ContestList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req contest.ContestListReq
@@ -259,7 +259,7 @@ func ContestList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.IDReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/contest-info [POST]
+// @router /service/wx/contest-info [POST]
 func ContestInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -285,7 +285,7 @@ func ContestInfo(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		wx.JoinContestReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/join-contest [POST]
+// @router /service/wx/join-contest [POST]
 func JoinContest(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req wx.JoinContestReq
@@ -307,7 +307,7 @@ func JoinContest(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		bootcamp.BootcampListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/bootcamp-list [POST]
+// @router /service/wx/bootcamp-list [POST]
 func BootcampList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req bootcamp.BootcampListReq
@@ -333,7 +333,7 @@ func BootcampList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.IDReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/bootcamp-info [POST]
+// @router /service/wx/bootcamp-info [POST]
 func BootcampInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -359,7 +359,7 @@ func BootcampInfo(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		wx.JoinBootcampReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/join-bootcamp [POST]
+// @router /service/wx/join-bootcamp [POST]
 func JoinBootcamp(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req wx.JoinBootcampReq
@@ -381,7 +381,7 @@ func JoinBootcamp(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		community.CommunityListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/community-list [POST]
+// @router /service/wx/community-list [POST]
 func CommunityList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req community.CommunityListReq
@@ -407,7 +407,7 @@ func CommunityList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.IDReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/community-info [POST]
+// @router /service/wx/community-info [POST]
 func CommunityInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -433,7 +433,7 @@ func CommunityInfo(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		wx.JoinCommunityReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/join-community [POST]
+// @router /service/wx/join-community [POST]
 func JoinCommunity(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req wx.JoinCommunityReq
@@ -455,7 +455,7 @@ func JoinCommunity(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		venue.VenueListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/venue-list [POST]
+// @router /service/wx/venue-list [POST]
 func VenueList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req venue.VenueListReq
@@ -481,7 +481,7 @@ func VenueList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.IDReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/venue-info [POST]
+// @router /service/wx/venue-info [POST]
 func VenueInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -588,7 +588,7 @@ func CreateMemberScheduleCourseLessons(ctx context.Context, c *app.RequestContex
 //	@Param			request	body		base.IDReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/product-info [POST]
+// @router /service/wx/product-info [POST]
 func ProductInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -636,7 +636,7 @@ func Buy(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		wx.CoachListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/coach-list [POST]
+// @router /service/wx/coach-list [POST]
 func CoachList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req wx.CoachListReq
@@ -670,7 +670,7 @@ func CoachList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.IDReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/coach-info [POST]
+// @router /service/wx/coach-info [POST]
 func CoachInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -696,7 +696,7 @@ func CoachInfo(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		base.IDReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/place-info [POST]
+// @router /service/wx/place-info [POST]
 func PlaceInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req base.IDReq
@@ -940,7 +940,7 @@ func MemberOrderList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		product.ProductListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/product-list [POST]
+// @router /service/wx/product-list [POST]
 func ProductList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.ProductListReq
@@ -965,7 +965,7 @@ func ProductList(ctx context.Context, c *app.RequestContext) {
 //	@Param			request	body		venue.VenuePlaceListReq	true	"query params"
 //	@Success		200		{object}	utils.Response
 //
-// @router /service/wx/member/place-list [POST]
+// @router /service/wx/place-list [POST]
 func PlaceList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req venue.VenuePlaceListReq

@@ -87,7 +87,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 			}
 			//jwt
 			var tokenInfo token.TokenInfo
-			tokenInfo.UserID = res.UserId
+			tokenInfo.UserId = res.UserId
 			tokenInfo.Username = res.Username
 			tokenInfo.ExpiredAt = time.Now().Add(time.Duration(config.GlobalServerConfig.Auth.AccessExpire) * time.Second).Format(time.DateTime)
 

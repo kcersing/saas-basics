@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"saas/biz/dal/db/ent/schema/mixins"
@@ -22,7 +23,11 @@ func (Token) Fields() []ent.Field {
 		field.Time("expired_at").Comment(" Expire time | 过期时间"),
 	}
 }
-
+func (Token) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("owner", User.Type).Ref("token").Unique(),
+	}
+}
 func (Token) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.BaseMixin{},

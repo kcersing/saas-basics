@@ -51,7 +51,7 @@ func (t Token) Create(req *token.TokenInfo) error {
 		req.ID = tokenExist.ID
 		return t.Update(req)
 	}
-
+	userInfo, err := t.db.User.Query().Where(entuser.IDEQ(req.UserId)).Only(t.ctx)
 	if err != nil {
 		return errors.Wrap(err, "get userinfo failed")
 	}
@@ -87,7 +87,7 @@ func (t Token) Update(req *token.TokenInfo) error {
 		return errors.Wrap(err, "update Token failed")
 	}
 
-	t.cache.SetWithTTL(fmt.Sprintf("token_%d", req.UserID), req.UserID, 1, expiredAt.Sub(time.Now()))
+	t.cache.SetWithTTL(fmt.Sprintf("token_%d", req.UserId), req.UserId, 1, expiredAt.Sub(time.Now()))
 	return nil
 }
 
@@ -132,7 +132,7 @@ func (t Token) List(req *token.TokenListReq) (res []*token.TokenInfo, total int,
 	for _, userEnt := range UserTokens {
 		res = append(res, &token.TokenInfo{
 			ID:        userEnt.Edges.Token.ID,
-			UserID:    userEnt.ID,
+			UserId:    userEnt.ID,
 			Username:  userEnt.Username,
 			Token:     userEnt.Edges.Token.Token,
 			Source:    userEnt.Edges.Token.Source,
